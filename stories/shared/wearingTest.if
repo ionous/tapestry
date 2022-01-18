@@ -22,27 +22,12 @@
               "Say:": "Fail to re-wear the flower:"
             },
             {
-              "Determine:arguments:": [
-                "wearing",
+              "Wearing agent:noun:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "flower"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "flower"
                 }
               ]
             },
@@ -50,27 +35,12 @@
               "Say:": "Take off the flower:"
             },
             {
-              "Determine:arguments:": [
-                "removing",
+              "Removing agent:noun:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "flower"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "flower"
                 }
               ]
             },
@@ -83,27 +53,12 @@
               "Say:": "Fail to re-remove the flower:"
             },
             {
-              "Determine:arguments:": [
-                "removing",
+              "Removing agent:noun:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "flower"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "flower"
                 }
               ]
             },
@@ -111,27 +66,12 @@
               "Say:": "Wear the flower again:"
             },
             {
-              "Determine:arguments:": [
-                "wearing",
+              "Wearing agent:noun:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "flower"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "flower"
                 }
               ]
             },
@@ -149,27 +89,12 @@
               "Say:": "Fail to wear an unwearable:"
             },
             {
-              "Determine:arguments:": [
-                "wearing",
+              "Wearing agent:noun:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "knife"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "knife"
                 }
               ]
             },
@@ -187,27 +112,12 @@
               "Say:": "Fail to wear something not held:"
             },
             {
-              "Determine:arguments:": [
-                "wearing",
+              "Wearing agent:noun:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "purse"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "purse"
                 }
               ]
             },
@@ -215,27 +125,12 @@
               "Say:": "Fail to remove something not held:"
             },
             {
-              "Determine:arguments:": [
-                "removing",
+              "Removing agent:noun:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "purse"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "purse"
                 }
               ]
             },
@@ -243,27 +138,12 @@
               "Say:": "Fail to put on something not reachable:"
             },
             {
-              "Determine:arguments:": [
-                "wearing",
+              "Wearing agent:noun:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "purse"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "purse"
                 }
               ]
             },
@@ -276,7 +156,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "wearing test",
@@ -310,7 +192,9 @@
                 ]
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "RelativeToNoun:nouns:areBeing:otherNouns:": [
                 " whereabouts",

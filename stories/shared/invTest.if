@@ -223,7 +223,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "RelativeToNoun:nouns:areBeing:otherNouns:": [
         "whereabouts",
@@ -314,7 +316,9 @@
         ]
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "status printing test",
@@ -372,7 +376,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "default inventory",
@@ -390,23 +396,11 @@
         {
           "Act:": [
             {
-              "Determine:arguments:": [
-                "Print inventory",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "actor",
-                        {
-                          "FromTxt:": {
-                            "IdOf:": "Mildred"
-                          }
-                        }
-                      ]
-                    }
-                  ]
+              "PrintInventory actor:": {
+                "FromTxt:": {
+                  "IdOf:": "Mildred"
                 }
-              ]
+              }
             }
           ]
         }

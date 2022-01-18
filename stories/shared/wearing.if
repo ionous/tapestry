@@ -41,19 +41,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
@@ -62,32 +50,12 @@
                         "resp",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can handle",
+                            "CanHandle actor:action:noun:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "wearing"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  }
-                                ]
-                              }
+                                "FromTxt:": "wearing"
+                              },
+                              "@noun"
                             ]
                           }
                         },
@@ -110,19 +78,7 @@
                                 "Send:path:arguments:": [
                                   "state change",
                                   {
-                                    "Determine:arguments:": [
-                                      "parentsOf",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "obj",
-                                              "@noun"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
+                                    "ParentsOf obj:": "@noun"
                                   },
                                   {
                                     "Args:": [
@@ -179,7 +135,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Event:action:args common:": [
         "remove",
@@ -221,19 +179,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
@@ -242,32 +188,12 @@
                         "resp",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can handle",
+                            "CanHandle actor:action:noun:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "removing"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  }
-                                ]
-                              }
+                                "FromTxt:": "removing"
+                              },
+                              "@noun"
                             ]
                           }
                         },
@@ -290,19 +216,7 @@
                                 "Send:path:arguments:": [
                                   "state change",
                                   {
-                                    "Determine:arguments:": [
-                                      "parentsOf",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "obj",
-                                              "@noun"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
+                                    "ParentsOf obj:": "@noun"
                                   },
                                   {
                                     "Args:": [
@@ -359,7 +273,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Comment:": "Can only remove what's worn. ( This isn't perfectly symmetrical with can only wear possessions, and that's okay. ) "
     },
@@ -375,28 +291,20 @@
                     {
                       "Cmp:is:txt:": [
                         "@trait",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "not worn"
                       ]
                     },
                     {
                       "Cmp:is:txt:": [
                         "@actor",
-                        "OtherThan",
                         {
-                          "Determine:arguments:": [
-                            "wearerOf",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@noun"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                          "OtherThan": []
+                        },
+                        {
+                          "WearerOf obj:": "@noun"
                         }
                       ]
                     }

@@ -27,7 +27,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -44,7 +46,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "contain",
@@ -67,7 +71,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -104,7 +110,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "On",
@@ -127,7 +135,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -164,7 +174,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "Off",
@@ -187,7 +199,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -224,7 +238,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "Are",
@@ -253,7 +269,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -265,7 +283,9 @@
                                 {
                                   "Len:": "@names"
                                 },
-                                "GreaterThan",
+                                {
+                                  "GreaterThan": []
+                                },
                                 1
                               ]
                             },
@@ -302,19 +322,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@noun"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@noun"
                 },
                 {
                   "Act:": [
@@ -329,7 +337,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Comment:": "say the phrase of are not or is not ( depending on the plural of the noun )"
     },
@@ -355,7 +365,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -385,19 +397,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@noun"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@noun"
                 },
                 {
                   "Act:": [
@@ -412,7 +412,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Comment:": "say the contraction aren't or isn't ( depending on the plural of the noun )"
     },
@@ -438,7 +440,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -468,19 +472,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@noun"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@noun"
                 },
                 {
                   "Act:": [

@@ -56,19 +56,7 @@
                 {
                   "LocalInit:": {
                     "FromBool:": {
-                      "Determine:arguments:": [
-                        "contains light",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "spot",
-                                "@actor"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "ContainsLight spot:": "@actor"
                     }
                   }
                 }
@@ -91,7 +79,7 @@
                 {
                   "Act:": [
                     {
-                      "Determine:": "Print news of darkness"
+                      "PrintNewsOfDarkness": []
                     }
                   ]
                 }
@@ -110,7 +98,7 @@
                 {
                   "Act:": [
                     {
-                      "Determine:": "print news of light"
+                      "PrintNewsOfLight": []
                     }
                   ]
                 }
@@ -118,7 +106,9 @@
             },
             {
               "PatternRule:flags:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 "before",
                 {
                   "Act:": [
@@ -139,7 +129,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:": "Print news of darkness"
     },
@@ -150,7 +142,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -169,7 +163,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:": "Print news of light"
     },
@@ -180,30 +176,20 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
-                      "Determine:arguments:": [
-                        "Print vantage",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "where",
-                                {
-                                  "Get:from:": [
-                                    "pawn",
-                                    {
-                                      "ObjFields:": "player"
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "PrintVantage where:": {
+                        "Get:from:": [
+                          "pawn",
+                          {
+                            "ObjFields:": "player"
+                          }
+                        ]
+                      }
                     }
                   ]
                 }

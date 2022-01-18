@@ -29,7 +29,9 @@
         ]
       }
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Event:action:args none:": [
         "sniff",
@@ -71,43 +73,18 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
-                      "Determine:arguments:": [
-                        "Smelling",
+                      "Smelling actor:noun:": [
+                        "@actor",
                         {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "actor",
-                                "@actor"
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "noun",
-                                {
-                                  "FromTxt:": {
-                                    "Determine:arguments:": [
-                                      "locationOf",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "obj",
-                                              "@actor"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                }
-                              ]
-                            }
-                          ]
+                          "FromTxt:": {
+                            "LocationOf obj:": "@actor"
+                          }
                         }
                       ]
                     }
@@ -119,7 +96,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Event:action:args common:": [
         "smell",
@@ -161,19 +140,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
@@ -182,32 +149,12 @@
                         "resp",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can reach",
+                            "CanReach actor:action:noun:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "smelling"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  }
-                                ]
-                              }
+                                "FromTxt:": "smelling"
+                              },
+                              "@noun"
                             ]
                           }
                         },
@@ -231,32 +178,12 @@
                                   "resp",
                                   {
                                     "FromTxt:": {
-                                      "Determine:arguments:": [
-                                        "can use",
+                                      "CanUse actor:action:noun:": [
+                                        "@actor",
                                         {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "actor",
-                                                "@actor"
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "action",
-                                                {
-                                                  "FromTxt:": "smelling"
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "noun",
-                                                "@noun"
-                                              ]
-                                            }
-                                          ]
-                                        }
+                                          "FromTxt:": "smelling"
+                                        },
+                                        "@noun"
                                       ]
                                     }
                                   },
@@ -276,24 +203,9 @@
                                     "ElseDo:": {
                                       "Act:": [
                                         {
-                                          "Determine:arguments:": [
-                                            "report smelling",
-                                            {
-                                              "Args:": [
-                                                {
-                                                  "Arg:from:": [
-                                                    "actor",
-                                                    "@actor"
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "noun",
-                                                    "@noun"
-                                                  ]
-                                                }
-                                              ]
-                                            }
+                                          "ReportSmelling actor:noun:": [
+                                            "@actor",
+                                            "@noun"
                                           ]
                                         }
                                       ]
@@ -314,7 +226,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "report smelling",
@@ -343,7 +257,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -363,19 +279,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [

@@ -18,7 +18,7 @@
                 {
                   "Act:": [
                     {
-                      "Determine:": "magic symbols"
+                      "MagicSymbols": []
                     }
                   ]
                 }
@@ -28,7 +28,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "countOf",
@@ -37,7 +39,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "countOf",
@@ -53,7 +57,9 @@
                   "PatternRules:": [
                     {
                       "PatternRule:hook activity:": [
-                        "Always",
+                        {
+                          "Always": []
+                        },
                         {
                           "Act:": [
                             {
@@ -67,7 +73,9 @@
                       "PatternRule:hook activity:": [
                         {
                           "CountOf:num:": [
-                            "After",
+                            {
+                              "After": []
+                            },
                             5
                           ]
                         },
@@ -84,7 +92,9 @@
                       "PatternRule:hook activity:": [
                         {
                           "CountOf:num:": [
-                            "At",
+                            {
+                              "At": []
+                            },
                             3
                           ]
                         },
@@ -101,7 +111,9 @@
                       "PatternRule:hook activity:": [
                         {
                           "CountOf:num:": [
-                            "Every",
+                            {
+                              "Every": []
+                            },
                             2
                           ]
                         },

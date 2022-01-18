@@ -82,11 +82,15 @@
         ]
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Comment:": "Mildred and the table are in the room. The basket is on the table. The apple is in the basket. Mildred is carrying the scalpel and wearing the pen."
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "whereabouts",
@@ -124,7 +128,9 @@
                 }
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "Nouns:relateTo:": [
                 [
@@ -151,7 +157,9 @@
                 }
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "Nouns:relateTo:": [
                 [
@@ -184,7 +192,9 @@
                 }
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "Nouns:startAs:": [
                 [
@@ -205,7 +215,9 @@
                 }
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "Nouns:relateTo:": [
                 [
@@ -236,7 +248,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "whereabouts",
@@ -245,7 +259,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestRule:hook activity:": [
         "whereabouts",

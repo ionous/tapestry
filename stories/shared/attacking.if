@@ -37,7 +37,9 @@
         ]
       }
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Event:action:args common:": [
         "attack",
@@ -79,19 +81,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
@@ -100,32 +90,12 @@
                         "resp",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can reach",
+                            "CanReach actor:action:noun:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "attacking"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  }
-                                ]
-                              }
+                                "FromTxt:": "attacking"
+                              },
+                              "@noun"
                             ]
                           }
                         },
@@ -145,24 +115,9 @@
                           "ElseDo:": {
                             "Act:": [
                               {
-                                "Determine:arguments:": [
-                                  "report attacking",
-                                  {
-                                    "Args:": [
-                                      {
-                                        "Arg:from:": [
-                                          "actor",
-                                          "@actor"
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "noun",
-                                          "@noun"
-                                        ]
-                                      }
-                                    ]
-                                  }
+                                "ReportAttacking actor:noun:": [
+                                  "@actor",
+                                  "@noun"
                                 ]
                               }
                             ]
@@ -178,7 +133,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "report attacking",
@@ -207,7 +164,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -227,19 +186,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [

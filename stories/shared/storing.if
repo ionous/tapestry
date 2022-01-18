@@ -41,19 +41,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
@@ -72,38 +60,13 @@
                         "result",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can handle",
+                            "CanHandle actor:action:noun:otherNoun:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "storing into"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "other noun",
-                                      "@other noun"
-                                    ]
-                                  }
-                                ]
-                              }
+                                "FromTxt:": "storing into"
+                              },
+                              "@noun",
+                              "@other noun"
                             ]
                           }
                         },
@@ -130,32 +93,12 @@
                                   "result",
                                   {
                                     "FromTxt:": {
-                                      "Determine:arguments:": [
-                                        "can reach",
+                                      "CanReach actor:action:noun:": [
+                                        "@actor",
                                         {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "actor",
-                                                "@actor"
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "action",
-                                                {
-                                                  "FromTxt:": "storing into"
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "noun",
-                                                "@other noun"
-                                              ]
-                                            }
-                                          ]
-                                        }
+                                          "FromTxt:": "storing into"
+                                        },
+                                        "@other noun"
                                       ]
                                     }
                                   },
@@ -179,38 +122,13 @@
                                             "result",
                                             {
                                               "FromTxt:": {
-                                                "Determine:arguments:": [
-                                                  "can use",
+                                                "CanUse actor:action:noun:otherNoun:": [
+                                                  "@actor",
                                                   {
-                                                    "Args:": [
-                                                      {
-                                                        "Arg:from:": [
-                                                          "actor",
-                                                          "@actor"
-                                                        ]
-                                                      },
-                                                      {
-                                                        "Arg:from:": [
-                                                          "action",
-                                                          {
-                                                            "FromTxt:": "storing into"
-                                                          }
-                                                        ]
-                                                      },
-                                                      {
-                                                        "Arg:from:": [
-                                                          "noun",
-                                                          "@noun"
-                                                        ]
-                                                      },
-                                                      {
-                                                        "Arg:from:": [
-                                                          "other noun",
-                                                          "@other noun"
-                                                        ]
-                                                      }
-                                                    ]
-                                                  }
+                                                    "FromTxt:": "storing into"
+                                                  },
+                                                  "@noun",
+                                                  "@other noun"
                                                 ]
                                               }
                                             },
@@ -235,19 +153,7 @@
                                                         "Send:path:arguments:": [
                                                           "store into",
                                                           {
-                                                            "Determine:arguments:": [
-                                                              "parentsOf",
-                                                              {
-                                                                "Args:": [
-                                                                  {
-                                                                    "Arg:from:": [
-                                                                      "obj",
-                                                                      "@noun"
-                                                                    ]
-                                                                  }
-                                                                ]
-                                                              }
-                                                            ]
+                                                            "ParentsOf obj:": "@noun"
                                                           },
                                                           {
                                                             "Args:": [
@@ -276,30 +182,10 @@
                                                       {
                                                         "Act:": [
                                                           {
-                                                            "Determine:arguments:": [
-                                                              "report storing into",
-                                                              {
-                                                                "Args:": [
-                                                                  {
-                                                                    "Arg:from:": [
-                                                                      "actor",
-                                                                      "@actor"
-                                                                    ]
-                                                                  },
-                                                                  {
-                                                                    "Arg:from:": [
-                                                                      "noun",
-                                                                      "@noun"
-                                                                    ]
-                                                                  },
-                                                                  {
-                                                                    "Arg:from:": [
-                                                                      "other noun",
-                                                                      "@other noun"
-                                                                    ]
-                                                                  }
-                                                                ]
-                                                              }
+                                                            "ReportStoringInto actor:noun:otherNoun:": [
+                                                              "@actor",
+                                                              "@noun",
+                                                              "@other noun"
                                                             ]
                                                           }
                                                         ]
@@ -329,7 +215,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Listen kinds:handlers:": [
         "things",
@@ -342,7 +230,9 @@
                 "PatternRules:": [
                   {
                     "PatternRule:hook activity:": [
-                      "Always",
+                      {
+                        "Always": []
+                      },
                       {
                         "Act:": [
                           {
@@ -350,24 +240,9 @@
                               "error",
                               {
                                 "FromTxt:": {
-                                  "Determine:arguments:": [
-                                    "move object",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "obj",
-                                            "@noun"
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "dest",
-                                            "@other noun"
-                                          ]
-                                        }
-                                      ]
-                                    }
+                                  "MoveObject obj:dest:": [
+                                    "@noun",
+                                    "@other noun"
                                   ]
                                 }
                               },
@@ -418,7 +293,9 @@
         ]
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "report storing into",
@@ -453,7 +330,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -474,19 +353,7 @@
               "PatternRule:hook activity:": [
                 {
                   "Not:": {
-                    "Determine:arguments:": [
-                      "isPlayer",
-                      {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "obj",
-                              "@actor"
-                            ]
-                          }
-                        ]
-                      }
-                    ]
+                    "IsPlayer obj:": "@actor"
                   }
                 },
                 {
@@ -509,7 +376,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:rules:": [
         "can handle",
@@ -522,29 +391,16 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "storing into"
                       ]
                     },
                     {
-                      "Determine:arguments:": [
-                        "ancestorOf",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@other noun"
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "root",
-                                "@noun"
-                              ]
-                            }
-                          ]
-                        }
+                      "AncestorOf obj:root:": [
+                        "@other noun",
+                        "@noun"
                       ]
                     }
                   ]
@@ -580,28 +436,20 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "storing into"
                       ]
                     },
                     {
                       "Cmp:is:txt:": [
                         {
-                          "Determine:arguments:": [
-                            "wearerOf",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@noun"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                          "WearerOf obj:": "@noun"
                         },
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "@actor"
                       ]
                     }
@@ -632,7 +480,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:rules:": [
         "reach down",
@@ -645,32 +495,24 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "storing into"
                       ]
                     },
                     {
                       "Cmp:is:txt:": [
                         "@intoObj",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "@noun"
                       ]
                     },
                     {
                       "Not:": {
-                        "Determine:arguments:": [
-                          "allows storage",
-                          {
-                            "Args:": [
-                              {
-                                "Arg:from:": [
-                                  "obj",
-                                  "@intoObj"
-                                ]
-                              }
-                            ]
-                          }
-                        ]
+                        "AllowsStorage obj:": "@intoObj"
                       }
                     }
                   ]
@@ -706,32 +548,24 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "storing into"
                       ]
                     },
                     {
                       "Cmp:is:txt:": [
                         "@intoObj",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "@noun"
                       ]
                     },
                     {
                       "Not:": {
-                        "Determine:arguments:": [
-                          "provides storage",
-                          {
-                            "Args:": [
-                              {
-                                "Arg:from:": [
-                                  "obj",
-                                  "@intoObj"
-                                ]
-                              }
-                            ]
-                          }
-                        ]
+                        "ProvidesStorage obj:": "@intoObj"
                       }
                     }
                   ]
@@ -767,7 +601,9 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "storing into"
                       ]
                     },

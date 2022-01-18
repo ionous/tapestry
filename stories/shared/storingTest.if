@@ -25,35 +25,15 @@
                               "Say:": "Fail to store something into an actor:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "storing into",
+                              "StoringInto agent:noun:otherNoun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "clutch"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "other noun",
-                                        {
-                                          "FromTxt:": "mildred"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "clutch"
+                                },
+                                {
+                                  "FromTxt:": "mildred"
                                 }
                               ]
                             },
@@ -74,35 +54,15 @@
                               "Say:": "Fail to store something into a closed container:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "storing into",
+                              "StoringInto agent:noun:otherNoun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "coffee"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "other noun",
-                                        {
-                                          "FromTxt:": "machine"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "coffee"
+                                },
+                                {
+                                  "FromTxt:": "machine"
                                 }
                               ]
                             },
@@ -123,35 +83,15 @@
                               "Say:": "Fail to store something into something nested:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "storing into",
+                              "StoringInto agent:noun:otherNoun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "clutch"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "other noun",
-                                        {
-                                          "FromTxt:": "purse"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "clutch"
+                                },
+                                {
+                                  "FromTxt:": "purse"
                                 }
                               ]
                             },
@@ -172,35 +112,15 @@
                               "Say:": "Okay, store something into an open container:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "storing into",
+                              "StoringInto agent:noun:otherNoun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "coffee"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "other noun",
-                                        {
-                                          "FromTxt:": "purse"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "coffee"
+                                },
+                                {
+                                  "FromTxt:": "purse"
                                 }
                               ]
                             },
@@ -221,35 +141,15 @@
                               "Say:": "Okay, store something onto a supporter:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "storing into",
+                              "StoringInto agent:noun:otherNoun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "coin"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "other noun",
-                                        {
-                                          "FromTxt:": "shelf"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "coin"
+                                },
+                                {
+                                  "FromTxt:": "shelf"
                                 }
                               ]
                             },
@@ -270,35 +170,15 @@
                               "Say:": "Fail to store something worn:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "storing into",
+                              "StoringInto agent:noun:otherNoun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "flower"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "other noun",
-                                        {
-                                          "FromTxt:": "shelf"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "flower"
+                                },
+                                {
+                                  "FromTxt:": "shelf"
                                 }
                               ]
                             },
@@ -319,35 +199,15 @@
                               "Say:": "Fail to store something not held:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "storing into",
+                              "StoringInto agent:noun:otherNoun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "broom"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "other noun",
-                                        {
-                                          "FromTxt:": "cabinet"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "broom"
+                                },
+                                {
+                                  "FromTxt:": "cabinet"
                                 }
                               ]
                             },
@@ -368,35 +228,15 @@
                               "Say:": "Okay, store something into something held:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "storing into",
+                              "StoringInto agent:noun:otherNoun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "knife"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "other noun",
-                                        {
-                                          "FromTxt:": "purse"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "knife"
+                                },
+                                {
+                                  "FromTxt:": "purse"
                                 }
                               ]
                             },
@@ -417,35 +257,15 @@
                               "Say:": "Fail to store something to somewhere unreachable:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "storing into",
+                              "StoringInto agent:noun:otherNoun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "purse"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "other noun",
-                                        {
-                                          "FromTxt:": "wisdom"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "purse"
+                                },
+                                {
+                                  "FromTxt:": "wisdom"
                                 }
                               ]
                             },
@@ -466,7 +286,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "storing test",

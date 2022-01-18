@@ -41,19 +41,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
@@ -62,39 +50,14 @@
                         "resp",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can reach",
+                            "CanReach actor:action:noun:requiresLight:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "examining"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "requires light",
-                                      {
-                                        "FromBool:": true
-                                      }
-                                    ]
-                                  }
-                                ]
+                                "FromTxt:": "examining"
+                              },
+                              "@noun",
+                              {
+                                "FromBool:": true
                               }
                             ]
                           }
@@ -119,32 +82,12 @@
                                   "resp",
                                   {
                                     "FromTxt:": {
-                                      "Determine:arguments:": [
-                                        "can use",
+                                      "CanUse actor:action:noun:": [
+                                        "@actor",
                                         {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "actor",
-                                                "@actor"
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "action",
-                                                {
-                                                  "FromTxt:": "examining"
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "noun",
-                                                "@noun"
-                                              ]
-                                            }
-                                          ]
-                                        }
+                                          "FromTxt:": "examining"
+                                        },
+                                        "@noun"
                                       ]
                                     }
                                   },
@@ -169,19 +112,7 @@
                                               "Send:path:arguments:": [
                                                 "examine",
                                                 {
-                                                  "Determine:arguments:": [
-                                                    "parentsOf",
-                                                    {
-                                                      "Args:": [
-                                                        {
-                                                          "Arg:from:": [
-                                                            "obj",
-                                                            "@noun"
-                                                          ]
-                                                        }
-                                                      ]
-                                                    }
-                                                  ]
+                                                  "ParentsOf obj:": "@noun"
                                                 },
                                                 {
                                                   "Args:": [
@@ -204,19 +135,7 @@
                                             {
                                               "Act:": [
                                                 {
-                                                  "Determine:arguments:": [
-                                                    "print description",
-                                                    {
-                                                      "Args:": [
-                                                        {
-                                                          "Arg:from:": [
-                                                            "obj",
-                                                            "@noun"
-                                                          ]
-                                                        }
-                                                      ]
-                                                    }
-                                                  ]
+                                                  "PrintDescription obj:": "@noun"
                                                 }
                                               ]
                                             }
@@ -240,7 +159,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "Print description",
@@ -284,26 +205,16 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
                       "If:do:": [
                         {
                           "Not:": {
-                            "Determine:arguments:": [
-                              "Print particulars",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "obj",
-                                      "@obj"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
+                            "PrintParticulars obj:": "@obj"
                           }
                         },
                         {
@@ -339,19 +250,7 @@
                       "Say:": "@description"
                     },
                     {
-                      "Determine:arguments:": [
-                        "Print particulars",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "PrintParticulars obj:": "@obj"
                     }
                   ]
                 }
@@ -361,7 +260,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "Print particulars",
@@ -400,19 +301,7 @@
                     {
                       "If:do:else:": [
                         {
-                          "Determine:arguments:": [
-                            "print inline storage",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@obj"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                          "PrintInlineStorage obj:": "@obj"
                         },
                         {
                           "Act:": [
@@ -437,23 +326,13 @@
                                   {
                                     "Cmp:is:txt:": [
                                       "@obj",
-                                      "OtherThan",
                                       {
-                                        "Determine:arguments:": [
-                                          "containerOf",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "obj",
-                                                  {
-                                                    "FromTxt:": "player"
-                                                  }
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
+                                        "OtherThan": []
+                                      },
+                                      {
+                                        "ContainerOf obj:": {
+                                          "FromTxt:": "player"
+                                        }
                                       }
                                     ]
                                   },
@@ -503,19 +382,7 @@
                     {
                       "If:do:": [
                         {
-                          "Determine:arguments:": [
-                            "print inline storage",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@obj"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                          "PrintInlineStorage obj:": "@obj"
                         },
                         {
                           "Act:": [
@@ -539,7 +406,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "examining test",
@@ -554,89 +423,29 @@
         {
           "Act:": [
             {
-              "Determine:arguments:": [
-                "Print description",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "blender"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "PrintDescription obj:": {
+                "FromTxt:": "blender"
+              }
             },
             {
-              "Determine:arguments:": [
-                "Print description",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "hat"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "PrintDescription obj:": {
+                "FromTxt:": "hat"
+              }
             },
             {
-              "Determine:arguments:": [
-                "Print description",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "mortar"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "PrintDescription obj:": {
+                "FromTxt:": "mortar"
+              }
             },
             {
-              "Determine:arguments:": [
-                "Print description",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "shelf"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "PrintDescription obj:": {
+                "FromTxt:": "shelf"
+              }
             },
             {
-              "Determine:arguments:": [
-                "Print description",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "cabinet"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "PrintDescription obj:": {
+                "FromTxt:": "cabinet"
+              }
             },
             {
               "Relate:to:via:": [
@@ -646,21 +455,9 @@
               ]
             },
             {
-              "Determine:arguments:": [
-                "Print description",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "blender"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "PrintDescription obj:": {
+                "FromTxt:": "blender"
+              }
             }
           ]
         }

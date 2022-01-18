@@ -33,7 +33,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -120,21 +122,11 @@
                                       {
                                         "Cmp:is:txt:": [
                                           "@dest",
-                                          "OtherThan",
                                           {
-                                            "Determine:arguments:": [
-                                              "parentOf",
-                                              {
-                                                "Args:": [
-                                                  {
-                                                    "Arg:from:": [
-                                                      "obj",
-                                                      "@obj"
-                                                    ]
-                                                  }
-                                                ]
-                                              }
-                                            ]
+                                            "OtherThan": []
+                                          },
+                                          {
+                                            "ParentOf obj:": "@obj"
                                           }
                                         ]
                                       },
@@ -179,7 +171,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "RemoveFromPlay",
@@ -202,7 +196,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -247,7 +243,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "WearObject",
@@ -279,7 +277,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -288,21 +288,11 @@
                           "Not:": {
                             "Cmp:is:txt:": [
                               {
-                                "Determine:arguments:": [
-                                  "holderOf",
-                                  {
-                                    "Args:": [
-                                      {
-                                        "Arg:from:": [
-                                          "obj",
-                                          "@obj"
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                ]
+                                "HolderOf obj:": "@obj"
                               },
-                              "Equals",
+                              {
+                                "Equals": []
+                              },
                               "@actor"
                             ]
                           }
@@ -310,24 +300,9 @@
                         {
                           "Act:": [
                             {
-                              "Determine:arguments:": [
-                                "Move Object",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "obj",
-                                        "@obj"
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "dest",
-                                        "@actor"
-                                      ]
-                                    }
-                                  ]
-                                }
+                              "MoveObject obj:dest:": [
+                                "@obj",
+                                "@actor"
                               ]
                             }
                           ]
@@ -339,21 +314,11 @@
                         {
                           "Cmp:is:txt:": [
                             {
-                              "Determine:arguments:": [
-                                "holderOf",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "obj",
-                                        "@obj"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
+                              "HolderOf obj:": "@obj"
                             },
-                            "Equals",
+                            {
+                              "Equals": []
+                            },
                             "@actor"
                           ]
                         },

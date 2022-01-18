@@ -3,7 +3,9 @@
     {
       "Comment:": "Since \"domains\" aren't yet hierarchical, to share objects across tests they have to be described globally."
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Nouns:depict:": [
         [
@@ -50,7 +52,9 @@
         "Kitchen"
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Make kinds:of:": [
         " cats",
@@ -147,7 +151,9 @@
         "Your aunt's very own witches hat, a Halloween favorite."
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Nouns:startAs:": [
         [
@@ -303,7 +309,9 @@
         ]
       }
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Nouns:startAs:": [
         [
@@ -402,7 +410,9 @@
         ]
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Nouns:depict:and:": [
         [
@@ -617,7 +627,9 @@
         "Steam leaks from the top of a recently used espresso machine."
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "baseVis",
@@ -653,21 +665,9 @@
                               "Repeating across:as:do:": [
                                 {
                                   "FromTxts:": {
-                                    "Determine:arguments:": [
-                                      "transparentList",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "obj",
-                                              {
-                                                "FromTxt:": "@src"
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
+                                    "TransparentList obj:": {
+                                      "FromTxt:": "@src"
+                                    }
                                   }
                                 },
                                 {
@@ -710,21 +710,9 @@
               "Repeating across:as:do:": [
                 {
                   "FromTxts:": {
-                    "Determine:arguments:": [
-                      "transparentList",
-                      {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "obj",
-                              {
-                                "FromTxt:": "cabinet"
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
+                    "TransparentList obj:": {
+                      "FromTxt:": "cabinet"
+                    }
                   }
                 },
                 {
@@ -748,25 +736,15 @@
                     {
                       "Len:": {
                         "FromTxts:": {
-                          "Determine:arguments:": [
-                            "transparentList",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    {
-                                      "FromTxt:": "cabinet"
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                          "TransparentList obj:": {
+                            "FromTxt:": "cabinet"
+                          }
                         }
                       }
                     },
-                    "OtherThan",
+                    {
+                      "OtherThan": []
+                    },
                     1
                   ]
                 },
@@ -797,25 +775,15 @@
                     {
                       "Len:": {
                         "FromTxts:": {
-                          "Determine:arguments:": [
-                            "transparentList",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    {
-                                      "FromTxt:": "cabinet"
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                          "TransparentList obj:": {
+                            "FromTxt:": "cabinet"
+                          }
                         }
                       }
                     },
-                    "GreaterThan",
+                    {
+                      "GreaterThan": []
+                    },
                     1
                   ]
                 },
@@ -832,7 +800,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "lookObjectDescription",
@@ -847,77 +817,32 @@
         {
           "Act:": [
             {
-              "Determine:arguments:": [
-                "print object description",
+              "PrintObjectDescription obj:locale:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "hat"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "locale",
-                        {
-                          "FromTxt:": "kitchen"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "hat"
+                },
+                {
+                  "FromTxt:": "kitchen"
                 }
               ]
             },
             {
-              "Determine:arguments:": [
-                "print object description",
+              "PrintObjectDescription obj:locale:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "shelf"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "locale",
-                        {
-                          "FromTxt:": "kitchen"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "shelf"
+                },
+                {
+                  "FromTxt:": "kitchen"
                 }
               ]
             },
             {
-              "Determine:arguments:": [
-                "print object description",
+              "PrintObjectDescription obj:locale:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "machine"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "locale",
-                        {
-                          "FromTxt:": "kitchen"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "machine"
+                },
+                {
+                  "FromTxt:": "kitchen"
                 }
               ]
             }
@@ -925,7 +850,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "printing vantages",
@@ -940,27 +867,12 @@
         {
           "Act:": [
             {
-              "Determine:arguments:": [
-                "Print vantage",
+              "PrintVantage where:inDarkness:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "where",
-                        {
-                          "FromTxt:": "cabinet"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "inDarkness",
-                        {
-                          "FromBool:": true
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "cabinet"
+                },
+                {
+                  "FromBool:": true
                 }
               ]
             },
@@ -968,21 +880,9 @@
               "Say:": "....."
             },
             {
-              "Determine:arguments:": [
-                "Print vantage",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "where",
-                        {
-                          "FromTxt:": "cabinet"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "PrintVantage where:": {
+                "FromTxt:": "cabinet"
+              }
             },
             {
               "Say:": "....."
@@ -999,21 +899,9 @@
               ]
             },
             {
-              "Determine:arguments:": [
-                "Print vantage",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "where",
-                        {
-                          "FromTxt:": "cabinet"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "PrintVantage where:": {
+                "FromTxt:": "cabinet"
+              }
             },
             {
               "Say:": "....."
@@ -1029,27 +917,17 @@
               ]
             },
             {
-              "Determine:arguments:": [
-                "Print vantage",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "where",
-                        {
-                          "FromTxt:": "cabinet"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "PrintVantage where:": {
+                "FromTxt:": "cabinet"
+              }
             }
           ]
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "printing inline objects",
@@ -1064,25 +942,13 @@
         {
           "Act:": [
             {
-              "Determine:arguments:": [
-                "print inline objects",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "objs",
-                        {
-                          "FromTxts:": [
-                            "mortar",
-                            "blender",
-                            "counter"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "PrintInlineObjects objs:": {
+                "FromTxts:": [
+                  "mortar",
+                  "blender",
+                  "counter"
+                ]
+              }
             }
           ]
         }

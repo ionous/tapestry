@@ -129,19 +129,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
@@ -150,38 +138,13 @@
                         "response",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can handle",
+                            "CanHandle actor:action:noun:otherNoun:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "showing"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "other noun",
-                                      "@other noun"
-                                    ]
-                                  }
-                                ]
-                              }
+                                "FromTxt:": "showing"
+                              },
+                              "@noun",
+                              "@other noun"
                             ]
                           }
                         },
@@ -202,32 +165,12 @@
                             "result",
                             {
                               "FromTxt:": {
-                                "Determine:arguments:": [
-                                  "can reach",
+                                "CanReach actor:action:noun:": [
+                                  "@actor",
                                   {
-                                    "Args:": [
-                                      {
-                                        "Arg:from:": [
-                                          "actor",
-                                          "@actor"
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "action",
-                                          {
-                                            "FromTxt:": "showing"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "noun",
-                                          "@other noun"
-                                        ]
-                                      }
-                                    ]
-                                  }
+                                    "FromTxt:": "showing"
+                                  },
+                                  "@other noun"
                                 ]
                               }
                             },
@@ -247,30 +190,10 @@
                               "ElseDo:": {
                                 "Act:": [
                                   {
-                                    "Determine:arguments:": [
-                                      "report showing",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "actor",
-                                              "@actor"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "noun",
-                                              "@noun"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "other noun",
-                                              "@other noun"
-                                            ]
-                                          }
-                                        ]
-                                      }
+                                    "ReportShowing actor:noun:otherNoun:": [
+                                      "@actor",
+                                      "@noun",
+                                      "@other noun"
                                     ]
                                   }
                                 ]
@@ -288,7 +211,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "report showing",
@@ -323,7 +248,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -344,19 +271,7 @@
               "PatternRule:hook activity:": [
                 {
                   "Not:": {
-                    "Determine:arguments:": [
-                      "isPlayer",
-                      {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "obj",
-                              "@actor"
-                            ]
-                          }
-                        ]
-                      }
-                    ]
+                    "IsPlayer obj:": "@actor"
                   }
                 },
                 {

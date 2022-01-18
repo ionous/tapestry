@@ -46,21 +46,11 @@
                 {
                   "Cmp:is:txt:": [
                     {
-                      "Determine:arguments:": [
-                        "parentOf",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@noun"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "ParentOf obj:": "@noun"
                     },
-                    "OtherThan",
+                    {
+                      "OtherThan": []
+                    },
                     "@actor"
                   ]
                 },

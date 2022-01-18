@@ -19,27 +19,12 @@
               }
             },
             {
-              "Determine:arguments:": [
-                "Activating",
+              "Activating agent:noun:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "controls"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "controls"
                 }
               ]
             },
@@ -49,27 +34,12 @@
               }
             },
             {
-              "Determine:arguments:": [
-                "Deactivating",
+              "Deactivating agent:noun:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "controls"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "controls"
                 }
               ]
             },
@@ -84,27 +54,12 @@
               }
             },
             {
-              "Determine:arguments:": [
-                "Activating",
+              "Activating agent:noun:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "knife"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "knife"
                 }
               ]
             },
@@ -115,7 +70,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "activating test",
@@ -143,7 +100,9 @@
                 ]
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "Nouns:depict:and:": [
                 [

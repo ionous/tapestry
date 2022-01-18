@@ -25,35 +25,15 @@
                               "Say:": "Fail to retrieve from something closed:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "Retrieving from",
+                              "RetrievingFrom agent:noun:otherNoun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "coffee"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "other noun",
-                                        {
-                                          "FromTxt:": "machine"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "coffee"
+                                },
+                                {
+                                  "FromTxt:": "machine"
                                 }
                               ]
                             }
@@ -74,35 +54,15 @@
                               "Say:": "Okay, retrieve from supporter:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "Retrieving from",
+                              "RetrievingFrom agent:noun:otherNoun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "soup"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "other noun",
-                                        {
-                                          "FromTxt:": "shelf"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "soup"
+                                },
+                                {
+                                  "FromTxt:": "shelf"
                                 }
                               ]
                             },
@@ -128,35 +88,15 @@
                               "Say:": "Okay, retrieve from container:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "Retrieving from",
+                              "RetrievingFrom agent:noun:otherNoun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "hook"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "other noun",
-                                        {
-                                          "FromTxt:": "cabinet"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "hook"
+                                },
+                                {
+                                  "FromTxt:": "cabinet"
                                 }
                               ]
                             },
@@ -177,35 +117,15 @@
                               "Say:": "Fail to retrieve incorrectly:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "Retrieving from",
+                              "RetrievingFrom agent:noun:otherNoun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "hat"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "other noun",
-                                        {
-                                          "FromTxt:": "cabinet"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "hat"
+                                },
+                                {
+                                  "FromTxt:": "cabinet"
                                 }
                               ]
                             }
@@ -221,35 +141,15 @@
                               "Say:": "Fail to steal:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "Retrieving from",
+                              "RetrievingFrom agent:noun:otherNoun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "apple"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "other noun",
-                                        {
-                                          "FromTxt:": "Mildred"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "apple"
+                                },
+                                {
+                                  "FromTxt:": "Mildred"
                                 }
                               ]
                             }
@@ -265,7 +165,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "retrieving test",
@@ -299,7 +201,9 @@
                 ]
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "RelativeToNoun:nouns:areBeing:otherNouns:": [
                 "whereabouts",
@@ -322,7 +226,9 @@
                 ]
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "RelativeToNoun:nouns:areBeing:otherNouns:": [
                 "whereabouts",

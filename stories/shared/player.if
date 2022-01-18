@@ -50,7 +50,9 @@
         ]
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Nouns:depict:": [
         [
@@ -137,7 +139,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "isPlayer",
@@ -180,7 +184,9 @@
                           "FromBool:": {
                             "Cmp:is:txt:": [
                               "@obj",
-                              "Equals",
+                              {
+                                "Equals": []
+                              },
                               {
                                 "Get:from:": [
                                   "pawn",
@@ -215,7 +221,9 @@
                           "FromBool:": {
                             "Cmp:is:txt:": [
                               "@obj",
-                              "Equals",
+                              {
+                                "Equals": []
+                              },
                               {
                                 "IdOf:": "player"
                               }
@@ -232,7 +240,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "RelativeToNoun:nouns:areBeing:otherNouns:": [
         " whereabouts",
@@ -255,7 +265,9 @@
         ]
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestRule:hook activity:": [
         "player tests",
@@ -264,21 +276,9 @@
             {
               "If:do:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            {
-                              "FromTxt:": "self"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": {
+                    "FromTxt:": "self"
+                  }
                 },
                 {
                   "Act:": [
@@ -301,7 +301,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "GrammarDecl:": {
         "Alias:asNoun:": [

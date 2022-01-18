@@ -76,7 +76,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "shows storage",
@@ -108,19 +110,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "provides storage",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@obj"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "ProvidesStorage obj:": "@obj"
                 },
                 {
                   "Act:": [
@@ -130,19 +120,7 @@
                         {
                           "FromBool:": {
                             "Not:": {
-                              "Determine:arguments:": [
-                                "fully opaque",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "obj",
-                                        "@obj"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
+                              "FullyOpaque obj:": "@obj"
                             }
                           }
                         }
@@ -156,7 +134,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "visible storage",
@@ -188,19 +168,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "shows storage",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@obj"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "ShowsStorage obj:": "@obj"
                 },
                 {
                   "Act:": [
@@ -208,19 +176,7 @@
                       "Repeating across:as:do:": [
                         {
                           "FromTxts:": {
-                            "Determine:arguments:": [
-                              "childrenOf",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "obj",
-                                      "@obj"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
+                            "ChildrenOf obj:": "@obj"
                           }
                         },
                         {
@@ -236,7 +192,9 @@
                                       {
                                         "Cmp:is:txt:": [
                                           "@it",
-                                          "Equals",
+                                          {
+                                            "Equals": []
+                                          },
                                           {
                                             "Get:from:": [
                                               "pawn",
@@ -282,7 +240,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "allows storage",
@@ -314,19 +274,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "provides storage",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@obj"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "ProvidesStorage obj:": "@obj"
                 },
                 {
                   "Act:": [

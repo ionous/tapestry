@@ -41,19 +41,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
@@ -65,32 +53,12 @@
                         "result",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can reach",
+                            "CanReach actor:action:noun:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "retrieving from"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  }
-                                ]
-                              }
+                                "FromTxt:": "retrieving from"
+                              },
+                              "@noun"
                             ]
                           }
                         },
@@ -114,38 +82,13 @@
                                   "result",
                                   {
                                     "FromTxt:": {
-                                      "Determine:arguments:": [
-                                        "can use",
+                                      "CanUse actor:action:noun:otherNoun:": [
+                                        "@actor",
                                         {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "actor",
-                                                "@actor"
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "action",
-                                                {
-                                                  "FromTxt:": "retrieving from"
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "noun",
-                                                "@noun"
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "other noun",
-                                                "@other noun"
-                                              ]
-                                            }
-                                          ]
-                                        }
+                                          "FromTxt:": "retrieving from"
+                                        },
+                                        "@noun",
+                                        "@other noun"
                                       ]
                                     }
                                   },
@@ -170,19 +113,7 @@
                                               "Send:path:arguments:": [
                                                 "retrieve from",
                                                 {
-                                                  "Determine:arguments:": [
-                                                    "parentsOf",
-                                                    {
-                                                      "Args:": [
-                                                        {
-                                                          "Arg:from:": [
-                                                            "obj",
-                                                            "@noun"
-                                                          ]
-                                                        }
-                                                      ]
-                                                    }
-                                                  ]
+                                                  "ParentsOf obj:": "@noun"
                                                 },
                                                 {
                                                   "Args:": [
@@ -211,30 +142,10 @@
                                             {
                                               "Act:": [
                                                 {
-                                                  "Determine:arguments:": [
-                                                    "Report retrieving from",
-                                                    {
-                                                      "Args:": [
-                                                        {
-                                                          "Arg:from:": [
-                                                            "actor",
-                                                            "@actor"
-                                                          ]
-                                                        },
-                                                        {
-                                                          "Arg:from:": [
-                                                            "noun",
-                                                            "@noun"
-                                                          ]
-                                                        },
-                                                        {
-                                                          "Arg:from:": [
-                                                            "other noun",
-                                                            "@other noun"
-                                                          ]
-                                                        }
-                                                      ]
-                                                    }
+                                                  "ReportRetrievingFrom actor:noun:otherNoun:": [
+                                                    "@actor",
+                                                    "@noun",
+                                                    "@other noun"
                                                   ]
                                                 }
                                               ]
@@ -259,7 +170,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:rules:": [
         "can reach",
@@ -272,7 +185,9 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "retrieving from"
                       ]
                     }
@@ -285,33 +200,13 @@
                         "response",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can reach",
+                            "CanReach actor:action:noun:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "taking"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      {
-                                        "FromTxt:": "@noun"
-                                      }
-                                    ]
-                                  }
-                                ]
+                                "FromTxt:": "taking"
+                              },
+                              {
+                                "FromTxt:": "@noun"
                               }
                             ]
                           }
@@ -326,7 +221,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:rules:": [
         "can use",
@@ -339,7 +236,9 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "retrieving from"
                       ]
                     }
@@ -352,33 +251,13 @@
                         "response",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can use",
+                            "CanUse actor:action:noun:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "taking"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      {
-                                        "FromTxt:": "@noun"
-                                      }
-                                    ]
-                                  }
-                                ]
+                                "FromTxt:": "taking"
+                              },
+                              {
+                                "FromTxt:": "@noun"
                               }
                             ]
                           }
@@ -396,28 +275,20 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "retrieving from"
                       ]
                     },
                     {
                       "Cmp:is:txt:": [
                         {
-                          "Determine:arguments:": [
-                            "parentOf",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@noun"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                          "ParentOf obj:": "@noun"
                         },
-                        "OtherThan",
+                        {
+                          "OtherThan": []
+                        },
                         "@other noun"
                       ]
                     }
@@ -448,7 +319,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Listen kinds:handlers:": [
         "things",
@@ -461,7 +334,9 @@
                 "PatternRules:": [
                   {
                     "PatternRule:hook activity:": [
-                      "Always",
+                      {
+                        "Always": []
+                      },
                       {
                         "Act:": [
                           {
@@ -472,19 +347,7 @@
                                   "Send:path:arguments:": [
                                     "take",
                                     {
-                                      "Determine:arguments:": [
-                                        "parentsOf",
-                                        {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "obj",
-                                                "@noun"
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
+                                      "ParentsOf obj:": "@noun"
                                     },
                                     {
                                       "Args:": [
@@ -518,7 +381,9 @@
         ]
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "report retrieving from",
@@ -553,28 +418,15 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
-                      "Determine:arguments:": [
-                        "Report taking",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "actor",
-                                "@actor"
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "noun",
-                                "@noun"
-                              ]
-                            }
-                          ]
-                        }
+                      "ReportTaking actor:noun:": [
+                        "@actor",
+                        "@noun"
                       ]
                     }
                   ]

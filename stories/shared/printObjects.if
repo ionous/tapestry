@@ -28,19 +28,7 @@
                 {
                   "LocalInit:": {
                     "FromRecs:": {
-                      "Determine:arguments:": [
-                        "make groups",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                "@objs"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "MakeGroups objs:": "@objs"
                     }
                   }
                 }
@@ -52,7 +40,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -72,19 +62,7 @@
                                         "Spaces:": {
                                           "Act:": [
                                             {
-                                              "Determine:arguments:": [
-                                                "print group",
-                                                {
-                                                  "Args:": [
-                                                    {
-                                                      "Arg:from:": [
-                                                        "group",
-                                                        "@group"
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
-                                              ]
+                                              "PrintGroup group:": "@group"
                                             }
                                           ]
                                         }
@@ -106,7 +84,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "print blocks",
@@ -135,19 +115,7 @@
                 {
                   "LocalInit:": {
                     "FromRecs:": {
-                      "Determine:arguments:": [
-                        "make groups",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                "@objs"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "MakeGroups objs:": "@objs"
                     }
                   }
                 }
@@ -159,7 +127,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -179,19 +149,7 @@
                                         "Row:": {
                                           "Act:": [
                                             {
-                                              "Determine:arguments:": [
-                                                "print group",
-                                                {
-                                                  "Args:": [
-                                                    {
-                                                      "Arg:from:": [
-                                                        "group",
-                                                        "@group"
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
-                                              ]
+                                              "PrintGroup group:": "@group"
                                             }
                                           ]
                                         }
@@ -213,7 +171,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "print object",
@@ -271,7 +231,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -290,14 +252,18 @@
                     {
                       "Cmp:is:num:": [
                         "@inline depth",
-                        "GreaterThan",
+                        {
+                          "GreaterThan": []
+                        },
                         0
                       ]
                     },
                     {
                       "Cmp:is:num:": [
                         "@inline depth",
-                        "GreaterThan",
+                        {
+                          "GreaterThan": []
+                        },
                         "@block depth"
                       ]
                     }
@@ -310,38 +276,14 @@
                         "Spaces:": {
                           "Act:": [
                             {
-                              "Determine:arguments:": [
-                                "a",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        "@obj"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
+                              "A noun:": "@obj"
                             },
                             {
                               "Say:": {
                                 "Brackets:": {
                                   "Act:": [
                                     {
-                                      "Determine:arguments:": [
-                                        "print details",
-                                        {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "obj",
-                                                "@obj"
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
+                                      "PrintDetails obj:": "@obj"
                                     }
                                   ]
                                 }
@@ -362,14 +304,18 @@
                     {
                       "Cmp:is:num:": [
                         "@block depth",
-                        "GreaterThan",
+                        {
+                          "GreaterThan": []
+                        },
                         0
                       ]
                     },
                     {
                       "Cmp:is:num:": [
                         "@block depth",
-                        "GreaterThan",
+                        {
+                          "GreaterThan": []
+                        },
                         "@inline depth"
                       ]
                     }
@@ -378,19 +324,7 @@
                 {
                   "Act:": [
                     {
-                      "Determine:arguments:": [
-                        "print block",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "PrintBlock obj:": "@obj"
                     }
                   ]
                 }
@@ -400,7 +334,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "print block",
@@ -429,19 +365,7 @@
                 {
                   "LocalInit:": {
                     "FromTxts:": {
-                      "Determine:arguments:": [
-                        "visible storage",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "VisibleStorage obj:": "@obj"
                     }
                   }
                 }
@@ -459,7 +383,9 @@
                         {
                           "Len:": "@kids"
                         },
-                        "GreaterThan",
+                        {
+                          "GreaterThan": []
+                        },
                         0
                       ]
                     }
@@ -473,7 +399,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -481,42 +409,15 @@
                         "Spaces:": {
                           "Act:": [
                             {
-                              "Determine:arguments:": [
-                                "a",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        "@obj"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
+                              "A noun:": "@obj"
                             },
                             {
-                              "Determine:arguments:": [
-                                "print status",
+                              "PrintStatus obj:isEmpty:": [
+                                "@obj",
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "obj",
-                                        "@obj"
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "isEmpty",
-                                        {
-                                          "FromBool:": {
-                                            "Not:": "@hasKids"
-                                          }
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromBool:": {
+                                    "Not:": "@hasKids"
+                                  }
                                 }
                               ]
                             }
@@ -530,19 +431,7 @@
                         {
                           "Act:": [
                             {
-                              "Determine:arguments:": [
-                                "print blocks",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "objs",
-                                        "@kids"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
+                              "PrintBlocks objs:": "@kids"
                             }
                           ]
                         }
@@ -556,7 +445,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "print inline storage",
@@ -590,19 +481,7 @@
                 {
                   "LocalInit:": {
                     "FromTxts:": {
-                      "Determine:arguments:": [
-                        "visible storage",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "VisibleStorage obj:": "@obj"
                     }
                   }
                 }
@@ -619,7 +498,9 @@
                     {
                       "Len:": "@kids"
                     },
-                    "GreaterThan",
+                    {
+                      "GreaterThan": []
+                    },
                     0
                   ]
                 },
@@ -651,7 +532,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "print details",
@@ -683,19 +566,7 @@
                 {
                   "LocalInit:": {
                     "FromTxts:": {
-                      "Determine:arguments:": [
-                        "visible storage",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "VisibleStorage obj:": "@obj"
                     }
                   }
                 }
@@ -774,7 +645,9 @@
                         {
                           "Len:": "@kids"
                         },
-                        "GreaterThan",
+                        {
+                          "GreaterThan": []
+                        },
                         0
                       ]
                     }
@@ -800,7 +673,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "print status",
@@ -834,7 +709,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -850,24 +727,9 @@
                                         "Commas:": {
                                           "Act:": [
                                             {
-                                              "Determine:arguments:": [
-                                                " print inner status",
-                                                {
-                                                  "Args:": [
-                                                    {
-                                                      "Arg:from:": [
-                                                        "obj",
-                                                        "@obj"
-                                                      ]
-                                                    },
-                                                    {
-                                                      "Arg:from:": [
-                                                        "isEmpty",
-                                                        "@isEmpty"
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
+                                              "PrintInnerStatus obj:isEmpty:": [
+                                                "@obj",
+                                                "@isEmpty"
                                               ]
                                             }
                                           ]
@@ -890,7 +752,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "print inner status",

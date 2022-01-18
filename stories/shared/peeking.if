@@ -41,19 +41,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
@@ -62,39 +50,14 @@
                         "result",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can reach",
+                            "CanReach actor:action:noun:requiresLight:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "peeking"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "requires light",
-                                      {
-                                        "FromBool:": true
-                                      }
-                                    ]
-                                  }
-                                ]
+                                "FromTxt:": "peeking"
+                              },
+                              "@noun",
+                              {
+                                "FromBool:": true
                               }
                             ]
                           }
@@ -120,19 +83,7 @@
                                     "Send:path:arguments:": [
                                       "peek",
                                       {
-                                        "Determine:arguments:": [
-                                          "parentsOf",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "obj",
-                                                  "@noun"
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
+                                        "ParentsOf obj:": "@noun"
                                       },
                                       {
                                         "Args:": [
@@ -155,24 +106,9 @@
                                   {
                                     "Act:": [
                                       {
-                                        "Determine:arguments:": [
-                                          "report peeking",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "actor",
-                                                  "@actor"
-                                                ]
-                                              },
-                                              {
-                                                "Arg:from:": [
-                                                  "noun",
-                                                  "@noun"
-                                                ]
-                                              }
-                                            ]
-                                          }
+                                        "ReportPeeking actor:noun:": [
+                                          "@actor",
+                                          "@noun"
                                         ]
                                       }
                                     ]
@@ -192,7 +128,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "report peeking",
@@ -221,7 +159,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -242,19 +182,7 @@
               "PatternRule:hook activity:": [
                 {
                   "Not:": {
-                    "Determine:arguments:": [
-                      "isPlayer",
-                      {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "obj",
-                              "@actor"
-                            ]
-                          }
-                        ]
-                      }
-                    ]
+                    "IsPlayer obj:": "@actor"
                   }
                 },
                 {

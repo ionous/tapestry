@@ -41,19 +41,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
@@ -62,39 +50,14 @@
                         "result",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can reach",
+                            "CanReach actor:action:noun:requiresLight:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "taking"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "requires light",
-                                      {
-                                        "FromBool:": false
-                                      }
-                                    ]
-                                  }
-                                ]
+                                "FromTxt:": "taking"
+                              },
+                              "@noun",
+                              {
+                                "FromBool:": false
                               }
                             ]
                           }
@@ -120,19 +83,7 @@
                                     "Send:path:arguments:": [
                                       "take",
                                       {
-                                        "Determine:arguments:": [
-                                          "parentsOf",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "obj",
-                                                  "@noun"
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
+                                        "ParentsOf obj:": "@noun"
                                       },
                                       {
                                         "Args:": [
@@ -155,24 +106,9 @@
                                   {
                                     "Act:": [
                                       {
-                                        "Determine:arguments:": [
-                                          "report taking",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "actor",
-                                                  "@actor"
-                                                ]
-                                              },
-                                              {
-                                                "Arg:from:": [
-                                                  "noun",
-                                                  "@noun"
-                                                ]
-                                              }
-                                            ]
-                                          }
+                                        "ReportTaking actor:noun:": [
+                                          "@actor",
+                                          "@noun"
                                         ]
                                       }
                                     ]
@@ -192,7 +128,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Listen kinds:handlers:": [
         "things",
@@ -205,7 +143,9 @@
                 "PatternRules:": [
                   {
                     "PatternRule:hook activity:": [
-                      "Always",
+                      {
+                        "Always": []
+                      },
                       {
                         "Act:": [
                           {
@@ -213,24 +153,9 @@
                               "error",
                               {
                                 "FromTxt:": {
-                                  "Determine:arguments:": [
-                                    "move object",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "obj",
-                                            "@noun"
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "dest",
-                                            "@actor"
-                                          ]
-                                        }
-                                      ]
-                                    }
+                                  "MoveObject obj:dest:": [
+                                    "@noun",
+                                    "@actor"
                                   ]
                                 }
                               },
@@ -288,7 +213,9 @@
         ]
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "report taking",
@@ -317,7 +244,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -338,19 +267,7 @@
               "PatternRule:hook activity:": [
                 {
                   "Not:": {
-                    "Determine:arguments:": [
-                      "isPlayer",
-                      {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "obj",
-                              "@actor"
-                            ]
-                          }
-                        ]
-                      }
-                    ]
+                    "IsPlayer obj:": "@actor"
                   }
                 },
                 {
@@ -373,7 +290,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:rules:": [
         "can reach",
@@ -386,7 +305,9 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "taking"
                       ]
                     },
@@ -426,14 +347,18 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "taking"
                       ]
                     },
                     {
                       "Cmp:is:txt:": [
                         "@actor",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "@noun"
                       ]
                     }
@@ -467,7 +392,9 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "taking"
                       ]
                     },
@@ -507,7 +434,9 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "taking"
                       ]
                     },
@@ -547,7 +476,9 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "taking"
                       ]
                     },
@@ -586,7 +517,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:rules:": [
         "reach up",
@@ -599,14 +532,18 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "taking"
                       ]
                     },
                     {
                       "Cmp:is:txt:": [
                         "@intoObj",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "@noun"
                       ]
                     }
@@ -640,7 +577,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:rules:": [
         "reach down",
@@ -653,7 +592,9 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "taking"
                       ]
                     },
@@ -696,21 +637,27 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "taking"
                       ]
                     },
                     {
                       "Cmp:is:txt:": [
                         "@fromObj",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "@actor"
                       ]
                     },
                     {
                       "Cmp:is:txt:": [
                         "@intoObj",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "@noun"
                       ]
                     }

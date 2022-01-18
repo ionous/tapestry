@@ -105,7 +105,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "no grouping",
@@ -118,7 +120,9 @@
                   "PatternRules:": [
                     {
                       "PatternRule:hook activity:": [
-                        "Always",
+                        {
+                          "Always": []
+                        },
                         {
                           "Act:": [
                             {
@@ -142,7 +146,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "no grouping",
@@ -160,35 +166,25 @@
         {
           "Act:": [
             {
-              "Determine:arguments:": [
-                "print inline objects",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "objs",
-                        {
-                          "FromTxts:": [
-                            "Mildred",
-                            " apple",
-                            " pen",
-                            "triangles_1",
-                            "triangles_2",
-                            "cats_1",
-                            "cats_2"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "PrintInlineObjects objs:": {
+                "FromTxts:": [
+                  "Mildred",
+                  " apple",
+                  " pen",
+                  "triangles_1",
+                  "triangles_2",
+                  "cats_1",
+                  "cats_2"
+                ]
+              }
             }
           ]
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "default grouping",
@@ -206,35 +202,25 @@
         {
           "Act:": [
             {
-              "Determine:arguments:": [
-                "print inline objects",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "objs",
-                        {
-                          "FromTxts:": [
-                            "Mildred",
-                            " apple",
-                            " pen",
-                            "triangles_1",
-                            "triangles_2",
-                            "cats_1",
-                            "cats_2"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "PrintInlineObjects objs:": {
+                "FromTxts:": [
+                  "Mildred",
+                  " apple",
+                  " pen",
+                  "triangles_1",
+                  "triangles_2",
+                  "cats_1",
+                  "cats_2"
+                ]
+              }
             }
           ]
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "custom few",
@@ -307,7 +293,9 @@
                 }
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "Pattern:rules:": [
                 "print several",
@@ -326,7 +314,9 @@
                             {
                               "Cmp:is:num:": [
                                 "@group size",
-                                "GreaterThan",
+                                {
+                                  "GreaterThan": []
+                                },
                                 1
                               ]
                             }
@@ -349,7 +339,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestRule:hook activity:": [
         "custom few",
@@ -360,52 +352,28 @@
                 "Spaces:": {
                   "Act:": [
                     {
-                      "Determine:arguments:": [
-                        "print inline objects",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                {
-                                  "FromTxts:": [
-                                    "Mildred",
-                                    " apple",
-                                    " pen",
-                                    "triangles_1",
-                                    "triangles_2"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "PrintInlineObjects objs:": {
+                        "FromTxts:": [
+                          "Mildred",
+                          " apple",
+                          " pen",
+                          "triangles_1",
+                          "triangles_2"
+                        ]
+                      }
                     },
                     {
                       "Say:": ";"
                     },
                     {
-                      "Determine:arguments:": [
-                        "print inline objects",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                {
-                                  "FromTxts:": [
-                                    "Mildred",
-                                    " apple",
-                                    " pen",
-                                    "triangles_1"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "PrintInlineObjects objs:": {
+                        "FromTxts:": [
+                          "Mildred",
+                          " apple",
+                          " pen",
+                          "triangles_1"
+                        ]
+                      }
                     }
                   ]
                 }
@@ -415,7 +383,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "custom replacement",
@@ -489,7 +459,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Comment:": "deactivated: uncounted objects are their own groups now; so the triangles don't group with generic props. tbd: how to fix this style of group printing."
     },
@@ -503,50 +475,26 @@
                 "Spaces:": {
                   "Act:": [
                     {
-                      "Determine:arguments:": [
-                        "print inline objects",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                {
-                                  "FromTxts:": [
-                                    "Mildred",
-                                    " apple",
-                                    " pen",
-                                    "triangles_1",
-                                    "triangles_2"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "PrintInlineObjects objs:": {
+                        "FromTxts:": [
+                          "Mildred",
+                          " apple",
+                          " pen",
+                          "triangles_1",
+                          "triangles_2"
+                        ]
+                      }
                     },
                     {
                       "Say:": ";"
                     },
                     {
-                      "Determine:arguments:": [
-                        "print inline objects",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                {
-                                  "FromTxts:": [
-                                    "Mildred",
-                                    " apple"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "PrintInlineObjects objs:": {
+                        "FromTxts:": [
+                          "Mildred",
+                          " apple"
+                        ]
+                      }
                     }
                   ]
                 }
@@ -556,7 +504,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "custom fancy phrase",
@@ -615,7 +565,9 @@
                 }
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "Pattern:rules:": [
                 "print group",
@@ -640,7 +592,9 @@
                                 }
                               ]
                             },
-                            "Equals",
+                            {
+                              "Equals": []
+                            },
                             "the tiles"
                           ]
                         },
@@ -658,7 +612,9 @@
                 }
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "Pattern:rules:": [
                 "print grouped object",
@@ -691,7 +647,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestRule:hook activity:": [
         "custom fancy phrase",
@@ -702,54 +660,30 @@
                 "Spaces:": {
                   "Act:": [
                     {
-                      "Determine:arguments:": [
-                        "print inline objects",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                {
-                                  "FromTxts:": [
-                                    "x",
-                                    "w",
-                                    "f",
-                                    "y",
-                                    "z"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "PrintInlineObjects objs:": {
+                        "FromTxts:": [
+                          "x",
+                          "w",
+                          "f",
+                          "y",
+                          "z"
+                        ]
+                      }
                     },
                     {
                       "Say:": ";"
                     },
                     {
-                      "Determine:arguments:": [
-                        "print inline objects",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                {
-                                  "FromTxts:": [
-                                    "Mildred",
-                                    "x",
-                                    "w",
-                                    "f",
-                                    "y",
-                                    "z"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "PrintInlineObjects objs:": {
+                        "FromTxts:": [
+                          "Mildred",
+                          "x",
+                          "w",
+                          "f",
+                          "y",
+                          "z"
+                        ]
+                      }
                     }
                   ]
                 }
@@ -759,7 +693,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "custom parenthetical",
@@ -807,7 +743,9 @@
                 }
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "Pattern:rules:": [
                 "print grouped object",
@@ -840,41 +778,33 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestRule:hook activity:": [
         "custom parenthetical",
         {
           "Act:": [
             {
-              "Determine:arguments:": [
-                "print inline objects",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "objs",
-                        {
-                          "FromTxts:": [
-                            "Mildred",
-                            "x",
-                            "w",
-                            "f",
-                            "y",
-                            "z"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "PrintInlineObjects objs:": {
+                "FromTxts:": [
+                  "Mildred",
+                  "x",
+                  "w",
+                  "f",
+                  "y",
+                  "z"
+                ]
+              }
             }
           ]
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "custom parenthetical articles",
@@ -926,41 +856,33 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestRule:hook activity:": [
         "custom parenthetical articles",
         {
           "Act:": [
             {
-              "Determine:arguments:": [
-                "print inline objects",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "objs",
-                        {
-                          "FromTxts:": [
-                            "Mildred",
-                            "x",
-                            "w",
-                            "f",
-                            "y",
-                            "z"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              "PrintInlineObjects objs:": {
+                "FromTxts:": [
+                  "Mildred",
+                  "x",
+                  "w",
+                  "f",
+                  "y",
+                  "z"
+                ]
+              }
             }
           ]
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "custom unnamed parenthetical",
@@ -1012,7 +934,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Comment:": "deactivated: uncounted objects are their own groups now; so the triangles don't group with generic props. tbd: how to fix this style of group printing."
     },
@@ -1026,52 +950,28 @@
                 "Spaces:": {
                   "Act:": [
                     {
-                      "Determine:arguments:": [
-                        "print inline objects",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                {
-                                  "FromTxts:": [
-                                    "Mildred",
-                                    " apple",
-                                    " pen",
-                                    "triangles_1"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "PrintInlineObjects objs:": {
+                        "FromTxts:": [
+                          "Mildred",
+                          " apple",
+                          " pen",
+                          "triangles_1"
+                        ]
+                      }
                     },
                     {
                       "Say:": ";"
                     },
                     {
-                      "Determine:arguments:": [
-                        "print inline objects",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                {
-                                  "FromTxts:": [
-                                    "Mildred",
-                                    " apple",
-                                    " pen",
-                                    "triangles_1",
-                                    "triangles_2"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "PrintInlineObjects objs:": {
+                        "FromTxts:": [
+                          "Mildred",
+                          " apple",
+                          " pen",
+                          "triangles_1",
+                          "triangles_2"
+                        ]
+                      }
                     }
                   ]
                 }

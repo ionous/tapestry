@@ -20,7 +20,9 @@
     {
       "Comment:": "Determine if text starts with a vowel or vowel sound. This method is from mudconnect.com"
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:rules:": [
         "starts with vowel",
@@ -96,7 +98,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "vowels",
@@ -105,7 +109,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestRule:hook activity:": [
         "vowels",
@@ -115,21 +121,9 @@
               "Say:": {
                 "Txt if:then:else:": [
                   {
-                    "Determine:arguments:": [
-                      "starts with vowel",
-                      {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "text",
-                              {
-                                "FromTxt:": "house"
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
+                    "StartsWithVowel text:": {
+                      "FromTxt:": "house"
+                    }
                   },
                   "error: house doesn't start with a vowel",
                   ""
@@ -140,21 +134,9 @@
               "Say:": {
                 "Txt if:then:else:": [
                   {
-                    "Determine:arguments:": [
-                      "starts with vowel",
-                      {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "text",
-                              {
-                                "FromTxt:": "hour"
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
+                    "StartsWithVowel text:": {
+                      "FromTxt:": "hour"
+                    }
                   },
                   "",
                   "error: hour starts with a vowel sound"
@@ -165,21 +147,9 @@
               "Say:": {
                 "Txt if:then:else:": [
                   {
-                    "Determine:arguments:": [
-                      "starts with vowel",
-                      {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "text",
-                              {
-                                "FromTxt:": "beta"
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
+                    "StartsWithVowel text:": {
+                      "FromTxt:": "beta"
+                    }
                   },
                   "error: beta doesn't start with a vowel",
                   ""
@@ -190,21 +160,9 @@
               "Say:": {
                 "Txt if:then:else:": [
                   {
-                    "Determine:arguments:": [
-                      "starts with vowel",
-                      {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "text",
-                              {
-                                "FromTxt:": "alpha"
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
+                    "StartsWithVowel text:": {
+                      "FromTxt:": "alpha"
+                    }
                   },
                   "",
                   "alpha starts with a vowel"

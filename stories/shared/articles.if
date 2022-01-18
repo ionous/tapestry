@@ -33,7 +33,9 @@
     {
       "KindsOfAspect:": " pluralization"
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "articles",
@@ -73,7 +75,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestRule:hook activity:": [
         "articles",
@@ -88,7 +92,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "articles",
@@ -97,7 +103,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "A",
@@ -120,31 +128,18 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
-                      "Determine:arguments:": [
-                        "print_article",
+                      "PrintArticle obj:name:": [
+                        "@noun",
                         {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@noun"
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "name",
-                                {
-                                  "FromTxt:": {
-                                    "RenderTemplate:": "{.noun}"
-                                  }
-                                }
-                              ]
-                            }
-                          ]
+                          "FromTxt:": {
+                            "RenderTemplate:": "{.noun}"
+                          }
                         }
                       ]
                     }
@@ -156,7 +151,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "The",
@@ -179,39 +176,21 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
-                      "Determine:arguments:": [
-                        "print_article",
+                      "PrintArticle article:obj:name:": [
                         {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "article",
-                                {
-                                  "FromTxt:": "the"
-                                }
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@noun"
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "name",
-                                {
-                                  "FromTxt:": {
-                                    "RenderTemplate:": "{.noun}"
-                                  }
-                                }
-                              ]
-                            }
-                          ]
+                          "FromTxt:": "the"
+                        },
+                        "@noun",
+                        {
+                          "FromTxt:": {
+                            "RenderTemplate:": "{.noun}"
+                          }
                         }
                       ]
                     }
@@ -223,7 +202,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "Print article",
@@ -252,7 +233,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -267,19 +250,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "starts with vowel",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "text",
-                            "@name"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "StartsWithVowel text:": "@name"
                 },
                 {
                   "Act:": [
@@ -323,7 +294,9 @@
                         }
                       ]
                     },
-                    "OtherThan",
+                    {
+                      "OtherThan": []
+                    },
                     ""
                   ]
                 },
@@ -343,7 +316,9 @@
                 {
                   "Cmp:is:txt:": [
                     "@article",
-                    "OtherThan",
+                    {
+                      "OtherThan": []
+                    },
                     ""
                   ]
                 },

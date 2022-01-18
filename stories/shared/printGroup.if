@@ -117,24 +117,9 @@
                                                 {
                                                   "Act:": [
                                                     {
-                                                      "Determine:arguments:": [
-                                                        "print grouped object",
-                                                        {
-                                                          "Args:": [
-                                                            {
-                                                              "Arg:from:": [
-                                                                "obj",
-                                                                "@obj"
-                                                              ]
-                                                            },
-                                                            {
-                                                              "Arg:from:": [
-                                                                "grouping",
-                                                                "@grouping"
-                                                              ]
-                                                            }
-                                                          ]
-                                                        }
+                                                      "PrintGroupedObject obj:grouping:": [
+                                                        "@obj",
+                                                        "@grouping"
                                                       ]
                                                     }
                                                   ]
@@ -167,24 +152,9 @@
                                           {
                                             "Act:": [
                                               {
-                                                "Determine:arguments:": [
-                                                  "print grouped object",
-                                                  {
-                                                    "Args:": [
-                                                      {
-                                                        "Arg:from:": [
-                                                          "obj",
-                                                          "@obj"
-                                                        ]
-                                                      },
-                                                      {
-                                                        "Arg:from:": [
-                                                          "grouping",
-                                                          "@grouping"
-                                                        ]
-                                                      }
-                                                    ]
-                                                  }
+                                                "PrintGroupedObject obj:grouping:": [
+                                                  "@obj",
+                                                  "@grouping"
                                                 ]
                                               }
                                             ]
@@ -265,62 +235,42 @@
                       "Comment:": "print the size, and possibly a label, for a group of objects."
                     },
                     {
-                      "Determine:arguments:": [
-                        "print several",
+                      "PrintSeveral obj:groupSize:label:": [
                         {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                {
-                                  "FromTxt:": {
-                                    "Get:index:": [
-                                      "@objs",
-                                      1
-                                    ]
+                          "FromTxt:": {
+                            "Get:index:": [
+                              "@objs",
+                              1
+                            ]
+                          }
+                        },
+                        {
+                          "FromNum:": {
+                            "Len:": "@objs"
+                          }
+                        },
+                        {
+                          "FromTxt:": {
+                            "Txt if:then:else:": [
+                              {
+                                "Get:from:": [
+                                  "not hide label",
+                                  {
+                                    "VarFields:": "grouping"
                                   }
-                                }
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "group size",
-                                {
-                                  "FromNum:": {
-                                    "Len:": "@objs"
+                                ]
+                              },
+                              {
+                                "Get:from:": [
+                                  "label",
+                                  {
+                                    "VarFields:": "grouping"
                                   }
-                                }
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "label",
-                                {
-                                  "FromTxt:": {
-                                    "Txt if:then:else:": [
-                                      {
-                                        "Get:from:": [
-                                          "not hide label",
-                                          {
-                                            "VarFields:": "grouping"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "Get:from:": [
-                                          "label",
-                                          {
-                                            "VarFields:": "grouping"
-                                          }
-                                        ]
-                                      },
-                                      ""
-                                    ]
-                                  }
-                                }
-                              ]
-                            }
-                          ]
+                                ]
+                              },
+                              ""
+                            ]
+                          }
                         }
                       ]
                     }
@@ -350,26 +300,14 @@
                       "Comment:": "completely unobject groups; presumably just one for each group."
                     },
                     {
-                      "Determine:arguments:": [
-                        "Print grouped object",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                {
-                                  "FromTxt:": {
-                                    "Get:index:": [
-                                      "@objs",
-                                      1
-                                    ]
-                                  }
-                                }
-                              ]
-                            }
+                      "PrintGroupedObject obj:": {
+                        "FromTxt:": {
+                          "Get:index:": [
+                            "@objs",
+                            1
                           ]
                         }
-                      ]
+                      }
                     },
                     {
                       "Let:be:": [
@@ -385,7 +323,9 @@
             },
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -401,7 +341,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "print grouped object",
@@ -433,23 +375,13 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
-                      "Determine:arguments:": [
-                        "print object",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "PrintObject obj:": "@obj"
                     }
                   ]
                 }

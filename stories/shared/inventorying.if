@@ -39,19 +39,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
@@ -59,19 +47,7 @@
                       "Send:path:arguments:": [
                         "inventory",
                         {
-                          "Determine:arguments:": [
-                            "parentsOf",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@actor"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                          "ParentsOf obj:": "@actor"
                         },
                         {
                           "Args:": [
@@ -93,7 +69,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Listen kinds:handlers:": [
         "actors",
@@ -106,23 +84,13 @@
                 "PatternRules:": [
                   {
                     "PatternRule:hook activity:": [
-                      "Always",
+                      {
+                        "Always": []
+                      },
                       {
                         "Act:": [
                           {
-                            "Determine:arguments:": [
-                              "Print inventory",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
+                            "PrintInventory actor:": "@actor"
                           },
                           {
                             "Let:be:": [
@@ -143,7 +111,9 @@
         ]
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "print inventory",
@@ -172,19 +142,7 @@
                 {
                   "LocalInit:": {
                     "FromTxts:": {
-                      "Determine:arguments:": [
-                        "childrenOf",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@actor"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "ChildrenOf obj:": "@actor"
                     }
                   }
                 }
@@ -196,7 +154,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -220,7 +180,9 @@
                     {
                       "Len:": "@kids"
                     },
-                    "GreaterThan",
+                    {
+                      "GreaterThan": []
+                    },
                     0
                   ]
                 },
@@ -237,19 +199,7 @@
                       }
                     },
                     {
-                      "Determine:arguments:": [
-                        "print blocks",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                "@kids"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "PrintBlocks objs:": "@kids"
                     }
                   ]
                 }

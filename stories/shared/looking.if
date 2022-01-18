@@ -39,19 +39,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
@@ -59,19 +47,7 @@
                       "Send:path:arguments:": [
                         "look",
                         {
-                          "Determine:arguments:": [
-                            "parentsOf",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@actor"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                          "ParentsOf obj:": "@actor"
                         },
                         {
                           "Args:": [
@@ -93,7 +69,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Listen kinds:handlers:": [
         "actors",
@@ -115,19 +93,7 @@
                       {
                         "LocalInit:": {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "locationOf",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "obj",
-                                      "@actor"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
+                            "LocationOf obj:": "@actor"
                           }
                         }
                       }
@@ -139,32 +105,19 @@
                 "PatternRules:": [
                   {
                     "PatternRule:hook activity:": [
-                      "Always",
+                      {
+                        "Always": []
+                      },
                       {
                         "Act:": [
                           {
-                            "Determine:arguments:": [
-                              "print_vantage",
+                            "PrintVantage where:inDarkness:": [
+                              "@location",
                               {
-                                "Args:": [
+                                "Get:from:": [
+                                  "is in darkness",
                                   {
-                                    "Arg:from:": [
-                                      "where",
-                                      "@location"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "inDarkness",
-                                      {
-                                        "Get:from:": [
-                                          "is in darkness",
-                                          {
-                                            "VarFields:": "actor"
-                                          }
-                                        ]
-                                      }
-                                    ]
+                                    "VarFields:": "actor"
                                   }
                                 ]
                               }
@@ -189,7 +142,9 @@
         ]
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "Print vantage",
@@ -224,19 +179,7 @@
                 {
                   "LocalInit:": {
                     "FromTxts:": {
-                      "Determine:arguments:": [
-                        "transparentList",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@where"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "TransparentList obj:": "@where"
                     }
                   }
                 }
@@ -253,19 +196,7 @@
                 {
                   "LocalInit:": {
                     "FromTxt:": {
-                      "Determine:arguments:": [
-                        "CurrentRoom",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@where"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "CurrentRoom obj:": "@where"
                     }
                   }
                 }
@@ -277,11 +208,13 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
-                      "Determine:": " set everything unmentioned"
+                      "SetEverythingUnmentioned": []
                     },
                     {
                       "If:do:else:": [
@@ -289,19 +222,7 @@
                         {
                           "Act:": [
                             {
-                              "Determine:arguments:": [
-                                "printDarkHeader",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "room",
-                                        "@room"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
+                              "PrintDarkHeader room:": "@room"
                             },
                             {
                               "Comment:": "fix? if \"thedark\" was an object, darkness witnessed could be \"thedark.visited.\" ( same as below )"
@@ -343,19 +264,7 @@
                                 {
                                   "Act:": [
                                     {
-                                      "Determine:arguments:": [
-                                        "PrintDarkDescription",
-                                        {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "room",
-                                                "@room"
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
+                                      "PrintDarkDescription room:": "@room"
                                     }
                                   ]
                                 }
@@ -370,40 +279,13 @@
                                 "Comment:": "list is inner to outer. the term \"locale\" here means some enclosure we are in."
                               },
                               {
-                                "Determine:arguments:": [
-                                  "PrintLocaleTitle",
-                                  {
-                                    "Args:": [
-                                      {
-                                        "Arg:from:": [
-                                          "room",
-                                          "@room"
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "enclosures",
-                                          "@enclosures"
-                                        ]
-                                      }
-                                    ]
-                                  }
+                                "PrintLocaleTitle room:enclosures:": [
+                                  "@room",
+                                  "@enclosures"
                                 ]
                               },
                               {
-                                "Determine:arguments:": [
-                                  "PrintLocaleSubtitle",
-                                  {
-                                    "Args:": [
-                                      {
-                                        "Arg:from:": [
-                                          "enclosures",
-                                          "@enclosures"
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                ]
+                                "PrintLocaleSubtitle enclosures:": "@enclosures"
                               },
                               {
                                 "Say:": "."
@@ -464,32 +346,12 @@
                                           {
                                             "Act:": [
                                               {
-                                                "Determine:arguments:": [
-                                                  "PrintLocaleDescription",
+                                                "PrintLocaleDescription where:viewpoint:room:": [
                                                   {
-                                                    "Args:": [
-                                                      {
-                                                        "Arg:from:": [
-                                                          "where",
-                                                          {
-                                                            "FromTxt:": "@it"
-                                                          }
-                                                        ]
-                                                      },
-                                                      {
-                                                        "Arg:from:": [
-                                                          "viewpoint",
-                                                          "@where"
-                                                        ]
-                                                      },
-                                                      {
-                                                        "Arg:from:": [
-                                                          "room",
-                                                          "@room"
-                                                        ]
-                                                      }
-                                                    ]
-                                                  }
+                                                    "FromTxt:": "@it"
+                                                  },
+                                                  "@where",
+                                                  "@room"
                                                 ]
                                               }
                                             ]
@@ -513,7 +375,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "PrintDarkHeader",
@@ -536,7 +400,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -555,7 +421,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "PrintDarkDescription",
@@ -578,7 +446,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -597,7 +467,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "PrintLocaleTitle",
@@ -649,7 +521,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -657,7 +531,9 @@
                         {
                           "Cmp:is:txt:": [
                             "@room",
-                            "Equals",
+                            {
+                              "Equals": []
+                            },
                             "@ceiling"
                           ]
                         },
@@ -691,7 +567,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "PrintLocaleSubtitle",
@@ -737,7 +615,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -753,13 +633,17 @@
                                 {
                                   "Cmp:is:txt:": [
                                     "@it",
-                                    "Equals",
+                                    {
+                                      "Equals": []
+                                    },
                                     "@ceiling"
                                   ]
                                 },
                                 {
                                   "Act:": [
-                                    "Break"
+                                    {
+                                      "Break": []
+                                    }
                                   ]
                                 }
                               ]
@@ -781,7 +665,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "PrintLocaleDescription",
@@ -822,19 +708,7 @@
                 {
                   "LocalInit:": {
                     "FromTxts:": {
-                      "Determine:arguments:": [
-                        "childrenOf",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@where"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "ChildrenOf obj:": "@where"
                     }
                   }
                 }
@@ -868,7 +742,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -876,7 +752,9 @@
                         {
                           "Cmp:is:txt:": [
                             "@where",
-                            "Equals",
+                            {
+                              "Equals": []
+                            },
                             "@room"
                           ]
                         },
@@ -921,45 +799,20 @@
                                       {
                                         "Cmp:is:txt:": [
                                           "@it",
-                                          "Equals",
+                                          {
+                                            "Equals": []
+                                          },
                                           "@viewpoint"
                                         ]
                                       },
                                       {
-                                        "Determine:arguments:": [
-                                          "ancestorOf",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "obj",
-                                                  "@viewpoint"
-                                                ]
-                                              },
-                                              {
-                                                "Arg:from:": [
-                                                  "root",
-                                                  "@it"
-                                                ]
-                                              }
-                                            ]
-                                          }
+                                        "AncestorOf obj:root:": [
+                                          "@viewpoint",
+                                          "@it"
                                         ]
                                       },
                                       {
-                                        "Determine:arguments:": [
-                                          "isPlayer",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "obj",
-                                                  "@it"
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
+                                        "IsPlayer obj:": "@it"
                                       }
                                     ]
                                   }
@@ -967,19 +820,7 @@
                                 {
                                   "Act:": [
                                     {
-                                      "Determine:arguments:": [
-                                        "print object description",
-                                        {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "obj",
-                                                "@it"
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
+                                      "PrintObjectDescription obj:": "@it"
                                     },
                                     {
                                       "If:do:": [
@@ -1012,60 +853,39 @@
                       ]
                     },
                     {
-                      "Determine:arguments:": [
-                        "canAlsoSee",
+                      "CanAlsoSee where:here:children:firstMention:": [
+                        "@where",
                         {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "where",
-                                "@where"
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "here",
-                                {
-                                  "FromBool:": {
-                                    "Cmp:is:txt:": [
-                                      "@where",
-                                      "Equals",
-                                      "@room"
-                                    ]
+                          "FromBool:": {
+                            "Cmp:is:txt:": [
+                              "@where",
+                              {
+                                "Equals": []
+                              },
+                              "@room"
+                            ]
+                          }
+                        },
+                        {
+                          "FromTxts:": "@remainingKids"
+                        },
+                        {
+                          "FromBool:": {
+                            "Cmp:is:num:": [
+                              "@previousMentions",
+                              {
+                                "Equals": []
+                              },
+                              {
+                                "Get:from:": [
+                                  "mentions",
+                                  {
+                                    "ObjFields:": "settings"
                                   }
-                                }
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "children",
-                                {
-                                  "FromTxts:": "@remainingKids"
-                                }
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "firstMention",
-                                {
-                                  "FromBool:": {
-                                    "Cmp:is:num:": [
-                                      "@previousMentions",
-                                      "Equals",
-                                      {
-                                        "Get:from:": [
-                                          "mentions",
-                                          {
-                                            "ObjFields:": "settings"
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                }
-                              ]
-                            }
-                          ]
+                                ]
+                              }
+                            ]
+                          }
                         }
                       ]
                     }
@@ -1077,7 +897,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Comment:": "prints the first impression of an object, and gives a chance for certain objects (ex. supporters) to say something more afterwards."
     },
@@ -1136,19 +958,7 @@
                       "Comment:": "a. mentioned supporters\nthis prints \"on the...\" for any supporters mentioned by the scenery supporters rule or mentioned by the author."
                     },
                     {
-                      "Determine:arguments:": [
-                        "print inline storage",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "PrintInlineStorage obj:": "@obj"
                     }
                   ]
                 }
@@ -1178,19 +988,7 @@
                       "Comment:": "b. scenery supporters \nthis sets up supporters for use by the next rule in a way that's easy to disable by authors"
                     },
                     {
-                      "Determine:arguments:": [
-                        "mention",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "Mention obj:": "@obj"
                     }
                   ]
                 }
@@ -1210,24 +1008,9 @@
                       "Comment:": "c. print the impression of everything but actors ( note: by default, print impression prints objects with an initial appearance, and flags them as mentioned. )"
                     },
                     {
-                      "Determine:arguments:": [
-                        "PrintImpressionOf",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "locale",
-                                "@locale"
-                              ]
-                            }
-                          ]
-                        }
+                      "PrintImpressionOf obj:locale:": [
+                        "@obj",
+                        "@locale"
                       ]
                     }
                   ]
@@ -1263,7 +1046,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "PrintImpressionOf",
@@ -1359,19 +1144,7 @@
                       }
                     },
                     {
-                      "Determine:arguments:": [
-                        "mention",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "Mention obj:": "@obj"
                     },
                     {
                       "Let:be:": [
@@ -1398,21 +1171,11 @@
                     {
                       "Cmp:is:txt:": [
                         {
-                          "Determine:arguments:": [
-                            "ParentOf",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@obj"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                          "ParentOf obj:": "@obj"
                         },
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "@locale"
                       ]
                     }
@@ -1427,19 +1190,7 @@
                       "Repeating across:as:do:": [
                         {
                           "FromTxts:": {
-                            "Determine:arguments:": [
-                              "childrenOf",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "obj",
-                                      "@obj"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
+                            "ChildrenOf obj:": "@obj"
                           }
                         },
                         {
@@ -1448,19 +1199,7 @@
                         {
                           "Act:": [
                             {
-                              "Determine:arguments:": [
-                                "PrintImpressionOf",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "obj",
-                                        "@it"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
+                              "PrintImpressionOf obj:": "@it"
                             }
                           ]
                         }
@@ -1474,7 +1213,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "CanAlsoSee",
@@ -1506,7 +1247,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -1527,7 +1270,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:": "set everything unmentioned"
     },
@@ -1538,7 +1283,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {

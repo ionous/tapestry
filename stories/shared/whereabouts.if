@@ -14,7 +14,9 @@
     {
       "Comment:": "The placement of objects in the game world.  One parent to many children. "
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:about:": [
         "parentOf",
@@ -48,7 +50,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -106,7 +110,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "parentsOf",
@@ -151,7 +157,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -176,21 +184,9 @@
                                 "it",
                                 {
                                   "FromTxt:": {
-                                    "Determine:arguments:": [
-                                      "parentOf",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "obj",
-                                              {
-                                                "FromTxt:": "@it"
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
+                                    "ParentOf obj:": {
+                                      "FromTxt:": "@it"
+                                    }
                                   }
                                 }
                               ]
@@ -207,7 +203,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "childrenOf",
@@ -235,7 +233,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -259,7 +259,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:about:": [
         "CurrentRoom",
@@ -312,7 +314,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -342,7 +346,9 @@
                                         }
                                       ]
                                     },
-                                    "Break"
+                                    {
+                                      "Break": []
+                                    }
                                   ]
                                 }
                               ]
@@ -352,19 +358,7 @@
                                 "search",
                                 {
                                   "FromTxt:": {
-                                    "Determine:arguments:": [
-                                      "parentOf",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "obj",
-                                              "@search"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
+                                    "ParentOf obj:": "@search"
                                   }
                                 }
                               ]
@@ -374,7 +368,9 @@
                                 {
                                   "Cmp:is:txt:": [
                                     "@search",
-                                    "Equals",
+                                    {
+                                      "Equals": []
+                                    },
                                     "@obj"
                                   ]
                                 },
@@ -383,7 +379,9 @@
                                     {
                                       "Comment:": "parent cycle detected"
                                     },
-                                    "Break"
+                                    {
+                                      "Break": []
+                                    }
                                   ]
                                 }
                               ]
@@ -400,7 +398,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:about:": [
         "Common Ancestor",
@@ -460,7 +460,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -495,7 +497,9 @@
                                         {
                                           "Cmp:is:txt:": [
                                             "@o1",
-                                            "Equals",
+                                            {
+                                              "Equals": []
+                                            },
                                             "@o2"
                                           ]
                                         },
@@ -510,7 +514,9 @@
                                                 "@o2"
                                               ]
                                             },
-                                            "Break"
+                                            {
+                                              "Break": []
+                                            }
                                           ]
                                         }
                                       ]
@@ -520,19 +526,7 @@
                                         "o2",
                                         {
                                           "FromTxt:": {
-                                            "Determine:arguments:": [
-                                              "ParentOf",
-                                              {
-                                                "Args:": [
-                                                  {
-                                                    "Arg:from:": [
-                                                      "obj",
-                                                      "@o2"
-                                                    ]
-                                                  }
-                                                ]
-                                              }
-                                            ]
+                                            "ParentOf obj:": "@o2"
                                           }
                                         }
                                       ]
@@ -542,13 +536,17 @@
                                         {
                                           "Cmp:is:txt:": [
                                             "@o2",
-                                            "Equals",
+                                            {
+                                              "Equals": []
+                                            },
                                             "@other object"
                                           ]
                                         },
                                         {
                                           "Act:": [
-                                            "Break"
+                                            {
+                                              "Break": []
+                                            }
                                           ]
                                         },
                                         {
@@ -556,13 +554,17 @@
                                             {
                                               "Cmp:is:txt:": [
                                                 "@o2",
-                                                "Equals",
+                                                {
+                                                  "Equals": []
+                                                },
                                                 ""
                                               ]
                                             },
                                             {
                                               "Act:": [
-                                                "Break"
+                                                {
+                                                  "Break": []
+                                                }
                                               ]
                                             }
                                           ]
@@ -578,19 +580,7 @@
                                 "o1",
                                 {
                                   "FromTxt:": {
-                                    "Determine:arguments:": [
-                                      "ParentOf",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "obj",
-                                              "@o1"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
+                                    "ParentOf obj:": "@o1"
                                   }
                                 }
                               ]
@@ -600,7 +590,9 @@
                                 {
                                   "Cmp:is:txt:": [
                                     "@o1",
-                                    "Equals",
+                                    {
+                                      "Equals": []
+                                    },
                                     "@object"
                                   ]
                                 },
@@ -609,7 +601,9 @@
                                     {
                                       "Comment:": "parent cycle detected"
                                     },
-                                    "Break"
+                                    {
+                                      "Break": []
+                                    }
                                   ]
                                 },
                                 {
@@ -617,7 +611,9 @@
                                     {
                                       "Cmp:is:txt:": [
                                         "@o1",
-                                        "Equals",
+                                        {
+                                          "Equals": []
+                                        },
                                         ""
                                       ]
                                     },
@@ -626,7 +622,9 @@
                                         {
                                           "Comment:": "out of world"
                                         },
-                                        "Break"
+                                        {
+                                          "Break": []
+                                        }
                                       ]
                                     }
                                   ]
@@ -645,7 +643,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "ancestorOf",
@@ -697,7 +697,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -721,19 +723,7 @@
                                 "up",
                                 {
                                   "FromTxt:": {
-                                    "Determine:arguments:": [
-                                      "ParentOf",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "obj",
-                                              "@up"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
+                                    "ParentOf obj:": "@up"
                                   }
                                 }
                               ]
@@ -743,7 +733,9 @@
                                 {
                                   "Cmp:is:txt:": [
                                     "@up",
-                                    "Equals",
+                                    {
+                                      "Equals": []
+                                    },
                                     "@obj"
                                   ]
                                 },
@@ -752,7 +744,9 @@
                                     {
                                       "Comment:": "parent cycle detected"
                                     },
-                                    "Break"
+                                    {
+                                      "Break": []
+                                    }
                                   ]
                                 },
                                 {
@@ -760,7 +754,9 @@
                                     {
                                       "Cmp:is:txt:": [
                                         "@up",
-                                        "Equals",
+                                        {
+                                          "Equals": []
+                                        },
                                         ""
                                       ]
                                     },
@@ -769,7 +765,9 @@
                                         {
                                           "Comment:": "out of world"
                                         },
-                                        "Break"
+                                        {
+                                          "Break": []
+                                        }
                                       ]
                                     }
                                   ]
@@ -781,7 +779,9 @@
                                 {
                                   "Cmp:is:txt:": [
                                     "@up",
-                                    "Equals",
+                                    {
+                                      "Equals": []
+                                    },
                                     "@root"
                                   ]
                                 },
@@ -798,7 +798,9 @@
                                         }
                                       ]
                                     },
-                                    "Break"
+                                    {
+                                      "Break": []
+                                    }
                                   ]
                                 }
                               ]
@@ -815,7 +817,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "locationOf",
@@ -858,19 +862,7 @@
                 {
                   "LocalInit:": {
                     "FromTxt:": {
-                      "Determine:arguments:": [
-                        "parentOf",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "ParentOf obj:": "@obj"
                     }
                   }
                 }
@@ -882,7 +874,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -929,7 +923,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "SupporterOf",
@@ -972,19 +968,7 @@
                 {
                   "LocalInit:": {
                     "FromTxt:": {
-                      "Determine:arguments:": [
-                        "parentOf",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "ParentOf obj:": "@obj"
                     }
                   }
                 }
@@ -996,7 +980,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -1027,7 +1013,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "ContainerOf",
@@ -1070,19 +1058,7 @@
                 {
                   "LocalInit:": {
                     "FromTxt:": {
-                      "Determine:arguments:": [
-                        "parentOf",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "ParentOf obj:": "@obj"
                     }
                   }
                 }
@@ -1094,7 +1070,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -1125,7 +1103,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "holderOf",
@@ -1171,7 +1151,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -1179,19 +1161,7 @@
                         "parent",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "parentOf",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "obj",
-                                      "@obj"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
+                            "ParentOf obj:": "@obj"
                           }
                         }
                       ]
@@ -1224,7 +1194,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "CarrierOf",
@@ -1270,7 +1242,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -1278,19 +1252,7 @@
                         "parent",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "parentOf",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "obj",
-                                      "@obj"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
+                            "ParentOf obj:": "@obj"
                           }
                         }
                       ]
@@ -1335,7 +1297,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "WearerOf",
@@ -1381,7 +1345,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -1389,19 +1355,7 @@
                         "parent",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "parentOf",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "obj",
-                                      "@obj"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
+                            "ParentOf obj:": "@obj"
                           }
                         }
                       ]

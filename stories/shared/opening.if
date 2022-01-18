@@ -41,19 +41,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
@@ -62,32 +50,12 @@
                         "resp",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can reach",
+                            "CanReach actor:action:noun:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "opening"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  }
-                                ]
-                              }
+                                "FromTxt:": "opening"
+                              },
+                              "@noun"
                             ]
                           }
                         },
@@ -111,32 +79,12 @@
                                   "resp",
                                   {
                                     "FromTxt:": {
-                                      "Determine:arguments:": [
-                                        "can use",
+                                      "CanUse actor:action:noun:": [
+                                        "@actor",
                                         {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "actor",
-                                                "@actor"
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "action",
-                                                {
-                                                  "FromTxt:": "opening"
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "noun",
-                                                "@noun"
-                                              ]
-                                            }
-                                          ]
-                                        }
+                                          "FromTxt:": "opening"
+                                        },
+                                        "@noun"
                                       ]
                                     }
                                   },
@@ -159,19 +107,7 @@
                                           "Send:path:arguments:": [
                                             "state change",
                                             {
-                                              "Determine:arguments:": [
-                                                "parentsOf",
-                                                {
-                                                  "Args:": [
-                                                    {
-                                                      "Arg:from:": [
-                                                        "obj",
-                                                        "@noun"
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
-                                              ]
+                                              "ParentsOf obj:": "@noun"
                                             },
                                             {
                                               "Args:": [
@@ -233,7 +169,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Event:action:args common:": [
         "close",
@@ -275,19 +213,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
@@ -296,32 +222,12 @@
                         "resp",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can reach",
+                            "CanReach actor:action:noun:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "closing"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  }
-                                ]
-                              }
+                                "FromTxt:": "closing"
+                              },
+                              "@noun"
                             ]
                           }
                         },
@@ -345,32 +251,12 @@
                                   "resp",
                                   {
                                     "FromTxt:": {
-                                      "Determine:arguments:": [
-                                        "can use",
+                                      "CanUse actor:action:noun:": [
+                                        "@actor",
                                         {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "actor",
-                                                "@actor"
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "action",
-                                                {
-                                                  "FromTxt:": "closing"
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "noun",
-                                                "@noun"
-                                              ]
-                                            }
-                                          ]
-                                        }
+                                          "FromTxt:": "closing"
+                                        },
+                                        "@noun"
                                       ]
                                     }
                                   },
@@ -393,19 +279,7 @@
                                           "Send:path:arguments:": [
                                             "state change",
                                             {
-                                              "Determine:arguments:": [
-                                                "parentsOf",
-                                                {
-                                                  "Args:": [
-                                                    {
-                                                      "Arg:from:": [
-                                                        "obj",
-                                                        "@noun"
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
-                                              ]
+                                              "ParentsOf obj:": "@noun"
                                             },
                                             {
                                               "Args:": [
@@ -467,7 +341,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Comment:": "Can't open when locked. "
     },
@@ -483,7 +359,9 @@
                     {
                       "Cmp:is:txt:": [
                         "@trait",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "open"
                       ]
                     },
@@ -526,7 +404,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Listen kinds:handlers:": [
         "things",
@@ -556,26 +436,16 @@
                           {
                             "Cmp:is:txt:": [
                               "@trait",
-                              "Equals",
+                              {
+                                "Equals": []
+                              },
                               "open"
                             ]
                           },
                           {
-                            "Determine:arguments:": [
-                              "isPlayer",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "obj",
-                                      {
-                                        "FromTxt:": "@actor"
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
+                            "IsPlayer obj:": {
+                              "FromTxt:": "@actor"
+                            }
                           },
                           {
                             "KindOf:is:": [
@@ -591,25 +461,10 @@
                           },
                           {
                             "Not:": {
-                              "Determine:arguments:": [
-                                "ancestorOf",
+                              "AncestorOf obj:root:": [
+                                "@noun",
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "obj",
-                                        "@noun"
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "root",
-                                        {
-                                          "FromTxt:": "@actor"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "@actor"
                                 }
                               ]
                             }
@@ -623,19 +478,7 @@
                               "concealed items",
                               {
                                 "FromTxts:": {
-                                  "Determine:arguments:": [
-                                    "visible storage",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "obj",
-                                            "@noun"
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "VisibleStorage obj:": "@noun"
                                 }
                               }
                             ]
@@ -647,7 +490,9 @@
                                   {
                                     "Len:": "@concealed items"
                                   },
-                                  "GreaterThan",
+                                  {
+                                    "GreaterThan": []
+                                  },
                                   0
                                 ]
                               },

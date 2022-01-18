@@ -85,7 +85,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -119,19 +121,7 @@
                                 "next",
                                 {
                                   "FromTxt:": {
-                                    "Determine:arguments:": [
-                                      "parentOf",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "obj",
-                                              "@i"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
+                                    "ParentOf obj:": "@i"
                                   }
                                 }
                               ]
@@ -151,42 +141,12 @@
                                         "response",
                                         {
                                           "FromTxt:": {
-                                            "Determine:arguments:": [
-                                              "reach up",
-                                              {
-                                                "Args:": [
-                                                  {
-                                                    "Arg:from:": [
-                                                      "fromObj",
-                                                      "@i"
-                                                    ]
-                                                  },
-                                                  {
-                                                    "Arg:from:": [
-                                                      "intoObj",
-                                                      "@next"
-                                                    ]
-                                                  },
-                                                  {
-                                                    "Arg:from:": [
-                                                      "actor",
-                                                      "@actor"
-                                                    ]
-                                                  },
-                                                  {
-                                                    "Arg:from:": [
-                                                      "noun",
-                                                      "@noun"
-                                                    ]
-                                                  },
-                                                  {
-                                                    "Arg:from:": [
-                                                      "action",
-                                                      "@action"
-                                                    ]
-                                                  }
-                                                ]
-                                              }
+                                            "ReachUp fromObj:intoObj:actor:noun:action:": [
+                                              "@i",
+                                              "@next",
+                                              "@actor",
+                                              "@noun",
+                                              "@action"
                                             ]
                                           }
                                         },
@@ -275,7 +235,9 @@
                                 {
                                   "Cmp:is:num:": [
                                     "@lca",
-                                    "GreaterThan",
+                                    {
+                                      "GreaterThan": []
+                                    },
                                     0
                                   ]
                                 },
@@ -284,7 +246,9 @@
                                     {
                                       "Comment:": "Exit once we've found the lca."
                                     },
-                                    "Break"
+                                    {
+                                      "Break": []
+                                    }
                                   ]
                                 }
                               ]
@@ -294,19 +258,7 @@
                                 "next",
                                 {
                                   "FromTxt:": {
-                                    "Determine:arguments:": [
-                                      "parentOf",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "obj",
-                                              "@i"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
+                                    "ParentOf obj:": "@i"
                                   }
                                 }
                               ]
@@ -316,42 +268,12 @@
                                 "response",
                                 {
                                   "FromTxt:": {
-                                    "Determine:arguments:": [
-                                      "reach down",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "fromObj",
-                                              "@next"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "intoObj",
-                                              "@i"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "actor",
-                                              "@actor"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "noun",
-                                              "@noun"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "action",
-                                              "@action"
-                                            ]
-                                          }
-                                        ]
-                                      }
+                                    "ReachDown fromObj:intoObj:actor:noun:action:": [
+                                      "@next",
+                                      "@i",
+                                      "@actor",
+                                      "@noun",
+                                      "@action"
                                     ]
                                   }
                                 },
@@ -393,7 +315,9 @@
                         {
                           "Cmp:is:num:": [
                             "@lca",
-                            "Equals",
+                            {
+                              "Equals": []
+                            },
                             0
                           ]
                         },
@@ -424,7 +348,9 @@
                             {
                               "Cmp:is:num:": [
                                 "@reach error",
-                                "LessThan",
+                                {
+                                  "LessThan": []
+                                },
                                 "@lca"
                               ]
                             },
@@ -515,7 +441,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "reach up",
@@ -632,7 +560,9 @@
             },
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -650,7 +580,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "reach down",
@@ -717,7 +649,9 @@
                       "Not:": {
                         "Cmp:is:txt:": [
                           "@intoObj",
-                          "Equals",
+                          {
+                            "Equals": []
+                          },
                           "@noun"
                         ]
                       }
@@ -776,7 +710,9 @@
             },
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {

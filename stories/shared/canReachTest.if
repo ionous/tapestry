@@ -18,27 +18,12 @@
                 "resp",
                 {
                   "FromTxt:": {
-                    "Determine:arguments:": [
-                      "can reach",
+                    "CanReach actor:noun:": [
                       {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "actor",
-                              {
-                                "FromTxt:": "self"
-                              }
-                            ]
-                          },
-                          {
-                            "Arg:from:": [
-                              "noun",
-                              {
-                                "FromTxt:": "beans"
-                              }
-                            ]
-                          }
-                        ]
+                        "FromTxt:": "self"
+                      },
+                      {
+                        "FromTxt:": "beans"
                       }
                     ]
                   }
@@ -73,27 +58,12 @@
                 "resp",
                 {
                   "FromTxt:": {
-                    "Determine:arguments:": [
-                      "can reach",
+                    "CanReach actor:noun:": [
                       {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "actor",
-                              {
-                                "FromTxt:": "self"
-                              }
-                            ]
-                          },
-                          {
-                            "Arg:from:": [
-                              "noun",
-                              {
-                                "FromTxt:": "tomatoes"
-                              }
-                            ]
-                          }
-                        ]
+                        "FromTxt:": "self"
+                      },
+                      {
+                        "FromTxt:": "tomatoes"
                       }
                     ]
                   }
@@ -139,27 +109,12 @@
                 "resp",
                 {
                   "FromTxt:": {
-                    "Determine:arguments:": [
-                      "can reach",
+                    "CanReach actor:noun:": [
                       {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "actor",
-                              {
-                                "FromTxt:": "self"
-                              }
-                            ]
-                          },
-                          {
-                            "Arg:from:": [
-                              "noun",
-                              {
-                                "FromTxt:": "beans"
-                              }
-                            ]
-                          }
-                        ]
+                        "FromTxt:": "self"
+                      },
+                      {
+                        "FromTxt:": "beans"
                       }
                     ]
                   }
@@ -205,27 +160,12 @@
                 "resp",
                 {
                   "FromTxt:": {
-                    "Determine:arguments:": [
-                      "can reach",
+                    "CanReach actor:noun:": [
                       {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "actor",
-                              {
-                                "FromTxt:": "self"
-                              }
-                            ]
-                          },
-                          {
-                            "Arg:from:": [
-                              "noun",
-                              {
-                                "FromTxt:": "tomatoes"
-                              }
-                            ]
-                          }
-                        ]
+                        "FromTxt:": "self"
+                      },
+                      {
+                        "FromTxt:": "tomatoes"
                       }
                     ]
                   }
@@ -260,27 +200,12 @@
                 "resp",
                 {
                   "FromTxt:": {
-                    "Determine:arguments:": [
-                      "can reach",
+                    "CanReach actor:noun:": [
                       {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "actor",
-                              {
-                                "FromTxt:": "self"
-                              }
-                            ]
-                          },
-                          {
-                            "Arg:from:": [
-                              "noun",
-                              {
-                                "FromTxt:": "cloak"
-                              }
-                            ]
-                          }
-                        ]
+                        "FromTxt:": "self"
+                      },
+                      {
+                        "FromTxt:": "cloak"
                       }
                     ]
                   }
@@ -314,7 +239,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "reach test",
@@ -341,7 +268,9 @@
             {
               "Comment:": "it is nowhere."
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "RelativeToNoun:nouns:areBeing:otherNouns:": [
                 " whereabouts",

@@ -42,7 +42,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -73,7 +75,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "assign grouping",
@@ -139,7 +143,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -222,7 +228,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Make kinds:of:": [
         "Groupings",
@@ -254,7 +262,9 @@
         ]
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Make kinds:of:": [
         "Object groups",
@@ -277,7 +287,9 @@
         ]
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "match groups",
@@ -323,7 +335,9 @@
                             }
                           ]
                         },
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         {
                           "Get:from:": [
                             "label",
@@ -344,7 +358,9 @@
                             }
                           ]
                         },
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         {
                           "Get:from:": [
                             "hide label",
@@ -365,7 +381,9 @@
                             }
                           ]
                         },
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         {
                           "Get:from:": [
                             "hide size",
@@ -386,7 +404,9 @@
                             }
                           ]
                         },
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         {
                           "Get:from:": [
                             "hide objects",
@@ -457,7 +477,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:about:": [
         "collate groups",
@@ -519,7 +541,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -536,28 +560,13 @@
                             {
                               "If:do:": [
                                 {
-                                  "Determine:arguments:": [
-                                    "match groups",
+                                  "MatchGroups first:second:": [
+                                    "@grouping",
                                     {
-                                      "Args:": [
+                                      "Get:from:": [
+                                        "grouping",
                                         {
-                                          "Arg:from:": [
-                                            "first",
-                                            "@grouping"
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "second",
-                                            {
-                                              "Get:from:": [
-                                                "grouping",
-                                                {
-                                                  "VarFields:": "el"
-                                                }
-                                              ]
-                                            }
-                                          ]
+                                          "VarFields:": "el"
                                         }
                                       ]
                                     }
@@ -587,7 +596,9 @@
                         {
                           "Cmp:is:num:": [
                             "@idx",
-                            "Equals",
+                            {
+                              "Equals": []
+                            },
                             0
                           ]
                         },

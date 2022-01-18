@@ -41,19 +41,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
@@ -62,32 +50,12 @@
                         "result",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can handle",
+                            "CanHandle actor:action:noun:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "dropping"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  }
-                                ]
-                              }
+                                "FromTxt:": "dropping"
+                              },
+                              "@noun"
                             ]
                           }
                         },
@@ -112,19 +80,7 @@
                                     "Send:path:arguments:": [
                                       "drop",
                                       {
-                                        "Determine:arguments:": [
-                                          "parentsOf",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "obj",
-                                                  "@noun"
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
+                                        "ParentsOf obj:": "@noun"
                                       },
                                       {
                                         "Args:": [
@@ -147,24 +103,9 @@
                                   {
                                     "Act:": [
                                       {
-                                        "Determine:arguments:": [
-                                          "report dropping",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "actor",
-                                                  "@actor"
-                                                ]
-                                              },
-                                              {
-                                                "Arg:from:": [
-                                                  "noun",
-                                                  "@noun"
-                                                ]
-                                              }
-                                            ]
-                                          }
+                                        "ReportDropping actor:noun:": [
+                                          "@actor",
+                                          "@noun"
                                         ]
                                       }
                                     ]
@@ -184,7 +125,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Listen kinds:handlers:": [
         "things",
@@ -197,7 +140,9 @@
                 "PatternRules:": [
                   {
                     "PatternRule:hook activity:": [
-                      "Always",
+                      {
+                        "Always": []
+                      },
                       {
                         "Act:": [
                           {
@@ -205,39 +150,12 @@
                               "error",
                               {
                                 "FromTxt:": {
-                                  "Determine:arguments:": [
-                                    "move object",
+                                  "MoveObject obj:dest:": [
+                                    "@noun",
                                     {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "obj",
-                                            "@noun"
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "dest",
-                                            {
-                                              "FromTxt:": {
-                                                "Determine:arguments:": [
-                                                  "parentOf",
-                                                  {
-                                                    "Args:": [
-                                                      {
-                                                        "Arg:from:": [
-                                                          "obj",
-                                                          "@actor"
-                                                        ]
-                                                      }
-                                                    ]
-                                                  }
-                                                ]
-                                              }
-                                            }
-                                          ]
-                                        }
-                                      ]
+                                      "FromTxt:": {
+                                        "ParentOf obj:": "@actor"
+                                      }
                                     }
                                   ]
                                 }
@@ -296,7 +214,9 @@
         ]
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "report dropping",
@@ -325,7 +245,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -346,19 +268,7 @@
               "PatternRule:hook activity:": [
                 {
                   "Not:": {
-                    "Determine:arguments:": [
-                      "isPlayer",
-                      {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "obj",
-                              "@actor"
-                            ]
-                          }
-                        ]
-                      }
-                    ]
+                    "IsPlayer obj:": "@actor"
                   }
                 },
                 {
@@ -381,7 +291,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:rules:": [
         "can reach",
@@ -394,42 +306,22 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "dropping"
                       ]
                     },
                     {
                       "Cmp:is:txt:": [
                         {
-                          "Determine:arguments:": [
-                            "parentOf",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@actor"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                          "ParentOf obj:": "@actor"
                         },
-                        "Equals",
                         {
-                          "Determine:arguments:": [
-                            "locationOf",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@noun"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                          "Equals": []
+                        },
+                        {
+                          "LocationOf obj:": "@noun"
                         }
                       ]
                     }
@@ -466,14 +358,18 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "dropping"
                       ]
                     },
                     {
                       "Cmp:is:txt:": [
                         "@actor",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "@noun"
                       ]
                     }

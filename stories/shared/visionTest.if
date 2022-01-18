@@ -36,7 +36,7 @@
               ]
             },
             {
-              "Determine:": "adjust light"
+              "AdjustLight": []
             },
             {
               "Say:": {
@@ -58,7 +58,7 @@
               ]
             },
             {
-              "Determine:": "adjust light"
+              "AdjustLight": []
             },
             {
               "Say:": {
@@ -69,7 +69,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "vision testing",
@@ -82,7 +84,9 @@
                   "PatternRules:": [
                     {
                       "PatternRule:hook activity:": [
-                        "Always",
+                        {
+                          "Always": []
+                        },
                         {
                           "Act:": [
                             {

@@ -14,102 +14,42 @@
         {
           "Act:": [
             {
-              "Determine:arguments:": [
-                "Searching",
+              "Searching agent:noun:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "knife"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "knife"
                 }
               ]
             },
             {
-              "Determine:arguments:": [
-                "Searching",
+              "Searching agent:noun:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "machine"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "machine"
                 }
               ]
             },
             {
-              "Determine:arguments:": [
-                "Searching",
+              "Searching agent:noun:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "counter"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "counter"
                 }
               ]
             },
             {
-              "Determine:arguments:": [
-                "Searching",
+              "Searching agent:noun:": [
                 {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "purse"
-                        }
-                      ]
-                    }
-                  ]
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "purse"
                 }
               ]
             }
@@ -117,7 +57,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "searching test",
@@ -151,7 +93,9 @@
                 ]
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "RelativeToNoun:nouns:areBeing:otherNouns:": [
                 " whereabouts",

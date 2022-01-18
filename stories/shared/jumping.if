@@ -16,7 +16,9 @@
         ]
       }
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Event:action:args none:": [
         "jump",
@@ -56,36 +58,12 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
                     {
-                      "Determine:arguments:": [
-                        "report jumping",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "actor",
-                                "@actor"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "ReportJumping actor:": "@actor"
                     }
                   ]
                 }
@@ -95,7 +73,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "report jumping",
@@ -118,7 +98,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -138,19 +120,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [

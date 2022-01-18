@@ -41,19 +41,7 @@
             {
               "PatternRule:hook activity:": [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "IsPlayer obj:": "@actor"
                 },
                 {
                   "Act:": [
@@ -62,39 +50,14 @@
                         "result",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can reach",
+                            "CanReach actor:action:noun:requiresLight:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "searching"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "requires light",
-                                      {
-                                        "FromBool:": true
-                                      }
-                                    ]
-                                  }
-                                ]
+                                "FromTxt:": "searching"
+                              },
+                              "@noun",
+                              {
+                                "FromBool:": true
                               }
                             ]
                           }
@@ -120,19 +83,7 @@
                                     "Send:path:arguments:": [
                                       "search",
                                       {
-                                        "Determine:arguments:": [
-                                          "parentsOf",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "obj",
-                                                  "@noun"
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
+                                        "ParentsOf obj:": "@noun"
                                       },
                                       {
                                         "Args:": [
@@ -155,24 +106,9 @@
                                   {
                                     "Act:": [
                                       {
-                                        "Determine:arguments:": [
-                                          "report searching",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "actor",
-                                                  "@actor"
-                                                ]
-                                              },
-                                              {
-                                                "Arg:from:": [
-                                                  "noun",
-                                                  "@noun"
-                                                ]
-                                              }
-                                            ]
-                                          }
+                                        "ReportSearching actor:noun:": [
+                                          "@actor",
+                                          "@noun"
                                         ]
                                       }
                                     ]
@@ -192,7 +128,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "report searching",
@@ -230,7 +168,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -251,19 +191,7 @@
               "PatternRule:hook activity:": [
                 {
                   "Not:": {
-                    "Determine:arguments:": [
-                      "isPlayer",
-                      {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "obj",
-                              "@actor"
-                            ]
-                          }
-                        ]
-                      }
-                    ]
+                    "IsPlayer obj:": "@actor"
                   }
                 },
                 {
@@ -287,34 +215,10 @@
                 {
                   "AllTrue:": [
                     {
-                      "Determine:arguments:": [
-                        "isPlayer",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@actor"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "IsPlayer obj:": "@actor"
                     },
                     {
-                      "Determine:arguments:": [
-                        "shows storage",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@noun"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "ShowsStorage obj:": "@noun"
                     }
                   ]
                 },
@@ -325,19 +229,7 @@
                         "items",
                         {
                           "FromTxts:": {
-                            "Determine:arguments:": [
-                              "visible storage",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "obj",
-                                      "@noun"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
+                            "VisibleStorage obj:": "@noun"
                           }
                         }
                       ]
@@ -349,7 +241,9 @@
                             {
                               "Len:": "@items"
                             },
-                            "Equals",
+                            {
+                              "Equals": []
+                            },
                             0
                           ]
                         },
@@ -429,7 +323,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "Pattern:rules:": [
         "can reach",
@@ -442,24 +338,14 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "searching"
                       ]
                     },
                     {
-                      "Determine:arguments:": [
-                        "fully opaque",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@noun"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "FullyOpaque obj:": "@noun"
                     }
                   ]
                 },
@@ -491,25 +377,15 @@
                     {
                       "Cmp:is:txt:": [
                         "@action",
-                        "Equals",
+                        {
+                          "Equals": []
+                        },
                         "searching"
                       ]
                     },
                     {
                       "Not:": {
-                        "Determine:arguments:": [
-                          "provides storage",
-                          {
-                            "Args:": [
-                              {
-                                "Arg:from:": [
-                                  "obj",
-                                  "@noun"
-                                ]
-                              }
-                            ]
-                          }
-                        ]
+                        "ProvidesStorage obj:": "@noun"
                       }
                     }
                   ]

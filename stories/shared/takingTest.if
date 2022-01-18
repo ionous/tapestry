@@ -25,27 +25,12 @@
                               "Say:": "Fail to take from something closed:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "taking",
+                              "Taking agent:noun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "coffee"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "coffee"
                                 }
                               ]
                             }
@@ -66,27 +51,12 @@
                               "Say:": "Fail to steal:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "taking",
+                              "Taking agent:noun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "apple"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "apple"
                                 }
                               ]
                             }
@@ -102,27 +72,12 @@
                               "Say:": "Fail to take possessions:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "taking",
+                              "Taking agent:noun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "coin"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "coin"
                                 }
                               ]
                             }
@@ -138,27 +93,12 @@
                               "Say:": "Fail to take your container:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "taking",
+                              "Taking agent:noun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "purse"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "purse"
                                 }
                               ]
                             }
@@ -179,27 +119,12 @@
                               "Say:": "Okay, take something:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "taking",
+                              "Taking agent:noun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "knife"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "knife"
                                 }
                               ]
                             },
@@ -220,27 +145,12 @@
                               "Say:": "Fail to take your self:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "taking",
+                              "Taking agent:noun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "self"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "self"
                                 }
                               ]
                             }
@@ -256,27 +166,12 @@
                               "Say:": "Fail to take someone else:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "taking",
+                              "Taking agent:noun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "mildred"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "mildred"
                                 }
                               ]
                             }
@@ -292,27 +187,12 @@
                               "Say:": "Fail to take scenery:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "taking",
+                              "Taking agent:noun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "cabinet"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "cabinet"
                                 }
                               ]
                             }
@@ -328,27 +208,12 @@
                               "Say:": "Fail to take something fixed in place:<br>"
                             },
                             {
-                              "Determine:arguments:": [
-                                "taking",
+                              "Taking agent:noun:": [
                                 {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "machine"
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                  "FromTxt:": "player"
+                                },
+                                {
+                                  "FromTxt:": "machine"
                                 }
                               ]
                             }
@@ -364,7 +229,9 @@
         }
       ]
     },
-    "--",
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "taking test",
@@ -392,7 +259,9 @@
                 ]
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "RelativeToNoun:nouns:areBeing:otherNouns:": [
                 "whereabouts",
@@ -421,7 +290,9 @@
                 ]
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "RelativeToNoun:nouns:areBeing:otherNouns:": [
                 "whereabouts",
@@ -444,7 +315,9 @@
                 ]
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "RelativeToNoun:nouns:areBeing:otherNouns:": [
                 "whereabouts",
@@ -467,7 +340,9 @@
                 ]
               ]
             },
-            "--",
+            {
+              "--": ""
+            },
             {
               "RelativeToNoun:nouns:areBeing:otherNouns:": [
                 "whereabouts",

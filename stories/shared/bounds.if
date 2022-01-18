@@ -36,7 +36,9 @@
           "PatternRules:": [
             {
               "PatternRule:hook activity:": [
-                "Always",
+                {
+                  "Always": []
+                },
                 {
                   "Act:": [
                     {
@@ -45,7 +47,9 @@
                         {
                           "IntoTxts:": "bounds"
                         },
-                        "Always"
+                        {
+                          "Always": []
+                        }
                       ]
                     },
                     {
@@ -63,7 +67,9 @@
                             {
                               "Len:": "@queue"
                             },
-                            "GreaterThan",
+                            {
+                              "GreaterThan": []
+                            },
                             0
                           ]
                         },
@@ -74,7 +80,9 @@
                                 {
                                   "VarOfTxts:": "queue"
                                 },
-                                "Always",
+                                {
+                                  "Always": []
+                                },
                                 "enc",
                                 {
                                   "Act:": [
@@ -82,19 +90,7 @@
                                       "Repeating across:as:do:": [
                                         {
                                           "FromTxts:": {
-                                            "Determine:arguments:": [
-                                              "childrenOf",
-                                              {
-                                                "Args:": [
-                                                  {
-                                                    "Arg:from:": [
-                                                      "obj",
-                                                      "@enc"
-                                                    ]
-                                                  }
-                                                ]
-                                              }
-                                            ]
+                                            "ChildrenOf obj:": "@enc"
                                           }
                                         },
                                         {
@@ -114,19 +110,7 @@
                                               "If:do:": [
                                                 {
                                                   "Not:": {
-                                                    "Determine:arguments:": [
-                                                      "fully opaque",
-                                                      {
-                                                        "Args:": [
-                                                          {
-                                                            "Arg:from:": [
-                                                              "obj",
-                                                              "@kid"
-                                                            ]
-                                                          }
-                                                        ]
-                                                      }
-                                                    ]
+                                                    "FullyOpaque obj:": "@kid"
                                                   }
                                                 },
                                                 {
