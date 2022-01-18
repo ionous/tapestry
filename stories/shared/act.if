@@ -219,22 +219,16 @@
               ]
             },
             {
-              "Text named:desc:": [
-                "trait",
-                "the trait we're changing to"
-              ]
+              "--": "the trait we're changing to",
+              "Text named:": "trait"
             },
             {
-              "Text named:desc:": [
-                "guard",
-                ", a trait which blocks the noun from changing"
-              ]
+              "--": "a trait which blocks the noun from changing",
+              "Text named:": "guard"
             },
             {
-              "Text named:desc:": [
-                "change",
-                "which describes the action"
-              ]
+              "--": "some text which describes the action",
+              "Text named:": "change"
             }
           ]
         },

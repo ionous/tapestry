@@ -67,10 +67,8 @@
         "Settings",
         [
           {
-            "Number named:desc:": [
-              "mentions",
-              ", incremented whenever an object name gets printed. see \"mention object\" and \"print name\". "
-            ]
+            "--": "incremented whenever an object name gets printed. see \"mention object\" and \"print name\".",
+            "Number named:": "mentions"
           }
         ]
       ]

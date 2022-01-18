@@ -300,8 +300,8 @@
                             "pattern_decl":
                             {
                                 "slot": "story_statement",
-                                "spec": "Tp determine {name:pattern_name|quote} {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}.",
-                                "sign": "Pattern:requires:returns:about:",
+                                "spec": "To determine {name:pattern_name|quote} {parameters%optvars?pattern_variables_tail} {?pattern_return}.",
+                                "sign": "Pattern:requires:returns:",
                                 "desc": [
                                     "Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.",
                                     "Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation."
@@ -506,7 +506,7 @@
                                 "desc": "Assign text to a noun: Assign text. Gives a noun one or more lines of text."
                             },
                             "named_property": {
-                                "spec": "named {name:text} ( {of%type?text} ) {comment?lines}",
+                                "spec": "named {name:text} ( {of%type?text} )",
                                 "embed": true
                             },    
                             "property_slot": {
@@ -515,43 +515,43 @@
                             },
                             "aspect_property": {
                                 "slot": "property_slot",
-                                "spec": "an aspect {aspect:text} {comment?lines}",
-                                "sign": "aspect of:desc:"
+                                "spec": "an aspect {aspect:text}",
+                                "sign": "aspect of:"
                             },
                             "bool_property": {
                                 "slot": "property_slot",
                                 "spec": "a true/false value {named_property}",
-                                "sign": "bool named:of:desc:"
+                                "sign": "bool named:of:"
                             },
                             "number_property": {
                                 "slot": "property_slot",
                                 "spec": "a number {named_property}",
-                                "sign": "number named:of:desc:"
+                                "sign": "number named:of:"
                             },
                             "text_property": {
                                 "slot": "property_slot",
                                 "spec": "some text {named_property}",
-                                "sign": "text named:of:desc:"
+                                "sign": "text named:of:"
                             },
                             "num_list_property": {
                                 "slot": "property_slot",
                                 "spec": "a list of nums {named_property}",
-                                "sign": "num_list named:of:desc:"
+                                "sign": "num_list named:of:"
                             },
                             "text_list_property": {
                                 "slot": "property_slot",
                                 "spec": "a list of text {named_property}",
-                                "sign": "text_list named:of:desc:"
+                                "sign": "text_list named:of:"
                             },
                             "record_property": {
                                 "slot": "property_slot",
                                 "spec": "a record {named_property}",
-                                "sign": "record named:of:desc:"
+                                "sign": "record named:of:"
                             },
                             "record_list_property": {
                                 "slot": "property_slot",
                                 "spec": "a list of records {named_property}",
-                                "sign": "record_list named:of:desc:"
+                                "sign": "record_list named:of:"
                             },
 
                             "certainties":

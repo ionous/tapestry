@@ -911,7 +911,6 @@ func Aspect_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Aspect) (err error) 
 // AspectProperty
 type AspectProperty struct {
 	Aspect      string `if:"label=of,type=text"`
-	Comment     Lines  `if:"label=desc,optional"`
 	UserComment string
 }
 
@@ -928,7 +927,6 @@ func (*AspectProperty) Compose() composer.Spec {
 
 const AspectProperty_Type = "aspect_property"
 const AspectProperty_Field_Aspect = "$ASPECT"
-const AspectProperty_Field_Comment = "$COMMENT"
 
 func (op *AspectProperty) Marshal(m jsn.Marshaler) error {
 	return AspectProperty_Marshal(m, op)
@@ -1007,13 +1005,6 @@ func AspectProperty_Marshal(m jsn.Marshaler, val *AspectProperty) (err error) {
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", AspectProperty_Field_Aspect))
-		}
-		e1 := m.MarshalKey("desc", AspectProperty_Field_Comment)
-		if e1 == nil {
-			e1 = Lines_Optional_Marshal(m, &val.Comment)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", AspectProperty_Field_Comment))
 		}
 		m.EndBlock()
 	}
@@ -1152,7 +1143,6 @@ const BoolProperty_Type = "bool_property"
 const BoolProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const BoolProperty_Field_Name = "$NAME"
 const BoolProperty_Field_Type = "$TYPE"
-const BoolProperty_Field_Comment = "$COMMENT"
 
 func (op *BoolProperty) Marshal(m jsn.Marshaler) error {
 	return BoolProperty_Marshal(m, op)
@@ -1238,13 +1228,6 @@ func BoolProperty_Marshal(m jsn.Marshaler, val *BoolProperty) (err error) {
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", BoolProperty_Field_Type))
-		}
-		e3 := m.MarshalKey("desc", BoolProperty_Field_Comment)
-		if e3 == nil {
-			e3 = Lines_Optional_Marshal(m, &val.Comment)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", BoolProperty_Field_Comment))
 		}
 		m.EndBlock()
 	}
@@ -4386,7 +4369,6 @@ func NamedNoun_Marshal(m jsn.Marshaler, val *NamedNoun) (err error) {
 type NamedProperty struct {
 	Name        string `if:"label=_,type=text"`
 	Type        string `if:"label=type,optional,type=text"`
-	Comment     Lines  `if:"label=comment,optional"`
 	UserComment string
 }
 
@@ -4400,7 +4382,6 @@ func (*NamedProperty) Compose() composer.Spec {
 const NamedProperty_Type = "named_property"
 const NamedProperty_Field_Name = "$NAME"
 const NamedProperty_Field_Type = "$TYPE"
-const NamedProperty_Field_Comment = "$COMMENT"
 
 func (op *NamedProperty) Marshal(m jsn.Marshaler) error {
 	return NamedProperty_Marshal(m, op)
@@ -4486,13 +4467,6 @@ func NamedProperty_Marshal(m jsn.Marshaler, val *NamedProperty) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", NamedProperty_Field_Type))
-		}
-		e2 := m.MarshalKey("comment", NamedProperty_Field_Comment)
-		if e2 == nil {
-			e2 = Lines_Optional_Marshal(m, &val.Comment)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", NamedProperty_Field_Comment))
 		}
 		m.EndBlock()
 	}
@@ -5378,7 +5352,6 @@ const NumListProperty_Type = "num_list_property"
 const NumListProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const NumListProperty_Field_Name = "$NAME"
 const NumListProperty_Field_Type = "$TYPE"
-const NumListProperty_Field_Comment = "$COMMENT"
 
 func (op *NumListProperty) Marshal(m jsn.Marshaler) error {
 	return NumListProperty_Marshal(m, op)
@@ -5465,13 +5438,6 @@ func NumListProperty_Marshal(m jsn.Marshaler, val *NumListProperty) (err error) 
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", NumListProperty_Field_Type))
 		}
-		e3 := m.MarshalKey("desc", NumListProperty_Field_Comment)
-		if e3 == nil {
-			e3 = Lines_Optional_Marshal(m, &val.Comment)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", NumListProperty_Field_Comment))
-		}
 		m.EndBlock()
 	}
 	return
@@ -5498,7 +5464,6 @@ const NumberProperty_Type = "number_property"
 const NumberProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const NumberProperty_Field_Name = "$NAME"
 const NumberProperty_Field_Type = "$TYPE"
-const NumberProperty_Field_Comment = "$COMMENT"
 
 func (op *NumberProperty) Marshal(m jsn.Marshaler) error {
 	return NumberProperty_Marshal(m, op)
@@ -5584,13 +5549,6 @@ func NumberProperty_Marshal(m jsn.Marshaler, val *NumberProperty) (err error) {
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", NumberProperty_Field_Type))
-		}
-		e3 := m.MarshalKey("desc", NumberProperty_Field_Comment)
-		if e3 == nil {
-			e3 = Lines_Optional_Marshal(m, &val.Comment)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", NumberProperty_Field_Comment))
 		}
 		m.EndBlock()
 	}
@@ -6137,7 +6095,6 @@ type PatternDecl struct {
 	Name          core.PatternName      `if:"label=_"`
 	Optvars       *PatternVariablesTail `if:"label=requires,optional"`
 	PatternReturn *PatternReturn        `if:"label=returns,optional"`
-	About         *Comment              `if:"label=about,optional"`
 	UserComment   string
 }
 
@@ -6156,7 +6113,6 @@ const PatternDecl_Type = "pattern_decl"
 const PatternDecl_Field_Name = "$NAME"
 const PatternDecl_Field_Optvars = "$OPTVARS"
 const PatternDecl_Field_PatternReturn = "$PATTERN_RETURN"
-const PatternDecl_Field_About = "$ABOUT"
 
 func (op *PatternDecl) Marshal(m jsn.Marshaler) error {
 	return PatternDecl_Marshal(m, op)
@@ -6249,13 +6205,6 @@ func PatternDecl_Marshal(m jsn.Marshaler, val *PatternDecl) (err error) {
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", PatternDecl_Field_PatternReturn))
-		}
-		e3 := m.MarshalKey("about", PatternDecl_Field_About)
-		if e3 == nil {
-			e3 = Comment_Optional_Marshal(m, &val.About)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", PatternDecl_Field_About))
 		}
 		m.EndBlock()
 	}
@@ -7284,7 +7233,6 @@ const RecordListProperty_Type = "record_list_property"
 const RecordListProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const RecordListProperty_Field_Name = "$NAME"
 const RecordListProperty_Field_Type = "$TYPE"
-const RecordListProperty_Field_Comment = "$COMMENT"
 
 func (op *RecordListProperty) Marshal(m jsn.Marshaler) error {
 	return RecordListProperty_Marshal(m, op)
@@ -7371,13 +7319,6 @@ func RecordListProperty_Marshal(m jsn.Marshaler, val *RecordListProperty) (err e
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", RecordListProperty_Field_Type))
 		}
-		e3 := m.MarshalKey("desc", RecordListProperty_Field_Comment)
-		if e3 == nil {
-			e3 = Lines_Optional_Marshal(m, &val.Comment)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", RecordListProperty_Field_Comment))
-		}
 		m.EndBlock()
 	}
 	return
@@ -7404,7 +7345,6 @@ const RecordProperty_Type = "record_property"
 const RecordProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const RecordProperty_Field_Name = "$NAME"
 const RecordProperty_Field_Type = "$TYPE"
-const RecordProperty_Field_Comment = "$COMMENT"
 
 func (op *RecordProperty) Marshal(m jsn.Marshaler) error {
 	return RecordProperty_Marshal(m, op)
@@ -7490,13 +7430,6 @@ func RecordProperty_Marshal(m jsn.Marshaler, val *RecordProperty) (err error) {
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", RecordProperty_Field_Type))
-		}
-		e3 := m.MarshalKey("desc", RecordProperty_Field_Comment)
-		if e3 == nil {
-			e3 = Lines_Optional_Marshal(m, &val.Comment)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", RecordProperty_Field_Comment))
 		}
 		m.EndBlock()
 	}
@@ -9097,7 +9030,6 @@ const TextListProperty_Type = "text_list_property"
 const TextListProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const TextListProperty_Field_Name = "$NAME"
 const TextListProperty_Field_Type = "$TYPE"
-const TextListProperty_Field_Comment = "$COMMENT"
 
 func (op *TextListProperty) Marshal(m jsn.Marshaler) error {
 	return TextListProperty_Marshal(m, op)
@@ -9184,13 +9116,6 @@ func TextListProperty_Marshal(m jsn.Marshaler, val *TextListProperty) (err error
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", TextListProperty_Field_Type))
 		}
-		e3 := m.MarshalKey("desc", TextListProperty_Field_Comment)
-		if e3 == nil {
-			e3 = Lines_Optional_Marshal(m, &val.Comment)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", TextListProperty_Field_Comment))
-		}
 		m.EndBlock()
 	}
 	return
@@ -9217,7 +9142,6 @@ const TextProperty_Type = "text_property"
 const TextProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const TextProperty_Field_Name = "$NAME"
 const TextProperty_Field_Type = "$TYPE"
-const TextProperty_Field_Comment = "$COMMENT"
 
 func (op *TextProperty) Marshal(m jsn.Marshaler) error {
 	return TextProperty_Marshal(m, op)
@@ -9303,13 +9227,6 @@ func TextProperty_Marshal(m jsn.Marshaler, val *TextProperty) (err error) {
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", TextProperty_Field_Type))
-		}
-		e3 := m.MarshalKey("desc", TextProperty_Field_Comment)
-		if e3 == nil {
-			e3 = Lines_Optional_Marshal(m, &val.Comment)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", TextProperty_Field_Comment))
 		}
 		m.EndBlock()
 	}
@@ -9605,12 +9522,9 @@ var Signatures = map[uint64]interface{}{
 	11902859627634050329: (*ActionParams)(nil),          /* ActionParams dual: */
 	5868886119925925865:  (*ActionParams)(nil),          /* ActionParams none: */
 	4946346507935163764:  (*AspectProperty)(nil),        /* Aspect of: */
-	2627975827633552637:  (*AspectProperty)(nil),        /* Aspect of:desc: */
 	17855209504331534011: (*AspectTraits)(nil),          /* AspectTraits:traitPhrase: */
 	10466815184164589710: (*BoolProperty)(nil),          /* Bool named: */
-	15292113293401271919: (*BoolProperty)(nil),          /* Bool named:desc: */
 	7864268224293611023:  (*BoolProperty)(nil),          /* Bool named:of: */
-	12288912254770942240: (*BoolProperty)(nil),          /* Bool named:of:desc: */
 	170374163879469822:   (*Certainties)(nil),           /* Certainties:areBeing:certainty:trait: */
 	15857890977690710700: (*Comment)(nil),               /* Comment: */
 	13295757043766156580: (*CommonAction)(nil),          /* CommonAction: */
@@ -9644,9 +9558,7 @@ var Signatures = map[uint64]interface{}{
 	17563761532337350103: (*ManyToMany)(nil),            /* ManyToMany:otherKinds: */
 	4129025779762507875:  (*ManyToOne)(nil),             /* ManyToOne:kind: */
 	7600243833025335851:  (*NamedProperty)(nil),         /* NamedProperty: */
-	8883280437292140850:  (*NamedProperty)(nil),         /* NamedProperty:comment: */
 	11281497065498302283: (*NamedProperty)(nil),         /* NamedProperty:type: */
-	847370382734809298:   (*NamedProperty)(nil),         /* NamedProperty:type:comment: */
 	9520200366645637656:  (*NamedNoun)(nil),             /* Noun:named: */
 	10597814521259612392: (*NounAssignment)(nil),        /* NounAssignment:nouns:lines: */
 	8083590999220488417:  (*NounRelation)(nil),          /* NounRelation areBeing:relation:otherNouns: */
@@ -9659,26 +9571,18 @@ var Signatures = map[uint64]interface{}{
 	6477696692861713863:  (*NounTraitStatement)(nil),    /* Nouns:startAs:and: */
 	18242559699550270796: (*NounTraits)(nil),            /* NounTraits:trait: */
 	1229800714295622509:  (*NumberProperty)(nil),        /* Number named: */
-	8220001352821667446:  (*NumberProperty)(nil),        /* Number named:desc: */
 	11728451174312232590: (*NumberProperty)(nil),        /* Number named:of: */
-	8225044541532672111:  (*NumberProperty)(nil),        /* Number named:of:desc: */
 	10570788478167904864: (*NumListProperty)(nil),       /* NumList named: */
-	12067969820633710801: (*NumListProperty)(nil),       /* NumList named:desc: */
 	1134638206967616033:  (*NumListProperty)(nil),       /* NumList named:of: */
-	4350453418069638626:  (*NumListProperty)(nil),       /* NumList named:of:desc: */
 	17075866407822548206: (*OneToMany)(nil),             /* OneToMany:kinds: */
 	13766274136867271026: (*OneToOne)(nil),              /* OneToOne:otherKind: */
 	18143853777230560632: (*PairedAction)(nil),          /* PairedAction: */
 	6457542997147343897:  (*Paragraph)(nil),             /* Paragraph */
 	1044755875845214073:  (*Paragraph)(nil),             /* Paragraph: */
 	11028694429729745801: (*PatternDecl)(nil),           /* Pattern: */
-	9822902173127317528:  (*PatternDecl)(nil),           /* Pattern:about: */
 	9595265807710753233:  (*PatternDecl)(nil),           /* Pattern:requires: */
-	12912062952203186528: (*PatternDecl)(nil),           /* Pattern:requires:about: */
 	13010900631615283446: (*PatternDecl)(nil),           /* Pattern:requires:returns: */
-	17024654433952487599: (*PatternDecl)(nil),           /* Pattern:requires:returns:about: */
 	10545169234908038990: (*PatternDecl)(nil),           /* Pattern:returns: */
-	6157469696159691367:  (*PatternDecl)(nil),           /* Pattern:returns:about: */
 	18102878396089561802: (*PatternActions)(nil),        /* Pattern:rules: */
 	14327863709522811694: (*PatternActions)(nil),        /* Pattern:with:rules: */
 	16940656754612309445: (*PatternLocals)(nil),         /* PatternLocals: */
@@ -9690,13 +9594,9 @@ var Signatures = map[uint64]interface{}{
 	12644281899387438986: (*PatternRules)(nil),          /* PatternRules: */
 	13417511286363622337: (*ProgramHook)(nil),           /* ProgramHook activity: */
 	9421894963555981921:  (*RecordProperty)(nil),        /* Record named: */
-	1627613176937258658:  (*RecordProperty)(nil),        /* Record named:desc: */
 	15273128656504901402: (*RecordProperty)(nil),        /* Record named:of: */
-	8491419645379028179:  (*RecordProperty)(nil),        /* Record named:of:desc: */
 	8380731787009175721:  (*RecordListProperty)(nil),    /* RecordList named: */
-	13065085319992699434: (*RecordListProperty)(nil),    /* RecordList named:desc: */
 	16326018873841140594: (*RecordListProperty)(nil),    /* RecordList named:of: */
-	8809350479853098315:  (*RecordListProperty)(nil),    /* RecordList named:of:desc: */
 	14287924768394488954: (*RelationCardinality)(nil),   /* RelationCardinality manyToMany: */
 	10453256446593418889: (*RelationCardinality)(nil),   /* RelationCardinality manyToOne: */
 	18092929693239672593: (*RelationCardinality)(nil),   /* RelationCardinality oneToMany: */
@@ -9712,13 +9612,9 @@ var Signatures = map[uint64]interface{}{
 	15304439741055926590: (*TestScene)(nil),             /* TestScene:story: */
 	1385539489971009934:  (*TestStatement)(nil),         /* TestStatement:test: */
 	34813485952713023:    (*TextProperty)(nil),          /* Text named: */
-	8821446596613108912:  (*TextProperty)(nil),          /* Text named:desc: */
 	15716906332929430280: (*TextProperty)(nil),          /* Text named:of: */
-	10950529590260468345: (*TextProperty)(nil),          /* Text named:of:desc: */
 	12060628209423567251: (*TextListProperty)(nil),      /* TextList named: */
-	8790232589946234908:  (*TextListProperty)(nil),      /* TextList named:desc: */
 	17501273845802809220: (*TextListProperty)(nil),      /* TextList named:of: */
-	10102728286923952045: (*TextListProperty)(nil),      /* TextList named:of:desc: */
 	14061432096605043790: (*TraitPhrase)(nil),           /* TraitPhrase:trait: */
 	3588173502446728488:  (*EventHandler)(nil),          /* With:event:rules: */
 	6066282364453737768:  (*EventHandler)(nil),          /* With:event:with:rules: */

@@ -5,10 +5,8 @@
         "Objects",
         [
           {
-            "Text named:desc:": [
-              "indefinite article",
-              ", which if not set will be the article from the declaration of the noun; example: \"some\" soldiers."
-            ]
+            "--": "when not set it will use the article from the declaration of the noun; example: \"some\" soldiers.",
+            "Text named:": "indefinite article"
           },
           {
             "Aspect of:": "pluralization"

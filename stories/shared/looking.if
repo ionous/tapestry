@@ -149,10 +149,8 @@
               ]
             },
             {
-              "Bool named:desc:": [
-                "inDarkness",
-                "for testing, darkness gets passed in as a flag."
-              ]
+              "--": "for testing, darkness gets passed in as a flag.",
+              "Bool named:": "inDarkness"
             }
           ]
         }

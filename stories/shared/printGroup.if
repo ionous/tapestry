@@ -1,7 +1,11 @@
 {
   "Story:": [
     {
-      "Pattern:requires:returns:about:": [
+      "--": [
+        "Prints the objects in a pre-determined group.",
+        "Having this as its own pattern allows authors to add custom prefixes and suffixes using before and after rules."
+      ],
+      "Pattern:requires:returns:": [
         "print group",
         {
           "PatternRequires:": [
@@ -17,9 +21,6 @@
           "PatternResult:": {
             "Bool named:": "success"
           }
-        },
-        {
-          "Comment:": "Prints the objects in a pre-determined group. Having this as its own pattern allows authors to add custom prefixes and suffixes using before and after rules."
         }
       ]
     },

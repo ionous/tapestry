@@ -1,7 +1,8 @@
 {
   "Story:": [
     {
-      "Pattern:requires:returns:about:": [
+      "--": "Returns a list of the objects partitioned into groups.",
+      "Pattern:requires:returns:": [
         "make groups",
         {
           "PatternRequires:": [
@@ -17,9 +18,6 @@
               "object group"
             ]
           }
-        },
-        {
-          "Comment:": "Returns a list of the objects partitioned into groups."
         }
       ]
     },
@@ -230,10 +228,8 @@
         "Groupings",
         [
           {
-            "Text named:desc:": [
-              "name",
-              ", containing the name of an object the grouping describes"
-            ]
+            "--": "the name of an object the grouping describes",
+            "Text named:": "name"
           },
           {
             "Text named:": "label"
@@ -469,7 +465,8 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:about:": [
+      "--": "Adds a grouping to a collated list of groupings, and returns the new list.",
+      "Pattern:requires:returns:": [
         "collate groups",
         {
           "PatternRequires:": [
@@ -494,9 +491,6 @@
               "object group"
             ]
           }
-        },
-        {
-          "Comment:": "Adds a grouping to a collated list of groupings, and returns the new list."
         }
       ]
     },

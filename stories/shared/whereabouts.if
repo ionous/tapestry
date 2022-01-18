@@ -18,7 +18,11 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:about:": [
+      "--": [
+        "An object indicating the position or ownership of another:",
+        "a kitchen with a cook, a cook holding a sack, a sack containing some flour."
+      ],
+      "Pattern:requires:returns:": [
         "parentOf",
         {
           "PatternRequires:": [
@@ -37,9 +41,6 @@
               "object"
             ]
           }
-        },
-        {
-          "Comment:": "An object indicating the position or ownership of another: a kitchen with a cook, a cook holding a sack, a sack containing some flour. "
         }
       ]
     },
@@ -263,7 +264,8 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:about:": [
+      "--": "The room in which an object can be found.",
+      "Pattern:requires:returns:": [
         "CurrentRoom",
         {
           "PatternRequires:": [
@@ -282,9 +284,6 @@
               "room"
             ]
           }
-        },
-        {
-          "Comment:": "The room in which an object can be found. "
         }
       ]
     },
@@ -402,7 +401,11 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:about:": [
+      "--": [
+        "Finds the innermost object housing two objects.",
+        "However, if one object directly encloses the other, it will return that object."
+      ],
+      "Pattern:requires:returns:": [
         "Common Ancestor",
         {
           "PatternRequires:": [
@@ -427,9 +430,6 @@
               "object"
             ]
           }
-        },
-        {
-          "Comment:": "Finds the innermost object housing two objects. However, if one object directly encloses the other, it will return that object."
         }
       ]
     },
@@ -667,10 +667,8 @@
         },
         {
           "PatternResult:": {
-            "Bool named:desc:": [
-              "isAncestor",
-              "- true if one object acts as the ancestor of another."
-            ]
+            "--": "true if one object acts as the ancestor of another.",
+            "Bool named:": "isAncestor"
           }
         }
       ]

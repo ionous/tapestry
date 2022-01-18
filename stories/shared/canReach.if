@@ -15,10 +15,10 @@
               "Text named:": "action"
             },
             {
-              "Text named:of:desc:": [
+              "--": "the target the agent is trying to reach",
+              "Text named:of:": [
                 "noun",
-                "thing",
-                ", the target the agent is trying to reach"
+                "thing"
               ]
             },
             {

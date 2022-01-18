@@ -21,10 +21,10 @@
               ]
             },
             {
-              "Text named:of:desc:": [
+              "--": "not all actions have a second noun and that's okay",
+              "Text named:of:": [
                 "other noun",
-                "thing",
-                ", not all actions have a second noun and that's okay"
+                "thing"
               ]
             }
           ]

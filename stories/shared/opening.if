@@ -367,10 +367,8 @@
                 "PatternLocals:": [
                   {
                     "LocalDecl:": {
-                      "TextList named:desc:": [
-                        "concealed items",
-                        "initialized only when needed, for containers revealing their contents."
-                      ]
+                      "--": "initialized only when needed, for containers revealing their contents.",
+                      "TextList named:": "concealed items"
                     }
                   }
                 ]

@@ -2,6 +2,7 @@ package cin
 
 import (
 	"encoding/json"
+	"strings"
 
 	"github.com/ionous/errutil"
 )
@@ -59,8 +60,12 @@ func parseOp(d map[string]json.RawMessage) (ret Op, err error) {
 		if k == commentMarker {
 			hadComment = true
 			if e := json.Unmarshal(v, &out.Cmt); e != nil {
-				err = errutil.New("couldnt read comment", e)
-				break
+				var lines []string
+				if e := json.Unmarshal(v, &lines); e != nil {
+					err = errutil.New("couldnt read comment", e)
+					break
+				}
+				out.Cmt = strings.Join(lines, "\n")
 			}
 		} else if len(out.Key) > 0 {
 			err = errutil.New("expected only a single key", d)
