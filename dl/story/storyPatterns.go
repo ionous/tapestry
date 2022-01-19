@@ -7,10 +7,9 @@ import (
 )
 
 func (op *PatternActions) ImportPhrase(k *Importer) (err error) {
-
 	patternName := op.Name.String()
 	var locals []eph.EphParams
-	if els := op.PatternLocals; els != nil {
+	if els := op.Provides; els != nil {
 		locals = els.ImportLocals(k, patternName)
 	}
 	if len(locals) > 0 {
@@ -30,7 +29,7 @@ func (op *PatternDecl) ImportPhrase(k *Importer) (err error) {
 }
 
 func (op *PatternDecl) reduceProps() (ret []eph.EphParams) {
-	if els := op.Optvars; els != nil {
+	if els := op.Params; els != nil {
 		ret = reduceProps(els.Props)
 	}
 	return
@@ -112,12 +111,8 @@ func (op *PatternFlags) ReadFlags() (ret eph.EphTiming, err error) {
 
 func (op *PatternLocals) ImportLocals(k *Importer, patternName string) []eph.EphParams {
 	var out []eph.EphParams
-	for _, el := range op.LocalDecl {
-		p := el.Local.GetParam()
-		if init := el.Value; init != nil {
-			p.Initially = init.Value
-		}
-		out = append(out, p)
+	for _, el := range op.Locals {
+		out = append(out, el.GetParam())
 	}
 	return out
 }

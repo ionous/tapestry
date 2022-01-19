@@ -8,7 +8,7 @@
       "Pattern:requires:returns:": [
         "print group",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Record named:of:": [
                 "group",
@@ -25,44 +25,34 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "print group",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:value:": [
+              "Record named:of:initially:": [
+                "grouping",
+                "grouping",
                 {
-                  "Record named:of:": [
+                  "Get:from:": [
                     "grouping",
-                    "grouping"
+                    {
+                      "VarFields:": "group"
+                    }
                   ]
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "grouping",
-                      {
-                        "VarFields:": "group"
-                      }
-                    ]
-                  }
                 }
               ]
             },
             {
-              "LocalDecl:value:": [
+              "TextList named:initially:": [
+                "objs",
                 {
-                  "TextList named:": "objs"
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "objects",
-                      {
-                        "VarFields:": "group"
-                      }
-                    ]
-                  }
+                  "Get:from:": [
+                    "objects",
+                    {
+                      "VarFields:": "group"
+                    }
+                  ]
                 }
               ]
             }
@@ -349,7 +339,7 @@
       "Pattern:requires:": [
         "print grouped object",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",

@@ -230,8 +230,8 @@
                             "event_handler":
                             {
                                 "uses": "flow",
-                                "spec": "{event_phase} {the event%event:event_name} {with locals%locals?pattern_locals} do:{pattern_rules}",
-                                "sign": "with:event:with:rules:"
+                                "spec": "{event_phase} {the event%event:event_name} {provides?pattern_locals} do:{pattern_rules}",
+                                "sign": "with:event:provides:rules:"
                             },
                             "event_phase":
                             {
@@ -300,18 +300,24 @@
                             "pattern_decl":
                             {
                                 "slot": "story_statement",
-                                "spec": "To determine {name:pattern_name|quote} {parameters%optvars?pattern_variables_tail} {?pattern_return}.",
+                                "spec": "To determine {name:pattern_name|quote} {params?pattern_params} {?pattern_return}.",
                                 "sign": "Pattern:requires:returns:",
                                 "desc": [
                                     "Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.",
                                     "Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation."
                                 ]
                             },
-                            "pattern_variables_tail":
+                            "pattern_params":
                             {
                                 "spec": "It requires {props+property_slot|comma-and}",
-                                "desc": "Pattern variables: Storage for values used during the execution of a pattern.",
-                                "sign": "pattern_requires:"
+                                "desc": "Pattern parameters: Storage for values used during the execution of a pattern.",
+                                "sign": "pattern_params:"
+                            },
+                            "pattern_locals":
+                            {
+                                "spec": "It provides {locals+property_slot|comma-and}",
+                                "desc": "Pattern locals: Storage for values used during the execution of a pattern.",
+                                "sign": "pattern_locals:"
                             },
                             "pattern_type":
                             {
@@ -322,9 +328,9 @@
                             "pattern_actions":
                             {
                                 "slot": "story_statement",
-                                "spec": "To determine {pattern name%name:pattern_name} {?pattern_locals} do:{pattern_rules}",
+                                "spec": "To determine {pattern name%name:pattern_name} {provides?pattern_locals} do:{pattern_rules}",
                                 "desc": "Add actions to a pattern: Actions to take when using a pattern.",
-                                "sign": "pattern:with:rules:"
+                                "sign": "pattern:provides:rules:"
                             },
                             "pattern_rules":
                             {
@@ -341,23 +347,6 @@
                             {
                                 "uses": "str",
                                 "spec": "{continue before%before}, {continue after%after}, {terminate}"
-                            },
-                            "pattern_locals":
-                            {
-                                "uses": "flow",
-                                "spec": "{+local_decl|comma-and}"
-                            },
-                            "local_decl":
-                            {
-                                "uses": "flow",
-                                "spec": "using {local:property_slot} {starting as%value?local_init}",
-                                "desc": "Local variables can use the parameters of a pattern to compute temporary values."
-                            },
-                            "local_init":
-                            {
-                                "uses": "flow",
-                                "spec": "starting as {value:assignment}",
-                                "desc": "Local variables can use the parameters of a pattern to compute temporary values."
                             },
                             "program_hook":
                             {
@@ -520,40 +509,39 @@
                             },
                             "bool_property": {
                                 "slot": "property_slot",
-                                "spec": "a true/false value {named_property}",
-                                "sign": "bool named:of:"
+                                "spec": "a true/false value {named_property} {initially?bool_eval}",
+                                "sign": "bool named:of:initially:"
                             },
                             "number_property": {
                                 "slot": "property_slot",
-                                "spec": "a number {named_property}",
-                                "sign": "number named:of:"
+                                "spec": "a number {named_property} {initially?number_eval}",
+                                "sign": "number named:of:initially:"
                             },
                             "text_property": {
                                 "slot": "property_slot",
-                                "spec": "some text {named_property}",
-                                "sign": "text named:of:"
+                                "spec": "some text {named_property} {initially?text_eval}",
+                                "sign": "text named:of:initially:"
                             },
                             "num_list_property": {
                                 "slot": "property_slot",
-                                "spec": "a list of nums {named_property}",
-                                "sign": "num_list named:of:"
+                                "spec": "a list of nums {named_property} {initially?num_list_eval}",
+                                "sign": "num_list named:of:initially:"
                             },
                             "text_list_property": {
                                 "slot": "property_slot",
-                                "spec": "a list of text {named_property}",
-                                "sign": "text_list named:of:"
+                                "spec": "a list of text {named_property} {initially?text_list_eval}",
+                                "sign": "text_list named:of:initially:"
                             },
                             "record_property": {
                                 "slot": "property_slot",
-                                "spec": "a record {named_property}",
-                                "sign": "record named:of:"
+                                "spec": "a record {named_property} {initially?record_eval}",
+                                "sign": "record named:of:initially:"
                             },
                             "record_list_property": {
                                 "slot": "property_slot",
-                                "spec": "a list of records {named_property}",
-                                "sign": "record_list named:of:"
+                                "spec": "a list of records {named_property} {initially?record_list_eval}",
+                                "sign": "record_list named:of:initially:"
                             },
-
                             "certainties":
                             {
                                 "uses": "flow",

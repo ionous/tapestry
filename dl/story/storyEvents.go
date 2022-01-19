@@ -32,8 +32,8 @@ func (op *EventBlock) ImportPhrase(k *Importer) (err error) {
 				err = errutil.Append(e)
 			} else {
 				// and these are locals used by those rules
-				if h.Locals != nil {
-					locals := h.Locals.ImportLocals(k, evt)
+				if h.Provides != nil {
+					locals := h.Provides.ImportLocals(k, evt)
 					if len(locals) > 0 {
 						k.WriteEphemera(&eph.EphPatterns{Name: evt, Locals: locals})
 					}

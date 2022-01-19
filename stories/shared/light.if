@@ -4,7 +4,7 @@
       "Pattern:requires:returns:": [
         "fully opaque",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",
@@ -121,7 +121,7 @@
       "Pattern:requires:returns:": [
         "transparentOf",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",
@@ -141,25 +141,17 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "transparentOf",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:value:": [
+              "Text named:of:initially:": [
+                "parent",
+                "object",
                 {
-                  "Text named:of:": [
-                    "parent",
-                    "object"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "FromTxt:": {
-                      "ParentOf obj:": {
-                        "FromTxt:": "@obj"
-                      }
-                    }
+                  "ParentOf obj:": {
+                    "FromTxt:": "@obj"
                   }
                 }
               ]
@@ -223,7 +215,7 @@
       "Pattern:requires:returns:": [
         "transparentList",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",
@@ -302,7 +294,7 @@
       "Pattern:requires:returns:": [
         "contains light",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "spot",
@@ -322,19 +314,15 @@
       "Comment:": "Returns true if the passed spot is illuminated ( because of its own light, or because of the light of some nearby objet. ) This roughly correlates to Inform's \"offers light\" routine."
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "contains light",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:": {
-                "TextList named:": "queue"
-              }
+              "TextList named:": "queue"
             },
             {
-              "LocalDecl:": {
-                "Text named:": "ceiling"
-              }
+              "Text named:": "ceiling"
             }
           ]
         },

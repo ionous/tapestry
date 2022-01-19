@@ -27,27 +27,21 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "jumping",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:value:": [
+              "Text named:of:initially:": [
+                "actor",
+                "object",
                 {
-                  "Text named:of:": [
-                    "actor",
-                    "object"
+                  "Get:from:": [
+                    "pawn",
+                    {
+                      "VarFields:": "agent"
+                    }
                   ]
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -80,7 +74,7 @@
       "Pattern:requires:": [
         "report jumping",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "actor",

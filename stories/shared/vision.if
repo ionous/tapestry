@@ -7,58 +7,40 @@
       "Comment:": "Adjust light runs at the end of the turn, examining the changes in the world to determine if the player has been plunged into darkness or thrust into the light. "
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "adjust light",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:value:": [
+              "Text named:of:initially:": [
+                "actor",
+                "actor",
                 {
-                  "Text named:of:": [
-                    "actor",
-                    "actor"
+                  "Get:from:": [
+                    "pawn",
+                    {
+                      "ObjFields:": "player"
+                    }
                   ]
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "ObjFields:": "player"
-                      }
-                    ]
-                  }
                 }
               ]
             },
             {
-              "LocalDecl:value:": [
+              "Bool named:initially:": [
+                "was lit",
                 {
-                  "Bool named:": "was lit"
-                },
-                {
-                  "LocalInit:": {
-                    "FromBool:": {
-                      "Get obj:trait:": [
-                        "@actor",
-                        "not in darkness"
-                      ]
-                    }
-                  }
+                  "Get obj:trait:": [
+                    "@actor",
+                    "not in darkness"
+                  ]
                 }
               ]
             },
             {
-              "LocalDecl:value:": [
+              "Bool named:initially:": [
+                "now lit",
                 {
-                  "Bool named:": "now lit"
-                },
-                {
-                  "LocalInit:": {
-                    "FromBool:": {
-                      "ContainsLight spot:": "@actor"
-                    }
-                  }
+                  "ContainsLight spot:": "@actor"
                 }
               ]
             }

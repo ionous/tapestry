@@ -10,27 +10,21 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "peeking",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:value:": [
+              "Text named:of:initially:": [
+                "actor",
+                "actor",
                 {
-                  "Text named:of:": [
-                    "actor",
-                    "actor"
+                  "Get:from:": [
+                    "pawn",
+                    {
+                      "VarFields:": "agent"
+                    }
                   ]
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -124,7 +118,7 @@
       "Pattern:requires:": [
         "report peeking",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "actor",

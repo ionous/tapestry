@@ -107,7 +107,7 @@
       "Pattern:requires:": [
         "print name",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",
@@ -214,7 +214,7 @@
       "Pattern:requires:": [
         "mention",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",

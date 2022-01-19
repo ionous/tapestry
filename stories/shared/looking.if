@@ -8,27 +8,21 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "looking",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:value:": [
+              "Text named:of:initially:": [
+                "actor",
+                "object",
                 {
-                  "Text named:of:": [
-                    "actor",
-                    "object"
+                  "Get:from:": [
+                    "pawn",
+                    {
+                      "VarFields:": "agent"
+                    }
                   ]
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -69,25 +63,17 @@
         "actors",
         [
           {
-            "With:event:with:rules:": [
+            "With:event:provides:rules:": [
               "while",
               "look",
               {
                 "PatternLocals:": [
                   {
-                    "LocalDecl:value:": [
+                    "Text named:of:initially:": [
+                      "location",
+                      "object",
                       {
-                        "Text named:of:": [
-                          "location",
-                          "object"
-                        ]
-                      },
-                      {
-                        "LocalInit:": {
-                          "FromTxt:": {
-                            "LocationOf obj:": "@actor"
-                          }
-                        }
+                        "LocationOf obj:": "@actor"
                       }
                     ]
                   }
@@ -141,7 +127,7 @@
       "Pattern:requires:": [
         "Print vantage",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "where",
@@ -157,38 +143,24 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "Print vantage",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:value:": [
+              "TextList named:initially:": [
+                "enclosures",
                 {
-                  "TextList named:": "enclosures"
-                },
-                {
-                  "LocalInit:": {
-                    "FromTxts:": {
-                      "TransparentList obj:": "@where"
-                    }
-                  }
+                  "TransparentList obj:": "@where"
                 }
               ]
             },
             {
-              "LocalDecl:value:": [
+              "Text named:of:initially:": [
+                "room",
+                "object",
                 {
-                  "Text named:of:": [
-                    "room",
-                    "object"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "FromTxt:": {
-                      "CurrentRoom obj:": "@where"
-                    }
-                  }
+                  "CurrentRoom obj:": "@where"
                 }
               ]
             }
@@ -372,7 +344,7 @@
       "Pattern:requires:": [
         "PrintDarkHeader",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "room",
@@ -418,7 +390,7 @@
       "Pattern:requires:": [
         "PrintDarkDescription",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "room",
@@ -464,7 +436,7 @@
       "Pattern:requires:": [
         "PrintLocaleTitle",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "room",
@@ -479,29 +451,21 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "PrintLocaleTitle",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:value:": [
+              "Text named:of:initially:": [
+                "ceiling",
+                "object",
                 {
-                  "Text named:of:": [
-                    "ceiling",
-                    "object"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "FromTxt:": {
-                      "Get:index:": [
-                        "@enclosures",
-                        {
-                          "Len:": "@enclosures"
-                        }
-                      ]
+                  "Get:index:": [
+                    "@enclosures",
+                    {
+                      "Len:": "@enclosures"
                     }
-                  }
+                  ]
                 }
               ]
             }
@@ -564,7 +528,7 @@
       "Pattern:requires:": [
         "PrintLocaleSubtitle",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "TextList named:": "enclosures"
             }
@@ -573,29 +537,21 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "PrintLocaleSubtitle",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:value:": [
+              "Text named:of:initially:": [
+                "ceiling",
+                "object",
                 {
-                  "Text named:of:": [
-                    "ceiling",
-                    "object"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "FromTxt:": {
-                      "Get:index:": [
-                        "@enclosures",
-                        {
-                          "Len:": "@enclosures"
-                        }
-                      ]
+                  "Get:index:": [
+                    "@enclosures",
+                    {
+                      "Len:": "@enclosures"
                     }
-                  }
+                  ]
                 }
               ]
             }
@@ -662,7 +618,7 @@
       "Pattern:requires:": [
         "PrintLocaleDescription",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "where",
@@ -686,45 +642,33 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "PrintLocaleDescription",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:value:": [
+              "TextList named:initially:": [
+                "kids",
                 {
-                  "TextList named:": "kids"
-                },
+                  "ChildrenOf obj:": "@where"
+                }
+              ]
+            },
+            {
+              "Number named:initially:": [
+                "previousMentions",
                 {
-                  "LocalInit:": {
-                    "FromTxts:": {
-                      "ChildrenOf obj:": "@where"
+                  "Get:from:": [
+                    "mentions",
+                    {
+                      "ObjFields:": "settings"
                     }
-                  }
+                  ]
                 }
               ]
             },
             {
-              "LocalDecl:value:": [
-                {
-                  "Number named:": "previousMentions"
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "mentions",
-                      {
-                        "ObjFields:": "settings"
-                      }
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "LocalDecl:": {
-                "TextList named:": "remainingKids"
-              }
+              "TextList named:": "remainingKids"
             }
           ]
         },
@@ -897,7 +841,7 @@
       "Pattern:requires:returns:": [
         "print object description",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",
@@ -1043,7 +987,7 @@
       "Pattern:requires:returns:": [
         "PrintImpressionOf",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",
@@ -1066,46 +1010,40 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "PrintImpressionOf",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:value:": [
+              "Bool named:initially:": [
+                "first look",
                 {
-                  "Bool named:": "first look"
-                },
-                {
-                  "LocalInit:": {
-                    "FromBool:": {
-                      "AllTrue:": [
-                        {
-                          "Get obj:trait:": [
-                            "@obj",
-                            "not mentioned"
-                          ]
-                        },
-                        {
-                          "Get obj:trait:": [
-                            "@obj",
-                            "not scenery"
-                          ]
-                        },
-                        {
-                          "Not:": {
-                            "Is empty:": {
-                              "Get:from:": [
-                                "initial appearance",
-                                {
-                                  "VarFields:": "obj"
-                                }
-                              ]
-                            }
-                          }
-                        }
+                  "AllTrue:": [
+                    {
+                      "Get obj:trait:": [
+                        "@obj",
+                        "not mentioned"
                       ]
+                    },
+                    {
+                      "Get obj:trait:": [
+                        "@obj",
+                        "not scenery"
+                      ]
+                    },
+                    {
+                      "Not:": {
+                        "Is empty:": {
+                          "Get:from:": [
+                            "initial appearance",
+                            {
+                              "VarFields:": "obj"
+                            }
+                          ]
+                        }
+                      }
                     }
-                  }
+                  ]
                 }
               ]
             }
@@ -1210,7 +1148,7 @@
       "Pattern:requires:": [
         "CanAlsoSee",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "where",

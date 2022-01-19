@@ -39,7 +39,7 @@ func TestPatternImport(t *testing.T) {
 func TestPatternParameterImport(t *testing.T) {
 	patternVariables := &story.PatternDecl{
 		Name: core.PatternName{Str: "corral"},
-		Optvars: &story.PatternVariablesTail{
+		Params: &story.PatternParams{
 			Props: []story.PropertySlot{&story.TextProperty{NamedProperty: story.NamedProperty{
 				Name: "pet",
 				Type: "animal",

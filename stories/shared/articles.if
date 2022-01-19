@@ -108,7 +108,7 @@
       "Pattern:requires:": [
         "A",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "noun",
@@ -156,7 +156,7 @@
       "Pattern:requires:": [
         "The",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "noun",
@@ -207,7 +207,7 @@
       "Pattern:requires:": [
         "Print article",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:": "article"
             },

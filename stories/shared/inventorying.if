@@ -8,27 +8,21 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "inventorying",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:value:": [
+              "Text named:of:initially:": [
+                "actor",
+                "object",
                 {
-                  "Text named:of:": [
-                    "actor",
-                    "object"
+                  "Get:from:": [
+                    "pawn",
+                    {
+                      "VarFields:": "agent"
+                    }
                   ]
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -110,7 +104,7 @@
       "Pattern:requires:": [
         "print inventory",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "actor",
@@ -122,21 +116,15 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "print inventory",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:value:": [
+              "TextList named:initially:": [
+                "kids",
                 {
-                  "TextList named:": "kids"
-                },
-                {
-                  "LocalInit:": {
-                    "FromTxts:": {
-                      "ChildrenOf obj:": "@actor"
-                    }
-                  }
+                  "ChildrenOf obj:": "@actor"
                 }
               ]
             }

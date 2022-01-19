@@ -10,27 +10,21 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "dropping",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:value:": [
+              "Text named:of:initially:": [
+                "actor",
+                "actor",
                 {
-                  "Text named:of:": [
-                    "actor",
-                    "actor"
+                  "Get:from:": [
+                    "pawn",
+                    {
+                      "VarFields:": "agent"
+                    }
                   ]
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
-                  }
                 }
               ]
             }
@@ -210,7 +204,7 @@
       "Pattern:requires:": [
         "report dropping",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "actor",

@@ -4,7 +4,7 @@
       "Pattern:requires:": [
         "We",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "TextList named:": "names"
             }
@@ -48,7 +48,7 @@
       "Pattern:requires:": [
         "They",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "noun",
@@ -106,7 +106,7 @@
       "Pattern:requires:": [
         "Those",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "noun",

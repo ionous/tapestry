@@ -4,7 +4,7 @@
       "Pattern:requires:returns:": [
         "can handle",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "actor",

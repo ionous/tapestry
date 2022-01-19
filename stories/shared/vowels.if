@@ -4,7 +4,7 @@
       "Pattern:requires:returns:": [
         "starts with vowel",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:": "text"
             }

@@ -146,7 +146,7 @@
       "Pattern:requires:returns:": [
         "isPlayer",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",

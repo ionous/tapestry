@@ -4,7 +4,7 @@
       "Pattern:requires:returns:": [
         "can reach",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "actor",
@@ -34,50 +34,36 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "can reach",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:": {
-                "Text named:of:": [
-                  "i",
-                  "object"
-                ]
-              }
+              "Text named:of:": [
+                "i",
+                "object"
+              ]
             },
             {
-              "LocalDecl:": {
-                "Text named:of:": [
-                  "next",
-                  "object"
-                ]
-              }
+              "Text named:of:": [
+                "next",
+                "object"
+              ]
             },
             {
-              "LocalDecl:": {
-                "Text named:": "dig error"
-              }
+              "Text named:": "dig error"
             },
             {
-              "LocalDecl:": {
-                "Number named:": "lca"
-              }
+              "Number named:": "lca"
             },
             {
-              "LocalDecl:": {
-                "Text named:": "reach response"
-              }
+              "Text named:": "reach response"
             },
             {
-              "LocalDecl:": {
-                "Number named:": "reach error"
-              }
+              "Number named:": "reach error"
             },
             {
-              "LocalDecl:": {
-                "TextList named:": "path"
-              }
+              "TextList named:": "path"
             }
           ]
         },
@@ -448,7 +434,7 @@
       "Pattern:requires:returns:": [
         "reach up",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "fromObj",
@@ -587,7 +573,7 @@
       "Pattern:requires:returns:": [
         "reach down",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "fromObj",

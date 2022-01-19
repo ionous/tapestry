@@ -4,7 +4,7 @@
       "Pattern:requires:returns:": [
         "parser bounds",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",
@@ -21,14 +21,12 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "parser bounds",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:": {
-                "TextList named:": "queue"
-              }
+              "TextList named:": "queue"
             }
           ]
         },

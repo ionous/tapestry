@@ -17,7 +17,7 @@
       "Pattern:requires:": [
         "print plural name",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",

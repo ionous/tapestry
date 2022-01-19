@@ -4,7 +4,7 @@
       "Pattern:requires:": [
         "print several",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",

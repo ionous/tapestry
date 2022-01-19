@@ -4,7 +4,7 @@
       "Pattern:requires:returns:": [
         "Move Object",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",
@@ -178,7 +178,7 @@
       "Pattern:requires:": [
         "RemoveFromPlay",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",
@@ -250,7 +250,7 @@
       "Pattern:requires:": [
         "WearObject",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",

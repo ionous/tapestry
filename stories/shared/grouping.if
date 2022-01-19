@@ -5,7 +5,7 @@
       "Pattern:requires:returns:": [
         "make groups",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "TextList named:": "objs"
             }
@@ -22,17 +22,15 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "make groups",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:": {
-                "RecordList named:of:": [
-                  "groupings",
-                  "grouping"
-                ]
-              }
+              "RecordList named:of:": [
+                "groupings",
+                "grouping"
+              ]
             }
           ]
         },
@@ -80,7 +78,7 @@
       "Pattern:requires:returns:": [
         "assign grouping",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",
@@ -100,25 +98,17 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "assign grouping",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:value:": [
+              "Record named:of:initially:": [
+                "grouping",
+                "grouping",
                 {
-                  "Record named:of:": [
-                    "grouping",
-                    "grouping"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "FromRec:": {
-                      "Groupings name:": {
-                        "FromTxt:": "@obj"
-                      }
-                    }
+                  "Groupings name:": {
+                    "FromTxt:": "@obj"
                   }
                 }
               ]
@@ -278,7 +268,7 @@
       "Pattern:requires:returns:": [
         "match groups",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Record named:of:": [
                 "first",
@@ -469,7 +459,7 @@
       "Pattern:requires:returns:": [
         "collate groups",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Record named:of:": [
                 "grouping",
@@ -495,27 +485,21 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "collate groups",
         {
           "PatternLocals:": [
             {
-              "LocalDecl:": {
-                "Number named:": "idx"
-              }
+              "Number named:": "idx"
             },
             {
-              "LocalDecl:": {
-                "Record named:of:": [
-                  "group",
-                  "object group"
-                ]
-              }
+              "Record named:of:": [
+                "group",
+                "object group"
+              ]
             },
             {
-              "LocalDecl:": {
-                "TextList named:": "names"
-              }
+              "TextList named:": "names"
             }
           ]
         },

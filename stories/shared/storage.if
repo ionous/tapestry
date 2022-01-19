@@ -4,7 +4,7 @@
       "Pattern:requires:returns:": [
         "provides storage",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",
@@ -83,7 +83,7 @@
       "Pattern:requires:returns:": [
         "shows storage",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",
@@ -141,7 +141,7 @@
       "Pattern:requires:returns:": [
         "visible storage",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",
@@ -247,7 +247,7 @@
       "Pattern:requires:returns:": [
         "allows storage",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "obj",

@@ -33,7 +33,7 @@ var FactorialStory = &story.Story{
 					UserComment:   "the result uses the same variable as the pattern input does",
 					NamedProperty: numberDecl,
 				}},
-				Optvars: &story.PatternVariablesTail{
+				Params: &story.PatternParams{
 					Props: []story.PropertySlot{
 						&story.NumberProperty{
 							UserComment:   "just one argument, a number called 'num'",

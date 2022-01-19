@@ -4,7 +4,7 @@
       "Pattern:requires:returns:": [
         "state change",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "actor",
@@ -211,7 +211,7 @@
       "Pattern:requires:returns:": [
         "state changing",
         {
-          "PatternRequires:": [
+          "PatternParams:": [
             {
               "Text named:of:": [
                 "noun",
