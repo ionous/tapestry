@@ -146,7 +146,7 @@
                                                       {
                                                         "Send:event:": [
                                                           {
-                                                            "ParentsOf obj:": "@noun"
+                                                            "Capture obj:": "@noun"
                                                           },
                                                           {
                                                             "StoreInto actor:noun:otherNoun:": [

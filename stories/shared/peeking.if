@@ -76,7 +76,7 @@
                                   {
                                     "Send:event:": [
                                       {
-                                        "ParentsOf obj:": "@noun"
+                                        "Capture obj:": "@noun"
                                       },
                                       {
                                         "Peek actor:noun:": [

@@ -1,6 +1,10 @@
 {
   "Story:": [
     {
+      "--": [
+        "The placement of objects in the game world",
+        "One parent to many children."
+      ],
       "KindOfRelation:cardinality oneToMany:": [
         "whereabouts",
         {
@@ -12,15 +16,12 @@
       ]
     },
     {
-      "Comment:": "The placement of objects in the game world.  One parent to many children. "
-    },
-    {
       "--": ""
     },
     {
       "--": [
         "An object indicating the position or ownership of another:",
-        "a kitchen with a cook, a cook holding a sack, a sack containing some flour."
+        "A kitchen encloses the cook, the cook holds a sack, the sack contains some flour."
       ],
       "Pattern:requires:returns:": [
         "parentOf",
@@ -115,8 +116,12 @@
       "--": ""
     },
     {
+      "--": [ 
+        "Returns the name of the specified object followed by all of its parents names.",
+        "Often used for event handling."
+      ],
       "Pattern:requires:returns:": [
-        "parentsOf",
+        "Capture",
         {
           "PatternParams:": [
             {
@@ -136,7 +141,7 @@
     },
     {
       "Pattern:provides:rules:": [
-        "parentsOf",
+        "Capture",
         {
           "PatternLocals:": [
             {
@@ -362,9 +367,7 @@
                                 {
                                   "Act:": [
                                     {
-                                      "Comment:": "parent cycle detected"
-                                    },
-                                    {
+                                      "--": "Parent cycle detected",
                                       "Break": []
                                     }
                                   ]
@@ -454,9 +457,7 @@
                       ]
                     },
                     {
-                      "Comment:": "we search every parent of the second object for every parent of the first object. slow but simple. "
-                    },
-                    {
+                      "--":  "We search every parent of the second object for every parent of the first object. Slow but simple.",
                       "Repeating:do:": [
                         {
                           "Is empty:": "@ancestor"
@@ -488,9 +489,7 @@
                                         {
                                           "Act:": [
                                             {
-                                              "Comment:": "success!"
-                                            },
-                                            {
+                                              "--": "Success!",
                                               "Let:be:": [
                                                 "ancestor",
                                                 "@o2"
@@ -581,9 +580,7 @@
                                 {
                                   "Act:": [
                                     {
-                                      "Comment:": "parent cycle detected"
-                                    },
-                                    {
+                                      "--": "parent cycle detected",
                                       "Break": []
                                     }
                                   ]
@@ -602,9 +599,7 @@
                                     {
                                       "Act:": [
                                         {
-                                          "Comment:": "out of world"
-                                        },
-                                        {
+                                          "--": "out of world",
                                           "Break": []
                                         }
                                       ]
@@ -629,6 +624,7 @@
       "--": ""
     },
     {
+      "--":"Returns true if the root is a parent of the object.",
       "Pattern:requires:returns:": [
         "ancestorOf",
         {
@@ -654,9 +650,6 @@
           }
         }
       ]
-    },
-    {
-      "Comment:": "Returns true if the root is a parent of the object. "
     },
     {
       "Pattern:provides:rules:": [
@@ -694,9 +687,7 @@
                         {
                           "Act:": [
                             {
-                              "Comment:": "Step up immediately, indirect implies objects dont hold themselves."
-                            },
-                            {
+                              "--": "Step up immediately, indirect implies objects dont hold themselves.",
                               "Let:be:": [
                                 "up",
                                 {
@@ -720,9 +711,7 @@
                                 {
                                   "Act:": [
                                     {
-                                      "Comment:": "parent cycle detected"
-                                    },
-                                    {
+                                      "--": "parent cycle detected",
                                       "Break": []
                                     }
                                   ]
@@ -741,9 +730,7 @@
                                     {
                                       "Act:": [
                                         {
-                                          "Comment:": "out of world"
-                                        },
-                                        {
+                                          "--": "out of world",
                                           "Break": []
                                         }
                                       ]
@@ -766,9 +753,7 @@
                                 {
                                   "Act:": [
                                     {
-                                      "Comment:": "success!"
-                                    },
-                                    {
+                                      "--": "Success!",
                                       "Let:be:": [
                                         "isAncestor",
                                         {
@@ -799,6 +784,10 @@
       "--": ""
     },
     {
+      "--": [
+        "If the parent of the specified object is a valid enclosure, return its name.",
+        "By default this means if the parent is a room, a supporter, or a container."
+      ],
       "Pattern:requires:returns:": [
         "locationOf",
         {
@@ -820,9 +809,6 @@
           }
         }
       ]
-    },
-    {
-      "Comment:": "Return the parent of an object if the parent is a valid enclosure. By default this means a room, a supporter, or a container. "
     },
     {
       "Pattern:provides:rules:": [
@@ -897,6 +883,7 @@
       "--": ""
     },
     {
+      "--": "If the parent of the specified object is a kind of supporter, return its name.",
       "Pattern:requires:returns:": [
         "SupporterOf",
         {
@@ -918,9 +905,6 @@
           }
         }
       ]
-    },
-    {
-      "Comment:": "Return the parent of an object if the parent is a kind of supporter. "
     },
     {
       "Pattern:provides:rules:": [
@@ -979,6 +963,7 @@
       "--": ""
     },
     {
+      "--": "If the parent of the specified object is a kind of container, return its name.",
       "Pattern:requires:returns:": [
         "ContainerOf",
         {
@@ -1000,9 +985,6 @@
           }
         }
       ]
-    },
-    {
-      "Comment:": "Return the parent of an object if the parent is a kind of container. "
     },
     {
       "Pattern:provides:rules:": [
@@ -1061,6 +1043,7 @@
       "--": ""
     },
     {
+      "--": "If the parent of the specified object is wearing or carrying the noun, return its name.",
       "Pattern:requires:returns:": [
         "holderOf",
         {
@@ -1082,9 +1065,6 @@
           }
         }
       ]
-    },
-    {
-      "Comment:": "Return the parent of an object if the parent is wearing or carrying the object. "
     },
     {
       "Pattern:provides:rules:": [
@@ -1150,6 +1130,10 @@
       "--": ""
     },
     {
+      "--": [
+        "If the parent of the specified object is carrying the noun, return its name.",
+        "Note that only actors can carry other objects."
+      ],
       "Pattern:requires:returns:": [
         "CarrierOf",
         {
@@ -1171,9 +1155,6 @@
           }
         }
       ]
-    },
-    {
-      "Comment:": "Return the parent of an object if the parent is carrying the object. Only actors can carry other objects. "
     },
     {
       "Pattern:provides:rules:": [
@@ -1251,6 +1232,10 @@
       "--": ""
     },
     {
+      "--": [
+        "If the parent of the specified object is wearing the noun, return its name.",
+        "Note that only actors can wear other objects."
+      ],
       "Pattern:requires:returns:": [
         "WearerOf",
         {
@@ -1272,9 +1257,6 @@
           }
         }
       ]
-    },
-    {
-      "Comment:": "Return the parent of an object if the parent is wearing the object.  Only actors can wear other objects. "
     },
     {
       "Pattern:provides:rules:": [

@@ -1,6 +1,11 @@
 {
   "Story:": [
     {
+      "--": [
+        "By default, can use allows most actions.",
+        "It exists as a hook for author customization.",
+        "Authors should return some 'response' text if they want to block the action."
+      ],
       "Pattern:requires:returns:": [
         "can use",
         {
@@ -21,7 +26,7 @@
               ]
             },
             {
-              "--": "not all actions have a second noun and that's okay",
+              "--": "note: not all actions have a second noun and that's okay",
               "Text named:of:": [
                 "other noun",
                 "thing"
@@ -33,29 +38,6 @@
           "PatternResult:": {
             "Text named:": "response"
           }
-        }
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "can use",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Comment:": "By default, \"can use\" allows most actions."
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
         }
       ]
     }

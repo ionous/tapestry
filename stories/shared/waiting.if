@@ -42,7 +42,7 @@
                         {
                           "Send:event:": [
                             {
-                              "ParentsOf obj:": "@actor"
+                              "Capture obj:": "@actor"
                             },
                             {
                               "Wait actor:noun:": [

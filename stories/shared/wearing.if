@@ -71,7 +71,7 @@
                               {
                                 "Send:event:": [
                                   {
-                                    "ParentsOf obj:": "@noun"
+                                    "Capture obj:": "@noun"
                                   },
                                   {
                                     "StateChange actor:noun:trait:guard:change:": [
@@ -177,7 +177,7 @@
                               {
                                 "Send:event:": [
                                   {
-                                    "ParentsOf obj:": "@noun"
+                                    "Capture obj:": "@noun"
                                   },
                                   {
                                     "StateChange actor:noun:trait:guard:change:": [

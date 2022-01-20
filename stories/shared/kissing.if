@@ -122,7 +122,7 @@
                                         {
                                           "Send:event:": [
                                             {
-                                              "ParentsOf obj:": "@noun"
+                                              "Capture obj:": "@noun"
                                             },
                                             {
                                               "Kiss actor:noun:": [
@@ -184,7 +184,7 @@
                         {
                           "FromTxt:": {
                             "Response:text:": [
-                              "can't kiss anything",
+                              "can't kiss without consent",
                               {
                                 "RenderTemplate:": "{the:.noun|capitalize!} might not like that."
                               }

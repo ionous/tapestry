@@ -106,7 +106,7 @@
                                             {
                                               "Send:event:": [
                                                 {
-                                                  "ParentsOf obj:": "@noun"
+                                                  "Capture obj:": "@noun"
                                                 },
                                                 {
                                                   "RetrieveFrom actor:noun:otherNoun:": [
@@ -324,7 +324,7 @@
                                 "FromBool:": {
                                   "Send:event:": [
                                     {
-                                      "ParentsOf obj:": "@noun"
+                                      "Capture obj:": "@noun"
                                     },
                                     {
                                       "Take actor:noun:": [

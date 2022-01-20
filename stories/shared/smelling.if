@@ -40,9 +40,7 @@
       ]
     },
     {
-      "Comment:": "Sniffing implies smelling the current location. "
-    },
-    {
+      "--": "Sniffing means smelling the current location.",
       "Pattern:provides:rules:": [
         "sniffing",
         {

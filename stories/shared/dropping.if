@@ -43,6 +43,11 @@
                       "If:from:and:do:else:": [
                         "result",
                         {
+                          "--": [
+                            "can we handle ( locally touch ) the object.",
+                            "the result will be empty if we can",
+                            "or an error message if we cant"
+                          ],
                           "FromTxt:": {
                             "CanHandle actor:action:noun:": [
                               "@actor",
@@ -59,6 +64,7 @@
                           }
                         },
                         {
+                          "--": "Say whatever 'can handle' returned.",
                           "Act:": [
                             {
                               "Say:": "@result"
@@ -71,9 +77,14 @@
                               {
                                 "If:do:": [
                                   {
+                                    "--": [
+                                      "send the drop event to noun",
+                                      "it will return true if it dropped the object okay.",
+                                      "we expect any handler which blocks the event to say why not."
+                                    ],
                                     "Send:event:": [
                                       {
-                                        "ParentsOf obj:": "@noun"
+                                        "Capture obj:": "@noun"
                                       },
                                       {
                                         "Drop actor:noun:": [
@@ -84,6 +95,10 @@
                                     ]
                                   },
                                   {
+                                    "--": [
+                                      "finally, because we did just drop the object:",
+                                      "let the player know by reporting it."
+                                    ],
                                     "Act:": [
                                       {
                                         "ReportDropping actor:noun:": [

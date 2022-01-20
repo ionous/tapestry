@@ -73,7 +73,7 @@
                                   {
                                     "Send:event:": [
                                       {
-                                        "ParentsOf obj:": "@noun"
+                                        "Capture obj:": "@noun"
                                       },
                                       {
                                         "Travel actor:noun:": [
