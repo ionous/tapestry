@@ -18,6 +18,11 @@ type CustomFlow func(jsn.Marshaler, jsn.FlowBlock) error
 
 // NewEncoder create an empty serializer to produce compact script data.
 func Encode(in jsn.Marshalee, customFlow CustomFlow) (ret interface{}, err error) {
+	if customFlow == nil {
+		customFlow = func(jsn.Marshaler, jsn.FlowBlock) error {
+			return chart.Unhandled("no custom encoder")
+		}
+	}
 	m := xEncoder{Machine: chart.MakeEncoder(), customFlow: customFlow}
 	next := m.newValue(m.newBlock())
 	next.OnCommit = func(v interface{}) {
