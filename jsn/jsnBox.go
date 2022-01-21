@@ -33,9 +33,9 @@ func (box BoxedBool) GetValue() (ret interface{}) {
 
 func (box BoxedBool) GetCompactValue() (ret interface{}) {
 	if *box.v {
-		ret = "true"
+		ret = true
 	} else {
-		ret = "false"
+		ret = false
 	}
 	return
 }
@@ -45,12 +45,15 @@ func (box BoxedBool) SetValue(v interface{}) (okay bool) {
 	case nil:
 		box.setValue(false)
 		okay = true
+	case bool:
+		box.setValue(n)
+		okay = true
 	case string:
 		switch n {
-		case "$TRUE", "true":
+		case "$TRUE":
 			box.setValue(true)
 			okay = true
-		case "$FALSE", "false":
+		case "$FALSE":
 			box.setValue(false)
 			okay = true
 		}
