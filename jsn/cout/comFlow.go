@@ -43,7 +43,7 @@ func (cf *comFlow) finalize() (ret interface{}) {
 		// but in cases where commands get used to generate text --
 		// there's no way to differentiate b/t a command of zero params and plain text.
 		if sig != commentMarker {
-			v = []interface{}{}
+			v = true
 		} else if cmt == nil {
 			v = ""
 		} else {
