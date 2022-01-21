@@ -1,0 +1,345 @@
+{
+  "Spec:with group:": [
+    "spec",
+    {
+      "Group contains:": [
+        {
+          "Spec:with flow:": [
+            "slot_spec",
+            {
+              "Flow:uses:": [
+                "slot",
+                []
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:with swap:": [
+            "uses_spec",
+            {
+              "Swap between:": [
+                {
+                  "Pick:type:": [
+                    "slot",
+                    "slot_spec"
+                  ]
+                },
+                {
+                  "Pick:type:": [
+                    "swap",
+                    "swap_spec"
+                  ]
+                },
+                {
+                  "Pick:type:": [
+                    "num",
+                    "num_spec"
+                  ]
+                },
+                {
+                  "Pick:type:": [
+                    "str",
+                    "str_spec"
+                  ]
+                },
+                {
+                  "Pick:type:": [
+                    "group",
+                    "group_spec"
+                  ]
+                },
+                {
+                  "Pick:type:": [
+                    "flow",
+                    "flow_spec"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:with flow:": [
+            "choice_spec",
+            {
+              "Flow:uses:": [
+                "pick",
+                [
+                  {
+                    "Term:type:optional:": [
+                      "label",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "type",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "specifies a choice between one or more other types.",
+          "Spec:with flow:": [
+            "swap_spec",
+            {
+              "Flow:uses:": [
+                "swap",
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "between",
+                      "choice_spec",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:with flow:": [
+            "str_spec",
+            {
+              "Flow:uses:": [
+                "str",
+                [
+                  {
+                    "Term:type:optional:": [
+                      "exclusively",
+                      "bool",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:repeats:": [
+                      "uses",
+                      "option_spec",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "can optionally fit one or more slots, or be part of one or more groups.",
+          "Spec:with flow:": [
+            "type_spec",
+            {
+              "Flow:uses:": [
+                "spec",
+                [
+                  {
+                    "Term:name:type:": [
+                      "with",
+                      "spec",
+                      "uses_spec"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:repeats:": [
+                      "slots",
+                      "text",
+                      true,
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:repeats:": [
+                      "groups",
+                      "text",
+                      true,
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:with flow:": [
+            "group_spec",
+            {
+              "Flow:uses:": [
+                "group",
+                [
+                  {
+                    "Term:name:type:repeats:": [
+                      "contains",
+                      "specs",
+                      "type_spec",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:with flow:": [
+            "term_spec",
+            {
+              "Flow:uses:": [
+                "term",
+                [
+                  {
+                    "Term:type:optional:": [
+                      "repeats",
+                      "bool",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "key",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "name",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "type",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "optional",
+                      "bool",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:with flow:": [
+            "num_spec",
+            {
+              "Flow:uses:": [
+                "num",
+                [
+                  {
+                    "Term:type:optional:": [
+                      "exclusively",
+                      "bool",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:repeats:": [
+                      "uses",
+                      "number",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:with flow:": [
+            "flow_spec",
+            {
+              "Flow:trim:uses:": [
+                "flow",
+                true,
+                [
+                  {
+                    "Term:type:optional:": [
+                      "name",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "phrase",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "trim",
+                      "bool",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                      "uses",
+                      "terms",
+                      "term_spec",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:with flow:": [
+            "option_spec",
+            {
+              "Flow:trim:uses:": [
+                "option",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "label",
+                      "text",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -13,6 +13,7 @@ cmd/play/play
 cmd/spec/spec
 cmd/stem/stem
 cmd/chart/chart
+cmd/regenspec/regenspec
 *.zip
 jsn.old.txt
 stories/temp

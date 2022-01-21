@@ -1,0 +1,156 @@
+{
+  "Spec:with group:": [
+    "render",
+    {
+      "Group contains:": [
+        {
+          "Spec:with flow:groups:": [
+            "render_pattern",
+            {
+              "Flow:trim:uses:": [
+                "render",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "call",
+                      "call_pattern"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": "returns the value of a variable or the id of an object.",
+          "Spec:with flow:groups:": [
+            "render_ref",
+            {
+              "Flow:trim:uses:": [
+                "render_ref",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "variable_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "flags",
+                      "render_flags"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "Spec:with flow:groups:": [
+            "render_field",
+            {
+              "Flow:trim:uses:": [
+                "render_field",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "Spec:with str:": [
+            "render_flags",
+            {
+              "Str exclusively:uses:": [
+                true,
+                [
+                  {
+                    "Option:label:": [
+                      "render_as_var",
+                      "as_var"
+                    ]
+                  },
+                  {
+                    "Option:label:": [
+                      "render_as_obj",
+                      "as_obj"
+                    ]
+                  },
+                  {
+                    "Option:label:": [
+                      "render_as_any",
+                      "as_any"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:with flow:groups:": [
+            "render_exp",
+            {
+              "Flow:trim:uses:": [
+                "render_exp",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "expression",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "Spec:with flow:groups:": [
+            "render_name",
+            {
+              "Flow:trim:uses:": [
+                "render_name",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "internal"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

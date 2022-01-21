@@ -1,0 +1,116 @@
+{
+  "Spec:with group:": [
+    "rt",
+    {
+      "Group contains:": [
+        {
+          "--": "Statements which return text.",
+          "Spec:with slot:": [
+            "text_eval",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": "Runtime version of argument.",
+          "Spec:with flow:": [
+            "arg",
+            {
+              "Flow:trim:uses:": [
+                "arg",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "from",
+                      "assignment"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Helper for setting variables.",
+          "Spec:with slot:": [
+            "assignment",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": "Statements which return a number.",
+          "Spec:with slot:": [
+            "number_eval",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": "Run a series of statements.",
+          "Spec:with slot:": [
+            "execute",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": "Statements which return a record.",
+          "Spec:with slot:": [
+            "record_eval",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": "Statements which return a list of text.",
+          "Spec:with slot:": [
+            "text_list_eval",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": "Statements which return a list of records.",
+          "Spec:with slot:": [
+            "record_list_eval",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": "Statements which return a list of numbers.",
+          "Spec:with slot:": [
+            "num_list_eval",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": "Statements which return true/false values.",
+          "Spec:with slot:": [
+            "bool_eval",
+            {
+              "Slot": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "Spec:with group:": [
+    "rel",
+    {
+      "Group contains:": [
+        {
+          "--": "Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).",
+          "Spec:with flow:": [
+            "relatives_of",
+            {
+              "Flow:trim:uses:": [
+                "relatives",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "via",
+                      "relation_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:with str:groups:": [
+            "relation_name",
+            {
+              "Str uses:": []
+            },
+            [
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": "Returns the relative of a noun (ex. the target of a one-to-one relation.).",
+          "Spec:with flow:": [
+            "relative_of",
+            {
+              "Flow:trim:uses:": [
+                "relative",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "via",
+                      "relation_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Returns the implied relative of a noun (ex. the source in a one-to-many relation.).",
+          "Spec:with flow:": [
+            "reciprocal_of",
+            {
+              "Flow:trim:uses:": [
+                "reciprocal",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "via",
+                      "relation_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Relate two nouns.",
+          "Spec:with flow:": [
+            "relate",
+            {
+              "Flow:uses:": [
+                "relate",
+                [
+                  {
+                    "Term:name:type:": [
+                      "to",
+                      "to_object",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "via",
+                      "relation_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Returns the implied relative of a noun (ex. the sources of a many-to-many relation.).",
+          "Spec:with flow:": [
+            "reciprocals_of",
+            {
+              "Flow:trim:uses:": [
+                "reciprocals",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "via",
+                      "relation_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

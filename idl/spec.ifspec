@@ -1,0 +1,76 @@
+{
+	"spec": {
+		"uses": "group",
+		"specs": {
+			"type_spec": {
+				"spec": "spec {_%name:text} {with%spec:uses_spec} {slots*text} {groups*text}",
+				"desc": "can optionally fit one or more slots, or be part of one or more groups."
+			},
+			"uses_spec": {
+				"uses": "swap",
+				"spec": "{flow:flow_spec}, {slot:slot_spec}, {swap:swap_spec}, {num:num_spec}, {str:str_spec}, or {group:group_spec}"
+			},
+			"flow_spec": {
+				"spec": "flow {_%name?text} {phrase?text} {trim?bool} {uses%terms+term_spec}",
+				"desc": [
+					"name: overrides the name of the operation used in compact story files.",
+					"phrase: english text with embedded tokens referring to existing terms.",
+					"trim: whether the first term should be left off when calling the command."
+				]
+			},
+			"slot_spec": {
+				"spec": "slot",
+				"desc": [
+					"A member of a flow which any of the other types can opt into.",
+					"Aka an interface."
+				]
+			},
+			"swap_spec": {
+				"spec": "swap {between+choice_spec}",
+				"desc": "specifies a choice between one or more other types"
+			},
+			"num_spec": {
+				"spec": "num {exclusively?bool} {uses+number}",
+				"desc": [
+					"when exclusive is true means the user can only specify one of the options",
+					"otherwise the options are treated as hints."
+				]
+			},
+			"str_spec": {
+				"spec": "str {exclusively?bool} {uses+option_spec}",
+				"desc": [
+					"when exclusive is true means the user can only specify one of the options",
+					"otherwise the options are treated as hints."
+				]
+			},
+			"group_spec": {
+				"spec": "group {contains%specs+type_spec}",
+				"desc": [
+					"a collection of one or more other specs."
+				]
+			},
+			"option_spec": {
+				"spec": "option {_%name:text} {label?text}",
+				"desc": [
+					"for string options", 
+					"if the label isnt specified, its derived from the name."
+				]
+			},
+			"choice_spec": {
+				"spec": "pick {_%name:text} {label?text} {type?text}",
+				"desc": [
+					"for swap choices", 
+					"if either label or type are not specified, they are derived from the name."
+				]
+			},
+			"term_spec": {
+				"spec": "term {_%key:text} {name?text} {type?text} {private?bool} {optional?bool} {repeats?bool}",
+				"desc": [
+					"a member of a flow", 
+					"the key gets used as the name and label, unless an explicit name is specified.",
+					"the type is derived from the name."
+				]
+			}
+		}
+	}
+}

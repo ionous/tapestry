@@ -1,0 +1,88 @@
+{
+  "Spec:with group:": [
+    "debug",
+    {
+      "Group contains:": [
+        {
+          "--": "Debug log.",
+          "Spec:with flow:": [
+            "debug_log",
+            {
+              "Flow:trim:uses:": [
+                "log",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "value",
+                      "assignment"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:": [
+                      "as",
+                      "log_level",
+                      "logging_level",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Statement which does nothing.",
+          "Spec:with flow:": [
+            "do_nothing",
+            {
+              "Flow:uses:": [
+                "do_nothing",
+                [
+                  {
+                    "Term:name:type:optional:": [
+                      "why",
+                      "reason",
+                      "text",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:with str:": [
+            "logging_level",
+            {
+              "Str exclusively:uses:": [
+                true,
+                [
+                  {
+                    "Option:": "info"
+                  },
+                  {
+                    "Option:": "warning"
+                  },
+                  {
+                    "Option:": "error"
+                  },
+                  {
+                    "Option:": "note"
+                  },
+                  {
+                    "Option:": "to_do"
+                  },
+                  {
+                    "Option:": "fix"
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
