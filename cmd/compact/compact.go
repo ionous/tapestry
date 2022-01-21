@@ -10,25 +10,32 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/jsn/cin"
+	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/jsn/dout"
 	"github.com/ionous/errutil"
 )
 
 const (
+	SpecExt     = ".ifspec"
 	DetailedExt = ".ifx"
 	CompactExt  = ".if"
 )
 
 func oppositeExt(ext string) (ret string) {
-	if ext == DetailedExt {
+	if ext == CompactExt {
+		ret = DetailedExt
+	} else if ext == DetailedExt {
 		ret = CompactExt
 	} else {
-		ret = DetailedExt
+		ret = ext
 	}
 	return
 }
@@ -42,19 +49,20 @@ func oppositeExt(ext string) (ret string) {
 //
 // or, load and rewrite the .if files
 // go build compact.go; for f in ../../stories/shared/*.if; do ./compact -in $f -out .if; done;
+// go build compact.go; for f in ../regenspec/out/*.ifspec; do ./compact -in $f -out $f; done;
 //
 func main() {
 	var inFile, outFile string
-	flag.StringVar(&inFile, "in", "", "input file name (.if|.ifx)")
-	flag.StringVar(&outFile, "out", "", "optional output file name (.if|.ifx)")
+	flag.StringVar(&inFile, "in", "", "input file name (.if|.ifx|.ifspec)")
+	flag.StringVar(&outFile, "out", "", "optional output file name (.if|.ifx|.ifspec)")
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
 	flag.Parse()
 	if len(inFile) == 0 {
 		println("requires an input file")
 	} else {
 		inExt := filepath.Ext(inFile)
-		if inExt != CompactExt && inExt != DetailedExt {
-			println("requires an .if or .ifx file")
+		if !strings.HasPrefix(inExt, CompactExt) {
+			println("requires some sort of .if, .ifx, or .ifspec file")
 		} else {
 			// determine the output extension
 			// ( if nothing was specified, it will be the opposite of in )
@@ -73,22 +81,31 @@ func main() {
 				outFile = filepath.Join(outFile, base[:len(base)-len(inExt)]+outExt)
 			}
 			// transform the files:
-			var x xform
-			if inExt == CompactExt {
-				x.decode = compact.decode
+			if inExt == SpecExt {
+				// report on results:
+				if e := decodeEncodeSpec(inFile, outFile); e != nil {
+					println(e.Error())
+				} else {
+					println("done.")
+				}
 			} else {
-				x.decode = detailed.decode
-			}
-			if outExt == CompactExt {
-				x.encode = compact.encode
-			} else {
-				x.encode = detailed.encode
-			}
-			// report on results:
-			if e := x.decodeEncode(inFile, outFile); e != nil {
-				println(e.Error())
-			} else {
-				println("done.")
+				var x xform
+				if inExt == DetailedExt {
+					x.decode = detailed.decode
+				} else {
+					x.decode = compact.decode
+				}
+				if outExt == DetailedExt {
+					x.encode = detailed.encode
+				} else {
+					x.encode = compact.encode
+				}
+				// report on results:
+				if e := x.decodeEncode(inFile, outFile); e != nil {
+					println(e.Error())
+				} else {
+					println("done.")
+				}
 			}
 		}
 	}
@@ -108,6 +125,20 @@ func (p *xform) decodeEncode(in, out string) (err error) {
 	} else if e := xformStory(&dst); e != nil {
 		err = e
 	} else if data, e := p.encode(&dst); e != nil {
+		err = e
+	} else {
+		err = writeOut(out, data)
+	}
+	return
+}
+
+func decodeEncodeSpec(in, out string) (err error) {
+	var dst spec.TypeSpec
+	if b, e := readOne(in); e != nil {
+		err = e
+	} else if e := cin.Decode(&dst, b, cin.Signatures(tapestry.AllSignatures)); e != nil {
+		err = e
+	} else if data, e := cout.Encode(&dst, nil); e != nil {
 		err = e
 	} else {
 		err = writeOut(out, data)
