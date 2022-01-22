@@ -14,11 +14,8 @@ import (
 	regen "git.sr.ht/~ionous/tapestry/cmd/regenspec/internal"
 )
 
-// FIX: desc isnt getting incorporated.
-// FIX: command line flags: generate one file at a time, output one file at a time
-//      - see compact.go for example.
+// fix: generate one file at a time, output one file at a time; see compact.go for example.
 func main() {
-	// debug()
 	if ts, e := template.ParseFS(templates, "templates/*.tmpl"); e != nil {
 		log.Fatal("parsing failed: ", e)
 	} else if e := convert(ts, allBytes); e != nil {
