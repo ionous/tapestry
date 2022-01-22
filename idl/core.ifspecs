@@ -1,0 +1,2543 @@
+{
+  "--": "core",
+  "Spec:with group:": [
+    "core",
+    {
+      "Group contains:": [
+        {
+          "--": [
+            "The first value doesn't equal the second value."
+          ],
+          "Spec:with flow:groups:": [
+            "unequal",
+            {
+              "flow:uses:": [
+                "other_than",
+                []
+              ]
+            },
+            [
+              "comparison"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Friendly name of the object's kind."
+          ],
+          "Spec:with flow:groups:": [
+            "kind_of",
+            {
+              "flow:trim:uses:": [
+                "kind_of",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "objects"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Determine whether the specified text is similar to the specified regular expression."
+          ],
+          "Spec:with flow:groups:": [
+            "matches",
+            {
+              "flow:trim:uses:": [
+                "matches",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "text",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "to",
+                      "pattern",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:private:": [
+                      "cache",
+                      "match_cache",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "matching"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Assigns the calculated number."
+          ],
+          "Spec:with flow:groups:": [
+            "from_num",
+            {
+              "flow:trim:uses:": [
+                "from_num",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "val",
+                      "number_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "variables"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "In a repeating loop, exit the loop."
+          ],
+          "Spec:with flow:groups:": [
+            "break",
+            {
+              "flow:uses:": [
+                "break",
+                []
+              ]
+            },
+            [
+              "flow"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Add a single blank line following some text."
+          ],
+          "Spec:with flow:groups:": [
+            "blankline",
+            {
+              "flow:uses:": [
+                "p",
+                []
+              ]
+            },
+            [
+              "printing"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Assigns a variable to a value."
+          ],
+          "Spec:with flow:groups:": [
+            "assign",
+            {
+              "flow:trim:uses:": [
+                "let",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "var",
+                      "variable_name"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "be",
+                      "from",
+                      "assignment"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "variables"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Runtime version of stopping_text."
+          ],
+          "Spec:with flow:groups:": [
+            "call_terminal",
+            {
+              "flow:trim:uses:": [
+                "stopping",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                      "over",
+                      "parts",
+                      "text_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns new text, with the first letter turned into uppercase."
+          ],
+          "Spec:with flow:groups:": [
+            "capitalize",
+            {
+              "flow:trim:uses:": [
+                "capitalize",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "text",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "format"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Executes a pattern, and potentially returns a value."
+          ],
+          "Spec:with flow:": [
+            "call_pattern",
+            {
+              "flow:trim:uses:": [
+                "determine",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "pattern",
+                      "pattern_name"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "args",
+                      "arguments",
+                      "call_args"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "Writes a number using numerals, eg. '1'."
+          ],
+          "Spec:with flow:groups:": [
+            "print_num",
+            {
+              "flow:trim:uses:": [
+                "numeral",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "num",
+                      "number_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "printing"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Group text into successive lines."
+          ],
+          "Spec:with flow:groups:": [
+            "rows",
+            {
+              "flow:trim:uses:": [
+                "rows",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "do",
+                      "activity"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "printing"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "The first value is less than or equal to the second value."
+          ],
+          "Spec:with flow:groups:": [
+            "at_most",
+            {
+              "flow:uses:": [
+                "at_most",
+                []
+              ]
+            },
+            [
+              "comparison"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Get Variable: Return the value of the named variable."
+          ],
+          "Spec:with flow:groups:": [
+            "get_var",
+            {
+              "flow:trim:uses:": [
+                "var",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "variable_name"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "variables"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "trigger_once",
+            {
+              "flow:uses:": [
+                "at",
+                []
+              ]
+            },
+            [
+              "comparison"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Keep running a series of actions while a condition is true."
+          ],
+          "Spec:with flow:groups:": [
+            "while",
+            {
+              "flow:trim:uses:": [
+                "repeating",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "true",
+                      "bool_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "do",
+                      "activity"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "flow"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "buffer_text",
+            {
+              "flow:trim:uses:": [
+                "buffers",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "do",
+                      "activity"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "printing"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Generate text in a replaceable manner."
+          ],
+          "Spec:with flow:groups:": [
+            "response",
+            {
+              "flow:trim:uses:": [
+                "response",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "text",
+                      "text_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "output"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "has_dominion",
+            {
+              "flow:trim:uses:": [
+                "has_dominion",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "logic"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Targets an object with a computed name."
+          ],
+          "Spec:with flow:groups:": [
+            "into_obj",
+            {
+              "flow:trim:uses:": [
+                "obj_field",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "misc"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'."
+          ],
+          "Spec:with flow:groups:": [
+            "make_lowercase",
+            {
+              "flow:trim:uses:": [
+                "lower",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "text",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "format"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "True if eq,ne,gt,lt,ge,le two numbers."
+          ],
+          "Spec:with flow:groups:": [
+            "compare_num",
+            {
+              "flow:trim:uses:": [
+                "cmp",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "a",
+                      "number_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "is",
+                      "comparator"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "num",
+                      "b",
+                      "number_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "logic"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Separates words with commas, and 'and'."
+          ],
+          "Spec:with flow:groups:": [
+            "comma_text",
+            {
+              "flow:trim:uses:": [
+                "commas",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "do",
+                      "activity"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "printing"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Assigns the calculated texts."
+          ],
+          "Spec:with flow:groups:": [
+            "from_texts",
+            {
+              "flow:trim:uses:": [
+                "from_txts",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "vals",
+                      "text_list_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "variables"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "In a repeating loop, try the next iteration of the loop."
+          ],
+          "Spec:with flow:groups:": [
+            "next",
+            {
+              "flow:uses:": [
+                "next",
+                []
+              ]
+            },
+            [
+              "flow"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Pick one of two numbers based on a boolean test."
+          ],
+          "Spec:with flow:groups:": [
+            "choose_num",
+            {
+              "flow:uses:": [
+                "num",
+                [
+                  {
+                    "Term:type:": [
+                      "if",
+                      "bool_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "then",
+                      "true",
+                      "number_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:": [
+                      "else",
+                      "false",
+                      "number_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "math"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Two values exactly match."
+          ],
+          "Spec:with flow:groups:": [
+            "equal",
+            {
+              "flow:uses:": [
+                "equals",
+                []
+              ]
+            },
+            [
+              "comparison"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Targets a record stored in a record."
+          ],
+          "Spec:with flow:groups:": [
+            "from_rec",
+            {
+              "flow:trim:uses:": [
+                "rec_fields",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "rec",
+                      "record_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "misc"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Targets an object with a computed name."
+          ],
+          "Spec:with flow:groups:": [
+            "from_obj",
+            {
+              "flow:trim:uses:": [
+                "obj_fields",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "misc"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "True if text contains text."
+          ],
+          "Spec:with flow:groups:": [
+            "includes",
+            {
+              "flow:trim:uses:": [
+                "contains",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "text",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "part",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "strings"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "A single line as part of a group of lines."
+          ],
+          "Spec:with flow:groups:": [
+            "row",
+            {
+              "flow:trim:uses:": [
+                "row",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "do",
+                      "activity"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "printing"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Add two numbers."
+          ],
+          "Spec:with flow:groups:": [
+            "sum_of",
+            {
+              "flow:trim:uses:": [
+                "inc",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "a",
+                      "number_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:": [
+                      "by",
+                      "b",
+                      "number_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "math"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Full name of the object."
+          ],
+          "Spec:with flow:groups:": [
+            "name_of",
+            {
+              "flow:trim:uses:": [
+                "name_of",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "objects"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Put a value into the field of an record or object."
+          ],
+          "Spec:with flow:groups:": [
+            "put_at_field",
+            {
+              "flow:trim:uses:": [
+                "put",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "into",
+                      "into_target_fields"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "from",
+                      "assignment"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "at",
+                      "at_field",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "variables"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Start a new line ( if not already at a new line. )."
+          ],
+          "Spec:with flow:groups:": [
+            "softline",
+            {
+              "flow:uses:": [
+                "wbr",
+                []
+              ]
+            },
+            [
+              "printing"
+            ]
+          ]
+        },
+        {
+          "--": "Helper for counting values.",
+          "Spec:with slot:": [
+            "trigger",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": [
+            "Targets a record stored in a variable."
+          ],
+          "Spec:with flow:groups:": [
+            "from_var",
+            {
+              "flow:trim:uses:": [
+                "var_fields",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "var",
+                      "variable_name"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "misc"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "choose_nothing_else",
+            {
+              "flow:trim:uses:": [
+                "else_do",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "do",
+                      "activity"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "misc"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'."
+          ],
+          "Spec:with flow:groups:": [
+            "make_reversed",
+            {
+              "flow:uses:": [
+                "reverse",
+                [
+                  {
+                    "Term:type:": [
+                      "text",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "format"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "True if eq,ne,gt,lt,ge,le two strings ( lexical. )."
+          ],
+          "Spec:with flow:groups:": [
+            "compare_text",
+            {
+              "flow:trim:uses:": [
+                "cmp",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "a",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "is",
+                      "comparator"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "txt",
+                      "b",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "logic"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Sandwiches text printed during a block and puts them inside parenthesis '()'."
+          ],
+          "Spec:with flow:groups:": [
+            "bracket_text",
+            {
+              "flow:trim:uses:": [
+                "brackets",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "do",
+                      "activity"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "printing"
+            ]
+          ]
+        },
+        {
+          "--": "Helper for comparing values.",
+          "Spec:with slot:": [
+            "comparator",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": [
+            "Assigns the calculated piece of text."
+          ],
+          "Spec:with flow:groups:": [
+            "from_text",
+            {
+              "flow:trim:uses:": [
+                "from_txt",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "val",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "variables"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "trigger_cycle",
+            {
+              "flow:uses:": [
+                "every",
+                []
+              ]
+            },
+            [
+              "comparison"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "activity",
+            {
+              "flow:trim:uses:": [
+                "act",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "exe",
+                      "execute",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "hidden"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns the opposite value."
+          ],
+          "Spec:with flow:groups:": [
+            "not",
+            {
+              "flow:trim:uses:": [
+                "not",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "test",
+                      "bool_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "logic"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "The first value is greater than or equal to the second value."
+          ],
+          "Spec:with flow:groups:": [
+            "at_least",
+            {
+              "flow:uses:": [
+                "at_least",
+                []
+              ]
+            },
+            [
+              "comparison"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "The first value is less than the second value."
+          ],
+          "Spec:with flow:groups:": [
+            "less_than",
+            {
+              "flow:uses:": [
+                "less_than",
+                []
+              ]
+            },
+            [
+              "comparison"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns true if all of the evaluations are true."
+          ],
+          "Spec:with flow:groups:": [
+            "all_true",
+            {
+              "flow:trim:uses:": [
+                "all_true",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "test",
+                      "bool_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "logic"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns the singular form of a plural word. (ex. apple for apples )."
+          ],
+          "Spec:with flow:groups:": [
+            "singularize",
+            {
+              "flow:uses:": [
+                "singular",
+                [
+                  {
+                    "Term:name:type:": [
+                      "of",
+                      "text",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "format"
+            ]
+          ]
+        },
+        {
+          "--": "Helper for getting fields.",
+          "Spec:with slot:": [
+            "from_source_fields",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": [
+            "Returns false."
+          ],
+          "Spec:with flow:groups:": [
+            "never",
+            {
+              "flow:uses:": [
+                "never",
+                []
+              ]
+            },
+            [
+              "logic"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns new text, with every letter turned into uppercase. For example, 'APPLE' from 'apple'."
+          ],
+          "Spec:with flow:groups:": [
+            "make_uppercase",
+            {
+              "flow:trim:uses:": [
+                "upper",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "text",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "format"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Start a new line."
+          ],
+          "Spec:with flow:groups:": [
+            "newline",
+            {
+              "flow:uses:": [
+                "br",
+                []
+              ]
+            },
+            [
+              "printing"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Get a value from a record."
+          ],
+          "Spec:with flow:groups:": [
+            "get_at_field",
+            {
+              "flow:trim:uses:": [
+                "get",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "field",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "from",
+                      "from_source_fields"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "variables"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "True if the object is compatible with the named kind."
+          ],
+          "Spec:with flow:groups:": [
+            "is_kind_of",
+            {
+              "flow:trim:uses:": [
+                "kind_of",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "is",
+                      "kind",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "objects"
+            ]
+          ]
+        },
+        {
+          "--": "Helper for setting fields.",
+          "Spec:with slot:": [
+            "into_target_fields",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": [
+            "Targets an object or record stored in a variable."
+          ],
+          "Spec:with flow:groups:": [
+            "into_var",
+            {
+              "flow:trim:uses:": [
+                "var_field",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "var",
+                      "variable_name"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "misc"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Return true if the object is currently in the requested state."
+          ],
+          "Spec:with flow:groups:": [
+            "has_trait",
+            {
+              "flow:uses:": [
+                "get",
+                [
+                  {
+                    "Term:name:type:": [
+                      "obj",
+                      "object",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "trait",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "objects"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'."
+          ],
+          "Spec:with flow:groups:": [
+            "make_sentence_case",
+            {
+              "flow:trim:uses:": [
+                "sentence",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "text",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "format"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns true."
+          ],
+          "Spec:with flow:groups:": [
+            "always",
+            {
+              "flow:uses:": [
+                "always",
+                []
+              ]
+            },
+            [
+              "logic"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Writes a number in plain english: eg. 'one'."
+          ],
+          "Spec:with flow:groups:": [
+            "print_num_word",
+            {
+              "flow:uses:": [
+                "numeral",
+                [
+                  {
+                    "Term:name:type:": [
+                      "words",
+                      "num",
+                      "number_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "printing"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Assigns the calculated numbers."
+          ],
+          "Spec:with flow:groups:": [
+            "from_numbers",
+            {
+              "flow:trim:uses:": [
+                "from_nums",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "vals",
+                      "num_list_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "variables"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "True if the text is empty."
+          ],
+          "Spec:with flow:groups:": [
+            "is_empty",
+            {
+              "flow:uses:": [
+                "is",
+                [
+                  {
+                    "Term:name:type:": [
+                      "empty",
+                      "text",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "strings"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns whether there is a object of the specified name."
+          ],
+          "Spec:with flow:groups:": [
+            "object_exists",
+            {
+              "flow:uses:": [
+                "is",
+                [
+                  {
+                    "Term:name:type:": [
+                      "valid",
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "objects"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns the plural form of a singular word. (ex. apples for apple. )."
+          ],
+          "Spec:with flow:groups:": [
+            "pluralize",
+            {
+              "flow:uses:": [
+                "plural",
+                [
+                  {
+                    "Term:name:type:": [
+                      "of",
+                      "text",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "format"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Separates words with left-leaning slashes '/'."
+          ],
+          "Spec:with flow:groups:": [
+            "slash_text",
+            {
+              "flow:trim:uses:": [
+                "slashes",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "do",
+                      "activity"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "printing"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "An if statement with local assignment."
+          ],
+          "Spec:with flow:groups:": [
+            "choose_value",
+            {
+              "flow:trim:uses:": [
+                "if",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "assign",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "from",
+                      "assignment"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "and",
+                      "filter",
+                      "bool_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "do",
+                      "activity"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "else",
+                      "brancher",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "misc"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Assigns the calculated records."
+          ],
+          "Spec:with flow:groups:": [
+            "from_records",
+            {
+              "flow:trim:uses:": [
+                "from_recs",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "vals",
+                      "record_list_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "variables"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Assigns the calculated boolean value."
+          ],
+          "Spec:with flow:groups:": [
+            "from_bool",
+            {
+              "flow:trim:uses:": [
+                "from_bool",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "val",
+                      "bool_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "variables"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Runtime version of shuffle_text."
+          ],
+          "Spec:with flow:groups:": [
+            "call_shuffle",
+            {
+              "flow:trim:uses:": [
+                "shuffle",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                      "over",
+                      "parts",
+                      "text_eval",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:private:": [
+                      "indices",
+                      "shuffler",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "A list of compatible kinds."
+          ],
+          "Spec:with flow:groups:": [
+            "kinds_of",
+            {
+              "flow:trim:uses:": [
+                "kinds_of",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "kind",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "objects"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Decide whether a pattern is running."
+          ],
+          "Spec:with flow:groups:": [
+            "during",
+            {
+              "flow:trim:uses:": [
+                "during",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "pattern",
+                      "pattern_name"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "patterns"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Multiply two numbers."
+          ],
+          "Spec:with flow:groups:": [
+            "product_of",
+            {
+              "flow:trim:uses:": [
+                "mul",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "a",
+                      "number_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "by",
+                      "b",
+                      "number_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "math"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:": [
+            "call_send",
+            {
+              "flow:trim:uses:": [
+                "send",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "path",
+                      "text_list_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "event",
+                      "bool_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "Divide one number by another."
+          ],
+          "Spec:with flow:groups:": [
+            "quotient_of",
+            {
+              "flow:trim:uses:": [
+                "div",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "a",
+                      "number_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "by",
+                      "b",
+                      "number_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "math"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Runtime version of count_of."
+          ],
+          "Spec:with flow:groups:": [
+            "call_trigger",
+            {
+              "flow:trim:uses:": [
+                "trigger",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:": [
+                      "on",
+                      "trigger"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "num",
+                      "number_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns new text, starting each word with a capital letter. For example, 'Empire Apple' from 'empire apple'."
+          ],
+          "Spec:with flow:groups:": [
+            "make_title_case",
+            {
+              "flow:trim:uses:": [
+                "title",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "text",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "format"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "choose_more_value",
+            {
+              "flow:trim:uses:": [
+                "else_if",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "assign",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "from",
+                      "assignment"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "and",
+                      "filter",
+                      "bool_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "do",
+                      "activity"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "else",
+                      "brancher",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "misc"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "The first value is larger than the second value."
+          ],
+          "Spec:with flow:groups:": [
+            "greater_than",
+            {
+              "flow:uses:": [
+                "greater_than",
+                []
+              ]
+            },
+            [
+              "comparison"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns multiple pieces of text as a single new piece of text."
+          ],
+          "Spec:with flow:groups:": [
+            "join",
+            {
+              "flow:trim:uses:": [
+                "join",
+                true,
+                [
+                  {
+                    "Term:type:optional:": [
+                      "sep",
+                      "text_eval",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:repeats:": [
+                      "parts",
+                      "text_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "strings"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Print some bit of text to the player."
+          ],
+          "Spec:with flow:groups:": [
+            "say_text",
+            {
+              "flow:trim:uses:": [
+                "say",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "text",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "printing"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Pattern arguments."
+          ],
+          "Spec:with flow:": [
+            "call_args",
+            {
+              "flow:trim:uses:": [
+                "args",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "args",
+                      "arg",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Helper for choose action.",
+          "Spec:with slot:": [
+            "brancher",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": [
+            "Assigns the calculated record."
+          ],
+          "Spec:with flow:groups:": [
+            "from_record",
+            {
+              "flow:trim:uses:": [
+                "from_rec",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "val",
+                      "record_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "variables"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:groups:": [
+            "variable_name",
+            {
+              "Str uses:": []
+            },
+            [
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns true if any of the evaluations are true."
+          ],
+          "Spec:with flow:groups:": [
+            "any_true",
+            {
+              "flow:trim:uses:": [
+                "any_true",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "test",
+                      "bool_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "logic"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "trigger_switch",
+            {
+              "flow:uses:": [
+                "after",
+                []
+              ]
+            },
+            [
+              "comparison"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Pick one of two strings based on a boolean test."
+          ],
+          "Spec:with flow:groups:": [
+            "choose_text",
+            {
+              "flow:uses:": [
+                "txt",
+                [
+                  {
+                    "Term:type:": [
+                      "if",
+                      "bool_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "then",
+                      "true",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:": [
+                      "else",
+                      "false",
+                      "text_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "format"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "True if the object is exactly the named kind."
+          ],
+          "Spec:with flow:groups:": [
+            "is_exact_kind_of",
+            {
+              "flow:trim:uses:": [
+                "kind_of",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "is_exactly",
+                      "kind",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "objects"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Subtract two numbers."
+          ],
+          "Spec:with flow:groups:": [
+            "diff_of",
+            {
+              "flow:trim:uses:": [
+                "dec",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "a",
+                      "number_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:": [
+                      "by",
+                      "b",
+                      "number_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "math"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Divide one number by another, and return the remainder."
+          ],
+          "Spec:with flow:groups:": [
+            "remainder_of",
+            {
+              "flow:trim:uses:": [
+                "mod",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "a",
+                      "number_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "by",
+                      "b",
+                      "number_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "math"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Put an object into a particular state."
+          ],
+          "Spec:with flow:groups:": [
+            "set_trait",
+            {
+              "flow:uses:": [
+                "put",
+                [
+                  {
+                    "Term:name:type:": [
+                      "obj",
+                      "object",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "trait",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "objects"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "An if statement."
+          ],
+          "Spec:with flow:groups:": [
+            "choose_action",
+            {
+              "flow:trim:uses:": [
+                "if",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "if",
+                      "bool_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "do",
+                      "activity"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "else",
+                      "brancher",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "misc"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "choose_more",
+            {
+              "flow:trim:uses:": [
+                "else_if",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "if",
+                      "bool_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "do",
+                      "activity"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "else",
+                      "brancher",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "misc"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Writes text with spaces between words."
+          ],
+          "Spec:with flow:groups:": [
+            "span_text",
+            {
+              "flow:trim:uses:": [
+                "spaces",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "do",
+                      "activity"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "printing"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:groups:": [
+            "pattern_name",
+            {
+              "Str uses:": []
+            },
+            [
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Runtime version of cycle_text."
+          ],
+          "Spec:with flow:groups:": [
+            "call_cycle",
+            {
+              "flow:trim:uses:": [
+                "cycle",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                      "over",
+                      "parts",
+                      "text_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "A unique object identifier."
+          ],
+          "Spec:with flow:groups:": [
+            "id_of",
+            {
+              "flow:trim:uses:": [
+                "id_of",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "objects"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

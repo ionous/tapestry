@@ -1,35 +1,15 @@
 {
+  "--": "testdl",
   "Spec:with group:": [
     "testdl",
     {
       "Group contains:": [
         {
-          "Spec:with str:": [
-            "test_txt",
-            {
-              "Str uses:": []
-            }
-          ]
-        },
-        {
-          "Spec:with slot:": [
-            "test_slot",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
+          "--": "",
           "Spec:with swap:": [
             "test_swap",
             {
               "Swap between:": [
-                {
-                  "Pick:type:": [
-                    "c",
-                    "test_txt"
-                  ]
-                },
                 {
                   "Pick:type:": [
                     "a",
@@ -41,18 +21,55 @@
                     "b",
                     "test_slot"
                   ]
+                },
+                {
+                  "Pick:type:": [
+                    "c",
+                    "test_txt"
+                  ]
                 }
               ]
             }
           ]
         },
         {
+          "--": "",
+          "Spec:with str:": [
+            "test_txt",
+            {
+              "Str uses:": []
+            }
+          ]
+        },
+        {
+          "--": "",
           "Spec:with flow:": [
             "test_flow",
             {
-              "Flow:uses:": [
+              "flow:uses:": [
                 "flow",
                 [
+                  {
+                    "Term:type:optional:": [
+                      "slot",
+                      "test_slot",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "txt",
+                      "test_txt",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "num",
+                      "test_num",
+                      true
+                    ]
+                  },
                   {
                     "Term:type:optional:": [
                       "bool",
@@ -74,27 +91,6 @@
                       true,
                       true
                     ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "slot",
-                      "test_slot",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "txt",
-                      "test_txt",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "num",
-                      "test_num",
-                      true
-                    ]
                   }
                 ]
               ]
@@ -102,6 +98,26 @@
           ]
         },
         {
+          "--": "",
+          "Spec:with str:": [
+            "test_bool",
+            {
+              "Str exclusively:uses:": [
+                true,
+                [
+                  {
+                    "Option:": "true"
+                  },
+                  {
+                    "Option:": "false"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "",
           "Spec:with num:": [
             "test_num",
             {
@@ -110,20 +126,11 @@
           ]
         },
         {
-          "Spec:with str:": [
-            "test_bool",
+          "--": "",
+          "Spec:with slot:": [
+            "test_slot",
             {
-              "Str exclusively:uses:": [
-                true,
-                [
-                  {
-                    "Option:": "false"
-                  },
-                  {
-                    "Option:": "true"
-                  }
-                ]
-              ]
+              "Slot": true
             }
           ]
         }

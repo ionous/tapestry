@@ -1,4 +1,5 @@
 {
+  "--": "grammar",
   "Spec:with group:": [
     "grammar",
     {
@@ -13,17 +14,19 @@
           ]
         },
         {
-          "--": "makes a parser scanner.",
+          "--": [
+            "makes a parser scanner producing a script defined action."
+          ],
           "Spec:with flow:": [
-            "noun",
+            "action",
             {
-              "Flow:trim:uses:": [
-                "noun",
+              "flow:trim:uses:": [
+                "as",
                 true,
                 [
                   {
                     "Term:type:": [
-                      "kind",
+                      "action",
                       "text"
                     ]
                   }
@@ -33,18 +36,21 @@
           ]
         },
         {
-          "--": "makes a parser scanner which matches the player. ( the player string is just to make the composer happy. ).",
+          "--": [
+            "makes a parser scanner."
+          ],
           "Spec:with flow:": [
-            "self",
+            "all_of",
             {
-              "Flow:trim:uses:": [
-                "self",
+              "flow:trim:uses:": [
+                "all_of",
                 true,
                 [
                   {
-                    "Term:type:": [
-                      "player",
-                      "text"
+                    "Term:type:repeats:": [
+                      "series",
+                      "scanner_maker",
+                      true
                     ]
                   }
                 ]
@@ -53,11 +59,45 @@
           ]
         },
         {
-          "--": "makes a parser scanner.",
+          "--": "Helper for defining input scanners.",
+          "Spec:with slot:": [
+            "scanner_maker",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": [
+            "makes a parser scanner."
+          ],
+          "Spec:with flow:": [
+            "words",
+            {
+              "flow:trim:uses:": [
+                "words",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "words",
+                      "text",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "makes a parser scanner."
+          ],
           "Spec:with flow:": [
             "reverse",
             {
-              "Flow:trim:uses:": [
+              "flow:trim:uses:": [
                 "reverse",
                 true,
                 [
@@ -74,11 +114,128 @@
           ]
         },
         {
-          "--": "starts a parser scanner.",
+          "--": [
+            "makes a parser scanner."
+          ],
+          "Spec:with flow:": [
+            "retarget",
+            {
+              "flow:trim:uses:": [
+                "retarget",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "span",
+                      "scanner_maker",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "makes a parser scanner."
+          ],
+          "Spec:with flow:": [
+            "any_of",
+            {
+              "flow:trim:uses:": [
+                "any_of",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "options",
+                      "scanner_maker",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "makes a parser scanner."
+          ],
+          "Spec:with flow:": [
+            "noun",
+            {
+              "flow:trim:uses:": [
+                "noun",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "kind",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "Read what the player types and turn it into actions."
+          ],
+          "Spec:with flow:groups:": [
+            "grammar",
+            {
+              "flow:trim:uses:": [
+                "grammar",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "grammar",
+                      "grammar_maker"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "makes a parser scanner which matches the player. ( the player string is just to make the composer happy. )."
+          ],
+          "Spec:with flow:": [
+            "self",
+            {
+              "flow:trim:uses:": [
+                "self",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "player",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "starts a parser scanner."
+          ],
           "Spec:with flow:": [
             "directive",
             {
-              "Flow:trim:uses:": [
+              "flow:trim:uses:": [
                 "directive",
                 true,
                 [
@@ -102,20 +259,13 @@
           ]
         },
         {
-          "--": "Helper for defining input scanners.",
-          "Spec:with slot:": [
-            "scanner_maker",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
-          "--": "allows the user to refer to a noun by one or more other terms.",
+          "--": [
+            "allows the user to refer to a noun by one or more other terms."
+          ],
           "Spec:with flow:": [
             "alias",
             {
-              "Flow:trim:uses:": [
+              "flow:trim:uses:": [
                 "alias",
                 true,
                 [
@@ -129,133 +279,6 @@
                   {
                     "Term:type:": [
                       "as_noun",
-                      "text"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "makes a parser scanner.",
-          "Spec:with flow:": [
-            "retarget",
-            {
-              "Flow:trim:uses:": [
-                "retarget",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "span",
-                      "scanner_maker",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "makes a parser scanner.",
-          "Spec:with flow:": [
-            "all_of",
-            {
-              "Flow:trim:uses:": [
-                "all_of",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "series",
-                      "scanner_maker",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Read what the player types and turn it into actions.",
-          "Spec:with flow:groups:": [
-            "grammar",
-            {
-              "Flow:trim:uses:": [
-                "grammar",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "grammar",
-                      "grammar_maker"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "internal"
-            ]
-          ]
-        },
-        {
-          "--": "makes a parser scanner.",
-          "Spec:with flow:": [
-            "any_of",
-            {
-              "Flow:trim:uses:": [
-                "any_of",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "options",
-                      "scanner_maker",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "makes a parser scanner.",
-          "Spec:with flow:": [
-            "words",
-            {
-              "Flow:trim:uses:": [
-                "words",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "words",
-                      "text",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "makes a parser scanner producing a script defined action.",
-          "Spec:with flow:": [
-            "action",
-            {
-              "Flow:trim:uses:": [
-                "as",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "action",
                       "text"
                     ]
                   }

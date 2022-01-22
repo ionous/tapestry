@@ -1,9 +1,29 @@
 {
+  "--": "prim",
   "Spec:with group:": [
     "prim",
     {
       "Group contains:": [
         {
+          "--": "",
+          "Spec:with num:": [
+            "number",
+            {
+              "Num uses:": []
+            }
+          ]
+        },
+        {
+          "--": "A sequence of characters of any length, all on one line.  Examples include letters, words, or short sentences.  Text is generally something displayed to the player.  See also: lines.",
+          "Spec:with str:": [
+            "text",
+            {
+              "Str uses:": []
+            }
+          ]
+        },
+        {
+          "--": "",
           "Spec:with str:": [
             "bool",
             {
@@ -18,23 +38,6 @@
                   }
                 ]
               ]
-            }
-          ]
-        },
-        {
-          "--": "A sequence of characters of any length, all on one line.  Examples include letters, words, or short sentences.  Text is generally something displayed to the player.  See also: lines.",
-          "Spec:with str:": [
-            "text",
-            {
-              "Str uses:": []
-            }
-          ]
-        },
-        {
-          "Spec:with num:": [
-            "number",
-            {
-              "Num uses:": []
             }
           ]
         }

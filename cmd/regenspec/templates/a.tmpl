@@ -1,8 +1,10 @@
-{ "Spec:with group:": [
+{   
+  {{if .Type.LiteralComment}}"--": {{.Type.LiteralComment}},{{end}}
+  "Spec:with group:": [
   "{{.Group}}", {
   "Group contains:": [
   {{ range $i, $g := .Types }}{{if $i}},{{end}}{
-    "--": {{.LiteralComment}},
+    "--": {{if .LiteralComment}}{{.LiteralComment}}{{else}}""{{end}},
     "Spec:with {{.Uses}}:{{if .Slots}}slots:{{end}}{{if .OtherGroups}}groups:{{end}}": [
       "{{.Name}}",
       {{- if eq .Uses "flow" -}}

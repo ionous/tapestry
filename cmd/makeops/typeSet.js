@@ -36,6 +36,8 @@ class TypeSet {
     }
     if (type.uses !== "group") {
       this.all[ name ]= type;
+    } else {
+      this.all["_"+name]= type;
     }
     return type;
   }

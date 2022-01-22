@@ -1,14 +1,17 @@
 {
+  "--": "reader",
   "Spec:with group:": [
     "reader",
     {
       "Group contains:": [
         {
-          "--": "Identifies the location of a specific command ( ex. from an .if file ).",
+          "--": [
+            "Identifies the location of a specific command ( ex. from an .if file )."
+          ],
           "Spec:with flow:groups:": [
             "position",
             {
-              "Flow:trim:uses:": [
+              "flow:trim:uses:": [
                 "src",
                 true,
                 [

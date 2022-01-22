@@ -1,6 +1,7 @@
 {
 	"spec": {
 		"uses": "group",
+		"desc": "Describes itself using its own types.",
 		"specs": {
 			"type_spec": {
 				"spec": "spec {_%name:text} {with%spec:uses_spec} {slots*text} {groups*text}",

@@ -324,6 +324,9 @@ templates["str"] = templates["num"] = templates["prim"];
 // split types into different categories
 for (const typeName in allTypes) {
   const type = allTypes[typeName];
+  if (type.uses === 'group') {
+    continue;
+  }
   // fix: maybe carry through the lines the whole way?
   if (Array.isArray(type.desc)) {
     type.desc = type.desc.join("  ");
@@ -433,13 +436,15 @@ for (currentGroup in groups) {
   const inc = new Set();
   for (const typeName of g.slats.filter(n=> !unbox[n])) {
     const type = allTypes[typeName];
-    for (const param of type.params) {
-      // when we are marshaling we need to include all types
-      // otherwise we only need to include the types we dont unbox out of existence
-      if (param && (marshal || !unbox[param.type])) {
-        const o = nameToGroup[param.type];
-        if (o && o !== currentGroup) {
-          inc.add(o);
+    if (type.uses !== 'group') {
+      for (const param of type.params) {
+        // when we are marshaling we need to include all types
+        // otherwise we only need to include the types we dont unbox out of existence
+        if (param && (marshal || !unbox[param.type])) {
+          const o = nameToGroup[param.type];
+          if (o && o !== currentGroup) {
+            inc.add(o);
+          }
         }
       }
     }

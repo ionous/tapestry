@@ -1,0 +1,284 @@
+{
+  "--": "literal",
+  "Spec:with group:": [
+    "literal",
+    {
+      "Group contains:": [
+        {
+          "--": [
+            "Specify a particular number."
+          ],
+          "Spec:with flow:": [
+            "num_value",
+            {
+              "flow:trim:uses:": [
+                "num",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "num",
+                      "number"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "class",
+                      "text",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "Specify a small bit of text."
+          ],
+          "Spec:with flow:": [
+            "text_value",
+            {
+              "flow:trim:uses:": [
+                "txt",
+                true,
+                [
+                  {
+                    "Term:": "text"
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "class",
+                      "text",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "field_values",
+            {
+              "flow:trim:uses:": [
+                "fields",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "contains",
+                      "field_value",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Specify a record composed of literal values."
+          ],
+          "Spec:with flow:": [
+            "record_value",
+            {
+              "flow:trim:uses:": [
+                "rec",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "kind",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:repeats:": [
+                      "fields",
+                      "field_value",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:private:": [
+                      "cache",
+                      "record_cache",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "A fixed value of a record."
+          ],
+          "Spec:with flow:": [
+            "field_value",
+            {
+              "flow:uses:": [
+                "field",
+                [
+                  {
+                    "Term:type:": [
+                      "field",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "value",
+                      "literal_value"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Slot for constant values.",
+          "Spec:with slot:": [
+            "literal_value",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": [
+            "Specify a series of records, all of the same kind."
+          ],
+          "Spec:with flow:": [
+            "record_values",
+            {
+              "flow:trim:uses:": [
+                "recs",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "kind",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                      "containing",
+                      "els",
+                      "field_values",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:private:": [
+                      "cache",
+                      "records_cache",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "Text List: Specifies a set of text values."
+          ],
+          "Spec:with flow:": [
+            "text_values",
+            {
+              "flow:trim:uses:": [
+                "txts",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "values",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "class",
+                      "text",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "Specify an explicit true or false."
+          ],
+          "Spec:with flow:": [
+            "bool_value",
+            {
+              "flow:trim:uses:": [
+                "bool",
+                true,
+                [
+                  {
+                    "Term:": "bool"
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "class",
+                      "text",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "Number List: Specify a list of numbers."
+          ],
+          "Spec:with flow:": [
+            "num_values",
+            {
+              "flow:trim:uses:": [
+                "nums",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "values",
+                      "number",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "class",
+                      "text",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

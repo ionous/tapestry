@@ -24,7 +24,7 @@ import (
 )
 
 const (
-	SpecExt     = ".ifspec"
+	SpecExt     = ".ifspecs"
 	DetailedExt = ".ifx"
 	CompactExt  = ".if"
 )
@@ -49,12 +49,12 @@ func oppositeExt(ext string) (ret string) {
 //
 // or, load and rewrite the .if files
 // go build compact.go; for f in ../../stories/shared/*.if; do ./compact -in $f -out .if; done;
-// go build compact.go; for f in ../regenspec/out/*.ifspec; do ./compact -in $f -out $f; done;
+// go build compact.go; for f in ../regenspec/out/*.ifspecs; do ./compact -in $f -out $f; done;
 //
 func main() {
 	var inFile, outFile string
-	flag.StringVar(&inFile, "in", "", "input file name (.if|.ifx|.ifspec)")
-	flag.StringVar(&outFile, "out", "", "optional output file name (.if|.ifx|.ifspec)")
+	flag.StringVar(&inFile, "in", "", "input file name (.if|.ifx|.ifspecs)")
+	flag.StringVar(&outFile, "out", "", "optional output file name (.if|.ifx|.ifspecs)")
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
 	flag.Parse()
 	if len(inFile) == 0 {
@@ -62,7 +62,7 @@ func main() {
 	} else {
 		inExt := filepath.Ext(inFile)
 		if !strings.HasPrefix(inExt, CompactExt) {
-			println("requires some sort of .if, .ifx, or .ifspec file")
+			println("requires some sort of .if, .ifx, or .ifspecs file")
 		} else {
 			// determine the output extension
 			// ( if nothing was specified, it will be the opposite of in )

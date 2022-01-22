@@ -1,13 +1,15 @@
 {
+  "--": "render",
   "Spec:with group:": [
     "render",
     {
       "Group contains:": [
         {
+          "--": "",
           "Spec:with flow:groups:": [
             "render_pattern",
             {
-              "Flow:trim:uses:": [
+              "flow:trim:uses:": [
                 "render",
                 true,
                 [
@@ -26,11 +28,13 @@
           ]
         },
         {
-          "--": "returns the value of a variable or the id of an object.",
+          "--": [
+            "returns the value of a variable or the id of an object."
+          ],
           "Spec:with flow:groups:": [
             "render_ref",
             {
-              "Flow:trim:uses:": [
+              "flow:trim:uses:": [
                 "render_ref",
                 true,
                 [
@@ -55,10 +59,11 @@
           ]
         },
         {
+          "--": "",
           "Spec:with flow:groups:": [
             "render_field",
             {
-              "Flow:trim:uses:": [
+              "flow:trim:uses:": [
                 "render_field",
                 true,
                 [
@@ -77,6 +82,53 @@
           ]
         },
         {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "render_name",
+            {
+              "flow:trim:uses:": [
+                "render_name",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "render_exp",
+            {
+              "flow:trim:uses:": [
+                "render_exp",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "expression",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": "",
           "Spec:with str:": [
             "render_flags",
             {
@@ -104,50 +156,6 @@
                 ]
               ]
             }
-          ]
-        },
-        {
-          "Spec:with flow:groups:": [
-            "render_exp",
-            {
-              "Flow:trim:uses:": [
-                "render_exp",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "expression",
-                      "text_eval"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "internal"
-            ]
-          ]
-        },
-        {
-          "Spec:with flow:groups:": [
-            "render_name",
-            {
-              "Flow:trim:uses:": [
-                "render_name",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "text"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "internal"
-            ]
           ]
         }
       ]

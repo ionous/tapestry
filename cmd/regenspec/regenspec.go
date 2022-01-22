@@ -14,9 +14,9 @@ import (
 	regen "git.sr.ht/~ionous/tapestry/cmd/regenspec/internal"
 )
 
-// story many to one isnt inline
-// pick isnt getting a label maybe (see spec)
-//
+// FIX: desc isnt getting incorporated.
+// FIX: command line flags: generate one file at a time, output one file at a time
+//      - see compact.go for example.
 func main() {
 	// debug()
 	if ts, e := template.ParseFS(templates, "templates/*.tmpl"); e != nil {
@@ -26,50 +26,6 @@ func main() {
 	}
 }
 
-// func debug() {
-// 	ex := spec.TypeSpec{
-// 		Name: "example",
-// 		Spec: spec.UsesSpec{
-// 			Choice: spec.UsesSpec_Group_Opt,
-// 			Value: &spec.GroupSpec{
-// 				Specs: []spec.TypeSpec{{
-// 					UserComment: "Debug log.",
-// 					Name:        "debug_log",
-// 					Spec: spec.UsesSpec{
-// 						Choice: spec.UsesSpec_Flow_Opt,
-// 						Value: &spec.FlowSpec{
-// 							Terms: []spec.TermSpec{{
-// 								Name:  "num",
-// 								Label: "_",
-// 								Type:  "number",
-// 							}},
-// 						},
-// 					},
-// 				}, {
-// 					UserComment: "Debug log.",
-// 					Name:        "debug_log",
-// 					Spec: spec.UsesSpec{
-// 						Choice: spec.UsesSpec_Flow_Opt,
-// 						Value: &spec.FlowSpec{
-// 							Terms: []spec.TermSpec{{
-// 								Name:     "num",
-// 								Label:    "_",
-// 								Type:     "number",
-// 								Optional: true,
-// 							}},
-// 						},
-// 					},
-// 				}},
-// 			},
-// 		},
-// 	}
-// 	if i, e := cout.Encode(&ex, nil); e != nil {
-// 		log.Fatal(e)
-// 	} else {
-// 		regen.MarshalIndentOut(os.Stdout, i)
-// 	}
-// }
-
 //go:embed data/allTypes.jspec
 var allBytes []byte
 
@@ -77,13 +33,13 @@ var allBytes []byte
 var templates embed.FS
 
 func convert(ts *template.Template, b []byte) (err error) {
-	var types map[string]interface{}
-	if e := json.Unmarshal(b, &types); e != nil {
+	var allTypes map[string]interface{}
+	if e := json.Unmarshal(b, &allTypes); e != nil {
 		err = e
 	} else {
 		groups := make(map[string][]*regen.Type)
-		for k, _ := range types {
-			t := regen.NewType(regen.MapOf(k, types))
+		for k, _ := range allTypes {
+			t := regen.NewType(regen.MapOf(k, allTypes))
 			if u := t.Uses(); u != "group" {
 				// the first group is the primary group.
 				gn := t.AllGroups()[0]
@@ -97,8 +53,11 @@ func convert(ts *template.Template, b []byte) (err error) {
 			// go-lang templating doesnt allow us to control the whitespace of nested templates
 			// it will always look bad, so just buffer it....
 			log.Println("writing", group)
+			gt := regen.NewType(regen.MapOf("_"+group, allTypes))
+
 			var buf bytes.Buffer
 			if e := ts.Execute(&buf, map[string]interface{}{
+				"Type":  gt,
 				"Group": group,
 				"Types": types,
 			}); e != nil {
@@ -114,7 +73,7 @@ func convert(ts *template.Template, b []byte) (err error) {
 				indented.Write(b)
 			}
 			// finally write it
-			outFile := fmt.Sprintf("out/%s.ifspec", group)
+			outFile := fmt.Sprintf("../../idl/%s.ifspecs", group)
 			if fp, e := os.Create(outFile); e != nil {
 				err = e
 				break

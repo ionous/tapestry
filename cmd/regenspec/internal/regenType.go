@@ -48,34 +48,31 @@ func (t *Type) AllGroups() []string {
 // return a json literal: either an array or a quoted string
 func (t *Type) LiteralComment() string {
 	if t.cmt == nil {
-		cmt := `""`
-		if d, ok := t.m["desc"]; ok {
-			if lines, ok := d.([]string); ok {
-				cmt = MarshalIndent(lines)
-			} else if str, ok := d.(string); ok {
-				cmt = MarshalIndent(str)
-			} else {
-				// desc is a description with the form: "label: short description. long description...
-				m := d.(map[string]interface{})
-				label := sentenceOf("label", m)
-				short := sentenceOf("short", m)
-				long := sentenceOf("long", m)
-				var ar []string
-				if len(label) > 0 {
-					x := strings.ToLower(strings.ReplaceAll(label, " ", "_"))
-					if n := t.Name(); x != n+"." {
-						ar = append(ar, label)
-					}
+		var cmt string
+		if desc := ListOf("desc", t.m); desc != nil {
+			cmt = MarshalIndent(desc)
+		} else if desc := StringOf("desc", t.m); len(desc) > 0 {
+			cmt = MarshalIndent(desc)
+		} else if desc := MapOf("desc", t.m); desc != nil {
+			// desc is a description with the form: "label: short description. long description...
+			label := sentenceOf("label", desc)
+			short := sentenceOf("short", desc)
+			long := sentenceOf("long", desc)
+			var ar []string
+			if len(label) > 0 {
+				x := strings.ToLower(strings.ReplaceAll(label, " ", "_"))
+				if n := t.Name(); x != n+"." {
+					ar = append(ar, label)
 				}
-				if short != "" {
-					ar = append(ar, short)
-				}
-				if long != "" {
-					ar = append(ar, long)
-				}
-				if len(ar) > 0 {
-					cmt = MarshalIndent(ar)
-				}
+			}
+			if short != "" {
+				ar = append(ar, short)
+			}
+			if long != "" {
+				ar = append(ar, long)
+			}
+			if len(ar) > 0 {
+				cmt = MarshalIndent(ar)
 			}
 		}
 		t.cmt = &cmt
@@ -145,7 +142,9 @@ func (t *Type) Picks() []Param {
 // for flow, the name used in story file commands
 func (t *Type) Flow() (ret string) {
 	if english, ts := t.Tokens(); !english && len(ts) > 0 {
-		ret = ts[0]
+		if s := ts[0]; len(s) > 0 && s[0] != '$' {
+			ret = s
+		}
 	}
 	return
 }
@@ -167,15 +166,18 @@ func (t *Type) Terms() []Param {
 		terms := make([]Param, 0)
 		w := MapOf("with", t.m)
 		ps := MapOf("params", w)
-		for k, _ := range ps {
-			v := MapOf(k, ps)
-			terms = append(terms, Param{
-				Name:     Detokenize(k),
-				Label:    StringOf("label", v),
-				Type:     StringOf("type", v),
-				Repeats:  BoolOf("repeats", v),
-				Optional: BoolOf("optional", v),
-			})
+		_, tokens := t.Tokens()
+		for _, k := range tokens {
+			if len(k) > 0 && k[0] == '$' {
+				v := MapOf(k, ps)
+				terms = append(terms, Param{
+					Name:     Detokenize(k),
+					Label:    StringOf("label", v),
+					Type:     StringOf("type", v),
+					Repeats:  BoolOf("repeats", v),
+					Optional: BoolOf("optional", v),
+				})
+			}
 		}
 		t.params = terms
 	}
@@ -193,15 +195,7 @@ func (t *Type) Tokens() (bool, []string) {
 			}
 		}
 		w := MapOf("with", t.m)
-		els := ListOf("tokens", w)
-		tokens := make([]string, 0)
-		for _, el := range els {
-			if strings.HasPrefix(el, "$") {
-				el = "{" + strings.ToLower(el) + "}"
-			}
-			tokens = append(tokens, el)
-		}
-		t.tokens = tokens
+		t.tokens = ListOf("tokens", w)
 		t.english = story && !modeling
 	}
 	return t.english, t.tokens
@@ -213,7 +207,19 @@ func (t *Type) Tokens() (bool, []string) {
 func (t *Type) Phrase() (ret string) {
 	english, tokens := t.Tokens()
 	if english {
-		ret = strings.Join(tokens, "")
+		var b strings.Builder
+		for _, k := range tokens {
+			if len(k) > 0 {
+				if k[0] != '$' {
+					b.WriteString(k)
+				} else {
+					b.WriteRune('{')
+					b.WriteString(strings.ToLower(k))
+					b.WriteRune('}')
+				}
+			}
+		}
+		ret = b.String()
 	}
 	return
 }
