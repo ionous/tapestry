@@ -6,6 +6,43 @@
       "Group contains:": [
         {
           "--": "",
+          "Spec:with str:": [
+            "test_txt",
+            {
+              "Str uses:": []
+            }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with num:": [
+            "test_num",
+            {
+              "Num uses:": []
+            }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:": [
+            "test_bool",
+            {
+              "Str exclusively:uses:": [
+                true,
+                [
+                  {
+                    "Option:": "true"
+                  },
+                  {
+                    "Option:": "false"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "",
           "Spec:with swap:": [
             "test_swap",
             {
@@ -34,16 +71,7 @@
         },
         {
           "--": "",
-          "Spec:with str:": [
-            "test_txt",
-            {
-              "Str uses:": []
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:": [
+          "Spec:with flow:slots:": [
             "test_flow",
             {
               "flow:uses:": [
@@ -94,35 +122,10 @@
                   }
                 ]
               ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with str:": [
-            "test_bool",
-            {
-              "Str exclusively:uses:": [
-                true,
-                [
-                  {
-                    "Option:": "true"
-                  },
-                  {
-                    "Option:": "false"
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with num:": [
-            "test_num",
-            {
-              "Num uses:": []
-            }
+            },
+            [
+              "test_slot"
+            ]
           ]
         },
         {

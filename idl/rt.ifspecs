@@ -5,18 +5,27 @@
     {
       "Group contains:": [
         {
-          "--": "Statements which return a record.",
+          "--": "Statements which return a number.",
           "Spec:with slot:": [
-            "record_eval",
+            "number_eval",
             {
               "Slot": true
             }
           ]
         },
         {
-          "--": "Run a series of statements.",
+          "--": "Statements which return text.",
           "Spec:with slot:": [
-            "execute",
+            "text_eval",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": "Statements which return a list of text.",
+          "Spec:with slot:": [
+            "text_list_eval",
             {
               "Slot": true
             }
@@ -26,6 +35,24 @@
           "--": "Statements which return a list of numbers.",
           "Spec:with slot:": [
             "num_list_eval",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": "Helper for setting variables.",
+          "Spec:with slot:": [
+            "assignment",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": "Run a series of statements.",
+          "Spec:with slot:": [
+            "execute",
             {
               "Slot": true
             }
@@ -60,36 +87,9 @@
           ]
         },
         {
-          "--": "Statements which return true/false values.",
+          "--": "Statements which return a record.",
           "Spec:with slot:": [
-            "bool_eval",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
-          "--": "Statements which return a list of text.",
-          "Spec:with slot:": [
-            "text_list_eval",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
-          "--": "Statements which return a number.",
-          "Spec:with slot:": [
-            "number_eval",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
-          "--": "Helper for setting variables.",
-          "Spec:with slot:": [
-            "assignment",
+            "record_eval",
             {
               "Slot": true
             }
@@ -105,9 +105,9 @@
           ]
         },
         {
-          "--": "Statements which return text.",
+          "--": "Statements which return true/false values.",
           "Spec:with slot:": [
-            "text_eval",
+            "bool_eval",
             {
               "Slot": true
             }

@@ -5,705 +5,8 @@
     {
       "Group contains:": [
         {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "bool_property",
-            {
-              "flow phrase:trim:uses:": [
-                "a true/false value named {$name} ( {$type} ) {$initially}",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:": [
-                      "of",
-                      "type",
-                      "text",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "initially",
-                      "bool_eval",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "properties"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "record_list_property",
-            {
-              "flow phrase:trim:uses:": [
-                "a list of records named {$name} ( {$type} ) {$initially}",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:": [
-                      "of",
-                      "type",
-                      "text",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "initially",
-                      "record_list_eval",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "properties"
-            ]
-          ]
-        },
-        {
-          "--": "When called multiple times returns its inputs at random.",
-          "Spec:with flow:groups:": [
-            "shuffle_text",
-            {
-              "flow phrase:trim:uses:": [
-                "shuffle {$parts}",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "parts",
-                      "text_eval",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "stubs",
-              "output",
-              "positioned"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "one_to_one",
-            {
-              "flow phrase:trim:uses:": [
-                "one {$kind} to one {$other_kind}",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "kind",
-                      "singular_kind"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "other_kind",
-                      "singular_kind"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "relations"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "story",
-            {
-              "flow phrase:trim:uses:": [
-                "{$paragraph}",
-                true,
-                [
-                  {
-                    "Term:repeats:": [
-                      "paragraph",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "statements"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "aspect_property",
-            {
-              "flow phrase:trim:uses:": [
-                "an aspect {$aspect}",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "aspect",
-                      "text"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "properties"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with swap:groups:": [
-            "relation_cardinality",
-            {
-              "Swap between:": [
-                {
-                  "Pick:": "many_to_one"
-                },
-                {
-                  "Pick:": "many_to_many"
-                },
-                {
-                  "Pick:": "one_to_one"
-                },
-                {
-                  "Pick:": "one_to_many"
-                }
-              ]
-            },
-            [
-              "debug",
-              "relations",
-              "positioned"
-            ]
-          ]
-        },
-        {
-          "--": "A sequence of characters of any length spanning multiple lines.  Paragraphs are a prime example. Generally lines are some piece of the story that will be displayed to the player.  See also: text.",
-          "Spec:with str:groups:": [
-            "lines",
-            {
-              "Str uses:": []
-            },
-            [
-              "debug",
-              "language"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "many_to_many",
-            {
-              "flow phrase:trim:uses:": [
-                "many {$kinds} to many {$other_kinds}",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "kinds",
-                      "plural_kinds"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "other_kinds",
-                      "plural_kinds"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "relations"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with swap:groups:": [
-            "action_params",
-            {
-              "Swap between:": [
-                {
-                  "Pick:label:type:": [
-                    "dual",
-                    "two similar objects",
-                    "paired_action"
-                  ]
-                },
-                {
-                  "Pick:label:type:": [
-                    "none",
-                    "nothing",
-                    "abstract_action"
-                  ]
-                },
-                {
-                  "Pick:label:type:": [
-                    "common",
-                    "one or more objects",
-                    "common_action"
-                  ]
-                }
-              ]
-            },
-            [
-              "debug",
-              "events"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "A guard which returns true based on a counter.",
-            "Counters start at zero and are incremented every time the guard gets checked."
-          ],
-          "Spec:with flow:groups:": [
-            "count_of",
-            {
-              "flow phrase:trim:uses:": [
-                "trigger {$trigger} {$num}",
-                true,
-                [
-                  {
-                    "Term:": "trigger"
-                  },
-                  {
-                    "Term:type:": [
-                      "num",
-                      "number_eval"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "stubs",
-              "logic",
-              "positioned"
-            ]
-          ]
-        },
-        {
-          "--": "Add traits to an aspect",
-          "Spec:with flow:groups:": [
-            "aspect_traits",
-            {
-              "flow phrase:trim:uses:": [
-                "{$aspect} {$trait_phrase}",
-                true,
-                [
-                  {
-                    "Term:": "aspect"
-                  },
-                  {
-                    "Term:": "trait_phrase"
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "traits"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with str:groups:": [
-            "test_name",
-            {
-              "Str uses:": [
-                {
-                  "Option:label:": [
-                    "current_test",
-                    "the test"
-                  ]
-                }
-              ]
-            },
-            [
-              "debug",
-              "tests",
-              "positioned"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with str:groups:": [
-            "pattern_type",
-            {
-              "Str uses:": [
-                {
-                  "Option:": "events"
-                },
-                {
-                  "Option:": "patterns"
-                },
-                {
-                  "Option:": "actions"
-                }
-              ]
-            },
-            [
-              "debug",
-              "patterns",
-              "positioned"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "kinds_of_aspect",
-            {
-              "flow phrase:trim:uses:": [
-                "{$aspect} is a kind of value.",
-                true,
-                [
-                  {
-                    "Term:": "aspect"
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "traits"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "one_to_many",
-            {
-              "flow phrase:trim:uses:": [
-                "one {$kind} to many {$kinds}",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "kind",
-                      "singular_kind"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "kinds",
-                      "plural_kinds"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "relations"
-            ]
-          ]
-        },
-        {
-          "--": "Create a scene for testing",
-          "Spec:with flow:groups:": [
-            "test_scene",
-            {
-              "flow phrase:trim:uses:": [
-                "While testing {$test_name}: {$story}",
-                true,
-                [
-                  {
-                    "Term:": "test_name"
-                  },
-                  {
-                    "Term:": "story"
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "tests"
-            ]
-          ]
-        },
-        {
-          "--": "Add properties to a kind",
-          "Spec:with flow:groups:": [
-            "kinds_have_properties",
-            {
-              "flow phrase:trim:uses:": [
-                "{$plural_kinds} have {$props}.",
-                true,
-                [
-                  {
-                    "Term:": "plural_kinds"
-                  },
-                  {
-                    "Term:type:repeats:": [
-                      "props",
-                      "property_slot",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "kinds"
-            ]
-          ]
-        },
-        {
-          "--": "Determiners: modify a word they are associated to designate specificity or, sometimes, a count.  For instance: \"some\" fish hooks, \"a\" pineapple, \"75\" triangles, \"our\" Trevor.",
-          "Spec:with str:groups:": [
-            "determiner",
-            {
-              "Str uses:": [
-                {
-                  "Option:": "our"
-                },
-                {
-                  "Option:": "a"
-                },
-                {
-                  "Option:": "an"
-                },
-                {
-                  "Option:": "the"
-                }
-              ]
-            },
-            [
-              "debug",
-              "nouns"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "named_property",
-            {
-              "flow phrase:trim:uses:": [
-                "named {$name} ( {$type} )",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:": [
-                      "of",
-                      "type",
-                      "text",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "properties"
-            ]
-          ]
-        },
-        {
-          "--": "A heading for movement within the game, often connecting one room within the game to another.  The most commonly used are standard compass directions like 'north', 'east', 'south', and 'west'.",
-          "Spec:with str:groups:": [
-            "map_direction",
-            {
-              "Str uses:": []
-            },
-            [
-              "debug",
-              "map_making",
-              "modeling"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Parse text using templates.",
-            "See: https://github.com/ionous/iffy/wiki/Templates."
-          ],
-          "Spec:with flow:groups:": [
-            "render_template",
-            {
-              "flow phrase:trim:uses:": [
-                "render_template {$template}",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "template",
-                      "lines"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "stubs",
-              "format"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "story_lines",
-            {
-              "flow phrase:trim:uses:": [
-                "{$lines}",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "lines",
-                      "story_statement",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "statements",
-              "internal"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Leaving a room by moving in a compass direction ( ex. heading east... )."
-          ],
-          "Spec:with flow:groups:": [
-            "map_heading",
-            {
-              "flow:trim:uses:": [
-                "heading",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "dir",
-                      "map_direction"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "from",
-                      "room",
-                      "named_noun"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:": [
-                      "via",
-                      "door",
-                      "named_noun",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:name:": [
-                      "and",
-                      "map_connection"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "other_room",
-                      "named_noun"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "map_making",
-              "modeling"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "action_context",
-            {
-              "flow phrase:trim:uses:": [
-                "and one {$kind} ( the other noun )",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "kind",
-                      "singular_kind"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "events",
-              "positioned"
-            ]
-          ]
-        },
-        {
           "--": "Add actions to a test",
-          "Spec:with flow:groups:": [
+          "Spec:with flow:slots:groups:": [
             "test_rule",
             {
               "flow phrase:trim:uses:": [
@@ -724,131 +27,11 @@
               ]
             },
             [
+              "story_statement"
+            ],
+            [
               "debug",
               "tests"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with str:groups:": [
-            "event_name",
-            {
-              "Str uses:": []
-            },
-            [
-              "debug",
-              "events",
-              "positioned"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with str:groups:": [
-            "event_phase",
-            {
-              "Str exclusively:uses:": [
-                true,
-                [
-                  {
-                    "Option:": "after"
-                  },
-                  {
-                    "Option:": "before"
-                  },
-                  {
-                    "Option:label:": [
-                      "while",
-                      "during"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "events"
-            ]
-          ]
-        },
-        {
-          "--": "The opposite of east is west.",
-          "Spec:with flow:groups:": [
-            "make_opposite",
-            {
-              "flow phrase:trim:uses:": [
-                "The opposite of {$word} is the {$opposite}.",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "word",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "opposite",
-                      "text"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "language"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "noun_relation_statement",
-            {
-              "flow phrase:trim:uses:": [
-                "{$nouns} {$noun_relation} {$more}.",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "nouns",
-                      "named_noun",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:": "noun_relation"
-                  },
-                  {
-                    "Term:name:type:optional:repeats:": [
-                      "and",
-                      "more",
-                      "noun_continuation",
-                      true,
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "nouns"
-            ]
-          ]
-        },
-        {
-          "--": "Phrase",
-          "Spec:with slot:groups:": [
-            "story_statement",
-            {
-              "Slot": true
-            },
-            [
-              "debug",
-              "statements"
             ]
           ]
         },
@@ -892,86 +75,7 @@
         },
         {
           "--": "",
-          "Spec:with flow:groups:": [
-            "trait_phrase",
-            {
-              "flow phrase:trim:uses:": [
-                "{$are_either} {$trait}.",
-                true,
-                [
-                  {
-                    "Term:": "are_either"
-                  },
-                  {
-                    "Term:repeats:": [
-                      "trait",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "traits"
-            ]
-          ]
-        },
-        {
-          "--": "future: each slot should support an appropriate 'starting as' initial value",
-          "Spec:with slot:groups:": [
-            "property_slot",
-            {
-              "Slot": true
-            },
-            [
-              "debug",
-              "properties"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "text_property",
-            {
-              "flow phrase:trim:uses:": [
-                "some text named {$name} ( {$type} ) {$initially}",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:": [
-                      "of",
-                      "type",
-                      "text",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "initially",
-                      "text_eval",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "properties"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:with flow:slots:groups:": [
             "number_property",
             {
               "flow phrase:trim:uses:": [
@@ -1003,31 +107,126 @@
               ]
             },
             [
+              "property_slot"
+            ],
+            [
               "debug",
               "properties"
             ]
           ]
         },
         {
-          "--": "Give a kind a trait",
+          "--": "",
           "Spec:with flow:groups:": [
-            "certainties",
+            "pattern_rules",
             {
               "flow phrase:trim:uses:": [
-                "{$plural_kinds} {$are_being} {$certainty} {$trait}.",
+                "{$pattern_rule}",
                 true,
                 [
                   {
-                    "Term:": "plural_kinds"
+                    "Term:optional:repeats:": [
+                      "pattern_rule",
+                      true,
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "debug",
+              "patterns"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with swap:groups:": [
+            "event_target",
+            {
+              "Swap between:": [
+                {
+                  "Pick:type:": [
+                    "kinds",
+                    "plural_kinds"
+                  ]
+                },
+                {
+                  "Pick:type:": [
+                    "noun",
+                    "named_noun"
+                  ]
+                }
+              ]
+            },
+            [
+              "debug",
+              "events"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "num_list_property",
+            {
+              "flow phrase:trim:uses:": [
+                "a list of nums named {$name} ( {$type} ) {$initially}",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
                   },
                   {
-                    "Term:": "are_being"
+                    "Term:name:type:optional:": [
+                      "of",
+                      "type",
+                      "text",
+                      true
+                    ]
                   },
                   {
-                    "Term:": "certainty"
+                    "Term:type:optional:": [
+                      "initially",
+                      "num_list_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "property_slot"
+            ],
+            [
+              "debug",
+              "properties"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:groups:": [
+            "are_either",
+            {
+              "Str exclusively:uses:": [
+                true,
+                [
+                  {
+                    "Option:label:": [
+                      "canbe",
+                      "can be"
+                    ]
                   },
                   {
-                    "Term:": "trait"
+                    "Option:label:": [
+                      "either",
+                      "are either"
+                    ]
                   }
                 ]
               ]
@@ -1039,43 +238,135 @@
           ]
         },
         {
-          "--": [
-            "Leaving a room by by going through a door ( ex. departing the house via the front door... )."
-          ],
-          "Spec:with flow:groups:": [
-            "map_departing",
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "kind_of_noun",
             {
-              "flow:uses:": [
-                "departing",
+              "flow phrase:trim:uses:": [
+                "{$are_an} {$kind}",
+                true,
                 [
                   {
-                    "Term:name:type:": [
-                      "from",
-                      "room",
-                      "named_noun"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "via",
-                      "door",
-                      "named_noun"
-                    ]
-                  },
-                  {
-                    "Term:name:": [
-                      "and",
-                      "map_connection"
-                    ]
+                    "Term:": "are_an"
                   },
                   {
                     "Term:type:": [
-                      "other_room",
-                      "named_noun"
+                      "kind",
+                      "singular_kind"
                     ]
                   }
                 ]
               ]
+            },
+            [
+              "noun_continuation"
+            ],
+            [
+              "debug",
+              "nouns"
+            ]
+          ]
+        },
+        {
+          "--": "Phrases",
+          "Spec:with flow:groups:": [
+            "paragraph",
+            {
+              "flow phrase:trim:uses:": [
+                "{$story_statement}",
+                true,
+                [
+                  {
+                    "Term:optional:repeats:": [
+                      "story_statement",
+                      true,
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "debug",
+              "statements"
+            ]
+          ]
+        },
+        {
+          "--": "Phrase",
+          "Spec:with slot:groups:": [
+            "story_statement",
+            {
+              "Slot": true
+            },
+            [
+              "debug",
+              "statements"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Expect that a test uses 'Say' to print some specific text."
+          ],
+          "Spec:with flow:slots:groups:": [
+            "test_output",
+            {
+              "flow phrase:trim:uses:": [
+                "output {$lines}.",
+                true,
+                [
+                  {
+                    "Term:": "lines"
+                  }
+                ]
+              ]
+            },
+            [
+              "testing"
+            ],
+            [
+              "debug",
+              "tests"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "noun_traits",
+            {
+              "flow phrase:trim:uses:": [
+                "{$are_being} {$trait}",
+                true,
+                [
+                  {
+                    "Term:": "are_being"
+                  },
+                  {
+                    "Term:repeats:": [
+                      "trait",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "noun_continuation"
+            ],
+            [
+              "debug",
+              "nouns"
+            ]
+          ]
+        },
+        {
+          "--": "A heading for movement within the game, often connecting one room within the game to another.  The most commonly used are standard compass directions like 'north', 'east', 'south', and 'west'.",
+          "Spec:with str:groups:": [
+            "map_direction",
+            {
+              "Str uses:": []
             },
             [
               "debug",
@@ -1086,7 +377,281 @@
         },
         {
           "--": "",
+          "Spec:with slot:groups:": [
+            "noun_continuation",
+            {
+              "Slot": true
+            },
+            [
+              "debug",
+              "nouns"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Parse text using templates.",
+            "See: https://github.com/ionous/iffy/wiki/Templates."
+          ],
+          "Spec:with flow:slots:groups:": [
+            "render_template",
+            {
+              "flow phrase:trim:uses:": [
+                "render_template {$template}",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "template",
+                      "lines"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "text_eval"
+            ],
+            [
+              "debug",
+              "stubs",
+              "format"
+            ]
+          ]
+        },
+        {
+          "--": "A sequence of characters of any length spanning multiple lines.  Paragraphs are a prime example. Generally lines are some piece of the story that will be displayed to the player.  See also: text.",
+          "Spec:with str:groups:": [
+            "lines",
+            {
+              "Str uses:": []
+            },
+            [
+              "debug",
+              "language"
+            ]
+          ]
+        },
+        {
+          "--": "Describe test results",
+          "Spec:with flow:slots:groups:": [
+            "test_statement",
+            {
+              "flow phrase:trim:uses:": [
+                "Expect {$test_name} to {$test}",
+                true,
+                [
+                  {
+                    "Term:": "test_name"
+                  },
+                  {
+                    "Term:name:type:": [
+                      "expectation",
+                      "test",
+                      "testing"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "tests",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:groups:": [
+            "property",
+            {
+              "Str uses:": []
+            },
+            [
+              "debug",
+              "properties",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": "Noun name: Some specific person, place, or thing; or, more rarely, a kind.  Proper names are usually capitalized:  For example, maybe: 'Haruki', 'Jane', or 'Toronto'.  Common names are usually not capitalized. For example, maybe: 'table', 'chair', or 'dog park'.  A set of duplicate object uses their kind. For instance: twelve 'cats'.`",
+          "Spec:with str:groups:": [
+            "noun_name",
+            {
+              "Str uses:": []
+            },
+            [
+              "debug",
+              "nouns",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": "Relate nouns to each other",
+          "Spec:with flow:slots:groups:": [
+            "relative_to_noun",
+            {
+              "flow phrase:trim:uses:": [
+                "The {$relation} of {$nouns} {$are_being} {$other_nouns}.",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "relation",
+                      "relation_name"
+                    ]
+                  },
+                  {
+                    "Term:type:repeats:": [
+                      "nouns",
+                      "named_noun",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:": "are_being"
+                  },
+                  {
+                    "Term:type:repeats:": [
+                      "other_nouns",
+                      "named_noun",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "nouns"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:groups:": [
+            "event_phase",
+            {
+              "Str exclusively:uses:": [
+                true,
+                [
+                  {
+                    "Option:": "before"
+                  },
+                  {
+                    "Option:label:": [
+                      "while",
+                      "during"
+                    ]
+                  },
+                  {
+                    "Option:": "after"
+                  }
+                ]
+              ]
+            },
+            [
+              "debug",
+              "events"
+            ]
+          ]
+        },
+        {
+          "--": "",
           "Spec:with flow:groups:": [
+            "named_property",
+            {
+              "flow phrase:trim:uses:": [
+                "named {$name} ( {$type} )",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:": [
+                      "of",
+                      "type",
+                      "text",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "debug",
+              "properties"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "paired_action",
+            {
+              "flow phrase:trim:uses:": [
+                "two {$kinds} ( the noun and other noun )",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "kinds",
+                      "plural_kinds"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "debug",
+              "events",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "aspect_property",
+            {
+              "flow phrase:trim:uses:": [
+                "an aspect {$aspect}",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "aspect",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "property_slot"
+            ],
+            [
+              "debug",
+              "properties"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
             "record_property",
             {
               "flow phrase:trim:uses:": [
@@ -1118,8 +683,404 @@
               ]
             },
             [
+              "property_slot"
+            ],
+            [
               "debug",
               "properties"
+            ]
+          ]
+        },
+        {
+          "--": "When called multiple times returns each of its inputs in turn, sticking to the last one.",
+          "Spec:with flow:slots:groups:": [
+            "stopping_text",
+            {
+              "flow phrase:trim:uses:": [
+                "stopping {$parts}",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "parts",
+                      "text_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "text_eval"
+            ],
+            [
+              "debug",
+              "stubs",
+              "output",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": "future: each slot should support an appropriate 'starting as' initial value",
+          "Spec:with slot:groups:": [
+            "property_slot",
+            {
+              "Slot": true
+            },
+            [
+              "debug",
+              "properties"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with swap:groups:": [
+            "relation_cardinality",
+            {
+              "Swap between:": [
+                {
+                  "Pick:": "one_to_one"
+                },
+                {
+                  "Pick:": "one_to_many"
+                },
+                {
+                  "Pick:": "many_to_one"
+                },
+                {
+                  "Pick:": "many_to_many"
+                }
+              ]
+            },
+            [
+              "debug",
+              "relations",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": "Determiners: modify a word they are associated to designate specificity or, sometimes, a count.  For instance: \"some\" fish hooks, \"a\" pineapple, \"75\" triangles, \"our\" Trevor.",
+          "Spec:with str:groups:": [
+            "determiner",
+            {
+              "Str uses:": [
+                {
+                  "Option:": "a"
+                },
+                {
+                  "Option:": "an"
+                },
+                {
+                  "Option:": "the"
+                },
+                {
+                  "Option:": "our"
+                }
+              ]
+            },
+            [
+              "debug",
+              "nouns"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:groups:": [
+            "ana",
+            {
+              "Str exclusively:uses:": [
+                true,
+                [
+                  {
+                    "Option:": "a"
+                  },
+                  {
+                    "Option:": "an"
+                  }
+                ]
+              ]
+            },
+            [
+              "debug",
+              "misc"
+            ]
+          ]
+        },
+        {
+          "--": "Run a series of tests.",
+          "Spec:with slot:groups:": [
+            "testing",
+            {
+              "Slot": true
+            },
+            [
+              "debug",
+              "tests"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "kinds_of_aspect",
+            {
+              "flow phrase:trim:uses:": [
+                "{$aspect} is a kind of value.",
+                true,
+                [
+                  {
+                    "Term:": "aspect"
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "traits"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:groups:": [
+            "aspect",
+            {
+              "Str uses:": []
+            },
+            [
+              "debug",
+              "traits",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:groups:": [
+            "pattern_type",
+            {
+              "Str uses:": [
+                {
+                  "Option:": "patterns"
+                },
+                {
+                  "Option:": "actions"
+                },
+                {
+                  "Option:": "events"
+                }
+              ]
+            },
+            [
+              "debug",
+              "patterns",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": "The plural name of a type of similar nouns.  For example: animals, containers, etc.",
+          "Spec:with str:groups:": [
+            "plural_kinds",
+            {
+              "Str uses:": []
+            },
+            [
+              "debug",
+              "kinds",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": "this cheats a bit by making the signature the same as the comment marker  that allows nodes which look like comments but are actually story breaks.",
+          "Spec:with flow:slots:groups:": [
+            "story_break",
+            {
+              "flow phrase:trim:uses:": [
+                "story_break",
+                true,
+                []
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "statements",
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Storage for values used during the execution of a pattern."
+          ],
+          "Spec:with flow:groups:": [
+            "pattern_locals",
+            {
+              "flow phrase:trim:uses:": [
+                "It provides {$locals}",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "locals",
+                      "property_slot",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "debug",
+              "patterns"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "text_property",
+            {
+              "flow phrase:trim:uses:": [
+                "some text named {$name} ( {$type} ) {$initially}",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:": [
+                      "of",
+                      "type",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "initially",
+                      "text_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "property_slot"
+            ],
+            [
+              "debug",
+              "properties"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "noun_relation_statement",
+            {
+              "flow phrase:trim:uses:": [
+                "{$nouns} {$noun_relation} {$more}.",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "nouns",
+                      "named_noun",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:": "noun_relation"
+                  },
+                  {
+                    "Term:name:type:optional:repeats:": [
+                      "and",
+                      "more",
+                      "noun_continuation",
+                      true,
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "nouns"
+            ]
+          ]
+        },
+        {
+          "--": "Describes a type of similar nouns.  For example: an animal, a container, etc.",
+          "Spec:with str:groups:": [
+            "singular_kind",
+            {
+              "Str uses:": []
+            },
+            [
+              "debug",
+              "kinds",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Add actions to a pattern.",
+            "Actions to take when using a pattern."
+          ],
+          "Spec:with flow:slots:groups:": [
+            "pattern_actions",
+            {
+              "flow phrase:trim:uses:": [
+                "To determine {$name} {$provides} do:{$pattern_rules}",
+                true,
+                [
+                  {
+                    "Term:name:type:": [
+                      "pattern name",
+                      "name",
+                      "pattern_name"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "provides",
+                      "pattern_locals",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:": "pattern_rules"
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "patterns"
             ]
           ]
         },
@@ -1164,128 +1125,6 @@
           ]
         },
         {
-          "--": "Describe test results",
-          "Spec:with flow:groups:": [
-            "test_statement",
-            {
-              "flow phrase:trim:uses:": [
-                "Expect {$test_name} to {$test}",
-                true,
-                [
-                  {
-                    "Term:": "test_name"
-                  },
-                  {
-                    "Term:name:type:": [
-                      "expectation",
-                      "test",
-                      "testing"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "tests",
-              "positioned"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Pattern parameters.",
-            "Storage for values used during the execution of a pattern."
-          ],
-          "Spec:with flow:groups:": [
-            "pattern_params",
-            {
-              "flow phrase:trim:uses:": [
-                "It requires {$props}",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "props",
-                      "property_slot",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "patterns"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "noun_kind_statement",
-            {
-              "flow phrase:trim:uses:": [
-                "{$nouns} {$kind_of_noun} {$more}.",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "nouns",
-                      "named_noun",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:name:": [
-                      "is a kind",
-                      "kind_of_noun"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:repeats:": [
-                      "and",
-                      "more",
-                      "noun_continuation",
-                      true,
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "nouns"
-            ]
-          ]
-        },
-        {
-          "--": "Phrases",
-          "Spec:with flow:groups:": [
-            "paragraph",
-            {
-              "flow phrase:trim:uses:": [
-                "{$story_statement}",
-                true,
-                [
-                  {
-                    "Term:optional:repeats:": [
-                      "story_statement",
-                      true,
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "statements"
-            ]
-          ]
-        },
-        {
           "--": "",
           "Spec:with flow:groups:": [
             "many_to_one",
@@ -1316,161 +1155,38 @@
           ]
         },
         {
-          "--": "this cheats a bit by making the signature the same as the comment marker  that allows nodes which look like comments but are actually story breaks.",
-          "Spec:with flow:groups:": [
-            "story_break",
+          "--": [
+            "The plural of person is people.",
+            "The plural of person is persons."
+          ],
+          "Spec:with flow:slots:groups:": [
+            "make_plural",
             {
               "flow phrase:trim:uses:": [
-                "story_break",
-                true,
-                []
-              ]
-            },
-            [
-              "debug",
-              "statements",
-              "internal"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "common_action",
-            {
-              "flow phrase:trim:uses:": [
-                "one {$kind} ( the noun ) {$action_context}",
+                "The plural of {$singular} is {$plural}.",
                 true,
                 [
                   {
                     "Term:type:": [
-                      "kind",
-                      "singular_kind"
+                      "singular",
+                      "text"
                     ]
-                  },
-                  {
-                    "Term:optional:": [
-                      "action_context",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "events",
-              "positioned"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with str:groups:": [
-            "abstract_action",
-            {
-              "Str exclusively:uses:": [
-                true,
-                [
-                  {
-                    "Option:": "nothing"
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "events"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with str:groups:": [
-            "property",
-            {
-              "Str uses:": []
-            },
-            [
-              "debug",
-              "properties",
-              "positioned"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "named_noun",
-            {
-              "flow phrase:trim:uses:": [
-                "{$determiner} {$name}",
-                true,
-                [
-                  {
-                    "Term:": "determiner"
                   },
                   {
                     "Term:type:": [
-                      "name",
-                      "noun_name"
+                      "plural",
+                      "text"
                     ]
                   }
                 ]
               ]
             },
             [
-              "debug",
-              "nouns"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with swap:groups:": [
-            "program_hook",
-            {
-              "Swap between:": [
-                {
-                  "Pick:label:": [
-                    "activity",
-                    "actions"
-                  ]
-                }
-              ]
-            },
+              "story_statement"
+            ],
             [
               "debug",
-              "patterns",
-              "positioned",
-              "modeling"
-            ]
-          ]
-        },
-        {
-          "--": "When called multiple times returns each of its inputs in turn, sticking to the last one.",
-          "Spec:with flow:groups:": [
-            "stopping_text",
-            {
-              "flow phrase:trim:uses:": [
-                "stopping {$parts}",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "parts",
-                      "text_eval",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "stubs",
-              "output",
-              "positioned"
+              "language"
             ]
           ]
         },
@@ -1498,44 +1214,29 @@
           ]
         },
         {
-          "--": [
-            "Add a note.",
-            "Information about the story for you and other authors."
-          ],
-          "Spec:with flow:groups:": [
-            "comment",
-            {
-              "flow phrase:trim:uses:": [
-                "Note: {$lines}",
-                true,
-                [
-                  {
-                    "Term:name:": [
-                      "comment",
-                      "lines"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "language"
-            ]
-          ]
-        },
-        {
           "--": "",
-          "Spec:with flow:groups:": [
-            "pattern_rules",
+          "Spec:with flow:slots:groups:": [
+            "noun_trait_statement",
             {
               "flow phrase:trim:uses:": [
-                "{$pattern_rule}",
+                "{$nouns} {$noun_traits} {$more}.",
                 true,
                 [
                   {
-                    "Term:optional:repeats:": [
-                      "pattern_rule",
+                    "Term:type:repeats:": [
+                      "nouns",
+                      "named_noun",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:": "noun_traits"
+                  },
+                  {
+                    "Term:name:type:optional:repeats:": [
+                      "and",
+                      "more",
+                      "noun_continuation",
                       true,
                       true
                     ]
@@ -1544,24 +1245,54 @@
               ]
             },
             [
+              "story_statement"
+            ],
+            [
               "debug",
-              "patterns"
+              "nouns"
+            ]
+          ]
+        },
+        {
+          "--": "Add traits to an aspect",
+          "Spec:with flow:slots:groups:": [
+            "aspect_traits",
+            {
+              "flow phrase:trim:uses:": [
+                "{$aspect} {$trait_phrase}",
+                true,
+                [
+                  {
+                    "Term:": "aspect"
+                  },
+                  {
+                    "Term:": "trait_phrase"
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "traits"
             ]
           ]
         },
         {
           "--": "",
           "Spec:with str:groups:": [
-            "ana",
+            "are_being",
             {
               "Str exclusively:uses:": [
                 true,
                 [
                   {
-                    "Option:": "a"
+                    "Option:": "are"
                   },
                   {
-                    "Option:": "an"
+                    "Option:": "is"
                   }
                 ]
               ]
@@ -1573,16 +1304,271 @@
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "noun_traits",
+          "--": "Declare a kind",
+          "Spec:with flow:slots:groups:": [
+            "kinds_of_kind",
             {
               "flow phrase:trim:uses:": [
-                "{$are_being} {$trait}",
+                "{$plural_kinds} are a kind of {$singular_kind}.",
                 true,
                 [
                   {
+                    "Term:": "plural_kinds"
+                  },
+                  {
+                    "Term:": "singular_kind"
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "kinds"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Leaving a room by by going through a door ( ex. departing the house via the front door... )."
+          ],
+          "Spec:with flow:slots:groups:": [
+            "map_departing",
+            {
+              "flow:uses:": [
+                "departing",
+                [
+                  {
+                    "Term:name:type:": [
+                      "from",
+                      "room",
+                      "named_noun"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "via",
+                      "door",
+                      "named_noun"
+                    ]
+                  },
+                  {
+                    "Term:name:": [
+                      "and",
+                      "map_connection"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "other_room",
+                      "named_noun"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "map_making",
+              "modeling"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with swap:groups:": [
+            "action_params",
+            {
+              "Swap between:": [
+                {
+                  "Pick:label:type:": [
+                    "dual",
+                    "two similar objects",
+                    "paired_action"
+                  ]
+                },
+                {
+                  "Pick:label:type:": [
+                    "none",
+                    "nothing",
+                    "abstract_action"
+                  ]
+                },
+                {
+                  "Pick:label:type:": [
+                    "common",
+                    "one or more objects",
+                    "common_action"
+                  ]
+                }
+              ]
+            },
+            [
+              "debug",
+              "events"
+            ]
+          ]
+        },
+        {
+          "--": "Give a kind a trait",
+          "Spec:with flow:slots:groups:": [
+            "certainties",
+            {
+              "flow phrase:trim:uses:": [
+                "{$plural_kinds} {$are_being} {$certainty} {$trait}.",
+                true,
+                [
+                  {
+                    "Term:": "plural_kinds"
+                  },
+                  {
                     "Term:": "are_being"
+                  },
+                  {
+                    "Term:": "certainty"
+                  },
+                  {
+                    "Term:": "trait"
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "properties"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Declare event listeners.",
+            "Listeners let objects in the game world react to changes before, during, or after they happen."
+          ],
+          "Spec:with flow:slots:groups:": [
+            "event_block",
+            {
+              "flow phrase:trim:uses:": [
+                "For {$target} {$handlers}",
+                true,
+                [
+                  {
+                    "Term:name:type:": [
+                      "the target",
+                      "target",
+                      "event_target"
+                    ]
+                  },
+                  {
+                    "Term:type:repeats:": [
+                      "handlers",
+                      "event_handler",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "events",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": "Add properties to a kind",
+          "Spec:with flow:slots:groups:": [
+            "kinds_have_properties",
+            {
+              "flow phrase:trim:uses:": [
+                "{$plural_kinds} have {$props}.",
+                true,
+                [
+                  {
+                    "Term:": "plural_kinds"
+                  },
+                  {
+                    "Term:type:repeats:": [
+                      "props",
+                      "property_slot",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "kinds"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Assign text to a noun.",
+            "Assign text.",
+            "Gives a noun one or more lines of text."
+          ],
+          "Spec:with flow:slots:groups:": [
+            "noun_assignment",
+            {
+              "flow phrase:trim:uses:": [
+                "The {$property} of {$nouns} is {$lines}",
+                true,
+                [
+                  {
+                    "Term:": "property"
+                  },
+                  {
+                    "Term:type:repeats:": [
+                      "nouns",
+                      "named_noun",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:name:": [
+                      "the text",
+                      "lines"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "properties"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "trait_phrase",
+            {
+              "flow phrase:trim:uses:": [
+                "{$are_either} {$trait}.",
+                true,
+                [
+                  {
+                    "Term:": "are_either"
                   },
                   {
                     "Term:repeats:": [
@@ -1595,244 +1581,7 @@
             },
             [
               "debug",
-              "nouns"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "paired_action",
-            {
-              "flow phrase:trim:uses:": [
-                "two {$kinds} ( the noun and other noun )",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "kinds",
-                      "plural_kinds"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "events",
-              "positioned"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Whether an trait applies to a kind of noun."
-          ],
-          "Spec:with str:groups:": [
-            "certainty",
-            {
-              "Str exclusively:uses:": [
-                true,
-                [
-                  {
-                    "Option:": "seldom"
-                  },
-                  {
-                    "Option:": "never"
-                  },
-                  {
-                    "Option:": "usually"
-                  },
-                  {
-                    "Option:": "always"
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "properties",
-              "positioned"
-            ]
-          ]
-        },
-        {
-          "--": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
-          "Spec:with flow:groups:": [
-            "action_decl",
-            {
-              "flow phrase:trim:uses:": [
-                "Agents can {$event} and {$action} requires {$action_params}.",
-                true,
-                [
-                  {
-                    "Term:name:type:": [
-                      "act",
-                      "event",
-                      "event_name"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "acting",
-                      "action",
-                      "action_name"
-                    ]
-                  },
-                  {
-                    "Term:": "action_params"
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "events"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "kind_of_noun",
-            {
-              "flow phrase:trim:uses:": [
-                "{$are_an} {$kind}",
-                true,
-                [
-                  {
-                    "Term:": "are_an"
-                  },
-                  {
-                    "Term:type:": [
-                      "kind",
-                      "singular_kind"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "nouns"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Add actions to a pattern.",
-            "Actions to take when using a pattern."
-          ],
-          "Spec:with flow:groups:": [
-            "pattern_actions",
-            {
-              "flow phrase:trim:uses:": [
-                "To determine {$name} {$provides} do:{$pattern_rules}",
-                true,
-                [
-                  {
-                    "Term:name:type:": [
-                      "pattern name",
-                      "name",
-                      "pattern_name"
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "provides",
-                      "pattern_locals",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:": "pattern_rules"
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "patterns"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Storage for values used during the execution of a pattern."
-          ],
-          "Spec:with flow:groups:": [
-            "pattern_locals",
-            {
-              "flow phrase:trim:uses:": [
-                "It provides {$locals}",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "locals",
-                      "property_slot",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "patterns"
-            ]
-          ]
-        },
-        {
-          "--": "Describes a type of similar nouns.  For example: an animal, a container, etc.",
-          "Spec:with str:groups:": [
-            "singular_kind",
-            {
-              "Str uses:": []
-            },
-            [
-              "debug",
-              "kinds",
-              "positioned"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with swap:groups:": [
-            "event_target",
-            {
-              "Swap between:": [
-                {
-                  "Pick:type:": [
-                    "kinds",
-                    "plural_kinds"
-                  ]
-                },
-                {
-                  "Pick:type:": [
-                    "noun",
-                    "named_noun"
-                  ]
-                }
-              ]
-            },
-            [
-              "debug",
-              "events"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with slot:groups:": [
-            "noun_continuation",
-            {
-              "Slot": true
-            },
-            [
-              "debug",
-              "nouns"
+              "traits"
             ]
           ]
         },
@@ -1852,87 +1601,61 @@
         },
         {
           "--": "",
-          "Spec:with str:groups:": [
-            "are_an",
+          "Spec:with flow:groups:": [
+            "story",
             {
-              "Str exclusively:uses:": [
+              "flow phrase:trim:uses:": [
+                "{$paragraph}",
                 true,
                 [
                   {
-                    "Option:label:": [
-                      "area",
-                      "are a"
+                    "Term:repeats:": [
+                      "paragraph",
+                      true
                     ]
-                  },
-                  {
-                    "Option:label:": [
-                      "arean",
-                      "are an"
-                    ]
-                  },
-                  {
-                    "Option:": "is"
-                  },
-                  {
-                    "Option:label:": [
-                      "isa",
-                      "is a"
-                    ]
-                  },
-                  {
-                    "Option:label:": [
-                      "isan",
-                      "is an"
-                    ]
-                  },
-                  {
-                    "Option:": "are"
                   }
                 ]
               ]
             },
             [
               "debug",
-              "misc"
+              "statements"
             ]
           ]
         },
         {
           "--": "",
           "Spec:with str:groups:": [
-            "trait",
+            "event_name",
             {
               "Str uses:": []
             },
             [
               "debug",
-              "traits",
+              "events",
               "positioned"
             ]
           ]
         },
         {
-          "--": [
-            "The plural of person is people.",
-            "The plural of person is persons."
-          ],
+          "--": "",
           "Spec:with flow:groups:": [
-            "make_plural",
+            "many_to_many",
             {
               "flow phrase:trim:uses:": [
-                "The plural of {$singular} is {$plural}.",
+                "many {$kinds} to many {$other_kinds}",
                 true,
                 [
                   {
                     "Term:type:": [
-                      "singular",
-                      "text"
+                      "kinds",
+                      "plural_kinds"
                     ]
                   },
                   {
                     "Term:type:": [
-                      "plural",
-                      "text"
+                      "other_kinds",
+                      "plural_kinds"
                     ]
                   }
                 ]
@@ -1940,7 +1663,140 @@
             },
             [
               "debug",
+              "relations"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "one_to_one",
+            {
+              "flow phrase:trim:uses:": [
+                "one {$kind} to one {$other_kind}",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "kind",
+                      "singular_kind"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "other_kind",
+                      "singular_kind"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "debug",
+              "relations"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Add a note.",
+            "Information about the story for you and other authors."
+          ],
+          "Spec:with flow:slots:groups:": [
+            "comment",
+            {
+              "flow phrase:trim:uses:": [
+                "Note: {$lines}",
+                true,
+                [
+                  {
+                    "Term:name:": [
+                      "comment",
+                      "lines"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement",
+              "execute"
+            ],
+            [
+              "debug",
               "language"
+            ]
+          ]
+        },
+        {
+          "--": "When called multiple times, returns each of its inputs in turn.",
+          "Spec:with flow:slots:groups:": [
+            "cycle_text",
+            {
+              "flow phrase:trim:uses:": [
+                "cycle {$parts}",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "parts",
+                      "text_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "text_eval"
+            ],
+            [
+              "debug",
+              "stubs",
+              "output",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "bool_property",
+            {
+              "flow phrase:trim:uses:": [
+                "a true/false value named {$name} ( {$type} ) {$initially}",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:": [
+                      "of",
+                      "type",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "initially",
+                      "bool_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "property_slot"
+            ],
+            [
+              "debug",
+              "properties"
             ]
           ]
         },
@@ -1977,6 +1833,110 @@
           ]
         },
         {
+          "--": "When called multiple times returns its inputs at random.",
+          "Spec:with flow:slots:groups:": [
+            "shuffle_text",
+            {
+              "flow phrase:trim:uses:": [
+                "shuffle {$parts}",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "parts",
+                      "text_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "text_eval"
+            ],
+            [
+              "debug",
+              "stubs",
+              "output",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:groups:": [
+            "trait",
+            {
+              "Str uses:": []
+            },
+            [
+              "debug",
+              "traits",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "named_noun",
+            {
+              "flow phrase:trim:uses:": [
+                "{$determiner} {$name}",
+                true,
+                [
+                  {
+                    "Term:": "determiner"
+                  },
+                  {
+                    "Term:type:": [
+                      "name",
+                      "noun_name"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "debug",
+              "nouns"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "kind_of_relation",
+            {
+              "flow phrase:trim:uses:": [
+                "{$relation} relates {$cardinality}",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "relation",
+                      "relation_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "cardinality",
+                      "relation_cardinality"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "relations"
+            ]
+          ]
+        },
+        {
           "--": "",
           "Spec:with flow:groups:": [
             "pattern_return",
@@ -2001,90 +1961,81 @@
           ]
         },
         {
-          "--": "Declare a kind",
+          "--": "",
           "Spec:with flow:groups:": [
-            "kinds_of_kind",
+            "story_lines",
             {
               "flow phrase:trim:uses:": [
-                "{$plural_kinds} are a kind of {$singular_kind}.",
+                "{$lines}",
                 true,
                 [
-                  {
-                    "Term:": "plural_kinds"
-                  },
-                  {
-                    "Term:": "singular_kind"
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "kinds"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Assign text to a noun.",
-            "Assign text.",
-            "Gives a noun one or more lines of text."
-          ],
-          "Spec:with flow:groups:": [
-            "noun_assignment",
-            {
-              "flow phrase:trim:uses:": [
-                "The {$property} of {$nouns} is {$lines}",
-                true,
-                [
-                  {
-                    "Term:": "property"
-                  },
                   {
                     "Term:type:repeats:": [
-                      "nouns",
-                      "named_noun",
+                      "lines",
+                      "story_statement",
                       true
                     ]
-                  },
-                  {
-                    "Term:name:": [
-                      "the text",
-                      "lines"
-                    ]
                   }
                 ]
               ]
             },
             [
               "debug",
-              "properties"
+              "statements",
+              "internal"
             ]
           ]
         },
         {
           "--": [
-            "Declare event listeners.",
-            "Listeners let objects in the game world react to changes before, during, or after they happen."
+            "Whether an trait applies to a kind of noun."
           ],
-          "Spec:with flow:groups:": [
-            "event_block",
+          "Spec:with str:groups:": [
+            "certainty",
             {
-              "flow phrase:trim:uses:": [
-                "For {$target} {$handlers}",
+              "Str exclusively:uses:": [
                 true,
                 [
                   {
-                    "Term:name:type:": [
-                      "the target",
-                      "target",
-                      "event_target"
+                    "Option:": "usually"
+                  },
+                  {
+                    "Option:": "always"
+                  },
+                  {
+                    "Option:": "seldom"
+                  },
+                  {
+                    "Option:": "never"
+                  }
+                ]
+              ]
+            },
+            [
+              "debug",
+              "properties",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "common_action",
+            {
+              "flow phrase:trim:uses:": [
+                "one {$kind} ( the noun ) {$action_context}",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "kind",
+                      "singular_kind"
                     ]
                   },
                   {
-                    "Term:type:repeats:": [
-                      "handlers",
-                      "event_handler",
+                    "Term:optional:": [
+                      "action_context",
                       true
                     ]
                   }
@@ -2099,8 +2050,278 @@
           ]
         },
         {
-          "--": "",
+          "--": "Read what the player types and turn it into actions.",
           "Spec:with flow:groups:": [
+            "grammar_decl",
+            {
+              "flow phrase:trim:uses:": [
+                "understand {$grammar}",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "grammar",
+                      "grammar_maker"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "debug",
+              "stubs",
+              "grammar"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Leaving a room by moving in a compass direction ( ex. heading east... )."
+          ],
+          "Spec:with flow:slots:groups:": [
+            "map_heading",
+            {
+              "flow:trim:uses:": [
+                "heading",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "dir",
+                      "map_direction"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "from",
+                      "room",
+                      "named_noun"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:": [
+                      "via",
+                      "door",
+                      "named_noun",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:name:": [
+                      "and",
+                      "map_connection"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "other_room",
+                      "named_noun"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "map_making",
+              "modeling"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:groups:": [
+            "are_an",
+            {
+              "Str exclusively:uses:": [
+                true,
+                [
+                  {
+                    "Option:": "is"
+                  },
+                  {
+                    "Option:label:": [
+                      "isa",
+                      "is a"
+                    ]
+                  },
+                  {
+                    "Option:label:": [
+                      "isan",
+                      "is an"
+                    ]
+                  },
+                  {
+                    "Option:": "are"
+                  },
+                  {
+                    "Option:label:": [
+                      "area",
+                      "are a"
+                    ]
+                  },
+                  {
+                    "Option:label:": [
+                      "arean",
+                      "are an"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "debug",
+              "misc"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "noun_kind_statement",
+            {
+              "flow phrase:trim:uses:": [
+                "{$nouns} {$kind_of_noun} {$more}.",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "nouns",
+                      "named_noun",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:name:": [
+                      "is a kind",
+                      "kind_of_noun"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:repeats:": [
+                      "and",
+                      "more",
+                      "noun_continuation",
+                      true,
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "nouns"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "record_list_property",
+            {
+              "flow phrase:trim:uses:": [
+                "a list of records named {$name} ( {$type} ) {$initially}",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:": [
+                      "of",
+                      "type",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "initially",
+                      "record_list_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "property_slot"
+            ],
+            [
+              "debug",
+              "properties"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:groups:": [
+            "test_name",
+            {
+              "Str uses:": [
+                {
+                  "Option:label:": [
+                    "current_test",
+                    "the test"
+                  ]
+                }
+              ]
+            },
+            [
+              "debug",
+              "tests",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "A guard which returns true based on a counter.",
+            "Counters start at zero and are incremented every time the guard gets checked."
+          ],
+          "Spec:with flow:slots:groups:": [
+            "count_of",
+            {
+              "flow phrase:trim:uses:": [
+                "trigger {$trigger} {$num}",
+                true,
+                [
+                  {
+                    "Term:": "trigger"
+                  },
+                  {
+                    "Term:type:": [
+                      "num",
+                      "number_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "bool_eval"
+            ],
+            [
+              "debug",
+              "stubs",
+              "logic",
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
             "noun_relation",
             {
               "flow phrase:trim:uses:": [
@@ -2130,38 +2351,27 @@
               ]
             },
             [
+              "noun_continuation"
+            ],
+            [
               "debug",
               "nouns"
             ]
           ]
         },
         {
-          "--": "Run a series of tests.",
-          "Spec:with slot:groups:": [
-            "testing",
-            {
-              "Slot": true
-            },
-            [
-              "debug",
-              "tests"
-            ]
-          ]
-        },
-        {
-          "--": "When called multiple times, returns each of its inputs in turn.",
+          "--": "",
           "Spec:with flow:groups:": [
-            "cycle_text",
+            "action_context",
             {
               "flow phrase:trim:uses:": [
-                "cycle {$parts}",
+                "and one {$kind} ( the other noun )",
                 true,
                 [
                   {
-                    "Term:type:repeats:": [
-                      "parts",
-                      "text_eval",
-                      true
+                    "Term:type:": [
+                      "kind",
+                      "singular_kind"
                     ]
                   }
                 ]
@@ -2169,29 +2379,175 @@
             },
             [
               "debug",
-              "stubs",
-              "output",
+              "events",
               "positioned"
             ]
           ]
         },
         {
-          "--": [
-            "Expect that a test uses 'Say' to print some specific text."
-          ],
-          "Spec:with flow:groups:": [
-            "test_output",
+          "--": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
+          "Spec:with flow:slots:groups:": [
+            "action_decl",
             {
               "flow phrase:trim:uses:": [
-                "output {$lines}.",
+                "Agents can {$event} and {$action} requires {$action_params}.",
                 true,
                 [
                   {
-                    "Term:": "lines"
+                    "Term:name:type:": [
+                      "act",
+                      "event",
+                      "event_name"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "acting",
+                      "action",
+                      "action_name"
+                    ]
+                  },
+                  {
+                    "Term:": "action_params"
                   }
                 ]
               ]
             },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "events"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "one_to_many",
+            {
+              "flow phrase:trim:uses:": [
+                "one {$kind} to many {$kinds}",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "kind",
+                      "singular_kind"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "kinds",
+                      "plural_kinds"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "debug",
+              "relations"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with swap:groups:": [
+            "program_hook",
+            {
+              "Swap between:": [
+                {
+                  "Pick:label:": [
+                    "activity",
+                    "actions"
+                  ]
+                }
+              ]
+            },
+            [
+              "debug",
+              "patterns",
+              "positioned",
+              "modeling"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:groups:": [
+            "abstract_action",
+            {
+              "Str exclusively:uses:": [
+                true,
+                [
+                  {
+                    "Option:": "nothing"
+                  }
+                ]
+              ]
+            },
+            [
+              "debug",
+              "events"
+            ]
+          ]
+        },
+        {
+          "--": "The opposite of east is west.",
+          "Spec:with flow:slots:groups:": [
+            "make_opposite",
+            {
+              "flow phrase:trim:uses:": [
+                "The opposite of {$word} is the {$opposite}.",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "word",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "opposite",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "language"
+            ]
+          ]
+        },
+        {
+          "--": "Create a scene for testing",
+          "Spec:with flow:slots:groups:": [
+            "test_scene",
+            {
+              "flow phrase:trim:uses:": [
+                "While testing {$test_name}: {$story}",
+                true,
+                [
+                  {
+                    "Term:": "test_name"
+                  },
+                  {
+                    "Term:": "story"
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
             [
               "debug",
               "tests"
@@ -2199,30 +2555,61 @@
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "noun_trait_statement",
+          "--": "Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.  Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation.",
+          "Spec:with flow:slots:groups:": [
+            "pattern_decl",
             {
               "flow phrase:trim:uses:": [
-                "{$nouns} {$noun_traits} {$more}.",
+                "To determine {$name} {$params} {$pattern_return}.",
                 true,
                 [
                   {
-                    "Term:type:repeats:": [
-                      "nouns",
-                      "named_noun",
+                    "Term:type:": [
+                      "name",
+                      "pattern_name"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "params",
+                      "pattern_params",
                       true
                     ]
                   },
                   {
-                    "Term:": "noun_traits"
-                  },
+                    "Term:optional:": [
+                      "pattern_return",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "patterns"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Pattern parameters.",
+            "Storage for values used during the execution of a pattern."
+          ],
+          "Spec:with flow:groups:": [
+            "pattern_params",
+            {
+              "flow phrase:trim:uses:": [
+                "It requires {$props}",
+                true,
+                [
                   {
-                    "Term:name:type:optional:repeats:": [
-                      "and",
-                      "more",
-                      "noun_continuation",
-                      true,
+                    "Term:type:repeats:": [
+                      "props",
+                      "property_slot",
                       true
                     ]
                   }
@@ -2231,13 +2618,13 @@
             },
             [
               "debug",
-              "nouns"
+              "patterns"
             ]
           ]
         },
         {
           "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:with flow:slots:groups:": [
             "text_list_property",
             {
               "flow phrase:trim:uses:": [
@@ -2269,271 +2656,8 @@
               ]
             },
             [
-              "debug",
-              "properties"
-            ]
-          ]
-        },
-        {
-          "--": "Read what the player types and turn it into actions.",
-          "Spec:with flow:groups:": [
-            "grammar_decl",
-            {
-              "flow phrase:trim:uses:": [
-                "understand {$grammar}",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "grammar",
-                      "grammar_maker"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "stubs",
-              "grammar"
-            ]
-          ]
-        },
-        {
-          "--": "The plural name of a type of similar nouns.  For example: animals, containers, etc.",
-          "Spec:with str:groups:": [
-            "plural_kinds",
-            {
-              "Str uses:": []
-            },
-            [
-              "debug",
-              "kinds",
-              "positioned"
-            ]
-          ]
-        },
-        {
-          "--": "Relate nouns to each other",
-          "Spec:with flow:groups:": [
-            "relative_to_noun",
-            {
-              "flow phrase:trim:uses:": [
-                "The {$relation} of {$nouns} {$are_being} {$other_nouns}.",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "relation",
-                      "relation_name"
-                    ]
-                  },
-                  {
-                    "Term:type:repeats:": [
-                      "nouns",
-                      "named_noun",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:": "are_being"
-                  },
-                  {
-                    "Term:type:repeats:": [
-                      "other_nouns",
-                      "named_noun",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "nouns"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "kind_of_relation",
-            {
-              "flow phrase:trim:uses:": [
-                "{$relation} relates {$cardinality}",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "relation",
-                      "relation_name"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "cardinality",
-                      "relation_cardinality"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "relations"
-            ]
-          ]
-        },
-        {
-          "--": "Noun name: Some specific person, place, or thing; or, more rarely, a kind.  Proper names are usually capitalized:  For example, maybe: 'Haruki', 'Jane', or 'Toronto'.  Common names are usually not capitalized. For example, maybe: 'table', 'chair', or 'dog park'.  A set of duplicate object uses their kind. For instance: twelve 'cats'.`",
-          "Spec:with str:groups:": [
-            "noun_name",
-            {
-              "Str uses:": []
-            },
-            [
-              "debug",
-              "nouns",
-              "positioned"
-            ]
-          ]
-        },
-        {
-          "--": "Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.  Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation.",
-          "Spec:with flow:groups:": [
-            "pattern_decl",
-            {
-              "flow phrase:trim:uses:": [
-                "To determine {$name} {$params} {$pattern_return}.",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "pattern_name"
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "params",
-                      "pattern_params",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:optional:": [
-                      "pattern_return",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "patterns"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with str:groups:": [
-            "aspect",
-            {
-              "Str uses:": []
-            },
-            [
-              "debug",
-              "traits",
-              "positioned"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "num_list_property",
-            {
-              "flow phrase:trim:uses:": [
-                "a list of nums named {$name} ( {$type} ) {$initially}",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:": [
-                      "of",
-                      "type",
-                      "text",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "initially",
-                      "num_list_eval",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "properties"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with str:groups:": [
-            "are_being",
-            {
-              "Str exclusively:uses:": [
-                true,
-                [
-                  {
-                    "Option:": "are"
-                  },
-                  {
-                    "Option:": "is"
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "misc"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with str:groups:": [
-            "are_either",
-            {
-              "Str exclusively:uses:": [
-                true,
-                [
-                  {
-                    "Option:label:": [
-                      "canbe",
-                      "can be"
-                    ]
-                  },
-                  {
-                    "Option:label:": [
-                      "either",
-                      "are either"
-                    ]
-                  }
-                ]
-              ]
-            },
+              "property_slot"
+            ],
             [
               "debug",
               "properties"

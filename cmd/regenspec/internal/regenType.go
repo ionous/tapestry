@@ -28,7 +28,8 @@ func (t *Type) Uses() string {
 
 func (t *Type) Slots() []string {
 	if t.slots == nil {
-		t.slots = ListOf("slots", t.m)
+		w := MapOf("with", t.m)
+		t.slots = ListOf("slots", w)
 	}
 	return t.slots
 }

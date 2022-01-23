@@ -10,122 +10,62 @@
       "Group contains:": [
         {
           "--": "",
-          "Spec:with flow:groups:": [
-            "one_one",
+          "Spec:with flow:slots:": [
+            "eph_relations",
             {
               "flow:trim:uses:": [
-                "kind",
+                "eph",
                 true,
                 [
                   {
                     "Term:type:": [
-                      "kind",
+                      "rel",
                       "text"
                     ]
                   },
                   {
                     "Term:name:type:": [
-                      "to_kind",
-                      "other_kind",
-                      "text"
+                      "relate",
+                      "cardinality",
+                      "eph_cardinality"
                     ]
                   }
                 ]
               ]
             },
             [
-              "eph_relation_helpers"
+              "ephemera"
             ]
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:": [
-            "eph_params",
-            {
-              "flow:uses:": [
-                "eph",
-                [
-                  {
-                    "Term:name:": [
-                      "have",
-                      "affinity"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "called",
-                      "name",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:": [
-                      "of",
-                      "class",
-                      "text",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "initially",
-                      "assignment",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with str:groups:": [
-            "eph_timing",
+          "--": "Indicates storage for fields and other properties.",
+          "Spec:with str:": [
+            "affinity",
             {
               "Str exclusively:uses:": [
                 true,
                 [
                   {
-                    "Option:": "before"
+                    "Option:": "bool"
                   },
                   {
-                    "Option:": "during"
+                    "Option:": "number"
                   },
                   {
-                    "Option:": "after"
+                    "Option:": "num_list"
                   },
                   {
-                    "Option:": "later"
-                  }
-                ]
-              ]
-            },
-            [
-              "eph_pattern_helpers"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:": [
-            "eph_plurals",
-            {
-              "flow:uses:": [
-                "eph",
-                [
-                  {
-                    "Term:type:": [
-                      "plural",
-                      "text"
-                    ]
+                    "Option:": "text"
                   },
                   {
-                    "Term:type:": [
-                      "singular",
-                      "text"
-                    ]
+                    "Option:": "text_list"
+                  },
+                  {
+                    "Option:": "record"
+                  },
+                  {
+                    "Option:": "record_list"
                   }
                 ]
               ]
@@ -134,60 +74,36 @@
         },
         {
           "--": "",
-          "Spec:with swap:groups:": [
-            "eph_cardinality",
-            {
-              "Swap between:": [
-                {
-                  "Pick:": "one_one"
-                },
-                {
-                  "Pick:": "one_many"
-                },
-                {
-                  "Pick:": "many_one"
-                },
-                {
-                  "Pick:": "many_many"
-                }
-              ]
-            },
-            [
-              "eph_relation_helpers"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:": [
-            "eph_aliases",
+          "Spec:with flow:slots:": [
+            "eph_directives",
             {
               "flow:uses:": [
                 "eph",
                 [
                   {
                     "Term:name:type:": [
-                      "understand",
-                      "short_name",
+                      "go",
+                      "name",
                       "text"
                     ]
                   },
                   {
-                    "Term:name:type:repeats:": [
-                      "as",
-                      "aliases",
-                      "text",
-                      true
+                    "Term:name:": [
+                      "parse",
+                      "directive"
                     ]
                   }
                 ]
               ]
-            }
+            },
+            [
+              "ephemera"
+            ]
           ]
         },
         {
           "--": "",
-          "Spec:with flow:": [
+          "Spec:with flow:slots:": [
             "eph_rules",
             {
               "flow:uses:": [
@@ -236,12 +152,77 @@
                   }
                 ]
               ]
-            }
+            },
+            [
+              "ephemera"
+            ]
           ]
         },
         {
           "--": "",
           "Spec:with flow:": [
+            "eph_at",
+            {
+              "flow:uses:": [
+                "eph",
+                [
+                  {
+                    "Term:type:": [
+                      "at",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "eph",
+                      "ephemera"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
+            "eph_relatives",
+            {
+              "flow:trim:uses:": [
+                "eph",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "rel",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "relates",
+                      "noun",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "to",
+                      "other_noun",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "ephemera"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
             "eph_begin_domain",
             {
               "flow:uses:": [
@@ -263,16 +244,107 @@
                   }
                 ]
               ]
-            }
+            },
+            [
+              "ephemera"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
+            "eph_refs",
+            {
+              "flow:uses:": [
+                "eph",
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "refs",
+                      "ephemera",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "ephemera"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
+            "eph_end_domain",
+            {
+              "flow:uses:": [
+                "eph",
+                [
+                  {
+                    "Term:name:type:": [
+                      "domain",
+                      "name",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "ephemera"
+            ]
           ]
         },
         {
           "--": "",
           "Spec:with flow:": [
-            "eph_kinds",
+            "eph_params",
             {
               "flow:uses:": [
                 "eph",
+                [
+                  {
+                    "Term:name:": [
+                      "have",
+                      "affinity"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "called",
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:": [
+                      "of",
+                      "class",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "initially",
+                      "assignment",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:groups:": [
+            "many_one",
+            {
+              "flow:trim:uses:": [
+                "kinds",
+                true,
                 [
                   {
                     "Term:type:": [
@@ -281,21 +353,310 @@
                     ]
                   },
                   {
+                    "Term:name:type:": [
+                      "to_kind",
+                      "other_kind",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "eph_relation_helpers"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
+            "eph_aliases",
+            {
+              "flow:uses:": [
+                "eph",
+                [
+                  {
+                    "Term:name:type:": [
+                      "understand",
+                      "short_name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                      "as",
+                      "aliases",
+                      "text",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "ephemera"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
+            "eph_opposites",
+            {
+              "flow:uses:": [
+                "eph",
+                [
+                  {
                     "Term:type:": [
-                      "from",
+                      "opposite",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "word",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "ephemera"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
+            "eph_plurals",
+            {
+              "flow:uses:": [
+                "eph",
+                [
+                  {
+                    "Term:type:": [
+                      "plural",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "singular",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "ephemera"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
+            "eph_values",
+            {
+              "flow:uses:": [
+                "eph",
+                [
+                  {
+                    "Term:type:": [
+                      "noun",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "has",
+                      "field",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:repeats:": [
+                      "path",
+                      "text",
+                      true,
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "value",
+                      "literal_value"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "ephemera"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
+            "eph_aspects",
+            {
+              "flow:uses:": [
+                "eph",
+                [
+                  {
+                    "Term:type:": [
+                      "aspects",
                       "text"
                     ]
                   },
                   {
                     "Term:type:repeats:": [
-                      "contain",
-                      "eph_params",
+                      "traits",
+                      "text",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "ephemera"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:": [
+            "eph_list",
+            {
+              "flow:uses:": [
+                "eph",
+                [
+                  {
+                    "Term:name:type:repeats:": [
+                      "list",
+                      "all",
+                      "eph_at",
                       true
                     ]
                   }
                 ]
               ]
             }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
+            "eph_nouns",
+            {
+              "flow:uses:": [
+                "eph",
+                [
+                  {
+                    "Term:type:": [
+                      "noun",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "kind",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "ephemera"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
+            "eph_patterns",
+            {
+              "flow:uses:": [
+                "eph",
+                [
+                  {
+                    "Term:name:type:": [
+                      "pattern",
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:repeats:": [
+                      "with",
+                      "params",
+                      "eph_params",
+                      true,
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:repeats:": [
+                      "locals",
+                      "eph_params",
+                      true,
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "result",
+                      "eph_params",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "ephemera"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
+            "eph_checks",
+            {
+              "flow:uses:": [
+                "eph",
+                [
+                  {
+                    "Term:name:type:": [
+                      "check",
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "expect",
+                      "literal_value",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "do",
+                      "exe",
+                      "execute"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "ephemera"
+            ]
           ]
         },
         {
@@ -339,6 +700,41 @@
         },
         {
           "--": "",
+          "Spec:with flow:slots:": [
+            "eph_kinds",
+            {
+              "flow:uses:": [
+                "eph",
+                [
+                  {
+                    "Term:type:": [
+                      "kinds",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "from",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:repeats:": [
+                      "contain",
+                      "eph_params",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "ephemera"
+            ]
+          ]
+        },
+        {
+          "--": "",
           "Spec:with str:groups:": [
             "eph_always",
             {
@@ -358,109 +754,16 @@
         },
         {
           "--": "",
-          "Spec:with flow:": [
-            "eph_values",
-            {
-              "flow:uses:": [
-                "eph",
-                [
-                  {
-                    "Term:type:": [
-                      "noun",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "has",
-                      "field",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:optional:repeats:": [
-                      "path",
-                      "text",
-                      true,
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "value",
-                      "literal_value"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:": [
-            "eph_relations",
-            {
-              "flow:trim:uses:": [
-                "eph",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "rel",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "relate",
-                      "cardinality",
-                      "eph_cardinality"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:": [
-            "eph_directives",
-            {
-              "flow:uses:": [
-                "eph",
-                [
-                  {
-                    "Term:name:type:": [
-                      "go",
-                      "name",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:name:": [
-                      "parse",
-                      "directive"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "",
           "Spec:with flow:groups:": [
-            "many_one",
+            "one_one",
             {
               "flow:trim:uses:": [
-                "kinds",
+                "kind",
                 true,
                 [
                   {
                     "Term:type:": [
-                      "kinds",
+                      "kind",
                       "text"
                     ]
                   },
@@ -481,87 +784,27 @@
         },
         {
           "--": "",
-          "Spec:with flow:": [
-            "eph_nouns",
+          "Spec:with swap:groups:": [
+            "eph_cardinality",
             {
-              "flow:uses:": [
-                "eph",
-                [
-                  {
-                    "Term:type:": [
-                      "noun",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "kind",
-                      "text"
-                    ]
-                  }
-                ]
+              "Swap between:": [
+                {
+                  "Pick:": "one_one"
+                },
+                {
+                  "Pick:": "one_many"
+                },
+                {
+                  "Pick:": "many_one"
+                },
+                {
+                  "Pick:": "many_many"
+                }
               ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:": [
-            "eph_relatives",
-            {
-              "flow:trim:uses:": [
-                "eph",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "rel",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "relates",
-                      "noun",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "to",
-                      "other_noun",
-                      "text"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:": [
-            "eph_aspects",
-            {
-              "flow:uses:": [
-                "eph",
-                [
-                  {
-                    "Term:type:": [
-                      "aspects",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:repeats:": [
-                      "traits",
-                      "text",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
+            },
+            [
+              "eph_relation_helpers"
+            ]
           ]
         },
         {
@@ -595,226 +838,31 @@
           ]
         },
         {
-          "--": "Indicates storage for fields and other properties.",
-          "Spec:with str:": [
-            "affinity",
+          "--": "",
+          "Spec:with str:groups:": [
+            "eph_timing",
             {
               "Str exclusively:uses:": [
                 true,
                 [
                   {
-                    "Option:": "num_list"
+                    "Option:": "during"
                   },
                   {
-                    "Option:": "text"
+                    "Option:": "after"
                   },
                   {
-                    "Option:": "text_list"
+                    "Option:": "later"
                   },
                   {
-                    "Option:": "record"
-                  },
-                  {
-                    "Option:": "record_list"
-                  },
-                  {
-                    "Option:": "bool"
-                  },
-                  {
-                    "Option:": "number"
+                    "Option:": "before"
                   }
                 ]
               ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:": [
-            "eph_refs",
-            {
-              "flow:uses:": [
-                "eph",
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "refs",
-                      "ephemera",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:": [
-            "eph_checks",
-            {
-              "flow:uses:": [
-                "eph",
-                [
-                  {
-                    "Term:name:type:": [
-                      "check",
-                      "name",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "expect",
-                      "literal_value",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "do",
-                      "exe",
-                      "execute"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:": [
-            "eph_end_domain",
-            {
-              "flow:uses:": [
-                "eph",
-                [
-                  {
-                    "Term:name:type:": [
-                      "domain",
-                      "name",
-                      "text"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:": [
-            "eph_at",
-            {
-              "flow:uses:": [
-                "eph",
-                [
-                  {
-                    "Term:type:": [
-                      "at",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "eph",
-                      "ephemera"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:": [
-            "eph_opposites",
-            {
-              "flow:uses:": [
-                "eph",
-                [
-                  {
-                    "Term:type:": [
-                      "opposite",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "word",
-                      "text"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:": [
-            "eph_list",
-            {
-              "flow:uses:": [
-                "eph",
-                [
-                  {
-                    "Term:name:type:repeats:": [
-                      "list",
-                      "all",
-                      "eph_at",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:": [
-            "eph_patterns",
-            {
-              "flow:uses:": [
-                "eph",
-                [
-                  {
-                    "Term:name:type:": [
-                      "pattern",
-                      "name",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:repeats:": [
-                      "with",
-                      "params",
-                      "eph_params",
-                      true,
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:repeats:": [
-                      "locals",
-                      "eph_params",
-                      true,
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "result",
-                      "eph_params",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
+            },
+            [
+              "eph_pattern_helpers"
+            ]
           ]
         }
       ]

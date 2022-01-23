@@ -6,129 +6,6 @@
       "Group contains:": [
         {
           "--": "",
-          "Spec:with flow:groups:": [
-            "render_pattern",
-            {
-              "flow:trim:uses:": [
-                "render",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "call",
-                      "call_pattern"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "internal"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "returns the value of a variable or the id of an object."
-          ],
-          "Spec:with flow:groups:": [
-            "render_ref",
-            {
-              "flow:trim:uses:": [
-                "render_ref",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "variable_name"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "flags",
-                      "render_flags"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "internal"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "render_field",
-            {
-              "flow:trim:uses:": [
-                "render_field",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "text_eval"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "internal"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "render_name",
-            {
-              "flow:trim:uses:": [
-                "render_name",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "text"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "internal"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "render_exp",
-            {
-              "flow:trim:uses:": [
-                "render_exp",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "expression",
-                      "text_eval"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "internal"
-            ]
-          ]
-        },
-        {
-          "--": "",
           "Spec:with str:": [
             "render_flags",
             {
@@ -156,6 +33,147 @@
                 ]
               ]
             }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "render_field",
+            {
+              "flow:trim:uses:": [
+                "render_field",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "from_source_fields"
+            ],
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "render_exp",
+            {
+              "flow:trim:uses:": [
+                "render_exp",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "expression",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "text_eval"
+            ],
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "returns the value of a variable or the id of an object."
+          ],
+          "Spec:with flow:slots:groups:": [
+            "render_ref",
+            {
+              "flow:trim:uses:": [
+                "render_ref",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "variable_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "flags",
+                      "render_flags"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "assignment",
+              "number_eval",
+              "text_eval"
+            ],
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "render_pattern",
+            {
+              "flow:trim:uses:": [
+                "render",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "call",
+                      "call_pattern"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "assignment",
+              "text_eval"
+            ],
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "render_name",
+            {
+              "flow:trim:uses:": [
+                "render_name",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "text_eval"
+            ],
+            [
+              "internal"
+            ]
           ]
         }
       ]
