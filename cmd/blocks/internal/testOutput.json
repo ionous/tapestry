@@ -1,0 +1,731 @@
+[
+  {
+    "type": "bool_value",
+    "colour": "%{BKY_LOGIC_HUE}",
+    "output": [
+      "bool_value",
+      "bool_eval",
+      "literal_value"
+    ],
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "bool"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "bool"
+      },
+      {
+        "type": "field_input"
+      },
+      {
+        "name": "BOOL",
+        "type": "input_dummy"
+      }
+    ],
+    "message0": "%1%2%3%4%5",
+    "mutator": "tapestry_generic_mutation",
+    "customData": {
+      "muiData": {
+        "CLASS": [
+          {
+            "type": "field_label",
+            "text": "class"
+          },
+          {
+            "type": "field_input"
+          },
+          {
+            "name": "CLASS",
+            "type": "input_dummy"
+          }
+        ]
+      }
+    },
+    "tooltip": "Specify an explicit true or false."
+  },
+  {
+    "type": "_bool_value_mutator",
+    "style": "logic_blocks",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "bool_value"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "class"
+      },
+      {
+        "type": "field_checkbox",
+        "name": "class_edit"
+      },
+      {
+        "name": "CLASS",
+        "type": "input_dummy"
+      }
+    ],
+    "message0": "%1%2%3%4%5"
+  },
+  {
+    "type": "field_value",
+    "colour": "%{BKY_COLOUR_HUE}",
+    "output": [
+      "field_value"
+    ],
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "field"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "field"
+      },
+      {
+        "type": "field_input"
+      },
+      {
+        "name": "FIELD",
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "value"
+      },
+      {
+        "name": "VALUE",
+        "check": "literal_value",
+        "type": "input_value"
+      }
+    ],
+    "message0": "%1%2%3%4%5%6%7",
+    "tooltip": "A fixed value of a record."
+  },
+  {
+    "type": "_field_value_mutator",
+    "style": "logic_blocks",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "field_value"
+      },
+      {
+        "type": "input_dummy"
+      }
+    ],
+    "message0": "%1%2"
+  },
+  {
+    "type": "field_values",
+    "colour": "%{BKY_MATH_HUE}",
+    "output": [
+      "field_values",
+      "literal_value"
+    ],
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "fields"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "contains"
+      },
+      {
+        "name": "CONTAINS0",
+        "check": "field_value",
+        "type": "input_value"
+      }
+    ],
+    "message0": "%1%2%3%4",
+    "mutator": "tapestry_generic_mutation",
+    "customData": {
+      "muiData": {
+        "CONTAINS": [
+          {
+            "type": "field_label",
+            "text": "contains"
+          },
+          {
+            "name": "CONTAINS",
+            "check": "field_value",
+            "type": "input_value"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "_field_values_mutator",
+    "style": "logic_blocks",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "field_values"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "contains"
+      },
+      {
+        "type": "field_number",
+        "min": 1,
+        "precision": 1,
+        "name": "contains_edit"
+      },
+      {
+        "name": "CONTAINS",
+        "type": "input_dummy"
+      }
+    ],
+    "message0": "%1%2%3%4%5"
+  },
+  {
+    "type": "num_value",
+    "colour": "%{BKY_MATH_HUE}",
+    "output": [
+      "num_value",
+      "number_eval",
+      "literal_value"
+    ],
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "num"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "num"
+      },
+      {
+        "type": "field_number"
+      },
+      {
+        "name": "NUM",
+        "type": "input_dummy"
+      }
+    ],
+    "message0": "%1%2%3%4%5",
+    "mutator": "tapestry_generic_mutation",
+    "customData": {
+      "muiData": {
+        "CLASS": [
+          {
+            "type": "field_label",
+            "text": "class"
+          },
+          {
+            "type": "field_input"
+          },
+          {
+            "name": "CLASS",
+            "type": "input_dummy"
+          }
+        ]
+      }
+    },
+    "tooltip": "Specify a particular number."
+  },
+  {
+    "type": "_num_value_mutator",
+    "style": "logic_blocks",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "num_value"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "class"
+      },
+      {
+        "type": "field_checkbox",
+        "name": "class_edit"
+      },
+      {
+        "name": "CLASS",
+        "type": "input_dummy"
+      }
+    ],
+    "message0": "%1%2%3%4%5"
+  },
+  {
+    "type": "num_values",
+    "colour": "%{BKY_MATH_HUE}",
+    "output": [
+      "num_values",
+      "num_list_eval",
+      "literal_value"
+    ],
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "nums"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "values"
+      },
+      {
+        "type": "field_number"
+      },
+      {
+        "name": "VALUES0",
+        "type": "input_dummy"
+      }
+    ],
+    "message0": "%1%2%3%4%5",
+    "mutator": "tapestry_generic_mutation",
+    "customData": {
+      "muiData": {
+        "VALUES": [
+          {
+            "type": "field_label",
+            "text": "values"
+          },
+          {
+            "type": "field_number"
+          },
+          {
+            "name": "VALUES",
+            "type": "input_dummy"
+          }
+        ],
+        "CLASS": [
+          {
+            "type": "field_label",
+            "text": "class"
+          },
+          {
+            "type": "field_input"
+          },
+          {
+            "name": "CLASS",
+            "type": "input_dummy"
+          }
+        ]
+      }
+    },
+    "tooltip": "Number List: Specify a list of numbers."
+  },
+  {
+    "type": "_num_values_mutator",
+    "style": "logic_blocks",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "num_values"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "values"
+      },
+      {
+        "type": "field_number",
+        "min": 1,
+        "precision": 1,
+        "name": "values_edit"
+      },
+      {
+        "name": "VALUES",
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "class"
+      },
+      {
+        "type": "field_checkbox",
+        "name": "class_edit"
+      },
+      {
+        "name": "CLASS",
+        "type": "input_dummy"
+      }
+    ],
+    "message0": "%1%2%3%4%5%6%7%8"
+  },
+  {
+    "type": "record_value",
+    "colour": "%{BKY_LISTS_HUE}",
+    "output": [
+      "record_value",
+      "record_eval",
+      "literal_value"
+    ],
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "rec"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "kind"
+      },
+      {
+        "type": "field_input"
+      },
+      {
+        "name": "KIND",
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "fields"
+      },
+      {
+        "name": "FIELDS0",
+        "check": "field_value",
+        "type": "input_value"
+      }
+    ],
+    "message0": "%1%2%3%4%5%6%7",
+    "mutator": "tapestry_generic_mutation",
+    "customData": {
+      "muiData": {
+        "FIELDS": [
+          {
+            "type": "field_label",
+            "text": "fields"
+          },
+          {
+            "name": "FIELDS",
+            "check": "field_value",
+            "type": "input_value"
+          }
+        ]
+      }
+    },
+    "tooltip": "Specify a record composed of literal values."
+  },
+  {
+    "type": "_record_value_mutator",
+    "style": "logic_blocks",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "record_value"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "fields"
+      },
+      {
+        "type": "field_number",
+        "min": 1,
+        "precision": 1,
+        "name": "fields_edit"
+      },
+      {
+        "name": "FIELDS",
+        "type": "input_dummy"
+      }
+    ],
+    "message0": "%1%2%3%4%5"
+  },
+  {
+    "type": "record_values",
+    "colour": "%{BKY_LISTS_HUE}",
+    "output": [
+      "record_values",
+      "record_list_eval",
+      "literal_value"
+    ],
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "recs"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "kind"
+      },
+      {
+        "type": "field_input"
+      },
+      {
+        "name": "KIND",
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "containing"
+      },
+      {
+        "name": "ELS0",
+        "check": "field_values",
+        "type": "input_value"
+      }
+    ],
+    "message0": "%1%2%3%4%5%6%7",
+    "mutator": "tapestry_generic_mutation",
+    "customData": {
+      "muiData": {
+        "ELS": [
+          {
+            "type": "field_label",
+            "text": "containing"
+          },
+          {
+            "name": "ELS",
+            "check": "field_values",
+            "type": "input_value"
+          }
+        ]
+      }
+    },
+    "tooltip": "Specify a series of records, all of the same kind."
+  },
+  {
+    "type": "_record_values_mutator",
+    "style": "logic_blocks",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "record_values"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "containing"
+      },
+      {
+        "type": "field_number",
+        "min": 1,
+        "precision": 1,
+        "name": "els_edit"
+      },
+      {
+        "name": "ELS",
+        "type": "input_dummy"
+      }
+    ],
+    "message0": "%1%2%3%4%5"
+  },
+  {
+    "type": "text_value",
+    "colour": "%{BKY_TEXTS_HUE}",
+    "output": [
+      "text_value",
+      "text_eval",
+      "literal_value"
+    ],
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "txt"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "text"
+      },
+      {
+        "type": "field_input"
+      },
+      {
+        "name": "TEXT",
+        "type": "input_dummy"
+      }
+    ],
+    "message0": "%1%2%3%4%5",
+    "mutator": "tapestry_generic_mutation",
+    "customData": {
+      "muiData": {
+        "CLASS": [
+          {
+            "type": "field_label",
+            "text": "class"
+          },
+          {
+            "type": "field_input"
+          },
+          {
+            "name": "CLASS",
+            "type": "input_dummy"
+          }
+        ]
+      }
+    },
+    "tooltip": "Specify a small bit of text."
+  },
+  {
+    "type": "_text_value_mutator",
+    "style": "logic_blocks",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "text_value"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "class"
+      },
+      {
+        "type": "field_checkbox",
+        "name": "class_edit"
+      },
+      {
+        "name": "CLASS",
+        "type": "input_dummy"
+      }
+    ],
+    "message0": "%1%2%3%4%5"
+  },
+  {
+    "type": "text_values",
+    "colour": "%{BKY_TEXTS_HUE}",
+    "output": [
+      "text_values",
+      "text_list_eval",
+      "literal_value"
+    ],
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "txts"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "values"
+      },
+      {
+        "type": "field_input"
+      },
+      {
+        "name": "VALUES0",
+        "type": "input_dummy"
+      }
+    ],
+    "message0": "%1%2%3%4%5",
+    "mutator": "tapestry_generic_mutation",
+    "customData": {
+      "muiData": {
+        "VALUES": [
+          {
+            "type": "field_label",
+            "text": "values"
+          },
+          {
+            "type": "field_input"
+          },
+          {
+            "name": "VALUES",
+            "type": "input_dummy"
+          }
+        ],
+        "CLASS": [
+          {
+            "type": "field_label",
+            "text": "class"
+          },
+          {
+            "type": "field_input"
+          },
+          {
+            "name": "CLASS",
+            "type": "input_dummy"
+          }
+        ]
+      }
+    },
+    "tooltip": "Text List: Specifies a set of text values."
+  },
+  {
+    "type": "_text_values_mutator",
+    "style": "logic_blocks",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "text_values"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "values"
+      },
+      {
+        "type": "field_number",
+        "min": 1,
+        "precision": 1,
+        "name": "values_edit"
+      },
+      {
+        "name": "VALUES",
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_label",
+        "text": "class"
+      },
+      {
+        "type": "field_checkbox",
+        "name": "class_edit"
+      },
+      {
+        "name": "CLASS",
+        "type": "input_dummy"
+      }
+    ],
+    "message0": "%1%2%3%4%5%6%7%8"
+  }
+]

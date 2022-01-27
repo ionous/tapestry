@@ -7,47 +7,29 @@ import (
 const space = ' '
 const comma = ','
 const colon = ':'
+const quote = '"'
+const score = '_'
+const percent = '%'
+const unchecked = ""
 
 var obj = [2]rune{'{', '}'}
 var array = [2]rune{'[', ']'}
-var quote = [2]rune{'"', '"'}
+var quotes = [2]rune{quote, quote}
 
 func Embrace(style [2]rune, cb func(*Js)) string {
 	var out Js
 	return out.Brace(style, cb).String()
 }
 
-// an array of comma separated quoted strings
-func QuotedStrings(els []string) string {
-	var out Js
-	return out.Brace(array, func(out *Js) {
-		var sep Commas
-		for _, el := range els {
-			out.R(sep.Next()).Q(el)
-		}
-	}).String()
-}
-
-type Commas int
-
-func (c *Commas) Next() (ret rune) {
-	n := *c
-	if n == 0 {
-		ret = -1
-	} else {
-		ret = comma
-	}
-	*c = n + 1
-	return
-}
-
 type Js struct {
 	strings.Builder
 }
 
-func (out *Js) R(el rune) *Js {
-	if el >= 0 {
-		out.WriteRune(el)
+func (out *Js) R(els ...rune) *Js {
+	for _, el := range els {
+		if el >= 0 {
+			out.WriteRune(el)
+		}
 	}
 	return out
 }
@@ -58,14 +40,9 @@ func (out *Js) S(el string) *Js {
 }
 
 func (out *Js) Q(el string) *Js {
-	return out.Brace(quote, func(out *Js) {
+	return out.Brace(quotes, func(out *Js) {
 		out.S(el)
 	})
-}
-
-func Q(el string) *Js {
-	var out Js
-	return out.Q(el)
 }
 
 func (out *Js) Kv(k, v string) *Js {
@@ -84,4 +61,15 @@ func (out *Js) Brace(style [2]rune, cb func(*Js)) *Js {
 	cb(out)
 	out.WriteRune(style[1])
 	return out
+}
+
+func quotedStrings(values []string) string {
+	var out Js
+	for i, el := range values {
+		if i > 0 {
+			out.R(comma)
+		}
+		out.Q(el)
+	}
+	return out.String()
 }

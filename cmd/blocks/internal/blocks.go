@@ -16,16 +16,16 @@ func readSpec(files fs.FS, fileName string) (ret *spec.TypeSpec, err error) {
 		err = e
 	} else {
 		// the outer one is always (supposed to be) a group
-		var tap spec.TypeSpec
-		if e := cin.Decode(&tap, b, cin.Signatures{
+		var blockType spec.TypeSpec
+		if e := cin.Decode(&blockType, b, cin.Signatures{
 			spec.Signatures, // we are reading specs so we need the spec signatures
 			prim.Signatures, // and some of those commands use the primitive types.
 		}); e != nil {
 			err = e
-		} else if e := importTypes(&tap); e != nil {
+		} else if e := importTypes(&blockType); e != nil {
 			err = e
 		} else {
-			ret = &tap
+			ret = &blockType
 		}
 	}
 	return
@@ -38,16 +38,16 @@ func importTypes(types *spec.TypeSpec) error {
 		spec.TypeSpec_Type: story.KeyMap{
 			story.BlockStart: func(b jsn.Block, _ interface{}) (err error) {
 				if flow, ok := b.(jsn.FlowBlock); ok {
-					if tap, ok := flow.GetFlow().(*spec.TypeSpec); ok {
-						switch tap.Spec.Choice {
+					if blockType, ok := flow.GetFlow().(*spec.TypeSpec); ok {
+						switch blockType.Spec.Choice {
 						case spec.UsesSpec_Group_Opt:
 							// the block is group: push it
-							currGroups = append(currGroups, tap.Name)
+							currGroups = append(currGroups, blockType.Name)
 						default:
-							lookup[tap.Name] = tap
+							lookup[blockType.Name] = blockType
 							// add in all of the parent groups --
 							// they take precedence over the extra groups listed
-							tap.Groups = append(currGroups, tap.Groups...)
+							blockType.Groups = append(currGroups, blockType.Groups...)
 						}
 					}
 				}
@@ -55,8 +55,8 @@ func importTypes(types *spec.TypeSpec) error {
 			},
 			story.BlockEnd: func(b jsn.Block, _ interface{}) (err error) {
 				if flow, ok := b.(jsn.FlowBlock); ok {
-					if tap, ok := flow.GetFlow().(*spec.TypeSpec); ok {
-						switch tap.Spec.Choice {
+					if blockType, ok := flow.GetFlow().(*spec.TypeSpec); ok {
+						switch blockType.Spec.Choice {
 						case spec.UsesSpec_Group_Opt:
 							// the block *was* a group: pop it.
 							currGroups = currGroups[:len(currGroups)-1]
