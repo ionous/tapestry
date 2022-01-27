@@ -24,3 +24,23 @@ func (op *TermSpec) TypeName() (ret string) {
 	}
 	return
 }
+
+// return english human friendly text.
+func (op *ChoiceSpec) FriendlyName() (ret string) {
+	if n := op.Label; len(n) > 0 {
+		ret = n
+	} else {
+		ret = op.Name
+	}
+	return
+}
+
+// return the name of the spec which describes the content of this Choice.
+func (op *ChoiceSpec) TypeName() (ret string) {
+	if len(op.Type) > 0 {
+		ret = op.Type
+	} else {
+		ret = op.Name
+	}
+	return
+}

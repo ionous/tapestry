@@ -7,48 +7,24 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 )
 
-// helper to write a workspace block.
-// a clone of muiWriter; not sure what to share...
-type blockWriter struct {
-	blockType *spec.TypeSpec
-	flow      *spec.FlowSpec
-	argCount  int
-	muiData   []muiData
-}
-
-// when multiple is false, the mui generates a checkbox for the field, when true: a number.
-// note: stacked repeat elements ( statement input ) have multiple false.
-type muiData struct {
-	term     spec.TermSpec
-	termType *spec.TypeSpec
-	multiple bool
-}
-
 // write the args0 and message0 key-values.
-func writeBlockInternals(out *Js, blockType *spec.TypeSpec, flow *spec.FlowSpec) {
-	w := blockWriter{blockType: blockType, flow: flow}
-	out.
-		Q("args0").R(colon).
-		Brace(array, w.writeArgs).R(comma).
-		Q("message0").R(colon).
-		Brace(quotes, func(msg *Js) { writeMsg(msg, w.argCount) }).
-		If(len(w.muiData) > 0, w.writeMuiData)
-}
-
-func (w *blockWriter) writeMuiData(out *Js) {
-	out.
-		R(comma).
-		Kv("mutator", "tapestry_generic_mutation").R(comma).
-		Q("customData").R(colon).
+func writeCustomData(out *Js, blockType *spec.TypeSpec, flow *spec.FlowSpec) {
+	out.WriteString(`"mutator": "tapestry_generic_mutation",` +
+		`"extensions":["tapestry_mutation_mixin","tapestry_mutation_extension"],`)
+	out.Q("customData").R(colon).
 		Brace(obj, func(custom *Js) {
 			custom.Q("muiData").R(colon).
-				Brace(obj, func(mui *Js) {
-					for i, cd := range w.muiData {
-						if i > 0 {
+				Brace(array, func(mui *Js) {
+					var csv int
+					for _, term := range flow.Terms {
+						if term.Private {
+							continue // skip private terms
+						}
+						if csv = csv + 1; csv > 1 {
 							mui.R(comma)
 						}
-						mui.Q(strings.ToUpper(cd.term.Field())).R(colon).Brace(array, func(opt *Js) {
-							writeTerm(opt, cd.term, cd.termType)
+						mui.Brace(array, func(args *Js) {
+							writeFieldDefs(args, term)
 						})
 					}
 				})
@@ -56,99 +32,77 @@ func (w *blockWriter) writeMuiData(out *Js) {
 }
 
 //
-func (w *blockWriter) writeArgs(args *Js) {
-	// write our
-	label := w.flow.Name
-	if len(label) == 0 {
-		label = w.blockType.Name
-	}
-	w.argCount += writeInput(args, Input{Label: label})
-	// write any mutating terms:
-	for _, term := range w.flow.Terms {
-		if term.Private {
-			continue // skip private terms
-		}
-		//
-		typeName := term.TypeName() // lookup spec
-		if termType, ok := lookup[typeName]; !ok {
-			log.Fatalln("missing named type", typeName)
-		} else {
-			// look at all of the slots the term type implements
-			stacks, _ := SlotStacks(termType)
-			if term.Optional && (!term.Repeats || len(stacks) > 0) {
-				w.muiData = append(w.muiData, muiData{term, termType, true})
-			} else if term.Repeats {
-				w.muiData = append(w.muiData, muiData{term, termType, false})
-			}
-			// write the field if we need it.
-			if !term.Optional {
-				args.R(comma)
-				// ugly, but simplifies counting of repeat fields in tapestry_generic_mutation
-				if term.Repeats {
-					term.Name = term.Field() + "0"
-				}
-				w.argCount += writeTerm(args, term, termType)
-			}
-		}
+func writeFieldDefs(args *Js, term spec.TermSpec) {
+	typeName := term.TypeName() // lookup spec
+	if termType, ok := lookup[typeName]; !ok {
+		log.Fatalln("missing named type", typeName)
+	} else {
+		writeTerm(args, term, termType)
 	}
 }
 
-func writeTerm(out *Js, term spec.TermSpec, termType *spec.TypeSpec) (ret int) {
-	name := term.Field()
-	label := term.Label()
-	// ideally then, we'd be able to refactor to write a single term.
+func writeTerm(args *Js, term spec.TermSpec, termType *spec.TypeSpec) {
+	name, label := term.Field(), term.Label()
+	// write the label for this term.
+	writeLabel(args, label)
+	// write other fields while collecting information for the trailing input:
+	var checks []string
+	var inputType = InputDummy
+	//
 	switch kind := termType.Spec.Choice; kind {
-
 	case spec.UsesSpec_Flow_Opt:
 		// a flow goes here: tbd: but probably a shadow
-		ret += writeInput(out, Input{
-			Name:  name,
-			Check: termType.Name,
-			Type:  InputValue,
-			Label: label,
-		})
+		// it only has the input, no special fields
+		inputType, checks = InputValue, []string{termType.Name}
 
 	case spec.UsesSpec_Slot_Opt:
+		// inputType might be a statement_input stack, or a single ( maybe repeatable ) input
+		// regardless, it only has the input, no special fields.
 		slot := slotRules.FindSlot(termType.Name)
-		ret += writeInput(out, Input{
-			Name:  name,
-			Check: slot.SlotType(),
-			Type:  slot.InputType(),
-			Label: label,
-		})
+		inputType, checks = slot.InputType(), []string{slot.SlotType()}
+		// if we are stack, we want to force a non-repeating input; one stack can already handle multiple blocks.
+		// fix? we dont handle the case of a stack of one element; not sure that it exists in practice.
+		if slot.Stack {
+			term.Repeats = false
+		}
 
 	case spec.UsesSpec_Swap_Opt:
-		pairs := []string{"first", "ITEM"}
-		ret += writeInput(out, Input{
-			Name:  name,
-			Label: label,
-		},
-			func(field *Js) {
-				field.Kv("type", FieldDropdown).R(comma).
+		swap := termType.Spec.Value.(*spec.SwapSpec)
+		inputType = InputValue
+		for _, pick := range swap.Between {
+			checks = append(checks, pick.TypeName())
+		}
+		args.R(comma).
+			Brace(obj, func(field *Js) {
+				field.
+					Kv("name", name).R(comma). // for blockly serialization
+					Kv("type", FieldDropdown).R(comma).
 					Q("option").R(colon).Brace(array,
 					func(options *Js) {
-						for i, cnt := 0, len(pairs); i < cnt; i += 2 {
+						for i, pick := range swap.Between {
 							if i > 0 {
 								options.R(comma)
 							}
 							options.Brace(array, func(opt *Js) {
-								// "first item", "ITEM1"
-								opt.Q(pairs[i]).R(comma).Q(pairs[i+1])
+								opt.Kv(pick.FriendlyName(), pick.TypeName())
 							})
 						}
 					})
 			})
-
 	case spec.UsesSpec_Num_Opt:
-		ret += writeInput(out, Input{Name: name, Label: label},
-			func(field *Js) {
-				field.Kv("type", FieldNumber)
+		args.R(comma).
+			Brace(obj, func(field *Js) {
+				field.
+					Kv("name", name).R(comma). // for blockly serialization
+					Kv("type", FieldNumber)
 			})
 
 	case spec.UsesSpec_Str_Opt:
-		ret += writeInput(out, Input{Name: name, Label: label},
-			func(field *Js) {
-				field.Kv("type", FieldText)
+		args.R(comma).
+			Brace(obj, func(field *Js) {
+				field.
+					Kv("name", name).R(comma). // for blockly serialization
+					Kv("type", FieldText)
 				// other options:
 				// spellcheck: true/false
 				// text: the default value
@@ -157,5 +111,28 @@ func writeTerm(out *Js, term spec.TermSpec, termType *spec.TypeSpec) (ret int) {
 	default:
 		log.Fatalln("unknown spec type", kind)
 	}
+	// write the input all of the above fields are a part of:
+	args.R(comma).
+		Brace(obj, func(tail *Js) {
+			tail.Kv("name", strings.ToUpper(term.Field())).R(comma)
+			tail.Kv("type", inputType)
+			if len(checks) > 0 {
+				tail.R(comma).
+					Q("check").R(colon).Brace(array, func(check *Js) {
+					for i, c := range checks {
+						if i > 0 {
+							check.R(comma)
+						}
+						check.Q(c)
+					}
+				})
+			}
+			if term.Optional {
+				tail.R(comma).Q("optional").R(colon).S("true")
+			}
+			if term.Repeats {
+				tail.R(comma).Q("repeats").R(colon).S("true")
+			}
+		})
 	return
 }

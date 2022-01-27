@@ -1,4 +1,4 @@
-[
+const jsonData=  [
   {
     "type": "bool_value",
     "output": [

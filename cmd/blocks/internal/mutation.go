@@ -16,7 +16,7 @@ func writeMutator(out *Js, blockType *spec.TypeSpec, flow *spec.FlowSpec) *Js {
 			Kv("style", "logic_blocks").R(comma).
 			Q("inputsInline").R(colon).S("false").R(comma).
 			If(true, func(args *Js) {
-				writeMuiArgs(args, blockType, flow)
+				writeMuiMsgArgs(args, blockType, flow)
 			})
 	})
 }

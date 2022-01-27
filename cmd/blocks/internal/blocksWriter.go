@@ -6,7 +6,7 @@ import (
 
 // return any fields which need mutation
 // tbd: "helpUrl"
-func writeBlock(out *Js, blockType *spec.TypeSpec) (okay bool) {
+func writeBlock(block *Js, blockType *spec.TypeSpec) (okay bool) {
 	stacks, values := SlotStacks(blockType)
 	switch blockType.Spec.Choice {
 	case spec.UsesSpec_Flow_Opt:
@@ -15,42 +15,49 @@ func writeBlock(out *Js, blockType *spec.TypeSpec) (okay bool) {
 		// one if we are stackable, one if we output a value
 		// ( ex. something that is executable or returns bool )
 		var partial Js
-		writeBlockInternals(&partial, blockType, flow)
+		// write the label for the block itself; aka the lede.
+		partial.Q("message0").R(colon)
+		if lede := flow.Name; len(lede) > 0 {
+			partial.Q(lede)
+		} else {
+			partial.Q(blockType.Name)
+		}
+		// color
+		var colour string = BKY_COLOUR_HUE // default
+		if len(values) > 0 {               // we take on the color of the first slot specified
+			slot := slotRules.FindSlot(values[0])
+			colour = slot.Colour
+		} else if len(stacks) > 0 {
+			slot := slotRules.FindSlot(stacks[0])
+			colour = slot.Colour
+		}
+		partial.R(comma).Kv("colour", colour)
 		// comment
 		if cmt := blockType.UserComment; len(cmt) > 0 {
 			partial.R(comma).Kv("tooltip", cmt)
 		}
+		partial.R(comma)
+		writeCustomData(&partial, blockType, flow)
 		// are we stackable? ( ex. story statement or executable )
-		var colour string = BKY_COLOUR_HUE // default
 		if len(stacks) > 0 {
-			out.Brace(obj, func(out *Js) {
-				slot := slotRules.FindSlot(stacks[0])
-				types := quotedStrings(stacks)
-				colour = slot.Colour //
+			block.Brace(obj, func(out *Js) {
+				checks := quotedStrings(stacks)
 				out.
 					Kv("type", "stacked_"+blockType.Name).R(comma).
-					Q("nextStatement").R(colon).S(types).R(comma).
-					Q("prevStatement").R(colon).S(types).R(comma).
+					Q("nextStatement").R(colon).S(checks).R(comma).
+					Q("prevStatement").R(colon).S(checks).R(comma).
 					S(partial.String())
 			})
 		}
-		if len(values) > 0 { // we take on the color of the first slot specified
-			slot := slotRules.FindSlot(values[0])
-			colour = slot.Colour
-		}
-		if len(stacks) > 0 {
-			out.R(comma)
-		}
-		out.Brace(obj, func(out *Js) {
+		block.Brace(obj, func(out *Js) {
 			out.
 				Kv("type", blockType.Name).R(comma).
-				Kv("colour", colour).R(comma).
-				Q("output").R(colon).Brace(array, func(out *Js) {
+				Q("output").R(colon).Brace(array, func(checks *Js) {
 				// add the flow itself as a possible output type
 				// (useful for cases where the its used directly by other flows)
-				out.Q(blockType.Name)
+				checks.Q(blockType.Name)
 				for _, el := range values {
-					out.R(comma).Q(el)
+					checks.R(comma).Q(el)
 				}
 			}).
 				R(comma).
