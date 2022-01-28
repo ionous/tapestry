@@ -2,11 +2,12 @@ package blocks
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/spec"
+	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
 // return any fields which need mutation
 // tbd: "helpUrl"
-func writeBlock(block *Js, blockType *spec.TypeSpec) (okay bool) {
+func writeBlock(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
 	stacks, values := SlotStacks(blockType)
 	switch blockType.Spec.Choice {
 	case spec.UsesSpec_Flow_Opt:
@@ -14,9 +15,9 @@ func writeBlock(block *Js, blockType *spec.TypeSpec) (okay bool) {
 		// we write to partial so that we can potentially have two blocks
 		// one if we are stackable, one if we output a value
 		// ( ex. something that is executable or returns bool )
-		var partial Js
+		var partial js.Builder
 		// write the label for the block itself; aka the lede.
-		partial.Q("message0").R(colon)
+		partial.Q("message0").R(js.Colon)
 		if lede := flow.Name; len(lede) > 0 {
 			partial.Q(lede)
 		} else {
@@ -31,36 +32,36 @@ func writeBlock(block *Js, blockType *spec.TypeSpec) (okay bool) {
 			slot := slotRules.FindSlot(stacks[0])
 			colour = slot.Colour
 		}
-		partial.R(comma).Kv("colour", colour)
+		partial.R(js.Comma).Kv("colour", colour)
 		// comment
 		if cmt := blockType.UserComment; len(cmt) > 0 {
-			partial.R(comma).Kv("tooltip", cmt)
+			partial.R(js.Comma).Kv("tooltip", cmt)
 		}
-		partial.R(comma)
+		partial.R(js.Comma)
 		writeCustomData(&partial, blockType, flow)
 		// are we stackable? ( ex. story statement or executable )
 		if len(stacks) > 0 {
-			block.Brace(obj, func(out *Js) {
-				checks := quotedStrings(stacks)
+			block.Brace(js.Obj, func(out *js.Builder) {
+				checks := js.QuotedStrings(stacks)
 				out.
-					Kv("type", "stacked_"+blockType.Name).R(comma).
-					Q("nextStatement").R(colon).S(checks).R(comma).
-					Q("prevStatement").R(colon).S(checks).R(comma).
+					Kv("type", "stacked_"+blockType.Name).R(js.Comma).
+					Q("nextStatement").R(js.Colon).S(checks).R(js.Comma).
+					Q("prevStatement").R(js.Colon).S(checks).R(js.Comma).
 					S(partial.String())
 			})
 		}
-		block.Brace(obj, func(out *Js) {
+		block.Brace(js.Obj, func(out *js.Builder) {
 			out.
-				Kv("type", blockType.Name).R(comma).
-				Q("output").R(colon).Brace(array, func(checks *Js) {
+				Kv("type", blockType.Name).R(js.Comma).
+				Q("output").R(js.Colon).Brace(js.Array, func(checks *js.Builder) {
 				// add the flow itself as a possible output type
 				// (useful for cases where the its used directly by other flows)
 				checks.Q(blockType.Name)
 				for _, el := range values {
-					checks.R(comma).Q(el)
+					checks.R(js.Comma).Q(el)
 				}
 			}).
-				R(comma).
+				R(js.Comma).
 				S(partial.String())
 		})
 		okay = true

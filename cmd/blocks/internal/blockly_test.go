@@ -10,6 +10,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/idl"
+	"git.sr.ht/~ionous/tapestry/web/js"
 	"github.com/kr/pretty"
 )
 
@@ -43,19 +44,19 @@ func run(t *testing.T) (ret string, err error) {
 			keys = append(keys, k)
 		}
 		sort.Strings(keys)
-		ret = Embrace(array, func(out *Js) {
+		ret = js.Embrace(js.Array, func(out *js.Builder) {
 			var csv bool
 			for _, key := range keys {
 				blockType := lookup[key]
 				if csv {
-					out.R(comma)
+					out.R(js.Comma)
 				}
 				if !writeBlock(out, blockType) {
 					csv = false // good enough for testing.
 				} else {
 					csv = true
 					if flow, ok := blockType.Spec.Value.(*spec.FlowSpec); ok {
-						out.R(comma)
+						out.R(js.Comma)
 						writeMutator(out, blockType, flow)
 					}
 				}

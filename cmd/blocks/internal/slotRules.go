@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
@@ -14,6 +15,7 @@ var slotRules = SlotRules{{
 }, {
 	Name:   rt.Execute_Type,
 	Colour: BKY_PROCEDURES_HUE,
+	Stack:  true,
 }, {
 	Name:   rt.Assignment_Type,
 	Colour: BKY_PROCEDURES_HUE,
@@ -38,6 +40,10 @@ var slotRules = SlotRules{{
 }, {
 	Name:   rt.RecordListEval_Type,
 	Colour: BKY_LISTS_HUE,
+}, {
+	Name:   story.StoryStatement_Type,
+	Colour: BKY_VARIABLES_HUE,
+	Stack:  true,
 }}
 
 type SlotRules []SlotRule

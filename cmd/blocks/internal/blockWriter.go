@@ -5,25 +5,26 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/spec"
+	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
 // write the args0 and message0 key-values.
-func writeCustomData(out *Js, blockType *spec.TypeSpec, flow *spec.FlowSpec) {
+func writeCustomData(out *js.Builder, blockType *spec.TypeSpec, flow *spec.FlowSpec) {
 	out.WriteString(`"mutator": "tapestry_generic_mutation",` +
 		`"extensions":["tapestry_mutation_mixin","tapestry_mutation_extension"],`)
-	out.Q("customData").R(colon).
-		Brace(obj, func(custom *Js) {
-			custom.Q("muiData").R(colon).
-				Brace(array, func(mui *Js) {
+	out.Q("customData").R(js.Colon).
+		Brace(js.Obj, func(custom *js.Builder) {
+			custom.Q("muiData").R(js.Colon).
+				Brace(js.Array, func(mui *js.Builder) {
 					var csv int
 					for _, term := range flow.Terms {
 						if term.Private {
 							continue // skip private terms
 						}
 						if csv = csv + 1; csv > 1 {
-							mui.R(comma)
+							mui.R(js.Comma)
 						}
-						mui.Brace(array, func(args *Js) {
+						mui.Brace(js.Array, func(args *js.Builder) {
 							writeFieldDefs(args, term)
 						})
 					}
@@ -32,7 +33,7 @@ func writeCustomData(out *Js, blockType *spec.TypeSpec, flow *spec.FlowSpec) {
 }
 
 //
-func writeFieldDefs(args *Js, term spec.TermSpec) {
+func writeFieldDefs(args *js.Builder, term spec.TermSpec) {
 	typeName := term.TypeName() // lookup spec
 	if termType, ok := lookup[typeName]; !ok {
 		log.Fatalln("missing named type", typeName)
@@ -41,7 +42,7 @@ func writeFieldDefs(args *Js, term spec.TermSpec) {
 	}
 }
 
-func writeTerm(args *Js, term spec.TermSpec, termType *spec.TypeSpec) {
+func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 	name, label := term.Field(), term.Label()
 	// write the label for this term.
 	writeLabel(args, label)
@@ -72,36 +73,41 @@ func writeTerm(args *Js, term spec.TermSpec, termType *spec.TypeSpec) {
 		for _, pick := range swap.Between {
 			checks = append(checks, pick.TypeName())
 		}
-		args.R(comma).
-			Brace(obj, func(field *Js) {
+		args.R(js.Comma).
+			Brace(js.Obj, func(field *js.Builder) {
 				field.
-					Kv("name", name).R(comma). // for blockly serialization
-					Kv("type", FieldDropdown).R(comma).
-					Q("option").R(colon).Brace(array,
-					func(options *Js) {
+					Kv("name", name).R(js.Comma). // for blockly serialization
+					Kv("type", FieldDropdown).R(js.Comma).
+					Q("option").R(js.Colon).Brace(js.Array,
+					func(options *js.Builder) {
 						for i, pick := range swap.Between {
 							if i > 0 {
-								options.R(comma)
+								options.R(js.Comma)
 							}
-							options.Brace(array, func(opt *Js) {
+							options.Brace(js.Array, func(opt *js.Builder) {
 								opt.Kv(pick.FriendlyName(), pick.TypeName())
 							})
 						}
 					})
 			})
+
 	case spec.UsesSpec_Num_Opt:
-		args.R(comma).
-			Brace(obj, func(field *Js) {
+		args.R(js.Comma).
+			Brace(js.Obj, func(field *js.Builder) {
 				field.
-					Kv("name", name).R(comma). // for blockly serialization
+					Kv("name", name).R(js.Comma). // for blockly serialization
 					Kv("type", FieldNumber)
 			})
 
 	case spec.UsesSpec_Str_Opt:
-		args.R(comma).
-			Brace(obj, func(field *Js) {
+		// FIX - write combo box for enums
+		// fix: future? a combo box with custom entry
+		// ( ex. something like a variable that is shared globally *if* variable categories are allowed. )
+		// ( or. a combo box with an "other" entry, or a mui option -- to change from selected to free typing )
+		args.R(js.Comma).
+			Brace(js.Obj, func(field *js.Builder) {
 				field.
-					Kv("name", name).R(comma). // for blockly serialization
+					Kv("name", name).R(js.Comma). // for blockly serialization
 					Kv("type", FieldText)
 				// other options:
 				// spellcheck: true/false
@@ -112,26 +118,26 @@ func writeTerm(args *Js, term spec.TermSpec, termType *spec.TypeSpec) {
 		log.Fatalln("unknown spec type", kind)
 	}
 	// write the input all of the above fields are a part of:
-	args.R(comma).
-		Brace(obj, func(tail *Js) {
-			tail.Kv("name", strings.ToUpper(term.Field())).R(comma)
+	args.R(js.Comma).
+		Brace(js.Obj, func(tail *js.Builder) {
+			tail.Kv("name", strings.ToUpper(term.Field())).R(js.Comma)
 			tail.Kv("type", inputType)
 			if len(checks) > 0 {
-				tail.R(comma).
-					Q("check").R(colon).Brace(array, func(check *Js) {
+				tail.R(js.Comma).
+					Q("check").R(js.Colon).Brace(js.Array, func(check *js.Builder) {
 					for i, c := range checks {
 						if i > 0 {
-							check.R(comma)
+							check.R(js.Comma)
 						}
 						check.Q(c)
 					}
 				})
 			}
 			if term.Optional {
-				tail.R(comma).Q("optional").R(colon).S("true")
+				tail.R(js.Comma).Q("optional").R(js.Colon).S("true")
 			}
 			if term.Repeats {
-				tail.R(comma).Q("repeats").R(colon).S("true")
+				tail.R(js.Comma).Q("repeats").R(js.Colon).S("true")
 			}
 		})
 	return
