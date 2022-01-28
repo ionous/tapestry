@@ -4,14 +4,12 @@ package main
 import (
 	"database/sql"
 	"flag"
-	"io"
 	"log"
 	"os"
 	"path"
 	"path/filepath"
 	"runtime/pprof"
 	"strconv"
-	"strings"
 
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/asm"
@@ -23,6 +21,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
+	"git.sr.ht/~ionous/tapestry/web/files"
 	"github.com/ionous/errutil"
 )
 
@@ -143,10 +142,12 @@ func collectEphemera(cat *eph.Catalog, out *error) story.WriterFun {
 	}
 }
 
+// read a comma-separated list of files and directories
 func importStoryFiles(k *story.Importer, srcPath string) (err error) {
-	if srcPath, e := filepath.Abs(srcPath); e != nil {
-		err = e
-	} else if e := readPaths(k, srcPath); e != nil {
+	if e := files.ReadPaths(srcPath,
+		[]string{CompactExt, DetailedExt}, func(p string) error {
+			return readOne(k, p)
+		}); e != nil {
 		err = errutil.New("couldn't read file", srcPath, e)
 	} else {
 		k.Flush()
@@ -154,56 +155,14 @@ func importStoryFiles(k *story.Importer, srcPath string) (err error) {
 	return
 }
 
-// read a comma-separated list of files and directories
-func readPaths(k *story.Importer, filePaths string) (err error) {
-	split := strings.Split(filePaths, ",")
-	for _, filePath := range split {
-		if info, e := os.Stat(filePath); e != nil {
-			err = errutil.Append(err, e)
-		} else {
-			which := readOne
-			if info.IsDir() {
-				which = readMany
-			}
-			if e := which(k, filePath); e != nil {
-				err = errutil.Append(err, e)
-			}
-		}
-	}
-	return
-}
-
-func readMany(k *story.Importer, path string) error {
-	if !strings.HasSuffix(path, "/") {
-		path += "/" // for opening symbolic directories
-	}
-	return filepath.Walk(path, func(path string, info os.FileInfo, e error) (err error) {
-		if e != nil {
-			err = e
-		} else if !info.IsDir() {
-			if ext := filepath.Ext(path); ext == CompactExt || ext == DetailedExt {
-				if e := readOne(k, path); e != nil {
-					err = errutil.New("error reading", path, e)
-				}
-			}
-		}
-		return
-	})
-}
-
 func readOne(k *story.Importer, path string) (err error) {
 	log.Println("reading", path)
-	if fp, e := os.Open(path); e != nil {
+	if b, e := files.ReadFile(path); e != nil {
 		err = e
-	} else {
-		defer fp.Close()
-		if b, e := io.ReadAll(fp); e != nil {
-			err = e
-		} else if script, e := decodeStory(path, b); e != nil {
-			err = errutil.New("couldn't decode", path, "b/c", e)
-		} else if e := k.ImportStory(path, script); e != nil {
-			err = errutil.New("couldn't import", path, "b/c", e)
-		}
+	} else if script, e := decodeStory(path, b); e != nil {
+		err = errutil.New("couldn't decode", path, "b/c", e)
+	} else if e := k.ImportStory(path, script); e != nil {
+		err = errutil.New("couldn't import", path, "b/c", e)
 	}
 	return
 }
