@@ -2,8 +2,8 @@ package blocks
 
 // every workspace block that needs a mutation uses
 // the "tapestry_generic_mutation" mutation,
-// the "tapestry_mutation_mixin" mixi
-// and "tapestry_mutation_extension" extension.
+// the "tapestry_generic_mixin" mixi
+// and "tapestry_generic_extension" extension.
 //
 // they use some "customData" stored in the workspace blocks's jsondef,
 // and rely on a mutation user interface ( mui ) block: one mui block per workspace block.

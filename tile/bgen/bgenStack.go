@@ -6,12 +6,11 @@ import (
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
-// some tapestry slices of slots are represented as a blockly statement stack.
-// ( for example: story or execute statements )
+// writes blockly statement stacks ( for example for: story or execute statements )
 // stacks in blockly are.... interesting.
 // they are a nested linked list of values.
 // this writes the inner halves of the list
-func newStack(m *chart.Machine, blk *js.Builder) chart.State {
+func newStack(m *chart.Machine, blk *js.Builder) *chart.StateMix {
 	// the whole chain is going to be encapsulated by object braces {}
 	// we try to keep the same state going for as long as we can...
 	open, close := js.Obj[0], js.Obj[1]

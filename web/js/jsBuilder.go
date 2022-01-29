@@ -1,6 +1,7 @@
 package js
 
 import (
+	"strconv"
 	"strings"
 )
 
@@ -24,6 +25,11 @@ func (out *Builder) R(els ...rune) *Builder {
 			out.WriteRune(el)
 		}
 	}
+	return out
+}
+
+func (out *Builder) N(n int) *Builder {
+	out.WriteString(strconv.Itoa(n))
 	return out
 }
 

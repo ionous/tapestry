@@ -2,7 +2,6 @@ package blocks
 
 import (
 	"log"
-	"strconv"
 
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/tile/bc"
@@ -31,7 +30,7 @@ func writeMuiMsgArgs(out *js.Builder, blockType *spec.TypeSpec, flow *spec.FlowS
 		Q("message0").R(js.Colon).Brace(js.Quotes, func(msg *js.Builder) {
 		// ex. "message0": "%1%2%3%4%5%6%7%8"
 		for i := 1; i <= argCount; i++ {
-			out.R(js.Percent).S(strconv.Itoa(i))
+			out.R(js.Percent).N(i)
 		}
 	})
 }

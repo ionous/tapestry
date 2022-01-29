@@ -12,7 +12,7 @@ import (
 // write the args0 and message0 key-values.
 func writeCustomData(out *js.Builder, blockType *spec.TypeSpec, flow *spec.FlowSpec) {
 	out.WriteString(`"mutator": "tapestry_generic_mutation",` +
-		`"extensions":["tapestry_mutation_mixin","tapestry_mutation_extension"],`)
+		`"extensions":["tapestry_generic_mixin","tapestry_generic_extension"],`)
 	out.Q("customData").R(js.Colon).
 		Brace(js.Obj, func(custom *js.Builder) {
 			custom.Q("muiData").R(js.Colon).
@@ -49,12 +49,15 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 	// write other fields while collecting information for the trailing input:
 	var checks []string
 	var inputType = bc.InputDummy
+	var shadow string
 	//
 	switch kind := termType.Spec.Choice; kind {
+
 	case spec.UsesSpec_Flow_Opt:
 		// a flow goes here: tbd: but probably a shadow
 		// it only has the input, no special fields
 		inputType, checks = bc.InputValue, []string{termType.Name}
+		shadow = termType.Name
 
 	case spec.UsesSpec_Slot_Opt:
 		// inputType might be a statement_input stack, or a single ( maybe repeatable ) input
@@ -128,6 +131,9 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 						check.Q(c)
 					}
 				})
+			}
+			if len(shadow) > 0 {
+				tail.R(js.Comma).Kv("shadow", shadow)
 			}
 			if term.Optional {
 				tail.R(js.Comma).Q("optional").R(js.Colon).S("true")
