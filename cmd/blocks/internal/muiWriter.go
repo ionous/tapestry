@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"git.sr.ht/~ionous/tapestry/dl/spec"
+	"git.sr.ht/~ionous/tapestry/tile/bc"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
@@ -72,7 +73,7 @@ func writeMuiTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec)
 					min = zero
 				}
 				field.
-					Kv("type", FieldNumber).R(js.Comma).
+					Kv("type", bc.FieldNumber).R(js.Comma).
 					Q("min").R(js.Colon).S(min).R(js.Comma).
 					Q("precision").R(js.Colon).S(one).R(js.Comma).
 					// unique name needed for blockly undo
@@ -86,7 +87,7 @@ func writeMuiTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec)
 		ret += writeDummy(args, name, label,
 			func(field *js.Builder) {
 				field.
-					Kv("type", FieldCheckbox).R(js.Comma).
+					Kv("type", bc.FieldCheckbox).R(js.Comma).
 					// unique name needed for blockly undo:
 					Q("name").R(js.Colon).Brace(js.Quotes, func(val *js.Builder) {
 					val.S(term.Field()).R(js.Score).S("edit")

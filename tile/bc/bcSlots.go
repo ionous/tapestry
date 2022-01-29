@@ -1,4 +1,4 @@
-package blocks
+package bc
 
 import (
 	"log"
@@ -8,47 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
-// fix: might eventually want to add to this as we are reading files....
-var slotRules = SlotRules{{
-	Name:   literal.LiteralValue_Type,
-	Colour: BKY_MATH_HUE,
-}, {
-	Name:   rt.Execute_Type,
-	Colour: BKY_PROCEDURES_HUE,
-	Stack:  true,
-}, {
-	Name:   rt.Assignment_Type,
-	Colour: BKY_PROCEDURES_HUE,
-}, {
-	Name:   rt.BoolEval_Type,
-	Colour: BKY_LOGIC_HUE,
-}, {
-	Name:   rt.NumberEval_Type,
-	Colour: BKY_MATH_HUE,
-}, {
-	Name:   rt.TextEval_Type,
-	Colour: BKY_TEXTS_HUE,
-}, {
-	Name:   rt.NumListEval_Type,
-	Colour: BKY_MATH_HUE,
-}, {
-	Name:   rt.TextListEval_Type,
-	Colour: BKY_TEXTS_HUE,
-}, {
-	Name:   rt.RecordEval_Type,
-	Colour: BKY_LISTS_HUE,
-}, {
-	Name:   rt.RecordListEval_Type,
-	Colour: BKY_LISTS_HUE,
-}, {
-	Name:   story.StoryStatement_Type,
-	Colour: BKY_VARIABLES_HUE,
-	Stack:  true,
-}}
-
-type SlotRules []SlotRule
-
-func (slots SlotRules) FindSlot(name string) (ret SlotRule) {
+func FindSlotRule(name string) (ret SlotRule) {
 	var found bool
 	for _, s := range slots {
 		if s.Name == name {
@@ -57,16 +17,16 @@ func (slots SlotRules) FindSlot(name string) (ret SlotRule) {
 		}
 	}
 	if !found {
-		log.Fatalln("couldnt find slot", name)
+		log.Fatalln("couldn't find slot", name)
 	}
 	return
 }
 
-// maybe "internal" could indicate shadows...
 type SlotRule struct {
 	Name   string
 	Stack  bool // if false, then: input_value, if true: input_statement
 	Colour string
+	// fix? maybe "internal" could indicate shadows...
 }
 
 // slots are referenced by terms of a flow
@@ -93,3 +53,41 @@ func (slot *SlotRule) SlotType() (ret string) {
 	}
 	return
 }
+
+// fix: might eventually want to add to this as we are reading files....
+var slots = []SlotRule{{
+	Name:   literal.LiteralValue_Type,
+	Colour: MATH_HUE,
+}, {
+	Name:   rt.Execute_Type,
+	Colour: PROCEDURES_HUE,
+	Stack:  true,
+}, {
+	Name:   rt.Assignment_Type,
+	Colour: PROCEDURES_HUE,
+}, {
+	Name:   rt.BoolEval_Type,
+	Colour: LOGIC_HUE,
+}, {
+	Name:   rt.NumberEval_Type,
+	Colour: MATH_HUE,
+}, {
+	Name:   rt.TextEval_Type,
+	Colour: TEXTS_HUE,
+}, {
+	Name:   rt.NumListEval_Type,
+	Colour: MATH_HUE,
+}, {
+	Name:   rt.TextListEval_Type,
+	Colour: TEXTS_HUE,
+}, {
+	Name:   rt.RecordEval_Type,
+	Colour: LISTS_HUE,
+}, {
+	Name:   rt.RecordListEval_Type,
+	Colour: LISTS_HUE,
+}, {
+	Name:   story.StoryStatement_Type,
+	Colour: VARIABLES_HUE,
+	Stack:  true,
+}}

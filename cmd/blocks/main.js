@@ -183,7 +183,7 @@ Blockly.Extensions.registerMixin(
       return found;
     },
     // allows overrides of the input name to handle repeated elements
-    createInput: function(name, fieldDefs, atIndex) {
+    createInput: function(inputName, fieldDefs, atIndex) {
       const inputDef= fieldDefs[fieldDefs.length-1];
       const appendFn= {
         // note: the names "statement_input" etc.
@@ -194,9 +194,9 @@ Blockly.Extensions.registerMixin(
         'input_statement': 'appendStatementInput',
       }[inputDef.type];
       if (!appendFn) {
-        throw new Error(`Tapestry mutation couldn't create ${name} of ${inputDef.type}`);
+        throw new Error(`Tapestry mutation couldn't create ${inputName} of ${inputDef.type}`);
       }
-      const newInput= this[appendFn](name);
+      const newInput= this[appendFn](inputName);
       const newIndex= this.inputList.length-1;
       if (atIndex && atIndex < newIndex) {
         this.moveNumberedInputBefore(newIndex, atIndex);
@@ -204,10 +204,20 @@ Blockly.Extensions.registerMixin(
       if (inputDef.check) {
         newInput.setCheck(inputDef.check);
       }
+      let fieldCount=0;
       for (let i=0; i<fieldDefs.length-1; i++) {
         const fieldDef= fieldDefs[i];
         const field= Blockly.fieldRegistry.fromJson(fieldDef);
-        newInput.appendField(field);
+        // note: the field doesnt get its name from the definition; instead you have to set it during append.
+        // also: dummy inputs dont count when being saved, so we have to scope it
+        let fieldName;
+        if (!(field instanceof Blockly.FieldLabel)) {
+          fieldName= inputName;
+          if (fieldCount++ > 0) {
+            fieldName += "-" + fieldCount;
+          }
+        }
+        newInput.appendField(field, fieldName);
       }
       return newInput;
     }

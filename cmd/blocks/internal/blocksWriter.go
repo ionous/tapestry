@@ -2,6 +2,7 @@ package blocks
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/spec"
+	"git.sr.ht/~ionous/tapestry/tile/bc"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
@@ -24,12 +25,12 @@ func writeBlock(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
 			partial.Q(blockType.Name)
 		}
 		// color
-		var colour string = BKY_COLOUR_HUE // default
-		if len(values) > 0 {               // we take on the color of the first slot specified
-			slot := slotRules.FindSlot(values[0])
+		var colour string = bc.COLOUR_HUE // default
+		if len(values) > 0 {              // we take on the color of the first slot specified
+			slot := bc.FindSlotRule(values[0])
 			colour = slot.Colour
 		} else if len(stacks) > 0 {
-			slot := slotRules.FindSlot(stacks[0])
+			slot := bc.FindSlotRule(stacks[0])
 			colour = slot.Colour
 		}
 		partial.R(js.Comma).Kv("colour", colour)
@@ -78,7 +79,7 @@ func SlotStacks(blockType *spec.TypeSpec) (retStack, retValue []string) {
 		slots = blockType.Slots
 	}
 	for _, s := range slots {
-		slotRule := slotRules.FindSlot(s)
+		slotRule := bc.FindSlotRule(s)
 		if slotRule.Stack {
 			retStack = append(retStack, slotRule.SlotType())
 		} else {

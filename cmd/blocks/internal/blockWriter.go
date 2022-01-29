@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/spec"
+	"git.sr.ht/~ionous/tapestry/tile/bc"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
@@ -43,23 +44,22 @@ func writeFieldDefs(args *js.Builder, term spec.TermSpec) {
 }
 
 func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
-	name, label := term.Field(), term.Label()
 	// write the label for this term.
-	writeLabel(args, label)
+	writeLabel(args, term.Label())
 	// write other fields while collecting information for the trailing input:
 	var checks []string
-	var inputType = InputDummy
+	var inputType = bc.InputDummy
 	//
 	switch kind := termType.Spec.Choice; kind {
 	case spec.UsesSpec_Flow_Opt:
 		// a flow goes here: tbd: but probably a shadow
 		// it only has the input, no special fields
-		inputType, checks = InputValue, []string{termType.Name}
+		inputType, checks = bc.InputValue, []string{termType.Name}
 
 	case spec.UsesSpec_Slot_Opt:
 		// inputType might be a statement_input stack, or a single ( maybe repeatable ) input
 		// regardless, it only has the input, no special fields.
-		slot := slotRules.FindSlot(termType.Name)
+		slot := bc.FindSlotRule(termType.Name)
 		inputType, checks = slot.InputType(), []string{slot.SlotType()}
 		// if we are stack, we want to force a non-repeating input; one stack can already handle multiple blocks.
 		// fix? we dont handle the case of a stack of one element; not sure that it exists in practice.
@@ -69,15 +69,14 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 
 	case spec.UsesSpec_Swap_Opt:
 		swap := termType.Spec.Value.(*spec.SwapSpec)
-		inputType = InputValue
+		inputType = bc.InputValue
 		for _, pick := range swap.Between {
 			checks = append(checks, pick.TypeName())
 		}
 		args.R(js.Comma).
 			Brace(js.Obj, func(field *js.Builder) {
 				field.
-					Kv("name", name).R(js.Comma). // for blockly serialization
-					Kv("type", FieldDropdown).R(js.Comma).
+					Kv("type", bc.FieldDropdown).R(js.Comma).
 					Q("option").R(js.Colon).Brace(js.Array,
 					func(options *js.Builder) {
 						for i, pick := range swap.Between {
@@ -94,9 +93,7 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 	case spec.UsesSpec_Num_Opt:
 		args.R(js.Comma).
 			Brace(js.Obj, func(field *js.Builder) {
-				field.
-					Kv("name", name).R(js.Comma). // for blockly serialization
-					Kv("type", FieldNumber)
+				field.Kv("type", bc.FieldNumber)
 			})
 
 	case spec.UsesSpec_Str_Opt:
@@ -107,8 +104,7 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 		args.R(js.Comma).
 			Brace(js.Obj, func(field *js.Builder) {
 				field.
-					Kv("name", name).R(js.Comma). // for blockly serialization
-					Kv("type", FieldText)
+					Kv("type", bc.FieldText)
 				// other options:
 				// spellcheck: true/false
 				// text: the default value

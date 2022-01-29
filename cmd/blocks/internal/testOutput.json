@@ -22,7 +22,6 @@
             "text": "bool"
           },
           {
-            "name": "bool",
             "type": "field_input"
           },
           {
@@ -36,7 +35,6 @@
             "text": "class"
           },
           {
-            "name": "class",
             "type": "field_input"
           },
           {
@@ -96,7 +94,6 @@
             "text": "field"
           },
           {
-            "name": "field",
             "type": "field_input"
           },
           {
@@ -219,7 +216,6 @@
             "text": "num"
           },
           {
-            "name": "num",
             "type": "field_number"
           },
           {
@@ -233,7 +229,6 @@
             "text": "class"
           },
           {
-            "name": "class",
             "type": "field_input"
           },
           {
@@ -295,7 +290,6 @@
             "text": "values"
           },
           {
-            "name": "values",
             "type": "field_number"
           },
           {
@@ -310,7 +304,6 @@
             "text": "class"
           },
           {
-            "name": "class",
             "type": "field_input"
           },
           {
@@ -386,7 +379,6 @@
             "text": "kind"
           },
           {
-            "name": "kind",
             "type": "field_input"
           },
           {
@@ -463,7 +455,6 @@
             "text": "kind"
           },
           {
-            "name": "kind",
             "type": "field_input"
           },
           {
@@ -540,7 +531,6 @@
             "text": "text"
           },
           {
-            "name": "text",
             "type": "field_input"
           },
           {
@@ -554,7 +544,6 @@
             "text": "class"
           },
           {
-            "name": "class",
             "type": "field_input"
           },
           {
@@ -616,7 +605,6 @@
             "text": "values"
           },
           {
-            "name": "values",
             "type": "field_input"
           },
           {
@@ -631,7 +619,6 @@
             "text": "class"
           },
           {
-            "name": "class",
             "type": "field_input"
           },
           {
