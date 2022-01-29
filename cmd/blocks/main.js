@@ -47,6 +47,10 @@ function start() {
             'kind': 'block',
             'type': 'text_values',
           },
+          {
+            'kind': 'block',
+            'type': 'field_values',
+          },
         ],
       }
     });
@@ -58,38 +62,69 @@ function start() {
 // opt_blockList: A list of blocks to appear in the flyout of the mutator dialog.
 Blockly.Extensions.registerMutator(
   'tapestry_generic_mutation', {
-    itemCounts_: {},
-    // create the MUI.
+    // cant put them as members or they'll share
+    // extraState: {}, // serialized data, required by blockly
+    // itemState:  {}, // a cache to avoid counting actual inputs
+    // these are required functions, even if we decide not to serialize into blockly format.
+    // ( ex. the "insertion manager" uses this as part of dragging blocks. )
+    saveExtraState() {
+      return Object.assign({}, this.extraState);
+    },
+    loadExtraState(extraState) {
+      this.extraState= Object.assign({}, extraState);
+      this.updateShape_();
+    },
+    // create the MUI from the block's desired state
     decompose: function(workspace) {
       const self= this; // the block we are creating the mui from.
       const mui = workspace.newBlock(`_${self.type}_mutator`); // ex. "_text_value_mutator"
       mui.initSvg();
       mui.inputList.forEach(function(min/*, index, array*/) {
         min.fieldRow.forEach(function(field/*, index, array*/) {
+          const wants= self.getExtraState(min.name);
           if (field instanceof Blockly.FieldCheckbox) {
-            const exists= !!self.getInput( min.name );
-            field.setValue(exists);
+            field.setValue(!!wants);
           } else if (field instanceof Blockly.FieldNumber) {
-            let itemCount= 0; // fix? could make this faster via "findInputIndex" tapestry_mutation_mixin
-            // note: the input names in the mui dont have trailing numbers;
-            // the names in the actual block do. ( VALUES vs. VALUES0 )
-            while (self.getInput( min.name + itemCount )) {
-              itemCount++;
-            }
-            field.setValue(itemCount);
-            self.itemCounts_[min.name]= itemCount;
+            field.setValue(wants);
           }
         });
       });
       return mui;
     },
     // modifies the real block based on changes from the MUI.
+    // 1: modify the "extra state" based on the mui status.
+    // 2: update the block from the extra state.
     compose: function(mui) {
-      // mui.setEnabled(true);
       const self= this;   // our real, workspace, block.
-      let insertAt= 1;    // index in the ws block, skipping the initial dummy header.
       const jsonDef= jsonDefs[self.type];
       const muiData= jsonDef.customData.muiData;
+      //
+      muiData.forEach(function(fieldDefs, index/*, array*/) {
+        const inputDef= fieldDefs[fieldDefs.length-1];
+        // get the mui input ( it might not exist, ex. for fields that arent mutable )
+        const min= mui.getInput(inputDef.name);
+        // get the primary edit field
+        const field= min && min.fieldRow.find(function(field/*, index, array*/) {
+          return !!field.name;
+        });
+        // record the edited status
+        if (field instanceof Blockly.FieldCheckbox) {
+          const isChecked= field.getValueBoolean();
+          self.setExtraState(min.name, isChecked?1:0);
+        } else if (field instanceof Blockly.FieldNumber) {
+          const itemCount= field.getValue();
+          self.setExtraState(min.name, itemCount);
+        }
+      });
+      this.updateShape_();
+    },
+    // update the workspace block based on its current desired state
+    updateShape_: function() {
+      const self= this;   // our real, workspace, block.
+      const jsonDef= jsonDefs[self.type];
+      const muiData= jsonDef.customData.muiData;
+      let insertAt= 1;    // index in the ws block, skipping the initial dummy header.
+      //
       muiData.forEach(function(fieldDefs, index/*, array*/) {
         const inputDef= fieldDefs[fieldDefs.length-1];
         const inputName= inputDef.name;
@@ -98,59 +133,48 @@ Blockly.Extensions.registerMutator(
         if (existsAt>=0) {
           insertAt= existsAt;
         }
-        // the mui input might not exist (ex. for fields  that arent mutable)
-        const min=  mui.getInput(inputName);
-        const field= min && min.fieldRow.find(function(field/*, index, array*/) {
-          return !!field.name; // find the edit field
-        });
-        if (field instanceof Blockly.FieldCheckbox) {
-          const isChecked= field.getValueBoolean();
-          // do we need to remove it?
-          if (!isChecked && existsAt>=0) {
+        const want= self.getExtraState(inputName);
+        let have= self.getItemState(inputName);
+        if (want == have) {
+          insertAt+= have;
+        } else {
+          self.setItemState(inputName, want);
+          // note: the 'repeat' status is disabled for "stackable slots" by the tapestry block generator
+          // and other repeating fields are represented by numbers even when they are optional.
+          // ie. zero means a non-existent optional repeating field.
+          if (inputDef.repeats) {
+            while (have > want) {
+              --have; // if we want zero, the last removed is name0.
+              self.removeInput(inputName + have);
+            }
+            insertAt+= have;
+            while (have < want) {
+              // if we have zero, the first added is name0.
+              self.createInput(inputName+have, fieldDefs, ++insertAt);
+              ++have;
+            }
+          } else if (!want) {
             self.removeInput(inputName, /*opt_quiet*/ true);
-          } else if (isChecked && existsAt< 0) {
-            // do we need to to create it?
-            self.createInput(inputName, fieldDefs, insertAt+1);
+          } else {
+            self.createInput(inputName, fieldDefs, ++insertAt);
           }
-        } else if (field instanceof Blockly.FieldNumber) {
-          // when we created the mui, we cached the block's item count.
-          let actual= self.itemCounts_[inputName];
-          // the editable number is how many items we want.
-          const want= field.getValue();
-          while (actual > want) {
-            --actual; // if we want zero, the last removed is name0.
-            self.removeInput(inputName + actual);
-          }
-          insertAt+= actual;
-          while (actual < want) {
-            // if we have zero, the first added is name0.
-            self.createInput(inputName+actual, fieldDefs, insertAt+1);
-            ++actual;
-            ++insertAt;
-          }
-          self.itemCounts_[inputName]= actual;
         }
       });
     },
-
-    // these are required functions, even if we decide not to serialize into blockly format.
-    saveExtraState() {
-      return {
-        'itemCount': "secrets",
-      };
-    },
-    loadExtraState(state) {},
-
   }, undefined,
   [/* we dont have any blocks */]
 );
 
 // uses the same data as the generic mutation to initialize the non-mutable fields
-// [ this gives us strict ordering for all the fields
+// [ this gives us strict ordering for all the fields ]
 Blockly.Extensions.register(
-  'tapestry_mutation_extension',
-  function() { // this refers to the block that the extension is being run on
-    var self = this;
+  'tapestry_generic_extension',
+  // note: the generic mutation and mixin have already been added.
+  // ( its not clear from the documentation if all three of these objects could live as one unit somewhere )
+  function() {
+    var self = this; // this refers to the block that the extension is being run on
+    self.extraState= {};
+    self.itemState= {};
     const jsonDef= jsonDefs[self.type];
     const muiData= jsonDef.customData.muiData;
     // an array of field-input sets
@@ -158,8 +182,10 @@ Blockly.Extensions.register(
       const inputDef= fieldDefs[fieldDefs.length-1];
       if (!inputDef.optional) {
         let name= inputDef.name;
-        if (inputDef.repeats) {
-          name += "0"; // ugly, but simplifies counting in tapestry_generic_mutation
+        if (inputDef.repeats) {        // a non-optional repeating field needs at least one element
+          self.setExtraState(name, 1); // track what we want.
+          self.setItemState(name, 1);  // track what we're about to have.
+          name += "0";                 // the first field is ...0 to match updateShape_.
         }
         // create the initial input
         self.createInput(name, fieldDefs);
@@ -169,7 +195,22 @@ Blockly.Extensions.register(
 
 // mix for helper functions
 Blockly.Extensions.registerMixin(
-  'tapestry_mutation_mixin', {
+  'tapestry_generic_mixin', {
+    // extra state tracks our *desired* block appearance
+    getExtraState(name)  {
+      return this.extraState[ name ] || 0;
+    },
+    setExtraState(name, itemCount)  {
+      return this.extraState[ name ]= itemCount;
+    },
+    // item state tracks our *desired* block appearance
+    getItemState(name)  {
+      return this.itemState[ name ] || 0;
+    },
+    setItemState(name, itemCount)  {
+      return this.itemState[ name ]= itemCount;
+    },
+
     // find the named input, return its index
     findInputIndex(name, from=0) {
       let found= -1;
@@ -218,6 +259,24 @@ Blockly.Extensions.registerMixin(
           }
         }
         newInput.appendField(field, fieldName);
+      }
+      // means that we created something other than a dummy input
+      // and we should give it an initial value
+      // rely on the toolbox to set up its own defaults
+      // otherwise dragging out of the toolbox seems to get unhappy
+      // ( though better if shadow is on )
+      if (inputDef.shadow && this.workspace===Blockly.mainWorkspace) {
+        const sub = this.workspace.newBlock(inputDef.shadow);
+        // guess at a bunch of random things to make this show up correctly.
+        // render is needed otherwise drag crashes trying to access a null location,
+        // and initSvg is needed before render.
+        // shadow seems needed otherwise we get a random extra block when drag starts.
+        sub.initSvg(); // needed before render is called
+        sub.render(false); // false means: only render this block.
+        // sub.setShadow(true);
+        // sub.setDeletable(false);
+        // sub.setMovable(false);
+        newInput.connection.connect(sub.outputConnection);
       }
       return newInput;
     }

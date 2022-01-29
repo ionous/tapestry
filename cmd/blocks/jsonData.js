@@ -1,4 +1,4 @@
-const jsonData=  [
+const jsonData = [
   {
     "type": "bool_value",
     "output": [
@@ -11,8 +11,8 @@ const jsonData=  [
     "tooltip": "Specify an explicit true or false.",
     "mutator": "tapestry_generic_mutation",
     "extensions": [
-      "tapestry_mutation_mixin",
-      "tapestry_mutation_extension"
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
     ],
     "customData": {
       "muiData": [
@@ -22,7 +22,6 @@ const jsonData=  [
             "text": "bool"
           },
           {
-            "name": "bool",
             "type": "field_input"
           },
           {
@@ -36,7 +35,6 @@ const jsonData=  [
             "text": "class"
           },
           {
-            "name": "class",
             "type": "field_input"
           },
           {
@@ -85,8 +83,8 @@ const jsonData=  [
     "tooltip": "A fixed value of a record.",
     "mutator": "tapestry_generic_mutation",
     "extensions": [
-      "tapestry_mutation_mixin",
-      "tapestry_mutation_extension"
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
     ],
     "customData": {
       "muiData": [
@@ -96,7 +94,6 @@ const jsonData=  [
             "text": "field"
           },
           {
-            "name": "field",
             "type": "field_input"
           },
           {
@@ -145,8 +142,8 @@ const jsonData=  [
     "colour": "%{BKY_MATH_HUE}",
     "mutator": "tapestry_generic_mutation",
     "extensions": [
-      "tapestry_mutation_mixin",
-      "tapestry_mutation_extension"
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
     ],
     "customData": {
       "muiData": [
@@ -161,6 +158,7 @@ const jsonData=  [
             "check": [
               "field_value"
             ],
+            "shadow": "field_value",
             "repeats": true
           }
         ]
@@ -208,8 +206,8 @@ const jsonData=  [
     "tooltip": "Specify a particular number.",
     "mutator": "tapestry_generic_mutation",
     "extensions": [
-      "tapestry_mutation_mixin",
-      "tapestry_mutation_extension"
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
     ],
     "customData": {
       "muiData": [
@@ -219,7 +217,6 @@ const jsonData=  [
             "text": "num"
           },
           {
-            "name": "num",
             "type": "field_number"
           },
           {
@@ -233,7 +230,6 @@ const jsonData=  [
             "text": "class"
           },
           {
-            "name": "class",
             "type": "field_input"
           },
           {
@@ -284,8 +280,8 @@ const jsonData=  [
     "tooltip": "Number List: Specify a list of numbers.",
     "mutator": "tapestry_generic_mutation",
     "extensions": [
-      "tapestry_mutation_mixin",
-      "tapestry_mutation_extension"
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
     ],
     "customData": {
       "muiData": [
@@ -295,7 +291,6 @@ const jsonData=  [
             "text": "values"
           },
           {
-            "name": "values",
             "type": "field_number"
           },
           {
@@ -310,7 +305,6 @@ const jsonData=  [
             "text": "class"
           },
           {
-            "name": "class",
             "type": "field_input"
           },
           {
@@ -375,8 +369,8 @@ const jsonData=  [
     "tooltip": "Specify a record composed of literal values.",
     "mutator": "tapestry_generic_mutation",
     "extensions": [
-      "tapestry_mutation_mixin",
-      "tapestry_mutation_extension"
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
     ],
     "customData": {
       "muiData": [
@@ -386,7 +380,6 @@ const jsonData=  [
             "text": "kind"
           },
           {
-            "name": "kind",
             "type": "field_input"
           },
           {
@@ -405,6 +398,7 @@ const jsonData=  [
             "check": [
               "field_value"
             ],
+            "shadow": "field_value",
             "repeats": true
           }
         ]
@@ -452,8 +446,8 @@ const jsonData=  [
     "tooltip": "Specify a series of records, all of the same kind.",
     "mutator": "tapestry_generic_mutation",
     "extensions": [
-      "tapestry_mutation_mixin",
-      "tapestry_mutation_extension"
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
     ],
     "customData": {
       "muiData": [
@@ -463,7 +457,6 @@ const jsonData=  [
             "text": "kind"
           },
           {
-            "name": "kind",
             "type": "field_input"
           },
           {
@@ -482,6 +475,7 @@ const jsonData=  [
             "check": [
               "field_values"
             ],
+            "shadow": "field_values",
             "repeats": true
           }
         ]
@@ -529,8 +523,8 @@ const jsonData=  [
     "tooltip": "Specify a small bit of text.",
     "mutator": "tapestry_generic_mutation",
     "extensions": [
-      "tapestry_mutation_mixin",
-      "tapestry_mutation_extension"
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
     ],
     "customData": {
       "muiData": [
@@ -540,7 +534,6 @@ const jsonData=  [
             "text": "text"
           },
           {
-            "name": "text",
             "type": "field_input"
           },
           {
@@ -554,7 +547,6 @@ const jsonData=  [
             "text": "class"
           },
           {
-            "name": "class",
             "type": "field_input"
           },
           {
@@ -605,8 +597,8 @@ const jsonData=  [
     "tooltip": "Text List: Specifies a set of text values.",
     "mutator": "tapestry_generic_mutation",
     "extensions": [
-      "tapestry_mutation_mixin",
-      "tapestry_mutation_extension"
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
     ],
     "customData": {
       "muiData": [
@@ -616,7 +608,6 @@ const jsonData=  [
             "text": "values"
           },
           {
-            "name": "values",
             "type": "field_input"
           },
           {
@@ -631,7 +622,6 @@ const jsonData=  [
             "text": "class"
           },
           {
-            "name": "class",
             "type": "field_input"
           },
           {
@@ -684,4 +674,4 @@ const jsonData=  [
     ],
     "message0": "%1%2%3%4%5%6%7%8"
   }
-]
+];
