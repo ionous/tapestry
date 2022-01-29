@@ -8,7 +8,8 @@ import (
 type State interface {
 	jsn.State
 	// substates write a fully completed value into us.
-	// fix -- maybe commit should return error? not sure.
+	// fix -- might be better to pass a completion callback into the states that need it
+	// could even pass a typed value then.
 	Commit(interface{})
 }
 

@@ -50,7 +50,9 @@ func TestStack(t *testing.T) {
 		t.Fatal(e, str)
 	} else if diff := pretty.Diff(str, `{
   "type": "story_lines",
-  "extraState": {},
+  "extraState": {
+    "LINES": 3
+  },
   "next": {
     "block": {
       "type": "story_break",
@@ -78,12 +80,10 @@ func TestStack(t *testing.T) {
 // a primitive list is a list of dummy inputs
 // noting that blockly ignores dummies when saving --
 // so get saved in the "fields" section
-func xTestSeries(t *testing.T) {
-	el := &literal.FieldValue{
-		Field: "test",
-		Value: &literal.NumValue{
-			Num: 5,
-		}}
+func TestSeries(t *testing.T) {
+	el := &literal.TextValues{
+		Values: []string{"a", "b", "c"},
+	}
 	var out js.Builder
 	enc := chart.MakeEncoder()
 	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
@@ -93,7 +93,7 @@ func xTestSeries(t *testing.T) {
 	} else if diff := pretty.Diff(str, `{
   "type": "text_values",
   "extraState": {
-  	"VALUES": 3
+    "VALUES": 3
   },
   "fields": {
     "VALUES0": "a",

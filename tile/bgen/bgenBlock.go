@@ -75,14 +75,15 @@ func newInnerBlock(m *chart.Machine, blk *js.Builder, typeName string) chart.Sta
 		OnRepeat: func(_ string, slice jsn.SliceBlock) (okay bool) {
 			// FIX: test some zero sized arrays
 			if cnt := slice.GetSize(); cnt > 0 {
-				m.PushState(newRepeat(m, term, cnt, &data))
+				data.writeCount(term, cnt)
+				m.PushState(newRepeat(m, term, &data))
 			}
 			return true
 		},
 
 		// a single value
 		OnValue: func(_ string, pv interface{}) (err error) {
-			if b, e := json.Marshal(unpackValue(pv)); e != nil {
+			if b, e := valueToBytes(pv); e != nil {
 				err = e
 			} else {
 				// fields are named the same as the input
@@ -101,6 +102,15 @@ func newInnerBlock(m *chart.Machine, blk *js.Builder, typeName string) chart.Sta
 	}
 }
 
+func valueToBytes(pv interface{}) (ret []byte, err error) {
+	if b, e := json.Marshal(unpackValue(pv)); e != nil {
+		err = e
+	} else {
+		ret = b
+	}
+	return
+}
+
 func unpackValue(pv interface{}) (ret interface{}) {
 	switch pv := pv.(type) {
 	// case interface{ GetCompactValue() interface{} }:
@@ -114,10 +124,12 @@ func unpackValue(pv interface{}) (ret interface{}) {
 }
 
 func (b *blockData) writeCount(term string, cnt int) {
-	if b.extraState.Len() > 0 {
-		b.extraState.R(js.Comma)
+	if cnt > 0 { // zero's the default for the tapestry_generic_mixin getExtraState()
+		if b.extraState.Len() > 0 {
+			b.extraState.R(js.Comma)
+		}
+		b.extraState.Q(term).R(js.Colon).N(cnt)
 	}
-	b.extraState.Q(term).R(js.Colon).N(cnt)
 }
 
 func (b *blockData) write(out *js.Builder) {
