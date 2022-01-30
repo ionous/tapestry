@@ -9,8 +9,7 @@
           "Spec:with flow:slots:groups:": [
             "render_exp",
             {
-              "flow:trim:uses:": [
-                "render_exp",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -35,8 +34,7 @@
           "Spec:with flow:slots:groups:": [
             "render_field",
             {
-              "flow:trim:uses:": [
-                "render_field",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -92,8 +90,7 @@
           "Spec:with flow:slots:groups:": [
             "render_name",
             {
-              "flow:trim:uses:": [
-                "render_name",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -147,8 +144,7 @@
           "Spec:with flow:slots:groups:": [
             "render_ref",
             {
-              "flow:trim:uses:": [
-                "render_ref",
+              "flow trim:uses:": [
                 true,
                 [
                   {

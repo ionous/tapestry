@@ -36,8 +36,7 @@
           "Spec:with flow:slots:": [
             "alias",
             {
-              "flow:trim:uses:": [
-                "alias",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -68,8 +67,7 @@
           "Spec:with flow:slots:": [
             "all_of",
             {
-              "flow:trim:uses:": [
-                "all_of",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -94,8 +92,7 @@
           "Spec:with flow:slots:": [
             "any_of",
             {
-              "flow:trim:uses:": [
-                "any_of",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -120,8 +117,7 @@
           "Spec:with flow:slots:": [
             "directive",
             {
-              "flow:trim:uses:": [
-                "directive",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -153,8 +149,7 @@
           "Spec:with flow:groups:": [
             "grammar",
             {
-              "flow:trim:uses:": [
-                "grammar",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -187,8 +182,7 @@
           "Spec:with flow:slots:": [
             "noun",
             {
-              "flow:trim:uses:": [
-                "noun",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -212,8 +206,7 @@
           "Spec:with flow:slots:": [
             "retarget",
             {
-              "flow:trim:uses:": [
-                "retarget",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -238,8 +231,7 @@
           "Spec:with flow:slots:": [
             "reverse",
             {
-              "flow:trim:uses:": [
-                "reverse",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -273,8 +265,7 @@
           "Spec:with flow:slots:": [
             "self",
             {
-              "flow:trim:uses:": [
-                "self",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -298,8 +289,7 @@
           "Spec:with flow:slots:": [
             "words",
             {
-              "flow:trim:uses:": [
-                "words",
+              "flow trim:uses:": [
                 true,
                 [
                   {

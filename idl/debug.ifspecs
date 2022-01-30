@@ -44,18 +44,15 @@
           "Spec:with flow:slots:": [
             "do_nothing",
             {
-              "flow:uses:": [
-                "do_nothing",
-                [
-                  {
-                    "Term:name:type:optional:": [
-                      "why",
-                      "reason",
-                      "text",
-                      true
-                    ]
-                  }
-                ]
+              "flow uses:": [
+                {
+                  "Term:name:type:optional:": [
+                    "why",
+                    "reason",
+                    "text",
+                    true
+                  ]
+                }
               ]
             },
             [

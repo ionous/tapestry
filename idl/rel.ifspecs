@@ -73,8 +73,7 @@
           "Spec:with flow:slots:": [
             "relate",
             {
-              "flow:trim:uses:": [
-                "relate",
+              "flow trim:uses:": [
                 true,
                 [
                   {

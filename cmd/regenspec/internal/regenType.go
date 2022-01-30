@@ -150,9 +150,9 @@ func (t *Type) Picks() []Param {
 func (t *Type) Flow() (ret string) {
 	if english, ts := t.Tokens(); !english && len(ts) > 0 {
 		if s := ts[0]; len(s) > 0 && s[0] != '$' {
-			// if s != t.Name() {
-			ret = s
-			// }
+			if s != t.Name() {
+				ret = s
+			}
 		}
 	}
 	return

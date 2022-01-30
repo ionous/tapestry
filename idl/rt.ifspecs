@@ -11,8 +11,7 @@
           "Spec:with flow:": [
             "arg",
             {
-              "flow:trim:uses:": [
-                "arg",
+              "flow trim:uses:": [
                 true,
                 [
                   {

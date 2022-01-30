@@ -38,8 +38,7 @@
           "Spec:with flow:slots:groups:": [
             "all_true",
             {
-              "flow:trim:uses:": [
-                "all_true",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -67,10 +66,7 @@
           "Spec:with flow:slots:groups:": [
             "always",
             {
-              "flow:uses:": [
-                "always",
-                []
-              ]
+              "flow uses:": []
             },
             [
               "bool_eval"
@@ -87,8 +83,7 @@
           "Spec:with flow:slots:groups:": [
             "any_true",
             {
-              "flow:trim:uses:": [
-                "any_true",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -151,10 +146,7 @@
           "Spec:with flow:slots:groups:": [
             "at_least",
             {
-              "flow:uses:": [
-                "at_least",
-                []
-              ]
+              "flow uses:": []
             },
             [
               "comparator"
@@ -171,10 +163,7 @@
           "Spec:with flow:slots:groups:": [
             "at_most",
             {
-              "flow:uses:": [
-                "at_most",
-                []
-              ]
+              "flow uses:": []
             },
             [
               "comparator"
@@ -248,10 +237,7 @@
           "Spec:with flow:slots:groups:": [
             "break",
             {
-              "flow:uses:": [
-                "break",
-                []
-              ]
+              "flow uses:": []
             },
             [
               "execute"
@@ -541,8 +527,7 @@
           "Spec:with flow:slots:groups:": [
             "capitalize",
             {
-              "flow:trim:uses:": [
-                "capitalize",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -1022,8 +1007,7 @@
           "Spec:with flow:slots:groups:": [
             "during",
             {
-              "flow:trim:uses:": [
-                "during",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -1071,8 +1055,7 @@
           "Spec:with flow:slots:groups:": [
             "from_bool",
             {
-              "flow:trim:uses:": [
-                "from_bool",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -1099,8 +1082,7 @@
           "Spec:with flow:slots:groups:": [
             "from_num",
             {
-              "flow:trim:uses:": [
-                "from_num",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -1436,10 +1418,7 @@
           "Spec:with flow:slots:groups:": [
             "greater_than",
             {
-              "flow:uses:": [
-                "greater_than",
-                []
-              ]
+              "flow uses:": []
             },
             [
               "comparator"
@@ -1454,8 +1433,7 @@
           "Spec:with flow:slots:groups:": [
             "has_dominion",
             {
-              "flow:trim:uses:": [
-                "has_dominion",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -1516,8 +1494,7 @@
           "Spec:with flow:slots:groups:": [
             "id_of",
             {
-              "flow:trim:uses:": [
-                "id_of",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -1741,8 +1718,7 @@
           "Spec:with flow:slots:groups:": [
             "join",
             {
-              "flow:trim:uses:": [
-                "join",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -1777,8 +1753,7 @@
           "Spec:with flow:slots:groups:": [
             "kind_of",
             {
-              "flow:trim:uses:": [
-                "kind_of",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -1805,8 +1780,7 @@
           "Spec:with flow:slots:groups:": [
             "kinds_of",
             {
-              "flow:trim:uses:": [
-                "kinds_of",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -1833,10 +1807,7 @@
           "Spec:with flow:slots:groups:": [
             "less_than",
             {
-              "flow:uses:": [
-                "less_than",
-                []
-              ]
+              "flow uses:": []
             },
             [
               "comparator"
@@ -1992,8 +1963,7 @@
           "Spec:with flow:slots:groups:": [
             "matches",
             {
-              "flow:trim:uses:": [
-                "matches",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -2034,8 +2004,7 @@
           "Spec:with flow:slots:groups:": [
             "name_of",
             {
-              "flow:trim:uses:": [
-                "name_of",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -2062,10 +2031,7 @@
           "Spec:with flow:slots:groups:": [
             "never",
             {
-              "flow:uses:": [
-                "never",
-                []
-              ]
+              "flow uses:": []
             },
             [
               "bool_eval"
@@ -2102,10 +2068,7 @@
           "Spec:with flow:slots:groups:": [
             "next",
             {
-              "flow:uses:": [
-                "next",
-                []
-              ]
+              "flow uses:": []
             },
             [
               "execute"
@@ -2122,8 +2085,7 @@
           "Spec:with flow:slots:groups:": [
             "not",
             {
-              "flow:trim:uses:": [
-                "not",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -2420,8 +2382,7 @@
           "Spec:with flow:slots:groups:": [
             "response",
             {
-              "flow:trim:uses:": [
-                "response",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -2455,8 +2416,7 @@
           "Spec:with flow:slots:groups:": [
             "row",
             {
-              "flow:trim:uses:": [
-                "row",
+              "flow trim:uses:": [
                 true,
                 [
                   {
@@ -2483,8 +2443,7 @@
           "Spec:with flow:slots:groups:": [
             "rows",
             {
-              "flow:trim:uses:": [
-                "rows",
+              "flow trim:uses:": [
                 true,
                 [
                   {
