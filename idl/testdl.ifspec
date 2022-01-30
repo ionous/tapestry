@@ -20,6 +20,12 @@
                 "spec": "swap {a:test_flow} {b:test_slot} {c:test_txt}",
                 "slot": "test_slot"
             },
+            "test_str":
+            {
+                "uses": "str",
+                "spec": "{one}, {other}, {option}",
+                "slot": "test_slot"
+            },
             "test_num":
             {
                 "uses": "num"

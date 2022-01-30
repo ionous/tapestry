@@ -25,6 +25,29 @@
         },
         {
           "--": "",
+          "Spec:with str:slots:": [
+            "test_str",
+            {
+              "Str exclusively:uses:": [
+                true,
+                [
+                  {
+                    "Option:": "one"
+                  },
+                  {
+                    "Option:": "other"
+                  },
+                  {
+                    "Option:": "option"
+                  }
+                ]
+              ]
+            },
+            ["test_slot"]
+          ]
+        },
+        {
+          "--": "",
           "Spec:with flow:slots:": [
             "test_flow",
             {

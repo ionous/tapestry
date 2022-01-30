@@ -429,6 +429,90 @@ func TestSlot_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestSlot) (err err
 	return
 }
 
+// TestStr requires a predefined string.
+type TestStr struct {
+	Str string
+}
+
+func (op *TestStr) String() string {
+	return op.Str
+}
+
+const TestStr_One = "$ONE"
+const TestStr_Other = "$OTHER"
+const TestStr_Option = "$OPTION"
+
+func (*TestStr) Compose() composer.Spec {
+	return composer.Spec{
+		Name: TestStr_Type,
+		Uses: composer.Type_Str,
+		Choices: []string{
+			TestStr_One, TestStr_Other, TestStr_Option,
+		},
+		Strings: []string{
+			"one", "other", "option",
+		},
+	}
+}
+
+const TestStr_Type = "test_str"
+
+func (op *TestStr) Marshal(m jsn.Marshaler) error {
+	return TestStr_Marshal(m, op)
+}
+
+func TestStr_Optional_Marshal(m jsn.Marshaler, val *TestStr) (err error) {
+	var zero TestStr
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = TestStr_Marshal(m, val)
+	}
+	return
+}
+
+func TestStr_Marshal(m jsn.Marshaler, val *TestStr) (err error) {
+	return m.MarshalValue(TestStr_Type, jsn.MakeEnum(val, &val.Str))
+}
+
+type TestStr_Slice []TestStr
+
+func (op *TestStr_Slice) GetType() string { return TestStr_Type }
+
+func (op *TestStr_Slice) Marshal(m jsn.Marshaler) error {
+	return TestStr_Repeats_Marshal(m, (*[]TestStr)(op))
+}
+
+func (op *TestStr_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *TestStr_Slice) SetSize(cnt int) {
+	var els []TestStr
+	if cnt >= 0 {
+		els = make(TestStr_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *TestStr_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return TestStr_Marshal(m, &(*op)[i])
+}
+
+func TestStr_Repeats_Marshal(m jsn.Marshaler, vals *[]TestStr) error {
+	return jsn.RepeatBlock(m, (*TestStr_Slice)(vals))
+}
+
+func TestStr_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestStr) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = TestStr_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
 // TestSwap swaps between various options
 type TestSwap struct {
 	Choice string
@@ -620,6 +704,7 @@ var Slats = []composer.Composer{
 	(*TestBool)(nil),
 	(*TestFlow)(nil),
 	(*TestNum)(nil),
+	(*TestStr)(nil),
 	(*TestSwap)(nil),
 	(*TestTxt)(nil),
 }
