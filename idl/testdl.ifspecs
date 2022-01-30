@@ -7,24 +7,6 @@
         {
           "--": "",
           "Spec:with str:": [
-            "test_txt",
-            {
-              "Str uses:": []
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with num:": [
-            "test_num",
-            {
-              "Num uses:": []
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with str:": [
             "test_bool",
             {
               "Str exclusively:uses:": [
@@ -37,34 +19,6 @@
                     "Option:": "false"
                   }
                 ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with swap:": [
-            "test_swap",
-            {
-              "Swap between:": [
-                {
-                  "Pick:type:": [
-                    "a",
-                    "test_flow"
-                  ]
-                },
-                {
-                  "Pick:type:": [
-                    "b",
-                    "test_slot"
-                  ]
-                },
-                {
-                  "Pick:type:": [
-                    "c",
-                    "test_txt"
-                  ]
-                }
               ]
             }
           ]
@@ -130,10 +84,56 @@
         },
         {
           "--": "",
+          "Spec:with num:": [
+            "test_num",
+            {
+              "Num uses:": []
+            }
+          ]
+        },
+        {
+          "--": "",
           "Spec:with slot:": [
             "test_slot",
             {
               "Slot": true
+            }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with swap:": [
+            "test_swap",
+            {
+              "Swap between:": [
+                {
+                  "Pick:type:": [
+                    "a",
+                    "test_flow"
+                  ]
+                },
+                {
+                  "Pick:type:": [
+                    "b",
+                    "test_slot"
+                  ]
+                },
+                {
+                  "Pick:type:": [
+                    "c",
+                    "test_txt"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:": [
+            "test_txt",
+            {
+              "Str uses:": []
             }
           ]
         }

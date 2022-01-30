@@ -7,34 +7,29 @@
         {
           "--": "",
           "Spec:with flow:": [
-            "slot_spec",
+            "choice_spec",
             {
-              "flow:uses:": [
-                "slot",
-                []
-              ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:": [
-            "str_spec",
-            {
-              "flow:uses:": [
-                "str",
+              "flow:trim:uses:": [
+                "pick",
+                true,
                 [
                   {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
                     "Term:type:optional:": [
-                      "exclusively",
-                      "bool",
+                      "label",
+                      "text",
                       true
                     ]
                   },
                   {
-                    "Term:type:repeats:": [
-                      "uses",
-                      "option_spec",
+                    "Term:type:optional:": [
+                      "type",
+                      "text",
                       true
                     ]
                   }
@@ -45,46 +40,43 @@
         },
         {
           "--": "",
-          "Spec:with swap:": [
-            "uses_spec",
+          "Spec:with flow:": [
+            "flow_spec",
             {
-              "Swap between:": [
-                {
-                  "Pick:type:": [
-                    "flow",
-                    "flow_spec"
-                  ]
-                },
-                {
-                  "Pick:type:": [
-                    "slot",
-                    "slot_spec"
-                  ]
-                },
-                {
-                  "Pick:type:": [
-                    "swap",
-                    "swap_spec"
-                  ]
-                },
-                {
-                  "Pick:type:": [
-                    "num",
-                    "num_spec"
-                  ]
-                },
-                {
-                  "Pick:type:": [
-                    "str",
-                    "str_spec"
-                  ]
-                },
-                {
-                  "Pick:type:": [
-                    "group",
-                    "group_spec"
-                  ]
-                }
+              "flow:trim:uses:": [
+                "flow",
+                true,
+                [
+                  {
+                    "Term:type:optional:": [
+                      "name",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "phrase",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "trim",
+                      "bool",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                      "uses",
+                      "terms",
+                      "term_spec",
+                      true
+                    ]
+                  }
+                ]
               ]
             }
           ]
@@ -140,116 +132,6 @@
         {
           "--": "",
           "Spec:with flow:": [
-            "flow_spec",
-            {
-              "flow:trim:uses:": [
-                "flow",
-                true,
-                [
-                  {
-                    "Term:type:optional:": [
-                      "name",
-                      "text",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "phrase",
-                      "text",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "trim",
-                      "bool",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:name:type:repeats:": [
-                      "uses",
-                      "terms",
-                      "term_spec",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": [
-            "can optionally fit one or more slots, or be part of one or more groups."
-          ],
-          "Spec:with flow:": [
-            "type_spec",
-            {
-              "flow:trim:uses:": [
-                "spec",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "with",
-                      "spec",
-                      "uses_spec"
-                    ]
-                  },
-                  {
-                    "Term:type:optional:repeats:": [
-                      "slots",
-                      "text",
-                      true,
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:repeats:": [
-                      "groups",
-                      "text",
-                      true,
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": [
-            "specifies a choice between one or more other types."
-          ],
-          "Spec:with flow:": [
-            "swap_spec",
-            {
-              "flow:uses:": [
-                "swap",
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "between",
-                      "choice_spec",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:": [
             "option_spec",
             {
               "flow:trim:uses:": [
@@ -277,29 +159,56 @@
         {
           "--": "",
           "Spec:with flow:": [
-            "choice_spec",
+            "slot_spec",
             {
-              "flow:trim:uses:": [
-                "pick",
-                true,
+              "flow:uses:": [
+                "slot",
+                []
+              ]
+            }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:": [
+            "str_spec",
+            {
+              "flow:uses:": [
+                "str",
                 [
                   {
-                    "Term:type:": [
-                      "name",
-                      "text"
-                    ]
-                  },
-                  {
                     "Term:type:optional:": [
-                      "label",
-                      "text",
+                      "exclusively",
+                      "bool",
                       true
                     ]
                   },
                   {
-                    "Term:type:optional:": [
-                      "type",
-                      "text",
+                    "Term:type:repeats:": [
+                      "uses",
+                      "option_spec",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "specifies a choice between one or more other types."
+          ],
+          "Spec:with flow:": [
+            "swap_spec",
+            {
+              "flow:uses:": [
+                "swap",
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "between",
+                      "choice_spec",
                       true
                     ]
                   }
@@ -359,6 +268,97 @@
                     ]
                   }
                 ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "can optionally fit one or more slots, or be part of one or more groups."
+          ],
+          "Spec:with flow:": [
+            "type_spec",
+            {
+              "flow:trim:uses:": [
+                "spec",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "with",
+                      "spec",
+                      "uses_spec"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:repeats:": [
+                      "slots",
+                      "text",
+                      true,
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:repeats:": [
+                      "groups",
+                      "text",
+                      true,
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with swap:": [
+            "uses_spec",
+            {
+              "Swap between:": [
+                {
+                  "Pick:type:": [
+                    "group",
+                    "group_spec"
+                  ]
+                },
+                {
+                  "Pick:type:": [
+                    "flow",
+                    "flow_spec"
+                  ]
+                },
+                {
+                  "Pick:type:": [
+                    "slot",
+                    "slot_spec"
+                  ]
+                },
+                {
+                  "Pick:type:": [
+                    "swap",
+                    "swap_spec"
+                  ]
+                },
+                {
+                  "Pick:type:": [
+                    "num",
+                    "num_spec"
+                  ]
+                },
+                {
+                  "Pick:type:": [
+                    "str",
+                    "str_spec"
+                  ]
+                }
               ]
             }
           ]

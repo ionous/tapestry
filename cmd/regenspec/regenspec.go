@@ -12,6 +12,7 @@ import (
 	"text/template"
 
 	regen "git.sr.ht/~ionous/tapestry/cmd/regenspec/internal"
+	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
 // fix: generate one file at a time, output one file at a time; see compact.go for example.
@@ -23,6 +24,7 @@ func main() {
 	}
 }
 
+// generated manually via makeops
 //go:embed data/allTypes.jspec
 var allBytes []byte
 
@@ -30,27 +32,46 @@ var allBytes []byte
 var templates embed.FS
 
 func convert(ts *template.Template, b []byte) (err error) {
-	var allTypes map[string]interface{}
+	var allTypes js.MapSlice // use MapSlice to keep the file specified order
 	if e := json.Unmarshal(b, &allTypes); e != nil {
 		err = e
 	} else {
+		// read all the types into their groups
+		// note: the descriptions of the groups themselves start with an underscore
 		groups := make(map[string][]*regen.Type)
-		for k, _ := range allTypes {
-			t := regen.NewType(regen.MapOf(k, allTypes))
-			if u := t.Uses(); u != "group" {
-				// the first group is the primary group.
-				gn := t.AllGroups()[0]
-				if len(gn) == 0 {
-					panic(t.Name())
+		for _, n := range allTypes {
+			var m map[string]interface{}
+			if e := json.Unmarshal(n.Value, &m); e != nil {
+				err = e
+				break
+			} else {
+				t := regen.NewType(m)
+				// get the name of the group from the type
+				var gn string
+				if u := t.Uses(); u == "group" {
+					gn = n.Key
+					if gn[0] != '_' {
+						panic(t.Name())
+					}
+				} else {
+					// the first group is the primary group.
+					gn = t.AllGroups()[0]
+					if len(gn) == 0 {
+						panic(t.Name())
+					}
 				}
+				// add to the group
 				groups[gn] = append(groups[gn], t)
 			}
 		}
 		for group, types := range groups {
+			if group[0] == '_' {
+				continue // skip groups
+			}
 			// go-lang templating doesnt allow us to control the whitespace of nested templates
 			// it will always look bad, so just buffer it....
 			log.Println("writing", group)
-			gt := regen.NewType(regen.MapOf("_"+group, allTypes))
+			gt := groups["_"+group][0]
 
 			var buf bytes.Buffer
 			if e := ts.Execute(&buf, map[string]interface{}{

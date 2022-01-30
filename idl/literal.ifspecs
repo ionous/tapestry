@@ -5,6 +5,63 @@
     {
       "Group contains:": [
         {
+          "--": [
+            "Specify an explicit true or false."
+          ],
+          "Spec:with flow:slots:": [
+            "bool_value",
+            {
+              "flow:trim:uses:": [
+                "bool",
+                true,
+                [
+                  {
+                    "Term:": "bool"
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "class",
+                      "text",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "bool_eval",
+              "literal_value"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "A fixed value of a record."
+          ],
+          "Spec:with flow:": [
+            "field_value",
+            {
+              "flow:uses:": [
+                "field",
+                [
+                  {
+                    "Term:type:": [
+                      "field",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "value",
+                      "literal_value"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
           "--": "",
           "Spec:with flow:slots:groups:": [
             "field_values",
@@ -28,40 +85,6 @@
             ],
             [
               "internal"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Text List: Specifies a set of text values."
-          ],
-          "Spec:with flow:slots:": [
-            "text_values",
-            {
-              "flow:trim:uses:": [
-                "txts",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "values",
-                      "text",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "class",
-                      "text",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "text_list_eval",
-              "literal_value"
             ]
           ]
         },
@@ -109,6 +132,40 @@
         },
         {
           "--": [
+            "Number List: Specify a list of numbers."
+          ],
+          "Spec:with flow:slots:": [
+            "num_values",
+            {
+              "flow:trim:uses:": [
+                "nums",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "values",
+                      "number",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "class",
+                      "text",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "num_list_eval",
+              "literal_value"
+            ]
+          ]
+        },
+        {
+          "--": [
             "Specify a record composed of literal values."
           ],
           "Spec:with flow:slots:": [
@@ -143,97 +200,6 @@
             },
             [
               "record_eval",
-              "literal_value"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "A fixed value of a record."
-          ],
-          "Spec:with flow:": [
-            "field_value",
-            {
-              "flow:uses:": [
-                "field",
-                [
-                  {
-                    "Term:type:": [
-                      "field",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "value",
-                      "literal_value"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": [
-            "Specify an explicit true or false."
-          ],
-          "Spec:with flow:slots:": [
-            "bool_value",
-            {
-              "flow:trim:uses:": [
-                "bool",
-                true,
-                [
-                  {
-                    "Term:": "bool"
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "class",
-                      "text",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "bool_eval",
-              "literal_value"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Number List: Specify a list of numbers."
-          ],
-          "Spec:with flow:slots:": [
-            "num_values",
-            {
-              "flow:trim:uses:": [
-                "nums",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "values",
-                      "number",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "class",
-                      "text",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "num_list_eval",
               "literal_value"
             ]
           ]
@@ -305,6 +271,40 @@
             },
             [
               "text_eval",
+              "literal_value"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Text List: Specifies a set of text values."
+          ],
+          "Spec:with flow:slots:": [
+            "text_values",
+            {
+              "flow:trim:uses:": [
+                "txts",
+                true,
+                [
+                  {
+                    "Term:type:repeats:": [
+                      "values",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "class",
+                      "text",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "text_list_eval",
               "literal_value"
             ]
           ]

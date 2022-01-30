@@ -6,6 +6,58 @@
       "Group contains:": [
         {
           "--": "",
+          "Spec:with flow:slots:groups:": [
+            "render_exp",
+            {
+              "flow:trim:uses:": [
+                "render_exp",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "expression",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "text_eval"
+            ],
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "render_field",
+            {
+              "flow:trim:uses:": [
+                "render_field",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "from_source_fields"
+            ],
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": "",
           "Spec:with str:": [
             "render_flags",
             {
@@ -38,23 +90,23 @@
         {
           "--": "",
           "Spec:with flow:slots:groups:": [
-            "render_field",
+            "render_name",
             {
               "flow:trim:uses:": [
-                "render_field",
+                "render_name",
                 true,
                 [
                   {
                     "Term:type:": [
                       "name",
-                      "text_eval"
+                      "text"
                     ]
                   }
                 ]
               ]
             },
             [
-              "from_source_fields"
+              "text_eval"
             ],
             [
               "internal"
@@ -64,22 +116,23 @@
         {
           "--": "",
           "Spec:with flow:slots:groups:": [
-            "render_exp",
+            "render_pattern",
             {
               "flow:trim:uses:": [
-                "render_exp",
+                "render",
                 true,
                 [
                   {
                     "Term:type:": [
-                      "expression",
-                      "text_eval"
+                      "call",
+                      "call_pattern"
                     ]
                   }
                 ]
               ]
             },
             [
+              "assignment",
               "text_eval"
             ],
             [
@@ -116,59 +169,6 @@
             [
               "assignment",
               "number_eval",
-              "text_eval"
-            ],
-            [
-              "internal"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
-            "render_pattern",
-            {
-              "flow:trim:uses:": [
-                "render",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "call",
-                      "call_pattern"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "assignment",
-              "text_eval"
-            ],
-            [
-              "internal"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
-            "render_name",
-            {
-              "flow:trim:uses:": [
-                "render_name",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "text"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
               "text_eval"
             ],
             [

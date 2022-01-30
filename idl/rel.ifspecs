@@ -5,14 +5,64 @@
     {
       "Group contains:": [
         {
-          "--": "",
-          "Spec:with str:groups:": [
-            "relation_name",
+          "--": [
+            "Returns the implied relative of a noun (ex. the source in a one-to-many relation.)."
+          ],
+          "Spec:with flow:slots:": [
+            "reciprocal_of",
             {
-              "Str uses:": []
+              "flow:trim:uses:": [
+                "reciprocal",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "via",
+                      "relation_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
             },
             [
-              "positioned"
+              "text_eval"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns the implied relative of a noun (ex. the sources of a many-to-many relation.)."
+          ],
+          "Spec:with flow:slots:": [
+            "reciprocals_of",
+            {
+              "flow:trim:uses:": [
+                "reciprocals",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "via",
+                      "relation_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "text_list_eval"
             ]
           ]
         },
@@ -55,33 +105,14 @@
           ]
         },
         {
-          "--": [
-            "Returns the implied relative of a noun (ex. the sources of a many-to-many relation.)."
-          ],
-          "Spec:with flow:slots:": [
-            "reciprocals_of",
+          "--": "",
+          "Spec:with str:groups:": [
+            "relation_name",
             {
-              "flow:trim:uses:": [
-                "reciprocals",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "via",
-                      "relation_name"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "object",
-                      "text_eval"
-                    ]
-                  }
-                ]
-              ]
+              "Str uses:": []
             },
             [
-              "text_list_eval"
+              "positioned"
             ]
           ]
         },
@@ -94,37 +125,6 @@
             {
               "flow:trim:uses:": [
                 "relative",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "via",
-                      "relation_name"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "object",
-                      "text_eval"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "text_eval"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Returns the implied relative of a noun (ex. the source in a one-to-many relation.)."
-          ],
-          "Spec:with flow:slots:": [
-            "reciprocal_of",
-            {
-              "flow:trim:uses:": [
-                "reciprocal",
                 true,
                 [
                   {

@@ -6,13 +6,13 @@
       "Group contains:": [
         {
           "--": [
-            "Uses a list of records."
+            "Define the name of a number variable."
           ],
           "Spec:with flow:slots:": [
-            "from_rec_list",
+            "as_num",
             {
               "flow:trim:uses:": [
-                "var_of_recs",
+                "as_num",
                 true,
                 [
                   {
@@ -25,24 +25,169 @@
               ]
             },
             [
-              "list_source"
+              "list_iterator"
             ]
           ]
         },
         {
           "--": [
-            "Reverse a list."
+            "Define the name of a record variable."
           ],
           "Spec:with flow:slots:": [
-            "list_reverse",
+            "as_rec",
             {
-              "flow:uses:": [
-                "reverse",
+              "flow:trim:uses:": [
+                "as_rec",
+                true,
                 [
                   {
                     "Term:type:": [
-                      "list",
+                      "var",
+                      "variable_name"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "list_iterator"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Define the name of a text variable."
+          ],
+          "Spec:with flow:slots:": [
+            "as_txt",
+            {
+              "flow:trim:uses:": [
+                "as_txt",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "var",
+                      "variable_name"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "list_iterator"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Erase at edge: Remove one or more values from a list."
+          ],
+          "Spec:with flow:slots:": [
+            "erase_edge",
+            {
+              "flow:trim:uses:": [
+                "erase",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "from",
                       "list_source"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:": [
+                      "at_front",
+                      "at_edge",
+                      "bool_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "execute"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Erase at index: Remove one or more values from a list."
+          ],
+          "Spec:with flow:slots:": [
+            "erase_index",
+            {
+              "flow:trim:uses:": [
+                "erase",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "count",
+                      "number_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "from",
+                      "list_source"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "at_index",
+                      "number_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "execute"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased."
+          ],
+          "Spec:with flow:slots:": [
+            "erasing",
+            {
+              "flow:trim:uses:": [
+                "erasing",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "count",
+                      "number_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "from",
+                      "list_source"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "at_index",
+                      "number_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "as",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "do",
+                      "activity"
                     ]
                   }
                 ]
@@ -107,6 +252,56 @@
         },
         {
           "--": [
+            "Uses a list of numbers."
+          ],
+          "Spec:with flow:slots:": [
+            "from_num_list",
+            {
+              "flow:trim:uses:": [
+                "var_of_nums",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "var",
+                      "variable_name"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "list_source"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Uses a list of records."
+          ],
+          "Spec:with flow:slots:": [
+            "from_rec_list",
+            {
+              "flow:trim:uses:": [
+                "var_of_recs",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "var",
+                      "variable_name"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "list_source"
+            ]
+          ]
+        },
+        {
+          "--": [
             "Uses a list of text."
           ],
           "Spec:with flow:slots:": [
@@ -131,108 +326,14 @@
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:": [
-            "range",
-            {
-              "flow:trim:uses:": [
-                "range",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "to",
-                      "number_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "from",
-                      "number_eval",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "by_step",
-                      "number_eval",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "num_list_eval"
-            ]
-          ]
-        },
-        {
           "--": [
-            "Search a list for a specific value."
+            "Targets a list of numbers."
           ],
           "Spec:with flow:slots:": [
-            "list_find",
+            "into_num_list",
             {
               "flow:trim:uses:": [
-                "find",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "value",
-                      "assignment"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "list",
-                      "assignment"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "bool_eval",
-              "number_eval"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Determines the number of values in a list."
-          ],
-          "Spec:with flow:slots:": [
-            "list_len",
-            {
-              "flow:trim:uses:": [
-                "len",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "list",
-                      "assignment"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "number_eval"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather."
-          ],
-          "Spec:with flow:": [
-            "list_gather",
-            {
-              "flow:trim:uses:": [
-                "gather",
+                "into_nums",
                 true,
                 [
                   {
@@ -240,33 +341,24 @@
                       "var",
                       "variable_name"
                     ]
-                  },
-                  {
-                    "Term:type:": [
-                      "from",
-                      "list_source"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "using",
-                      "text"
-                    ]
                   }
                 ]
               ]
-            }
+            },
+            [
+              "list_target"
+            ]
           ]
         },
         {
           "--": [
-            "Rearrange the elements in the named list by using the designated pattern to test pairs of elements."
+            "Targets a list of records."
           ],
           "Spec:with flow:slots:": [
-            "list_sort_text",
+            "into_rec_list",
             {
               "flow:trim:uses:": [
-                "sort_texts",
+                "into_recs",
                 true,
                 [
                   {
@@ -274,78 +366,12 @@
                       "var",
                       "variable_name"
                     ]
-                  },
-                  {
-                    "Term:type:": [
-                      "by_field",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "descending",
-                      "bool_eval",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "using_case",
-                      "bool_eval",
-                      true
-                    ]
                   }
                 ]
               ]
             },
             [
-              "execute"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list's length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed."
-          ],
-          "Spec:with flow:slots:": [
-            "list_splice",
-            {
-              "flow:trim:uses:": [
-                "splice",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "list",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "start",
-                      "number_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "remove",
-                      "number_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "insert",
-                      "assignment"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "execute",
-              "num_list_eval",
-              "text_list_eval",
-              "record_list_eval"
+              "list_target"
             ]
           ]
         },
@@ -376,40 +402,34 @@
         },
         {
           "--": [
-            "Add a value to a list."
+            "Get a value from a list. The first element is is index 1."
           ],
           "Spec:with flow:slots:": [
-            "put_edge",
+            "list_at",
             {
               "flow:trim:uses:": [
-                "put",
+                "get",
                 true,
                 [
                   {
                     "Term:type:": [
-                      "from",
+                      "list",
                       "assignment"
                     ]
                   },
                   {
                     "Term:type:": [
-                      "into",
-                      "list_target"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:": [
-                      "at_front",
-                      "at_edge",
-                      "bool_eval",
-                      true
+                      "index",
+                      "number_eval"
                     ]
                   }
                 ]
               ]
             },
             [
-              "execute"
+              "number_eval",
+              "text_eval",
+              "record_eval"
             ]
           ]
         },
@@ -458,274 +478,46 @@
           ]
         },
         {
-          "--": "Helper for accessing lists.",
-          "Spec:with slot:": [
-            "list_target",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
           "--": [
-            "Define the name of a text variable."
+            "Search a list for a specific value."
           ],
           "Spec:with flow:slots:": [
-            "as_txt",
+            "list_find",
             {
               "flow:trim:uses:": [
-                "as_txt",
+                "find",
                 true,
                 [
                   {
                     "Term:type:": [
-                      "var",
-                      "variable_name"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "list_iterator"
-            ]
-          ]
-        },
-        {
-          "--": "Helper for accessing lists.",
-          "Spec:with slot:": [
-            "list_source",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
-          "--": [
-            "Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased."
-          ],
-          "Spec:with flow:slots:": [
-            "erasing",
-            {
-              "flow:trim:uses:": [
-                "erasing",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "count",
-                      "number_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "from",
-                      "list_source"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "at_index",
-                      "number_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "as",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "do",
-                      "activity"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "execute"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Erase at edge: Remove one or more values from a list."
-          ],
-          "Spec:with flow:slots:": [
-            "erase_edge",
-            {
-              "flow:trim:uses:": [
-                "erase",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "from",
-                      "list_source"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:": [
-                      "at_front",
-                      "at_edge",
-                      "bool_eval",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "execute"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Targets a list of records."
-          ],
-          "Spec:with flow:slots:": [
-            "into_rec_list",
-            {
-              "flow:trim:uses:": [
-                "into_recs",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "var",
-                      "variable_name"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "list_target"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:slots:": [
-            "list_sort_numbers",
-            {
-              "flow:trim:uses:": [
-                "sort_numbers",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "var",
-                      "variable_name"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "by_field",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "descending",
-                      "bool_eval",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "execute"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Erase at index: Remove one or more values from a list."
-          ],
-          "Spec:with flow:slots:": [
-            "erase_index",
-            {
-              "flow:trim:uses:": [
-                "erase",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "count",
-                      "number_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "from",
-                      "list_source"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "at_index",
-                      "number_eval"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "execute"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Replace one value in a list with another."
-          ],
-          "Spec:with flow:slots:": [
-            "put_index",
-            {
-              "flow:trim:uses:": [
-                "put",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "from",
+                      "value",
                       "assignment"
                     ]
                   },
                   {
                     "Term:type:": [
-                      "into",
-                      "list_target"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "at_index",
-                      "number_eval"
+                      "list",
+                      "assignment"
                     ]
                   }
                 ]
               ]
             },
             [
-              "execute"
+              "bool_eval",
+              "number_eval"
             ]
           ]
         },
         {
           "--": [
-            "Uses a list of numbers."
+            "Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather."
           ],
-          "Spec:with flow:slots:": [
-            "from_num_list",
+          "Spec:with flow:": [
+            "list_gather",
             {
               "flow:trim:uses:": [
-                "var_of_nums",
+                "gather",
                 true,
                 [
                   {
@@ -733,22 +525,42 @@
                       "var",
                       "variable_name"
                     ]
+                  },
+                  {
+                    "Term:type:": [
+                      "from",
+                      "list_source"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "using",
+                      "text"
+                    ]
                   }
                 ]
               ]
-            },
-            [
-              "list_source"
-            ]
+            }
           ]
         },
         {
-          "--": "",
+          "--": "Helper for accessing lists.",
+          "Spec:with slot:": [
+            "list_iterator",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": [
+            "Determines the number of values in a list."
+          ],
           "Spec:with flow:slots:": [
-            "list_slice",
+            "list_len",
             {
               "flow:trim:uses:": [
-                "slice",
+                "len",
                 true,
                 [
                   {
@@ -756,28 +568,12 @@
                       "list",
                       "assignment"
                     ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "start",
-                      "number_eval",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "end",
-                      "number_eval",
-                      true
-                    ]
                   }
                 ]
               ]
             },
             [
-              "num_list_eval",
-              "text_list_eval",
-              "record_list_eval"
+              "number_eval"
             ]
           ]
         },
@@ -808,154 +604,6 @@
                     "Term:name:type:": [
                       "using",
                       "using_pattern",
-                      "text"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "execute"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Get a value from a list. The first element is is index 1."
-          ],
-          "Spec:with flow:slots:": [
-            "list_at",
-            {
-              "flow:trim:uses:": [
-                "get",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "list",
-                      "assignment"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "index",
-                      "number_eval"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "number_eval",
-              "text_eval",
-              "record_eval"
-            ]
-          ]
-        },
-        {
-          "--": "Helper for accessing lists.",
-          "Spec:with slot:": [
-            "list_iterator",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
-          "--": [
-            "Define the name of a record variable."
-          ],
-          "Spec:with flow:slots:": [
-            "as_rec",
-            {
-              "flow:trim:uses:": [
-                "as_rec",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "var",
-                      "variable_name"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "list_iterator"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Define the name of a number variable."
-          ],
-          "Spec:with flow:slots:": [
-            "as_num",
-            {
-              "flow:trim:uses:": [
-                "as_num",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "var",
-                      "variable_name"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "list_iterator"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Targets a list of numbers."
-          ],
-          "Spec:with flow:slots:": [
-            "into_num_list",
-            {
-              "flow:trim:uses:": [
-                "into_nums",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "var",
-                      "variable_name"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "list_target"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Rearrange the elements in the named list by using the designated pattern to test pairs of elements."
-          ],
-          "Spec:with flow:slots:": [
-            "list_sort_using",
-            {
-              "flow:trim:uses:": [
-                "sort",
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "var",
-                      "variable_name"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "using",
                       "text"
                     ]
                   }
@@ -1007,6 +655,30 @@
         },
         {
           "--": [
+            "Reverse a list."
+          ],
+          "Spec:with flow:slots:": [
+            "list_reverse",
+            {
+              "flow:uses:": [
+                "reverse",
+                [
+                  {
+                    "Term:type:": [
+                      "list",
+                      "list_source"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "execute"
+            ]
+          ]
+        },
+        {
+          "--": [
             "Overwrite an existing value in a list."
           ],
           "Spec:with flow:slots:": [
@@ -1039,6 +711,334 @@
             },
             [
               "execute"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
+            "list_slice",
+            {
+              "flow:trim:uses:": [
+                "slice",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "list",
+                      "assignment"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "start",
+                      "number_eval",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "end",
+                      "number_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "num_list_eval",
+              "text_list_eval",
+              "record_list_eval"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
+            "list_sort_numbers",
+            {
+              "flow:trim:uses:": [
+                "sort_numbers",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "var",
+                      "variable_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "by_field",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "descending",
+                      "bool_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "execute"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Rearrange the elements in the named list by using the designated pattern to test pairs of elements."
+          ],
+          "Spec:with flow:slots:": [
+            "list_sort_text",
+            {
+              "flow:trim:uses:": [
+                "sort_texts",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "var",
+                      "variable_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "by_field",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "descending",
+                      "bool_eval",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "using_case",
+                      "bool_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "execute"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Rearrange the elements in the named list by using the designated pattern to test pairs of elements."
+          ],
+          "Spec:with flow:slots:": [
+            "list_sort_using",
+            {
+              "flow:trim:uses:": [
+                "sort",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "var",
+                      "variable_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "using",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "execute"
+            ]
+          ]
+        },
+        {
+          "--": "Helper for accessing lists.",
+          "Spec:with slot:": [
+            "list_source",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": [
+            "Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list's length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed."
+          ],
+          "Spec:with flow:slots:": [
+            "list_splice",
+            {
+              "flow:trim:uses:": [
+                "splice",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "list",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "start",
+                      "number_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "remove",
+                      "number_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "insert",
+                      "assignment"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "execute",
+              "num_list_eval",
+              "text_list_eval",
+              "record_list_eval"
+            ]
+          ]
+        },
+        {
+          "--": "Helper for accessing lists.",
+          "Spec:with slot:": [
+            "list_target",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": [
+            "Add a value to a list."
+          ],
+          "Spec:with flow:slots:": [
+            "put_edge",
+            {
+              "flow:trim:uses:": [
+                "put",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "from",
+                      "assignment"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "into",
+                      "list_target"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:": [
+                      "at_front",
+                      "at_edge",
+                      "bool_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "execute"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Replace one value in a list with another."
+          ],
+          "Spec:with flow:slots:": [
+            "put_index",
+            {
+              "flow:trim:uses:": [
+                "put",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "from",
+                      "assignment"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "into",
+                      "list_target"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "at_index",
+                      "number_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "execute"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
+            "range",
+            {
+              "flow:trim:uses:": [
+                "range",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "to",
+                      "number_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "from",
+                      "number_eval",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "by_step",
+                      "number_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "num_list_eval"
             ]
           ]
         }
