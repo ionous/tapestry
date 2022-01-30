@@ -1,73 +1,120 @@
 package blocks
 
 import (
+	"log"
+
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/tile/bc"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
+var writeBlockType = map[string]func(*js.Builder, *spec.TypeSpec) bool{
+	spec.UsesSpec_Flow_Opt: writeFlowBlock,
+	spec.UsesSpec_Slot_Opt: writeSlotBlock,
+	spec.UsesSpec_Swap_Opt: writeOneBlock,
+	spec.UsesSpec_Num_Opt:  writeOneBlock,
+	spec.UsesSpec_Str_Opt:  writeOneBlock,
+}
+
 // return any fields which need mutation
-// tbd: "helpUrl"
 func writeBlock(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
-	stacks, values := SlotStacks(blockType)
-	switch blockType.Spec.Choice {
-	case spec.UsesSpec_Flow_Opt:
-		flow := blockType.Spec.Value.(*spec.FlowSpec)
-		// we write to partial so that we can potentially have two blocks
-		// one if we are stackable, one if we output a value
-		// ( ex. something that is executable or returns bool )
-		var partial js.Builder
-		// write the label for the block itself; aka the lede.
-		partial.Q("message0").R(js.Colon)
-		if lede := flow.Name; len(lede) > 0 {
-			partial.Q(lede)
-		} else {
-			partial.Q(blockType.Name)
-		}
-		// color
-		var colour string = bc.COLOUR_HUE // default
-		if len(values) > 0 {              // we take on the color of the first slot specified
-			slot := bc.FindSlotRule(values[0])
-			colour = slot.Colour
-		} else if len(stacks) > 0 {
-			slot := bc.FindSlotRule(stacks[0])
-			colour = slot.Colour
-		}
-		partial.R(js.Comma).Kv("colour", colour)
-		// comment
-		if cmt := blockType.UserComment; len(cmt) > 0 {
-			partial.R(js.Comma).Kv("tooltip", cmt)
-		}
-		partial.R(js.Comma)
-		writeCustomData(&partial, blockType, flow)
-		// are we stackable? ( ex. story statement or executable )
-		if len(stacks) > 0 {
-			block.Brace(js.Obj, func(out *js.Builder) {
-				checks := js.QuotedStrings(stacks)
-				out.
-					Kv("type", "stacked_"+blockType.Name).R(js.Comma).
-					Q("nextStatement").R(js.Colon).S(checks).R(js.Comma).
-					Q("prevStatement").R(js.Colon).S(checks).R(js.Comma).
-					S(partial.String())
-			})
-		}
-		block.Brace(js.Obj, func(out *js.Builder) {
-			out.
-				Kv("type", blockType.Name).R(js.Comma).
-				Q("output").R(js.Colon).Brace(js.Array, func(checks *js.Builder) {
-				// add the flow itself as a possible output type
-				// (useful for cases where the its used directly by other flows)
-				checks.Q(blockType.Name)
-				for _, el := range values {
-					checks.R(js.Comma).Q(el)
-				}
-			}).
-				R(js.Comma).
-				S(partial.String())
-		})
-		okay = true
+	if cb, ok := writeBlockType[blockType.Spec.Choice]; !ok {
+		log.Fatalln("unknown type", blockType.Spec.Choice)
+	} else {
+		okay = cb(block, blockType)
 	}
 	return
+}
+
+func writeSlotBlock(block *js.Builder, blockType *spec.TypeSpec) bool {
+	return false // slots dont have have corresponding blocks
+}
+
+// we only need a standalone block for strs, etc. when they implement some slot.
+// to do so, we simply pretend its a flow of one anonymous member.
+func writeOneBlock(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
+	if len(blockType.Slots) > 0 {
+		// create a fake term to represent ourself
+		okay = _writeBlock(block, blockType.Name, blockType, []spec.TermSpec{{
+			Key:  "",
+			Name: blockType.Name,
+			Type: blockType.Name,
+		}})
+	}
+	return okay
+}
+
+func writeFlowBlock(block *js.Builder, blockType *spec.TypeSpec) bool {
+	flow := blockType.Spec.Value.(*spec.FlowSpec)
+	name := blockType.Name
+	if n := flow.Name; len(n) > 0 {
+		name = n
+	}
+	return _writeBlock(block, name, blockType, flow.Terms)
+}
+
+// writes one or possible two blocks to represent the blockType.
+// will always generate an output block because every type outputs itself
+// it may also generate a stackable block if any of the slots implemented have a stackable SlotRule.
+// ( ex. a type that implements rt.BoolEval and rt.Execute will write both types of blocks )
+func _writeBlock(block *js.Builder, name string, blockType *spec.TypeSpec, terms []spec.TermSpec) bool {
+	stacks, values := SlotStacks(blockType)
+	// we write to partial so that we can potentially have two blocks
+	var partial js.Builder
+	// write the label for the block itself; aka the lede.
+	partial.Kv("message0", name)
+	// color
+	var colour string = bc.COLOUR_HUE // default
+	if len(values) > 0 {              // we take on the color of the first slot specified
+		slot := bc.FindSlotRule(values[0])
+		colour = slot.Colour
+	} else if len(stacks) > 0 {
+		slot := bc.FindSlotRule(stacks[0])
+		colour = slot.Colour
+	}
+	partial.R(js.Comma)
+	if len(colour) > 0 {
+		partial.Kv("colour", colour)
+	} else {
+		partial.Kv("colour", bc.COLOUR_HUE)
+	}
+	// comment
+	if cmt := blockType.UserComment; len(cmt) > 0 {
+		partial.R(js.Comma).Kv("tooltip", cmt)
+	}
+	partial.R(js.Comma)
+	writeBlockDef(&partial, blockType, terms)
+	// are we stackable? ( ex. story statement or executable )
+	if len(stacks) > 0 {
+		block.Brace(js.Obj, func(out *js.Builder) {
+			checks := js.QuotedStrings(stacks)
+			out.
+				Kv("type", "stacked_"+blockType.Name).R(js.Comma).
+				Q("nextStatement").R(js.Colon).S(checks).R(js.Comma).
+				Q("prevStatement").R(js.Colon).S(checks)
+			appendString(out, partial.String())
+		})
+	}
+	block.Brace(js.Obj, func(out *js.Builder) {
+		out.
+			Kv("type", blockType.Name).R(js.Comma).
+			Q("output").R(js.Colon).Brace(js.Array, func(checks *js.Builder) {
+			// add the flow itself as a possible output type
+			// (useful for cases where the its used directly by other flows)
+			checks.Q(blockType.Name)
+			for _, el := range values {
+				checks.R(js.Comma).Q(el)
+			}
+		})
+		appendString(out, partial.String())
+	})
+	return true
+}
+
+func appendString(out *js.Builder, s string) {
+	if len(s) > 0 {
+		out.R(js.Comma).S(s)
+	}
 }
 
 // split the slots that this type supports into "stacks" and "values"

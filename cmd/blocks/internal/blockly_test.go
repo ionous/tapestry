@@ -36,25 +36,24 @@ func run(t *testing.T) (ret string, err error) {
 		err = e
 	} else if _, e := readSpec(idl.Specs, "literal.ifspecs"); e != nil {
 		err = e
-	} else /*if _, e := readSpec(idl.Specs, "testdl.ifspecs"); e != nil {
+	} else if _, e := readSpec(idl.Specs, "testdl.ifspecs"); e != nil {
 		err = e
-	} else */{
+	} else {
 		var keys []string
 		for k, _ := range lookup {
 			keys = append(keys, k)
 		}
 		sort.Strings(keys)
 		ret = js.Embrace(js.Array, func(out *js.Builder) {
-			var csv bool
+			var comma bool
 			for _, key := range keys {
 				blockType := lookup[key]
-				if csv {
+				if comma {
 					out.R(js.Comma)
+					comma = false
 				}
-				if !writeBlock(out, blockType) {
-					csv = false // good enough for testing.
-				} else {
-					csv = true
+				if writeBlock(out, blockType) {
+					comma = true
 					if flow, ok := blockType.Spec.Value.(*spec.FlowSpec); ok {
 						out.R(js.Comma)
 						writeMutator(out, blockType, flow)

@@ -39,6 +39,11 @@ function start() {
           //     },
           //   },
           // },
+
+          {
+            'kind': 'block',
+            'type': 'test_str',
+          },
           {
             'kind': 'block',
             'type': 'text_value',
