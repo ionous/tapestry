@@ -24,6 +24,8 @@ func newList(m *chart.Machine, term string, fields *js.Builder) *chart.StateMix 
 			}
 			return
 		},
+		// we dont enter a new state for "OnValue".. but values dont have a matching End.
+		// we only get the end of our own repeat.
 		OnEnd: func() {
 			m.FinishState(nil)
 		},

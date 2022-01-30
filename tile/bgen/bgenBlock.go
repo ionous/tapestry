@@ -38,7 +38,7 @@ type blockData struct {
 
 // writes most of the contents of a block, without its surrounding {}
 // ( to support the nested linked lists of blocks used for stacks )
-func newInnerBlock(m *chart.Machine, blk *js.Builder, typeName string) chart.State {
+func newInnerBlock(m *chart.Machine, blk *js.Builder, typeName string) *chart.StateMix {
 	var term string // set per key
 	data := blockData{typeName: typeName}
 	return &chart.StateMix{
@@ -59,9 +59,7 @@ func newInnerBlock(m *chart.Machine, blk *js.Builder, typeName string) chart.Sta
 
 		// a value that fills a slot; this will be an input
 		OnSlot: func(string, jsn.SlotBlock) bool {
-			data.writeCount(term, 1)
-			data.inputs.Q(term).R(js.Colon) // "TEXT": ....
-			m.PushState(newSlot(m, &data.inputs))
+			m.PushState(newSlot(m, term, &data))
 			return true
 		},
 

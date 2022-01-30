@@ -13,10 +13,12 @@ import (
 //      and not quite sure what they'd look like off hand....
 func newRepeat(m *chart.Machine, term string, data *blockData) chart.State {
 	return &chart.StateMix{
-		// a series of inputs
-		// OnMap: func(typeName string, _ jsn.FlowBlock) bool {
-		// 	return false
-		// },
+		// ex. a series of a specific flow
+		OnMap: func(typeName string, flow jsn.FlowBlock) bool {
+			next := newSlice(m, term, &data.inputs)
+			m.PushState(next)
+			return next.OnMap(typeName, flow)
+		},
 		// possibly a single stack, or a series of inputs
 		OnSlot: func(slotType string, slotBlock jsn.SlotBlock) bool {
 			var next *chart.StateMix

@@ -13,30 +13,27 @@ import (
 func newStack(m *chart.Machine, blk *js.Builder) *chart.StateMix {
 	// the whole chain is going to be encapsulated by object braces {}
 	// we try to keep the same state going for as long as we can...
+	var cnt int
+	var writingSlot bool
 	open, close := js.Obj[0], js.Obj[1]
-	// var waitingOnBlock bool
-	var cnt, end int // alt: might read the .Len() of the slice
 	return &chart.StateMix{
 		OnMap: func(typeName string, _ jsn.FlowBlock) bool {
+			cnt++ // we increment count here, eliding any empty slots.
+			blk.R(js.Comma).Q("next").R(js.Colon).R(open).
+				Q("block").R(js.Colon).R(open)
 			m.PushState(newInnerBlock(m, blk, typeName))
-			// waitingOnBlock = false
 			return true
 		},
 		OnSlot: func(string, jsn.SlotBlock) (okay bool) {
-			// this could (theoretically) happen with nil slots
-			// if waitingOnBlock {
-			// 	blk.S("{}") // how to correctly handle this?
-			// 	log.Println("skipped nil slot in stack")
-			// }
-			blk.R(js.Comma).Q("next").R(js.Colon).R(open).
-				Q("block").R(js.Colon).R(open)
-			// the contents will (usually) be written by OnMap
-			// waitingOnBlock = true
-			cnt++
+			writingSlot = true
 			return true
 		},
 		OnEnd: func() {
-			if end = end + 1; end > cnt {
+			// we dont enter a new state for "OnSlot"
+			// so we get ends for it and for the end of our own repeat.
+			if writingSlot {
+				writingSlot = false
+			} else {
 				for i := 0; i < cnt*2; i++ {
 					blk.R(close)
 				}

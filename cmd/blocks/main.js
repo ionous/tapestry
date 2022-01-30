@@ -51,10 +51,16 @@ function start() {
             'kind': 'block',
             'type': 'field_values',
           },
+
+          {
+            'kind': 'block',
+            'type': 'test_flow',
+          }
         ],
       }
     });
 }
+
 
 // name: name for the mutator, referenced by the block json.
 // mixinObj: Contains mutator methods, and any other data to copy to a new block.
@@ -97,9 +103,9 @@ Blockly.Extensions.registerMutator(
     compose: function(mui) {
       const self= this;   // our real, workspace, block.
       const jsonDef= jsonDefs[self.type];
-      const muiData= jsonDef.customData.muiData;
+      const blockDef= jsonDef.customData.blockDef;
       //
-      muiData.forEach(function(fieldDefs, index/*, array*/) {
+      blockDef.forEach(function(fieldDefs, index/*, array*/) {
         const inputDef= fieldDefs[fieldDefs.length-1];
         // get the mui input ( it might not exist, ex. for fields that arent mutable )
         const min= mui.getInput(inputDef.name);
@@ -117,15 +123,16 @@ Blockly.Extensions.registerMutator(
         }
       });
       this.updateShape_();
+      this.setShadow(false);
     },
     // update the workspace block based on its current desired state
     updateShape_: function() {
       const self= this;   // our real, workspace, block.
       const jsonDef= jsonDefs[self.type];
-      const muiData= jsonDef.customData.muiData;
+      const blockDef= jsonDef.customData.blockDef;
       let insertAt= 1;    // index in the ws block, skipping the initial dummy header.
       //
-      muiData.forEach(function(fieldDefs, index/*, array*/) {
+      blockDef.forEach(function(fieldDefs, index/*, array*/) {
         const inputDef= fieldDefs[fieldDefs.length-1];
         const inputName= inputDef.name;
         // for every desired input, search the existing block to keep the insertion point updated
@@ -176,9 +183,9 @@ Blockly.Extensions.register(
     self.extraState= {};
     self.itemState= {};
     const jsonDef= jsonDefs[self.type];
-    const muiData= jsonDef.customData.muiData;
+    const blockDef= jsonDef.customData.blockDef;
     // an array of field-input sets
-    muiData.forEach(function(fieldDefs/*, index, array*/) {
+    blockDef.forEach(function(fieldDefs/*, index, array*/) {
       const inputDef= fieldDefs[fieldDefs.length-1];
       if (!inputDef.optional) {
         let name= inputDef.name;
@@ -262,18 +269,16 @@ Blockly.Extensions.registerMixin(
       }
       // means that we created something other than a dummy input
       // and we should give it an initial value
-      // rely on the toolbox to set up its own defaults
-      // otherwise dragging out of the toolbox seems to get unhappy
-      // ( though better if shadow is on )
-      if (inputDef.shadow && this.workspace===Blockly.mainWorkspace) {
+      // const isToolbox= this.workspace!==Blockly.mainWorkspace;
+      if (inputDef.shadow) {
         const sub = this.workspace.newBlock(inputDef.shadow);
         // guess at a bunch of random things to make this show up correctly.
         // render is needed otherwise drag crashes trying to access a null location,
         // and initSvg is needed before render.
-        // shadow seems needed otherwise we get a random extra block when drag starts.
+        // shadow is needed for the toolbox otherwise we get a random extra block when drag starts.
         sub.initSvg(); // needed before render is called
-        sub.render(false); // false means: only render this block.
-        // sub.setShadow(true);
+        sub.render(false); // false means: only re/render this block.
+        sub.setShadow(true); // shadow cleans up better when done; but you can connect other values
         // sub.setDeletable(false);
         // sub.setMovable(false);
         newInput.connection.connect(sub.outputConnection);

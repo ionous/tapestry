@@ -15,7 +15,7 @@
       "tapestry_generic_extension"
     ],
     "customData": {
-      "muiData": [
+      "blockDef": [
         [
           {
             "type": "field_label",
@@ -87,7 +87,7 @@
       "tapestry_generic_extension"
     ],
     "customData": {
-      "muiData": [
+      "blockDef": [
         [
           {
             "type": "field_label",
@@ -146,7 +146,7 @@
       "tapestry_generic_extension"
     ],
     "customData": {
-      "muiData": [
+      "blockDef": [
         [
           {
             "type": "field_label",
@@ -210,7 +210,7 @@
       "tapestry_generic_extension"
     ],
     "customData": {
-      "muiData": [
+      "blockDef": [
         [
           {
             "type": "field_label",
@@ -284,7 +284,7 @@
       "tapestry_generic_extension"
     ],
     "customData": {
-      "muiData": [
+      "blockDef": [
         [
           {
             "type": "field_label",
@@ -373,7 +373,7 @@
       "tapestry_generic_extension"
     ],
     "customData": {
-      "muiData": [
+      "blockDef": [
         [
           {
             "type": "field_label",
@@ -450,7 +450,7 @@
       "tapestry_generic_extension"
     ],
     "customData": {
-      "muiData": [
+      "blockDef": [
         [
           {
             "type": "field_label",
@@ -527,7 +527,7 @@
       "tapestry_generic_extension"
     ],
     "customData": {
-      "muiData": [
+      "blockDef": [
         [
           {
             "type": "field_label",
@@ -601,7 +601,7 @@
       "tapestry_generic_extension"
     ],
     "customData": {
-      "muiData": [
+      "blockDef": [
         [
           {
             "type": "field_label",

@@ -1,8 +1,6 @@
 package bc
 
 import (
-	"log"
-
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -17,7 +15,9 @@ func FindSlotRule(name string) (ret SlotRule) {
 		}
 	}
 	if !found {
-		log.Fatalln("couldn't find slot", name)
+		ret = SlotRule{
+			Name: name,
+		}
 	}
 	return
 }
@@ -54,7 +54,6 @@ func (slot *SlotRule) SlotType() (ret string) {
 	return
 }
 
-// fix: might eventually want to add to this as we are reading files....
 var slots = []SlotRule{{
 	Name:   literal.LiteralValue_Type,
 	Colour: MATH_HUE,

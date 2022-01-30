@@ -15,7 +15,7 @@ func writeCustomData(out *js.Builder, blockType *spec.TypeSpec, flow *spec.FlowS
 		`"extensions":["tapestry_generic_mixin","tapestry_generic_extension"],`)
 	out.Q("customData").R(js.Colon).
 		Brace(js.Obj, func(custom *js.Builder) {
-			custom.Q("muiData").R(js.Colon).
+			custom.Q("blockDef").R(js.Colon).
 				Brace(js.Array, func(mui *js.Builder) {
 					var csv int
 					for _, term := range flow.Terms {
@@ -80,14 +80,14 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 			Brace(js.Obj, func(field *js.Builder) {
 				field.
 					Kv("type", bc.FieldDropdown).R(js.Comma).
-					Q("option").R(js.Colon).Brace(js.Array,
+					Q("options").R(js.Colon).Brace(js.Array,
 					func(options *js.Builder) {
 						for i, pick := range swap.Between {
 							if i > 0 {
 								options.R(js.Comma)
 							}
 							options.Brace(js.Array, func(opt *js.Builder) {
-								opt.Kv(pick.FriendlyName(), pick.TypeName())
+								opt.Q(pick.FriendlyName()).R(js.Comma).Q(pick.TypeName())
 							})
 						}
 					})

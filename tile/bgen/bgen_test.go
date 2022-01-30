@@ -7,6 +7,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/dl/testdl"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/web/js"
 	"github.com/kr/pretty"
@@ -28,6 +29,47 @@ func TestFields(t *testing.T) {
   },
   "fields": {
     "TEXT": "hello world"
+  }
+}`); len(diff) > 0 {
+		t.Log(str)
+		t.Fatal("ng", diff)
+	}
+}
+
+// test a slot member of the flow
+func TestSlot(t *testing.T) {
+	el := &literal.FieldValue{
+		Field: "test",
+		Value: &literal.NumValue{
+			Num: 5,
+		}}
+	var out js.Builder
+	enc := chart.MakeEncoder()
+	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
+		t.Fatal(e)
+	} else if str, e := indent(out.String()); e != nil {
+		t.Fatal(e, str)
+	} else if diff := pretty.Diff(str, `{
+  "type": "field_value",
+  "extraState": {
+    "FIELD": 1,
+    "VALUE": 1
+  },
+  "fields": {
+    "FIELD": "test"
+  },
+  "inputs": {
+    "VALUE": {
+      "block": {
+        "type": "num_value",
+        "extraState": {
+          "NUM": 1
+        },
+        "fields": {
+          "NUM": 5
+        }
+      }
+    }
   }
 }`); len(diff) > 0 {
 		t.Log(str)
@@ -80,7 +122,7 @@ func TestStack(t *testing.T) {
 // a primitive list is a list of dummy inputs
 // noting that blockly ignores dummies when saving --
 // so get saved in the "fields" section
-func TestSeries(t *testing.T) {
+func TestList(t *testing.T) {
 	el := &literal.TextValues{
 		Values: []string{"a", "b", "c"},
 	}
@@ -106,13 +148,20 @@ func TestSeries(t *testing.T) {
 	}
 }
 
-// test a slot member of the flow
-func TestSlot(t *testing.T) {
-	el := &literal.FieldValue{
-		Field: "test",
-		Value: &literal.NumValue{
-			Num: 5,
-		}}
+// repeats of a specific flow
+func TestSlice(t *testing.T) {
+	el := &literal.FieldValues{
+		Contains: []literal.FieldValue{{
+			Field: "first",
+			Value: &literal.NumValue{
+				Num: 5,
+			}}, {
+			Field: "second",
+			Value: &literal.TextValue{
+				Text: "five",
+			}},
+		},
+	}
 	var out js.Builder
 	enc := chart.MakeEncoder()
 	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
@@ -120,23 +169,58 @@ func TestSlot(t *testing.T) {
 	} else if str, e := indent(out.String()); e != nil {
 		t.Fatal(e, str)
 	} else if diff := pretty.Diff(str, `{
-  "type": "field_value",
+  "type": "field_values",
   "extraState": {
-    "FIELD": 1,
-    "VALUE": 1
-  },
-  "fields": {
-    "FIELD": "test"
+    "CONTAINS": 2
   },
   "inputs": {
-    "VALUE": {
+    "CONTAINS0": {
       "block": {
-        "type": "num_value",
+        "type": "field_value",
         "extraState": {
-          "NUM": 1
+          "FIELD": 1,
+          "VALUE": 1
         },
         "fields": {
-          "NUM": 5
+          "FIELD": "first"
+        },
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "num_value",
+              "extraState": {
+                "NUM": 1
+              },
+              "fields": {
+                "NUM": 5
+              }
+            }
+          }
+        }
+      }
+    },
+    "CONTAINS1": {
+      "block": {
+        "type": "field_value",
+        "extraState": {
+          "FIELD": 1,
+          "VALUE": 1
+        },
+        "fields": {
+          "FIELD": "second"
+        },
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "type": "text_value",
+              "extraState": {
+                "TEXT": 1
+              },
+              "fields": {
+                "TEXT": "five"
+              }
+            }
+          }
         }
       }
     }
@@ -147,24 +231,68 @@ func TestSlot(t *testing.T) {
 	}
 }
 
-// func TestEmbed(t *testing.T) {
-// 	el := &literal.FieldValues{
-// 		Contains: []literal.FieldValue{
-// 			Field: "test",
-// 			Value: &literal.NumValue{
-// 				Num: 5,
-// 			}}}
-// 	var out js.Builder
-// 	enc := chart.MakeEncoder()
-// 	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
-// 		t.Fatal(e)
-// 	} else if str, e := indent(out.String()); e != nil {
-// 		t.Fatal(e, str)
-// 	} else if diff := pretty.Diff(str, ``); len(diff) > 0 {
-// 		t.Log(str)
-// 		t.Fatal("ng", diff)
-// 	}
-// }
+// repeats of a non-stacking slot.
+func TestSeries(t *testing.T) {
+	// FIX FIX FIX -- the series doesnt generate remotely correct.
+	el := &testdl.TestFlow{
+		Slots: []testdl.TestSlot{
+			&testdl.TestFlow{},
+			&testdl.TestFlow{},
+		},
+	}
+	var out js.Builder
+	enc := chart.MakeEncoder()
+	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
+		t.Fatal(e)
+	} else if str, e := indent(out.String()); e != nil {
+		t.Fatal(e, str)
+	} else if diff := pretty.Diff(str, `{
+  "type": "test_flow",
+  "extraState": {
+    "SLOTS": 2
+  },
+  "inputs": {
+    "SLOTS0": {
+      "block": {
+        "type": "test_flow",
+        "extraState": {}
+      }
+    },
+    "SLOTS1": {
+      "block": {
+        "type": "test_flow",
+        "extraState": {}
+      }
+    }
+  }
+}`); len(diff) > 0 {
+		t.Log(str)
+		t.Fatal("ng", diff)
+	}
+}
+
+// repeats of an empty series
+func TestEmptySeries(t *testing.T) {
+	el := &testdl.TestFlow{
+		Slots: []testdl.TestSlot{},
+	}
+	var out js.Builder
+	enc := chart.MakeEncoder()
+	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
+		t.Fatal(e)
+	} else if str, e := indent(out.String()); e != nil {
+		t.Fatal(e, str)
+	} else if diff := pretty.Diff(str, `{
+  "type": "test_flow",
+  "extraState": {}
+}`); len(diff) > 0 {
+		t.Log(str)
+		t.Fatal("ng", diff)
+	}
+}
+
+// other ideas: might verify an empty repeat
+// a flow member....
 
 func indent(str string) (ret string, err error) {
 	var indent bytes.Buffer
@@ -175,24 +303,3 @@ func indent(str string) (ret string, err error) {
 	}
 	return
 }
-
-// // test a flow containing flows
-// func TestEmbed(t *testing.T) {
-// 		el := &literal.FieldValues{
-// 			Contains: []literal.FieldValue{
-// 		Field       string       `if:"label=field,type=text"`
-// 	Value       LiteralValue `if:"label=value"`
-// }}
-// 	}}
-
-// }
-//    "field_values": {
-//                 "uses": "flow",
-//                 "spec": "fields {_%contains+field_value}",
-//                 "group": "internal",
-//                 "slot": ["literal_value"],
-//                 "desc": [
-//                     "A series of values all for the same record.",
-//                     "While it can be specified wherever a literal value can, it only has meaning when the record type is known."
-//                 ]
-//             }
