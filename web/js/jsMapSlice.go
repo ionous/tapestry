@@ -15,6 +15,17 @@ type MapItem struct {
 
 type MapSlice []MapItem
 
+// returns a valid pointer, or nil if not found
+func (om MapSlice) Find(k string) (ret *MapItem) {
+	for i, kv := range om {
+		if kv.Key == k {
+			ret = &om[i]
+			break
+		}
+	}
+	return
+}
+
 // expects that we're unmarshaling a map
 // ex. json.Unmarshal(data, om)
 func (om *MapSlice) UnmarshalJSON(data []byte) (err error) {

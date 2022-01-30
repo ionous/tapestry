@@ -109,13 +109,6 @@
               "Swap between:": [
                 {
                   "Pick:label:type:": [
-                    "none",
-                    "nothing",
-                    "abstract_action"
-                  ]
-                },
-                {
-                  "Pick:label:type:": [
                     "common",
                     "one or more objects",
                     "common_action"
@@ -126,6 +119,13 @@
                     "dual",
                     "two similar objects",
                     "paired_action"
+                  ]
+                },
+                {
+                  "Pick:label:type:": [
+                    "none",
+                    "nothing",
+                    "abstract_action"
                   ]
                 }
               ]
@@ -2136,9 +2136,6 @@
             {
               "Swap between:": [
                 {
-                  "Pick:": "many_to_many"
-                },
-                {
                   "Pick:": "one_to_one"
                 },
                 {
@@ -2146,6 +2143,9 @@
                 },
                 {
                   "Pick:": "many_to_one"
+                },
+                {
+                  "Pick:": "many_to_many"
                 }
               ]
             },

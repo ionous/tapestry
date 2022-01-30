@@ -17,6 +17,15 @@
                 true,
                 [
                   {
+                    "Option:": "bool"
+                  },
+                  {
+                    "Option:": "number"
+                  },
+                  {
+                    "Option:": "num_list"
+                  },
+                  {
                     "Option:": "text"
                   },
                   {
@@ -27,15 +36,6 @@
                   },
                   {
                     "Option:": "record_list"
-                  },
-                  {
-                    "Option:": "bool"
-                  },
-                  {
-                    "Option:": "number"
-                  },
-                  {
-                    "Option:": "num_list"
                   }
                 ]
               ]
@@ -674,16 +674,16 @@
                 true,
                 [
                   {
-                    "Option:": "after"
-                  },
-                  {
-                    "Option:": "later"
-                  },
-                  {
                     "Option:": "before"
                   },
                   {
                     "Option:": "during"
+                  },
+                  {
+                    "Option:": "after"
+                  },
+                  {
+                    "Option:": "later"
                   }
                 ]
               ]

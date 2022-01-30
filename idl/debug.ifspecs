@@ -72,9 +72,6 @@
                 true,
                 [
                   {
-                    "Option:": "error"
-                  },
-                  {
                     "Option:": "note"
                   },
                   {
@@ -88,6 +85,9 @@
                   },
                   {
                     "Option:": "warning"
+                  },
+                  {
+                    "Option:": "error"
                   }
                 ]
               ]

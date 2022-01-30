@@ -325,12 +325,6 @@
               "Swap between:": [
                 {
                   "Pick:type:": [
-                    "group",
-                    "group_spec"
-                  ]
-                },
-                {
-                  "Pick:type:": [
                     "flow",
                     "flow_spec"
                   ]
@@ -357,6 +351,12 @@
                   "Pick:type:": [
                     "str",
                     "str_spec"
+                  ]
+                },
+                {
+                  "Pick:type:": [
+                    "group",
+                    "group_spec"
                   ]
                 }
               ]

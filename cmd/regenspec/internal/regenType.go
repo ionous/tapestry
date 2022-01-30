@@ -107,13 +107,16 @@ func (t *Type) Options() []Param {
 		w := MapOf("with", t.m)
 		ps := MapOf("params", w)
 		self := Tokenize(n)
-		for k, _ := range ps {
-			v := MapOf(k, ps)
-			if self != k {
-				opt = append(opt, Param{
-					Name:  StringOf("value", v),
-					Label: StringOf("label", v),
-				})
+		_, tokens := t.Tokens()
+		for _, k := range tokens {
+			if len(k) > 0 && k[0] == '$' {
+				v := MapOf(k, ps)
+				if self != k {
+					opt = append(opt, Param{
+						Name:  StringOf("value", v),
+						Label: StringOf("label", v),
+					})
+				}
 			}
 		}
 		t.params = opt
@@ -127,13 +130,16 @@ func (t *Type) Picks() []Param {
 		picks := make([]Param, 0)
 		w := MapOf("with", t.m)
 		ps := MapOf("params", w)
-		for k, _ := range ps {
-			v := MapOf(k, ps)
-			picks = append(picks, Param{
-				Name:  Detokenize(k),
-				Label: StringOf("label", v),
-				Type:  StringOf("type", v),
-			})
+		_, tokens := t.Tokens()
+		for _, k := range tokens {
+			if len(k) > 0 && k[0] == '$' {
+				v := MapOf(k, ps)
+				picks = append(picks, Param{
+					Name:  Detokenize(k),
+					Label: StringOf("label", v),
+					Type:  StringOf("type", v),
+				})
+			}
 		}
 		t.params = picks
 	}
@@ -144,7 +150,9 @@ func (t *Type) Picks() []Param {
 func (t *Type) Flow() (ret string) {
 	if english, ts := t.Tokens(); !english && len(ts) > 0 {
 		if s := ts[0]; len(s) > 0 && s[0] != '$' {
+			// if s != t.Name() {
 			ret = s
+			// }
 		}
 	}
 	return
@@ -185,6 +193,7 @@ func (t *Type) Terms() []Param {
 	return t.params
 }
 
+// return all token keys and labels
 func (t *Type) Tokens() (bool, []string) {
 	if t.tokens == nil {
 		var story, modeling bool
