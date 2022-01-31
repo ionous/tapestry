@@ -11,9 +11,9 @@ import (
 var writeBlockType = map[string]func(*js.Builder, *spec.TypeSpec) bool{
 	spec.UsesSpec_Flow_Opt: writeFlowBlock,
 	spec.UsesSpec_Slot_Opt: writeSlotBlock,
-	spec.UsesSpec_Swap_Opt: writeOneBlock,
-	spec.UsesSpec_Num_Opt:  writeOneBlock,
-	spec.UsesSpec_Str_Opt:  writeOneBlock,
+	spec.UsesSpec_Swap_Opt: writeStandalone,
+	spec.UsesSpec_Num_Opt:  writeStandalone,
+	spec.UsesSpec_Str_Opt:  writeStandalone,
 }
 
 // return any fields which need mutation
@@ -34,7 +34,7 @@ func writeSlotBlock(block *js.Builder, blockType *spec.TypeSpec) bool {
 // however, if they are used by a slot -- then we need a block for them too.
 // fix: maybe consider writing an "inputDef" object {} as the value of "swaps"
 // ( for simple types or maybe all of them ) and change the block's input on selection.
-func writeOneBlock(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
+func writeStandalone(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
 	// we simply pretend we're a flow of one anonymous member.
 	okay = _writeBlock(block, blockType.Name, blockType, []spec.TermSpec{{
 		Key:  "",

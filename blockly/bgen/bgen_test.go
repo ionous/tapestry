@@ -36,6 +36,79 @@ func TestFields(t *testing.T) {
 	}
 }
 
+// test a flow within a flow
+func TestEmbeds(t *testing.T) {
+	el := &testdl.TestEmbed{
+		TestFlow: testdl.TestFlow{},
+	}
+	var out js.Builder
+	enc := chart.MakeEncoder()
+	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
+		t.Fatal(e)
+	} else if str, e := indent(out.String()); e != nil {
+		t.Fatal(e, str)
+	} else if diff := pretty.Diff(str, `{
+  "type": "test_embed",
+  "extraState": {
+    "TEST_FLOW": 1
+  },
+  "inputs": {
+    "TEST_FLOW": {
+      "block": {
+        "type": "test_flow",
+        "extraState": {}
+      }
+    }
+  }
+}`); len(diff) > 0 {
+		t.Log(str)
+		t.Fatal("ng", diff)
+	}
+}
+
+// test a swap member of the flow
+func TestSwap(t *testing.T) {
+	el := &testdl.TestFlow{
+		Swap: testdl.TestSwap{
+			Choice: testdl.TestSwap_C_Opt,
+			Value: &testdl.TestTxt{
+				Str: "something",
+			},
+		},
+	}
+	var out js.Builder
+	enc := chart.MakeEncoder()
+	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
+		t.Fatal(e)
+	} else if str, e := indent(out.String()); e != nil {
+		t.Fatal(e, str)
+	} else if diff := pretty.Diff(str, `{
+  "type": "test_flow",
+  "extraState": {
+    "SWAP": 1
+  },
+  "fields": {
+    "SWAP": "$C"
+  },
+  "inputs": {
+    "SWAP": {
+      "block": {
+        "type": "test_txt",
+        "extraState": {
+          "TEST_TXT": 1
+        },
+        "fields": {
+          "TEST_TXT": "something"
+        }
+      }
+    }
+  }
+}`); len(diff) > 0 {
+		t.Log(str)
+		t.Fatal("ng", diff)
+	}
+}
+
 // test a slot member of the flow
 func TestSlot(t *testing.T) {
 	el := &literal.FieldValue{

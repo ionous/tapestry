@@ -14,12 +14,8 @@ package bgen
 // )
 
 // const (
-// 	DetailedExt = ".ifx"
 // 	CompactExt  = ".if"
 // )
-
-// type Output struct {
-// }
 
 // func (out *Output) importStory(tgt jsn.Marshalee) error {
 // 	enc := chart.MakeEncoder()
@@ -67,59 +63,4 @@ package bgen
 // 		ret = curr.reformat()
 // 	}
 // 	return
-// }
-
-// // starting a new flow; which represents a fresh block that has no influence on parent blocks
-// // "blocks" might be the topLevel array of blocks, or the value of a block or shadow key.
-// func newBlock(blocks *js.Builder, typeName string) jsn.State {
-// 	var fields, inputs, next Js
-// 	var nextKey string
-// 	return &StateMix{
-// 		// one of every extant member of the flow ( skipping optional elements lacking a value )
-// 		OnKey: func(key string, _ string) error {
-// 			nextKey = key
-// 			// this might be a field or input
-// 			// we might write to next when the block is *followed* by another in a repeat.
-// 			// therefore we cant close the block in Commit --
-// 			// but we might close child blocks
-// 		},
-// 		// an embedded flow
-// 		OnMap: func(string, jsn.FlowBlock) (okay bool) { return },
-// 		// a value that fills a slot
-// 		OnSlot: func(string, jsn.SlotBlock) (okay bool) { return },
-// 		// a member that's a swap
-// 		OnSwap: func(string, jsn.SwapBlock) (okay bool) { return },
-// 		// a member that repeats
-// 		OnRepeat: func(string, jsn.SliceBlock) (okay bool) { return },
-// 		// a single value
-// 		OnValue: func(_ string, pv interface{}) (err error) {
-// 			if b, e := json.Marshal(pv); e != nil {
-// 				err = e
-// 			} else {
-// 				fields.Q(nextKey).R(js.Colon).Write(b)
-// 			}
-// 			return
-// 		},
-
-// 		OnEnd: func(interface{}) {
-// 			// blocks.Brace(js.Obj, func(blk *js.Builder) {
-// 			blk.Kv("type", typeName)
-// 			blk.Q("extraState").R(js.Colon).Brace(js.Obj, func(out *js.Builder) {
-// 				// it seems the extra state blk is required for loading to work
-// 				// even if there's nothing to put in it.
-// 			})
-// 			writeContents(blk, "fields", &fields)
-// 			writeContents(blk, "inputs", &inputs)
-// 			// writeContents(blk, "next", &next)
-// 			// })
-// 		},
-// 	}
-// }
-
-// func writeContents(out *js.Builder, key string, contents *js.Builder) {
-// 	if contents.Len() > 0 {
-// 		out.R(js.Comma).Q("fields").R(js.Colon).Brace(js.Obj, func(out *js.Builder) {
-// 			out.S(contents.String())
-// 		})
-// 	}
 // }
