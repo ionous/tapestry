@@ -1,11 +1,12 @@
-package btypes
-
-// every workspace block that needs a mutation uses
-// the "tapestry_generic_mutation" mutation,
-// the "tapestry_generic_mixin" mixi
-// and "tapestry_generic_extension" extension.
+// package btypes defines blockly custom blocks in its JSON format.
+// see: https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks
 //
-// they use some "customData" stored in the workspace blocks's jsondef,
+// every workspace block that needs a mutation has custom javascript support:
+//  * the "tapestry_generic_mutation" mutation,
+//  * the "tapestry_generic_mixin" mixin, and
+//  * the "tapestry_generic_extension" extension.
+//
+// they use some "customData" tacked on to blockly's standard JSON def,
 // and rely on a mutation user interface ( mui ) block: one mui block per workspace block.
 //
 // the custom data generates all of the fields for the workspace block ( except for the block's label )
@@ -31,3 +32,5 @@ package btypes
 //
 // the mui controls ( the checkboxes and numbers ) and the are embedded in dummy inputs inside the mui.
 // the dummy inputs have the same name as the corresponding inputs in the workspace block.
+//
+package btypes

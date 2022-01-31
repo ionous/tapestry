@@ -66,7 +66,7 @@ type FlowBlock interface {
 // the swap is closed ( written ) with a call to EndBlock()
 type SwapBlock interface {
 	Block
-	GetSwap() (string, interface{})
+	GetSwap() (retChoice string, retValue interface{})
 	SetSwap(string) bool
 }
 
