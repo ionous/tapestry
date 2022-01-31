@@ -69,6 +69,10 @@ function start() {
           {
             'kind': 'block',
             'type': 'test_txt',
+          },
+          {
+            'kind': 'block',
+            'type': 'test_embed',
           }
         ],
       }

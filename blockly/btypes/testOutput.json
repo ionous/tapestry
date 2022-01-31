@@ -617,6 +617,53 @@
     }
   },
   {
+    "type": "test_embed",
+    "output": [
+      "test_embed",
+      "test_slot"
+    ],
+    "message0": "embed",
+    "colour": "%{BKY_COLOUR_HUE}",
+    "extensions": [
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
+    ],
+    "mutator": "tapestry_generic_mutation",
+    "customData": {
+      "blockDef": [
+        [
+          {
+            "type": "field_label",
+            "text": "test_flow"
+          },
+          {
+            "name": "TEST_FLOW",
+            "type": "input_value",
+            "check": [
+              "test_flow"
+            ],
+            "shadow": "test_flow"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "type": "_test_embed_mutator",
+    "style": "logic_blocks",
+    "inputsInline": false,
+    "args0": [
+      {
+        "type": "field_label",
+        "text": "embed"
+      },
+      {
+        "type": "input_dummy"
+      }
+    ],
+    "message0": "%1%2"
+  },
+  {
     "type": "test_flow",
     "output": [
       "test_flow",

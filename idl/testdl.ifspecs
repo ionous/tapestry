@@ -26,6 +26,25 @@
         {
           "--": "",
           "Spec:with flow:slots:": [
+            "test_embed",
+            {
+              "flow:uses:": [
+                "embed",
+                [
+                  {
+                    "Term:": "test_flow"
+                  }
+                ]
+              ]
+            },
+            [
+              "test_slot"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
             "test_flow",
             {
               "flow:uses:": [

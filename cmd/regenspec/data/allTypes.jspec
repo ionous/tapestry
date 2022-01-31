@@ -16551,6 +16551,45 @@
       }
     ]
   },
+  "test_embed": {
+    "name": "test_embed",
+    "uses": "flow",
+    "group": [
+      "testdl"
+    ],
+    "with": {
+      "tokens": [
+        "embed",
+        " ",
+        "test flow",
+        ": ",
+        "$TEST_FLOW"
+      ],
+      "params": {
+        "$TEST_FLOW": {
+          "label": "test flow",
+          "type": "test_flow",
+          "key": "$TEST_FLOW",
+          "internal": false,
+          "tag": "test_flow",
+          "sel": "test_flow"
+        }
+      },
+      "slots": [
+        "test_slot"
+      ]
+    },
+    "params": [
+      {
+        "label": "test flow",
+        "type": "test_flow",
+        "key": "$TEST_FLOW",
+        "internal": false,
+        "tag": "test_flow",
+        "sel": "test_flow"
+      }
+    ]
+  },
   "test_flow": {
     "name": "test_flow",
     "uses": "flow",

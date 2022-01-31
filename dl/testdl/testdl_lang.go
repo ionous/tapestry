@@ -90,6 +90,109 @@ func TestBool_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestBool) (err err
 	return
 }
 
+// TestEmbed
+type TestEmbed struct {
+	TestFlow    TestFlow `if:"label=test_flow"`
+	UserComment string
+}
+
+// User implemented slots:
+var _ TestSlot = (*TestEmbed)(nil)
+
+func (*TestEmbed) Compose() composer.Spec {
+	return composer.Spec{
+		Name: TestEmbed_Type,
+		Uses: composer.Type_Flow,
+		Lede: "embed",
+	}
+}
+
+const TestEmbed_Type = "test_embed"
+const TestEmbed_Field_TestFlow = "$TEST_FLOW"
+
+func (op *TestEmbed) Marshal(m jsn.Marshaler) error {
+	return TestEmbed_Marshal(m, op)
+}
+
+type TestEmbed_Slice []TestEmbed
+
+func (op *TestEmbed_Slice) GetType() string { return TestEmbed_Type }
+
+func (op *TestEmbed_Slice) Marshal(m jsn.Marshaler) error {
+	return TestEmbed_Repeats_Marshal(m, (*[]TestEmbed)(op))
+}
+
+func (op *TestEmbed_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *TestEmbed_Slice) SetSize(cnt int) {
+	var els []TestEmbed
+	if cnt >= 0 {
+		els = make(TestEmbed_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *TestEmbed_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return TestEmbed_Marshal(m, &(*op)[i])
+}
+
+func TestEmbed_Repeats_Marshal(m jsn.Marshaler, vals *[]TestEmbed) error {
+	return jsn.RepeatBlock(m, (*TestEmbed_Slice)(vals))
+}
+
+func TestEmbed_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestEmbed) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = TestEmbed_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type TestEmbed_Flow struct{ ptr *TestEmbed }
+
+func (n TestEmbed_Flow) GetType() string      { return TestEmbed_Type }
+func (n TestEmbed_Flow) GetLede() string      { return "embed" }
+func (n TestEmbed_Flow) GetFlow() interface{} { return n.ptr }
+func (n TestEmbed_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*TestEmbed); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func TestEmbed_Optional_Marshal(m jsn.Marshaler, pv **TestEmbed) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = TestEmbed_Marshal(m, *pv)
+	} else if !enc {
+		var v TestEmbed
+		if err = TestEmbed_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func TestEmbed_Marshal(m jsn.Marshaler, val *TestEmbed) (err error) {
+	m.SetComment(&val.UserComment)
+	if err = m.MarshalBlock(TestEmbed_Flow{val}); err == nil {
+		e0 := m.MarshalKey("test_flow", TestEmbed_Field_TestFlow)
+		if e0 == nil {
+			e0 = TestFlow_Marshal(m, &val.TestFlow)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", TestEmbed_Field_TestFlow))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // TestFlow
 type TestFlow struct {
 	Slot        TestSlot   `if:"label=slot,optional"`
@@ -702,6 +805,7 @@ var Slots = []interface{}{
 
 var Slats = []composer.Composer{
 	(*TestBool)(nil),
+	(*TestEmbed)(nil),
 	(*TestFlow)(nil),
 	(*TestNum)(nil),
 	(*TestStr)(nil),
@@ -710,103 +814,104 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	5337047762531013063:  (*TestFlow)(nil), /* Flow bool:swap a: */
-	173907217500496038:   (*TestFlow)(nil), /* Flow bool:swap a:slots: */
-	5338021929833418784:  (*TestFlow)(nil), /* Flow bool:swap b: */
-	17774439874725826645: (*TestFlow)(nil), /* Flow bool:swap b:slots: */
-	5339018087368388725:  (*TestFlow)(nil), /* Flow bool:swap c: */
-	13993954442636639556: (*TestFlow)(nil), /* Flow bool:swap c:slots: */
-	17459444998408277825: (*TestFlow)(nil), /* Flow num:bool:swap a: */
-	14647405343768426120: (*TestFlow)(nil), /* Flow num:bool:swap a:slots: */
-	17456487312128957910: (*TestFlow)(nil), /* Flow num:bool:swap b: */
-	1903455566071210763:  (*TestFlow)(nil), /* Flow num:bool:swap b:slots: */
-	17457474673570902163: (*TestFlow)(nil), /* Flow num:bool:swap c: */
-	18059206813038075706: (*TestFlow)(nil), /* Flow num:bool:swap c:slots: */
-	4666675808510842369:  (*TestFlow)(nil), /* Flow num:swap a: */
-	16427114558833338056: (*TestFlow)(nil), /* Flow num:swap a:slots: */
-	4663718122231522454:  (*TestFlow)(nil), /* Flow num:swap b: */
-	3438281551349410379:  (*TestFlow)(nil), /* Flow num:swap b:slots: */
-	4664705483673466707:  (*TestFlow)(nil), /* Flow num:swap c: */
-	14846854600902914938: (*TestFlow)(nil), /* Flow num:swap c:slots: */
-	11377739199057956195: (*TestFlow)(nil), /* Flow slot:bool:swap a: */
-	4658225592716078922:  (*TestFlow)(nil), /* Flow slot:bool:swap a:slots: */
-	11378730958546413292: (*TestFlow)(nil), /* Flow slot:bool:swap b: */
-	4600549086376030505:  (*TestFlow)(nil), /* Flow slot:bool:swap b:slots: */
-	11379709523895331857: (*TestFlow)(nil), /* Flow slot:bool:swap c: */
-	8879769277624914776:  (*TestFlow)(nil), /* Flow slot:bool:swap c:slots: */
-	2223088452677130245:  (*TestFlow)(nil), /* Flow slot:num:bool:swap a: */
-	9083701904834269716:  (*TestFlow)(nil), /* Flow slot:num:bool:swap a:slots: */
-	2220271503886221338:  (*TestFlow)(nil), /* Flow slot:num:bool:swap b: */
-	14165450989025931767: (*TestFlow)(nil), /* Flow slot:num:bool:swap b:slots: */
-	2221118127839754583:  (*TestFlow)(nil), /* Flow slot:num:bool:swap c: */
-	2873696889990895094:  (*TestFlow)(nil), /* Flow slot:num:bool:swap c:slots: */
-	15358787804422758677: (*TestFlow)(nil), /* Flow slot:num:swap a: */
-	3990079510368579812:  (*TestFlow)(nil), /* Flow slot:num:swap a:slots: */
-	15355970855631849770: (*TestFlow)(nil), /* Flow slot:num:swap b: */
-	3227047420855120839:  (*TestFlow)(nil), /* Flow slot:num:swap b:slots: */
-	15356958217073794023: (*TestFlow)(nil), /* Flow slot:num:swap c: */
-	15964700649333640774: (*TestFlow)(nil), /* Flow slot:num:swap c:slots: */
-	473288575672775711:   (*TestFlow)(nil), /* Flow slot:swap a: */
-	5352266987280328366:  (*TestFlow)(nil), /* Flow slot:swap a:slots: */
-	474262742975181432:   (*TestFlow)(nil), /* Flow slot:swap b: */
-	6977705303858443549:  (*TestFlow)(nil), /* Flow slot:swap b:slots: */
-	475258900510151373:   (*TestFlow)(nil), /* Flow slot:swap c: */
-	17351518409012557612: (*TestFlow)(nil), /* Flow slot:swap c:slots: */
-	6319745570155300781:  (*TestFlow)(nil), /* Flow slot:txt:bool:swap a: */
-	15532303502597138316: (*TestFlow)(nil), /* Flow slot:txt:bool:swap a:slots: */
-	6316928621364391874:  (*TestFlow)(nil), /* Flow slot:txt:bool:swap b: */
-	5932864323383072431:  (*TestFlow)(nil), /* Flow slot:txt:bool:swap b:slots: */
-	6317775245317925119:  (*TestFlow)(nil), /* Flow slot:txt:bool:swap c: */
-	16987875464862798990: (*TestFlow)(nil), /* Flow slot:txt:bool:swap c:slots: */
-	15692898581799579543: (*TestFlow)(nil), /* Flow slot:txt:num:bool:swap a: */
-	4113536089123331766:  (*TestFlow)(nil), /* Flow slot:txt:num:bool:swap a:slots: */
-	15693872749101985264: (*TestFlow)(nil), /* Flow slot:txt:num:bool:swap b: */
-	7990918451189932581:  (*TestFlow)(nil), /* Flow slot:txt:num:bool:swap b:slots: */
-	15694868906636955205: (*TestFlow)(nil), /* Flow slot:txt:num:bool:swap c: */
-	17933442576771064276: (*TestFlow)(nil), /* Flow slot:txt:num:bool:swap c:slots: */
-	10797567927238540899: (*TestFlow)(nil), /* Flow slot:txt:num:swap a: */
-	18088294895293012042: (*TestFlow)(nil), /* Flow slot:txt:num:swap a:slots: */
-	10798559686726997996: (*TestFlow)(nil), /* Flow slot:txt:num:swap b: */
-	18030618388952963625: (*TestFlow)(nil), /* Flow slot:txt:num:swap b:slots: */
-	10799538252075916561: (*TestFlow)(nil), /* Flow slot:txt:num:swap c: */
-	3863094506492296280:  (*TestFlow)(nil), /* Flow slot:txt:num:swap c:slots: */
-	12888316790172233453: (*TestFlow)(nil), /* Flow slot:txt:swap a: */
-	13143049727272335436: (*TestFlow)(nil), /* Flow slot:txt:swap a:slots: */
-	12885499841381324546: (*TestFlow)(nil), /* Flow slot:txt:swap b: */
-	8151749273386767471:  (*TestFlow)(nil), /* Flow slot:txt:swap b:slots: */
-	12886346465334857791: (*TestFlow)(nil), /* Flow slot:txt:swap c: */
-	7378328281120740942:  (*TestFlow)(nil), /* Flow slot:txt:swap c:slots: */
-	11197575529385158675: (*TestFlow)(nil), /* Flow swap a: */
-	5941332621307640506:  (*TestFlow)(nil), /* Flow swap a:slots: */
-	11198567288873615772: (*TestFlow)(nil), /* Flow swap b: */
-	15070663784246521433: (*TestFlow)(nil), /* Flow swap b:slots: */
-	11199545854222534337: (*TestFlow)(nil), /* Flow swap c: */
-	2529531152037990920:  (*TestFlow)(nil), /* Flow swap c:slots: */
-	911670878832212209:   (*TestFlow)(nil), /* Flow txt:bool:swap a: */
-	10809752327504430648: (*TestFlow)(nil), /* Flow txt:bool:swap a:slots: */
-	908853930041303302:   (*TestFlow)(nil), /* Flow txt:bool:swap b: */
-	2406137992719069243:  (*TestFlow)(nil), /* Flow txt:bool:swap b:slots: */
-	909841291483247555:   (*TestFlow)(nil), /* Flow txt:bool:swap c: */
-	16912195045548080810: (*TestFlow)(nil), /* Flow txt:bool:swap c:slots: */
-	17003454676585106931: (*TestFlow)(nil), /* Flow txt:num:bool:swap a: */
-	7213260971153186202:  (*TestFlow)(nil), /* Flow txt:num:bool:swap a:slots: */
-	17004446436073564028: (*TestFlow)(nil), /* Flow txt:num:bool:swap b: */
-	10358941174051435065: (*TestFlow)(nil), /* Flow txt:num:bool:swap b:slots: */
-	17005425001422482593: (*TestFlow)(nil), /* Flow txt:num:bool:swap c: */
-	14638302102788730344: (*TestFlow)(nil), /* Flow txt:num:bool:swap c:slots: */
-	6470611964404050607:  (*TestFlow)(nil), /* Flow txt:num:swap a: */
-	3446557831411620030:  (*TestFlow)(nil), /* Flow txt:num:swap a:slots: */
-	6471586131706456328:  (*TestFlow)(nil), /* Flow txt:num:swap b: */
-	7009547525656593965:  (*TestFlow)(nil), /* Flow txt:num:swap b:slots: */
-	6472582289241426269:  (*TestFlow)(nil), /* Flow txt:num:swap c: */
-	6546518029905514300:  (*TestFlow)(nil), /* Flow txt:num:swap c:slots: */
-	1999357900407268657:  (*TestFlow)(nil), /* Flow txt:swap a: */
-	10029138454270883832: (*TestFlow)(nil), /* Flow txt:swap a:slots: */
-	1996540951616359750:  (*TestFlow)(nil), /* Flow txt:swap b: */
-	9480308822076592635:  (*TestFlow)(nil), /* Flow txt:swap b:slots: */
-	1997528313058304003:  (*TestFlow)(nil), /* Flow txt:swap c: */
-	10392813442060614250: (*TestFlow)(nil), /* Flow txt:swap c:slots: */
-	7140800509473528945:  (*TestSwap)(nil), /* TestSwap a: */
-	7137983560682620038:  (*TestSwap)(nil), /* TestSwap b: */
-	7138970922124564291:  (*TestSwap)(nil), /* TestSwap c: */
+	14301235366180245076: (*TestEmbed)(nil), /* Embed testFlow: */
+	5337047762531013063:  (*TestFlow)(nil),  /* Flow bool:swap a: */
+	173907217500496038:   (*TestFlow)(nil),  /* Flow bool:swap a:slots: */
+	5338021929833418784:  (*TestFlow)(nil),  /* Flow bool:swap b: */
+	17774439874725826645: (*TestFlow)(nil),  /* Flow bool:swap b:slots: */
+	5339018087368388725:  (*TestFlow)(nil),  /* Flow bool:swap c: */
+	13993954442636639556: (*TestFlow)(nil),  /* Flow bool:swap c:slots: */
+	17459444998408277825: (*TestFlow)(nil),  /* Flow num:bool:swap a: */
+	14647405343768426120: (*TestFlow)(nil),  /* Flow num:bool:swap a:slots: */
+	17456487312128957910: (*TestFlow)(nil),  /* Flow num:bool:swap b: */
+	1903455566071210763:  (*TestFlow)(nil),  /* Flow num:bool:swap b:slots: */
+	17457474673570902163: (*TestFlow)(nil),  /* Flow num:bool:swap c: */
+	18059206813038075706: (*TestFlow)(nil),  /* Flow num:bool:swap c:slots: */
+	4666675808510842369:  (*TestFlow)(nil),  /* Flow num:swap a: */
+	16427114558833338056: (*TestFlow)(nil),  /* Flow num:swap a:slots: */
+	4663718122231522454:  (*TestFlow)(nil),  /* Flow num:swap b: */
+	3438281551349410379:  (*TestFlow)(nil),  /* Flow num:swap b:slots: */
+	4664705483673466707:  (*TestFlow)(nil),  /* Flow num:swap c: */
+	14846854600902914938: (*TestFlow)(nil),  /* Flow num:swap c:slots: */
+	11377739199057956195: (*TestFlow)(nil),  /* Flow slot:bool:swap a: */
+	4658225592716078922:  (*TestFlow)(nil),  /* Flow slot:bool:swap a:slots: */
+	11378730958546413292: (*TestFlow)(nil),  /* Flow slot:bool:swap b: */
+	4600549086376030505:  (*TestFlow)(nil),  /* Flow slot:bool:swap b:slots: */
+	11379709523895331857: (*TestFlow)(nil),  /* Flow slot:bool:swap c: */
+	8879769277624914776:  (*TestFlow)(nil),  /* Flow slot:bool:swap c:slots: */
+	2223088452677130245:  (*TestFlow)(nil),  /* Flow slot:num:bool:swap a: */
+	9083701904834269716:  (*TestFlow)(nil),  /* Flow slot:num:bool:swap a:slots: */
+	2220271503886221338:  (*TestFlow)(nil),  /* Flow slot:num:bool:swap b: */
+	14165450989025931767: (*TestFlow)(nil),  /* Flow slot:num:bool:swap b:slots: */
+	2221118127839754583:  (*TestFlow)(nil),  /* Flow slot:num:bool:swap c: */
+	2873696889990895094:  (*TestFlow)(nil),  /* Flow slot:num:bool:swap c:slots: */
+	15358787804422758677: (*TestFlow)(nil),  /* Flow slot:num:swap a: */
+	3990079510368579812:  (*TestFlow)(nil),  /* Flow slot:num:swap a:slots: */
+	15355970855631849770: (*TestFlow)(nil),  /* Flow slot:num:swap b: */
+	3227047420855120839:  (*TestFlow)(nil),  /* Flow slot:num:swap b:slots: */
+	15356958217073794023: (*TestFlow)(nil),  /* Flow slot:num:swap c: */
+	15964700649333640774: (*TestFlow)(nil),  /* Flow slot:num:swap c:slots: */
+	473288575672775711:   (*TestFlow)(nil),  /* Flow slot:swap a: */
+	5352266987280328366:  (*TestFlow)(nil),  /* Flow slot:swap a:slots: */
+	474262742975181432:   (*TestFlow)(nil),  /* Flow slot:swap b: */
+	6977705303858443549:  (*TestFlow)(nil),  /* Flow slot:swap b:slots: */
+	475258900510151373:   (*TestFlow)(nil),  /* Flow slot:swap c: */
+	17351518409012557612: (*TestFlow)(nil),  /* Flow slot:swap c:slots: */
+	6319745570155300781:  (*TestFlow)(nil),  /* Flow slot:txt:bool:swap a: */
+	15532303502597138316: (*TestFlow)(nil),  /* Flow slot:txt:bool:swap a:slots: */
+	6316928621364391874:  (*TestFlow)(nil),  /* Flow slot:txt:bool:swap b: */
+	5932864323383072431:  (*TestFlow)(nil),  /* Flow slot:txt:bool:swap b:slots: */
+	6317775245317925119:  (*TestFlow)(nil),  /* Flow slot:txt:bool:swap c: */
+	16987875464862798990: (*TestFlow)(nil),  /* Flow slot:txt:bool:swap c:slots: */
+	15692898581799579543: (*TestFlow)(nil),  /* Flow slot:txt:num:bool:swap a: */
+	4113536089123331766:  (*TestFlow)(nil),  /* Flow slot:txt:num:bool:swap a:slots: */
+	15693872749101985264: (*TestFlow)(nil),  /* Flow slot:txt:num:bool:swap b: */
+	7990918451189932581:  (*TestFlow)(nil),  /* Flow slot:txt:num:bool:swap b:slots: */
+	15694868906636955205: (*TestFlow)(nil),  /* Flow slot:txt:num:bool:swap c: */
+	17933442576771064276: (*TestFlow)(nil),  /* Flow slot:txt:num:bool:swap c:slots: */
+	10797567927238540899: (*TestFlow)(nil),  /* Flow slot:txt:num:swap a: */
+	18088294895293012042: (*TestFlow)(nil),  /* Flow slot:txt:num:swap a:slots: */
+	10798559686726997996: (*TestFlow)(nil),  /* Flow slot:txt:num:swap b: */
+	18030618388952963625: (*TestFlow)(nil),  /* Flow slot:txt:num:swap b:slots: */
+	10799538252075916561: (*TestFlow)(nil),  /* Flow slot:txt:num:swap c: */
+	3863094506492296280:  (*TestFlow)(nil),  /* Flow slot:txt:num:swap c:slots: */
+	12888316790172233453: (*TestFlow)(nil),  /* Flow slot:txt:swap a: */
+	13143049727272335436: (*TestFlow)(nil),  /* Flow slot:txt:swap a:slots: */
+	12885499841381324546: (*TestFlow)(nil),  /* Flow slot:txt:swap b: */
+	8151749273386767471:  (*TestFlow)(nil),  /* Flow slot:txt:swap b:slots: */
+	12886346465334857791: (*TestFlow)(nil),  /* Flow slot:txt:swap c: */
+	7378328281120740942:  (*TestFlow)(nil),  /* Flow slot:txt:swap c:slots: */
+	11197575529385158675: (*TestFlow)(nil),  /* Flow swap a: */
+	5941332621307640506:  (*TestFlow)(nil),  /* Flow swap a:slots: */
+	11198567288873615772: (*TestFlow)(nil),  /* Flow swap b: */
+	15070663784246521433: (*TestFlow)(nil),  /* Flow swap b:slots: */
+	11199545854222534337: (*TestFlow)(nil),  /* Flow swap c: */
+	2529531152037990920:  (*TestFlow)(nil),  /* Flow swap c:slots: */
+	911670878832212209:   (*TestFlow)(nil),  /* Flow txt:bool:swap a: */
+	10809752327504430648: (*TestFlow)(nil),  /* Flow txt:bool:swap a:slots: */
+	908853930041303302:   (*TestFlow)(nil),  /* Flow txt:bool:swap b: */
+	2406137992719069243:  (*TestFlow)(nil),  /* Flow txt:bool:swap b:slots: */
+	909841291483247555:   (*TestFlow)(nil),  /* Flow txt:bool:swap c: */
+	16912195045548080810: (*TestFlow)(nil),  /* Flow txt:bool:swap c:slots: */
+	17003454676585106931: (*TestFlow)(nil),  /* Flow txt:num:bool:swap a: */
+	7213260971153186202:  (*TestFlow)(nil),  /* Flow txt:num:bool:swap a:slots: */
+	17004446436073564028: (*TestFlow)(nil),  /* Flow txt:num:bool:swap b: */
+	10358941174051435065: (*TestFlow)(nil),  /* Flow txt:num:bool:swap b:slots: */
+	17005425001422482593: (*TestFlow)(nil),  /* Flow txt:num:bool:swap c: */
+	14638302102788730344: (*TestFlow)(nil),  /* Flow txt:num:bool:swap c:slots: */
+	6470611964404050607:  (*TestFlow)(nil),  /* Flow txt:num:swap a: */
+	3446557831411620030:  (*TestFlow)(nil),  /* Flow txt:num:swap a:slots: */
+	6471586131706456328:  (*TestFlow)(nil),  /* Flow txt:num:swap b: */
+	7009547525656593965:  (*TestFlow)(nil),  /* Flow txt:num:swap b:slots: */
+	6472582289241426269:  (*TestFlow)(nil),  /* Flow txt:num:swap c: */
+	6546518029905514300:  (*TestFlow)(nil),  /* Flow txt:num:swap c:slots: */
+	1999357900407268657:  (*TestFlow)(nil),  /* Flow txt:swap a: */
+	10029138454270883832: (*TestFlow)(nil),  /* Flow txt:swap a:slots: */
+	1996540951616359750:  (*TestFlow)(nil),  /* Flow txt:swap b: */
+	9480308822076592635:  (*TestFlow)(nil),  /* Flow txt:swap b:slots: */
+	1997528313058304003:  (*TestFlow)(nil),  /* Flow txt:swap c: */
+	10392813442060614250: (*TestFlow)(nil),  /* Flow txt:swap c:slots: */
+	7140800509473528945:  (*TestSwap)(nil),  /* TestSwap a: */
+	7137983560682620038:  (*TestSwap)(nil),  /* TestSwap b: */
+	7138970922124564291:  (*TestSwap)(nil),  /* TestSwap c: */
 }

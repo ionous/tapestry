@@ -36,6 +36,12 @@
             "test_txt":
             {
                 "uses": "str"
+            },
+            "test_embed":
+            {
+                "uses": "flow",
+                "spec": "embed {test_flow}",
+                "slot": "test_slot"
             }
         }
     }
