@@ -21,7 +21,7 @@ func newSeries(m *chart.Machine, term string, inputs *js.Builder) *chart.StateMi
 			// writes: `"term#"`:{"block":{`
 			inputs.
 				Brace(js.Quotes, func(q *js.Builder) {
-					q.S(term).N(cnt - 1)
+					q.X(term).N(cnt - 1)
 				}).
 				R(js.Colon).R(open).
 				Q("block").

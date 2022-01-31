@@ -18,7 +18,7 @@ func newSlice(m *chart.Machine, term string, inputs *js.Builder) *chart.StateMix
 			}
 			// write `"TERM#": {"block":{`
 			inputs.Brace(js.Quotes, func(q *js.Builder) {
-				q.S(term).N(cnt)
+				q.X(term).N(cnt)
 			}).R(js.Colon).R(open).
 				Q("block").R(js.Colon).R(open)
 			cnt++

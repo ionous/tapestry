@@ -17,7 +17,7 @@ func newList(m *chart.Machine, term string, fields *js.Builder) *chart.StateMix 
 				if fields.Len() > 0 {
 					fields.R(js.Comma)
 				}
-				fields.Brace(js.Quotes, func(q *js.Builder) { q.S(term).N(cnt) }).
+				fields.Brace(js.Quotes, func(q *js.Builder) { q.X(term).N(cnt) }).
 					R(js.Colon).
 					Write(b)
 				cnt++

@@ -76,9 +76,10 @@ func writeMuiTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec)
 					Q("min").R(js.Colon).S(min).R(js.Comma).
 					Q("precision").R(js.Colon).S(one).R(js.Comma).
 					// unique name needed for blockly undo
-					Q("name").R(js.Colon).Brace(js.Quotes, func(val *js.Builder) {
-					val.S(term.Field()).R(js.Score).S("edit")
-				})
+					Q("name").R(js.Colon).Brace(js.Quotes,
+					func(val *js.Builder) {
+						val.X(term.Field()).R(js.Score).S("edit")
+					})
 			})
 
 	} else if term.Optional {
@@ -88,9 +89,10 @@ func writeMuiTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec)
 				field.
 					Kv("type", bconst.FieldCheckbox).R(js.Comma).
 					// unique name needed for blockly undo:
-					Q("name").R(js.Colon).Brace(js.Quotes, func(val *js.Builder) {
-					val.S(term.Field()).R(js.Score).S("edit")
-				})
+					Q("name").R(js.Colon).Brace(js.Quotes,
+					func(val *js.Builder) {
+						val.X(term.Field()).R(js.Score).S("edit")
+					})
 			})
 	}
 	return

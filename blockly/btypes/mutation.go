@@ -15,7 +15,7 @@ func writeMutator(out *js.Builder, blockType *spec.TypeSpec, flow *spec.FlowSpec
 	// 2. write args and message.
 	return out.Brace(js.Obj, func(block *js.Builder) {
 		block.
-			Q("type").R(js.Colon, js.Quote, js.Score).S(blockType.Name).S("_mutator").R(js.Quote, js.Comma).
+			Q("type").R(js.Colon, js.Quote, js.Score).X(blockType.Name).S("_mutator").R(js.Quote, js.Comma).
 			Kv("style", "logic_blocks").R(js.Comma).
 			Q("inputsInline").R(js.Colon).S("false").R(js.Comma).
 			If(true, func(args *js.Builder) {

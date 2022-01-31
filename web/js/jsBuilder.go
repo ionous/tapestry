@@ -38,9 +38,56 @@ func (out *Builder) S(el string) *Builder {
 	return out
 }
 
+// write the inner bits of a json friend string
+// see: https://cs.opensource.google/go/go/+/refs/tags/go1.17.6:src/encoding/json/encode.go;l=1036
+func (out *Builder) X(s string) *Builder {
+	var start int
+	for i, c := range s {
+		// is this rune a control character or other special value?
+		if esc, special := escapes[c]; special || c < 32 {
+			if start < i { // flush
+				out.WriteString(s[start:i])
+			}
+			start = i + 1 // skip the character we're escaping
+			if special {
+				out.WriteString(esc)
+			} else {
+				// write in the default \uxxxx format
+				const hex = "0123456789abcdef"
+				out.WriteString(`u00`)
+				out.WriteByte(hex[c>>4])
+				out.WriteByte(hex[c&0xF])
+			}
+		}
+	}
+	if start < len(s) { // flush
+		out.WriteString(s[start:])
+	}
+	return out
+}
+
+// special escapes for json strings.
+// any codepoint except " or \ or a control character is fine
+// ( re: https://www.json.org/json-en.html, plus or minus some separators. )
+// all control characters *can* be written in \uxxxx format
+// while some also have their own special syntax ( ex. \n instead of \u000a )
+var escapes = map[rune]string{
+	'"':  `\"`,
+	'\\': `\\`,
+	'\b': `\b`,
+	'\f': `\f`,
+	'\n': `\n`,
+	'\r': `\r`,
+	'\t': `\t`,
+	// U+2028 is LINE SEPARATOR.
+	// U+2029 is PARAGRAPH SEPARATOR.
+	'\u2028': `\u2028`,
+	'\u2029': `\u2029`,
+}
+
 func (out *Builder) Q(el string) *Builder {
 	return out.Brace(Quotes, func(out *Builder) {
-		out.S(el)
+		out.X(el)
 	})
 }
 
