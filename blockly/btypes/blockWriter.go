@@ -150,17 +150,8 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 	args.Brace(js.Obj, func(tail *js.Builder) {
 		tail.Kv("name", strings.ToUpper(term.Field())).R(js.Comma)
 		tail.Kv("type", inputType)
-		if len(checks) > 0 {
-			tail.R(js.Comma).
-				Q("check").R(js.Colon).Brace(js.Array, func(check *js.Builder) {
-				for i, c := range checks {
-					if i > 0 {
-						check.R(js.Comma)
-					}
-					check.Q(c)
-				}
-			})
-		}
+		appendChecks(tail, "checks", checks)
+
 		if len(shadow) > 0 {
 			tail.R(js.Comma).Kv("shadow", shadow)
 		}
@@ -172,4 +163,18 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 		}
 	})
 	return
+}
+
+func appendChecks(tail *js.Builder, label string, checks []string) {
+	if len(checks) > 0 {
+		tail.R(js.Comma).
+			Q(label).R(js.Colon).Brace(js.Array, func(check *js.Builder) {
+			for i, c := range checks {
+				if i > 0 {
+					check.R(js.Comma)
+				}
+				check.Q(c)
+			}
+		})
+	}
 }
