@@ -60,6 +60,15 @@ function start() {
           {
             'kind': 'block',
             'type': 'test_flow',
+          },
+
+          {
+            'kind': 'block',
+            'type': 'test_swap',
+          },
+          {
+            'kind': 'block',
+            'type': 'test_txt',
           }
         ],
       }
@@ -223,7 +232,8 @@ Blockly.Extensions.registerMixin(
       return this.itemState[ name ]= itemCount;
     },
 
-    // find the named input, return its index
+    // given the named input, return its index.
+    // ( blockly's getInput() returns the actual input itself )
     findInputIndex(name, from=0) {
       let found= -1;
       for (let i= from; i< this.inputList.length; i++) {
@@ -235,6 +245,68 @@ Blockly.Extensions.registerMixin(
       }
       return found;
     },
+
+    // called by swap dropdowns to disconnect incompatible blocks after the user swaps the value.
+    onSwapChanged(inputName, fieldDef, newValue) {
+      const allowedType= fieldDef.swaps[newValue];
+      const input= this.getInput(inputName);
+      const targetConnection= input.connection && input.connection.targetConnection;
+      if (targetConnection) {
+        const checks= targetConnection.getCheck(); // null if everything is allowed; rare.
+        const stillCompatible= !checks || checks.includes(allowedType);
+        if (!stillCompatible) {
+          targetConnection.disconnect(); // bumps the disconnecting block away automatically.
+        }
+      }
+    },
+
+    // 1. search for swaps, and change the swap to match the input type.
+    onchange: function(e) {
+      // move events are used for connections
+      if (e.type === Blockly.Events.BLOCK_MOVE) {
+        // we only care about events intended for this specific block
+        if (e.newParentId === this.id) {
+          // find the input that's being connected to
+          const input= this.getInput(e.newInputName);
+          if (input && input.inputDef) {
+            // ends when field is nil because array is exhausted.
+            for (let i = 0, field; (field = input.fieldRow[i]); i++) {
+              if (field.name === input.name) {
+                this._updateSwap(input, field);
+                break;
+              }
+            }
+          }
+        }
+      }
+    },
+
+    // update the value of a swap based on its current (new) input block.
+    _updateSwap: function(input, field) {
+      // if the input is a swap:
+      const swaps= field.fieldDef && field.fieldDef.swaps;
+      if (swaps) {
+        const targetConnection= input.connection && input.connection.targetConnection;
+        // assuming something is connected
+        if (targetConnection) {
+          // first check the current value ....
+          const currOpt= field.getValue();
+          const currType= swaps[currOpt];
+          const checks= targetConnection.getCheck(); // null if everything is allowed; rare.
+          const stillCompatible= !checks || checks.includes(currType);
+          if (!stillCompatible) {
+            for (let k in swaps) {
+              const checkType= swaps[k];
+              if (checks.includes(checkType)) {
+                field.setValue(k); // this triggers a "swapChanged" :/
+                break;
+              }
+            }
+          }
+        }
+      }
+    },
+
     // allows overrides of the input name to handle repeated elements
     createInput: function(inputName, fieldDefs, atIndex) {
       const inputDef= fieldDefs[fieldDefs.length-1];
@@ -250,6 +322,7 @@ Blockly.Extensions.registerMixin(
         throw new Error(`Tapestry mutation couldn't create ${inputName} of ${inputDef.type}`);
       }
       const newInput= this[appendFn](inputName);
+      newInput.inputDef= inputDef;
       const newIndex= this.inputList.length-1;
       if (atIndex && atIndex < newIndex) {
         this.moveNumberedInputBefore(newIndex, atIndex);
@@ -261,6 +334,7 @@ Blockly.Extensions.registerMixin(
       for (let i=0; i<fieldDefs.length-1; i++) {
         const fieldDef= fieldDefs[i];
         const field= Blockly.fieldRegistry.fromJson(fieldDef);
+        field.fieldDef= fieldDef;
         // note: the field doesnt get its name from the definition; instead you have to set it during append.
         // also: dummy inputs dont count when being saved, so we have to scope it
         let fieldName;
@@ -269,6 +343,10 @@ Blockly.Extensions.registerMixin(
           if (fieldCount++ > 0) {
             fieldName += "-" + fieldCount;
           }
+        }
+        if ((fieldDef.swaps) && (field instanceof Blockly.FieldDropdown)) {
+          // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
+          field.setValidator(this.onSwapChanged.bind(this, inputName, fieldDef));
         }
         newInput.appendField(field, fieldName);
       }
