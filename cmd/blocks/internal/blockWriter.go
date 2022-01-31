@@ -15,7 +15,6 @@ func writeBlockDef(out *js.Builder, blockType *spec.TypeSpec, terms []spec.TermS
 	if blockType.Spec.Choice == spec.UsesSpec_Flow_Opt {
 		out.Kv("mutator", "tapestry_generic_mutation").R(js.Comma)
 	}
-
 	out.Q("customData").R(js.Colon).
 		Brace(js.Obj, func(custom *js.Builder) {
 			custom.Q("blockDef").R(js.Colon).
@@ -48,7 +47,7 @@ func writeFieldDefs(args *js.Builder, term spec.TermSpec) {
 
 func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 	// write the label for this term.
-	if l := term.Label(); len(l) > 0 {
+	if l := term.FriendlyName(); len(l) > 0 {
 		writeLabel(args, l)
 		args.R(js.Comma)
 	}
@@ -79,23 +78,37 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 	case spec.UsesSpec_Swap_Opt:
 		swap := termType.Spec.Value.(*spec.SwapSpec)
 		inputType = bc.InputValue
+		// allows all the types and changes the swap depending on what gets connected
 		for _, pick := range swap.Between {
 			checks = append(checks, pick.TypeName())
 		}
 		args.Brace(js.Obj, func(field *js.Builder) {
 			field.
 				Kv("type", bc.FieldDropdown).R(js.Comma).
-				Q("options").R(js.Colon).Brace(js.Array,
-				func(options *js.Builder) {
-					for i, pick := range swap.Between {
-						if i > 0 {
-							options.R(js.Comma)
+				// write the blockly dropdown data
+				Q("options").R(js.Colon).
+				Brace(js.Array,
+					func(options *js.Builder) {
+						for i, pick := range swap.Between {
+							if i > 0 {
+								options.R(js.Comma)
+							}
+							options.Brace(js.Array, func(opt *js.Builder) {
+								opt.Q(pick.FriendlyName()).R(js.Comma).Q(pick.Value())
+							})
 						}
-						options.Brace(js.Array, func(opt *js.Builder) {
-							opt.Q(pick.FriendlyName()).R(js.Comma).Q(pick.TypeName())
-						})
-					}
-				})
+					}).R(js.Comma).
+				// write info on how to change the input when swapping types
+				Q("swaps").R(js.Colon).
+				Brace(js.Obj,
+					func(swaps *js.Builder) {
+						for i, pick := range swap.Between {
+							if i > 0 {
+								swaps.R(js.Comma)
+							}
+							swaps.Kv(pick.Value(), pick.TypeName())
+						}
+					})
 		}).R(js.Comma)
 
 	case spec.UsesSpec_Num_Opt:
@@ -104,22 +117,36 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 		}).R(js.Comma)
 
 	case spec.UsesSpec_Str_Opt:
-		// FIX - write combo box for enums
-		// fix: future? a combo box with custom entry
-		// ( ex. something like a variable that is shared globally *if* variable categories are allowed. )
-		// ( or. a combo box with an "other" entry, or a mui option -- to change from selected to free typing )
+		// other options:
+		// spellcheck: true/false
+		// text: the default value
+		str := termType.Spec.Value.(*spec.StrSpec)
+		// open:
+		// closed:
 		args.Brace(js.Obj, func(field *js.Builder) {
-			field.
-				Kv("type", bc.FieldText)
-			// other options:
-			// spellcheck: true/false
-			// text: the default value
+			if !str.Exclusively {
+				field.Kv("type", bc.FieldText)
+			} else {
+				field.Kv("type", bc.FieldDropdown).R(js.Comma).
+					Q("options").R(js.Colon).
+					Brace(js.Array,
+						func(options *js.Builder) {
+							for i, pick := range str.Uses {
+								if i > 0 {
+									options.R(js.Comma)
+								}
+								options.Brace(js.Array, func(opt *js.Builder) {
+									opt.Q(pick.FriendlyName()).R(js.Comma).Q(pick.Value())
+								})
+							}
+						})
+			}
 		}).R(js.Comma)
 
 	default:
 		log.Fatalln("unknown spec type", kind)
 	}
-	// write the input all of the above fields are a part of:
+	// write the input that all of the above fields are a part of:
 	args.Brace(js.Obj, func(tail *js.Builder) {
 		tail.Kv("name", strings.ToUpper(term.Field())).R(js.Comma)
 		tail.Kv("type", inputType)

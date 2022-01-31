@@ -47,7 +47,7 @@ func writeMuiInput(args *js.Builder, term spec.TermSpec) (ret int) {
 
 // note: writes a leading comma :/
 func writeMuiTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) (ret int) {
-	name, label := term.Field(), term.Label()
+	name, label := term.Field(), term.FriendlyName()
 	// stacked elements dont need to repeat inputs: one input allows multiple blocks.
 	// ( and if they are optional, we'll want to use a checkbox )
 	stacks, _ := SlotStacks(termType)

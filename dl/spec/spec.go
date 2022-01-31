@@ -1,7 +1,9 @@
 package spec
 
+import "strings"
+
 // return english human friendly text.
-func (op *TermSpec) Label() string {
+func (op *TermSpec) FriendlyName() string {
 	return op.Key
 }
 
@@ -35,6 +37,11 @@ func (op *ChoiceSpec) FriendlyName() (ret string) {
 	return
 }
 
+// the value for the swap
+func (op *ChoiceSpec) Value() string {
+	return "$" + strings.ToUpper(op.Name)
+}
+
 // return the name of the spec which describes the content of this Choice.
 func (op *ChoiceSpec) TypeName() (ret string) {
 	if len(op.Type) > 0 {
@@ -43,4 +50,17 @@ func (op *ChoiceSpec) TypeName() (ret string) {
 		ret = op.Name
 	}
 	return
+}
+
+func (op *OptionSpec) FriendlyName() (ret string) {
+	if n := op.Label; len(n) > 0 {
+		ret = n
+	} else {
+		ret = op.Name
+	}
+	return
+}
+
+func (op *OptionSpec) Value() (ret string) {
+	return "$" + strings.ToUpper(op.Name)
 }

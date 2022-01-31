@@ -25,29 +25,6 @@
         },
         {
           "--": "",
-          "Spec:with str:slots:": [
-            "test_str",
-            {
-              "Str exclusively:uses:": [
-                true,
-                [
-                  {
-                    "Option:": "one"
-                  },
-                  {
-                    "Option:": "other"
-                  },
-                  {
-                    "Option:": "option"
-                  }
-                ]
-              ]
-            },
-            ["test_slot"]
-          ]
-        },
-        {
-          "--": "",
           "Spec:with flow:slots:": [
             "test_flow",
             {
@@ -125,25 +102,50 @@
         },
         {
           "--": "",
+          "Spec:with str:": [
+            "test_str",
+            {
+              "Str exclusively:uses:": [
+                true,
+                [
+                  {
+                    "Option:": "one"
+                  },
+                  {
+                    "Option:": "other"
+                  },
+                  {
+                    "Option:": "option"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "",
           "Spec:with swap:": [
             "test_swap",
             {
               "Swap between:": [
                 {
-                  "Pick:type:": [
+                  "Pick:label:type:": [
                     "a",
+                    "flow",
                     "test_flow"
                   ]
                 },
                 {
-                  "Pick:type:": [
+                  "Pick:label:type:": [
                     "b",
+                    "slot",
                     "test_slot"
                   ]
                 },
                 {
-                  "Pick:type:": [
+                  "Pick:label:type:": [
                     "c",
+                    "text",
                     "test_txt"
                   ]
                 }

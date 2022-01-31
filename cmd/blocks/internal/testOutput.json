@@ -1,5 +1,40 @@
 [
   {
+    "type": "bool",
+    "output": [
+      "bool"
+    ],
+    "message0": "bool",
+    "colour": "%{BKY_COLOUR_HUE}",
+    "extensions": [
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
+    ],
+    "customData": {
+      "blockDef": [
+        [
+          {
+            "type": "field_dropdown",
+            "options": [
+              [
+                "true",
+                "$TRUE"
+              ],
+              [
+                "false",
+                "$FALSE"
+              ]
+            ]
+          },
+          {
+            "name": "BOOL",
+            "type": "input_dummy"
+          }
+        ]
+      ]
+    }
+  },
+  {
     "type": "bool_value",
     "output": [
       "bool_value",
@@ -22,7 +57,17 @@
             "text": "bool"
           },
           {
-            "type": "field_input"
+            "type": "field_dropdown",
+            "options": [
+              [
+                "true",
+                "$TRUE"
+              ],
+              [
+                "false",
+                "$FALSE"
+              ]
+            ]
           },
           {
             "name": "BOOL",
@@ -358,6 +403,31 @@
     "message0": "%1%2%3%4%5%6%7%8"
   },
   {
+    "type": "number",
+    "output": [
+      "number"
+    ],
+    "message0": "number",
+    "colour": "%{BKY_COLOUR_HUE}",
+    "extensions": [
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
+    ],
+    "customData": {
+      "blockDef": [
+        [
+          {
+            "type": "field_number"
+          },
+          {
+            "name": "NUMBER",
+            "type": "input_dummy"
+          }
+        ]
+      ]
+    }
+  },
+  {
     "type": "record_value",
     "output": [
       "record_value",
@@ -512,6 +582,41 @@
     "message0": "%1%2%3%4%5"
   },
   {
+    "type": "test_bool",
+    "output": [
+      "test_bool"
+    ],
+    "message0": "test_bool",
+    "colour": "%{BKY_COLOUR_HUE}",
+    "extensions": [
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
+    ],
+    "customData": {
+      "blockDef": [
+        [
+          {
+            "type": "field_dropdown",
+            "options": [
+              [
+                "true",
+                "$TRUE"
+              ],
+              [
+                "false",
+                "$FALSE"
+              ]
+            ]
+          },
+          {
+            "name": "TEST_BOOL",
+            "type": "input_dummy"
+          }
+        ]
+      ]
+    }
+  },
+  {
     "type": "test_flow",
     "output": [
       "test_flow",
@@ -574,7 +679,17 @@
             "text": "bool"
           },
           {
-            "type": "field_input"
+            "type": "field_dropdown",
+            "options": [
+              [
+                "true",
+                "$TRUE"
+              ],
+              [
+                "false",
+                "$FALSE"
+              ]
+            ]
           },
           {
             "name": "BOOL",
@@ -591,18 +706,23 @@
             "type": "field_dropdown",
             "options": [
               [
-                "a",
-                "test_flow"
+                "flow",
+                "$A"
               ],
               [
-                "b",
-                "test_slot"
+                "slot",
+                "$B"
               ],
               [
-                "c",
-                "test_txt"
+                "text",
+                "$C"
               ]
-            ]
+            ],
+            "swaps": {
+              "$A": "test_flow",
+              "$B": "test_slot",
+              "$C": "test_txt"
+            }
           },
           {
             "name": "SWAP",
@@ -723,12 +843,124 @@
     "message0": "%1%2%3%4%5%6%7%8%9%10%11%12%13%14%15%16%17%18%19%20"
   },
   {
+    "type": "test_num",
+    "output": [
+      "test_num"
+    ],
+    "message0": "test_num",
+    "colour": "%{BKY_COLOUR_HUE}",
+    "extensions": [
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
+    ],
+    "customData": {
+      "blockDef": [
+        [
+          {
+            "type": "field_number"
+          },
+          {
+            "name": "TEST_NUM",
+            "type": "input_dummy"
+          }
+        ]
+      ]
+    }
+  },
+  {
     "type": "test_str",
     "output": [
-      "test_str",
-      "test_slot"
+      "test_str"
     ],
     "message0": "test_str",
+    "colour": "%{BKY_COLOUR_HUE}",
+    "extensions": [
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
+    ],
+    "customData": {
+      "blockDef": [
+        [
+          {
+            "type": "field_dropdown",
+            "options": [
+              [
+                "one",
+                "$ONE"
+              ],
+              [
+                "other",
+                "$OTHER"
+              ],
+              [
+                "option",
+                "$OPTION"
+              ]
+            ]
+          },
+          {
+            "name": "TEST_STR",
+            "type": "input_dummy"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "type": "test_swap",
+    "output": [
+      "test_swap"
+    ],
+    "message0": "test_swap",
+    "colour": "%{BKY_COLOUR_HUE}",
+    "extensions": [
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
+    ],
+    "customData": {
+      "blockDef": [
+        [
+          {
+            "type": "field_dropdown",
+            "options": [
+              [
+                "flow",
+                "$A"
+              ],
+              [
+                "slot",
+                "$B"
+              ],
+              [
+                "text",
+                "$C"
+              ]
+            ],
+            "swaps": {
+              "$A": "test_flow",
+              "$B": "test_slot",
+              "$C": "test_txt"
+            }
+          },
+          {
+            "name": "TEST_SWAP",
+            "type": "input_value",
+            "check": [
+              "test_flow",
+              "test_slot",
+              "test_txt"
+            ]
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "type": "test_txt",
+    "output": [
+      "test_txt"
+    ],
+    "message0": "test_txt",
     "colour": "%{BKY_COLOUR_HUE}",
     "extensions": [
       "tapestry_generic_mixin",
@@ -741,7 +973,33 @@
             "type": "field_input"
           },
           {
-            "name": "TEST_STR",
+            "name": "TEST_TXT",
+            "type": "input_dummy"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "type": "text",
+    "output": [
+      "text"
+    ],
+    "message0": "text",
+    "colour": "%{BKY_COLOUR_HUE}",
+    "tooltip": "A sequence of characters of any length, all on one line.  Examples include letters, words, or short sentences.  Text is generally something displayed to the player.  See also: lines.",
+    "extensions": [
+      "tapestry_generic_mixin",
+      "tapestry_generic_extension"
+    ],
+    "customData": {
+      "blockDef": [
+        [
+          {
+            "type": "field_input"
+          },
+          {
+            "name": "TEXT",
             "type": "input_dummy"
           }
         ]

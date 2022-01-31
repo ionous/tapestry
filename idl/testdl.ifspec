@@ -17,14 +17,12 @@
             "test_swap":
             {
                 "uses": "swap",
-                "spec": "swap {a:test_flow} {b:test_slot} {c:test_txt}",
-                "slot": "test_slot"
+                "spec": "swap {flow%a:test_flow} {slot%b:test_slot} {text%c:test_txt}"
             },
             "test_str":
             {
                 "uses": "str",
-                "spec": "{one}, {other}, {option}",
-                "slot": "test_slot"
+                "spec": "{one}, {other}, {option}"
             },
             "test_num":
             {

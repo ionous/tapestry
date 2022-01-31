@@ -30,17 +30,17 @@ func writeSlotBlock(block *js.Builder, blockType *spec.TypeSpec) bool {
 	return false // slots dont have have corresponding blocks
 }
 
-// we only need a standalone block for strs, etc. when they implement some slot.
-// to do so, we simply pretend its a flow of one anonymous member.
+// ideally: we'd only need a standalone block for strs, etc. when they implement some slot.
+// however, if they are used by a slot -- then we need a block for them too.
+// fix: maybe consider writing an "inputDef" object {} as the value of "swaps"
+// ( for simple types or maybe all of them ) and change the block's input on selection.
 func writeOneBlock(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
-	if len(blockType.Slots) > 0 {
-		// create a fake term to represent ourself
-		okay = _writeBlock(block, blockType.Name, blockType, []spec.TermSpec{{
-			Key:  "",
-			Name: blockType.Name,
-			Type: blockType.Name,
-		}})
-	}
+	// we simply pretend we're a flow of one anonymous member.
+	okay = _writeBlock(block, blockType.Name, blockType, []spec.TermSpec{{
+		Key:  "",
+		Name: blockType.Name,
+		Type: blockType.Name,
+	}})
 	return okay
 }
 
@@ -83,7 +83,10 @@ func _writeBlock(block *js.Builder, name string, blockType *spec.TypeSpec, terms
 		partial.R(js.Comma).Kv("tooltip", cmt)
 	}
 	partial.R(js.Comma)
+
+	// write the terms:
 	writeBlockDef(&partial, blockType, terms)
+
 	// are we stackable? ( ex. story statement or executable )
 	if len(stacks) > 0 {
 		block.Brace(js.Obj, func(out *js.Builder) {

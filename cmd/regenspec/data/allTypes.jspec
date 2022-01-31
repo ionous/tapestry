@@ -16995,6 +16995,74 @@
       }
     ]
   },
+  "test_str": {
+    "name": "test_str",
+    "uses": "str",
+    "group": [
+      "testdl"
+    ],
+    "with": {
+      "tokens": [
+        "$ONE",
+        ", ",
+        "$OTHER",
+        ", ",
+        "$OPTION"
+      ],
+      "params": {
+        "$ONE": {
+          "label": "one",
+          "value": "one",
+          "key": "$ONE",
+          "internal": false,
+          "tag": "one",
+          "sel": "one"
+        },
+        "$OTHER": {
+          "label": "other",
+          "value": "other",
+          "key": "$OTHER",
+          "internal": false,
+          "tag": "other",
+          "sel": "other"
+        },
+        "$OPTION": {
+          "label": "option",
+          "value": "option",
+          "key": "$OPTION",
+          "internal": false,
+          "tag": "option",
+          "sel": "option"
+        }
+      }
+    },
+    "params": [
+      {
+        "label": "one",
+        "value": "one",
+        "key": "$ONE",
+        "internal": false,
+        "tag": "one",
+        "sel": "one"
+      },
+      {
+        "label": "other",
+        "value": "other",
+        "key": "$OTHER",
+        "internal": false,
+        "tag": "other",
+        "sel": "other"
+      },
+      {
+        "label": "option",
+        "value": "option",
+        "key": "$OPTION",
+        "internal": false,
+        "tag": "option",
+        "sel": "option"
+      }
+    ]
+  },
   "test_swap": {
     "name": "test_swap",
     "uses": "swap",
@@ -17012,7 +17080,7 @@
       ],
       "params": {
         "$A": {
-          "label": "a",
+          "label": "flow",
           "type": "test_flow",
           "key": "$A",
           "internal": false,
@@ -17020,7 +17088,7 @@
           "sel": "a"
         },
         "$B": {
-          "label": "b",
+          "label": "slot",
           "type": "test_slot",
           "key": "$B",
           "internal": false,
@@ -17028,7 +17096,7 @@
           "sel": "b"
         },
         "$C": {
-          "label": "c",
+          "label": "text",
           "type": "test_txt",
           "key": "$C",
           "internal": false,
@@ -17039,7 +17107,7 @@
     },
     "params": [
       {
-        "label": "a",
+        "label": "flow",
         "type": "test_flow",
         "key": "$A",
         "internal": false,
@@ -17047,7 +17115,7 @@
         "sel": "a"
       },
       {
-        "label": "b",
+        "label": "slot",
         "type": "test_slot",
         "key": "$B",
         "internal": false,
@@ -17055,7 +17123,7 @@
         "sel": "b"
       },
       {
-        "label": "c",
+        "label": "text",
         "type": "test_txt",
         "key": "$C",
         "internal": false,
