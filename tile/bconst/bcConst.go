@@ -1,4 +1,4 @@
-package bc
+package bconst
 
 const (
 	COLOUR_HUE            = "%{BKY_COLOUR_HUE}"

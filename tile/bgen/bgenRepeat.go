@@ -3,7 +3,7 @@ package bgen
 import (
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
-	"git.sr.ht/~ionous/tapestry/tile/bc"
+	"git.sr.ht/~ionous/tapestry/tile/bconst"
 )
 
 // a repeating member of a flow
@@ -22,7 +22,7 @@ func newRepeat(m *chart.Machine, term string, data *blockData) chart.State {
 		// possibly a single stack, or a series of inputs
 		OnSlot: func(slotType string, slotBlock jsn.SlotBlock) bool {
 			var next *chart.StateMix
-			if slot := bc.FindSlotRule(slotType); slot.Stack {
+			if slot := bconst.FindSlotRule(slotType); slot.Stack {
 				next = newStack(m, &data.next)
 			} else {
 				next = newSeries(m, term, &data.inputs)

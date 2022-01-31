@@ -1,9 +1,9 @@
-package blocks
+package btypes
 
 import (
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/tile/bc"
+	"git.sr.ht/~ionous/tapestry/tile/bconst"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
@@ -26,7 +26,7 @@ func writeDummy(args *js.Builder, name, label string, fields ...func(*js.Builder
 			if n := name; len(n) > 0 {
 				tail.Kv("name", strings.ToUpper(n)).R(js.Comma)
 			}
-			tail.Kv("type", bc.InputDummy)
+			tail.Kv("type", bconst.InputDummy)
 			ret++
 		})
 	return
@@ -46,7 +46,7 @@ func writeFields(out *js.Builder, fields ...func(*js.Builder)) (ret int) {
 func writeLabel(out *js.Builder, n string) *js.Builder {
 	return out.Brace(js.Obj, func(lab *js.Builder) {
 		lab.
-			Kv("type", bc.FieldLabel).R(js.Comma).
+			Kv("type", bconst.FieldLabel).R(js.Comma).
 			Kv("text", n)
 	})
 }

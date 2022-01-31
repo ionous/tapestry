@@ -1,4 +1,4 @@
-package blocks
+package btypes
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/spec"

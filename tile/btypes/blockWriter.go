@@ -1,11 +1,11 @@
-package blocks
+package btypes
 
 import (
 	"log"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/spec"
-	"git.sr.ht/~ionous/tapestry/tile/bc"
+	"git.sr.ht/~ionous/tapestry/tile/bconst"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
@@ -53,7 +53,7 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 	}
 	// write other fields while collecting information for the trailing input:
 	var checks []string
-	var inputType = bc.InputDummy
+	var inputType = bconst.InputDummy
 	var shadow string
 	//
 	switch kind := termType.Spec.Choice; kind {
@@ -61,13 +61,13 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 	case spec.UsesSpec_Flow_Opt:
 		// a flow goes here: tbd: but probably a shadow
 		// it only has the input, no special fields
-		inputType, checks = bc.InputValue, []string{termType.Name}
+		inputType, checks = bconst.InputValue, []string{termType.Name}
 		shadow = termType.Name
 
 	case spec.UsesSpec_Slot_Opt:
 		// inputType might be a statement_input stack, or a single ( maybe repeatable ) input
 		// regardless, it only has the input, no special fields.
-		slot := bc.FindSlotRule(termType.Name)
+		slot := bconst.FindSlotRule(termType.Name)
 		inputType, checks = slot.InputType(), []string{slot.SlotType()}
 		// if we are stack, we want to force a non-repeating input; one stack can already handle multiple blocks.
 		// fix? we dont handle the case of a stack of one element; not sure that it exists in practice.
@@ -77,14 +77,14 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 
 	case spec.UsesSpec_Swap_Opt:
 		swap := termType.Spec.Value.(*spec.SwapSpec)
-		inputType = bc.InputValue
+		inputType = bconst.InputValue
 		// allows all the types and changes the swap depending on what gets connected
 		for _, pick := range swap.Between {
 			checks = append(checks, pick.TypeName())
 		}
 		args.Brace(js.Obj, func(field *js.Builder) {
 			field.
-				Kv("type", bc.FieldDropdown).R(js.Comma).
+				Kv("type", bconst.FieldDropdown).R(js.Comma).
 				// write the blockly dropdown data
 				Q("options").R(js.Colon).
 				Brace(js.Array,
@@ -113,7 +113,7 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 
 	case spec.UsesSpec_Num_Opt:
 		args.Brace(js.Obj, func(field *js.Builder) {
-			field.Kv("type", bc.FieldNumber)
+			field.Kv("type", bconst.FieldNumber)
 		}).R(js.Comma)
 
 	case spec.UsesSpec_Str_Opt:
@@ -125,9 +125,9 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 		// closed:
 		args.Brace(js.Obj, func(field *js.Builder) {
 			if !str.Exclusively {
-				field.Kv("type", bc.FieldText)
+				field.Kv("type", bconst.FieldText)
 			} else {
-				field.Kv("type", bc.FieldDropdown).R(js.Comma).
+				field.Kv("type", bconst.FieldDropdown).R(js.Comma).
 					Q("options").R(js.Colon).
 					Brace(js.Array,
 						func(options *js.Builder) {

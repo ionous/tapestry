@@ -1,4 +1,4 @@
-package bc
+package bconst
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"

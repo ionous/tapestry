@@ -1,4 +1,4 @@
-package blocks
+package btypes
 
 import (
 	"bytes"

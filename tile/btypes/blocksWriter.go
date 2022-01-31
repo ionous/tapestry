@@ -1,10 +1,10 @@
-package blocks
+package btypes
 
 import (
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/dl/spec"
-	"git.sr.ht/~ionous/tapestry/tile/bc"
+	"git.sr.ht/~ionous/tapestry/tile/bconst"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
@@ -64,19 +64,19 @@ func _writeBlock(block *js.Builder, name string, blockType *spec.TypeSpec, terms
 	// write the label for the block itself; aka the lede.
 	partial.Kv("message0", name)
 	// color
-	var colour string = bc.COLOUR_HUE // default
-	if len(values) > 0 {              // we take on the color of the first slot specified
-		slot := bc.FindSlotRule(values[0])
+	var colour string = bconst.COLOUR_HUE // default
+	if len(values) > 0 {                  // we take on the color of the first slot specified
+		slot := bconst.FindSlotRule(values[0])
 		colour = slot.Colour
 	} else if len(stacks) > 0 {
-		slot := bc.FindSlotRule(stacks[0])
+		slot := bconst.FindSlotRule(stacks[0])
 		colour = slot.Colour
 	}
 	partial.R(js.Comma)
 	if len(colour) > 0 {
 		partial.Kv("colour", colour)
 	} else {
-		partial.Kv("colour", bc.COLOUR_HUE)
+		partial.Kv("colour", bconst.COLOUR_HUE)
 	}
 	// comment
 	if cmt := blockType.UserComment; len(cmt) > 0 {
@@ -129,7 +129,7 @@ func SlotStacks(blockType *spec.TypeSpec) (retStack, retValue []string) {
 		slots = blockType.Slots
 	}
 	for _, s := range slots {
-		slotRule := bc.FindSlotRule(s)
+		slotRule := bconst.FindSlotRule(s)
 		if slotRule.Stack {
 			retStack = append(retStack, slotRule.SlotType())
 		} else {

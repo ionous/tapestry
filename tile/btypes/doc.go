@@ -1,4 +1,4 @@
-package blocks
+package btypes
 
 // every workspace block that needs a mutation uses
 // the "tapestry_generic_mutation" mutation,
