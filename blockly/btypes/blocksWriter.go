@@ -3,8 +3,8 @@ package btypes
 import (
 	"log"
 
+	"git.sr.ht/~ionous/tapestry/blockly/bconst"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
-	"git.sr.ht/~ionous/tapestry/tile/bconst"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 

@@ -1,9 +1,9 @@
 package bgen
 
 import (
+	"git.sr.ht/~ionous/tapestry/blockly/bconst"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
-	"git.sr.ht/~ionous/tapestry/tile/bconst"
 )
 
 // a repeating member of a flow

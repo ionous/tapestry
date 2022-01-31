@@ -3,7 +3,7 @@ package btypes
 import (
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/tile/bconst"
+	"git.sr.ht/~ionous/tapestry/blockly/bconst"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
