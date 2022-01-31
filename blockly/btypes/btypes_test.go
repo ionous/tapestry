@@ -2,20 +2,20 @@ package btypes
 
 import (
 	"bytes"
+	_ "embed"
 	"encoding/json"
+	"io/fs"
 	"sort"
 	"testing"
-
-	_ "embed"
 
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/idl"
 	"git.sr.ht/~ionous/tapestry/web/js"
-	"github.com/kr/pretty"
+	"github.com/ionous/errutil"
 )
 
-func TestBlocklyOutput(t *testing.T) {
-	// errutil.Panic = true
+// fix: generate and test just testdl?
+func TestBlocklyTypes(t *testing.T) {
 	if str, e := run(t); e != nil {
 		t.Fatal(e)
 	} else {
@@ -23,20 +23,23 @@ func TestBlocklyOutput(t *testing.T) {
 		if e := json.Indent(&out, []byte(str), "", "  "); e != nil {
 			t.Fatal(str)
 		} else {
-			if diff := pretty.Diff(out.Bytes(), testOutput); len(diff) > 0 {
-				t.Log(diff)
-				t.Fatal(out.String())
-			}
+			t.Log(out.String())
 		}
 	}
 }
 
 func run(t *testing.T) (ret string, err error) {
-	if _, e := readSpec(idl.Specs, "prim.ifspecs"); e != nil {
-		err = e
-	} else if _, e := readSpec(idl.Specs, "literal.ifspecs"); e != nil {
-		err = e
-	} else if _, e := readSpec(idl.Specs, "testdl.ifspecs"); e != nil {
+	if e := fs.WalkDir(idl.Specs, ".", func(path string, d fs.DirEntry, e error) (err error) {
+		if e != nil {
+			err = e // can happen if it failed to read the contents of a director
+		} else if !d.IsDir() { // the first dir we get is "."
+			println("reading", path)
+			if _, e := readSpec(idl.Specs, path); e != nil { // reads into the global lookup
+				err = errutil.New(e, "reading", path)
+			}
+		}
+		return
+	}); e != nil {
 		err = e
 	} else {
 		var keys []string
@@ -64,6 +67,3 @@ func run(t *testing.T) (ret string, err error) {
 	}
 	return
 }
-
-//go:embed testOutput.json
-var testOutput []byte
