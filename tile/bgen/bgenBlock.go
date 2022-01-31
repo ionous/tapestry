@@ -65,13 +65,12 @@ func newInnerBlock(m *chart.Machine, blk *js.Builder, typeName string) *chart.St
 
 		// a member that's a swap
 		OnSwap: func(string, jsn.SwapBlock) (okay bool) {
-			// 			data.writeCount(term, 1)
+			// data.writeCount(term, 1)
 			return
 		},
 
 		// a member that repeats
 		OnRepeat: func(_ string, slice jsn.SliceBlock) (okay bool) {
-			// FIX: test some zero sized arrays
 			if cnt := slice.GetSize(); cnt > 0 {
 				data.writeCount(term, cnt)
 				m.PushState(newRepeat(m, term, &data))
