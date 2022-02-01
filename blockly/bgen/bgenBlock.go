@@ -8,7 +8,7 @@ import (
 
 // writes a new block into what might be the topLevel array of blocks,
 // or the value of a block or shadow key.
-func newTopBlock(m *chart.Machine, blk *js.Builder) chart.State {
+func NewTopBlock(m *chart.Machine, blk *js.Builder) chart.State {
 	open, close := js.Obj[0], js.Obj[1]
 	return &chart.StateMix{
 		// initially our own block name

@@ -10,21 +10,24 @@ type blockData struct {
 }
 
 // start a new input connection from this block to some new block
-func (blk *blockData) startInput(term string) int {
+func (b *blockData) startInput(term string) int {
 	open := js.Obj[0]
-	oldPos := blk.inputs.Len()
-	blk.inputs.
+	oldPos := b.inputs.Len()
+	if oldPos > 0 {
+		b.inputs.R(js.Comma)
+	}
+	b.inputs.
 		Q(term).R(js.Colon).
 		R(open).Q("block").R(js.Colon).R(open)
-	blk.writeCount(term, 1)
+	b.writeCount(term, 1)
 	return oldPos
 }
 
 // end a previous startInput connection.
-func (blk *blockData) endInput(was int) {
+func (b *blockData) endInput(was int) {
 	close := js.Obj[1]
-	if now := blk.inputs.Len(); now > was {
-		blk.inputs.R(close, close)
+	if now := b.inputs.Len(); now > was {
+		b.inputs.R(close, close)
 	}
 }
 
@@ -34,8 +37,11 @@ func (b *blockData) writeValue(term string, pv interface{}) (err error) {
 	if v, e := valueToBytes(pv); e != nil {
 		err = e
 	} else {
-		b.writeCount(term, 1)
+		if b.fields.Len() > 0 {
+			b.fields.R(js.Comma)
+		}
 		b.fields.Q(term).R(js.Colon).Write(v)
+		b.writeCount(term, 1)
 	}
 	return
 }

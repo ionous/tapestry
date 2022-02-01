@@ -1,4 +1,4 @@
-package bgen
+package bgen_test
 
 import (
 	"bytes"
@@ -18,7 +18,7 @@ func TestFields(t *testing.T) {
 	el := &literal.TextValue{Text: "hello world"}
 	var out js.Builder
 	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
+	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
 		t.Fatal(e)
 	} else if str, e := indent(out.String()); e != nil {
 		t.Fatal(e, str)
@@ -43,7 +43,7 @@ func TestEmbeds(t *testing.T) {
 	}
 	var out js.Builder
 	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
+	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
 		t.Fatal(e)
 	} else if str, e := indent(out.String()); e != nil {
 		t.Fatal(e, str)
@@ -78,7 +78,7 @@ func TestSwap(t *testing.T) {
 	}
 	var out js.Builder
 	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
+	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
 		t.Fatal(e)
 	} else if str, e := indent(out.String()); e != nil {
 		t.Fatal(e, str)
@@ -118,7 +118,7 @@ func TestSlot(t *testing.T) {
 		}}
 	var out js.Builder
 	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
+	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
 		t.Fatal(e)
 	} else if str, e := indent(out.String()); e != nil {
 		t.Fatal(e, str)
@@ -159,7 +159,7 @@ func TestStack(t *testing.T) {
 	}}
 	var out js.Builder
 	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
+	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
 		t.Fatal(e)
 	} else if str, e := indent(out.String()); e != nil {
 		t.Fatal(e, str)
@@ -201,7 +201,7 @@ func TestList(t *testing.T) {
 	}
 	var out js.Builder
 	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
+	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
 		t.Fatal(e)
 	} else if str, e := indent(out.String()); e != nil {
 		t.Fatal(e, str)
@@ -237,7 +237,7 @@ func TestSlice(t *testing.T) {
 	}
 	var out js.Builder
 	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
+	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
 		t.Fatal(e)
 	} else if str, e := indent(out.String()); e != nil {
 		t.Fatal(e, str)
@@ -315,7 +315,7 @@ func TestSeries(t *testing.T) {
 	}
 	var out js.Builder
 	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
+	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
 		t.Fatal(e)
 	} else if str, e := indent(out.String()); e != nil {
 		t.Fatal(e, str)
@@ -351,7 +351,7 @@ func TestEmptySeries(t *testing.T) {
 	}
 	var out js.Builder
 	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, newTopBlock(&enc, &out)); e != nil {
+	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
 		t.Fatal(e)
 	} else if str, e := indent(out.String()); e != nil {
 		t.Fatal(e, str)
