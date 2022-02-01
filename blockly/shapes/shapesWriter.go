@@ -96,17 +96,12 @@ func _writeBlock(block *js.Builder, name string, blockType *spec.TypeSpec, terms
 			appendString(out, partial.String())
 		}).R(js.Comma)
 	}
+	if rootBlock := rootBlocks.IsRoot(blockType.Name); !rootBlock {
+		values = append([]string{blockType.Name}, values...)
+	}
 	block.Brace(js.Obj, func(out *js.Builder) {
-		out.
-			Kv("type", blockType.Name).R(js.Comma).
-			Q("output").R(js.Colon).Brace(js.Array, func(checks *js.Builder) {
-			// add the flow itself as a possible output type
-			// (useful for cases where the its used directly by other flows)
-			checks.Q(blockType.Name)
-			for _, el := range values {
-				checks.R(js.Comma).Q(el)
-			}
-		})
+		out.Kv("type", blockType.Name)
+		appendChecks(out, "output", values)
 		appendString(out, partial.String())
 	})
 	return true

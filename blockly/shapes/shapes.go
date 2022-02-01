@@ -11,6 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
 )
 
+// loads into global "lookup"
 func readSpec(files fs.FS, fileName string) (ret *spec.TypeSpec, err error) {
 	if b, e := fs.ReadFile(files, fileName); e != nil {
 		err = e
@@ -69,4 +70,21 @@ func importTypes(types *spec.TypeSpec) error {
 	}))
 }
 
-var lookup = make(map[string]*spec.TypeSpec)
+type TypeSpecs map[string]*spec.TypeSpec
+
+var lookup = make(TypeSpecs)
+
+var rootBlocks = RootBlocks{"story_lines"}
+
+// root blocks have no output
+type RootBlocks []string
+
+func (x RootBlocks) IsRoot(name string) (ret bool) {
+	for _, str := range x {
+		if name == str {
+			ret = true
+			break
+		}
+	}
+	return
+}
