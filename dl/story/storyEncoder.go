@@ -12,7 +12,7 @@ import (
 
 // Write a story to a story file.
 func Encode(src *Story) (interface{}, error) {
-	lines := src.reformat()
+	lines := src.Reformat()
 	return cout.Encode(&lines, CompactEncoder)
 }
 
@@ -20,7 +20,7 @@ func Encode(src *Story) (interface{}, error) {
 func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 	switch op := flow.GetFlow().(type) {
 	case *Story:
-		lines := op.reformat()
+		lines := op.Reformat()
 		err = lines.Marshal(m)
 
 	case *core.CallPattern:
@@ -76,7 +76,7 @@ func recase(str string, cap bool) string {
 }
 
 // change from old format composer friendly paragraph blocks into simpler to read and edit lines.
-func (op *Story) reformat() (out StoryLines) {
+func (op *Story) Reformat() (out StoryLines) {
 	for i, p := range op.Paragraph {
 		// every new paragraph, write a "story break"
 		if i > 0 || len(p.UserComment) > 0 {
@@ -91,7 +91,7 @@ func (op *Story) reformat() (out StoryLines) {
 }
 
 // change from simpler to read story lines into old format composer friendly blocks of paragraphs.
-func (op *StoryLines) reformat() (out Story) {
+func (op *StoryLines) Reformat() (out Story) {
 	var p Paragraph
 	for i, el := range op.Lines {
 		if br, ok := el.(*StoryBreak); !ok {
