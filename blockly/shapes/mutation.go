@@ -1,4 +1,4 @@
-package btypes
+package shapes
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/spec"

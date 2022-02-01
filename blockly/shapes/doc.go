@@ -1,4 +1,5 @@
-// package btypes defines blockly custom blocks in its JSON format.
+// package shapes generates blockly custom blocks in its JSON format.
+// Blockly doesnt have its own name for the format -- so Tapestry refers to them as "shape" files.
 // see: https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks
 //
 // every workspace block that needs a mutation has custom javascript support:
@@ -33,4 +34,4 @@
 // the mui controls ( the checkboxes and numbers ) and the are embedded in dummy inputs inside the mui.
 // the dummy inputs have the same name as the corresponding inputs in the workspace block.
 //
-package btypes
+package shapes

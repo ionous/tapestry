@@ -1,4 +1,4 @@
-package btypes
+package shapes
 
 import (
 	"log"
