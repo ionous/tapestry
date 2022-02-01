@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/blockly/bgen"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/dl/testdl"
