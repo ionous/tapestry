@@ -13,12 +13,11 @@ function start() {
   // registerDisplayOption();
   // Blockly.ContextMenuRegistry.registry.unregister('workspaceDelete');
   // Create main workspace.
-
   jsonData.forEach(function(el) {
     jsonDefs[el.type]= el;
     Blockly.defineBlocksWithJsonArray([el]);
   });
-  // Blockly.defineBlocksWithJsonArray(exp);
+
   Blockly.WorkspaceAudio.prototype.preload= function(){};
   workspace = Blockly.inject('blocklyDiv',{
       // toolbox: toolboxSimple,
@@ -77,6 +76,7 @@ function start() {
         ],
       }
     });
+  Blockly.serialization.workspaces.load(dataBlocks, Blockly.mainWorkspace)
 }
 
 
