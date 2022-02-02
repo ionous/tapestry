@@ -17,6 +17,7 @@ func writeBlockDef(out *js.Builder, blockType *spec.TypeSpec, terms []spec.TermS
 	}
 	out.Q("customData").R(js.Colon).
 		Brace(js.Obj, func(custom *js.Builder) {
+			custom.Kv("mui", bconst.MutatorName(blockType.Name)).R(js.Comma)
 			custom.Q("blockDef").R(js.Colon).
 				Brace(js.Array, func(mui *js.Builder) {
 					var csv int

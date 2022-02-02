@@ -39,6 +39,7 @@ func TestStoryLineShape(t *testing.T) {
   ],
   "mutator": "tapestry_generic_mutation",
   "customData": {
+    "mui": "_story_lines_mutator",
     "blockDef": [
       [
         {
@@ -67,6 +68,43 @@ func TestStoryLineShape(t *testing.T) {
 		} else if diff := pretty.Diff(str, expect); len(diff) > 0 {
 			t.Log(str)
 			t.Fatal("ng", diff)
+		}
+	}
+}
+
+// make sure that story lines has no output and one stacked input.
+func TestStoryLineMui(t *testing.T) {
+	lookup = make(TypeSpecs) // reset
+	expect := `{
+  "type": "_story_lines_mutator",
+  "style": "logic_blocks",
+  "inputsInline": false,
+  "args0": [
+    {
+      "type": "field_label",
+      "text": "story_lines"
+    },
+    {
+      "type": "input_dummy"
+    }
+  ],
+  "message0": "%1%2"
+}`
+	if _, e := readSpec(idl.Specs, "story.ifspecs"); e != nil { // reads into the global lookup
+		t.Fatal(e)
+	} else {
+		blockType := lookup["story_lines"]
+		if flow, ok := blockType.Spec.Value.(*spec.FlowSpec); !ok {
+			t.Fatal("unexpected")
+		} else {
+			var out js.Builder
+			writeMutator(&out, blockType, flow)
+			if str, e := indent(out.String()); e != nil {
+				t.Fatal(e, str)
+			} else if diff := pretty.Diff(str, expect); len(diff) > 0 {
+				t.Log(str)
+				t.Fatal("ng", diff)
+			}
 		}
 	}
 }
