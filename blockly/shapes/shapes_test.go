@@ -16,7 +16,7 @@ import (
 )
 
 // fix: generate and test just testdl?
-func xTestBlocklyTypes(t *testing.T) {
+func TestBlocklyTypes(t *testing.T) {
 	if str, e := run(t); e != nil {
 		t.Fatal(e)
 	} else if out, e := indent(str); e != nil {
@@ -27,7 +27,7 @@ func xTestBlocklyTypes(t *testing.T) {
 }
 
 // make sure that story lines has no output and one stacked input.
-func TestStoryLines(t *testing.T) {
+func TestStoryLineShape(t *testing.T) {
 	lookup = make(TypeSpecs) // reset
 	expect := `{
   "type": "story_lines",
@@ -49,7 +49,7 @@ func TestStoryLines(t *testing.T) {
           "name": "LINES",
           "type": "input_statement",
           "checks": [
-            "stacked_story_statement"
+            "_story_statement_stack"
           ]
         }
       ]

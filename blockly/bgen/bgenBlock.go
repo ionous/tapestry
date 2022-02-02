@@ -30,7 +30,7 @@ func NewTopBlock(m *chart.Machine, blk *js.Builder) chart.State {
 // ( to support the nested linked lists of blocks used for stacks )
 func newInnerBlock(m *chart.Machine, body *js.Builder, typeName string) *chart.StateMix {
 	var term string // set per key
-	blk := blockData{typeName: typeName}
+	blk := blockData{id: NewId(), typeName: typeName}
 	return &chart.StateMix{
 		// a member that is a flow.
 		OnMap: func(_ string, flow jsn.FlowBlock) bool {

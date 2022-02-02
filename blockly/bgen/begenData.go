@@ -5,12 +5,18 @@ import "git.sr.ht/~ionous/tapestry/web/js"
 // helper for writing the inner bits of a blockly block definition
 // ( ex. anything inside of "block" or "shadow" keys )
 type blockData struct {
-	typeName                         string
-	fields, inputs, next, extraState js.Builder
+	id, typeName               string
+	fields, inputs, extraState js.Builder
 }
 
 // start a new input connection from this block to some new block
 func (b *blockData) startInput(term string) int {
+	ret := b.startInputWithoutCount(term)
+	b.writeCount(term, 1)
+	return ret
+}
+
+func (b *blockData) startInputWithoutCount(term string) int {
 	open := js.Obj[0]
 	oldPos := b.inputs.Len()
 	if oldPos > 0 {
@@ -19,7 +25,6 @@ func (b *blockData) startInput(term string) int {
 	b.inputs.
 		Q(term).R(js.Colon).
 		R(open).Q("block").R(js.Colon).R(open)
-	b.writeCount(term, 1)
 	return oldPos
 }
 
@@ -58,7 +63,8 @@ func (b *blockData) writeCount(term string, cnt int) {
 }
 
 func (b *blockData) writeTo(out *js.Builder) {
-	out.Kv("type", b.typeName)
+	out.Kv("id", b.id).R(js.Comma).
+		Kv("type", b.typeName)
 	// note: always have to write extraState or blockly gets unhappy...
 	writeContents(out, "extraState", &b.extraState)
 	if els := &b.fields; els.Len() > 0 {
@@ -66,9 +72,6 @@ func (b *blockData) writeTo(out *js.Builder) {
 	}
 	if els := &b.inputs; els.Len() > 0 {
 		writeContents(out, "inputs", els)
-	}
-	if b.next.Len() > 0 {
-		out.S(b.next.String())
 	}
 }
 

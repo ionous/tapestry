@@ -90,9 +90,9 @@ func _writeBlock(block *js.Builder, name string, blockType *spec.TypeSpec, terms
 	// are we stackable? ( ex. story statement or executable )
 	if len(stacks) > 0 {
 		block.Brace(js.Obj, func(out *js.Builder) {
-			out.Kv("type", "stacked_"+blockType.Name)
+			out.Kv("type", bconst.StackedName(blockType.Name))
 			appendChecks(out, "nextStatement", stacks)
-			appendChecks(out, "prevStatement", stacks)
+			appendChecks(out, "previousStatement", stacks)
 			appendString(out, partial.String())
 		}).R(js.Comma)
 	}

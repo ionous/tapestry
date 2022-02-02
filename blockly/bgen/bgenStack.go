@@ -1,6 +1,7 @@
 package bgen
 
 import (
+	"git.sr.ht/~ionous/tapestry/blockly/bconst"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/web/js"
@@ -10,7 +11,7 @@ import (
 // stacks in blockly are.... interesting.
 // they are a nested linked list of values.
 // this writes the inner halves of the list
-func newStack(m *chart.Machine, blk *js.Builder) *chart.StateMix {
+func newStack(m *chart.Machine, term string, blk *blockData) *chart.StateMix {
 	// the whole chain is going to be encapsulated by object braces {}
 	// we try to keep the same state going for as long as we can...
 	var cnt int
@@ -18,10 +19,14 @@ func newStack(m *chart.Machine, blk *js.Builder) *chart.StateMix {
 	open, close := js.Obj[0], js.Obj[1]
 	return &chart.StateMix{
 		OnMap: func(typeName string, _ jsn.FlowBlock) bool {
-			cnt++ // we increment count here, eliding any empty slots.
-			blk.R(js.Comma).Q("next").R(js.Colon).R(open).
-				Q("block").R(js.Colon).R(open)
-			m.PushState(newInnerBlock(m, blk, typeName))
+			if cnt == 0 {
+				_ = blk.startInputWithoutCount(term) // the repeat already wrote the count
+			} else {
+				blk.inputs.R(js.Comma).Q("next").R(js.Colon).R(open).
+					Q("block").R(js.Colon).R(open)
+			}
+			cnt++ // increment here (rather than OnSlot) to skip any empty slots.
+			m.PushState(newInnerBlock(m, &blk.inputs, bconst.StackedName(typeName)))
 			return true
 		},
 		OnSlot: func(string, jsn.SlotBlock) (okay bool) {
@@ -35,7 +40,7 @@ func newStack(m *chart.Machine, blk *js.Builder) *chart.StateMix {
 				writingSlot = false
 			} else {
 				for i := 0; i < cnt*2; i++ {
-					blk.R(close)
+					blk.inputs.R(close)
 				}
 				m.FinishState(nil)
 			}

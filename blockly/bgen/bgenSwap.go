@@ -26,7 +26,7 @@ func newSwap(m *chart.Machine, term string, swap jsn.SwapBlock, blk *blockData) 
 		OnValue: func(typeName string, pv interface{}) (err error) {
 			if was, err = openSwap(blk, term, swap); err == nil {
 				field := strings.ToUpper(typeName) // see: btypes.writeStandalone
-				faux := blockData{typeName: typeName}
+				faux := blockData{id: NewId(), typeName: typeName}
 				if e := faux.writeValue(field, pv); e != nil {
 					err = e
 				} else {

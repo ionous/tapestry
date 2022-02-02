@@ -3,27 +3,25 @@ package bgen_test
 import (
 	"bytes"
 	"encoding/json"
+	"strconv"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/blockly/bgen"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/dl/testdl"
+	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/web/js"
+	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
 // test writing a block with a field:value pair (use some literal text)
 func TestFields(t *testing.T) {
-	el := &literal.TextValue{Text: "hello world"}
-	var out js.Builder
-	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
-		t.Fatal(e)
-	} else if str, e := indent(out.String()); e != nil {
-		t.Fatal(e, str)
-	} else if diff := pretty.Diff(str, `{
+	if e := testBlocks(
+		&literal.TextValue{Text: "hello world"}, `{
+  "id": "test-1",
   "type": "text_value",
   "extraState": {
     "TEXT": 1
@@ -31,24 +29,17 @@ func TestFields(t *testing.T) {
   "fields": {
     "TEXT": "hello world"
   }
-}`); len(diff) > 0 {
-		t.Log(str)
-		t.Fatal("ng", diff)
+}`); e != nil {
+		t.Fatal(e)
 	}
 }
 
 // test a flow within a flow
 func TestEmbeds(t *testing.T) {
-	el := &testdl.TestEmbed{
+	if e := testBlocks(&testdl.TestEmbed{
 		TestFlow: testdl.TestFlow{},
-	}
-	var out js.Builder
-	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
-		t.Fatal(e)
-	} else if str, e := indent(out.String()); e != nil {
-		t.Fatal(e, str)
-	} else if diff := pretty.Diff(str, `{
+	}, `{
+  "id": "test-1",
   "type": "test_embed",
   "extraState": {
     "TEST_FLOW": 1
@@ -56,34 +47,28 @@ func TestEmbeds(t *testing.T) {
   "inputs": {
     "TEST_FLOW": {
       "block": {
+        "id": "test-2",
         "type": "test_flow",
         "extraState": {}
       }
     }
   }
-}`); len(diff) > 0 {
-		t.Log(str)
-		t.Fatal("ng", diff)
+}`); e != nil {
+		t.Fatal(e)
 	}
 }
 
 // test a swap member of the flow
 func TestSwap(t *testing.T) {
-	el := &testdl.TestFlow{
+	if e := testBlocks(&testdl.TestFlow{
 		Swap: testdl.TestSwap{
 			Choice: testdl.TestSwap_C_Opt,
 			Value: &testdl.TestTxt{
 				Str: "something",
 			},
 		},
-	}
-	var out js.Builder
-	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
-		t.Fatal(e)
-	} else if str, e := indent(out.String()); e != nil {
-		t.Fatal(e, str)
-	} else if diff := pretty.Diff(str, `{
+	}, `{
+  "id": "test-1",
   "type": "test_flow",
   "extraState": {
     "SWAP": 1
@@ -94,6 +79,7 @@ func TestSwap(t *testing.T) {
   "inputs": {
     "SWAP": {
       "block": {
+        "id": "test-2",
         "type": "test_txt",
         "extraState": {
           "TEST_TXT": 1
@@ -104,26 +90,19 @@ func TestSwap(t *testing.T) {
       }
     }
   }
-}`); len(diff) > 0 {
-		t.Log(str)
-		t.Fatal("ng", diff)
+}`); e != nil {
+		t.Fatal(e)
 	}
 }
 
 // test a slot member of the flow
 func TestSlot(t *testing.T) {
-	el := &literal.FieldValue{
+	if e := testBlocks(&literal.FieldValue{
 		Field: "test",
 		Value: &literal.NumValue{
 			Num: 5,
-		}}
-	var out js.Builder
-	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
-		t.Fatal(e)
-	} else if str, e := indent(out.String()); e != nil {
-		t.Fatal(e, str)
-	} else if diff := pretty.Diff(str, `{
+		}}, `{
+  "id": "test-1",
   "type": "field_value",
   "extraState": {
     "FIELD": 1,
@@ -135,6 +114,7 @@ func TestSlot(t *testing.T) {
   "inputs": {
     "VALUE": {
       "block": {
+        "id": "test-2",
         "type": "num_value",
         "extraState": {
           "NUM": 1
@@ -145,51 +125,48 @@ func TestSlot(t *testing.T) {
       }
     }
   }
-}`); len(diff) > 0 {
-		t.Log(str)
-		t.Fatal("ng", diff)
+}`); e != nil {
+		t.Fatal(e)
 	}
 }
 
 // test writing some blockly nested next blocks
 func TestStack(t *testing.T) {
-	el := &story.StoryLines{Lines: []story.StoryStatement{
+	if e := testBlocks(&story.StoryLines{Lines: []story.StoryStatement{
 		&story.StoryBreak{},
 		&story.StoryBreak{},
 		&story.StoryBreak{},
-	}}
-	var out js.Builder
-	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
-		t.Fatal(e)
-	} else if str, e := indent(out.String()); e != nil {
-		t.Fatal(e, str)
-	} else if diff := pretty.Diff(str, `{
+	}}, `{
+  "id": "test-1",
   "type": "story_lines",
   "extraState": {
     "LINES": 3
   },
-  "next": {
-    "block": {
-      "type": "story_break",
-      "extraState": {},
-      "next": {
-        "block": {
-          "type": "story_break",
-          "extraState": {},
-          "next": {
-            "block": {
-              "type": "story_break",
-              "extraState": {}
+  "inputs": {
+    "LINES": {
+      "block": {
+        "id": "test-2",
+        "type": "_story_break_stack",
+        "extraState": {},
+        "next": {
+          "block": {
+            "id": "test-3",
+            "type": "_story_break_stack",
+            "extraState": {},
+            "next": {
+              "block": {
+                "id": "test-4",
+                "type": "_story_break_stack",
+                "extraState": {}
+              }
             }
           }
         }
       }
     }
   }
-}`); len(diff) > 0 {
-		t.Log(str)
-		t.Fatal("ng", diff)
+}`); e != nil {
+		t.Fatal(e)
 	}
 }
 
@@ -197,16 +174,10 @@ func TestStack(t *testing.T) {
 // noting that blockly ignores dummies when saving --
 // so get saved in the "fields" section
 func TestList(t *testing.T) {
-	el := &literal.TextValues{
+	if e := testBlocks(&literal.TextValues{
 		Values: []string{"a", "b", "c"},
-	}
-	var out js.Builder
-	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
-		t.Fatal(e)
-	} else if str, e := indent(out.String()); e != nil {
-		t.Fatal(e, str)
-	} else if diff := pretty.Diff(str, `{
+	}, `{
+  "id": "test-1",
   "type": "text_values",
   "extraState": {
     "VALUES": 3
@@ -216,15 +187,14 @@ func TestList(t *testing.T) {
     "VALUES1": "b",
     "VALUES2": "c"
   }
-}`); len(diff) > 0 {
-		t.Log(str)
-		t.Fatal("ng", diff)
+}`); e != nil {
+		t.Fatal(e)
 	}
 }
 
 // repeats of a specific flow
 func TestSlice(t *testing.T) {
-	el := &literal.FieldValues{
+	if e := testBlocks(&literal.FieldValues{
 		Contains: []literal.FieldValue{{
 			Field: "first",
 			Value: &literal.NumValue{
@@ -235,14 +205,8 @@ func TestSlice(t *testing.T) {
 				Text: "five",
 			}},
 		},
-	}
-	var out js.Builder
-	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
-		t.Fatal(e)
-	} else if str, e := indent(out.String()); e != nil {
-		t.Fatal(e, str)
-	} else if diff := pretty.Diff(str, `{
+	}, `{
+  "id": "test-1",
   "type": "field_values",
   "extraState": {
     "CONTAINS": 2
@@ -250,6 +214,7 @@ func TestSlice(t *testing.T) {
   "inputs": {
     "CONTAINS0": {
       "block": {
+        "id": "test-2",
         "type": "field_value",
         "extraState": {
           "FIELD": 1,
@@ -261,6 +226,7 @@ func TestSlice(t *testing.T) {
         "inputs": {
           "VALUE": {
             "block": {
+              "id": "test-3",
               "type": "num_value",
               "extraState": {
                 "NUM": 1
@@ -275,6 +241,7 @@ func TestSlice(t *testing.T) {
     },
     "CONTAINS1": {
       "block": {
+        "id": "test-4",
         "type": "field_value",
         "extraState": {
           "FIELD": 1,
@@ -286,6 +253,7 @@ func TestSlice(t *testing.T) {
         "inputs": {
           "VALUE": {
             "block": {
+              "id": "test-5",
               "type": "text_value",
               "extraState": {
                 "TEXT": 1
@@ -299,28 +267,19 @@ func TestSlice(t *testing.T) {
       }
     }
   }
-}`); len(diff) > 0 {
-		t.Log(str)
-		t.Fatal("ng", diff)
+}`); e != nil {
+		t.Fatal(e)
 	}
 }
 
 // repeats of a non-stacking slot.
 func TestSeries(t *testing.T) {
-	// FIX FIX FIX -- the series doesnt generate remotely correct.
-	el := &testdl.TestFlow{
+	if e := testBlocks(&testdl.TestFlow{
 		Slots: []testdl.TestSlot{
 			&testdl.TestFlow{},
 			&testdl.TestFlow{},
-		},
-	}
-	var out js.Builder
-	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
-		t.Fatal(e)
-	} else if str, e := indent(out.String()); e != nil {
-		t.Fatal(e, str)
-	} else if diff := pretty.Diff(str, `{
+		}}, `{
+  "id": "test-1",
   "type": "test_flow",
   "extraState": {
     "SLOTS": 2
@@ -328,45 +287,54 @@ func TestSeries(t *testing.T) {
   "inputs": {
     "SLOTS0": {
       "block": {
+        "id": "test-2",
         "type": "test_flow",
         "extraState": {}
       }
     },
     "SLOTS1": {
       "block": {
+        "id": "test-3",
         "type": "test_flow",
         "extraState": {}
       }
     }
   }
-}`); len(diff) > 0 {
-		t.Log(str)
-		t.Fatal("ng", diff)
+}`); e != nil {
+		t.Fatal(e)
 	}
 }
 
 // repeats of an empty series
 func TestEmptySeries(t *testing.T) {
-	el := &testdl.TestFlow{
+	if e := testBlocks(&testdl.TestFlow{
 		Slots: []testdl.TestSlot{},
-	}
-	var out js.Builder
-	enc := chart.MakeEncoder()
-	if e := enc.Marshal(el, bgen.NewTopBlock(&enc, &out)); e != nil {
-		t.Fatal(e)
-	} else if str, e := indent(out.String()); e != nil {
-		t.Fatal(e, str)
-	} else if diff := pretty.Diff(str, `{
+	}, `{
+  "id": "test-1",
   "type": "test_flow",
   "extraState": {}
-}`); len(diff) > 0 {
-		t.Log(str)
-		t.Fatal("ng", diff)
+}`); e != nil {
+		t.Fatal(e)
 	}
 }
 
-// other ideas: might verify an empty repeat
-// a flow member....
+func testBlocks(src jsn.Marshalee, expect string) (err error) {
+	var id int
+	bgen.NewId = func() string {
+		id++
+		return "test-" + strconv.Itoa(id)
+	}
+	var out js.Builder
+	enc := chart.MakeEncoder()
+	if e := enc.Marshal(src, bgen.NewTopBlock(&enc, &out)); e != nil {
+		err = errutil.New(e, "failed marshal")
+	} else if str, e := indent(out.String()); e != nil {
+		err = errutil.New(e, "invalid json", str)
+	} else if diff := pretty.Diff(str, expect); len(diff) > 0 {
+		err = errutil.New(e, "mismatched", diff, str)
+	}
+	return
+}
 
 func indent(str string) (ret string, err error) {
 	var indent bytes.Buffer
