@@ -44,7 +44,7 @@ const options = {
   zoom:{             // https://developers.google.com/blockly/guides/configure/web/zoom
     controls:true, // show zoom-centre, zoom-in, and zoom-out buttons.
     // wheel:true, // Set to true to allow the mouse wheel to zoom. Defaults to false.
-    startScale:1,
+    startScale:0.8,
     maxScale:3,
     minScale:0.3,
     scaleSpeed:1.2,
@@ -69,18 +69,18 @@ const options = {
       //   },
       // },
 
-      {
-        'kind': 'block',
-        'type': '_kinds_of_kind_stack',
-      },
-      {
-        'kind': 'block',
-        'type': '_noun_kind_statement_stack',
-      },
-      {
-        'kind': 'block',
-        'type': 'story_lines',
-      }
+      // {
+      //   'kind': 'block',
+      //   'type': '_kinds_of_kind_stack',
+      // },
+      // {
+      //   'kind': 'block',
+      //   'type': '_noun_kind_statement_stack',
+      // },
+      // {
+      //   'kind': 'block',
+      //   'type': 'story_lines',
+      // }
     ],
   }
 };
@@ -124,7 +124,8 @@ Blockly.Extensions.registerMutator(
     // create the MUI from the block's desired state
     decompose: function(workspace) {
       const self= this; // the block we are creating the mui from.
-      const mui = workspace.newBlock(`_${self.type}_mutator`); // ex. "_text_value_mutator"
+      const jsonDef= jsonDefs[self.type];
+      const mui = workspace.newBlock(jsonDef.customData.mui); // ex. "_text_value_mutator"
       mui.initSvg();
       mui.inputList.forEach(function(min/*, index, array*/) {
         min.fieldRow.forEach(function(field/*, index, array*/) {
@@ -181,10 +182,12 @@ Blockly.Extensions.registerMutator(
         if (existsAt>=0) {
           insertAt= existsAt;
         }
+        // this alg handles some cases where extraState has info where its not needed
+        // ( ie. the block generator records the number of stacked inputs even tho that's... wrong. )
         const want= self.getExtraState(inputName);
         let have= self.getItemState(inputName);
         if (want == have) {
-          insertAt+= have;
+          insertAt += have;
         } else {
           self.setItemState(inputName, want);
           // note: the 'repeat' status is disabled for "stackable slots" by the tapestry block generator
@@ -203,8 +206,10 @@ Blockly.Extensions.registerMutator(
             }
           } else if (!want) {
             self.removeInput(inputName, /*opt_quiet*/ true);
-          } else {
+          } else if (!have) {
             self.createInput(inputName, fieldDefs, ++insertAt);
+          } else {
+            ++insertAt; // want and have and not repeating.
           }
         }
       });
@@ -228,12 +233,12 @@ Blockly.Extensions.register(
     // an array of field-input sets
     blockDef.forEach(function(fieldDefs/*, index, array*/) {
       const inputDef= fieldDefs[fieldDefs.length-1];
-      if (!inputDef.optional) {
+      if (!inputDef.optional) {        // only creates required inputs; loadExtraState takes care of the rest.
         let name= inputDef.name;
-        if (inputDef.repeats) {        // a non-optional repeating field needs at least one element
+        self.setItemState(name, 1);    // track what we're about to have.
+        if (inputDef.repeats) {        // note: stackable inputs are not flagged as "repeats"
           self.setExtraState(name, 1); // track what we want.
-          self.setItemState(name, 1);  // track what we're about to have.
-          name += "0";                 // the first field is ...0 to match updateShape_.
+          name += "0";                 // counters are "name", inputs are "name#" for updateShape_()
         }
         // create the initial input
         self.createInput(name, fieldDefs);
@@ -245,6 +250,8 @@ Blockly.Extensions.register(
 Blockly.Extensions.registerMixin(
   'tapestry_generic_mixin', {
     // extra state tracks our *desired* block appearance
+    // fix? while ideally this would only exist for mutable fields,
+    // the block generator doesnt always distinguish between optional and required fields.
     getExtraState(name)  {
       return this.extraState[ name ] || 0;
     },
@@ -258,6 +265,8 @@ Blockly.Extensions.registerMixin(
     setItemState(name, itemCount)  {
       return this.itemState[ name ]= itemCount;
     },
+    // extraState: {}, // created by the generic extension...
+    // itemState: {},  // so they dont wind up shared across instances.
 
     // given the named input, return its index.
     // ( blockly's getInput() returns the actual input itself )
