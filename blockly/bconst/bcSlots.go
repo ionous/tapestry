@@ -49,7 +49,7 @@ func (slot *SlotRule) InputType() (ret string) {
 func (slot *SlotRule) SlotType() (ret string) {
 	ret = slot.Name
 	if slot.Stack {
-		ret = "stacked_" + ret
+		ret = StackedName(ret)
 	}
 	return
 }
