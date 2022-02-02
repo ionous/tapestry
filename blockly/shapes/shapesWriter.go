@@ -116,7 +116,7 @@ func appendString(out *js.Builder, s string) {
 // split the slots that this type supports into "stacks" and "values"
 func SlotStacks(blockType *spec.TypeSpec) (retStack, retValue []string) {
 	var slots []string
-	if blockType.Spec.Choice == spec.TypeSpec_Field_Slots {
+	if blockType.Spec.Choice == spec.UsesSpec_Slot_Opt {
 		slots = []string{blockType.Name}
 	} else {
 		slots = blockType.Slots
