@@ -123,12 +123,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_action_decl",
+    "type": "_action_decl_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "action_decl",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -377,12 +377,12 @@ const jsonData = [
     }
   },
   {
-    "type": "stacked_activity",
+    "type": "_activity_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "act",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -402,7 +402,7 @@ const jsonData = [
             "name": "EXE",
             "type": "input_statement",
             "checks": [
-              "stacked_execute"
+              "_execute_stack"
             ]
           }
         ]
@@ -432,7 +432,7 @@ const jsonData = [
             "name": "EXE",
             "type": "input_statement",
             "checks": [
-              "stacked_execute"
+              "_execute_stack"
             ]
           }
         ]
@@ -1308,12 +1308,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_aspect_traits",
+    "type": "_aspect_traits_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "aspect_traits",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -1416,12 +1416,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_assign",
+    "type": "_assign_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "let",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -1588,12 +1588,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_blankline",
+    "type": "_blankline_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "p",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -1905,12 +1905,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_break",
+    "type": "_break_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "break",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -2141,12 +2141,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5"
   },
   {
-    "type": "stacked_call_pattern",
+    "type": "_call_pattern_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "determine",
     "colour": "%{BKY_LOGIC_HUE}",
@@ -2256,12 +2256,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_call_send",
+    "type": "_call_send_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "send",
     "colour": "%{BKY_LOGIC_HUE}",
@@ -2631,12 +2631,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_certainties",
+    "type": "_certainties_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "certainties",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -2986,12 +2986,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5%6%7%8"
   },
   {
-    "type": "stacked_choose_action",
+    "type": "_choose_action_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "if",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -3552,12 +3552,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5"
   },
   {
-    "type": "stacked_choose_value",
+    "type": "_choose_value_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "if",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -3801,14 +3801,14 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_comment",
+    "type": "_comment_stack",
     "nextStatement": [
-      "stacked_story_statement",
-      "stacked_execute"
+      "_story_statement_stack",
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement",
-      "stacked_execute"
+    "previousStatement": [
+      "_story_statement_stack",
+      "_execute_stack"
     ],
     "message0": "comment",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -4223,12 +4223,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5"
   },
   {
-    "type": "stacked_debug_log",
+    "type": "_debug_log_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "log",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -4584,12 +4584,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5%6%7%8"
   },
   {
-    "type": "stacked_do_nothing",
+    "type": "_do_nothing_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "do_nothing",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -5142,7 +5142,7 @@ const jsonData = [
             "name": "EXE",
             "type": "input_statement",
             "checks": [
-              "stacked_execute"
+              "_execute_stack"
             ]
           }
         ]
@@ -6198,7 +6198,7 @@ const jsonData = [
             "name": "EXE",
             "type": "input_statement",
             "checks": [
-              "stacked_execute"
+              "_execute_stack"
             ]
           }
         ],
@@ -6442,12 +6442,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_erase_edge",
+    "type": "_erase_edge_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "erase",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -6562,12 +6562,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5"
   },
   {
-    "type": "stacked_erase_index",
+    "type": "_erase_index_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "erase",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -6694,12 +6694,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_erasing",
+    "type": "_erasing_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "erasing",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -6880,12 +6880,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_erasing_edge",
+    "type": "_erasing_edge_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "erasing",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -7094,12 +7094,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5%6%7%8"
   },
   {
-    "type": "stacked_event_block",
+    "type": "_event_block_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "event_block",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -9497,12 +9497,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_kind_of_relation",
+    "type": "_kind_of_relation_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "kind_of_relation",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -9661,12 +9661,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_kinds_have_properties",
+    "type": "_kinds_have_properties_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "kinds_have_properties",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -9830,12 +9830,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_kinds_of_aspect",
+    "type": "_kinds_of_aspect_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "kinds_of_aspect",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -9908,12 +9908,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_kinds_of_kind",
+    "type": "_kinds_of_kind_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "kinds_of_kind",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -10135,12 +10135,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_list_each",
+    "type": "_list_each_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "repeating",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -10489,12 +10489,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_list_map",
+    "type": "_list_map_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "map",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -10621,12 +10621,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_list_reduce",
+    "type": "_list_reduce_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "reduce",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -10753,12 +10753,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_list_reverse",
+    "type": "_list_reverse_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "reverse",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -10833,12 +10833,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_list_set",
+    "type": "_list_set_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "set",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -11065,12 +11065,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5%6%7%8"
   },
   {
-    "type": "stacked_list_sort_numbers",
+    "type": "_list_sort_numbers_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "sort_numbers",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -11209,12 +11209,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5"
   },
   {
-    "type": "stacked_list_sort_text",
+    "type": "_list_sort_text_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "sort_texts",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -11395,12 +11395,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5%6%7%8"
   },
   {
-    "type": "stacked_list_sort_using",
+    "type": "_list_sort_using_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "sort",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -11501,12 +11501,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_list_splice",
+    "type": "_list_splice_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "splice",
     "colour": "%{BKY_MATH_HUE}",
@@ -11760,12 +11760,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_make_opposite",
+    "type": "_make_opposite_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "make_opposite",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -11866,12 +11866,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_make_plural",
+    "type": "_make_plural_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "make_plural",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -12428,12 +12428,12 @@ const jsonData = [
     }
   },
   {
-    "type": "stacked_map_departing",
+    "type": "_map_departing_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "departing",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -12638,12 +12638,12 @@ const jsonData = [
     }
   },
   {
-    "type": "stacked_map_heading",
+    "type": "_map_heading_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "heading",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -13131,12 +13131,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_newline",
+    "type": "_newline_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "br",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -13183,12 +13183,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_next",
+    "type": "_next_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "next",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -13329,12 +13329,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_noun_assignment",
+    "type": "_noun_assignment_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "noun_assignment",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -13479,12 +13479,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5"
   },
   {
-    "type": "stacked_noun_kind_statement",
+    "type": "_noun_kind_statement_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "noun_kind_statement",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -13784,12 +13784,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5%6%7%8"
   },
   {
-    "type": "stacked_noun_relation_statement",
+    "type": "_noun_relation_statement_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "noun_relation_statement",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -13952,12 +13952,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5%6%7%8"
   },
   {
-    "type": "stacked_noun_trait_statement",
+    "type": "_noun_trait_statement_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "noun_trait_statement",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -15102,7 +15102,7 @@ const jsonData = [
             "name": "STORY_STATEMENT",
             "type": "input_statement",
             "checks": [
-              "stacked_story_statement"
+              "_story_statement_stack"
             ],
             "optional": true
           }
@@ -15140,12 +15140,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5"
   },
   {
-    "type": "stacked_pattern_actions",
+    "type": "_pattern_actions_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "pattern_actions",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -15290,12 +15290,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5"
   },
   {
-    "type": "stacked_pattern_decl",
+    "type": "_pattern_decl_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "pattern_decl",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -16231,12 +16231,12 @@ const jsonData = [
     }
   },
   {
-    "type": "stacked_put_at_field",
+    "type": "_put_at_field_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "put",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -16363,12 +16363,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_put_edge",
+    "type": "_put_edge_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "put",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -16509,12 +16509,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5"
   },
   {
-    "type": "stacked_put_index",
+    "type": "_put_index_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "put",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -17269,12 +17269,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5"
   },
   {
-    "type": "stacked_relate",
+    "type": "_relate_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "relate",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -17541,12 +17541,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_relative_to_noun",
+    "type": "_relative_to_noun_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "relative_to_noun",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -18516,12 +18516,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_say_text",
+    "type": "_say_text_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "say",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -18643,12 +18643,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_set_trait",
+    "type": "_set_trait_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "put",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -18963,12 +18963,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_softline",
+    "type": "_softline_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "wbr",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -19186,12 +19186,12 @@ const jsonData = [
     "message0": "%1%2%3%4%5"
   },
   {
-    "type": "stacked_story_break",
+    "type": "_story_break_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "story_break",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -19239,9 +19239,6 @@ const jsonData = [
   },
   {
     "type": "story_lines",
-    "output": [
-      "story_lines"
-    ],
     "message0": "story_lines",
     "colour": "%{BKY_COLOUR_HUE}",
     "extensions": [
@@ -19260,7 +19257,7 @@ const jsonData = [
             "name": "LINES",
             "type": "input_statement",
             "checks": [
-              "stacked_story_statement"
+              "_story_statement_stack"
             ]
           }
         ]
@@ -20139,12 +20136,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_test_rule",
+    "type": "_test_rule_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "test_rule",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -20269,12 +20266,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_test_scene",
+    "type": "_test_scene_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "test_scene",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -20377,12 +20374,12 @@ const jsonData = [
     "message0": "%1%2"
   },
   {
-    "type": "stacked_test_statement",
+    "type": "_test_statement_stack",
     "nextStatement": [
-      "stacked_story_statement"
+      "_story_statement_stack"
     ],
-    "prevStatement": [
-      "stacked_story_statement"
+    "previousStatement": [
+      "_story_statement_stack"
     ],
     "message0": "test_statement",
     "colour": "%{BKY_COLOUR_HUE}",
@@ -21469,12 +21466,12 @@ const jsonData = [
     }
   },
   {
-    "type": "stacked_while",
+    "type": "_while_stack",
     "nextStatement": [
-      "stacked_execute"
+      "_execute_stack"
     ],
-    "prevStatement": [
-      "stacked_execute"
+    "previousStatement": [
+      "_execute_stack"
     ],
     "message0": "repeating",
     "colour": "%{BKY_COLOUR_HUE}",
