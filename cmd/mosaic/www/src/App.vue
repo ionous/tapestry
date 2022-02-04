@@ -1,8 +1,8 @@
-<template><div class="mk-app"
+<template
 ><img alt="Vue logo" src="./assets/logo.png" 
   /><router-view/><Catalog :catalog="catalog" 
   /><Blockly></Blockly
-></div></template>
+></template>
 
 <script>
 import MockCatalog from './catalog/mockCatalog.js'
