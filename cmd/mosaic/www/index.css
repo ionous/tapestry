@@ -1,5 +1,35 @@
-@import 'normalize.css'
+@import 'normalize.css';
 
+html, body { 
+  height: 100%;
+}
+
+.mk-app {
+  display: grid;
+  grid-template-columns: 200px auto;
+  grid-template-rows: 2rem auto;
+  grid-gap: 0px 10px;
+  height: 100%;
+  grid-template-areas: 
+    "navigator tools"
+    "sidebar editor"
+}
+
+/* unused right now.
+.mk-app--nosidebar {
+  grid-template-areas: 
+    "navigator tools"
+    "editor editor"
+    "context context";
+}*/
+
+/**
+ * mk-blockly
+ */
+.mk-blockly {
+  grid-area: editor;
+  background-color: red;
+}
 /**
  * mk-catalog
  */
@@ -27,7 +57,7 @@
   display: block;
 }
 .mk-cat-button:hover {
-  background-color: white;
+  /*background-color: white;*/
   color: #0366d6;
   cursor: pointer;
 }

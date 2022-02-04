@@ -25,16 +25,40 @@ const mockCatalog= [{
   "empty": []
 }];
 
+function addAll(parent, all, list, path) {
+ for (let i=0; i< list.length; i++) {
+  const el= list[i];
+  if (typeof el === 'string') {
+    const file= new CatalogFile(el, path);
+    all[file.path]= file;
+   } else {
+      for (const name in el) {
+        const folder= new CatalogFolder(name, path);
+        all[folder.path]= folder;
+        const subPath= path? `${path}/${name}`: name;
+        addAll(folder, all, el[name], subPath);
+      }
+    }
+  }
+  return all;
+}
+
 export default class MockCatalog extends Cataloger {
   constructor() {
     super();
     this.store= {};
+    this.root= new CatalogFolder("");
+    this.all= addAll(this.root, {}, mockCatalog, "");
   }
 
   // future:takes a string, list, or none; if none saves all.
   saveStories() {
     const json= JSON.stringify(this.store, 0,2);
     console.log("SAVED:", json);
+  }
+
+  findByPath(path) {
+    return this.all[path];
   }
 
   loadFile(file) {
@@ -55,39 +79,15 @@ export default class MockCatalog extends Cataloger {
   }
 
   loadFolder(folder) {
-    let mockFolder= mockCatalog;
-    const path= folder.path;
-    if (path.length) {
-      // advance through the mockup data
-      path.split("/").forEach((part)=>{
-        // the last element is where the directories live.
-        const last= mockFolder[mockFolder.length-1];
-        const dirs= (typeof last !== 'string')? last: {};
-        if (!part in dirs) {
-          throw new Error(`unknown part ${part} in ${dirs}`);
+    if (!folder.contents) {
+      const contents=[];
+      for (const k in this.all) {
+        const item= this.all[k];
+        if (item.dir == folder.path) {
+          contents.push(this.all[k]);
         }
-        mockFolder= dirs[part];
-      });
+      };
+      folder.contents= contents;
     }
-    folder.contents= MockCatalog.buildContents(mockFolder, path);
-    // console.log("folder", folder.name, "has", folder.contents?folder.contents.length:0, "items");
-  }
-
-  // returns a list of catalog folders and files.
-  static buildContents(mockFolder, mockPath) {
-    const ret= [];
-    // walk the items in the folder:
-    for (const item of mockFolder) {
-      // file vs sub-folder map
-      if (typeof item === 'string') {
-        ret.push( new CatalogFile(item, mockPath) );
-      } else {
-        // note: if there's a map, its always the last item of the folder
-        Object.keys(item).forEach((mockDir) => {
-          ret.push( new CatalogFolder(mockDir, mockPath) );
-        });
-      }
-    }
-    return ret;
   }
 };
