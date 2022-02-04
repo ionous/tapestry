@@ -10,7 +10,7 @@ import (
 )
 
 // write the args0 and message0 key-values.
-func writeBlockDef(out *js.Builder, blockType *spec.TypeSpec, terms []spec.TermSpec) {
+func writeShapeDef(out *js.Builder, blockType *spec.TypeSpec, terms []spec.TermSpec) {
 	out.WriteString(`"extensions":["tapestry_generic_mixin","tapestry_generic_extension"],`)
 	if blockType.Spec.Choice == spec.UsesSpec_Flow_Opt {
 		out.Kv("mutator", "tapestry_generic_mutation").R(js.Comma)
@@ -18,7 +18,7 @@ func writeBlockDef(out *js.Builder, blockType *spec.TypeSpec, terms []spec.TermS
 	out.Q("customData").R(js.Colon).
 		Brace(js.Obj, func(custom *js.Builder) {
 			custom.Kv("mui", bconst.MutatorName(blockType.Name)).R(js.Comma)
-			custom.Q("blockDef").R(js.Colon).
+			custom.Q("shapeDef").R(js.Colon).
 				Brace(js.Array, func(mui *js.Builder) {
 					var csv int
 					for _, term := range terms {

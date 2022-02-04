@@ -8,7 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
-var writeBlockType = map[string]func(*js.Builder, *spec.TypeSpec) bool{
+var writeShapeType = map[string]func(*js.Builder, *spec.TypeSpec) bool{
 	spec.UsesSpec_Flow_Opt: writeFlowBlock,
 	spec.UsesSpec_Slot_Opt: writeSlotBlock,
 	spec.UsesSpec_Swap_Opt: writeStandalone,
@@ -17,8 +17,8 @@ var writeBlockType = map[string]func(*js.Builder, *spec.TypeSpec) bool{
 }
 
 // return any fields which need mutation
-func writeBlock(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
-	if cb, ok := writeBlockType[blockType.Spec.Choice]; !ok {
+func writeShape(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
+	if cb, ok := writeShapeType[blockType.Spec.Choice]; !ok {
 		log.Fatalln("unknown type", blockType.Spec.Choice)
 	} else {
 		okay = cb(block, blockType)
@@ -36,7 +36,7 @@ func writeSlotBlock(block *js.Builder, blockType *spec.TypeSpec) bool {
 // ( for simple types or maybe all of them ) and change the block's input on selection.
 func writeStandalone(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
 	// we simply pretend we're a flow of one anonymous member.
-	okay = _writeBlock(block, blockType.Name, blockType, []spec.TermSpec{{
+	okay = _writeShape(block, blockType.Name, blockType, []spec.TermSpec{{
 		Key:  "",
 		Name: blockType.Name,
 		Type: blockType.Name,
@@ -50,14 +50,14 @@ func writeFlowBlock(block *js.Builder, blockType *spec.TypeSpec) bool {
 	if n := flow.Name; len(n) > 0 {
 		name = n
 	}
-	return _writeBlock(block, name, blockType, flow.Terms)
+	return _writeShape(block, name, blockType, flow.Terms)
 }
 
 // writes one or possible two blocks to represent the blockType.
 // will always generate an output block because every type outputs itself
 // it may also generate a stackable block if any of the slots implemented have a stackable SlotRule.
 // ( ex. a type that implements rt.BoolEval and rt.Execute will write both types of blocks )
-func _writeBlock(block *js.Builder, name string, blockType *spec.TypeSpec, terms []spec.TermSpec) bool {
+func _writeShape(block *js.Builder, name string, blockType *spec.TypeSpec, terms []spec.TermSpec) bool {
 	stacks, values := SlotStacks(blockType)
 	// we write to partial so that we can potentially have two blocks
 	var partial js.Builder
@@ -85,7 +85,7 @@ func _writeBlock(block *js.Builder, name string, blockType *spec.TypeSpec, terms
 	partial.R(js.Comma)
 
 	// write the terms:
-	writeBlockDef(&partial, blockType, terms)
+	writeShapeDef(&partial, blockType, terms)
 
 	// are we stackable? ( ex. story statement or executable )
 	if len(stacks) > 0 {

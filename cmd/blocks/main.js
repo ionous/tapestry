@@ -145,9 +145,9 @@ Blockly.Extensions.registerMutator(
     compose: function(mui) {
       const self= this;   // our real, workspace, block.
       const jsonDef= jsonDefs[self.type];
-      const blockDef= jsonDef.customData.blockDef;
+      const shapeDef= jsonDef.customData.shapeDef;
       //
-      blockDef.forEach(function(fieldDefs, index/*, array*/) {
+      shapeDef.forEach(function(fieldDefs, index/*, array*/) {
         const inputDef= fieldDefs[fieldDefs.length-1];
         // get the mui input ( it might not exist, ex. for fields that arent mutable )
         const min= mui.getInput(inputDef.name);
@@ -171,10 +171,10 @@ Blockly.Extensions.registerMutator(
     updateShape_: function() {
       const self= this;   // our real, workspace, block.
       const jsonDef= jsonDefs[self.type];
-      const blockDef= jsonDef.customData.blockDef;
+      const shapeDef= jsonDef.customData.shapeDef;
       let insertAt= 1;    // index in the ws block, skipping the initial dummy header.
       //
-      blockDef.forEach(function(fieldDefs, index/*, array*/) {
+      shapeDef.forEach(function(fieldDefs, index/*, array*/) {
         const inputDef= fieldDefs[fieldDefs.length-1];
         const inputName= inputDef.name;
         // for every desired input, search the existing block to keep the insertion point updated
@@ -229,9 +229,9 @@ Blockly.Extensions.register(
     self.extraState= {};
     self.itemState= {};
     const jsonDef= jsonDefs[self.type];
-    const blockDef= jsonDef.customData.blockDef;
+    const shapeDef= jsonDef.customData.shapeDef;
     // an array of field-input sets
-    blockDef.forEach(function(fieldDefs/*, index, array*/) {
+    shapeDef.forEach(function(fieldDefs/*, index, array*/) {
       const inputDef= fieldDefs[fieldDefs.length-1];
       if (!inputDef.optional) {        // only creates required inputs; loadExtraState takes care of the rest.
         let name= inputDef.name;

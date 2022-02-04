@@ -12,7 +12,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_abstract_action_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -47,7 +47,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_action_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -93,7 +93,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_action_context_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -143,7 +143,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_action_decl_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -225,7 +225,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_action_decl_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -320,7 +320,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_action_name_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -346,7 +346,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_action_params_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -400,7 +400,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_activity_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -431,7 +431,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_activity_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -477,7 +477,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_affinity_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -536,7 +536,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_alias_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -612,7 +612,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_all_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -675,7 +675,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_all_true_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -738,7 +738,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_always_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -769,7 +769,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_ana_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -808,7 +808,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_any_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -871,7 +871,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_any_true_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -931,7 +931,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_are_an_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -983,7 +983,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_are_being_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -1019,7 +1019,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_are_either_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -1057,7 +1057,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_arg_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -1118,7 +1118,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_as_num_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -1166,7 +1166,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_as_rec_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -1214,7 +1214,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_as_txt_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -1259,7 +1259,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_aspect_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -1287,7 +1287,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_aspect_property_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -1337,7 +1337,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_aspect_traits_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -1383,7 +1383,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_aspect_traits_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -1447,7 +1447,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_assign_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -1492,7 +1492,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_assign_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -1553,7 +1553,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_at_least_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -1587,7 +1587,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_at_most_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -1623,7 +1623,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_blankline_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -1641,7 +1641,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_blankline_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -1672,7 +1672,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_bool_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -1710,7 +1710,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_bool_property_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -1811,7 +1811,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_bool_value_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -1895,7 +1895,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_bracket_text_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -1946,7 +1946,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_break_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -1964,7 +1964,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_break_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -1997,7 +1997,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_buffer_text_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -2045,7 +2045,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_call_args_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -2109,7 +2109,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_call_cycle_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -2187,7 +2187,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_call_pattern_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -2240,7 +2240,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_call_pattern_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -2303,7 +2303,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_call_send_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -2348,7 +2348,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_call_send_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -2409,7 +2409,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_call_shuffle_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -2485,7 +2485,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_call_terminal_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -2561,7 +2561,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_call_trigger_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -2635,7 +2635,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_capitalize_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -2685,7 +2685,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_certainties_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -2784,7 +2784,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_certainties_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -2897,7 +2897,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_certainty_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -2942,7 +2942,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_choice_spec_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -3044,7 +3044,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_choose_action_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -3105,7 +3105,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_choose_action_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -3192,7 +3192,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_choose_more_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -3279,7 +3279,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_choose_more_value_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -3392,7 +3392,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_choose_nothing_else_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -3441,7 +3441,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_choose_num_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -3528,7 +3528,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_choose_text_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -3617,7 +3617,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_choose_value_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -3704,7 +3704,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_choose_value_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -3818,7 +3818,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_comma_text_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -3871,7 +3871,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_comment_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -3903,7 +3903,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_comment_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -3949,7 +3949,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_common_action_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -4024,7 +4024,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_compare_num_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -4098,7 +4098,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_compare_text_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -4172,7 +4172,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_count_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -4233,7 +4233,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_cycle_text_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -4298,7 +4298,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_debug_log_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -4370,7 +4370,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_debug_log_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -4468,7 +4468,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_determiner_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -4497,7 +4497,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_diff_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -4571,7 +4571,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_directive_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -4664,7 +4664,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_do_nothing_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -4697,7 +4697,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_do_nothing_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -4759,7 +4759,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_during_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -4806,7 +4806,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_aliases_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -4879,7 +4879,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_eph_always_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -4913,7 +4913,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_aspects_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -4987,7 +4987,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_at_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -5047,7 +5047,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_begin_domain_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -5120,7 +5120,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_eph_cardinality_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -5178,7 +5178,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_checks_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -5264,7 +5264,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_directives_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -5325,7 +5325,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_end_domain_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -5372,7 +5372,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_kinds_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -5460,7 +5460,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_list_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -5523,7 +5523,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_nouns_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -5583,7 +5583,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_opposites_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -5642,7 +5642,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_params_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -5784,7 +5784,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_patterns_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -5918,7 +5918,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_plurals_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -5978,7 +5978,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_refs_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -6040,7 +6040,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_relations_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -6130,7 +6130,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_relatives_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -6203,7 +6203,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_rules_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -6363,7 +6363,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_eph_timing_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -6409,7 +6409,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_eph_values_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -6512,7 +6512,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_equal_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -6548,7 +6548,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_erase_edge_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -6594,7 +6594,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_erase_edge_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -6670,7 +6670,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_erase_index_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -6728,7 +6728,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_erase_index_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -6804,7 +6804,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_erasing_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -6889,7 +6889,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_erasing_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -6992,7 +6992,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_erasing_edge_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -7079,7 +7079,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_erasing_edge_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -7208,7 +7208,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_event_block_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -7273,7 +7273,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_event_block_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -7366,7 +7366,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_event_handler_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -7479,7 +7479,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_event_name_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -7505,7 +7505,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_event_phase_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -7545,7 +7545,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_event_target_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -7591,7 +7591,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_field_value_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -7651,7 +7651,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_field_values_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -7713,7 +7713,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_flow_spec_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -7865,7 +7865,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_from_bool_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -7913,7 +7913,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_from_num_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -7961,7 +7961,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_from_num_list_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8009,7 +8009,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_from_numbers_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8057,7 +8057,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_from_obj_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8105,7 +8105,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_from_rec_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8153,7 +8153,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_from_rec_list_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8201,7 +8201,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_from_record_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8249,7 +8249,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_from_records_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8297,7 +8297,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_from_text_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8345,7 +8345,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_from_texts_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8393,7 +8393,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_from_txt_list_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8441,7 +8441,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_from_var_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8496,7 +8496,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_get_at_field_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8564,7 +8564,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_get_var_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8611,7 +8611,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_grammar_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8658,7 +8658,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_grammar_decl_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8706,7 +8706,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_greater_than_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -8738,7 +8738,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_group_spec_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8801,7 +8801,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_has_dominion_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8849,7 +8849,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_has_trait_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8910,7 +8910,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_id_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -8958,7 +8958,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_includes_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9019,7 +9019,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_into_num_list_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9067,7 +9067,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_into_obj_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9115,7 +9115,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_into_rec_list_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9163,7 +9163,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_into_txt_list_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9211,7 +9211,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_into_var_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9259,7 +9259,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_is_empty_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9307,7 +9307,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_is_exact_kind_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9368,7 +9368,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_is_kind_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9429,7 +9429,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_join_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9518,7 +9518,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_kind_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9565,7 +9565,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_kind_of_noun_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9653,7 +9653,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_kind_of_relation_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9727,7 +9727,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_kind_of_relation_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9820,7 +9820,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_kinds_have_properties_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9866,7 +9866,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_kinds_have_properties_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9942,7 +9942,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_kinds_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -9991,7 +9991,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_kinds_of_aspect_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -10022,7 +10022,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_kinds_of_aspect_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -10072,7 +10072,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_kinds_of_kind_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -10117,7 +10117,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_kinds_of_kind_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -10178,7 +10178,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_less_than_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -10210,7 +10210,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_lines_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -10241,7 +10241,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_at_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -10304,7 +10304,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_each_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -10377,7 +10377,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_each_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -10479,7 +10479,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_find_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -10539,7 +10539,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_gather_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -10613,7 +10613,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_len_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -10663,7 +10663,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_map_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -10721,7 +10721,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_map_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -10797,7 +10797,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_reduce_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -10855,7 +10855,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_reduce_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -10931,7 +10931,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_reverse_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -10963,7 +10963,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_reverse_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -11013,7 +11013,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_set_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -11071,7 +11071,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_set_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -11146,7 +11146,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_slice_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -11247,7 +11247,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_sort_numbers_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -11305,7 +11305,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_sort_numbers_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -11394,7 +11394,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_sort_text_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -11467,7 +11467,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_sort_text_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -11582,7 +11582,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_sort_using_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -11627,7 +11627,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_sort_using_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -11690,7 +11690,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_splice_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -11764,7 +11764,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_list_splice_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -11848,7 +11848,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_logging_level_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -11903,7 +11903,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_make_lowercase_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -11953,7 +11953,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_make_opposite_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -11998,7 +11998,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_make_opposite_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -12061,7 +12061,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_make_plural_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -12106,7 +12106,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_make_plural_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -12167,7 +12167,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_make_reversed_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -12215,7 +12215,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_make_sentence_case_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -12263,7 +12263,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_make_title_case_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -12311,7 +12311,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_make_uppercase_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -12357,7 +12357,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_many_many_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -12416,7 +12416,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_many_one_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -12475,7 +12475,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_many_to_many_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -12534,7 +12534,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_many_to_one_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -12593,7 +12593,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_map_connection_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -12634,7 +12634,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_map_departing_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -12718,7 +12718,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_map_departing_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -12816,7 +12816,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_map_direction_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -12847,7 +12847,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_map_heading_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -12945,7 +12945,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_map_heading_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -13071,7 +13071,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_matches_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -13132,7 +13132,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_name_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -13178,7 +13178,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_named_noun_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -13237,7 +13237,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_named_property_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -13311,7 +13311,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_never_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -13347,7 +13347,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_newline_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -13365,7 +13365,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_newline_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -13401,7 +13401,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_next_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -13419,7 +13419,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_next_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -13453,7 +13453,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_not_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -13501,7 +13501,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_noun_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -13551,7 +13551,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_noun_assignment_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -13611,7 +13611,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_noun_assignment_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -13702,7 +13702,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_noun_kind_statement_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -13764,7 +13764,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_noun_kind_statement_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -13869,7 +13869,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_noun_name_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -13897,7 +13897,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_noun_relation_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -14011,7 +14011,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_noun_relation_statement_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -14073,7 +14073,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_noun_relation_statement_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -14181,7 +14181,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_noun_trait_statement_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -14243,7 +14243,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_noun_trait_statement_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -14349,7 +14349,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_noun_traits_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -14434,7 +14434,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_num_list_property_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -14532,7 +14532,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_num_spec_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -14632,7 +14632,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_num_value_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -14707,7 +14707,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_num_values_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -14793,7 +14793,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_number_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_number"
@@ -14821,7 +14821,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_number_property_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -14921,7 +14921,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_object_exists_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -14967,7 +14967,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_one_many_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -15026,7 +15026,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_one_one_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -15085,7 +15085,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_one_to_many_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -15144,7 +15144,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_one_to_one_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -15203,7 +15203,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_option_spec_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -15275,7 +15275,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_paired_action_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -15322,7 +15322,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_paragraph_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -15385,7 +15385,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_pattern_actions_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -15446,7 +15446,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_pattern_actions_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -15537,7 +15537,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_pattern_decl_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -15599,7 +15599,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_pattern_decl_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -15698,7 +15698,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_pattern_flags_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -15740,7 +15740,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_pattern_locals_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -15800,7 +15800,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_pattern_name_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -15828,7 +15828,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_pattern_params_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -15889,7 +15889,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_pattern_return_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -15936,7 +15936,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_pattern_rule_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -16047,7 +16047,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_pattern_rules_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -16109,7 +16109,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_pattern_type_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -16136,7 +16136,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_plural_kinds_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -16165,7 +16165,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_pluralize_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -16212,7 +16212,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_position_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -16273,7 +16273,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_print_num_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -16321,7 +16321,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_print_num_word_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -16369,7 +16369,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_product_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -16427,7 +16427,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_program_hook_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -16465,7 +16465,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_property_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -16496,7 +16496,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_put_at_field_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -16554,7 +16554,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_put_at_field_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -16630,7 +16630,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_put_edge_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -16689,7 +16689,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_put_edge_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -16778,7 +16778,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_put_index_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -16836,7 +16836,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_put_index_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -16910,7 +16910,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_quotient_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -16970,7 +16970,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_range_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -17070,7 +17070,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_reciprocal_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -17131,7 +17131,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_reciprocals_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -17191,7 +17191,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_record_list_property_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -17290,7 +17290,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_record_property_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -17391,7 +17391,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_record_value_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -17469,7 +17469,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_record_values_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -17548,7 +17548,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_relate_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -17606,7 +17606,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_relate_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -17677,7 +17677,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_relation_cardinality_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -17733,7 +17733,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_relation_name_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -17762,7 +17762,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_relative_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -17825,7 +17825,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_relative_to_noun_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -17910,7 +17910,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_relative_to_noun_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18039,7 +18039,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_relatives_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18100,7 +18100,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_remainder_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18160,7 +18160,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_render_exp_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18207,7 +18207,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_render_field_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18252,7 +18252,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_render_flags_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -18294,7 +18294,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_render_name_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18342,7 +18342,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_render_pattern_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18393,7 +18393,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_render_ref_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18468,7 +18468,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_render_template_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18516,7 +18516,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_response_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18590,7 +18590,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_retarget_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18653,7 +18653,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_reverse_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18716,7 +18716,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_row_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18765,7 +18765,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_rows_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18816,7 +18816,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_say_text_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18848,7 +18848,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_say_text_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18896,7 +18896,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_self_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18946,7 +18946,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_set_trait_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -18991,7 +18991,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_set_trait_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -19052,7 +19052,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_shuffle_text_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -19113,7 +19113,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_singular_kind_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -19142,7 +19142,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_singularize_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -19190,7 +19190,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_slash_text_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -19237,7 +19237,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_slot_spec_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -19273,7 +19273,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_softline_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -19291,7 +19291,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_softline_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -19325,7 +19325,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_span_text_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -19374,7 +19374,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_stopping_text_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -19435,7 +19435,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_story_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -19501,7 +19501,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_story_break_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -19519,7 +19519,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_story_break_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -19548,7 +19548,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_story_lines_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -19594,7 +19594,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_str_spec_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -19694,7 +19694,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_sum_of_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -19767,7 +19767,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_swap_spec_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -19829,7 +19829,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_term_spec_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -20034,7 +20034,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_test_bool_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -20072,7 +20072,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_test_embed_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -20120,7 +20120,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_test_flow_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -20345,7 +20345,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_test_name_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -20371,7 +20371,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_test_num_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_number"
@@ -20400,7 +20400,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_test_output_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -20450,7 +20450,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_test_rule_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -20507,7 +20507,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_test_rule_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -20582,7 +20582,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_test_scene_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -20628,7 +20628,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_test_scene_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -20692,7 +20692,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_test_statement_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -20737,7 +20737,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_test_statement_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -20795,7 +20795,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_test_str_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -20835,7 +20835,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_test_swap_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -20885,7 +20885,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_test_txt_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -20912,7 +20912,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_text_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -20940,7 +20940,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_text_list_property_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -21039,7 +21039,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_text_property_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -21140,7 +21140,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_text_value_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -21215,7 +21215,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_text_values_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -21301,7 +21301,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_trait_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -21328,7 +21328,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_trait_phrase_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -21413,7 +21413,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_trigger_cycle_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -21446,7 +21446,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_trigger_once_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -21479,7 +21479,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_trigger_switch_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -21512,7 +21512,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_type_spec_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -21673,7 +21673,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_unequal_mutator",
-              "blockDef": []
+              "shapeDef": []
             }
           },
           {
@@ -21704,7 +21704,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_uses_spec_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_dropdown",
@@ -21772,7 +21772,7 @@ const jsonData = [
             ],
             "customData": {
               "mui": "_variable_name_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_input"
@@ -21803,7 +21803,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_while_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -21849,7 +21849,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_while_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
@@ -21911,7 +21911,7 @@ const jsonData = [
             "mutator": "tapestry_generic_mutation",
             "customData": {
               "mui": "_words_mutator",
-              "blockDef": [
+              "shapeDef": [
                 [
                   {
                     "type": "field_label",
