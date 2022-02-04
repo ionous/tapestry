@@ -16,6 +16,7 @@ import (
 )
 
 // path of a local .if file
+// has subactions for "check" to test the file.
 type storyFile string
 
 // String name of the file.
@@ -24,6 +25,7 @@ func (d storyFile) String() string {
 }
 
 // Find actions for individual files
+// check tests a file.
 func (d storyFile) Find(sub string) (ret web.Resource) {
 	switch sub {
 	case "check":
@@ -39,9 +41,9 @@ func (d storyFile) Find(sub string) (ret web.Resource) {
 	return
 }
 
-// Get the contents of this resource.
+// files are stored in compact format,
+// this transforms them to detailed format for the composer.
 func (d storyFile) Get(ctx context.Context, w http.ResponseWriter) (err error) {
-	// files are stored in compact format, and we need to transform them to detailed format for the composer.
 	var dst story.Story
 	if b, e := readOne(string(d)); e != nil {
 		err = e
@@ -57,28 +59,16 @@ func (d storyFile) Get(ctx context.Context, w http.ResponseWriter) (err error) {
 	return
 }
 
-// Post a modification to this resource
+// files dont support posting; returns error
 func (d storyFile) Post(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
 	return errutil.New("unsupported post", d)
 }
 
-// Put new resource data in our place
+// files dont support putting; returns error
+// ( save is handled by putting stories into the folder )
 func (d storyFile) Put(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
 	return errutil.New("unsupported put", d)
 }
-
-// -- saving uses storyFolder ( specifically rootFolder.Put )
-// -- so what does this do?
-// func (d storyFile) Put(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
-// 	// its okay to use Create because storyFolder.Get() ensures it already exists.
-// 	if f, e := os.Create(string(d)); e != nil {
-// 		err = e
-// 	} else {
-// 		defer f.Close()
-// 		_, err = io.Copy(f, r)
-// 	}
-// 	return
-// }
 
 func writeOut(outPath string, data interface{}) (err error) {
 	log.Println("writing", outPath)

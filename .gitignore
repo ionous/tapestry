@@ -11,6 +11,7 @@ cmd/compact/compact
 cmd/compose/compose
 cmd/idl/idl
 cmd/import/import
+cmd/mosaic/mosaic
 cmd/play/play
 cmd/regenspec/regenspec
 cmd/spec/spec

@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"strconv"
 )
 
 // Config contains paths to the standalone console utils.
@@ -15,6 +16,11 @@ type Config struct {
 	Play     string
 	Root     string
 	Port     int
+	Mosaic   string
+}
+
+func (c *Config) PortString() string {
+	return ":" + strconv.Itoa(c.Port)
 }
 
 func (c *Config) Scratch(parts ...string) string {
