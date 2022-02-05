@@ -28,7 +28,7 @@ html, body {
  */
 .mk-blockly {
   grid-area: editor;
-  background-color: red;
+  /*background-color: red;*/
 }
 /**
  * mk-catalog
