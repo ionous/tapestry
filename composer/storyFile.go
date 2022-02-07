@@ -44,17 +44,20 @@ func (d storyFile) Find(sub string) (ret web.Resource) {
 // files are stored in compact format,
 // this transforms them to detailed format for the composer.
 func (d storyFile) Get(ctx context.Context, w http.ResponseWriter) (err error) {
-	var dst story.Story
+	var file story.StoryFile
 	if b, e := readOne(string(d)); e != nil {
 		err = e
-	} else if e := story.Decode(&dst, b, tapestry.AllSignatures); e != nil {
-		err = e
-	} else if data, e := dout.Encode(&dst); e != nil {
+	} else if e := story.Decode(&file, b, tapestry.AllSignatures); e != nil {
 		err = e
 	} else {
-		w.Header().Set("Content-Type", "application/json")
-		js := json.NewEncoder(w)
-		err = js.Encode(data)
+		oldFormat := file.StoryLines.Reformat()
+		if data, e := dout.Encode(&oldFormat); e != nil {
+			err = e
+		} else {
+			w.Header().Set("Content-Type", "application/json")
+			js := json.NewEncoder(w)
+			err = js.Encode(data)
+		}
 	}
 	return
 }

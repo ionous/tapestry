@@ -19,9 +19,14 @@ func Decode(dst jsn.Marshalee, msg json.RawMessage, sig cin.Signatures) error {
 
 func decode(dst jsn.Marshalee, msg json.RawMessage, reg cin.TypeCreator) error {
 	return cin.NewDecoder(reg).
-		SetFlowDecoder(CompactFlowDecoder).
+		//SetFlowDecoder(CompactFlowDecoder).
 		SetSlotDecoder(CompactSlotDecoder).
 		Decode(dst, msg)
+
+	// re: flow decoder
+	// right now, we only get here when the flow is a member of a flow;
+	// when we know what the type is but havent tried to read from the msg yet.
+	// for slots to read a slat, the msg already would have been expanded into its final type.
 }
 
 //
@@ -69,26 +74,6 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 					}
 				}
 			}
-		}
-	}
-	return
-}
-
-// customized reader of compact data.
-// right now, we only get here when the flow is a member of a flow;
-// when we know what the type is but havent tried to read from the msg yet.
-// for slots to read a slat, the msg already would have been expanded into its final type.
-func CompactFlowDecoder(m jsn.Marshaler, flow jsn.FlowBlock, msg json.RawMessage) (err error) {
-	switch typeName := flow.GetType(); typeName {
-	default:
-		err = chart.Unhandled("CustomFlow")
-	case Story_Type:
-		var lines StoryLines
-		if e := decode(&lines, msg, m.(cin.TypeCreator)); e != nil {
-			err = e
-		} else {
-			story := lines.Reformat()
-			flow.SetFlow(&story)
 		}
 	}
 	return

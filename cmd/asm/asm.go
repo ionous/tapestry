@@ -167,20 +167,23 @@ func readOne(k *story.Importer, path string) (err error) {
 	return
 }
 
-func decodeStory(path string, b []byte) (ret *story.Story, err error) {
-	var curr story.Story
+func decodeStory(path string, b []byte) (ret *story.StoryFile, err error) {
 	switch ext := filepath.Ext(path); ext {
 	case CompactExt:
+		var curr story.StoryFile
 		if e := story.Decode(&curr, b, tapestry.AllSignatures); e != nil {
 			err = e
 		} else {
 			ret = &curr
 		}
 	case DetailedExt:
+		var curr story.Story // fix: should also be story file...
 		if e := din.Decode(&curr, tapestry.Registry(), b); e != nil {
 			err = e
 		} else {
-			ret = &curr
+			ret = &story.StoryFile{
+				StoryLines: curr.Reformat(),
+			}
 		}
 	default:
 		err = errutil.Fmt("unknown file type %q", ext)

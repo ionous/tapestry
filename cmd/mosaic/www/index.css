@@ -35,6 +35,7 @@ html, body {
  */
 .mk-catalog {
   grid-area: sidebar;
+  overflow-y: auto;
 }
 .mk-folder-ctrl {
   list-style-type: none;

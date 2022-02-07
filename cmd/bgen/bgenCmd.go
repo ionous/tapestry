@@ -98,23 +98,21 @@ func prettify(str []byte, pretty bool) (ret []byte, err error) {
 }
 
 func decodeCompact(b []byte) (ret jsn.Marshalee, err error) {
-	var dst story.Story
+	var dst story.StoryFile
 	if e := story.Decode(&dst, b, tapestry.AllSignatures); e != nil {
 		err = e
 	} else {
-		lines := dst.Reformat()
-		ret = &lines
+		ret = &dst
 	}
 	return
 }
 
 func decodeDet(b []byte) (ret jsn.Marshalee, err error) {
-	var dst story.Story
+	var dst story.StoryFile
 	if e := din.Decode(&dst, tapestry.Registry(), b); e != nil {
 		err = e
 	} else {
-		lines := dst.Reformat()
-		ret = &lines
+		ret = &dst
 	}
 	return
 }

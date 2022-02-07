@@ -74,7 +74,7 @@ type TypeSpecs map[string]*spec.TypeSpec
 
 var lookup = make(TypeSpecs)
 
-var rootBlocks = RootBlocks{"story_lines"}
+var rootBlocks = RootBlocks{"story_file"}
 
 // root blocks have no output
 type RootBlocks []string

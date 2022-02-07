@@ -53,13 +53,18 @@ func (d rootFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWriter)
 				e := errutil.New("cant save to", at)
 				err = errutil.Append(err, e)
 			} else {
-				var dst story.Story
+				var dst story.Story // composer hands back old format stories ( because that's what we give it )
 				if e := din.Decode(&dst, tapestry.Registry(), el.Story); e != nil {
 					err = e
-				} else if data, e := story.Encode(&dst); e != nil {
-					err = errutil.Append(err, e)
 				} else {
-					err = writeOut(at, data)
+					file := story.StoryFile{
+						StoryLines: dst.Reformat(),
+					}
+					if data, e := story.Encode(&file); e != nil {
+						err = errutil.Append(err, e)
+					} else {
+						err = writeOut(at, data)
+					}
 				}
 			}
 		}

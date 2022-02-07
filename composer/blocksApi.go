@@ -57,12 +57,12 @@ func (d blocksFile) Put(ctx context.Context, r io.Reader, w http.ResponseWriter)
 
 // gets the contents of the story file, transforms it into blocks
 func (d blocksFile) Get(ctx context.Context, w http.ResponseWriter) (err error) {
-	var dst story.Story
+	var file story.StoryFile
 	if b, e := readOne(string(d)); e != nil {
 		err = e
-	} else if e := story.Decode(&dst, b, tapestry.AllSignatures); e != nil {
+	} else if e := story.Decode(&file, b, tapestry.AllSignatures); e != nil {
 		err = e
-	} else if str, e := bgen.Convert(&dst); e != nil {
+	} else if str, e := bgen.Convert(&file); e != nil {
 		err = e
 	} else {
 		w.Header().Set("Content-Type", "application/json")

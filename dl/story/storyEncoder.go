@@ -11,9 +11,8 @@ import (
 )
 
 // Write a story to a story file.
-func Encode(src *Story) (interface{}, error) {
-	lines := src.Reformat()
-	return cout.Encode(&lines, CompactEncoder)
+func Encode(src *StoryFile) (interface{}, error) {
+	return cout.Encode(src, CompactEncoder)
 }
 
 // customized writer of compact data
