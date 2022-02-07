@@ -1,71 +1,60 @@
  <template
- ><img alt="Vue logo" src="./assets/logo.png" 
-   /><router-view/><Catalog :catalog="catalog" 
-   /><Blockly></Blockly
+   ><Startup 
+    v-if="!shapeData"
+    @started="onStarted"
+   /><template v-else
+      ><img alt="Vue logo" src="./assets/logo.png" 
+      ><router-view
+      /><Catalog 
+        :catalog="catalog"
+      /><Blockly 
+        :catalog="catalog"
+        :shapeData="shapeData"
+  /></template
 ></template>
  
- <script>
- import MockCatalog from './catalog/mockCatalog.js'
- import Catalog from './catalog/Catalog.vue'
+<script>
+import BlockCatalog from './catalog/blockCatalog.js'
 import Blockly from './blockly/Blockly.vue'
+import Catalog from './catalog/Catalog.vue'
+import Startup from './Startup.vue'
 import { RouterView } from 'vue-router'
+import { ref, onMounted } from 'vue'
+
+// dataUrl comes through vite conifg.
+const catalog= new BlockCatalog(dataUrl + '/blocks/'); // only need one.
 
 export default {
-  components: { Catalog, Blockly, RouterView},
-  data() {
+  components: { Blockly, Catalog, RouterView, Startup },
+  setup(props) {
+    let shapeData= ref(null);
     return {
-      catalog: new MockCatalog()
+      catalog, // unwatched.
+      shapeData, 
+      onStarted(_shapeData) {
+        shapeData.value= Object.freeze(_shapeData);
+      }
+    }
+  },
+  provide() {
+    const { "$router": router, catalog } = this;
+    return {
+      onFolder(folder) {
+        if (folder.contents) {
+          console.log("closing", folder.name);
+          folder.contents= false;
+        } else {
+          // injects the list of sub-files into the passed folder
+          console.log("opening", folder.name, folder.path);
+          catalog.loadFolder(folder);
+        }
+      },
+      onFile(file) {
+        const parts= file.path.split("/");
+        router.push({ name: 'edit', params: { editPath: parts } });
+      },
     }
   }
 }
 </script>
 
-
-
-<!--   
-the blockly music maker is interesting.
-it has classes on "permanent" divs -- example the edit div --
-which default to not displaying, and then adds a global "mode" attribute to the body
-to select which ones display. nice and simple. similar the ".blockly-editor" class is 
-left: -400px; by default, and during mode-blockly it "moves" into place.
-
-they load and save the workspace at every transition.
-using: 
-  let xml = Blockly.Xml.workspaceToDom(Blockly.getMainWorkspace());
-  Blockly.Xml.domToWorkspace(button.blocklyXml, workspace);
-
-tbd: that might now work because im using "extraState"
-but could just serialize and save to memory somewhere, 
-[ ex. if file persisted ]
-
-- 
-
-.mode-edit, .mode-maker, .mode-blockly {
-  display: none;
-}
-
-[mode="maker"] .mode-maker,
-[mode="edit"] .mode-edit,
-[mode="blockly"] .mode-blockly {
-  display: block;
-}
-[mode="blockly"] .blockly-editor {
-  left: 0;
-}
-
-
-/Users/ionous/Dev/blockly/google-blockly/demos/codelab/app-complete/index.html
-https://blocklycodelabs.dev/codelabs/getting-started/index.html
-
-function enableEditMode() {
-    document.body.setAttribute('mode', 'edit');
-    document.querySelectorAll('.button').forEach(btn => {
-      btn.removeEventListener('click', handlePlay);
-      btn.addEventListener('click', enableBlocklyMode);
-    });
-  }
-   provide() {
-    
-    }
-  },
- -->

@@ -47,7 +47,6 @@ export default class MockCatalog extends Cataloger {
   constructor() {
     super();
     this.store= {};
-    this.root= new CatalogFolder("");
     this.all= addAll(this.root, {}, mockCatalog, "");
   }
 
@@ -61,6 +60,7 @@ export default class MockCatalog extends Cataloger {
     return this.all[path];
   }
 
+  // fix: should be path.
   loadFile(file) {
     const path= file.path;
     let story= this.store[path];

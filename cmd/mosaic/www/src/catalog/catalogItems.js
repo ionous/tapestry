@@ -1,8 +1,9 @@
 // base-class for all catalog items
 class CatalogItem {
-  constructor( name, dir ) {
+  constructor(name, dir) {
     this.name= name;
     this.dir= dir; // ex. curr/sub
+    this.contents= false;
   }
   // ex. "", "curr", "curr/sub"
   get path() {
@@ -11,17 +12,6 @@ class CatalogItem {
   }
 }
 
-export class CatalogFolder extends CatalogItem {
-  constructor( name, dir ) {
-    super(name, dir);
-    this.contents= false;
-  }
-}
-
-export class CatalogFile extends CatalogItem {
-  constructor( name, dir ) {
-    super(name, dir);
-    this.story= false;
-  }
-}
+export class CatalogFolder extends CatalogItem {}
+export class CatalogFile extends CatalogItem {}
 
