@@ -1,291 +1,293 @@
 {
-  "Story:": [
-    {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          [
-            "smell",
-            "sniff"
-          ],
-          [
-            {
-              "AnyOf:": [
-                {
-                  "AllOf:": [
-                    {
-                      "Noun:": "objects"
-                    },
-                    {
-                      "As:": "smelling"
-                    }
-                  ]
-                },
-                {
-                  "As:": "sniffing"
-                }
-              ]
-            }
+  "Tapestry:": {
+    "Story:": [
+      {
+        "GrammarDecl:": {
+          "Directive:scans:": [
+            [
+              "smell",
+              "sniff"
+            ],
+            [
+              {
+                "AnyOf:": [
+                  {
+                    "AllOf:": [
+                      {
+                        "Noun:": "objects"
+                      },
+                      {
+                        "As:": "smelling"
+                      }
+                    ]
+                  },
+                  {
+                    "As:": "sniffing"
+                  }
+                ]
+              }
+            ]
           ]
+        }
+      },
+      {
+        "--": ""
+      },
+      {
+        "Event:action:args none:": [
+          "sniff",
+          "sniffing",
+          "nothing"
         ]
-      }
-    },
-    {
-      "--": ""
-    },
-    {
-      "Event:action:args none:": [
-        "sniff",
-        "sniffing",
-        "nothing"
-      ]
-    },
-    {
-      "--": "Sniffing means smelling the current location.",
-      "Pattern:provides:rules:": [
-        "sniffing",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:initially:": [
-                "actor",
-                "actor",
-                {
-                  "Get:from:": [
-                    "pawn",
-                    {
-                      "VarFields:": "agent"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Smelling actor:noun:": [
-                        "@actor",
-                        {
-                          "FromTxt:": {
-                            "LocationOf obj:": "@actor"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Event:action:args common:": [
-        "smell",
-        "smelling",
-        {
-          "CommonAction:": "object"
-        }
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "smelling",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:initially:": [
-                "actor",
-                "actor",
-                {
-                  "Get:from:": [
-                    "pawn",
-                    {
-                      "VarFields:": "agent"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "IsPlayer obj:": "@actor"
-                },
-                {
-                  "Act:": [
-                    {
-                      "If:from:and:do:else:": [
-                        "resp",
-                        {
-                          "FromTxt:": {
-                            "CanReach actor:action:noun:": [
-                              "@actor",
-                              {
-                                "FromTxt:": "smelling"
-                              },
-                              "@noun"
-                            ]
-                          }
-                        },
-                        {
-                          "Not:": {
-                            "Is empty:": "@resp"
-                          }
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": "@resp"
+      },
+      {
+        "--": "Sniffing means smelling the current location.",
+        "Pattern:provides:rules:": [
+          "sniffing",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:of:initially:": [
+                  "actor",
+                  "actor",
+                  {
+                    "Get:from:": [
+                      "pawn",
+                      {
+                        "VarFields:": "agent"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Smelling actor:noun:": [
+                          "@actor",
+                          {
+                            "FromTxt:": {
+                              "LocationOf obj:": "@actor"
                             }
-                          ]
-                        },
-                        {
-                          "ElseDo:": {
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Event:action:args common:": [
+          "smell",
+          "smelling",
+          {
+            "CommonAction:": "object"
+          }
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "smelling",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:of:initially:": [
+                  "actor",
+                  "actor",
+                  {
+                    "Get:from:": [
+                      "pawn",
+                      {
+                        "VarFields:": "agent"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "IsPlayer obj:": "@actor"
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "If:from:and:do:else:": [
+                          "resp",
+                          {
+                            "FromTxt:": {
+                              "CanReach actor:action:noun:": [
+                                "@actor",
+                                {
+                                  "FromTxt:": "smelling"
+                                },
+                                "@noun"
+                              ]
+                            }
+                          },
+                          {
+                            "Not:": {
+                              "Is empty:": "@resp"
+                            }
+                          },
+                          {
                             "Act:": [
                               {
-                                "If:from:and:do:else:": [
-                                  "resp",
-                                  {
-                                    "FromTxt:": {
-                                      "CanUse actor:action:noun:": [
-                                        "@actor",
-                                        {
-                                          "FromTxt:": "smelling"
-                                        },
-                                        "@noun"
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    "Not:": {
-                                      "Is empty:": "@resp"
-                                    }
-                                  },
-                                  {
-                                    "Act:": [
-                                      {
-                                        "Say:": "@resp"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "ElseDo:": {
-                                      "Act:": [
-                                        {
-                                          "ReportSmelling actor:noun:": [
-                                            "@actor",
-                                            "@noun"
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  }
-                                ]
+                                "Say:": "@resp"
                               }
                             ]
+                          },
+                          {
+                            "ElseDo:": {
+                              "Act:": [
+                                {
+                                  "If:from:and:do:else:": [
+                                    "resp",
+                                    {
+                                      "FromTxt:": {
+                                        "CanUse actor:action:noun:": [
+                                          "@actor",
+                                          {
+                                            "FromTxt:": "smelling"
+                                          },
+                                          "@noun"
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "Not:": {
+                                        "Is empty:": "@resp"
+                                      }
+                                    },
+                                    {
+                                      "Act:": [
+                                        {
+                                          "Say:": "@resp"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "ElseDo:": {
+                                        "Act:": [
+                                          {
+                                            "ReportSmelling actor:noun:": [
+                                              "@actor",
+                                              "@noun"
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
                           }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Pattern:requires:": [
+          "report smelling",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "actor",
+                  "actor"
+                ]
+              },
+              {
+                "Text named:of:": [
+                  "noun",
+                  "object"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Pattern:rules:": [
+          "report smelling",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": {
+                          "Response:text:": [
+                            "actor smelling",
+                            {
+                              "RenderTemplate:": "{the:.actor|capitalize!} sniffs {the: .noun}."
+                            }
+                          ]
                         }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Pattern:requires:": [
-        "report smelling",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "actor",
-                "actor"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "noun",
-                "object"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "report smelling",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "actor smelling",
-                          {
-                            "RenderTemplate:": "{the:.actor|capitalize!} sniffs {the: .noun}."
-                          }
-                        ]
                       }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "IsPlayer obj:": "@actor"
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "player smelling",
-                          {
-                            "RenderTemplate:": "{we:|capitalize!} smell nothing unexpected."
-                          }
-                        ]
+                    ]
+                  }
+                ]
+              },
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "IsPlayer obj:": "@actor"
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": {
+                          "Response:text:": [
+                            "player smelling",
+                            {
+                              "RenderTemplate:": "{we:|capitalize!} smell nothing unexpected."
+                            }
+                          ]
+                        }
                       }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }

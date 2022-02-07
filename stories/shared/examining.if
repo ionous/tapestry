@@ -1,446 +1,448 @@
 {
-  "Story:": [
-    {
-      "Event:action:args common:": [
-        "examine",
-        "examining",
-        {
-          "CommonAction:": "thing"
-        }
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "examining",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:initially:": [
-                "actor",
-                "actor",
-                {
-                  "Get:from:": [
-                    "pawn",
-                    {
-                      "VarFields:": "agent"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "IsPlayer obj:": "@actor"
-                },
-                {
-                  "Act:": [
-                    {
-                      "If:from:and:do:else:": [
-                        "resp",
-                        {
-                          "FromTxt:": {
-                            "CanReach actor:action:noun:requiresLight:": [
-                              "@actor",
-                              {
-                                "FromTxt:": "examining"
-                              },
-                              "@noun",
-                              {
-                                "FromBool:": true
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "Not:": {
-                            "Is empty:": "@resp"
-                          }
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": "@resp"
-                            }
-                          ]
-                        },
-                        {
-                          "ElseDo:": {
-                            "Act:": [
-                              {
-                                "If:from:and:do:else:": [
-                                  "resp",
-                                  {
-                                    "FromTxt:": {
-                                      "CanUse actor:action:noun:": [
-                                        "@actor",
-                                        {
-                                          "FromTxt:": "examining"
-                                        },
-                                        "@noun"
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    "Not:": {
-                                      "Is empty:": "@resp"
-                                    }
-                                  },
-                                  {
-                                    "Act:": [
-                                      {
-                                        "Say:": "@resp"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "ElseDo:": {
-                                      "Act:": [
-                                        {
-                                          "If:do:": [
-                                            {
-                                              "Send:event:": [
-                                                {
-                                                  "Capture obj:": "@noun"
-                                                },
-                                                {
-                                                  "Examine actor:noun:": [
-                                                    "@actor",
-                                                    "@noun"
-                                                  ]
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Act:": [
-                                                {
-                                                  "PrintDescription obj:": "@noun"
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Pattern:requires:": [
-        "Print description",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "Print description",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:initially:": [
-                "description",
-                {
-                  "Get:from:": [
-                    "description",
-                    {
-                      "ObjFields:": "@obj"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "If:do:": [
-                        {
-                          "Not:": {
-                            "PrintParticulars obj:": "@obj"
-                          }
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": {
-                                "Response:text:": [
-                                  "unremarkable description",
-                                  {
-                                    "RenderTemplate:": "{We!|make_title_case!} see nothing special about {the: .obj}."
-                                  }
-                                ]
-                              }
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Not:": {
-                    "Is empty:": "@description"
-                  }
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": "@description"
-                    },
-                    {
-                      "PrintParticulars obj:": "@obj"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Pattern:requires:returns:": [
-        "Print particulars",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "Bool named:": "success"
+  "Tapestry:": {
+    "Story:": [
+      {
+        "Event:action:args common:": [
+          "examine",
+          "examining",
+          {
+            "CommonAction:": "thing"
           }
-        }
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "Print particulars",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "KindOf:is:": [
-                    "@obj",
-                    "containers"
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "If:do:else:": [
-                        {
-                          "PrintInlineStorage obj:": "@obj"
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Let:be:": [
-                                "success",
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "examining",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:of:initially:": [
+                  "actor",
+                  "actor",
+                  {
+                    "Get:from:": [
+                      "pawn",
+                      {
+                        "VarFields:": "agent"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "IsPlayer obj:": "@actor"
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "If:from:and:do:else:": [
+                          "resp",
+                          {
+                            "FromTxt:": {
+                              "CanReach actor:action:noun:requiresLight:": [
+                                "@actor",
+                                {
+                                  "FromTxt:": "examining"
+                                },
+                                "@noun",
                                 {
                                   "FromBool:": true
                                 }
                               ]
                             }
-                          ]
-                        },
-                        {
-                          "ElseDo:": {
+                          },
+                          {
+                            "Not:": {
+                              "Is empty:": "@resp"
+                            }
+                          },
+                          {
                             "Act:": [
                               {
-                                "Comment:": "if the player isn't in the container."
-                              },
-                              {
-                                "If:do:": [
-                                  {
-                                    "Cmp:is:txt:": [
-                                      "@obj",
-                                      {
-                                        "OtherThan": []
-                                      },
-                                      {
-                                        "ContainerOf obj:": {
-                                          "FromTxt:": "player"
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Act:": [
-                                      {
-                                        "Say:": {
-                                          "Response:text:": [
-                                            "empty container description",
-                                            {
-                                              "RenderTemplate:": "{The: .obj|capitalize!} {are: .obj} empty."
-                                            }
-                                          ]
-                                        }
-                                      },
-                                      {
-                                        "Let:be:": [
-                                          "success",
+                                "Say:": "@resp"
+                              }
+                            ]
+                          },
+                          {
+                            "ElseDo:": {
+                              "Act:": [
+                                {
+                                  "If:from:and:do:else:": [
+                                    "resp",
+                                    {
+                                      "FromTxt:": {
+                                        "CanUse actor:action:noun:": [
+                                          "@actor",
                                           {
-                                            "FromBool:": true
+                                            "FromTxt:": "examining"
+                                          },
+                                          "@noun"
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "Not:": {
+                                        "Is empty:": "@resp"
+                                      }
+                                    },
+                                    {
+                                      "Act:": [
+                                        {
+                                          "Say:": "@resp"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "ElseDo:": {
+                                        "Act:": [
+                                          {
+                                            "If:do:": [
+                                              {
+                                                "Send:event:": [
+                                                  {
+                                                    "Capture obj:": "@noun"
+                                                  },
+                                                  {
+                                                    "Examine actor:noun:": [
+                                                      "@actor",
+                                                      "@noun"
+                                                    ]
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "Act:": [
+                                                  {
+                                                    "PrintDescription obj:": "@noun"
+                                                  }
+                                                ]
+                                              }
+                                            ]
                                           }
                                         ]
                                       }
-                                    ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Pattern:requires:": [
+          "Print description",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "object"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "Print description",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:initially:": [
+                  "description",
+                  {
+                    "Get:from:": [
+                      "description",
+                      {
+                        "ObjFields:": "@obj"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "If:do:": [
+                          {
+                            "Not:": {
+                              "PrintParticulars obj:": "@obj"
+                            }
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "Say:": {
+                                  "Response:text:": [
+                                    "unremarkable description",
+                                    {
+                                      "RenderTemplate:": "{We!|make_title_case!} see nothing special about {the: .obj}."
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Not:": {
+                      "Is empty:": "@description"
+                    }
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": "@description"
+                      },
+                      {
+                        "PrintParticulars obj:": "@obj"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Pattern:requires:returns:": [
+          "Print particulars",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
+              "Bool named:": "success"
+            }
+          }
+        ]
+      },
+      {
+        "Pattern:rules:": [
+          "Print particulars",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "KindOf:is:": [
+                      "@obj",
+                      "containers"
+                    ]
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "If:do:else:": [
+                          {
+                            "PrintInlineStorage obj:": "@obj"
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "Let:be:": [
+                                  "success",
+                                  {
+                                    "FromBool:": true
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "ElseDo:": {
+                              "Act:": [
+                                {
+                                  "Comment:": "if the player isn't in the container."
+                                },
+                                {
+                                  "If:do:": [
+                                    {
+                                      "Cmp:is:txt:": [
+                                        "@obj",
+                                        {
+                                          "OtherThan": true
+                                        },
+                                        {
+                                          "ContainerOf obj:": {
+                                            "FromTxt:": "player"
+                                          }
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Act:": [
+                                        {
+                                          "Say:": {
+                                            "Response:text:": [
+                                              "empty container description",
+                                              {
+                                                "RenderTemplate:": "{The: .obj|capitalize!} {are: .obj} empty."
+                                              }
+                                            ]
+                                          }
+                                        },
+                                        {
+                                          "Let:be:": [
+                                            "success",
+                                            {
+                                              "FromBool:": true
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "KindOf:is:": [
+                      "@obj",
+                      "supporters"
+                    ]
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "If:do:": [
+                          {
+                            "PrintInlineStorage obj:": "@obj"
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "Let:be:": [
+                                  "success",
+                                  {
+                                    "FromBool:": true
                                   }
                                 ]
                               }
                             ]
                           }
-                        }
-                      ]
-                    }
-                  ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "TestStatement:test:": [
+          "examining test",
+          {
+            "TestOutput:": "The blender is empty.\nYour aunt's very own witches hat, a Halloween favorite.\nIn the mortar is a pestle.\nOn the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.\nAn ancient teak wardrobe repurposed as a kitchen cupboard.\nIn the cabinet are a book of matches, a bottle of descaling solution, a fish hook, and a rusty knife.\nYou see nothing special about the blender.\n"
+          }
+        ]
+      },
+      {
+        "TestRule:hook activity:": [
+          "examining test",
+          {
+            "Act:": [
+              {
+                "PrintDescription obj:": {
+                  "FromTxt:": "blender"
                 }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "KindOf:is:": [
-                    "@obj",
-                    "supporters"
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "If:do:": [
-                        {
-                          "PrintInlineStorage obj:": "@obj"
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Let:be:": [
-                                "success",
-                                {
-                                  "FromBool:": true
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+              },
+              {
+                "PrintDescription obj:": {
+                  "FromTxt:": "hat"
                 }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestStatement:test:": [
-        "examining test",
-        {
-          "TestOutput:": "The blender is empty.\nYour aunt's very own witches hat, a Halloween favorite.\nIn the mortar is a pestle.\nOn the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.\nAn ancient teak wardrobe repurposed as a kitchen cupboard.\nIn the cabinet are a book of matches, a bottle of descaling solution, a fish hook, and a rusty knife.\nYou see nothing special about the blender.\n"
-        }
-      ]
-    },
-    {
-      "TestRule:hook activity:": [
-        "examining test",
-        {
-          "Act:": [
-            {
-              "PrintDescription obj:": {
-                "FromTxt:": "blender"
+              },
+              {
+                "PrintDescription obj:": {
+                  "FromTxt:": "mortar"
+                }
+              },
+              {
+                "PrintDescription obj:": {
+                  "FromTxt:": "shelf"
+                }
+              },
+              {
+                "PrintDescription obj:": {
+                  "FromTxt:": "cabinet"
+                }
+              },
+              {
+                "Relate:to:via:": [
+                  "blender",
+                  "self",
+                  "whereabouts"
+                ]
+              },
+              {
+                "PrintDescription obj:": {
+                  "FromTxt:": "blender"
+                }
               }
-            },
-            {
-              "PrintDescription obj:": {
-                "FromTxt:": "hat"
-              }
-            },
-            {
-              "PrintDescription obj:": {
-                "FromTxt:": "mortar"
-              }
-            },
-            {
-              "PrintDescription obj:": {
-                "FromTxt:": "shelf"
-              }
-            },
-            {
-              "PrintDescription obj:": {
-                "FromTxt:": "cabinet"
-              }
-            },
-            {
-              "Relate:to:via:": [
-                "blender",
-                "self",
-                "whereabouts"
-              ]
-            },
-            {
-              "PrintDescription obj:": {
-                "FromTxt:": "blender"
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ]
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }

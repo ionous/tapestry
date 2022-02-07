@@ -1,487 +1,489 @@
 {
-  "Story:": [
-    {
-      "Pattern:requires:returns:": [
-        "fully opaque",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
+  "Tapestry:": {
+    "Story:": [
+      {
+        "Pattern:requires:returns:": [
+          "fully opaque",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
+              "Bool named:": "result"
             }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "Bool named:": "result"
           }
-        }
-      ]
-    },
-    {
-      "Comment:": "Returns true if light gets stopped when passing from inside an object to outside an object. Note that \"lit\" objects emit light from all of their surfaces, so while a closed box might not reveal a flashlight locked inside, a glowing haunted treasure chest would illuminate its contents and the room it's in. "
-    },
-    {
-      "Pattern:rules:": [
-        "fully opaque",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "result",
-                        {
-                          "FromBool:": false
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "AllTrue:": [
-                    {
-                      "KindOf:is:": [
-                        "@obj",
-                        "containers"
-                      ]
-                    },
-                    {
-                      "Get obj:trait:": [
-                        "@obj",
-                        "opaque"
-                      ]
-                    },
-                    {
-                      "Get obj:trait:": [
-                        "@obj",
-                        "closed"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "result",
-                        {
-                          "FromBool:": true
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "KindOf:is:": [
-                    "@obj",
-                    "rooms"
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Comment:": "a room is the top of line."
-                    },
-                    {
-                      "Let:be:": [
-                        "result",
-                        {
-                          "FromBool:": true
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Pattern:requires:returns:": [
-        "transparentOf",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "Text named:of:": [
-              "result",
-              "object"
+        ]
+      },
+      {
+        "Comment:": "Returns true if light gets stopped when passing from inside an object to outside an object. Note that \"lit\" objects emit light from all of their surfaces, so while a closed box might not reveal a flashlight locked inside, a glowing haunted treasure chest would illuminate its contents and the room it's in. "
+      },
+      {
+        "Pattern:rules:": [
+          "fully opaque",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Let:be:": [
+                          "result",
+                          {
+                            "FromBool:": false
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "AllTrue:": [
+                      {
+                        "KindOf:is:": [
+                          "@obj",
+                          "containers"
+                        ]
+                      },
+                      {
+                        "Get obj:trait:": [
+                          "@obj",
+                          "opaque"
+                        ]
+                      },
+                      {
+                        "Get obj:trait:": [
+                          "@obj",
+                          "closed"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Let:be:": [
+                          "result",
+                          {
+                            "FromBool:": true
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "KindOf:is:": [
+                      "@obj",
+                      "rooms"
+                    ]
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Comment:": "a room is the top of line."
+                      },
+                      {
+                        "Let:be:": [
+                          "result",
+                          {
+                            "FromBool:": true
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
             ]
           }
-        }
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "transparentOf",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:initially:": [
-                "parent",
-                "object",
-                {
-                  "ParentOf obj:": {
-                    "FromTxt:": "@obj"
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Pattern:requires:returns:": [
+          "transparentOf",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
+              "Text named:of:": [
+                "result",
+                "object"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "transparentOf",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:of:initially:": [
+                  "parent",
+                  "object",
+                  {
+                    "ParentOf obj:": {
+                      "FromTxt:": "@obj"
+                    }
                   }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Comment:": "normally the parent is just the parent."
-                    },
-                    {
-                      "Let:be:": [
-                        "result",
-                        {
-                          "FromTxt:": "@parent"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "FullyOpaque obj:": "@obj"
-                },
-                {
-                  "Act:": [
-                    {
-                      "Comment:": "for example: if our object is a closed, opaque, container, dont return anything."
-                    },
-                    {
-                      "Let:be:": [
-                        "result",
-                        {
-                          "FromTxt:": ""
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Pattern:requires:returns:": [
-        "transparentList",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "TextList named:": "list"
-          }
-        }
-      ]
-    },
-    {
-      "Comment:": "Return a list containing the object and all of its transparent parents. "
-    },
-    {
-      "Pattern:rules:": [
-        "transparentList",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Repeating:do:": [
-                        {
-                          "Not:": {
-                            "Is empty:": "@obj"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Comment:": "normally the parent is just the parent."
+                      },
+                      {
+                        "Let:be:": [
+                          "result",
+                          {
+                            "FromTxt:": "@parent"
                           }
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Put:into:": [
-                                "@obj",
-                                {
-                                  "IntoTxts:": "list"
-                                }
-                              ]
-                            },
-                            {
-                              "Let:be:": [
-                                "obj",
-                                {
-                                  "FromTxt:": {
-                                    "TransparentOf obj:": {
-                                      "FromTxt:": "@obj"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "FullyOpaque obj:": "@obj"
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Comment:": "for example: if our object is a closed, opaque, container, dont return anything."
+                      },
+                      {
+                        "Let:be:": [
+                          "result",
+                          {
+                            "FromTxt:": ""
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Pattern:requires:returns:": [
+          "transparentList",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
+              "TextList named:": "list"
+            }
+          }
+        ]
+      },
+      {
+        "Comment:": "Return a list containing the object and all of its transparent parents. "
+      },
+      {
+        "Pattern:rules:": [
+          "transparentList",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Repeating:do:": [
+                          {
+                            "Not:": {
+                              "Is empty:": "@obj"
+                            }
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "Put:into:": [
+                                  "@obj",
+                                  {
+                                    "IntoTxts:": "list"
+                                  }
+                                ]
+                              },
+                              {
+                                "Let:be:": [
+                                  "obj",
+                                  {
+                                    "FromTxt:": {
+                                      "TransparentOf obj:": {
+                                        "FromTxt:": "@obj"
+                                      }
                                     }
                                   }
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Pattern:requires:returns:": [
-        "contains light",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "spot",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "Bool named:": "result"
-          }
-        }
-      ]
-    },
-    {
-      "Comment:": "Returns true if the passed spot is illuminated ( because of its own light, or because of the light of some nearby objet. ) This roughly correlates to Inform's \"offers light\" routine."
-    },
-    {
-      "Pattern:provides:rules:": [
-        "contains light",
-        {
-          "PatternLocals:": [
-            {
-              "TextList named:": "queue"
-            },
-            {
-              "Text named:": "ceiling"
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Comment:": "Determine the ceiling, and add it to the queue for processing."
-                    },
-                    {
-                      "Repeating:do:": [
-                        {
-                          "Not:": {
-                            "Is empty:": "@spot"
+                                ]
+                              }
+                            ]
                           }
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Let:be:": [
-                                "ceiling",
-                                "@spot"
-                              ]
-                            },
-                            {
-                              "Let:be:": [
-                                "spot",
-                                {
-                                  "FromTxt:": {
-                                    "TransparentOf obj:": "@spot"
-                                  }
-                                }
-                              ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Pattern:requires:returns:": [
+          "contains light",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "spot",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
+              "Bool named:": "result"
+            }
+          }
+        ]
+      },
+      {
+        "Comment:": "Returns true if the passed spot is illuminated ( because of its own light, or because of the light of some nearby objet. ) This roughly correlates to Inform's \"offers light\" routine."
+      },
+      {
+        "Pattern:provides:rules:": [
+          "contains light",
+          {
+            "PatternLocals:": [
+              {
+                "TextList named:": "queue"
+              },
+              {
+                "Text named:": "ceiling"
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Comment:": "Determine the ceiling, and add it to the queue for processing."
+                      },
+                      {
+                        "Repeating:do:": [
+                          {
+                            "Not:": {
+                              "Is empty:": "@spot"
                             }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Put:into:": [
-                        "@ceiling",
-                        {
-                          "IntoTxts:": "queue"
-                        }
-                      ]
-                    },
-                    {
-                      "Repeating:do:": [
-                        {
-                          "Cmp:is:num:": [
-                            {
-                              "Len:": "@queue"
-                            },
-                            {
-                              "GreaterThan": []
-                            },
-                            0
-                          ]
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Erasing:as:do:": [
-                                {
-                                  "VarOfTxts:": "queue"
-                                },
-                                "it",
-                                {
-                                  "Act:": [
-                                    {
-                                      "Comment:": "objects which generate light are considered to be bright both inside and out; all of their surfaces aglow."
-                                    },
-                                    {
-                                      "If:do:else:": [
-                                        {
-                                          "Get obj:trait:": [
-                                            "@it",
-                                            "lit"
-                                          ]
-                                        },
-                                        {
-                                          "Act:": [
-                                            {
-                                              "Let:be:": [
-                                                "result",
-                                                {
-                                                  "FromBool:": true
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Break": []
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "ElseIf:do:": [
-                                            {
-                                              "AnyTrue:": [
-                                                {
-                                                  "Cmp:is:txt:": [
-                                                    "@it",
-                                                    {
-                                                      "Equals": []
-                                                    },
-                                                    "@ceiling"
-                                                  ]
-                                                },
-                                                {
-                                                  "Not:": {
-                                                    "FullyOpaque obj:": "@it"
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "Let:be:": [
+                                  "ceiling",
+                                  "@spot"
+                                ]
+                              },
+                              {
+                                "Let:be:": [
+                                  "spot",
+                                  {
+                                    "FromTxt:": {
+                                      "TransparentOf obj:": "@spot"
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "Put:into:": [
+                          "@ceiling",
+                          {
+                            "IntoTxts:": "queue"
+                          }
+                        ]
+                      },
+                      {
+                        "Repeating:do:": [
+                          {
+                            "Cmp:is:num:": [
+                              {
+                                "Len:": "@queue"
+                              },
+                              {
+                                "GreaterThan": true
+                              },
+                              0
+                            ]
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "Erasing:as:do:": [
+                                  {
+                                    "VarOfTxts:": "queue"
+                                  },
+                                  "it",
+                                  {
+                                    "Act:": [
+                                      {
+                                        "Comment:": "objects which generate light are considered to be bright both inside and out; all of their surfaces aglow."
+                                      },
+                                      {
+                                        "If:do:else:": [
+                                          {
+                                            "Get obj:trait:": [
+                                              "@it",
+                                              "lit"
+                                            ]
+                                          },
+                                          {
+                                            "Act:": [
+                                              {
+                                                "Let:be:": [
+                                                  "result",
+                                                  {
+                                                    "FromBool:": true
                                                   }
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Act:": [
-                                                {
-                                                  "Comment:": "Any children of our ceiling will be considered for their light contributions, even if the ceiling wouldn't transmit that light outward. "
-                                                },
-                                                {
-                                                  "Put:into:": [
-                                                    {
-                                                      "FromTxts:": {
-                                                        "ChildrenOf obj:": "@it"
-                                                      }
-                                                    },
-                                                    {
-                                                      "IntoTxts:": "queue"
+                                                ]
+                                              },
+                                              {
+                                                "Break": true
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "ElseIf:do:": [
+                                              {
+                                                "AnyTrue:": [
+                                                  {
+                                                    "Cmp:is:txt:": [
+                                                      "@it",
+                                                      {
+                                                        "Equals": true
+                                                      },
+                                                      "@ceiling"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "Not:": {
+                                                      "FullyOpaque obj:": "@it"
                                                     }
-                                                  ]
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "Act:": [
+                                                  {
+                                                    "Comment:": "Any children of our ceiling will be considered for their light contributions, even if the ceiling wouldn't transmit that light outward. "
+                                                  },
+                                                  {
+                                                    "Put:into:": [
+                                                      {
+                                                        "FromTxts:": {
+                                                          "ChildrenOf obj:": "@it"
+                                                        }
+                                                      },
+                                                      {
+                                                        "IntoTxts:": "queue"
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }

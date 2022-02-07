@@ -1,90 +1,50 @@
 {
-  "Story:": [
-    {
-      "Event:action:args none:": [
-        "inventory",
-        "inventorying",
-        "nothing"
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "inventorying",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:initially:": [
-                "actor",
-                "object",
-                {
-                  "Get:from:": [
-                    "pawn",
-                    {
-                      "VarFields:": "agent"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "IsPlayer obj:": "@actor"
-                },
-                {
-                  "Act:": [
-                    {
-                      "Send:event:": [
-                        {
-                          "Capture obj:": "@actor"
-                        },
-                        {
-                          "Inventory actor:": "@actor"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Listen kinds:handlers:": [
-        "actors",
-        [
+  "Tapestry:": {
+    "Story:": [
+      {
+        "Event:action:args none:": [
+          "inventory",
+          "inventorying",
+          "nothing"
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "inventorying",
           {
-            "With:event:rules:": [
-              "while",
-              "inventory",
+            "PatternLocals:": [
               {
-                "PatternRules:": [
+                "Text named:of:initially:": [
+                  "actor",
+                  "object",
                   {
-                    "PatternRule:hook activity:": [
+                    "Get:from:": [
+                      "pawn",
                       {
-                        "Always": []
-                      },
+                        "VarFields:": "agent"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "IsPlayer obj:": "@actor"
+                  },
+                  {
+                    "Act:": [
                       {
-                        "Act:": [
+                        "Send:event:": [
                           {
-                            "PrintInventory actor:": "@actor"
+                            "Capture obj:": "@actor"
                           },
                           {
-                            "Let:be:": [
-                              "success",
-                              {
-                                "FromBool:": true
-                              }
-                            ]
+                            "Inventory actor:": "@actor"
                           }
                         ]
                       }
@@ -95,99 +55,141 @@
             ]
           }
         ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Pattern:requires:": [
-        "print inventory",
-        {
-          "PatternParams:": [
+      },
+      {
+        "--": ""
+      },
+      {
+        "Listen kinds:handlers:": [
+          "actors",
+          [
             {
-              "Text named:of:": [
-                "actor",
-                "actor"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "print inventory",
-        {
-          "PatternLocals:": [
-            {
-              "TextList named:initially:": [
-                "kids",
+              "With:event:rules:": [
+                "while",
+                "inventory",
                 {
-                  "ChildrenOf obj:": "@actor"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
+                  "PatternRules:": [
                     {
-                      "Say:": {
-                        "Response:text:": [
-                          "carrying nothing",
-                          {
-                            "RenderTemplate:": "{we:|capitalize!} {are:.actor} carrying nothing."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Cmp:is:num:": [
-                    {
-                      "Len:": "@kids"
-                    },
-                    {
-                      "GreaterThan": []
-                    },
-                    0
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "carrying something",
-                          {
-                            "RenderTemplate:": "You are carrying:"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "PrintBlocks objs:": "@kids"
+                      "PatternRule:hook activity:": [
+                        {
+                          "Always": true
+                        },
+                        {
+                          "Act:": [
+                            {
+                              "PrintInventory actor:": "@actor"
+                            },
+                            {
+                              "Let:be:": [
+                                "success",
+                                {
+                                  "FromBool:": true
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 }
               ]
             }
           ]
-        }
-      ]
-    }
-  ]
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Pattern:requires:": [
+          "print inventory",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "actor",
+                  "actor"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "print inventory",
+          {
+            "PatternLocals:": [
+              {
+                "TextList named:initially:": [
+                  "kids",
+                  {
+                    "ChildrenOf obj:": "@actor"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": {
+                          "Response:text:": [
+                            "carrying nothing",
+                            {
+                              "RenderTemplate:": "{we:|capitalize!} {are:.actor} carrying nothing."
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Cmp:is:num:": [
+                      {
+                        "Len:": "@kids"
+                      },
+                      {
+                        "GreaterThan": true
+                      },
+                      0
+                    ]
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": {
+                          "Response:text:": [
+                            "carrying something",
+                            {
+                              "RenderTemplate:": "You are carrying:"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "PrintBlocks objs:": "@kids"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }

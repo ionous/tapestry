@@ -1,146 +1,148 @@
 {
-  "Story:": [
-    {
-      "Pattern:requires:": [
-        "print several",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "thing"
-              ]
-            },
-            {
-              "Number named:": "group size"
-            },
-            {
-              "Text named:": "label"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Comment:": "Provides a way to describe a generic group of objects. By default, it prints the group size in words, then prints the plural name of the target. It's similar to Inform's \"Printing a number of something.\""
-    },
-    {
-      "Pattern:rules:": [
-        "print several",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Spaces:": {
-                          "Act:": [
-                            {
-                              "Say:": {
-                                "RenderTemplate:": "{print_num_word: .group_size}"
-                              }
-                            },
-                            {
-                              "If:do:else:": [
-                                {
-                                  "Is empty:": "@label"
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "Say:": {
-                                        "RenderTemplate:": "{if .group_size > 1}{print_plural_name: .obj}{else}{print_name: .obj}{end}"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "ElseDo:": {
+  "Tapestry:": {
+    "Story:": [
+      {
+        "Pattern:requires:": [
+          "print several",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "thing"
+                ]
+              },
+              {
+                "Number named:": "group size"
+              },
+              {
+                "Text named:": "label"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Comment:": "Provides a way to describe a generic group of objects. By default, it prints the group size in words, then prints the plural name of the target. It's similar to Inform's \"Printing a number of something.\""
+      },
+      {
+        "Pattern:rules:": [
+          "print several",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": {
+                          "Spaces:": {
+                            "Act:": [
+                              {
+                                "Say:": {
+                                  "RenderTemplate:": "{print_num_word: .group_size}"
+                                }
+                              },
+                              {
+                                "If:do:else:": [
+                                  {
+                                    "Is empty:": "@label"
+                                  },
+                                  {
                                     "Act:": [
                                       {
                                         "Say:": {
-                                          "RenderTemplate:": "{if .group_size > 1}{pluralize: .label}{else}{singularize: .label}{end}"
+                                          "RenderTemplate:": "{if .group_size > 1}{print_plural_name: .obj}{else}{print_name: .obj}{end}"
                                         }
                                       }
                                     ]
+                                  },
+                                  {
+                                    "ElseDo:": {
+                                      "Act:": [
+                                        {
+                                          "Say:": {
+                                            "RenderTemplate:": "{if .group_size > 1}{pluralize: .label}{else}{singularize: .label}{end}"
+                                          }
+                                        }
+                                      ]
+                                    }
                                   }
-                                }
-                              ]
-                            }
-                          ]
+                                ]
+                              }
+                            ]
+                          }
                         }
                       }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:story:": [
-        "print several",
-        {
-          "Story:": [
-            {
-              "Nouns:depict:": [
-                [
-                  {
-                    "Noun:named:": [
-                      "the",
-                      "books"
                     ]
                   }
-                ],
-                {
-                  "Kind:named:": [
-                    "area",
-                    "thing"
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestRule:hook activity:": [
-        "print several",
-        {
-          "Act:": [
-            {
-              "Say:": {
-                "RenderTemplate:": "{print_several: .books}\n{print_several: .books 5}"
+                ]
               }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestStatement:test:": [
-        "print several",
-        {
-          "TestOutput:": "zero books\nfive books"
-        }
-      ]
-    }
-  ]
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "TestScene:story:": [
+          "print several",
+          {
+            "Story:": [
+              {
+                "Nouns:depict:": [
+                  [
+                    {
+                      "Noun:named:": [
+                        "the",
+                        "books"
+                      ]
+                    }
+                  ],
+                  {
+                    "Kind:named:": [
+                      "area",
+                      "thing"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "TestRule:hook activity:": [
+          "print several",
+          {
+            "Act:": [
+              {
+                "Say:": {
+                  "RenderTemplate:": "{print_several: .books}\n{print_several: .books 5}"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "TestStatement:test:": [
+          "print several",
+          {
+            "TestOutput:": "zero books\nfive books"
+          }
+        ]
+      }
+    ]
+  }
 }

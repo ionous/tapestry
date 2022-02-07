@@ -8092,6 +8092,106 @@ func StoryBreak_Marshal(m jsn.Marshaler, val *StoryBreak) (err error) {
 	return
 }
 
+// StoryFile
+type StoryFile struct {
+	StoryLines  StoryLines `if:"label=_"`
+	UserComment string
+}
+
+func (*StoryFile) Compose() composer.Spec {
+	return composer.Spec{
+		Name: StoryFile_Type,
+		Uses: composer.Type_Flow,
+		Lede: "tapestry",
+	}
+}
+
+const StoryFile_Type = "story_file"
+const StoryFile_Field_StoryLines = "$STORY_LINES"
+
+func (op *StoryFile) Marshal(m jsn.Marshaler) error {
+	return StoryFile_Marshal(m, op)
+}
+
+type StoryFile_Slice []StoryFile
+
+func (op *StoryFile_Slice) GetType() string { return StoryFile_Type }
+
+func (op *StoryFile_Slice) Marshal(m jsn.Marshaler) error {
+	return StoryFile_Repeats_Marshal(m, (*[]StoryFile)(op))
+}
+
+func (op *StoryFile_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *StoryFile_Slice) SetSize(cnt int) {
+	var els []StoryFile
+	if cnt >= 0 {
+		els = make(StoryFile_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *StoryFile_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return StoryFile_Marshal(m, &(*op)[i])
+}
+
+func StoryFile_Repeats_Marshal(m jsn.Marshaler, vals *[]StoryFile) error {
+	return jsn.RepeatBlock(m, (*StoryFile_Slice)(vals))
+}
+
+func StoryFile_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoryFile) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = StoryFile_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type StoryFile_Flow struct{ ptr *StoryFile }
+
+func (n StoryFile_Flow) GetType() string      { return StoryFile_Type }
+func (n StoryFile_Flow) GetLede() string      { return "tapestry" }
+func (n StoryFile_Flow) GetFlow() interface{} { return n.ptr }
+func (n StoryFile_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*StoryFile); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func StoryFile_Optional_Marshal(m jsn.Marshaler, pv **StoryFile) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = StoryFile_Marshal(m, *pv)
+	} else if !enc {
+		var v StoryFile
+		if err = StoryFile_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func StoryFile_Marshal(m jsn.Marshaler, val *StoryFile) (err error) {
+	m.SetComment(&val.UserComment)
+	if err = m.MarshalBlock(StoryFile_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", StoryFile_Field_StoryLines)
+		if e0 == nil {
+			e0 = StoryLines_Marshal(m, &val.StoryLines)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", StoryFile_Field_StoryLines))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // StoryLines
 type StoryLines struct {
 	Lines       []StoryStatement `if:"label=_"`
@@ -8559,8 +8659,8 @@ func TestRule_Marshal(m jsn.Marshaler, val *TestRule) (err error) {
 
 // TestScene
 type TestScene struct {
-	TestName    TestName `if:"label=_"`
-	Story       Story    `if:"label=story"`
+	TestName    TestName   `if:"label=_"`
+	Story       StoryLines `if:"label=story"`
 	UserComment string
 }
 
@@ -8658,7 +8758,7 @@ func TestScene_Marshal(m jsn.Marshaler, val *TestScene) (err error) {
 		}
 		e1 := m.MarshalKey("story", TestScene_Field_Story)
 		if e1 == nil {
-			e1 = Story_Marshal(m, &val.Story)
+			e1 = StoryLines_Marshal(m, &val.Story)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", TestScene_Field_Story))
@@ -9358,6 +9458,7 @@ var Slats = []composer.Composer{
 	(*StoppingText)(nil),
 	(*Story)(nil),
 	(*StoryBreak)(nil),
+	(*StoryFile)(nil),
 	(*StoryLines)(nil),
 	(*TestName)(nil),
 	(*TestOutput)(nil),
@@ -9469,6 +9570,7 @@ var Signatures = map[uint64]interface{}{
 	10085329253831819088: (*StoppingText)(nil),          /* StoppingText: */
 	11597613116511938589: (*Story)(nil),                 /* Story paragraphs: */
 	13392546219852761816: (*StoryLines)(nil),            /* Story: */
+	5991962903091297123:  (*StoryFile)(nil),             /* Tapestry: */
 	15090827023293362138: (*TestOutput)(nil),            /* TestOutput: */
 	11231723833188820353: (*TestRule)(nil),              /* TestRule:hook activity: */
 	15304439741055926590: (*TestScene)(nil),             /* TestScene:story: */

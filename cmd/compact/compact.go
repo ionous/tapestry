@@ -112,12 +112,12 @@ func main() {
 }
 
 type xform struct {
-	decode func(*story.Story, []byte) error
-	encode func(*story.Story) (interface{}, error)
+	decode func(jsn.Marshalee, []byte) error
+	encode func(jsn.Marshalee) (interface{}, error)
 }
 
 func (p *xform) decodeEncode(in, out string) (err error) {
-	var dst story.Story
+	var dst story.StoryFile
 	if b, e := readOne(in); e != nil {
 		err = e
 	} else if e := p.decode(&dst, b); e != nil {
@@ -147,18 +147,18 @@ func decodeEncodeSpec(in, out string) (err error) {
 }
 
 var compact = xform{
-	func(dst *story.Story, b []byte) error {
+	func(dst jsn.Marshalee, b []byte) error {
 		return story.Decode(dst, b, tapestry.AllSignatures)
 	},
-	func(src *story.Story) (interface{}, error) {
-		return story.Encode(src)
+	func(src jsn.Marshalee) (interface{}, error) {
+		return cout.Encode(src, story.CompactEncoder)
 	},
 }
 var detailed = xform{
-	func(dst *story.Story, b []byte) error {
+	func(dst jsn.Marshalee, b []byte) error {
 		return din.Decode(dst, tapestry.Registry(), b)
 	},
-	func(src *story.Story) (interface{}, error) {
+	func(src jsn.Marshalee) (interface{}, error) {
 		return dout.Encode(src)
 	},
 }

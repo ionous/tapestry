@@ -1,284 +1,145 @@
 {
-  "Story:": [
-    {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          [
-            "kiss",
-            "hug",
-            "embrace"
-          ],
-          [
-            {
-              "Noun:": "things"
-            },
-            {
-              "As:": "kissing"
-            }
-          ]
-        ]
-      }
-    },
-    {
-      "--": ""
-    },
-    {
-      "Event:action:args common:": [
-        "kiss",
-        "kissing",
-        {
-          "CommonAction:": "object"
-        }
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "kissing",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:initially:": [
-                "actor",
-                "actor",
-                {
-                  "Get:from:": [
-                    "pawn",
-                    {
-                      "VarFields:": "agent"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "IsPlayer obj:": "@actor"
-                },
-                {
-                  "Act:": [
-                    {
-                      "If:from:and:do:else:": [
-                        "resp",
-                        {
-                          "FromTxt:": {
-                            "CanReach actor:action:noun:": [
-                              "@actor",
-                              {
-                                "FromTxt:": "kissing"
-                              },
-                              "@noun"
-                            ]
-                          }
-                        },
-                        {
-                          "Not:": {
-                            "Is empty:": "@resp"
-                          }
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": "@resp"
-                            }
-                          ]
-                        },
-                        {
-                          "ElseDo:": {
-                            "Act:": [
-                              {
-                                "If:from:and:do:else:": [
-                                  "resp",
-                                  {
-                                    "FromTxt:": {
-                                      "CanUse actor:action:noun:": [
-                                        "@actor",
-                                        {
-                                          "FromTxt:": "kissing"
-                                        },
-                                        "@noun"
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    "Not:": {
-                                      "Is empty:": "@resp"
-                                    }
-                                  },
-                                  {
-                                    "Act:": [
-                                      {
-                                        "Say:": "@resp"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "ElseDo:": {
-                                      "Act:": [
-                                        {
-                                          "Send:event:": [
-                                            {
-                                              "Capture obj:": "@noun"
-                                            },
-                                            {
-                                              "Kiss actor:noun:": [
-                                                "@actor",
-                                                "@noun"
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Pattern:rules:": [
-        "can use",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "AllTrue:": [
-                    {
-                      "Cmp:is:txt:": [
-                        "@action",
-                        {
-                          "Equals": []
-                        },
-                        "kissing"
-                      ]
-                    },
-                    {
-                      "IsPlayer obj:": "@actor"
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "response",
-                        {
-                          "FromTxt:": {
-                            "Response:text:": [
-                              "can't kiss without consent",
-                              {
-                                "RenderTemplate:": "{the:.noun|capitalize!} might not like that."
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "AllTrue:": [
-                    {
-                      "Cmp:is:txt:": [
-                        "@action",
-                        {
-                          "Equals": []
-                        },
-                        "kissing"
-                      ]
-                    },
-                    {
-                      "Cmp:is:txt:": [
-                        "@actor",
-                        {
-                          "Equals": []
-                        },
-                        "@noun"
-                      ]
-                    },
-                    {
-                      "IsPlayer obj:": "@actor"
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "response",
-                        {
-                          "FromTxt:": {
-                            "Response:text:": [
-                              "can't kiss yourself",
-                              {
-                                "RenderTemplate:": "{we:|capitalize!} don't get much from that."
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Listen kinds:handlers:": [
-        "actors",
-        [
-          {
-            "With:event:rules:": [
-              "while",
+  "Tapestry:": {
+    "Story:": [
+      {
+        "GrammarDecl:": {
+          "Directive:scans:": [
+            [
               "kiss",
+              "hug",
+              "embrace"
+            ],
+            [
               {
-                "PatternRules:": [
+                "Noun:": "things"
+              },
+              {
+                "As:": "kissing"
+              }
+            ]
+          ]
+        }
+      },
+      {
+        "--": ""
+      },
+      {
+        "Event:action:args common:": [
+          "kiss",
+          "kissing",
+          {
+            "CommonAction:": "object"
+          }
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "kissing",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:of:initially:": [
+                  "actor",
+                  "actor",
                   {
-                    "PatternRule:hook activity:": [
+                    "Get:from:": [
+                      "pawn",
                       {
-                        "Always": []
-                      },
+                        "VarFields:": "agent"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "IsPlayer obj:": "@actor"
+                  },
+                  {
+                    "Act:": [
                       {
-                        "Act:": [
+                        "If:from:and:do:else:": [
+                          "resp",
                           {
-                            "ReportKissing actor:": "@actor"
+                            "FromTxt:": {
+                              "CanReach actor:action:noun:": [
+                                "@actor",
+                                {
+                                  "FromTxt:": "kissing"
+                                },
+                                "@noun"
+                              ]
+                            }
                           },
                           {
-                            "Let:be:": [
-                              "success",
+                            "Not:": {
+                              "Is empty:": "@resp"
+                            }
+                          },
+                          {
+                            "Act:": [
                               {
-                                "FromBool:": true
+                                "Say:": "@resp"
                               }
                             ]
+                          },
+                          {
+                            "ElseDo:": {
+                              "Act:": [
+                                {
+                                  "If:from:and:do:else:": [
+                                    "resp",
+                                    {
+                                      "FromTxt:": {
+                                        "CanUse actor:action:noun:": [
+                                          "@actor",
+                                          {
+                                            "FromTxt:": "kissing"
+                                          },
+                                          "@noun"
+                                        ]
+                                      }
+                                    },
+                                    {
+                                      "Not:": {
+                                        "Is empty:": "@resp"
+                                      }
+                                    },
+                                    {
+                                      "Act:": [
+                                        {
+                                          "Say:": "@resp"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "ElseDo:": {
+                                        "Act:": [
+                                          {
+                                            "Send:event:": [
+                                              {
+                                                "Capture obj:": "@noun"
+                                              },
+                                              {
+                                                "Kiss actor:noun:": [
+                                                  "@actor",
+                                                  "@noun"
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
                           }
                         ]
                       }
@@ -289,76 +150,217 @@
             ]
           }
         ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Pattern:requires:": [
-        "report kissing",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "actor",
-                "actor"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "report kissing",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "actor kissing",
+      },
+      {
+        "--": ""
+      },
+      {
+        "Pattern:rules:": [
+          "can use",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "AllTrue:": [
+                      {
+                        "Cmp:is:txt:": [
+                          "@action",
                           {
-                            "RenderTemplate:": "{the:.actor|capitalize!} kisses {the:.noun}."
+                            "Equals": true
+                          },
+                          "kissing"
+                        ]
+                      },
+                      {
+                        "IsPlayer obj:": "@actor"
+                      }
+                    ]
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Let:be:": [
+                          "response",
+                          {
+                            "FromTxt:": {
+                              "Response:text:": [
+                                "can't kiss without consent",
+                                {
+                                  "RenderTemplate:": "{the:.noun|capitalize!} might not like that."
+                                }
+                              ]
+                            }
                           }
                         ]
                       }
+                    ]
+                  }
+                ]
+              },
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "AllTrue:": [
+                      {
+                        "Cmp:is:txt:": [
+                          "@action",
+                          {
+                            "Equals": true
+                          },
+                          "kissing"
+                        ]
+                      },
+                      {
+                        "Cmp:is:txt:": [
+                          "@actor",
+                          {
+                            "Equals": true
+                          },
+                          "@noun"
+                        ]
+                      },
+                      {
+                        "IsPlayer obj:": "@actor"
+                      }
+                    ]
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Let:be:": [
+                          "response",
+                          {
+                            "FromTxt:": {
+                              "Response:text:": [
+                                "can't kiss yourself",
+                                {
+                                  "RenderTemplate:": "{we:|capitalize!} don't get much from that."
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Listen kinds:handlers:": [
+          "actors",
+          [
+            {
+              "With:event:rules:": [
+                "while",
+                "kiss",
+                {
+                  "PatternRules:": [
+                    {
+                      "PatternRule:hook activity:": [
+                        {
+                          "Always": true
+                        },
+                        {
+                          "Act:": [
+                            {
+                              "ReportKissing actor:": "@actor"
+                            },
+                            {
+                              "Let:be:": [
+                                "success",
+                                {
+                                  "FromBool:": true
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "IsPlayer obj:": "@actor"
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "player kissing",
-                          {
-                            "RenderTemplate:": "{we:|capitalize!} kiss on {the:.noun}."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
             }
           ]
-        }
-      ]
-    }
-  ]
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Pattern:requires:": [
+          "report kissing",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "actor",
+                  "actor"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Pattern:rules:": [
+          "report kissing",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": {
+                          "Response:text:": [
+                            "actor kissing",
+                            {
+                              "RenderTemplate:": "{the:.actor|capitalize!} kisses {the:.noun}."
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "IsPlayer obj:": "@actor"
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": {
+                          "Response:text:": [
+                            "player kissing",
+                            {
+                              "RenderTemplate:": "{we:|capitalize!} kiss on {the:.noun}."
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }

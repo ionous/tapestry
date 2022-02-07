@@ -1,491 +1,493 @@
 {
-  "Story:": [
-    {
-      "Pattern:requires:returns:": [
-        "verbing",
-        {
-          "PatternParams:": [
-            {
-              "Text named:": "verb"
+  "Tapestry:": {
+    "Story:": [
+      {
+        "Pattern:requires:returns:": [
+          "verbing",
+          {
+            "PatternParams:": [
+              {
+                "Text named:": "verb"
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
+              "Text named:": "result"
             }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "Text named:": "result"
           }
-        }
-      ]
-    },
-    {
-      "Comment:": "verb adapts a verb from its specified (usually present) tense, to the story's tense. [ this is just a placeholder for future work. ] "
-    },
-    {
-      "Pattern:rules:": [
-        "verbing",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "result",
-                        "@verb"
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Pattern:requires:": [
-        "contain",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "noun",
-                "object"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "contain",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "If:do:else:": [
-                        {
-                          "KindOf:is:": [
-                            "@noun",
-                            "containers"
-                          ]
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": "contain"
-                            }
-                          ]
-                        },
-                        {
-                          "ElseDo:": {
+        ]
+      },
+      {
+        "Comment:": "verb adapts a verb from its specified (usually present) tense, to the story's tense. [ this is just a placeholder for future work. ] "
+      },
+      {
+        "Pattern:rules:": [
+          "verbing",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Let:be:": [
+                          "result",
+                          "@verb"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Pattern:requires:": [
+          "contain",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "noun",
+                  "object"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Pattern:rules:": [
+          "contain",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "If:do:else:": [
+                          {
+                            "KindOf:is:": [
+                              "@noun",
+                              "containers"
+                            ]
+                          },
+                          {
                             "Act:": [
                               {
-                                "Say:": "support"
+                                "Say:": "contain"
                               }
                             ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Pattern:requires:": [
-        "On",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "noun",
-                "object"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "On",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "If:do:else:": [
-                        {
-                          "KindOf:is:": [
-                            "@noun",
-                            "containers"
-                          ]
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": "in"
-                            }
-                          ]
-                        },
-                        {
-                          "ElseDo:": {
-                            "Act:": [
-                              {
-                                "Say:": "on"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Pattern:requires:": [
-        "Off",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "noun",
-                "object"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "Off",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "If:do:else:": [
-                        {
-                          "KindOf:is:": [
-                            "@noun",
-                            "containers"
-                          ]
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": "out"
-                            }
-                          ]
-                        },
-                        {
-                          "ElseDo:": {
-                            "Act:": [
-                              {
-                                "Say:": "off"
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Pattern:requires:": [
-        "Are",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "noun",
-                "object"
-              ]
-            },
-            {
-              "TextList named:": "names"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Comment:": "print \"is\" or \"are\" depending on the plurality of the noun, and (optionally) the length of the passed list of names. "
-    },
-    {
-      "Pattern:rules:": [
-        "Are",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "If:do:else:": [
-                        {
-                          "AnyTrue:": [
-                            {
-                              "Cmp:is:num:": [
+                          },
+                          {
+                            "ElseDo:": {
+                              "Act:": [
                                 {
-                                  "Len:": "@names"
-                                },
-                                {
-                                  "GreaterThan": []
-                                },
-                                1
-                              ]
-                            },
-                            {
-                              "Get obj:trait:": [
-                                "@noun",
-                                "plural named"
+                                  "Say:": "support"
+                                }
                               ]
                             }
-                          ]
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": "are"
-                            }
-                          ]
-                        },
-                        {
-                          "ElseDo:": {
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Pattern:requires:": [
+          "On",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "noun",
+                  "object"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Pattern:rules:": [
+          "On",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "If:do:else:": [
+                          {
+                            "KindOf:is:": [
+                              "@noun",
+                              "containers"
+                            ]
+                          },
+                          {
                             "Act:": [
                               {
-                                "Say:": "is"
+                                "Say:": "in"
                               }
                             ]
+                          },
+                          {
+                            "ElseDo:": {
+                              "Act:": [
+                                {
+                                  "Say:": "on"
+                                }
+                              ]
+                            }
                           }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "IsPlayer obj:": "@noun"
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": "are"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Comment:": "say the phrase of are not or is not ( depending on the plural of the noun )"
-    },
-    {
-      "Pattern:requires:": [
-        "Are not",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "noun",
-                "object"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "Are not",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": "is not"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Get obj:trait:": [
-                    "@noun",
-                    "plural named"
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": "are not"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "IsPlayer obj:": "@noun"
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": "are not"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Comment:": "say the contraction aren't or isn't ( depending on the plural of the noun )"
-    },
-    {
-      "Pattern:requires:": [
-        "Arent",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "noun",
-                "object"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "Arent",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": "isn't"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Get obj:trait:": [
-                    "@noun",
-                    "plural named"
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": "aren't"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "IsPlayer obj:": "@noun"
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": "aren't"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Pattern:requires:": [
+          "Off",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "noun",
+                  "object"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Pattern:rules:": [
+          "Off",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "If:do:else:": [
+                          {
+                            "KindOf:is:": [
+                              "@noun",
+                              "containers"
+                            ]
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "Say:": "out"
+                              }
+                            ]
+                          },
+                          {
+                            "ElseDo:": {
+                              "Act:": [
+                                {
+                                  "Say:": "off"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Pattern:requires:": [
+          "Are",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "noun",
+                  "object"
+                ]
+              },
+              {
+                "TextList named:": "names"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Comment:": "print \"is\" or \"are\" depending on the plurality of the noun, and (optionally) the length of the passed list of names. "
+      },
+      {
+        "Pattern:rules:": [
+          "Are",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "If:do:else:": [
+                          {
+                            "AnyTrue:": [
+                              {
+                                "Cmp:is:num:": [
+                                  {
+                                    "Len:": "@names"
+                                  },
+                                  {
+                                    "GreaterThan": true
+                                  },
+                                  1
+                                ]
+                              },
+                              {
+                                "Get obj:trait:": [
+                                  "@noun",
+                                  "plural named"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "Say:": "are"
+                              }
+                            ]
+                          },
+                          {
+                            "ElseDo:": {
+                              "Act:": [
+                                {
+                                  "Say:": "is"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "IsPlayer obj:": "@noun"
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": "are"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Comment:": "say the phrase of are not or is not ( depending on the plural of the noun )"
+      },
+      {
+        "Pattern:requires:": [
+          "Are not",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "noun",
+                  "object"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Pattern:rules:": [
+          "Are not",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": "is not"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Get obj:trait:": [
+                      "@noun",
+                      "plural named"
+                    ]
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": "are not"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "IsPlayer obj:": "@noun"
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": "are not"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Comment:": "say the contraction aren't or isn't ( depending on the plural of the noun )"
+      },
+      {
+        "Pattern:requires:": [
+          "Arent",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "noun",
+                  "object"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Pattern:rules:": [
+          "Arent",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": "isn't"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Get obj:trait:": [
+                      "@noun",
+                      "plural named"
+                    ]
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": "aren't"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "IsPlayer obj:": "@noun"
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": "aren't"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }

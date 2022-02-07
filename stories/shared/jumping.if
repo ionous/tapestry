@@ -1,140 +1,142 @@
 {
-  "Story:": [
-    {
-      "GrammarDecl:": {
-        "Directive:scans:": [
-          [
-            "jump",
-            "skip",
-            "hop"
-          ],
-          [
-            {
-              "As:": "jumping"
-            }
+  "Tapestry:": {
+    "Story:": [
+      {
+        "GrammarDecl:": {
+          "Directive:scans:": [
+            [
+              "jump",
+              "skip",
+              "hop"
+            ],
+            [
+              {
+                "As:": "jumping"
+              }
+            ]
           ]
+        }
+      },
+      {
+        "--": ""
+      },
+      {
+        "Event:action:args none:": [
+          "jump",
+          "jumping",
+          "nothing"
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "jumping",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:of:initially:": [
+                  "actor",
+                  "object",
+                  {
+                    "Get:from:": [
+                      "pawn",
+                      {
+                        "VarFields:": "agent"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "IsPlayer obj:": "@actor"
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "ReportJumping actor:": "@actor"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Pattern:requires:": [
+          "report jumping",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "actor",
+                  "actor"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "Pattern:rules:": [
+          "report jumping",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": {
+                          "Response:text:": [
+                            "actor jumping",
+                            {
+                              "RenderTemplate:": "{the:.actor|capitalize!} jumps on the spot."
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "IsPlayer obj:": "@actor"
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Say:": {
+                          "Response:text:": [
+                            "player jumping",
+                            {
+                              "RenderTemplate:": "{we:|capitalize!} jump on the spot."
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
         ]
       }
-    },
-    {
-      "--": ""
-    },
-    {
-      "Event:action:args none:": [
-        "jump",
-        "jumping",
-        "nothing"
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "jumping",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:initially:": [
-                "actor",
-                "object",
-                {
-                  "Get:from:": [
-                    "pawn",
-                    {
-                      "VarFields:": "agent"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "IsPlayer obj:": "@actor"
-                },
-                {
-                  "Act:": [
-                    {
-                      "ReportJumping actor:": "@actor"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Pattern:requires:": [
-        "report jumping",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "actor",
-                "actor"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "report jumping",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "actor jumping",
-                          {
-                            "RenderTemplate:": "{the:.actor|capitalize!} jumps on the spot."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "IsPlayer obj:": "@actor"
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "player jumping",
-                          {
-                            "RenderTemplate:": "{we:|capitalize!} jump on the spot."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+    ]
+  }
 }

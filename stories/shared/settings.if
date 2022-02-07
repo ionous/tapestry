@@ -1,77 +1,79 @@
 {
-  "Story:": [
-    {
-      "Make kinds:of:": [
-        "Settings",
-        "object"
-      ]
-    },
-    {
-      "Nouns:depict:": [
-        [
+  "Tapestry:": {
+    "Story:": [
+      {
+        "Make kinds:of:": [
+          "Settings",
+          "object"
+        ]
+      },
+      {
+        "Nouns:depict:": [
+          [
+            {
+              "Noun:named:": [
+                "our",
+                "settings"
+              ]
+            }
+          ],
           {
-            "Noun:named:": [
-              "our",
+            "Kind:named:": [
+              "isa",
               "settings"
             ]
           }
-        ],
-        {
-          "Kind:named:": [
-            "isa",
-            "settings"
-          ]
-        }
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Settings",
-        [
-          {
-            "Aspect of:": "abbreviated room descriptions"
-          }
         ]
-      ]
-    },
-    {
-      "KindsOfAspect:": " abbreviated room descriptions"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
-        " abbreviated room descriptions",
-        {
-          "TraitPhrase:trait:": [
-            "canbe",
-            [
-              "brief",
-              "verbose",
-              "superbrief"
+      },
+      {
+        "Kinds:have:": [
+          "Settings",
+          [
+            {
+              "Aspect of:": "abbreviated room descriptions"
+            }
+          ]
+        ]
+      },
+      {
+        "KindsOfAspect:": " abbreviated room descriptions"
+      },
+      {
+        "AspectTraits:traitPhrase:": [
+          " abbreviated room descriptions",
+          {
+            "TraitPhrase:trait:": [
+              "canbe",
+              [
+                "brief",
+                "verbose",
+                "superbrief"
+              ]
             ]
+          }
+        ]
+      },
+      {
+        "Kinds:have:": [
+          "Settings",
+          [
+            {
+              "Bool named:": "darkness witnessed"
+            }
           ]
-        }
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Settings",
-        [
-          {
-            "Bool named:": "darkness witnessed"
-          }
         ]
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Settings",
-        [
-          {
-            "--": "incremented whenever an object name gets printed. see \"mention object\" and \"print name\".",
-            "Number named:": "mentions"
-          }
+      },
+      {
+        "Kinds:have:": [
+          "Settings",
+          [
+            {
+              "--": "incremented whenever an object name gets printed. see \"mention object\" and \"print name\".",
+              "Number named:": "mentions"
+            }
+          ]
         ]
-      ]
-    }
-  ]
+      }
+    ]
+  }
 }

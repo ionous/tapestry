@@ -19,3 +19,4 @@ cmd/stem/stem
 *.zip
 jsn.old.txt
 stories/temp
+cmd/mosaic/_sampledata

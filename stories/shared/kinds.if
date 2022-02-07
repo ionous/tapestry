@@ -1,458 +1,460 @@
 {
-  "Story:": [
-    {
-      "Make kinds:of:": [
-        "Objects",
-        "kind"
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Objects",
-        [
+  "Tapestry:": {
+    "Story:": [
+      {
+        "Make kinds:of:": [
+          "Objects",
+          "kind"
+        ]
+      },
+      {
+        "Kinds:have:": [
+          "Objects",
+          [
+            {
+              "Text named:": "description"
+            }
+          ]
+        ]
+      },
+      {
+        "Kinds:have:": [
+          "Objects",
+          [
+            {
+              "Text named:": "grouping label"
+            }
+          ]
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Make kinds:of:": [
+          "Things",
+          "object"
+        ]
+      },
+      {
+        "KindsOfAspect:": " possessiveness"
+      },
+      {
+        "AspectTraits:traitPhrase:": [
+          " possessiveness",
           {
-            "Text named:": "description"
+            "TraitPhrase:trait:": [
+              "canbe",
+              [
+                "not worn",
+                "worn"
+              ]
+            ]
           }
         ]
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Objects",
-        [
+      },
+      {
+        "KindsOfAspect:": " portability"
+      },
+      {
+        "AspectTraits:traitPhrase:": [
+          " portability",
           {
-            "Text named:": "grouping label"
+            "TraitPhrase:trait:": [
+              "either",
+              [
+                "portable",
+                "fixed in place"
+              ]
+            ]
           }
         ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Make kinds:of:": [
-        "Things",
-        "object"
-      ]
-    },
-    {
-      "KindsOfAspect:": " possessiveness"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
-        " possessiveness",
-        {
-          "TraitPhrase:trait:": [
-            "canbe",
-            [
-              "not worn",
-              "worn"
-            ]
+      },
+      {
+        "Kinds:have:": [
+          "Things",
+          [
+            {
+              "Aspect of:": "portability"
+            },
+            {
+              "Aspect of:": "possessiveness"
+            },
+            {
+              "Aspect of:": "wearability"
+            }
           ]
-        }
-      ]
-    },
-    {
-      "KindsOfAspect:": " portability"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
-        " portability",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "portable",
-              "fixed in place"
+        ]
+      },
+      {
+        "KindsOfAspect:": " scenery status"
+      },
+      {
+        "AspectTraits:traitPhrase:": [
+          " scenery status",
+          {
+            "TraitPhrase:trait:": [
+              "either",
+              [
+                "not scenery",
+                "scenery"
+              ]
             ]
-          ]
-        }
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Things",
-        [
-          {
-            "Aspect of:": "portability"
-          },
-          {
-            "Aspect of:": "possessiveness"
-          },
-          {
-            "Aspect of:": "wearability"
           }
         ]
-      ]
-    },
-    {
-      "KindsOfAspect:": " scenery status"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
-        " scenery status",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "not scenery",
-              "scenery"
-            ]
+      },
+      {
+        "Kinds:have:": [
+          "Things",
+          [
+            {
+              "Aspect of:": "scenery status"
+            }
           ]
-        }
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Things",
-        [
+        ]
+      },
+      {
+        "Kinds:have:": [
+          "Things",
+          [
+            {
+              "Text named:": "initial appearance"
+            }
+          ]
+        ]
+      },
+      {
+        "Kinds:have:": [
+          "Things",
+          [
+            {
+              "Aspect of:": "mentionable"
+            }
+          ]
+        ]
+      },
+      {
+        "KindsOfAspect:": " mentionable"
+      },
+      {
+        "AspectTraits:traitPhrase:": [
+          " mentionable",
           {
-            "Aspect of:": "scenery status"
+            "TraitPhrase:trait:": [
+              "either",
+              [
+                "not mentioned",
+                "mentioned"
+              ]
+            ]
           }
         ]
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Things",
-        [
+      },
+      {
+        "Kinds:have:": [
+          "Things",
+          [
+            {
+              "Aspect of:": "handleable"
+            }
+          ]
+        ]
+      },
+      {
+        "KindsOfAspect:": " handleable"
+      },
+      {
+        "AspectTraits:traitPhrase:": [
+          " handleable",
           {
-            "Text named:": "initial appearance"
+            "TraitPhrase:trait:": [
+              "either",
+              [
+                "not handled",
+                "handled"
+              ]
+            ]
           }
         ]
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Things",
-        [
+      },
+      {
+        "KindsOfAspect:": " wearability"
+      },
+      {
+        "AspectTraits:traitPhrase:": [
+          " wearability",
           {
-            "Aspect of:": "mentionable"
+            "TraitPhrase:trait:": [
+              "canbe",
+              [
+                "not wearable",
+                "wearable"
+              ]
+            ]
           }
         ]
-      ]
-    },
-    {
-      "KindsOfAspect:": " mentionable"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
-        " mentionable",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "not mentioned",
-              "mentioned"
-            ]
-          ]
-        }
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Things",
-        [
+      },
+      {
+        "--": ""
+      },
+      {
+        "Make kinds:of:": [
+          "Actors",
+          "thing"
+        ]
+      },
+      {
+        "Make kinds:of:": [
+          " animals",
+          "actor"
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Make kinds:of:": [
+          " props",
+          "thing"
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Make kinds:of:": [
+          " openers",
+          "prop"
+        ]
+      },
+      {
+        "KindsOfAspect:": " open status"
+      },
+      {
+        "AspectTraits:traitPhrase:": [
+          " open status",
           {
-            "Aspect of:": "handleable"
+            "TraitPhrase:trait:": [
+              "either",
+              [
+                "open",
+                "closed"
+              ]
+            ]
           }
         ]
-      ]
-    },
-    {
-      "KindsOfAspect:": " handleable"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
-        " handleable",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "not handled",
-              "handled"
-            ]
-          ]
-        }
-      ]
-    },
-    {
-      "KindsOfAspect:": " wearability"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
-        " wearability",
-        {
-          "TraitPhrase:trait:": [
-            "canbe",
-            [
-              "not wearable",
-              "wearable"
-            ]
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Make kinds:of:": [
-        "Actors",
-        "thing"
-      ]
-    },
-    {
-      "Make kinds:of:": [
-        " animals",
-        "actor"
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Make kinds:of:": [
-        " props",
-        "thing"
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Make kinds:of:": [
-        " openers",
-        "prop"
-      ]
-    },
-    {
-      "KindsOfAspect:": " open status"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
-        " open status",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "open",
-              "closed"
-            ]
-          ]
-        }
-      ]
-    },
-    {
-      "KindsOfAspect:": " openability"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
-        " openability",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "unopenable",
-              "openable"
-            ]
-          ]
-        }
-      ]
-    },
-    {
-      "KindsOfAspect:": " locked status"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
-        " locked status",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "unlocked",
-              "locked"
-            ]
-          ]
-        }
-      ]
-    },
-    {
-      "KindsOfAspect:": " lockable status"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
-        " lockable status",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "lockable",
-              "unlockable"
-            ]
-          ]
-        }
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Openers",
-        [
+      },
+      {
+        "KindsOfAspect:": " openability"
+      },
+      {
+        "AspectTraits:traitPhrase:": [
+          " openability",
           {
-            "Aspect of:": "open status"
-          },
-          {
-            "Aspect of:": "openability"
-          },
-          {
-            "Aspect of:": "locked status"
-          },
-          {
-            "Aspect of:": "lockable status"
+            "TraitPhrase:trait:": [
+              "either",
+              [
+                "unopenable",
+                "openable"
+              ]
+            ]
           }
         ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Make kinds:of:": [
-        " containers",
-        "opener"
-      ]
-    },
-    {
-      "KindsOfAspect:": " enterability"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
-        " enterability",
-        {
-          "TraitPhrase:trait:": [
-            "canbe",
-            [
-              "enterable",
-              "not enterable"
+      },
+      {
+        "KindsOfAspect:": " locked status"
+      },
+      {
+        "AspectTraits:traitPhrase:": [
+          " locked status",
+          {
+            "TraitPhrase:trait:": [
+              "either",
+              [
+                "unlocked",
+                "locked"
+              ]
             ]
-          ]
-        }
-      ]
-    },
-    {
-      "KindsOfAspect:": " opacity"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
-        " opacity",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "opaque",
-              "transparent"
+          }
+        ]
+      },
+      {
+        "KindsOfAspect:": " lockable status"
+      },
+      {
+        "AspectTraits:traitPhrase:": [
+          " lockable status",
+          {
+            "TraitPhrase:trait:": [
+              "either",
+              [
+                "lockable",
+                "unlockable"
+              ]
             ]
-          ]
-        }
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Containers",
-        [
-          {
-            "Aspect of:": "enterability"
-          },
-          {
-            "Aspect of:": "opacity"
           }
         ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "KindsOfAspect:": " illumination"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
-        " illumination",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "unlit",
-              "lit"
+      },
+      {
+        "Kinds:have:": [
+          "Openers",
+          [
+            {
+              "Aspect of:": "open status"
+            },
+            {
+              "Aspect of:": "openability"
+            },
+            {
+              "Aspect of:": "locked status"
+            },
+            {
+              "Aspect of:": "lockable status"
+            }
+          ]
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Make kinds:of:": [
+          " containers",
+          "opener"
+        ]
+      },
+      {
+        "KindsOfAspect:": " enterability"
+      },
+      {
+        "AspectTraits:traitPhrase:": [
+          " enterability",
+          {
+            "TraitPhrase:trait:": [
+              "canbe",
+              [
+                "enterable",
+                "not enterable"
+              ]
             ]
+          }
+        ]
+      },
+      {
+        "KindsOfAspect:": " opacity"
+      },
+      {
+        "AspectTraits:traitPhrase:": [
+          " opacity",
+          {
+            "TraitPhrase:trait:": [
+              "either",
+              [
+                "opaque",
+                "transparent"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "Kinds:have:": [
+          "Containers",
+          [
+            {
+              "Aspect of:": "enterability"
+            },
+            {
+              "Aspect of:": "opacity"
+            }
           ]
-        }
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Things",
-        [
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "KindsOfAspect:": " illumination"
+      },
+      {
+        "AspectTraits:traitPhrase:": [
+          " illumination",
           {
-            "Aspect of:": "illumination"
+            "TraitPhrase:trait:": [
+              "either",
+              [
+                "unlit",
+                "lit"
+              ]
+            ]
           }
         ]
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Rooms",
-        [
-          {
-            "Aspect of:": "illumination"
-          }
+      },
+      {
+        "Kinds:have:": [
+          "Things",
+          [
+            {
+              "Aspect of:": "illumination"
+            }
+          ]
         ]
-      ]
-    },
-    {
-      "Certainties:areBeing:certainty:trait:": [
-        " rooms",
-        "are",
-        "usually",
-        "lit"
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Make kinds:of:": [
-        " supporters",
-        "prop"
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Make kinds:of:": [
-        " rooms",
-        "object"
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Rooms",
-        [
-          {
-            "Bool named:": "visited"
-          }
+      },
+      {
+        "Kinds:have:": [
+          "Rooms",
+          [
+            {
+              "Aspect of:": "illumination"
+            }
+          ]
         ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Make kinds:of:": [
-        " regions",
-        "object"
-      ]
-    }
-  ]
+      },
+      {
+        "Certainties:areBeing:certainty:trait:": [
+          " rooms",
+          "are",
+          "usually",
+          "lit"
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Make kinds:of:": [
+          " supporters",
+          "prop"
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Make kinds:of:": [
+          " rooms",
+          "object"
+        ]
+      },
+      {
+        "Kinds:have:": [
+          "Rooms",
+          [
+            {
+              "Bool named:": "visited"
+            }
+          ]
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Make kinds:of:": [
+          " regions",
+          "object"
+        ]
+      }
+    ]
+  }
 }

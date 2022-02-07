@@ -1,124 +1,251 @@
 {
-  "Story:": [
-    {
-      "Make kinds:of:": [
-        "Compasses",
-        "records"
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Rooms",
-        [
-          {
-            "Record named:": "compass"
-          }
+  "Tapestry:": {
+    "Story:": [
+      {
+        "Make kinds:of:": [
+          "Compasses",
+          "records"
         ]
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Compasses",
-        [
-          {
-            "Text named:of:": [
-              "north",
-              "door"
-            ]
-          },
-          {
-            "Text named:of:": [
-              "east",
-              "door"
-            ]
-          },
-          {
-            "Text named:of:": [
-              "south",
-              "door"
-            ]
-          },
-          {
-            "Text named:of:": [
-              "west",
-              "door"
-            ]
-          },
-          {
-            "Text named:of:": [
-              "up",
-              "door"
-            ]
-          },
-          {
-            "Text named:of:": [
-              "down",
-              "door"
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "Make:opposite:": [
-        "north",
-        "south"
-      ]
-    },
-    {
-      "Make:opposite:": [
-        "east",
-        "west"
-      ]
-    },
-    {
-      "Make:opposite:": [
-        "up",
-        "down"
-      ]
-    },
-    {
-      "Make kinds:of:": [
-        "Doors",
-        "opener"
-      ]
-    },
-    {
-      "Kinds:have:": [
-        "Doors",
-        [
-          {
-            "Text named:of:": [
-              "destination",
-              "room"
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:story:": [
-        "traversal",
-        {
-          "Story:": [
+      },
+      {
+        "Kinds:have:": [
+          "Rooms",
+          [
             {
-              "Nouns:depict:": [
-                [
+              "Record named:": "compass"
+            }
+          ]
+        ]
+      },
+      {
+        "Kinds:have:": [
+          "Compasses",
+          [
+            {
+              "Text named:of:": [
+                "north",
+                "door"
+              ]
+            },
+            {
+              "Text named:of:": [
+                "east",
+                "door"
+              ]
+            },
+            {
+              "Text named:of:": [
+                "south",
+                "door"
+              ]
+            },
+            {
+              "Text named:of:": [
+                "west",
+                "door"
+              ]
+            },
+            {
+              "Text named:of:": [
+                "up",
+                "door"
+              ]
+            },
+            {
+              "Text named:of:": [
+                "down",
+                "door"
+              ]
+            }
+          ]
+        ]
+      },
+      {
+        "Make:opposite:": [
+          "north",
+          "south"
+        ]
+      },
+      {
+        "Make:opposite:": [
+          "east",
+          "west"
+        ]
+      },
+      {
+        "Make:opposite:": [
+          "up",
+          "down"
+        ]
+      },
+      {
+        "Make kinds:of:": [
+          "Doors",
+          "opener"
+        ]
+      },
+      {
+        "Kinds:have:": [
+          "Doors",
+          [
+            {
+              "Text named:of:": [
+                "destination",
+                "room"
+              ]
+            }
+          ]
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "TestScene:story:": [
+          "traversal",
+          {
+            "Story:": [
+              {
+                "Nouns:depict:": [
+                  [
+                    {
+                      "Noun:named:": [
+                        "the",
+                        "lobby"
+                      ]
+                    },
+                    {
+                      "Noun:named:": [
+                        "the",
+                        "parapet"
+                      ]
+                    },
+                    {
+                      "Noun:named:": [
+                        "the",
+                        "foyer"
+                      ]
+                    },
+                    {
+                      "Noun:named:": [
+                        "the",
+                        "cloak room"
+                      ]
+                    },
+                    {
+                      "Noun:named:": [
+                        "the",
+                        "basement"
+                      ]
+                    },
+                    {
+                      "Noun:named:": [
+                        "the",
+                        "outside"
+                      ]
+                    }
+                  ],
+                  {
+                    "Kind:named:": [
+                      "isa",
+                      "room"
+                    ]
+                  }
+                ]
+              },
+              {
+                "Heading:from:and:otherRoom:": [
+                  "North",
                   {
                     "Noun:named:": [
                       "the",
                       "lobby"
                     ]
                   },
+                  "arriving_at",
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "foyer"
+                    ]
+                  }
+                ]
+              },
+              {
+                "Heading:from:and:otherRoom:": [
+                  "Down",
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "lobby"
+                    ]
+                  },
+                  "arriving_at",
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "basement"
+                    ]
+                  }
+                ]
+              },
+              {
+                "Heading:from:and:otherRoom:": [
+                  "Up",
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "lobby"
+                    ]
+                  },
+                  "connecting_to",
                   {
                     "Noun:named:": [
                       "the",
                       "parapet"
                     ]
+                  }
+                ]
+              },
+              {
+                "Heading:from:and:otherRoom:": [
+                  "North",
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "foyer"
+                    ]
                   },
+                  "connecting_to",
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "outside"
+                    ]
+                  }
+                ]
+              },
+              {
+                "Heading:from:and:otherRoom:": [
+                  "West",
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "foyer"
+                    ]
+                  },
+                  "arriving_at",
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "lobby"
+                    ]
+                  }
+                ]
+              },
+              {
+                "Heading:from:via:and:otherRoom:": [
+                  "South",
                   {
                     "Noun:named:": [
                       "the",
@@ -128,165 +255,40 @@
                   {
                     "Noun:named:": [
                       "the",
-                      "cloak room"
+                      "curtain"
                     ]
                   },
+                  "connecting_to",
+                  {
+                    "Noun:named:": [
+                      "the",
+                      "cloak room"
+                    ]
+                  }
+                ]
+              },
+              {
+                "Heading:from:and:otherRoom:": [
+                  "South",
                   {
                     "Noun:named:": [
                       "the",
                       "basement"
                     ]
                   },
+                  "arriving_at",
                   {
                     "Noun:named:": [
                       "the",
                       "outside"
                     ]
                   }
-                ],
-                {
-                  "Kind:named:": [
-                    "isa",
-                    "room"
-                  ]
-                }
-              ]
-            },
-            {
-              "Heading:from:and:otherRoom:": [
-                "North",
-                {
-                  "Noun:named:": [
-                    "the",
-                    "lobby"
-                  ]
-                },
-                "arriving_at",
-                {
-                  "Noun:named:": [
-                    "the",
-                    "foyer"
-                  ]
-                }
-              ]
-            },
-            {
-              "Heading:from:and:otherRoom:": [
-                "Down",
-                {
-                  "Noun:named:": [
-                    "the",
-                    "lobby"
-                  ]
-                },
-                "arriving_at",
-                {
-                  "Noun:named:": [
-                    "the",
-                    "basement"
-                  ]
-                }
-              ]
-            },
-            {
-              "Heading:from:and:otherRoom:": [
-                "Up",
-                {
-                  "Noun:named:": [
-                    "the",
-                    "lobby"
-                  ]
-                },
-                "connecting_to",
-                {
-                  "Noun:named:": [
-                    "the",
-                    "parapet"
-                  ]
-                }
-              ]
-            },
-            {
-              "Heading:from:and:otherRoom:": [
-                "North",
-                {
-                  "Noun:named:": [
-                    "the",
-                    "foyer"
-                  ]
-                },
-                "connecting_to",
-                {
-                  "Noun:named:": [
-                    "the",
-                    "outside"
-                  ]
-                }
-              ]
-            },
-            {
-              "Heading:from:and:otherRoom:": [
-                "West",
-                {
-                  "Noun:named:": [
-                    "the",
-                    "foyer"
-                  ]
-                },
-                "arriving_at",
-                {
-                  "Noun:named:": [
-                    "the",
-                    "lobby"
-                  ]
-                }
-              ]
-            },
-            {
-              "Heading:from:via:and:otherRoom:": [
-                "South",
-                {
-                  "Noun:named:": [
-                    "the",
-                    "foyer"
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    "curtain"
-                  ]
-                },
-                "connecting_to",
-                {
-                  "Noun:named:": [
-                    "the",
-                    "cloak room"
-                  ]
-                }
-              ]
-            },
-            {
-              "Heading:from:and:otherRoom:": [
-                "South",
-                {
-                  "Noun:named:": [
-                    "the",
-                    "basement"
-                  ]
-                },
-                "arriving_at",
-                {
-                  "Noun:named:": [
-                    "the",
-                    "outside"
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }

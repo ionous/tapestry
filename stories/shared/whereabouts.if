@@ -1,1334 +1,1336 @@
 {
-  "Story:": [
-    {
-      "--": [
-        "The placement of objects in the game world",
-        "One parent to many children."
-      ],
-      "KindOfRelation:cardinality oneToMany:": [
-        "whereabouts",
-        {
-          "OneToMany:kinds:": [
-            "object",
-            "objects"
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "--": [
-        "An object indicating the position or ownership of another:",
-        "A kitchen encloses the cook, the cook holds a sack, the sack contains some flour."
-      ],
-      "Pattern:requires:returns:": [
-        "parentOf",
-        {
-          "PatternParams:": [
-            {
+  "Tapestry:": {
+    "Story:": [
+      {
+        "--": [
+          "The placement of objects in the game world",
+          "One parent to many children."
+        ],
+        "KindOfRelation:cardinality oneToMany:": [
+          "whereabouts",
+          {
+            "OneToMany:kinds:": [
+              "object",
+              "objects"
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "--": [
+          "An object indicating the position or ownership of another:",
+          "A kitchen encloses the cook, the cook holds a sack, the sack contains some flour."
+        ],
+        "Pattern:requires:returns:": [
+          "parentOf",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
               "Text named:of:": [
-                "obj",
+                "parent",
                 "object"
               ]
             }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "Text named:of:": [
-              "parent",
-              "object"
+          }
+        ]
+      },
+      {
+        "Pattern:rules:": [
+          "parentOf",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Let:be:": [
+                          "parent",
+                          {
+                            "FromTxt:": {
+                              "Reciprocal:object:": [
+                                "whereabouts",
+                                "@obj"
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "KindOf:is:": [
+                      "@obj",
+                      "agents"
+                    ]
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Let:be:": [
+                          "parent",
+                          {
+                            "FromTxt:": {
+                              "Reciprocal:object:": [
+                                "whereabouts",
+                                {
+                                  "Get:from:": [
+                                    "pawn",
+                                    {
+                                      "VarFields:": "obj"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
             ]
           }
-        }
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "parentOf",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "parent",
-                        {
-                          "FromTxt:": {
-                            "Reciprocal:object:": [
-                              "whereabouts",
-                              "@obj"
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "--": [
+          "Returns the name of the specified object followed by all of its parents names.",
+          "Often used for event handling."
+        ],
+        "Pattern:requires:returns:": [
+          "Capture",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
+              "TextList named:": "list"
+            }
+          }
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "Capture",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:of:initially:": [
+                  "it",
+                  "object",
+                  "@obj"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Repeating:do:": [
+                          {
+                            "Not:": {
+                              "Is empty:": "@it"
+                            }
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "Put:into:": [
+                                  "@it",
+                                  {
+                                    "IntoTxts:": "list"
+                                  }
+                                ]
+                              },
+                              {
+                                "Let:be:": [
+                                  "it",
+                                  {
+                                    "FromTxt:": {
+                                      "ParentOf obj:": {
+                                        "FromTxt:": "@it"
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
                             ]
                           }
-                        }
-                      ]
-                    }
-                  ]
-                }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "Pattern:requires:returns:": [
+          "childrenOf",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
+              "TextList named:": "kids"
+            }
+          }
+        ]
+      },
+      {
+        "Pattern:rules:": [
+          "childrenOf",
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Let:be:": [
+                          "kids",
+                          {
+                            "FromTxts:": {
+                              "Relatives:object:": [
+                                "whereabouts",
+                                "@obj"
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "--": "The room in which an object can be found.",
+        "Pattern:requires:returns:": [
+          "CurrentRoom",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
+              "Text named:of:": [
+                "room",
+                "room"
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "KindOf:is:": [
-                    "@obj",
-                    "agents"
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "parent",
-                        {
-                          "FromTxt:": {
-                            "Reciprocal:object:": [
-                              "whereabouts",
+            }
+          }
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "CurrentRoom",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:of:initially:": [
+                  "search",
+                  "object",
+                  "@obj"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Repeating:do:": [
+                          {
+                            "Not:": {
+                              "Is empty:": "@search"
+                            }
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "If:do:": [
+                                  {
+                                    "KindOf:is:": [
+                                      "@search",
+                                      "rooms"
+                                    ]
+                                  },
+                                  {
+                                    "Act:": [
+                                      {
+                                        "Let:be:": [
+                                          "room",
+                                          {
+                                            "FromTxt:": "@search"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "Break": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "Let:be:": [
+                                  "search",
+                                  {
+                                    "FromTxt:": {
+                                      "ParentOf obj:": "@search"
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "If:do:": [
+                                  {
+                                    "Cmp:is:txt:": [
+                                      "@search",
+                                      {
+                                        "Equals": true
+                                      },
+                                      "@obj"
+                                    ]
+                                  },
+                                  {
+                                    "Act:": [
+                                      {
+                                        "--": "Parent cycle detected",
+                                        "Break": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "--": [
+          "Finds the innermost object housing two objects.",
+          "However, if one object directly encloses the other, it will return that object."
+        ],
+        "Pattern:requires:returns:": [
+          "Common Ancestor",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "object",
+                  "object"
+                ]
+              },
+              {
+                "Text named:of:": [
+                  "other object",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
+              "Text named:of:": [
+                "ancestor",
+                "object"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "Common Ancestor",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:of:": [
+                  "o1",
+                  "object"
+                ]
+              },
+              {
+                "Text named:of:": [
+                  "o2",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Let:be:": [
+                          "o1",
+                          "@object"
+                        ]
+                      },
+                      {
+                        "--": "We search every parent of the second object for every parent of the first object. Slow but simple.",
+                        "Repeating:do:": [
+                          {
+                            "Is empty:": "@ancestor"
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "Let:be:": [
+                                  "o2",
+                                  "@other object"
+                                ]
+                              },
+                              {
+                                "Repeating:do:": [
+                                  true,
+                                  {
+                                    "Act:": [
+                                      {
+                                        "If:do:": [
+                                          {
+                                            "Cmp:is:txt:": [
+                                              "@o1",
+                                              {
+                                                "Equals": true
+                                              },
+                                              "@o2"
+                                            ]
+                                          },
+                                          {
+                                            "Act:": [
+                                              {
+                                                "--": "Success!",
+                                                "Let:be:": [
+                                                  "ancestor",
+                                                  "@o2"
+                                                ]
+                                              },
+                                              {
+                                                "Break": true
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "Let:be:": [
+                                          "o2",
+                                          {
+                                            "FromTxt:": {
+                                              "ParentOf obj:": "@o2"
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "If:do:else:": [
+                                          {
+                                            "Cmp:is:txt:": [
+                                              "@o2",
+                                              {
+                                                "Equals": true
+                                              },
+                                              "@other object"
+                                            ]
+                                          },
+                                          {
+                                            "Act:": [
+                                              {
+                                                "Break": true
+                                              }
+                                            ]
+                                          },
+                                          {
+                                            "ElseIf:do:": [
+                                              {
+                                                "Cmp:is:txt:": [
+                                                  "@o2",
+                                                  {
+                                                    "Equals": true
+                                                  },
+                                                  ""
+                                                ]
+                                              },
+                                              {
+                                                "Act:": [
+                                                  {
+                                                    "Break": true
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "Let:be:": [
+                                  "o1",
+                                  {
+                                    "FromTxt:": {
+                                      "ParentOf obj:": "@o1"
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "If:do:else:": [
+                                  {
+                                    "Cmp:is:txt:": [
+                                      "@o1",
+                                      {
+                                        "Equals": true
+                                      },
+                                      "@object"
+                                    ]
+                                  },
+                                  {
+                                    "Act:": [
+                                      {
+                                        "--": "parent cycle detected",
+                                        "Break": true
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "ElseIf:do:": [
+                                      {
+                                        "Cmp:is:txt:": [
+                                          "@o1",
+                                          {
+                                            "Equals": true
+                                          },
+                                          ""
+                                        ]
+                                      },
+                                      {
+                                        "Act:": [
+                                          {
+                                            "--": "out of world",
+                                            "Break": true
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "--": "Returns true if the root is a parent of the object.",
+        "Pattern:requires:returns:": [
+          "ancestorOf",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "object"
+                ]
+              },
+              {
+                "Text named:of:": [
+                  "root",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
+              "--": "true if one object acts as the ancestor of another.",
+              "Bool named:": "isAncestor"
+            }
+          }
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "ancestorOf",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:of:": [
+                  "up",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Let:be:": [
+                          "up",
+                          {
+                            "FromTxt:": "@obj"
+                          }
+                        ]
+                      },
+                      {
+                        "Repeating:do:": [
+                          true,
+                          {
+                            "Act:": [
+                              {
+                                "--": "Step up immediately, indirect implies objects dont hold themselves.",
+                                "Let:be:": [
+                                  "up",
+                                  {
+                                    "FromTxt:": {
+                                      "ParentOf obj:": "@up"
+                                    }
+                                  }
+                                ]
+                              },
+                              {
+                                "If:do:else:": [
+                                  {
+                                    "Cmp:is:txt:": [
+                                      "@up",
+                                      {
+                                        "Equals": true
+                                      },
+                                      "@obj"
+                                    ]
+                                  },
+                                  {
+                                    "Act:": [
+                                      {
+                                        "--": "parent cycle detected",
+                                        "Break": true
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "ElseIf:do:": [
+                                      {
+                                        "Cmp:is:txt:": [
+                                          "@up",
+                                          {
+                                            "Equals": true
+                                          },
+                                          ""
+                                        ]
+                                      },
+                                      {
+                                        "Act:": [
+                                          {
+                                            "--": "out of world",
+                                            "Break": true
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "If:do:": [
+                                  {
+                                    "Cmp:is:txt:": [
+                                      "@up",
+                                      {
+                                        "Equals": true
+                                      },
+                                      "@root"
+                                    ]
+                                  },
+                                  {
+                                    "Act:": [
+                                      {
+                                        "--": "Success!",
+                                        "Let:be:": [
+                                          "isAncestor",
+                                          {
+                                            "FromBool:": true
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "Break": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "--": [
+          "If the parent of the specified object is a valid enclosure, return its name.",
+          "By default this means if the parent is a room, a supporter, or a container."
+        ],
+        "Pattern:requires:returns:": [
+          "locationOf",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
+              "Text named:of:": [
+                "location",
+                "object"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "locationOf",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:of:initially:": [
+                  "parent",
+                  "object",
+                  {
+                    "ParentOf obj:": "@obj"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "If:do:": [
+                          {
+                            "AnyTrue:": [
+                              {
+                                "KindOf:is:": [
+                                  "@parent",
+                                  "containers"
+                                ]
+                              },
+                              {
+                                "KindOf:is:": [
+                                  "@parent",
+                                  "supporters"
+                                ]
+                              },
+                              {
+                                "KindOf:is:": [
+                                  "@parent",
+                                  "rooms"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "Let:be:": [
+                                  "location",
+                                  "@parent"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "--": "If the parent of the specified object is a kind of supporter, return its name.",
+        "Pattern:requires:returns:": [
+          "SupporterOf",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
+              "Text named:of:": [
+                "supporter",
+                "supporter"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "SupporterOf",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:of:initially:": [
+                  "parent",
+                  "object",
+                  {
+                    "ParentOf obj:": "@obj"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "If:do:": [
+                          {
+                            "KindOf:is:": [
+                              "@parent",
+                              "supporters"
+                            ]
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "Let:be:": [
+                                  "supporter",
+                                  "@parent"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "--": "If the parent of the specified object is a kind of container, return its name.",
+        "Pattern:requires:returns:": [
+          "ContainerOf",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
+              "Text named:of:": [
+                "container",
+                "container"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "ContainerOf",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:of:initially:": [
+                  "parent",
+                  "object",
+                  {
+                    "ParentOf obj:": "@obj"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "If:do:": [
+                          {
+                            "KindOf:is:": [
+                              "@parent",
+                              "containers"
+                            ]
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "Let:be:": [
+                                  "container",
+                                  "@parent"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "--": "If the parent of the specified object is wearing or carrying the noun, return its name.",
+        "Pattern:requires:returns:": [
+          "holderOf",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
+              "Text named:of:": [
+                "owner",
+                "actor"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "holderOf",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:of:": [
+                  "parent",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Let:be:": [
+                          "parent",
+                          {
+                            "FromTxt:": {
+                              "ParentOf obj:": "@obj"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "If:do:": [
+                          {
+                            "KindOf:is:": [
+                              "@parent",
+                              "actors"
+                            ]
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "Let:be:": [
+                                  "owner",
+                                  "@parent"
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "--": [
+          "If the parent of the specified object is carrying the noun, return its name.",
+          "Note that only actors can carry other objects."
+        ],
+        "Pattern:requires:returns:": [
+          "CarrierOf",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
+              "Text named:of:": [
+                "carrier",
+                "object"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "CarrierOf",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:of:": [
+                  "parent",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Let:be:": [
+                          "parent",
+                          {
+                            "FromTxt:": {
+                              "ParentOf obj:": "@obj"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "If:do:": [
+                          {
+                            "AllTrue:": [
+                              {
+                                "KindOf:is:": [
+                                  "@parent",
+                                  "actors"
+                                ]
+                              },
                               {
                                 "Get:from:": [
-                                  "pawn",
+                                  "not worn",
                                   {
                                     "VarFields:": "obj"
                                   }
                                 ]
                               }
                             ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "--": [ 
-        "Returns the name of the specified object followed by all of its parents names.",
-        "Often used for event handling."
-      ],
-      "Pattern:requires:returns:": [
-        "Capture",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "TextList named:": "list"
-          }
-        }
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "Capture",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:initially:": [
-                "it",
-                "object",
-                "@obj"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Repeating:do:": [
-                        {
-                          "Not:": {
-                            "Is empty:": "@it"
-                          }
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Put:into:": [
-                                "@it",
-                                {
-                                  "IntoTxts:": "list"
-                                }
-                              ]
-                            },
-                            {
-                              "Let:be:": [
-                                "it",
-                                {
-                                  "FromTxt:": {
-                                    "ParentOf obj:": {
-                                      "FromTxt:": "@it"
-                                    }
-                                  }
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Pattern:requires:returns:": [
-        "childrenOf",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "TextList named:": "kids"
-          }
-        }
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "childrenOf",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "kids",
-                        {
-                          "FromTxts:": {
-                            "Relatives:object:": [
-                              "whereabouts",
-                              "@obj"
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "Let:be:": [
+                                  "carrier",
+                                  "@parent"
+                                ]
+                              }
                             ]
                           }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "--": "The room in which an object can be found.",
-      "Pattern:requires:returns:": [
-        "CurrentRoom",
-        {
-          "PatternParams:": [
-            {
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "--": ""
+      },
+      {
+        "--": [
+          "If the parent of the specified object is wearing the noun, return its name.",
+          "Note that only actors can wear other objects."
+        ],
+        "Pattern:requires:returns:": [
+          "WearerOf",
+          {
+            "PatternParams:": [
+              {
+                "Text named:of:": [
+                  "obj",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternResult:": {
               "Text named:of:": [
-                "obj",
+                "wearer",
                 "object"
               ]
             }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "Text named:of:": [
-              "room",
-              "room"
-            ]
           }
-        }
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "CurrentRoom",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:initially:": [
-                "search",
-                "object",
-                "@obj"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Repeating:do:": [
-                        {
-                          "Not:": {
-                            "Is empty:": "@search"
+        ]
+      },
+      {
+        "Pattern:provides:rules:": [
+          "WearerOf",
+          {
+            "PatternLocals:": [
+              {
+                "Text named:of:": [
+                  "parent",
+                  "object"
+                ]
+              }
+            ]
+          },
+          {
+            "PatternRules:": [
+              {
+                "PatternRule:hook activity:": [
+                  {
+                    "Always": true
+                  },
+                  {
+                    "Act:": [
+                      {
+                        "Let:be:": [
+                          "parent",
+                          {
+                            "FromTxt:": {
+                              "ParentOf obj:": "@obj"
+                            }
                           }
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "If:do:": [
-                                {
-                                  "KindOf:is:": [
-                                    "@search",
-                                    "rooms"
-                                  ]
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "Let:be:": [
-                                        "room",
-                                        {
-                                          "FromTxt:": "@search"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Break": []
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "Let:be:": [
-                                "search",
-                                {
-                                  "FromTxt:": {
-                                    "ParentOf obj:": "@search"
+                        ]
+                      },
+                      {
+                        "If:do:": [
+                          {
+                            "AllTrue:": [
+                              {
+                                "KindOf:is:": [
+                                  "@parent",
+                                  "actors"
+                                ]
+                              },
+                              {
+                                "Get:from:": [
+                                  "worn",
+                                  {
+                                    "VarFields:": "obj"
                                   }
-                                }
-                              ]
-                            },
-                            {
-                              "If:do:": [
-                                {
-                                  "Cmp:is:txt:": [
-                                    "@search",
-                                    {
-                                      "Equals": []
-                                    },
-                                    "@obj"
-                                  ]
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "--": "Parent cycle detected",
-                                      "Break": []
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "--": [
-        "Finds the innermost object housing two objects.",
-        "However, if one object directly encloses the other, it will return that object."
-      ],
-      "Pattern:requires:returns:": [
-        "Common Ancestor",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "object",
-                "object"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "other object",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "Text named:of:": [
-              "ancestor",
-              "object"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "Common Ancestor",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:": [
-                "o1",
-                "object"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "o2",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "o1",
-                        "@object"
-                      ]
-                    },
-                    {
-                      "--":  "We search every parent of the second object for every parent of the first object. Slow but simple.",
-                      "Repeating:do:": [
-                        {
-                          "Is empty:": "@ancestor"
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Let:be:": [
-                                "o2",
-                                "@other object"
-                              ]
-                            },
-                            {
-                              "Repeating:do:": [
-                                true,
-                                {
-                                  "Act:": [
-                                    {
-                                      "If:do:": [
-                                        {
-                                          "Cmp:is:txt:": [
-                                            "@o1",
-                                            {
-                                              "Equals": []
-                                            },
-                                            "@o2"
-                                          ]
-                                        },
-                                        {
-                                          "Act:": [
-                                            {
-                                              "--": "Success!",
-                                              "Let:be:": [
-                                                "ancestor",
-                                                "@o2"
-                                              ]
-                                            },
-                                            {
-                                              "Break": []
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Let:be:": [
-                                        "o2",
-                                        {
-                                          "FromTxt:": {
-                                            "ParentOf obj:": "@o2"
-                                          }
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "If:do:else:": [
-                                        {
-                                          "Cmp:is:txt:": [
-                                            "@o2",
-                                            {
-                                              "Equals": []
-                                            },
-                                            "@other object"
-                                          ]
-                                        },
-                                        {
-                                          "Act:": [
-                                            {
-                                              "Break": []
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "ElseIf:do:": [
-                                            {
-                                              "Cmp:is:txt:": [
-                                                "@o2",
-                                                {
-                                                  "Equals": []
-                                                },
-                                                ""
-                                              ]
-                                            },
-                                            {
-                                              "Act:": [
-                                                {
-                                                  "Break": []
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "Let:be:": [
-                                "o1",
-                                {
-                                  "FromTxt:": {
-                                    "ParentOf obj:": "@o1"
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "If:do:else:": [
-                                {
-                                  "Cmp:is:txt:": [
-                                    "@o1",
-                                    {
-                                      "Equals": []
-                                    },
-                                    "@object"
-                                  ]
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "--": "parent cycle detected",
-                                      "Break": []
-                                    }
-                                  ]
-                                },
-                                {
-                                  "ElseIf:do:": [
-                                    {
-                                      "Cmp:is:txt:": [
-                                        "@o1",
-                                        {
-                                          "Equals": []
-                                        },
-                                        ""
-                                      ]
-                                    },
-                                    {
-                                      "Act:": [
-                                        {
-                                          "--": "out of world",
-                                          "Break": []
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "--":"Returns true if the root is a parent of the object.",
-      "Pattern:requires:returns:": [
-        "ancestorOf",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "root",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "--": "true if one object acts as the ancestor of another.",
-            "Bool named:": "isAncestor"
-          }
-        }
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "ancestorOf",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:": [
-                "up",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "up",
-                        {
-                          "FromTxt:": "@obj"
-                        }
-                      ]
-                    },
-                    {
-                      "Repeating:do:": [
-                        true,
-                        {
-                          "Act:": [
-                            {
-                              "--": "Step up immediately, indirect implies objects dont hold themselves.",
-                              "Let:be:": [
-                                "up",
-                                {
-                                  "FromTxt:": {
-                                    "ParentOf obj:": "@up"
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "If:do:else:": [
-                                {
-                                  "Cmp:is:txt:": [
-                                    "@up",
-                                    {
-                                      "Equals": []
-                                    },
-                                    "@obj"
-                                  ]
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "--": "parent cycle detected",
-                                      "Break": []
-                                    }
-                                  ]
-                                },
-                                {
-                                  "ElseIf:do:": [
-                                    {
-                                      "Cmp:is:txt:": [
-                                        "@up",
-                                        {
-                                          "Equals": []
-                                        },
-                                        ""
-                                      ]
-                                    },
-                                    {
-                                      "Act:": [
-                                        {
-                                          "--": "out of world",
-                                          "Break": []
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "If:do:": [
-                                {
-                                  "Cmp:is:txt:": [
-                                    "@up",
-                                    {
-                                      "Equals": []
-                                    },
-                                    "@root"
-                                  ]
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "--": "Success!",
-                                      "Let:be:": [
-                                        "isAncestor",
-                                        {
-                                          "FromBool:": true
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Break": []
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "--": [
-        "If the parent of the specified object is a valid enclosure, return its name.",
-        "By default this means if the parent is a room, a supporter, or a container."
-      ],
-      "Pattern:requires:returns:": [
-        "locationOf",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "Text named:of:": [
-              "location",
-              "object"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "locationOf",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:initially:": [
-                "parent",
-                "object",
-                {
-                  "ParentOf obj:": "@obj"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "If:do:": [
-                        {
-                          "AnyTrue:": [
-                            {
-                              "KindOf:is:": [
-                                "@parent",
-                                "containers"
-                              ]
-                            },
-                            {
-                              "KindOf:is:": [
-                                "@parent",
-                                "supporters"
-                              ]
-                            },
-                            {
-                              "KindOf:is:": [
-                                "@parent",
-                                "rooms"
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Let:be:": [
-                                "location",
-                                "@parent"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "--": "If the parent of the specified object is a kind of supporter, return its name.",
-      "Pattern:requires:returns:": [
-        "SupporterOf",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "Text named:of:": [
-              "supporter",
-              "supporter"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "SupporterOf",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:initially:": [
-                "parent",
-                "object",
-                {
-                  "ParentOf obj:": "@obj"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "If:do:": [
-                        {
-                          "KindOf:is:": [
-                            "@parent",
-                            "supporters"
-                          ]
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Let:be:": [
-                                "supporter",
-                                "@parent"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "--": "If the parent of the specified object is a kind of container, return its name.",
-      "Pattern:requires:returns:": [
-        "ContainerOf",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "Text named:of:": [
-              "container",
-              "container"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "ContainerOf",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:initially:": [
-                "parent",
-                "object",
-                {
-                  "ParentOf obj:": "@obj"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "If:do:": [
-                        {
-                          "KindOf:is:": [
-                            "@parent",
-                            "containers"
-                          ]
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Let:be:": [
-                                "container",
-                                "@parent"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "--": "If the parent of the specified object is wearing or carrying the noun, return its name.",
-      "Pattern:requires:returns:": [
-        "holderOf",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "Text named:of:": [
-              "owner",
-              "actor"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "holderOf",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:": [
-                "parent",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "parent",
-                        {
-                          "FromTxt:": {
-                            "ParentOf obj:": "@obj"
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "Act:": [
+                              {
+                                "Let:be:": [
+                                  "wearer",
+                                  "@parent"
+                                ]
+                              }
+                            ]
                           }
-                        }
-                      ]
-                    },
-                    {
-                      "If:do:": [
-                        {
-                          "KindOf:is:": [
-                            "@parent",
-                            "actors"
-                          ]
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Let:be:": [
-                                "owner",
-                                "@parent"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "--": [
-        "If the parent of the specified object is carrying the noun, return its name.",
-        "Note that only actors can carry other objects."
-      ],
-      "Pattern:requires:returns:": [
-        "CarrierOf",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "Text named:of:": [
-              "carrier",
-              "object"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
             ]
           }
-        }
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "CarrierOf",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:": [
-                "parent",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "parent",
-                        {
-                          "FromTxt:": {
-                            "ParentOf obj:": "@obj"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "If:do:": [
-                        {
-                          "AllTrue:": [
-                            {
-                              "KindOf:is:": [
-                                "@parent",
-                                "actors"
-                              ]
-                            },
-                            {
-                              "Get:from:": [
-                                "not worn",
-                                {
-                                  "VarFields:": "obj"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Let:be:": [
-                                "carrier",
-                                "@parent"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "--": [
-        "If the parent of the specified object is wearing the noun, return its name.",
-        "Note that only actors can wear other objects."
-      ],
-      "Pattern:requires:returns:": [
-        "WearerOf",
-        {
-          "PatternParams:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "Text named:of:": [
-              "wearer",
-              "object"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "Pattern:provides:rules:": [
-        "WearerOf",
-        {
-          "PatternLocals:": [
-            {
-              "Text named:of:": [
-                "parent",
-                "object"
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Always": []
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "parent",
-                        {
-                          "FromTxt:": {
-                            "ParentOf obj:": "@obj"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "If:do:": [
-                        {
-                          "AllTrue:": [
-                            {
-                              "KindOf:is:": [
-                                "@parent",
-                                "actors"
-                              ]
-                            },
-                            {
-                              "Get:from:": [
-                                "worn",
-                                {
-                                  "VarFields:": "obj"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Let:be:": [
-                                "wearer",
-                                "@parent"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+        ]
+      }
+    ]
+  }
 }
