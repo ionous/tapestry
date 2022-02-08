@@ -26,7 +26,7 @@ func newSeries(m *chart.Machine, term string, inputs *js.Builder) *chart.StateMi
 				R(js.Colon).R(open).
 				Q("block").
 				R(js.Colon).R(open)
-			m.PushState(newInnerBlock(m, inputs, typeName))
+			m.PushState(newInnerFlow(m, inputs, typeName))
 			return true
 		},
 		// when a child ( the inner block ) has finished

@@ -8,9 +8,9 @@ import (
   "git.sr.ht/~ionous/tapestry/dl/story"
 )
 
-// was getting 4 extra closes
-// because slot gets the "end of slot" without an inner block if the slot is empty.
-func TestPut(t *testing.T) {
+// empty slots shouldn't get extra closes
+// previously this was getting 4 extra closes
+func TestEndSlot(t *testing.T) {
   if e := testBlocks(&list.PutEdge{
     From: &core.GetVar{},
   }, `{
@@ -36,6 +36,42 @@ func TestPut(t *testing.T) {
 }`); e != nil {
     t.Fatal(e)
   }
+}
+
+// blocks without mutations shouldnt get extra data
+// ( or blockly exceptions and gets very unhappy )
+func TestExcessState(t *testing.T) {
+  if e := testBlocks(&story.EventBlock{
+    Target: story.EventTarget{
+      Choice: story.EventTarget_Kinds_Opt,
+      Value: &story.PluralKinds{
+        Str: "x",
+      },
+    },
+  }, `{
+  "id": "test-1",
+  "type": "event_block",
+  "extraState": {
+    "TARGET": 1
+  },
+  "fields": {
+    "TARGET": "$KINDS"
+  },
+  "inputs": {
+    "TARGET": {
+      "block": {
+        "id": "test-2",
+        "type": "plural_kinds",
+        "fields": {
+          "PLURAL_KINDS": "x"
+        }
+      }
+    }
+  }
+}`); e != nil {
+    t.Fatal(e)
+  }
+
 }
 
 // story lines should be a block with no output, and one stacking input

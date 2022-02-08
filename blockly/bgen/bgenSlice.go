@@ -22,7 +22,7 @@ func newSlice(m *chart.Machine, term string, inputs *js.Builder) *chart.StateMix
 			}).R(js.Colon).R(open).
 				Q("block").R(js.Colon).R(open)
 			cnt++
-			m.PushState(newInnerBlock(m, inputs, typeName))
+			m.PushState(newInnerFlow(m, inputs, typeName))
 			return true
 		},
 		// when a child state ( the inner block ) has finished

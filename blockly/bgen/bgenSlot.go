@@ -11,7 +11,8 @@ func newSlot(m *chart.Machine, term string, blk *blockData) *chart.StateMix {
 	return &chart.StateMix{
 		OnBlock: func(block jsn.Block) (err error) {
 			was = blk.startInput(term)
-			m.PushState(newInnerBlock(m, &blk.inputs, block.GetType()))
+			_, ok := block.(jsn.FlowBlock)
+			m.PushState(newInnerBlock(m, &blk.inputs, block.GetType(), ok))
 			return
 		},
 		OnEnd: func() {

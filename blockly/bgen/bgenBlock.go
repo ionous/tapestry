@@ -15,7 +15,7 @@ func NewTopBlock(m *chart.Machine, blk *js.Builder) chart.State {
 		// later, a member of our flow
 		OnMap: func(typeName string, flow jsn.FlowBlock) (okay bool) {
 			blk.R(open)
-			m.PushState(newInnerBlock(m, blk, typeName))
+			m.PushState(newInnerFlow(m, blk, typeName))
 			return true
 		},
 		// listen to the end of the inner block
@@ -28,14 +28,18 @@ func NewTopBlock(m *chart.Machine, blk *js.Builder) chart.State {
 
 // writes most of the contents of a block, without its surrounding {}
 // ( to support the nested linked lists of blocks used for stacks )
-func newInnerBlock(m *chart.Machine, body *js.Builder, typeName string) *chart.StateMix {
+func newInnerFlow(m *chart.Machine, body *js.Builder, typeName string) *chart.StateMix {
+	return newInnerBlock(m, body, typeName, true)
+}
+
+func newInnerBlock(m *chart.Machine, body *js.Builder, typeName string, allowExtraData bool) *chart.StateMix {
 	var term string // set per key
-	blk := blockData{id: NewId(), typeName: typeName}
+	blk := blockData{id: NewId(), typeName: typeName, allowExtraData: allowExtraData}
 	return &chart.StateMix{
 		// a member that is a flow.
 		OnMap: func(_ string, flow jsn.FlowBlock) bool {
 			was := blk.startInput(term)
-			next := newInnerBlock(m, &blk.inputs, flow.GetType())
+			next := newInnerFlow(m, &blk.inputs, flow.GetType())
 			m.PushState(next)
 			prev := next.OnEnd
 			next.OnEnd = func() {

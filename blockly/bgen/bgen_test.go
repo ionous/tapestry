@@ -81,9 +81,6 @@ func TestSwap(t *testing.T) {
       "block": {
         "id": "test-2",
         "type": "test_txt",
-        "extraState": {
-          "TEST_TXT": 1
-        },
         "fields": {
           "TEST_TXT": "something"
         }

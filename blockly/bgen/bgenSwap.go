@@ -16,7 +16,8 @@ func newSwap(m *chart.Machine, term string, swap jsn.SwapBlock, blk *blockData) 
 	return &chart.StateMix{
 		OnBlock: func(block jsn.Block) (err error) {
 			if was, err = openSwap(blk, term, swap); err == nil {
-				m.PushState(newInnerBlock(m, &blk.inputs, block.GetType()))
+				_, ok := block.(jsn.FlowBlock)
+				m.PushState(newInnerBlock(m, &blk.inputs, block.GetType(), ok))
 			}
 			return
 		},

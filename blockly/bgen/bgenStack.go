@@ -26,7 +26,7 @@ func newStack(m *chart.Machine, term string, blk *blockData) *chart.StateMix {
 					Q("block").R(js.Colon).R(open)
 			}
 			cnt++ // increment here (rather than OnSlot) to skip any empty slots.
-			m.PushState(newInnerBlock(m, &blk.inputs, bconst.StackedName(typeName)))
+			m.PushState(newInnerFlow(m, &blk.inputs, bconst.StackedName(typeName)))
 			return true
 		},
 		OnSlot: func(string, jsn.SlotBlock) (okay bool) {

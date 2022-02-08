@@ -7,6 +7,7 @@ import "git.sr.ht/~ionous/tapestry/web/js"
 type blockData struct {
 	id, typeName               string
 	fields, inputs, extraState js.Builder
+	allowExtraData             bool
 }
 
 // start a new input connection from this block to some new block
@@ -65,8 +66,13 @@ func (b *blockData) writeCount(term string, cnt int) {
 func (b *blockData) writeTo(out *js.Builder) {
 	out.Kv("id", b.id).R(js.Comma).
 		Kv("type", b.typeName)
-	// note: always have to write extraState or blockly gets unhappy...
-	writeContents(out, "extraState", &b.extraState)
+
+	// note: blockly throws exceptions if you have extraData but not a loadExtraState function on the shape.
+	// and it only allows you to have loadExtraState on shapes with mutations.
+	// ( in loadConnection, appendPrivate, it tries to treat extraData as xml data when that function is missing )
+	if b.allowExtraData {
+		writeContents(out, "extraState", &b.extraState)
+	}
 	if els := &b.fields; els.Len() > 0 {
 		writeContents(out, "fields", els)
 	}
