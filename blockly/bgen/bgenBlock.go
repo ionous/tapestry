@@ -37,24 +37,24 @@ func newInnerBlock(m *chart.Machine, body *js.Builder, typeName string, allowExt
 	blk := blockData{id: NewId(), typeName: typeName, allowExtraData: allowExtraData}
 	return &chart.StateMix{
 		// a member that is a flow.
-		OnMap: func(_ string, flow jsn.FlowBlock) bool {
+		OnMap: func(_ string, flow jsn.FlowBlock) (alwaysTrue bool) {
 			was := blk.startInput(term)
-			next := newInnerFlow(m, &blk.inputs, flow.GetType())
-			m.PushState(next)
-			prev := next.OnEnd
-			next.OnEnd = func() {
-				prev() // flushes its block, so call first
+			inner := newInnerFlow(m, &blk.inputs, flow.GetType())
+			m.PushState(inner)
+			defaultEnding := inner.OnEnd
+			inner.OnEnd = func() {
+				defaultEnding() // flushes its block, so call first
 				blk.endInput(was)
 			}
 			return true
 		},
 
-		// one of every extant member of the flow ( skipping optional elements lacking a value )
+		// one of every extant member of the flow ( the encoder skips optional elements lacking a value )
 		// this might be a field or input
 		// we might write to next when the block is *followed* by another in a repeat.
 		// therefore we cant close the block in Commit --
 		// but we might close child blocks
-		OnKey: func(_ string, field string) (err error) {
+		OnKey: func(_ string, field string) (noerr error) {
 			term = field[1:] // strip off the $
 			return
 		},
@@ -72,16 +72,17 @@ func newInnerBlock(m *chart.Machine, body *js.Builder, typeName string, allowExt
 		},
 
 		// a member that repeats
-		OnRepeat: func(_ string, slice jsn.SliceBlock) (alwaysTrue bool) {
+		OnRepeat: func(_ string, slice jsn.SliceBlock) (okay bool) {
 			if cnt := slice.GetSize(); cnt > 0 {
 				blk.writeCount(term, cnt)
 				m.PushState(newRepeat(m, term, &blk))
+				okay = true
 			}
-			return true
+			return
 		},
 
 		// a single value
-		OnValue: func(_ string, pv interface{}) (err error) {
+		OnValue: func(_ string, pv interface{}) error {
 			return blk.writeValue(term, pv)
 		},
 

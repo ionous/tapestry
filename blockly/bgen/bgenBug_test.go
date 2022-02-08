@@ -8,6 +8,28 @@ import (
   "git.sr.ht/~ionous/tapestry/dl/story"
 )
 
+// blocks with optional members should just skip happily to the next member
+func TestSkippedSlot(t *testing.T) {
+  if e := testBlocks(&list.ListEach{}, `{
+  "id": "test-1",
+  "type": "list_each",
+  "extraState": {
+    "DO": 1
+  },
+  "inputs": {
+    "DO": {
+      "block": {
+        "id": "test-2",
+        "type": "activity",
+        "extraState": {}
+      }
+    }
+  }
+}`); e != nil {
+    t.Fatal(e)
+  }
+}
+
 // empty slots shouldn't get extra closes
 // previously this was getting 4 extra closes
 func TestEndSlot(t *testing.T) {
@@ -71,7 +93,6 @@ func TestExcessState(t *testing.T) {
 }`); e != nil {
     t.Fatal(e)
   }
-
 }
 
 // story lines should be a block with no output, and one stacking input
