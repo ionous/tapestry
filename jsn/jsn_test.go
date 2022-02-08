@@ -19,7 +19,8 @@ import (
 )
 
 func TestDetailsEncode(t *testing.T) {
-	if d, e := dout.Encode(debug.FactorialStory); e != nil {
+	file := &story.StoryFile{StoryLines: debug.FactorialStory.Reformat()}
+	if d, e := dout.Encode(file); e != nil {
 		t.Fatal(e)
 	} else if b, e := json.Marshal(d); e != nil {
 		t.Fatal(e)
@@ -29,18 +30,21 @@ func TestDetailsEncode(t *testing.T) {
 }
 
 func TestDetailsDecode(t *testing.T) {
-	var dst story.Story
-	if e := din.Decode(&dst, tapestry.Registry(), []byte(jsnTestIfx)); e != nil {
+	var file story.StoryFile
+	if e := din.Decode(&file, tapestry.Registry(), []byte(jsnTestIfx)); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
-		pretty.Print(dst)
-		t.Fatal(diff)
+	} else {
+		paragraphs := file.StoryLines.Reformat()
+		if diff := pretty.Diff(debug.FactorialStory, &paragraphs); len(diff) != 0 {
+			pretty.Print(file.StoryLines)
+			t.Fatal(diff)
+		}
 	}
 }
 
 func TestCompactEncoder(t *testing.T) {
-	lines := debug.FactorialStory.Reformat()
-	if str, e := cout.Marshal(&lines, story.CompactEncoder); e != nil {
+	file := &story.StoryFile{StoryLines: debug.FactorialStory.Reformat()}
+	if str, e := cout.Marshal(file, story.CompactEncoder); e != nil {
 		t.Fatal(e)
 	} else if str != jsnTestIf {
 		t.Fatal(str)
@@ -48,14 +52,14 @@ func TestCompactEncoder(t *testing.T) {
 }
 
 func TestCompactDecode(t *testing.T) {
-	var lines story.StoryLines
-	if e := story.Decode(&lines, []byte(jsnTestIf), tapestry.AllSignatures); e != nil {
-		pretty.Println(lines)
+	var file story.StoryFile
+	if e := story.Decode(&file, []byte(jsnTestIf), tapestry.AllSignatures); e != nil {
+		pretty.Println(file)
 		t.Fatal(e)
 	} else {
-		dst := lines.Reformat()
-		if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
-			pretty.Print(dst)
+		paragraphs := file.StoryLines.Reformat()
+		if diff := pretty.Diff(debug.FactorialStory, &paragraphs); len(diff) != 0 {
+			pretty.Print(file.StoryLines)
 			t.Fatal(diff)
 		}
 	}

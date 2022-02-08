@@ -47,9 +47,8 @@ func (op *PatternRules) ImportRules(k *Importer, pattern, target string, flags e
 }
 
 func (op *PatternRule) importRule(k *Importer, pattern, target string, tgtFlags eph.EphTiming) (err error) {
-	if act, e := op.Hook.ImportProgram(k); e != nil {
-		err = e
-	} else if flags, e := op.Flags.ReadFlags(); e != nil {
+	act := op.Does
+	if flags, e := op.Flags.ReadFlags(); e != nil {
 		err = e
 	} else if len(flags.Str) > 0 && len(tgtFlags.Str) > 0 {
 		// ensure flags were only set via the rule or via the pattern

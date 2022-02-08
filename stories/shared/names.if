@@ -88,17 +88,15 @@
         "Comment:": "The story engine automagically calls \"print name\" when the name of an object is used in a template.  ex. { .someObject }"
       },
       {
-        "TestRule:hook activity:": [
+        "TestRule:does:": [
           "name of a kind",
-          {
-            "Act:": [
-              {
-                "Say:": {
-                  "RenderTemplate:": "{.named}, {.unnamed}"
-                }
+          [
+            {
+              "Say:": {
+                "RenderTemplate:": "{.named}, {.unnamed}"
               }
-            ]
-          }
+            }
+          ]
         ]
       },
       {
@@ -125,50 +123,46 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Singular of:": {
-                            "KindOf:": "@obj"
-                          }
+                  [
+                    {
+                      "Say:": {
+                        "Singular of:": {
+                          "KindOf:": "@obj"
                         }
-                      },
-                      {
-                        "Mention obj:": "@obj"
                       }
-                    ]
-                  }
+                    },
+                    {
+                      "Mention obj:": "@obj"
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Get obj:trait:": [
                       "@obj",
                       "publicly named"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "NameOf:": "@obj"
-                        }
-                      },
-                      {
-                        "Mention obj:": "@obj"
+                  [
+                    {
+                      "Say:": {
+                        "NameOf:": "@obj"
                       }
-                    ]
-                  }
+                    },
+                    {
+                      "Mention obj:": "@obj"
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Cmp:is:txt:": [
                       {
@@ -185,23 +179,21 @@
                       ""
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Get:from:": [
-                            "printed name",
-                            {
-                              "VarFields:": "obj"
-                            }
-                          ]
-                        }
-                      },
-                      {
-                        "Mention obj:": "@obj"
+                  [
+                    {
+                      "Say:": {
+                        "Get:from:": [
+                          "printed name",
+                          {
+                            "VarFields:": "obj"
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    },
+                    {
+                      "Mention obj:": "@obj"
+                    }
+                  ]
                 ]
               }
             ]
@@ -232,51 +224,49 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "KindOf:is:": [
                       "@obj",
                       "things"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Put:from:at:": [
-                          {
-                            "ObjField:": "@obj"
-                          },
-                          {
-                            "FromBool:": true
-                          },
-                          "mentioned"
-                        ]
-                      },
-                      {
-                        "Put:from:at:": [
-                          {
-                            "ObjField:": "settings"
-                          },
-                          {
-                            "FromNum:": {
-                              "Inc:by:": [
-                                1,
-                                {
-                                  "Get:from:": [
-                                    "mentions",
-                                    {
-                                      "ObjFields:": "settings"
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          },
-                          "mentions"
-                        ]
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Put:from:at:": [
+                        {
+                          "ObjField:": "@obj"
+                        },
+                        {
+                          "FromBool:": true
+                        },
+                        "mentioned"
+                      ]
+                    },
+                    {
+                      "Put:from:at:": [
+                        {
+                          "ObjField:": "settings"
+                        },
+                        {
+                          "FromNum:": {
+                            "Inc:by:": [
+                              1,
+                              {
+                                "Get:from:": [
+                                  "mentions",
+                                  {
+                                    "ObjFields:": "settings"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        "mentions"
+                      ]
+                    }
+                  ]
                 ]
               }
             ]

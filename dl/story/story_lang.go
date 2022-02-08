@@ -6422,7 +6422,8 @@ func PatternReturn_Marshal(m jsn.Marshaler, val *PatternReturn) (err error) {
 type PatternRule struct {
 	Guard       rt.BoolEval  `if:"label=_"`
 	Flags       PatternFlags `if:"label=flags,optional"`
-	Hook        ProgramHook  `if:"label=hook"`
+	Hook        ProgramHook  `if:"label=hook,optional"`
+	Does        []rt.Execute `if:"label=does,optional"`
 	UserComment string
 }
 
@@ -6437,6 +6438,7 @@ const PatternRule_Type = "pattern_rule"
 const PatternRule_Field_Guard = "$GUARD"
 const PatternRule_Field_Flags = "$FLAGS"
 const PatternRule_Field_Hook = "$HOOK"
+const PatternRule_Field_Does = "$DOES"
 
 func (op *PatternRule) Marshal(m jsn.Marshaler) error {
 	return PatternRule_Marshal(m, op)
@@ -6525,10 +6527,17 @@ func PatternRule_Marshal(m jsn.Marshaler, val *PatternRule) (err error) {
 		}
 		e2 := m.MarshalKey("hook", PatternRule_Field_Hook)
 		if e2 == nil {
-			e2 = ProgramHook_Marshal(m, &val.Hook)
+			e2 = ProgramHook_Optional_Marshal(m, &val.Hook)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", PatternRule_Field_Hook))
+		}
+		e3 := m.MarshalKey("does", PatternRule_Field_Does)
+		if e3 == nil {
+			e3 = rt.Execute_Optional_Repeats_Marshal(m, &val.Does)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", PatternRule_Field_Does))
 		}
 		m.EndBlock()
 	}
@@ -8551,8 +8560,9 @@ func TestOutput_Marshal(m jsn.Marshaler, val *TestOutput) (err error) {
 
 // TestRule
 type TestRule struct {
-	TestName    TestName    `if:"label=_"`
-	Hook        ProgramHook `if:"label=hook"`
+	TestName    TestName     `if:"label=_"`
+	Hook        ProgramHook  `if:"label=hook,optional"`
+	Does        []rt.Execute `if:"label=does,optional"`
 	UserComment string
 }
 
@@ -8569,6 +8579,7 @@ func (*TestRule) Compose() composer.Spec {
 const TestRule_Type = "test_rule"
 const TestRule_Field_TestName = "$TEST_NAME"
 const TestRule_Field_Hook = "$HOOK"
+const TestRule_Field_Does = "$DOES"
 
 func (op *TestRule) Marshal(m jsn.Marshaler) error {
 	return TestRule_Marshal(m, op)
@@ -8650,10 +8661,17 @@ func TestRule_Marshal(m jsn.Marshaler, val *TestRule) (err error) {
 		}
 		e1 := m.MarshalKey("hook", TestRule_Field_Hook)
 		if e1 == nil {
-			e1 = ProgramHook_Marshal(m, &val.Hook)
+			e1 = ProgramHook_Optional_Marshal(m, &val.Hook)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", TestRule_Field_Hook))
+		}
+		e2 := m.MarshalKey("does", TestRule_Field_Does)
+		if e2 == nil {
+			e2 = rt.Execute_Optional_Repeats_Marshal(m, &val.Does)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", TestRule_Field_Does))
 		}
 		m.EndBlock()
 	}
@@ -9475,6 +9493,10 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
+	14623117004128374492: (*TestRule)(nil),    /* TestRule:does: */
+	10703761093736583840: (*PatternRule)(nil), /* PatternRule:does: */
+	1493717172765332753:  (*PatternRule)(nil), /* PatternRule:flags:does: */
+	//
 	562975275283375503:   (*StoryBreak)(nil),            /* -- */
 	7872120455849093108:  (*ActionContext)(nil),         /* ActionContext: */
 	14902711848163440508: (*ActionParams)(nil),          /* ActionParams common: */
@@ -9551,7 +9573,9 @@ var Signatures = map[uint64]interface{}{
 	6869255187827325487:  (*PatternParams)(nil),         /* PatternParams: */
 	3203894909373400694:  (*PatternReturn)(nil),         /* PatternResult: */
 	14391699440407036198: (*PatternRule)(nil),           /* PatternRule:flags:hook activity: */
+	12646730086697177587: (*PatternRule)(nil),           /* PatternRule:flags:hook activity:does: */
 	15914753357447503965: (*PatternRule)(nil),           /* PatternRule:hook activity: */
+	12871963775463778214: (*PatternRule)(nil),           /* PatternRule:hook activity:does: */
 	15881043500959019380: (*PatternRules)(nil),          /* PatternRules */
 	12644281899387438986: (*PatternRules)(nil),          /* PatternRules: */
 	13417511286363622337: (*ProgramHook)(nil),           /* ProgramHook activity: */
@@ -9576,6 +9600,7 @@ var Signatures = map[uint64]interface{}{
 	5991962903091297123:  (*StoryFile)(nil),             /* Tapestry: */
 	15090827023293362138: (*TestOutput)(nil),            /* TestOutput: */
 	11231723833188820353: (*TestRule)(nil),              /* TestRule:hook activity: */
+	11699100906048175946: (*TestRule)(nil),              /* TestRule:hook activity:does: */
 	15304439741055926590: (*TestScene)(nil),             /* TestScene:story: */
 	1385539489971009934:  (*TestStatement)(nil),         /* TestStatement:test: */
 	34813485952713023:    (*TextProperty)(nil),          /* Text named: */

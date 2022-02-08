@@ -39,7 +39,7 @@ func TestFactorialImport(t *testing.T) {
 			// one test rule
 			&eph.EphChecks{
 				Name: "factorial",
-				Exe:  debug.FactorialCheck.Exe[0],
+				Exe:  debug.FactorialCheck,
 			},
 			// a pattern definition including one parameter
 			&eph.EphPatterns{
@@ -62,7 +62,7 @@ func TestFactorialImport(t *testing.T) {
 				Name:   "factorial",
 				Filter: &core.Always{},
 				When:   eph.EphTiming{eph.EphTiming_During},
-				Exe:    debug.FactorialMulMinusOne.Exe[0],
+				Exe:    debug.FactorialMulMinusOne,
 			},
 			// the story happens to declare the return value twice
 			// once before each rule.... that's fine it will be logged but it wont fail.
@@ -78,7 +78,7 @@ func TestFactorialImport(t *testing.T) {
 				Name:   "factorial",
 				Filter: debug.FactorialIsZero,
 				When:   eph.EphTiming{eph.EphTiming_During},
-				Exe:    debug.FactorialUseOne.Exe[0],
+				Exe:    debug.FactorialUseOne,
 			},
 		}
 		if diff := pretty.Diff(els, expect); len(diff) > 0 {

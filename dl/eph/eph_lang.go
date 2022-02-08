@@ -744,7 +744,7 @@ func EphCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EphCardinali
 type EphChecks struct {
 	Name        string               `if:"label=check,type=text"`
 	Expect      literal.LiteralValue `if:"label=expect,optional"`
-	Exe         rt.Execute           `if:"label=do"`
+	Exe         []rt.Execute         `if:"label=does"`
 	UserComment string
 }
 
@@ -849,9 +849,9 @@ func EphChecks_Marshal(m jsn.Marshaler, val *EphChecks) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EphChecks_Field_Expect))
 		}
-		e2 := m.MarshalKey("do", EphChecks_Field_Exe)
+		e2 := m.MarshalKey("does", EphChecks_Field_Exe)
 		if e2 == nil {
-			e2 = rt.Execute_Marshal(m, &val.Exe)
+			e2 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", EphChecks_Field_Exe))
@@ -2243,12 +2243,12 @@ func EphRelatives_Marshal(m jsn.Marshaler, val *EphRelatives) (err error) {
 
 // EphRules
 type EphRules struct {
-	Name        string      `if:"label=pattern,type=text"`
-	Target      string      `if:"label=target,optional,type=text"`
-	Filter      rt.BoolEval `if:"label=if"`
-	When        EphTiming   `if:"label=when"`
-	Exe         rt.Execute  `if:"label=do"`
-	Touch       EphAlways   `if:"label=touch,optional"`
+	Name        string       `if:"label=pattern,type=text"`
+	Target      string       `if:"label=target,optional,type=text"`
+	Filter      rt.BoolEval  `if:"label=if"`
+	When        EphTiming    `if:"label=when"`
+	Exe         []rt.Execute `if:"label=does"`
+	Touch       EphAlways    `if:"label=touch,optional"`
 	UserComment string
 }
 
@@ -2370,9 +2370,9 @@ func EphRules_Marshal(m jsn.Marshaler, val *EphRules) (err error) {
 		if e3 != nil && e3 != jsn.Missing {
 			m.Error(errutil.New(e3, "in flow at", EphRules_Field_When))
 		}
-		e4 := m.MarshalKey("do", EphRules_Field_Exe)
+		e4 := m.MarshalKey("does", EphRules_Field_Exe)
 		if e4 == nil {
-			e4 = rt.Execute_Marshal(m, &val.Exe)
+			e4 = rt.Execute_Repeats_Marshal(m, &val.Exe)
 		}
 		if e4 != nil && e4 != jsn.Missing {
 			m.Error(errutil.New(e4, "in flow at", EphRules_Field_Exe))
@@ -3150,8 +3150,8 @@ var Slats = []composer.Composer{
 var Signatures = map[uint64]interface{}{
 	18295658173337269930: (*EphAspects)(nil),     /* Eph aspects:traits: */
 	9182060341586636438:  (*EphAt)(nil),          /* Eph at:eph: */
-	7963757310721049403:  (*EphChecks)(nil),      /* Eph check:do: */
-	1948835363584093228:  (*EphChecks)(nil),      /* Eph check:expect:do: */
+	12806469257217444875: (*EphChecks)(nil),      /* Eph check:does: */
+	11992113972950966500: (*EphChecks)(nil),      /* Eph check:expect:does: */
 	4379746949646135194:  (*EphEndDomain)(nil),   /* Eph domain: */
 	12209727080993772760: (*EphBeginDomain)(nil), /* Eph domain:requires: */
 	1520695377871896491:  (*EphDirectives)(nil),  /* Eph go:parse: */
@@ -3166,13 +3166,13 @@ var Signatures = map[uint64]interface{}{
 	4810543164949198614:  (*EphNouns)(nil),       /* Eph noun:kind: */
 	6279464935630150301:  (*EphOpposites)(nil),   /* Eph opposite:word: */
 	1611161010098549912:  (*EphPatterns)(nil),    /* Eph pattern: */
-	17570881590226414756: (*EphRules)(nil),       /* Eph pattern:if:when:do: */
-	10757199676611909587: (*EphRules)(nil),       /* Eph pattern:if:when:do:touch: */
+	4397176286918283100:  (*EphRules)(nil),       /* Eph pattern:if:when:does: */
+	3821903530056281499:  (*EphRules)(nil),       /* Eph pattern:if:when:does:touch: */
 	7324201728182884878:  (*EphPatterns)(nil),    /* Eph pattern:locals: */
 	16745375238637686855: (*EphPatterns)(nil),    /* Eph pattern:locals:result: */
 	14244437562331442113: (*EphPatterns)(nil),    /* Eph pattern:result: */
-	7214067641252607715:  (*EphRules)(nil),       /* Eph pattern:target:if:when:do: */
-	10406184722562866480: (*EphRules)(nil),       /* Eph pattern:target:if:when:do:touch: */
+	16394616384690883347: (*EphRules)(nil),       /* Eph pattern:target:if:when:does: */
+	11145895837727200576: (*EphRules)(nil),       /* Eph pattern:target:if:when:does:touch: */
 	13289385533668993470: (*EphPatterns)(nil),    /* Eph pattern:with: */
 	3398548629283569576:  (*EphPatterns)(nil),    /* Eph pattern:with:locals: */
 	1340667739035001681:  (*EphPatterns)(nil),    /* Eph pattern:with:locals:result: */

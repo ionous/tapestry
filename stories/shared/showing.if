@@ -122,84 +122,76 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@actor"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "If:from:and:do:else:": [
-                          "response",
+                  [
+                    {
+                      "If:from:and:does:else:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "CanHandle actor:action:noun:otherNoun:": [
+                              "@actor",
+                              {
+                                "FromTxt:": "showing"
+                              },
+                              "@noun",
+                              "@other noun"
+                            ]
+                          }
+                        },
+                        {
+                          "Not:": {
+                            "Is empty:": "@response"
+                          }
+                        },
+                        [
                           {
-                            "FromTxt:": {
-                              "CanHandle actor:action:noun:otherNoun:": [
-                                "@actor",
-                                {
-                                  "FromTxt:": "showing"
-                                },
-                                "@noun",
-                                "@other noun"
-                              ]
-                            }
-                          },
-                          {
-                            "Not:": {
-                              "Is empty:": "@response"
-                            }
-                          },
-                          {
-                            "Act:": [
+                            "Say:": "@response"
+                          }
+                        ],
+                        {
+                          "ElseIf:from:and:does:else:": [
+                            "result",
+                            {
+                              "FromTxt:": {
+                                "CanReach actor:action:noun:": [
+                                  "@actor",
+                                  {
+                                    "FromTxt:": "showing"
+                                  },
+                                  "@other noun"
+                                ]
+                              }
+                            },
+                            {
+                              "Not:": {
+                                "Is empty:": "@response"
+                              }
+                            },
+                            [
                               {
                                 "Say:": "@response"
                               }
-                            ]
-                          },
-                          {
-                            "ElseIf:from:and:do:else:": [
-                              "result",
-                              {
-                                "FromTxt:": {
-                                  "CanReach actor:action:noun:": [
+                            ],
+                            {
+                              "ElseDo does:": [
+                                {
+                                  "ReportShowing actor:noun:otherNoun:": [
                                     "@actor",
-                                    {
-                                      "FromTxt:": "showing"
-                                    },
+                                    "@noun",
                                     "@other noun"
                                   ]
                                 }
-                              },
-                              {
-                                "Not:": {
-                                  "Is empty:": "@response"
-                                }
-                              },
-                              {
-                                "Act:": [
-                                  {
-                                    "Say:": "@response"
-                                  }
-                                ]
-                              },
-                              {
-                                "ElseDo:": {
-                                  "Act:": [
-                                    {
-                                      "ReportShowing actor:noun:otherNoun:": [
-                                        "@actor",
-                                        "@noun",
-                                        "@other noun"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -242,47 +234,43 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "player shows",
-                            {
-                              "RenderTemplate:": "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "player shows",
+                          {
+                            "RenderTemplate:": "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Not:": {
                       "IsPlayer obj:": "@actor"
                     }
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "someone else shows",
-                            {
-                              "RenderTemplate:": "{The: .actor|capitalize!} shows off {the: .noun}."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "someone else shows",
+                          {
+                            "RenderTemplate:": "{The: .actor|capitalize!} shows off {the: .noun}."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]

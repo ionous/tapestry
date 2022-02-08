@@ -53,9 +53,9 @@ func eachTest(t *testing.T, src []string, res []accum, otherwise int) {
 	each := &list.ListEach{
 		List: V("source"),
 		As:   &list.AsTxt{Var: N("text")},
-		Do:   core.MakeActivity(&visitEach{&visits}),
+		Does: core.MakeActivity(&visitEach{&visits}),
 		Else: &core.ChooseNothingElse{
-			Do: core.MakeActivity(&Write{&out, T("x")}),
+			Does: core.MakeActivity(&Write{&out, T("x")}),
 		},
 	}
 	if lt, _, e := newListTime(src, nil); e != nil {

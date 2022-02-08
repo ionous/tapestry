@@ -169,72 +169,68 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "KindOf:is:": [
                       "@obj",
                       "actors"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "success",
-                          {
-                            "FromBool:": {
-                              "Cmp:is:txt:": [
-                                "@obj",
-                                {
-                                  "Equals": true
-                                },
-                                {
-                                  "Get:from:": [
-                                    "pawn",
-                                    {
-                                      "ObjFields:": "player"
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "success",
+                        {
+                          "FromBool:": {
+                            "Cmp:is:txt:": [
+                              "@obj",
+                              {
+                                "Equals": true
+                              },
+                              {
+                                "Get:from:": [
+                                  "pawn",
+                                  {
+                                    "ObjFields:": "player"
+                                  }
+                                ]
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "KindOf:is:": [
                       "@obj",
                       "agents"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "success",
-                          {
-                            "FromBool:": {
-                              "Cmp:is:txt:": [
-                                "@obj",
-                                {
-                                  "Equals": true
-                                },
-                                {
-                                  "IdOf:": "player"
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "success",
+                        {
+                          "FromBool:": {
+                            "Cmp:is:txt:": [
+                              "@obj",
+                              {
+                                "Equals": true
+                              },
+                              {
+                                "IdOf:": "player"
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -270,28 +266,24 @@
         "--": ""
       },
       {
-        "TestRule:hook activity:": [
+        "TestRule:does:": [
           "player tests",
-          {
-            "Act:": [
-              {
-                "If:do:": [
+          [
+            {
+              "If:does:": [
+                {
+                  "IsPlayer obj:": {
+                    "FromTxt:": "self"
+                  }
+                },
+                [
                   {
-                    "IsPlayer obj:": {
-                      "FromTxt:": "self"
-                    }
-                  },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": "yes"
-                      }
-                    ]
+                    "Say:": "yes"
                   }
                 ]
-              }
-            ]
-          }
+              ]
+            }
+          ]
         ]
       },
       {

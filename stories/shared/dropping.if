@@ -34,90 +34,77 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@actor"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "If:from:and:do:else:": [
-                          "result",
-                          {
-                            "--": [
-                              "can we handle ( locally touch ) the object.",
-                              "the result will be empty if we can",
-                              "or an error message if we cant"
-                            ],
-                            "FromTxt:": {
-                              "CanHandle actor:action:noun:": [
-                                "@actor",
-                                {
-                                  "FromTxt:": "dropping"
-                                },
-                                "@noun"
-                              ]
-                            }
-                          },
-                          {
-                            "Not:": {
-                              "Is empty:": "@result"
-                            }
-                          },
-                          {
-                            "--": "Say whatever 'can handle' returned.",
-                            "Act:": [
+                  [
+                    {
+                      "If:from:and:does:else:": [
+                        "result",
+                        {
+                          "--": [
+                            "can we handle ( locally touch ) the object.",
+                            "the result will be empty if we can",
+                            "or an error message if we cant"
+                          ],
+                          "FromTxt:": {
+                            "CanHandle actor:action:noun:": [
+                              "@actor",
                               {
-                                "Say:": "@result"
-                              }
+                                "FromTxt:": "dropping"
+                              },
+                              "@noun"
                             ]
-                          },
+                          }
+                        },
+                        {
+                          "Not:": {
+                            "Is empty:": "@result"
+                          }
+                        },
+                        [
                           {
-                            "ElseDo:": {
-                              "Act:": [
+                            "Say:": "@result"
+                          }
+                        ],
+                        {
+                          "ElseDo does:": [
+                            {
+                              "If:does:": [
                                 {
-                                  "If:do:": [
+                                  "--": [
+                                    "send the drop event to noun",
+                                    "it will return true if it dropped the object okay.",
+                                    "we expect any handler which blocks the event to say why not."
+                                  ],
+                                  "Send:event:": [
                                     {
-                                      "--": [
-                                        "send the drop event to noun",
-                                        "it will return true if it dropped the object okay.",
-                                        "we expect any handler which blocks the event to say why not."
-                                      ],
-                                      "Send:event:": [
-                                        {
-                                          "Capture obj:": "@noun"
-                                        },
-                                        {
-                                          "Drop actor:noun:": [
-                                            "@actor",
-                                            "@noun"
-                                          ]
-                                        }
-                                      ]
+                                      "Capture obj:": "@noun"
                                     },
                                     {
-                                      "--": [
-                                        "finally, because we did just drop the object:",
-                                        "let the player know by reporting it."
-                                      ],
-                                      "Act:": [
-                                        {
-                                          "ReportDropping actor:noun:": [
-                                            "@actor",
-                                            "@noun"
-                                          ]
-                                        }
+                                      "Drop actor:noun:": [
+                                        "@actor",
+                                        "@noun"
                                       ]
                                     }
                                   ]
-                                }
+                                },
+                                [
+                                  {
+                                    "ReportDropping actor:noun:": [
+                                      "@actor",
+                                      "@noun"
+                                    ]
+                                  }
+                                ]
                               ]
                             }
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -138,72 +125,66 @@
                 {
                   "PatternRules:": [
                     {
-                      "PatternRule:hook activity:": [
+                      "PatternRule:does:": [
                         {
                           "Always": true
                         },
-                        {
-                          "Act:": [
-                            {
-                              "If:from:and:do:else:": [
-                                "error",
-                                {
-                                  "FromTxt:": {
-                                    "MoveObject obj:dest:": [
-                                      "@noun",
-                                      {
-                                        "FromTxt:": {
-                                          "ParentOf obj:": "@actor"
-                                        }
+                        [
+                          {
+                            "If:from:and:does:else:": [
+                              "error",
+                              {
+                                "FromTxt:": {
+                                  "MoveObject obj:dest:": [
+                                    "@noun",
+                                    {
+                                      "FromTxt:": {
+                                        "ParentOf obj:": "@actor"
                                       }
-                                    ]
-                                  }
-                                },
-                                {
-                                  "Not:": {
-                                    "Is empty:": "@error"
-                                  }
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "Say:": "@error"
-                                    },
-                                    {
-                                      "Let:be:": [
-                                        "success",
-                                        {
-                                          "FromBool:": false
-                                        }
-                                      ]
                                     }
                                   ]
+                                }
+                              },
+                              {
+                                "Not:": {
+                                  "Is empty:": "@error"
+                                }
+                              },
+                              [
+                                {
+                                  "Say:": "@error"
                                 },
                                 {
-                                  "ElseDo:": {
-                                    "Act:": [
+                                  "Let:be:": [
+                                    "success",
+                                    {
+                                      "FromBool:": false
+                                    }
+                                  ]
+                                }
+                              ],
+                              {
+                                "ElseDo does:": [
+                                  {
+                                    "Log:": {
+                                      "FromTxt:": {
+                                        "RenderTemplate:": "{The: .actor} is taking {the: .noun} ..."
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "Let:be:": [
+                                      "success",
                                       {
-                                        "Log:": {
-                                          "FromTxt:": {
-                                            "RenderTemplate:": "{The: .actor} is taking {the: .noun} ..."
-                                          }
-                                        }
-                                      },
-                                      {
-                                        "Let:be:": [
-                                          "success",
-                                          {
-                                            "FromBool:": true
-                                          }
-                                        ]
+                                        "FromBool:": true
                                       }
                                     ]
                                   }
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
                       ]
                     }
                   ]
@@ -243,47 +224,43 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "player drops",
-                            {
-                              "RenderTemplate:": "Dropped."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "player drops",
+                          {
+                            "RenderTemplate:": "Dropped."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Not:": {
                       "IsPlayer obj:": "@actor"
                     }
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "someone else drops",
-                            {
-                              "RenderTemplate:": "{The: .actor|capitalize!} put down {the: .noun}."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "someone else drops",
+                          {
+                            "RenderTemplate:": "{The: .actor|capitalize!} put down {the: .noun}."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]
@@ -299,7 +276,7 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -326,32 +303,30 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Comment:": "Tell the player that they've already accomplished the goal they are trying to achieve ( vs. that they can't accomplish what they are trying to achieve. )"
-                      },
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't drop what's already there",
-                                {
-                                  "RenderTemplate:": "{The: .noun|capitalize!} {are: .noun} already here.\""
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Comment:": "Tell the player that they've already accomplished the goal they are trying to achieve ( vs. that they can't accomplish what they are trying to achieve. )"
+                    },
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't drop what's already there",
+                              {
+                                "RenderTemplate:": "{The: .noun|capitalize!} {are: .noun} already here.\""
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -374,25 +349,23 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't drop yourself",
-                                {
-                                  "RenderTemplate:": "{We:|capitalize!} lack the dexterity."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't drop yourself",
+                              {
+                                "RenderTemplate:": "{We:|capitalize!} lack the dexterity."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]

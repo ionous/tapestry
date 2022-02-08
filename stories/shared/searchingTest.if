@@ -10,52 +10,50 @@
         ]
       },
       {
-        "TestRule:hook activity:": [
+        "TestRule:does:": [
           "searching test",
-          {
-            "Act:": [
-              {
-                "Searching agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "knife"
-                  }
-                ]
-              },
-              {
-                "Searching agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "machine"
-                  }
-                ]
-              },
-              {
-                "Searching agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "counter"
-                  }
-                ]
-              },
-              {
-                "Searching agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "purse"
-                  }
-                ]
-              }
-            ]
-          }
+          [
+            {
+              "Searching agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "knife"
+                }
+              ]
+            },
+            {
+              "Searching agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "machine"
+                }
+              ]
+            },
+            {
+              "Searching agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "counter"
+                }
+              ]
+            },
+            {
+              "Searching agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "purse"
+                }
+              ]
+            }
+          ]
         ]
       },
       {

@@ -4,11 +4,13 @@ import (
 	"bytes"
 	_ "embed"
 	"encoding/json"
+	"io/fs"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/idl"
 	"git.sr.ht/~ionous/tapestry/web/js"
+	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
@@ -21,6 +23,62 @@ func TestBlocklyTypes(t *testing.T) {
 	} else {
 		t.Log(out)
 	}
+}
+
+func TestRepeatingContainers(t *testing.T) {
+	// reads all of the files in the passed filesystem as ifspecs and returns them as one big json array of shapes
+	if reps, e := findRepeatingContainers(idl.Specs); e != nil {
+		t.Fatal(e)
+	} else {
+		for _, rep := range reps {
+			t.Log(rep.outer, rep.inner)
+		}
+	}
+}
+
+type repeatingContainer struct {
+	outer, inner string
+}
+
+func findRepeatingContainers(files fs.FS) (ret []repeatingContainer, err error) {
+	// first, read into global "lookup"
+	if e := fs.WalkDir(files, ".", func(path string, d fs.DirEntry, e error) (err error) {
+		if e != nil {
+			err = e // can happen if it failed to read the contents of a director
+		} else if !d.IsDir() { // the first dir we get is "."
+			println("reading", path)
+			if _, e := readSpec(files, path); e != nil {
+				err = errutil.New(e, "reading", path)
+			}
+		}
+		return
+	}); e != nil {
+		err = e
+	} else {
+		for _, blockType := range lookup {
+			// search for flows...
+			if flow, ok := blockType.Spec.Value.(*spec.FlowSpec); ok {
+				// that have a term...
+				for _, t := range flow.Terms {
+					// that isnt a special internal term...
+					if n := t.TypeName(); !t.Private {
+						if ref, ok := lookup[n]; !ok {
+							err = errutil.New("couldnt find", n)
+						} else {
+							// which is a flow...
+							if flow, ok := ref.Spec.Value.(*spec.FlowSpec); ok {
+								// containing a single repeating term
+								if len(flow.Terms) == 1 && flow.Terms[0].Repeats {
+									ret = append(ret, repeatingContainer{n, flow.Terms[0].TypeName()})
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return
 }
 
 // make sure that story file has no output and one stacked input.

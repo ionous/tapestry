@@ -2,31 +2,27 @@
   "Tapestry:": {
     "Story:": [
       {
-        "TestRule:hook activity:": [
+        "TestRule:does:": [
           "countOf",
-          {
-            "Act:": [
-              {
-                "Repeating across:as:do:": [
+          [
+            {
+              "Repeating across:as:does:": [
+                {
+                  "FromNums:": {
+                    "Range:": 6
+                  }
+                },
+                {
+                  "AsNum:": "i"
+                },
+                [
                   {
-                    "FromNums:": {
-                      "Range:": 6
-                    }
-                  },
-                  {
-                    "AsNum:": "i"
-                  },
-                  {
-                    "Act:": [
-                      {
-                        "MagicSymbols": true
-                      }
-                    ]
+                    "MagicSymbols": true
                   }
                 ]
-              }
-            ]
-          }
+              ]
+            }
+          ]
         ]
       },
       {
@@ -57,21 +53,19 @@
                   {
                     "PatternRules:": [
                       {
-                        "PatternRule:hook activity:": [
+                        "PatternRule:does:": [
                           {
                             "Always": true
                           },
-                          {
-                            "Act:": [
-                              {
-                                "Say:": "o"
-                              }
-                            ]
-                          }
+                          [
+                            {
+                              "Say:": "o"
+                            }
+                          ]
                         ]
                       },
                       {
-                        "PatternRule:hook activity:": [
+                        "PatternRule:does:": [
                           {
                             "CountOf:num:": [
                               {
@@ -80,17 +74,15 @@
                               5
                             ]
                           },
-                          {
-                            "Act:": [
-                              {
-                                "Say:": "x"
-                              }
-                            ]
-                          }
+                          [
+                            {
+                              "Say:": "x"
+                            }
+                          ]
                         ]
                       },
                       {
-                        "PatternRule:hook activity:": [
+                        "PatternRule:does:": [
                           {
                             "CountOf:num:": [
                               {
@@ -99,17 +91,15 @@
                               3
                             ]
                           },
-                          {
-                            "Act:": [
-                              {
-                                "Say:": "-"
-                              }
-                            ]
-                          }
+                          [
+                            {
+                              "Say:": "-"
+                            }
+                          ]
                         ]
                       },
                       {
-                        "PatternRule:hook activity:": [
+                        "PatternRule:does:": [
                           {
                             "CountOf:num:": [
                               {
@@ -118,13 +108,11 @@
                               2
                             ]
                           },
-                          {
-                            "Act:": [
-                              {
-                                "Say:": "*"
-                              }
-                            ]
-                          }
+                          [
+                            {
+                              "Say:": "*"
+                            }
+                          ]
                         ]
                       }
                     ]

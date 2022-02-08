@@ -34,78 +34,70 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@actor"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "If:from:and:do:else:": [
-                          "result",
-                          {
-                            "FromTxt:": {
-                              "CanReach actor:action:noun:requiresLight:": [
-                                "@actor",
-                                {
-                                  "FromTxt:": "searching"
-                                },
-                                "@noun",
-                                {
-                                  "FromBool:": true
-                                }
-                              ]
-                            }
-                          },
-                          {
-                            "Not:": {
-                              "Is empty:": "@result"
-                            }
-                          },
-                          {
-                            "Act:": [
+                  [
+                    {
+                      "If:from:and:does:else:": [
+                        "result",
+                        {
+                          "FromTxt:": {
+                            "CanReach actor:action:noun:requiresLight:": [
+                              "@actor",
                               {
-                                "Say:": "@result"
+                                "FromTxt:": "searching"
+                              },
+                              "@noun",
+                              {
+                                "FromBool:": true
                               }
                             ]
-                          },
+                          }
+                        },
+                        {
+                          "Not:": {
+                            "Is empty:": "@result"
+                          }
+                        },
+                        [
                           {
-                            "ElseDo:": {
-                              "Act:": [
+                            "Say:": "@result"
+                          }
+                        ],
+                        {
+                          "ElseDo does:": [
+                            {
+                              "If:does:": [
                                 {
-                                  "If:do:": [
+                                  "Send:event:": [
                                     {
-                                      "Send:event:": [
-                                        {
-                                          "Capture obj:": "@noun"
-                                        },
-                                        {
-                                          "Search actor:noun:": [
-                                            "@actor",
-                                            "@noun"
-                                          ]
-                                        }
-                                      ]
+                                      "Capture obj:": "@noun"
                                     },
                                     {
-                                      "Act:": [
-                                        {
-                                          "ReportSearching actor:noun:": [
-                                            "@actor",
-                                            "@noun"
-                                          ]
-                                        }
+                                      "Search actor:noun:": [
+                                        "@actor",
+                                        "@noun"
                                       ]
                                     }
                                   ]
-                                }
+                                },
+                                [
+                                  {
+                                    "ReportSearching actor:noun:": [
+                                      "@actor",
+                                      "@noun"
+                                    ]
+                                  }
+                                ]
                               ]
                             }
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -149,51 +141,47 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "player searches something",
-                            {
-                              "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "player searches something",
+                          {
+                            "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Not:": {
                       "IsPlayer obj:": "@actor"
                     }
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "someone else searches something",
-                            {
-                              "RenderTemplate:": "{The: .actor|capitalize!} searches {the: .noun}."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "someone else searches something",
+                          {
+                            "RenderTemplate:": "{The: .actor|capitalize!} searches {the: .noun}."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -204,101 +192,89 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "items",
-                          {
-                            "FromTxts:": {
-                              "VisibleStorage obj:": "@noun"
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "items",
+                        {
+                          "FromTxts:": {
+                            "VisibleStorage obj:": "@noun"
                           }
-                        ]
-                      },
-                      {
-                        "If:do:else:": [
+                        }
+                      ]
+                    },
+                    {
+                      "If:does:else:": [
+                        {
+                          "Cmp:is:num:": [
+                            {
+                              "Len:": "@items"
+                            },
+                            {
+                              "Equals": true
+                            },
+                            0
+                          ]
+                        },
+                        [
                           {
-                            "Cmp:is:num:": [
-                              {
-                                "Len:": "@items"
-                              },
-                              {
-                                "Equals": true
-                              },
-                              0
-                            ]
-                          },
-                          {
-                            "Act:": [
-                              {
-                                "Say:": {
-                                  "Response:text:": [
-                                    "player searches empty storage",
-                                    {
-                                      "RenderTemplate:": "There is nothing {on:.noun} {the:.noun}."
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
-                          },
-                          {
-                            "ElseDo:": {
-                              "Act:": [
+                            "Say:": {
+                              "Response:text:": [
+                                "player searches empty storage",
                                 {
-                                  "Say:": {
-                                    "Response:text:": [
-                                      "player searches storage",
-                                      {
-                                        "Spaces:": {
-                                          "Act:": [
-                                            {
-                                              "Say:": {
-                                                "RenderTemplate:": "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
-                                              }
-                                            },
-                                            {
-                                              "Say:": {
-                                                "Commas:": {
-                                                  "Act:": [
-                                                    {
-                                                      "Repeating across:as:do:": [
-                                                        "@items",
-                                                        {
-                                                          "AsTxt:": "item"
-                                                        },
-                                                        {
-                                                          "Act:": [
-                                                            {
-                                                              "Say:": {
-                                                                "RenderTemplate:": "{the: .item}"
-                                                              }
-                                                            }
-                                                          ]
-                                                        }
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
-                                              }
-                                            },
-                                            {
-                                              "Say:": "."
-                                            }
-                                          ]
-                                        }
-                                      }
-                                    ]
-                                  }
+                                  "RenderTemplate:": "There is nothing {on:.noun} {the:.noun}."
                                 }
                               ]
                             }
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        ],
+                        {
+                          "ElseDo does:": [
+                            {
+                              "Say:": {
+                                "Response:text:": [
+                                  "player searches storage",
+                                  {
+                                    "Spaces does:": [
+                                      {
+                                        "Say:": {
+                                          "RenderTemplate:": "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
+                                        }
+                                      },
+                                      {
+                                        "Say:": {
+                                          "Commas does:": [
+                                            {
+                                              "Repeating across:as:does:": [
+                                                "@items",
+                                                {
+                                                  "AsTxt:": "item"
+                                                },
+                                                [
+                                                  {
+                                                    "Say:": {
+                                                      "RenderTemplate:": "{the: .item}"
+                                                    }
+                                                  }
+                                                ]
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      {
+                                        "Say:": "."
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -314,7 +290,7 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -331,29 +307,27 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't search opaque objects",
-                                {
-                                  "RenderTemplate:": "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't search opaque objects",
+                              {
+                                "RenderTemplate:": "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -372,25 +346,23 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can only search storage",
-                                {
-                                  "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can only search storage",
+                              {
+                                "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]

@@ -32,45 +32,37 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Commas:": {
-                            "Act:": [
+                  [
+                    {
+                      "Say:": {
+                        "Commas does:": [
+                          {
+                            "Repeating across:as:does:": [
+                              "@groups",
                               {
-                                "Repeating across:as:do:": [
-                                  "@groups",
-                                  {
-                                    "AsRec:": "group"
-                                  },
-                                  {
-                                    "Act:": [
+                                "AsRec:": "group"
+                              },
+                              [
+                                {
+                                  "Say:": {
+                                    "Spaces does:": [
                                       {
-                                        "Say:": {
-                                          "Spaces:": {
-                                            "Act:": [
-                                              {
-                                                "PrintGroup group:": "@group"
-                                              }
-                                            ]
-                                          }
-                                        }
+                                        "PrintGroup group:": "@group"
                                       }
                                     ]
                                   }
-                                ]
-                              }
+                                }
+                              ]
                             ]
                           }
-                        }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]
@@ -111,45 +103,37 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Rows:": {
-                            "Act:": [
+                  [
+                    {
+                      "Say:": {
+                        "Rows does:": [
+                          {
+                            "Repeating across:as:does:": [
+                              "@groups",
                               {
-                                "Repeating across:as:do:": [
-                                  "@groups",
-                                  {
-                                    "AsRec:": "group"
-                                  },
-                                  {
-                                    "Act:": [
+                                "AsRec:": "group"
+                              },
+                              [
+                                {
+                                  "Say:": {
+                                    "Row does:": [
                                       {
-                                        "Say:": {
-                                          "Row:": {
-                                            "Act:": [
-                                              {
-                                                "PrintGroup group:": "@group"
-                                              }
-                                            ]
-                                          }
-                                        }
+                                        "PrintGroup group:": "@group"
                                       }
                                     ]
                                   }
-                                ]
-                              }
+                                }
+                              ]
                             ]
                           }
-                        }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]
@@ -203,23 +187,21 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "RenderTemplate:": "{.obj}"
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "RenderTemplate:": "{.obj}"
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -242,36 +224,30 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Spaces:": {
-                            "Act:": [
-                              {
-                                "A noun:": "@obj"
-                              },
-                              {
-                                "Say:": {
-                                  "Brackets:": {
-                                    "Act:": [
-                                      {
-                                        "PrintDetails obj:": "@obj"
-                                      }
-                                    ]
-                                  }
+                  [
+                    {
+                      "Say:": {
+                        "Spaces does:": [
+                          {
+                            "A noun:": "@obj"
+                          },
+                          {
+                            "Say:": {
+                              "Brackets does:": [
+                                {
+                                  "PrintDetails obj:": "@obj"
                                 }
-                              }
-                            ]
+                              ]
+                            }
                           }
-                        }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -294,13 +270,11 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "PrintBlock obj:": "@obj"
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "PrintBlock obj:": "@obj"
+                    }
+                  ]
                 ]
               }
             ]
@@ -359,47 +333,41 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Spaces:": {
-                            "Act:": [
-                              {
-                                "A noun:": "@obj"
-                              },
-                              {
-                                "PrintStatus obj:isEmpty:": [
-                                  "@obj",
-                                  {
-                                    "FromBool:": {
-                                      "Not:": "@hasKids"
-                                    }
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        }
-                      },
-                      {
-                        "If:do:": [
-                          "@hasKids",
+                  [
+                    {
+                      "Say:": {
+                        "Spaces does:": [
                           {
-                            "Act:": [
+                            "A noun:": "@obj"
+                          },
+                          {
+                            "PrintStatus obj:isEmpty:": [
+                              "@obj",
                               {
-                                "PrintBlocks objs:": "@kids"
+                                "FromBool:": {
+                                  "Not:": "@hasKids"
+                                }
                               }
                             ]
                           }
                         ]
                       }
-                    ]
-                  }
+                    },
+                    {
+                      "If:does:": [
+                        "@hasKids",
+                        [
+                          {
+                            "PrintBlocks objs:": "@kids"
+                          }
+                        ]
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -447,7 +415,7 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Cmp:is:num:": [
                       {
@@ -459,28 +427,26 @@
                       0
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "inline storage",
-                            {
-                              "RenderTemplate:": "{On: .obj|capitalize!} {the: .obj} {are: .obj .kids} {print_inline_objects: .kids}."
-                            }
-                          ]
-                        }
-                      },
-                      {
-                        "Let:be:": [
-                          "success",
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "inline storage",
                           {
-                            "FromBool:": true
+                            "RenderTemplate:": "{On: .obj|capitalize!} {the: .obj} {are: .obj .kids} {print_inline_objects: .kids}."
                           }
                         ]
                       }
-                    ]
-                  }
+                    },
+                    {
+                      "Let:be:": [
+                        "success",
+                        {
+                          "FromBool:": true
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -526,7 +492,7 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -537,24 +503,22 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "empty container",
-                            {
-                              "RenderTemplate:": "empty"
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "empty container",
+                          {
+                            "RenderTemplate:": "empty"
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -571,22 +535,20 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "closed container",
-                            "closed"
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "closed container",
+                          "closed"
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -602,20 +564,18 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "on which are",
-                            {
-                              "RenderTemplate:": "{on: .obj} which {are: .obj .kids} {print_inline_objects: .kids}"
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "on which are",
+                          {
+                            "RenderTemplate:": "{on: .obj} which {are: .obj .kids} {print_inline_objects: .kids}"
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]
@@ -657,44 +617,36 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Spaces:": {
-                            "Act:": [
-                              {
-                                "Say:": {
-                                  "Brackets:": {
-                                    "Act:": [
+                  [
+                    {
+                      "Say:": {
+                        "Spaces does:": [
+                          {
+                            "Say:": {
+                              "Brackets does:": [
+                                {
+                                  "Say:": {
+                                    "Commas does:": [
                                       {
-                                        "Say:": {
-                                          "Commas:": {
-                                            "Act:": [
-                                              {
-                                                "PrintInnerStatus obj:isEmpty:": [
-                                                  "@obj",
-                                                  "@isEmpty"
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        }
+                                        "PrintInnerStatus obj:isEmpty:": [
+                                          "@obj",
+                                          "@isEmpty"
+                                        ]
                                       }
                                     ]
                                   }
                                 }
-                              }
-                            ]
+                              ]
+                            }
                           }
-                        }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]
@@ -736,31 +688,29 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Get obj:trait:": [
                       "@obj",
                       "locked"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "locked status",
-                            {
-                              "RenderTemplate:": "{if .obj.closed and .obj.locked}locked{end}"
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "locked status",
+                          {
+                            "RenderTemplate:": "{if .obj.closed and .obj.locked}locked{end}"
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -777,92 +727,84 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "transparent status",
-                            {
-                              "RenderTemplate:": "{if .isEmpty}empty{end}"
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "transparent status",
+                          {
+                            "RenderTemplate:": "{if .isEmpty}empty{end}"
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Get obj:trait:": [
                       "@obj",
                       "openable"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "openable status",
-                            {
-                              "RenderTemplate:": "{if .obj.closed}closed{else}open{if .isEmpty} but empty{end}"
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "openable status",
+                          {
+                            "RenderTemplate:": "{if .obj.closed}closed{else}open{if .isEmpty} but empty{end}"
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Get obj:trait:": [
                       "@obj",
                       "worn"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "worn status",
-                            {
-                              "RenderTemplate:": "being worn"
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "worn status",
+                          {
+                            "RenderTemplate:": "being worn"
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Get obj:trait:": [
                       "@obj",
                       "lit"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "lit status",
-                            {
-                              "RenderTemplate:": "providing light"
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "lit status",
+                          {
+                            "RenderTemplate:": "providing light"
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]

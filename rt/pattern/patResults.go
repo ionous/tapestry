@@ -163,7 +163,7 @@ func ApplyRule(run rt.Runtime, rule rt.Rule, allow rt.Flags) (ret rt.Flags, err 
 		if ok, e := safe.GetOptionalBool(run, rule.Filter, true); e != nil {
 			err = e
 		} else if ok.Bool() && allow&flags != 0 {
-			if e := safe.Run(run, rule.Execute); e != nil {
+			if e := safe.RunAll(run, rule.Execute); e != nil {
 				err = e
 			} else {
 				// don't let the "run always" filter flag show through

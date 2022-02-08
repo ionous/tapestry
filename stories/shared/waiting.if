@@ -32,38 +32,34 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@actor"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "If:do:": [
+                  [
+                    {
+                      "If:does:": [
+                        {
+                          "Send:event:": [
+                            {
+                              "Capture obj:": "@actor"
+                            },
+                            {
+                              "Wait actor:noun:": [
+                                "@actor",
+                                "@actor"
+                              ]
+                            }
+                          ]
+                        },
+                        [
                           {
-                            "Send:event:": [
-                              {
-                                "Capture obj:": "@actor"
-                              },
-                              {
-                                "Wait actor:noun:": [
-                                  "@actor",
-                                  "@actor"
-                                ]
-                              }
-                            ]
-                          },
-                          {
-                            "Act:": [
-                              {
-                                "ReportWaiting actor:": "@actor"
-                              }
-                            ]
+                            "ReportWaiting actor:": "@actor"
                           }
                         ]
-                      }
-                    ]
-                  }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -94,47 +90,43 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "the player waits",
-                            {
-                              "RenderTemplate:": "Time passes."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "the player waits",
+                          {
+                            "RenderTemplate:": "Time passes."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Not:": {
                       "IsPlayer obj:": "@actor"
                     }
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "someone waits",
-                            {
-                              "RenderTemplate:": "{The: .actor|capitalize!} waited."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "someone waits",
+                          {
+                            "RenderTemplate:": "{The: .actor|capitalize!} waited."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]

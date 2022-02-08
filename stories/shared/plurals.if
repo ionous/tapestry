@@ -38,25 +38,23 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Plural of:": {
-                            "RenderTemplate:": "{.obj}"
-                          }
+                  [
+                    {
+                      "Say:": {
+                        "Plural of:": {
+                          "RenderTemplate:": "{.obj}"
                         }
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Cmp:is:txt:": [
                       {
@@ -73,15 +71,13 @@
                       ""
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "RenderTemplate:": "{.obj.printed_plural_name}"
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "RenderTemplate:": "{.obj.printed_plural_name}"
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]
@@ -156,17 +152,15 @@
         ]
       },
       {
-        "TestRule:hook activity:": [
+        "TestRule:does:": [
           "current_test",
-          {
-            "Act:": [
-              {
-                "Say:": {
-                  "RenderTemplate:": "{print_plural_name: .flowerpot}, {print_plural_name: .dishes}, {print_plural_name: .spoon}"
-                }
+          [
+            {
+              "Say:": {
+                "RenderTemplate:": "{print_plural_name: .flowerpot}, {print_plural_name: .dishes}, {print_plural_name: .spoon}"
               }
-            ]
-          }
+            }
+          ]
         ]
       }
     ]

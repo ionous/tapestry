@@ -74,54 +74,48 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@actor"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "If:from:and:do:else:": [
-                          "resp",
+                  [
+                    {
+                      "If:from:and:does:else:": [
+                        "resp",
+                        {
+                          "FromTxt:": {
+                            "CanReach actor:action:noun:": [
+                              "@actor",
+                              {
+                                "FromTxt:": "attacking"
+                              },
+                              "@noun"
+                            ]
+                          }
+                        },
+                        {
+                          "Not:": {
+                            "Is empty:": "@resp"
+                          }
+                        },
+                        [
                           {
-                            "FromTxt:": {
-                              "CanReach actor:action:noun:": [
+                            "Say:": "@resp"
+                          }
+                        ],
+                        {
+                          "ElseDo does:": [
+                            {
+                              "ReportAttacking actor:noun:": [
                                 "@actor",
-                                {
-                                  "FromTxt:": "attacking"
-                                },
                                 "@noun"
                               ]
                             }
-                          },
-                          {
-                            "Not:": {
-                              "Is empty:": "@resp"
-                            }
-                          },
-                          {
-                            "Act:": [
-                              {
-                                "Say:": "@resp"
-                              }
-                            ]
-                          },
-                          {
-                            "ElseDo:": {
-                              "Act:": [
-                                {
-                                  "ReportAttacking actor:noun:": [
-                                    "@actor",
-                                    "@noun"
-                                  ]
-                                }
-                              ]
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -158,45 +152,41 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "actor attacking",
-                            {
-                              "RenderTemplate:": "{the:.actor|capitalize!} attacks {the: .noun}."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "actor attacking",
+                          {
+                            "RenderTemplate:": "{the:.actor|capitalize!} attacks {the: .noun}."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@actor"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "player attacking",
-                            {
-                              "RenderTemplate:": "Violence isn't the answer."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "player attacking",
+                          {
+                            "RenderTemplate:": "Violence isn't the answer."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]

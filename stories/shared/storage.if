@@ -30,47 +30,43 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "KindOf:is:": [
                       "@obj",
                       "containers"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "success",
-                          {
-                            "FromBool:": true
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Let:be:": [
+                        "success",
+                        {
+                          "FromBool:": true
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "KindOf:is:": [
                       "@obj",
                       "supporters"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "success",
-                          {
-                            "FromBool:": true
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Let:be:": [
+                        "success",
+                        {
+                          "FromBool:": true
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -109,26 +105,24 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "ProvidesStorage obj:": "@obj"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "success",
-                          {
-                            "FromBool:": {
-                              "Not:": {
-                                "FullyOpaque obj:": "@obj"
-                              }
+                  [
+                    {
+                      "Let:be:": [
+                        "success",
+                        {
+                          "FromBool:": {
+                            "Not:": {
+                              "FullyOpaque obj:": "@obj"
                             }
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -167,74 +161,68 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "ShowsStorage obj:": "@obj"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Repeating across:as:do:": [
+                  [
+                    {
+                      "Repeating across:as:does:": [
+                        {
+                          "FromTxts:": {
+                            "ChildrenOf obj:": "@obj"
+                          }
+                        },
+                        {
+                          "AsTxt:": "it"
+                        },
+                        [
                           {
-                            "FromTxts:": {
-                              "ChildrenOf obj:": "@obj"
-                            }
-                          },
-                          {
-                            "AsTxt:": "it"
-                          },
-                          {
-                            "Act:": [
+                            "If:does:": [
                               {
-                                "If:do:": [
-                                  {
-                                    "Not:": {
-                                      "AnyTrue:": [
+                                "Not:": {
+                                  "AnyTrue:": [
+                                    {
+                                      "Cmp:is:txt:": [
+                                        "@it",
                                         {
-                                          "Cmp:is:txt:": [
-                                            "@it",
-                                            {
-                                              "Equals": true
-                                            },
-                                            {
-                                              "Get:from:": [
-                                                "pawn",
-                                                {
-                                                  "ObjFields:": "player"
-                                                }
-                                              ]
-                                            }
-                                          ]
+                                          "Equals": true
                                         },
                                         {
-                                          "Get obj:trait:": [
-                                            "@it",
-                                            "scenery"
+                                          "Get:from:": [
+                                            "pawn",
+                                            {
+                                              "ObjFields:": "player"
+                                            }
                                           ]
                                         }
                                       ]
+                                    },
+                                    {
+                                      "Get obj:trait:": [
+                                        "@it",
+                                        "scenery"
+                                      ]
                                     }
-                                  },
-                                  {
-                                    "Act:": [
-                                      {
-                                        "Put:into:": [
-                                          "@it",
-                                          {
-                                            "IntoTxts:": "out"
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
+                                  ]
+                                }
+                              },
+                              [
+                                {
+                                  "Put:into:": [
+                                    "@it",
+                                    {
+                                      "IntoTxts:": "out"
+                                    }
+                                  ]
+                                }
+                              ]
                             ]
                           }
                         ]
-                      }
-                    ]
-                  }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -273,26 +261,24 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "ProvidesStorage obj:": "@obj"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "success",
-                          {
-                            "FromBool:": true
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Let:be:": [
+                        "success",
+                        {
+                          "FromBool:": true
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -309,18 +295,16 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "success",
-                          {
-                            "FromBool:": false
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Let:be:": [
+                        "success",
+                        {
+                          "FromBool:": false
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]

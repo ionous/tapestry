@@ -50,72 +50,66 @@
                 {
                   "PatternRules:": [
                     {
-                      "PatternRule:hook activity:": [
+                      "PatternRule:does:": [
                         {
                           "Always": true
                         },
-                        {
-                          "Act:": [
-                            {
-                              "If:from:and:do:else:": [
-                                "resp",
+                        [
+                          {
+                            "If:from:and:does:else:": [
+                              "resp",
+                              {
+                                "FromTxt:": {
+                                  "StateChanging noun:trait:guard:change:": [
+                                    "@noun",
+                                    "@trait",
+                                    "@guard",
+                                    "@change"
+                                  ]
+                                }
+                              },
+                              {
+                                "Not:": {
+                                  "Is empty:": "@resp"
+                                }
+                              },
+                              [
                                 {
-                                  "FromTxt:": {
-                                    "StateChanging noun:trait:guard:change:": [
-                                      "@noun",
-                                      "@trait",
-                                      "@guard",
-                                      "@change"
-                                    ]
-                                  }
+                                  "Say:": "@resp"
                                 },
                                 {
-                                  "Not:": {
-                                    "Is empty:": "@resp"
-                                  }
-                                },
-                                {
-                                  "Act:": [
+                                  "Let:be:": [
+                                    "success",
                                     {
-                                      "Say:": "@resp"
-                                    },
-                                    {
-                                      "Let:be:": [
-                                        "success",
-                                        {
-                                          "FromBool:": false
-                                        }
-                                      ]
+                                      "FromBool:": false
                                     }
                                   ]
-                                },
-                                {
-                                  "ElseDo:": {
-                                    "Act:": [
+                                }
+                              ],
+                              {
+                                "ElseDo does:": [
+                                  {
+                                    "Comment:": "nothing has stopped us, so lets change the state now."
+                                  },
+                                  {
+                                    "Put obj:trait:": [
+                                      "@noun",
+                                      "@trait"
+                                    ]
+                                  },
+                                  {
+                                    "Let:be:": [
+                                      "success",
                                       {
-                                        "Comment:": "nothing has stopped us, so lets change the state now."
-                                      },
-                                      {
-                                        "Put obj:trait:": [
-                                          "@noun",
-                                          "@trait"
-                                        ]
-                                      },
-                                      {
-                                        "Let:be:": [
-                                          "success",
-                                          {
-                                            "FromBool:": true
-                                          }
-                                        ]
+                                        "FromBool:": true
                                       }
                                     ]
                                   }
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
                       ]
                     }
                   ]
@@ -139,63 +133,59 @@
                 {
                   "PatternRules:": [
                     {
-                      "PatternRule:hook activity:": [
+                      "PatternRule:does:": [
                         {
                           "Always": true
                         },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": {
-                                "Response:text:": [
-                                  "something changed itself",
-                                  {
-                                    "RenderTemplate:": "{The: .noun|capitalize!} {are!} {.trait}."
-                                  }
-                                ]
-                              }
-                            },
-                            {
-                              "Let:be:": [
-                                "success",
+                        [
+                          {
+                            "Say:": {
+                              "Response:text:": [
+                                "something changed itself",
                                 {
-                                  "FromBool:": true
+                                  "RenderTemplate:": "{The: .noun|capitalize!} {are!} {.trait}."
                                 }
                               ]
                             }
-                          ]
-                        }
+                          },
+                          {
+                            "Let:be:": [
+                              "success",
+                              {
+                                "FromBool:": true
+                              }
+                            ]
+                          }
+                        ]
                       ]
                     },
                     {
-                      "PatternRule:hook activity:": [
+                      "PatternRule:does:": [
                         {
                           "IsPlayer obj:": {
                             "FromTxt:": "@actor"
                           }
                         },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": {
-                                "Response:text:": [
-                                  "the player changed something",
-                                  {
-                                    "RenderTemplate:": "{We!|capitalize!} {.change} {the: .noun}."
-                                  }
-                                ]
-                              }
-                            },
-                            {
-                              "Let:be:": [
-                                "success",
+                        [
+                          {
+                            "Say:": {
+                              "Response:text:": [
+                                "the player changed something",
                                 {
-                                  "FromBool:": true
+                                  "RenderTemplate:": "{We!|capitalize!} {.change} {the: .noun}."
                                 }
                               ]
                             }
-                          ]
-                        }
+                          },
+                          {
+                            "Let:be:": [
+                              "success",
+                              {
+                                "FromBool:": true
+                              }
+                            ]
+                          }
+                        ]
                       ]
                     }
                   ]
@@ -249,39 +239,37 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Get obj:trait:": [
                       "@noun",
                       "@trait"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Comment:": "can't change what is."
-                      },
-                      {
-                        "Let:be:": [
-                          "result",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't change what is",
-                                {
-                                  "RenderTemplate:": "{They: .noun|capitalize!} {are!} already {.trait}."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Comment:": "can't change what is."
+                    },
+                    {
+                      "Let:be:": [
+                        "result",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't change what is",
+                              {
+                                "RenderTemplate:": "{They: .noun|capitalize!} {are!} already {.trait}."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -299,28 +287,26 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Comment:": "can't change the unchangeable."
-                      },
-                      {
-                        "Let:be:": [
-                          "result",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't change the unchangeable",
-                                {
-                                  "RenderTemplate:": "{They: .noun|capitalize!} {arent!} something {we!} can {.change}."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Comment:": "can't change the unchangeable."
+                    },
+                    {
+                      "Let:be:": [
+                        "result",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't change the unchangeable",
+                              {
+                                "RenderTemplate:": "{They: .noun|capitalize!} {arent!} something {we!} can {.change}."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]

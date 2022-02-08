@@ -27,20 +27,18 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "result",
-                          "@verb"
-                        ]
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Let:be:": [
+                        "result",
+                        "@verb"
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -71,40 +69,34 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "If:do:else:": [
+                  [
+                    {
+                      "If:does:else:": [
+                        {
+                          "KindOf:is:": [
+                            "@noun",
+                            "containers"
+                          ]
+                        },
+                        [
                           {
-                            "KindOf:is:": [
-                              "@noun",
-                              "containers"
-                            ]
-                          },
-                          {
-                            "Act:": [
-                              {
-                                "Say:": "contain"
-                              }
-                            ]
-                          },
-                          {
-                            "ElseDo:": {
-                              "Act:": [
-                                {
-                                  "Say:": "support"
-                                }
-                              ]
-                            }
+                            "Say:": "contain"
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        ],
+                        {
+                          "ElseDo does:": [
+                            {
+                              "Say:": "support"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -135,40 +127,34 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "If:do:else:": [
+                  [
+                    {
+                      "If:does:else:": [
+                        {
+                          "KindOf:is:": [
+                            "@noun",
+                            "containers"
+                          ]
+                        },
+                        [
                           {
-                            "KindOf:is:": [
-                              "@noun",
-                              "containers"
-                            ]
-                          },
-                          {
-                            "Act:": [
-                              {
-                                "Say:": "in"
-                              }
-                            ]
-                          },
-                          {
-                            "ElseDo:": {
-                              "Act:": [
-                                {
-                                  "Say:": "on"
-                                }
-                              ]
-                            }
+                            "Say:": "in"
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        ],
+                        {
+                          "ElseDo does:": [
+                            {
+                              "Say:": "on"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -199,40 +185,34 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "If:do:else:": [
+                  [
+                    {
+                      "If:does:else:": [
+                        {
+                          "KindOf:is:": [
+                            "@noun",
+                            "containers"
+                          ]
+                        },
+                        [
                           {
-                            "KindOf:is:": [
-                              "@noun",
-                              "containers"
-                            ]
-                          },
-                          {
-                            "Act:": [
-                              {
-                                "Say:": "out"
-                              }
-                            ]
-                          },
-                          {
-                            "ElseDo:": {
-                              "Act:": [
-                                {
-                                  "Say:": "off"
-                                }
-                              ]
-                            }
+                            "Say:": "out"
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        ],
+                        {
+                          "ElseDo does:": [
+                            {
+                              "Say:": "off"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -269,69 +249,61 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "If:do:else:": [
-                          {
-                            "AnyTrue:": [
-                              {
-                                "Cmp:is:num:": [
-                                  {
-                                    "Len:": "@names"
-                                  },
-                                  {
-                                    "GreaterThan": true
-                                  },
-                                  1
-                                ]
-                              },
-                              {
-                                "Get obj:trait:": [
-                                  "@noun",
-                                  "plural named"
-                                ]
-                              }
-                            ]
-                          },
-                          {
-                            "Act:": [
-                              {
-                                "Say:": "are"
-                              }
-                            ]
-                          },
-                          {
-                            "ElseDo:": {
-                              "Act:": [
+                  [
+                    {
+                      "If:does:else:": [
+                        {
+                          "AnyTrue:": [
+                            {
+                              "Cmp:is:num:": [
                                 {
-                                  "Say:": "is"
-                                }
+                                  "Len:": "@names"
+                                },
+                                {
+                                  "GreaterThan": true
+                                },
+                                1
+                              ]
+                            },
+                            {
+                              "Get obj:trait:": [
+                                "@noun",
+                                "plural named"
                               ]
                             }
+                          ]
+                        },
+                        [
+                          {
+                            "Say:": "are"
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        ],
+                        {
+                          "ElseDo does:": [
+                            {
+                              "Say:": "is"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@noun"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": "are"
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Say:": "are"
+                    }
+                  ]
                 ]
               }
             ]
@@ -365,48 +337,42 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": "is not"
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Say:": "is not"
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Get obj:trait:": [
                       "@noun",
                       "plural named"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": "are not"
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Say:": "are not"
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@noun"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": "are not"
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Say:": "are not"
+                    }
+                  ]
                 ]
               }
             ]
@@ -440,48 +406,42 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": "isn't"
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Say:": "isn't"
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Get obj:trait:": [
                       "@noun",
                       "plural named"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": "aren't"
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Say:": "aren't"
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@noun"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": "aren't"
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Say:": "aren't"
+                    }
+                  ]
                 ]
               }
             ]

@@ -51,17 +51,15 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@actor"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "ReportJumping actor:": "@actor"
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "ReportJumping actor:": "@actor"
+                    }
+                  ]
                 ]
               }
             ]
@@ -92,45 +90,41 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "actor jumping",
-                            {
-                              "RenderTemplate:": "{the:.actor|capitalize!} jumps on the spot."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "actor jumping",
+                          {
+                            "RenderTemplate:": "{the:.actor|capitalize!} jumps on the spot."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@actor"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "player jumping",
-                            {
-                              "RenderTemplate:": "{we:|capitalize!} jump on the spot."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "player jumping",
+                          {
+                            "RenderTemplate:": "{we:|capitalize!} jump on the spot."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]

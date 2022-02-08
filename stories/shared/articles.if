@@ -78,17 +78,15 @@
         "--": ""
       },
       {
-        "TestRule:hook activity:": [
+        "TestRule:does:": [
           "articles",
-          {
-            "Act:": [
-              {
-                "Say:": {
-                  "RenderTemplate:": "You can only just make out {a: .lamp_post}.\nYou can only just make out {a: .Trevor}.\nYou can only just make out {a: .soldiers}.\n{a: .lamp_post|capitalize!} can be made out in the mist.\n{a: .Trevor|capitalize!} can be made out in the mist.\n{a: .soldiers|capitalize!} can be made out in the mist.\nYou can only just make out {the: .lamp_post}.\nYou can only just make out {the: .trevor}.\nYou can only just make out {the: .soldiers}.\n{the: .lamp_post|capitalize!} may be a trick of the mist.\n{the: .trevor|capitalize!} may be a trick of the mist.\n{the: .soldiers|capitalize!} may be a trick of the mist.\nYou can only just make out {a: .Trevor}."
-                }
+          [
+            {
+              "Say:": {
+                "RenderTemplate:": "You can only just make out {a: .lamp_post}.\nYou can only just make out {a: .Trevor}.\nYou can only just make out {a: .soldiers}.\n{a: .lamp_post|capitalize!} can be made out in the mist.\n{a: .Trevor|capitalize!} can be made out in the mist.\n{a: .soldiers|capitalize!} can be made out in the mist.\nYou can only just make out {the: .lamp_post}.\nYou can only just make out {the: .trevor}.\nYou can only just make out {the: .soldiers}.\n{the: .lamp_post|capitalize!} may be a trick of the mist.\n{the: .trevor|capitalize!} may be a trick of the mist.\n{the: .soldiers|capitalize!} may be a trick of the mist.\nYou can only just make out {a: .Trevor}."
               }
-            ]
-          }
+            }
+          ]
         ]
       },
       {
@@ -126,24 +124,22 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "PrintArticle obj:name:": [
-                          "@noun",
-                          {
-                            "FromTxt:": {
-                              "RenderTemplate:": "{.noun}"
-                            }
+                  [
+                    {
+                      "PrintArticle obj:name:": [
+                        "@noun",
+                        {
+                          "FromTxt:": {
+                            "RenderTemplate:": "{.noun}"
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -174,27 +170,25 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "PrintArticle article:obj:name:": [
-                          {
-                            "FromTxt:": "the"
-                          },
-                          "@noun",
-                          {
-                            "FromTxt:": {
-                              "RenderTemplate:": "{.noun}"
-                            }
+                  [
+                    {
+                      "PrintArticle article:obj:name:": [
+                        {
+                          "FromTxt:": "the"
+                        },
+                        "@noun",
+                        {
+                          "FromTxt:": {
+                            "RenderTemplate:": "{.noun}"
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -231,58 +225,52 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "RenderTemplate:": "a {.name}"
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "RenderTemplate:": "a {.name}"
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "StartsWithVowel text:": "@name"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "RenderTemplate:": "an {.name}"
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "RenderTemplate:": "an {.name}"
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Get obj:trait:": [
                       "@obj",
                       "plural named"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "RenderTemplate:": "some {.name}"
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "RenderTemplate:": "some {.name}"
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Cmp:is:txt:": [
                       {
@@ -299,19 +287,17 @@
                       ""
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "RenderTemplate:": "{.obj.indefinite_article} {.name}"
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "RenderTemplate:": "{.obj.indefinite_article} {.name}"
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Cmp:is:txt:": [
                       "@article",
@@ -321,37 +307,33 @@
                       ""
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "RenderTemplate:": "{.article} {.name}"
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "RenderTemplate:": "{.article} {.name}"
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Get obj:trait:": [
                       "@obj",
                       "proper named"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Comment:": "by definition proper named objects have no article."
-                      },
-                      {
-                        "Say:": {
-                          "RenderTemplate:": "{.name}"
-                        }
+                  [
+                    {
+                      "Comment:": "by definition proper named objects have no article."
+                    },
+                    {
+                      "Say:": {
+                        "RenderTemplate:": "{.name}"
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]

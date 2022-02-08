@@ -6,12 +6,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
-func NewActivity(exe ...rt.Execute) *Activity {
-	return &Activity{Exe: exe}
-}
-
-func MakeActivity(exe ...rt.Execute) Activity {
-	return Activity{Exe: exe}
+func MakeActivity(exe ...rt.Execute) []rt.Execute {
+	return exe
 }
 
 func Args(from ...rt.Assignment) CallArgs {

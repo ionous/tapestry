@@ -32,24 +32,22 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@actor"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Send:event:": [
-                          {
-                            "Capture obj:": "@actor"
-                          },
-                          {
-                            "Inventory actor:": "@actor"
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Send:event:": [
+                        {
+                          "Capture obj:": "@actor"
+                        },
+                        {
+                          "Inventory actor:": "@actor"
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -70,25 +68,23 @@
                 {
                   "PatternRules:": [
                     {
-                      "PatternRule:hook activity:": [
+                      "PatternRule:does:": [
                         {
                           "Always": true
                         },
-                        {
-                          "Act:": [
-                            {
-                              "PrintInventory actor:": "@actor"
-                            },
-                            {
-                              "Let:be:": [
-                                "success",
-                                {
-                                  "FromBool:": true
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                        [
+                          {
+                            "PrintInventory actor:": "@actor"
+                          },
+                          {
+                            "Let:be:": [
+                              "success",
+                              {
+                                "FromBool:": true
+                              }
+                            ]
+                          }
+                        ]
                       ]
                     }
                   ]
@@ -134,28 +130,26 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "carrying nothing",
-                            {
-                              "RenderTemplate:": "{we:|capitalize!} {are:.actor} carrying nothing."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "carrying nothing",
+                          {
+                            "RenderTemplate:": "{we:|capitalize!} {are:.actor} carrying nothing."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Cmp:is:num:": [
                       {
@@ -167,23 +161,21 @@
                       0
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "carrying something",
-                            {
-                              "RenderTemplate:": "You are carrying:"
-                            }
-                          ]
-                        }
-                      },
-                      {
-                        "PrintBlocks objs:": "@kids"
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "carrying something",
+                          {
+                            "RenderTemplate:": "You are carrying:"
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    },
+                    {
+                      "PrintBlocks objs:": "@kids"
+                    }
+                  ]
                 ]
               }
             ]

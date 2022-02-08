@@ -11,8 +11,8 @@ import (
   "git.sr.ht/~ionous/tapestry/test/testpat"
 )
 
-func SayIt(s string) rt.Execute {
-  return &core.Say{Text: T(s)}
+func SayIt(s string) []rt.Execute {
+  return []rt.Execute{&core.Say{Text: T(s)}}
 }
 
 type MatchNumber struct {
@@ -89,13 +89,13 @@ func I(n int) *literal.NumValue     { return &literal.NumValue{Num: float64(n)} 
 func F(n float64) *literal.NumValue { return &literal.NumValue{Num: n} }
 func T(s string) *literal.TextValue { return &literal.TextValue{Text: s} }
 
-var SayHelloGoodbye = core.NewActivity(
+var SayHelloGoodbye = core.MakeActivity(
   &core.ChooseAction{
     If: B(true),
-    Do: core.MakeActivity(&core.Say{
+    Does: core.MakeActivity(&core.Say{
       Text: T("hello"),
     }),
-    Else: &core.ChooseNothingElse{Do: core.MakeActivity(&core.Say{
+    Else: &core.ChooseNothingElse{Does: core.MakeActivity(&core.Say{
       Text: T("goodbye"),
     }),
     },

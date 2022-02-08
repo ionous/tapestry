@@ -10,151 +10,149 @@
         ]
       },
       {
-        "TestRule:hook activity:": [
+        "TestRule:does:": [
           "wearing test",
-          {
-            "Act:": [
-              {
-                "Say:": {
-                  "RenderTemplate:": "The flower's ogp: {the: {parentOf: .flower}}, {.flower.possessiveness}."
-                }
-              },
-              {
-                "Say:": "Fail to re-wear the flower:"
-              },
-              {
-                "Wearing agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "flower"
-                  }
-                ]
-              },
-              {
-                "Say:": "Take off the flower:"
-              },
-              {
-                "Removing agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "flower"
-                  }
-                ]
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
-                }
-              },
-              {
-                "Say:": "Fail to re-remove the flower:"
-              },
-              {
-                "Removing agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "flower"
-                  }
-                ]
-              },
-              {
-                "Say:": "Wear the flower again:"
-              },
-              {
-                "Wearing agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "flower"
-                  }
-                ]
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
-                }
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
-                }
-              },
-              {
-                "Say:": "Fail to wear an unwearable:"
-              },
-              {
-                "Wearing agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "knife"
-                  }
-                ]
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
-                }
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
-                }
-              },
-              {
-                "Say:": "Fail to wear something not held:"
-              },
-              {
-                "Wearing agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "purse"
-                  }
-                ]
-              },
-              {
-                "Say:": "Fail to remove something not held:"
-              },
-              {
-                "Removing agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "purse"
-                  }
-                ]
-              },
-              {
-                "Say:": "Fail to put on something not reachable:"
-              },
-              {
-                "Wearing agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "purse"
-                  }
-                ]
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
-                }
+          [
+            {
+              "Say:": {
+                "RenderTemplate:": "The flower's ogp: {the: {parentOf: .flower}}, {.flower.possessiveness}."
               }
-            ]
-          }
+            },
+            {
+              "Say:": "Fail to re-wear the flower:"
+            },
+            {
+              "Wearing agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "flower"
+                }
+              ]
+            },
+            {
+              "Say:": "Take off the flower:"
+            },
+            {
+              "Removing agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "flower"
+                }
+              ]
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
+              }
+            },
+            {
+              "Say:": "Fail to re-remove the flower:"
+            },
+            {
+              "Removing agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "flower"
+                }
+              ]
+            },
+            {
+              "Say:": "Wear the flower again:"
+            },
+            {
+              "Wearing agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "flower"
+                }
+              ]
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
+              }
+            },
+            {
+              "Say:": "Fail to wear an unwearable:"
+            },
+            {
+              "Wearing agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "knife"
+                }
+              ]
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
+              }
+            },
+            {
+              "Say:": "Fail to wear something not held:"
+            },
+            {
+              "Wearing agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "purse"
+                }
+              ]
+            },
+            {
+              "Say:": "Fail to remove something not held:"
+            },
+            {
+              "Removing agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "purse"
+                }
+              ]
+            },
+            {
+              "Say:": "Fail to put on something not reachable:"
+            },
+            {
+              "Wearing agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "purse"
+                }
+              ]
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
+              }
+            }
+          ]
         ]
       },
       {

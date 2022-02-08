@@ -43,7 +43,7 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Cmp:is:txt:": [
                       {
@@ -55,25 +55,23 @@
                       "@actor"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can only use possessions",
-                                {
-                                  "RenderTemplate:": "{we:|capitalize!} haven't got {those:.noun}!"
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can only use possessions",
+                              {
+                                "RenderTemplate:": "{we:|capitalize!} haven't got {those:.noun}!"
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]

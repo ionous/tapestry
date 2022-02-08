@@ -62,7 +62,7 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -75,99 +75,83 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Comment:": "unless something else stops us, print a bracketed list of objects"
-                      },
-                      {
-                        "If:do:else:": [
+                  [
+                    {
+                      "Comment:": "unless something else stops us, print a bracketed list of objects"
+                    },
+                    {
+                      "If:does:else:": [
+                        {
+                          "Get:from:": [
+                            "not hide size",
+                            {
+                              "VarFields:": "grouping"
+                            }
+                          ]
+                        },
+                        [
                           {
-                            "Get:from:": [
-                              "not hide size",
-                              {
-                                "VarFields:": "grouping"
-                              }
-                            ]
-                          },
-                          {
-                            "Act:": [
-                              {
-                                "Say:": {
-                                  "Brackets:": {
-                                    "Act:": [
-                                      {
-                                        "Say:": {
-                                          "Commas:": {
-                                            "Act:": [
-                                              {
-                                                "Repeating across:as:do:": [
-                                                  "@objs",
-                                                  {
-                                                    "AsTxt:": "obj"
-                                                  },
-                                                  {
-                                                    "Act:": [
-                                                      {
-                                                        "PrintGroupedObject obj:grouping:": [
-                                                          "@obj",
-                                                          "@grouping"
-                                                        ]
-                                                      }
-                                                    ]
-                                                  }
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
-                              }
-                            ]
-                          },
-                          {
-                            "ElseDo:": {
-                              "Act:": [
+                            "Say:": {
+                              "Brackets does:": [
                                 {
                                   "Say:": {
-                                    "Commas:": {
-                                      "Act:": [
-                                        {
-                                          "Repeating across:as:do:": [
-                                            "@objs",
+                                    "Commas does:": [
+                                      {
+                                        "Repeating across:as:does:": [
+                                          "@objs",
+                                          {
+                                            "AsTxt:": "obj"
+                                          },
+                                          [
                                             {
-                                              "AsTxt:": "obj"
-                                            },
-                                            {
-                                              "Act:": [
-                                                {
-                                                  "PrintGroupedObject obj:grouping:": [
-                                                    "@obj",
-                                                    "@grouping"
-                                                  ]
-                                                }
+                                              "PrintGroupedObject obj:grouping:": [
+                                                "@obj",
+                                                "@grouping"
                                               ]
                                             }
                                           ]
-                                        }
-                                      ]
-                                    }
+                                        ]
+                                      }
+                                    ]
                                   }
                                 }
                               ]
                             }
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        ],
+                        {
+                          "ElseDo does:": [
+                            {
+                              "Say:": {
+                                "Commas does:": [
+                                  {
+                                    "Repeating across:as:does:": [
+                                      "@objs",
+                                      {
+                                        "AsTxt:": "obj"
+                                      },
+                                      [
+                                        {
+                                          "PrintGroupedObject obj:grouping:": [
+                                            "@obj",
+                                            "@grouping"
+                                          ]
+                                        }
+                                      ]
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -188,27 +172,25 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Comment:": "print a label with no prefixed size."
-                      },
-                      {
-                        "Say:": {
-                          "Get:from:": [
-                            "label",
-                            {
-                              "VarFields:": "grouping"
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Comment:": "print a label with no prefixed size."
+                    },
+                    {
+                      "Say:": {
+                        "Get:from:": [
+                          "label",
+                          {
+                            "VarFields:": "grouping"
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -221,57 +203,55 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Comment:": "print the size, and possibly a label, for a group of objects."
-                      },
-                      {
-                        "PrintSeveral obj:groupSize:label:": [
-                          {
-                            "FromTxt:": {
-                              "Get:index:": [
-                                "@objs",
-                                1
-                              ]
-                            }
-                          },
-                          {
-                            "FromNum:": {
-                              "Len:": "@objs"
-                            }
-                          },
-                          {
-                            "FromTxt:": {
-                              "Txt if:then:else:": [
-                                {
-                                  "Get:from:": [
-                                    "not hide label",
-                                    {
-                                      "VarFields:": "grouping"
-                                    }
-                                  ]
-                                },
-                                {
-                                  "Get:from:": [
-                                    "label",
-                                    {
-                                      "VarFields:": "grouping"
-                                    }
-                                  ]
-                                },
-                                ""
-                              ]
-                            }
+                  [
+                    {
+                      "Comment:": "print the size, and possibly a label, for a group of objects."
+                    },
+                    {
+                      "PrintSeveral obj:groupSize:label:": [
+                        {
+                          "FromTxt:": {
+                            "Get:index:": [
+                              "@objs",
+                              1
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        },
+                        {
+                          "FromNum:": {
+                            "Len:": "@objs"
+                          }
+                        },
+                        {
+                          "FromTxt:": {
+                            "Txt if:then:else:": [
+                              {
+                                "Get:from:": [
+                                  "not hide label",
+                                  {
+                                    "VarFields:": "grouping"
+                                  }
+                                ]
+                              },
+                              {
+                                "Get:from:": [
+                                  "label",
+                                  {
+                                    "VarFields:": "grouping"
+                                  }
+                                ]
+                              },
+                              ""
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -286,47 +266,43 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Comment:": "completely unobject groups; presumably just one for each group."
-                      },
-                      {
-                        "PrintGroupedObject obj:": {
-                          "FromTxt:": {
-                            "Get:index:": [
-                              "@objs",
-                              1
-                            ]
-                          }
+                  [
+                    {
+                      "Comment:": "completely unobject groups; presumably just one for each group."
+                    },
+                    {
+                      "PrintGroupedObject obj:": {
+                        "FromTxt:": {
+                          "Get:index:": [
+                            "@objs",
+                            1
+                          ]
                         }
-                      },
-                      {
-                        "Let:be:": [
-                          "success",
-                          {
-                            "FromBool:": true
-                          }
-                        ]
                       }
-                    ]
-                  }
+                    },
+                    {
+                      "Let:be:": [
+                        "success",
+                        {
+                          "FromBool:": true
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Log:": {
-                          "FromRec:": "@group"
-                        }
+                  [
+                    {
+                      "Log:": {
+                        "FromRec:": "@group"
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]
@@ -366,17 +342,15 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "PrintObject obj:": "@obj"
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "PrintObject obj:": "@obj"
+                    }
+                  ]
                 ]
               }
             ]

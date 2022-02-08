@@ -11,10 +11,10 @@ import (
 func (op *Row) GetText(run rt.Runtime) (ret g.Value, err error) {
 	// use brackets to establish a span inside the li
 	span := print.Brackets("<li>", "</li>")
-	return writeSpan(run, span, op, op.Do, span.ChunkOutput())
+	return writeSpan(run, span, op, op.Does, span.ChunkOutput())
 }
 
 func (op *Rows) GetText(run rt.Runtime) (g.Value, error) {
 	var buf bytes.Buffer
-	return writeSpan(run, &buf, op, op.Do, print.Tag(&buf, "ul"))
+	return writeSpan(run, &buf, op, op.Does, print.Tag(&buf, "ul"))
 }

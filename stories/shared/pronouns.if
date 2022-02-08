@@ -22,17 +22,15 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": "you"
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Say:": "you"
+                    }
+                  ]
                 ]
               }
             ]
@@ -66,34 +64,30 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": "it"
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Say:": "it"
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Get obj:trait:": [
                       "@noun",
                       "plural named"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": "they"
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Say:": "they"
+                    }
+                  ]
                 ]
               }
             ]
@@ -124,34 +118,30 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": "that"
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Say:": "that"
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Get obj:trait:": [
                       "@noun",
                       "plural named"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": "these"
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Say:": "these"
+                    }
+                  ]
                 ]
               }
             ]

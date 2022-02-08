@@ -10,65 +10,63 @@
         ]
       },
       {
-        "TestRule:hook activity:": [
+        "TestRule:does:": [
           "activating test",
-          {
-            "Act:": [
-              {
-                "Say:": {
-                  "RenderTemplate:": "The control status: {.controls.activation}."
-                }
-              },
-              {
-                "Activating agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "controls"
-                  }
-                ]
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "The control status: {.controls.activation}."
-                }
-              },
-              {
-                "Deactivating agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "controls"
-                  }
-                ]
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "The control status: {.controls.activation}."
-                }
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "Try to activate a regular object."
-                }
-              },
-              {
-                "Activating agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "knife"
-                  }
-                ]
-              },
-              {
-                "Comment:": "we don't need to test the whole state changing algorithm; that's shared and tested elsewhere. We just need to test that the engine knows about activation and deactivation."
+          [
+            {
+              "Say:": {
+                "RenderTemplate:": "The control status: {.controls.activation}."
               }
-            ]
-          }
+            },
+            {
+              "Activating agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "controls"
+                }
+              ]
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "The control status: {.controls.activation}."
+              }
+            },
+            {
+              "Deactivating agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "controls"
+                }
+              ]
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "The control status: {.controls.activation}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "Try to activate a regular object."
+              }
+            },
+            {
+              "Activating agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "knife"
+                }
+              ]
+            },
+            {
+              "Comment:": "we don't need to test the whole state changing algorithm; that's shared and tested elsewhere. We just need to test that the engine knows about activation and deactivation."
+            }
+          ]
         ]
       },
       {

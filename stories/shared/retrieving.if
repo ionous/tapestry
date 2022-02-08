@@ -34,115 +34,103 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@actor"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Comment:": "can we \"reach\" the noun we are attempting to retrieve?"
-                      },
-                      {
-                        "If:from:and:do:else:": [
-                          "result",
-                          {
-                            "FromTxt:": {
-                              "CanReach actor:action:noun:": [
-                                "@actor",
-                                {
-                                  "FromTxt:": "retrieving from"
-                                },
-                                "@noun"
-                              ]
-                            }
-                          },
-                          {
-                            "Not:": {
-                              "Is empty:": "@result"
-                            }
-                          },
-                          {
-                            "Act:": [
+                  [
+                    {
+                      "Comment:": "can we \"reach\" the noun we are attempting to retrieve?"
+                    },
+                    {
+                      "If:from:and:does:else:": [
+                        "result",
+                        {
+                          "FromTxt:": {
+                            "CanReach actor:action:noun:": [
+                              "@actor",
                               {
-                                "Say:": "@result"
-                              }
+                                "FromTxt:": "retrieving from"
+                              },
+                              "@noun"
                             ]
-                          },
+                          }
+                        },
+                        {
+                          "Not:": {
+                            "Is empty:": "@result"
+                          }
+                        },
+                        [
                           {
-                            "ElseDo:": {
-                              "Act:": [
+                            "Say:": "@result"
+                          }
+                        ],
+                        {
+                          "ElseDo does:": [
+                            {
+                              "If:from:and:does:else:": [
+                                "result",
                                 {
-                                  "If:from:and:do:else:": [
-                                    "result",
+                                  "FromTxt:": {
+                                    "CanUse actor:action:noun:otherNoun:": [
+                                      "@actor",
+                                      {
+                                        "FromTxt:": "retrieving from"
+                                      },
+                                      "@noun",
+                                      "@other noun"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Not:": {
+                                    "Is empty:": "@result"
+                                  }
+                                },
+                                [
+                                  {
+                                    "Say:": "@result"
+                                  }
+                                ],
+                                {
+                                  "ElseDo does:": [
                                     {
-                                      "FromTxt:": {
-                                        "CanUse actor:action:noun:otherNoun:": [
-                                          "@actor",
-                                          {
-                                            "FromTxt:": "retrieving from"
-                                          },
-                                          "@noun",
-                                          "@other noun"
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      "Not:": {
-                                        "Is empty:": "@result"
-                                      }
-                                    },
-                                    {
-                                      "Act:": [
+                                      "If:does:": [
                                         {
-                                          "Say:": "@result"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "ElseDo:": {
-                                        "Act:": [
+                                          "Send:event:": [
+                                            {
+                                              "Capture obj:": "@noun"
+                                            },
+                                            {
+                                              "RetrieveFrom actor:noun:otherNoun:": [
+                                                "@actor",
+                                                "@noun",
+                                                "@other noun"
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        [
                                           {
-                                            "If:do:": [
-                                              {
-                                                "Send:event:": [
-                                                  {
-                                                    "Capture obj:": "@noun"
-                                                  },
-                                                  {
-                                                    "RetrieveFrom actor:noun:otherNoun:": [
-                                                      "@actor",
-                                                      "@noun",
-                                                      "@other noun"
-                                                    ]
-                                                  }
-                                                ]
-                                              },
-                                              {
-                                                "Act:": [
-                                                  {
-                                                    "ReportRetrievingFrom actor:noun:otherNoun:": [
-                                                      "@actor",
-                                                      "@noun",
-                                                      "@other noun"
-                                                    ]
-                                                  }
-                                                ]
-                                              }
+                                            "ReportRetrievingFrom actor:noun:otherNoun:": [
+                                              "@actor",
+                                              "@noun",
+                                              "@other noun"
                                             ]
                                           }
                                         ]
-                                      }
+                                      ]
                                     }
                                   ]
                                 }
                               ]
                             }
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -158,7 +146,7 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -172,28 +160,26 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "CanReach actor:action:noun:": [
-                                "@actor",
-                                {
-                                  "FromTxt:": "taking"
-                                },
-                                {
-                                  "FromTxt:": "@noun"
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "CanReach actor:action:noun:": [
+                              "@actor",
+                              {
+                                "FromTxt:": "taking"
+                              },
+                              {
+                                "FromTxt:": "@noun"
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -209,7 +195,7 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -223,32 +209,30 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "CanUse actor:action:noun:": [
-                                "@actor",
-                                {
-                                  "FromTxt:": "taking"
-                                },
-                                {
-                                  "FromTxt:": "@noun"
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "CanUse actor:action:noun:": [
+                              "@actor",
+                              {
+                                "FromTxt:": "taking"
+                              },
+                              {
+                                "FromTxt:": "@noun"
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -273,25 +257,23 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't retrieve what's not inside",
-                                {
-                                  "RenderTemplate:": "But {they:.noun} {arent:.noun} there now."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't retrieve what's not inside",
+                              {
+                                "RenderTemplate:": "But {they:.noun} {arent:.noun} there now."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -312,34 +294,32 @@
                 {
                   "PatternRules:": [
                     {
-                      "PatternRule:hook activity:": [
+                      "PatternRule:does:": [
                         {
                           "Always": true
                         },
-                        {
-                          "Act:": [
-                            {
-                              "Let:be:": [
-                                "success",
-                                {
-                                  "FromBool:": {
-                                    "Send:event:": [
-                                      {
-                                        "Capture obj:": "@noun"
-                                      },
-                                      {
-                                        "Take actor:noun:": [
-                                          "@actor",
-                                          "@noun"
-                                        ]
-                                      }
-                                    ]
-                                  }
+                        [
+                          {
+                            "Let:be:": [
+                              "success",
+                              {
+                                "FromBool:": {
+                                  "Send:event:": [
+                                    {
+                                      "Capture obj:": "@noun"
+                                    },
+                                    {
+                                      "Take actor:noun:": [
+                                        "@actor",
+                                        "@noun"
+                                      ]
+                                    }
+                                  ]
                                 }
-                              ]
-                            }
-                          ]
-                        }
+                              }
+                            ]
+                          }
+                        ]
                       ]
                     }
                   ]
@@ -385,20 +365,18 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "ReportTaking actor:noun:": [
-                          "@actor",
-                          "@noun"
-                        ]
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "ReportTaking actor:noun:": [
+                        "@actor",
+                        "@noun"
+                      ]
+                    }
+                  ]
                 ]
               }
             ]

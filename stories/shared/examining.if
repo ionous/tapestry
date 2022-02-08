@@ -34,109 +34,97 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@actor"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "If:from:and:do:else:": [
-                          "resp",
-                          {
-                            "FromTxt:": {
-                              "CanReach actor:action:noun:requiresLight:": [
-                                "@actor",
-                                {
-                                  "FromTxt:": "examining"
-                                },
-                                "@noun",
-                                {
-                                  "FromBool:": true
-                                }
-                              ]
-                            }
-                          },
-                          {
-                            "Not:": {
-                              "Is empty:": "@resp"
-                            }
-                          },
-                          {
-                            "Act:": [
+                  [
+                    {
+                      "If:from:and:does:else:": [
+                        "resp",
+                        {
+                          "FromTxt:": {
+                            "CanReach actor:action:noun:requiresLight:": [
+                              "@actor",
                               {
-                                "Say:": "@resp"
+                                "FromTxt:": "examining"
+                              },
+                              "@noun",
+                              {
+                                "FromBool:": true
                               }
                             ]
-                          },
+                          }
+                        },
+                        {
+                          "Not:": {
+                            "Is empty:": "@resp"
+                          }
+                        },
+                        [
                           {
-                            "ElseDo:": {
-                              "Act:": [
+                            "Say:": "@resp"
+                          }
+                        ],
+                        {
+                          "ElseDo does:": [
+                            {
+                              "If:from:and:does:else:": [
+                                "resp",
                                 {
-                                  "If:from:and:do:else:": [
-                                    "resp",
+                                  "FromTxt:": {
+                                    "CanUse actor:action:noun:": [
+                                      "@actor",
+                                      {
+                                        "FromTxt:": "examining"
+                                      },
+                                      "@noun"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Not:": {
+                                    "Is empty:": "@resp"
+                                  }
+                                },
+                                [
+                                  {
+                                    "Say:": "@resp"
+                                  }
+                                ],
+                                {
+                                  "ElseDo does:": [
                                     {
-                                      "FromTxt:": {
-                                        "CanUse actor:action:noun:": [
-                                          "@actor",
-                                          {
-                                            "FromTxt:": "examining"
-                                          },
-                                          "@noun"
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      "Not:": {
-                                        "Is empty:": "@resp"
-                                      }
-                                    },
-                                    {
-                                      "Act:": [
+                                      "If:does:": [
                                         {
-                                          "Say:": "@resp"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "ElseDo:": {
-                                        "Act:": [
+                                          "Send:event:": [
+                                            {
+                                              "Capture obj:": "@noun"
+                                            },
+                                            {
+                                              "Examine actor:noun:": [
+                                                "@actor",
+                                                "@noun"
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        [
                                           {
-                                            "If:do:": [
-                                              {
-                                                "Send:event:": [
-                                                  {
-                                                    "Capture obj:": "@noun"
-                                                  },
-                                                  {
-                                                    "Examine actor:noun:": [
-                                                      "@actor",
-                                                      "@noun"
-                                                    ]
-                                                  }
-                                                ]
-                                              },
-                                              {
-                                                "Act:": [
-                                                  {
-                                                    "PrintDescription obj:": "@noun"
-                                                  }
-                                                ]
-                                              }
-                                            ]
+                                            "PrintDescription obj:": "@noun"
                                           }
                                         ]
-                                      }
+                                      ]
                                     }
                                   ]
                                 }
                               ]
                             }
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -184,56 +172,50 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "If:do:": [
+                  [
+                    {
+                      "If:does:": [
+                        {
+                          "Not:": {
+                            "PrintParticulars obj:": "@obj"
+                          }
+                        },
+                        [
                           {
-                            "Not:": {
-                              "PrintParticulars obj:": "@obj"
-                            }
-                          },
-                          {
-                            "Act:": [
-                              {
-                                "Say:": {
-                                  "Response:text:": [
-                                    "unremarkable description",
-                                    {
-                                      "RenderTemplate:": "{We!|make_title_case!} see nothing special about {the: .obj}."
-                                    }
-                                  ]
+                            "Say:": {
+                              "Response:text:": [
+                                "unremarkable description",
+                                {
+                                  "RenderTemplate:": "{We!|make_title_case!} see nothing special about {the: .obj}."
                                 }
-                              }
-                            ]
+                              ]
+                            }
                           }
                         ]
-                      }
-                    ]
-                  }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Not:": {
                       "Is empty:": "@description"
                     }
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": "@description"
-                      },
-                      {
-                        "PrintParticulars obj:": "@obj"
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Say:": "@description"
+                    },
+                    {
+                      "PrintParticulars obj:": "@obj"
+                    }
+                  ]
                 ]
               }
             ]
@@ -269,117 +251,105 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "KindOf:is:": [
                       "@obj",
                       "containers"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "If:do:else:": [
+                  [
+                    {
+                      "If:does:else:": [
+                        {
+                          "PrintInlineStorage obj:": "@obj"
+                        },
+                        [
                           {
-                            "PrintInlineStorage obj:": "@obj"
-                          },
-                          {
-                            "Act:": [
+                            "Let:be:": [
+                              "success",
                               {
-                                "Let:be:": [
-                                  "success",
-                                  {
-                                    "FromBool:": true
-                                  }
-                                ]
+                                "FromBool:": true
                               }
                             ]
-                          },
-                          {
-                            "ElseDo:": {
-                              "Act:": [
+                          }
+                        ],
+                        {
+                          "ElseDo does:": [
+                            {
+                              "Comment:": "if the player isn't in the container."
+                            },
+                            {
+                              "If:does:": [
                                 {
-                                  "Comment:": "if the player isn't in the container."
-                                },
-                                {
-                                  "If:do:": [
+                                  "Cmp:is:txt:": [
+                                    "@obj",
                                     {
-                                      "Cmp:is:txt:": [
-                                        "@obj",
-                                        {
-                                          "OtherThan": true
-                                        },
-                                        {
-                                          "ContainerOf obj:": {
-                                            "FromTxt:": "player"
-                                          }
-                                        }
-                                      ]
+                                      "OtherThan": true
                                     },
                                     {
-                                      "Act:": [
+                                      "ContainerOf obj:": {
+                                        "FromTxt:": "player"
+                                      }
+                                    }
+                                  ]
+                                },
+                                [
+                                  {
+                                    "Say:": {
+                                      "Response:text:": [
+                                        "empty container description",
                                         {
-                                          "Say:": {
-                                            "Response:text:": [
-                                              "empty container description",
-                                              {
-                                                "RenderTemplate:": "{The: .obj|capitalize!} {are: .obj} empty."
-                                              }
-                                            ]
-                                          }
-                                        },
-                                        {
-                                          "Let:be:": [
-                                            "success",
-                                            {
-                                              "FromBool:": true
-                                            }
-                                          ]
+                                          "RenderTemplate:": "{The: .obj|capitalize!} {are: .obj} empty."
                                         }
                                       ]
                                     }
-                                  ]
-                                }
+                                  },
+                                  {
+                                    "Let:be:": [
+                                      "success",
+                                      {
+                                        "FromBool:": true
+                                      }
+                                    ]
+                                  }
+                                ]
                               ]
                             }
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "KindOf:is:": [
                       "@obj",
                       "supporters"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "If:do:": [
+                  [
+                    {
+                      "If:does:": [
+                        {
+                          "PrintInlineStorage obj:": "@obj"
+                        },
+                        [
                           {
-                            "PrintInlineStorage obj:": "@obj"
-                          },
-                          {
-                            "Act:": [
+                            "Let:be:": [
+                              "success",
                               {
-                                "Let:be:": [
-                                  "success",
-                                  {
-                                    "FromBool:": true
-                                  }
-                                ]
+                                "FromBool:": true
                               }
                             ]
                           }
                         ]
-                      }
-                    ]
-                  }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -398,49 +368,47 @@
         ]
       },
       {
-        "TestRule:hook activity:": [
+        "TestRule:does:": [
           "examining test",
-          {
-            "Act:": [
-              {
-                "PrintDescription obj:": {
-                  "FromTxt:": "blender"
-                }
-              },
-              {
-                "PrintDescription obj:": {
-                  "FromTxt:": "hat"
-                }
-              },
-              {
-                "PrintDescription obj:": {
-                  "FromTxt:": "mortar"
-                }
-              },
-              {
-                "PrintDescription obj:": {
-                  "FromTxt:": "shelf"
-                }
-              },
-              {
-                "PrintDescription obj:": {
-                  "FromTxt:": "cabinet"
-                }
-              },
-              {
-                "Relate:to:via:": [
-                  "blender",
-                  "self",
-                  "whereabouts"
-                ]
-              },
-              {
-                "PrintDescription obj:": {
-                  "FromTxt:": "blender"
-                }
+          [
+            {
+              "PrintDescription obj:": {
+                "FromTxt:": "blender"
               }
-            ]
-          }
+            },
+            {
+              "PrintDescription obj:": {
+                "FromTxt:": "hat"
+              }
+            },
+            {
+              "PrintDescription obj:": {
+                "FromTxt:": "mortar"
+              }
+            },
+            {
+              "PrintDescription obj:": {
+                "FromTxt:": "shelf"
+              }
+            },
+            {
+              "PrintDescription obj:": {
+                "FromTxt:": "cabinet"
+              }
+            },
+            {
+              "Relate:to:via:": [
+                "blender",
+                "self",
+                "whereabouts"
+              ]
+            },
+            {
+              "PrintDescription obj:": {
+                "FromTxt:": "blender"
+              }
+            }
+          ]
         ]
       }
     ]

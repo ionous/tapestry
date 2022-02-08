@@ -34,115 +34,105 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Put:into:atFront:": [
-                          "@obj",
+                  [
+                    {
+                      "Put:into:atFront:": [
+                        "@obj",
+                        {
+                          "IntoTxts:": "bounds"
+                        },
+                        {
+                          "Always": true
+                        }
+                      ]
+                    },
+                    {
+                      "Put:into:": [
+                        "@obj",
+                        {
+                          "IntoTxts:": "queue"
+                        }
+                      ]
+                    },
+                    {
+                      "Repeating:does:": [
+                        {
+                          "Cmp:is:num:": [
+                            {
+                              "Len:": "@queue"
+                            },
+                            {
+                              "GreaterThan": true
+                            },
+                            0
+                          ]
+                        },
+                        [
                           {
-                            "IntoTxts:": "bounds"
-                          },
-                          {
-                            "Always": true
-                          }
-                        ]
-                      },
-                      {
-                        "Put:into:": [
-                          "@obj",
-                          {
-                            "IntoTxts:": "queue"
-                          }
-                        ]
-                      },
-                      {
-                        "Repeating:do:": [
-                          {
-                            "Cmp:is:num:": [
+                            "Erasing:atFront:as:does:": [
                               {
-                                "Len:": "@queue"
+                                "VarOfTxts:": "queue"
                               },
                               {
-                                "GreaterThan": true
+                                "Always": true
                               },
-                              0
-                            ]
-                          },
-                          {
-                            "Act:": [
-                              {
-                                "Erasing:atFront:as:do:": [
-                                  {
-                                    "VarOfTxts:": "queue"
-                                  },
-                                  {
-                                    "Always": true
-                                  },
-                                  "enc",
-                                  {
-                                    "Act:": [
+                              "enc",
+                              [
+                                {
+                                  "Repeating across:as:does:": [
+                                    {
+                                      "FromTxts:": {
+                                        "ChildrenOf obj:": "@enc"
+                                      }
+                                    },
+                                    {
+                                      "AsTxt:": "kid"
+                                    },
+                                    [
                                       {
-                                        "Repeating across:as:do:": [
+                                        "Put:into:": [
+                                          "@kid",
                                           {
-                                            "FromTxts:": {
-                                              "ChildrenOf obj:": "@enc"
+                                            "IntoTxts:": "bounds"
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "If:does:": [
+                                          {
+                                            "Not:": {
+                                              "FullyOpaque obj:": "@kid"
                                             }
                                           },
-                                          {
-                                            "AsTxt:": "kid"
-                                          },
-                                          {
-                                            "Act:": [
-                                              {
-                                                "Put:into:": [
-                                                  "@kid",
-                                                  {
-                                                    "IntoTxts:": "bounds"
-                                                  }
-                                                ]
-                                              },
-                                              {
-                                                "If:do:": [
-                                                  {
-                                                    "Not:": {
-                                                      "FullyOpaque obj:": "@kid"
-                                                    }
-                                                  },
-                                                  {
-                                                    "Act:": [
-                                                      {
-                                                        "Comment:": "add this kid for additional processing"
-                                                      },
-                                                      {
-                                                        "Put:into:": [
-                                                          "@kid",
-                                                          {
-                                                            "IntoTxts:": "queue"
-                                                          }
-                                                        ]
-                                                      }
-                                                    ]
-                                                  }
-                                                ]
-                                              }
-                                            ]
-                                          }
+                                          [
+                                            {
+                                              "Comment:": "add this kid for additional processing"
+                                            },
+                                            {
+                                              "Put:into:": [
+                                                "@kid",
+                                                {
+                                                  "IntoTxts:": "queue"
+                                                }
+                                              ]
+                                            }
+                                          ]
                                         ]
                                       }
                                     ]
-                                  }
-                                ]
-                              }
+                                  ]
+                                }
+                              ]
                             ]
                           }
                         ]
-                      }
-                    ]
-                  }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]

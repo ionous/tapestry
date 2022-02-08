@@ -34,160 +34,144 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@actor"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Comment:": "First, we need to make sure we can use the first noun:"
-                      },
-                      {
-                        "Log:": {
-                          "FromTxt:": {
-                            "RenderTemplate:": "{.actor} storing {the:.noun} to {the:.other_noun}."
-                          }
+                  [
+                    {
+                      "Comment:": "First, we need to make sure we can use the first noun:"
+                    },
+                    {
+                      "Log:": {
+                        "FromTxt:": {
+                          "RenderTemplate:": "{.actor} storing {the:.noun} to {the:.other_noun}."
                         }
-                      },
-                      {
-                        "If:from:and:do:else:": [
-                          "result",
-                          {
-                            "FromTxt:": {
-                              "CanHandle actor:action:noun:otherNoun:": [
-                                "@actor",
-                                {
-                                  "FromTxt:": "storing into"
-                                },
-                                "@noun",
-                                "@other noun"
-                              ]
-                            }
-                          },
-                          {
-                            "Not:": {
-                              "Is empty:": "@result"
-                            }
-                          },
-                          {
-                            "Act:": [
+                      }
+                    },
+                    {
+                      "If:from:and:does:else:": [
+                        "result",
+                        {
+                          "FromTxt:": {
+                            "CanHandle actor:action:noun:otherNoun:": [
+                              "@actor",
                               {
-                                "Say:": "@result"
-                              }
+                                "FromTxt:": "storing into"
+                              },
+                              "@noun",
+                              "@other noun"
                             ]
-                          },
+                          }
+                        },
+                        {
+                          "Not:": {
+                            "Is empty:": "@result"
+                          }
+                        },
+                        [
                           {
-                            "ElseDo:": {
-                              "Act:": [
+                            "Say:": "@result"
+                          }
+                        ],
+                        {
+                          "ElseDo does:": [
+                            {
+                              "Comment:": "Then, we need to make sure we can reach the other noun:"
+                            },
+                            {
+                              "If:from:and:does:else:": [
+                                "result",
                                 {
-                                  "Comment:": "Then, we need to make sure we can reach the other noun:"
+                                  "FromTxt:": {
+                                    "CanReach actor:action:noun:": [
+                                      "@actor",
+                                      {
+                                        "FromTxt:": "storing into"
+                                      },
+                                      "@other noun"
+                                    ]
+                                  }
                                 },
                                 {
-                                  "If:from:and:do:else:": [
-                                    "result",
+                                  "Not:": {
+                                    "Is empty:": "@result"
+                                  }
+                                },
+                                [
+                                  {
+                                    "Say:": "@result"
+                                  }
+                                ],
+                                {
+                                  "ElseDo does:": [
                                     {
-                                      "FromTxt:": {
-                                        "CanReach actor:action:noun:": [
-                                          "@actor",
-                                          {
-                                            "FromTxt:": "storing into"
-                                          },
-                                          "@other noun"
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      "Not:": {
-                                        "Is empty:": "@result"
-                                      }
-                                    },
-                                    {
-                                      "Act:": [
+                                      "If:from:and:does:else:": [
+                                        "result",
                                         {
-                                          "Say:": "@result"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "ElseDo:": {
-                                        "Act:": [
+                                          "FromTxt:": {
+                                            "CanUse actor:action:noun:otherNoun:": [
+                                              "@actor",
+                                              {
+                                                "FromTxt:": "storing into"
+                                              },
+                                              "@noun",
+                                              "@other noun"
+                                            ]
+                                          }
+                                        },
+                                        {
+                                          "Not:": {
+                                            "Is empty:": "@result"
+                                          }
+                                        },
+                                        [
                                           {
-                                            "If:from:and:do:else:": [
-                                              "result",
-                                              {
-                                                "FromTxt:": {
-                                                  "CanUse actor:action:noun:otherNoun:": [
-                                                    "@actor",
+                                            "Say:": "@result"
+                                          }
+                                        ],
+                                        {
+                                          "ElseDo does:": [
+                                            {
+                                              "If:does:": [
+                                                {
+                                                  "Send:event:": [
                                                     {
-                                                      "FromTxt:": "storing into"
+                                                      "Capture obj:": "@noun"
                                                     },
-                                                    "@noun",
-                                                    "@other noun"
-                                                  ]
-                                                }
-                                              },
-                                              {
-                                                "Not:": {
-                                                  "Is empty:": "@result"
-                                                }
-                                              },
-                                              {
-                                                "Act:": [
-                                                  {
-                                                    "Say:": "@result"
-                                                  }
-                                                ]
-                                              },
-                                              {
-                                                "ElseDo:": {
-                                                  "Act:": [
                                                     {
-                                                      "If:do:": [
-                                                        {
-                                                          "Send:event:": [
-                                                            {
-                                                              "Capture obj:": "@noun"
-                                                            },
-                                                            {
-                                                              "StoreInto actor:noun:otherNoun:": [
-                                                                "@actor",
-                                                                "@noun",
-                                                                "@other noun"
-                                                              ]
-                                                            }
-                                                          ]
-                                                        },
-                                                        {
-                                                          "Act:": [
-                                                            {
-                                                              "ReportStoringInto actor:noun:otherNoun:": [
-                                                                "@actor",
-                                                                "@noun",
-                                                                "@other noun"
-                                                              ]
-                                                            }
-                                                          ]
-                                                        }
+                                                      "StoreInto actor:noun:otherNoun:": [
+                                                        "@actor",
+                                                        "@noun",
+                                                        "@other noun"
                                                       ]
                                                     }
                                                   ]
-                                                }
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      }
+                                                },
+                                                [
+                                                  {
+                                                    "ReportStoringInto actor:noun:otherNoun:": [
+                                                      "@actor",
+                                                      "@noun",
+                                                      "@other noun"
+                                                    ]
+                                                  }
+                                                ]
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ]
                                     }
                                   ]
                                 }
                               ]
                             }
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -208,61 +192,55 @@
                 {
                   "PatternRules:": [
                     {
-                      "PatternRule:hook activity:": [
+                      "PatternRule:does:": [
                         {
                           "Always": true
                         },
-                        {
-                          "Act:": [
-                            {
-                              "If:from:and:do:else:": [
-                                "error",
+                        [
+                          {
+                            "If:from:and:does:else:": [
+                              "error",
+                              {
+                                "FromTxt:": {
+                                  "MoveObject obj:dest:": [
+                                    "@noun",
+                                    "@other noun"
+                                  ]
+                                }
+                              },
+                              {
+                                "Not:": {
+                                  "Is empty:": "@error"
+                                }
+                              },
+                              [
                                 {
-                                  "FromTxt:": {
-                                    "MoveObject obj:dest:": [
-                                      "@noun",
-                                      "@other noun"
-                                    ]
-                                  }
+                                  "Say:": "@error"
                                 },
                                 {
-                                  "Not:": {
-                                    "Is empty:": "@error"
-                                  }
-                                },
-                                {
-                                  "Act:": [
+                                  "Let:be:": [
+                                    "success",
                                     {
-                                      "Say:": "@error"
-                                    },
-                                    {
-                                      "Let:be:": [
-                                        "success",
-                                        {
-                                          "FromBool:": false
-                                        }
-                                      ]
+                                      "FromBool:": false
                                     }
                                   ]
-                                },
-                                {
-                                  "ElseDo:": {
-                                    "Act:": [
+                                }
+                              ],
+                              {
+                                "ElseDo does:": [
+                                  {
+                                    "Let:be:": [
+                                      "success",
                                       {
-                                        "Let:be:": [
-                                          "success",
-                                          {
-                                            "FromBool:": true
-                                          }
-                                        ]
+                                        "FromBool:": true
                                       }
                                     ]
                                   }
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
                       ]
                     }
                   ]
@@ -308,47 +286,43 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "player stores",
-                            {
-                              "RenderTemplate:": "{We:|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "player stores",
+                          {
+                            "RenderTemplate:": "{We:|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Not:": {
                       "IsPlayer obj:": "@actor"
                     }
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "someone stores",
-                            {
-                              "RenderTemplate:": "{The: .actor|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "someone stores",
+                          {
+                            "RenderTemplate:": "{The: .actor|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]
@@ -364,7 +338,7 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -384,32 +358,30 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't insert something into itself",
-                                {
-                                  "RenderTemplate:": "{We:|capitalize!} can't put  {those:.noun} {on:.other_noun} itself."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't insert something into itself",
+                              {
+                                "RenderTemplate:": "{We:|capitalize!} can't put  {those:.noun} {on:.other_noun} itself."
+                              }
+                            ]
                           }
-                        ]
-                      },
-                      {
-                        "Comment:": "trying to put the noun into the other noun, but the other noun is on or in the noun. ( ex. can't put a backpack into a purse that's inside the backpack. )"
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    },
+                    {
+                      "Comment:": "trying to put the noun into the other noun, but the other noun is on or in the noun. ( ex. can't put a backpack into a purse that's inside the backpack. )"
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -434,25 +406,23 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't insert clothing",
-                                {
-                                  "RenderTemplate:": "{We:|capitalize!} would have to take {those:.noun} off first."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't insert clothing",
+                              {
+                                "RenderTemplate:": "{We:|capitalize!} would have to take {those:.noun} off first."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -468,7 +438,7 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -496,32 +466,30 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Comment:": "Assuming we are able to reach the noun, check whether it actually allows storage right now. ( ex. open, not closed. )"
-                      },
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can only store when allowed",
-                                {
-                                  "RenderTemplate:": "{the: .fromObj|capitalize!} is closed."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Comment:": "Assuming we are able to reach the noun, check whether it actually allows storage right now. ( ex. open, not closed. )"
+                    },
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can only store when allowed",
+                              {
+                                "RenderTemplate:": "{the: .fromObj|capitalize!} is closed."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -549,32 +517,30 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Comment:": "Assuming we are able to reach the noun, check whether it actually provides storage."
-                      },
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can only store to storage",
-                                {
-                                  "RenderTemplate:": "{the: .fromObj|capitalize!} can't {contain:.fromObj} things."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Comment:": "Assuming we are able to reach the noun, check whether it actually provides storage."
+                    },
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can only store to storage",
+                              {
+                                "RenderTemplate:": "{the: .fromObj|capitalize!} can't {contain:.fromObj} things."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -594,28 +560,26 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Comment:": "If the target noun were owned by reaching actor then the actor would be the lca. By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach."
-                      },
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't store people's possessions",
-                                {
-                                  "RenderTemplate:": "{those: .noun|capitalize!} seems to belong to {the: .intoObj}."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Comment:": "If the target noun were owned by reaching actor then the actor would be the lca. By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach."
+                    },
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't store people's possessions",
+                              {
+                                "RenderTemplate:": "{those: .noun|capitalize!} seems to belong to {the: .intoObj}."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]

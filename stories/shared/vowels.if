@@ -30,69 +30,63 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Matches:to:": [
                       "@text",
                       "^(?i:A|E|I|O|U)"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "matching",
-                          {
-                            "FromBool:": true
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Let:be:": [
+                        "matching",
+                        {
+                          "FromBool:": true
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Matches:to:": [
                       "@text",
                       "^(?i:EU|EW|ONCE|ONE|OUI|UBI|UGAND|UKRAIN|UKULELE|ULYSS|UNA|UNESCO|UNI|UNUM|URA|URE|URI|URO|URU|USA|USE|USI|USU|UTA|UTE|UTI|UTO)"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "matching",
-                          {
-                            "FromBool:": false
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Let:be:": [
+                        "matching",
+                        {
+                          "FromBool:": false
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Matches:to:": [
                       "@text",
                       "^(?i:HEIR|HERB|HOMAGE|HONEST|HONOR|HONOUR|HORS|HOUR)"
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "matching",
-                          {
-                            "FromBool:": true
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Let:be:": [
+                        "matching",
+                        {
+                          "FromBool:": true
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -114,67 +108,65 @@
         "--": ""
       },
       {
-        "TestRule:hook activity:": [
+        "TestRule:does:": [
           "vowels",
-          {
-            "Act:": [
-              {
-                "Say:": {
-                  "Txt if:then:else:": [
-                    {
-                      "StartsWithVowel text:": {
-                        "FromTxt:": "house"
-                      }
-                    },
-                    "error: house doesn't start with a vowel",
-                    ""
-                  ]
-                }
-              },
-              {
-                "Say:": {
-                  "Txt if:then:else:": [
-                    {
-                      "StartsWithVowel text:": {
-                        "FromTxt:": "hour"
-                      }
-                    },
-                    "",
-                    "error: hour starts with a vowel sound"
-                  ]
-                }
-              },
-              {
-                "Say:": {
-                  "Txt if:then:else:": [
-                    {
-                      "StartsWithVowel text:": {
-                        "FromTxt:": "beta"
-                      }
-                    },
-                    "error: beta doesn't start with a vowel",
-                    ""
-                  ]
-                }
-              },
-              {
-                "Say:": {
-                  "Txt if:then:else:": [
-                    {
-                      "StartsWithVowel text:": {
-                        "FromTxt:": "alpha"
-                      }
-                    },
-                    "",
-                    "alpha starts with a vowel"
-                  ]
-                }
-              },
-              {
-                "Say:": "ok"
+          [
+            {
+              "Say:": {
+                "Txt if:then:else:": [
+                  {
+                    "StartsWithVowel text:": {
+                      "FromTxt:": "house"
+                    }
+                  },
+                  "error: house doesn't start with a vowel",
+                  ""
+                ]
               }
-            ]
-          }
+            },
+            {
+              "Say:": {
+                "Txt if:then:else:": [
+                  {
+                    "StartsWithVowel text:": {
+                      "FromTxt:": "hour"
+                    }
+                  },
+                  "",
+                  "error: hour starts with a vowel sound"
+                ]
+              }
+            },
+            {
+              "Say:": {
+                "Txt if:then:else:": [
+                  {
+                    "StartsWithVowel text:": {
+                      "FromTxt:": "beta"
+                    }
+                  },
+                  "error: beta doesn't start with a vowel",
+                  ""
+                ]
+              }
+            },
+            {
+              "Say:": {
+                "Txt if:then:else:": [
+                  {
+                    "StartsWithVowel text:": {
+                      "FromTxt:": "alpha"
+                    }
+                  },
+                  "",
+                  "alpha starts with a vowel"
+                ]
+              }
+            },
+            {
+              "Say:": "ok"
+            }
+          ]
         ]
       }
     ]

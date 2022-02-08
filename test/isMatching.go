@@ -71,6 +71,6 @@ var matchGroups = testpat.Pattern{
 	}},
 }
 
-func matches(b bool) rt.Execute {
-	return &core.Assign{Var: N("matches"), From: &core.FromBool{Val: B(b)}}
+func matches(b bool) []rt.Execute {
+	return []rt.Execute{&core.Assign{Var: N("matches"), From: &core.FromBool{Val: B(b)}}}
 }

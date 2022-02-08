@@ -33,7 +33,7 @@ func TestFactorial(t *testing.T) {
 					{Name: "num", Affinity: affine.Number},
 				},
 				Rules: []rt.Rule{{
-					Execute: core.NewActivity(
+					Execute: core.MakeActivity(
 						&core.Assign{Var: N("num"),
 							From: &core.FromNum{
 								Val: &core.ProductOf{
@@ -54,7 +54,7 @@ func TestFactorial(t *testing.T) {
 						Is: &core.Equal{},
 						B:  I(0),
 					},
-					Execute: core.NewActivity(
+					Execute: core.MakeActivity(
 						&core.Assign{Var: N("num"),
 							From: &core.FromNum{
 								Val: I(1),

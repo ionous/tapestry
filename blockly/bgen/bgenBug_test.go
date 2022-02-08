@@ -56,18 +56,7 @@ func TestSkippedSlot(t *testing.T) {
   if e := testBlocks(&list.ListEach{}, `{
   "id": "test-1",
   "type": "list_each",
-  "extraState": {
-    "DO": 1
-  },
-  "inputs": {
-    "DO": {
-      "block": {
-        "id": "test-2",
-        "type": "activity",
-        "extraState": {}
-      }
-    }
-  }
+  "extraState": {}
 }`); e != nil {
     t.Fatal(e)
   }

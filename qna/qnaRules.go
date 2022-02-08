@@ -57,8 +57,8 @@ func (run *Runner) buildRules(pat, tgt string) (ret cachedRules, err error) {
 				e = errutil.New("error decoding filter for", pat, tgt, el.Id, e)
 				err = errutil.Append(err, e)
 			} else {
-				var prog rt.Execute
-				if e := core.Decode(rt.Execute_Slot{&prog}, el.Prog, run.signatures); e != nil {
+				var prog rt.Execute_Slice
+				if e := core.Decode(&prog, el.Prog, run.signatures); e != nil {
 					e = errutil.New("error decoding prog for", pat, tgt, el.Id, e)
 					err = errutil.Append(err, e)
 				} else {

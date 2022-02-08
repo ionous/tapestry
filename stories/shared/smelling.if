@@ -65,24 +65,22 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Smelling actor:noun:": [
-                          "@actor",
-                          {
-                            "FromTxt:": {
-                              "LocationOf obj:": "@actor"
-                            }
+                  [
+                    {
+                      "Smelling actor:noun:": [
+                        "@actor",
+                        {
+                          "FromTxt:": {
+                            "LocationOf obj:": "@actor"
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -125,88 +123,78 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@actor"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "If:from:and:do:else:": [
-                          "resp",
-                          {
-                            "FromTxt:": {
-                              "CanReach actor:action:noun:": [
-                                "@actor",
-                                {
-                                  "FromTxt:": "smelling"
-                                },
-                                "@noun"
-                              ]
-                            }
-                          },
-                          {
-                            "Not:": {
-                              "Is empty:": "@resp"
-                            }
-                          },
-                          {
-                            "Act:": [
+                  [
+                    {
+                      "If:from:and:does:else:": [
+                        "resp",
+                        {
+                          "FromTxt:": {
+                            "CanReach actor:action:noun:": [
+                              "@actor",
                               {
-                                "Say:": "@resp"
-                              }
+                                "FromTxt:": "smelling"
+                              },
+                              "@noun"
                             ]
-                          },
+                          }
+                        },
+                        {
+                          "Not:": {
+                            "Is empty:": "@resp"
+                          }
+                        },
+                        [
                           {
-                            "ElseDo:": {
-                              "Act:": [
+                            "Say:": "@resp"
+                          }
+                        ],
+                        {
+                          "ElseDo does:": [
+                            {
+                              "If:from:and:does:else:": [
+                                "resp",
                                 {
-                                  "If:from:and:do:else:": [
-                                    "resp",
+                                  "FromTxt:": {
+                                    "CanUse actor:action:noun:": [
+                                      "@actor",
+                                      {
+                                        "FromTxt:": "smelling"
+                                      },
+                                      "@noun"
+                                    ]
+                                  }
+                                },
+                                {
+                                  "Not:": {
+                                    "Is empty:": "@resp"
+                                  }
+                                },
+                                [
+                                  {
+                                    "Say:": "@resp"
+                                  }
+                                ],
+                                {
+                                  "ElseDo does:": [
                                     {
-                                      "FromTxt:": {
-                                        "CanUse actor:action:noun:": [
-                                          "@actor",
-                                          {
-                                            "FromTxt:": "smelling"
-                                          },
-                                          "@noun"
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      "Not:": {
-                                        "Is empty:": "@resp"
-                                      }
-                                    },
-                                    {
-                                      "Act:": [
-                                        {
-                                          "Say:": "@resp"
-                                        }
+                                      "ReportSmelling actor:noun:": [
+                                        "@actor",
+                                        "@noun"
                                       ]
-                                    },
-                                    {
-                                      "ElseDo:": {
-                                        "Act:": [
-                                          {
-                                            "ReportSmelling actor:noun:": [
-                                              "@actor",
-                                              "@noun"
-                                            ]
-                                          }
-                                        ]
-                                      }
                                     }
                                   ]
                                 }
                               ]
                             }
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -243,45 +231,41 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "actor smelling",
-                            {
-                              "RenderTemplate:": "{the:.actor|capitalize!} sniffs {the: .noun}."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "actor smelling",
+                          {
+                            "RenderTemplate:": "{the:.actor|capitalize!} sniffs {the: .noun}."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@actor"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "player smelling",
-                            {
-                              "RenderTemplate:": "{we:|capitalize!} smell nothing unexpected."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "player smelling",
+                          {
+                            "RenderTemplate:": "{we:|capitalize!} smell nothing unexpected."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]

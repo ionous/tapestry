@@ -31,54 +31,46 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Spaces:": {
-                            "Act:": [
+                  [
+                    {
+                      "Say:": {
+                        "Spaces does:": [
+                          {
+                            "Say:": {
+                              "RenderTemplate:": "{print_num_word: .group_size}"
+                            }
+                          },
+                          {
+                            "If:does:else:": [
                               {
-                                "Say:": {
-                                  "RenderTemplate:": "{print_num_word: .group_size}"
-                                }
+                                "Is empty:": "@label"
                               },
+                              [
+                                {
+                                  "Say:": {
+                                    "RenderTemplate:": "{if .group_size > 1}{print_plural_name: .obj}{else}{print_name: .obj}{end}"
+                                  }
+                                }
+                              ],
                               {
-                                "If:do:else:": [
+                                "ElseDo does:": [
                                   {
-                                    "Is empty:": "@label"
-                                  },
-                                  {
-                                    "Act:": [
-                                      {
-                                        "Say:": {
-                                          "RenderTemplate:": "{if .group_size > 1}{print_plural_name: .obj}{else}{print_name: .obj}{end}"
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "ElseDo:": {
-                                      "Act:": [
-                                        {
-                                          "Say:": {
-                                            "RenderTemplate:": "{if .group_size > 1}{pluralize: .label}{else}{singularize: .label}{end}"
-                                          }
-                                        }
-                                      ]
+                                    "Say:": {
+                                      "RenderTemplate:": "{if .group_size > 1}{pluralize: .label}{else}{singularize: .label}{end}"
                                     }
                                   }
                                 ]
                               }
                             ]
                           }
-                        }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]
@@ -119,17 +111,15 @@
         "--": ""
       },
       {
-        "TestRule:hook activity:": [
+        "TestRule:does:": [
           "print several",
-          {
-            "Act:": [
-              {
-                "Say:": {
-                  "RenderTemplate:": "{print_several: .books}\n{print_several: .books 5}"
-                }
+          [
+            {
+              "Say:": {
+                "RenderTemplate:": "{print_several: .books}\n{print_several: .books 5}"
               }
-            ]
-          }
+            }
+          ]
         ]
       },
       {

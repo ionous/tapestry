@@ -2,6 +2,7 @@ package list
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 )
 
@@ -17,7 +18,7 @@ func (op *Erasing) popping(run rt.Runtime) (err error) {
 		err = e
 	} else {
 		run.PushScope(scope.NewSingleValue(op.As, els))
-		err = op.Do.Execute(run)
+		err = safe.RunAll(run, op.Does)
 		run.PopScope()
 	}
 	return
@@ -37,7 +38,7 @@ func (op *ErasingEdge) popping(run rt.Runtime) (err error) {
 		err = otherwise.Branch(run)
 	} else if cnt > 0 {
 		run.PushScope(scope.NewSingleValue(op.As, vs.Index(0)))
-		err = op.Do.Execute(run)
+		err = safe.RunAll(run, op.Does)
 		run.PopScope()
 	}
 	return

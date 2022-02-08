@@ -93,7 +93,7 @@
                             {
                                 "uses": "flow",
                                 "slot": "story_statement",
-                                "spec": "To test {test_name}: {do%hook:program_hook}",
+                                "spec": "To test {test_name}: {do%hook?program_hook} {does*execute}",
                                 "desc": "Add actions to a test"
                             },
                             "test_output":
@@ -354,7 +354,7 @@
                             "pattern_rule":
                             {
                                 "uses": "flow",
-                                "spec": "When {conditions are met%guard:bool_eval}{continue%flags?pattern_flags}, then: {do%hook:program_hook}",
+                                "spec": "When {conditions are met%guard:bool_eval}{continue%flags?pattern_flags}, then: {do%hook?program_hook} {does*execute}",
                                 "desc": "Rule"
                             },
                             "pattern_flags":

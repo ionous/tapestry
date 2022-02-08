@@ -2,6 +2,7 @@ package core
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 // Brancher connects else and else-if clauses.
@@ -24,7 +25,7 @@ func (op *ChooseMoreValue) Branch(run rt.Runtime) (err error) {
 }
 
 func (op *ChooseNothingElse) Branch(run rt.Runtime) (err error) {
-	if e := op.Do.Execute(run); e != nil {
+	if e := safe.RunAll(run, op.Does); e != nil {
 		err = cmdError(op, e)
 	}
 	return

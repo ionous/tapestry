@@ -34,78 +34,70 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@actor"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "If:from:and:do:else:": [
-                          "result",
-                          {
-                            "FromTxt:": {
-                              "CanReach actor:action:noun:requiresLight:": [
-                                "@actor",
-                                {
-                                  "FromTxt:": "taking"
-                                },
-                                "@noun",
-                                {
-                                  "FromBool:": false
-                                }
-                              ]
-                            }
-                          },
-                          {
-                            "Not:": {
-                              "Is empty:": "@result"
-                            }
-                          },
-                          {
-                            "Act:": [
+                  [
+                    {
+                      "If:from:and:does:else:": [
+                        "result",
+                        {
+                          "FromTxt:": {
+                            "CanReach actor:action:noun:requiresLight:": [
+                              "@actor",
                               {
-                                "Say:": "@result"
+                                "FromTxt:": "taking"
+                              },
+                              "@noun",
+                              {
+                                "FromBool:": false
                               }
                             ]
-                          },
+                          }
+                        },
+                        {
+                          "Not:": {
+                            "Is empty:": "@result"
+                          }
+                        },
+                        [
                           {
-                            "ElseDo:": {
-                              "Act:": [
+                            "Say:": "@result"
+                          }
+                        ],
+                        {
+                          "ElseDo does:": [
+                            {
+                              "If:does:": [
                                 {
-                                  "If:do:": [
+                                  "Send:event:": [
                                     {
-                                      "Send:event:": [
-                                        {
-                                          "Capture obj:": "@noun"
-                                        },
-                                        {
-                                          "Take actor:noun:": [
-                                            "@actor",
-                                            "@noun"
-                                          ]
-                                        }
-                                      ]
+                                      "Capture obj:": "@noun"
                                     },
                                     {
-                                      "Act:": [
-                                        {
-                                          "ReportTaking actor:noun:": [
-                                            "@actor",
-                                            "@noun"
-                                          ]
-                                        }
+                                      "Take actor:noun:": [
+                                        "@actor",
+                                        "@noun"
                                       ]
                                     }
                                   ]
-                                }
+                                },
+                                [
+                                  {
+                                    "ReportTaking actor:noun:": [
+                                      "@actor",
+                                      "@noun"
+                                    ]
+                                  }
+                                ]
                               ]
                             }
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -126,68 +118,62 @@
                 {
                   "PatternRules:": [
                     {
-                      "PatternRule:hook activity:": [
+                      "PatternRule:does:": [
                         {
                           "Always": true
                         },
-                        {
-                          "Act:": [
-                            {
-                              "If:from:and:do:else:": [
-                                "error",
+                        [
+                          {
+                            "If:from:and:does:else:": [
+                              "error",
+                              {
+                                "FromTxt:": {
+                                  "MoveObject obj:dest:": [
+                                    "@noun",
+                                    "@actor"
+                                  ]
+                                }
+                              },
+                              {
+                                "Not:": {
+                                  "Is empty:": "@error"
+                                }
+                              },
+                              [
                                 {
-                                  "FromTxt:": {
-                                    "MoveObject obj:dest:": [
-                                      "@noun",
-                                      "@actor"
-                                    ]
-                                  }
+                                  "Say:": "@error"
                                 },
                                 {
-                                  "Not:": {
-                                    "Is empty:": "@error"
-                                  }
-                                },
-                                {
-                                  "Act:": [
+                                  "Let:be:": [
+                                    "success",
                                     {
-                                      "Say:": "@error"
-                                    },
-                                    {
-                                      "Let:be:": [
-                                        "success",
-                                        {
-                                          "FromBool:": false
-                                        }
-                                      ]
+                                      "FromBool:": false
                                     }
                                   ]
-                                },
-                                {
-                                  "ElseDo:": {
-                                    "Act:": [
+                                }
+                              ],
+                              {
+                                "ElseDo does:": [
+                                  {
+                                    "Log:": {
+                                      "FromTxt:": {
+                                        "RenderTemplate:": "{The: .actor} is taking {the: .noun}..."
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "Let:be:": [
+                                      "success",
                                       {
-                                        "Log:": {
-                                          "FromTxt:": {
-                                            "RenderTemplate:": "{The: .actor} is taking {the: .noun}..."
-                                          }
-                                        }
-                                      },
-                                      {
-                                        "Let:be:": [
-                                          "success",
-                                          {
-                                            "FromBool:": true
-                                          }
-                                        ]
+                                        "FromBool:": true
                                       }
                                     ]
                                   }
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
                       ]
                     }
                   ]
@@ -227,47 +213,43 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "player takes",
-                            {
-                              "RenderTemplate:": "Taken."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "player takes",
+                          {
+                            "RenderTemplate:": "Taken."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Not:": {
                       "IsPlayer obj:": "@actor"
                     }
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "someone else takes",
-                            {
-                              "RenderTemplate:": "{The: .actor|capitalize!} picks up {the: .noun}."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "someone else takes",
+                          {
+                            "RenderTemplate:": "{The: .actor|capitalize!} picks up {the: .noun}."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]
@@ -283,7 +265,7 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -303,29 +285,27 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't take other people",
-                                {
-                                  "RenderTemplate:": "I don't suppose {the: .noun} would care for that."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't take other people",
+                              {
+                                "RenderTemplate:": "I don't suppose {the: .noun} would care for that."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -348,29 +328,27 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't take yourself",
-                                {
-                                  "RenderTemplate:": "{we!|capitalize!} {are:.self} always self-possessed."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't take yourself",
+                              {
+                                "RenderTemplate:": "{we!|capitalize!} {are:.self} always self-possessed."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -390,29 +368,27 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't take scenery",
-                                {
-                                  "RenderTemplate:": "{they:.noun|capitalize!} {are:.noun} hardly portable."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't take scenery",
+                              {
+                                "RenderTemplate:": "{they:.noun|capitalize!} {are:.noun} hardly portable."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -432,29 +408,27 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't take what's fixed in place",
-                                {
-                                  "RenderTemplate:": "{they:.noun|capitalize!} {are:.noun} fixed in place."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't take what's fixed in place",
+                              {
+                                "RenderTemplate:": "{they:.noun|capitalize!} {are:.noun} fixed in place."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -476,25 +450,23 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't take nothings",
-                                {
-                                  "RenderTemplate:": "{we:|capitalize!} can't carry {the: .noun}."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't take nothings",
+                              {
+                                "RenderTemplate:": "{we:|capitalize!} can't carry {the: .noun}."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -510,7 +482,7 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -533,28 +505,26 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Comment:": "Reaching up to take the noun, means the noun contains the actor."
-                      },
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't take what you're inside",
-                                {
-                                  "RenderTemplate:": "{We:|capitalize!} would have to get {off:.noun} first."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Comment:": "Reaching up to take the noun, means the noun contains the actor."
+                    },
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't take what you're inside",
+                              {
+                                "RenderTemplate:": "{We:|capitalize!} would have to get {off:.noun} first."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -570,7 +540,7 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -590,32 +560,30 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Comment:": "If the target noun were owned by reaching actor then the actor would be the lca. By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach."
-                      },
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't take people's possessions",
-                                {
-                                  "RenderTemplate:": "{those: .noun|capitalize!} seems to belong to {the: .fromObj}."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Comment:": "If the target noun were owned by reaching actor then the actor would be the lca. By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach."
+                    },
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't take people's possessions",
+                              {
+                                "RenderTemplate:": "{those: .noun|capitalize!} seems to belong to {the: .fromObj}."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       {
@@ -647,28 +615,26 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Comment:": "Reaching down to take the noun, means the noun contains the actor."
-                      },
-                      {
-                        "Let:be:": [
-                          "response",
-                          {
-                            "FromTxt:": {
-                              "Response:text:": [
-                                "can't take what you're holding",
-                                {
-                                  "RenderTemplate:": "{we:|capitalize!} already have {those:.noun}."
-                                }
-                              ]
-                            }
+                  [
+                    {
+                      "Comment:": "Reaching down to take the noun, means the noun contains the actor."
+                    },
+                    {
+                      "Let:be:": [
+                        "response",
+                        {
+                          "FromTxt:": {
+                            "Response:text:": [
+                              "can't take what you're holding",
+                              {
+                                "RenderTemplate:": "{we:|capitalize!} already have {those:.noun}."
+                              }
+                            ]
                           }
-                        ]
-                      }
-                    ]
-                  }
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]

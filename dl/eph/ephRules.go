@@ -53,9 +53,10 @@ type Rulesets struct {
 }
 
 func (rs *Rulesets) AppendRule(el *EphRules, tgt string, part int, at string) (err error) {
+	slice := rt.Execute_Slice(el.Exe)
 	if filter, e := marshalout(el.Filter); e != nil {
 		err = e
-	} else if prog, e := marshalout(el.Exe); e != nil {
+	} else if prog, e := marshalout(&slice); e != nil {
 		err = e
 	} else {
 		p := &rs.partitions[part]
@@ -98,8 +99,11 @@ func (op *EphRules) Assemble(c *Catalog, d *Domain, at string) (err error) {
 			d.rules = make(map[string]Rulesets)
 		}
 		rules := d.rules[name]
-		rules.AppendRule(op, tgt, part, at)
-		d.rules[name] = rules
+		if e := rules.AppendRule(op, tgt, part, at); e != nil {
+			err = e
+		} else {
+			d.rules[name] = rules
+		}
 	}
 	return
 }

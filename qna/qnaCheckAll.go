@@ -23,8 +23,8 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options Options, signature
 		err = errutil.New("no matching checks found")
 	} else {
 		for _, el := range checks {
-			var act rt.Execute
-			if e := story.Decode(rt.Execute_Slot{&act}, el.Prog, signatures); e != nil {
+			var act rt.Execute_Slice
+			if e := story.Decode(&act, el.Prog, signatures); e != nil {
 				err = errutil.Append(err, e)
 			} else if v, e := literal.ReadLiteral(el.Aff, "", el.Value); e != nil {
 				err = errutil.Append(err, e)

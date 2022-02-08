@@ -34,78 +34,70 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "IsPlayer obj:": "@actor"
                   },
-                  {
-                    "Act:": [
-                      {
-                        "If:from:and:do:else:": [
-                          "result",
-                          {
-                            "FromTxt:": {
-                              "CanReach actor:action:noun:requiresLight:": [
-                                "@actor",
-                                {
-                                  "FromTxt:": "peeking"
-                                },
-                                "@noun",
-                                {
-                                  "FromBool:": true
-                                }
-                              ]
-                            }
-                          },
-                          {
-                            "Not:": {
-                              "Is empty:": "@result"
-                            }
-                          },
-                          {
-                            "Act:": [
+                  [
+                    {
+                      "If:from:and:does:else:": [
+                        "result",
+                        {
+                          "FromTxt:": {
+                            "CanReach actor:action:noun:requiresLight:": [
+                              "@actor",
                               {
-                                "Say:": "@result"
+                                "FromTxt:": "peeking"
+                              },
+                              "@noun",
+                              {
+                                "FromBool:": true
                               }
                             ]
-                          },
+                          }
+                        },
+                        {
+                          "Not:": {
+                            "Is empty:": "@result"
+                          }
+                        },
+                        [
                           {
-                            "ElseDo:": {
-                              "Act:": [
+                            "Say:": "@result"
+                          }
+                        ],
+                        {
+                          "ElseDo does:": [
+                            {
+                              "If:does:": [
                                 {
-                                  "If:do:": [
+                                  "Send:event:": [
                                     {
-                                      "Send:event:": [
-                                        {
-                                          "Capture obj:": "@noun"
-                                        },
-                                        {
-                                          "Peek actor:noun:": [
-                                            "@actor",
-                                            "@noun"
-                                          ]
-                                        }
-                                      ]
+                                      "Capture obj:": "@noun"
                                     },
                                     {
-                                      "Act:": [
-                                        {
-                                          "ReportPeeking actor:noun:": [
-                                            "@actor",
-                                            "@noun"
-                                          ]
-                                        }
+                                      "Peek actor:noun:": [
+                                        "@actor",
+                                        "@noun"
                                       ]
                                     }
                                   ]
-                                }
+                                },
+                                [
+                                  {
+                                    "ReportPeeking actor:noun:": [
+                                      "@actor",
+                                      "@noun"
+                                    ]
+                                  }
+                                ]
                               ]
                             }
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -142,47 +134,43 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "player peeks",
-                            {
-                              "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "player peeks",
+                          {
+                            "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Not:": {
                       "IsPlayer obj:": "@actor"
                     }
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "someone else peeks",
-                            {
-                              "RenderTemplate:": "{The: .actor|capitalize!} looks under {the: .noun}."
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "someone else peeks",
+                          {
+                            "RenderTemplate:": "{The: .actor|capitalize!} looks under {the: .noun}."
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]

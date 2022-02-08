@@ -50,7 +50,7 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       "@was lit",
@@ -59,17 +59,15 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "PrintNewsOfDarkness": true
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "PrintNewsOfDarkness": true
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "AllTrue:": [
                       "@now lit",
@@ -78,34 +76,30 @@
                       }
                     ]
                   },
-                  {
-                    "Act:": [
-                      {
-                        "PrintNewsOfLight": true
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "PrintNewsOfLight": true
+                    }
+                  ]
                 ]
               },
               {
-                "PatternRule:flags:hook activity:": [
+                "PatternRule:flags:does:": [
                   {
                     "Always": true
                   },
                   "before",
-                  {
-                    "Act:": [
-                      {
-                        "Put:from:at:": [
-                          {
-                            "VarField:": "actor"
-                          },
-                          "@now lit",
-                          "not in darkness"
-                        ]
-                      }
-                    ]
-                  }
+                  [
+                    {
+                      "Put:from:at:": [
+                        {
+                          "VarField:": "actor"
+                        },
+                        "@now lit",
+                        "not in darkness"
+                      ]
+                    }
+                  ]
                 ]
               }
             ]
@@ -124,22 +118,20 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Response:text:": [
-                            "darkness has fallen",
-                            "It is now pitch dark in here!"
-                          ]
-                        }
+                  [
+                    {
+                      "Say:": {
+                        "Response:text:": [
+                          "darkness has fallen",
+                          "It is now pitch dark in here!"
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]
@@ -158,24 +150,22 @@
           {
             "PatternRules:": [
               {
-                "PatternRule:hook activity:": [
+                "PatternRule:does:": [
                   {
                     "Always": true
                   },
-                  {
-                    "Act:": [
-                      {
-                        "PrintVantage where:": {
-                          "Get:from:": [
-                            "pawn",
-                            {
-                              "ObjFields:": "player"
-                            }
-                          ]
-                        }
+                  [
+                    {
+                      "PrintVantage where:": {
+                        "Get:from:": [
+                          "pawn",
+                          {
+                            "ObjFields:": "player"
+                          }
+                        ]
                       }
-                    ]
-                  }
+                    }
+                  ]
                 ]
               }
             ]

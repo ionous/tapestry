@@ -10,224 +10,202 @@
         ]
       },
       {
-        "TestRule:hook activity:": [
+        "TestRule:does:": [
           "taking test",
-          {
-            "Act:": [
-              {
-                "Say:": {
-                  "Rows:": {
-                    "Act:": [
-                      {
-                        "Say:": {
-                          "Row:": {
-                            "Act:": [
-                              {
-                                "Say:": "Fail to take from something closed:<br>"
-                              },
-                              {
-                                "Taking agent:noun:": [
-                                  {
-                                    "FromTxt:": "player"
-                                  },
-                                  {
-                                    "FromTxt:": "coffee"
-                                  }
-                                ]
-                              }
-                            ]
+          [
+            {
+              "Say:": {
+                "Rows does:": [
+                  {
+                    "Say:": {
+                      "Row does:": [
+                        {
+                          "Say:": "Fail to take from something closed:<br>"
+                        },
+                        {
+                          "Taking agent:noun:": [
+                            {
+                              "FromTxt:": "player"
+                            },
+                            {
+                              "FromTxt:": "coffee"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "Say:": {
+                      "Row does:": [
+                        {
+                          "Say:": {
+                            "RenderTemplate:": "The apple's parent: {the: {parentOf: .apple}}."
+                          }
+                        },
+                        {
+                          "Say:": "Fail to steal:<br>"
+                        },
+                        {
+                          "Taking agent:noun:": [
+                            {
+                              "FromTxt:": "player"
+                            },
+                            {
+                              "FromTxt:": "apple"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "Say:": {
+                      "Row does:": [
+                        {
+                          "Say:": "Fail to take possessions:<br>"
+                        },
+                        {
+                          "Taking agent:noun:": [
+                            {
+                              "FromTxt:": "player"
+                            },
+                            {
+                              "FromTxt:": "coin"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "Say:": {
+                      "Row does:": [
+                        {
+                          "Say:": "Fail to take your container:<br>"
+                        },
+                        {
+                          "Taking agent:noun:": [
+                            {
+                              "FromTxt:": "player"
+                            },
+                            {
+                              "FromTxt:": "purse"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "Say:": {
+                      "Row does:": [
+                        {
+                          "Say:": {
+                            "RenderTemplate:": "The knife's parent was: {the: {parentOf: .knife}}."
+                          }
+                        },
+                        {
+                          "Say:": "Okay, take something:<br>"
+                        },
+                        {
+                          "Taking agent:noun:": [
+                            {
+                              "FromTxt:": "player"
+                            },
+                            {
+                              "FromTxt:": "knife"
+                            }
+                          ]
+                        },
+                        {
+                          "Say:": {
+                            "RenderTemplate:": "The knife's parent is: {the: {parentOf: .knife}}."
                           }
                         }
-                      },
-                      {
-                        "Say:": {
-                          "Row:": {
-                            "Act:": [
-                              {
-                                "Say:": {
-                                  "RenderTemplate:": "The apple's parent: {the: {parentOf: .apple}}."
-                                }
-                              },
-                              {
-                                "Say:": "Fail to steal:<br>"
-                              },
-                              {
-                                "Taking agent:noun:": [
-                                  {
-                                    "FromTxt:": "player"
-                                  },
-                                  {
-                                    "FromTxt:": "apple"
-                                  }
-                                ]
-                              }
-                            ]
-                          }
+                      ]
+                    }
+                  },
+                  {
+                    "Say:": {
+                      "Row does:": [
+                        {
+                          "Say:": "Fail to take your self:<br>"
+                        },
+                        {
+                          "Taking agent:noun:": [
+                            {
+                              "FromTxt:": "player"
+                            },
+                            {
+                              "FromTxt:": "self"
+                            }
+                          ]
                         }
-                      },
-                      {
-                        "Say:": {
-                          "Row:": {
-                            "Act:": [
-                              {
-                                "Say:": "Fail to take possessions:<br>"
-                              },
-                              {
-                                "Taking agent:noun:": [
-                                  {
-                                    "FromTxt:": "player"
-                                  },
-                                  {
-                                    "FromTxt:": "coin"
-                                  }
-                                ]
-                              }
-                            ]
-                          }
+                      ]
+                    }
+                  },
+                  {
+                    "Say:": {
+                      "Row does:": [
+                        {
+                          "Say:": "Fail to take someone else:<br>"
+                        },
+                        {
+                          "Taking agent:noun:": [
+                            {
+                              "FromTxt:": "player"
+                            },
+                            {
+                              "FromTxt:": "mildred"
+                            }
+                          ]
                         }
-                      },
-                      {
-                        "Say:": {
-                          "Row:": {
-                            "Act:": [
-                              {
-                                "Say:": "Fail to take your container:<br>"
-                              },
-                              {
-                                "Taking agent:noun:": [
-                                  {
-                                    "FromTxt:": "player"
-                                  },
-                                  {
-                                    "FromTxt:": "purse"
-                                  }
-                                ]
-                              }
-                            ]
-                          }
+                      ]
+                    }
+                  },
+                  {
+                    "Say:": {
+                      "Row does:": [
+                        {
+                          "Say:": "Fail to take scenery:<br>"
+                        },
+                        {
+                          "Taking agent:noun:": [
+                            {
+                              "FromTxt:": "player"
+                            },
+                            {
+                              "FromTxt:": "cabinet"
+                            }
+                          ]
                         }
-                      },
-                      {
-                        "Say:": {
-                          "Row:": {
-                            "Act:": [
-                              {
-                                "Say:": {
-                                  "RenderTemplate:": "The knife's parent was: {the: {parentOf: .knife}}."
-                                }
-                              },
-                              {
-                                "Say:": "Okay, take something:<br>"
-                              },
-                              {
-                                "Taking agent:noun:": [
-                                  {
-                                    "FromTxt:": "player"
-                                  },
-                                  {
-                                    "FromTxt:": "knife"
-                                  }
-                                ]
-                              },
-                              {
-                                "Say:": {
-                                  "RenderTemplate:": "The knife's parent is: {the: {parentOf: .knife}}."
-                                }
-                              }
-                            ]
-                          }
+                      ]
+                    }
+                  },
+                  {
+                    "Say:": {
+                      "Row does:": [
+                        {
+                          "Say:": "Fail to take something fixed in place:<br>"
+                        },
+                        {
+                          "Taking agent:noun:": [
+                            {
+                              "FromTxt:": "player"
+                            },
+                            {
+                              "FromTxt:": "machine"
+                            }
+                          ]
                         }
-                      },
-                      {
-                        "Say:": {
-                          "Row:": {
-                            "Act:": [
-                              {
-                                "Say:": "Fail to take your self:<br>"
-                              },
-                              {
-                                "Taking agent:noun:": [
-                                  {
-                                    "FromTxt:": "player"
-                                  },
-                                  {
-                                    "FromTxt:": "self"
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        }
-                      },
-                      {
-                        "Say:": {
-                          "Row:": {
-                            "Act:": [
-                              {
-                                "Say:": "Fail to take someone else:<br>"
-                              },
-                              {
-                                "Taking agent:noun:": [
-                                  {
-                                    "FromTxt:": "player"
-                                  },
-                                  {
-                                    "FromTxt:": "mildred"
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        }
-                      },
-                      {
-                        "Say:": {
-                          "Row:": {
-                            "Act:": [
-                              {
-                                "Say:": "Fail to take scenery:<br>"
-                              },
-                              {
-                                "Taking agent:noun:": [
-                                  {
-                                    "FromTxt:": "player"
-                                  },
-                                  {
-                                    "FromTxt:": "cabinet"
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        }
-                      },
-                      {
-                        "Say:": {
-                          "Row:": {
-                            "Act:": [
-                              {
-                                "Say:": "Fail to take something fixed in place:<br>"
-                              },
-                              {
-                                "Taking agent:noun:": [
-                                  {
-                                    "FromTxt:": "player"
-                                  },
-                                  {
-                                    "FromTxt:": "machine"
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        }
-                      }
-                    ]
+                      ]
+                    }
                   }
-                }
+                ]
               }
-            ]
-          }
+            }
+          ]
         ]
       },
       {

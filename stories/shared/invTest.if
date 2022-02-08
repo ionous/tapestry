@@ -329,52 +329,50 @@
         ]
       },
       {
-        "TestRule:hook activity:": [
+        "TestRule:does:": [
           "status printing test",
-          {
-            "Act:": [
-              {
-                "Say:": {
-                  "RenderTemplate:": "{the: .flower}: {print_status:.flower}."
-                }
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "{the: .headlamp}: {print_status:.headlamp}."
-                }
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "{the: .secrets}: {print_status:.secrets}."
-                }
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "{the: .wisdom}: {print_status:.wisdom true}."
-                }
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "{the: .clutch}: {print_status:.clutch}."
-                }
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "{the: .purse}: {print_status:.purse}."
-                }
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "{the: .flashlight}: {print_status:.flashlight}."
-                }
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "{the: .coin}: {print_status:.coin}."
-                }
+          [
+            {
+              "Say:": {
+                "RenderTemplate:": "{the: .flower}: {print_status:.flower}."
               }
-            ]
-          }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{the: .headlamp}: {print_status:.headlamp}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{the: .secrets}: {print_status:.secrets}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{the: .wisdom}: {print_status:.wisdom true}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{the: .clutch}: {print_status:.clutch}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{the: .purse}: {print_status:.purse}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{the: .flashlight}: {print_status:.flashlight}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "{the: .coin}: {print_status:.coin}."
+              }
+            }
+          ]
         ]
       },
       {
@@ -392,19 +390,17 @@
         "Comment:": "Print inventory as a list."
       },
       {
-        "TestRule:hook activity:": [
+        "TestRule:does:": [
           "default inventory",
-          {
-            "Act:": [
-              {
-                "PrintInventory actor:": {
-                  "FromTxt:": {
-                    "IdOf:": "Mildred"
-                  }
+          [
+            {
+              "PrintInventory actor:": {
+                "FromTxt:": {
+                  "IdOf:": "Mildred"
                 }
               }
-            ]
-          }
+            }
+          ]
         ]
       }
     ]

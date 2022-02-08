@@ -264,42 +264,40 @@
         "--": ""
       },
       {
-        "TestRule:hook activity:": [
+        "TestRule:does:": [
           "whereabouts",
-          {
-            "Act:": [
-              {
-                "Say:": {
-                  "RenderTemplate:": "Mildred's parent is {the: {parentOf: .Mildred}}.\nThe basket's parent is {the: {parentOf: .basket}}.\nMildred is in {the: {CurrentRoom: .Mildred}}.\nThe scalpel is in {the: {CurrentRoom: .scalpel}}.\n{The: {locationOf: .basket}|capitalize!} encloses the basket.\n{The: {locationOf: .apple}|capitalize!} encloses the apple.\n{The: {containerOf: .apple}|capitalize!} contains the apple.\n{The: {containerOf: .basket}|capitalize!} contains the basket.\n{The: {supporterOf: .apple}|capitalize!} supports the apple.\n{The: {supporterOf: .basket}|capitalize!} supports the basket.\nThe basket's parent: {name_of: {parentOf: .basket}}.\nThe scalpel's parent: {name_of: {parentOf: .scalpel}}.\n{The: {holderOf: .pen}|capitalize!} owns the pen.\n{The: {carrierOf: .pen}|capitalize!} carries the pen.\n{The: {carrierOf: .scalpel}|capitalize!} carries the scalpel.\nThe pen is in {the: {wearerOf: .pen}}'s pocket.\nThe scalpel is worn by: {name_of: {wearerOf: .scalpel}}.\n"
-                }
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "The common ancestor of the pen and itself: {name_of: {common_ancestor: .pen .pen}}."
-                }
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "The common ancestor of the pen and a sibling: {name_of: {common_ancestor: .pen .scalpel}}."
-                }
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "The common ancestor of the sibling and a pen: {name_of: {common_ancestor: .scalpel .pen}}."
-                }
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "The common ancestor of the pen and its owner: {name_of: {common_ancestor: .Mildred .pen}}."
-                }
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "The common ancestor of the pen's owner and the pen: {name_of: {common_ancestor: .pen .Mildred}}."
-                }
+          [
+            {
+              "Say:": {
+                "RenderTemplate:": "Mildred's parent is {the: {parentOf: .Mildred}}.\nThe basket's parent is {the: {parentOf: .basket}}.\nMildred is in {the: {CurrentRoom: .Mildred}}.\nThe scalpel is in {the: {CurrentRoom: .scalpel}}.\n{The: {locationOf: .basket}|capitalize!} encloses the basket.\n{The: {locationOf: .apple}|capitalize!} encloses the apple.\n{The: {containerOf: .apple}|capitalize!} contains the apple.\n{The: {containerOf: .basket}|capitalize!} contains the basket.\n{The: {supporterOf: .apple}|capitalize!} supports the apple.\n{The: {supporterOf: .basket}|capitalize!} supports the basket.\nThe basket's parent: {name_of: {parentOf: .basket}}.\nThe scalpel's parent: {name_of: {parentOf: .scalpel}}.\n{The: {holderOf: .pen}|capitalize!} owns the pen.\n{The: {carrierOf: .pen}|capitalize!} carries the pen.\n{The: {carrierOf: .scalpel}|capitalize!} carries the scalpel.\nThe pen is in {the: {wearerOf: .pen}}'s pocket.\nThe scalpel is worn by: {name_of: {wearerOf: .scalpel}}.\n"
               }
-            ]
-          }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "The common ancestor of the pen and itself: {name_of: {common_ancestor: .pen .pen}}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "The common ancestor of the pen and a sibling: {name_of: {common_ancestor: .pen .scalpel}}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "The common ancestor of the sibling and a pen: {name_of: {common_ancestor: .scalpel .pen}}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "The common ancestor of the pen and its owner: {name_of: {common_ancestor: .Mildred .pen}}."
+              }
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "The common ancestor of the pen's owner and the pen: {name_of: {common_ancestor: .pen .Mildred}}."
+              }
+            }
+          ]
         ]
       }
     ]

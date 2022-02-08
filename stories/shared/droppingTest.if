@@ -10,42 +10,40 @@
         ]
       },
       {
-        "TestRule:hook activity:": [
+        "TestRule:does:": [
           "dropping test",
-          {
-            "Act:": [
-              {
-                "Say:": {
-                  "RenderTemplate:": "The knife's ogp: {the: {parentOf: .knife}}."
-                }
-              },
-              {
-                "Dropping agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "knife"
-                  }
-                ]
-              },
-              {
-                "Say:": {
-                  "RenderTemplate:": "The knife's newg: {the: {parentOf: .knife}}."
-                }
-              },
-              {
-                "Dropping agent:noun:": [
-                  {
-                    "FromTxt:": "player"
-                  },
-                  {
-                    "FromTxt:": "knife"
-                  }
-                ]
+          [
+            {
+              "Say:": {
+                "RenderTemplate:": "The knife's ogp: {the: {parentOf: .knife}}."
               }
-            ]
-          }
+            },
+            {
+              "Dropping agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "knife"
+                }
+              ]
+            },
+            {
+              "Say:": {
+                "RenderTemplate:": "The knife's newg: {the: {parentOf: .knife}}."
+              }
+            },
+            {
+              "Dropping agent:noun:": [
+                {
+                  "FromTxt:": "player"
+                },
+                {
+                  "FromTxt:": "knife"
+                }
+              ]
+            }
+          ]
         ]
       },
       {

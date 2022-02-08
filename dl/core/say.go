@@ -22,27 +22,27 @@ func (op *Say) Execute(run rt.Runtime) (err error) {
 
 func (op *BufferText) GetText(run rt.Runtime) (g.Value, error) {
 	var buf bytes.Buffer
-	return writeSpan(run, &buf, op, op.Do, &buf)
+	return writeSpan(run, &buf, op, op.Does, &buf)
 }
 
 func (op *SpanText) GetText(run rt.Runtime) (g.Value, error) {
 	span := print.NewSpanner() // separate writes with spaces
-	return writeSpan(run, span, op, op.Do, span.ChunkOutput())
+	return writeSpan(run, span, op, op.Does, span.ChunkOutput())
 }
 
 func (op *BracketText) GetText(run rt.Runtime) (g.Value, error) {
 	span := print.Parens()
-	return writeSpan(run, span, op, op.Do, span.ChunkOutput())
+	return writeSpan(run, span, op, op.Does, span.ChunkOutput())
 }
 
 func (op *SlashText) GetText(run rt.Runtime) (g.Value, error) {
 	span := print.NewSpanner() // separate punctuation with spaces
-	return writeSpan(run, span, op, op.Do, print.Slash(span.ChunkOutput()))
+	return writeSpan(run, span, op, op.Does, print.Slash(span.ChunkOutput()))
 }
 
 func (op *CommaText) GetText(run rt.Runtime) (g.Value, error) {
 	span := print.NewSpanner() // separate punctuation with spaces
-	return writeSpan(run, span, op, op.Do, print.AndSeparator(span.ChunkOutput()))
+	return writeSpan(run, span, op, op.Does, print.AndSeparator(span.ChunkOutput()))
 }
 
 type stringer interface{ String() string }
@@ -52,12 +52,12 @@ type stringer interface{ String() string }
 // act - activity that presumably generates some output
 // w - output target with any needed filters, etc.
 // returns the output of "s" as a value
-func writeSpan(run rt.Runtime, s stringer, op composer.Composer, act Activity, w writer.Output) (ret g.Value, err error) {
-	if act.Empty() {
+func writeSpan(run rt.Runtime, s stringer, op composer.Composer, act []rt.Execute, w writer.Output) (ret g.Value, err error) {
+	if len(act) == 0 {
 		ret = g.Empty
 	} else {
 		was := run.SetWriter(w)
-		ex := act.Execute(run)
+		ex := safe.RunAll(run, act)
 		run.SetWriter(was)
 		if e := errutil.Append(ex, writer.Close(w)); e != nil {
 			err = cmdError(op, e)
