@@ -16,7 +16,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn"
-	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"git.sr.ht/~ionous/tapestry/jsn/din"
@@ -190,20 +189,20 @@ func readOne(filePath string) (ret []byte, err error) {
 
 // example of migrating one command to another.
 func xformStory(tgt jsn.Marshalee) (err error) {
-	ts := chart.MakeEncoder()
-	err = ts.Marshal(tgt, story.Map(&ts, story.BlockMap{
-		story.OtherBlocks: story.KeyMap{
-			story.BlockStart: func(b jsn.Block, v interface{}) (err error) {
-				switch newBlock := b.(type) {
-				case jsn.FlowBlock:
-					f := newBlock.GetFlow()
-					if b, ok := f.(interface{ RewriteActivity() }); ok {
-						b.RewriteActivity()
-					}
-				}
-				return
-			},
-		},
-	}))
+	// ts := chart.MakeEncoder()
+	// err = ts.Marshal(tgt, story.Map(&ts, story.BlockMap{
+	// 	story.OtherBlocks: story.KeyMap{
+	// 		story.BlockStart: func(b jsn.Block, v interface{}) (err error) {
+	// 			switch newBlock := b.(type) {
+	// 			case jsn.FlowBlock:
+	// 				f := newBlock.GetFlow()
+	// 				if b, ok := f.(interface{ RewriteActivity() }); ok {
+	// 					b.RewriteActivity()
+	// 				}
+	// 			}
+	// 			return
+	// 		},
+	// 	},
+	// }))
 	return
 }

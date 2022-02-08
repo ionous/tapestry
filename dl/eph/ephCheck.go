@@ -3,6 +3,7 @@ package eph
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 
@@ -36,13 +37,18 @@ func (c *asmCheck) setExpectation(v literal.LiteralValue) (err error) {
 	return
 }
 
-func (c *asmCheck) setProg(cmd interface{}) (err error) {
-	if cmd != nil && len(c.prog) > 0 {
-		err = errutil.Fmt("check %q cant have multiple programs to check", c.name)
-	} else if prog, e := marshalout(cmd); e != nil {
-		err = e
-	} else if len(prog) > 0 {
-		c.prog = prog
+func (c *asmCheck) setProg(exe []rt.Execute) (err error) {
+	if len(exe) > 0 {
+		if len(c.prog) > 0 {
+			err = errutil.Fmt("check %q cant have multiple programs to check", c.name)
+		} else {
+			slice := rt.Execute_Slice(exe)
+			if str, e := marshalout(&slice); e != nil {
+				err = e
+			} else if len(str) > 0 {
+				c.prog = str
+			}
+		}
 	}
 	return
 }

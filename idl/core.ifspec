@@ -39,13 +39,6 @@
                 "uses": "slot",
                 "desc": "Helper for counting values."
             },
-            "activity":
-            {
-                "uses": "flow",
-                "spec": "act {_%exe+execute}",
-                "slot": "execute",
-                "group": "hidden"
-            },
             "all_true":
             {
                 "uses": "flow",
@@ -89,7 +82,7 @@
             "bracket_text":
             {
                 "uses": "flow",
-                "spec": "brackets {_%do?activity} {does*execute}",
+                "spec": "brackets {does+execute}",
                 "slot": "text_eval",
                 "desc": "Sandwiches text printed during a block and puts them inside parenthesis '()'.",
                 "group": "printing"
@@ -105,7 +98,7 @@
             "buffer_text":
             {
                 "uses": "flow",
-                "spec": "buffers {_%do?activity} {does*execute}",
+                "spec": "buffers {does+execute}",
                 "slot": "text_eval",
                 "group": "printing"
             },
@@ -142,7 +135,7 @@
             "choose_action":
             {
                 "uses": "flow",
-                "spec": "if {_%if:bool_eval} {do?activity} {does*execute} {else?brancher}",
+                "spec": "if {_%if:bool_eval} {does+execute} {else?brancher}",
                 "slot":
                 [
                     "execute",
@@ -154,21 +147,21 @@
             "choose_more":
             {
                 "uses": "flow",
-                "spec": "else_if {_%if:bool_eval} {do?activity} {does*execute} {else?brancher}",
+                "spec": "else_if {_%if:bool_eval} {does+execute} {else?brancher}",
                 "slot": "brancher",
                 "group": "misc"
             },
             "choose_more_value":
             {
                 "uses": "flow",
-                "spec": "else_if {_%assign:text} {from:assignment} {and%filter:bool_eval} {do?activity} {does*execute} {else?brancher}",
+                "spec": "else_if {_%assign:text} {from:assignment} {and%filter:bool_eval} {does+execute} {else?brancher}",
                 "slot": "brancher",
                 "group": "misc"
             },
             "choose_nothing_else":
             {
                 "uses": "flow",
-                "spec": "else_do {_%do?activity} {does*execute}",
+                "spec": "else_do {does+execute}",
                 "slot": "brancher",
                 "group": "misc"
             },
@@ -191,7 +184,7 @@
             "choose_value":
             {
                 "uses": "flow",
-                "spec": "if {_%assign:text} {from:assignment} {and%filter:bool_eval} {do?activity} {does*execute} {else?brancher}",
+                "spec": "if {_%assign:text} {from:assignment} {and%filter:bool_eval} {does+execute} {else?brancher}",
                 "slot":
                 [
                     "execute",
@@ -203,7 +196,7 @@
             "comma_text":
             {
                 "uses": "flow",
-                "spec": "commas {_%do?activity} {does*execute}",
+                "spec": "commas {does+execute}",
                 "slot": "text_eval",
                 "desc": "Separates words with commas, and 'and'.",
                 "group": "printing"
@@ -688,7 +681,7 @@
             "row":
             {
                 "uses": "flow",
-                "spec": "row {_%do?activity} {does*execute}",
+                "spec": "row {does+execute}",
                 "slot": "text_eval",
                 "desc": "A single line as part of a group of lines.",
                 "group": "printing"
@@ -696,7 +689,7 @@
             "rows":
             {
                 "uses": "flow",
-                "spec": "rows {_%do?activity} {does*execute}",
+                "spec": "rows {does+execute}",
                 "slot": "text_eval",
                 "desc": "Group text into successive lines.",
                 "group": "printing"
@@ -734,7 +727,7 @@
             "slash_text":
             {
                 "uses": "flow",
-                "spec": "slashes {_%do?activity} {does*execute}",
+                "spec": "slashes {does+execute}",
                 "slot": "text_eval",
                 "desc": "Separates words with left-leaning slashes '/'.",
                 "group": "printing"
@@ -750,7 +743,7 @@
             "span_text":
             {
                 "uses": "flow",
-                "spec": "spaces {_%do?activity} {does*execute}",
+                "spec": "spaces {does+execute}",
                 "slot": "text_eval",
                 "desc": "Writes text with spaces between words.",
                 "group": "printing"
@@ -805,7 +798,7 @@
             "while":
             {
                 "uses": "flow",
-                "spec": "repeating {_%true:bool_eval} {do?activity} {does*execute}",
+                "spec": "repeating {_%true:bool_eval} {does+execute}",
                 "slot": "execute",
                 "desc": "Keep running a series of actions while a condition is true.",
                 "group": "flow"

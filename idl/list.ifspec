@@ -55,7 +55,7 @@
             "list_each":
             {
                 "uses": "flow",
-                "spec": "repeating {across%list:assignment} {as:list_iterator} {do?activity} {does*execute} {else?brancher}",
+                "spec": "repeating {across%list:assignment} {as:list_iterator} {does+execute} {else?brancher}",
                 "slot": "execute",
                 "desc": "Loops over the elements in the passed list, or runs the 'else' activity if empty."
             },
@@ -76,14 +76,14 @@
             "erasing":
             {
                 "uses": "flow",
-                "spec": "erasing {_%count:number_eval} {from:list_source} {at_index:number_eval} {as:text} {do?activity} {does*execute}",
+                "spec": "erasing {_%count:number_eval} {from:list_source} {at_index:number_eval} {as:text} {does+execute}",
                 "slot": "execute",
                 "desc": "Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased."
             },
             "erasing_edge":
             {
                 "uses": "flow",
-                "spec": "erasing {_%from:list_source} {at_front%at_edge?bool_eval} {as:text} {do?activity} {does*execute} {else?brancher}",
+                "spec": "erasing {_%from:list_source} {at_front%at_edge?bool_eval} {as:text} {does+execute} {else?brancher}",
                 "slot": "execute",
                 "desc": "Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased."
             },

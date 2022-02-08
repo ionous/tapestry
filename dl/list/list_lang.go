@@ -551,12 +551,11 @@ func EraseIndex_Marshal(m jsn.Marshaler, val *EraseIndex) (err error) {
 
 // Erasing Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
 type Erasing struct {
-	Count       rt.NumberEval  `if:"label=_"`
-	From        ListSource     `if:"label=from"`
-	AtIndex     rt.NumberEval  `if:"label=at_index"`
-	As          string         `if:"label=as,type=text"`
-	Do          *core.Activity `if:"label=do,optional"`
-	Does        []rt.Execute   `if:"label=does,optional"`
+	Count       rt.NumberEval `if:"label=_"`
+	From        ListSource    `if:"label=from"`
+	AtIndex     rt.NumberEval `if:"label=at_index"`
+	As          string        `if:"label=as,type=text"`
+	Does        []rt.Execute  `if:"label=does"`
 	UserComment string
 }
 
@@ -575,7 +574,6 @@ const Erasing_Field_Count = "$COUNT"
 const Erasing_Field_From = "$FROM"
 const Erasing_Field_AtIndex = "$AT_INDEX"
 const Erasing_Field_As = "$AS"
-const Erasing_Field_Do = "$DO"
 const Erasing_Field_Does = "$DOES"
 
 func (op *Erasing) Marshal(m jsn.Marshaler) error {
@@ -677,19 +675,12 @@ func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
 		if e3 != nil && e3 != jsn.Missing {
 			m.Error(errutil.New(e3, "in flow at", Erasing_Field_As))
 		}
-		e4 := m.MarshalKey("do", Erasing_Field_Do)
+		e4 := m.MarshalKey("does", Erasing_Field_Does)
 		if e4 == nil {
-			e4 = core.Activity_Optional_Marshal(m, &val.Do)
+			e4 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e4 != nil && e4 != jsn.Missing {
-			m.Error(errutil.New(e4, "in flow at", Erasing_Field_Do))
-		}
-		e5 := m.MarshalKey("does", Erasing_Field_Does)
-		if e5 == nil {
-			e5 = rt.Execute_Optional_Repeats_Marshal(m, &val.Does)
-		}
-		if e5 != nil && e5 != jsn.Missing {
-			m.Error(errutil.New(e5, "in flow at", Erasing_Field_Does))
+			m.Error(errutil.New(e4, "in flow at", Erasing_Field_Does))
 		}
 		m.EndBlock()
 	}
@@ -698,12 +689,11 @@ func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
 
 // ErasingEdge Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
 type ErasingEdge struct {
-	From        ListSource     `if:"label=_"`
-	AtEdge      rt.BoolEval    `if:"label=at_front,optional"`
-	As          string         `if:"label=as,type=text"`
-	Do          *core.Activity `if:"label=do,optional"`
-	Does        []rt.Execute   `if:"label=does,optional"`
-	Else        core.Brancher  `if:"label=else,optional"`
+	From        ListSource    `if:"label=_"`
+	AtEdge      rt.BoolEval   `if:"label=at_front,optional"`
+	As          string        `if:"label=as,type=text"`
+	Does        []rt.Execute  `if:"label=does"`
+	Else        core.Brancher `if:"label=else,optional"`
 	UserComment string
 }
 
@@ -722,7 +712,6 @@ const ErasingEdge_Type = "erasing_edge"
 const ErasingEdge_Field_From = "$FROM"
 const ErasingEdge_Field_AtEdge = "$AT_EDGE"
 const ErasingEdge_Field_As = "$AS"
-const ErasingEdge_Field_Do = "$DO"
 const ErasingEdge_Field_Does = "$DOES"
 const ErasingEdge_Field_Else = "$ELSE"
 
@@ -818,26 +807,19 @@ func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ErasingEdge_Field_As))
 		}
-		e3 := m.MarshalKey("do", ErasingEdge_Field_Do)
+		e3 := m.MarshalKey("does", ErasingEdge_Field_Does)
 		if e3 == nil {
-			e3 = core.Activity_Optional_Marshal(m, &val.Do)
+			e3 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", ErasingEdge_Field_Do))
+			m.Error(errutil.New(e3, "in flow at", ErasingEdge_Field_Does))
 		}
-		e4 := m.MarshalKey("does", ErasingEdge_Field_Does)
+		e4 := m.MarshalKey("else", ErasingEdge_Field_Else)
 		if e4 == nil {
-			e4 = rt.Execute_Optional_Repeats_Marshal(m, &val.Does)
+			e4 = core.Brancher_Optional_Marshal(m, &val.Else)
 		}
 		if e4 != nil && e4 != jsn.Missing {
-			m.Error(errutil.New(e4, "in flow at", ErasingEdge_Field_Does))
-		}
-		e5 := m.MarshalKey("else", ErasingEdge_Field_Else)
-		if e5 == nil {
-			e5 = core.Brancher_Optional_Marshal(m, &val.Else)
-		}
-		if e5 != nil && e5 != jsn.Missing {
-			m.Error(errutil.New(e5, "in flow at", ErasingEdge_Field_Else))
+			m.Error(errutil.New(e4, "in flow at", ErasingEdge_Field_Else))
 		}
 		m.EndBlock()
 	}
@@ -1578,11 +1560,10 @@ func ListAt_Marshal(m jsn.Marshaler, val *ListAt) (err error) {
 
 // ListEach Loops over the elements in the passed list, or runs the 'else' activity if empty.
 type ListEach struct {
-	List        rt.Assignment  `if:"label=across"`
-	As          ListIterator   `if:"label=as"`
-	Do          *core.Activity `if:"label=do,optional"`
-	Does        []rt.Execute   `if:"label=does,optional"`
-	Else        core.Brancher  `if:"label=else,optional"`
+	List        rt.Assignment `if:"label=across"`
+	As          ListIterator  `if:"label=as"`
+	Does        []rt.Execute  `if:"label=does"`
+	Else        core.Brancher `if:"label=else,optional"`
 	UserComment string
 }
 
@@ -1600,7 +1581,6 @@ func (*ListEach) Compose() composer.Spec {
 const ListEach_Type = "list_each"
 const ListEach_Field_List = "$LIST"
 const ListEach_Field_As = "$AS"
-const ListEach_Field_Do = "$DO"
 const ListEach_Field_Does = "$DOES"
 const ListEach_Field_Else = "$ELSE"
 
@@ -1689,26 +1669,19 @@ func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListEach_Field_As))
 		}
-		e2 := m.MarshalKey("do", ListEach_Field_Do)
+		e2 := m.MarshalKey("does", ListEach_Field_Does)
 		if e2 == nil {
-			e2 = core.Activity_Optional_Marshal(m, &val.Do)
+			e2 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", ListEach_Field_Do))
+			m.Error(errutil.New(e2, "in flow at", ListEach_Field_Does))
 		}
-		e3 := m.MarshalKey("does", ListEach_Field_Does)
+		e3 := m.MarshalKey("else", ListEach_Field_Else)
 		if e3 == nil {
-			e3 = rt.Execute_Optional_Repeats_Marshal(m, &val.Does)
+			e3 = core.Brancher_Optional_Marshal(m, &val.Else)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", ListEach_Field_Does))
-		}
-		e4 := m.MarshalKey("else", ListEach_Field_Else)
-		if e4 == nil {
-			e4 = core.Brancher_Optional_Marshal(m, &val.Else)
-		}
-		if e4 != nil && e4 != jsn.Missing {
-			m.Error(errutil.New(e4, "in flow at", ListEach_Field_Else))
+			m.Error(errutil.New(e3, "in flow at", ListEach_Field_Else))
 		}
 		m.EndBlock()
 	}
@@ -3760,25 +3733,10 @@ var Signatures = map[uint64]interface{}{
 	602674204343183133:   (*EraseEdge)(nil),       /* Erase: */
 	2379140516691405863:  (*EraseEdge)(nil),       /* Erase:atFront: */
 	18068640065349035914: (*EraseIndex)(nil),      /* Erase:from:atIndex: */
-	1712652914788593170:  (*ErasingEdge)(nil),     /* Erasing:as: */
-	10199179765059749783: (*ErasingEdge)(nil),     /* Erasing:as:do: */
-	14753759897897796728: (*ErasingEdge)(nil),     /* Erasing:as:do:does: */
-	2884199363398711193:  (*ErasingEdge)(nil),     /* Erasing:as:do:does:else: */
-	2253244220008480180:  (*ErasingEdge)(nil),     /* Erasing:as:do:else: */
 	18138731018283732895: (*ErasingEdge)(nil),     /* Erasing:as:does: */
 	9346092789410031916:  (*ErasingEdge)(nil),     /* Erasing:as:does:else: */
-	3524311471576115911:  (*ErasingEdge)(nil),     /* Erasing:as:else: */
-	8312937671141428020:  (*ErasingEdge)(nil),     /* Erasing:atFront:as: */
-	4059879572017637653:  (*ErasingEdge)(nil),     /* Erasing:atFront:as:do: */
-	4866286332196659438:  (*ErasingEdge)(nil),     /* Erasing:atFront:as:do:does: */
-	4291149649450765203:  (*ErasingEdge)(nil),     /* Erasing:atFront:as:do:does:else: */
-	4832054959845425038:  (*ErasingEdge)(nil),     /* Erasing:atFront:as:do:else: */
 	15331416331853754385: (*ErasingEdge)(nil),     /* Erasing:atFront:as:does: */
 	5204747510046770858:  (*ErasingEdge)(nil),     /* Erasing:atFront:as:does:else: */
-	12261704371328642245: (*ErasingEdge)(nil),     /* Erasing:atFront:as:else: */
-	11798816072814311309: (*Erasing)(nil),         /* Erasing:from:atIndex:as: */
-	15022408731321198722: (*Erasing)(nil),         /* Erasing:from:atIndex:as:do: */
-	11774126201256851823: (*Erasing)(nil),         /* Erasing:from:atIndex:as:do:does: */
 	333549251967229686:   (*Erasing)(nil),         /* Erasing:from:atIndex:as:does: */
 	10285751875873889942: (*ListFind)(nil),        /* Find:list: */
 	6334415563934548256:  (*ListGather)(nil),      /* Gather:from:using: */
@@ -3796,14 +3754,8 @@ var Signatures = map[uint64]interface{}{
 	12654734042076112886: (*Range)(nil),           /* Range:from: */
 	17061865887297909749: (*Range)(nil),           /* Range:from:byStep: */
 	14826188473242626433: (*ListReduce)(nil),      /* Reduce into:fromList:using: */
-	12572922642631194627: (*ListEach)(nil),        /* Repeating across:as: */
-	5893619730181277740:  (*ListEach)(nil),        /* Repeating across:as:do: */
-	14910628578010065081: (*ListEach)(nil),        /* Repeating across:as:do:does: */
-	14611758915277199170: (*ListEach)(nil),        /* Repeating across:as:do:does:else: */
-	4018832586238090637:  (*ListEach)(nil),        /* Repeating across:as:do:else: */
 	4436696650994425060:  (*ListEach)(nil),        /* Repeating across:as:does: */
 	9394092098582830357:  (*ListEach)(nil),        /* Repeating across:as:does:else: */
-	14149499667593470096: (*ListEach)(nil),        /* Repeating across:as:else: */
 	13627278328240309351: (*ListReverse)(nil),     /* Reverse list: */
 	15586923045386932713: (*ListSet)(nil),         /* Set:index:from: */
 	16656583749567367441: (*ListSlice)(nil),       /* Slice: */

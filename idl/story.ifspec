@@ -93,7 +93,7 @@
                             {
                                 "uses": "flow",
                                 "slot": "story_statement",
-                                "spec": "To test {test_name}: {do%hook?program_hook} {does*execute}",
+                                "spec": "To test {test_name}: {does+execute}",
                                 "desc": "Add actions to a test"
                             },
                             "test_output":
@@ -354,23 +354,13 @@
                             "pattern_rule":
                             {
                                 "uses": "flow",
-                                "spec": "When {conditions are met%guard:bool_eval}{continue%flags?pattern_flags}, then: {do%hook?program_hook} {does*execute}",
+                                "spec": "When {conditions are met%guard:bool_eval}{continue%flags?pattern_flags}, then: {does+execute}",
                                 "desc": "Rule"
                             },
                             "pattern_flags":
                             {
                                 "uses": "str",
                                 "spec": "{continue before%before}, {continue after%after}, {terminate}"
-                            },
-                            "program_hook":
-                            {
-                                "uses": "swap",
-                                "spec": "do {actions%activity}",
-                                "group":
-                                [
-                                    "positioned",
-                                    "modeling"
-                                ]
                             },
                             "pattern_return":
                             {
