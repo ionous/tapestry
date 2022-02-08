@@ -734,7 +734,7 @@
         },
         {
           "--": "Read what the player types and turn it into actions.",
-          "Spec:with flow:groups:": [
+          "Spec:with flow:slots:groups:": [
             "grammar_decl",
             {
               "flow phrase:trim:uses:": [
@@ -750,6 +750,9 @@
                 ]
               ]
             },
+            [
+              "story_statement"
+            ],
             [
               "debug",
               "stubs",

@@ -705,6 +705,7 @@
                             {
                                 "uses": "flow",
                                 "spec": "understand {_%grammar:grammar_maker}",
+                                "slot": "story_statement",
                                 "desc": "Read what the player types and turn it into actions.",
                                 "group": "grammar"
                             }

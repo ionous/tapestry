@@ -2474,6 +2474,9 @@ type GrammarDecl struct {
 	UserComment string
 }
 
+// User implemented slots:
+var _ StoryStatement = (*GrammarDecl)(nil)
+
 func (*GrammarDecl) Compose() composer.Spec {
 	return composer.Spec{
 		Name: GrammarDecl_Type,
