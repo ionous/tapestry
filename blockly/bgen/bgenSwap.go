@@ -12,7 +12,7 @@ import (
 // we are basically the same as slot
 // we just write a choice of the swap to the block's fields
 func newSwap(m *chart.Machine, term string, swap jsn.SwapBlock, blk *blockData) chart.State {
-	var was int
+	was := -1
 	return &chart.StateMix{
 		OnBlock: func(block jsn.Block) (err error) {
 			if was, err = openSwap(blk, term, swap); err == nil {
@@ -36,7 +36,10 @@ func newSwap(m *chart.Machine, term string, swap jsn.SwapBlock, blk *blockData) 
 			return
 		},
 		OnEnd: func() {
-			blk.endInput(was)
+			if was >= 0 {
+				blk.endInput(was)
+				was = -1
+			}
 			m.FinishState(nil)
 		},
 	}

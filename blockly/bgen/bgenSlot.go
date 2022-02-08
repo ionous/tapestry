@@ -7,7 +7,7 @@ import (
 
 // see also: newSwap
 func newSlot(m *chart.Machine, term string, blk *blockData) *chart.StateMix {
-	var was int
+	was := -1
 	return &chart.StateMix{
 		OnBlock: func(block jsn.Block) (err error) {
 			was = blk.startInput(term)
@@ -15,7 +15,10 @@ func newSlot(m *chart.Machine, term string, blk *blockData) *chart.StateMix {
 			return
 		},
 		OnEnd: func() {
-			blk.endInput(was)
+			if was >= 0 {
+				blk.endInput(was)
+				was = -1
+			}
 			m.FinishState(nil)
 		},
 	}
