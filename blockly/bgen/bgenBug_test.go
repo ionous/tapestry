@@ -8,6 +8,49 @@ import (
   "git.sr.ht/~ionous/tapestry/dl/story"
 )
 
+// close strings use drop downs, and the field should be their $KEY
+func TestStringChoice(t *testing.T) {
+  if e := testBlocks(
+    &story.TraitPhrase{
+      AreEither: story.AreEither{
+        Str: story.AreEither_Canbe,
+      }}, `{
+  "id": "test-1",
+  "type": "trait_phrase",
+  "extraState": {
+    "ARE_EITHER": 1
+  },
+  "fields": {
+    "ARE_EITHER": "$CANBE"
+  }
+}`); e != nil {
+    t.Fatal(e)
+  }
+}
+
+// until there are variables ( or something ) for the hints
+// their text should hold normal text not $KEY values
+func TestStringHints(t *testing.T) {
+  if e := testBlocks(
+    &story.NamedNoun{
+      Determiner: story.Determiner{Str: story.Determiner_The},
+      Name:       story.NounName{Str: "table"},
+    }, `{
+  "id": "test-1",
+  "type": "named_noun",
+  "extraState": {
+    "DETERMINER": 1,
+    "NAME": 1
+  },
+  "fields": {
+    "DETERMINER": "the",
+    "NAME": "table"
+  }
+}`); e != nil {
+    t.Fatal(e)
+  }
+}
+
 // blocks with optional members should just skip happily to the next member
 func TestSkippedSlot(t *testing.T) {
   if e := testBlocks(&list.ListEach{}, `{
