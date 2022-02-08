@@ -39,7 +39,8 @@ func TestDetailsDecode(t *testing.T) {
 }
 
 func TestCompactEncoder(t *testing.T) {
-	if str, e := cout.Marshal(debug.FactorialStory, story.CompactEncoder); e != nil {
+	lines := debug.FactorialStory.Reformat()
+	if str, e := cout.Marshal(&lines, story.CompactEncoder); e != nil {
 		t.Fatal(e)
 	} else if str != jsnTestIf {
 		t.Fatal(str)
@@ -47,13 +48,16 @@ func TestCompactEncoder(t *testing.T) {
 }
 
 func TestCompactDecode(t *testing.T) {
-	var dst story.Story
-	if e := story.Decode(&dst, []byte(jsnTestIf), tapestry.AllSignatures); e != nil {
-		pretty.Println(dst)
+	var lines story.StoryLines
+	if e := story.Decode(&lines, []byte(jsnTestIf), tapestry.AllSignatures); e != nil {
+		pretty.Println(lines)
 		t.Fatal(e)
-	} else if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
-		pretty.Print(dst)
-		t.Fatal(diff)
+	} else {
+		dst := lines.Reformat()
+		if diff := pretty.Diff(debug.FactorialStory, &dst); len(diff) != 0 {
+			pretty.Print(dst)
+			t.Fatal(diff)
+		}
 	}
 }
 

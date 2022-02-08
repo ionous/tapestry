@@ -23,32 +23,34 @@ func TestBlocklyTypes(t *testing.T) {
 	}
 }
 
-// make sure that story lines has no output and one stacked input.
-func TestStoryLineShape(t *testing.T) {
+// make sure that story file has no output and one stacked input.
+func TestStoryFileShape(t *testing.T) {
 	lookup = make(TypeSpecs) // reset
 	expect := `{
-  "type": "story_lines",
-  "message0": "story_lines",
+  "type": "story_file",
+  "message0": "story_file",
   "colour": "%{BKY_COLOUR_HUE}",
+  "tooltip": "top level node, currently just for blockly  might eventually contain story metadata  ex. author, description...",
   "extensions": [
     "tapestry_generic_mixin",
     "tapestry_generic_extension"
   ],
   "mutator": "tapestry_generic_mutation",
   "customData": {
-    "mui": "_story_lines_mutator",
+    "mui": "_story_file_mutator",
     "shapeDef": [
       [
         {
           "type": "field_label",
-          "text": "lines"
+          "text": "story_lines"
         },
         {
-          "name": "LINES",
-          "type": "input_statement",
+          "name": "STORY_LINES",
+          "type": "input_value",
           "checks": [
-            "_story_statement_stack"
-          ]
+            "story_lines"
+          ],
+          "shadow": "story_lines"
         }
       ]
     ]
@@ -58,7 +60,7 @@ func TestStoryLineShape(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		var out js.Builder
-		writeShape(&out, lookup["story_lines"])
+		writeShape(&out, lookup["story_file"])
 		//
 		if str, e := indent(out.String()); e != nil {
 			t.Fatal(e, str)
