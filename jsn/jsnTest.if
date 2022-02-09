@@ -1,1 +1,114 @@
-{"Tapestry:":[{"TestStatement:test:":["factorial",{"--":"3! should equal 6","TestOutput:":"6"}]},{"TestRule:does:":["factorial",[{"Say:":{"Numeral:":{"Factorial num:":{"--":"start the factorial with '3'","FromNum:":3}}}}]]},{"Pattern:requires:returns:":["factorial",{"PatternParams:":[{"--":"just one argument, a number called 'num'","Number named:":"num"}]},{"PatternResult:":{"--":"the result uses the same variable as the pattern input does","Number named:":"num"}}]},{"Pattern:rules:":["factorial",{"PatternRules:":[{"PatternRule:does:":[{"Always":true},[{"Let:be:":["num",{"FromNum:":{"Mul:by:":["@num",{"Dec:by:":["@num",1]}]}}]}]]}]}]},{"Pattern:rules:":["factorial",{"PatternRules:":[{"--":"the rule considered first is the rule that was written last:","PatternRule:does:":[{"--":"so, when we've reached 0...","Cmp:is:num:":["@num",{"Equals":true},0]},[{"Let:be:":["num",{"--":"...return 1.","FromNum:":1}]}]]}]}]}]}
+{
+  "Tapestry:": [
+    {
+      "TestStatement:test:": [
+        "factorial",
+        {
+          "--": "3! should equal 6",
+          "TestOutput:": "6"
+        }
+      ]
+    },
+    {
+      "TestRule:does:": [
+        "factorial",
+        [
+          {
+            "Say:": {
+              "Numeral:": {
+                "Factorial num:": {
+                  "--": "start the factorial with '3'",
+                  "FromNum:": 3
+                }
+              }
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:requires:returns:": [
+        "factorial",
+        [
+          {
+            "--": "just one argument, a number called 'num'",
+            "Number named:": "num"
+          }
+        ],
+        {
+          "PatternResult:": {
+            "--": "the result uses the same variable as the pattern input does",
+            "Number named:": "num"
+          }
+        }
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "factorial",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
+                {
+                  "Let:be:": [
+                    "num",
+                    {
+                      "FromNum:": {
+                        "Mul:by:": [
+                          "@num",
+                          {
+                            "Dec:by:": [
+                              "@num",
+                              1
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "factorial",
+        [
+          {
+            "--": "the rule considered first is the rule that was written last:",
+            "PatternRule:does:": [
+              {
+                "--": "so, when we've reached 0...",
+                "Cmp:is:num:": [
+                  "@num",
+                  {
+                    "Equals": true
+                  },
+                  0
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "num",
+                    {
+                      "--": "...return 1.",
+                      "FromNum:": 1
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    }
+  ]
+}

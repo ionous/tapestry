@@ -1,299 +1,251 @@
 {
-    "Tapestry:":
-    [
+  "Tapestry:": [
+    {
+      "Event:action:args common:": [
+        "wear",
+        "wearing",
         {
-            "Event:action:args common:":
-            [
-                "wear",
-                "wearing",
-                {
-                    "CommonAction:": "object"
-                }
-            ]
-        },
-        {
-            "Pattern:provides:rules:":
-            [
-                "wearing",
-                {
-                    "PatternLocals:":
-                    [
-                        {
-                            "Text named:of:initially:":
-                            [
-                                "actor",
-                                "actor",
-                                {
-                                    "Get:from:":
-                                    [
-                                        "pawn",
-                                        {
-                                            "VarFields:": "agent"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "IsPlayer obj:": "@actor"
-                                },
-                                [
-                                    {
-                                        "If:from:and:does:else:":
-                                        [
-                                            "resp",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "CanHandle actor:action:noun:":
-                                                    [
-                                                        "@actor",
-                                                        {
-                                                            "FromTxt:": "wearing"
-                                                        },
-                                                        "@noun"
-                                                    ]
-                                                }
-                                            },
-                                            {
-                                                "Not:":
-                                                {
-                                                    "Is empty:": "@resp"
-                                                }
-                                            },
-                                            [
-                                                {
-                                                    "Say:": "@resp"
-                                                }
-                                            ],
-                                            {
-                                                "ElseDo does:":
-                                                [
-                                                    {
-                                                        "Send:event:":
-                                                        [
-                                                            {
-                                                                "Capture obj:": "@noun"
-                                                            },
-                                                            {
-                                                                "StateChange actor:noun:trait:guard:change:":
-                                                                [
-                                                                    "@actor",
-                                                                    "@noun",
-                                                                    {
-                                                                        "FromTxt:": "worn"
-                                                                    },
-                                                                    {
-                                                                        "FromTxt:": "wearable"
-                                                                    },
-                                                                    {
-                                                                        "FromTxt:": "put on"
-                                                                    }
-                                                                ]
-                                                            }
-                                                        ]
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Event:action:args common:":
-            [
-                "remove",
-                "removing",
-                {
-                    "CommonAction:": "object"
-                }
-            ]
-        },
-        {
-            "Pattern:provides:rules:":
-            [
-                "removing",
-                {
-                    "PatternLocals:":
-                    [
-                        {
-                            "Text named:of:initially:":
-                            [
-                                "actor",
-                                "actor",
-                                {
-                                    "Get:from:":
-                                    [
-                                        "pawn",
-                                        {
-                                            "VarFields:": "agent"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "IsPlayer obj:": "@actor"
-                                },
-                                [
-                                    {
-                                        "If:from:and:does:else:":
-                                        [
-                                            "resp",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "CanHandle actor:action:noun:":
-                                                    [
-                                                        "@actor",
-                                                        {
-                                                            "FromTxt:": "removing"
-                                                        },
-                                                        "@noun"
-                                                    ]
-                                                }
-                                            },
-                                            {
-                                                "Not:":
-                                                {
-                                                    "Is empty:": "@resp"
-                                                }
-                                            },
-                                            [
-                                                {
-                                                    "Say:": "@resp"
-                                                }
-                                            ],
-                                            {
-                                                "ElseDo does:":
-                                                [
-                                                    {
-                                                        "Send:event:":
-                                                        [
-                                                            {
-                                                                "Capture obj:": "@noun"
-                                                            },
-                                                            {
-                                                                "StateChange actor:noun:trait:guard:change:":
-                                                                [
-                                                                    "@actor",
-                                                                    "@noun",
-                                                                    {
-                                                                        "FromTxt:": "not worn"
-                                                                    },
-                                                                    {
-                                                                        "FromTxt:": "wearable"
-                                                                    },
-                                                                    {
-                                                                        "FromTxt:": "take off"
-                                                                    }
-                                                                ]
-                                                            }
-                                                        ]
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Comment:": "Can only remove what's worn. ( This isn't perfectly symmetrical with can only wear possessions, and that's okay. ) "
-        },
-        {
-            "Pattern:rules:":
-            [
-                "state changing",
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "AllTrue:":
-                                    [
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@trait",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "not worn"
-                                            ]
-                                        },
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@actor",
-                                                {
-                                                    "OtherThan": true
-                                                },
-                                                {
-                                                    "WearerOf obj:": "@noun"
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "result",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "Response:text:":
-                                                    [
-                                                        "can only remove what's worn",
-                                                        {
-                                                            "RenderTemplate:": "{We:|capitalize!} aren't wearing {those:.noun}!"
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
+          "CommonAction:": "object"
         }
-    ]
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "wearing",
+        [
+          {
+            "Text named:of:initially:": [
+              "actor",
+              "actor",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
+                {
+                  "If:from:and:does:else:": [
+                    "resp",
+                    {
+                      "FromTxt:": {
+                        "CanHandle actor:action:noun:": [
+                          "@actor",
+                          {
+                            "FromTxt:": "wearing"
+                          },
+                          "@noun"
+                        ]
+                      }
+                    },
+                    {
+                      "Not:": {
+                        "Is empty:": "@resp"
+                      }
+                    },
+                    [
+                      {
+                        "Say:": "@resp"
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
+                        {
+                          "Send:event:": [
+                            {
+                              "Capture obj:": "@noun"
+                            },
+                            {
+                              "StateChange actor:noun:trait:guard:change:": [
+                                "@actor",
+                                "@noun",
+                                {
+                                  "FromTxt:": "worn"
+                                },
+                                {
+                                  "FromTxt:": "wearable"
+                                },
+                                {
+                                  "FromTxt:": "put on"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Event:action:args common:": [
+        "remove",
+        "removing",
+        {
+          "CommonAction:": "object"
+        }
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "removing",
+        [
+          {
+            "Text named:of:initially:": [
+              "actor",
+              "actor",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
+                {
+                  "If:from:and:does:else:": [
+                    "resp",
+                    {
+                      "FromTxt:": {
+                        "CanHandle actor:action:noun:": [
+                          "@actor",
+                          {
+                            "FromTxt:": "removing"
+                          },
+                          "@noun"
+                        ]
+                      }
+                    },
+                    {
+                      "Not:": {
+                        "Is empty:": "@resp"
+                      }
+                    },
+                    [
+                      {
+                        "Say:": "@resp"
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
+                        {
+                          "Send:event:": [
+                            {
+                              "Capture obj:": "@noun"
+                            },
+                            {
+                              "StateChange actor:noun:trait:guard:change:": [
+                                "@actor",
+                                "@noun",
+                                {
+                                  "FromTxt:": "not worn"
+                                },
+                                {
+                                  "FromTxt:": "wearable"
+                                },
+                                {
+                                  "FromTxt:": "take off"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Comment:": "Can only remove what's worn. ( This isn't perfectly symmetrical with can only wear possessions, and that's okay. ) "
+    },
+    {
+      "Pattern:rules:": [
+        "state changing",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@trait",
+                      {
+                        "Equals": true
+                      },
+                      "not worn"
+                    ]
+                  },
+                  {
+                    "Cmp:is:txt:": [
+                      "@actor",
+                      {
+                        "OtherThan": true
+                      },
+                      {
+                        "WearerOf obj:": "@noun"
+                      }
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "result",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can only remove what's worn",
+                          {
+                            "RenderTemplate:": "{We:|capitalize!} aren't wearing {those:.noun}!"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    }
+  ]
 }

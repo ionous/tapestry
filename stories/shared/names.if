@@ -1,318 +1,266 @@
 {
-    "Tapestry:":
-    [
-        {
-            "Make kinds:of:":
-            [
-                " things",
-                "kind"
-            ]
-        },
-        {
-            "Kinds:have:":
-            [
-                "Things",
-                [
-                    {
-                        "Text named:": "printed name"
-                    }
+  "Tapestry:": [
+    {
+      "Make kinds:of:": [
+        " things",
+        "kind"
+      ]
+    },
+    {
+      "Kinds:have:": [
+        "Things",
+        [
+          {
+            "Text named:": "printed name"
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "TestScene:story:": [
+        "name of a kind",
+        [
+          {
+            "Nouns:depict:": [
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "named object"
+                  ]
+                },
+                {
+                  "Noun:named:": [
+                    "the",
+                    "unnamed object"
+                  ]
+                }
+              ],
+              {
+                "Kind:named:": [
+                  "are",
+                  "thing"
                 ]
+              }
             ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "TestScene:story:":
-            [
-                "name of a kind",
-                
-                    [
-                        {
-                            "Nouns:depict:":
-                            [
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "the",
-                                            "named object"
-                                        ]
-                                    },
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "the",
-                                            "unnamed object"
-                                        ]
-                                    }
-                                ],
-                                {
-                                    "Kind:named:":
-                                    [
-                                        "are",
-                                        "thing"
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "Nouns:startAs:":
-                            [
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "the",
-                                            "unnamed object"
-                                        ]
-                                    }
-                                ],
-                                {
-                                    "NounTraits:trait:":
-                                    [
-                                        "is",
-                                        [
-                                            "privately named"
-                                        ]
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "TestStatement:test:":
-            [
-                "name of a kind",
+          },
+          {
+            "Nouns:startAs:": [
+              [
                 {
-                    "TestOutput:": "named object, thing"
+                  "Noun:named:": [
+                    "the",
+                    "unnamed object"
+                  ]
                 }
-            ]
-        },
-        {
-            "Comment:": "The story engine automagically calls \"print name\" when the name of an object is used in a template.  ex. { .someObject }"
-        },
-        {
-            "TestRule:does:":
-            [
-                "name of a kind",
-                [
-                    {
-                        "Say:":
-                        {
-                            "RenderTemplate:": "{.named}, {.unnamed}"
-                        }
-                    }
+              ],
+              {
+                "NounTraits:trait:": [
+                  "is",
+                  [
+                    "privately named"
+                  ]
                 ]
+              }
             ]
-        },
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "TestStatement:test:": [
+        "name of a kind",
         {
-            "--": ""
-        },
-        {
-            "Pattern:requires:":
-            [
-                "print name",
-                {
-                    "PatternParams:":
-                    [
-                        {
-                            "Text named:of:":
-                            [
-                                "obj",
-                                "object"
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "Pattern:rules:":
-            [
-                "print name",
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Always": true
-                                },
-                                [
-                                    {
-                                        "Say:":
-                                        {
-                                            "Singular of:":
-                                            {
-                                                "KindOf:": "@obj"
-                                            }
-                                        }
-                                    },
-                                    {
-                                        "Mention obj:": "@obj"
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Get obj:trait:":
-                                    [
-                                        "@obj",
-                                        "publicly named"
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Say:":
-                                        {
-                                            "NameOf:": "@obj"
-                                        }
-                                    },
-                                    {
-                                        "Mention obj:": "@obj"
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Cmp:is:txt:":
-                                    [
-                                        {
-                                            "Get:from:":
-                                            [
-                                                "printed name",
-                                                {
-                                                    "VarFields:": "obj"
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "OtherThan": true
-                                        },
-                                        ""
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Say:":
-                                        {
-                                            "Get:from:":
-                                            [
-                                                "printed name",
-                                                {
-                                                    "VarFields:": "obj"
-                                                }
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "Mention obj:": "@obj"
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Pattern:requires:":
-            [
-                "mention",
-                {
-                    "PatternParams:":
-                    [
-                        {
-                            "Text named:of:":
-                            [
-                                "obj",
-                                "object"
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "Pattern:rules:":
-            [
-                "mention",
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "KindOf:is:":
-                                    [
-                                        "@obj",
-                                        "things"
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Put:from:at:":
-                                        [
-                                            {
-                                                "ObjField:": "@obj"
-                                            },
-                                            {
-                                                "FromBool:": true
-                                            },
-                                            "mentioned"
-                                        ]
-                                    },
-                                    {
-                                        "Put:from:at:":
-                                        [
-                                            {
-                                                "ObjField:": "settings"
-                                            },
-                                            {
-                                                "FromNum:":
-                                                {
-                                                    "Inc:by:":
-                                                    [
-                                                        1,
-                                                        {
-                                                            "Get:from:":
-                                                            [
-                                                                "mentions",
-                                                                {
-                                                                    "ObjFields:": "settings"
-                                                                }
-                                                            ]
-                                                        }
-                                                    ]
-                                                }
-                                            },
-                                            "mentions"
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
+          "TestOutput:": "named object, thing"
         }
-    ]
+      ]
+    },
+    {
+      "Comment:": "The story engine automagically calls \"print name\" when the name of an object is used in a template.  ex. { .someObject }"
+    },
+    {
+      "TestRule:does:": [
+        "name of a kind",
+        [
+          {
+            "Say:": {
+              "RenderTemplate:": "{.named}, {.unnamed}"
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "print name",
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "print name",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
+                {
+                  "Say:": {
+                    "Singular of:": {
+                      "KindOf:": "@obj"
+                    }
+                  }
+                },
+                {
+                  "Mention obj:": "@obj"
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Get obj:trait:": [
+                  "@obj",
+                  "publicly named"
+                ]
+              },
+              [
+                {
+                  "Say:": {
+                    "NameOf:": "@obj"
+                  }
+                },
+                {
+                  "Mention obj:": "@obj"
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Cmp:is:txt:": [
+                  {
+                    "Get:from:": [
+                      "printed name",
+                      {
+                        "VarFields:": "obj"
+                      }
+                    ]
+                  },
+                  {
+                    "OtherThan": true
+                  },
+                  ""
+                ]
+              },
+              [
+                {
+                  "Say:": {
+                    "Get:from:": [
+                      "printed name",
+                      {
+                        "VarFields:": "obj"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Mention obj:": "@obj"
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "mention",
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "mention",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@obj",
+                  "things"
+                ]
+              },
+              [
+                {
+                  "Put:from:at:": [
+                    {
+                      "ObjField:": "@obj"
+                    },
+                    {
+                      "FromBool:": true
+                    },
+                    "mentioned"
+                  ]
+                },
+                {
+                  "Put:from:at:": [
+                    {
+                      "ObjField:": "settings"
+                    },
+                    {
+                      "FromNum:": {
+                        "Inc:by:": [
+                          1,
+                          {
+                            "Get:from:": [
+                              "mentions",
+                              {
+                                "ObjFields:": "settings"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "mentions"
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    }
+  ]
 }

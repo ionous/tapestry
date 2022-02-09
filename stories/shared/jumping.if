@@ -1,155 +1,126 @@
 {
-    "Tapestry:":
-    [
-        {
-            "GrammarDecl:":
+  "Tapestry:": [
+    {
+      "GrammarDecl:": {
+        "Directive:scans:": [
+          [
+            "jump",
+            "skip",
+            "hop"
+          ],
+          [
             {
-                "Directive:scans:":
-                [
-                    [
-                        "jump",
-                        "skip",
-                        "hop"
-                    ],
-                    [
-                        {
-                            "As:": "jumping"
-                        }
-                    ]
-                ]
+              "As:": "jumping"
             }
-        },
-        {
-            "--": ""
-        },
-        {
-            "Event:action:args none:":
-            [
-                "jump",
-                "jumping",
-                "nothing"
+          ]
+        ]
+      }
+    },
+    {
+      "--": ""
+    },
+    {
+      "Event:action:args none:": [
+        "jump",
+        "jumping",
+        "nothing"
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "jumping",
+        [
+          {
+            "Text named:of:initially:": [
+              "actor",
+              "object",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
+                  }
+                ]
+              }
             ]
-        },
-        {
-            "Pattern:provides:rules:":
-            [
-                "jumping",
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
                 {
-                    "PatternLocals:":
-                    [
-                        {
-                            "Text named:of:initially:":
-                            [
-                                "actor",
-                                "object",
-                                {
-                                    "Get:from:":
-                                    [
-                                        "pawn",
-                                        {
-                                            "VarFields:": "agent"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "IsPlayer obj:": "@actor"
-                                },
-                                [
-                                    {
-                                        "ReportJumping actor:": "@actor"
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
+                  "ReportJumping actor:": "@actor"
                 }
+              ]
             ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Pattern:requires:":
-            [
-                "report jumping",
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "report jumping",
+        [
+          {
+            "Text named:of:": [
+              "actor",
+              "actor"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "report jumping",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                    "PatternParams:":
-                    [
-                        {
-                            "Text named:of:":
-                            [
-                                "actor",
-                                "actor"
-                            ]
-                        }
+                  "Say:": {
+                    "Response:text:": [
+                      "actor jumping",
+                      {
+                        "RenderTemplate:": "{the:.actor|capitalize!} jumps on the spot."
+                      }
                     ]
+                  }
                 }
+              ]
             ]
-        },
-        {
-            "Pattern:rules:":
-            [
-                "report jumping",
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
                 {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Always": true
-                                },
-                                [
-                                    {
-                                        "Say:":
-                                        {
-                                            "Response:text:":
-                                            [
-                                                "actor jumping",
-                                                {
-                                                    "RenderTemplate:": "{the:.actor|capitalize!} jumps on the spot."
-                                                }
-                                            ]
-                                        }
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "IsPlayer obj:": "@actor"
-                                },
-                                [
-                                    {
-                                        "Say:":
-                                        {
-                                            "Response:text:":
-                                            [
-                                                "player jumping",
-                                                {
-                                                    "RenderTemplate:": "{we:|capitalize!} jump on the spot."
-                                                }
-                                            ]
-                                        }
-                                    }
-                                ]
-                            ]
-                        }
+                  "Say:": {
+                    "Response:text:": [
+                      "player jumping",
+                      {
+                        "RenderTemplate:": "{we:|capitalize!} jump on the spot."
+                      }
                     ]
+                  }
                 }
+              ]
             ]
-        }
-    ]
+          }
+        ]
+      ]
+    }
+  ]
 }

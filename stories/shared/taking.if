@@ -1,751 +1,628 @@
 {
-    "Tapestry:":
-    [
+  "Tapestry:": [
+    {
+      "Event:action:args common:": [
+        "take",
+        "taking",
         {
-            "Event:action:args common:":
-            [
-                "take",
-                "taking",
-                {
-                    "CommonAction:": "thing"
-                }
+          "CommonAction:": "thing"
+        }
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "taking",
+        [
+          {
+            "Text named:of:initially:": [
+              "actor",
+              "actor",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
+                  }
+                ]
+              }
             ]
-        },
-        {
-            "Pattern:provides:rules:":
-            [
-                "taking",
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
                 {
-                    "PatternLocals:":
+                  "If:from:and:does:else:": [
+                    "result",
+                    {
+                      "FromTxt:": {
+                        "CanReach actor:action:noun:requiresLight:": [
+                          "@actor",
+                          {
+                            "FromTxt:": "taking"
+                          },
+                          "@noun",
+                          {
+                            "FromBool:": false
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "Not:": {
+                        "Is empty:": "@result"
+                      }
+                    },
                     [
+                      {
+                        "Say:": "@result"
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
                         {
-                            "Text named:of:initially:":
-                            [
-                                "actor",
-                                "actor",
+                          "If:does:": [
+                            {
+                              "Send:event:": [
                                 {
-                                    "Get:from:":
-                                    [
-                                        "pawn",
-                                        {
-                                            "VarFields:": "agent"
-                                        }
-                                    ]
+                                  "Capture obj:": "@noun"
+                                },
+                                {
+                                  "Take actor:noun:": [
+                                    "@actor",
+                                    "@noun"
+                                  ]
                                 }
+                              ]
+                            },
+                            [
+                              {
+                                "ReportTaking actor:noun:": [
+                                  "@actor",
+                                  "@noun"
+                                ]
+                              }
                             ]
+                          ]
                         }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Listen kinds:handlers:": [
+        "things",
+        [
+          {
+            "With:event:rules:": [
+              "while",
+              "take",
+              [
+                {
+                  "PatternRule:does:": [
+                    {
+                      "Always": true
+                    },
+                    [
+                      {
+                        "If:from:and:does:else:": [
+                          "error",
+                          {
+                            "FromTxt:": {
+                              "MoveObject obj:dest:": [
+                                "@noun",
+                                "@actor"
+                              ]
+                            }
+                          },
+                          {
+                            "Not:": {
+                              "Is empty:": "@error"
+                            }
+                          },
+                          [
+                            {
+                              "Say:": "@error"
+                            },
+                            {
+                              "Let:be:": [
+                                "success",
+                                {
+                                  "FromBool:": false
+                                }
+                              ]
+                            }
+                          ],
+                          {
+                            "ElseDo does:": [
+                              {
+                                "Log:": {
+                                  "FromTxt:": {
+                                    "RenderTemplate:": "{The: .actor} is taking {the: .noun}..."
+                                  }
+                                }
+                              },
+                              {
+                                "Let:be:": [
+                                  "success",
+                                  {
+                                    "FromBool:": true
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
                     ]
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "report taking",
+        [
+          {
+            "Text named:of:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "noun",
+              "thing"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "report taking",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
+                {
+                  "Say:": {
+                    "Response:text:": [
+                      "player takes",
+                      {
+                        "RenderTemplate:": "Taken."
+                      }
+                    ]
+                  }
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Not:": {
+                  "IsPlayer obj:": "@actor"
+                }
+              },
+              [
+                {
+                  "Say:": {
+                    "Response:text:": [
+                      "someone else takes",
+                      {
+                        "RenderTemplate:": "{The: .actor|capitalize!} picks up {the: .noun}."
+                      }
+                    ]
+                  }
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:rules:": [
+        "can reach",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "taking"
+                    ]
+                  },
+                  {
+                    "KindOf:is:": [
+                      "@noun",
+                      "actors"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't take other people",
+                          {
+                            "RenderTemplate:": "I don't suppose {the: .noun} would care for that."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "taking"
+                    ]
+                  },
+                  {
+                    "Cmp:is:txt:": [
+                      "@actor",
+                      {
+                        "Equals": true
+                      },
+                      "@noun"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't take yourself",
+                          {
+                            "RenderTemplate:": "{we!|capitalize!} {are:.self} always self-possessed."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "taking"
+                    ]
+                  },
+                  {
+                    "Get obj:trait:": [
+                      "@noun",
+                      "scenery"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't take scenery",
+                          {
+                            "RenderTemplate:": "{they:.noun|capitalize!} {are:.noun} hardly portable."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "taking"
+                    ]
+                  },
+                  {
+                    "Get obj:trait:": [
+                      "@noun",
+                      "fixed in place"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't take what's fixed in place",
+                          {
+                            "RenderTemplate:": "{they:.noun|capitalize!} {are:.noun} fixed in place."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "taking"
+                    ]
+                  },
+                  {
+                    "Not:": {
+                      "KindOf:is:": [
+                        "@noun",
+                        "things"
+                      ]
+                    }
+                  }
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't take nothings",
+                          {
+                            "RenderTemplate:": "{we:|capitalize!} can't carry {the: .noun}."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:rules:": [
+        "reach up",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "taking"
+                    ]
+                  },
+                  {
+                    "Cmp:is:txt:": [
+                      "@intoObj",
+                      {
+                        "Equals": true
+                      },
+                      "@noun"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Comment:": "Reaching up to take the noun, means the noun contains the actor."
                 },
                 {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "IsPlayer obj:": "@actor"
-                                },
-                                [
-                                    {
-                                        "If:from:and:does:else:":
-                                        [
-                                            "result",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "CanReach actor:action:noun:requiresLight:":
-                                                    [
-                                                        "@actor",
-                                                        {
-                                                            "FromTxt:": "taking"
-                                                        },
-                                                        "@noun",
-                                                        {
-                                                            "FromBool:": false
-                                                        }
-                                                    ]
-                                                }
-                                            },
-                                            {
-                                                "Not:":
-                                                {
-                                                    "Is empty:": "@result"
-                                                }
-                                            },
-                                            [
-                                                {
-                                                    "Say:": "@result"
-                                                }
-                                            ],
-                                            {
-                                                "ElseDo does:":
-                                                [
-                                                    {
-                                                        "If:does:":
-                                                        [
-                                                            {
-                                                                "Send:event:":
-                                                                [
-                                                                    {
-                                                                        "Capture obj:": "@noun"
-                                                                    },
-                                                                    {
-                                                                        "Take actor:noun:":
-                                                                        [
-                                                                            "@actor",
-                                                                            "@noun"
-                                                                        ]
-                                                                    }
-                                                                ]
-                                                            },
-                                                            [
-                                                                {
-                                                                    "ReportTaking actor:noun:":
-                                                                    [
-                                                                        "@actor",
-                                                                        "@noun"
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        ]
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Listen kinds:handlers:":
-            [
-                "things",
-                [
+                  "Let:be:": [
+                    "response",
                     {
-                        "With:event:rules:":
-                        [
-                            "while",
-                            "take",
-                            {
-                                "PatternRules:":
-                                [
-                                    {
-                                        "PatternRule:does:":
-                                        [
-                                            {
-                                                "Always": true
-                                            },
-                                            [
-                                                {
-                                                    "If:from:and:does:else:":
-                                                    [
-                                                        "error",
-                                                        {
-                                                            "FromTxt:":
-                                                            {
-                                                                "MoveObject obj:dest:":
-                                                                [
-                                                                    "@noun",
-                                                                    "@actor"
-                                                                ]
-                                                            }
-                                                        },
-                                                        {
-                                                            "Not:":
-                                                            {
-                                                                "Is empty:": "@error"
-                                                            }
-                                                        },
-                                                        [
-                                                            {
-                                                                "Say:": "@error"
-                                                            },
-                                                            {
-                                                                "Let:be:":
-                                                                [
-                                                                    "success",
-                                                                    {
-                                                                        "FromBool:": false
-                                                                    }
-                                                                ]
-                                                            }
-                                                        ],
-                                                        {
-                                                            "ElseDo does:":
-                                                            [
-                                                                {
-                                                                    "Log:":
-                                                                    {
-                                                                        "FromTxt:":
-                                                                        {
-                                                                            "RenderTemplate:": "{The: .actor} is taking {the: .noun}..."
-                                                                        }
-                                                                    }
-                                                                },
-                                                                {
-                                                                    "Let:be:":
-                                                                    [
-                                                                        "success",
-                                                                        {
-                                                                            "FromBool:": true
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        ]
-                                    }
-                                ]
-                            }
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't take what you're inside",
+                          {
+                            "RenderTemplate:": "{We:|capitalize!} would have to get {off:.noun} first."
+                          }
                         ]
+                      }
                     }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:rules:": [
+        "reach down",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "taking"
+                    ]
+                  },
+                  {
+                    "KindOf:is:": [
+                      "@fromObj",
+                      "actors"
+                    ]
+                  }
                 ]
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Pattern:requires:":
-            [
-                "report taking",
+              },
+              [
                 {
-                    "PatternParams:":
-                    [
-                        {
-                            "Text named:of:":
-                            [
-                                "actor",
-                                "actor"
-                            ]
-                        },
-                        {
-                            "Text named:of:":
-                            [
-                                "noun",
-                                "thing"
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "Pattern:rules:":
-            [
-                "report taking",
+                  "Comment:": "If the target noun were owned by reaching actor then the actor would be the lca. By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach."
+                },
                 {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Always": true
-                                },
-                                [
-                                    {
-                                        "Say:":
-                                        {
-                                            "Response:text:":
-                                            [
-                                                "player takes",
-                                                {
-                                                    "RenderTemplate:": "Taken."
-                                                }
-                                            ]
-                                        }
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Not:":
-                                    {
-                                        "IsPlayer obj:": "@actor"
-                                    }
-                                },
-                                [
-                                    {
-                                        "Say:":
-                                        {
-                                            "Response:text:":
-                                            [
-                                                "someone else takes",
-                                                {
-                                                    "RenderTemplate:": "{The: .actor|capitalize!} picks up {the: .noun}."
-                                                }
-                                            ]
-                                        }
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't take people's possessions",
+                          {
+                            "RenderTemplate:": "{those: .noun|capitalize!} seems to belong to {the: .fromObj}."
+                          }
+                        ]
+                      }
+                    }
+                  ]
                 }
+              ]
             ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Pattern:rules:":
-            [
-                "can reach",
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "taking"
+                    ]
+                  },
+                  {
+                    "Cmp:is:txt:": [
+                      "@fromObj",
+                      {
+                        "Equals": true
+                      },
+                      "@actor"
+                    ]
+                  },
+                  {
+                    "Cmp:is:txt:": [
+                      "@intoObj",
+                      {
+                        "Equals": true
+                      },
+                      "@noun"
+                    ]
+                  }
+                ]
+              },
+              [
                 {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "AllTrue:":
-                                    [
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@action",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "taking"
-                                            ]
-                                        },
-                                        {
-                                            "KindOf:is:":
-                                            [
-                                                "@noun",
-                                                "actors"
-                                            ]
-                                        }
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "response",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "Response:text:":
-                                                    [
-                                                        "can't take other people",
-                                                        {
-                                                            "RenderTemplate:": "I don't suppose {the: .noun} would care for that."
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "AllTrue:":
-                                    [
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@action",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "taking"
-                                            ]
-                                        },
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@actor",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "@noun"
-                                            ]
-                                        }
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "response",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "Response:text:":
-                                                    [
-                                                        "can't take yourself",
-                                                        {
-                                                            "RenderTemplate:": "{we!|capitalize!} {are:.self} always self-possessed."
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "AllTrue:":
-                                    [
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@action",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "taking"
-                                            ]
-                                        },
-                                        {
-                                            "Get obj:trait:":
-                                            [
-                                                "@noun",
-                                                "scenery"
-                                            ]
-                                        }
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "response",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "Response:text:":
-                                                    [
-                                                        "can't take scenery",
-                                                        {
-                                                            "RenderTemplate:": "{they:.noun|capitalize!} {are:.noun} hardly portable."
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "AllTrue:":
-                                    [
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@action",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "taking"
-                                            ]
-                                        },
-                                        {
-                                            "Get obj:trait:":
-                                            [
-                                                "@noun",
-                                                "fixed in place"
-                                            ]
-                                        }
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "response",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "Response:text:":
-                                                    [
-                                                        "can't take what's fixed in place",
-                                                        {
-                                                            "RenderTemplate:": "{they:.noun|capitalize!} {are:.noun} fixed in place."
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "AllTrue:":
-                                    [
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@action",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "taking"
-                                            ]
-                                        },
-                                        {
-                                            "Not:":
-                                            {
-                                                "KindOf:is:":
-                                                [
-                                                    "@noun",
-                                                    "things"
-                                                ]
-                                            }
-                                        }
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "response",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "Response:text:":
-                                                    [
-                                                        "can't take nothings",
-                                                        {
-                                                            "RenderTemplate:": "{we:|capitalize!} can't carry {the: .noun}."
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Pattern:rules:":
-            [
-                "reach up",
+                  "Comment:": "Reaching down to take the noun, means the noun contains the actor."
+                },
                 {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "AllTrue:":
-                                    [
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@action",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "taking"
-                                            ]
-                                        },
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@intoObj",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "@noun"
-                                            ]
-                                        }
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Comment:": "Reaching up to take the noun, means the noun contains the actor."
-                                    },
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "response",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "Response:text:":
-                                                    [
-                                                        "can't take what you're inside",
-                                                        {
-                                                            "RenderTemplate:": "{We:|capitalize!} would have to get {off:.noun} first."
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't take what you're holding",
+                          {
+                            "RenderTemplate:": "{we:|capitalize!} already have {those:.noun}."
+                          }
+                        ]
+                      }
+                    }
+                  ]
                 }
+              ]
             ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Pattern:rules:":
-            [
-                "reach down",
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "AllTrue:":
-                                    [
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@action",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "taking"
-                                            ]
-                                        },
-                                        {
-                                            "KindOf:is:":
-                                            [
-                                                "@fromObj",
-                                                "actors"
-                                            ]
-                                        }
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Comment:": "If the target noun were owned by reaching actor then the actor would be the lca. By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach."
-                                    },
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "response",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "Response:text:":
-                                                    [
-                                                        "can't take people's possessions",
-                                                        {
-                                                            "RenderTemplate:": "{those: .noun|capitalize!} seems to belong to {the: .fromObj}."
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "AllTrue:":
-                                    [
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@action",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "taking"
-                                            ]
-                                        },
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@fromObj",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "@actor"
-                                            ]
-                                        },
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@intoObj",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "@noun"
-                                            ]
-                                        }
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Comment:": "Reaching down to take the noun, means the noun contains the actor."
-                                    },
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "response",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "Response:text:":
-                                                    [
-                                                        "can't take what you're holding",
-                                                        {
-                                                            "RenderTemplate:": "{we:|capitalize!} already have {those:.noun}."
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
+          }
+        ]
+      ]
+    }
+  ]
 }

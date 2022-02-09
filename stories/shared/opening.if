@@ -1,548 +1,460 @@
 {
-    "Tapestry:":
-    [
+  "Tapestry:": [
+    {
+      "Event:action:args common:": [
+        "open",
+        "opening",
         {
-            "Event:action:args common:":
-            [
-                "open",
-                "opening",
-                {
-                    "CommonAction:": "object"
-                }
+          "CommonAction:": "object"
+        }
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "opening",
+        [
+          {
+            "Text named:of:initially:": [
+              "actor",
+              "actor",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
+                  }
+                ]
+              }
             ]
-        },
-        {
-            "Pattern:provides:rules:":
-            [
-                "opening",
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
                 {
-                    "PatternLocals:":
-                    [
-                        {
-                            "Text named:of:initially:":
-                            [
-                                "actor",
-                                "actor",
-                                {
-                                    "Get:from:":
-                                    [
-                                        "pawn",
-                                        {
-                                            "VarFields:": "agent"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "IsPlayer obj:": "@actor"
-                                },
-                                [
-                                    {
-                                        "If:from:and:does:else:":
-                                        [
-                                            "resp",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "CanReach actor:action:noun:":
-                                                    [
-                                                        "@actor",
-                                                        {
-                                                            "FromTxt:": "opening"
-                                                        },
-                                                        "@noun"
-                                                    ]
-                                                }
-                                            },
-                                            {
-                                                "Not:":
-                                                {
-                                                    "Is empty:": "@resp"
-                                                }
-                                            },
-                                            [
-                                                {
-                                                    "Say:": "@resp"
-                                                }
-                                            ],
-                                            {
-                                                "ElseDo does:":
-                                                [
-                                                    {
-                                                        "If:from:and:does:else:":
-                                                        [
-                                                            "resp",
-                                                            {
-                                                                "FromTxt:":
-                                                                {
-                                                                    "CanUse actor:action:noun:":
-                                                                    [
-                                                                        "@actor",
-                                                                        {
-                                                                            "FromTxt:": "opening"
-                                                                        },
-                                                                        "@noun"
-                                                                    ]
-                                                                }
-                                                            },
-                                                            {
-                                                                "Not:":
-                                                                {
-                                                                    "Is empty:": "@resp"
-                                                                }
-                                                            },
-                                                            [
-                                                                {
-                                                                    "Say:": "@resp"
-                                                                }
-                                                            ],
-                                                            {
-                                                                "ElseDo does:":
-                                                                [
-                                                                    {
-                                                                        "Send:event:":
-                                                                        [
-                                                                            {
-                                                                                "Capture obj:": "@noun"
-                                                                            },
-                                                                            {
-                                                                                "StateChange actor:noun:trait:guard:change:":
-                                                                                [
-                                                                                    "@actor",
-                                                                                    "@noun",
-                                                                                    {
-                                                                                        "FromTxt:": "open"
-                                                                                    },
-                                                                                    {
-                                                                                        "FromTxt:": "openable"
-                                                                                    },
-                                                                                    {
-                                                                                        "FromTxt:": "open"
-                                                                                    }
-                                                                                ]
-                                                                            }
-                                                                        ]
-                                                                    }
-                                                                ]
-                                                            }
-                                                        ]
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Event:action:args common:":
-            [
-                "close",
-                "closing",
-                {
-                    "CommonAction:": "object"
-                }
-            ]
-        },
-        {
-            "Pattern:provides:rules:":
-            [
-                "closing",
-                {
-                    "PatternLocals:":
-                    [
-                        {
-                            "Text named:of:initially:":
-                            [
-                                "actor",
-                                "actor",
-                                {
-                                    "Get:from:":
-                                    [
-                                        "pawn",
-                                        {
-                                            "VarFields:": "agent"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "IsPlayer obj:": "@actor"
-                                },
-                                [
-                                    {
-                                        "If:from:and:does:else:":
-                                        [
-                                            "resp",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "CanReach actor:action:noun:":
-                                                    [
-                                                        "@actor",
-                                                        {
-                                                            "FromTxt:": "closing"
-                                                        },
-                                                        "@noun"
-                                                    ]
-                                                }
-                                            },
-                                            {
-                                                "Not:":
-                                                {
-                                                    "Is empty:": "@resp"
-                                                }
-                                            },
-                                            [
-                                                {
-                                                    "Say:": "@resp"
-                                                }
-                                            ],
-                                            {
-                                                "ElseDo does:":
-                                                [
-                                                    {
-                                                        "If:from:and:does:else:":
-                                                        [
-                                                            "resp",
-                                                            {
-                                                                "FromTxt:":
-                                                                {
-                                                                    "CanUse actor:action:noun:":
-                                                                    [
-                                                                        "@actor",
-                                                                        {
-                                                                            "FromTxt:": "closing"
-                                                                        },
-                                                                        "@noun"
-                                                                    ]
-                                                                }
-                                                            },
-                                                            {
-                                                                "Not:":
-                                                                {
-                                                                    "Is empty:": "@resp"
-                                                                }
-                                                            },
-                                                            [
-                                                                {
-                                                                    "Say:": "@resp"
-                                                                }
-                                                            ],
-                                                            {
-                                                                "ElseDo does:":
-                                                                [
-                                                                    {
-                                                                        "Send:event:":
-                                                                        [
-                                                                            {
-                                                                                "Capture obj:": "@noun"
-                                                                            },
-                                                                            {
-                                                                                "StateChange actor:noun:trait:guard:change:":
-                                                                                [
-                                                                                    "@actor",
-                                                                                    "@noun",
-                                                                                    {
-                                                                                        "FromTxt:": "closed"
-                                                                                    },
-                                                                                    {
-                                                                                        "FromTxt:": "openable"
-                                                                                    },
-                                                                                    {
-                                                                                        "FromTxt:": "close"
-                                                                                    }
-                                                                                ]
-                                                                            }
-                                                                        ]
-                                                                    }
-                                                                ]
-                                                            }
-                                                        ]
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Comment:": "Can't open when locked. "
-        },
-        {
-            "Pattern:rules:":
-            [
-                "state changing",
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "AllTrue:":
-                                    [
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@trait",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "open"
-                                            ]
-                                        },
-                                        {
-                                            "Get obj:trait:":
-                                            [
-                                                "@noun",
-                                                "lockable"
-                                            ]
-                                        },
-                                        {
-                                            "Get obj:trait:":
-                                            [
-                                                "@noun",
-                                                "locked"
-                                            ]
-                                        }
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "result",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "Response:text:":
-                                                    [
-                                                        "can't open when locked",
-                                                        {
-                                                            "RenderTemplate:": "{They: .noun|capitalize!} seems to be locked."
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Listen kinds:handlers:":
-            [
-                "things",
-                [
+                  "If:from:and:does:else:": [
+                    "resp",
                     {
-                        "With:event:provides:rules:":
-                        [
-                            "after",
-                            "state change",
+                      "FromTxt:": {
+                        "CanReach actor:action:noun:": [
+                          "@actor",
+                          {
+                            "FromTxt:": "opening"
+                          },
+                          "@noun"
+                        ]
+                      }
+                    },
+                    {
+                      "Not:": {
+                        "Is empty:": "@resp"
+                      }
+                    },
+                    [
+                      {
+                        "Say:": "@resp"
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
+                        {
+                          "If:from:and:does:else:": [
+                            "resp",
                             {
-                                "PatternLocals:":
-                                [
-                                    {
-                                        "--": "initialized only when needed, for containers revealing their contents.",
-                                        "TextList named:": "concealed items"
-                                    }
+                              "FromTxt:": {
+                                "CanUse actor:action:noun:": [
+                                  "@actor",
+                                  {
+                                    "FromTxt:": "opening"
+                                  },
+                                  "@noun"
                                 ]
+                              }
                             },
                             {
-                                "PatternRules:":
-                                [
+                              "Not:": {
+                                "Is empty:": "@resp"
+                              }
+                            },
+                            [
+                              {
+                                "Say:": "@resp"
+                              }
+                            ],
+                            {
+                              "ElseDo does:": [
+                                {
+                                  "Send:event:": [
                                     {
-                                        "PatternRule:does:":
-                                        [
-                                            {
-                                                "AllTrue:":
-                                                [
-                                                    {
-                                                        "Cmp:is:txt:":
-                                                        [
-                                                            "@trait",
-                                                            {
-                                                                "Equals": true
-                                                            },
-                                                            "open"
-                                                        ]
-                                                    },
-                                                    {
-                                                        "IsPlayer obj:":
-                                                        {
-                                                            "FromTxt:": "@actor"
-                                                        }
-                                                    },
-                                                    {
-                                                        "KindOf:is:":
-                                                        [
-                                                            "@noun",
-                                                            "containers"
-                                                        ]
-                                                    },
-                                                    {
-                                                        "Get obj:trait:":
-                                                        [
-                                                            "@noun",
-                                                            "opaque"
-                                                        ]
-                                                    },
-                                                    {
-                                                        "Not:":
-                                                        {
-                                                            "AncestorOf obj:root:":
-                                                            [
-                                                                "@noun",
-                                                                {
-                                                                    "FromTxt:": "@actor"
-                                                                }
-                                                            ]
-                                                        }
-                                                    }
-                                                ]
-                                            },
-                                            [
-                                                {
-                                                    "Let:be:":
-                                                    [
-                                                        "concealed items",
-                                                        {
-                                                            "FromTxts:":
-                                                            {
-                                                                "VisibleStorage obj:": "@noun"
-                                                            }
-                                                        }
-                                                    ]
-                                                },
-                                                {
-                                                    "If:does:":
-                                                    [
-                                                        {
-                                                            "Cmp:is:num:":
-                                                            [
-                                                                {
-                                                                    "Len:": "@concealed items"
-                                                                },
-                                                                {
-                                                                    "GreaterThan": true
-                                                                },
-                                                                0
-                                                            ]
-                                                        },
-                                                        [
-                                                            {
-                                                                "Comment:": "inform doesn't print the inventory details when opening objects, so this doesn't either. "
-                                                            },
-                                                            {
-                                                                "Say:":
-                                                                {
-                                                                    "Response:text:":
-                                                                    [
-                                                                        "reveal newly visible objects",
-                                                                        {
-                                                                            "Spaces does:":
-                                                                            [
-                                                                                {
-                                                                                    "Say:":
-                                                                                    {
-                                                                                        "RenderTemplate:": "{We!|capitalize!} open {the: .noun}, revealing"
-                                                                                    }
-                                                                                },
-                                                                                {
-                                                                                    "Say:":
-                                                                                    {
-                                                                                        "Commas does:":
-                                                                                        [
-                                                                                            {
-                                                                                                "Repeating across:as:does:":
-                                                                                                [
-                                                                                                    "@concealed items",
-                                                                                                    {
-                                                                                                        "AsTxt:": "item"
-                                                                                                    },
-                                                                                                    [
-                                                                                                        {
-                                                                                                            "Say:":
-                                                                                                            {
-                                                                                                                "RenderTemplate:": "{the: .item}"
-                                                                                                            }
-                                                                                                        }
-                                                                                                    ]
-                                                                                                ]
-                                                                                            }
-                                                                                        ]
-                                                                                    }
-                                                                                },
-                                                                                {
-                                                                                    "Say:": "."
-                                                                                }
-                                                                            ]
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            },
-                                                            {
-                                                                "Let:be:":
-                                                                [
-                                                                    "success",
-                                                                    {
-                                                                        "FromBool:": true
-                                                                    }
-                                                                ]
-                                                            }
-                                                        ]
-                                                    ]
-                                                }
-                                            ]
-                                        ]
+                                      "Capture obj:": "@noun"
+                                    },
+                                    {
+                                      "StateChange actor:noun:trait:guard:change:": [
+                                        "@actor",
+                                        "@noun",
+                                        {
+                                          "FromTxt:": "open"
+                                        },
+                                        {
+                                          "FromTxt:": "openable"
+                                        },
+                                        {
+                                          "FromTxt:": "open"
+                                        }
+                                      ]
                                     }
-                                ]
+                                  ]
+                                }
+                              ]
                             }
-                        ]
+                          ]
+                        }
+                      ]
                     }
-                ]
+                  ]
+                }
+              ]
             ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Event:action:args common:": [
+        "close",
+        "closing",
+        {
+          "CommonAction:": "object"
         }
-    ]
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "closing",
+        [
+          {
+            "Text named:of:initially:": [
+              "actor",
+              "actor",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
+                {
+                  "If:from:and:does:else:": [
+                    "resp",
+                    {
+                      "FromTxt:": {
+                        "CanReach actor:action:noun:": [
+                          "@actor",
+                          {
+                            "FromTxt:": "closing"
+                          },
+                          "@noun"
+                        ]
+                      }
+                    },
+                    {
+                      "Not:": {
+                        "Is empty:": "@resp"
+                      }
+                    },
+                    [
+                      {
+                        "Say:": "@resp"
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
+                        {
+                          "If:from:and:does:else:": [
+                            "resp",
+                            {
+                              "FromTxt:": {
+                                "CanUse actor:action:noun:": [
+                                  "@actor",
+                                  {
+                                    "FromTxt:": "closing"
+                                  },
+                                  "@noun"
+                                ]
+                              }
+                            },
+                            {
+                              "Not:": {
+                                "Is empty:": "@resp"
+                              }
+                            },
+                            [
+                              {
+                                "Say:": "@resp"
+                              }
+                            ],
+                            {
+                              "ElseDo does:": [
+                                {
+                                  "Send:event:": [
+                                    {
+                                      "Capture obj:": "@noun"
+                                    },
+                                    {
+                                      "StateChange actor:noun:trait:guard:change:": [
+                                        "@actor",
+                                        "@noun",
+                                        {
+                                          "FromTxt:": "closed"
+                                        },
+                                        {
+                                          "FromTxt:": "openable"
+                                        },
+                                        {
+                                          "FromTxt:": "close"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Comment:": "Can't open when locked. "
+    },
+    {
+      "Pattern:rules:": [
+        "state changing",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@trait",
+                      {
+                        "Equals": true
+                      },
+                      "open"
+                    ]
+                  },
+                  {
+                    "Get obj:trait:": [
+                      "@noun",
+                      "lockable"
+                    ]
+                  },
+                  {
+                    "Get obj:trait:": [
+                      "@noun",
+                      "locked"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "result",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't open when locked",
+                          {
+                            "RenderTemplate:": "{They: .noun|capitalize!} seems to be locked."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Listen kinds:handlers:": [
+        "things",
+        [
+          {
+            "With:event:provides:rules:": [
+              "after",
+              "state change",
+              [
+                {
+                  "--": "initialized only when needed, for containers revealing their contents.",
+                  "TextList named:": "concealed items"
+                }
+              ],
+              [
+                {
+                  "PatternRule:does:": [
+                    {
+                      "AllTrue:": [
+                        {
+                          "Cmp:is:txt:": [
+                            "@trait",
+                            {
+                              "Equals": true
+                            },
+                            "open"
+                          ]
+                        },
+                        {
+                          "IsPlayer obj:": {
+                            "FromTxt:": "@actor"
+                          }
+                        },
+                        {
+                          "KindOf:is:": [
+                            "@noun",
+                            "containers"
+                          ]
+                        },
+                        {
+                          "Get obj:trait:": [
+                            "@noun",
+                            "opaque"
+                          ]
+                        },
+                        {
+                          "Not:": {
+                            "AncestorOf obj:root:": [
+                              "@noun",
+                              {
+                                "FromTxt:": "@actor"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    [
+                      {
+                        "Let:be:": [
+                          "concealed items",
+                          {
+                            "FromTxts:": {
+                              "VisibleStorage obj:": "@noun"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "If:does:": [
+                          {
+                            "Cmp:is:num:": [
+                              {
+                                "Len:": "@concealed items"
+                              },
+                              {
+                                "GreaterThan": true
+                              },
+                              0
+                            ]
+                          },
+                          [
+                            {
+                              "Comment:": "inform doesn't print the inventory details when opening objects, so this doesn't either. "
+                            },
+                            {
+                              "Say:": {
+                                "Response:text:": [
+                                  "reveal newly visible objects",
+                                  {
+                                    "Spaces does:": [
+                                      {
+                                        "Say:": {
+                                          "RenderTemplate:": "{We!|capitalize!} open {the: .noun}, revealing"
+                                        }
+                                      },
+                                      {
+                                        "Say:": {
+                                          "Commas does:": [
+                                            {
+                                              "Repeating across:as:does:": [
+                                                "@concealed items",
+                                                {
+                                                  "AsTxt:": "item"
+                                                },
+                                                [
+                                                  {
+                                                    "Say:": {
+                                                      "RenderTemplate:": "{the: .item}"
+                                                    }
+                                                  }
+                                                ]
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      {
+                                        "Say:": "."
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            },
+                            {
+                              "Let:be:": [
+                                "success",
+                                {
+                                  "FromBool:": true
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    ]
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    }
+  ]
 }

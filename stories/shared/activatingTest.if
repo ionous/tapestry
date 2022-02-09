@@ -1,161 +1,140 @@
 {
-    "Tapestry:":
-    [
+  "Tapestry:": [
+    {
+      "TestStatement:test:": [
+        "activating test",
         {
-            "TestStatement:test:":
-            [
-                "activating test",
-                {
-                    "TestOutput:": "The control status: deactivated.\nYou switch on the espresso controls.\nThe control status: activated.\nYou switch off the espresso controls.\nThe control status: deactivated.\nTry to activate a regular object.\nIt isn't something you can switch on.\n"
-                }
-            ]
-        },
-        {
-            "TestRule:does:":
-            [
-                "activating test",
-                [
-                    {
-                        "Say:":
-                        {
-                            "RenderTemplate:": "The control status: {.controls.activation}."
-                        }
-                    },
-                    {
-                        "Activating agent:noun:":
-                        [
-                            {
-                                "FromTxt:": "player"
-                            },
-                            {
-                                "FromTxt:": "controls"
-                            }
-                        ]
-                    },
-                    {
-                        "Say:":
-                        {
-                            "RenderTemplate:": "The control status: {.controls.activation}."
-                        }
-                    },
-                    {
-                        "Deactivating agent:noun:":
-                        [
-                            {
-                                "FromTxt:": "player"
-                            },
-                            {
-                                "FromTxt:": "controls"
-                            }
-                        ]
-                    },
-                    {
-                        "Say:":
-                        {
-                            "RenderTemplate:": "The control status: {.controls.activation}."
-                        }
-                    },
-                    {
-                        "Say:":
-                        {
-                            "RenderTemplate:": "Try to activate a regular object."
-                        }
-                    },
-                    {
-                        "Activating agent:noun:":
-                        [
-                            {
-                                "FromTxt:": "player"
-                            },
-                            {
-                                "FromTxt:": "knife"
-                            }
-                        ]
-                    },
-                    {
-                        "Comment:": "we don't need to test the whole state changing algorithm; that's shared and tested elsewhere. We just need to test that the engine knows about activation and deactivation."
-                    }
-                ]
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "TestScene:story:":
-            [
-                "activating test",
-                
-                    [
-                        {
-                            "RelativeToNoun:nouns:areBeing:otherNouns:":
-                            [
-                                " whereabouts",
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "the",
-                                            "knife"
-                                        ]
-                                    }
-                                ],
-                                "is",
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "our",
-                                            "self"
-                                        ]
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "--": ""
-                        },
-                        {
-                            "Nouns:depict:and:":
-                            [
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "the",
-                                            "espresso controls"
-                                        ]
-                                    }
-                                ],
-                                {
-                                    "Kind:named:":
-                                    [
-                                        "area",
-                                        "device"
-                                    ]
-                                },
-                                [
-                                    {
-                                        "NounRelation relation:otherNouns:":
-                                        [
-                                            "whereabouts",
-                                            [
-                                                {
-                                                    "Noun:named:":
-                                                    [
-                                                        "the",
-                                                        "kitchen"
-                                                    ]
-                                                }
-                                            ]
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                
-            ]
+          "TestOutput:": "The control status: deactivated.\nYou switch on the espresso controls.\nThe control status: activated.\nYou switch off the espresso controls.\nThe control status: deactivated.\nTry to activate a regular object.\nIt isn't something you can switch on.\n"
         }
-    ]
+      ]
+    },
+    {
+      "TestRule:does:": [
+        "activating test",
+        [
+          {
+            "Say:": {
+              "RenderTemplate:": "The control status: {.controls.activation}."
+            }
+          },
+          {
+            "Activating agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "controls"
+              }
+            ]
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The control status: {.controls.activation}."
+            }
+          },
+          {
+            "Deactivating agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "controls"
+              }
+            ]
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The control status: {.controls.activation}."
+            }
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "Try to activate a regular object."
+            }
+          },
+          {
+            "Activating agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "knife"
+              }
+            ]
+          },
+          {
+            "Comment:": "we don't need to test the whole state changing algorithm; that's shared and tested elsewhere. We just need to test that the engine knows about activation and deactivation."
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "TestScene:story:": [
+        "activating test",
+        [
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              " whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "knife"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "our",
+                    "self"
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "Nouns:depict:and:": [
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "espresso controls"
+                  ]
+                }
+              ],
+              {
+                "Kind:named:": [
+                  "area",
+                  "device"
+                ]
+              },
+              [
+                {
+                  "NounRelation relation:otherNouns:": [
+                    "whereabouts",
+                    [
+                      {
+                        "Noun:named:": [
+                          "the",
+                          "kitchen"
+                        ]
+                      }
+                    ]
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    }
+  ]
 }

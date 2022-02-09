@@ -1,173 +1,139 @@
 {
-    "Tapestry:":
-    [
-        {
-            "Pattern:requires:":
-            [
-                "We",
+  "Tapestry:": [
+    {
+      "Pattern:requires:": [
+        "We",
+        [
+          {
+            "TextList named:": "names"
+          }
+        ]
+      ]
+    },
+    {
+      "Comment:": "We refers to the player. As with all the customizable grammar, we use the plural for the name of pattern."
+    },
+    {
+      "Pattern:rules:": [
+        "We",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                    "PatternParams:":
-                    [
-                        {
-                            "TextList named:": "names"
-                        }
-                    ]
+                  "Say:": "you"
                 }
+              ]
             ]
-        },
-        {
-            "Comment:": "We refers to the player. As with all the customizable grammar, we use the plural for the name of pattern."
-        },
-        {
-            "Pattern:rules:":
-            [
-                "We",
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Comment:": "they, [we], [ey], it. "
+    },
+    {
+      "Pattern:requires:": [
+        "They",
+        [
+          {
+            "Text named:of:": [
+              "noun",
+              "object"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "They",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Always": true
-                                },
-                                [
-                                    {
-                                        "Say:": "you"
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
+                  "Say:": "it"
                 }
+              ]
             ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Comment:": "they, [we], [ey], it. "
-        },
-        {
-            "Pattern:requires:":
-            [
-                "They",
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Get obj:trait:": [
+                  "@noun",
+                  "plural named"
+                ]
+              },
+              [
                 {
-                    "PatternParams:":
-                    [
-                        {
-                            "Text named:of:":
-                            [
-                                "noun",
-                                "object"
-                            ]
-                        }
-                    ]
+                  "Say:": "they"
                 }
+              ]
             ]
-        },
-        {
-            "Pattern:rules:":
-            [
-                "They",
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "Those",
+        [
+          {
+            "Text named:of:": [
+              "noun",
+              "object"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "Those",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Always": true
-                                },
-                                [
-                                    {
-                                        "Say:": "it"
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Get obj:trait:":
-                                    [
-                                        "@noun",
-                                        "plural named"
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Say:": "they"
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
+                  "Say:": "that"
                 }
+              ]
             ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Pattern:requires:":
-            [
-                "Those",
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Get obj:trait:": [
+                  "@noun",
+                  "plural named"
+                ]
+              },
+              [
                 {
-                    "PatternParams:":
-                    [
-                        {
-                            "Text named:of:":
-                            [
-                                "noun",
-                                "object"
-                            ]
-                        }
-                    ]
+                  "Say:": "these"
                 }
+              ]
             ]
-        },
-        {
-            "Pattern:rules:":
-            [
-                "Those",
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Always": true
-                                },
-                                [
-                                    {
-                                        "Say:": "that"
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Get obj:trait:":
-                                    [
-                                        "@noun",
-                                        "plural named"
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Say:": "these"
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
+          }
+        ]
+      ]
+    }
+  ]
 }

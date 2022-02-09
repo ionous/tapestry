@@ -1,359 +1,308 @@
 {
-    "Tapestry:":
-    [
-        {
-            "Make kinds:of:":
-            [
-                " agents",
-                "object"
+  "Tapestry:": [
+    {
+      "Make kinds:of:": [
+        " agents",
+        "object"
+      ]
+    },
+    {
+      "Make kinds:of:": [
+        " players",
+        "agent"
+      ]
+    },
+    {
+      "Nouns:depict:": [
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "player"
             ]
-        },
+          }
+        ],
         {
-            "Make kinds:of:":
-            [
-                " players",
-                "agent"
-            ]
-        },
-        {
-            "Nouns:depict:":
-            [
-                [
-                    {
-                        "Noun:named:":
-                        [
-                            "the",
-                            "player"
-                        ]
-                    }
-                ],
-                {
-                    "Kind:named:":
-                    [
-                        "isa",
-                        "players"
-                    ]
-                }
-            ]
-        },
-        {
-            "Kinds:have:":
-            [
-                "Agents",
-                [
-                    {
-                        "Text named:": "pawn"
-                    }
-                ]
-            ]
-        },
-        {
-            "Kinds:have:":
-            [
-                "Actors",
-                [
-                    {
-                        "Bool named:": "in darkness"
-                    }
-                ]
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Nouns:depict:":
-            [
-                [
-                    {
-                        "Noun:named:":
-                        [
-                            "our",
-                            "self"
-                        ]
-                    }
-                ],
-                {
-                    "Kind:named:":
-                    [
-                        "isan",
-                        "actor"
-                    ]
-                }
-            ]
-        },
-        {
-            "Nouns:startAs:":
-            [
-                [
-                    {
-                        "Noun:named:":
-                        [
-                            "our",
-                            "self"
-                        ]
-                    }
-                ],
-                {
-                    "NounTraits:trait:":
-                    [
-                        "is",
-                        [
-                            "privately named"
-                        ]
-                    ]
-                }
-            ]
-        },
-        {
-            "NounAssignment:nouns:lines:":
-            [
-                "pawn",
-                [
-                    {
-                        "Noun:named:":
-                        [
-                            "the",
-                            "player"
-                        ]
-                    }
-                ],
-                "self"
-            ]
-        },
-        {
-            "NounAssignment:nouns:lines:":
-            [
-                "printed name",
-                [
-                    {
-                        "Noun:named:":
-                        [
-                            "our",
-                            "self"
-                        ]
-                    }
-                ],
-                "you"
-            ]
-        },
-        {
-            "Nouns:startAs:":
-            [
-                [
-                    {
-                        "Noun:named:":
-                        [
-                            "our",
-                            "self"
-                        ]
-                    }
-                ],
-                {
-                    "NounTraits:trait:":
-                    [
-                        "is",
-                        [
-                            "proper named"
-                        ]
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Pattern:requires:returns:":
-            [
-                "isPlayer",
-                {
-                    "PatternParams:":
-                    [
-                        {
-                            "Text named:of:":
-                            [
-                                "obj",
-                                "object"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "PatternResult:":
-                    {
-                        "Bool named:": "success"
-                    }
-                }
-            ]
-        },
-        {
-            "Pattern:rules:":
-            [
-                "isPlayer",
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "KindOf:is:":
-                                    [
-                                        "@obj",
-                                        "actors"
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "success",
-                                            {
-                                                "FromBool:":
-                                                {
-                                                    "Cmp:is:txt:":
-                                                    [
-                                                        "@obj",
-                                                        {
-                                                            "Equals": true
-                                                        },
-                                                        {
-                                                            "Get:from:":
-                                                            [
-                                                                "pawn",
-                                                                {
-                                                                    "ObjFields:": "player"
-                                                                }
-                                                            ]
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "KindOf:is:":
-                                    [
-                                        "@obj",
-                                        "agents"
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "success",
-                                            {
-                                                "FromBool:":
-                                                {
-                                                    "Cmp:is:txt:":
-                                                    [
-                                                        "@obj",
-                                                        {
-                                                            "Equals": true
-                                                        },
-                                                        {
-                                                            "IdOf:": "player"
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "RelativeToNoun:nouns:areBeing:otherNouns:":
-            [
-                " whereabouts",
-                [
-                    {
-                        "Noun:named:":
-                        [
-                            "our",
-                            "self"
-                        ]
-                    }
-                ],
-                "is",
-                [
-                    {
-                        "Noun:named:":
-                        [
-                            "our",
-                            "kitchen"
-                        ]
-                    }
-                ]
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "TestRule:does:":
-            [
-                "player tests",
-                [
-                    {
-                        "If:does:":
-                        [
-                            {
-                                "IsPlayer obj:":
-                                {
-                                    "FromTxt:": "self"
-                                }
-                            },
-                            [
-                                {
-                                    "Say:": "yes"
-                                }
-                            ]
-                        ]
-                    }
-                ]
-            ]
-        },
-        {
-            "TestStatement:test:":
-            [
-                "player tests",
-                {
-                    "TestOutput:": "yes"
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "GrammarDecl:":
-            {
-                "Alias:asNoun:":
-                [
-                    [
-                        "me",
-                        "myself",
-                        "self"
-                    ],
-                    "player"
-                ]
-            }
+          "Kind:named:": [
+            "isa",
+            "players"
+          ]
         }
-    ]
+      ]
+    },
+    {
+      "Kinds:have:": [
+        "Agents",
+        [
+          {
+            "Text named:": "pawn"
+          }
+        ]
+      ]
+    },
+    {
+      "Kinds:have:": [
+        "Actors",
+        [
+          {
+            "Bool named:": "in darkness"
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Nouns:depict:": [
+        [
+          {
+            "Noun:named:": [
+              "our",
+              "self"
+            ]
+          }
+        ],
+        {
+          "Kind:named:": [
+            "isan",
+            "actor"
+          ]
+        }
+      ]
+    },
+    {
+      "Nouns:startAs:": [
+        [
+          {
+            "Noun:named:": [
+              "our",
+              "self"
+            ]
+          }
+        ],
+        {
+          "NounTraits:trait:": [
+            "is",
+            [
+              "privately named"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "NounAssignment:nouns:lines:": [
+        "pawn",
+        [
+          {
+            "Noun:named:": [
+              "the",
+              "player"
+            ]
+          }
+        ],
+        "self"
+      ]
+    },
+    {
+      "NounAssignment:nouns:lines:": [
+        "printed name",
+        [
+          {
+            "Noun:named:": [
+              "our",
+              "self"
+            ]
+          }
+        ],
+        "you"
+      ]
+    },
+    {
+      "Nouns:startAs:": [
+        [
+          {
+            "Noun:named:": [
+              "our",
+              "self"
+            ]
+          }
+        ],
+        {
+          "NounTraits:trait:": [
+            "is",
+            [
+              "proper named"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:returns:": [
+        "isPlayer",
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          }
+        ],
+        {
+          "PatternResult:": {
+            "Bool named:": "success"
+          }
+        }
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "isPlayer",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@obj",
+                  "actors"
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "success",
+                    {
+                      "FromBool:": {
+                        "Cmp:is:txt:": [
+                          "@obj",
+                          {
+                            "Equals": true
+                          },
+                          {
+                            "Get:from:": [
+                              "pawn",
+                              {
+                                "ObjFields:": "player"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@obj",
+                  "agents"
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "success",
+                    {
+                      "FromBool:": {
+                        "Cmp:is:txt:": [
+                          "@obj",
+                          {
+                            "Equals": true
+                          },
+                          {
+                            "IdOf:": "player"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "RelativeToNoun:nouns:areBeing:otherNouns:": [
+        " whereabouts",
+        [
+          {
+            "Noun:named:": [
+              "our",
+              "self"
+            ]
+          }
+        ],
+        "is",
+        [
+          {
+            "Noun:named:": [
+              "our",
+              "kitchen"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "TestRule:does:": [
+        "player tests",
+        [
+          {
+            "If:does:": [
+              {
+                "IsPlayer obj:": {
+                  "FromTxt:": "self"
+                }
+              },
+              [
+                {
+                  "Say:": "yes"
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "TestStatement:test:": [
+        "player tests",
+        {
+          "TestOutput:": "yes"
+        }
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "GrammarDecl:": {
+        "Alias:asNoun:": [
+          [
+            "me",
+            "myself",
+            "self"
+          ],
+          "player"
+        ]
+      }
+    }
+  ]
 }

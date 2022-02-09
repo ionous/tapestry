@@ -1,280 +1,243 @@
 {
-    "Tapestry:":
-    [
+  "Tapestry:": [
+    {
+      "TestStatement:test:": [
+        "retrieving test",
         {
-            "TestStatement:test:":
-            [
-                "retrieving test",
-                {
-                    "TestOutput:": "  - Fail to retrieve from something closed:\n  The espresso machine isn't open.\n  - The soup's parent was: the shelf. Okay, retrieve from supporter:\n  Taken.The soup's parent is: you.\n  - The hook's parent was: the cabinet. Okay, retrieve from container:\n  Taken.The hook's parent is: you.\n  - Fail to retrieve incorrectly:\n  But it isn't there now.\n  - Fail to steal:\n  That seems to belong to Mildred.\n"
-                }
-            ]
-        },
-        {
-            "TestRule:does:":
-            [
-                "retrieving test",
-                [
-                    {
-                        "Say:":
-                        {
-                            "Rows does:":
-                            [
-                                {
-                                    "Say:":
-                                    {
-                                        "Row does:":
-                                        [
-                                            {
-                                                "Say:": "Fail to retrieve from something closed:<br>"
-                                            },
-                                            {
-                                                "RetrievingFrom agent:noun:otherNoun:":
-                                                [
-                                                    {
-                                                        "FromTxt:": "player"
-                                                    },
-                                                    {
-                                                        "FromTxt:": "coffee"
-                                                    },
-                                                    {
-                                                        "FromTxt:": "machine"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "Say:":
-                                    {
-                                        "Row does:":
-                                        [
-                                            {
-                                                "Say:":
-                                                {
-                                                    "RenderTemplate:": "The soup's parent was: {the: {parentOf: .soup}}."
-                                                }
-                                            },
-                                            {
-                                                "Say:": "Okay, retrieve from supporter:<br>"
-                                            },
-                                            {
-                                                "RetrievingFrom agent:noun:otherNoun:":
-                                                [
-                                                    {
-                                                        "FromTxt:": "player"
-                                                    },
-                                                    {
-                                                        "FromTxt:": "soup"
-                                                    },
-                                                    {
-                                                        "FromTxt:": "shelf"
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                "Say:":
-                                                {
-                                                    "RenderTemplate:": "The soup's parent is: {the: {parentOf: .soup}}."
-                                                }
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "Say:":
-                                    {
-                                        "Row does:":
-                                        [
-                                            {
-                                                "Say:":
-                                                {
-                                                    "RenderTemplate:": "The hook's parent was: {the: {parentOf: .hook}}."
-                                                }
-                                            },
-                                            {
-                                                "Say:": "Okay, retrieve from container:<br>"
-                                            },
-                                            {
-                                                "RetrievingFrom agent:noun:otherNoun:":
-                                                [
-                                                    {
-                                                        "FromTxt:": "player"
-                                                    },
-                                                    {
-                                                        "FromTxt:": "hook"
-                                                    },
-                                                    {
-                                                        "FromTxt:": "cabinet"
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                "Say:":
-                                                {
-                                                    "RenderTemplate:": "The hook's parent is: {the: {parentOf: .hook}}."
-                                                }
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "Say:":
-                                    {
-                                        "Row does:":
-                                        [
-                                            {
-                                                "Say:": "Fail to retrieve incorrectly:<br>"
-                                            },
-                                            {
-                                                "RetrievingFrom agent:noun:otherNoun:":
-                                                [
-                                                    {
-                                                        "FromTxt:": "player"
-                                                    },
-                                                    {
-                                                        "FromTxt:": "hat"
-                                                    },
-                                                    {
-                                                        "FromTxt:": "cabinet"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                },
-                                {
-                                    "Say:":
-                                    {
-                                        "Row does:":
-                                        [
-                                            {
-                                                "Say:": "Fail to steal:<br>"
-                                            },
-                                            {
-                                                "RetrievingFrom agent:noun:otherNoun:":
-                                                [
-                                                    {
-                                                        "FromTxt:": "player"
-                                                    },
-                                                    {
-                                                        "FromTxt:": "apple"
-                                                    },
-                                                    {
-                                                        "FromTxt:": "Mildred"
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                ]
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "TestScene:story:":
-            [
-                "retrieving test",
-                
-                    [
-                        {
-                            "RelativeToNoun:nouns:areBeing:otherNouns:":
-                            [
-                                "whereabouts",
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "our",
-                                            "self"
-                                        ]
-                                    },
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "our",
-                                            "Mildred"
-                                        ]
-                                    }
-                                ],
-                                "is",
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "the",
-                                            "kitchen"
-                                        ]
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "--": ""
-                        },
-                        {
-                            "RelativeToNoun:nouns:areBeing:otherNouns:":
-                            [
-                                "whereabouts",
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "the",
-                                            "coffee"
-                                        ]
-                                    }
-                                ],
-                                "is",
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "the",
-                                            "machine"
-                                        ]
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "--": ""
-                        },
-                        {
-                            "RelativeToNoun:nouns:areBeing:otherNouns:":
-                            [
-                                "whereabouts",
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "the",
-                                            "empire apple"
-                                        ]
-                                    }
-                                ],
-                                "is",
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "our",
-                                            "Mildred"
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                
-            ]
+          "TestOutput:": "  - Fail to retrieve from something closed:\n  The espresso machine isn't open.\n  - The soup's parent was: the shelf. Okay, retrieve from supporter:\n  Taken.The soup's parent is: you.\n  - The hook's parent was: the cabinet. Okay, retrieve from container:\n  Taken.The hook's parent is: you.\n  - Fail to retrieve incorrectly:\n  But it isn't there now.\n  - Fail to steal:\n  That seems to belong to Mildred.\n"
         }
-    ]
+      ]
+    },
+    {
+      "TestRule:does:": [
+        "retrieving test",
+        [
+          {
+            "Say:": {
+              "Rows does:": [
+                {
+                  "Say:": {
+                    "Row does:": [
+                      {
+                        "Say:": "Fail to retrieve from something closed:<br>"
+                      },
+                      {
+                        "RetrievingFrom agent:noun:otherNoun:": [
+                          {
+                            "FromTxt:": "player"
+                          },
+                          {
+                            "FromTxt:": "coffee"
+                          },
+                          {
+                            "FromTxt:": "machine"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Say:": {
+                    "Row does:": [
+                      {
+                        "Say:": {
+                          "RenderTemplate:": "The soup's parent was: {the: {parentOf: .soup}}."
+                        }
+                      },
+                      {
+                        "Say:": "Okay, retrieve from supporter:<br>"
+                      },
+                      {
+                        "RetrievingFrom agent:noun:otherNoun:": [
+                          {
+                            "FromTxt:": "player"
+                          },
+                          {
+                            "FromTxt:": "soup"
+                          },
+                          {
+                            "FromTxt:": "shelf"
+                          }
+                        ]
+                      },
+                      {
+                        "Say:": {
+                          "RenderTemplate:": "The soup's parent is: {the: {parentOf: .soup}}."
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Say:": {
+                    "Row does:": [
+                      {
+                        "Say:": {
+                          "RenderTemplate:": "The hook's parent was: {the: {parentOf: .hook}}."
+                        }
+                      },
+                      {
+                        "Say:": "Okay, retrieve from container:<br>"
+                      },
+                      {
+                        "RetrievingFrom agent:noun:otherNoun:": [
+                          {
+                            "FromTxt:": "player"
+                          },
+                          {
+                            "FromTxt:": "hook"
+                          },
+                          {
+                            "FromTxt:": "cabinet"
+                          }
+                        ]
+                      },
+                      {
+                        "Say:": {
+                          "RenderTemplate:": "The hook's parent is: {the: {parentOf: .hook}}."
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Say:": {
+                    "Row does:": [
+                      {
+                        "Say:": "Fail to retrieve incorrectly:<br>"
+                      },
+                      {
+                        "RetrievingFrom agent:noun:otherNoun:": [
+                          {
+                            "FromTxt:": "player"
+                          },
+                          {
+                            "FromTxt:": "hat"
+                          },
+                          {
+                            "FromTxt:": "cabinet"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Say:": {
+                    "Row does:": [
+                      {
+                        "Say:": "Fail to steal:<br>"
+                      },
+                      {
+                        "RetrievingFrom agent:noun:otherNoun:": [
+                          {
+                            "FromTxt:": "player"
+                          },
+                          {
+                            "FromTxt:": "apple"
+                          },
+                          {
+                            "FromTxt:": "Mildred"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "TestScene:story:": [
+        "retrieving test",
+        [
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "our",
+                    "self"
+                  ]
+                },
+                {
+                  "Noun:named:": [
+                    "our",
+                    "Mildred"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "kitchen"
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "coffee"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "machine"
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "empire apple"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "our",
+                    "Mildred"
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    }
+  ]
 }

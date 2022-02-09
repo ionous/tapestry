@@ -1,201 +1,168 @@
 {
-    "Tapestry:":
-    [
+  "Tapestry:": [
+    {
+      "Pattern:requires:returns:": [
+        "starts with vowel",
+        [
+          {
+            "Text named:": "text"
+          }
+        ],
         {
-            "Pattern:requires:returns:":
-            [
-                "starts with vowel",
-                {
-                    "PatternParams:":
-                    [
-                        {
-                            "Text named:": "text"
-                        }
-                    ]
-                },
-                {
-                    "PatternResult:":
-                    {
-                        "Bool named:": "matching"
-                    }
-                }
-            ]
-        },
-        {
-            "Comment:": "Determine if text starts with a vowel or vowel sound. This method is from mudconnect.com"
-        },
-        {
-            "--": ""
-        },
-        {
-            "Pattern:rules:":
-            [
-                "starts with vowel",
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Matches:to:":
-                                    [
-                                        "@text",
-                                        "^(?i:A|E|I|O|U)"
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "matching",
-                                            {
-                                                "FromBool:": true
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Matches:to:":
-                                    [
-                                        "@text",
-                                        "^(?i:EU|EW|ONCE|ONE|OUI|UBI|UGAND|UKRAIN|UKULELE|ULYSS|UNA|UNESCO|UNI|UNUM|URA|URE|URI|URO|URU|USA|USE|USI|USU|UTA|UTE|UTI|UTO)"
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "matching",
-                                            {
-                                                "FromBool:": false
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Matches:to:":
-                                    [
-                                        "@text",
-                                        "^(?i:HEIR|HERB|HOMAGE|HONEST|HONOR|HONOUR|HORS|HOUR)"
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "matching",
-                                            {
-                                                "FromBool:": true
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "TestStatement:test:":
-            [
-                "vowels",
-                {
-                    "TestOutput:": "ok"
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "TestRule:does:":
-            [
-                "vowels",
-                [
-                    {
-                        "Say:":
-                        {
-                            "Txt if:then:else:":
-                            [
-                                {
-                                    "StartsWithVowel text:":
-                                    {
-                                        "FromTxt:": "house"
-                                    }
-                                },
-                                "error: house doesn't start with a vowel",
-                                ""
-                            ]
-                        }
-                    },
-                    {
-                        "Say:":
-                        {
-                            "Txt if:then:else:":
-                            [
-                                {
-                                    "StartsWithVowel text:":
-                                    {
-                                        "FromTxt:": "hour"
-                                    }
-                                },
-                                "",
-                                "error: hour starts with a vowel sound"
-                            ]
-                        }
-                    },
-                    {
-                        "Say:":
-                        {
-                            "Txt if:then:else:":
-                            [
-                                {
-                                    "StartsWithVowel text:":
-                                    {
-                                        "FromTxt:": "beta"
-                                    }
-                                },
-                                "error: beta doesn't start with a vowel",
-                                ""
-                            ]
-                        }
-                    },
-                    {
-                        "Say:":
-                        {
-                            "Txt if:then:else:":
-                            [
-                                {
-                                    "StartsWithVowel text:":
-                                    {
-                                        "FromTxt:": "alpha"
-                                    }
-                                },
-                                "",
-                                "alpha starts with a vowel"
-                            ]
-                        }
-                    },
-                    {
-                        "Say:": "ok"
-                    }
-                ]
-            ]
+          "PatternResult:": {
+            "Bool named:": "matching"
+          }
         }
-    ]
+      ]
+    },
+    {
+      "Comment:": "Determine if text starts with a vowel or vowel sound. This method is from mudconnect.com"
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:rules:": [
+        "starts with vowel",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Matches:to:": [
+                  "@text",
+                  "^(?i:A|E|I|O|U)"
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "matching",
+                    {
+                      "FromBool:": true
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Matches:to:": [
+                  "@text",
+                  "^(?i:EU|EW|ONCE|ONE|OUI|UBI|UGAND|UKRAIN|UKULELE|ULYSS|UNA|UNESCO|UNI|UNUM|URA|URE|URI|URO|URU|USA|USE|USI|USU|UTA|UTE|UTI|UTO)"
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "matching",
+                    {
+                      "FromBool:": false
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Matches:to:": [
+                  "@text",
+                  "^(?i:HEIR|HERB|HOMAGE|HONEST|HONOR|HONOUR|HORS|HOUR)"
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "matching",
+                    {
+                      "FromBool:": true
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "TestStatement:test:": [
+        "vowels",
+        {
+          "TestOutput:": "ok"
+        }
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "TestRule:does:": [
+        "vowels",
+        [
+          {
+            "Say:": {
+              "Txt if:then:else:": [
+                {
+                  "StartsWithVowel text:": {
+                    "FromTxt:": "house"
+                  }
+                },
+                "error: house doesn't start with a vowel",
+                ""
+              ]
+            }
+          },
+          {
+            "Say:": {
+              "Txt if:then:else:": [
+                {
+                  "StartsWithVowel text:": {
+                    "FromTxt:": "hour"
+                  }
+                },
+                "",
+                "error: hour starts with a vowel sound"
+              ]
+            }
+          },
+          {
+            "Say:": {
+              "Txt if:then:else:": [
+                {
+                  "StartsWithVowel text:": {
+                    "FromTxt:": "beta"
+                  }
+                },
+                "error: beta doesn't start with a vowel",
+                ""
+              ]
+            }
+          },
+          {
+            "Say:": {
+              "Txt if:then:else:": [
+                {
+                  "StartsWithVowel text:": {
+                    "FromTxt:": "alpha"
+                  }
+                },
+                "",
+                "alpha starts with a vowel"
+              ]
+            }
+          },
+          {
+            "Say:": "ok"
+          }
+        ]
+      ]
+    }
+  ]
 }

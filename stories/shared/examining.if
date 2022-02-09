@@ -1,480 +1,400 @@
 {
-    "Tapestry:":
-    [
+  "Tapestry:": [
+    {
+      "Event:action:args common:": [
+        "examine",
+        "examining",
         {
-            "Event:action:args common:":
-            [
-                "examine",
-                "examining",
-                {
-                    "CommonAction:": "thing"
-                }
-            ]
-        },
-        {
-            "Pattern:provides:rules:":
-            [
-                "examining",
-                {
-                    "PatternLocals:":
-                    [
-                        {
-                            "Text named:of:initially:":
-                            [
-                                "actor",
-                                "actor",
-                                {
-                                    "Get:from:":
-                                    [
-                                        "pawn",
-                                        {
-                                            "VarFields:": "agent"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "IsPlayer obj:": "@actor"
-                                },
-                                [
-                                    {
-                                        "If:from:and:does:else:":
-                                        [
-                                            "resp",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "CanReach actor:action:noun:requiresLight:":
-                                                    [
-                                                        "@actor",
-                                                        {
-                                                            "FromTxt:": "examining"
-                                                        },
-                                                        "@noun",
-                                                        {
-                                                            "FromBool:": true
-                                                        }
-                                                    ]
-                                                }
-                                            },
-                                            {
-                                                "Not:":
-                                                {
-                                                    "Is empty:": "@resp"
-                                                }
-                                            },
-                                            [
-                                                {
-                                                    "Say:": "@resp"
-                                                }
-                                            ],
-                                            {
-                                                "ElseDo does:":
-                                                [
-                                                    {
-                                                        "If:from:and:does:else:":
-                                                        [
-                                                            "resp",
-                                                            {
-                                                                "FromTxt:":
-                                                                {
-                                                                    "CanUse actor:action:noun:":
-                                                                    [
-                                                                        "@actor",
-                                                                        {
-                                                                            "FromTxt:": "examining"
-                                                                        },
-                                                                        "@noun"
-                                                                    ]
-                                                                }
-                                                            },
-                                                            {
-                                                                "Not:":
-                                                                {
-                                                                    "Is empty:": "@resp"
-                                                                }
-                                                            },
-                                                            [
-                                                                {
-                                                                    "Say:": "@resp"
-                                                                }
-                                                            ],
-                                                            {
-                                                                "ElseDo does:":
-                                                                [
-                                                                    {
-                                                                        "If:does:":
-                                                                        [
-                                                                            {
-                                                                                "Send:event:":
-                                                                                [
-                                                                                    {
-                                                                                        "Capture obj:": "@noun"
-                                                                                    },
-                                                                                    {
-                                                                                        "Examine actor:noun:":
-                                                                                        [
-                                                                                            "@actor",
-                                                                                            "@noun"
-                                                                                        ]
-                                                                                    }
-                                                                                ]
-                                                                            },
-                                                                            [
-                                                                                {
-                                                                                    "PrintDescription obj:": "@noun"
-                                                                                }
-                                                                            ]
-                                                                        ]
-                                                                    }
-                                                                ]
-                                                            }
-                                                        ]
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Pattern:requires:":
-            [
-                "Print description",
-                {
-                    "PatternParams:":
-                    [
-                        {
-                            "Text named:of:":
-                            [
-                                "obj",
-                                "object"
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "Pattern:provides:rules:":
-            [
-                "Print description",
-                {
-                    "PatternLocals:":
-                    [
-                        {
-                            "Text named:initially:":
-                            [
-                                "description",
-                                {
-                                    "Get:from:":
-                                    [
-                                        "description",
-                                        {
-                                            "ObjFields:": "@obj"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Always": true
-                                },
-                                [
-                                    {
-                                        "If:does:":
-                                        [
-                                            {
-                                                "Not:":
-                                                {
-                                                    "PrintParticulars obj:": "@obj"
-                                                }
-                                            },
-                                            [
-                                                {
-                                                    "Say:":
-                                                    {
-                                                        "Response:text:":
-                                                        [
-                                                            "unremarkable description",
-                                                            {
-                                                                "RenderTemplate:": "{We!|make_title_case!} see nothing special about {the: .obj}."
-                                                            }
-                                                        ]
-                                                    }
-                                                }
-                                            ]
-                                        ]
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Not:":
-                                    {
-                                        "Is empty:": "@description"
-                                    }
-                                },
-                                [
-                                    {
-                                        "Say:": "@description"
-                                    },
-                                    {
-                                        "PrintParticulars obj:": "@obj"
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Pattern:requires:returns:":
-            [
-                "Print particulars",
-                {
-                    "PatternParams:":
-                    [
-                        {
-                            "Text named:of:":
-                            [
-                                "obj",
-                                "object"
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "PatternResult:":
-                    {
-                        "Bool named:": "success"
-                    }
-                }
-            ]
-        },
-        {
-            "Pattern:rules:":
-            [
-                "Print particulars",
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "KindOf:is:":
-                                    [
-                                        "@obj",
-                                        "containers"
-                                    ]
-                                },
-                                [
-                                    {
-                                        "If:does:else:":
-                                        [
-                                            {
-                                                "PrintInlineStorage obj:": "@obj"
-                                            },
-                                            [
-                                                {
-                                                    "Let:be:":
-                                                    [
-                                                        "success",
-                                                        {
-                                                            "FromBool:": true
-                                                        }
-                                                    ]
-                                                }
-                                            ],
-                                            {
-                                                "ElseDo does:":
-                                                [
-                                                    {
-                                                        "Comment:": "if the player isn't in the container."
-                                                    },
-                                                    {
-                                                        "If:does:":
-                                                        [
-                                                            {
-                                                                "Cmp:is:txt:":
-                                                                [
-                                                                    "@obj",
-                                                                    {
-                                                                        "OtherThan": true
-                                                                    },
-                                                                    {
-                                                                        "ContainerOf obj:":
-                                                                        {
-                                                                            "FromTxt:": "player"
-                                                                        }
-                                                                    }
-                                                                ]
-                                                            },
-                                                            [
-                                                                {
-                                                                    "Say:":
-                                                                    {
-                                                                        "Response:text:":
-                                                                        [
-                                                                            "empty container description",
-                                                                            {
-                                                                                "RenderTemplate:": "{The: .obj|capitalize!} {are: .obj} empty."
-                                                                            }
-                                                                        ]
-                                                                    }
-                                                                },
-                                                                {
-                                                                    "Let:be:":
-                                                                    [
-                                                                        "success",
-                                                                        {
-                                                                            "FromBool:": true
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        ]
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "KindOf:is:":
-                                    [
-                                        "@obj",
-                                        "supporters"
-                                    ]
-                                },
-                                [
-                                    {
-                                        "If:does:":
-                                        [
-                                            {
-                                                "PrintInlineStorage obj:": "@obj"
-                                            },
-                                            [
-                                                {
-                                                    "Let:be:":
-                                                    [
-                                                        "success",
-                                                        {
-                                                            "FromBool:": true
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "TestStatement:test:":
-            [
-                "examining test",
-                {
-                    "TestOutput:": "The blender is empty.\nYour aunt's very own witches hat, a Halloween favorite.\nIn the mortar is a pestle.\nOn the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.\nAn ancient teak wardrobe repurposed as a kitchen cupboard.\nIn the cabinet are a book of matches, a bottle of descaling solution, a fish hook, and a rusty knife.\nYou see nothing special about the blender.\n"
-                }
-            ]
-        },
-        {
-            "TestRule:does:":
-            [
-                "examining test",
-                [
-                    {
-                        "PrintDescription obj:":
-                        {
-                            "FromTxt:": "blender"
-                        }
-                    },
-                    {
-                        "PrintDescription obj:":
-                        {
-                            "FromTxt:": "hat"
-                        }
-                    },
-                    {
-                        "PrintDescription obj:":
-                        {
-                            "FromTxt:": "mortar"
-                        }
-                    },
-                    {
-                        "PrintDescription obj:":
-                        {
-                            "FromTxt:": "shelf"
-                        }
-                    },
-                    {
-                        "PrintDescription obj:":
-                        {
-                            "FromTxt:": "cabinet"
-                        }
-                    },
-                    {
-                        "Relate:to:via:":
-                        [
-                            "blender",
-                            "self",
-                            "whereabouts"
-                        ]
-                    },
-                    {
-                        "PrintDescription obj:":
-                        {
-                            "FromTxt:": "blender"
-                        }
-                    }
-                ]
-            ]
+          "CommonAction:": "thing"
         }
-    ]
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "examining",
+        [
+          {
+            "Text named:of:initially:": [
+              "actor",
+              "actor",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
+                {
+                  "If:from:and:does:else:": [
+                    "resp",
+                    {
+                      "FromTxt:": {
+                        "CanReach actor:action:noun:requiresLight:": [
+                          "@actor",
+                          {
+                            "FromTxt:": "examining"
+                          },
+                          "@noun",
+                          {
+                            "FromBool:": true
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "Not:": {
+                        "Is empty:": "@resp"
+                      }
+                    },
+                    [
+                      {
+                        "Say:": "@resp"
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
+                        {
+                          "If:from:and:does:else:": [
+                            "resp",
+                            {
+                              "FromTxt:": {
+                                "CanUse actor:action:noun:": [
+                                  "@actor",
+                                  {
+                                    "FromTxt:": "examining"
+                                  },
+                                  "@noun"
+                                ]
+                              }
+                            },
+                            {
+                              "Not:": {
+                                "Is empty:": "@resp"
+                              }
+                            },
+                            [
+                              {
+                                "Say:": "@resp"
+                              }
+                            ],
+                            {
+                              "ElseDo does:": [
+                                {
+                                  "If:does:": [
+                                    {
+                                      "Send:event:": [
+                                        {
+                                          "Capture obj:": "@noun"
+                                        },
+                                        {
+                                          "Examine actor:noun:": [
+                                            "@actor",
+                                            "@noun"
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    [
+                                      {
+                                        "PrintDescription obj:": "@noun"
+                                      }
+                                    ]
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "Print description",
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "Print description",
+        [
+          {
+            "Text named:initially:": [
+              "description",
+              {
+                "Get:from:": [
+                  "description",
+                  {
+                    "ObjFields:": "@obj"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
+                {
+                  "If:does:": [
+                    {
+                      "Not:": {
+                        "PrintParticulars obj:": "@obj"
+                      }
+                    },
+                    [
+                      {
+                        "Say:": {
+                          "Response:text:": [
+                            "unremarkable description",
+                            {
+                              "RenderTemplate:": "{We!|make_title_case!} see nothing special about {the: .obj}."
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Not:": {
+                  "Is empty:": "@description"
+                }
+              },
+              [
+                {
+                  "Say:": "@description"
+                },
+                {
+                  "PrintParticulars obj:": "@obj"
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:returns:": [
+        "Print particulars",
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          }
+        ],
+        {
+          "PatternResult:": {
+            "Bool named:": "success"
+          }
+        }
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "Print particulars",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@obj",
+                  "containers"
+                ]
+              },
+              [
+                {
+                  "If:does:else:": [
+                    {
+                      "PrintInlineStorage obj:": "@obj"
+                    },
+                    [
+                      {
+                        "Let:be:": [
+                          "success",
+                          {
+                            "FromBool:": true
+                          }
+                        ]
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
+                        {
+                          "Comment:": "if the player isn't in the container."
+                        },
+                        {
+                          "If:does:": [
+                            {
+                              "Cmp:is:txt:": [
+                                "@obj",
+                                {
+                                  "OtherThan": true
+                                },
+                                {
+                                  "ContainerOf obj:": {
+                                    "FromTxt:": "player"
+                                  }
+                                }
+                              ]
+                            },
+                            [
+                              {
+                                "Say:": {
+                                  "Response:text:": [
+                                    "empty container description",
+                                    {
+                                      "RenderTemplate:": "{The: .obj|capitalize!} {are: .obj} empty."
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "Let:be:": [
+                                  "success",
+                                  {
+                                    "FromBool:": true
+                                  }
+                                ]
+                              }
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@obj",
+                  "supporters"
+                ]
+              },
+              [
+                {
+                  "If:does:": [
+                    {
+                      "PrintInlineStorage obj:": "@obj"
+                    },
+                    [
+                      {
+                        "Let:be:": [
+                          "success",
+                          {
+                            "FromBool:": true
+                          }
+                        ]
+                      }
+                    ]
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "TestStatement:test:": [
+        "examining test",
+        {
+          "TestOutput:": "The blender is empty.\nYour aunt's very own witches hat, a Halloween favorite.\nIn the mortar is a pestle.\nOn the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.\nAn ancient teak wardrobe repurposed as a kitchen cupboard.\nIn the cabinet are a book of matches, a bottle of descaling solution, a fish hook, and a rusty knife.\nYou see nothing special about the blender.\n"
+        }
+      ]
+    },
+    {
+      "TestRule:does:": [
+        "examining test",
+        [
+          {
+            "PrintDescription obj:": {
+              "FromTxt:": "blender"
+            }
+          },
+          {
+            "PrintDescription obj:": {
+              "FromTxt:": "hat"
+            }
+          },
+          {
+            "PrintDescription obj:": {
+              "FromTxt:": "mortar"
+            }
+          },
+          {
+            "PrintDescription obj:": {
+              "FromTxt:": "shelf"
+            }
+          },
+          {
+            "PrintDescription obj:": {
+              "FromTxt:": "cabinet"
+            }
+          },
+          {
+            "Relate:to:via:": [
+              "blender",
+              "self",
+              "whereabouts"
+            ]
+          },
+          {
+            "PrintDescription obj:": {
+              "FromTxt:": "blender"
+            }
+          }
+        ]
+      ]
+    }
+  ]
 }

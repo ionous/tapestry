@@ -234,7 +234,7 @@
                             "event_handler":
                             {
                                 "uses": "flow",
-                                "spec": "{event_phase} {the event%event:event_name} {provides?pattern_locals} do:{pattern_rules}",
+                                "spec": "{event_phase} {the event%event:event_name} {provides%locals*property_slot} do:{rules+pattern_rule}",
                                 "sign": "with:event:provides:rules:"
                             },
                             "event_phase":
@@ -304,24 +304,12 @@
                             "pattern_decl":
                             {
                                 "slot": "story_statement",
-                                "spec": "To determine {name:pattern_name|quote} {params?pattern_params} {?pattern_return}.",
+                                "spec": "To determine {name:pattern_name|quote} {params*property_slot} {?pattern_return}.",
                                 "sign": "Pattern:requires:returns:",
                                 "desc": [
                                     "Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.",
                                     "Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation."
                                 ]
-                            },
-                            "pattern_params":
-                            {
-                                "spec": "It requires {props+property_slot|comma-and}",
-                                "desc": "Pattern parameters: Storage for values used during the execution of a pattern.",
-                                "sign": "pattern_params:"
-                            },
-                            "pattern_locals":
-                            {
-                                "spec": "It provides {locals+property_slot|comma-and}",
-                                "desc": "Pattern locals: Storage for values used during the execution of a pattern.",
-                                "sign": "pattern_locals:"
                             },
                             "pattern_type":
                             {
@@ -332,7 +320,7 @@
                             "pattern_actions":
                             {
                                 "slot": "story_statement",
-                                "spec": "To determine {pattern name%name:pattern_name} {provides?pattern_locals} do:{pattern_rules}",
+                                "spec": "To determine {pattern name%name:pattern_name} {locals*property_slot} do: {rules+pattern_rule}",
                                 "desc": "Add actions to a pattern: Actions to take when using a pattern.",
                                 "sign": "pattern:provides:rules:"
                             },

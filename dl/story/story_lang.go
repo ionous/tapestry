@@ -2081,11 +2081,11 @@ func EventBlock_Marshal(m jsn.Marshaler, val *EventBlock) (err error) {
 
 // EventHandler
 type EventHandler struct {
-	EventPhase   EventPhase     `if:"label=_"`
-	Event        EventName      `if:"label=event"`
-	Provides     *PatternLocals `if:"label=provides,optional"`
-	PatternRules PatternRules   `if:"label=rules"`
-	UserComment  string
+	EventPhase  EventPhase     `if:"label=_"`
+	Event       EventName      `if:"label=event"`
+	Locals      []PropertySlot `if:"label=provides,optional"`
+	Rules       []PatternRule  `if:"label=rules"`
+	UserComment string
 }
 
 func (*EventHandler) Compose() composer.Spec {
@@ -2099,8 +2099,8 @@ func (*EventHandler) Compose() composer.Spec {
 const EventHandler_Type = "event_handler"
 const EventHandler_Field_EventPhase = "$EVENT_PHASE"
 const EventHandler_Field_Event = "$EVENT"
-const EventHandler_Field_Provides = "$PROVIDES"
-const EventHandler_Field_PatternRules = "$PATTERN_RULES"
+const EventHandler_Field_Locals = "$LOCALS"
+const EventHandler_Field_Rules = "$RULES"
 
 func (op *EventHandler) Marshal(m jsn.Marshaler) error {
 	return EventHandler_Marshal(m, op)
@@ -2187,19 +2187,19 @@ func EventHandler_Marshal(m jsn.Marshaler, val *EventHandler) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EventHandler_Field_Event))
 		}
-		e2 := m.MarshalKey("provides", EventHandler_Field_Provides)
+		e2 := m.MarshalKey("provides", EventHandler_Field_Locals)
 		if e2 == nil {
-			e2 = PatternLocals_Optional_Marshal(m, &val.Provides)
+			e2 = PropertySlot_Optional_Repeats_Marshal(m, &val.Locals)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", EventHandler_Field_Provides))
+			m.Error(errutil.New(e2, "in flow at", EventHandler_Field_Locals))
 		}
-		e3 := m.MarshalKey("rules", EventHandler_Field_PatternRules)
+		e3 := m.MarshalKey("rules", EventHandler_Field_Rules)
 		if e3 == nil {
-			e3 = PatternRules_Marshal(m, &val.PatternRules)
+			e3 = PatternRule_Repeats_Marshal(m, &val.Rules)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", EventHandler_Field_PatternRules))
+			m.Error(errutil.New(e3, "in flow at", EventHandler_Field_Rules))
 		}
 		m.EndBlock()
 	}
@@ -5794,10 +5794,10 @@ func Paragraph_Marshal(m jsn.Marshaler, val *Paragraph) (err error) {
 
 // PatternActions Actions to take when using a pattern.
 type PatternActions struct {
-	Name         core.PatternName `if:"label=_"`
-	Provides     *PatternLocals   `if:"label=provides,optional"`
-	PatternRules PatternRules     `if:"label=rules"`
-	UserComment  string
+	Name        core.PatternName `if:"label=_"`
+	Locals      []PropertySlot   `if:"label=provides,optional"`
+	Rules       []PatternRule    `if:"label=rules"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -5813,8 +5813,8 @@ func (*PatternActions) Compose() composer.Spec {
 
 const PatternActions_Type = "pattern_actions"
 const PatternActions_Field_Name = "$NAME"
-const PatternActions_Field_Provides = "$PROVIDES"
-const PatternActions_Field_PatternRules = "$PATTERN_RULES"
+const PatternActions_Field_Locals = "$LOCALS"
+const PatternActions_Field_Rules = "$RULES"
 
 func (op *PatternActions) Marshal(m jsn.Marshaler) error {
 	return PatternActions_Marshal(m, op)
@@ -5894,19 +5894,19 @@ func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", PatternActions_Field_Name))
 		}
-		e1 := m.MarshalKey("provides", PatternActions_Field_Provides)
+		e1 := m.MarshalKey("provides", PatternActions_Field_Locals)
 		if e1 == nil {
-			e1 = PatternLocals_Optional_Marshal(m, &val.Provides)
+			e1 = PropertySlot_Optional_Repeats_Marshal(m, &val.Locals)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", PatternActions_Field_Provides))
+			m.Error(errutil.New(e1, "in flow at", PatternActions_Field_Locals))
 		}
-		e2 := m.MarshalKey("rules", PatternActions_Field_PatternRules)
+		e2 := m.MarshalKey("rules", PatternActions_Field_Rules)
 		if e2 == nil {
-			e2 = PatternRules_Marshal(m, &val.PatternRules)
+			e2 = PatternRule_Repeats_Marshal(m, &val.Rules)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", PatternActions_Field_PatternRules))
+			m.Error(errutil.New(e2, "in flow at", PatternActions_Field_Rules))
 		}
 		m.EndBlock()
 	}
@@ -5916,7 +5916,7 @@ func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
 // PatternDecl
 type PatternDecl struct {
 	Name          core.PatternName `if:"label=_"`
-	Params        *PatternParams   `if:"label=requires,optional"`
+	Params        []PropertySlot   `if:"label=requires,optional"`
 	PatternReturn *PatternReturn   `if:"label=returns,optional"`
 	UserComment   string
 }
@@ -6017,7 +6017,7 @@ func PatternDecl_Marshal(m jsn.Marshaler, val *PatternDecl) (err error) {
 		}
 		e1 := m.MarshalKey("requires", PatternDecl_Field_Params)
 		if e1 == nil {
-			e1 = PatternParams_Optional_Marshal(m, &val.Params)
+			e1 = PropertySlot_Optional_Repeats_Marshal(m, &val.Params)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", PatternDecl_Field_Params))
@@ -6114,206 +6114,6 @@ func PatternFlags_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternFlags) error {
 func PatternFlags_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternFlags) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PatternFlags_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// PatternLocals Storage for values used during the execution of a pattern.
-type PatternLocals struct {
-	Locals      []PropertySlot `if:"label=_"`
-	UserComment string
-}
-
-func (*PatternLocals) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PatternLocals_Type,
-		Uses: composer.Type_Flow,
-		Lede: "pattern_locals",
-	}
-}
-
-const PatternLocals_Type = "pattern_locals"
-const PatternLocals_Field_Locals = "$LOCALS"
-
-func (op *PatternLocals) Marshal(m jsn.Marshaler) error {
-	return PatternLocals_Marshal(m, op)
-}
-
-type PatternLocals_Slice []PatternLocals
-
-func (op *PatternLocals_Slice) GetType() string { return PatternLocals_Type }
-
-func (op *PatternLocals_Slice) Marshal(m jsn.Marshaler) error {
-	return PatternLocals_Repeats_Marshal(m, (*[]PatternLocals)(op))
-}
-
-func (op *PatternLocals_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PatternLocals_Slice) SetSize(cnt int) {
-	var els []PatternLocals
-	if cnt >= 0 {
-		els = make(PatternLocals_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PatternLocals_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PatternLocals_Marshal(m, &(*op)[i])
-}
-
-func PatternLocals_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternLocals) error {
-	return jsn.RepeatBlock(m, (*PatternLocals_Slice)(vals))
-}
-
-func PatternLocals_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternLocals) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PatternLocals_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type PatternLocals_Flow struct{ ptr *PatternLocals }
-
-func (n PatternLocals_Flow) GetType() string      { return PatternLocals_Type }
-func (n PatternLocals_Flow) GetLede() string      { return "pattern_locals" }
-func (n PatternLocals_Flow) GetFlow() interface{} { return n.ptr }
-func (n PatternLocals_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*PatternLocals); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func PatternLocals_Optional_Marshal(m jsn.Marshaler, pv **PatternLocals) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = PatternLocals_Marshal(m, *pv)
-	} else if !enc {
-		var v PatternLocals
-		if err = PatternLocals_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func PatternLocals_Marshal(m jsn.Marshaler, val *PatternLocals) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(PatternLocals_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PatternLocals_Field_Locals)
-		if e0 == nil {
-			e0 = PropertySlot_Repeats_Marshal(m, &val.Locals)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PatternLocals_Field_Locals))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// PatternParams Storage for values used during the execution of a pattern.
-type PatternParams struct {
-	Props       []PropertySlot `if:"label=_"`
-	UserComment string
-}
-
-func (*PatternParams) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PatternParams_Type,
-		Uses: composer.Type_Flow,
-		Lede: "pattern_params",
-	}
-}
-
-const PatternParams_Type = "pattern_params"
-const PatternParams_Field_Props = "$PROPS"
-
-func (op *PatternParams) Marshal(m jsn.Marshaler) error {
-	return PatternParams_Marshal(m, op)
-}
-
-type PatternParams_Slice []PatternParams
-
-func (op *PatternParams_Slice) GetType() string { return PatternParams_Type }
-
-func (op *PatternParams_Slice) Marshal(m jsn.Marshaler) error {
-	return PatternParams_Repeats_Marshal(m, (*[]PatternParams)(op))
-}
-
-func (op *PatternParams_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PatternParams_Slice) SetSize(cnt int) {
-	var els []PatternParams
-	if cnt >= 0 {
-		els = make(PatternParams_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PatternParams_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PatternParams_Marshal(m, &(*op)[i])
-}
-
-func PatternParams_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternParams) error {
-	return jsn.RepeatBlock(m, (*PatternParams_Slice)(vals))
-}
-
-func PatternParams_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternParams) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PatternParams_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type PatternParams_Flow struct{ ptr *PatternParams }
-
-func (n PatternParams_Flow) GetType() string      { return PatternParams_Type }
-func (n PatternParams_Flow) GetLede() string      { return "pattern_params" }
-func (n PatternParams_Flow) GetFlow() interface{} { return n.ptr }
-func (n PatternParams_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*PatternParams); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func PatternParams_Optional_Marshal(m jsn.Marshaler, pv **PatternParams) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = PatternParams_Marshal(m, *pv)
-	} else if !enc {
-		var v PatternParams
-		if err = PatternParams_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func PatternParams_Marshal(m jsn.Marshaler, val *PatternParams) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(PatternParams_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PatternParams_Field_Props)
-		if e0 == nil {
-			e0 = PropertySlot_Repeats_Marshal(m, &val.Props)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PatternParams_Field_Props))
-		}
-		m.EndBlock()
 	}
 	return
 }
@@ -9244,8 +9044,6 @@ var Slats = []composer.Composer{
 	(*PatternActions)(nil),
 	(*PatternDecl)(nil),
 	(*PatternFlags)(nil),
-	(*PatternLocals)(nil),
-	(*PatternParams)(nil),
 	(*PatternReturn)(nil),
 	(*PatternRule)(nil),
 	(*PatternRules)(nil),
@@ -9347,8 +9145,6 @@ var Signatures = map[uint64]interface{}{
 	13010900631615283446: (*PatternDecl)(nil),           /* Pattern:requires:returns: */
 	10545169234908038990: (*PatternDecl)(nil),           /* Pattern:returns: */
 	18102878396089561802: (*PatternActions)(nil),        /* Pattern:rules: */
-	16940656754612309445: (*PatternLocals)(nil),         /* PatternLocals: */
-	6869255187827325487:  (*PatternParams)(nil),         /* PatternParams: */
 	3203894909373400694:  (*PatternReturn)(nil),         /* PatternResult: */
 	10703761093736583840: (*PatternRule)(nil),           /* PatternRule:does: */
 	1493717172765332753:  (*PatternRule)(nil),           /* PatternRule:flags:does: */

@@ -1,448 +1,372 @@
 {
-    "Tapestry:":
-    [
+  "Tapestry:": [
+    {
+      "Event:action:args dual:": [
+        "retrieve from",
+        "retrieving from",
         {
-            "Event:action:args dual:":
-            [
-                "retrieve from",
-                "retrieving from",
-                {
-                    "PairedAction:": "things"
-                }
+          "PairedAction:": "things"
+        }
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "retrieving from",
+        [
+          {
+            "Text named:of:initially:": [
+              "actor",
+              "actor",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
+                  }
+                ]
+              }
             ]
-        },
-        {
-            "Pattern:provides:rules:":
-            [
-                "retrieving from",
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
                 {
-                    "PatternLocals:":
-                    [
-                        {
-                            "Text named:of:initially:":
-                            [
-                                "actor",
-                                "actor",
-                                {
-                                    "Get:from:":
-                                    [
-                                        "pawn",
-                                        {
-                                            "VarFields:": "agent"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
+                  "Comment:": "can we \"reach\" the noun we are attempting to retrieve?"
                 },
                 {
-                    "PatternRules:":
+                  "If:from:and:does:else:": [
+                    "result",
+                    {
+                      "FromTxt:": {
+                        "CanReach actor:action:noun:": [
+                          "@actor",
+                          {
+                            "FromTxt:": "retrieving from"
+                          },
+                          "@noun"
+                        ]
+                      }
+                    },
+                    {
+                      "Not:": {
+                        "Is empty:": "@result"
+                      }
+                    },
                     [
+                      {
+                        "Say:": "@result"
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
                         {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "IsPlayer obj:": "@actor"
-                                },
-                                [
-                                    {
-                                        "Comment:": "can we \"reach\" the noun we are attempting to retrieve?"
-                                    },
-                                    {
-                                        "If:from:and:does:else:":
-                                        [
-                                            "result",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "CanReach actor:action:noun:":
-                                                    [
-                                                        "@actor",
-                                                        {
-                                                            "FromTxt:": "retrieving from"
-                                                        },
-                                                        "@noun"
-                                                    ]
-                                                }
-                                            },
-                                            {
-                                                "Not:":
-                                                {
-                                                    "Is empty:": "@result"
-                                                }
-                                            },
-                                            [
-                                                {
-                                                    "Say:": "@result"
-                                                }
-                                            ],
-                                            {
-                                                "ElseDo does:":
-                                                [
-                                                    {
-                                                        "If:from:and:does:else:":
-                                                        [
-                                                            "result",
-                                                            {
-                                                                "FromTxt:":
-                                                                {
-                                                                    "CanUse actor:action:noun:otherNoun:":
-                                                                    [
-                                                                        "@actor",
-                                                                        {
-                                                                            "FromTxt:": "retrieving from"
-                                                                        },
-                                                                        "@noun",
-                                                                        "@other noun"
-                                                                    ]
-                                                                }
-                                                            },
-                                                            {
-                                                                "Not:":
-                                                                {
-                                                                    "Is empty:": "@result"
-                                                                }
-                                                            },
-                                                            [
-                                                                {
-                                                                    "Say:": "@result"
-                                                                }
-                                                            ],
-                                                            {
-                                                                "ElseDo does:":
-                                                                [
-                                                                    {
-                                                                        "If:does:":
-                                                                        [
-                                                                            {
-                                                                                "Send:event:":
-                                                                                [
-                                                                                    {
-                                                                                        "Capture obj:": "@noun"
-                                                                                    },
-                                                                                    {
-                                                                                        "RetrieveFrom actor:noun:otherNoun:":
-                                                                                        [
-                                                                                            "@actor",
-                                                                                            "@noun",
-                                                                                            "@other noun"
-                                                                                        ]
-                                                                                    }
-                                                                                ]
-                                                                            },
-                                                                            [
-                                                                                {
-                                                                                    "ReportRetrievingFrom actor:noun:otherNoun:":
-                                                                                    [
-                                                                                        "@actor",
-                                                                                        "@noun",
-                                                                                        "@other noun"
-                                                                                    ]
-                                                                                }
-                                                                            ]
-                                                                        ]
-                                                                    }
-                                                                ]
-                                                            }
-                                                        ]
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
+                          "If:from:and:does:else:": [
+                            "result",
+                            {
+                              "FromTxt:": {
+                                "CanUse actor:action:noun:otherNoun:": [
+                                  "@actor",
+                                  {
+                                    "FromTxt:": "retrieving from"
+                                  },
+                                  "@noun",
+                                  "@other noun"
                                 ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Pattern:rules:":
-            [
-                "can reach",
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
+                              }
+                            },
+                            {
+                              "Not:": {
+                                "Is empty:": "@result"
+                              }
+                            },
                             [
+                              {
+                                "Say:": "@result"
+                              }
+                            ],
+                            {
+                              "ElseDo does:": [
                                 {
-                                    "AllTrue:":
-                                    [
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@action",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "retrieving from"
-                                            ]
-                                        }
-                                    ]
-                                },
-                                [
+                                  "If:does:": [
                                     {
-                                        "Let:be:":
-                                        [
-                                            "response",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "CanReach actor:action:noun:":
-                                                    [
-                                                        "@actor",
-                                                        {
-                                                            "FromTxt:": "taking"
-                                                        },
-                                                        {
-                                                            "FromTxt:": "@noun"
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Pattern:rules:":
-            [
-                "can use",
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "AllTrue:":
-                                    [
+                                      "Send:event:": [
                                         {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@action",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "retrieving from"
-                                            ]
-                                        }
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "response",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "CanUse actor:action:noun:":
-                                                    [
-                                                        "@actor",
-                                                        {
-                                                            "FromTxt:": "taking"
-                                                        },
-                                                        {
-                                                            "FromTxt:": "@noun"
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "AllTrue:":
-                                    [
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@action",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "retrieving from"
-                                            ]
+                                          "Capture obj:": "@noun"
                                         },
                                         {
-                                            "Cmp:is:txt:":
-                                            [
-                                                {
-                                                    "ParentOf obj:": "@noun"
-                                                },
-                                                {
-                                                    "OtherThan": true
-                                                },
-                                                "@other noun"
-                                            ]
-                                        }
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "response",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "Response:text:":
-                                                    [
-                                                        "can't retrieve what's not inside",
-                                                        {
-                                                            "RenderTemplate:": "But {they:.noun} {arent:.noun} there now."
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Listen kinds:handlers:":
-            [
-                "things",
-                [
-                    {
-                        "With:event:rules:":
-                        [
-                            "while",
-                            "retrieve from",
-                            {
-                                "PatternRules:":
-                                [
-                                    {
-                                        "PatternRule:does:":
-                                        [
-                                            {
-                                                "Always": true
-                                            },
-                                            [
-                                                {
-                                                    "Let:be:":
-                                                    [
-                                                        "success",
-                                                        {
-                                                            "FromBool:":
-                                                            {
-                                                                "Send:event:":
-                                                                [
-                                                                    {
-                                                                        "Capture obj:": "@noun"
-                                                                    },
-                                                                    {
-                                                                        "Take actor:noun:":
-                                                                        [
-                                                                            "@actor",
-                                                                            "@noun"
-                                                                        ]
-                                                                    }
-                                                                ]
-                                                            }
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Pattern:requires:":
-            [
-                "report retrieving from",
-                {
-                    "PatternParams:":
-                    [
-                        {
-                            "Text named:of:":
-                            [
-                                "actor",
-                                "actor"
-                            ]
-                        },
-                        {
-                            "Text named:of:":
-                            [
-                                "noun",
-                                "thing"
-                            ]
-                        },
-                        {
-                            "Text named:of:":
-                            [
-                                "other noun",
-                                "thing"
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "Pattern:rules:":
-            [
-                "report retrieving from",
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Always": true
-                                },
-                                [
-                                    {
-                                        "ReportTaking actor:noun:":
-                                        [
+                                          "RetrieveFrom actor:noun:otherNoun:": [
                                             "@actor",
-                                            "@noun"
+                                            "@noun",
+                                            "@other noun"
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    [
+                                      {
+                                        "ReportRetrievingFrom actor:noun:otherNoun:": [
+                                          "@actor",
+                                          "@noun",
+                                          "@other noun"
                                         ]
-                                    }
-                                ]
-                            ]
+                                      }
+                                    ]
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
                         }
-                    ]
+                      ]
+                    }
+                  ]
                 }
+              ]
             ]
-        }
-    ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:rules:": [
+        "can reach",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "retrieving from"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "CanReach actor:action:noun:": [
+                          "@actor",
+                          {
+                            "FromTxt:": "taking"
+                          },
+                          {
+                            "FromTxt:": "@noun"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:rules:": [
+        "can use",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "retrieving from"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "CanUse actor:action:noun:": [
+                          "@actor",
+                          {
+                            "FromTxt:": "taking"
+                          },
+                          {
+                            "FromTxt:": "@noun"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "retrieving from"
+                    ]
+                  },
+                  {
+                    "Cmp:is:txt:": [
+                      {
+                        "ParentOf obj:": "@noun"
+                      },
+                      {
+                        "OtherThan": true
+                      },
+                      "@other noun"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't retrieve what's not inside",
+                          {
+                            "RenderTemplate:": "But {they:.noun} {arent:.noun} there now."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Listen kinds:handlers:": [
+        "things",
+        [
+          {
+            "With:event:rules:": [
+              "while",
+              "retrieve from",
+              [
+                {
+                  "PatternRule:does:": [
+                    {
+                      "Always": true
+                    },
+                    [
+                      {
+                        "Let:be:": [
+                          "success",
+                          {
+                            "FromBool:": {
+                              "Send:event:": [
+                                {
+                                  "Capture obj:": "@noun"
+                                },
+                                {
+                                  "Take actor:noun:": [
+                                    "@actor",
+                                    "@noun"
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "report retrieving from",
+        [
+          {
+            "Text named:of:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "noun",
+              "thing"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "other noun",
+              "thing"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "report retrieving from",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
+                {
+                  "ReportTaking actor:noun:": [
+                    "@actor",
+                    "@noun"
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    }
+  ]
 }

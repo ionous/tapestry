@@ -1,94 +1,81 @@
 {
-    "Tapestry:":
-    [
+  "Tapestry:": [
+    {
+      "TestStatement:test:": [
+        "dropping test",
         {
-            "TestStatement:test:":
-            [
-                "dropping test",
-                {
-                    "TestOutput:": "The knife's ogp: you.\nDropped.\nThe knife's newg: the Kitchen.\nYou haven't got that!\n"
-                }
-            ]
-        },
-        {
-            "TestRule:does:":
-            [
-                "dropping test",
-                [
-                    {
-                        "Say:":
-                        {
-                            "RenderTemplate:": "The knife's ogp: {the: {parentOf: .knife}}."
-                        }
-                    },
-                    {
-                        "Dropping agent:noun:":
-                        [
-                            {
-                                "FromTxt:": "player"
-                            },
-                            {
-                                "FromTxt:": "knife"
-                            }
-                        ]
-                    },
-                    {
-                        "Say:":
-                        {
-                            "RenderTemplate:": "The knife's newg: {the: {parentOf: .knife}}."
-                        }
-                    },
-                    {
-                        "Dropping agent:noun:":
-                        [
-                            {
-                                "FromTxt:": "player"
-                            },
-                            {
-                                "FromTxt:": "knife"
-                            }
-                        ]
-                    }
-                ]
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "TestScene:story:":
-            [
-                "dropping test",
-                
-                    [
-                        {
-                            "RelativeToNoun:nouns:areBeing:otherNouns:":
-                            [
-                                " whereabouts",
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "the",
-                                            "knife"
-                                        ]
-                                    }
-                                ],
-                                "is",
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "our",
-                                            "self"
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                
-            ]
+          "TestOutput:": "The knife's ogp: you.\nDropped.\nThe knife's newg: the Kitchen.\nYou haven't got that!\n"
         }
-    ]
+      ]
+    },
+    {
+      "TestRule:does:": [
+        "dropping test",
+        [
+          {
+            "Say:": {
+              "RenderTemplate:": "The knife's ogp: {the: {parentOf: .knife}}."
+            }
+          },
+          {
+            "Dropping agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "knife"
+              }
+            ]
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The knife's newg: {the: {parentOf: .knife}}."
+            }
+          },
+          {
+            "Dropping agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "knife"
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "TestScene:story:": [
+        "dropping test",
+        [
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              " whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "knife"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "our",
+                    "self"
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    }
+  ]
 }

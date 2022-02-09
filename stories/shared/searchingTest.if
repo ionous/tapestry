@@ -1,139 +1,122 @@
 {
-    "Tapestry:":
-    [
+  "Tapestry:": [
+    {
+      "TestStatement:test:": [
+        "searching test",
         {
-            "TestStatement:test:":
-            [
-                "searching test",
-                {
-                    "TestOutput:": "You find nothing of interest.\nYou can't see inside, it is closed.\nOn the counter are the blender, the espresso machine, and the mortar.\nIn the purse is the coin.\n"
-                }
-            ]
-        },
-        {
-            "TestRule:does:":
-            [
-                "searching test",
-                [
-                    {
-                        "Searching agent:noun:":
-                        [
-                            {
-                                "FromTxt:": "player"
-                            },
-                            {
-                                "FromTxt:": "knife"
-                            }
-                        ]
-                    },
-                    {
-                        "Searching agent:noun:":
-                        [
-                            {
-                                "FromTxt:": "player"
-                            },
-                            {
-                                "FromTxt:": "machine"
-                            }
-                        ]
-                    },
-                    {
-                        "Searching agent:noun:":
-                        [
-                            {
-                                "FromTxt:": "player"
-                            },
-                            {
-                                "FromTxt:": "counter"
-                            }
-                        ]
-                    },
-                    {
-                        "Searching agent:noun:":
-                        [
-                            {
-                                "FromTxt:": "player"
-                            },
-                            {
-                                "FromTxt:": "purse"
-                            }
-                        ]
-                    }
-                ]
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "TestScene:story:":
-            [
-                "searching test",
-                
-                    [
-                        {
-                            "RelativeToNoun:nouns:areBeing:otherNouns:":
-                            [
-                                " whereabouts",
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "the",
-                                            "flower"
-                                        ]
-                                    },
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "the",
-                                            "knife"
-                                        ]
-                                    }
-                                ],
-                                "is",
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "our",
-                                            "self"
-                                        ]
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "--": ""
-                        },
-                        {
-                            "RelativeToNoun:nouns:areBeing:otherNouns:":
-                            [
-                                " whereabouts",
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "the",
-                                            "purse"
-                                        ]
-                                    }
-                                ],
-                                "is",
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "the",
-                                            "kitchen"
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                
-            ]
+          "TestOutput:": "You find nothing of interest.\nYou can't see inside, it is closed.\nOn the counter are the blender, the espresso machine, and the mortar.\nIn the purse is the coin.\n"
         }
-    ]
+      ]
+    },
+    {
+      "TestRule:does:": [
+        "searching test",
+        [
+          {
+            "Searching agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "knife"
+              }
+            ]
+          },
+          {
+            "Searching agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "machine"
+              }
+            ]
+          },
+          {
+            "Searching agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "counter"
+              }
+            ]
+          },
+          {
+            "Searching agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "purse"
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "TestScene:story:": [
+        "searching test",
+        [
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              " whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "flower"
+                  ]
+                },
+                {
+                  "Noun:named:": [
+                    "the",
+                    "knife"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "our",
+                    "self"
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              " whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "purse"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "kitchen"
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    }
+  ]
 }

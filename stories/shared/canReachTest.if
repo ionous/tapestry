@@ -1,321 +1,277 @@
 {
-    "Tapestry:":
-    [
+  "Tapestry:": [
+    {
+      "TestStatement:test:": [
+        "reach test",
         {
-            "TestStatement:test:":
-            [
-                "reach test",
-                {
-                    "TestOutput:": "okay: The espresso machine isn't open.\nokay: reached outside the open cabinet.\nokay: reached inside the open espresso machine.\nokay: The cabinet isn't open.\nokay: It isn't available.\n"
-                }
-            ]
-        },
-        {
-            "TestRule:does:":
-            [
-                "reach test",
-                [
-                    {
-                        "If:from:and:does:else:":
-                        [
-                            "resp",
-                            {
-                                "FromTxt:":
-                                {
-                                    "CanReach actor:noun:":
-                                    [
-                                        {
-                                            "FromTxt:": "self"
-                                        },
-                                        {
-                                            "FromTxt:": "beans"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "Not:":
-                                {
-                                    "Is empty:": "@resp"
-                                }
-                            },
-                            [
-                                {
-                                    "Say:":
-                                    {
-                                        "RenderTemplate:": "okay: {.resp}"
-                                    }
-                                }
-                            ],
-                            {
-                                "ElseDo does:":
-                                [
-                                    {
-                                        "Say:": "failed: shouldnt have reached into the espresso machine."
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "If:from:and:does:else:":
-                        [
-                            "resp",
-                            {
-                                "FromTxt:":
-                                {
-                                    "CanReach actor:noun:":
-                                    [
-                                        {
-                                            "FromTxt:": "self"
-                                        },
-                                        {
-                                            "FromTxt:": "tomatoes"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "Not:":
-                                {
-                                    "Is empty:": "@resp"
-                                }
-                            },
-                            [
-                                {
-                                    "Say:":
-                                    {
-                                        "RenderTemplate:": "failed: {.resp}"
-                                    }
-                                }
-                            ],
-                            {
-                                "ElseDo does:":
-                                [
-                                    {
-                                        "Say:": "okay: reached outside the open cabinet."
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "Put:from:at:":
-                        [
-                            {
-                                "ObjField:": "espresso machine"
-                            },
-                            {
-                                "FromBool:": true
-                            },
-                            "open"
-                        ]
-                    },
-                    {
-                        "If:from:and:does:else:":
-                        [
-                            "resp",
-                            {
-                                "FromTxt:":
-                                {
-                                    "CanReach actor:noun:":
-                                    [
-                                        {
-                                            "FromTxt:": "self"
-                                        },
-                                        {
-                                            "FromTxt:": "beans"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "Not:":
-                                {
-                                    "Is empty:": "@resp"
-                                }
-                            },
-                            [
-                                {
-                                    "Say:":
-                                    {
-                                        "RenderTemplate:": "failed: {.resp}"
-                                    }
-                                }
-                            ],
-                            {
-                                "ElseDo does:":
-                                [
-                                    {
-                                        "Say:": "okay: reached inside the open espresso machine."
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "Put:from:at:":
-                        [
-                            {
-                                "ObjField:": "cabinet"
-                            },
-                            {
-                                "FromBool:": true
-                            },
-                            "closed"
-                        ]
-                    },
-                    {
-                        "If:from:and:does:else:":
-                        [
-                            "resp",
-                            {
-                                "FromTxt:":
-                                {
-                                    "CanReach actor:noun:":
-                                    [
-                                        {
-                                            "FromTxt:": "self"
-                                        },
-                                        {
-                                            "FromTxt:": "tomatoes"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "Not:":
-                                {
-                                    "Is empty:": "@resp"
-                                }
-                            },
-                            [
-                                {
-                                    "Say:":
-                                    {
-                                        "RenderTemplate:": "okay: {.resp}"
-                                    }
-                                }
-                            ],
-                            {
-                                "ElseDo does:":
-                                [
-                                    {
-                                        "Say:": "failed: shouldnt have reached from the closed cabinet."
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "If:from:and:does:else:":
-                        [
-                            "resp",
-                            {
-                                "FromTxt:":
-                                {
-                                    "CanReach actor:noun:":
-                                    [
-                                        {
-                                            "FromTxt:": "self"
-                                        },
-                                        {
-                                            "FromTxt:": "cloak"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                "Not:":
-                                {
-                                    "Is empty:": "@resp"
-                                }
-                            },
-                            [
-                                {
-                                    "Say:":
-                                    {
-                                        "RenderTemplate:": "okay: {.resp}"
-                                    }
-                                }
-                            ],
-                            {
-                                "ElseDo does:":
-                                [
-                                    {
-                                        "Say:": "failed: shouldnt have reached out of world."
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "TestScene:story:":
-            [
-                "reach test",
-                
-                    [
-                        {
-                            "Nouns:depict:":
-                            [
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "an",
-                                            "other worldly cloak"
-                                        ]
-                                    }
-                                ],
-                                {
-                                    "Kind:named:":
-                                    [
-                                        "isa",
-                                        "thing"
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "Comment:": "it is nowhere."
-                        },
-                        {
-                            "--": ""
-                        },
-                        {
-                            "RelativeToNoun:nouns:areBeing:otherNouns:":
-                            [
-                                " whereabouts",
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "our",
-                                            "self"
-                                        ]
-                                    }
-                                ],
-                                "is",
-                                [
-                                    {
-                                        "Noun:named:":
-                                        [
-                                            "the",
-                                            "cabinet"
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                
-            ]
+          "TestOutput:": "okay: The espresso machine isn't open.\nokay: reached outside the open cabinet.\nokay: reached inside the open espresso machine.\nokay: The cabinet isn't open.\nokay: It isn't available.\n"
         }
-    ]
+      ]
+    },
+    {
+      "TestRule:does:": [
+        "reach test",
+        [
+          {
+            "If:from:and:does:else:": [
+              "resp",
+              {
+                "FromTxt:": {
+                  "CanReach actor:noun:": [
+                    {
+                      "FromTxt:": "self"
+                    },
+                    {
+                      "FromTxt:": "beans"
+                    }
+                  ]
+                }
+              },
+              {
+                "Not:": {
+                  "Is empty:": "@resp"
+                }
+              },
+              [
+                {
+                  "Say:": {
+                    "RenderTemplate:": "okay: {.resp}"
+                  }
+                }
+              ],
+              {
+                "ElseDo does:": [
+                  {
+                    "Say:": "failed: shouldnt have reached into the espresso machine."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "If:from:and:does:else:": [
+              "resp",
+              {
+                "FromTxt:": {
+                  "CanReach actor:noun:": [
+                    {
+                      "FromTxt:": "self"
+                    },
+                    {
+                      "FromTxt:": "tomatoes"
+                    }
+                  ]
+                }
+              },
+              {
+                "Not:": {
+                  "Is empty:": "@resp"
+                }
+              },
+              [
+                {
+                  "Say:": {
+                    "RenderTemplate:": "failed: {.resp}"
+                  }
+                }
+              ],
+              {
+                "ElseDo does:": [
+                  {
+                    "Say:": "okay: reached outside the open cabinet."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Put:from:at:": [
+              {
+                "ObjField:": "espresso machine"
+              },
+              {
+                "FromBool:": true
+              },
+              "open"
+            ]
+          },
+          {
+            "If:from:and:does:else:": [
+              "resp",
+              {
+                "FromTxt:": {
+                  "CanReach actor:noun:": [
+                    {
+                      "FromTxt:": "self"
+                    },
+                    {
+                      "FromTxt:": "beans"
+                    }
+                  ]
+                }
+              },
+              {
+                "Not:": {
+                  "Is empty:": "@resp"
+                }
+              },
+              [
+                {
+                  "Say:": {
+                    "RenderTemplate:": "failed: {.resp}"
+                  }
+                }
+              ],
+              {
+                "ElseDo does:": [
+                  {
+                    "Say:": "okay: reached inside the open espresso machine."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Put:from:at:": [
+              {
+                "ObjField:": "cabinet"
+              },
+              {
+                "FromBool:": true
+              },
+              "closed"
+            ]
+          },
+          {
+            "If:from:and:does:else:": [
+              "resp",
+              {
+                "FromTxt:": {
+                  "CanReach actor:noun:": [
+                    {
+                      "FromTxt:": "self"
+                    },
+                    {
+                      "FromTxt:": "tomatoes"
+                    }
+                  ]
+                }
+              },
+              {
+                "Not:": {
+                  "Is empty:": "@resp"
+                }
+              },
+              [
+                {
+                  "Say:": {
+                    "RenderTemplate:": "okay: {.resp}"
+                  }
+                }
+              ],
+              {
+                "ElseDo does:": [
+                  {
+                    "Say:": "failed: shouldnt have reached from the closed cabinet."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "If:from:and:does:else:": [
+              "resp",
+              {
+                "FromTxt:": {
+                  "CanReach actor:noun:": [
+                    {
+                      "FromTxt:": "self"
+                    },
+                    {
+                      "FromTxt:": "cloak"
+                    }
+                  ]
+                }
+              },
+              {
+                "Not:": {
+                  "Is empty:": "@resp"
+                }
+              },
+              [
+                {
+                  "Say:": {
+                    "RenderTemplate:": "okay: {.resp}"
+                  }
+                }
+              ],
+              {
+                "ElseDo does:": [
+                  {
+                    "Say:": "failed: shouldnt have reached out of world."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "TestScene:story:": [
+        "reach test",
+        [
+          {
+            "Nouns:depict:": [
+              [
+                {
+                  "Noun:named:": [
+                    "an",
+                    "other worldly cloak"
+                  ]
+                }
+              ],
+              {
+                "Kind:named:": [
+                  "isa",
+                  "thing"
+                ]
+              }
+            ]
+          },
+          {
+            "Comment:": "it is nowhere."
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              " whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "our",
+                    "self"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "cabinet"
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    }
+  ]
 }

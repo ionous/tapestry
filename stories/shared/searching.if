@@ -1,435 +1,360 @@
 {
-    "Tapestry:":
-    [
+  "Tapestry:": [
+    {
+      "Event:action:args common:": [
+        "search",
+        "searching",
         {
-            "Event:action:args common:":
-            [
-                "search",
-                "searching",
-                {
-                    "CommonAction:": "thing"
-                }
-            ]
-        },
-        {
-            "Pattern:provides:rules:":
-            [
-                "searching",
-                {
-                    "PatternLocals:":
-                    [
-                        {
-                            "Text named:of:initially:":
-                            [
-                                "actor",
-                                "actor",
-                                {
-                                    "Get:from:":
-                                    [
-                                        "pawn",
-                                        {
-                                            "VarFields:": "agent"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "IsPlayer obj:": "@actor"
-                                },
-                                [
-                                    {
-                                        "If:from:and:does:else:":
-                                        [
-                                            "result",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "CanReach actor:action:noun:requiresLight:":
-                                                    [
-                                                        "@actor",
-                                                        {
-                                                            "FromTxt:": "searching"
-                                                        },
-                                                        "@noun",
-                                                        {
-                                                            "FromBool:": true
-                                                        }
-                                                    ]
-                                                }
-                                            },
-                                            {
-                                                "Not:":
-                                                {
-                                                    "Is empty:": "@result"
-                                                }
-                                            },
-                                            [
-                                                {
-                                                    "Say:": "@result"
-                                                }
-                                            ],
-                                            {
-                                                "ElseDo does:":
-                                                [
-                                                    {
-                                                        "If:does:":
-                                                        [
-                                                            {
-                                                                "Send:event:":
-                                                                [
-                                                                    {
-                                                                        "Capture obj:": "@noun"
-                                                                    },
-                                                                    {
-                                                                        "Search actor:noun:":
-                                                                        [
-                                                                            "@actor",
-                                                                            "@noun"
-                                                                        ]
-                                                                    }
-                                                                ]
-                                                            },
-                                                            [
-                                                                {
-                                                                    "ReportSearching actor:noun:":
-                                                                    [
-                                                                        "@actor",
-                                                                        "@noun"
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        ]
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Pattern:requires:":
-            [
-                "report searching",
-                {
-                    "PatternParams:":
-                    [
-                        {
-                            "Text named:of:":
-                            [
-                                "actor",
-                                "actor"
-                            ]
-                        },
-                        {
-                            "Text named:of:":
-                            [
-                                "noun",
-                                "thing"
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "Pattern:provides:rules:":
-            [
-                "report searching",
-                {
-                    "PatternLocals:":
-                    [
-                        {
-                            "TextList named:": "items"
-                        }
-                    ]
-                },
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Always": true
-                                },
-                                [
-                                    {
-                                        "Say:":
-                                        {
-                                            "Response:text:":
-                                            [
-                                                "player searches something",
-                                                {
-                                                    "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
-                                                }
-                                            ]
-                                        }
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "Not:":
-                                    {
-                                        "IsPlayer obj:": "@actor"
-                                    }
-                                },
-                                [
-                                    {
-                                        "Say:":
-                                        {
-                                            "Response:text:":
-                                            [
-                                                "someone else searches something",
-                                                {
-                                                    "RenderTemplate:": "{The: .actor|capitalize!} searches {the: .noun}."
-                                                }
-                                            ]
-                                        }
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "AllTrue:":
-                                    [
-                                        {
-                                            "IsPlayer obj:": "@actor"
-                                        },
-                                        {
-                                            "ShowsStorage obj:": "@noun"
-                                        }
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "items",
-                                            {
-                                                "FromTxts:":
-                                                {
-                                                    "VisibleStorage obj:": "@noun"
-                                                }
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "If:does:else:":
-                                        [
-                                            {
-                                                "Cmp:is:num:":
-                                                [
-                                                    {
-                                                        "Len:": "@items"
-                                                    },
-                                                    {
-                                                        "Equals": true
-                                                    },
-                                                    0
-                                                ]
-                                            },
-                                            [
-                                                {
-                                                    "Say:":
-                                                    {
-                                                        "Response:text:":
-                                                        [
-                                                            "player searches empty storage",
-                                                            {
-                                                                "RenderTemplate:": "There is nothing {on:.noun} {the:.noun}."
-                                                            }
-                                                        ]
-                                                    }
-                                                }
-                                            ],
-                                            {
-                                                "ElseDo does:":
-                                                [
-                                                    {
-                                                        "Say:":
-                                                        {
-                                                            "Response:text:":
-                                                            [
-                                                                "player searches storage",
-                                                                {
-                                                                    "Spaces does:":
-                                                                    [
-                                                                        {
-                                                                            "Say:":
-                                                                            {
-                                                                                "RenderTemplate:": "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
-                                                                            }
-                                                                        },
-                                                                        {
-                                                                            "Say:":
-                                                                            {
-                                                                                "Commas does:":
-                                                                                [
-                                                                                    {
-                                                                                        "Repeating across:as:does:":
-                                                                                        [
-                                                                                            "@items",
-                                                                                            {
-                                                                                                "AsTxt:": "item"
-                                                                                            },
-                                                                                            [
-                                                                                                {
-                                                                                                    "Say:":
-                                                                                                    {
-                                                                                                        "RenderTemplate:": "{the: .item}"
-                                                                                                    }
-                                                                                                }
-                                                                                            ]
-                                                                                        ]
-                                                                                    }
-                                                                                ]
-                                                                            }
-                                                                        },
-                                                                        {
-                                                                            "Say:": "."
-                                                                        }
-                                                                    ]
-                                                                }
-                                                            ]
-                                                        }
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "--": ""
-        },
-        {
-            "Pattern:rules:":
-            [
-                "can reach",
-                {
-                    "PatternRules:":
-                    [
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "AllTrue:":
-                                    [
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@action",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "searching"
-                                            ]
-                                        },
-                                        {
-                                            "FullyOpaque obj:": "@noun"
-                                        }
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "response",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "Response:text:":
-                                                    [
-                                                        "can't search opaque objects",
-                                                        {
-                                                            "RenderTemplate:": "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        },
-                        {
-                            "PatternRule:does:":
-                            [
-                                {
-                                    "AllTrue:":
-                                    [
-                                        {
-                                            "Cmp:is:txt:":
-                                            [
-                                                "@action",
-                                                {
-                                                    "Equals": true
-                                                },
-                                                "searching"
-                                            ]
-                                        },
-                                        {
-                                            "Not:":
-                                            {
-                                                "ProvidesStorage obj:": "@noun"
-                                            }
-                                        }
-                                    ]
-                                },
-                                [
-                                    {
-                                        "Let:be:":
-                                        [
-                                            "response",
-                                            {
-                                                "FromTxt:":
-                                                {
-                                                    "Response:text:":
-                                                    [
-                                                        "can only search storage",
-                                                        {
-                                                            "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                }
-            ]
+          "CommonAction:": "thing"
         }
-    ]
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "searching",
+        [
+          {
+            "Text named:of:initially:": [
+              "actor",
+              "actor",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
+                {
+                  "If:from:and:does:else:": [
+                    "result",
+                    {
+                      "FromTxt:": {
+                        "CanReach actor:action:noun:requiresLight:": [
+                          "@actor",
+                          {
+                            "FromTxt:": "searching"
+                          },
+                          "@noun",
+                          {
+                            "FromBool:": true
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "Not:": {
+                        "Is empty:": "@result"
+                      }
+                    },
+                    [
+                      {
+                        "Say:": "@result"
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
+                        {
+                          "If:does:": [
+                            {
+                              "Send:event:": [
+                                {
+                                  "Capture obj:": "@noun"
+                                },
+                                {
+                                  "Search actor:noun:": [
+                                    "@actor",
+                                    "@noun"
+                                  ]
+                                }
+                              ]
+                            },
+                            [
+                              {
+                                "ReportSearching actor:noun:": [
+                                  "@actor",
+                                  "@noun"
+                                ]
+                              }
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "report searching",
+        [
+          {
+            "Text named:of:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "noun",
+              "thing"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "report searching",
+        [
+          {
+            "TextList named:": "items"
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
+                {
+                  "Say:": {
+                    "Response:text:": [
+                      "player searches something",
+                      {
+                        "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
+                      }
+                    ]
+                  }
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Not:": {
+                  "IsPlayer obj:": "@actor"
+                }
+              },
+              [
+                {
+                  "Say:": {
+                    "Response:text:": [
+                      "someone else searches something",
+                      {
+                        "RenderTemplate:": "{The: .actor|capitalize!} searches {the: .noun}."
+                      }
+                    ]
+                  }
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "IsPlayer obj:": "@actor"
+                  },
+                  {
+                    "ShowsStorage obj:": "@noun"
+                  }
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "items",
+                    {
+                      "FromTxts:": {
+                        "VisibleStorage obj:": "@noun"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "If:does:else:": [
+                    {
+                      "Cmp:is:num:": [
+                        {
+                          "Len:": "@items"
+                        },
+                        {
+                          "Equals": true
+                        },
+                        0
+                      ]
+                    },
+                    [
+                      {
+                        "Say:": {
+                          "Response:text:": [
+                            "player searches empty storage",
+                            {
+                              "RenderTemplate:": "There is nothing {on:.noun} {the:.noun}."
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
+                        {
+                          "Say:": {
+                            "Response:text:": [
+                              "player searches storage",
+                              {
+                                "Spaces does:": [
+                                  {
+                                    "Say:": {
+                                      "RenderTemplate:": "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
+                                    }
+                                  },
+                                  {
+                                    "Say:": {
+                                      "Commas does:": [
+                                        {
+                                          "Repeating across:as:does:": [
+                                            "@items",
+                                            {
+                                              "AsTxt:": "item"
+                                            },
+                                            [
+                                              {
+                                                "Say:": {
+                                                  "RenderTemplate:": "{the: .item}"
+                                                }
+                                              }
+                                            ]
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  },
+                                  {
+                                    "Say:": "."
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:rules:": [
+        "can reach",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "searching"
+                    ]
+                  },
+                  {
+                    "FullyOpaque obj:": "@noun"
+                  }
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't search opaque objects",
+                          {
+                            "RenderTemplate:": "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "searching"
+                    ]
+                  },
+                  {
+                    "Not:": {
+                      "ProvidesStorage obj:": "@noun"
+                    }
+                  }
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can only search storage",
+                          {
+                            "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    }
+  ]
 }
