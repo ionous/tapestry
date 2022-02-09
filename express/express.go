@@ -151,7 +151,7 @@ func (c *Converter) buildPattern(name string, arity int) (err error) {
 	if args, e := c.stack.pop(arity); e != nil {
 		err = e
 	} else {
-		var ps core.CallArgs
+		var ps []rt.Arg
 		for i, arg := range args {
 			if newa, e := newAssignment(arg); e != nil {
 				err = errutil.Append(e)
@@ -160,7 +160,7 @@ func (c *Converter) buildPattern(name string, arity int) (err error) {
 					Name: W("$" + strconv.Itoa(i+1)),
 					From: newa,
 				}
-				ps.Args = append(ps.Args, newp)
+				ps = append(ps, newp)
 			}
 		}
 		if err == nil {

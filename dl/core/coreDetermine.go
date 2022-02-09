@@ -52,7 +52,7 @@ func (op *CallPattern) DetermineValue(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *CallPattern) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	if v, e := run.Call(op.Pattern.String(), aff, op.Arguments.Args); e != nil && !errors.Is(e, rt.NoResult{}) {
+	if v, e := run.Call(op.Pattern.String(), aff, op.Arguments); e != nil && !errors.Is(e, rt.NoResult{}) {
 		err = cmdError(op, e)
 	} else {
 		ret = v

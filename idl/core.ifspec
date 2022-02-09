@@ -102,15 +102,10 @@
                 "slot": "text_eval",
                 "group": "printing"
             },
-            "call_args":
-            {
-                "spec": "args {_%args+arg}",
-                "desc": "Pattern arguments."
-            },
             "call_pattern":
             {
                 "uses": "flow",
-                "spec": "determine {_%pattern:pattern_name} {args%arguments:call_args}",
+                "spec": "determine {_%pattern:pattern_name} {args%arguments+arg}",
                 "desc": "Executes a pattern, and potentially returns a value.",
                 "slot":
                 [

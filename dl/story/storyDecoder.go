@@ -64,7 +64,7 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 									call = append(call, rt.Arg{Name: p.Label, From: ptr})
 								}
 							}
-							out.Arguments.Args = call
+							out.Arguments = call
 						}
 						if !slot.SetSlot(out) {
 							err = errutil.New("unexpected error setting slot")

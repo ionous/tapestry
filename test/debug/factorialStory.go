@@ -63,15 +63,13 @@ var FactorialCheck = []rt.Execute{
 		Text: &core.PrintNum{
 			Num: &core.CallPattern{
 				Pattern: factorialName,
-				Arguments: core.CallArgs{
-					Args: []rt.Arg{
-						rt.Arg{
-							Name: "num",
-							From: &core.FromNum{
-								UserComment: "start the factorial with '3'",
-								Val:         F(3)},
-						}},
-				}},
+				Arguments: []rt.Arg{rt.Arg{
+					Name: "num",
+					From: &core.FromNum{
+						UserComment: "start the factorial with '3'",
+						Val:         F(3),
+					},
+				}}},
 		}},
 }
 

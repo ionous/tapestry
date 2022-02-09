@@ -26,7 +26,7 @@ func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 		// rewrite pattern calls to look like normal operations.
 		patName := recase(op.Pattern.Str, true)
 		if err = m.MarshalBlock(fakeBlock(patName)); err == nil {
-			for _, arg := range op.Arguments.Args {
+			for _, arg := range op.Arguments {
 				argName := recase(arg.Name, false)
 				if e := m.MarshalKey(argName, argName); e != nil {
 					err = e

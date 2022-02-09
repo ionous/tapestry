@@ -21,12 +21,11 @@ func TestDetermineNum(t *testing.T) {
 		call := call.(*core.CallPattern)
 		if diff := pretty.Diff(call, &core.CallPattern{
 			Pattern: core.PatternName{Str: "factorial"},
-			Arguments: core.CallArgs{
-				Args: []rt.Arg{{
-					Name: "num",
-					From: &core.FromNum{
-						Val: F(3),
-					}}}}}); len(diff) > 0 {
+			Arguments: []rt.Arg{{
+				Name: "num",
+				From: &core.FromNum{
+					Val: F(3),
+				}}}}); len(diff) > 0 {
 			t.Fatal(diff)
 		} else {
 			refs := story.ImportCall(call)

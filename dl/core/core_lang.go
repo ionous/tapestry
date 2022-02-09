@@ -1066,106 +1066,6 @@ func BufferText_Marshal(m jsn.Marshaler, val *BufferText) (err error) {
 	return
 }
 
-// CallArgs Pattern arguments.
-type CallArgs struct {
-	Args        []rt.Arg `if:"label=_"`
-	UserComment string
-}
-
-func (*CallArgs) Compose() composer.Spec {
-	return composer.Spec{
-		Name: CallArgs_Type,
-		Uses: composer.Type_Flow,
-		Lede: "args",
-	}
-}
-
-const CallArgs_Type = "call_args"
-const CallArgs_Field_Args = "$ARGS"
-
-func (op *CallArgs) Marshal(m jsn.Marshaler) error {
-	return CallArgs_Marshal(m, op)
-}
-
-type CallArgs_Slice []CallArgs
-
-func (op *CallArgs_Slice) GetType() string { return CallArgs_Type }
-
-func (op *CallArgs_Slice) Marshal(m jsn.Marshaler) error {
-	return CallArgs_Repeats_Marshal(m, (*[]CallArgs)(op))
-}
-
-func (op *CallArgs_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *CallArgs_Slice) SetSize(cnt int) {
-	var els []CallArgs
-	if cnt >= 0 {
-		els = make(CallArgs_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *CallArgs_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return CallArgs_Marshal(m, &(*op)[i])
-}
-
-func CallArgs_Repeats_Marshal(m jsn.Marshaler, vals *[]CallArgs) error {
-	return jsn.RepeatBlock(m, (*CallArgs_Slice)(vals))
-}
-
-func CallArgs_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CallArgs) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = CallArgs_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type CallArgs_Flow struct{ ptr *CallArgs }
-
-func (n CallArgs_Flow) GetType() string      { return CallArgs_Type }
-func (n CallArgs_Flow) GetLede() string      { return "args" }
-func (n CallArgs_Flow) GetFlow() interface{} { return n.ptr }
-func (n CallArgs_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*CallArgs); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func CallArgs_Optional_Marshal(m jsn.Marshaler, pv **CallArgs) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = CallArgs_Marshal(m, *pv)
-	} else if !enc {
-		var v CallArgs
-		if err = CallArgs_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func CallArgs_Marshal(m jsn.Marshaler, val *CallArgs) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(CallArgs_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", CallArgs_Field_Args)
-		if e0 == nil {
-			e0 = rt.Arg_Repeats_Marshal(m, &val.Args)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", CallArgs_Field_Args))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // CallCycle Runtime version of cycle_text
 type CallCycle struct {
 	Name        string        `if:"label=_,type=text"`
@@ -1281,7 +1181,7 @@ func CallCycle_Marshal(m jsn.Marshaler, val *CallCycle) (err error) {
 // CallPattern Executes a pattern, and potentially returns a value.
 type CallPattern struct {
 	Pattern     PatternName `if:"label=_"`
-	Arguments   CallArgs    `if:"label=args"`
+	Arguments   []rt.Arg    `if:"label=args"`
 	UserComment string
 }
 
@@ -1387,7 +1287,7 @@ func CallPattern_Marshal(m jsn.Marshaler, val *CallPattern) (err error) {
 		}
 		e1 := m.MarshalKey("args", CallPattern_Field_Arguments)
 		if e1 == nil {
-			e1 = CallArgs_Marshal(m, &val.Arguments)
+			e1 = rt.Arg_Repeats_Marshal(m, &val.Arguments)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", CallPattern_Field_Arguments))
@@ -10158,7 +10058,6 @@ var Slats = []composer.Composer{
 	(*BracketText)(nil),
 	(*Break)(nil),
 	(*BufferText)(nil),
-	(*CallArgs)(nil),
 	(*CallCycle)(nil),
 	(*CallPattern)(nil),
 	(*CallSend)(nil),
@@ -10248,7 +10147,6 @@ var Signatures = map[uint64]interface{}{
 	5766132082989451290:  (*AllTrue)(nil),           /* AllTrue: */
 	3551738626604328996:  (*Always)(nil),            /* Always */
 	5530004915832666773:  (*AnyTrue)(nil),           /* AnyTrue: */
-	2275326896920679506:  (*CallArgs)(nil),          /* Args: */
 	650855941173987400:   (*TriggerOnce)(nil),       /* At */
 	8393987310376781689:  (*AtLeast)(nil),           /* AtLeast */
 	6318029524925488119:  (*AtMost)(nil),            /* AtMost */

@@ -9,7 +9,7 @@ import (
 )
 
 func importCall(op *core.CallPattern) *eph.EphRefs {
-	return refArgs(op.Pattern.String(), kindsOf.Pattern, op.Arguments.Args)
+	return refArgs(op.Pattern.String(), kindsOf.Pattern, op.Arguments)
 }
 
 func refArgs(k string, parentKind kindsOf.Kinds, args []rt.Arg) (ret *eph.EphRefs) {
