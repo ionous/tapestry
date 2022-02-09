@@ -324,11 +324,6 @@
                                 "desc": "Add actions to a pattern: Actions to take when using a pattern.",
                                 "sign": "pattern:provides:rules:"
                             },
-                            "pattern_rules":
-                            {
-                                "uses": "flow",
-                                "spec": "{*pattern_rule}"
-                            },
                             "pattern_rule":
                             {
                                 "uses": "flow",

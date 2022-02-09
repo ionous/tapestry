@@ -31,28 +31,25 @@ var FactorialStory = &story.Story{
 					UserComment:   "the result uses the same variable as the pattern input does",
 					NamedProperty: numberDecl,
 				}},
-				Params: &story.PatternParams{
-					Props: []story.PropertySlot{
-						&story.NumberProperty{
-							UserComment:   "just one argument, a number called 'num'",
-							NamedProperty: numberDecl,
-						}}},
+				Params: []story.PropertySlot{
+					&story.NumberProperty{
+						UserComment:   "just one argument, a number called 'num'",
+						NamedProperty: numberDecl,
+					}},
 			},
 			&story.PatternActions{
 				Name: factorialName,
-				PatternRules: story.PatternRules{
-					PatternRule: []story.PatternRule{{
-						Guard: &core.Always{},
-						Does:  FactorialMulMinusOne,
-					}}}},
+				Rules: []story.PatternRule{{
+					Guard: &core.Always{},
+					Does:  FactorialMulMinusOne,
+				}}},
 			&story.PatternActions{
 				Name: factorialName,
-				PatternRules: story.PatternRules{
-					PatternRule: []story.PatternRule{{
-						UserComment: "the rule considered first is the rule that was written last:",
-						Guard:       FactorialIsZero,
-						Does:        FactorialUseOne,
-					}}},
+				Rules: []story.PatternRule{{
+					UserComment: "the rule considered first is the rule that was written last:",
+					Guard:       FactorialIsZero,
+					Does:        FactorialUseOne,
+				}},
 			}},
 	}},
 }

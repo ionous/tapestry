@@ -6335,105 +6335,6 @@ func PatternRule_Marshal(m jsn.Marshaler, val *PatternRule) (err error) {
 	return
 }
 
-// PatternRules
-type PatternRules struct {
-	PatternRule []PatternRule `if:"label=_,optional"`
-	UserComment string
-}
-
-func (*PatternRules) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PatternRules_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const PatternRules_Type = "pattern_rules"
-const PatternRules_Field_PatternRule = "$PATTERN_RULE"
-
-func (op *PatternRules) Marshal(m jsn.Marshaler) error {
-	return PatternRules_Marshal(m, op)
-}
-
-type PatternRules_Slice []PatternRules
-
-func (op *PatternRules_Slice) GetType() string { return PatternRules_Type }
-
-func (op *PatternRules_Slice) Marshal(m jsn.Marshaler) error {
-	return PatternRules_Repeats_Marshal(m, (*[]PatternRules)(op))
-}
-
-func (op *PatternRules_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PatternRules_Slice) SetSize(cnt int) {
-	var els []PatternRules
-	if cnt >= 0 {
-		els = make(PatternRules_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PatternRules_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PatternRules_Marshal(m, &(*op)[i])
-}
-
-func PatternRules_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternRules) error {
-	return jsn.RepeatBlock(m, (*PatternRules_Slice)(vals))
-}
-
-func PatternRules_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternRules) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PatternRules_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type PatternRules_Flow struct{ ptr *PatternRules }
-
-func (n PatternRules_Flow) GetType() string      { return PatternRules_Type }
-func (n PatternRules_Flow) GetLede() string      { return PatternRules_Type }
-func (n PatternRules_Flow) GetFlow() interface{} { return n.ptr }
-func (n PatternRules_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*PatternRules); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func PatternRules_Optional_Marshal(m jsn.Marshaler, pv **PatternRules) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = PatternRules_Marshal(m, *pv)
-	} else if !enc {
-		var v PatternRules
-		if err = PatternRules_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func PatternRules_Marshal(m jsn.Marshaler, val *PatternRules) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(PatternRules_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PatternRules_Field_PatternRule)
-		if e0 == nil {
-			e0 = PatternRule_Optional_Repeats_Marshal(m, &val.PatternRule)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PatternRules_Field_PatternRule))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // PatternType requires a predefined or user-specified string.
 type PatternType struct {
 	Str string
@@ -9046,7 +8947,6 @@ var Slats = []composer.Composer{
 	(*PatternFlags)(nil),
 	(*PatternReturn)(nil),
 	(*PatternRule)(nil),
-	(*PatternRules)(nil),
 	(*PatternType)(nil),
 	(*PluralKinds)(nil),
 	(*Property)(nil),
@@ -9148,8 +9048,6 @@ var Signatures = map[uint64]interface{}{
 	3203894909373400694:  (*PatternReturn)(nil),         /* PatternResult: */
 	10703761093736583840: (*PatternRule)(nil),           /* PatternRule:does: */
 	1493717172765332753:  (*PatternRule)(nil),           /* PatternRule:flags:does: */
-	15881043500959019380: (*PatternRules)(nil),          /* PatternRules */
-	12644281899387438986: (*PatternRules)(nil),          /* PatternRules: */
 	9421894963555981921:  (*RecordProperty)(nil),        /* Record named: */
 	15214376251358756462: (*RecordProperty)(nil),        /* Record named:initially: */
 	15273128656504901402: (*RecordProperty)(nil),        /* Record named:of: */

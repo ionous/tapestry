@@ -28,16 +28,11 @@ func (op *EventBlock) ImportPhrase(k *Importer) (err error) {
 			evt := h.Event.String()
 			if flags, e := h.EventPhase.ReadFlags(k); e != nil {
 				err = errutil.Append(e)
-			} else if e := h.PatternRules.ImportRules(k, evt, tgt, flags); e != nil {
+			} else if e := ImportRules(k, evt, tgt, h.Rules, flags); e != nil {
 				err = errutil.Append(e)
-			} else {
+			} else if locals := ImportLocals(k, evt, h.Locals); len(locals) > 0 {
 				// and these are locals used by those rules
-				if h.Provides != nil {
-					locals := h.Provides.ImportLocals(k, evt)
-					if len(locals) > 0 {
-						k.WriteEphemera(&eph.EphPatterns{Name: evt, Locals: locals})
-					}
-				}
+				k.WriteEphemera(&eph.EphPatterns{Name: evt, Locals: locals})
 			}
 		}
 	}
