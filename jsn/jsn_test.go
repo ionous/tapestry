@@ -34,7 +34,7 @@ func TestDetailsDecode(t *testing.T) {
 	if e := din.Decode(&file, tapestry.Registry(), []byte(jsnTestIfx)); e != nil {
 		t.Fatal(e)
 	} else {
-		paragraphs := file.StoryLines.Reformat()
+		paragraphs := story.ReformatStory(file.StoryLines)
 		if diff := pretty.Diff(debug.FactorialStory, &paragraphs); len(diff) != 0 {
 			pretty.Print(file.StoryLines)
 			t.Fatal(diff)
@@ -57,7 +57,7 @@ func TestCompactDecode(t *testing.T) {
 		pretty.Println(file)
 		t.Fatal(e)
 	} else {
-		paragraphs := file.StoryLines.Reformat()
+		paragraphs := story.ReformatStory(file.StoryLines)
 		if diff := pretty.Diff(debug.FactorialStory, &paragraphs); len(diff) != 0 {
 			pretty.Print(file.StoryLines)
 			t.Fatal(diff)

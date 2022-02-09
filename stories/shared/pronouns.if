@@ -1,153 +1,173 @@
 {
-  "Tapestry:": {
-    "Story:": [
-      {
-        "Pattern:requires:": [
-          "We",
-          {
-            "PatternParams:": [
-              {
-                "TextList named:": "names"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "Comment:": "We refers to the player. As with all the customizable grammar, we use the plural for the name of pattern."
-      },
-      {
-        "Pattern:rules:": [
-          "We",
-          {
-            "PatternRules:": [
-              {
-                "PatternRule:does:": [
-                  {
-                    "Always": true
-                  },
-                  [
-                    {
-                      "Say:": "you"
-                    }
-                  ]
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "--": ""
-      },
-      {
-        "Comment:": "they, [we], [ey], it. "
-      },
-      {
-        "Pattern:requires:": [
-          "They",
-          {
-            "PatternParams:": [
-              {
-                "Text named:of:": [
-                  "noun",
-                  "object"
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "Pattern:rules:": [
-          "They",
-          {
-            "PatternRules:": [
-              {
-                "PatternRule:does:": [
-                  {
-                    "Always": true
-                  },
-                  [
-                    {
-                      "Say:": "it"
-                    }
-                  ]
-                ]
-              },
-              {
-                "PatternRule:does:": [
-                  {
-                    "Get obj:trait:": [
-                      "@noun",
-                      "plural named"
+    "Tapestry:":
+    [
+        {
+            "Pattern:requires:":
+            [
+                "We",
+                {
+                    "PatternParams:":
+                    [
+                        {
+                            "TextList named:": "names"
+                        }
                     ]
-                  },
-                  [
-                    {
-                      "Say:": "they"
-                    }
-                  ]
-                ]
-              }
+                }
             ]
-          }
-        ]
-      },
-      {
-        "--": ""
-      },
-      {
-        "Pattern:requires:": [
-          "Those",
-          {
-            "PatternParams:": [
-              {
-                "Text named:of:": [
-                  "noun",
-                  "object"
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "Pattern:rules:": [
-          "Those",
-          {
-            "PatternRules:": [
-              {
-                "PatternRule:does:": [
-                  {
-                    "Always": true
-                  },
-                  [
-                    {
-                      "Say:": "that"
-                    }
-                  ]
-                ]
-              },
-              {
-                "PatternRule:does:": [
-                  {
-                    "Get obj:trait:": [
-                      "@noun",
-                      "plural named"
+        },
+        {
+            "Comment:": "We refers to the player. As with all the customizable grammar, we use the plural for the name of pattern."
+        },
+        {
+            "Pattern:rules:":
+            [
+                "We",
+                {
+                    "PatternRules:":
+                    [
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "Always": true
+                                },
+                                [
+                                    {
+                                        "Say:": "you"
+                                    }
+                                ]
+                            ]
+                        }
                     ]
-                  },
-                  [
-                    {
-                      "Say:": "these"
-                    }
-                  ]
-                ]
-              }
+                }
             ]
-          }
-        ]
-      }
+        },
+        {
+            "--": ""
+        },
+        {
+            "Comment:": "they, [we], [ey], it. "
+        },
+        {
+            "Pattern:requires:":
+            [
+                "They",
+                {
+                    "PatternParams:":
+                    [
+                        {
+                            "Text named:of:":
+                            [
+                                "noun",
+                                "object"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Pattern:rules:":
+            [
+                "They",
+                {
+                    "PatternRules:":
+                    [
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "Always": true
+                                },
+                                [
+                                    {
+                                        "Say:": "it"
+                                    }
+                                ]
+                            ]
+                        },
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "Get obj:trait:":
+                                    [
+                                        "@noun",
+                                        "plural named"
+                                    ]
+                                },
+                                [
+                                    {
+                                        "Say:": "they"
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "--": ""
+        },
+        {
+            "Pattern:requires:":
+            [
+                "Those",
+                {
+                    "PatternParams:":
+                    [
+                        {
+                            "Text named:of:":
+                            [
+                                "noun",
+                                "object"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Pattern:rules:":
+            [
+                "Those",
+                {
+                    "PatternRules:":
+                    [
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "Always": true
+                                },
+                                [
+                                    {
+                                        "Say:": "that"
+                                    }
+                                ]
+                            ]
+                        },
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "Get obj:trait:":
+                                    [
+                                        "@noun",
+                                        "plural named"
+                                    ]
+                                },
+                                [
+                                    {
+                                        "Say:": "these"
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
     ]
-  }
 }

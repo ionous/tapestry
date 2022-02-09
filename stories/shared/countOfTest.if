@@ -1,128 +1,141 @@
 {
-  "Tapestry:": {
-    "Story:": [
-      {
-        "TestRule:does:": [
-          "countOf",
-          [
-            {
-              "Repeating across:as:does:": [
-                {
-                  "FromNums:": {
-                    "Range:": 6
-                  }
-                },
-                {
-                  "AsNum:": "i"
-                },
+    "Tapestry:":
+    [
+        {
+            "TestRule:does:":
+            [
+                "countOf",
                 [
-                  {
-                    "MagicSymbols": true
-                  }
+                    {
+                        "Repeating across:as:does:":
+                        [
+                            {
+                                "FromNums:":
+                                {
+                                    "Range:": 6
+                                }
+                            },
+                            {
+                                "AsNum:": "i"
+                            },
+                            [
+                                {
+                                    "MagicSymbols": true
+                                }
+                            ]
+                        ]
+                    }
                 ]
-              ]
-            }
-          ]
-        ]
-      },
-      {
-        "--": ""
-      },
-      {
-        "TestStatement:test:": [
-          "countOf",
-          {
-            "TestOutput:": "o*-*x*x"
-          }
-        ]
-      },
-      {
-        "--": ""
-      },
-      {
-        "TestScene:story:": [
-          "countOf",
-          {
-            "Story:": [
-              {
-                "Pattern:": "magic symbols"
-              },
-              {
-                "Pattern:rules:": [
-                  "magic symbols",
-                  {
-                    "PatternRules:": [
-                      {
-                        "PatternRule:does:": [
-                          {
-                            "Always": true
-                          },
-                          [
-                            {
-                              "Say:": "o"
-                            }
-                          ]
-                        ]
-                      },
-                      {
-                        "PatternRule:does:": [
-                          {
-                            "CountOf:num:": [
-                              {
-                                "After": true
-                              },
-                              5
-                            ]
-                          },
-                          [
-                            {
-                              "Say:": "x"
-                            }
-                          ]
-                        ]
-                      },
-                      {
-                        "PatternRule:does:": [
-                          {
-                            "CountOf:num:": [
-                              {
-                                "At": true
-                              },
-                              3
-                            ]
-                          },
-                          [
-                            {
-                              "Say:": "-"
-                            }
-                          ]
-                        ]
-                      },
-                      {
-                        "PatternRule:does:": [
-                          {
-                            "CountOf:num:": [
-                              {
-                                "Every": true
-                              },
-                              2
-                            ]
-                          },
-                          [
-                            {
-                              "Say:": "*"
-                            }
-                          ]
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              }
             ]
-          }
-        ]
-      }
+        },
+        {
+            "--": ""
+        },
+        {
+            "TestStatement:test:":
+            [
+                "countOf",
+                {
+                    "TestOutput:": "o*-*x*x"
+                }
+            ]
+        },
+        {
+            "--": ""
+        },
+        {
+            "TestScene:story:":
+            [
+                "countOf",
+                
+                    [
+                        {
+                            "Pattern:": "magic symbols"
+                        },
+                        {
+                            "Pattern:rules:":
+                            [
+                                "magic symbols",
+                                {
+                                    "PatternRules:":
+                                    [
+                                        {
+                                            "PatternRule:does:":
+                                            [
+                                                {
+                                                    "Always": true
+                                                },
+                                                [
+                                                    {
+                                                        "Say:": "o"
+                                                    }
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "PatternRule:does:":
+                                            [
+                                                {
+                                                    "CountOf:num:":
+                                                    [
+                                                        {
+                                                            "After": true
+                                                        },
+                                                        5
+                                                    ]
+                                                },
+                                                [
+                                                    {
+                                                        "Say:": "x"
+                                                    }
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "PatternRule:does:":
+                                            [
+                                                {
+                                                    "CountOf:num:":
+                                                    [
+                                                        {
+                                                            "At": true
+                                                        },
+                                                        3
+                                                    ]
+                                                },
+                                                [
+                                                    {
+                                                        "Say:": "-"
+                                                    }
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "PatternRule:does:":
+                                            [
+                                                {
+                                                    "CountOf:num:":
+                                                    [
+                                                        {
+                                                            "Every": true
+                                                        },
+                                                        2
+                                                    ]
+                                                },
+                                                [
+                                                    {
+                                                        "Say:": "*"
+                                                    }
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                
+            ]
+        }
     ]
-  }
 }

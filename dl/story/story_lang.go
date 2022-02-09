@@ -7999,7 +7999,7 @@ func StoryBreak_Marshal(m jsn.Marshaler, val *StoryBreak) (err error) {
 
 // StoryFile
 type StoryFile struct {
-	StoryLines  StoryLines `if:"label=_"`
+	StoryLines  []StoryStatement `if:"label=_"`
 	UserComment string
 }
 
@@ -8087,110 +8087,10 @@ func StoryFile_Marshal(m jsn.Marshaler, val *StoryFile) (err error) {
 	if err = m.MarshalBlock(StoryFile_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", StoryFile_Field_StoryLines)
 		if e0 == nil {
-			e0 = StoryLines_Marshal(m, &val.StoryLines)
+			e0 = StoryStatement_Repeats_Marshal(m, &val.StoryLines)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", StoryFile_Field_StoryLines))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// StoryLines
-type StoryLines struct {
-	Lines       []StoryStatement `if:"label=_"`
-	UserComment string
-}
-
-func (*StoryLines) Compose() composer.Spec {
-	return composer.Spec{
-		Name: StoryLines_Type,
-		Uses: composer.Type_Flow,
-		Lede: "story",
-	}
-}
-
-const StoryLines_Type = "story_lines"
-const StoryLines_Field_Lines = "$LINES"
-
-func (op *StoryLines) Marshal(m jsn.Marshaler) error {
-	return StoryLines_Marshal(m, op)
-}
-
-type StoryLines_Slice []StoryLines
-
-func (op *StoryLines_Slice) GetType() string { return StoryLines_Type }
-
-func (op *StoryLines_Slice) Marshal(m jsn.Marshaler) error {
-	return StoryLines_Repeats_Marshal(m, (*[]StoryLines)(op))
-}
-
-func (op *StoryLines_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *StoryLines_Slice) SetSize(cnt int) {
-	var els []StoryLines
-	if cnt >= 0 {
-		els = make(StoryLines_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *StoryLines_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return StoryLines_Marshal(m, &(*op)[i])
-}
-
-func StoryLines_Repeats_Marshal(m jsn.Marshaler, vals *[]StoryLines) error {
-	return jsn.RepeatBlock(m, (*StoryLines_Slice)(vals))
-}
-
-func StoryLines_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoryLines) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = StoryLines_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type StoryLines_Flow struct{ ptr *StoryLines }
-
-func (n StoryLines_Flow) GetType() string      { return StoryLines_Type }
-func (n StoryLines_Flow) GetLede() string      { return "story" }
-func (n StoryLines_Flow) GetFlow() interface{} { return n.ptr }
-func (n StoryLines_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*StoryLines); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func StoryLines_Optional_Marshal(m jsn.Marshaler, pv **StoryLines) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = StoryLines_Marshal(m, *pv)
-	} else if !enc {
-		var v StoryLines
-		if err = StoryLines_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func StoryLines_Marshal(m jsn.Marshaler, val *StoryLines) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(StoryLines_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", StoryLines_Field_Lines)
-		if e0 == nil {
-			e0 = StoryStatement_Repeats_Marshal(m, &val.Lines)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", StoryLines_Field_Lines))
 		}
 		m.EndBlock()
 	}
@@ -8564,8 +8464,8 @@ func TestRule_Marshal(m jsn.Marshaler, val *TestRule) (err error) {
 
 // TestScene
 type TestScene struct {
-	TestName    TestName   `if:"label=_"`
-	Story       StoryLines `if:"label=story"`
+	TestName    TestName         `if:"label=_"`
+	Story       []StoryStatement `if:"label=story"`
 	UserComment string
 }
 
@@ -8663,7 +8563,7 @@ func TestScene_Marshal(m jsn.Marshaler, val *TestScene) (err error) {
 		}
 		e1 := m.MarshalKey("story", TestScene_Field_Story)
 		if e1 == nil {
-			e1 = StoryLines_Marshal(m, &val.Story)
+			e1 = StoryStatement_Repeats_Marshal(m, &val.Story)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", TestScene_Field_Story))
@@ -9363,7 +9263,6 @@ var Slats = []composer.Composer{
 	(*Story)(nil),
 	(*StoryBreak)(nil),
 	(*StoryFile)(nil),
-	(*StoryLines)(nil),
 	(*TestName)(nil),
 	(*TestOutput)(nil),
 	(*TestRule)(nil),
@@ -9472,7 +9371,6 @@ var Signatures = map[uint64]interface{}{
 	7279273919312137397:  (*ShuffleText)(nil),           /* ShuffleText: */
 	10085329253831819088: (*StoppingText)(nil),          /* StoppingText: */
 	11597613116511938589: (*Story)(nil),                 /* Story paragraphs: */
-	13392546219852761816: (*StoryLines)(nil),            /* Story: */
 	5991962903091297123:  (*StoryFile)(nil),             /* Tapestry: */
 	15090827023293362138: (*TestOutput)(nil),            /* TestOutput: */
 	14623117004128374492: (*TestRule)(nil),              /* TestRule:does: */

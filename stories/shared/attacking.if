@@ -1,198 +1,226 @@
 {
-  "Tapestry:": {
-    "Story:": [
-      {
-        "GrammarDecl:": {
-          "Directive:scans:": [
-            [
-              "attack",
-              "break",
-              "crack",
-              "destroy",
-              "fight",
-              "hit",
-              "kill",
-              "murder",
-              "punch",
-              "smash",
-              "thump",
-              "torture",
-              "wreck"
-            ],
-            [
-              {
-                "AnyOf:": [
-                  {
-                    "AllOf:": [
-                      {
-                        "Noun:": "things"
-                      },
-                      {
-                        "As:": "attacking"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          ]
-        }
-      },
-      {
-        "--": ""
-      },
-      {
-        "Event:action:args common:": [
-          "attack",
-          "attacking",
-          {
-            "CommonAction:": "object"
-          }
-        ]
-      },
-      {
-        "Pattern:provides:rules:": [
-          "attacking",
-          {
-            "PatternLocals:": [
-              {
-                "Text named:of:initially:": [
-                  "actor",
-                  "actor",
-                  {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "PatternRules:": [
-              {
-                "PatternRule:does:": [
-                  {
-                    "IsPlayer obj:": "@actor"
-                  },
-                  [
-                    {
-                      "If:from:and:does:else:": [
-                        "resp",
+    "Tapestry:":
+    [
+        {
+            "GrammarDecl:":
+            {
+                "Directive:scans:":
+                [
+                    [
+                        "attack",
+                        "break",
+                        "crack",
+                        "destroy",
+                        "fight",
+                        "hit",
+                        "kill",
+                        "murder",
+                        "punch",
+                        "smash",
+                        "thump",
+                        "torture",
+                        "wreck"
+                    ],
+                    [
                         {
-                          "FromTxt:": {
-                            "CanReach actor:action:noun:": [
-                              "@actor",
-                              {
-                                "FromTxt:": "attacking"
-                              },
-                              "@noun"
+                            "AnyOf:":
+                            [
+                                {
+                                    "AllOf:":
+                                    [
+                                        {
+                                            "Noun:": "things"
+                                        },
+                                        {
+                                            "As:": "attacking"
+                                        }
+                                    ]
+                                }
                             ]
-                          }
-                        },
-                        {
-                          "Not:": {
-                            "Is empty:": "@resp"
-                          }
-                        },
-                        [
-                          {
-                            "Say:": "@resp"
-                          }
-                        ],
-                        {
-                          "ElseDo does:": [
-                            {
-                              "ReportAttacking actor:noun:": [
-                                "@actor",
-                                "@noun"
-                              ]
-                            }
-                          ]
                         }
-                      ]
-                    }
-                  ]
+                    ]
                 ]
-              }
+            }
+        },
+        {
+            "--": ""
+        },
+        {
+            "Event:action:args common:":
+            [
+                "attack",
+                "attacking",
+                {
+                    "CommonAction:": "object"
+                }
             ]
-          }
-        ]
-      },
-      {
-        "--": ""
-      },
-      {
-        "Pattern:requires:": [
-          "report attacking",
-          {
-            "PatternParams:": [
-              {
-                "Text named:of:": [
-                  "actor",
-                  "actor"
-                ]
-              },
-              {
-                "Text named:of:": [
-                  "noun",
-                  "object"
-                ]
-              }
+        },
+        {
+            "Pattern:provides:rules:":
+            [
+                "attacking",
+                {
+                    "PatternLocals:":
+                    [
+                        {
+                            "Text named:of:initially:":
+                            [
+                                "actor",
+                                "actor",
+                                {
+                                    "Get:from:":
+                                    [
+                                        "pawn",
+                                        {
+                                            "VarFields:": "agent"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "PatternRules:":
+                    [
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "IsPlayer obj:": "@actor"
+                                },
+                                [
+                                    {
+                                        "If:from:and:does:else:":
+                                        [
+                                            "resp",
+                                            {
+                                                "FromTxt:":
+                                                {
+                                                    "CanReach actor:action:noun:":
+                                                    [
+                                                        "@actor",
+                                                        {
+                                                            "FromTxt:": "attacking"
+                                                        },
+                                                        "@noun"
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "Not:":
+                                                {
+                                                    "Is empty:": "@resp"
+                                                }
+                                            },
+                                            [
+                                                {
+                                                    "Say:": "@resp"
+                                                }
+                                            ],
+                                            {
+                                                "ElseDo does:":
+                                                [
+                                                    {
+                                                        "ReportAttacking actor:noun:":
+                                                        [
+                                                            "@actor",
+                                                            "@noun"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                }
             ]
-          }
-        ]
-      },
-      {
-        "Pattern:rules:": [
-          "report attacking",
-          {
-            "PatternRules:": [
-              {
-                "PatternRule:does:": [
-                  {
-                    "Always": true
-                  },
-                  [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "actor attacking",
-                          {
-                            "RenderTemplate:": "{the:.actor|capitalize!} attacks {the: .noun}."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                ]
-              },
-              {
-                "PatternRule:does:": [
-                  {
-                    "IsPlayer obj:": "@actor"
-                  },
-                  [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "player attacking",
-                          {
-                            "RenderTemplate:": "Violence isn't the answer."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                ]
-              }
+        },
+        {
+            "--": ""
+        },
+        {
+            "Pattern:requires:":
+            [
+                "report attacking",
+                {
+                    "PatternParams:":
+                    [
+                        {
+                            "Text named:of:":
+                            [
+                                "actor",
+                                "actor"
+                            ]
+                        },
+                        {
+                            "Text named:of:":
+                            [
+                                "noun",
+                                "object"
+                            ]
+                        }
+                    ]
+                }
             ]
-          }
-        ]
-      }
+        },
+        {
+            "Pattern:rules:":
+            [
+                "report attacking",
+                {
+                    "PatternRules:":
+                    [
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "Always": true
+                                },
+                                [
+                                    {
+                                        "Say:":
+                                        {
+                                            "Response:text:":
+                                            [
+                                                "actor attacking",
+                                                {
+                                                    "RenderTemplate:": "{the:.actor|capitalize!} attacks {the: .noun}."
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            ]
+                        },
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "IsPlayer obj:": "@actor"
+                                },
+                                [
+                                    {
+                                        "Say:":
+                                        {
+                                            "Response:text:":
+                                            [
+                                                "player attacking",
+                                                {
+                                                    "RenderTemplate:": "Violence isn't the answer."
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
     ]
-  }
 }

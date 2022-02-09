@@ -1,177 +1,200 @@
 {
-  "Tapestry:": {
-    "Story:": [
-      {
-        "Pattern:": "adjust light"
-      },
-      {
-        "Comment:": "Adjust light runs at the end of the turn, examining the changes in the world to determine if the player has been plunged into darkness or thrust into the light. "
-      },
-      {
-        "Pattern:provides:rules:": [
-          "adjust light",
-          {
-            "PatternLocals:": [
-              {
-                "Text named:of:initially:": [
-                  "actor",
-                  "actor",
-                  {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "ObjFields:": "player"
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                "Bool named:initially:": [
-                  "was lit",
-                  {
-                    "Get obj:trait:": [
-                      "@actor",
-                      "not in darkness"
-                    ]
-                  }
-                ]
-              },
-              {
-                "Bool named:initially:": [
-                  "now lit",
-                  {
-                    "ContainsLight spot:": "@actor"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "PatternRules:": [
-              {
-                "PatternRule:does:": [
-                  {
-                    "AllTrue:": [
-                      "@was lit",
-                      {
-                        "Not:": "@now lit"
-                      }
-                    ]
-                  },
-                  [
-                    {
-                      "PrintNewsOfDarkness": true
-                    }
-                  ]
-                ]
-              },
-              {
-                "PatternRule:does:": [
-                  {
-                    "AllTrue:": [
-                      "@now lit",
-                      {
-                        "Not:": "@was lit"
-                      }
-                    ]
-                  },
-                  [
-                    {
-                      "PrintNewsOfLight": true
-                    }
-                  ]
-                ]
-              },
-              {
-                "PatternRule:flags:does:": [
-                  {
-                    "Always": true
-                  },
-                  "before",
-                  [
-                    {
-                      "Put:from:at:": [
+    "Tapestry:":
+    [
+        {
+            "Pattern:": "adjust light"
+        },
+        {
+            "Comment:": "Adjust light runs at the end of the turn, examining the changes in the world to determine if the player has been plunged into darkness or thrust into the light. "
+        },
+        {
+            "Pattern:provides:rules:":
+            [
+                "adjust light",
+                {
+                    "PatternLocals:":
+                    [
                         {
-                          "VarField:": "actor"
+                            "Text named:of:initially:":
+                            [
+                                "actor",
+                                "actor",
+                                {
+                                    "Get:from:":
+                                    [
+                                        "pawn",
+                                        {
+                                            "ObjFields:": "player"
+                                        }
+                                    ]
+                                }
+                            ]
                         },
-                        "@now lit",
-                        "not in darkness"
-                      ]
-                    }
-                  ]
-                ]
-              }
+                        {
+                            "Bool named:initially:":
+                            [
+                                "was lit",
+                                {
+                                    "Get obj:trait:":
+                                    [
+                                        "@actor",
+                                        "not in darkness"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "Bool named:initially:":
+                            [
+                                "now lit",
+                                {
+                                    "ContainsLight spot:": "@actor"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "PatternRules:":
+                    [
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "AllTrue:":
+                                    [
+                                        "@was lit",
+                                        {
+                                            "Not:": "@now lit"
+                                        }
+                                    ]
+                                },
+                                [
+                                    {
+                                        "PrintNewsOfDarkness": true
+                                    }
+                                ]
+                            ]
+                        },
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "AllTrue:":
+                                    [
+                                        "@now lit",
+                                        {
+                                            "Not:": "@was lit"
+                                        }
+                                    ]
+                                },
+                                [
+                                    {
+                                        "PrintNewsOfLight": true
+                                    }
+                                ]
+                            ]
+                        },
+                        {
+                            "PatternRule:flags:does:":
+                            [
+                                {
+                                    "Always": true
+                                },
+                                "before",
+                                [
+                                    {
+                                        "Put:from:at:":
+                                        [
+                                            {
+                                                "VarField:": "actor"
+                                            },
+                                            "@now lit",
+                                            "not in darkness"
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                }
             ]
-          }
-        ]
-      },
-      {
-        "--": ""
-      },
-      {
-        "Pattern:": "Print news of darkness"
-      },
-      {
-        "Pattern:rules:": [
-          "Print news of darkness",
-          {
-            "PatternRules:": [
-              {
-                "PatternRule:does:": [
-                  {
-                    "Always": true
-                  },
-                  [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "darkness has fallen",
-                          "It is now pitch dark in here!"
-                        ]
-                      }
-                    }
-                  ]
-                ]
-              }
+        },
+        {
+            "--": ""
+        },
+        {
+            "Pattern:": "Print news of darkness"
+        },
+        {
+            "Pattern:rules:":
+            [
+                "Print news of darkness",
+                {
+                    "PatternRules:":
+                    [
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "Always": true
+                                },
+                                [
+                                    {
+                                        "Say:":
+                                        {
+                                            "Response:text:":
+                                            [
+                                                "darkness has fallen",
+                                                "It is now pitch dark in here!"
+                                            ]
+                                        }
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                }
             ]
-          }
-        ]
-      },
-      {
-        "--": ""
-      },
-      {
-        "Pattern:": "Print news of light"
-      },
-      {
-        "Pattern:rules:": [
-          "Print news of light",
-          {
-            "PatternRules:": [
-              {
-                "PatternRule:does:": [
-                  {
-                    "Always": true
-                  },
-                  [
-                    {
-                      "PrintVantage where:": {
-                        "Get:from:": [
-                          "pawn",
-                          {
-                            "ObjFields:": "player"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                ]
-              }
+        },
+        {
+            "--": ""
+        },
+        {
+            "Pattern:": "Print news of light"
+        },
+        {
+            "Pattern:rules:":
+            [
+                "Print news of light",
+                {
+                    "PatternRules:":
+                    [
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "Always": true
+                                },
+                                [
+                                    {
+                                        "PrintVantage where:":
+                                        {
+                                            "Get:from:":
+                                            [
+                                                "pawn",
+                                                {
+                                                    "ObjFields:": "player"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                }
             ]
-          }
-        ]
-      }
+        }
     ]
-  }
 }

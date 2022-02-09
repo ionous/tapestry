@@ -1,83 +1,95 @@
 {
-  "Tapestry:": {
-    "Story:": [
-      {
-        "Pattern:requires:returns:": [
-          "can handle",
-          {
-            "PatternParams:": [
-              {
-                "Text named:of:": [
-                  "actor",
-                  "actor"
-                ]
-              },
-              {
-                "Text named:": "action"
-              },
-              {
-                "Text named:of:": [
-                  "noun",
-                  "thing"
-                ]
-              },
-              {
-                "--": "not all actions have a second noun and that's okay",
-                "Text named:of:": [
-                  "other noun",
-                  "thing"
-                ]
-              }
-            ]
-          },
-          {
-            "PatternResult:": {
-              "Text named:": "response"
-            }
-          }
-        ]
-      },
-      {
-        "Pattern:rules:": [
-          "can handle",
-          {
-            "PatternRules:": [
-              {
-                "PatternRule:does:": [
-                  {
-                    "Cmp:is:txt:": [
-                      {
-                        "ParentOf obj:": "@noun"
-                      },
-                      {
-                        "OtherThan": true
-                      },
-                      "@actor"
-                    ]
-                  },
-                  [
-                    {
-                      "Let:be:": [
-                        "response",
+    "Tapestry:":
+    [
+        {
+            "Pattern:requires:returns:":
+            [
+                "can handle",
+                {
+                    "PatternParams:":
+                    [
                         {
-                          "FromTxt:": {
-                            "Response:text:": [
-                              "can only use possessions",
-                              {
-                                "RenderTemplate:": "{we:|capitalize!} haven't got {those:.noun}!"
-                              }
+                            "Text named:of:":
+                            [
+                                "actor",
+                                "actor"
                             ]
-                          }
+                        },
+                        {
+                            "Text named:": "action"
+                        },
+                        {
+                            "Text named:of:":
+                            [
+                                "noun",
+                                "thing"
+                            ]
+                        },
+                        {
+                            "--": "not all actions have a second noun and that's okay",
+                            "Text named:of:":
+                            [
+                                "other noun",
+                                "thing"
+                            ]
                         }
-                      ]
+                    ]
+                },
+                {
+                    "PatternResult:":
+                    {
+                        "Text named:": "response"
                     }
-                  ]
-                ]
-              }
+                }
             ]
-          }
-        ]
-      }
+        },
+        {
+            "Pattern:rules:":
+            [
+                "can handle",
+                {
+                    "PatternRules:":
+                    [
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "Cmp:is:txt:":
+                                    [
+                                        {
+                                            "ParentOf obj:": "@noun"
+                                        },
+                                        {
+                                            "OtherThan": true
+                                        },
+                                        "@actor"
+                                    ]
+                                },
+                                [
+                                    {
+                                        "Let:be:":
+                                        [
+                                            "response",
+                                            {
+                                                "FromTxt:":
+                                                {
+                                                    "Response:text:":
+                                                    [
+                                                        "can only use possessions",
+                                                        {
+                                                            "RenderTemplate:": "{we:|capitalize!} haven't got {those:.noun}!"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
     ]
-  }
 }

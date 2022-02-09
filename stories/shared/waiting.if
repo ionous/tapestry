@@ -1,138 +1,159 @@
 {
-  "Tapestry:": {
-    "Story:": [
-      {
-        "Event:action:args none:": [
-          "wait",
-          "waiting",
-          "nothing"
-        ]
-      },
-      {
-        "Pattern:provides:rules:": [
-          "waiting",
-          {
-            "PatternLocals:": [
-              {
-                "Text named:of:initially:": [
-                  "actor",
-                  "actor",
-                  {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
-                  }
-                ]
-              }
+    "Tapestry:":
+    [
+        {
+            "Event:action:args none:":
+            [
+                "wait",
+                "waiting",
+                "nothing"
             ]
-          },
-          {
-            "PatternRules:": [
-              {
-                "PatternRule:does:": [
-                  {
-                    "IsPlayer obj:": "@actor"
-                  },
-                  [
-                    {
-                      "If:does:": [
+        },
+        {
+            "Pattern:provides:rules:":
+            [
+                "waiting",
+                {
+                    "PatternLocals:":
+                    [
                         {
-                          "Send:event:": [
-                            {
-                              "Capture obj:": "@actor"
-                            },
-                            {
-                              "Wait actor:noun:": [
-                                "@actor",
-                                "@actor"
-                              ]
-                            }
-                          ]
+                            "Text named:of:initially:":
+                            [
+                                "actor",
+                                "actor",
+                                {
+                                    "Get:from:":
+                                    [
+                                        "pawn",
+                                        {
+                                            "VarFields:": "agent"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "PatternRules:":
+                    [
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "IsPlayer obj:": "@actor"
+                                },
+                                [
+                                    {
+                                        "If:does:":
+                                        [
+                                            {
+                                                "Send:event:":
+                                                [
+                                                    {
+                                                        "Capture obj:": "@actor"
+                                                    },
+                                                    {
+                                                        "Wait actor:noun:":
+                                                        [
+                                                            "@actor",
+                                                            "@actor"
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            [
+                                                {
+                                                    "ReportWaiting actor:": "@actor"
+                                                }
+                                            ]
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "--": ""
+        },
+        {
+            "Pattern:requires:":
+            [
+                "report waiting",
+                {
+                    "PatternParams:":
+                    [
+                        {
+                            "Text named:of:":
+                            [
+                                "actor",
+                                "actor"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "Pattern:rules:":
+            [
+                "report waiting",
+                {
+                    "PatternRules:":
+                    [
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "Always": true
+                                },
+                                [
+                                    {
+                                        "Say:":
+                                        {
+                                            "Response:text:":
+                                            [
+                                                "the player waits",
+                                                {
+                                                    "RenderTemplate:": "Time passes."
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            ]
                         },
-                        [
-                          {
-                            "ReportWaiting actor:": "@actor"
-                          }
-                        ]
-                      ]
-                    }
-                  ]
-                ]
-              }
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "Not:":
+                                    {
+                                        "IsPlayer obj:": "@actor"
+                                    }
+                                },
+                                [
+                                    {
+                                        "Say:":
+                                        {
+                                            "Response:text:":
+                                            [
+                                                "someone waits",
+                                                {
+                                                    "RenderTemplate:": "{The: .actor|capitalize!} waited."
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                }
             ]
-          }
-        ]
-      },
-      {
-        "--": ""
-      },
-      {
-        "Pattern:requires:": [
-          "report waiting",
-          {
-            "PatternParams:": [
-              {
-                "Text named:of:": [
-                  "actor",
-                  "actor"
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "Pattern:rules:": [
-          "report waiting",
-          {
-            "PatternRules:": [
-              {
-                "PatternRule:does:": [
-                  {
-                    "Always": true
-                  },
-                  [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "the player waits",
-                          {
-                            "RenderTemplate:": "Time passes."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                ]
-              },
-              {
-                "PatternRule:does:": [
-                  {
-                    "Not:": {
-                      "IsPlayer obj:": "@actor"
-                    }
-                  },
-                  [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "someone waits",
-                          {
-                            "RenderTemplate:": "{The: .actor|capitalize!} waited."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                ]
-              }
-            ]
-          }
-        ]
-      }
+        }
     ]
-  }
 }

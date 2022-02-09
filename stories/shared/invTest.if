@@ -1,408 +1,465 @@
 {
-  "Tapestry:": {
-    "Story:": [
-      {
-        "Nouns:depict:and:": [
-          [
-            {
-              "Noun:named:": [
-                "the",
-                "flower"
-              ]
-            }
-          ],
-          {
-            "Kind:named:": [
-              "isa",
-              "thing"
-            ]
-          },
-          [
-            {
-              "NounTraits:trait:": [
-                "",
+    "Tapestry:":
+    [
+        {
+            "Nouns:depict:and:":
+            [
                 [
-                  "wearable",
-                  "worn"
-                ]
-              ]
-            }
-          ]
-        ]
-      },
-      {
-        "Nouns:depict:and:": [
-          [
-            {
-              "Noun:named:": [
-                "the",
-                "headlamp"
-              ]
-            }
-          ],
-          {
-            "Kind:named:": [
-              "isa",
-              "thing"
-            ]
-          },
-          [
-            {
-              "NounTraits:trait:": [
-                "",
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "flower"
+                        ]
+                    }
+                ],
+                {
+                    "Kind:named:":
+                    [
+                        "isa",
+                        "thing"
+                    ]
+                },
                 [
-                  "lit",
-                  "wearable",
-                  "worn"
+                    {
+                        "NounTraits:trait:":
+                        [
+                            "",
+                            [
+                                "wearable",
+                                "worn"
+                            ]
+                        ]
+                    }
                 ]
-              ]
-            }
-          ]
-        ]
-      },
-      {
-        "Nouns:depict:and:": [
-          [
-            {
-              "Noun:named:": [
-                "the",
-                "book of secrets"
-              ]
-            }
-          ],
-          {
-            "Kind:named:": [
-              "isan",
-              "container"
             ]
-          },
-          [
-            {
-              "NounTraits:trait:": [
-                "",
+        },
+        {
+            "Nouns:depict:and:":
+            [
                 [
-                  "openable",
-                  "closed",
-                  "locked"
-                ]
-              ]
-            }
-          ]
-        ]
-      },
-      {
-        "Nouns:depict:and:": [
-          [
-            {
-              "Noun:named:": [
-                "the",
-                "book of wisdom"
-              ]
-            }
-          ],
-          {
-            "Kind:named:": [
-              "isan",
-              "container"
-            ]
-          },
-          [
-            {
-              "NounTraits:trait:": [
-                "",
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "headlamp"
+                        ]
+                    }
+                ],
+                {
+                    "Kind:named:":
+                    [
+                        "isa",
+                        "thing"
+                    ]
+                },
                 [
-                  "openable",
-                  "open"
+                    {
+                        "NounTraits:trait:":
+                        [
+                            "",
+                            [
+                                "lit",
+                                "wearable",
+                                "worn"
+                            ]
+                        ]
+                    }
                 ]
-              ]
-            }
-          ]
-        ]
-      },
-      {
-        "Nouns:depict:and:": [
-          [
-            {
-              "Noun:named:": [
-                "the",
-                "clutch"
-              ]
-            }
-          ],
-          {
-            "Kind:named:": [
-              "isan",
-              "container"
             ]
-          },
-          [
-            {
-              "NounTraits:trait:": [
-                "",
+        },
+        {
+            "Nouns:depict:and:":
+            [
                 [
-                  "openable",
-                  "open"
-                ]
-              ]
-            }
-          ]
-        ]
-      },
-      {
-        "Nouns:depict:and:": [
-          [
-            {
-              "Noun:named:": [
-                "the",
-                "purse"
-              ]
-            }
-          ],
-          {
-            "Kind:named:": [
-              "isan",
-              "container"
-            ]
-          },
-          [
-            {
-              "NounTraits:trait:": [
-                "",
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "book of secrets"
+                        ]
+                    }
+                ],
+                {
+                    "Kind:named:":
+                    [
+                        "isan",
+                        "container"
+                    ]
+                },
                 [
-                  "wearable",
-                  "openable",
-                  "open"
+                    {
+                        "NounTraits:trait:":
+                        [
+                            "",
+                            [
+                                "openable",
+                                "closed",
+                                "locked"
+                            ]
+                        ]
+                    }
                 ]
-              ]
-            }
-          ]
-        ]
-      },
-      {
-        "Nouns:depict:and:": [
-          [
-            {
-              "Noun:named:": [
-                "the",
-                "flashlight"
-              ]
-            }
-          ],
-          {
-            "Kind:named:": [
-              "isa",
-              "thing"
             ]
-          },
-          [
-            {
-              "NounTraits:trait:": [
-                "",
+        },
+        {
+            "Nouns:depict:and:":
+            [
                 [
-                  "lit"
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "book of wisdom"
+                        ]
+                    }
+                ],
+                {
+                    "Kind:named:":
+                    [
+                        "isan",
+                        "container"
+                    ]
+                },
+                [
+                    {
+                        "NounTraits:trait:":
+                        [
+                            "",
+                            [
+                                "openable",
+                                "open"
+                            ]
+                        ]
+                    }
                 ]
-              ]
-            }
-          ]
-        ]
-      },
-      {
-        "Nouns:depict:": [
-          [
-            {
-              "Noun:named:": [
-                "the",
-                "coin"
-              ]
-            }
-          ],
-          {
-            "Kind:named:": [
-              "isa",
-              "thing"
             ]
-          }
-        ]
-      },
-      {
-        "--": ""
-      },
-      {
-        "RelativeToNoun:nouns:areBeing:otherNouns:": [
-          "whereabouts",
-          [
-            {
-              "Noun:named:": [
-                "the",
-                "flower"
-              ]
-            },
-            {
-              "Noun:named:": [
-                "the",
-                "headlamp"
-              ]
-            },
-            {
-              "Noun:named:": [
-                "the",
-                "secrets"
-              ]
-            },
-            {
-              "Noun:named:": [
-                "the",
-                "wisdom"
-              ]
-            },
-            {
-              "Noun:named:": [
-                "the",
-                "clutch"
-              ]
-            }
-          ],
-          "is",
-          [
-            {
-              "Noun:named:": [
-                "our",
-                "Mildred"
-              ]
-            }
-          ]
-        ]
-      },
-      {
-        "RelativeToNoun:nouns:areBeing:otherNouns:": [
-          "whereabouts",
-          [
-            {
-              "Noun:named:": [
-                "the",
-                "coin"
-              ]
-            }
-          ],
-          "is",
-          [
-            {
-              "Noun:named:": [
-                "the",
-                "purse"
-              ]
-            }
-          ]
-        ]
-      },
-      {
-        "RelativeToNoun:nouns:areBeing:otherNouns:": [
-          "whereabouts",
-          [
-            {
-              "Noun:named:": [
-                "the",
-                "purse"
-              ]
-            }
-          ],
-          "is",
-          [
-            {
-              "Noun:named:": [
-                "the",
-                "clutch"
-              ]
-            }
-          ]
-        ]
-      },
-      {
-        "--": ""
-      },
-      {
-        "TestStatement:test:": [
-          "status printing test",
-          {
-            "TestOutput:": "the flower: (being worn).\nthe headlamp: (providing light and being worn).\nthe book of secrets: (closed and locked).\nthe book of wisdom: (open but empty).\nthe clutch: (open).\nthe purse: (open).\nthe flashlight: (providing light).\nthe coin: .\n"
-          }
-        ]
-      },
-      {
-        "TestRule:does:": [
-          "status printing test",
-          [
-            {
-              "Say:": {
-                "RenderTemplate:": "{the: .flower}: {print_status:.flower}."
-              }
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{the: .headlamp}: {print_status:.headlamp}."
-              }
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{the: .secrets}: {print_status:.secrets}."
-              }
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{the: .wisdom}: {print_status:.wisdom true}."
-              }
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{the: .clutch}: {print_status:.clutch}."
-              }
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{the: .purse}: {print_status:.purse}."
-              }
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{the: .flashlight}: {print_status:.flashlight}."
-              }
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{the: .coin}: {print_status:.coin}."
-              }
-            }
-          ]
-        ]
-      },
-      {
-        "--": ""
-      },
-      {
-        "TestStatement:test:": [
-          "default inventory",
-          {
-            "TestOutput:": "You are carrying:\n  - a book of secrets (closed and locked)\n  - a book of wisdom (open but empty)\n  - a clutch (open) \n    - a purse (open) \n      - a coin\n  - a flower (being worn)\n  - a headlamp (providing light and being worn)\n"
-          }
-        ]
-      },
-      {
-        "Comment:": "Print inventory as a list."
-      },
-      {
-        "TestRule:does:": [
-          "default inventory",
-          [
-            {
-              "PrintInventory actor:": {
-                "FromTxt:": {
-                  "IdOf:": "Mildred"
+        },
+        {
+            "Nouns:depict:and:":
+            [
+                [
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "clutch"
+                        ]
+                    }
+                ],
+                {
+                    "Kind:named:":
+                    [
+                        "isan",
+                        "container"
+                    ]
+                },
+                [
+                    {
+                        "NounTraits:trait:":
+                        [
+                            "",
+                            [
+                                "openable",
+                                "open"
+                            ]
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "Nouns:depict:and:":
+            [
+                [
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "purse"
+                        ]
+                    }
+                ],
+                {
+                    "Kind:named:":
+                    [
+                        "isan",
+                        "container"
+                    ]
+                },
+                [
+                    {
+                        "NounTraits:trait:":
+                        [
+                            "",
+                            [
+                                "wearable",
+                                "openable",
+                                "open"
+                            ]
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "Nouns:depict:and:":
+            [
+                [
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "flashlight"
+                        ]
+                    }
+                ],
+                {
+                    "Kind:named:":
+                    [
+                        "isa",
+                        "thing"
+                    ]
+                },
+                [
+                    {
+                        "NounTraits:trait:":
+                        [
+                            "",
+                            [
+                                "lit"
+                            ]
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "Nouns:depict:":
+            [
+                [
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "coin"
+                        ]
+                    }
+                ],
+                {
+                    "Kind:named:":
+                    [
+                        "isa",
+                        "thing"
+                    ]
                 }
-              }
-            }
-          ]
-        ]
-      }
+            ]
+        },
+        {
+            "--": ""
+        },
+        {
+            "RelativeToNoun:nouns:areBeing:otherNouns:":
+            [
+                "whereabouts",
+                [
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "flower"
+                        ]
+                    },
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "headlamp"
+                        ]
+                    },
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "secrets"
+                        ]
+                    },
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "wisdom"
+                        ]
+                    },
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "clutch"
+                        ]
+                    }
+                ],
+                "is",
+                [
+                    {
+                        "Noun:named:":
+                        [
+                            "our",
+                            "Mildred"
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "RelativeToNoun:nouns:areBeing:otherNouns:":
+            [
+                "whereabouts",
+                [
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "coin"
+                        ]
+                    }
+                ],
+                "is",
+                [
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "purse"
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "RelativeToNoun:nouns:areBeing:otherNouns:":
+            [
+                "whereabouts",
+                [
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "purse"
+                        ]
+                    }
+                ],
+                "is",
+                [
+                    {
+                        "Noun:named:":
+                        [
+                            "the",
+                            "clutch"
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "--": ""
+        },
+        {
+            "TestStatement:test:":
+            [
+                "status printing test",
+                {
+                    "TestOutput:": "the flower: (being worn).\nthe headlamp: (providing light and being worn).\nthe book of secrets: (closed and locked).\nthe book of wisdom: (open but empty).\nthe clutch: (open).\nthe purse: (open).\nthe flashlight: (providing light).\nthe coin: .\n"
+                }
+            ]
+        },
+        {
+            "TestRule:does:":
+            [
+                "status printing test",
+                [
+                    {
+                        "Say:":
+                        {
+                            "RenderTemplate:": "{the: .flower}: {print_status:.flower}."
+                        }
+                    },
+                    {
+                        "Say:":
+                        {
+                            "RenderTemplate:": "{the: .headlamp}: {print_status:.headlamp}."
+                        }
+                    },
+                    {
+                        "Say:":
+                        {
+                            "RenderTemplate:": "{the: .secrets}: {print_status:.secrets}."
+                        }
+                    },
+                    {
+                        "Say:":
+                        {
+                            "RenderTemplate:": "{the: .wisdom}: {print_status:.wisdom true}."
+                        }
+                    },
+                    {
+                        "Say:":
+                        {
+                            "RenderTemplate:": "{the: .clutch}: {print_status:.clutch}."
+                        }
+                    },
+                    {
+                        "Say:":
+                        {
+                            "RenderTemplate:": "{the: .purse}: {print_status:.purse}."
+                        }
+                    },
+                    {
+                        "Say:":
+                        {
+                            "RenderTemplate:": "{the: .flashlight}: {print_status:.flashlight}."
+                        }
+                    },
+                    {
+                        "Say:":
+                        {
+                            "RenderTemplate:": "{the: .coin}: {print_status:.coin}."
+                        }
+                    }
+                ]
+            ]
+        },
+        {
+            "--": ""
+        },
+        {
+            "TestStatement:test:":
+            [
+                "default inventory",
+                {
+                    "TestOutput:": "You are carrying:\n  - a book of secrets (closed and locked)\n  - a book of wisdom (open but empty)\n  - a clutch (open) \n    - a purse (open) \n      - a coin\n  - a flower (being worn)\n  - a headlamp (providing light and being worn)\n"
+                }
+            ]
+        },
+        {
+            "Comment:": "Print inventory as a list."
+        },
+        {
+            "TestRule:does:":
+            [
+                "default inventory",
+                [
+                    {
+                        "PrintInventory actor:":
+                        {
+                            "FromTxt:":
+                            {
+                                "IdOf:": "Mildred"
+                            }
+                        }
+                    }
+                ]
+            ]
+        }
     ]
-  }
 }

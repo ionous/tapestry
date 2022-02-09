@@ -129,18 +129,19 @@ func TestSlot(t *testing.T) {
 
 // test writing some blockly nested next blocks
 func TestStack(t *testing.T) {
-  if e := testBlocks(&story.StoryLines{Lines: []story.StoryStatement{
-    &story.StoryBreak{},
-    &story.StoryBreak{},
-    &story.StoryBreak{},
-  }}, `{
+  if e := testBlocks(&story.StoryFile{
+    StoryLines: []story.StoryStatement{
+      &story.StoryBreak{},
+      &story.StoryBreak{},
+      &story.StoryBreak{},
+    }}, `{
   "id": "test-1",
-  "type": "story_lines",
+  "type": "story_file",
   "extraState": {
-    "LINES": 3
+    "STORY_LINES": 3
   },
   "inputs": {
-    "LINES": {
+    "STORY_LINES": {
       "block": {
         "id": "test-2",
         "type": "_story_break_stack",

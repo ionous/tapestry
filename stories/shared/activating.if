@@ -1,322 +1,365 @@
 {
-  "Tapestry:": {
-    "Story:": [
-      {
-        "Event:action:args common:": [
-          "activate",
-          "activating",
-          {
-            "CommonAction:": "object"
-          }
-        ]
-      },
-      {
-        "Pattern:provides:rules:": [
-          "activating",
-          {
-            "PatternLocals:": [
-              {
-                "Text named:of:initially:": [
-                  "actor",
-                  "actor",
-                  {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
-                  }
-                ]
-              }
+    "Tapestry:":
+    [
+        {
+            "Event:action:args common:":
+            [
+                "activate",
+                "activating",
+                {
+                    "CommonAction:": "object"
+                }
             ]
-          },
-          {
-            "PatternRules:": [
-              {
-                "PatternRule:does:": [
-                  {
-                    "IsPlayer obj:": "@actor"
-                  },
-                  [
-                    {
-                      "If:from:and:does:else:": [
-                        "resp",
+        },
+        {
+            "Pattern:provides:rules:":
+            [
+                "activating",
+                {
+                    "PatternLocals:":
+                    [
                         {
-                          "FromTxt:": {
-                            "CanReach actor:action:noun:": [
-                              "@actor",
-                              {
-                                "FromTxt:": "activating"
-                              },
-                              "@noun"
-                            ]
-                          }
-                        },
-                        {
-                          "Not:": {
-                            "Is empty:": "@resp"
-                          }
-                        },
-                        [
-                          {
-                            "Say:": "@resp"
-                          }
-                        ],
-                        {
-                          "ElseDo does:": [
-                            {
-                              "If:from:and:does:else:": [
-                                "resp",
+                            "Text named:of:initially:":
+                            [
+                                "actor",
+                                "actor",
                                 {
-                                  "FromTxt:": {
-                                    "CanUse actor:action:noun:": [
-                                      "@actor",
-                                      {
-                                        "FromTxt:": "activating"
-                                      },
-                                      "@noun"
+                                    "Get:from:":
+                                    [
+                                        "pawn",
+                                        {
+                                            "VarFields:": "agent"
+                                        }
                                     ]
-                                  }
-                                },
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "PatternRules:":
+                    [
+                        {
+                            "PatternRule:does:":
+                            [
                                 {
-                                  "Not:": {
-                                    "Is empty:": "@resp"
-                                  }
+                                    "IsPlayer obj:": "@actor"
                                 },
                                 [
-                                  {
-                                    "Say:": "@resp"
-                                  }
-                                ],
-                                {
-                                  "ElseDo does:": [
                                     {
-                                      "Send:event:": [
-                                        {
-                                          "Capture obj:": "@noun"
-                                        },
-                                        {
-                                          "StateChange actor:noun:trait:guard:change:": [
-                                            "@actor",
-                                            "@noun",
+                                        "If:from:and:does:else:":
+                                        [
+                                            "resp",
                                             {
-                                              "FromTxt:": "activated"
+                                                "FromTxt:":
+                                                {
+                                                    "CanReach actor:action:noun:":
+                                                    [
+                                                        "@actor",
+                                                        {
+                                                            "FromTxt:": "activating"
+                                                        },
+                                                        "@noun"
+                                                    ]
+                                                }
                                             },
                                             {
-                                              "FromTxt:": "activatable"
+                                                "Not:":
+                                                {
+                                                    "Is empty:": "@resp"
+                                                }
                                             },
+                                            [
+                                                {
+                                                    "Say:": "@resp"
+                                                }
+                                            ],
                                             {
-                                              "FromTxt:": "switch on"
+                                                "ElseDo does:":
+                                                [
+                                                    {
+                                                        "If:from:and:does:else:":
+                                                        [
+                                                            "resp",
+                                                            {
+                                                                "FromTxt:":
+                                                                {
+                                                                    "CanUse actor:action:noun:":
+                                                                    [
+                                                                        "@actor",
+                                                                        {
+                                                                            "FromTxt:": "activating"
+                                                                        },
+                                                                        "@noun"
+                                                                    ]
+                                                                }
+                                                            },
+                                                            {
+                                                                "Not:":
+                                                                {
+                                                                    "Is empty:": "@resp"
+                                                                }
+                                                            },
+                                                            [
+                                                                {
+                                                                    "Say:": "@resp"
+                                                                }
+                                                            ],
+                                                            {
+                                                                "ElseDo does:":
+                                                                [
+                                                                    {
+                                                                        "Send:event:":
+                                                                        [
+                                                                            {
+                                                                                "Capture obj:": "@noun"
+                                                                            },
+                                                                            {
+                                                                                "StateChange actor:noun:trait:guard:change:":
+                                                                                [
+                                                                                    "@actor",
+                                                                                    "@noun",
+                                                                                    {
+                                                                                        "FromTxt:": "activated"
+                                                                                    },
+                                                                                    {
+                                                                                        "FromTxt:": "activatable"
+                                                                                    },
+                                                                                    {
+                                                                                        "FromTxt:": "switch on"
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
                                             }
-                                          ]
-                                        }
-                                      ]
+                                        ]
                                     }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "--": ""
-      },
-      {
-        "Event:action:args common:": [
-          "deactivate",
-          "deactivating",
-          {
-            "CommonAction:": "object"
-          }
-        ]
-      },
-      {
-        "Pattern:provides:rules:": [
-          "deactivating",
-          {
-            "PatternLocals:": [
-              {
-                "Text named:of:initially:": [
-                  "actor",
-                  "actor",
-                  {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "PatternRules:": [
-              {
-                "PatternRule:does:": [
-                  {
-                    "IsPlayer obj:": "@actor"
-                  },
-                  [
-                    {
-                      "If:from:and:does:else:": [
-                        "resp",
-                        {
-                          "FromTxt:": {
-                            "CanReach actor:action:noun:": [
-                              "@actor",
-                              {
-                                "FromTxt:": "deactivating"
-                              },
-                              "@noun"
+                                ]
                             ]
-                          }
-                        },
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "--": ""
+        },
+        {
+            "Event:action:args common:":
+            [
+                "deactivate",
+                "deactivating",
+                {
+                    "CommonAction:": "object"
+                }
+            ]
+        },
+        {
+            "Pattern:provides:rules:":
+            [
+                "deactivating",
+                {
+                    "PatternLocals:":
+                    [
                         {
-                          "Not:": {
-                            "Is empty:": "@resp"
-                          }
-                        },
-                        [
-                          {
-                            "Say:": "@resp"
-                          }
-                        ],
-                        {
-                          "ElseDo does:": [
-                            {
-                              "If:from:and:does:else:": [
-                                "resp",
+                            "Text named:of:initially:":
+                            [
+                                "actor",
+                                "actor",
                                 {
-                                  "FromTxt:": {
-                                    "CanUse actor:action:noun:": [
-                                      "@actor",
-                                      {
-                                        "FromTxt:": "deactivating"
-                                      },
-                                      "@noun"
+                                    "Get:from:":
+                                    [
+                                        "pawn",
+                                        {
+                                            "VarFields:": "agent"
+                                        }
                                     ]
-                                  }
-                                },
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "PatternRules:":
+                    [
+                        {
+                            "PatternRule:does:":
+                            [
                                 {
-                                  "Not:": {
-                                    "Is empty:": "@resp"
-                                  }
+                                    "IsPlayer obj:": "@actor"
                                 },
                                 [
-                                  {
-                                    "Say:": "@resp"
-                                  }
-                                ],
-                                {
-                                  "ElseDo does:": [
                                     {
-                                      "Send:event:": [
-                                        {
-                                          "Capture obj:": "@noun"
-                                        },
-                                        {
-                                          "StateChange actor:noun:trait:guard:change:": [
-                                            "@actor",
-                                            "@noun",
+                                        "If:from:and:does:else:":
+                                        [
+                                            "resp",
                                             {
-                                              "FromTxt:": "deactivated"
+                                                "FromTxt:":
+                                                {
+                                                    "CanReach actor:action:noun:":
+                                                    [
+                                                        "@actor",
+                                                        {
+                                                            "FromTxt:": "deactivating"
+                                                        },
+                                                        "@noun"
+                                                    ]
+                                                }
                                             },
                                             {
-                                              "FromTxt:": "activatable"
+                                                "Not:":
+                                                {
+                                                    "Is empty:": "@resp"
+                                                }
                                             },
+                                            [
+                                                {
+                                                    "Say:": "@resp"
+                                                }
+                                            ],
                                             {
-                                              "FromTxt:": "switch off"
+                                                "ElseDo does:":
+                                                [
+                                                    {
+                                                        "If:from:and:does:else:":
+                                                        [
+                                                            "resp",
+                                                            {
+                                                                "FromTxt:":
+                                                                {
+                                                                    "CanUse actor:action:noun:":
+                                                                    [
+                                                                        "@actor",
+                                                                        {
+                                                                            "FromTxt:": "deactivating"
+                                                                        },
+                                                                        "@noun"
+                                                                    ]
+                                                                }
+                                                            },
+                                                            {
+                                                                "Not:":
+                                                                {
+                                                                    "Is empty:": "@resp"
+                                                                }
+                                                            },
+                                                            [
+                                                                {
+                                                                    "Say:": "@resp"
+                                                                }
+                                                            ],
+                                                            {
+                                                                "ElseDo does:":
+                                                                [
+                                                                    {
+                                                                        "Send:event:":
+                                                                        [
+                                                                            {
+                                                                                "Capture obj:": "@noun"
+                                                                            },
+                                                                            {
+                                                                                "StateChange actor:noun:trait:guard:change:":
+                                                                                [
+                                                                                    "@actor",
+                                                                                    "@noun",
+                                                                                    {
+                                                                                        "FromTxt:": "deactivated"
+                                                                                    },
+                                                                                    {
+                                                                                        "FromTxt:": "activatable"
+                                                                                    },
+                                                                                    {
+                                                                                        "FromTxt:": "switch off"
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
                                             }
-                                          ]
-                                        }
-                                      ]
+                                        ]
                                     }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                                ]
+                            ]
                         }
-                      ]
+                    ]
+                }
+            ]
+        },
+        {
+            "--": ""
+        },
+        {
+            "Make kinds:of:":
+            [
+                "Devices",
+                "prop"
+            ]
+        },
+        {
+            "Kinds:have:":
+            [
+                "Devices",
+                [
+                    {
+                        "Aspect of:": "activatability"
+                    },
+                    {
+                        "Aspect of:": "activation"
                     }
-                  ]
                 ]
-              }
             ]
-          }
-        ]
-      },
-      {
-        "--": ""
-      },
-      {
-        "Make kinds:of:": [
-          "Devices",
-          "prop"
-        ]
-      },
-      {
-        "Kinds:have:": [
-          "Devices",
-          [
-            {
-              "Aspect of:": "activatability"
-            },
-            {
-              "Aspect of:": "activation"
-            }
-          ]
-        ]
-      },
-      {
-        "--": ""
-      },
-      {
-        "KindsOfAspect:": " activatability"
-      },
-      {
-        "AspectTraits:traitPhrase:": [
-          " activatability",
-          {
-            "TraitPhrase:trait:": [
-              "canbe",
-              [
-                "activatable",
-                "not activatable"
-              ]
+        },
+        {
+            "--": ""
+        },
+        {
+            "KindsOfAspect:": " activatability"
+        },
+        {
+            "AspectTraits:traitPhrase:":
+            [
+                " activatability",
+                {
+                    "TraitPhrase:trait:":
+                    [
+                        "canbe",
+                        [
+                            "activatable",
+                            "not activatable"
+                        ]
+                    ]
+                }
             ]
-          }
-        ]
-      },
-      {
-        "KindsOfAspect:": " activation"
-      },
-      {
-        "AspectTraits:traitPhrase:": [
-          " activation",
-          {
-            "TraitPhrase:trait:": [
-              "canbe",
-              [
-                "deactivated",
-                "activated"
-              ]
+        },
+        {
+            "KindsOfAspect:": " activation"
+        },
+        {
+            "AspectTraits:traitPhrase:":
+            [
+                " activation",
+                {
+                    "TraitPhrase:trait:":
+                    [
+                        "canbe",
+                        [
+                            "deactivated",
+                            "activated"
+                        ]
+                    ]
+                }
             ]
-          }
-        ]
-      }
+        }
     ]
-  }
 }

@@ -1,106 +1,116 @@
 {
-  "Tapestry:": {
-    "Story:": [
-      {
-        "TestStatement:test:": [
-          "vision testing",
-          {
-            "TestOutput:": "ok: started in light.\nIt is now pitch dark in here!\nok: left in the dark.\nThe light, it burns.\nok: expected darkness.\n"
-          }
-        ]
-      },
-      {
-        "TestRule:does:": [
-          "vision testing",
-          [
-            {
-              "Comment:": "the player's in darkness setting defaults to false."
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{if .self.is_in_darkness}ng: started in darkness{else}ok: started in light{end}."
-              }
-            },
-            {
-              "Comment:": "we expect to see darkness fall"
-            },
-            {
-              "Put:from:at:": [
+    "Tapestry:":
+    [
+        {
+            "TestStatement:test:":
+            [
+                "vision testing",
                 {
-                  "ObjField:": "kitchen"
-                },
-                {
-                  "FromBool:": true
-                },
-                "unlit"
-              ]
-            },
-            {
-              "AdjustLight": true
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{if .self.is_in_darkness}ok: left in the dark{else}ng: expected darkness{end}."
-              }
-            },
-            {
-              "Comment:": "we expect to see light break forth in a glorious wonder"
-            },
-            {
-              "Put:from:at:": [
-                {
-                  "ObjField:": "kitchen"
-                },
-                {
-                  "FromBool:": true
-                },
-                "lit"
-              ]
-            },
-            {
-              "AdjustLight": true
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{if .self.is_in_darkness}ng: left in the dark{else}ok: expected darkness{end}."
-              }
-            }
-          ]
-        ]
-      },
-      {
-        "--": ""
-      },
-      {
-        "TestScene:story:": [
-          "vision testing",
-          {
-            "Story:": [
-              {
-                "Pattern:rules:": [
-                  "Print news of light",
-                  {
-                    "PatternRules:": [
-                      {
-                        "PatternRule:does:": [
-                          {
-                            "Always": true
-                          },
-                          [
-                            {
-                              "Say:": "The light, it burns."
-                            }
-                          ]
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              }
+                    "TestOutput:": "ok: started in light.\nIt is now pitch dark in here!\nok: left in the dark.\nThe light, it burns.\nok: expected darkness.\n"
+                }
             ]
-          }
-        ]
-      }
+        },
+        {
+            "TestRule:does:":
+            [
+                "vision testing",
+                [
+                    {
+                        "Comment:": "the player's in darkness setting defaults to false."
+                    },
+                    {
+                        "Say:":
+                        {
+                            "RenderTemplate:": "{if .self.is_in_darkness}ng: started in darkness{else}ok: started in light{end}."
+                        }
+                    },
+                    {
+                        "Comment:": "we expect to see darkness fall"
+                    },
+                    {
+                        "Put:from:at:":
+                        [
+                            {
+                                "ObjField:": "kitchen"
+                            },
+                            {
+                                "FromBool:": true
+                            },
+                            "unlit"
+                        ]
+                    },
+                    {
+                        "AdjustLight": true
+                    },
+                    {
+                        "Say:":
+                        {
+                            "RenderTemplate:": "{if .self.is_in_darkness}ok: left in the dark{else}ng: expected darkness{end}."
+                        }
+                    },
+                    {
+                        "Comment:": "we expect to see light break forth in a glorious wonder"
+                    },
+                    {
+                        "Put:from:at:":
+                        [
+                            {
+                                "ObjField:": "kitchen"
+                            },
+                            {
+                                "FromBool:": true
+                            },
+                            "lit"
+                        ]
+                    },
+                    {
+                        "AdjustLight": true
+                    },
+                    {
+                        "Say:":
+                        {
+                            "RenderTemplate:": "{if .self.is_in_darkness}ng: left in the dark{else}ok: expected darkness{end}."
+                        }
+                    }
+                ]
+            ]
+        },
+        {
+            "--": ""
+        },
+        {
+            "TestScene:story:":
+            [
+                "vision testing",
+                
+                    [
+                        {
+                            "Pattern:rules:":
+                            [
+                                "Print news of light",
+                                {
+                                    "PatternRules:":
+                                    [
+                                        {
+                                            "PatternRule:does:":
+                                            [
+                                                {
+                                                    "Always": true
+                                                },
+                                                [
+                                                    {
+                                                        "Say:": "The light, it burns."
+                                                    }
+                                                ]
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                
+            ]
+        }
     ]
-  }
 }

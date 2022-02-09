@@ -1,144 +1,162 @@
 {
-  "Tapestry:": {
-    "Story:": [
-      {
-        "Pattern:requires:returns:": [
-          "parser bounds",
-          {
-            "PatternParams:": [
-              {
-                "Text named:of:": [
-                  "obj",
-                  "object"
-                ]
-              }
-            ]
-          },
-          {
-            "PatternResult:": {
-              "TextList named:": "bounds"
-            }
-          }
-        ]
-      },
-      {
-        "Pattern:provides:rules:": [
-          "parser bounds",
-          {
-            "PatternLocals:": [
-              {
-                "TextList named:": "queue"
-              }
-            ]
-          },
-          {
-            "PatternRules:": [
-              {
-                "PatternRule:does:": [
-                  {
-                    "Always": true
-                  },
-                  [
-                    {
-                      "Put:into:atFront:": [
-                        "@obj",
+    "Tapestry:":
+    [
+        {
+            "Pattern:requires:returns:":
+            [
+                "parser bounds",
+                {
+                    "PatternParams:":
+                    [
                         {
-                          "IntoTxts:": "bounds"
-                        },
-                        {
-                          "Always": true
+                            "Text named:of:":
+                            [
+                                "obj",
+                                "object"
+                            ]
                         }
-                      ]
-                    },
+                    ]
+                },
+                {
+                    "PatternResult:":
                     {
-                      "Put:into:": [
-                        "@obj",
+                        "TextList named:": "bounds"
+                    }
+                }
+            ]
+        },
+        {
+            "Pattern:provides:rules:":
+            [
+                "parser bounds",
+                {
+                    "PatternLocals:":
+                    [
                         {
-                          "IntoTxts:": "queue"
+                            "TextList named:": "queue"
                         }
-                      ]
-                    },
-                    {
-                      "Repeating:does:": [
+                    ]
+                },
+                {
+                    "PatternRules:":
+                    [
                         {
-                          "Cmp:is:num:": [
-                            {
-                              "Len:": "@queue"
-                            },
-                            {
-                              "GreaterThan": true
-                            },
-                            0
-                          ]
-                        },
-                        [
-                          {
-                            "Erasing:atFront:as:does:": [
-                              {
-                                "VarOfTxts:": "queue"
-                              },
-                              {
-                                "Always": true
-                              },
-                              "enc",
-                              [
+                            "PatternRule:does:":
+                            [
                                 {
-                                  "Repeating across:as:does:": [
+                                    "Always": true
+                                },
+                                [
                                     {
-                                      "FromTxts:": {
-                                        "ChildrenOf obj:": "@enc"
-                                      }
-                                    },
-                                    {
-                                      "AsTxt:": "kid"
-                                    },
-                                    [
-                                      {
-                                        "Put:into:": [
-                                          "@kid",
-                                          {
-                                            "IntoTxts:": "bounds"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "If:does:": [
-                                          {
-                                            "Not:": {
-                                              "FullyOpaque obj:": "@kid"
-                                            }
-                                          },
-                                          [
+                                        "Put:into:atFront:":
+                                        [
+                                            "@obj",
                                             {
-                                              "Comment:": "add this kid for additional processing"
+                                                "IntoTxts:": "bounds"
                                             },
                                             {
-                                              "Put:into:": [
-                                                "@kid",
-                                                {
-                                                  "IntoTxts:": "queue"
-                                                }
-                                              ]
+                                                "Always": true
                                             }
-                                          ]
                                         ]
-                                      }
-                                    ]
-                                  ]
-                                }
-                              ]
+                                    },
+                                    {
+                                        "Put:into:":
+                                        [
+                                            "@obj",
+                                            {
+                                                "IntoTxts:": "queue"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "Repeating:does:":
+                                        [
+                                            {
+                                                "Cmp:is:num:":
+                                                [
+                                                    {
+                                                        "Len:": "@queue"
+                                                    },
+                                                    {
+                                                        "GreaterThan": true
+                                                    },
+                                                    0
+                                                ]
+                                            },
+                                            [
+                                                {
+                                                    "Erasing:atFront:as:does:":
+                                                    [
+                                                        {
+                                                            "VarOfTxts:": "queue"
+                                                        },
+                                                        {
+                                                            "Always": true
+                                                        },
+                                                        "enc",
+                                                        [
+                                                            {
+                                                                "Repeating across:as:does:":
+                                                                [
+                                                                    {
+                                                                        "FromTxts:":
+                                                                        {
+                                                                            "ChildrenOf obj:": "@enc"
+                                                                        }
+                                                                    },
+                                                                    {
+                                                                        "AsTxt:": "kid"
+                                                                    },
+                                                                    [
+                                                                        {
+                                                                            "Put:into:":
+                                                                            [
+                                                                                "@kid",
+                                                                                {
+                                                                                    "IntoTxts:": "bounds"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        {
+                                                                            "If:does:":
+                                                                            [
+                                                                                {
+                                                                                    "Not:":
+                                                                                    {
+                                                                                        "FullyOpaque obj:": "@kid"
+                                                                                    }
+                                                                                },
+                                                                                [
+                                                                                    {
+                                                                                        "Comment:": "add this kid for additional processing"
+                                                                                    },
+                                                                                    {
+                                                                                        "Put:into:":
+                                                                                        [
+                                                                                            "@kid",
+                                                                                            {
+                                                                                                "IntoTxts:": "queue"
+                                                                                            }
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                ]
+                                                            }
+                                                        ]
+                                                    ]
+                                                }
+                                            ]
+                                        ]
+                                    }
+                                ]
                             ]
-                          }
-                        ]
-                      ]
-                    }
-                  ]
-                ]
-              }
+                        }
+                    ]
+                }
             ]
-          }
-        ]
-      }
+        }
     ]
-  }
 }

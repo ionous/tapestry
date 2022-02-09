@@ -1,282 +1,323 @@
 {
-  "Tapestry:": {
-    "Story:": [
-      {
-        "GrammarDecl:": {
-          "Directive:scans:": [
-            [
-              "show",
-              "present",
-              "display"
-            ],
-            [
-              {
-                "AnyOf:": [
-                  {
-                    "AllOf:": [
-                      {
-                        "Self:": "player"
-                      },
-                      {
-                        "Noun:": "things"
-                      },
-                      {
-                        "As:": "examining"
-                      }
-                    ]
-                  },
-                  {
-                    "AllOf:": [
-                      {
-                        "Noun:": "things"
-                      },
-                      {
-                        "Words:": [
-                          "to"
-                        ]
-                      },
-                      {
-                        "Self:": "player"
-                      },
-                      {
-                        "As:": "examining"
-                      }
-                    ]
-                  },
-                  {
-                    "AllOf:": [
-                      {
-                        "Reverse:": [
-                          {
-                            "Noun:": "actors"
-                          },
-                          {
-                            "Noun:": "things"
-                          }
-                        ]
-                      },
-                      {
-                        "As:": "showing it to"
-                      }
-                    ]
-                  },
-                  {
-                    "AllOf:": [
-                      {
-                        "Noun:": "things"
-                      },
-                      {
-                        "Words:": [
-                          "to"
-                        ]
-                      },
-                      {
-                        "Noun:": "actors"
-                      },
-                      {
-                        "As:": "showing it to"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          ]
-        }
-      },
-      {
-        "Event:action:args common:": [
-          "show it to",
-          "showing it to",
-          {
-            "CommonAction:actionContext:": [
-              "thing",
-              {
-                "ActionContext:": "actor"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "Pattern:provides:rules:": [
-          "showing",
-          {
-            "PatternLocals:": [
-              {
-                "Text named:of:initially:": [
-                  "actor",
-                  "actor",
-                  {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "PatternRules:": [
-              {
-                "PatternRule:does:": [
-                  {
-                    "IsPlayer obj:": "@actor"
-                  },
-                  [
-                    {
-                      "If:from:and:does:else:": [
-                        "response",
+    "Tapestry:":
+    [
+        {
+            "GrammarDecl:":
+            {
+                "Directive:scans:":
+                [
+                    [
+                        "show",
+                        "present",
+                        "display"
+                    ],
+                    [
                         {
-                          "FromTxt:": {
-                            "CanHandle actor:action:noun:otherNoun:": [
-                              "@actor",
-                              {
-                                "FromTxt:": "showing"
-                              },
-                              "@noun",
-                              "@other noun"
-                            ]
-                          }
-                        },
-                        {
-                          "Not:": {
-                            "Is empty:": "@response"
-                          }
-                        },
-                        [
-                          {
-                            "Say:": "@response"
-                          }
-                        ],
-                        {
-                          "ElseIf:from:and:does:else:": [
-                            "result",
-                            {
-                              "FromTxt:": {
-                                "CanReach actor:action:noun:": [
-                                  "@actor",
-                                  {
-                                    "FromTxt:": "showing"
-                                  },
-                                  "@other noun"
-                                ]
-                              }
-                            },
-                            {
-                              "Not:": {
-                                "Is empty:": "@response"
-                              }
-                            },
+                            "AnyOf:":
                             [
-                              {
-                                "Say:": "@response"
-                              }
-                            ],
-                            {
-                              "ElseDo does:": [
                                 {
-                                  "ReportShowing actor:noun:otherNoun:": [
-                                    "@actor",
-                                    "@noun",
-                                    "@other noun"
-                                  ]
+                                    "AllOf:":
+                                    [
+                                        {
+                                            "Self:": "player"
+                                        },
+                                        {
+                                            "Noun:": "things"
+                                        },
+                                        {
+                                            "As:": "examining"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "AllOf:":
+                                    [
+                                        {
+                                            "Noun:": "things"
+                                        },
+                                        {
+                                            "Words:":
+                                            [
+                                                "to"
+                                            ]
+                                        },
+                                        {
+                                            "Self:": "player"
+                                        },
+                                        {
+                                            "As:": "examining"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "AllOf:":
+                                    [
+                                        {
+                                            "Reverse:":
+                                            [
+                                                {
+                                                    "Noun:": "actors"
+                                                },
+                                                {
+                                                    "Noun:": "things"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "As:": "showing it to"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "AllOf:":
+                                    [
+                                        {
+                                            "Noun:": "things"
+                                        },
+                                        {
+                                            "Words:":
+                                            [
+                                                "to"
+                                            ]
+                                        },
+                                        {
+                                            "Noun:": "actors"
+                                        },
+                                        {
+                                            "As:": "showing it to"
+                                        }
+                                    ]
                                 }
-                              ]
-                            }
-                          ]
+                            ]
                         }
-                      ]
-                    }
-                  ]
+                    ]
                 ]
-              }
+            }
+        },
+        {
+            "Event:action:args common:":
+            [
+                "show it to",
+                "showing it to",
+                {
+                    "CommonAction:actionContext:":
+                    [
+                        "thing",
+                        {
+                            "ActionContext:": "actor"
+                        }
+                    ]
+                }
             ]
-          }
-        ]
-      },
-      {
-        "--": ""
-      },
-      {
-        "Pattern:requires:": [
-          "report showing",
-          {
-            "PatternParams:": [
-              {
-                "Text named:of:": [
-                  "actor",
-                  "actor"
-                ]
-              },
-              {
-                "Text named:of:": [
-                  "noun",
-                  "thing"
-                ]
-              },
-              {
-                "Text named:of:": [
-                  "other noun",
-                  "actor"
-                ]
-              }
+        },
+        {
+            "Pattern:provides:rules:":
+            [
+                "showing",
+                {
+                    "PatternLocals:":
+                    [
+                        {
+                            "Text named:of:initially:":
+                            [
+                                "actor",
+                                "actor",
+                                {
+                                    "Get:from:":
+                                    [
+                                        "pawn",
+                                        {
+                                            "VarFields:": "agent"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "PatternRules:":
+                    [
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "IsPlayer obj:": "@actor"
+                                },
+                                [
+                                    {
+                                        "If:from:and:does:else:":
+                                        [
+                                            "response",
+                                            {
+                                                "FromTxt:":
+                                                {
+                                                    "CanHandle actor:action:noun:otherNoun:":
+                                                    [
+                                                        "@actor",
+                                                        {
+                                                            "FromTxt:": "showing"
+                                                        },
+                                                        "@noun",
+                                                        "@other noun"
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "Not:":
+                                                {
+                                                    "Is empty:": "@response"
+                                                }
+                                            },
+                                            [
+                                                {
+                                                    "Say:": "@response"
+                                                }
+                                            ],
+                                            {
+                                                "ElseIf:from:and:does:else:":
+                                                [
+                                                    "result",
+                                                    {
+                                                        "FromTxt:":
+                                                        {
+                                                            "CanReach actor:action:noun:":
+                                                            [
+                                                                "@actor",
+                                                                {
+                                                                    "FromTxt:": "showing"
+                                                                },
+                                                                "@other noun"
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "Not:":
+                                                        {
+                                                            "Is empty:": "@response"
+                                                        }
+                                                    },
+                                                    [
+                                                        {
+                                                            "Say:": "@response"
+                                                        }
+                                                    ],
+                                                    {
+                                                        "ElseDo does:":
+                                                        [
+                                                            {
+                                                                "ReportShowing actor:noun:otherNoun:":
+                                                                [
+                                                                    "@actor",
+                                                                    "@noun",
+                                                                    "@other noun"
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                }
             ]
-          }
-        ]
-      },
-      {
-        "Pattern:rules:": [
-          "report showing",
-          {
-            "PatternRules:": [
-              {
-                "PatternRule:does:": [
-                  {
-                    "Always": true
-                  },
-                  [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "player shows",
-                          {
-                            "RenderTemplate:": "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                ]
-              },
-              {
-                "PatternRule:does:": [
-                  {
-                    "Not:": {
-                      "IsPlayer obj:": "@actor"
-                    }
-                  },
-                  [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "someone else shows",
-                          {
-                            "RenderTemplate:": "{The: .actor|capitalize!} shows off {the: .noun}."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                ]
-              }
+        },
+        {
+            "--": ""
+        },
+        {
+            "Pattern:requires:":
+            [
+                "report showing",
+                {
+                    "PatternParams:":
+                    [
+                        {
+                            "Text named:of:":
+                            [
+                                "actor",
+                                "actor"
+                            ]
+                        },
+                        {
+                            "Text named:of:":
+                            [
+                                "noun",
+                                "thing"
+                            ]
+                        },
+                        {
+                            "Text named:of:":
+                            [
+                                "other noun",
+                                "actor"
+                            ]
+                        }
+                    ]
+                }
             ]
-          }
-        ]
-      }
+        },
+        {
+            "Pattern:rules:":
+            [
+                "report showing",
+                {
+                    "PatternRules:":
+                    [
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "Always": true
+                                },
+                                [
+                                    {
+                                        "Say:":
+                                        {
+                                            "Response:text:":
+                                            [
+                                                "player shows",
+                                                {
+                                                    "RenderTemplate:": "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            ]
+                        },
+                        {
+                            "PatternRule:does:":
+                            [
+                                {
+                                    "Not:":
+                                    {
+                                        "IsPlayer obj:": "@actor"
+                                    }
+                                },
+                                [
+                                    {
+                                        "Say:":
+                                        {
+                                            "Response:text:":
+                                            [
+                                                "someone else shows",
+                                                {
+                                                    "RenderTemplate:": "{The: .actor|capitalize!} shows off {the: .noun}."
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
     ]
-  }
 }

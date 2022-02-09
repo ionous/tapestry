@@ -50,7 +50,7 @@ func (d storyFile) Get(ctx context.Context, w http.ResponseWriter) (err error) {
 	} else if e := story.Decode(&file, b, tapestry.AllSignatures); e != nil {
 		err = e
 	} else {
-		oldFormat := file.StoryLines.Reformat()
+		oldFormat := story.ReformatStory(file.StoryLines)
 		if data, e := dout.Encode(&oldFormat); e != nil {
 			err = e
 		} else {

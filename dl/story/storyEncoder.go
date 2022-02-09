@@ -18,10 +18,6 @@ func Encode(src *StoryFile) (interface{}, error) {
 // customized writer of compact data
 func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 	switch op := flow.GetFlow().(type) {
-	case *Story:
-		lines := op.Reformat()
-		err = lines.Marshal(m)
-
 	case *core.CallPattern:
 		// rewrite pattern calls to look like normal operations.
 		patName := recase(op.Pattern.Str, true)
@@ -75,24 +71,24 @@ func recase(str string, cap bool) string {
 }
 
 // change from old format composer friendly paragraph blocks into simpler to read and edit lines.
-func (op *Story) Reformat() (out StoryLines) {
+func (op *Story) Reformat() (out []StoryStatement) {
 	for i, p := range op.Paragraph {
 		// every new paragraph, write a "story break"
 		if i > 0 || len(p.UserComment) > 0 {
-			out.Lines = append(out.Lines, &StoryBreak{p.UserComment})
+			out = append(out, &StoryBreak{p.UserComment})
 		}
 		// add all the lines of the paragraph to the output.
 		for _, s := range p.StoryStatement {
-			out.Lines = append(out.Lines, s)
+			out = append(out, s)
 		}
 	}
 	return
 }
 
 // change from simpler to read story lines into old format composer friendly blocks of paragraphs.
-func (op *StoryLines) Reformat() (out Story) {
+func ReformatStory(lines []StoryStatement) (out Story) {
 	var p Paragraph
-	for i, el := range op.Lines {
+	for i, el := range lines {
 		if br, ok := el.(*StoryBreak); !ok {
 			// not a story break, add the statement to the current paragraph.
 			p.StoryStatement = append(p.StoryStatement, el)
