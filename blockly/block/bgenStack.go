@@ -18,6 +18,12 @@ func newStack(m *chart.Machine, term string, blk *blockData) *chart.StateMix {
 	var writingSlot bool
 	open, close := js.Obj[0], js.Obj[1]
 	return &chart.StateMix{
+		// happens before each slat which is received in OnMap.
+		OnSlot: func(string, jsn.SlotBlock) (okay bool) {
+			writingSlot = true
+			return true
+		},
+		// happens after OnSlot, if and only if the slot is filled.
 		OnMap: func(typeName string, _ jsn.FlowBlock) bool {
 			if cnt == 0 {
 				_ = blk.startInputWithoutCount(term) // the repeat already wrote the count
@@ -29,10 +35,7 @@ func newStack(m *chart.Machine, term string, blk *blockData) *chart.StateMix {
 			m.PushState(newInnerFlow(m, &blk.inputs, bconst.StackedName(typeName)))
 			return true
 		},
-		OnSlot: func(string, jsn.SlotBlock) (okay bool) {
-			writingSlot = true
-			return true
-		},
+		// called after each slot and slot.
 		OnEnd: func() {
 			// we dont enter a new state for "OnSlot"
 			// so we get ends for it and for the end of our own repeat.

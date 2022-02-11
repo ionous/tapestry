@@ -9,7 +9,6 @@ import (
   "git.sr.ht/~ionous/tapestry/blockly/block"
   "git.sr.ht/~ionous/tapestry/blockly/test"
   "git.sr.ht/~ionous/tapestry/dl/literal"
-  "git.sr.ht/~ionous/tapestry/dl/story"
   "git.sr.ht/~ionous/tapestry/dl/testdl"
   "git.sr.ht/~ionous/tapestry/jsn"
   "git.sr.ht/~ionous/tapestry/jsn/chart"
@@ -17,23 +16,6 @@ import (
   "github.com/ionous/errutil"
   "github.com/kr/pretty"
 )
-
-// test writing a block with a field:value pair (use some literal text)
-func TestFields(t *testing.T) {
-  if e := testBlocks(
-    &literal.TextValue{Text: "hello world"}, `{
-  "id": "test-1",
-  "type": "text_value",
-  "extraState": {
-    "TEXT": 1
-  },
-  "fields": {
-    "TEXT": "hello world"
-  }
-}`); e != nil {
-    t.Fatal(e)
-  }
-}
 
 // test a flow within a flow
 func TestEmbeds(t *testing.T) {
@@ -119,47 +101,6 @@ func TestSlot(t *testing.T) {
         },
         "fields": {
           "NUM": 5
-        }
-      }
-    }
-  }
-}`); e != nil {
-    t.Fatal(e)
-  }
-}
-
-// test writing some blockly nested next blocks
-func TestStack(t *testing.T) {
-  if e := testBlocks(&story.StoryFile{
-    StoryLines: []story.StoryStatement{
-      &story.StoryBreak{},
-      &story.StoryBreak{},
-      &story.StoryBreak{},
-    }}, `{
-  "id": "test-1",
-  "type": "story_file",
-  "extraState": {
-    "STORY_LINES": 3
-  },
-  "inputs": {
-    "STORY_LINES": {
-      "block": {
-        "id": "test-2",
-        "type": "_story_break_stack",
-        "extraState": {},
-        "next": {
-          "block": {
-            "id": "test-3",
-            "type": "_story_break_stack",
-            "extraState": {},
-            "next": {
-              "block": {
-                "id": "test-4",
-                "type": "_story_break_stack",
-                "extraState": {}
-              }
-            }
-          }
         }
       }
     }

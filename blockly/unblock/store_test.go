@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"encoding/json"
 	r "reflect"
+	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry"
@@ -18,16 +19,18 @@ import (
 
 func TestStoring(t *testing.T) {
 	for _, p := range test.Pairs {
-		t.Run(p.Name, func(t *testing.T) {
-			if e := testStore(p.Test, p.Json); e != nil {
-				t.Fatal(e)
-			}
-		})
+		if !strings.HasPrefix(p.Name, "x") {
+			t.Run(p.Name, func(t *testing.T) {
+				if e := testUnblock(p.Test, p.Json); e != nil {
+					t.Fatal(e)
+				}
+			})
+		}
 	}
 }
 
 // for now just tests that it can load into the in memory structures without error
-func xTestStoreStructs(t *testing.T) {
+func xTestUnblockStructs(t *testing.T) {
 	var bff unblock.File
 	if e := json.Unmarshal(storeTest, &bff); e != nil {
 		t.Fatal(e)
@@ -66,7 +69,7 @@ func TestCountField(t *testing.T) {
 	}
 }
 
-func testStore(expect jsn.Marshalee, msg string) (err error) {
+func testUnblock(expect jsn.Marshalee, msg string) (err error) {
 	var top unblock.Info
 	if e := json.Unmarshal([]byte(msg), &top); e != nil {
 		err = e

@@ -82,7 +82,7 @@ func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *I
 				cnt := 1 + stack.CountNext() // all of the next blocks connected to the input, plus the input block itself.
 				outBlocks.SetSize(cnt)
 				m.PushState(newStackReader(m, reg, stack.Info))
-
+				okay = true
 			} else {
 				if i, cnt := bff.CountField(term); cnt > 0 {
 					outBlocks.SetSize(cnt)
@@ -94,15 +94,16 @@ func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *I
 		},
 		// simple values live in bff.fields
 		OnValue: func(_ string, pv interface{}) (err error) {
-			if _, ok := bff.Fields.Find(term); !ok {
+			if field, ok := bff.Fields.Find(term); !ok {
 				err = jsn.Missing
 			} else {
-				err = errutil.New("not implemented")
+				err = storeValue(pv, field.Msg)
 			}
 			return
 		},
 		// end of the dl structure
 		OnEnd: func() {
+			m.FinishState(true)
 		},
 	}
 }
@@ -111,48 +112,73 @@ func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *I
 // we expect to get OnMap/OnEnd for every element
 func newStackReader(m *chart.Machine, reg TypeCreator, next *Info) *chart.StateMix {
 	return &chart.StateMix{
-		OnMap: func(typeName string, flow jsn.FlowBlock) (okay bool) {
-			if next != nil {
-				if i, ok := reg.NewType(typeName); !ok {
-					log.Println("couldn't create", typeName)
-				} else if !flow.SetFlow(i) {
-					log.Printf("couldn't set flow %T", i)
-				} else {
-					m.PushState(newInnerBlock(m, reg, flow, next))
-					okay = true
-				}
+		// create the value for the slot
+		OnSlot: func(_ string, slot jsn.SlotBlock) (okay bool) {
+			// the typename we want is (munged) in the block file
+			if typeName, ok := unstackName(next.Type); !ok {
+				log.Println("couldnt unstack", next.Type)
+			} else if i, ok := reg.NewType(typeName); !ok {
+				log.Println("couldn't create", typeName)
+			} else if !slot.SetSlot(i) {
+				log.Printf("couldn't set flow %T", i)
+			} else {
+				okay = true
 			}
 			return
 		},
+		// happens after OnSlot for every block of data in the stack
+		OnMap: func(_ string, flow jsn.FlowBlock) (alwaysTrue bool) {
+			m.PushState(newInnerBlock(m, reg, flow, next))
+			return true
+		},
+		// called after each the map's inner block completes
+		// if we are out of data, we end the stack reader
 		OnCommit: func(interface{}) {
-			// advance to the next incoming data.
-			if next = next.Next.Info; next == nil {
+			// advance the function level's next pointer.
+			if outer := next.Next; outer != nil {
+				next = outer.Info
+			} else {
 				m.FinishState(true)
 			}
 		},
 	}
 }
 
+func unstackName(n string) (ret string, okay bool) {
+	const suffix = "_stack"
+	if cnt := len(n); cnt > len(suffix) && n[0] == '_' && n[cnt-len(suffix):] == suffix {
+		ret = n[1 : cnt-len(suffix)]
+		okay = true
+	}
+	return
+}
+
 func newListReader(m *chart.Machine, b *Info, idx, end int) *chart.StateMix {
 	return &chart.StateMix{
 		OnValue: func(n string, pv interface{}) (err error) {
 			field := b.Fields[idx]
-			if el, ok := pv.(interface{ SetValue(interface{}) bool }); ok {
-				var i interface{}
-				if e := json.Unmarshal(field.Msg, &i); e != nil {
-					err = e
-				} else if !el.SetValue(i) {
-					err = errutil.New("couldnt set value", i)
-				}
-			} else {
-				if e := json.Unmarshal(field.Msg, pv); e != nil {
-					err = e // couldnt unmarshal directly into the target value
-				}
-			}
-			if idx = idx + 1; idx >= end {
+			if e := storeValue(pv, field.Msg); e != nil {
+				err = e
+			} else if idx = idx + 1; idx >= end {
 				m.FinishState(true)
 			}
 			return
 		},
 	}
+}
+
+func storeValue(pv interface{}, msg json.RawMessage) (err error) {
+	if el, ok := pv.(interface{ SetValue(interface{}) bool }); ok {
+		var i interface{}
+		if e := json.Unmarshal(msg, &i); e != nil {
+			err = e
+		} else if !el.SetValue(i) {
+			err = errutil.New("couldnt set value", i)
+		}
+	} else {
+		if e := json.Unmarshal(msg, pv); e != nil {
+			err = e // couldnt unmarshal directly into the target value
+		}
+	}
+	return
 }
