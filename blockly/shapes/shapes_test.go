@@ -5,6 +5,7 @@ import (
 	_ "embed"
 	"encoding/json"
 	"io/fs"
+	"sort"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/spec"
@@ -29,10 +30,15 @@ func TestRepeatingContainers(t *testing.T) {
 	// reads all of the files in the passed filesystem as ifspecs and returns them as one big json array of shapes
 	if reps, e := findRepeatingContainers(idl.Specs); e != nil {
 		t.Fatal(e)
-	} else {
+	} else if diff := pretty.Diff(reps,
+		[]repeatingContainer{
+			{"field_values", "field_value"},
+			{"paragraph", "story_statement"},
+		}); len(diff) > 0 {
 		for _, rep := range reps {
 			t.Log(rep.outer, rep.inner)
 		}
+		t.Fatal("dont want to use any repeating containers")
 	}
 }
 
@@ -55,7 +61,13 @@ func findRepeatingContainers(files fs.FS) (ret []repeatingContainer, err error) 
 	}); e != nil {
 		err = e
 	} else {
-		for _, blockType := range lookup {
+		var keys []string
+		for k, _ := range lookup {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			blockType := lookup[k]
 			// search for flows...
 			if flow, ok := blockType.Spec.Value.(*spec.FlowSpec); ok {
 				// that have a term...
@@ -104,11 +116,10 @@ func TestStoryFileShape(t *testing.T) {
         },
         {
           "name": "STORY_LINES",
-          "type": "input_value",
+          "type": "input_statement",
           "checks": [
-            "story_lines"
-          ],
-          "shadow": "story_lines"
+            "_story_statement_stack"
+          ]
         }
       ]
     ]
@@ -129,43 +140,6 @@ func TestStoryFileShape(t *testing.T) {
 	}
 }
 
-// make sure that story lines has no output and one stacked input.
-func TestStoryLineMui(t *testing.T) {
-	lookup = make(TypeSpecs) // reset
-	expect := `{
-  "type": "_story_lines_mutator",
-  "style": "logic_blocks",
-  "inputsInline": false,
-  "args0": [
-    {
-      "type": "field_label",
-      "text": "story_lines"
-    },
-    {
-      "type": "input_dummy"
-    }
-  ],
-  "message0": "%1%2"
-}`
-	if _, e := readSpec(idl.Specs, "story.ifspecs"); e != nil { // reads into the global lookup
-		t.Fatal(e)
-	} else {
-		blockType := lookup["story_lines"]
-		if flow, ok := blockType.Spec.Value.(*spec.FlowSpec); !ok {
-			t.Fatal("unexpected")
-		} else {
-			var out js.Builder
-			writeMutator(&out, blockType, flow)
-			if str, e := indent(out.String()); e != nil {
-				t.Fatal(e, str)
-			} else if diff := pretty.Diff(str, expect); len(diff) > 0 {
-				t.Log(str)
-				t.Fatal("ng", diff)
-			}
-		}
-	}
-}
-
 func indent(str string) (ret string, err error) {
 	var indent bytes.Buffer
 	if e := json.Indent(&indent, []byte(str), "", "  "); e != nil {
@@ -175,30 +149,3 @@ func indent(str string) (ret string, err error) {
 	}
 	return
 }
-
-//   "type": "story_lines",
-//   "message0": "story_lines",
-//   "colour": "%{BKY_COLOUR_HUE}",
-//   "extensions": [
-//     "tapestry_generic_mixin",
-//     "tapestry_generic_extension"
-//   ],
-//   "mutator": "tapestry_generic_mutation",
-//   "customData": {
-//     "shapeDef": [
-//       [
-//         {
-//           "type": "field_label",
-//           "text": "lines"
-//         },
-//         {
-//           "name": "LINES",
-//           "type": "input_statement",
-//           "checks": [
-//             "stacked_story_statement"
-//           ]
-//         }
-//       ]
-//     ]
-//   }
-// }

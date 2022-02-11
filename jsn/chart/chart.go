@@ -13,12 +13,15 @@ type Machine struct {
 	err      error
 }
 
-// MakeEncoder writes json data
+// MakeEncoder writes data from Tapestry's data-language structures.
+// Encoding *skips* empty in-memory structures ( ex. nil slices. )
 func MakeEncoder() Machine {
 	return makeMachine(true)
 }
 
-// MakeDecoder reads json data
+// MakeDecoder reads data into Tapestry's data-language structures.
+// Decoding visits the in-memory structures regardless of whether they currently have data
+// ( so that they can be filled with data from whatever source is being decoded. )
 func MakeDecoder() Machine {
 	return makeMachine(false)
 }

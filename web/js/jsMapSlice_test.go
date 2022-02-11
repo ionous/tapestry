@@ -36,7 +36,7 @@ func TestMapSlice(t *testing.T) {
 			if want, got := keys[i], el.Key; want != got {
 				t.Fatal("expected key", want, "got", got)
 			}
-			if want, got := vals[i], string(el.Value); want != got {
+			if want, got := vals[i], string(el.Msg); want != got {
 				t.Fatal("expected value", want, "got", got)
 			}
 		}

@@ -7,6 +7,7 @@ import (
   "testing"
 
   "git.sr.ht/~ionous/tapestry/blockly/bgen"
+  "git.sr.ht/~ionous/tapestry/blockly/test"
   "git.sr.ht/~ionous/tapestry/dl/literal"
   "git.sr.ht/~ionous/tapestry/dl/story"
   "git.sr.ht/~ionous/tapestry/dl/testdl"
@@ -168,25 +169,13 @@ func TestStack(t *testing.T) {
   }
 }
 
-// a primitive list is a list of dummy inputs
-// noting that blockly ignores dummies when saving --
-// so get saved in the "fields" section
-func TestList(t *testing.T) {
-  if e := testBlocks(&literal.TextValues{
-    Values: []string{"a", "b", "c"},
-  }, `{
-  "id": "test-1",
-  "type": "text_values",
-  "extraState": {
-    "VALUES": 3
-  },
-  "fields": {
-    "VALUES0": "a",
-    "VALUES1": "b",
-    "VALUES2": "c"
-  }
-}`); e != nil {
-    t.Fatal(e)
+func TestPairs(t *testing.T) {
+  for _, p := range test.Pairs {
+    t.Run(p.Name, func(t *testing.T) {
+      if e := testBlocks(p.Test, p.Json); e != nil {
+        t.Fatal(e)
+      }
+    })
   }
 }
 

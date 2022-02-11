@@ -2,7 +2,6 @@ package din
 
 import (
 	"encoding/json"
-	r "reflect"
 
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
@@ -11,10 +10,14 @@ import (
 
 type xDecoder struct {
 	chart.Machine
-	reg map[string]r.Type
+	reg TypeCreator
 }
 
-func Decode(dst jsn.Marshalee, reg map[string]r.Type, msg json.RawMessage) error {
+type TypeCreator interface {
+	NewType(string) (interface{}, bool)
+}
+
+func Decode(dst jsn.Marshalee, reg TypeCreator, msg json.RawMessage) error {
 	dec := xDecoder{reg: reg}
 	next := dec.newBlock(&msg)
 	next.OnCommit = func(interface{}) {}
@@ -24,10 +27,10 @@ func Decode(dst jsn.Marshalee, reg map[string]r.Type, msg json.RawMessage) error
 }
 
 func (dec *xDecoder) newType(typeName string) (ret interface{}, err error) {
-	if rtype, ok := dec.reg[typeName]; !ok {
+	if val, ok := dec.reg.NewType(typeName); !ok {
 		err = errutil.New("unknown type", typeName)
 	} else {
-		ret = r.New(rtype).Interface()
+		ret = val
 	}
 	return
 }

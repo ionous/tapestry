@@ -9,25 +9,33 @@ import (
 
 // https://github.com/golang/go/issues/27179
 type MapItem struct {
-	Key   string
-	Value json.RawMessage
+	Key string
+	Msg json.RawMessage
 }
 
 type MapSlice []MapItem
 
-// returns a valid pointer, or nil if not found
-func (om MapSlice) Find(k string) (ret *MapItem) {
+// returns a valid pointer into the slice, or nil if not found
+func (om MapSlice) Find(k string) (ret *MapItem, okay bool) {
+	if at := om.FindIndex(k); at >= 0 {
+		ret, okay = &(om[at]), true
+	}
+	return
+}
+
+// returns the index of the item or -1 if not found
+func (om MapSlice) FindIndex(k string) (ret int) {
+	ret = -1 // provisionally
 	for i, kv := range om {
 		if kv.Key == k {
-			ret = &om[i]
+			ret = i
 			break
 		}
 	}
 	return
 }
 
-// expects that we're unmarshaling a map
-// ex. json.Unmarshal(data, om)
+// expects we're unmarshaling a valid json object.
 func (om *MapSlice) UnmarshalJSON(data []byte) (err error) {
 	d := json.NewDecoder(bytes.NewReader(data))
 	d.UseNumber() // so we can determine the width of the original value
@@ -57,7 +65,9 @@ func (om *MapSlice) UnmarshalJSON(data []byte) (err error) {
 	return
 }
 
-func skipValue(d *json.Decoder, data []byte) (ret []byte, err error) {
+// read through the passed json value until its end.
+// return that isolated value, excluding any starting or ending whitespace.
+func skipValue(d *json.Decoder, value []byte) (ret []byte, err error) {
 	var start, depth int64
 	for err == nil && ret == nil {
 		if t, e := d.Token(); e != nil {
@@ -70,21 +80,23 @@ func skipValue(d *json.Decoder, data []byte) (ret []byte, err error) {
 				if depth == 0 {
 					end := d.InputOffset()
 					start := end - int64(width(t))
-					ret = data[start:end]
+					ret = value[start:end]
 				}
 			case json.Delim('['), json.Delim('{'):
 				if depth == 0 {
-					start = d.InputOffset() - 1
+					start = d.InputOffset() - 1 // -1 includes the delimiter in the returned value
 				}
 				depth++
 			case json.Delim(']'), json.Delim('}'):
 				if depth = depth - 1; depth < 0 {
-					// never had any open tokens
-					err = errutil.New("invalid end of array or object")
+					// closed but never had any open tokens
+					err = errutil.New("invalid end of array or object", t)
 				} else if depth == 0 {
-					// had an open token, and returned from it.
+					// had an open token, and now closed it.
+					// its not too picky on the type of token.
+					// assumes the json is valid.
 					end := d.InputOffset()
-					ret = data[start:end]
+					ret = value[start:end]
 				}
 			}
 		}
@@ -92,6 +104,8 @@ func skipValue(d *json.Decoder, data []byte) (ret []byte, err error) {
 	return
 }
 
+// return the length in bytes of the passed token
+// requires the decoder ( see MapSlice UnmarshaJSON ) to be in "UseNumber" mode.
 func width(t json.Token) (ret int) {
 	switch v := t.(type) {
 	case json.Delim:

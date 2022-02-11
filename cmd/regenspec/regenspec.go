@@ -41,7 +41,7 @@ func convert(ts *template.Template, b []byte) (err error) {
 		groups := make(map[string][]*regen.Type)
 		for _, n := range allTypes {
 			var m map[string]interface{}
-			if e := json.Unmarshal(n.Value, &m); e != nil {
+			if e := json.Unmarshal(n.Msg, &m); e != nil {
 				err = e
 				break
 			} else {

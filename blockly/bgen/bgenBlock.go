@@ -36,6 +36,16 @@ func newInnerBlock(m *chart.Machine, body *js.Builder, typeName string, allowExt
 	var term string // set per key
 	blk := blockData{id: NewId(), typeName: typeName, allowExtraData: allowExtraData}
 	return &chart.StateMix{
+		// one of every extant member of the flow ( the encoder skips optional elements lacking a value )
+		// this might be a field or input
+		// we might write to next when the block is *followed* by another in a repeat.
+		// therefore we cant close the block in Commit --
+		// but we might close child blocks
+		OnKey: func(_ string, field string) (noerr error) {
+			term = field[1:] // strip off the $
+			return
+		},
+
 		// a member that is a flow.
 		OnMap: func(_ string, flow jsn.FlowBlock) (alwaysTrue bool) {
 			was := blk.startInput(term)
@@ -47,16 +57,6 @@ func newInnerBlock(m *chart.Machine, body *js.Builder, typeName string, allowExt
 				blk.endInput(was)
 			}
 			return true
-		},
-
-		// one of every extant member of the flow ( the encoder skips optional elements lacking a value )
-		// this might be a field or input
-		// we might write to next when the block is *followed* by another in a repeat.
-		// therefore we cant close the block in Commit --
-		// but we might close child blocks
-		OnKey: func(_ string, field string) (noerr error) {
-			term = field[1:] // strip off the $
-			return
 		},
 
 		// a value that fills a slot; this will be an input

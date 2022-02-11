@@ -59,6 +59,14 @@ func Registry() TypeRegistry {
 	return reg
 }
 
+func (reg TypeRegistry) NewType(typeName string) (ret interface{}, okay bool) {
+	if rtype, ok := reg[typeName]; ok {
+		ret = r.New(rtype).Interface()
+		okay = true
+	}
+	return
+}
+
 func (reg *TypeRegistry) RegisterTypes(cmds []composer.Composer) (err error) {
 	if *(reg) == nil {
 		*(reg) = make(TypeRegistry)
