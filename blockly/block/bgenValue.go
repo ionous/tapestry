@@ -1,4 +1,4 @@
-package bgen
+package block
 
 import (
 	"encoding/json"

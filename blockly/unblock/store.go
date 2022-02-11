@@ -1,4 +1,4 @@
-package store
+package unblock
 
 import (
 	"encoding/json"
@@ -20,7 +20,7 @@ type TypeCreator interface {
 func Decode(dst jsn.Marshalee, reg TypeCreator, msg json.RawMessage) (err error) {
 	// we first unmarshal into a structure we can poke around in
 	// a "streaming" decoder, would be a bit trickier to write.
-	var bff BlockFile
+	var bff File
 	if e := json.Unmarshal(msg, &bff); e != nil {
 		err = e
 	} else if top, ok := bff.FindFirst("story_file"); !ok {
@@ -32,7 +32,7 @@ func Decode(dst jsn.Marshalee, reg TypeCreator, msg json.RawMessage) (err error)
 	return
 }
 
-func NewTopBlock(m *chart.Machine, reg TypeCreator, bff *BlockInfo) *chart.StateMix {
+func NewTopBlock(m *chart.Machine, reg TypeCreator, bff *Info) *chart.StateMix {
 	return &chart.StateMix{
 		OnMap: func(typeName string, flow jsn.FlowBlock) (okay bool) {
 			// bff.type should equal flow.GetType()
@@ -46,7 +46,7 @@ func NewTopBlock(m *chart.Machine, reg TypeCreator, bff *BlockInfo) *chart.State
 	}
 }
 
-func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *BlockInfo) *chart.StateMix {
+func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *Info) *chart.StateMix {
 	var term string
 	return &chart.StateMix{
 		// a member of the dl, which might exist in bff.inputs, .fields, or .next;
@@ -81,7 +81,7 @@ func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *B
 				// could also sink them into a flat list as we count.
 				cnt := 1 + stack.CountNext() // all of the next blocks connected to the input, plus the input block itself.
 				outBlocks.SetSize(cnt)
-				m.PushState(newStackReader(m, reg, stack.BlockInfo))
+				m.PushState(newStackReader(m, reg, stack.Info))
 
 			} else {
 				if i, cnt := bff.CountField(term); cnt > 0 {
@@ -109,7 +109,7 @@ func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *B
 
 // a stack is a repeating slot
 // we expect to get OnMap/OnEnd for every element
-func newStackReader(m *chart.Machine, reg TypeCreator, next *BlockInfo) *chart.StateMix {
+func newStackReader(m *chart.Machine, reg TypeCreator, next *Info) *chart.StateMix {
 	return &chart.StateMix{
 		OnMap: func(typeName string, flow jsn.FlowBlock) (okay bool) {
 			if next != nil {
@@ -126,14 +126,14 @@ func newStackReader(m *chart.Machine, reg TypeCreator, next *BlockInfo) *chart.S
 		},
 		OnCommit: func(interface{}) {
 			// advance to the next incoming data.
-			if next = next.Next.BlockInfo; next == nil {
+			if next = next.Next.Info; next == nil {
 				m.FinishState(true)
 			}
 		},
 	}
 }
 
-func newListReader(m *chart.Machine, b *BlockInfo, idx, end int) *chart.StateMix {
+func newListReader(m *chart.Machine, b *Info, idx, end int) *chart.StateMix {
 	return &chart.StateMix{
 		OnValue: func(n string, pv interface{}) (err error) {
 			field := b.Fields[idx]

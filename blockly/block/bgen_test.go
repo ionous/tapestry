@@ -1,4 +1,4 @@
-package bgen_test
+package block_test
 
 import (
   "bytes"
@@ -6,7 +6,7 @@ import (
   "strconv"
   "testing"
 
-  "git.sr.ht/~ionous/tapestry/blockly/bgen"
+  "git.sr.ht/~ionous/tapestry/blockly/block"
   "git.sr.ht/~ionous/tapestry/blockly/test"
   "git.sr.ht/~ionous/tapestry/dl/literal"
   "git.sr.ht/~ionous/tapestry/dl/story"
@@ -307,13 +307,13 @@ func TestEmptySeries(t *testing.T) {
 
 func testBlocks(src jsn.Marshalee, expect string) (err error) {
   var id int
-  bgen.NewId = func() string {
+  block.NewId = func() string {
     id++
     return "test-" + strconv.Itoa(id)
   }
   var out js.Builder
   enc := chart.MakeEncoder()
-  if e := enc.Marshal(src, bgen.NewTopBlock(&enc, &out)); e != nil {
+  if e := enc.Marshal(src, block.NewTopBlock(&enc, &out)); e != nil {
     err = errutil.New(e, "failed marshal")
   } else if str, e := indent(out.String()); e != nil {
     err = errutil.New(e, "invalid json", str)

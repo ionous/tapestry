@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"git.sr.ht/~ionous/tapestry"
-	"git.sr.ht/~ionous/tapestry/blockly/bgen"
+	"git.sr.ht/~ionous/tapestry/blockly/block"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/web"
 	"github.com/ionous/errutil"
@@ -62,7 +62,7 @@ func (d blocksFile) Get(ctx context.Context, w http.ResponseWriter) (err error) 
 		err = e
 	} else if e := story.Decode(&file, b, tapestry.AllSignatures); e != nil {
 		err = e
-	} else if str, e := bgen.Convert(&file); e != nil {
+	} else if str, e := block.Convert(&file); e != nil {
 		err = e
 	} else {
 		w.Header().Set("Content-Type", "application/json")

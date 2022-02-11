@@ -1,4 +1,4 @@
-package bgen
+package block
 
 import (
 	"git.sr.ht/~ionous/tapestry/blockly/bconst"

@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 
 	"git.sr.ht/~ionous/tapestry"
-	"git.sr.ht/~ionous/tapestry/blockly/bgen"
+	"git.sr.ht/~ionous/tapestry/blockly/block"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn"
@@ -44,7 +44,7 @@ func convert(inFile, outFile string, pretty bool) (err error) {
 		err = e
 	} else if m, e := decode(b); e != nil {
 		err = e
-	} else if x, e := bgen.Convert(m); e != nil {
+	} else if x, e := block.Convert(m); e != nil {
 		err = e
 	} else {
 		// create outfile name if needed

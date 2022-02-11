@@ -1,4 +1,4 @@
-package shapes
+package shape
 
 import (
 	"git.sr.ht/~ionous/tapestry/blockly/bconst"

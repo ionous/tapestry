@@ -1,4 +1,4 @@
-package bgen_test
+package block_test
 
 import (
   "testing"
