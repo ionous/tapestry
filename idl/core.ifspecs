@@ -5,33 +5,6 @@
     {
       "Group contains:": [
         {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
-            "activity",
-            {
-              "flow:trim:uses:": [
-                "act",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "exe",
-                      "execute",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "execute"
-            ],
-            [
-              "hidden"
-            ]
-          ]
-        },
-        {
           "--": [
             "Returns true if all of the evaluations are true."
           ],
@@ -200,14 +173,14 @@
           "Spec:with flow:slots:groups:": [
             "bracket_text",
             {
-              "flow:trim:uses:": [
+              "flow:uses:": [
                 "brackets",
-                true,
                 [
                   {
-                    "Term:type:": [
-                      "do",
-                      "activity"
+                    "Term:type:repeats:": [
+                      "does",
+                      "execute",
+                      true
                     ]
                   }
                 ]
@@ -252,14 +225,14 @@
           "Spec:with flow:slots:groups:": [
             "buffer_text",
             {
-              "flow:trim:uses:": [
+              "flow:uses:": [
                 "buffers",
-                true,
                 [
                   {
-                    "Term:type:": [
-                      "do",
-                      "activity"
+                    "Term:type:repeats:": [
+                      "does",
+                      "execute",
+                      true
                     ]
                   }
                 ]
@@ -271,29 +244,6 @@
             [
               "printing"
             ]
-          ]
-        },
-        {
-          "--": [
-            "Pattern arguments."
-          ],
-          "Spec:with flow:": [
-            "call_args",
-            {
-              "flow:trim:uses:": [
-                "args",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "args",
-                      "arg",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
           ]
         },
         {
@@ -350,10 +300,11 @@
                     ]
                   },
                   {
-                    "Term:name:type:": [
+                    "Term:name:type:repeats:": [
                       "args",
                       "arguments",
-                      "call_args"
+                      "arg",
+                      true
                     ]
                   }
                 ]
@@ -565,9 +516,10 @@
                     ]
                   },
                   {
-                    "Term:type:": [
-                      "do",
-                      "activity"
+                    "Term:type:repeats:": [
+                      "does",
+                      "execute",
+                      true
                     ]
                   },
                   {
@@ -605,9 +557,10 @@
                     ]
                   },
                   {
-                    "Term:type:": [
-                      "do",
-                      "activity"
+                    "Term:type:repeats:": [
+                      "does",
+                      "execute",
+                      true
                     ]
                   },
                   {
@@ -657,9 +610,10 @@
                     ]
                   },
                   {
-                    "Term:type:": [
-                      "do",
-                      "activity"
+                    "Term:type:repeats:": [
+                      "does",
+                      "execute",
+                      true
                     ]
                   },
                   {
@@ -685,14 +639,14 @@
           "Spec:with flow:slots:groups:": [
             "choose_nothing_else",
             {
-              "flow:trim:uses:": [
+              "flow:uses:": [
                 "else_do",
-                true,
                 [
                   {
-                    "Term:type:": [
-                      "do",
-                      "activity"
+                    "Term:type:repeats:": [
+                      "does",
+                      "execute",
+                      true
                     ]
                   }
                 ]
@@ -821,9 +775,10 @@
                     ]
                   },
                   {
-                    "Term:type:": [
-                      "do",
-                      "activity"
+                    "Term:type:repeats:": [
+                      "does",
+                      "execute",
+                      true
                     ]
                   },
                   {
@@ -852,14 +807,14 @@
           "Spec:with flow:slots:groups:": [
             "comma_text",
             {
-              "flow:trim:uses:": [
+              "flow:uses:": [
                 "commas",
-                true,
                 [
                   {
-                    "Term:type:": [
-                      "do",
-                      "activity"
+                    "Term:type:repeats:": [
+                      "does",
+                      "execute",
+                      true
                     ]
                   }
                 ]
@@ -2416,16 +2371,14 @@
           "Spec:with flow:slots:groups:": [
             "row",
             {
-              "flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "do",
-                      "activity"
-                    ]
-                  }
-                ]
+              "flow uses:": [
+                {
+                  "Term:type:repeats:": [
+                    "does",
+                    "execute",
+                    true
+                  ]
+                }
               ]
             },
             [
@@ -2443,16 +2396,14 @@
           "Spec:with flow:slots:groups:": [
             "rows",
             {
-              "flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "do",
-                      "activity"
-                    ]
-                  }
-                ]
+              "flow uses:": [
+                {
+                  "Term:type:repeats:": [
+                    "does",
+                    "execute",
+                    true
+                  ]
+                }
               ]
             },
             [
@@ -2560,14 +2511,14 @@
           "Spec:with flow:slots:groups:": [
             "slash_text",
             {
-              "flow:trim:uses:": [
+              "flow:uses:": [
                 "slashes",
-                true,
                 [
                   {
-                    "Term:type:": [
-                      "do",
-                      "activity"
+                    "Term:type:repeats:": [
+                      "does",
+                      "execute",
+                      true
                     ]
                   }
                 ]
@@ -2608,14 +2559,14 @@
           "Spec:with flow:slots:groups:": [
             "span_text",
             {
-              "flow:trim:uses:": [
+              "flow:uses:": [
                 "spaces",
-                true,
                 [
                   {
-                    "Term:type:": [
-                      "do",
-                      "activity"
+                    "Term:type:repeats:": [
+                      "does",
+                      "execute",
+                      true
                     ]
                   }
                 ]
@@ -2778,9 +2729,10 @@
                     ]
                   },
                   {
-                    "Term:type:": [
-                      "do",
-                      "activity"
+                    "Term:type:repeats:": [
+                      "does",
+                      "execute",
+                      true
                     ]
                   }
                 ]

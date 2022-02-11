@@ -631,7 +631,7 @@
             "event_handler",
             {
               "flow phrase:trim:uses:": [
-                "{$event_phase} {$event} {$provides} do:{$pattern_rules}",
+                "{$event_phase} {$event} {$locals} do:{$rules}",
                 true,
                 [
                   {
@@ -645,14 +645,20 @@
                     ]
                   },
                   {
-                    "Term:type:optional:": [
+                    "Term:name:type:optional:repeats:": [
                       "provides",
-                      "pattern_locals",
+                      "locals",
+                      "property_slot",
+                      true,
                       true
                     ]
                   },
                   {
-                    "Term:": "pattern_rules"
+                    "Term:type:repeats:": [
+                      "rules",
+                      "pattern_rule",
+                      true
+                    ]
                   }
                 ]
               ]
@@ -1713,7 +1719,7 @@
             "pattern_actions",
             {
               "flow phrase:trim:uses:": [
-                "To determine {$name} {$provides} do:{$pattern_rules}",
+                "To determine {$name} {$locals} do: {$rules}",
                 true,
                 [
                   {
@@ -1724,14 +1730,19 @@
                     ]
                   },
                   {
-                    "Term:type:optional:": [
-                      "provides",
-                      "pattern_locals",
+                    "Term:type:optional:repeats:": [
+                      "locals",
+                      "property_slot",
+                      true,
                       true
                     ]
                   },
                   {
-                    "Term:": "pattern_rules"
+                    "Term:type:repeats:": [
+                      "rules",
+                      "pattern_rule",
+                      true
+                    ]
                   }
                 ]
               ]
@@ -1761,9 +1772,10 @@
                     ]
                   },
                   {
-                    "Term:type:optional:": [
+                    "Term:type:optional:repeats:": [
                       "params",
-                      "pattern_params",
+                      "property_slot",
+                      true,
                       true
                     ]
                   },
@@ -1818,61 +1830,6 @@
           ]
         },
         {
-          "--": [
-            "Storage for values used during the execution of a pattern."
-          ],
-          "Spec:with flow:groups:": [
-            "pattern_locals",
-            {
-              "flow phrase:trim:uses:": [
-                "It provides {$locals}",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "locals",
-                      "property_slot",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "patterns"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Pattern parameters.",
-            "Storage for values used during the execution of a pattern."
-          ],
-          "Spec:with flow:groups:": [
-            "pattern_params",
-            {
-              "flow phrase:trim:uses:": [
-                "It requires {$props}",
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "props",
-                      "property_slot",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "patterns"
-            ]
-          ]
-        },
-        {
           "--": "",
           "Spec:with flow:groups:": [
             "pattern_return",
@@ -1902,7 +1859,7 @@
             "pattern_rule",
             {
               "flow phrase:trim:uses:": [
-                "When {$guard}{$flags}, then: {$hook}",
+                "When {$guard}{$flags}, then: {$does}",
                 true,
                 [
                   {
@@ -1921,34 +1878,9 @@
                     ]
                   },
                   {
-                    "Term:name:type:": [
-                      "do",
-                      "hook",
-                      "program_hook"
-                    ]
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "patterns"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:groups:": [
-            "pattern_rules",
-            {
-              "flow phrase:trim:uses:": [
-                "{$pattern_rule}",
-                true,
-                [
-                  {
-                    "Term:optional:repeats:": [
-                      "pattern_rule",
-                      true,
+                    "Term:type:repeats:": [
+                      "does",
+                      "execute",
                       true
                     ]
                   }
@@ -1996,28 +1928,6 @@
               "debug",
               "kinds",
               "positioned"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with swap:groups:": [
-            "program_hook",
-            {
-              "Swap between:": [
-                {
-                  "Pick:label:": [
-                    "activity",
-                    "actions"
-                  ]
-                }
-              ]
-            },
-            [
-              "debug",
-              "patterns",
-              "positioned",
-              "modeling"
             ]
           ]
         },
@@ -2363,29 +2273,8 @@
                 true,
                 [
                   {
-                    "Term:": "story_lines"
-                  }
-                ]
-              ]
-            },
-            [
-              "debug",
-              "statements"
-            ]
-          ]
-        },
-        {
-          "--": "this cheats a bit by making the signature the same as the comment marker  that allows nodes which look like comments but are actually story breaks.",
-          "Spec:with flow:groups:": [
-            "story_lines",
-            {
-              "flow phrase:trim:uses:": [
-                "{$lines}",
-                true,
-                [
-                  {
                     "Term:type:repeats:": [
-                      "lines",
+                      "story_lines",
                       "story_statement",
                       true
                     ]
@@ -2395,8 +2284,7 @@
             },
             [
               "debug",
-              "statements",
-              "internal"
+              "statements"
             ]
           ]
         },
@@ -2466,17 +2354,17 @@
             "test_rule",
             {
               "flow phrase:trim:uses:": [
-                "To test {$test_name}: {$hook}",
+                "To test {$test_name}: {$does}",
                 true,
                 [
                   {
                     "Term:": "test_name"
                   },
                   {
-                    "Term:name:type:": [
-                      "do",
-                      "hook",
-                      "program_hook"
+                    "Term:type:repeats:": [
+                      "does",
+                      "execute",
+                      true
                     ]
                   }
                 ]
@@ -2504,9 +2392,10 @@
                     "Term:": "test_name"
                   },
                   {
-                    "Term:type:": [
+                    "Term:type:repeats:": [
                       "story",
-                      "story_lines"
+                      "story_statement",
+                      true
                     ]
                   }
                 ]

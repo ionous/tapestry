@@ -181,9 +181,10 @@
                     ]
                   },
                   {
-                    "Term:type:": [
-                      "do",
-                      "activity"
+                    "Term:type:repeats:": [
+                      "does",
+                      "execute",
+                      true
                     ]
                   }
                 ]
@@ -226,9 +227,10 @@
                     ]
                   },
                   {
-                    "Term:type:": [
-                      "do",
-                      "activity"
+                    "Term:type:repeats:": [
+                      "does",
+                      "execute",
+                      true
                     ]
                   },
                   {
@@ -453,9 +455,10 @@
                     ]
                   },
                   {
-                    "Term:type:": [
-                      "do",
-                      "activity"
+                    "Term:type:repeats:": [
+                      "does",
+                      "execute",
+                      true
                     ]
                   },
                   {

@@ -560,46 +560,6 @@
       }
     ]
   },
-  "activity": {
-    "name": "activity",
-    "uses": "flow",
-    "group": [
-      "core",
-      "hidden"
-    ],
-    "with": {
-      "tokens": [
-        "act",
-        ": ",
-        "$EXE"
-      ],
-      "params": {
-        "$EXE": {
-          "label": "_",
-          "type": "execute",
-          "repeats": true,
-          "key": "$EXE",
-          "internal": false,
-          "tag": "_",
-          "sel": ""
-        }
-      },
-      "slots": [
-        "execute"
-      ]
-    },
-    "params": [
-      {
-        "label": "_",
-        "type": "execute",
-        "repeats": true,
-        "key": "$EXE",
-        "internal": false,
-        "tag": "_",
-        "sel": ""
-      }
-    ]
-  },
   "affinity": {
     "name": "affinity",
     "desc": "Indicates storage for fields and other properties.",
@@ -1966,17 +1926,20 @@
     "with": {
       "tokens": [
         "brackets",
+        " ",
+        "does",
         ": ",
-        "$DO"
+        "$DOES"
       ],
       "params": {
-        "$DO": {
-          "label": "_",
-          "type": "activity",
-          "key": "$DO",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "_",
-          "sel": ""
+          "tag": "does",
+          "sel": "does"
         }
       },
       "slots": [
@@ -1989,12 +1952,13 @@
     },
     "params": [
       {
-        "label": "_",
-        "type": "activity",
-        "key": "$DO",
+        "label": "does",
+        "type": "execute",
+        "repeats": true,
+        "key": "$DOES",
         "internal": false,
-        "tag": "_",
-        "sel": ""
+        "tag": "does",
+        "sel": "does"
       }
     ]
   },
@@ -2039,17 +2003,20 @@
     "with": {
       "tokens": [
         "buffers",
+        " ",
+        "does",
         ": ",
-        "$DO"
+        "$DOES"
       ],
       "params": {
-        "$DO": {
-          "label": "_",
-          "type": "activity",
-          "key": "$DO",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "_",
-          "sel": ""
+          "tag": "does",
+          "sel": "does"
         }
       },
       "slots": [
@@ -2058,52 +2025,13 @@
     },
     "params": [
       {
-        "label": "_",
-        "type": "activity",
-        "key": "$DO",
-        "internal": false,
-        "tag": "_",
-        "sel": ""
-      }
-    ]
-  },
-  "call_args": {
-    "name": "call_args",
-    "uses": "flow",
-    "group": [
-      "core"
-    ],
-    "with": {
-      "tokens": [
-        "args",
-        ": ",
-        "$ARGS"
-      ],
-      "params": {
-        "$ARGS": {
-          "label": "_",
-          "type": "arg",
-          "repeats": true,
-          "key": "$ARGS",
-          "internal": false,
-          "tag": "_",
-          "sel": ""
-        }
-      }
-    },
-    "desc": {
-      "label": "Call Args",
-      "short": "Pattern arguments."
-    },
-    "params": [
-      {
-        "label": "_",
-        "type": "arg",
+        "label": "does",
+        "type": "execute",
         "repeats": true,
-        "key": "$ARGS",
+        "key": "$DOES",
         "internal": false,
-        "tag": "_",
-        "sel": ""
+        "tag": "does",
+        "sel": "does"
       }
     ]
   },
@@ -2198,7 +2126,8 @@
         },
         "$ARGUMENTS": {
           "label": "args",
-          "type": "call_args",
+          "type": "arg",
+          "repeats": true,
           "key": "$ARGUMENTS",
           "internal": false,
           "tag": "args",
@@ -2231,7 +2160,8 @@
       },
       {
         "label": "args",
-        "type": "call_args",
+        "type": "arg",
+        "repeats": true,
         "key": "$ARGUMENTS",
         "internal": false,
         "tag": "args",
@@ -2862,9 +2792,9 @@
         ": ",
         "$IF",
         ", ",
-        "do",
+        "does",
         ": ",
-        "$DO",
+        "$DOES",
         ", ",
         "else",
         ": ",
@@ -2879,13 +2809,14 @@
           "tag": "_",
           "sel": ""
         },
-        "$DO": {
-          "label": "do",
-          "type": "activity",
-          "key": "$DO",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "do",
-          "sel": "do"
+          "tag": "does",
+          "sel": "does"
         },
         "$ELSE": {
           "label": "else",
@@ -2916,12 +2847,13 @@
         "sel": ""
       },
       {
-        "label": "do",
-        "type": "activity",
-        "key": "$DO",
+        "label": "does",
+        "type": "execute",
+        "repeats": true,
+        "key": "$DOES",
         "internal": false,
-        "tag": "do",
-        "sel": "do"
+        "tag": "does",
+        "sel": "does"
       },
       {
         "label": "else",
@@ -2947,9 +2879,9 @@
         ": ",
         "$IF",
         ", ",
-        "do",
+        "does",
         ": ",
-        "$DO",
+        "$DOES",
         ", ",
         "else",
         ": ",
@@ -2964,13 +2896,14 @@
           "tag": "_",
           "sel": ""
         },
-        "$DO": {
-          "label": "do",
-          "type": "activity",
-          "key": "$DO",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "do",
-          "sel": "do"
+          "tag": "does",
+          "sel": "does"
         },
         "$ELSE": {
           "label": "else",
@@ -2996,12 +2929,13 @@
         "sel": ""
       },
       {
-        "label": "do",
-        "type": "activity",
-        "key": "$DO",
+        "label": "does",
+        "type": "execute",
+        "repeats": true,
+        "key": "$DOES",
         "internal": false,
-        "tag": "do",
-        "sel": "do"
+        "tag": "does",
+        "sel": "does"
       },
       {
         "label": "else",
@@ -3035,9 +2969,9 @@
         ": ",
         "$FILTER",
         ", ",
-        "do",
+        "does",
         ": ",
-        "$DO",
+        "$DOES",
         ", ",
         "else",
         ": ",
@@ -3068,13 +3002,14 @@
           "tag": "and",
           "sel": "and"
         },
-        "$DO": {
-          "label": "do",
-          "type": "activity",
-          "key": "$DO",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "do",
-          "sel": "do"
+          "tag": "does",
+          "sel": "does"
         },
         "$ELSE": {
           "label": "else",
@@ -3116,12 +3051,13 @@
         "sel": "and"
       },
       {
-        "label": "do",
-        "type": "activity",
-        "key": "$DO",
+        "label": "does",
+        "type": "execute",
+        "repeats": true,
+        "key": "$DOES",
         "internal": false,
-        "tag": "do",
-        "sel": "do"
+        "tag": "does",
+        "sel": "does"
       },
       {
         "label": "else",
@@ -3144,17 +3080,20 @@
     "with": {
       "tokens": [
         "else_do",
+        " ",
+        "does",
         ": ",
-        "$DO"
+        "$DOES"
       ],
       "params": {
-        "$DO": {
-          "label": "_",
-          "type": "activity",
-          "key": "$DO",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "_",
-          "sel": ""
+          "tag": "does",
+          "sel": "does"
         }
       },
       "slots": [
@@ -3163,12 +3102,13 @@
     },
     "params": [
       {
-        "label": "_",
-        "type": "activity",
-        "key": "$DO",
+        "label": "does",
+        "type": "execute",
+        "repeats": true,
+        "key": "$DOES",
         "internal": false,
-        "tag": "_",
-        "sel": ""
+        "tag": "does",
+        "sel": "does"
       }
     ]
   },
@@ -3365,9 +3305,9 @@
         ": ",
         "$FILTER",
         ", ",
-        "do",
+        "does",
         ": ",
-        "$DO",
+        "$DOES",
         ", ",
         "else",
         ": ",
@@ -3398,13 +3338,14 @@
           "tag": "and",
           "sel": "and"
         },
-        "$DO": {
-          "label": "do",
-          "type": "activity",
-          "key": "$DO",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "do",
-          "sel": "do"
+          "tag": "does",
+          "sel": "does"
         },
         "$ELSE": {
           "label": "else",
@@ -3451,12 +3392,13 @@
         "sel": "and"
       },
       {
-        "label": "do",
-        "type": "activity",
-        "key": "$DO",
+        "label": "does",
+        "type": "execute",
+        "repeats": true,
+        "key": "$DOES",
         "internal": false,
-        "tag": "do",
-        "sel": "do"
+        "tag": "does",
+        "sel": "does"
       },
       {
         "label": "else",
@@ -3479,17 +3421,20 @@
     "with": {
       "tokens": [
         "commas",
+        " ",
+        "does",
         ": ",
-        "$DO"
+        "$DOES"
       ],
       "params": {
-        "$DO": {
-          "label": "_",
-          "type": "activity",
-          "key": "$DO",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "_",
-          "sel": ""
+          "tag": "does",
+          "sel": "does"
         }
       },
       "slots": [
@@ -3502,12 +3447,13 @@
     },
     "params": [
       {
-        "label": "_",
-        "type": "activity",
-        "key": "$DO",
+        "label": "does",
+        "type": "execute",
+        "repeats": true,
+        "key": "$DOES",
         "internal": false,
-        "tag": "_",
-        "sel": ""
+        "tag": "does",
+        "sel": "does"
       }
     ]
   },
@@ -4662,7 +4608,7 @@
         ": ",
         "$EXPECT",
         ", ",
-        "do",
+        "does",
         ": ",
         "$EXE"
       ],
@@ -4685,12 +4631,13 @@
           "sel": "expect"
         },
         "$EXE": {
-          "label": "do",
+          "label": "does",
           "type": "execute",
+          "repeats": true,
           "key": "$EXE",
           "internal": false,
-          "tag": "do",
-          "sel": "do"
+          "tag": "does",
+          "sel": "does"
         }
       },
       "slots": [
@@ -4716,12 +4663,13 @@
         "sel": "expect"
       },
       {
-        "label": "do",
+        "label": "does",
         "type": "execute",
+        "repeats": true,
         "key": "$EXE",
         "internal": false,
-        "tag": "do",
-        "sel": "do"
+        "tag": "does",
+        "sel": "does"
       }
     ]
   },
@@ -5580,7 +5528,7 @@
         ": ",
         "$WHEN",
         ", ",
-        "do",
+        "does",
         ": ",
         "$EXE",
         ", ",
@@ -5623,12 +5571,13 @@
           "sel": "when"
         },
         "$EXE": {
-          "label": "do",
+          "label": "does",
           "type": "execute",
+          "repeats": true,
           "key": "$EXE",
           "internal": false,
-          "tag": "do",
-          "sel": "do"
+          "tag": "does",
+          "sel": "does"
         },
         "$TOUCH": {
           "label": "touch",
@@ -5679,12 +5628,13 @@
         "sel": "when"
       },
       {
-        "label": "do",
+        "label": "does",
         "type": "execute",
+        "repeats": true,
         "key": "$EXE",
         "internal": false,
-        "tag": "do",
-        "sel": "do"
+        "tag": "does",
+        "sel": "does"
       },
       {
         "label": "touch",
@@ -6095,9 +6045,9 @@
         ": ",
         "$AS",
         ", ",
-        "do",
+        "does",
         ": ",
-        "$DO"
+        "$DOES"
       ],
       "params": {
         "$COUNT": {
@@ -6132,13 +6082,14 @@
           "tag": "as",
           "sel": "as"
         },
-        "$DO": {
-          "label": "do",
-          "type": "activity",
-          "key": "$DO",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "do",
-          "sel": "do"
+          "tag": "does",
+          "sel": "does"
         }
       },
       "slots": [
@@ -6183,12 +6134,13 @@
         "sel": "as"
       },
       {
-        "label": "do",
-        "type": "activity",
-        "key": "$DO",
+        "label": "does",
+        "type": "execute",
+        "repeats": true,
+        "key": "$DOES",
         "internal": false,
-        "tag": "do",
-        "sel": "do"
+        "tag": "does",
+        "sel": "does"
       }
     ]
   },
@@ -6212,9 +6164,9 @@
         ": ",
         "$AS",
         ", ",
-        "do",
+        "does",
         ": ",
-        "$DO",
+        "$DOES",
         ", ",
         "else",
         ": ",
@@ -6246,13 +6198,14 @@
           "tag": "as",
           "sel": "as"
         },
-        "$DO": {
-          "label": "do",
-          "type": "activity",
-          "key": "$DO",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "do",
-          "sel": "do"
+          "tag": "does",
+          "sel": "does"
         },
         "$ELSE": {
           "label": "else",
@@ -6299,12 +6252,13 @@
         "sel": "as"
       },
       {
-        "label": "do",
-        "type": "activity",
-        "key": "$DO",
+        "label": "does",
+        "type": "execute",
+        "repeats": true,
+        "key": "$DOES",
         "internal": false,
-        "tag": "do",
-        "sel": "do"
+        "tag": "does",
+        "sel": "does"
       },
       {
         "label": "else",
@@ -6396,9 +6350,9 @@
         " ",
         "$EVENT",
         " ",
-        "$PROVIDES",
+        "$LOCALS",
         " do:",
-        "$PATTERN_RULES"
+        "$RULES"
       ],
       "params": {
         "$EVENT_PHASE": {
@@ -6417,19 +6371,21 @@
           "tag": "event",
           "sel": "event"
         },
-        "$PROVIDES": {
+        "$LOCALS": {
           "label": "provides",
-          "type": "pattern_locals",
+          "type": "property_slot",
           "optional": true,
-          "key": "$PROVIDES",
+          "repeats": true,
+          "key": "$LOCALS",
           "internal": false,
           "tag": "provides",
           "sel": "provides"
         },
-        "$PATTERN_RULES": {
-          "label": "pattern rules",
-          "type": "pattern_rules",
-          "key": "$PATTERN_RULES",
+        "$RULES": {
+          "label": "rules",
+          "type": "pattern_rule",
+          "repeats": true,
+          "key": "$RULES",
           "internal": false,
           "tag": "rules",
           "sel": "rules"
@@ -6458,17 +6414,19 @@
       },
       {
         "label": "provides",
-        "type": "pattern_locals",
+        "type": "property_slot",
         "optional": true,
-        "key": "$PROVIDES",
+        "repeats": true,
+        "key": "$LOCALS",
         "internal": false,
         "tag": "provides",
         "sel": "provides"
       },
       {
-        "label": "pattern rules",
-        "type": "pattern_rules",
-        "key": "$PATTERN_RULES",
+        "label": "rules",
+        "type": "pattern_rule",
+        "repeats": true,
+        "key": "$RULES",
         "internal": false,
         "tag": "rules",
         "sel": "rules"
@@ -7593,7 +7551,9 @@
           "sel": ""
         }
       },
-      "slots": []
+      "slots": [
+        "story_statement"
+      ]
     },
     "params": [
       {
@@ -8835,9 +8795,9 @@
         ": ",
         "$AS",
         ", ",
-        "do",
+        "does",
         ": ",
-        "$DO",
+        "$DOES",
         ", ",
         "else",
         ": ",
@@ -8860,13 +8820,14 @@
           "tag": "as",
           "sel": "as"
         },
-        "$DO": {
-          "label": "do",
-          "type": "activity",
-          "key": "$DO",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "do",
-          "sel": "do"
+          "tag": "does",
+          "sel": "does"
         },
         "$ELSE": {
           "label": "else",
@@ -8904,12 +8865,13 @@
         "sel": "as"
       },
       {
-        "label": "do",
-        "type": "activity",
-        "key": "$DO",
+        "label": "does",
+        "type": "execute",
+        "repeats": true,
+        "key": "$DOES",
         "internal": false,
-        "tag": "do",
-        "sel": "do"
+        "tag": "does",
+        "sel": "does"
       },
       {
         "label": "else",
@@ -12647,9 +12609,9 @@
         "To determine ",
         "$NAME",
         " ",
-        "$PROVIDES",
-        " do:",
-        "$PATTERN_RULES"
+        "$LOCALS",
+        " do: ",
+        "$RULES"
       ],
       "params": {
         "$NAME": {
@@ -12660,19 +12622,21 @@
           "tag": "_",
           "sel": ""
         },
-        "$PROVIDES": {
-          "label": "provides",
-          "type": "pattern_locals",
+        "$LOCALS": {
+          "label": "locals",
+          "type": "property_slot",
           "optional": true,
-          "key": "$PROVIDES",
+          "repeats": true,
+          "key": "$LOCALS",
           "internal": false,
           "tag": "provides",
           "sel": "provides"
         },
-        "$PATTERN_RULES": {
-          "label": "pattern rules",
-          "type": "pattern_rules",
-          "key": "$PATTERN_RULES",
+        "$RULES": {
+          "label": "rules",
+          "type": "pattern_rule",
+          "repeats": true,
+          "key": "$RULES",
           "internal": false,
           "tag": "rules",
           "sel": "rules"
@@ -12694,18 +12658,20 @@
         "sel": ""
       },
       {
-        "label": "provides",
-        "type": "pattern_locals",
+        "label": "locals",
+        "type": "property_slot",
         "optional": true,
-        "key": "$PROVIDES",
+        "repeats": true,
+        "key": "$LOCALS",
         "internal": false,
         "tag": "provides",
         "sel": "provides"
       },
       {
-        "label": "pattern rules",
-        "type": "pattern_rules",
-        "key": "$PATTERN_RULES",
+        "label": "rules",
+        "type": "pattern_rule",
+        "repeats": true,
+        "key": "$RULES",
         "internal": false,
         "tag": "rules",
         "sel": "rules"
@@ -12745,8 +12711,9 @@
         },
         "$PARAMS": {
           "label": "params",
-          "type": "pattern_params",
+          "type": "property_slot",
           "optional": true,
+          "repeats": true,
           "key": "$PARAMS",
           "internal": false,
           "tag": "requires",
@@ -12782,8 +12749,9 @@
       },
       {
         "label": "params",
-        "type": "pattern_params",
+        "type": "property_slot",
         "optional": true,
+        "repeats": true,
         "key": "$PARAMS",
         "internal": false,
         "tag": "requires",
@@ -12870,57 +12838,6 @@
       }
     ]
   },
-  "pattern_locals": {
-    "name": "pattern_locals",
-    "desc": {
-      "label": "Pattern locals",
-      "short": "Storage for values used during the execution of a pattern.",
-      "long": ""
-    },
-    "uses": "flow",
-    "group": [
-      "story",
-      "debug",
-      "patterns"
-    ],
-    "with": {
-      "tokens": [
-        "It provides ",
-        "$LOCALS"
-      ],
-      "params": {
-        "$LOCALS": {
-          "label": "locals",
-          "type": "property_slot",
-          "repeats": true,
-          "filters": [
-            "comma-and"
-          ],
-          "key": "$LOCALS",
-          "internal": false,
-          "tag": "_",
-          "sel": ""
-        }
-      },
-      "slots": []
-    },
-    "lede": "pattern_locals",
-    "sign": "pattern_locals:",
-    "params": [
-      {
-        "label": "locals",
-        "type": "property_slot",
-        "repeats": true,
-        "filters": [
-          "comma-and"
-        ],
-        "key": "$LOCALS",
-        "internal": false,
-        "tag": "_",
-        "sel": ""
-      }
-    ]
-  },
   "pattern_name": {
     "name": "pattern_name",
     "uses": "str",
@@ -12951,57 +12868,6 @@
         "internal": false,
         "tag": "pattern_name",
         "sel": "pattern_name"
-      }
-    ]
-  },
-  "pattern_params": {
-    "name": "pattern_params",
-    "desc": {
-      "label": "Pattern parameters",
-      "short": "Storage for values used during the execution of a pattern.",
-      "long": ""
-    },
-    "uses": "flow",
-    "group": [
-      "story",
-      "debug",
-      "patterns"
-    ],
-    "with": {
-      "tokens": [
-        "It requires ",
-        "$PROPS"
-      ],
-      "params": {
-        "$PROPS": {
-          "label": "props",
-          "type": "property_slot",
-          "repeats": true,
-          "filters": [
-            "comma-and"
-          ],
-          "key": "$PROPS",
-          "internal": false,
-          "tag": "_",
-          "sel": ""
-        }
-      },
-      "slots": []
-    },
-    "lede": "pattern_params",
-    "sign": "pattern_params:",
-    "params": [
-      {
-        "label": "props",
-        "type": "property_slot",
-        "repeats": true,
-        "filters": [
-          "comma-and"
-        ],
-        "key": "$PROPS",
-        "internal": false,
-        "tag": "_",
-        "sel": ""
       }
     ]
   },
@@ -13058,7 +12924,7 @@
         "$GUARD",
         "$FLAGS",
         ", then: ",
-        "$HOOK"
+        "$DOES"
       ],
       "params": {
         "$GUARD": {
@@ -13078,13 +12944,14 @@
           "tag": "flags",
           "sel": "flags"
         },
-        "$HOOK": {
-          "label": "do",
-          "type": "program_hook",
-          "key": "$HOOK",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "hook",
-          "sel": "hook"
+          "tag": "does",
+          "sel": "does"
         }
       },
       "slots": []
@@ -13108,51 +12975,13 @@
         "sel": "flags"
       },
       {
-        "label": "do",
-        "type": "program_hook",
-        "key": "$HOOK",
-        "internal": false,
-        "tag": "hook",
-        "sel": "hook"
-      }
-    ]
-  },
-  "pattern_rules": {
-    "name": "pattern_rules",
-    "uses": "flow",
-    "group": [
-      "story",
-      "debug",
-      "patterns"
-    ],
-    "with": {
-      "tokens": [
-        "$PATTERN_RULE"
-      ],
-      "params": {
-        "$PATTERN_RULE": {
-          "label": "pattern rule",
-          "type": "pattern_rule",
-          "optional": true,
-          "repeats": true,
-          "key": "$PATTERN_RULE",
-          "internal": false,
-          "tag": "_",
-          "sel": ""
-        }
-      },
-      "slots": []
-    },
-    "params": [
-      {
-        "label": "pattern rule",
-        "type": "pattern_rule",
-        "optional": true,
+        "label": "does",
+        "type": "execute",
         "repeats": true,
-        "key": "$PATTERN_RULE",
+        "key": "$DOES",
         "internal": false,
-        "tag": "_",
-        "sel": ""
+        "tag": "does",
+        "sel": "does"
       }
     ]
   },
@@ -13529,43 +13358,6 @@
         "internal": false,
         "tag": "by",
         "sel": "by"
-      }
-    ]
-  },
-  "program_hook": {
-    "name": "program_hook",
-    "uses": "swap",
-    "group": [
-      "story",
-      "debug",
-      "patterns",
-      "positioned",
-      "modeling"
-    ],
-    "with": {
-      "tokens": [
-        "do ",
-        "$ACTIVITY"
-      ],
-      "params": {
-        "$ACTIVITY": {
-          "label": "actions",
-          "type": "activity",
-          "key": "$ACTIVITY",
-          "internal": false,
-          "tag": "activity",
-          "sel": "activity"
-        }
-      }
-    },
-    "params": [
-      {
-        "label": "actions",
-        "type": "activity",
-        "key": "$ACTIVITY",
-        "internal": false,
-        "tag": "activity",
-        "sel": "activity"
       }
     ]
   },
@@ -15541,17 +15333,20 @@
     "with": {
       "tokens": [
         "row",
+        " ",
+        "does",
         ": ",
-        "$DO"
+        "$DOES"
       ],
       "params": {
-        "$DO": {
-          "label": "_",
-          "type": "activity",
-          "key": "$DO",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "_",
-          "sel": ""
+          "tag": "does",
+          "sel": "does"
         }
       },
       "slots": [
@@ -15564,12 +15359,13 @@
     },
     "params": [
       {
-        "label": "_",
-        "type": "activity",
-        "key": "$DO",
+        "label": "does",
+        "type": "execute",
+        "repeats": true,
+        "key": "$DOES",
         "internal": false,
-        "tag": "_",
-        "sel": ""
+        "tag": "does",
+        "sel": "does"
       }
     ]
   },
@@ -15583,17 +15379,20 @@
     "with": {
       "tokens": [
         "rows",
+        " ",
+        "does",
         ": ",
-        "$DO"
+        "$DOES"
       ],
       "params": {
-        "$DO": {
-          "label": "_",
-          "type": "activity",
-          "key": "$DO",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "_",
-          "sel": ""
+          "tag": "does",
+          "sel": "does"
         }
       },
       "slots": [
@@ -15606,12 +15405,13 @@
     },
     "params": [
       {
-        "label": "_",
-        "type": "activity",
-        "key": "$DO",
+        "label": "does",
+        "type": "execute",
+        "repeats": true,
+        "key": "$DOES",
         "internal": false,
-        "tag": "_",
-        "sel": ""
+        "tag": "does",
+        "sel": "does"
       }
     ]
   },
@@ -15904,17 +15704,20 @@
     "with": {
       "tokens": [
         "slashes",
+        " ",
+        "does",
         ": ",
-        "$DO"
+        "$DOES"
       ],
       "params": {
-        "$DO": {
-          "label": "_",
-          "type": "activity",
-          "key": "$DO",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "_",
-          "sel": ""
+          "tag": "does",
+          "sel": "does"
         }
       },
       "slots": [
@@ -15927,12 +15730,13 @@
     },
     "params": [
       {
-        "label": "_",
-        "type": "activity",
-        "key": "$DO",
+        "label": "does",
+        "type": "execute",
+        "repeats": true,
+        "key": "$DOES",
         "internal": false,
-        "tag": "_",
-        "sel": ""
+        "tag": "does",
+        "sel": "does"
       }
     ]
   },
@@ -15989,17 +15793,20 @@
     "with": {
       "tokens": [
         "spaces",
+        " ",
+        "does",
         ": ",
-        "$DO"
+        "$DOES"
       ],
       "params": {
-        "$DO": {
-          "label": "_",
-          "type": "activity",
-          "key": "$DO",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "_",
-          "sel": ""
+          "tag": "does",
+          "sel": "does"
         }
       },
       "slots": [
@@ -16012,12 +15819,13 @@
     },
     "params": [
       {
-        "label": "_",
-        "type": "activity",
-        "key": "$DO",
+        "label": "does",
+        "type": "execute",
+        "repeats": true,
+        "key": "$DOES",
         "internal": false,
-        "tag": "_",
-        "sel": ""
+        "tag": "does",
+        "sel": "does"
       }
     ]
   },
@@ -16141,7 +15949,8 @@
       "params": {
         "$STORY_LINES": {
           "label": "_",
-          "type": "story_lines",
+          "type": "story_statement",
+          "repeats": true,
           "key": "$STORY_LINES",
           "internal": false,
           "tag": "_",
@@ -16155,49 +15964,9 @@
     "params": [
       {
         "label": "_",
-        "type": "story_lines",
-        "key": "$STORY_LINES",
-        "internal": false,
-        "tag": "_",
-        "sel": ""
-      }
-    ]
-  },
-  "story_lines": {
-    "name": "story_lines",
-    "desc": "this cheats a bit by making the signature the same as the comment marker  that allows nodes which look like comments but are actually story breaks.",
-    "uses": "flow",
-    "group": [
-      "story",
-      "debug",
-      "statements",
-      "internal"
-    ],
-    "with": {
-      "tokens": [
-        "$LINES"
-      ],
-      "params": {
-        "$LINES": {
-          "label": "_",
-          "type": "story_statement",
-          "repeats": true,
-          "key": "$LINES",
-          "internal": false,
-          "tag": "_",
-          "sel": ""
-        }
-      },
-      "slots": []
-    },
-    "lede": "story",
-    "sign": "story:",
-    "params": [
-      {
-        "label": "_",
         "type": "story_statement",
         "repeats": true,
-        "key": "$LINES",
+        "key": "$STORY_LINES",
         "internal": false,
         "tag": "_",
         "sel": ""
@@ -16907,7 +16676,7 @@
         "To test ",
         "$TEST_NAME",
         ": ",
-        "$HOOK"
+        "$DOES"
       ],
       "params": {
         "$TEST_NAME": {
@@ -16918,13 +16687,14 @@
           "tag": "_",
           "sel": ""
         },
-        "$HOOK": {
-          "label": "do",
-          "type": "program_hook",
-          "key": "$HOOK",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "hook",
-          "sel": "hook"
+          "tag": "does",
+          "sel": "does"
         }
       },
       "slots": [
@@ -16941,12 +16711,13 @@
         "sel": ""
       },
       {
-        "label": "do",
-        "type": "program_hook",
-        "key": "$HOOK",
+        "label": "does",
+        "type": "execute",
+        "repeats": true,
+        "key": "$DOES",
         "internal": false,
-        "tag": "hook",
-        "sel": "hook"
+        "tag": "does",
+        "sel": "does"
       }
     ]
   },
@@ -16977,7 +16748,8 @@
         },
         "$STORY": {
           "label": "story",
-          "type": "story_lines",
+          "type": "story_statement",
+          "repeats": true,
           "key": "$STORY",
           "internal": false,
           "tag": "story",
@@ -16999,7 +16771,8 @@
       },
       {
         "label": "story",
-        "type": "story_lines",
+        "type": "story_statement",
+        "repeats": true,
         "key": "$STORY",
         "internal": false,
         "tag": "story",
@@ -18098,9 +17871,9 @@
         ": ",
         "$TRUE",
         ", ",
-        "do",
+        "does",
         ": ",
-        "$DO"
+        "$DOES"
       ],
       "params": {
         "$TRUE": {
@@ -18111,13 +17884,14 @@
           "tag": "_",
           "sel": ""
         },
-        "$DO": {
-          "label": "do",
-          "type": "activity",
-          "key": "$DO",
+        "$DOES": {
+          "label": "does",
+          "type": "execute",
+          "repeats": true,
+          "key": "$DOES",
           "internal": false,
-          "tag": "do",
-          "sel": "do"
+          "tag": "does",
+          "sel": "does"
         }
       },
       "slots": [
@@ -18138,12 +17912,13 @@
         "sel": ""
       },
       {
-        "label": "do",
-        "type": "activity",
-        "key": "$DO",
+        "label": "does",
+        "type": "execute",
+        "repeats": true,
+        "key": "$DOES",
         "internal": false,
-        "tag": "do",
-        "sel": "do"
+        "tag": "does",
+        "sel": "does"
       }
     ]
   },
