@@ -3,6 +3,7 @@ package test
 import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/dl/testdl"
 	"git.sr.ht/~ionous/tapestry/jsn"
 )
 
@@ -46,7 +47,7 @@ var Pairs = []struct {
   }
 }`}, {
 	// ------------------------------------------------------------
-	// test writing some nested next content-free blocks
+	// test nested content-free blocks
 	"Stack",
 	&story.StoryFile{
 		StoryLines: []story.StoryStatement{
@@ -82,5 +83,15 @@ var Pairs = []struct {
       }
     }
   }
+}`}, {
+	// ------------------------------------------------------------
+	// repeats of an empty series
+	"EmptySeries",
+	&testdl.TestFlow{
+		Slots: []testdl.TestSlot{},
+	}, `{
+  "id": "test-1",
+  "type": "test_flow",
+  "extraState": {}
 }`,
 }}

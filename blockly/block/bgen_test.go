@@ -233,19 +233,6 @@ func TestSeries(t *testing.T) {
   }
 }
 
-// repeats of an empty series
-func TestEmptySeries(t *testing.T) {
-  if e := testBlocks(&testdl.TestFlow{
-    Slots: []testdl.TestSlot{},
-  }, `{
-  "id": "test-1",
-  "type": "test_flow",
-  "extraState": {}
-}`); e != nil {
-    t.Fatal(e)
-  }
-}
-
 func testBlocks(src jsn.Marshalee, expect string) (err error) {
   var id int
   block.NewId = func() string {

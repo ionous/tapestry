@@ -40,7 +40,6 @@ func NewTopBlock(m *chart.Machine, reg TypeCreator, bff *Info) *chart.StateMix {
 			return true
 		},
 		OnCommit: func(interface{}) {
-			// blk.R(close)
 			// m.FinishState(nil)
 		},
 	}
@@ -156,13 +155,21 @@ func unstackName(n string) (ret string, okay bool) {
 func newListReader(m *chart.Machine, b *Info, idx, end int) *chart.StateMix {
 	return &chart.StateMix{
 		OnValue: func(n string, pv interface{}) (err error) {
-			field := b.Fields[idx]
-			if e := storeValue(pv, field.Msg); e != nil {
-				err = e
-			} else if idx = idx + 1; idx >= end {
-				m.FinishState(true)
+			if idx < 0 {
+				err = errutil.New("list underflow")
+			} else if idx >= end {
+				err = errutil.New("list overflow")
+			} else {
+				field := b.Fields[idx]
+				idx++ // next time, next field
+				if e := storeValue(pv, field.Msg); e != nil {
+					err = e
+				}
 			}
 			return
+		},
+		OnEnd: func() {
+			m.FinishState(true)
 		},
 	}
 }
