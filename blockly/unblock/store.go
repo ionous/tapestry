@@ -75,17 +75,23 @@ func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *I
 		// we could return true/false depending on whether the block file has data
 		// but first we have to find out where that data lives
 		OnRepeat: func(typeName string, outBlocks jsn.SliceBlock) (okay bool) {
-			if stack, ok := bff.Inputs[term]; ok {
-				// might be nicer if count could grow, rather than counting in advance
-				// could also sink them into a flat list as we count.
-				cnt := 1 + stack.CountNext() // all of the next blocks connected to the input, plus the input block itself.
+			if i, cnt := bff.CountFields(term); cnt > 0 {
 				outBlocks.SetSize(cnt)
-				m.PushState(newStackReader(m, reg, stack.Info))
+				m.PushState(newListReader(m, bff, i, i+cnt))
 				okay = true
-			} else {
-				if i, cnt := bff.CountField(term); cnt > 0 {
+			} else if i, cnt := bff.CountInputs(term); cnt > 0 {
+				outBlocks.SetSize(cnt)
+				m.PushState(newSeriesReader(m, reg, bff, i, i+cnt))
+				okay = true
+			} else if at := bff.Inputs.FindIndex(term); at >= 0 {
+				if input, e := bff.ReadInput(at); e != nil {
+					log.Println(e)
+				} else {
+					// might be nicer if count could grow, rather than counting in advance
+					// could also sink them into a flat list as we count.
+					cnt := 1 + input.CountNext() // all of the next blocks connected to the input, plus the input block itself.
 					outBlocks.SetSize(cnt)
-					m.PushState(newListReader(m, bff, i, i+cnt))
+					m.PushState(newStackReader(m, reg, input.Info))
 					okay = true
 				}
 			}
@@ -116,10 +122,8 @@ func newStackReader(m *chart.Machine, reg TypeCreator, next *Info) *chart.StateM
 			// the typename we want is (munged) in the block file
 			if typeName, ok := unstackName(next.Type); !ok {
 				log.Println("couldnt unstack", next.Type)
-			} else if i, ok := reg.NewType(typeName); !ok {
-				log.Println("couldn't create", typeName)
-			} else if !slot.SetSlot(i) {
-				log.Printf("couldn't set flow %T", i)
+			} else if e := fillSlot(reg, slot, typeName); e != nil {
+				log.Println(e)
 			} else {
 				okay = true
 			}
@@ -152,6 +156,47 @@ func unstackName(n string) (ret string, okay bool) {
 	return
 }
 
+// non-stacking slots are a series of inputs
+func newSeriesReader(m *chart.Machine, reg TypeCreator, bff *Info, idx, end int) *chart.StateMix {
+	var next *Info
+	return &chart.StateMix{
+		// create the value for the slot
+		OnSlot: func(_ string, slot jsn.SlotBlock) (okay bool) {
+			if input, e := bff.ReadInput(idx); e != nil {
+				log.Println(e)
+			} else if e := fillSlot(reg, slot, input.Type); e != nil {
+				log.Println(e)
+			} else {
+				next = input.Info
+				okay = true
+			}
+			return
+		},
+		// happens after OnSlot for every block of data in the stack
+		OnMap: func(_ string, flow jsn.FlowBlock) (alwaysTrue bool) {
+			m.PushState(newInnerBlock(m, reg, flow, next))
+			return true
+		},
+		// called after each the map's inner block completes
+		// if we are out of data, we're done reading the series
+		OnCommit: func(interface{}) {
+			if idx++; idx >= end {
+				m.FinishState(true)
+			}
+		},
+	}
+}
+
+func fillSlot(reg TypeCreator, slot jsn.SlotBlock, typeName string) (err error) {
+	if i, ok := reg.NewType(typeName); !ok {
+		err = errutil.New("couldn't create", typeName)
+	} else if !slot.SetSlot(i) {
+		err = errutil.New("couldn't set flow %T", i)
+	}
+	return
+}
+
+// an array of primitives is a list of fields .
 func newListReader(m *chart.Machine, b *Info, idx, end int) *chart.StateMix {
 	return &chart.StateMix{
 		OnValue: func(n string, pv interface{}) (err error) {

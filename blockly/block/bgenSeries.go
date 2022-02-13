@@ -14,6 +14,11 @@ func newSeries(m *chart.Machine, term string, inputs *js.Builder) *chart.StateMi
 	var cnt int
 	var writingSlot bool
 	return &chart.StateMix{
+		OnSlot: func(string, jsn.SlotBlock) (okay bool) {
+			cnt++ // we count every slot, even if there is no block filling it.
+			writingSlot = true
+			return true
+		},
 		OnMap: func(typeName string, _ jsn.FlowBlock) bool {
 			if inputs.Len() > 0 {
 				inputs.R(js.Comma)
@@ -32,11 +37,6 @@ func newSeries(m *chart.Machine, term string, inputs *js.Builder) *chart.StateMi
 		// when a child ( the inner block ) has finished
 		OnCommit: func(interface{}) {
 			inputs.R(close, close)
-		},
-		OnSlot: func(string, jsn.SlotBlock) (okay bool) {
-			cnt++ // we count every slot, even if there is no block filling it.
-			writingSlot = true
-			return true
 		},
 		OnEnd: func() {
 			// note: we reuse the current state for each "OnSlot"

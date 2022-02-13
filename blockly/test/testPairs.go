@@ -15,6 +15,36 @@ var Pairs = []struct {
 	Json string
 }{{
 	// ------------------------------------------------------------
+	// repeats of a non-stacking slot.
+	"Series",
+	&testdl.TestFlow{
+		Slots: []testdl.TestSlot{
+			&testdl.TestFlow{},
+			&testdl.TestFlow{},
+		}}, `{
+  "id": "test-1",
+  "type": "test_flow",
+  "extraState": {
+    "SLOTS": 2
+  },
+  "inputs": {
+    "SLOTS0": {
+      "block": {
+        "id": "test-2",
+        "type": "test_flow",
+        "extraState": {}
+      }
+    },
+    "SLOTS1": {
+      "block": {
+        "id": "test-3",
+        "type": "test_flow",
+        "extraState": {}
+      }
+    }
+  }
+}`}, {
+	// ------------------------------------------------------------
 	// test a block with a field:value pair (use some literal text)
 	"Field",
 	&literal.TextValue{Text: "hello world"}, `{
@@ -28,7 +58,7 @@ var Pairs = []struct {
   }
 }`}, {
 	// ------------------------------------------------------------
-	// test a primitive list is a list of dummy inputs.
+	// an array of primitives is a list of dummy inputs.
 	// ( noting that blockly ignores dummies when saving,
 	// so they get saved in the "fields" section )
 	"List",
