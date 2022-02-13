@@ -17,30 +17,6 @@ import (
   "github.com/kr/pretty"
 )
 
-// test a flow within a flow
-func TestEmbeds(t *testing.T) {
-  if e := testBlocks(&testdl.TestEmbed{
-    TestFlow: testdl.TestFlow{},
-  }, `{
-  "id": "test-1",
-  "type": "test_embed",
-  "extraState": {
-    "TEST_FLOW": 1
-  },
-  "inputs": {
-    "TEST_FLOW": {
-      "block": {
-        "id": "test-2",
-        "type": "test_flow",
-        "extraState": {}
-      }
-    }
-  }
-}`); e != nil {
-    t.Fatal(e)
-  }
-}
-
 // test a swap member of the flow
 func TestSwap(t *testing.T) {
   if e := testBlocks(&testdl.TestFlow{
@@ -66,41 +42,6 @@ func TestSwap(t *testing.T) {
         "type": "test_txt",
         "fields": {
           "TEST_TXT": "something"
-        }
-      }
-    }
-  }
-}`); e != nil {
-    t.Fatal(e)
-  }
-}
-
-// test a slot member of the flow
-func TestSlot(t *testing.T) {
-  if e := testBlocks(&literal.FieldValue{
-    Field: "test",
-    Value: &literal.NumValue{
-      Num: 5,
-    }}, `{
-  "id": "test-1",
-  "type": "field_value",
-  "extraState": {
-    "FIELD": 1,
-    "VALUE": 1
-  },
-  "fields": {
-    "FIELD": "test"
-  },
-  "inputs": {
-    "VALUE": {
-      "block": {
-        "id": "test-2",
-        "type": "num_value",
-        "extraState": {
-          "NUM": 1
-        },
-        "fields": {
-          "NUM": 5
         }
       }
     }

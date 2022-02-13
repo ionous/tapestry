@@ -1,27 +1,80 @@
 package test
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/dl/testdl"
-	"git.sr.ht/~ionous/tapestry/jsn"
+  "git.sr.ht/~ionous/tapestry/dl/literal"
+  "git.sr.ht/~ionous/tapestry/dl/story"
+  "git.sr.ht/~ionous/tapestry/dl/testdl"
+  "git.sr.ht/~ionous/tapestry/jsn"
 )
 
 // contents of block files and their matching representation in go.
 // ( used by un/block to test read/writing of block files )
 var Pairs = []struct {
-	Name string
-	Test jsn.Marshalee
-	Json string
+  Name string
+  Test jsn.Marshalee
+  Json string
 }{{
-	// ------------------------------------------------------------
-	// repeats of a non-stacking slot.
-	"Series",
-	&testdl.TestFlow{
-		Slots: []testdl.TestSlot{
-			&testdl.TestFlow{},
-			&testdl.TestFlow{},
-		}}, `{
+  // ------------------------------------------------------------
+  // a flow within a flow
+  "Embed",
+  &testdl.TestEmbed{
+    TestFlow: testdl.TestFlow{},
+  }, `{
+  "id": "test-1",
+  "type": "test_embed",
+  "extraState": {
+    "TEST_FLOW": 1
+  },
+  "inputs": {
+    "TEST_FLOW": {
+      "block": {
+        "id": "test-2",
+        "type": "test_flow",
+        "extraState": {}
+      }
+    }
+  }
+}`}, {
+  // ------------------------------------------------------------
+  // a flow with a single slot.
+  "Slot",
+  &literal.FieldValue{
+    Field: "test",
+    Value: &literal.NumValue{
+      Num: 5,
+    }}, `{
+  "id": "test-1",
+  "type": "field_value",
+  "extraState": {
+    "FIELD": 1,
+    "VALUE": 1
+  },
+  "fields": {
+    "FIELD": "test"
+  },
+  "inputs": {
+    "VALUE": {
+      "block": {
+        "id": "test-2",
+        "type": "num_value",
+        "extraState": {
+          "NUM": 1
+        },
+        "fields": {
+          "NUM": 5
+        }
+      }
+    }
+  }
+}`}, {
+  // ------------------------------------------------------------
+  // repeats of a non-stacking slot.
+  "Series",
+  &testdl.TestFlow{
+    Slots: []testdl.TestSlot{
+      &testdl.TestFlow{},
+      &testdl.TestFlow{},
+    }}, `{
   "id": "test-1",
   "type": "test_flow",
   "extraState": {
@@ -44,10 +97,10 @@ var Pairs = []struct {
     }
   }
 }`}, {
-	// ------------------------------------------------------------
-	// test a block with a field:value pair (use some literal text)
-	"Field",
-	&literal.TextValue{Text: "hello world"}, `{
+  // ------------------------------------------------------------
+  // test a block with a field:value pair (use some literal text)
+  "Field",
+  &literal.TextValue{Text: "hello world"}, `{
   "id": "test-1",
   "type": "text_value",
   "extraState": {
@@ -57,14 +110,14 @@ var Pairs = []struct {
     "TEXT": "hello world"
   }
 }`}, {
-	// ------------------------------------------------------------
-	// an array of primitives is a list of dummy inputs.
-	// ( noting that blockly ignores dummies when saving,
-	// so they get saved in the "fields" section )
-	"List",
-	&literal.TextValues{
-		Values: []string{"a", "b", "c"},
-	}, `{
+  // ------------------------------------------------------------
+  // an array of primitives is a list of dummy inputs.
+  // ( noting that blockly ignores dummies when saving,
+  // so they get saved in the "fields" section )
+  "List",
+  &literal.TextValues{
+    Values: []string{"a", "b", "c"},
+  }, `{
   "id": "test-1",
   "type": "text_values",
   "extraState": {
@@ -76,15 +129,15 @@ var Pairs = []struct {
     "VALUES2": "c"
   }
 }`}, {
-	// ------------------------------------------------------------
-	// test nested content-free blocks
-	"Stack",
-	&story.StoryFile{
-		StoryLines: []story.StoryStatement{
-			&story.StoryBreak{},
-			&story.StoryBreak{},
-			&story.StoryBreak{},
-		}}, `{
+  // ------------------------------------------------------------
+  // test nested content-free blocks
+  "Stack",
+  &story.StoryFile{
+    StoryLines: []story.StoryStatement{
+      &story.StoryBreak{},
+      &story.StoryBreak{},
+      &story.StoryBreak{},
+    }}, `{
   "id": "test-1",
   "type": "story_file",
   "extraState": {
@@ -114,12 +167,12 @@ var Pairs = []struct {
     }
   }
 }`}, {
-	// ------------------------------------------------------------
-	// repeats of an empty series
-	"EmptySeries",
-	&testdl.TestFlow{
-		Slots: []testdl.TestSlot{},
-	}, `{
+  // ------------------------------------------------------------
+  // repeats of an empty series
+  "EmptySeries",
+  &testdl.TestFlow{
+    Slots: []testdl.TestSlot{},
+  }, `{
   "id": "test-1",
   "type": "test_flow",
   "extraState": {}

@@ -56,13 +56,30 @@ func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *I
 		},
 		// a member that is a flow.
 		// value lives in inputs
-		OnMap: func(typeName string, flow jsn.FlowBlock) bool {
-			// new inner block...
-			return false
+		OnMap: func(typeName string, flow jsn.FlowBlock) (okay bool) {
+			if idx := bff.Inputs.FindIndex(term); idx >= 0 {
+				if input, e := bff.ReadInput(idx); e != nil {
+					log.Println(e)
+				} else {
+					m.PushState(newInnerBlock(m, reg, flow, input.Info))
+					okay = true
+				}
+			}
+			return
 		},
 		// a value that fills a slot; this will be an input
-		OnSlot: func(string, jsn.SlotBlock) (alwaysTrue bool) {
-			return false
+		OnSlot: func(_ string, slot jsn.SlotBlock) (okay bool) {
+			if idx := bff.Inputs.FindIndex(term); idx >= 0 {
+				if input, e := bff.ReadInput(idx); e != nil {
+					log.Println(e)
+				} else if e := fillSlot(reg, slot, input.Type); e != nil {
+					log.Println(e)
+				} else {
+					m.PushState(NewTopBlock(m, reg, input.Info))
+					okay = true
+				}
+			}
+			return
 		},
 		// a member that's a swap will always be an input
 		// for simple values ( strs in swaps ) there will be a faux for that input
