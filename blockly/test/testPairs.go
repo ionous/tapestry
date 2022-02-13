@@ -15,7 +15,7 @@ var Pairs = []struct {
   Json string
 }{{
   // swap member of the flow
-  "Swap",
+  /*test*/ "Swap",
   &testdl.TestFlow{
     Swap: testdl.TestSwap{
       Choice: testdl.TestSwap_C_Opt,
@@ -45,7 +45,7 @@ var Pairs = []struct {
   }
 }`}, {
   // repeats of a specific flow
-  "Slice",
+  /*test*/ "Slice",
   &literal.FieldValues{
     Contains: []literal.FieldValue{{
       Field: "first",
@@ -122,7 +122,7 @@ var Pairs = []struct {
 }`}, {
   // ------------------------------------------------------------
   // a flow within a flow
-  "Embed",
+  /*test*/ "Embed",
   &testdl.TestEmbed{
     TestFlow: testdl.TestFlow{},
   }, `{
@@ -143,7 +143,7 @@ var Pairs = []struct {
 }`}, {
   // ------------------------------------------------------------
   // a flow with a single slot.
-  "Slot",
+  /*test*/ "Slot",
   &literal.FieldValue{
     Field: "test",
     Value: &literal.NumValue{
@@ -175,7 +175,7 @@ var Pairs = []struct {
 }`}, {
   // ------------------------------------------------------------
   // repeats of a non-stacking slot.
-  "Series",
+  /*test*/ "Series",
   &testdl.TestFlow{
     Slots: []testdl.TestSlot{
       &testdl.TestFlow{},
@@ -205,7 +205,7 @@ var Pairs = []struct {
 }`}, {
   // ------------------------------------------------------------
   // test a block with a field:value pair (use some literal text)
-  "Field",
+  /*test*/ "Field",
   &literal.TextValue{Text: "hello world"}, `{
   "id": "test-1",
   "type": "text_value",
@@ -220,7 +220,7 @@ var Pairs = []struct {
   // an array of primitives is a list of dummy inputs.
   // ( noting that blockly ignores dummies when saving,
   // so they get saved in the "fields" section )
-  "List",
+  /*test*/ "List",
   &literal.TextValues{
     Values: []string{"a", "b", "c"},
   }, `{
@@ -236,8 +236,8 @@ var Pairs = []struct {
   }
 }`}, {
   // ------------------------------------------------------------
-  // test nested content-free blocks
-  "Stack",
+  // nested content-free blocks
+  /*test*/ "Stack",
   &story.StoryFile{
     StoryLines: []story.StoryStatement{
       &story.StoryBreak{},
@@ -275,7 +275,7 @@ var Pairs = []struct {
 }`}, {
   // ------------------------------------------------------------
   // repeats of an empty series
-  "EmptySeries",
+  /*test*/ "EmptySeries",
   &testdl.TestFlow{
     Slots: []testdl.TestSlot{},
   }, `{

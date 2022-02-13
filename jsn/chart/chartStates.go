@@ -24,6 +24,7 @@ func (e Unhandled) Error() string {
 // providing functions which can be overridden one at a time to customize functionality
 // returning false returns jsn.Missing from the State's relevant Marshal method.
 type StateMix struct {
+	Name     string // helpful sometimes for debugging
 	OnBlock  func(jsn.Block) error
 	OnMap    func(string, jsn.FlowBlock) bool
 	OnKey    func(string, string) error

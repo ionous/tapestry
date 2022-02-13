@@ -11,20 +11,17 @@ import (
 )
 
 type TypeCreator interface {
-	//HasType(string) bool
-	// ex. test_scene
-	// fix? _test_scene_stack
 	NewType(string) (interface{}, bool)
 }
 
-// assumes dst is something similar to story file
-func Decode(dst jsn.Marshalee, reg TypeCreator, msg json.RawMessage) (err error) {
+// where topBlock is the expected topblock type in the file.... ex. story_file
+func Decode(dst jsn.Marshalee, topBlock string, reg TypeCreator, msg json.RawMessage) (err error) {
 	// we first unmarshal into a structure we can poke around in
 	// a "streaming" decoder, would be a bit trickier to write.
 	var bff File
 	if e := json.Unmarshal(msg, &bff); e != nil {
 		err = e
-	} else if top, ok := bff.FindFirst("story_file"); !ok {
+	} else if top, ok := bff.FindFirst(topBlock); !ok {
 		err = errutil.New("couldnt find story file in block file")
 	} else {
 		dec := chart.MakeDecoder()
@@ -35,6 +32,7 @@ func Decode(dst jsn.Marshalee, reg TypeCreator, msg json.RawMessage) (err error)
 
 func NewBlock(m *chart.Machine, reg TypeCreator, bff *Info) *chart.StateMix {
 	return &chart.StateMix{
+		Name: "Block:" + bff.Id,
 		OnMap: func(typeName string, flow jsn.FlowBlock) (okay bool) {
 			// bff.type should equal flow.GetType()
 			m.PushState(newInnerBlock(m, reg, flow, bff))
@@ -49,6 +47,7 @@ func NewBlock(m *chart.Machine, reg TypeCreator, bff *Info) *chart.StateMix {
 func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *Info) *chart.StateMix {
 	var term string
 	return &chart.StateMix{
+		Name: "InnerBlock:" + bff.Id,
 		// a member of the dl, which might exist in bff.inputs, .fields, or .next;
 		// it depends on what the next call is.
 		OnKey: func(_ string, field string) (noerr error) {
@@ -76,7 +75,6 @@ func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *I
 				} else if e := fillSlot(reg, slot, input.Type); e != nil {
 					log.Println(e)
 				} else {
-					// should be inner block onMap
 					m.PushState(NewBlock(m, reg, input.Info))
 					okay = true
 				}
@@ -113,7 +111,7 @@ func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *I
 		OnRepeat: func(typeName string, outBlocks jsn.SliceBlock) (okay bool) {
 			if i, cnt := bff.CountFields(term); cnt > 0 {
 				outBlocks.SetSize(cnt)
-				m.PushState(newListReader(m, bff, i, i+cnt))
+				m.PushState(newListReader(m, bff, term, i, i+cnt))
 				okay = true
 			} else if i, cnt := bff.CountInputs(term); cnt > 0 {
 				outBlocks.SetSize(cnt)
@@ -127,7 +125,7 @@ func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *I
 					// could also sink them into a flat list as we count.
 					cnt := 1 + input.CountNext() // all of the next blocks connected to the input, plus the input block itself.
 					outBlocks.SetSize(cnt)
-					m.PushState(newStackReader(m, reg, input.Info))
+					m.PushState(newStackReader(m, reg, term, typeName, input.Info))
 					okay = true
 				}
 			}
@@ -151,8 +149,9 @@ func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *I
 
 // a stack is a repeating slot
 // we expect to get OnMap/OnEnd for every element
-func newStackReader(m *chart.Machine, reg TypeCreator, next *Info) *chart.StateMix {
+func newStackReader(m *chart.Machine, reg TypeCreator, term, typeName string, next *Info) *chart.StateMix {
 	return &chart.StateMix{
+		Name: "StackReader:" + term,
 		// create the value for the slot
 		OnSlot: func(_ string, slot jsn.SlotBlock) (okay bool) {
 			// the typename we want is (munged) in the block file
@@ -170,14 +169,15 @@ func newStackReader(m *chart.Machine, reg TypeCreator, next *Info) *chart.StateM
 			m.PushState(newInnerBlock(m, reg, flow, next))
 			return true
 		},
-		// called after each the map's inner block completes
-		// if we are out of data, we end the stack reader
-		OnCommit: func(interface{}) {
+		// end of each slot
+		OnEnd: func() {
 			// advance the function level's next pointer.
 			if outer := next.Next; outer != nil {
 				next = outer.Info
 			} else {
-				m.FinishState(true)
+				// after we are out of stacked blocks:
+				// wait for the end of the stack
+				m.ChangeState(chart.NewBlockResult(m, true))
 			}
 		},
 	}
@@ -197,6 +197,7 @@ func unstackName(n string) (ret string, okay bool) {
 // or a fake block wrapping a primitive value ( a "standalone" )
 func newSwapContents(m *chart.Machine, reg TypeCreator, bff *Info) *chart.StateMix {
 	next := NewBlock(m, reg, bff)
+	next.Name = "Swap:" + bff.Type
 	next.OnValue = func(typeName string, pv interface{}) (err error) {
 		// see: block.newSwap & shape.writeStandalone:
 		// the fields name is the name of the ifspec type 0 )
@@ -214,10 +215,32 @@ func newSwapContents(m *chart.Machine, reg TypeCreator, bff *Info) *chart.StateM
 	return next
 }
 
-// non-stacking slots are a series of inputs
+// we cant tell whether we have a series of repeating slots, or a slice of repeating flows
+// not until we hear a request for either the first slot, or the first flow.
 func newSeriesSlice(m *chart.Machine, reg TypeCreator, bff *Info, idx, end int) *chart.StateMix {
-	var next *Info
+	id := bff.Id + " " + bff.Inputs[idx].Key
 	return &chart.StateMix{
+		Name: "SeriesOrSlice:" + id,
+		OnSlot: func(n string, slot jsn.SlotBlock) bool {
+			state := newSeries(m, reg, bff, idx, end)
+			m.ChangeState(state)
+			return state.OnSlot(n, slot)
+		},
+		OnMap: func(n string, flow jsn.FlowBlock) bool {
+			state := newSlice(m, reg, bff, idx, end)
+			m.ChangeState(state)
+			return state.OnMap(n, flow)
+		},
+	}
+}
+
+// repeating non-stacking slots
+// idx is the index of the first input, end is one beyond the last matching input
+func newSeries(m *chart.Machine, reg TypeCreator, bff *Info, idx, end int) *chart.StateMix {
+	var next *Info // the block connected to the current input
+	id := bff.Id + " " + bff.Inputs[idx].Key
+	return &chart.StateMix{
+		Name: "Series:" + id,
 		// create the value for the slot
 		OnSlot: func(_ string, slot jsn.SlotBlock) (okay bool) {
 			if input, e := bff.ReadInput(idx); e != nil {
@@ -231,24 +254,44 @@ func newSeriesSlice(m *chart.Machine, reg TypeCreator, bff *Info, idx, end int) 
 			return
 		},
 		// happens after OnSlot for every block of data in the stack
+		OnMap: func(_ string, flow jsn.FlowBlock) (alwaysTrue bool) {
+			m.PushState(newInnerBlock(m, reg, flow, next))
+			return true
+		},
+		// end of each slot
+		OnEnd: func() {
+			if idx++; idx >= end {
+				// after we are out of inputs:
+				// wait for the end of the series
+				m.ChangeState(chart.NewBlockResult(m, true))
+			}
+		},
+	}
+}
+
+// repeating flows
+// idx is the index of the first input, end is one beyond the last matching input
+func newSlice(m *chart.Machine, reg TypeCreator, bff *Info, idx, end int) *chart.StateMix {
+	id := bff.Id + " " + bff.Inputs[idx].Key
+	return &chart.StateMix{
+		Name: "Slice:" + id,
+		// happens for every new flow in the series
 		OnMap: func(_ string, flow jsn.FlowBlock) (okay bool) {
-			// next can be nil if this is a slice of flows, instead of a series of slots.
-			if next != nil {
-				m.PushState(newInnerBlock(m, reg, flow, next))
-				okay = true
-			} else if input, e := bff.ReadInput(idx); e != nil {
+			if input, e := bff.ReadInput(idx); e != nil {
 				log.Println(e)
 			} else {
 				m.PushState(newInnerBlock(m, reg, flow, input.Info))
+				okay = true
 			}
-			return true
+			return okay
 		},
-		// called after each the map's inner block completes
-		// if we are out of data, we're done reading the series
+		// end of the inner block, advance to the next input
 		OnCommit: func(interface{}) {
-			if idx++; idx >= end {
-				m.FinishState(true)
-			}
+			idx++
+		},
+		// end of the repeating flows
+		OnEnd: func() {
+			m.FinishState(true)
 		},
 	}
 }
@@ -263,15 +306,16 @@ func fillSlot(reg TypeCreator, slot jsn.SlotBlock, typeName string) (err error) 
 }
 
 // an array of primitives is a list of fields .
-func newListReader(m *chart.Machine, b *Info, idx, end int) *chart.StateMix {
+func newListReader(m *chart.Machine, bff *Info, term string, idx, end int) *chart.StateMix {
 	return &chart.StateMix{
+		Name: "List:" + bff.Id + ":" + term,
 		OnValue: func(n string, pv interface{}) (err error) {
 			if idx < 0 {
 				err = errutil.New("list underflow")
 			} else if idx >= end {
 				err = errutil.New("list overflow")
 			} else {
-				field := b.Fields[idx]
+				field := bff.Fields[idx]
 				idx++ // next time, next field
 				if e := storeValue(pv, field.Msg); e != nil {
 					err = e
