@@ -3,6 +3,7 @@ package unblock
 import (
 	"encoding/json"
 	"log"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
@@ -27,12 +28,12 @@ func Decode(dst jsn.Marshalee, reg TypeCreator, msg json.RawMessage) (err error)
 		err = errutil.New("couldnt find story file in block file")
 	} else {
 		dec := chart.MakeDecoder()
-		err = dec.Marshal(dst, NewTopBlock(&dec, reg, top))
+		err = dec.Marshal(dst, NewBlock(&dec, reg, top))
 	}
 	return
 }
 
-func NewTopBlock(m *chart.Machine, reg TypeCreator, bff *Info) *chart.StateMix {
+func NewBlock(m *chart.Machine, reg TypeCreator, bff *Info) *chart.StateMix {
 	return &chart.StateMix{
 		OnMap: func(typeName string, flow jsn.FlowBlock) (okay bool) {
 			// bff.type should equal flow.GetType()
@@ -75,7 +76,8 @@ func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *I
 				} else if e := fillSlot(reg, slot, input.Type); e != nil {
 					log.Println(e)
 				} else {
-					m.PushState(NewTopBlock(m, reg, input.Info))
+					// should be inner block onMap
+					m.PushState(NewBlock(m, reg, input.Info))
 					okay = true
 				}
 			}
@@ -83,8 +85,25 @@ func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *I
 		},
 		// a member that's a swap will always be an input
 		// for simple values ( strs in swaps ) there will be a faux for that input
-		OnSwap: func(_ string, swap jsn.SwapBlock) (alwaysTrue bool) {
-			return false
+		OnSwap: func(_ string, swap jsn.SwapBlock) (okay bool) {
+			// the field holds a combo box with swap's choice
+			if idx := bff.Fields.FindIndex(term); idx >= 0 {
+				var choice string
+				if e := storeValue(&choice, bff.Fields[idx].Msg); e != nil {
+					log.Println(e)
+				} else if !swap.SetSwap(choice) {
+					log.Println("unexpected choice for swap", term, choice)
+				} else if idx := bff.Inputs.FindIndex(term); idx >= 0 {
+					// the input hold the value of the swap's block
+					if input, e := bff.ReadInput(idx); e != nil {
+						log.Println(e)
+					} else {
+						m.PushState(newSwapContents(m, reg, input.Info))
+						okay = true
+					}
+				}
+			}
+			return
 		},
 		// a member that repeats:
 		// could be a slice of a specific flow of a series of slots ( of numbered inputs ),
@@ -171,6 +190,28 @@ func unstackName(n string) (ret string, okay bool) {
 		okay = true
 	}
 	return
+}
+
+// read the insides of a swap:
+// it could be a flow filling the input....
+// or a fake block wrapping a primitive value ( a "standalone" )
+func newSwapContents(m *chart.Machine, reg TypeCreator, bff *Info) *chart.StateMix {
+	next := NewBlock(m, reg, bff)
+	next.OnValue = func(typeName string, pv interface{}) (err error) {
+		// see: block.newSwap & shape.writeStandalone:
+		// the fields name is the name of the ifspec type 0 )
+		field := strings.ToUpper(typeName)
+		if idx := bff.Fields.FindIndex(field); idx < 0 {
+			err = jsn.Missing // the block might be missing, and that's okay.
+		} else {
+			field := bff.Fields[idx]
+			err = storeValue(pv, field.Msg) // pv is the destination
+		}
+		// note: even for values, the state is still getting popped by the ending of the swap
+		// ( via the handler added in NewBlock )
+		return
+	}
+	return next
 }
 
 // non-stacking slots are a series of inputs

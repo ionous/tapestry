@@ -84,7 +84,7 @@ func testUnblock(reg unblock.TypeCreator, expect jsn.Marshalee, msg string) (err
 	} else {
 		dst := r.New(r.TypeOf(expect).Elem()).Interface().(jsn.Marshalee)
 		dec := chart.MakeDecoder()
-		if e := dec.Marshal(dst, unblock.NewTopBlock(&dec, reg, &top)); e != nil {
+		if e := dec.Marshal(dst, unblock.NewBlock(&dec, reg, &top)); e != nil {
 			err = e
 		} else if diff := pretty.Diff(expect, dst); len(diff) > 0 {
 			pretty.Println(dst)

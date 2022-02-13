@@ -8,47 +8,12 @@ import (
 
   "git.sr.ht/~ionous/tapestry/blockly/block"
   "git.sr.ht/~ionous/tapestry/blockly/test"
-  "git.sr.ht/~ionous/tapestry/dl/testdl"
   "git.sr.ht/~ionous/tapestry/jsn"
   "git.sr.ht/~ionous/tapestry/jsn/chart"
   "git.sr.ht/~ionous/tapestry/web/js"
   "github.com/ionous/errutil"
   "github.com/kr/pretty"
 )
-
-// test a swap member of the flow
-func TestSwap(t *testing.T) {
-  if e := testBlocks(&testdl.TestFlow{
-    Swap: testdl.TestSwap{
-      Choice: testdl.TestSwap_C_Opt,
-      Value: &testdl.TestTxt{
-        Str: "something",
-      },
-    },
-  }, `{
-  "id": "test-1",
-  "type": "test_flow",
-  "extraState": {
-    "SWAP": 1
-  },
-  "fields": {
-    "SWAP": "$C"
-  },
-  "inputs": {
-    "SWAP": {
-      "block": {
-        "id": "test-2",
-        "type": "test_txt",
-        "fields": {
-          "TEST_TXT": "something"
-        }
-      }
-    }
-  }
-}`); e != nil {
-    t.Fatal(e)
-  }
-}
 
 func TestPairs(t *testing.T) {
   for _, p := range test.Pairs {

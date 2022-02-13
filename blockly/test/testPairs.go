@@ -14,6 +14,36 @@ var Pairs = []struct {
   Test jsn.Marshalee
   Json string
 }{{
+  // swap member of the flow
+  "Swap",
+  &testdl.TestFlow{
+    Swap: testdl.TestSwap{
+      Choice: testdl.TestSwap_C_Opt,
+      Value: &testdl.TestTxt{
+        Str: "something",
+      },
+    },
+  }, `{
+  "id": "test-1",
+  "type": "test_flow",
+  "extraState": {
+    "SWAP": 1
+  },
+  "fields": {
+    "SWAP": "$C"
+  },
+  "inputs": {
+    "SWAP": {
+      "block": {
+        "id": "test-2",
+        "type": "test_txt",
+        "fields": {
+          "TEST_TXT": "something"
+        }
+      }
+    }
+  }
+}`}, {
   // repeats of a specific flow
   "Slice",
   &literal.FieldValues{
