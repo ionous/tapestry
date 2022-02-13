@@ -4,6 +4,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"flag"
 	"io"
@@ -13,6 +14,8 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/blockly/block"
+	"git.sr.ht/~ionous/tapestry/blockly/unblock"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn"
@@ -27,7 +30,10 @@ const (
 	SpecExt     = ".ifspecs"
 	DetailedExt = ".ifx"
 	CompactExt  = ".if"
+	BlockExt    = ".block"
 )
+
+var exts = []string{SpecExt, DetailedExt, CompactExt, BlockExt}
 
 func oppositeExt(ext string) (ret string) {
 	if ext == CompactExt {
@@ -48,21 +54,35 @@ func oppositeExt(ext string) (ret string) {
 // go build compact.go; for f in ../../stories/*.if; do ./compact -in $f; done;
 //
 // or, load and rewrite the .if files
-// go build compact.go; for f in ../../stories/shared/*.if; do ./compact -in $f -out .if; done;
-// go build compact.go; for f in ../regenspec/out/*.ifspecs; do ./compact -in $f -out $f; done;
-//
+// go build compact.go; for f in ../../stories/shared/*.if; do ./compact -pretty -in $f -out .if; done;
+// go build compact.go; for f in ../regenspec/out/*.ifspecs; do ./compact -pretty -in $f -out $f; done;
+// go build compact.go; for f in ../../stories/shared/*.if; do ./compact -pretty -in $f -out .block; done;
+// go build compact.go; for f in ../../stories/shared/*.block; do ./compact -pretty -in $f -out .if; done;
+
 func main() {
 	var inFile, outFile string
+	var pretty bool
 	flag.StringVar(&inFile, "in", "", "input file name (.if|.ifx|.ifspecs)")
 	flag.StringVar(&outFile, "out", "", "optional output file name (.if|.ifx|.ifspecs)")
+	flag.BoolVar(&pretty, "pretty", false, "make the output somewhat human readable")
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
 	flag.Parse()
 	if len(inFile) == 0 {
 		println("requires an input file")
 	} else {
 		inExt := filepath.Ext(inFile)
-		if !strings.HasPrefix(inExt, CompactExt) {
-			println("requires some sort of .if, .ifx, or .ifspecs file")
+		var allExts strings.Builder
+		var exists bool
+		for _, x := range exts {
+			if inExt == x {
+				exists = true
+				break
+			}
+			allExts.WriteString(x)
+			allExts.WriteRune(' ')
+		}
+		if !exists {
+			println("expected one of the file types:" + allExts.String())
 		} else {
 			// determine the output extension
 			// ( if nothing was specified, it will be the opposite of in )
@@ -75,7 +95,7 @@ func main() {
 			// create outfile name if needed
 			if len(outFile) == 0 {
 				outFile = inFile[:len(inFile)-len(inExt)] + outExt
-			} else if len(filepath.Ext(outFile)) == 0 {
+			} else if ext := filepath.Ext(outFile); len(ext) == 0 || ext == outFile {
 				// convert directory
 				base := filepath.Base(inFile)
 				outFile = filepath.Join(outFile, base[:len(base)-len(inExt)]+outExt)
@@ -83,25 +103,31 @@ func main() {
 			// transform the files:
 			if inExt == SpecExt {
 				// report on results:
-				if e := decodeEncodeSpec(inFile, outFile); e != nil {
+				if e := decodeEncodeSpec(inFile, outFile, pretty); e != nil {
 					println(e.Error())
 				} else {
 					println("done.")
 				}
 			} else {
 				var x xform
-				if inExt == DetailedExt {
+				switch inExt {
+				case DetailedExt:
 					x.decode = detailed.decode
-				} else {
+				case CompactExt:
 					x.decode = compact.decode
+				case BlockExt:
+					x.decode = blockly.decode
 				}
-				if outExt == DetailedExt {
+				switch outExt {
+				case DetailedExt:
 					x.encode = detailed.encode
-				} else {
+				case CompactExt:
 					x.encode = compact.encode
+				case BlockExt:
+					x.encode = blockly.encode
 				}
 				// report on results:
-				if e := x.decodeEncode(inFile, outFile); e != nil {
+				if e := x.decodeEncode(inFile, outFile, pretty); e != nil {
 					println(e.Error())
 				} else {
 					println("done.")
@@ -116,7 +142,7 @@ type xform struct {
 	encode func(jsn.Marshalee) (interface{}, error)
 }
 
-func (p *xform) decodeEncode(in, out string) (err error) {
+func (p *xform) decodeEncode(in, out string, pretty bool) (err error) {
 	var dst story.StoryFile
 	if b, e := readOne(in); e != nil {
 		err = e
@@ -127,12 +153,12 @@ func (p *xform) decodeEncode(in, out string) (err error) {
 	} else if data, e := p.encode(&dst); e != nil {
 		err = e
 	} else {
-		err = writeOut(out, data)
+		err = writeOut(out, data, pretty)
 	}
 	return
 }
 
-func decodeEncodeSpec(in, out string) (err error) {
+func decodeEncodeSpec(in, out string, pretty bool) (err error) {
 	var dst spec.TypeSpec
 	if b, e := readOne(in); e != nil {
 		err = e
@@ -141,7 +167,7 @@ func decodeEncodeSpec(in, out string) (err error) {
 	} else if data, e := cout.Encode(&dst, nil); e != nil {
 		err = e
 	} else {
-		err = writeOut(out, data)
+		err = writeOut(out, data, pretty)
 	}
 	return
 }
@@ -162,16 +188,46 @@ var detailed = xform{
 		return dout.Encode(src)
 	},
 }
+var blockly = xform{
+	// turn a block file into some dl structures
+	func(dst jsn.Marshalee, b []byte) error {
+		return unblock.Decode(dst, "story_file", tapestry.Registry(), b)
+	},
+	// turn some dl structures into a block file
+	func(src jsn.Marshalee) (interface{}, error) {
+		return block.Convert(src)
+	},
+}
 
-func writeOut(outPath string, data interface{}) (err error) {
+func writeOut(outPath string, data interface{}, pretty bool) (err error) {
 	log.Println("writing", outPath)
 	if fp, e := os.Create(outPath); e != nil {
 		err = e
 	} else {
-		js := json.NewEncoder(fp)
-		js.SetEscapeHTML(false)
-		js.SetIndent("", "  ")
-		err = js.Encode(data)
+		defer fp.Close()
+		if str, ok := data.(string); ok {
+			_, err = fp.Write(prettify(str, pretty))
+		} else {
+			js := json.NewEncoder(fp)
+			js.SetEscapeHTML(false)
+			if pretty {
+				js.SetIndent("", "  ")
+			}
+			err = js.Encode(data)
+		}
+	}
+	return
+}
+
+func prettify(str string, pretty bool) (ret []byte) {
+	ret = []byte(str)
+	if pretty {
+		var indent bytes.Buffer
+		if e := json.Indent(&indent, ret, "", "  "); e != nil {
+			log.Println(e)
+		} else {
+			ret = indent.Bytes()
+		}
 	}
 	return
 }
