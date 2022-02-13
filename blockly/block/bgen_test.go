@@ -8,7 +8,6 @@ import (
 
   "git.sr.ht/~ionous/tapestry/blockly/block"
   "git.sr.ht/~ionous/tapestry/blockly/test"
-  "git.sr.ht/~ionous/tapestry/dl/literal"
   "git.sr.ht/~ionous/tapestry/dl/testdl"
   "git.sr.ht/~ionous/tapestry/jsn"
   "git.sr.ht/~ionous/tapestry/jsn/chart"
@@ -58,86 +57,6 @@ func TestPairs(t *testing.T) {
         t.Fatal(e)
       }
     })
-  }
-}
-
-// repeats of a specific flow
-func TestSlice(t *testing.T) {
-  if e := testBlocks(&literal.FieldValues{
-    Contains: []literal.FieldValue{{
-      Field: "first",
-      Value: &literal.NumValue{
-        Num: 5,
-      }}, {
-      Field: "second",
-      Value: &literal.TextValue{
-        Text: "five",
-      }},
-    },
-  }, `{
-  "id": "test-1",
-  "type": "field_values",
-  "extraState": {
-    "CONTAINS": 2
-  },
-  "inputs": {
-    "CONTAINS0": {
-      "block": {
-        "id": "test-2",
-        "type": "field_value",
-        "extraState": {
-          "FIELD": 1,
-          "VALUE": 1
-        },
-        "fields": {
-          "FIELD": "first"
-        },
-        "inputs": {
-          "VALUE": {
-            "block": {
-              "id": "test-3",
-              "type": "num_value",
-              "extraState": {
-                "NUM": 1
-              },
-              "fields": {
-                "NUM": 5
-              }
-            }
-          }
-        }
-      }
-    },
-    "CONTAINS1": {
-      "block": {
-        "id": "test-4",
-        "type": "field_value",
-        "extraState": {
-          "FIELD": 1,
-          "VALUE": 1
-        },
-        "fields": {
-          "FIELD": "second"
-        },
-        "inputs": {
-          "VALUE": {
-            "block": {
-              "id": "test-5",
-              "type": "text_value",
-              "extraState": {
-                "TEXT": 1
-              },
-              "fields": {
-                "TEXT": "five"
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}`); e != nil {
-    t.Fatal(e)
   }
 }
 

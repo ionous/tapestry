@@ -39,8 +39,8 @@ func NewTopBlock(m *chart.Machine, reg TypeCreator, bff *Info) *chart.StateMix {
 			m.PushState(newInnerBlock(m, reg, flow, bff))
 			return true
 		},
-		OnCommit: func(interface{}) {
-			// m.FinishState(nil)
+		OnEnd: func() {
+			m.FinishState(true)
 		},
 	}
 }
@@ -98,7 +98,7 @@ func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *I
 				okay = true
 			} else if i, cnt := bff.CountInputs(term); cnt > 0 {
 				outBlocks.SetSize(cnt)
-				m.PushState(newSeriesReader(m, reg, bff, i, i+cnt))
+				m.PushState(newSeriesSlice(m, reg, bff, i, i+cnt))
 				okay = true
 			} else if at := bff.Inputs.FindIndex(term); at >= 0 {
 				if input, e := bff.ReadInput(at); e != nil {
@@ -174,7 +174,7 @@ func unstackName(n string) (ret string, okay bool) {
 }
 
 // non-stacking slots are a series of inputs
-func newSeriesReader(m *chart.Machine, reg TypeCreator, bff *Info, idx, end int) *chart.StateMix {
+func newSeriesSlice(m *chart.Machine, reg TypeCreator, bff *Info, idx, end int) *chart.StateMix {
 	var next *Info
 	return &chart.StateMix{
 		// create the value for the slot
@@ -190,8 +190,16 @@ func newSeriesReader(m *chart.Machine, reg TypeCreator, bff *Info, idx, end int)
 			return
 		},
 		// happens after OnSlot for every block of data in the stack
-		OnMap: func(_ string, flow jsn.FlowBlock) (alwaysTrue bool) {
-			m.PushState(newInnerBlock(m, reg, flow, next))
+		OnMap: func(_ string, flow jsn.FlowBlock) (okay bool) {
+			// next can be nil if this is a slice of flows, instead of a series of slots.
+			if next != nil {
+				m.PushState(newInnerBlock(m, reg, flow, next))
+				okay = true
+			} else if input, e := bff.ReadInput(idx); e != nil {
+				log.Println(e)
+			} else {
+				m.PushState(newInnerBlock(m, reg, flow, input.Info))
+			}
 			return true
 		},
 		// called after each the map's inner block completes

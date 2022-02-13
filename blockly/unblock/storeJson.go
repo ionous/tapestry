@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"strconv"
 
+	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
@@ -58,7 +59,11 @@ func (bi *Info) CountInputs(term string) (retStart, retCnt int) {
 }
 
 func (bi *Info) ReadInput(i int) (ret Input, err error) {
-	err = json.Unmarshal(bi.Inputs[i].Msg, &ret)
+	if e := json.Unmarshal(bi.Inputs[i].Msg, &ret); e != nil {
+		err = e
+	} else if ret.Info == nil {
+		err = jsn.Missing
+	}
 	return
 }
 

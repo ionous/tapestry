@@ -14,6 +14,82 @@ var Pairs = []struct {
   Test jsn.Marshalee
   Json string
 }{{
+  // repeats of a specific flow
+  "Slice",
+  &literal.FieldValues{
+    Contains: []literal.FieldValue{{
+      Field: "first",
+      Value: &literal.NumValue{
+        Num: 5,
+      }}, {
+      Field: "second",
+      Value: &literal.TextValue{
+        Text: "five",
+      }},
+    },
+  }, `{
+  "id": "test-1",
+  "type": "field_values",
+  "extraState": {
+    "CONTAINS": 2
+  },
+  "inputs": {
+    "CONTAINS0": {
+      "block": {
+        "id": "test-2",
+        "type": "field_value",
+        "extraState": {
+          "FIELD": 1,
+          "VALUE": 1
+        },
+        "fields": {
+          "FIELD": "first"
+        },
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "id": "test-3",
+              "type": "num_value",
+              "extraState": {
+                "NUM": 1
+              },
+              "fields": {
+                "NUM": 5
+              }
+            }
+          }
+        }
+      }
+    },
+    "CONTAINS1": {
+      "block": {
+        "id": "test-4",
+        "type": "field_value",
+        "extraState": {
+          "FIELD": 1,
+          "VALUE": 1
+        },
+        "fields": {
+          "FIELD": "second"
+        },
+        "inputs": {
+          "VALUE": {
+            "block": {
+              "id": "test-5",
+              "type": "text_value",
+              "extraState": {
+                "TEXT": 1
+              },
+              "fields": {
+                "TEXT": "five"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}`}, {
   // ------------------------------------------------------------
   // a flow within a flow
   "Embed",
