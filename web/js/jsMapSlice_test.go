@@ -3,6 +3,8 @@ package js
 import (
 	"encoding/json"
 	"testing"
+
+	"github.com/kr/pretty"
 )
 
 func TestMapSlice(t *testing.T) {
@@ -40,5 +42,20 @@ func TestMapSlice(t *testing.T) {
 				t.Fatal("expected value", want, "got", got)
 			}
 		}
+	}
+}
+
+// escapes have a different content length than string length
+// test that the raw json we get is the whole and proper content.
+func TestStringWidth(t *testing.T) {
+	var els MapSlice
+	var contents = `"a\n\n\u000ab"`
+	var data = `{"ESC" :` + contents + `}`
+	if e := json.Unmarshal([]byte(data), &els); e != nil {
+		t.Fatal(e)
+	} else if len(els) != 1 {
+		t.Fatal("failed to parse")
+	} else if diff := pretty.Diff(string(els[0].Msg), contents); len(diff) > 0 {
+		t.Fatal(diff)
 	}
 }

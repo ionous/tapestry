@@ -67,8 +67,11 @@ func (om *MapSlice) UnmarshalJSON(data []byte) (err error) {
 
 // read through the passed json value until its end.
 // return that isolated value, excluding any starting or ending whitespace.
-func skipValue(d *json.Decoder, value []byte) (ret []byte, err error) {
+func skipValue(d *json.Decoder, b []byte) (ret []byte, err error) {
 	var start, depth int64
+	// prev holds the index after the closing quote of the key
+	// could be whitespace or a colon.
+	prev := d.InputOffset()
 	for err == nil && ret == nil {
 		if t, e := d.Token(); e != nil {
 			err = e
@@ -79,8 +82,25 @@ func skipValue(d *json.Decoder, value []byte) (ret []byte, err error) {
 				// so we're skipping just one thing.
 				if depth == 0 {
 					end := d.InputOffset()
-					start := end - int64(width(t))
-					ret = value[start:end]
+					if _, ok := t.(string); ok {
+						// note: multi-character escapes get read as a single character
+						// ex. "\n" as a linefeed ( 0xa )
+						// so the length of a string isnt the width of the content.
+						// no good way to find that width except to scan for it (again)
+						for ; prev < end; prev++ {
+							// we dont worry about unicode decoding:
+							// the only legal json is whitespace, colon, or quote.
+							if b[prev] == '"' {
+								break
+							}
+						}
+						// end is the index after the closing quote,
+						// so this grabs the entire json string literal.
+						ret = b[prev:end]
+					} else {
+						start := end - int64(width(t))
+						ret = b[start:end]
+					}
 				}
 			case json.Delim('['), json.Delim('{'):
 				if depth == 0 {
@@ -96,7 +116,7 @@ func skipValue(d *json.Decoder, value []byte) (ret []byte, err error) {
 					// its not too picky on the type of token.
 					// assumes the json is valid.
 					end := d.InputOffset()
-					ret = value[start:end]
+					ret = b[start:end]
 				}
 			}
 		}
@@ -116,8 +136,6 @@ func width(t json.Token) (ret int) {
 		} else {
 			ret = len("false")
 		}
-	case string:
-		ret = len(v) + 2 // open and close quotes
 	case nil:
 		ret = len("null")
 	case json.Number:
