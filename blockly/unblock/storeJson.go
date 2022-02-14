@@ -21,6 +21,7 @@ type Info struct {
 	Id         string         `json:"id"`
 	Type       string         `json:"type"`
 	ExtraState map[string]int `json:"extraState"`
+	Icons      Icons          `json:"icons"`
 	Inputs     js.MapSlice    `json:"inputs"`
 	Fields     js.MapSlice    `json:"fields"`
 	Next       *Input         `json:"next"`
@@ -28,6 +29,19 @@ type Info struct {
 
 type Input struct {
 	*Info `json:"block"`
+}
+
+type Icons struct {
+	Comment *Comment `json:"comment"`
+}
+
+// this is how blockly handles comments
+// fix? move to make part of the mutation ( as extra data )
+type Comment struct {
+	Text   string `json:"text"`
+	Pinned bool   `json:"pinned"`
+	Height int    `json:"height"`
+	Width  int    `json:"width"`
 }
 
 func (tb *TopBlocks) FindFirst(typeName string) (ret *Info, okay bool) {

@@ -33,8 +33,14 @@ func newInnerFlow(m *chart.Machine, body *js.Builder, typeName string) *chart.St
 }
 
 func newInnerBlock(m *chart.Machine, body *js.Builder, typeName string, allowExtraData bool) *chart.StateMix {
+	var cmt string
+	if m.Comment != nil {
+		cmt = *m.Comment
+		m.Comment = nil
+	}
+	//
 	var term string // set per key
-	blk := blockData{id: NewId(), typeName: typeName, allowExtraData: allowExtraData}
+	blk := blockData{id: NewId(), typeName: typeName, allowExtraData: allowExtraData, comment: cmt}
 	return &chart.StateMix{
 		// one of every extant member of the flow ( the encoder skips optional elements lacking a value )
 		// this might be a field or input

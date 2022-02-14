@@ -17,6 +17,7 @@ let lastPath;    // the last successfully displayed file
 let pendingLoad; // we only allow one load request at a time
 let shapeData= null; // the customData from the shapes file.
 
+// Blockly.serialization.workspaces.save(Blockly.mainWorkspace)
 export default {
   props: {
     catalog: Cataloger,
@@ -232,6 +233,7 @@ Blockly.Extensions.register(
     var self = this; // this refers to the block that the extension is being run on
     self.extraState= {};
     self.itemState= {};
+    // self.setCommentText("");
     const customData= shapeData[self.type];
     const shapeDef= customData.shapeDef;
     // an array of field-input sets

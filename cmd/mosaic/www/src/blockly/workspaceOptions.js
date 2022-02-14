@@ -2,7 +2,7 @@
 // unless otherwise specified boolean options are toolbox dependent; defaults to true if the toolbox has categories, false otherwise.
 export default {
   // collapse: // can blocks be collapsed or expanded.
-  // comments: // can blocks have comments.
+  comments: true, // add commenting to the context menu.
   // css:      // when false, CSS becomes the document's responsibility. Defaults to true.
   // disable:  // Allows blocks to be disabled.
   // grid:     // Configures a grid which blocks may snap to.

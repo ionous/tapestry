@@ -11,6 +11,8 @@ const Colon = ':'
 const Quote = '"'
 const Score = '_'
 const Percent = '%'
+const True = "true"
+const False = "false"
 
 var Obj = [2]rune{'{', '}'}
 var Array = [2]rune{'[', ']'}

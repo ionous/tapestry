@@ -46,6 +46,11 @@ func NewBlock(m *chart.Machine, reg TypeCreator, bff *Info) *chart.StateMix {
 
 func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *Info) *chart.StateMix {
 	var term string
+	if m.Comment != nil {
+		if c := bff.Icons.Comment; c != nil {
+			*m.Comment = c.Text
+		}
+	}
 	return &chart.StateMix{
 		Name: "InnerBlock:" + bff.Id,
 		// a member of the dl, which might exist in bff.inputs, .fields, or .next;

@@ -8,6 +8,7 @@ type blockData struct {
 	id, typeName               string
 	fields, inputs, extraState js.Builder
 	allowExtraData             bool
+	comment                    string
 }
 
 // start a new input connection from this block to some new block
@@ -64,9 +65,22 @@ func (b *blockData) writeCount(term string, cnt int) {
 }
 
 func (b *blockData) writeTo(out *js.Builder) {
-	out.Kv("id", b.id).R(js.Comma).
+	out.
+		Kv("id", b.id).R(js.Comma).
 		Kv("type", b.typeName)
-
+	// comment, if any:
+	if cmt := b.comment; len(cmt) > 0 {
+		out.R(js.Comma).
+			Q("icons").R(js.Colon).Brace(js.Obj, func(icons *js.Builder) {
+			icons.Q("comment").R(js.Colon).Brace(js.Obj, func(com *js.Builder) {
+				com.
+					Kv("text", cmt).R(js.Comma).
+					Q("pinned").R(js.Colon).S(js.False).R(js.Comma).
+					Q("height").R(js.Colon).N(80).R(js.Comma).
+					Q("width").R(js.Colon).N(280)
+			})
+		})
+	}
 	// note: blockly throws exceptions if you have extraData but not a loadExtraState function on the shape.
 	// and it only allows you to have loadExtraState on shapes with mutations.
 	// ( in loadConnection, appendPrivate, it tries to treat extraData as xml data when that function is missing )
