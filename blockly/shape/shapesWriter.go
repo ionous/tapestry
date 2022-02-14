@@ -5,28 +5,39 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/blockly/bconst"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
+	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
-var writeShapeType = map[string]func(*js.Builder, *spec.TypeSpec) bool{
-	spec.UsesSpec_Flow_Opt: writeFlowBlock,
-	spec.UsesSpec_Slot_Opt: writeSlotBlock,
-	spec.UsesSpec_Swap_Opt: writeStandalone,
-	spec.UsesSpec_Num_Opt:  writeStandalone,
-	spec.UsesSpec_Str_Opt:  writeStandalone,
+type ShapeWriter struct {
+	lookup rs.TypeSpecs
+}
+
+func Write(block *js.Builder, blockType *spec.TypeSpec) bool {
+	var w ShapeWriter
+	return w.WriteShape(block, blockType)
 }
 
 // return any fields which need mutation
-func writeShape(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
-	if cb, ok := writeShapeType[blockType.Spec.Choice]; !ok {
+func (w *ShapeWriter) WriteShape(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
+	switch t := blockType.Spec.Choice; t {
+	case spec.UsesSpec_Flow_Opt:
+		okay = w.writeFlowBlock(block, blockType)
+	case spec.UsesSpec_Slot_Opt:
+		okay = w.writeSlotBlock(block, blockType)
+	case spec.UsesSpec_Swap_Opt:
+		okay = w.writeStandalone(block, blockType)
+	case spec.UsesSpec_Num_Opt:
+		okay = w.writeStandalone(block, blockType)
+	case spec.UsesSpec_Str_Opt:
+		okay = w.writeStandalone(block, blockType)
+	default:
 		log.Fatalln("unknown type", blockType.Spec.Choice)
-	} else {
-		okay = cb(block, blockType)
 	}
 	return
 }
 
-func writeSlotBlock(block *js.Builder, blockType *spec.TypeSpec) bool {
+func (w *ShapeWriter) writeSlotBlock(block *js.Builder, blockType *spec.TypeSpec) bool {
 	return false // slots dont have have corresponding blocks
 }
 
@@ -34,9 +45,9 @@ func writeSlotBlock(block *js.Builder, blockType *spec.TypeSpec) bool {
 // however, if they are used by a slot -- then we need a block for them too.
 // fix: maybe consider writing an "inputDef" object {} as the value of "swaps"
 // ( for simple types or maybe all of them ) and change the block's input on selection.
-func writeStandalone(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
+func (w *ShapeWriter) writeStandalone(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
 	// we simply pretend we're a flow of one anonymous member.
-	okay = _writeShape(block, blockType.Name, blockType, []spec.TermSpec{{
+	okay = w._writeShape(block, blockType.Name, blockType, []spec.TermSpec{{
 		Key:  "",
 		Name: blockType.Name,
 		Type: blockType.Name,
@@ -44,21 +55,21 @@ func writeStandalone(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
 	return okay
 }
 
-func writeFlowBlock(block *js.Builder, blockType *spec.TypeSpec) bool {
+func (w *ShapeWriter) writeFlowBlock(block *js.Builder, blockType *spec.TypeSpec) bool {
 	flow := blockType.Spec.Value.(*spec.FlowSpec)
 	name := blockType.Name
 	if n := flow.Name; len(n) > 0 {
 		name = n
 	}
-	return _writeShape(block, name, blockType, flow.Terms)
+	return w._writeShape(block, name, blockType, flow.Terms)
 }
 
 // writes one or possible two blocks to represent the blockType.
 // will always generate an output block because every type outputs itself
 // it may also generate a stackable block if any of the slots implemented have a stackable SlotRule.
 // ( ex. a type that implements rt.BoolEval and rt.Execute will write both types of blocks )
-func _writeShape(block *js.Builder, name string, blockType *spec.TypeSpec, terms []spec.TermSpec) bool {
-	stacks, values := SlotStacks(blockType)
+func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spec.TypeSpec, terms []spec.TermSpec) bool {
+	stacks, values := slotStacks(blockType)
 	// we write to partial so that we can potentially have two blocks
 	var partial js.Builder
 	// write the label for the block itself; aka the lede.
@@ -85,7 +96,7 @@ func _writeShape(block *js.Builder, name string, blockType *spec.TypeSpec, terms
 	partial.R(js.Comma)
 
 	// write the terms:
-	writeShapeDef(&partial, blockType, terms)
+	w.writeShapeDef(&partial, blockType, terms)
 
 	// are we stackable? ( ex. story statement or executable )
 	if len(stacks) > 0 {
@@ -114,7 +125,7 @@ func appendString(out *js.Builder, s string) {
 }
 
 // split the slots that this type supports into "stacks" and "values"
-func SlotStacks(blockType *spec.TypeSpec) (retStack, retValue []string) {
+func slotStacks(blockType *spec.TypeSpec) (retStack, retValue []string) {
 	var slots []string
 	if blockType.Spec.Choice == spec.UsesSpec_Slot_Opt {
 		slots = []string{blockType.Name}

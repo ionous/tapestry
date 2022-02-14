@@ -9,13 +9,15 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/blockly/shape"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
+	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
 	"git.sr.ht/~ionous/tapestry/idl"
 	"git.sr.ht/~ionous/tapestry/web/js"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
-// fix: generate and test just testdl?
+// fix: generate and compare just testdl?
+// right now this just tests that the shapes are well formed.
 func TestBlocklyTypes(t *testing.T) {
 	if str, e := shape.FromSpecs(idl.Specs); e != nil {
 		t.Fatal(e)
@@ -47,30 +49,18 @@ type repeatingContainer struct {
 }
 
 func findRepeatingContainers(files fs.FS) (ret []repeatingContainer, err error) {
-	// first, read into global "lookup"
-	if e := fs.WalkDir(files, ".", func(path string, d fs.DirEntry, e error) (err error) {
-		if e != nil {
-			err = e // can happen if it failed to read the contents of a director
-		} else if !d.IsDir() { // the first dir we get is "."
-			println("reading", path)
-			if _, e := shape.ReadSpec(files, path); e != nil {
-				err = errutil.New(e, "reading", path)
-			}
-		}
-		return
-	}); e != nil {
+	if ts, e := rs.FromSpecs(files); e != nil {
 		err = e
 	} else {
-		keys := shape.LookupKeys()
-		for _, k := range keys {
-			blockType, _ := shape.Lookup(k)
+		for _, k := range ts.Keys() {
+			blockType, _ := ts[k]
 			// search for flows...
 			if flow, ok := blockType.Spec.Value.(*spec.FlowSpec); ok {
 				// that have a term...
 				for _, t := range flow.Terms {
 					// that isnt a special internal term...
 					if n := t.TypeName(); !t.Private {
-						if ref, ok := shape.Lookup(n); !ok {
+						if ref, ok := ts[n]; !ok {
 							err = errutil.New("couldnt find", n)
 						} else {
 							// which is a flow...
@@ -91,7 +81,6 @@ func findRepeatingContainers(files fs.FS) (ret []repeatingContainer, err error) 
 
 // make sure that story file has no output and one stacked input.
 func TestStoryFileShape(t *testing.T) {
-	shape.ResetLookup()
 	expect := `{
   "type": "story_file",
   "message0": "story_file",
@@ -121,9 +110,9 @@ func TestStoryFileShape(t *testing.T) {
     ]
   }
 }`
-	if _, e := shape.ReadSpec(idl.Specs, "story.ifspecs"); e != nil { // reads into the global lookup
+	if ts, e := rs.ReadSpec(idl.Specs, "story.ifspecs"); e != nil { // reads into the global lookup
 		t.Fatal(e)
-	} else if x, ok := shape.Lookup("story_file"); !ok {
+	} else if x, ok := ts["story_file"]; !ok {
 		t.Fatal("missing story file type")
 	} else {
 		var out js.Builder

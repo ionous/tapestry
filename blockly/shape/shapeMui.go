@@ -9,7 +9,7 @@ import (
 )
 
 // write the args0 and message0 for a mutator ui block
-func writeMuiMsgArgs(out *js.Builder, blockType *spec.TypeSpec, flow *spec.FlowSpec) {
+func (w *ShapeWriter) writeMuiMsgArgs(out *js.Builder, blockType *spec.TypeSpec, flow *spec.FlowSpec) {
 	var argCount int
 	out.
 		Q("args0").R(js.Colon).Brace(js.Array, func(args *js.Builder) {
@@ -22,7 +22,7 @@ func writeMuiMsgArgs(out *js.Builder, blockType *spec.TypeSpec, flow *spec.FlowS
 		argCount += writeDummy(args, "", header)
 		for _, term := range flow.Terms {
 			if !term.Private {
-				argCount += writeMuiInput(args, term)
+				argCount += w.writeMuiInput(args, term)
 			}
 		}
 	}).
@@ -35,9 +35,9 @@ func writeMuiMsgArgs(out *js.Builder, blockType *spec.TypeSpec, flow *spec.FlowS
 	})
 }
 
-func writeMuiInput(args *js.Builder, term spec.TermSpec) (ret int) {
+func (w *ShapeWriter) writeMuiInput(args *js.Builder, term spec.TermSpec) (ret int) {
 	typeName := term.TypeName() // lookup spec
-	if termType, ok := lookup[typeName]; !ok {
+	if termType, ok := w.lookup[typeName]; !ok {
 		log.Fatalln("missing named type", typeName)
 	} else {
 		ret = writeMuiTerm(args, term, termType)
@@ -50,7 +50,7 @@ func writeMuiTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec)
 	name, label := term.Field(), term.FriendlyName()
 	// stacked elements dont need to repeat inputs: one input allows multiple blocks.
 	// ( and if they are optional, we'll want to use a checkbox )
-	stacks, _ := SlotStacks(termType)
+	stacks, _ := slotStacks(termType)
 	if term.Repeats && len(stacks) == 0 {
 		// for the mui: insist on having a label.
 		if len(label) == 0 {

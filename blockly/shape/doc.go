@@ -1,4 +1,4 @@
-// package shape generates blockly custom blocks in its JSON format.
+// Package shape generates blockly custom blocks in its JSON format.
 // Blockly doesnt have its own name for the format -- so Tapestry refers to them as "shape" files.
 // see: https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks
 //

@@ -8,7 +8,7 @@ import (
 
 // write the mutation block used by the 'tapestry_generic_mutation' mutator
 // see also: writeMuiData
-func writeMutator(out *js.Builder, blockType *spec.TypeSpec, flow *spec.FlowSpec) *js.Builder {
+func (w *ShapeWriter) writeMutator(out *js.Builder, blockType *spec.TypeSpec, flow *spec.FlowSpec) *js.Builder {
 	// 1. write header
 	//  "type": "_text_value_mutator",
 	//  "style": "logic_blocks",
@@ -23,7 +23,7 @@ func writeMutator(out *js.Builder, blockType *spec.TypeSpec, flow *spec.FlowSpec
 			Kv("style", "logic_blocks").R(js.Comma).
 			Q("inputsInline").R(js.Colon).S("false").R(js.Comma).
 			If(true, func(args *js.Builder) {
-				writeMuiMsgArgs(args, blockType, flow)
+				w.writeMuiMsgArgs(args, blockType, flow)
 			})
 	})
 }

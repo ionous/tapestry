@@ -10,7 +10,7 @@ import (
 )
 
 // write the args0 and message0 key-values.
-func writeShapeDef(out *js.Builder, blockType *spec.TypeSpec, terms []spec.TermSpec) {
+func (w *ShapeWriter) writeShapeDef(out *js.Builder, blockType *spec.TypeSpec, terms []spec.TermSpec) {
 	out.WriteString(`"extensions":["tapestry_generic_mixin","tapestry_generic_extension"],`)
 	hasMutator := blockType.Spec.Choice == spec.UsesSpec_Flow_Opt
 	if hasMutator {
@@ -32,7 +32,7 @@ func writeShapeDef(out *js.Builder, blockType *spec.TypeSpec, terms []spec.TermS
 							mui.R(js.Comma)
 						}
 						mui.Brace(js.Array, func(args *js.Builder) {
-							writeFieldDefs(args, term)
+							w.writeFieldDefs(args, term)
 						})
 					}
 				})
@@ -40,9 +40,9 @@ func writeShapeDef(out *js.Builder, blockType *spec.TypeSpec, terms []spec.TermS
 }
 
 //
-func writeFieldDefs(args *js.Builder, term spec.TermSpec) {
+func (w *ShapeWriter) writeFieldDefs(args *js.Builder, term spec.TermSpec) {
 	typeName := term.TypeName() // lookup spec
-	if termType, ok := lookup[typeName]; !ok {
+	if termType, ok := w.lookup[typeName]; !ok {
 		log.Fatalln("missing named type", typeName)
 	} else {
 		writeTerm(args, term, termType)
