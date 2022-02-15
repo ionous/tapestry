@@ -10,14 +10,14 @@ import (
 
 // reads all of the files in the passed filesystem as ifspecs and returns them as one big json array of shapes
 func FromSpecs(files fs.FS) (ret string, err error) {
-	if lookup, e := rs.FromSpecs(files); e != nil {
+	if ts, e := rs.FromSpecs(files); e != nil {
 		err = e
 	} else {
-		w := ShapeWriter{lookup}
+		w := ShapeWriter{ts}
 		ret = js.Embrace(js.Array, func(out *js.Builder) {
 			var comma bool
-			for _, key := range lookup.Keys() {
-				blockType := lookup[key]
+			for _, key := range ts.Keys() {
+				blockType := ts.Types[key]
 				if comma {
 					out.R(js.Comma)
 					comma = false

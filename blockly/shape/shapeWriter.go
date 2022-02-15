@@ -42,7 +42,7 @@ func (w *ShapeWriter) writeShapeDef(out *js.Builder, blockType *spec.TypeSpec, t
 //
 func (w *ShapeWriter) writeFieldDefs(args *js.Builder, term spec.TermSpec) {
 	typeName := term.TypeName() // lookup spec
-	if termType, ok := w.lookup[typeName]; !ok {
+	if termType, ok := w.Types[typeName]; !ok {
 		log.Fatalln("missing named type", typeName)
 	} else {
 		writeTerm(args, term, termType)

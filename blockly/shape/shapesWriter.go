@@ -10,12 +10,7 @@ import (
 )
 
 type ShapeWriter struct {
-	lookup rs.TypeSpecs
-}
-
-func Write(block *js.Builder, blockType *spec.TypeSpec) bool {
-	var w ShapeWriter
-	return w.WriteShape(block, blockType)
+	rs.TypeSpecs
 }
 
 // return any fields which need mutation

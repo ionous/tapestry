@@ -53,14 +53,14 @@ func findRepeatingContainers(files fs.FS) (ret []repeatingContainer, err error) 
 		err = e
 	} else {
 		for _, k := range ts.Keys() {
-			blockType, _ := ts[k]
+			blockType := ts.Types[k]
 			// search for flows...
 			if flow, ok := blockType.Spec.Value.(*spec.FlowSpec); ok {
 				// that have a term...
 				for _, t := range flow.Terms {
 					// that isnt a special internal term...
 					if n := t.TypeName(); !t.Private {
-						if ref, ok := ts[n]; !ok {
+						if ref, ok := ts.Types[n]; !ok {
 							err = errutil.New("couldnt find", n)
 						} else {
 							// which is a flow...
@@ -110,13 +110,14 @@ func TestStoryFileShape(t *testing.T) {
     ]
   }
 }`
-	if ts, e := rs.ReadSpec(idl.Specs, "story.ifspecs"); e != nil { // reads into the global lookup
+	if ts, e := rs.ReadSpec(idl.Specs, "story.ifspecs"); e != nil {
 		t.Fatal(e)
-	} else if x, ok := ts["story_file"]; !ok {
+	} else if x, ok := ts.Types["story_file"]; !ok {
 		t.Fatal("missing story file type")
 	} else {
 		var out js.Builder
-		shape.Write(&out, x)
+		w := shape.ShapeWriter{ts}
+		w.WriteShape(&out, x)
 		//
 		if str, e := indent(out.String()); e != nil {
 			t.Fatal(e, str)

@@ -15,26 +15,31 @@ import (
 )
 
 // type name to type spec lookup
-type TypeSpecs map[string]*spec.TypeSpec
+type TypeSpecs struct {
+	Types  map[string]*spec.TypeSpec
+	Groups []*spec.TypeSpec
+}
 
 // return a list of sorted keys
-func (lookup TypeSpecs) Keys() []string {
-	keys := make([]string, 0, len(lookup))
-	for k, _ := range lookup {
+func (ts *TypeSpecs) Keys() []string {
+	keys := make([]string, 0, len(ts.Types))
+	for k, _ := range ts.Types {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
 	return keys
 }
 
+type typeMap map[string]*spec.TypeSpec
+
 // reads all of the files in the passed filesystem as ifspecs and returns them as one big map
 func FromSpecs(files fs.FS) (ret TypeSpecs, err error) {
-	lookup := make(TypeSpecs)
+	ts := TypeSpecs{Types: make(typeMap)}
 	if e := fs.WalkDir(files, ".", func(path string, d fs.DirEntry, e error) (err error) {
 		if e != nil {
 			err = e // can happen if it failed to read the contents of a director
 		} else if !d.IsDir() { // the first dir we get is "."
-			if _, e := readSpec(lookup, files, path); e != nil { // reads into the global lookup
+			if _, e := readSpec(&ts, files, path); e != nil {
 				err = errutil.New(e, "reading", path)
 			}
 		}
@@ -42,24 +47,24 @@ func FromSpecs(files fs.FS) (ret TypeSpecs, err error) {
 	}); e != nil {
 		err = e
 	} else {
-		ret = lookup
+		ret = ts
 	}
 	return
 }
 
 func ReadSpec(files fs.FS, fileName string) (ret TypeSpecs, err error) {
-	lookup := make(TypeSpecs)
-	if _, e := readSpec(lookup, files, fileName); e != nil {
+	ts := TypeSpecs{Types: make(typeMap)}
+	if _, e := readSpec(&ts, files, fileName); e != nil {
 		err = e
 	} else {
-		ret = lookup
+		ret = ts
 	}
 	return
 }
 
 // reads a single typespec from the named file from the passed filesystem into the lookup.
 // ( usually a group containing other yet still other typespecs )
-func readSpec(lookup TypeSpecs, files fs.FS, fileName string) (ret *spec.TypeSpec, err error) {
+func readSpec(ts *TypeSpecs, files fs.FS, fileName string) (ret *spec.TypeSpec, err error) {
 	if b, e := fs.ReadFile(files, fileName); e != nil {
 		err = e
 	} else {
@@ -70,7 +75,7 @@ func readSpec(lookup TypeSpecs, files fs.FS, fileName string) (ret *spec.TypeSpe
 			prim.Signatures, // and some of those commands use the primitive types.
 		}); e != nil {
 			err = e
-		} else if e := importTypes(lookup, &blockType); e != nil {
+		} else if e := importTypes(ts, &blockType); e != nil {
 			err = e
 		} else {
 			ret = &blockType
@@ -79,7 +84,7 @@ func readSpec(lookup TypeSpecs, files fs.FS, fileName string) (ret *spec.TypeSpe
 	return
 }
 
-func importTypes(lookup TypeSpecs, types *spec.TypeSpec) error {
+func importTypes(ts *TypeSpecs, types *spec.TypeSpec) error {
 	var currGroups []string
 	enc := chart.MakeEncoder()
 	return enc.Marshal(types, story.Map(&enc, story.BlockMap{
@@ -91,8 +96,10 @@ func importTypes(lookup TypeSpecs, types *spec.TypeSpec) error {
 						case spec.UsesSpec_Group_Opt:
 							// the block is group: push it
 							currGroups = append(currGroups, blockType.Name)
+							ts.Groups = append(ts.Groups, blockType)
+
 						default:
-							lookup[blockType.Name] = blockType
+							ts.Types[blockType.Name] = blockType
 							// add in all of the parent groups --
 							// they take precedence over the extra groups listed
 							blockType.Groups = append(currGroups, blockType.Groups...)

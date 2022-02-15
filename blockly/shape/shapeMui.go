@@ -37,7 +37,7 @@ func (w *ShapeWriter) writeMuiMsgArgs(out *js.Builder, blockType *spec.TypeSpec,
 
 func (w *ShapeWriter) writeMuiInput(args *js.Builder, term spec.TermSpec) (ret int) {
 	typeName := term.TypeName() // lookup spec
-	if termType, ok := w.lookup[typeName]; !ok {
+	if termType, ok := w.Types[typeName]; !ok {
 		log.Fatalln("missing named type", typeName)
 	} else {
 		ret = writeMuiTerm(args, term, termType)
