@@ -5,18 +5,38 @@ import (
 
   "git.sr.ht/~ionous/tapestry/dl/core"
   "git.sr.ht/~ionous/tapestry/dl/list"
+  "git.sr.ht/~ionous/tapestry/dl/literal"
   "git.sr.ht/~ionous/tapestry/dl/story"
 )
 
-// close strings use drop downs, and the field should be their $KEY
+// bool values should ( for now ) be $KEY
+func TestBoolChoice(t *testing.T) {
+  if e := testBlocks(
+    &literal.BoolValue{
+      Bool: true,
+    }, `{
+  "type": "bool_value",
+  "id": "test-1",
+  "extraState": {
+    "BOOL": 1
+  },
+  "fields": {
+    "BOOL": "$TRUE"
+  }
+}`); e != nil {
+    t.Fatal(e)
+  }
+}
+
+// closed strings use drop downs, and the field should be their $KEY
 func TestStringChoice(t *testing.T) {
   if e := testBlocks(
     &story.TraitPhrase{
       AreEither: story.AreEither{
         Str: story.AreEither_Canbe,
       }}, `{
-  "id": "test-1",
   "type": "trait_phrase",
+  "id": "test-1",
   "extraState": {
     "ARE_EITHER": 1
   },
@@ -36,8 +56,8 @@ func TestStringHints(t *testing.T) {
       Determiner: story.Determiner{Str: story.Determiner_The},
       Name:       story.NounName{Str: "table"},
     }, `{
-  "id": "test-1",
   "type": "named_noun",
+  "id": "test-1",
   "extraState": {
     "DETERMINER": 1,
     "NAME": 1
@@ -54,8 +74,8 @@ func TestStringHints(t *testing.T) {
 // blocks with optional members should just skip happily to the next member
 func TestSkippedSlot(t *testing.T) {
   if e := testBlocks(&list.ListEach{}, `{
-  "id": "test-1",
   "type": "list_each",
+  "id": "test-1",
   "extraState": {}
 }`); e != nil {
     t.Fatal(e)
@@ -68,16 +88,16 @@ func TestEndSlot(t *testing.T) {
   if e := testBlocks(&list.PutEdge{
     From: &core.GetVar{},
   }, `{
-  "id": "test-1",
   "type": "put_edge",
+  "id": "test-1",
   "extraState": {
     "FROM": 1
   },
   "inputs": {
     "FROM": {
       "block": {
-        "id": "test-2",
         "type": "get_var",
+        "id": "test-2",
         "extraState": {
           "NAME": 1
         },
@@ -103,8 +123,8 @@ func TestExcessState(t *testing.T) {
       },
     },
   }, `{
-  "id": "test-1",
   "type": "event_block",
+  "id": "test-1",
   "extraState": {
     "TARGET": 1
   },
@@ -114,8 +134,8 @@ func TestExcessState(t *testing.T) {
   "inputs": {
     "TARGET": {
       "block": {
-        "id": "test-2",
         "type": "plural_kinds",
+        "id": "test-2",
         "fields": {
           "PLURAL_KINDS": "x"
         }
@@ -142,16 +162,16 @@ func TestStoryLines(t *testing.T) {
       },
     },
   }, `{
-  "id": "test-1",
   "type": "story_file",
+  "id": "test-1",
   "extraState": {
     "STORY_LINES": 2
   },
   "inputs": {
     "STORY_LINES": {
       "block": {
-        "id": "test-2",
         "type": "_kinds_of_kind_stack",
+        "id": "test-2",
         "extraState": {
           "PLURAL_KINDS": 1,
           "SINGULAR_KIND": 1
@@ -162,8 +182,8 @@ func TestStoryLines(t *testing.T) {
         },
         "next": {
           "block": {
-            "id": "test-3",
             "type": "_kinds_of_kind_stack",
+            "id": "test-3",
             "extraState": {
               "PLURAL_KINDS": 1,
               "SINGULAR_KIND": 1

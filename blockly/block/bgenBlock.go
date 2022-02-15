@@ -8,8 +8,9 @@ import (
 
 // writes a new block into what might be the topLevel array of blocks,
 // or the value of a block or shadow key.
-func NewTopBlock(m *chart.Machine, blk *js.Builder) chart.State {
+func NewTopBlock(m *chart.Machine, blk *js.Builder, _zeroPos bool) chart.State {
 	open, close := js.Obj[0], js.Obj[1]
+	zeroPos = _zeroPos
 	return &chart.StateMix{
 		// initially our own block name
 		// later, a member of our flow
@@ -26,6 +27,8 @@ func NewTopBlock(m *chart.Machine, blk *js.Builder) chart.State {
 	}
 }
 
+var zeroPos = false
+
 // writes most of the contents of a block, without its surrounding {}
 // ( to support the nested linked lists of blocks used for stacks )
 func newInnerFlow(m *chart.Machine, body *js.Builder, typeName string) *chart.StateMix {
@@ -40,7 +43,8 @@ func newInnerBlock(m *chart.Machine, body *js.Builder, typeName string, allowExt
 	}
 	//
 	var term string // set per key
-	blk := blockData{id: NewId(), typeName: typeName, allowExtraData: allowExtraData, comment: cmt}
+	blk := blockData{id: NewId(), typeName: typeName, allowExtraData: allowExtraData, comment: cmt, zeroPos: zeroPos}
+	zeroPos = false
 	return &chart.StateMix{
 		// one of every extant member of the flow ( the encoder skips optional elements lacking a value )
 		// this might be a field or input

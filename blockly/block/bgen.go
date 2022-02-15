@@ -13,7 +13,7 @@ func Convert(story jsn.Marshalee) (ret string, err error) {
 	const footer = `]}}`
 	var out js.Builder
 	out.WriteString(header)
-	if e := enc.Marshal(story, NewTopBlock(&enc, &out)); e != nil {
+	if e := enc.Marshal(story, NewTopBlock(&enc, &out, true)); e != nil {
 		err = e
 	} else {
 		out.WriteString(footer)

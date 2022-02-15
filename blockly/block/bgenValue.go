@@ -21,13 +21,13 @@ func valueToBytes(pv interface{}) (ret json.RawMessage, err error) {
 func unpackValue(pv interface{}) (ret interface{}) {
 	// ugh. for str values whether we want the compact value or the $KEY value
 	// depends on how we are handling things in blockly
-	var notCompact bool
-	if c, ok := pv.(composer.Composer); ok { //ugh
-		if spec := c.Compose(); !spec.OpenStrings {
-			notCompact = true
+	var canBeCompact bool // note: BoxedBool doesnt implement composer...
+	if c, ok := pv.(composer.Composer); ok {
+		if spec := c.Compose(); spec.OpenStrings {
+			canBeCompact = true
 		}
 	}
-	if v, ok := pv.(interface{ GetCompactValue() interface{} }); !notCompact && ok {
+	if v, ok := pv.(interface{ GetCompactValue() interface{} }); ok && canBeCompact {
 		ret = v.GetCompactValue()
 	} else if v, ok := pv.(interface{ GetValue() interface{} }); ok {
 		ret = v.GetValue()

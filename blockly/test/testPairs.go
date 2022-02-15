@@ -24,8 +24,8 @@ var Pairs = []struct {
       },
     },
   }, `{
-  "id": "test-1",
   "type": "test_flow",
+  "id": "test-1",
   "extraState": {
     "SWAP": 1
   },
@@ -35,8 +35,8 @@ var Pairs = []struct {
   "inputs": {
     "SWAP": {
       "block": {
-        "id": "test-2",
         "type": "test_txt",
+        "id": "test-2",
         "fields": {
           "TEST_TXT": "something"
         }
@@ -58,16 +58,16 @@ var Pairs = []struct {
       }},
     },
   }, `{
-  "id": "test-1",
   "type": "field_values",
+  "id": "test-1",
   "extraState": {
     "CONTAINS": 2
   },
   "inputs": {
     "CONTAINS0": {
       "block": {
-        "id": "test-2",
         "type": "field_value",
+        "id": "test-2",
         "extraState": {
           "FIELD": 1,
           "VALUE": 1
@@ -78,8 +78,8 @@ var Pairs = []struct {
         "inputs": {
           "VALUE": {
             "block": {
-              "id": "test-3",
               "type": "num_value",
+              "id": "test-3",
               "extraState": {
                 "NUM": 1
               },
@@ -93,8 +93,8 @@ var Pairs = []struct {
     },
     "CONTAINS1": {
       "block": {
-        "id": "test-4",
         "type": "field_value",
+        "id": "test-4",
         "extraState": {
           "FIELD": 1,
           "VALUE": 1
@@ -105,8 +105,8 @@ var Pairs = []struct {
         "inputs": {
           "VALUE": {
             "block": {
-              "id": "test-5",
               "type": "text_value",
+              "id": "test-5",
               "extraState": {
                 "TEXT": 1
               },
@@ -126,16 +126,16 @@ var Pairs = []struct {
   &testdl.TestEmbed{
     TestFlow: testdl.TestFlow{},
   }, `{
-  "id": "test-1",
   "type": "test_embed",
+  "id": "test-1",
   "extraState": {
     "TEST_FLOW": 1
   },
   "inputs": {
     "TEST_FLOW": {
       "block": {
-        "id": "test-2",
         "type": "test_flow",
+        "id": "test-2",
         "extraState": {}
       }
     }
@@ -149,8 +149,8 @@ var Pairs = []struct {
     Value: &literal.NumValue{
       Num: 5,
     }}, `{
-  "id": "test-1",
   "type": "field_value",
+  "id": "test-1",
   "extraState": {
     "FIELD": 1,
     "VALUE": 1
@@ -161,8 +161,8 @@ var Pairs = []struct {
   "inputs": {
     "VALUE": {
       "block": {
-        "id": "test-2",
         "type": "num_value",
+        "id": "test-2",
         "extraState": {
           "NUM": 1
         },
@@ -181,23 +181,23 @@ var Pairs = []struct {
       &testdl.TestFlow{},
       &testdl.TestFlow{},
     }}, `{
-  "id": "test-1",
   "type": "test_flow",
+  "id": "test-1",
   "extraState": {
     "SLOTS": 2
   },
   "inputs": {
     "SLOTS0": {
       "block": {
-        "id": "test-2",
         "type": "test_flow",
+        "id": "test-2",
         "extraState": {}
       }
     },
     "SLOTS1": {
       "block": {
-        "id": "test-3",
         "type": "test_flow",
+        "id": "test-3",
         "extraState": {}
       }
     }
@@ -207,8 +207,8 @@ var Pairs = []struct {
   // test a block with a field:value pair (use some literal text)
   /*test*/ "Field",
   &literal.TextValue{Text: "hello world"}, `{
-  "id": "test-1",
   "type": "text_value",
+  "id": "test-1",
   "extraState": {
     "TEXT": 1
   },
@@ -224,8 +224,8 @@ var Pairs = []struct {
   &literal.TextValues{
     Values: []string{"a", "b", "c"},
   }, `{
-  "id": "test-1",
   "type": "text_values",
+  "id": "test-1",
   "extraState": {
     "VALUES": 3
   },
@@ -244,26 +244,26 @@ var Pairs = []struct {
       &story.StoryBreak{},
       &story.StoryBreak{},
     }}, `{
-  "id": "test-1",
   "type": "story_file",
+  "id": "test-1",
   "extraState": {
     "STORY_LINES": 3
   },
   "inputs": {
     "STORY_LINES": {
       "block": {
-        "id": "test-2",
         "type": "_story_break_stack",
+        "id": "test-2",
         "extraState": {},
         "next": {
           "block": {
-            "id": "test-3",
             "type": "_story_break_stack",
+            "id": "test-3",
             "extraState": {},
             "next": {
               "block": {
-                "id": "test-4",
                 "type": "_story_break_stack",
+                "id": "test-4",
                 "extraState": {}
               }
             }
@@ -279,8 +279,8 @@ var Pairs = []struct {
   &testdl.TestFlow{
     Slots: []testdl.TestSlot{},
   }, `{
-  "id": "test-1",
   "type": "test_flow",
+  "id": "test-1",
   "extraState": {}
 }`,
 }}

@@ -33,7 +33,7 @@ func testBlocks(src jsn.Marshalee, expect string) (err error) {
   }
   var out js.Builder
   enc := chart.MakeEncoder()
-  if e := enc.Marshal(src, block.NewTopBlock(&enc, &out)); e != nil {
+  if e := enc.Marshal(src, block.NewTopBlock(&enc, &out, false)); e != nil {
     err = errutil.New(e, "failed marshal")
   } else if str, e := indent(out.String()); e != nil {
     err = errutil.New(e, "invalid json", str)
