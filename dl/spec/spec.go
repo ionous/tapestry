@@ -2,6 +2,11 @@ package spec
 
 import "strings"
 
+// fix: this isnt right currently i dont think
+func (op *TypeSpec) FriendlyName() string {
+	return strings.Join(strings.Split(op.Name, "_"), " ")
+}
+
 // return english human friendly text.
 func (op *TermSpec) FriendlyName() string {
 	return op.Key
