@@ -8,6 +8,7 @@ import { inject } from 'vue'
 
 // shapes is an array of blockly shape data.
 const shapesUrl= 'http://localhost:8080/shapes/';
+const toolboxUrl= 'http://localhost:8080/boxes/';
 
 export default {
   // reports back on shapeData
@@ -17,6 +18,13 @@ export default {
   setup(props, { emit /*attrs, slots, emit, expose*/ }) {
     // fix: ref some error text or something to the display?
     // fix: push your json fetch into a shared library?
+    let toolboxData;
+    fetch(toolboxUrl).then((response) => {
+      return (!response.ok) ?
+        Promise.reject({status: response.status, url}) :
+        response.json().then((jsonData) => {
+          toolboxData= jsonData;
+    })}).then(
     fetch(shapesUrl).then((response) => {
       return (!response.ok) ?
         Promise.reject({status: response.status, url}) :
@@ -29,11 +37,13 @@ export default {
               shapeData[el.type]= customData;
             }
           });
-          emit('started', shapeData);
+          emit('started', {shapeData, toolboxData});
         });
-    }).catch((error) => {
+    })).catch((error) => {
       console.log('error:', error)
     });
   } 
 }
 </script>
+
+

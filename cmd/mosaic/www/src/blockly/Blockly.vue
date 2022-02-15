@@ -22,13 +22,16 @@ export default {
   props: {
     catalog: Cataloger,
     shapeData: Object, 
+    toolboxData: Object,
   },
   mounted() {
     blocklyDiv = document.getElementById('blockly-div');
     if (!blocklyDiv) {
       throw new Error("couldnt find blockly div");
     } else {
-      workspace= Blockly.inject('blockly-div', WorkspaceOptions);
+      const w= WorkspaceOptions;
+      w.toolbox= this.toolboxData; // overwrite placeholder toolbox with the one from the server.
+      workspace= Blockly.inject('blockly-div', w);
       blocklyArea = document.getElementById('blockly-area');
       if (!blocklyArea) {
         throw new Error("couldnt find blockly area");
@@ -36,6 +39,7 @@ export default {
         window.addEventListener('resize',this.onResize);
         this.onResize();
         Blockly.svgResize(workspace);
+        this.onRouteChanged(this.$route.params);
       }
     }
   },

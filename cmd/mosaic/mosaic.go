@@ -23,7 +23,7 @@ func main() {
 	//
 	cfg := composer.DevConfig(build.Default.GOPATH)
 	cfg.Port = 8080
-	cfg.Mosaic = "http://localhost:3000/"
+	cfg.Mosaic = "http://localhost:3000/" // dev backend; fix: need static version too
 	if len(dir) > 0 {
 		cfg.Root = dir
 	}

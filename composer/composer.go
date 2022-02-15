@@ -66,6 +66,11 @@ func Mosaic(cfg *Config) {
 		return context.WithValue(ctx, configKey, cfg)
 	})))
 
+	// blockly shape files ( from .ifspecs )
+	http.Handle("/boxes/", http.StripPrefix("/boxes/", web.HandleResourceWithContext(BoxesApi(cfg), func(ctx context.Context) context.Context {
+		return context.WithValue(ctx, configKey, cfg)
+	})))
+
 	// http.HandleFunc("/stories/", web.HandleResourceWithContext(FilesApi(cfg), func(ctx context.Context) context.Context {
 	// 	return context.WithValue(ctx, configKey, cfg)
 	// }))

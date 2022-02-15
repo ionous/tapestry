@@ -10,6 +10,7 @@
       /><Blockly 
         :catalog="catalog"
         :shapeData="shapeData"
+        :toolboxData="toolboxData"
   /></template
 ></template>
  
@@ -28,11 +29,14 @@ export default {
   components: { Blockly, Catalog, RouterView, Startup },
   setup(props) {
     let shapeData= ref(null);
+    let toolboxData= ref(null);
     return {
       catalog, // unwatched.
       shapeData, 
-      onStarted(_shapeData) {
-        shapeData.value= Object.freeze(_shapeData);
+      toolboxData,
+      onStarted(b) {
+        shapeData.value= Object.freeze(b.shapeData);
+        toolboxData.value= Object.freeze(b.toolboxData);
       }
     }
   },

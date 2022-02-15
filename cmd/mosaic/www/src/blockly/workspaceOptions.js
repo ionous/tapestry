@@ -45,34 +45,6 @@ export default {
   // toolbox: toolboxSimple,
   toolbox: {
     'kind': 'flyoutToolbox',
-    'contents': [
-      // {
-      //   'kind': 'block',
-      //   'type': 'controls_repeat_ext',
-      //   'inputs': {
-      //     'TIMES': {
-      //       'shadow': {
-      //         'type': 'math_number',
-      //         'fields': {
-      //           'NUM': 5,
-      //         },
-      //       },
-      //     },
-      //   },
-      // },
-
-      // {
-      //   'kind': 'block',
-      //   'type': '_kinds_of_kind_stack',
-      // },
-      // {
-      //   'kind': 'block',
-      //   'type': '_noun_kind_statement_stack',
-      // },
-      // {
-      //   'kind': 'block',
-      //   'type': 'story_lines',
-      // }
-    ],
+    'contents': [],
   }
 };
