@@ -19,18 +19,20 @@ func valueToBytes(pv interface{}) (ret json.RawMessage, err error) {
 
 // where pv is from the encoding statemachine
 func unpackValue(pv interface{}) (ret interface{}) {
-	// ugh. for str values whether we want the compact value or the $KEY value
-	// depends on how we are handling things in blockly
-	var canBeCompact bool // note: BoxedBool doesnt implement composer...
+	// str values depend on how we are handling things in blockly
+	// for closed strings we use a dropdown, so we want $KEY
+	var canBeCompact bool // note: BoxedBool doesn't implement composer...
 	if c, ok := pv.(composer.Composer); ok {
 		if spec := c.Compose(); spec.OpenStrings {
 			canBeCompact = true
 		}
 	}
+	// get/compact/value are implemented by enums ( see: jsnEnum.go; jsnBox.go )
 	if v, ok := pv.(interface{ GetCompactValue() interface{} }); ok && canBeCompact {
-		ret = v.GetCompactValue()
+		ret = v.GetCompactValue() // returns the more friendly value used in compact json
 	} else if v, ok := pv.(interface{ GetValue() interface{} }); ok {
-		ret = v.GetValue()
+		ret = v.GetValue() // returns the $KEY value used in detailed json
+
 	} else {
 		ret = pv
 	}
