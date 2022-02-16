@@ -12,5 +12,8 @@ export default class Cataloger {
   loadFile(path) {
     throw new Error("load file not implemented");
   }
+  storeFile(path, pod) {
+    throw new Error("store file not implemented");
+  }
 }
 
