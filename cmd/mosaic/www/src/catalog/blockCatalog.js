@@ -82,7 +82,8 @@ export default class BlockCatalog extends Cataloger {
           if (contents) {
             out.push({
               path: item.path,
-              contents: {toJSON: ()=> contents},
+              // contents: {toJSON: ()=> contents}, this double encodes the string.
+              contents: JSON.parse(contents),
             });
           }
         }

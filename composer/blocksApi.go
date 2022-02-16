@@ -2,12 +2,16 @@ package composer
 
 import (
 	"context"
+	"encoding/json"
 	"io"
 	"log"
 	"net/http"
+	"path/filepath"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/blockly/block"
+	"git.sr.ht/~ionous/tapestry/blockly/unblock"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/web"
 	"github.com/ionous/errutil"
@@ -36,6 +40,36 @@ func (d blocksFolder) Find(sub string) (ret web.Resource) {
 		// fix: is there an error resource?
 		// and/or why doesnt find return error?
 		log.Println("unknown resource at", res, sub)
+	}
+	return
+}
+
+func (d blocksFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
+	var els []struct {
+		Path     string          `json:"path"`
+		Contents json.RawMessage `json:"contents"`
+	}
+	dec := json.NewDecoder(r)
+	if e := dec.Decode(&els); err != nil {
+		err = e
+	} else {
+		root := d.String()
+		for _, el := range els {
+			var file story.StoryFile // mosaic hands back blocks
+			if at := filepath.Join(root, el.Path); !strings.HasPrefix(at, root) {
+				e := errutil.New("cant save to", at)
+				err = errutil.Append(err, e)
+			} else if e := unblock.Decode(&file, "story_file", tapestry.Registry(), el.Contents); e != nil {
+				err = errutil.Append(err, e)
+			} else if data, e := story.Encode(&file); e != nil {
+				err = errutil.Append(err, e)
+			} else if e := writeOut(at, data); e != nil {
+				err = errutil.Append(err, e)
+			}
+		}
+	}
+	if err != nil {
+		log.Println("ERROR", err)
 	}
 	return
 }
@@ -72,5 +106,4 @@ func (d blocksFile) Get(ctx context.Context, w http.ResponseWriter) (err error) 
 		_, err = io.WriteString(w, str)
 	}
 	return
-
 }
