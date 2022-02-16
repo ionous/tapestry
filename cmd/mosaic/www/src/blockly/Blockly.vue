@@ -11,11 +11,12 @@ Blockly.WorkspaceAudio.prototype.preload= function(){};
 
 // https://developers.google.com/blockly/guides/configure/web/resizable
 let workspace, blocklyArea, blocklyDiv;
-let lastPath;    // the last successfully displayed file
-let pendingLoad; // we only allow one load request at a time
+let currentFile;     // the last successfully displayed file
+let pendingLoad;     // we only allow one load request at a time
 let shapeData= null; // the customData from the shapes file.
 
 export default {
+  emits: ["workspaceChanged"],
   props: {
     catalog: Cataloger,
     shapeData: Object, 
@@ -51,7 +52,7 @@ export default {
   },
   destroyed: function() {
     window.removeEventListener('resize', this.onResize, false);
-    lastPath= null;
+    currentFile= null;
     pendingLoad= null;
   },
   methods: {
@@ -59,15 +60,14 @@ export default {
       const { catalog } = this;
       if (params && params.editPath !== undefined) {
         const path = params.editPath.join("/");
-        if (path && (path !== lastPath)) {
+        if (path && (!currentFile || (currentFile.path !== path))) {
           if (pendingLoad) {     // if something is already loading
             console.log("queuing:", pendingLoad);
             pendingLoad = path;  // remember the most recent request.
           } else {
-            if (lastPath && workspace) { // lastPath gets updated after the new file has loaded
-              const pod= Blockly.serialization.workspaces.save(workspace);
-              const contents= JSON.stringify(pod);
-              catalog.storeFile(lastPath, contents);
+            // currentFile gets updated after the new contents have finished loading.
+            if (currentFile) {
+              this.storeCurrentWorkspace(currentFile);
             }
             workspace.clear();
             pendingLoad = path;
@@ -85,12 +85,24 @@ export default {
         console.log("reloading:", pendingLoad);
         catalog.loadFile(pendingLoad).then(this._onFileLoaded);
       } else {
-        lastPath= file.path;
+        currentFile= file;
         pendingLoad= null;
         if (workspace && file.contents) {
           const pod= JSON.parse(file.contents);
           Blockly.serialization.workspaces.load(pod, workspace);
+          this.$emit("workspaceChanged",{
+            file: file,
+            flush: () => {
+              this.storeCurrentWorkspace(file);
+            },
+          });
         }
+      }
+    },
+    storeCurrentWorkspace(file) {
+      if (workspace && file && (file===currentFile)) { 
+        const pod= Blockly.serialization.workspaces.save(workspace);
+        file.updateContents(JSON.stringify(pod));
       }
     },
     onResize() {

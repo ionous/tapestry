@@ -3,14 +3,17 @@
     v-if="!shapeData"
     @started="onStarted"
    /><template v-else
-      ><img alt="Vue logo" src="./assets/logo.png" 
-      ><router-view
-      /><Catalog 
+      ><div class="mk-header"
+      ><h1>Tapestry</h1></div
+      ><Toolbar
+        @save="onSave"
+      /><Catalog
         :catalog="catalog"
       /><Blockly 
         :catalog="catalog"
-        :shapeData="shapeData"
-        :toolboxData="toolboxData"
+        :shape-data="shapeData"
+        :toolbox-data="toolboxData"
+        @workspace-changed="onWorkspaceChanged"
   /></template
 ></template>
  
@@ -18,15 +21,16 @@
 import BlockCatalog from './catalog/blockCatalog.js'
 import Blockly from './blockly/Blockly.vue'
 import Catalog from './catalog/Catalog.vue'
+import Toolbar from './Toolbar.vue'
 import Startup from './Startup.vue'
-import { RouterView } from 'vue-router'
+// import { RouterView } from 'vue-router'
 import { ref, onMounted } from 'vue'
 
 // dataUrl comes through vite conifg.
 const catalog= new BlockCatalog(dataUrl + '/blocks/'); // only need one.
 
 export default {
-  components: { Blockly, Catalog, RouterView, Startup },
+  components: { Blockly, Catalog, Toolbar, Startup },
   setup(props) {
     let shapeData= ref(null);
     let toolboxData= ref(null);
@@ -34,10 +38,26 @@ export default {
       catalog, // unwatched.
       shapeData, 
       toolboxData,
+      workspace: null,
       onStarted(b) {
         shapeData.value= Object.freeze(b.shapeData);
         toolboxData.value= Object.freeze(b.toolboxData);
       }
+    }
+  },
+  methods: {
+    onSave() {
+      // we have to look at the currently focused file as well to see if it has any changes 
+      // and if so flush them to its in memory catalog file.
+      // but *Blockly* has to be the thing to do that... not really something vue wants us to do.
+      console.log("save");
+      if (this.workspace) {
+        this.workspace.flush();
+      }
+      catalog.saveStories();
+    },
+    onWorkspaceChanged(ws) {
+      this.workspace= ws;
     }
   },
   provide() {
@@ -54,6 +74,8 @@ export default {
         }
       },
       onFile(file) {
+        // a little convoluted: we change the router; the router changes blockly
+        // blockly tells us when the workspace has changed.
         const parts= file.path.split("/");
         router.push({ name: 'edit', params: { editPath: parts } });
       },

@@ -73,7 +73,6 @@ export default class BlockCatalog extends Cataloger {
     const { _saving:saving, _saved:last, _store:store } = this;
     if (!saving) {
       const next= ++this._saves; // increment the save attempt.
-      this._saving = next; // stores the save id for debugging.
       //
       let out= [];
       for (const key in store) {
@@ -89,7 +88,8 @@ export default class BlockCatalog extends Cataloger {
         }
       }
       if (out.length>0) {
-        console.log(json);
+        this._saving = next; // stores the save id for debugging.
+        console.log("saving", out.length, "files");
         http.put(this.base, '', out).then((res)=>{
           console.log("SAVED:", res);
           this._saved= next;

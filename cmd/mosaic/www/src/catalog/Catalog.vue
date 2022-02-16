@@ -1,6 +1,5 @@
 <template><div 
   :class="bemBlock()"
-  ><h1>Catalog</h1
   ><Folder
       v-if="!!folder.contents"
       :folder="folder"

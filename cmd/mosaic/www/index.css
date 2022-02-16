@@ -10,15 +10,17 @@ html, body {
   grid-template-rows: 2rem auto;
   grid-gap: 0px 10px;
   height: 100%;
+  margin: 5px;
+  font-family: sans-serif;
   grid-template-areas: 
-    "navigator tools"
+    "header tools"
     "sidebar editor"
 }
 
 /* unused right now.
 .mk-app--nosidebar {
   grid-template-areas: 
-    "navigator tools"
+    "header tools"
     "editor editor"
     "context context";
 }*/
@@ -30,6 +32,21 @@ html, body {
   grid-area: editor;
   /*background-color: red;*/
 }
+
+.mk-tools {
+  grid-area: tools;
+  /*background-color: red;*/
+}
+
+.mk-header {
+  grid-area: header;
+  /*background-color: red;*/
+}
+.mk-header h1 {
+  margin: 0;
+  font-family: monospace;
+}
+
 /**
  * mk-catalog
  */
