@@ -19,7 +19,7 @@
         [
           {
             "NounTraits:trait:": [
-              "",
+              "is",
               [
                 "wearable",
                 "worn"
@@ -48,7 +48,7 @@
         [
           {
             "NounTraits:trait:": [
-              "",
+              "is",
               [
                 "lit",
                 "wearable",
@@ -78,7 +78,7 @@
         [
           {
             "NounTraits:trait:": [
-              "",
+              "is",
               [
                 "openable",
                 "closed",
@@ -108,7 +108,7 @@
         [
           {
             "NounTraits:trait:": [
-              "",
+              "is",
               [
                 "openable",
                 "open"
@@ -137,7 +137,7 @@
         [
           {
             "NounTraits:trait:": [
-              "",
+              "is",
               [
                 "openable",
                 "open"
@@ -166,7 +166,7 @@
         [
           {
             "NounTraits:trait:": [
-              "",
+              "is",
               [
                 "wearable",
                 "openable",
@@ -196,7 +196,7 @@
         [
           {
             "NounTraits:trait:": [
-              "",
+              "is",
               [
                 "lit"
               ]

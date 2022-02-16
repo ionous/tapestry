@@ -465,7 +465,7 @@
         [
           {
             "NounTraits:trait:": [
-              "",
+              "is",
               [
                 "fixed in place",
                 "closed"

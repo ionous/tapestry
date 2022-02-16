@@ -25,7 +25,7 @@ func (n Enum) GetCompactValue() (ret interface{}) {
 	spec, str := n.Compose(), *n.str
 	if v, i := spec.IndexOfChoice(str); i >= 0 {
 		ret = v
-	} else {
+	} else if spec.OpenStrings {
 		ret = str
 	}
 	return
@@ -36,10 +36,11 @@ func (n Enum) SetValue(kv interface{}) (okay bool) {
 		spec := n.Compose()
 		if k, i := spec.IndexOfValue(str); i >= 0 {
 			*(n.str) = k
-		} else {
+			okay = true
+		} else if spec.OpenStrings {
 			*(n.str) = str
+			okay = true
 		}
-		okay = true
 	}
 	return
 }
