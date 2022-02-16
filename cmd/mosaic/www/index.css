@@ -42,7 +42,7 @@ html, body {
   padding-inline-start: 0px;
 }
 .mk-file-item__button::before {
-   content: "\1F4F0"; 
+   content: "\1F4C4";
    font-size: smaller;
    padding-right: 3px;
 }
