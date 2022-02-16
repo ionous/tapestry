@@ -24,7 +24,7 @@ export default {
         Promise.reject({status: response.status, url}) :
         response.json().then((jsonData) => {
           toolboxData= jsonData;
-    })}).then(
+    }).then(
     fetch(shapesUrl).then((response) => {
       return (!response.ok) ?
         Promise.reject({status: response.status, url}) :
@@ -39,7 +39,7 @@ export default {
           });
           emit('started', {shapeData, toolboxData});
         });
-    })).catch((error) => {
+    }))}).catch((error) => {
       console.log('error:', error)
     });
   } 
