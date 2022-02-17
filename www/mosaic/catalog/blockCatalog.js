@@ -1,5 +1,5 @@
 import Cataloger from './cataloger.js'
-import http from './http.js'
+import http from '/lib/http.js'
 import { CatalogFolder, CatalogFile } from './catalogItems.js'
 import { reactive } from "vue"
 

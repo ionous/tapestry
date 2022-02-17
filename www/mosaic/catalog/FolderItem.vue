@@ -13,7 +13,7 @@
 <script>
 import CatalogButton from './CatalogButton.vue'
 import { CatalogFolder } from './catalogItems.js'
-import bemMixin from '/src/bemMixin.js'
+import bemMixin from '/lib/bemMixin.js'
 
 export default {
   mixins: [bemMixin('mk-folder-item')],

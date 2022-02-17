@@ -11,7 +11,7 @@
 import CatalogButton from './CatalogButton.vue'
 import { CatalogFile } from './catalogItems.js'
 import { computed } from 'vue'
-import bemMixin from '/src/bemMixin.js'
+import bemMixin from '/lib/bemMixin.js'
 
 export default {
   mixins: [ bemMixin("mk-file-item") ],

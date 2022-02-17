@@ -1,8 +1,8 @@
  <template
-   ><Startup 
+  ><Startup 
     v-if="!shapeData"
     @started="onStarted"
-   /><template v-else
+  /><template v-else
       ><div class="mk-header"
       ><h1>Tapestry</h1></div
       ><Toolbar

@@ -4,7 +4,7 @@
 ></template>
 <script>
 import Blockly from 'blockly';
-import Cataloger from '/src/catalog/cataloger.js'
+import Cataloger from '/mosaic/catalog/cataloger.js'
 import WorkspaceOptions from './workspaceOptions.js'
 
 Blockly.WorkspaceAudio.prototype.preload= function(){};

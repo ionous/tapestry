@@ -10,7 +10,7 @@
 import Folder from './Folder.vue'
 import Cataloger from './cataloger.js'
 import { CatalogFolder } from './catalogItems.js'
-import bemMixin from '/src/bemMixin.js'
+import bemMixin from '/lib/bemMixin.js'
 
 export default {
   mixins: [ bemMixin("mk-catalog") ],

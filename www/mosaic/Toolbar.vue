@@ -8,7 +8,7 @@
 ></template>
 
 <script>
-import bemMixin from '/src/bemMixin.js'
+import bemMixin from '/lib/bemMixin.js'
 
 export default {
 	props: {

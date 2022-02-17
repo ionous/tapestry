@@ -1,3 +1,0 @@
-<template>
-	Not Found
-</template>
