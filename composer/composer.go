@@ -40,20 +40,33 @@ func Compose(cfg *Config) {
 
 // starts the blockly editor, this function doesnt return.
 func Mosaic(cfg *Config) {
+
 	// configure server root
 	http.HandleFunc("/index.html", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/mosaic/index.html", http.StatusMovedPermanently)
 	})
 
-	// in dev mode, we reflect all calls to /mosaic/ to port 3000
+	// in dev mode, we reflect all unhandled calls to port 3000
 	if m := cfg.Mosaic; !strings.HasPrefix(m, "http") {
-		// maybe a directory?
-		panic("not implemented")
-		http.Handle("/mosaic/", http.StripPrefix("/mosaic/", http.FileServer(http.Dir("./www"))))
+		panic("not implemented") // compiled, non-dev mode.
+		// http.Handle("/mosaic/", http.StripPrefix("/mosaic/", http.FileServer(http.Dir("./www"))))
 	} else if u, e := url.Parse(m); e != nil {
 		panic(e)
 	} else {
-		http.Handle("/mosaic/", httputil.NewSingleHostReverseProxy(u))
+		//
+		p := httputil.NewSingleHostReverseProxy(u)
+		// this is a bit questionable:
+		// basically i want everything but not any other apps
+		//
+		http.Handle("/", p)
+		// http.Handle("/mosaic/", p)
+		// http.Handle("/index.css", p)
+		// http.Handle("/favicon.ico", p)
+		// http.Handle("/assets/", p)
+		// http.Handle("/lib/", p)
+		// http.Handle("/node_modules/", p)
+		// http.Handle("/@vite/", p)
+		// http.Handle("/@id/", p)
 	}
 
 	// blockly blocks ( from .if )
