@@ -1,15 +1,15 @@
  <template
-  ><Startup 
+  ><mk-startup 
     v-if="!shapeData"
     @started="onStarted"
   /><template v-else
       ><div class="mk-header"
       ><h1>Tapestry</h1></div
-      ><Toolbar
+      ><mk-toolbar
         @save="onSave"
-      /><Catalog
+      /><mk-catalog
         :catalog="catalog"
-      /><Blockly 
+      /><mk-blockly 
         :catalog="catalog"
         :shape-data="shapeData"
         :toolbox-data="toolboxData"
@@ -19,10 +19,10 @@
  
 <script>
 import BlockCatalog from './catalog/blockCatalog.js'
-import Blockly from './blockly/Blockly.vue'
-import Catalog from './catalog/Catalog.vue'
-import Toolbar from './Toolbar.vue'
-import Startup from './Startup.vue'
+import mkBlockly from './blockly/Blockly.vue'
+import mkCatalog from './catalog/Catalog.vue'
+import mkToolbar from './Toolbar.vue'
+import mkStartup from './Startup.vue'
 // import { RouterView } from 'vue-router'
 import { ref, onMounted } from 'vue'
 
@@ -30,7 +30,7 @@ import { ref, onMounted } from 'vue'
 const catalog= new BlockCatalog(dataUrl + '/blocks/'); // only need one.
 
 export default {
-  components: { Blockly, Catalog, Toolbar, Startup },
+  components: { mkBlockly, mkCatalog, mkToolbar, mkStartup },
   setup(props) {
     let shapeData= ref(null);
     let toolboxData= ref(null);

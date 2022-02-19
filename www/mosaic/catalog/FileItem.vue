@@ -1,23 +1,21 @@
 <template>
 <li :class="bemBlock()"
-><CatalogButton
+><mk-catalog-button
   :depth="depth"
   :class="bemElem('button')"
   @activate="onActivated"
->{{name}}</CatalogButton
+>{{name}}</mk-catalog-button
 ></li>
 </template>
 <script>
-import CatalogButton from './CatalogButton.vue'
+import mkCatalogButton from './CatalogButton.vue'
 import { CatalogFile } from './catalogItems.js'
 import { computed } from 'vue'
 import bemMixin from '/lib/bemMixin.js'
 
 export default {
   mixins: [ bemMixin("mk-file-item") ],
-  components: {
-    CatalogButton
-  },
+  components: { mkCatalogButton },
   props: {
     file: CatalogFile,
     depth: Number,

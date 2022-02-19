@@ -1,25 +1,23 @@
 <template>
 <li
-  ><CatalogButton
+  ><mk-catalog-button
     :class="bemElem('button', open?'open':'closed')"
     :depth="depth"
     @activate="onActivated"
-  >{{name}}</CatalogButton
+  >{{name}}</mk-catalog-button
   ><slot
   ></slot
 ></li>
 </template>
 
 <script>
-import CatalogButton from './CatalogButton.vue'
+import mkCatalogButton from './CatalogButton.vue'
 import { CatalogFolder } from './catalogItems.js'
 import bemMixin from '/lib/bemMixin.js'
 
 export default {
   mixins: [bemMixin('mk-folder-item')],
-  components: {
-    CatalogButton
-  },
+  components: { mkCatalogButton },
   props: {
     folder: CatalogFolder,
     depth: Number

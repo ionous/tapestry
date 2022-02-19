@@ -1,13 +1,13 @@
 <template><div 
   :class="bemBlock()"
-  ><Folder
+  ><mk-folder
       v-if="!!folder.contents"
       :folder="folder"
-  ></Folder
+  ></mk-folder
 ></div></template>
 
 <script>
-import Folder from './Folder.vue'
+import mkFolder from './Folder.vue'
 import Cataloger from './cataloger.js'
 import { CatalogFolder } from './catalogItems.js'
 import bemMixin from '/lib/bemMixin.js'
@@ -17,9 +17,7 @@ export default {
   props: {
     catalog: Cataloger,
   },
-  components: {
-    Folder,
-  },
+  components: { mkFolder },
   data() {
     const { catalog } = this;
     return {

@@ -1,8 +1,12 @@
 export default {
 
   // promise json
-  get(base, path) {
-    const url= base+path;
+  join(base, path){
+     const url= base+path; // fix to exception on dots
+     return url;
+  },
+
+  get(url) {
     console.log("getting", url);
     return fetch(url).then((response) => {
       return (!response.ok) ?
@@ -14,8 +18,7 @@ export default {
   },
 
   //https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-  async put(base, path, data = {}) {
-    const url= base+path;
+  async put(url, data = {}) {
     // Default options are marked with *
     const response = await fetch(url, {
       method: 'PUT', // *GET, POST, PUT, DELETE, etc.

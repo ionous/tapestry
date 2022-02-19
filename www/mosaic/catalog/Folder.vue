@@ -1,34 +1,35 @@
 <template>
 <ol class="mk-folder-ctrl"
-  ><FolderItem
+  ><mk-folder-item
     v-for="subFolder in folders"
     :key="subFolder.path"
     :folder="subFolder"
     :depth="depth"
     @activated="onFolder(subFolder)"
-    ><Folder
+    ><mk-folder
       :folder="subFolder"
       :depth="depth+1"
-    ></Folder
-  ></FolderItem
-  ><FileItem
+    ></mk-folder
+  ></mk-folder-item
+  ><mk-file-item
     v-for="file in files"
     :key="file.path"
     :file="file"
     :depth="depth"
     @activated="onFile(file)"
-  ></FileItem
+  ></mk-file-item
 ></ol>
 </template>
 <script>
 
-import FileItem from './FileItem.vue'
-import FolderItem from './FolderItem.vue'
+import mkFileItem from './FileItem.vue'
+import mkFolderItem from './FolderItem.vue'
 import { CatalogFolder } from './catalogItems.js'
 
 export default {
+  name: 'mkFolder',
   inject: ['onFolder', 'onFile'],
-  components: { FolderItem, FileItem },
+  components: { mkFolderItem, mkFileItem },
   props: {
     folder: CatalogFolder,
     depth: {

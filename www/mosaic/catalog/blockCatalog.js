@@ -18,7 +18,7 @@ export default class BlockCatalog extends Cataloger {
   loadFolder(folder) {
     const { path } = folder;
     const { _store: store } = this;
-    http.get(this.base, path).then((contents) => {
+    http.get(http.join(this.base, path)).then((contents) => {
       if (Array.isArray(contents)) {
         // a list of CatalogItems
         folder.contents= this._readFolder(path, contents);
@@ -51,7 +51,7 @@ export default class BlockCatalog extends Cataloger {
       // already exists? return a promise to match
       ret= Promise.resolve(file);
     } else {
-      ret= http.get(this.base, path).then((pod) => {
+      ret= http.get(http.join(this.base, path)).then((pod) => {
         console.log('success:', path);
         let file= store[path];
         if (!file) {
@@ -91,7 +91,7 @@ export default class BlockCatalog extends Cataloger {
       if (out.length>0) {
         this._saving = next; // stores the save id for debugging.
         console.log("saving", out.length, "files");
-        http.put(this.base, '', out).then((res)=>{
+        http.put(this.base, out).then((res)=>{
           console.log("SAVED:", res);
           this._saved= next;
           this._saving= false;
