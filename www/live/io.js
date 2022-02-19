@@ -2,10 +2,7 @@ import http from '/lib/http.js'
 
 export default class Io {
   // pass in the sink we're writing data to
-  constructor(output, endpoint= 'http://localhost:8088/io') {
-    if (keepalive<=0) {
-      throw new Error("bad timer")
-    }
+  constructor(output, endpoint) {
     this.endpoint= endpoint;
     this.keepalive=0;
     this.timer=0;
@@ -18,7 +15,7 @@ export default class Io {
     this.keepalive= false;
   }
   startPolling(keepalive= 15) {
-    stopPolling();
+    this.stopPolling();
     if (keepalive > 0) {
       this.keepalive= keepalive;
       this.timer = setTimeout( keepalive*1000, () => {
@@ -32,23 +29,23 @@ export default class Io {
     this._clearTimer();
     // we use promises to keep our get/send requests "serialized" --
     // but it shouldnt really matter because the server needs to handle things regardless.
-    this.sending= Promise.allSettled(this.getting, this.sending).then(()=>{
+    this.sending= Promise.allSettled([this.getting, this.sending]).then(()=>{
       // expects zero or more messages back
-      return http.put(this.endpoint, cmd).then((msgs) => {
-        for (const msg of msgs) {
-          this.lines.push(msg);
+      return http.post(this.endpoint, cmd, true).then((msgs) => {
+        if (Array.isArray(msgs)) {
+          for (const msg of msgs) {
+            this.lines.push("from server: "+ msg);
+          }
         }
       }).finally(()=>{
-        if (restartPolling) {
-          this.startPolling(this.keepalive);
-        }
+        this.startPolling(this.keepalive);
       });
     });
   }
   // poll resets the timer
   // expects zero or more messages
   _poll() {
-    this.getting= Promise.allSettled(this.getting, this.sending).then(()=>{
+    this.getting= Promise.allSettled([this.getting, this.sending]).then(()=>{
       return http.get(this.endpoint).then((msgs) => {
         for (const msg of msgs) {
           this.lines.push(msg);

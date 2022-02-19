@@ -26,8 +26,8 @@ import mkStartup from './Startup.vue'
 // import { RouterView } from 'vue-router'
 import { ref, onMounted } from 'vue'
 
-// dataUrl comes through vite conifg.
-const catalog= new BlockCatalog(dataUrl + '/blocks/'); // only need one.
+// appcfg comes through vite conifg.
+const catalog= new BlockCatalog(appcfg.mosaic + '/blocks/'); // only need one.
 
 export default {
   components: { mkBlockly, mkCatalog, mkToolbar, mkStartup },

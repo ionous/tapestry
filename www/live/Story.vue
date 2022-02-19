@@ -9,9 +9,13 @@
 import lvMarkup from './markup/markup.js'
 
 export default {
+	emits: ['updated'],
 	components: { lvMarkup },
 	props: {
 		lines: Array 
+	},
+	updated() {
+		this.$emit('updated');
 	},
 }
 </script>

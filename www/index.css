@@ -88,21 +88,23 @@ html, body {
   background-color: black;
   color: white;
 }
+.lv-story {
+  margin-left: 0.25em;
+}
 .lv-prompt {
-   margin-top:1em;
-   padding-left: 2px;
-   padding-bottom: 1em;
+  margin-top: 0.25em;
+  padding-bottom: 1em;
+  margin-left: 0.25em;
  }
 .lv-prompt::before {
   content: ">"; 
-  font-size: smaller;
 }
 .lv-prompt input {
   width: 90%;
 }
 .lv-no-outline {
-    border-style: none;
+  border-style: none;
 }
 .lv-no-outline:focus {
- outline: none; 
+  outline: none; 
 }

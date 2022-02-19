@@ -5,6 +5,9 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [vue()],
   define: {
-    dataUrl: JSON.stringify('http://localhost:8080')
+    appcfg: JSON.stringify({
+      mosaic: 'http://localhost:8080',
+      live: 'http://localhost:8088',
+    })
   }
 })
