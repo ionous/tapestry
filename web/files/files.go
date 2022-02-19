@@ -10,7 +10,7 @@ import (
 )
 
 // read a comma-separated list of files and directories
-// fix? the comma separation isnt used much -- maybe this could just be turned into an io/fs ?
+// fix? maybe filepaths could just be turned into an io/fs ?
 func ReadPaths(filePaths string, exts []string, onFile func(string) error) (err error) {
 	split := strings.Split(filePaths, ",")
 	for _, filePath := range split {

@@ -10,7 +10,6 @@ import (
 // Config contains paths to the standalone console utils.
 // Rather than creating one big app, for now, tapestry is split into a bunch of separate commands.
 type Config struct {
-	Import   string
 	Assemble string
 	Check    string
 	Play     string
@@ -19,16 +18,16 @@ type Config struct {
 	Mosaic   string
 }
 
-func (c *Config) PortString() string {
-	return ":" + strconv.Itoa(c.Port)
+func (cfg *Config) PortString() string {
+	return ":" + strconv.Itoa(cfg.Port)
 }
 
-func (c *Config) Scratch(parts ...string) string {
-	return path.Join(append([]string{c.Root, "build"}, parts...)...)
+func (cfg *Config) Scratch(parts ...string) string {
+	return path.Join(append([]string{cfg.Root, "build"}, parts...)...)
 }
 
-func (c *Config) PathTo(parts ...string) string {
-	return path.Join(append([]string{c.Root}, parts...)...)
+func (cfg *Config) PathTo(parts ...string) string {
+	return path.Join(append([]string{cfg.Root}, parts...)...)
 }
 
 // DevConfig creates a reasonable(?) config based on the developer go path.
@@ -40,11 +39,10 @@ func DevConfig(base string) *Config {
 	} else {
 		dir = temp
 	}
-	i, a, c, p := "import", "asm", "check", "play"
+	a, cfg, p := "asm", "check", "play"
 	return &Config{
-		Import:   path.Join(base, bin, i),
 		Assemble: path.Join(base, bin, a),
-		Check:    path.Join(base, bin, c),
+		Check:    path.Join(base, bin, cfg),
 		Play:     path.Join(base, bin, p),
 		Root:     dir,
 		Port:     3000,

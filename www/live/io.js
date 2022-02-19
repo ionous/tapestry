@@ -12,16 +12,16 @@ export default class Io {
   }
   stopPolling() {
     this._clearTimer();
-    this.keepalive= false;
+    this.keepalive= -1;
   }
-  startPolling(keepalive= 15) {
+  startPolling(keepalive= 15, quick=false) {
     this.stopPolling();
-    if (keepalive > 0) {
+    if (keepalive >= 0) {
       this.keepalive= keepalive;
       this.timer = setTimeout( () => {
         this.timer=0; // done, so forget.
         this._poll();
-      }, keepalive*1000);
+      }, quick?0: keepalive*1000);
     }
   }
   // send a pod command
@@ -33,25 +33,24 @@ export default class Io {
       // expects zero or more messages back
       return http.post(this.endpoint, cmd, true).then((msgs) => {
         if (Array.isArray(msgs)) {
-          for (const msg of msgs) {
-            this.lines.push("from server: "+ msg);
-          }
+          this.lines.push(...msgs);
+          msgCnt= msgs.length;
         }
       }).finally(()=>{
-        this.startPolling(this.keepalive);
+        this.startPolling(this.keepalive, msgCnt>500);
       });
     });
   }
   // poll resets the timer
   // expects zero or more messages
   _poll() {
+    let msgCnt=0;
     this.getting= Promise.allSettled([this.getting, this.sending]).then(()=>{
       return http.get(this.endpoint).then((msgs) => {
-        for (const msg of msgs) {
-          this.lines.push(msg);
-        }
+        this.lines.push(...msgs);
+        msgCnt= msgs.length;
       }).finally(()=>{
-        this.startPolling(this.keepalive);
+        this.startPolling(this.keepalive, msgCnt>500);
       });
     });
   }

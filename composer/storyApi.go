@@ -34,10 +34,7 @@ func tempTest(ctx context.Context, file string, in io.Reader) (err error) {
 		}
 		// src is now one or two absolute paths to project directories
 		// dir is a relative dir
-		if ephFile, e := runImport(ctx, cfg, src, dir); e != nil {
-			log.Println(tab, "Import error", cfg.Import, exitError(e))
-			err = e
-		} else if playFile, e := runAsm(ctx, cfg, ephFile, dir); e != nil {
+		if playFile, e := runAsm(ctx, cfg, src, dir); e != nil {
 			log.Println(tab, "Assembly error", cfg.Assemble, exitError(e))
 			err = e
 		} else if e := runCheck(ctx, cfg, playFile); e != nil {
@@ -49,21 +46,6 @@ func tempTest(ctx context.Context, file string, in io.Reader) (err error) {
 }
 
 const tab = '\t'
-
-// note: for now, these read from CombinedOutput to grab any log/println traces...
-func runImport(ctx context.Context, cfg *Config, inFile, path string) (ret string, err error) {
-	log.Println("Importing", inFile+"...")
-	ephFile := cfg.Scratch(path, "ephemera.db")
-	log.Println(">", cfg.Import, "-in", inFile, "-out", ephFile)
-	imported, e := exec.CommandContext(ctx, cfg.Import, "-in", inFile, "-out", ephFile).CombinedOutput()
-	if e != nil {
-		err = e
-	} else {
-		ret = ephFile
-	}
-	logBytes(imported)
-	return
-}
 
 func runAsm(ctx context.Context, cfg *Config, ephFile, path string) (ret string, err error) {
 	log.Println("Assembling", ephFile+"...")
