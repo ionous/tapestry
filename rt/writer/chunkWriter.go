@@ -29,6 +29,7 @@ func (c ChunkWriter) WriteString(s string) (ret int, err error) {
 	return
 }
 
+// WriteRune helper, returns the number of bytes written.
 func WriteRune(w io.Writer, q rune) (int, error) {
 	var p [utf8.UTFMax]byte
 	n := utf8.EncodeRune(p[:], q)
