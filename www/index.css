@@ -79,3 +79,30 @@ html, body {
   color: #0366d6;
   cursor: pointer;
 }
+
+/**/
+
+.lv-status {
+  position: sticky;
+  top:0;
+  background-color: black;
+  color: white;
+}
+.lv-prompt {
+   margin-top:1em;
+   padding-left: 2px;
+   padding-bottom: 1em;
+ }
+.lv-prompt::before {
+  content: ">"; 
+  font-size: smaller;
+}
+.lv-prompt input {
+  width: 90%;
+}
+.lv-no-outline {
+    border-style: none;
+}
+.lv-no-outline:focus {
+ outline: none; 
+}
