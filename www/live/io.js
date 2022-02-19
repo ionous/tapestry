@@ -18,10 +18,10 @@ export default class Io {
     this.stopPolling();
     if (keepalive > 0) {
       this.keepalive= keepalive;
-      this.timer = setTimeout( keepalive*1000, () => {
+      this.timer = setTimeout( () => {
         this.timer=0; // done, so forget.
         this._poll();
-      });
+      }, keepalive*1000);
     }
   }
   // send a pod command

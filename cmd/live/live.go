@@ -31,7 +31,7 @@ func main() {
 		}
 	}()
 
-	buildMsgs := func() string {
+	buildMsgs := func() (retCnt int, retStr string) {
 		var out js.Builder // fix: really need to make this streamable.
 		out.Brace(js.Array, func(a *js.Builder) {
 			// some arbitrary maximum size
@@ -42,17 +42,23 @@ func main() {
 						a.R(js.Comma)
 					}
 					a.Q(msg) // json quote each string.
+					retCnt++
 				default:
 					break // done
 				}
 			}
 		})
-		return out.String()
+		retStr = out.String()
+		return
 	}
-	writeMsgs := func(w http.ResponseWriter) (err error) {
+	writeMsgs := func(w http.ResponseWriter) (ret int, err error) {
 		w.Header().Set("Content-Type", "application/json")
-		msgs := buildMsgs()
-		_, err = io.WriteString(w, msgs)
+		cnt, msgs := buildMsgs()
+		if _, e := io.WriteString(w, msgs); e != nil {
+			err = e
+		} else {
+			ret = cnt
+		}
 		return
 	}
 
@@ -69,7 +75,12 @@ func main() {
 
 					// polling for data.
 					Gets: func(ctx context.Context, w http.ResponseWriter) (err error) {
-						return writeMsgs(w)
+						if cnt, e := writeMsgs(w); e != nil {
+							err = e
+						} else {
+							log.Println("wrote", cnt, "messages")
+						}
+						return
 					},
 					// sending a command.
 					Posts: func(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
@@ -79,7 +90,7 @@ func main() {
 							select {
 							case messages <- msg:
 								log.Println("posted:", msg)
-								err = writeMsgs(w)
+								_, err = writeMsgs(w)
 							default:
 								log.Println("ignored:", msg)
 								_, err = io.WriteString(w, "(server busy)")
