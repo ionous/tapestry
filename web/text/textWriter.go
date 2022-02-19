@@ -89,9 +89,7 @@ func closingTag(c *converter, q rune) (ret state, err error) {
 			ret, err = accumTag(c, q, closingTag)
 
 		default: // wasn't a valid tag, revert to readingText
-			c.tag.Reset()
-			_, err = c.buf.WriteTo(c.out) // flush
-			ret = readingText
+			ret, err = rejectTag(c)
 		}
 	}
 	return

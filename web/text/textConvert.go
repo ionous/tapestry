@@ -51,7 +51,7 @@ func (c *converter) Write(b []byte) (ret int, err error) {
 func (c *converter) WriteRune(q rune) (ret int, err error) {
 	switch q {
 	case Newline:
-		ret = 1 // we know the size of the newline
+		ret = 1 // we know the size of the rune
 		writer.WriteRune(c.out, Newline)
 		c.line++
 
