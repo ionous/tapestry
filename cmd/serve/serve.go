@@ -5,14 +5,13 @@ import (
 	"go/build"
 	"log"
 
+	serve "git.sr.ht/~ionous/tapestry/cmd/serve/internal"
 	"git.sr.ht/~ionous/tapestry/composer"
 	"git.sr.ht/~ionous/tapestry/dl/play"
-
-	live "git.sr.ht/~ionous/tapestry/cmd/live/internal"
 )
 
-// go run live.go -in /Users/ionous/Documents/Tapestry/stories/shared -out /Users/ionous/Documents/Tapestry/build/play.db
-// go run live.go -in /Users/ionous/Documents/Tapestry/build/play.db
+// go run serve.go -in /Users/ionous/Documents/Tapestry/stories/shared -out /Users/ionous/Documents/Tapestry/build/play.db
+// go run serve.go -in /Users/ionous/Documents/Tapestry/build/play.db
 func main() {
 	cfg := composer.DevConfig(build.Default.GOPATH)
 	//
@@ -29,19 +28,19 @@ func main() {
 	}
 
 	// sub-process communication
-	cs := live.NewChannels()
+	cs := serve.NewChannels()
 
 	// assemble and play ( reads from and writes to channels )
 	go func() {
 		cs.ChangeMode(play.PlayModes_Asm)
 		log.Println("Assembling", srcPath+"...")
-		if dbPath, e := live.Asm(cfg.Assemble, srcPath, outFile, check, cs); e != nil {
+		if dbPath, e := serve.Asm(cfg.Assemble, srcPath, outFile, check, cs); e != nil {
 			println(e.Error())
 			cs.Fatal(e)
 		} else {
 			log.Println("Playing", dbPath+"...")
 			cs.ChangeMode(play.PlayModes_Play)
-			if e := live.Play(cfg.Play, dbPath, cs); e != nil {
+			if e := serve.Play(cfg.Play, dbPath, cs); e != nil {
 				println(e.Error())
 				cs.Fatal(e)
 			} else {
@@ -52,5 +51,5 @@ func main() {
 	}()
 
 	// the server might last longer than the processes so let it block
-	log.Fatal(live.ListenAndServe(":8088", cs))
+	log.Fatal(serve.ListenAndServe(":8088", cs))
 }

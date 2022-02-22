@@ -2,6 +2,7 @@ package serve
 
 import (
 	"bufio"
+	"encoding/json"
 	"io"
 	"log"
 	"os/exec"
@@ -17,7 +18,7 @@ func Play(exe, inFile string, cs *Channels) (err error) {
 	var pipes pipes
 	defer pipes.Close()
 
-	cmd := exec.Command(exe, "-in", inFile, "-prompt", "")
+	cmd := exec.Command(exe, "-in", inFile, "-json")
 	if outp, e := pipes.AddReader(cmd.StdoutPipe()); e != nil {
 		err = e
 	} else if logp, e := pipes.AddReader(cmd.StderrPipe()); e != nil {
@@ -25,13 +26,13 @@ func Play(exe, inFile string, cs *Channels) (err error) {
 	} else if inp, e := pipes.AddWriter(cmd.StdinPipe()); e != nil {
 		err = e
 	} else {
-		goScan(outp, func(line string) {
-			log.Println("wrote:", line)
-			cs.msgs <- &play.PlayOut{Out: line}
-		})
-		goScan(logp, func(line string) {
+		goScanText(logp, func(line string) {
 			log.Println("logged:", line)
 			cs.msgs <- &play.PlayLog{Log: line}
+		})
+		goScanJson(outp, func(line string) {
+			log.Println("wrote:", line)
+			cs.msgs <- &play.PlayOut{Out: line}
 		})
 		goWrite(inp, cs.input)
 		//
@@ -59,11 +60,30 @@ func goWrite(w io.Writer, in <-chan string) {
 
 // https://www.yellowduck.be/posts/reading-command-output-line-by-line/
 // https://blog.kowalczyk.info/article/wOYk/advanced-command-execution-in-go-with-osexec.html
-func goScan(r io.Reader, onText func(string)) {
+func goScanText(r io.Reader, onText func(string)) {
 	scan := bufio.NewScanner(r) // by default the scanner separates input line by line
 	go func() {
 		for scan.Scan() {
 			onText(scan.Text())
+		}
+	}()
+}
+
+// reads from a stream of JSON objects.
+func goScanJson(r io.Reader, onText func(string)) {
+	type Obj struct {
+		Out string `json:"out"`
+	}
+	scan := json.NewDecoder(r)
+	go func() {
+		for {
+			var obj Obj
+			if e := scan.Decode(&obj); e != nil {
+				log.Println("error scanning:", e)
+				break
+			} else {
+				onText(obj.Out)
+			}
 		}
 	}()
 }

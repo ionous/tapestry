@@ -83,7 +83,7 @@ func playGame(inFile, testString, prompt string, jsonMode bool) (ret int, err er
 				if len(testString) > 0 {
 					for _, cmd := range strings.Split(testString, ";") {
 						fmt.Println(prompt, cmd)
-						step(parser, cmd)
+						step(parser, cmd, !jsonMode)
 					}
 				} else {
 					reader := bufio.NewReader(os.Stdin)
@@ -93,11 +93,14 @@ func playGame(inFile, testString, prompt string, jsonMode bool) (ret int, err er
 							break
 						} else {
 							words := in[:len(in)-1] // strip the newline.
-							step(parser, words)
+							step(parser, words, !jsonMode)
 
 							if jsonMode {
 								// take buffered text and write it out
 								// fix? possibly splitting newlines into array entries?
+								// fix? right now serve turns this into play commands
+								// but as/if we add more... we should do it in here
+								// including probably hijacking the log output
 								var out js.Builder
 								out.Brace(js.Obj, func(inner *js.Builder) {
 									inner.Q("out").R(js.Colon).Q(bufferedText.String())
@@ -114,10 +117,10 @@ func playGame(inFile, testString, prompt string, jsonMode bool) (ret int, err er
 	return
 }
 
-func step(p *play.Parser, s string) {
+func step(p *play.Parser, s string, pad bool) {
 	if res, e := p.Step(s); e != nil {
-		fmt.Println("error:", e)
-	} else if res != nil {
+		log.Println("error:", e)
+	} else if res != nil && pad {
 		fmt.Println()
 	}
 }

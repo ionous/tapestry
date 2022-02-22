@@ -8,14 +8,12 @@ import (
 )
 
 func Asm(exe, srcPath, outFile string, check bool, cs *Channels) (ret string, err error) {
-
 	cmd := exec.Command(
 		exe,
 		"-in", srcPath,
 		"-out", outFile,
 		"-check", strconv.FormatBool(check),
 	)
-
 	// creates a pipe to read from standard out
 	if r, e := cmd.StdoutPipe(); e != nil {
 		err = e
@@ -23,7 +21,7 @@ func Asm(exe, srcPath, outFile string, check bool, cs *Channels) (ret string, er
 		cmd.Stderr = cmd.Stdout // assign the same *writer*
 
 		// post output as log messages
-		goScan(r, func(line string) {
+		goScanText(r, func(line string) {
 			cs.msgs <- &play.PlayLog{Log: line}
 		})
 
