@@ -95,9 +95,6 @@ html, body {
   margin-top: 0.25em;
   padding-bottom: 1em;
   margin-left: 0.25em;
- }
-.lv-prompt::before {
-  content: ">"; 
 }
 .lv-prompt input {
   width: 90%;
@@ -107,4 +104,34 @@ html, body {
 }
 .lv-no-outline:focus {
   outline: none; 
+}
+.lv-prompt {
+  position: relative;
+}
+/* fake blinking cursor contains the same text as the prompt
+and this positions that text overlapping it. */
+.lv-prompt i {
+  position: absolute;
+  top:0;
+  left:2ch;
+  border-right: solid;
+  border-width: 1px;
+  border-color: black;
+  font-style: normal;
+  animation: blink 1s linear infinite;
+  user-select: none;
+}
+/* hide the text used to place the blinking cursor */
+.lv-hidden {
+  width:auto;
+  visibility: hidden;
+  overflow: auto;
+}
+/* hide the fake blinking cursor when the input has the focus */
+.lv-prompt input:focus + i {
+    display: none;
+}
+@keyframes blink {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }

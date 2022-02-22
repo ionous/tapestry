@@ -9,17 +9,16 @@
     :lines="narration"
   /><lv-prompt 
     @changed="onPrompt"
-    :len="narration.length"
+    ref="prompt"
   /></div
-></template>
-<script>
+></template
+><script>
 
 import lvPrompt from './Prompt.vue'
 import lvOutput from './Output.vue'
 import lvStatus from './Status.vue'
 import Io from './io.js'  
-
-import { reactive } from 'vue'
+import { ref, onMounted, onUnmounted, reactive } from 'vue';
 
 const junk= JSON.stringify([
 `<b>should write in bold</b>`,
@@ -36,13 +35,15 @@ new line`,
 `one line<br>then another<br><wbr>no blank lines<wbr>another new line<br><br>one blank line`,
 ]);
 
+
 export default {
   components: { lvOutput,lvPrompt,lvStatus },
   // props: {},
   setup(/*props*/) {
     const logging= reactive([]);//JSON.parse(junk));
     const narration= reactive([]);
-    let io= new Io(appcfg.live+"/io/", (msgs)=>{
+    const prompt= ref(null); // template ref 
+    const io= new Io(appcfg.live+"/io/", (msgs)=>{
       for (const msg of msgs) {
         for (const k in msg) {
           const v= msg[k];
@@ -53,6 +54,10 @@ export default {
             break;
             case "Play out:":
               narration.push(v);
+              const el= prompt.value;
+              if (el) {
+                el.scrollTo();
+              }
             break;
             case "Play mode:":
               console.warn("mode:", v);
@@ -74,11 +79,40 @@ export default {
         }
       }
     });
+    const onkey= (evt) => {
+      // console.log("key", evt.key);
+      const ignore= (evt.metaKey || evt.ctrlKey || evt.altKey);
+      if (!ignore) {
+        const el= prompt.value;
+        if (el && el !== document.activeElement) {
+          el.setFocus();
+        }
+        // switch (evt.key) {
+        //   case 'ArrowLeft':
+        //   break;
+        //   case 'ArrowRight':
+        //   break;
+        //   case 'ArrowUp':
+        //   break;
+        //   case 'ArrowDown':
+        //   break;
+        // }
+      }
+    };
+    onMounted(()=> {
+      document.body.addEventListener("keydown", onkey);
+      io.startPolling();
+    });
+    onUnmounted(()=> {
+      document.body.removeEventListener("keydown", onkey);
+      io.stopPolling();
+    });
     return {
-      io,        // start/stop polling 
       narration, // story output 
       logging,   // story debugging
+      prompt,   // template ref
       onPrompt(txt) {
+        console.log("onPrompt");
         narration.push("> "+ txt);
         // fix? tapestry commands?
         io.send({
@@ -86,12 +120,6 @@ export default {
         });
       }
     }
-  },
-  mounted() {
-    this.io.startPolling();
-  },
-  unmounted() {
-    this.io.stopPolling();
-  },
+  }
 }
 </script> 

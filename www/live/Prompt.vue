@@ -1,29 +1,42 @@
 <template
 ><div class="lv-prompt"
+><label for="prompt">&gt; </label
 ><input 
-	class="lv-no-outline"
-	ref= "input"
+	class="lv-no-outline lv-blink"
+	ref="input"
+	name="prompt"
 	v-model.trim="text"
-	@change="onInput"
+	@keyup.enter="onInput"
+><i><span class="lv-hidden">{{text}}</span></i
 ></div></template>
 <script>
+// fix? would it make more sense to just post using form?
 export default {
 	emits: ["changed"],
-	props: {
-		len: Number, // we use the side effect of update to stay in view
-	},
 	data() {
 		return {
-			text: "",
+			text: ""
 		}
 	},
 	mounted() {
-		this.$refs.input.focus();
+		this.setFocus();
   },
+  // when props change.
   updated() {
-		this.$refs.input.scrollIntoView(true);
+		this.scrollTo();
   },
 	methods: {
+		setFocus() {
+			const el= this.$refs.input;
+			if (document.activeElement !== el) {
+				el.focus();
+				const end= this.text.length;
+				el.setSelectionRange(end,end);
+			}
+		},
+		scrollTo() {
+			this.$refs.input.scrollIntoView(true);
+		},
 		onInput() {
 			const txt= this.text;
 			this.text ="";
