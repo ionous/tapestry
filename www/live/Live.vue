@@ -84,19 +84,19 @@ export default {
       const ignore= (evt.metaKey || evt.ctrlKey || evt.altKey);
       if (!ignore) {
         const el= prompt.value;
-        if (el && el !== document.activeElement) {
-          el.setFocus();
+        if (el) {
+          if (el !== document.activeElement) {
+            el.setFocus();
+          }
+          switch (evt.key) {
+            case 'ArrowUp':
+              el.browseHistory(true);
+            break;
+            case 'ArrowDown':
+              el.browseHistory(false);
+            break;
+          }
         }
-        // switch (evt.key) {
-        //   case 'ArrowLeft':
-        //   break;
-        //   case 'ArrowRight':
-        //   break;
-        //   case 'ArrowUp':
-        //   break;
-        //   case 'ArrowDown':
-        //   break;
-        // }
       }
     };
     onMounted(()=> {
