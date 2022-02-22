@@ -22,7 +22,9 @@ type Options int
 
 //go:generate stringer -type=Options
 const (
-	// a true/false flag to print response names ( instead of values )
+	// flag to print response names ( instead of values )
 	PrintResponseNames Options = iota
+	// flag to output text as json ( instead of plain text )
+	JsonMode
 	NumOptions
 )

@@ -1,4 +1,4 @@
-package live
+package serve
 
 // read from stdin
 // go func() {

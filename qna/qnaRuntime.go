@@ -2,6 +2,7 @@ package qna
 
 import (
 	"database/sql"
+	"io"
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
@@ -22,10 +23,10 @@ func NewRuntime(db *sql.DB, signatures cin.Signatures) *Runner {
 	if e != nil {
 		panic(e)
 	}
-	return NewRuntimeOptions(qdb, opt, signatures)
+	return NewRuntimeOptions(writer.NewStdout(), qdb, opt, signatures)
 }
 
-func NewRuntimeOptions(qdb *qdb.Query, options Options, signatures cin.Signatures) *Runner {
+func NewRuntimeOptions(w io.Writer, qdb *qdb.Query, options Options, signatures cin.Signatures) *Runner {
 	run := &Runner{
 		qdb:        qdb,
 		values:     make(cache),
@@ -34,7 +35,7 @@ func NewRuntimeOptions(qdb *qdb.Query, options Options, signatures cin.Signature
 		signatures: signatures,
 		options:    options,
 	}
-	run.SetWriter(print.NewAutoWriter(writer.NewStdout()))
+	run.SetWriter(print.NewAutoWriter(w))
 	return run
 }
 

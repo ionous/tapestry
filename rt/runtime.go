@@ -65,6 +65,8 @@ type Runtime interface {
 	// return a pseudo-random number
 	Random(inclusiveMin, exclusiveMax int) int
 	// Return the built-in writer, or the current override.
+	// fix: should probably return io.Writer and have callers use appropriate helpers
+	// ( ex. io.WriteString, and writer.WriteRune if need be -- with possible a .WriteRune cast similar to WriteString )
 	Writer() writer.Output
 	// Override the current writer
 	SetWriter(writer.Output) (prev writer.Output)

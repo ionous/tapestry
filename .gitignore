@@ -11,11 +11,11 @@ cmd/compact/compact
 cmd/compose/compose
 cmd/idl/idl
 cmd/import/import
-cmd/live/live
 cmd/mosaic/_sampledata
 cmd/mosaic/mosaic
 cmd/play/play
 cmd/regenspec/regenspec
+cmd/serve/serve
 cmd/spec/spec
 cmd/stem/stem
 *.zip
