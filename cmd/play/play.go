@@ -21,14 +21,15 @@ import (
 
 // go run play.go -in /Users/ionous/Documents/Tapestry/build/play.db
 func main() {
-	var inFile, testString string
+	var inFile, testString, prompt string
 	flag.StringVar(&inFile, "in", "", "input file name (sqlite3)")
 	flag.StringVar(&testString, "test", "", "input test string")
+	flag.StringVar(&prompt, "prompt", "> ", "default input prompt")
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
 	flag.Parse()
 	debug.LogLevel = debug.LoggingLevel{debug.LoggingLevel_Warning}
 
-	if cnt, e := playGame(inFile, testString); e != nil {
+	if cnt, e := playGame(inFile, testString, prompt); e != nil {
 		errutil.PrintErrors(e, func(s string) { log.Println(s) })
 		if errutil.Panic {
 			log.Panic("mismatched")
@@ -40,7 +41,7 @@ func main() {
 
 // open db, select tests, de-gob and run them each in turn.
 // print the results, only error on critical errors
-func playGame(inFile, testString string) (ret int, err error) {
+func playGame(inFile, testString, prompt string) (ret int, err error) {
 	if inFile, e := filepath.Abs(inFile); e != nil {
 		err = e
 	} else if db, e := sql.Open(tables.DefaultDriver, inFile); e != nil {
@@ -63,13 +64,13 @@ func playGame(inFile, testString string) (ret int, err error) {
 				//
 				if len(testString) > 0 {
 					for _, cmd := range strings.Split(testString, ";") {
-						fmt.Println("> ", cmd)
+						fmt.Println(prompt, cmd)
 						step(parser, cmd)
 					}
 				} else {
 					reader := bufio.NewReader(os.Stdin)
 					for {
-						fmt.Printf("> ")
+						fmt.Printf(prompt)
 						if in, _ := reader.ReadString('\n'); len(in) <= 1 {
 							break
 						} else {

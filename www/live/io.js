@@ -2,11 +2,11 @@ import http from '/lib/http.js'
 
 export default class Io {
   // pass in the sink we're writing data to
-  constructor(output, endpoint) {
+  constructor(endpoint, msgcb) {
     this.endpoint= endpoint;
     this.keepalive=0;
     this.timer=0;
-    this.lines= output;
+    this.msgcb= msgcb;
     this.getting= false;
     this.sending= false;
   }
@@ -29,11 +29,12 @@ export default class Io {
     this._clearTimer();
     // we use promises to keep our get/send requests "serialized" --
     // but it shouldnt really matter because the server needs to handle things regardless.
+    let msgCnt=0;
     this.sending= Promise.allSettled([this.getting, this.sending]).then(()=>{
       // expects zero or more messages back
       return http.post(this.endpoint, cmd, true).then((msgs) => {
         if (Array.isArray(msgs)) {
-          this.lines.push(...msgs);
+          this.msgcb(msgs);
           msgCnt= msgs.length;
         }
       }).finally(()=>{
@@ -47,7 +48,7 @@ export default class Io {
     let msgCnt=0;
     this.getting= Promise.allSettled([this.getting, this.sending]).then(()=>{
       return http.get(this.endpoint).then((msgs) => {
-        this.lines.push(...msgs);
+        this.msgcb(msgs);
         msgCnt= msgs.length;
       }).finally(()=>{
         this.startPolling(this.keepalive, msgCnt>500);

@@ -1,19 +1,22 @@
 <template
-><lv-results
-/><lv-status
-/><lv-story 
-	:lines="lines"
-/><lv-prompt 
-	@changed="onPrompt"
-	:len="lines && lines.length"
-/></template>
-
+><lv-output
+  class="lv-results"
+  :lines="logging"
+/><div v-if="narration"
+  ><lv-status
+  /><lv-output
+    class="lv-story"
+    :lines="narration"
+  /><lv-prompt 
+    @changed="onPrompt"
+    :len="narration.length"
+  /></div
+></template>
 <script>
 
 import lvPrompt from './Prompt.vue'
-import lvResults from './Results.vue'
+import lvOutput from './Output.vue'
 import lvStatus from './Status.vue'
-import lvStory from './Story.vue'
 import Io from './io.js'  
 
 import { reactive } from 'vue'
@@ -34,28 +37,61 @@ new line`,
 ]);
 
 export default {
-	components: { lvPrompt,lvResults,lvStatus,lvStory },
-	// props: {},
-	setup(/*props*/) {
-		const lines= reactive(JSON.parse(junk));
-		let io= new Io(lines, appcfg.live+"/io/");
-		return {
-			lines,
-			io,
-			onPrompt(txt) {
-				lines.push("> "+ txt);
-				// fix? tapestry commands?
-				io.send({
-					cmd: txt,
-				});
-			}
-		}
-	},
-	mounted() {
-		this.io.startPolling();
-	},
-	unmounted() {
-		this.io.stopPolling();
-	},
+  components: { lvOutput,lvPrompt,lvStatus },
+  // props: {},
+  setup(/*props*/) {
+    const logging= reactive([]);//JSON.parse(junk));
+    const narration= reactive([]);
+    let io= new Io(appcfg.live+"/io/", (msgs)=>{
+      for (const msg of msgs) {
+        for (const k in msg) {
+          const v= msg[k];
+          switch (k) {
+            case "Play log:":
+              console.info("log:", v);
+              logging.push(v);
+            break;
+            case "Play out:":
+              narration.push(v);
+            break;
+            case "Play mode:":
+              console.warn("mode:", v);
+              switch (v) {
+                case 'asm':
+                break 
+                case 'play':
+                break
+                case 'complete':
+                break;
+                case 'error':
+                break;
+              }
+            break;
+            default:
+              console.error("unknown command", k);
+            break;
+          }
+        }
+      }
+    });
+    return {
+      io,        // start/stop polling 
+      narration, // story output 
+      logging,   // story debugging
+      onPrompt(txt) {
+        narration.push("> "+ txt);
+        // fix? tapestry commands?
+        io.send({
+          cmd: txt,
+        });
+      }
+    }
+  },
+  mounted() {
+    this.io.startPolling();
+  },
+  unmounted() {
+    this.io.stopPolling();
+  },
 }
 </script> 
