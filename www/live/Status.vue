@@ -1,6 +1,12 @@
 <template><div class="lv-status"
->Cabin</div
+>{{roomName}}&nbsp;</div
 ></template>
 <script>
-	export default {}
+	export default {
+    data() {
+      return {
+        roomName: " ", // blank for now
+      }
+    }
+  }
 </script>
