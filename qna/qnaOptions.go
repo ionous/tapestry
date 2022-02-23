@@ -12,7 +12,7 @@ type Options struct {
 	options map[string]g.Value
 }
 
-var optionTypes = [meta.NumOptions]affine.Affinity{affine.Bool}
+var optionTypes = [meta.NumOptions]affine.Affinity{affine.Bool, affine.Bool}
 
 type emptyKinds struct{}
 
