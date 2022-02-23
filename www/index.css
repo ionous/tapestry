@@ -1,6 +1,7 @@
 @import 'normalize.css';
 
-html  { 
+/* body 100 is needed for blockly.... */
+html, body  { 
   height: 100%;
 }
 
