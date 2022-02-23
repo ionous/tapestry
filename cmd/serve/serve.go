@@ -29,7 +29,7 @@ func main() {
 
 	cfg := web.DevConfig(build.Default.GOPATH, "")
 	if open {
-		support.OpenBrowser(web.Endpoint(3000, "localhost", "live"))
+		support.OpenBrowser(web.Endpoint(8088, "localhost", "live"))
 	}
 
 	// sub-process communication
