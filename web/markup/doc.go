@@ -1,4 +1,4 @@
-// Package text converts an custom html-like markup into markdown-like text.
+// Package markup converts an custom html-like markup into markdown-like text.
 //
 // If english text is a series characters in left-to-right columns and top-to-bottom rows, then:
 //
@@ -25,4 +25,4 @@
 // Unknown tags are left as is.
 // Attributes on tags are not supported.
 //
-package text
+package markup

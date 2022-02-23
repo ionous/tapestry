@@ -1,4 +1,4 @@
-package text
+package markup
 
 // Format - replacement text for certain html tags.
 // If a substitution string exists, it replaces the opening and closing html tags;

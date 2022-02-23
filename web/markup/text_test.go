@@ -1,4 +1,4 @@
-package text
+package markup
 
 import (
 	"bytes"
@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestText(t *testing.T) {
+func TestMarkup(t *testing.T) {
 	var tests = []string{
 		// 1. nothing special
 		`Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
@@ -77,7 +77,7 @@ elit.`,
 		var buf bytes.Buffer
 		test, want := tests[i], tests[i+1]
 		which := i/2 + 1
-		if n, e := io.WriteString(Html2Text(&buf), test); e != nil {
+		if n, e := io.WriteString(Mark2Text(&buf), test); e != nil {
 			t.Fatal(e)
 		} else if wantLen := len(test); n != wantLen {
 			t.Fatal(which, "mismatched count", n, "!=", wantLen)
