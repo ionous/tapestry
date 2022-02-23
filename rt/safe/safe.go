@@ -1,6 +1,8 @@
 package safe
 
 import (
+	"io"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -70,7 +72,7 @@ func WriteText(run rt.Runtime, eval rt.TextEval) (err error) {
 	} else if w := run.Writer(); w == nil {
 		err = errutil.New("missing writer")
 	} else {
-		_, e := w.WriteString(t.String())
+		_, e := io.WriteString(w, t.String())
 		err = e
 	}
 	return

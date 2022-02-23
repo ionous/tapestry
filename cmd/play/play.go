@@ -19,6 +19,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
+	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/web/js"
 	"github.com/ionous/errutil"
@@ -67,10 +68,10 @@ func playGame(inFile, testString, prompt string, jsonMode bool) (ret int, err er
 			var w io.Writer
 			var bufferedText bytes.Buffer
 			if !jsonMode {
-				w = os.Stdout
+				w = print.NewAutoWriter(os.Stdout)
 			} else {
 				opt.SetOption(meta.JsonMode, g.BoolOf(jsonMode))
-				w = &bufferedText
+				w = print.NewLineWriter(&bufferedText)
 			}
 
 			rx := qna.NewRuntimeOptions(w, qdb, opt, tapestry.AllSignatures)

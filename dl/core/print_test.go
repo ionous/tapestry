@@ -1,13 +1,14 @@
 package core
 
 import (
+	"os"
+
 	"git.sr.ht/~ionous/tapestry/rt/safe"
-	"git.sr.ht/~ionous/tapestry/rt/writer"
 )
 
 func ExamplePrintNum() {
 	var run sayTester
-	run.SetWriter(writer.NewStdout())
+	run.SetWriter(os.Stdout)
 	if e := safe.WriteText(&run, &PrintNum{Num: F(213)}); e != nil {
 		panic(e)
 	}
@@ -17,7 +18,7 @@ func ExamplePrintNum() {
 
 func ExamplePrintNumWord() {
 	var run sayTester
-	run.SetWriter(writer.NewStdout())
+	run.SetWriter(os.Stdout)
 	if e := safe.WriteText(&run, &PrintNumWord{Num: F(213)}); e != nil {
 		panic(e)
 	}

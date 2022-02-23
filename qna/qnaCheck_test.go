@@ -1,6 +1,7 @@
 package qna_test
 
 import (
+	"os"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/core"
@@ -35,7 +36,7 @@ func TestCheck(t *testing.T) {
 
 func runTest(prog *qna.CheckOutput) (err error) {
 	var run checkTester
-	run.SetWriter(print.NewAutoWriter(writer.NewStdout()))
+	run.SetWriter(print.NewAutoWriter(os.Stdout))
 	return prog.RunTest(&run)
 }
 

@@ -77,7 +77,7 @@ elit.`,
 		var buf bytes.Buffer
 		test, want := tests[i], tests[i+1]
 		which := i/2 + 1
-		if n, e := io.WriteString(Mark2Text(&buf), test); e != nil {
+		if n, e := io.WriteString(ToText(&buf), test); e != nil {
 			t.Fatal(e)
 		} else if wantLen := len(test); n != wantLen {
 			t.Fatal(which, "mismatched count", n, "!=", wantLen)

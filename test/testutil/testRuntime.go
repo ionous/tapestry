@@ -1,11 +1,13 @@
 package testutil
 
 import (
+	"io"
+	"os"
+
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
-	"git.sr.ht/~ionous/tapestry/rt/writer"
 )
 
 type panicTime struct {
@@ -20,8 +22,8 @@ type Runtime struct {
 	*Kinds
 }
 
-func (x *Runtime) Writer() writer.Output {
-	return writer.NewStdout()
+func (x *Runtime) Writer() io.Writer {
+	return os.Stdout
 }
 
 // we ignore the request to initialize the scope during testing.

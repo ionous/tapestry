@@ -1,6 +1,8 @@
 package core
 
 import (
+	"os"
+
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/rt/writer"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
@@ -14,7 +16,7 @@ var helloThereWorld = MakeActivity(
 
 func ExampleSpan() {
 	var run sayTester
-	run.SetWriter(writer.NewStdout())
+	run.SetWriter(os.Stdout)
 	if e := safe.WriteText(&run, &SpanText{Does: helloThereWorld}); e != nil {
 		panic(e)
 	}
@@ -24,7 +26,7 @@ func ExampleSpan() {
 
 func ExampleBracket() {
 	var run sayTester
-	run.SetWriter(writer.NewStdout())
+	run.SetWriter(os.Stdout)
 	if e := safe.WriteText(&run, &BracketText{Does: helloThereWorld}); e != nil {
 		panic(e)
 	}
@@ -34,7 +36,7 @@ func ExampleBracket() {
 
 func ExampleSlash() {
 	var run sayTester
-	run.SetWriter(writer.NewStdout())
+	run.SetWriter(os.Stdout)
 	if e := safe.WriteText(&run, &SlashText{Does: helloThereWorld}); e != nil {
 		panic(e)
 	}
@@ -44,7 +46,7 @@ func ExampleSlash() {
 
 func ExampleCommas() {
 	var run sayTester
-	run.SetWriter(writer.NewStdout())
+	run.SetWriter(os.Stdout)
 	if e := safe.WriteText(&run, &CommaText{Does: helloThereWorld}); e != nil {
 		panic(e)
 	}

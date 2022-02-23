@@ -26,10 +26,6 @@ export default {
   mounted() {
     this.setFocus();
   },
-  // when props change.
-  updated() {
-    this.scrollTo();
-  },
   methods: {
     setFocus() {
       const el= this.$refs.input;
@@ -38,6 +34,7 @@ export default {
         el.focus();
         const end= this.text.length;
         el.setSelectionRange(end,end);
+        el.scrollIntoView();
       }
     },
     browseHistory(upArrow) {
@@ -54,7 +51,7 @@ export default {
         })
       }
     },
-    scrollTo() {
+    scrollIntoView() {
       this.$refs.input.scrollIntoView(true);
     },
     onInput() {

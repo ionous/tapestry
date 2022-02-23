@@ -10,7 +10,7 @@ import (
 
 // pass w, the plain text output stream.
 // return a writer that accepts html-like text.
-func Mark2Text(w io.Writer) io.Writer {
+func ToText(w io.Writer) io.Writer {
 	return &fsm{converter{out: w, line: 2}, readingText}
 }
 

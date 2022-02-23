@@ -1,16 +1,19 @@
 <template
-><lv-output
-  class="lv-results"
-  :lines="logging"
-/><div v-if="narration"
-  ><lv-status
-  /><lv-output
-    class="lv-story"
-    :lines="narration"
-  /><lv-prompt 
-    @changed="onPrompt"
-    ref="prompt"
-  /></div
+><div ref="container"
+  ><lv-output
+    class="lv-results"
+    :lines="logging"
+  /><div v-if="narration"
+    ><lv-status
+    /><lv-output 
+      class="lv-story"
+      :lines="narration"
+    /><lv-prompt
+      enabled="playing"
+      @changed="onPrompt"
+      ref="prompt"
+    /></div
+></div
 ></template
 ><script>
 
@@ -18,7 +21,7 @@ import lvPrompt from './Prompt.vue'
 import lvOutput from './Output.vue'
 import lvStatus from './Status.vue'
 import Io from './io.js'  
-import { ref, onMounted, onUnmounted, reactive } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 const junk= JSON.stringify([
 `<b>should write in bold</b>`,
@@ -40,9 +43,12 @@ export default {
   components: { lvOutput,lvPrompt,lvStatus },
   // props: {},
   setup(/*props*/) {
-    const logging= reactive([]);//JSON.parse(junk));
-    const narration= reactive([]);
+    const logging= ref([]);//JSON.parse(junk));
+    const narration= ref([]);
+    const playing= ref(false);
     const prompt= ref(null); // template ref 
+    const container= ref(null);
+
     const io= new Io(appcfg.live+"/io/", (msgs)=>{
       for (const msg of msgs) {
         for (const k in msg) {
@@ -50,19 +56,26 @@ export default {
           switch (k) {
             case "Play log:":
               console.info("log:", v);
-              logging.push(v);
+              logging.value.push(v);
+              setTimeout(()=> {
+                const el= container.value;
+                el.scrollIntoView(false);
+              });
             break;
             case "Play out:":
-              narration.push(v);
-              const el= prompt.value;
-              if (el) {
-                el.scrollTo();
-              }
+              narration.value.push(v);
+              setTimeout(()=> {
+                const el= container.value;
+                el.scrollIntoView(false);
+              });
             break;
             case "Play mode:":
               console.warn("mode:", v);
+              playing.value= (v === 'play');
               switch (v) {
                 case 'asm':
+                  logging.value= [];
+                  narration.value= [];
                 break 
                 case 'play':
                 break
@@ -111,9 +124,10 @@ export default {
       narration, // story output 
       logging,   // story debugging
       prompt,   // template ref
+      container,
       onPrompt(txt) {
         console.log("onPrompt");
-        narration.push("> "+ txt);
+        narration.value.push("> "+ txt);
         // fix? tapestry commands?
         io.send({
           cmd: txt,

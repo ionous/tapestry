@@ -2,6 +2,7 @@ package qna
 
 import (
 	"database/sql"
+	"os"
 
 	"github.com/ionous/errutil"
 
@@ -10,7 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/writer"
+	"git.sr.ht/~ionous/tapestry/rt/print"
 )
 
 // CheckAll tests stored in the passed db.
@@ -38,7 +39,8 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options Options, signature
 				if _, e := qdb.ActivateDomain(""); e != nil {
 					err = errutil.Append(err, e)
 				} else {
-					run := NewRuntimeOptions(writer.NewStdout(), qdb, options, tapestry.AllSignatures)
+					w := print.NewAutoWriter(os.Stdout)
+					run := NewRuntimeOptions(w, qdb, options, tapestry.AllSignatures)
 					// fix! if we dont activate "entire_game" first, we wind up with multiple pairs active
 					// this is something to do with the way the pair query works
 					// when there is a relation in the entire_game that is supposed to be changed by a sub-domain.

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"io"
 	"log"
+	"os"
 
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/lang"
@@ -23,7 +24,8 @@ func NewRuntime(db *sql.DB, signatures cin.Signatures) *Runner {
 	if e != nil {
 		panic(e)
 	}
-	return NewRuntimeOptions(writer.NewStdout(), qdb, opt, signatures)
+	w := print.NewAutoWriter(os.Stdout)
+	return NewRuntimeOptions(w, qdb, opt, signatures)
 }
 
 func NewRuntimeOptions(w io.Writer, qdb *qdb.Query, options Options, signatures cin.Signatures) *Runner {
@@ -35,7 +37,7 @@ func NewRuntimeOptions(w io.Writer, qdb *qdb.Query, options Options, signatures 
 		signatures: signatures,
 		options:    options,
 	}
-	run.SetWriter(print.NewAutoWriter(w))
+	run.SetWriter(w)
 	return run
 }
 
