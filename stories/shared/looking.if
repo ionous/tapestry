@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "Event:action:args none:": [
         "look",
@@ -8,162 +8,195 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "looking",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:value:": [
-                {
-                  "Text named:of:": [
-                    "actor",
-                    "object"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
+        [
+          {
+            "Text named:of:initially:": [
+              "actor",
+              "object",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
                   }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
+                  "Send:event:": [
                     {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
+                      "Capture obj:": "@actor"
+                    },
                     {
-                      "Send:path:arguments:": [
-                        "look",
-                        {
-                          "Determine:arguments:": [
-                            "parentsOf",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@actor"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "actor",
-                                "@actor"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "Look actor:": "@actor"
                     }
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Listen kinds:handlers:": [
         "actors",
         [
           {
-            "With:event:with:rules:": [
+            "With:event:provides:rules:": [
               "while",
               "look",
-              {
-                "PatternLocals:": [
-                  {
-                    "LocalDecl:value:": [
+              [
+                {
+                  "Text named:of:initially:": [
+                    "location",
+                    "object",
+                    {
+                      "LocationOf obj:": "@actor"
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "PatternRule:does:": [
+                    {
+                      "Always": true
+                    },
+                    [
                       {
-                        "Text named:of:": [
-                          "location",
-                          "object"
-                        ]
-                      },
-                      {
-                        "LocalInit:": {
-                          "FromTxt:": {
-                            "Determine:arguments:": [
-                              "locationOf",
+                        "PrintVantage where:inDarkness:": [
+                          "@location",
+                          {
+                            "Get:from:": [
+                              "is in darkness",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "obj",
-                                      "@actor"
-                                    ]
-                                  }
-                                ]
+                                "VarFields:": "actor"
                               }
                             ]
                           }
-                        }
+                        ]
+                      },
+                      {
+                        "Let:be:": [
+                          "success",
+                          {
+                            "FromBool:": true
+                          }
+                        ]
                       }
                     ]
-                  }
-                ]
-              },
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "Print vantage",
+        [
+          {
+            "Text named:of:": [
+              "where",
+              "object"
+            ]
+          },
+          {
+            "--": "for testing, darkness gets passed in as a flag.",
+            "Bool named:": "inDarkness"
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "Print vantage",
+        [
+          {
+            "TextList named:initially:": [
+              "enclosures",
               {
-                "PatternRules:": [
-                  {
-                    "PatternRule:hook activity:": [
-                      "Always",
+                "TransparentList obj:": "@where"
+              }
+            ]
+          },
+          {
+            "Text named:of:initially:": [
+              "room",
+              "object",
+              {
+                "CurrentRoom obj:": "@where"
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
+                {
+                  "SetEverythingUnmentioned": true
+                },
+                {
+                  "If:does:else:": [
+                    "@inDarkness",
+                    [
                       {
-                        "Act:": [
+                        "PrintDarkHeader room:": "@room"
+                      },
+                      {
+                        "Comment:": "fix? if \"thedark\" was an object, darkness witnessed could be \"thedark.visited.\" ( same as below )"
+                      },
+                      {
+                        "If:does:": [
                           {
-                            "Determine:arguments:": [
-                              "print_vantage",
+                            "AnyTrue:": [
                               {
-                                "Args:": [
+                                "Get:from:": [
+                                  "verbose",
                                   {
-                                    "Arg:from:": [
-                                      "where",
-                                      "@location"
+                                    "ObjFields:": "settings"
+                                  }
+                                ]
+                              },
+                              {
+                                "AllTrue:": [
+                                  {
+                                    "Get:from:": [
+                                      "brief",
+                                      {
+                                        "ObjFields:": "settings"
+                                      }
                                     ]
                                   },
                                   {
-                                    "Arg:from:": [
-                                      "inDarkness",
+                                    "Get:from:": [
+                                      "not darkness witnessed",
                                       {
-                                        "Get:from:": [
-                                          "is in darkness",
-                                          {
-                                            "VarFields:": "actor"
-                                          }
-                                        ]
+                                        "ObjFields:": "settings"
                                       }
                                     ]
                                   }
@@ -171,610 +204,97 @@
                               }
                             ]
                           },
-                          {
-                            "Let:be:": [
-                              "success",
-                              {
-                                "FromBool:": true
-                              }
-                            ]
-                          }
+                          [
+                            {
+                              "PrintDarkDescription room:": "@room"
+                            }
+                          ]
                         ]
                       }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      ]
-    }
-  ],
-  [
-    {
-      "Pattern:requires:": [
-        "Print vantage",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "where",
-                "object"
-              ]
-            },
-            {
-              "Bool named:desc:": [
-                "inDarkness",
-                "for testing, darkness gets passed in as a flag."
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:with:rules:": [
-        "Print vantage",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:value:": [
-                {
-                  "TextList named:": "enclosures"
-                },
-                {
-                  "LocalInit:": {
-                    "FromTxts:": {
-                      "Determine:arguments:": [
-                        "transparentList",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@where"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "LocalDecl:value:": [
-                {
-                  "Text named:of:": [
-                    "room",
-                    "object"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "FromTxt:": {
-                      "Determine:arguments:": [
-                        "CurrentRoom",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@where"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
-                {
-                  "Act:": [
+                    ],
                     {
-                      "Determine:": " set everything unmentioned"
-                    },
-                    {
-                      "If:do:else:": [
-                        "@inDarkness",
+                      "ElseDo does:": [
                         {
-                          "Act:": [
+                          "Comment:": "list is inner to outer. the term \"locale\" here means some enclosure we are in."
+                        },
+                        {
+                          "PrintLocaleTitle room:enclosures:": [
+                            "@room",
+                            "@enclosures"
+                          ]
+                        },
+                        {
+                          "PrintLocaleSubtitle enclosures:": "@enclosures"
+                        },
+                        {
+                          "Say:": "."
+                        },
+                        {
+                          "Comment:": "(b/c we dont have a newline op yet, we use fullstop instead.)"
+                        },
+                        {
+                          "If:does:": [
                             {
-                              "Determine:arguments:": [
-                                "printDarkHeader",
+                              "AnyTrue:": [
                                 {
-                                  "Args:": [
+                                  "Get:from:": [
+                                    "verbose",
                                     {
-                                      "Arg:from:": [
-                                        "room",
-                                        "@room"
-                                      ]
+                                      "ObjFields:": "settings"
                                     }
                                   ]
-                                }
-                              ]
-                            },
-                            {
-                              "Comment:": "fix? if \"thedark\" was an object, darkness witnessed could be \"thedark.visited.\" ( same as below )"
-                            },
-                            {
-                              "If:do:": [
+                                },
                                 {
-                                  "AnyTrue:": [
+                                  "AllTrue:": [
                                     {
                                       "Get:from:": [
-                                        "verbose",
+                                        "brief",
                                         {
                                           "ObjFields:": "settings"
                                         }
                                       ]
                                     },
                                     {
-                                      "AllTrue:": [
+                                      "Get:from:": [
+                                        "not visited",
                                         {
-                                          "Get:from:": [
-                                            "brief",
-                                            {
-                                              "ObjFields:": "settings"
-                                            }
-                                          ]
-                                        },
-                                        {
-                                          "Get:from:": [
-                                            "not darkness witnessed",
-                                            {
-                                              "ObjFields:": "settings"
-                                            }
-                                          ]
+                                          "VarFields:": "room"
                                         }
                                       ]
                                     }
-                                  ]
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "Determine:arguments:": [
-                                        "PrintDarkDescription",
-                                        {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "room",
-                                                "@room"
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "ElseDo:": {
-                            "Act:": [
-                              {
-                                "Comment:": "list is inner to outer. the term \"locale\" here means some enclosure we are in."
-                              },
-                              {
-                                "Determine:arguments:": [
-                                  "PrintLocaleTitle",
-                                  {
-                                    "Args:": [
-                                      {
-                                        "Arg:from:": [
-                                          "room",
-                                          "@room"
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "enclosures",
-                                          "@enclosures"
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                ]
-                              },
-                              {
-                                "Determine:arguments:": [
-                                  "PrintLocaleSubtitle",
-                                  {
-                                    "Args:": [
-                                      {
-                                        "Arg:from:": [
-                                          "enclosures",
-                                          "@enclosures"
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                ]
-                              },
-                              {
-                                "Say:": "."
-                              },
-                              {
-                                "Comment:": "(b/c we dont have a newline op yet, we use fullstop instead.)"
-                              },
-                              {
-                                "If:do:": [
-                                  {
-                                    "AnyTrue:": [
-                                      {
-                                        "Get:from:": [
-                                          "verbose",
-                                          {
-                                            "ObjFields:": "settings"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "AllTrue:": [
-                                          {
-                                            "Get:from:": [
-                                              "brief",
-                                              {
-                                                "ObjFields:": "settings"
-                                              }
-                                            ]
-                                          },
-                                          {
-                                            "Get:from:": [
-                                              "not visited",
-                                              {
-                                                "VarFields:": "room"
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Act:": [
-                                      {
-                                        "Comment:": "Reorder from outer to inner"
-                                      },
-                                      {
-                                        "Reverse list:": {
-                                          "VarOfTxts:": "enclosures"
-                                        }
-                                      },
-                                      {
-                                        "Repeating across:as:do:": [
-                                          "@enclosures",
-                                          {
-                                            "AsTxt:": "it"
-                                          },
-                                          {
-                                            "Act:": [
-                                              {
-                                                "Determine:arguments:": [
-                                                  "PrintLocaleDescription",
-                                                  {
-                                                    "Args:": [
-                                                      {
-                                                        "Arg:from:": [
-                                                          "where",
-                                                          {
-                                                            "FromTxt:": "@it"
-                                                          }
-                                                        ]
-                                                      },
-                                                      {
-                                                        "Arg:from:": [
-                                                          "viewpoint",
-                                                          "@where"
-                                                        ]
-                                                      },
-                                                      {
-                                                        "Arg:from:": [
-                                                          "room",
-                                                          "@room"
-                                                        ]
-                                                      }
-                                                    ]
-                                                  }
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  [
-    {
-      "Pattern:requires:": [
-        "PrintDarkHeader",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "room",
-                "room"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "PrintDarkHeader",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "the darkness",
-                          "Darkness."
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  [
-    {
-      "Pattern:requires:": [
-        "PrintDarkDescription",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "room",
-                "room"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "PrintDarkDescription",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "pitch dark",
-                          "It is pitch dark, and you can't see a thing."
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  [
-    {
-      "Pattern:requires:": [
-        "PrintLocaleTitle",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "room",
-                "room"
-              ]
-            },
-            {
-              "TextList named:": "enclosures"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:with:rules:": [
-        "PrintLocaleTitle",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:value:": [
-                {
-                  "Text named:of:": [
-                    "ceiling",
-                    "object"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "FromTxt:": {
-                      "Get:index:": [
-                        "@enclosures",
-                        {
-                          "Len:": "@enclosures"
-                        }
-                      ]
-                    }
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
-                {
-                  "Act:": [
-                    {
-                      "If:do:else:": [
-                        {
-                          "Cmp:is:txt:": [
-                            "@room",
-                            "Equals",
-                            "@ceiling"
-                          ]
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": {
-                                "RenderTemplate:": "{.ceiling}"
-                              }
-                            }
-                          ]
-                        },
-                        {
-                          "ElseDo:": {
-                            "Act:": [
-                              {
-                                "Say:": {
-                                  "RenderTemplate:": "{The: .ceiling|capitalize!}"
-                                }
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  [
-    {
-      "Pattern:requires:": [
-        "PrintLocaleSubtitle",
-        {
-          "PatternRequires:": [
-            {
-              "TextList named:": "enclosures"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:with:rules:": [
-        "PrintLocaleSubtitle",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:value:": [
-                {
-                  "Text named:of:": [
-                    "ceiling",
-                    "object"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "FromTxt:": {
-                      "Get:index:": [
-                        "@enclosures",
-                        {
-                          "Len:": "@enclosures"
-                        }
-                      ]
-                    }
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
-                {
-                  "Act:": [
-                    {
-                      "Repeating across:as:do:": [
-                        "@enclosures",
-                        {
-                          "AsTxt:": "it"
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "If:do:": [
-                                {
-                                  "Cmp:is:txt:": [
-                                    "@it",
-                                    "Equals",
-                                    "@ceiling"
-                                  ]
-                                },
-                                {
-                                  "Act:": [
-                                    "Break"
                                   ]
                                 }
                               ]
                             },
-                            {
-                              "Say:": {
-                                "RenderTemplate:": " ({on: .it} {the: .it})"
+                            [
+                              {
+                                "Comment:": "Reorder from outer to inner"
+                              },
+                              {
+                                "Reverse list:": {
+                                  "VarOfTxts:": "enclosures"
+                                }
+                              },
+                              {
+                                "Repeating across:as:does:": [
+                                  "@enclosures",
+                                  {
+                                    "AsTxt:": "it"
+                                  },
+                                  [
+                                    {
+                                      "PrintLocaleDescription where:viewpoint:room:": [
+                                        {
+                                          "FromTxt:": "@it"
+                                        },
+                                        "@where",
+                                        "@room"
+                                      ]
+                                    }
+                                  ]
+                                ]
                               }
-                            }
+                            ]
                           ]
                         }
                       ]
@@ -782,332 +302,477 @@
                   ]
                 }
               ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  [
-    {
-      "Pattern:requires:": [
-        "PrintLocaleDescription",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "where",
-                "object"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "viewpoint",
-                "object"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "room",
-                "room"
-              ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
     },
     {
-      "Pattern:with:rules:": [
-        "PrintLocaleDescription",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:value:": [
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "PrintDarkHeader",
+        [
+          {
+            "Text named:of:": [
+              "room",
+              "room"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "PrintDarkHeader",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "TextList named:": "kids"
-                },
-                {
-                  "LocalInit:": {
-                    "FromTxts:": {
-                      "Determine:arguments:": [
-                        "childrenOf",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@where"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "LocalDecl:value:": [
-                {
-                  "Number named:": "previousMentions"
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "mentions",
-                      {
-                        "ObjFields:": "settings"
-                      }
+                  "Say:": {
+                    "Response:text:": [
+                      "the darkness",
+                      "Darkness."
                     ]
                   }
                 }
               ]
-            },
-            {
-              "LocalDecl:": {
-                "TextList named:": "remainingKids"
-              }
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "PrintDarkDescription",
+        [
+          {
+            "Text named:of:": [
+              "room",
+              "room"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "PrintDarkDescription",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
+                  "Say:": {
+                    "Response:text:": [
+                      "pitch dark",
+                      "It is pitch dark, and you can't see a thing."
+                    ]
+                  }
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "PrintLocaleTitle",
+        [
+          {
+            "Text named:of:": [
+              "room",
+              "room"
+            ]
+          },
+          {
+            "TextList named:": "enclosures"
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "PrintLocaleTitle",
+        [
+          {
+            "Text named:of:initially:": [
+              "ceiling",
+              "object",
+              {
+                "Get:index:": [
+                  "@enclosures",
+                  {
+                    "Len:": "@enclosures"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
+                {
+                  "If:does:else:": [
                     {
-                      "If:do:": [
+                      "Cmp:is:txt:": [
+                        "@room",
                         {
-                          "Cmp:is:txt:": [
-                            "@where",
-                            "Equals",
-                            "@room"
-                          ]
+                          "Equals": true
                         },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": {
-                                "Get:from:": [
-                                  "description",
-                                  {
-                                    "VarFields:": "room"
-                                  }
-                                ]
-                              }
-                            }
-                          ]
+                        "@ceiling"
+                      ]
+                    },
+                    [
+                      {
+                        "Say:": {
+                          "RenderTemplate:": "{.ceiling}"
                         }
-                      ]
-                    },
+                      }
+                    ],
                     {
-                      "SortTexts:byField:": [
-                        "kids",
-                        "grouping label"
-                      ]
-                    },
-                    {
-                      "Repeating across:as:do:": [
-                        "@kids",
+                      "ElseDo does:": [
                         {
-                          "AsTxt:": "it"
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Comment:": "exclude objects that enclose the viewpoint, those get their own locale descriptions"
-                            },
-                            {
-                              "If:do:": [
-                                {
-                                  "Not:": {
-                                    "AnyTrue:": [
-                                      {
-                                        "Cmp:is:txt:": [
-                                          "@it",
-                                          "Equals",
-                                          "@viewpoint"
-                                        ]
-                                      },
-                                      {
-                                        "Determine:arguments:": [
-                                          "ancestorOf",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "obj",
-                                                  "@viewpoint"
-                                                ]
-                                              },
-                                              {
-                                                "Arg:from:": [
-                                                  "root",
-                                                  "@it"
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "Determine:arguments:": [
-                                          "isPlayer",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "obj",
-                                                  "@it"
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "Determine:arguments:": [
-                                        "print object description",
-                                        {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "obj",
-                                                "@it"
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "If:do:": [
-                                        {
-                                          "Get obj:trait:": [
-                                            "@it",
-                                            "not mentioned"
-                                          ]
-                                        },
-                                        {
-                                          "Act:": [
-                                            {
-                                              "Put:into:": [
-                                                "@it",
-                                                {
-                                                  "IntoTxts:": "remainingKids"
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Determine:arguments:": [
-                        "canAlsoSee",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "where",
-                                "@where"
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "here",
-                                {
-                                  "FromBool:": {
-                                    "Cmp:is:txt:": [
-                                      "@where",
-                                      "Equals",
-                                      "@room"
-                                    ]
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "children",
-                                {
-                                  "FromTxts:": "@remainingKids"
-                                }
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "firstMention",
-                                {
-                                  "FromBool:": {
-                                    "Cmp:is:num:": [
-                                      "@previousMentions",
-                                      "Equals",
-                                      {
-                                        "Get:from:": [
-                                          "mentions",
-                                          {
-                                            "ObjFields:": "settings"
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                }
-                              ]
-                            }
-                          ]
+                          "Say:": {
+                            "RenderTemplate:": "{The: .ceiling|capitalize!}"
+                          }
                         }
                       ]
                     }
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "PrintLocaleSubtitle",
+        [
+          {
+            "TextList named:": "enclosures"
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "PrintLocaleSubtitle",
+        [
+          {
+            "Text named:of:initially:": [
+              "ceiling",
+              "object",
+              {
+                "Get:index:": [
+                  "@enclosures",
+                  {
+                    "Len:": "@enclosures"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
+                {
+                  "Repeating across:as:does:": [
+                    "@enclosures",
+                    {
+                      "AsTxt:": "it"
+                    },
+                    [
+                      {
+                        "If:does:": [
+                          {
+                            "Cmp:is:txt:": [
+                              "@it",
+                              {
+                                "Equals": true
+                              },
+                              "@ceiling"
+                            ]
+                          },
+                          [
+                            {
+                              "Break": true
+                            }
+                          ]
+                        ]
+                      },
+                      {
+                        "Say:": {
+                          "RenderTemplate:": " ({on: .it} {the: .it})"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "PrintLocaleDescription",
+        [
+          {
+            "Text named:of:": [
+              "where",
+              "object"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "viewpoint",
+              "object"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "room",
+              "room"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "PrintLocaleDescription",
+        [
+          {
+            "TextList named:initially:": [
+              "kids",
+              {
+                "ChildrenOf obj:": "@where"
+              }
+            ]
+          },
+          {
+            "Number named:initially:": [
+              "previousMentions",
+              {
+                "Get:from:": [
+                  "mentions",
+                  {
+                    "ObjFields:": "settings"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "TextList named:": "remainingKids"
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
+                {
+                  "If:does:": [
+                    {
+                      "Cmp:is:txt:": [
+                        "@where",
+                        {
+                          "Equals": true
+                        },
+                        "@room"
+                      ]
+                    },
+                    [
+                      {
+                        "Say:": {
+                          "Get:from:": [
+                            "description",
+                            {
+                              "VarFields:": "room"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "SortTexts:byField:": [
+                    "kids",
+                    "grouping label"
+                  ]
+                },
+                {
+                  "Repeating across:as:does:": [
+                    "@kids",
+                    {
+                      "AsTxt:": "it"
+                    },
+                    [
+                      {
+                        "Comment:": "exclude objects that enclose the viewpoint, those get their own locale descriptions"
+                      },
+                      {
+                        "If:does:": [
+                          {
+                            "Not:": {
+                              "AnyTrue:": [
+                                {
+                                  "Cmp:is:txt:": [
+                                    "@it",
+                                    {
+                                      "Equals": true
+                                    },
+                                    "@viewpoint"
+                                  ]
+                                },
+                                {
+                                  "AncestorOf obj:root:": [
+                                    "@viewpoint",
+                                    "@it"
+                                  ]
+                                },
+                                {
+                                  "IsPlayer obj:": "@it"
+                                }
+                              ]
+                            }
+                          },
+                          [
+                            {
+                              "PrintObjectDescription obj:": "@it"
+                            },
+                            {
+                              "If:does:": [
+                                {
+                                  "Get obj:trait:": [
+                                    "@it",
+                                    "not mentioned"
+                                  ]
+                                },
+                                [
+                                  {
+                                    "Put:into:": [
+                                      "@it",
+                                      {
+                                        "IntoTxts:": "remainingKids"
+                                      }
+                                    ]
+                                  }
+                                ]
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "CanAlsoSee where:here:children:firstMention:": [
+                    "@where",
+                    {
+                      "FromBool:": {
+                        "Cmp:is:txt:": [
+                          "@where",
+                          {
+                            "Equals": true
+                          },
+                          "@room"
+                        ]
+                      }
+                    },
+                    {
+                      "FromTxts:": "@remainingKids"
+                    },
+                    {
+                      "FromBool:": {
+                        "Cmp:is:num:": [
+                          "@previousMentions",
+                          {
+                            "Equals": true
+                          },
+                          {
+                            "Get:from:": [
+                              "mentions",
+                              {
+                                "ObjFields:": "settings"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
     {
       "Comment:": "prints the first impression of an object, and gives a chance for certain objects (ex. supporters) to say something more afterwards."
     },
     {
       "Pattern:requires:returns:": [
         "print object description",
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "locale",
+              "object"
+            ]
+          }
+        ],
         {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "locale",
-                "object"
-              ]
-            }
-          ]
-        },{
           "PatternResult:": {
             "Bool named:": "success"
           }
@@ -1117,180 +782,130 @@
     {
       "Pattern:rules:": [
         "print object description",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Get obj:trait:": [
+                      "@obj",
+                      "mentioned"
+                    ]
+                  },
+                  {
+                    "KindOf:is:": [
+                      "@obj",
+                      "supporters"
+                    ]
+                  }
+                ]
+              },
+              [
                 {
-                  "AllTrue:": [
-                    {
-                      "Get obj:trait:": [
-                        "@obj",
-                        "mentioned"
-                      ]
-                    },
-                    {
-                      "KindOf:is:": [
-                        "@obj",
-                        "supporters"
-                      ]
-                    }
-                  ]
+                  "Comment:": "a. mentioned supporters\nthis prints \"on the...\" for any supporters mentioned by the scenery supporters rule or mentioned by the author."
                 },
                 {
-                  "Act:": [
-                    {
-                      "Comment:": "a. mentioned supporters\nthis prints \"on the...\" for any supporters mentioned by the scenery supporters rule or mentioned by the author."
-                    },
-                    {
-                      "Determine:arguments:": [
-                        "print inline storage",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "PrintInlineStorage obj:": "@obj"
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Get obj:trait:": [
+                      "@obj",
+                      "scenery"
+                    ]
+                  },
+                  {
+                    "KindOf:is:": [
+                      "@obj",
+                      "supporters"
+                    ]
+                  }
+                ]
+              },
+              [
                 {
-                  "AllTrue:": [
-                    {
-                      "Get obj:trait:": [
-                        "@obj",
-                        "scenery"
-                      ]
-                    },
-                    {
-                      "KindOf:is:": [
-                        "@obj",
-                        "supporters"
-                      ]
-                    }
-                  ]
+                  "Comment:": "b. scenery supporters \nthis sets up supporters for use by the next rule in a way that's easy to disable by authors"
                 },
                 {
-                  "Act:": [
-                    {
-                      "Comment:": "b. scenery supporters \nthis sets up supporters for use by the next rule in a way that's easy to disable by authors"
-                    },
-                    {
-                      "Determine:arguments:": [
-                        "mention",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "Mention obj:": "@obj"
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Get obj:trait:": [
+                  "@obj",
+                  "not mentioned"
+                ]
+              },
+              [
                 {
-                  "Get obj:trait:": [
+                  "Comment:": "c. print the impression of everything but actors ( note: by default, print impression prints objects with an initial appearance, and flags them as mentioned. )"
+                },
+                {
+                  "PrintImpressionOf obj:locale:": [
                     "@obj",
-                    "not mentioned"
+                    "@locale"
                   ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@obj",
+                  "actors"
+                ]
+              },
+              [
+                {
+                  "Comment:": "d. by default, we dont want to say anything special for actors"
                 },
                 {
-                  "Act:": [
+                  "Let:be:": [
+                    "success",
                     {
-                      "Comment:": "c. print the impression of everything but actors ( note: by default, print impression prints objects with an initial appearance, and flags them as mentioned. )"
-                    },
-                    {
-                      "Determine:arguments:": [
-                        "PrintImpressionOf",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "locale",
-                                "@locale"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "FromBool:": true
                     }
                   ]
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "KindOf:is:": [
-                    "@obj",
-                    "actors"
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Comment:": "d. by default, we dont want to say anything special for actors"
-                    },
-                    {
-                      "Let:be:": [
-                        "success",
-                        {
-                          "FromBool:": true
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "PrintImpressionOf",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "locale",
-                "object"
-              ]
-            }
-          ]
-        },
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "locale",
+              "object"
+            ]
+          }
+        ],
         {
           "PatternResult:": {
             "Bool named:": "success"
@@ -1299,303 +914,235 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "PrintImpressionOf",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:value:": [
-                {
-                  "Bool named:": "first look"
-                },
-                {
-                  "LocalInit:": {
-                    "FromBool:": {
-                      "AllTrue:": [
-                        {
-                          "Get obj:trait:": [
-                            "@obj",
-                            "not mentioned"
-                          ]
-                        },
-                        {
-                          "Get obj:trait:": [
-                            "@obj",
-                            "not scenery"
-                          ]
-                        },
-                        {
-                          "Not:": {
-                            "Is empty:": {
-                              "Get:from:": [
-                                "initial appearance",
-                                {
-                                  "VarFields:": "obj"
-                                }
-                              ]
-                            }
+        [
+          {
+            "Bool named:initially:": [
+              "first look",
+              {
+                "AllTrue:": [
+                  {
+                    "Get obj:trait:": [
+                      "@obj",
+                      "not mentioned"
+                    ]
+                  },
+                  {
+                    "Get obj:trait:": [
+                      "@obj",
+                      "not scenery"
+                    ]
+                  },
+                  {
+                    "Not:": {
+                      "Is empty:": {
+                        "Get:from:": [
+                          "initial appearance",
+                          {
+                            "VarFields:": "obj"
                           }
-                        }
-                      ]
+                        ]
+                      }
                     }
                   }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  "@first look",
+                  {
+                    "Get obj:trait:": [
+                      "@obj",
+                      "not mentioned"
+                    ]
+                  }
+                ]
+              },
+              [
                 {
-                  "AllTrue:": [
-                    "@first look",
-                    {
-                      "Get obj:trait:": [
-                        "@obj",
-                        "not mentioned"
-                      ]
-                    }
-                  ]
+                  "Say:": {
+                    "RenderTemplate:": "{.obj.initial_appearance}"
+                  }
                 },
                 {
-                  "Act:": [
+                  "Mention obj:": "@obj"
+                },
+                {
+                  "Let:be:": [
+                    "success",
                     {
-                      "Say:": {
-                        "RenderTemplate:": "{.obj.initial_appearance}"
+                      "FromBool:": true
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "KindOf:is:": [
+                      "@obj",
+                      "supporters"
+                    ]
+                  },
+                  {
+                    "Cmp:is:txt:": [
+                      {
+                        "ParentOf obj:": "@obj"
+                      },
+                      {
+                        "Equals": true
+                      },
+                      "@locale"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Comment:": "we check where to stop recursion of supporters in supporters"
+                },
+                {
+                  "Repeating across:as:does:": [
+                    {
+                      "FromTxts:": {
+                        "ChildrenOf obj:": "@obj"
                       }
                     },
                     {
-                      "Determine:arguments:": [
-                        "mention",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "AsTxt:": "it"
                     },
-                    {
-                      "Let:be:": [
-                        "success",
-                        {
-                          "FromBool:": true
-                        }
-                      ]
-                    }
+                    [
+                      {
+                        "PrintImpressionOf obj:": "@it"
+                      }
+                    ]
                   ]
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "AllTrue:": [
-                    {
-                      "KindOf:is:": [
-                        "@obj",
-                        "supporters"
-                      ]
-                    },
-                    {
-                      "Cmp:is:txt:": [
-                        {
-                          "Determine:arguments:": [
-                            "ParentOf",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@obj"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        "Equals",
-                        "@locale"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Comment:": "we check where to stop recursion of supporters in supporters"
-                    },
-                    {
-                      "Repeating across:as:do:": [
-                        {
-                          "FromTxts:": {
-                            "Determine:arguments:": [
-                              "childrenOf",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "obj",
-                                      "@obj"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "AsTxt:": "it"
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Determine:arguments:": [
-                                "PrintImpressionOf",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "obj",
-                                        "@it"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "CanAlsoSee",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "where",
-                "object"
-              ]
-            },
-            {
-              "Bool named:": "here"
-            },
-            {
-              "TextList named:": "children"
-            },
-            {
-              "Bool named:": "firstMention"
-            }
-          ]
-        }
+        [
+          {
+            "Text named:of:": [
+              "where",
+              "object"
+            ]
+          },
+          {
+            "Bool named:": "here"
+          },
+          {
+            "TextList named:": "children"
+          },
+          {
+            "Bool named:": "firstMention"
+          }
+        ]
       ]
     },
     {
       "Pattern:rules:": [
         "CanAlsoSee",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "you can also see",
-                          {
-                            "RenderTemplate:": "{unless .here}{On: .where|capitalize!} {the: .where} you{else}{We!|capitalize!}{end} can {unless .firstMention}also {end}see {print_inline_objects: .children}."
-                          }
-                        ]
+                  "Say:": {
+                    "Response:text:": [
+                      "you can also see",
+                      {
+                        "RenderTemplate:": "{unless .here}{On: .where|capitalize!} {the: .where} you{else}{We!|capitalize!}{end} can {unless .firstMention}also {end}see {print_inline_objects: .children}."
                       }
-                    }
-                  ]
+                    ]
+                  }
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:": "set everything unmentioned"
     },
     {
       "Pattern:rules:": [
         "set everything unmentioned",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
+                  "Put:from:at:": [
                     {
-                      "Put:from:at:": [
-                        {
-                          "ObjField:": "settings"
-                        },
-                        {
-                          "FromNum:": 0
-                        },
-                        "mentions"
-                      ]
+                      "ObjField:": "settings"
                     },
                     {
-                      "Repeating across:as:do:": [
-                        {
-                          "FromTxts:": {
-                            "KindsOf:": "things"
-                          }
-                        },
-                        {
-                          "AsTxt:": "it"
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Put:from:at:": [
-                                {
-                                  "ObjField:": "@it"
-                                },
-                                {
-                                  "FromBool:": true
-                                },
-                                "not mentioned"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
+                      "FromNum:": 0
+                    },
+                    "mentions"
+                  ]
+                },
+                {
+                  "Repeating across:as:does:": [
+                    {
+                      "FromTxts:": {
+                        "KindsOf:": "things"
+                      }
+                    },
+                    {
+                      "AsTxt:": "it"
+                    },
+                    [
+                      {
+                        "Put:from:at:": [
+                          {
+                            "ObjField:": "@it"
+                          },
+                          {
+                            "FromBool:": true
+                          },
+                          "not mentioned"
+                        ]
+                      }
+                    ]
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
     }
   ]
-]
+}

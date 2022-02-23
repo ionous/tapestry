@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "Event:action:args common:": [
         "examine",
@@ -10,344 +10,108 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "examining",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:value:": [
+        [
+          {
+            "Text named:of:initially:": [
+              "actor",
+              "actor",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
                 {
-                  "Text named:of:": [
-                    "actor",
-                    "actor"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
+                  "If:from:and:does:else:": [
+                    "resp",
+                    {
+                      "FromTxt:": {
+                        "CanReach actor:action:noun:requiresLight:": [
+                          "@actor",
+                          {
+                            "FromTxt:": "examining"
+                          },
+                          "@noun",
+                          {
+                            "FromBool:": true
+                          }
+                        ]
                       }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "If:from:and:do:else:": [
-                        "resp",
-                        {
-                          "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can reach",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "examining"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "requires light",
-                                      {
-                                        "FromBool:": true
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "Not:": {
-                            "Is empty:": "@resp"
-                          }
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": "@resp"
-                            }
-                          ]
-                        },
-                        {
-                          "ElseDo:": {
-                            "Act:": [
-                              {
-                                "If:from:and:do:else:": [
-                                  "resp",
-                                  {
-                                    "FromTxt:": {
-                                      "Determine:arguments:": [
-                                        "can use",
-                                        {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "actor",
-                                                "@actor"
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "action",
-                                                {
-                                                  "FromTxt:": "examining"
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "noun",
-                                                "@noun"
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    "Not:": {
-                                      "Is empty:": "@resp"
-                                    }
-                                  },
-                                  {
-                                    "Act:": [
-                                      {
-                                        "Say:": "@resp"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "ElseDo:": {
-                                      "Act:": [
-                                        {
-                                          "If:do:": [
-                                            {
-                                              "Send:path:arguments:": [
-                                                "examine",
-                                                {
-                                                  "Determine:arguments:": [
-                                                    "parentsOf",
-                                                    {
-                                                      "Args:": [
-                                                        {
-                                                          "Arg:from:": [
-                                                            "obj",
-                                                            "@noun"
-                                                          ]
-                                                        }
-                                                      ]
-                                                    }
-                                                  ]
-                                                },
-                                                {
-                                                  "Args:": [
-                                                    {
-                                                      "Arg:from:": [
-                                                        "actor",
-                                                        "@actor"
-                                                      ]
-                                                    },
-                                                    {
-                                                      "Arg:from:": [
-                                                        "noun",
-                                                        "@noun"
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Act:": [
-                                                {
-                                                  "Determine:arguments:": [
-                                                    "print description",
-                                                    {
-                                                      "Args:": [
-                                                        {
-                                                          "Arg:from:": [
-                                                            "obj",
-                                                            "@noun"
-                                                          ]
-                                                        }
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  [
-    {
-      "Pattern:requires:": [
-        "Print description",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:with:rules:": [
-        "Print description",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:value:": [
-                {
-                  "Text named:": "description"
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "description",
-                      {
-                        "ObjFields:": "@obj"
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
-                {
-                  "Act:": [
-                    {
-                      "If:do:": [
-                        {
-                          "Not:": {
-                            "Determine:arguments:": [
-                              "Print particulars",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "obj",
-                                      "@obj"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": {
-                                "Response:text:": [
-                                  "unremarkable description",
-                                  {
-                                    "RenderTemplate:": "{We!|make_title_case!} see nothing special about {the: .obj}."
-                                  }
-                                ]
-                              }
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Not:": {
-                    "Is empty:": "@description"
-                  }
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": "@description"
                     },
                     {
-                      "Determine:arguments:": [
-                        "Print particulars",
+                      "Not:": {
+                        "Is empty:": "@resp"
+                      }
+                    },
+                    [
+                      {
+                        "Say:": "@resp"
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
                         {
-                          "Args:": [
+                          "If:from:and:does:else:": [
+                            "resp",
                             {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
+                              "FromTxt:": {
+                                "CanUse actor:action:noun:": [
+                                  "@actor",
+                                  {
+                                    "FromTxt:": "examining"
+                                  },
+                                  "@noun"
+                                ]
+                              }
+                            },
+                            {
+                              "Not:": {
+                                "Is empty:": "@resp"
+                              }
+                            },
+                            [
+                              {
+                                "Say:": "@resp"
+                              }
+                            ],
+                            {
+                              "ElseDo does:": [
+                                {
+                                  "If:does:": [
+                                    {
+                                      "Send:event:": [
+                                        {
+                                          "Capture obj:": "@noun"
+                                        },
+                                        {
+                                          "Examine actor:noun:": [
+                                            "@actor",
+                                            "@noun"
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    [
+                                      {
+                                        "PrintDescription obj:": "@noun"
+                                      }
+                                    ]
+                                  ]
+                                }
                               ]
                             }
                           ]
@@ -357,26 +121,110 @@
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "Print description",
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "Print description",
+        [
+          {
+            "Text named:initially:": [
+              "description",
+              {
+                "Get:from:": [
+                  "description",
+                  {
+                    "ObjFields:": "@obj"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
+                {
+                  "If:does:": [
+                    {
+                      "Not:": {
+                        "PrintParticulars obj:": "@obj"
+                      }
+                    },
+                    [
+                      {
+                        "Say:": {
+                          "Response:text:": [
+                            "unremarkable description",
+                            {
+                              "RenderTemplate:": "{We!|make_title_case!} see nothing special about {the: .obj}."
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Not:": {
+                  "Is empty:": "@description"
+                }
+              },
+              [
+                {
+                  "Say:": "@description"
+                },
+                {
+                  "PrintParticulars obj:": "@obj"
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "Print particulars",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        },
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          }
+        ],
         {
           "PatternResult:": {
             "Bool named:": "success"
@@ -387,162 +235,115 @@
     {
       "Pattern:rules:": [
         "Print particulars",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@obj",
+                  "containers"
+                ]
+              },
+              [
                 {
-                  "KindOf:is:": [
-                    "@obj",
-                    "containers"
-                  ]
-                },
-                {
-                  "Act:": [
+                  "If:does:else:": [
                     {
-                      "If:do:else:": [
+                      "PrintInlineStorage obj:": "@obj"
+                    },
+                    [
+                      {
+                        "Let:be:": [
+                          "success",
+                          {
+                            "FromBool:": true
+                          }
+                        ]
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
                         {
-                          "Determine:arguments:": [
-                            "print inline storage",
+                          "Comment:": "if the player isn't in the container."
+                        },
+                        {
+                          "If:does:": [
                             {
-                              "Args:": [
+                              "Cmp:is:txt:": [
+                                "@obj",
                                 {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@obj"
+                                  "OtherThan": true
+                                },
+                                {
+                                  "ContainerOf obj:": {
+                                    "FromTxt:": "player"
+                                  }
+                                }
+                              ]
+                            },
+                            [
+                              {
+                                "Say:": {
+                                  "Response:text:": [
+                                    "empty container description",
+                                    {
+                                      "RenderTemplate:": "{The: .obj|capitalize!} {are: .obj} empty."
+                                    }
                                   ]
                                 }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Let:be:": [
-                                "success",
-                                {
-                                  "FromBool:": true
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "ElseDo:": {
-                            "Act:": [
-                              {
-                                "Comment:": "if the player isn't in the container."
                               },
                               {
-                                "If:do:": [
+                                "Let:be:": [
+                                  "success",
                                   {
-                                    "Cmp:is:txt:": [
-                                      "@obj",
-                                      "OtherThan",
-                                      {
-                                        "Determine:arguments:": [
-                                          "containerOf",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "obj",
-                                                  {
-                                                    "FromTxt:": "player"
-                                                  }
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Act:": [
-                                      {
-                                        "Say:": {
-                                          "Response:text:": [
-                                            "empty container description",
-                                            {
-                                              "RenderTemplate:": "{The: .obj|capitalize!} {are: .obj} empty."
-                                            }
-                                          ]
-                                        }
-                                      },
-                                      {
-                                        "Let:be:": [
-                                          "success",
-                                          {
-                                            "FromBool:": true
-                                          }
-                                        ]
-                                      }
-                                    ]
+                                    "FromBool:": true
                                   }
                                 ]
                               }
                             ]
-                          }
+                          ]
                         }
                       ]
                     }
                   ]
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@obj",
+                  "supporters"
+                ]
+              },
+              [
                 {
-                  "KindOf:is:": [
-                    "@obj",
-                    "supporters"
-                  ]
-                },
-                {
-                  "Act:": [
+                  "If:does:": [
                     {
-                      "If:do:": [
-                        {
-                          "Determine:arguments:": [
-                            "print inline storage",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@obj"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Let:be:": [
-                                "success",
-                                {
-                                  "FromBool:": true
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
+                      "PrintInlineStorage obj:": "@obj"
+                    },
+                    [
+                      {
+                        "Let:be:": [
+                          "success",
+                          {
+                            "FromBool:": true
+                          }
+                        ]
+                      }
+                    ]
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "examining test",
@@ -552,122 +353,48 @@
       ]
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "examining test",
-        {
-          "Act:": [
-            {
-              "Determine:arguments:": [
-                "Print description",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "blender"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Determine:arguments:": [
-                "Print description",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "hat"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Determine:arguments:": [
-                "Print description",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "mortar"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Determine:arguments:": [
-                "Print description",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "shelf"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Determine:arguments:": [
-                "Print description",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "cabinet"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Relate:to:via:": [
-                "blender",
-                "self",
-                "whereabouts"
-              ]
-            },
-            {
-              "Determine:arguments:": [
-                "Print description",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "blender"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+        [
+          {
+            "PrintDescription obj:": {
+              "FromTxt:": "blender"
             }
-          ]
-        }
+          },
+          {
+            "PrintDescription obj:": {
+              "FromTxt:": "hat"
+            }
+          },
+          {
+            "PrintDescription obj:": {
+              "FromTxt:": "mortar"
+            }
+          },
+          {
+            "PrintDescription obj:": {
+              "FromTxt:": "shelf"
+            }
+          },
+          {
+            "PrintDescription obj:": {
+              "FromTxt:": "cabinet"
+            }
+          },
+          {
+            "Relate:to:via:": [
+              "blender",
+              "self",
+              "whereabouts"
+            ]
+          },
+          {
+            "PrintDescription obj:": {
+              "FromTxt:": "blender"
+            }
+          }
+        ]
       ]
     }
   ]
-]
+}

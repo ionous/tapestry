@@ -1,7 +1,6 @@
-[
-  [
+{
+  "Tapestry:": [
     {
-      "--": "Define the traveling action, and the travel event.",
       "Event:action:args common:": [
         "travel",
         "traveling",
@@ -13,86 +12,25 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "traveling",
-        {
-          "PatternLocals:": [
-            {
+        [
+          {
               "--": "Get the actor from the agent.",
-              "LocalDecl:value:": [
-                {
-                  "Text named:of:": [
-                    "actor",
-                    "actor"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
+            "Text named:of:initially:": [
+              "actor",
+              "actor",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
               "--": [
                 "If this is the player, make sure we can reach the door in question",
                 "and if not let the player know.",
               ],
-              "PatternRule:hook activity:": [
-                {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "If:from:and:do:else:": [
-                        "result",
-                        {
                           "--": "'result' is the name of a new local variable containing the reach response.",
-                          "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can reach",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "traveling"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
+                              "can handle",
                                     ]
                                   },
                                   {
@@ -101,109 +39,84 @@
                                       {
                                         "FromBool:": true
                                       }
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "Not:": {
-                            "Is empty:": "@result"
-                          }
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": "@result"
-                            }
-                          ]
-                        },
-                        {
-                          "ElseDo:": {
-                            "Act:": [
-                              {
                                 "--": "Send the travel event, and if nobody complains report traveling",
-                                "If:do:": [
-                                  {
-                                    "Send:path:arguments:": [
-                                      "travel",
-                                      {
-                                        "Determine:arguments:": [
-                                          "parentsOf",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "obj",
-                                                  "@noun"
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "actor",
-                                              "@actor"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "noun",
-                                              "@noun"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Act:": [
-                                      {
-                                        "Determine:arguments:": [
-                                          "report traveling",
-                                          {
-                                            "Args:": [
-                                              {
-                                                "Arg:from:": [
-                                                  "actor",
-                                                  "@actor"
-                                                ]
-                                              },
-                                              {
-                                                "Arg:from:": [
-                                                  "noun",
-                                                  "@noun"
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
+                {
+                  "If:from:and:does:else:": [
+                    "result",
+                    {
+                      "FromTxt:": {
+                        "CanHandle actor:action:noun:": [
+                          "@actor",
+                          {
+                            "FromTxt:": "traveling"
+                          },
+                          "@noun"
+                        ]
+                      }
+                    },
+                    {
+                      "Not:": {
+                        "Is empty:": "@result"
+                      }
+                    },
+                    [
+                      {
+                        "Say:": "@result"
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
+                        {
+                          "If:does:": [
+                            {
+                              "Send:event:": [
+                                {
+                                  "Capture obj:": "@noun"
+                                },
+                                {
+                                  "Travel actor:noun:": [
+                                    "@actor",
+                                    "@noun"
+                                  ]
+                                }
+                              ]
+                            },
+                            [
+                              {
+                                "ReportTraveling actor:noun:": [
+                                  "@actor",
+                                  "@noun"
                                 ]
                               }
                             ]
-                          }
+                          ]
                         }
                       ]
                     }
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Listen kinds:handlers:": [
         "things",
@@ -212,183 +125,194 @@
             "With:event:rules:": [
               "while",
               "travel",
-              {
-                "PatternRules:": [
-                  {
-                    "PatternRule:hook activity:": [
-                      "Always",
+              [
+                {
+                  "PatternRule:does:": [
+                    {
+                      "Always": true
+                    },
+                    [
                       {
-                        "Act:": [
+                        "If:from:and:does:else:": [
+                          "error",
                           {
-                            "If:from:and:do:else:": [
-                              "error",
+                            "FromTxt:": {
+                              "MoveObject obj:dest:": [
+                                "@noun",
+                                {
+                                  "FromTxt:": {
+                                    "ParentOf obj:": "@actor"
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "Not:": {
+                              "Is empty:": "@error"
+                            }
+                          },
+                          [
+                            {
+                              "Say:": "@error"
+                            },
+                            {
+                              "Let:be:": [
+                                "success",
+                                {
+                                  "FromBool:": false
+                                }
+                              ]
+                            }
+                          ],
+                          {
+                            "ElseDo does:": [
                               {
-                                "FromTxt:": {
-                                  "Determine:arguments:": [
-                                    "move object",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "obj",
-                                            "@noun"
-                                          ]
-                                        },
-                                        {
-                                          "Arg:from:": [
-                                            "dest",
-                                            {
-                                              "FromTxt:": {
-                                                "Determine:arguments:": [
-                                                  "parentOf",
-                                                  {
-                                                    "Args:": [
-                                                      {
-                                                        "Arg:from:": [
-                                                          "obj",
-                                                          "@actor"
-                                                        ]
-                                                      }
-                                                    ]
-                                                  }
-                                                ]
-                                              }
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
+                                "Log:": {
+                                  "FromTxt:": {
+                                    "RenderTemplate:": "{The: .actor} is taking {the: .noun} ..."
+                                  }
                                 }
                               },
                               {
-                                "Not:": {
-                                  "Is empty:": "@error"
-                                }
-                              },
-                              {
-                                "Act:": [
+                                "Let:be:": [
+                                  "success",
                                   {
-                                    "Say:": "@error"
-                                  },
-                                  {
-                                    "Let:be:": [
-                                      "success",
-                                      {
-                                        "FromBool:": false
-                                      }
-                                    ]
+                                    "FromBool:": true
                                   }
                                 ]
-                              },
-                              {
-                                "ElseDo:": {
-                                  "Act:": [
-                                    {
-                                      "Log:": {
-                                        "FromTxt:": {
-                                          "RenderTemplate:": "{The: .actor} is taking {the: .noun} ..."
-                                        }
-                                      }
-                                    },
-                                    {
-                                      "Let:be:": [
-                                        "success",
-                                        {
-                                          "FromBool:": true
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
                               }
                             ]
                           }
                         ]
                       }
                     ]
-                  }
-                ]
-              }
+                  ]
+                }
+              ]
             ]
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "report traveling",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "actor",
-                "actor"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "noun",
-                "thing"
-              ]
-            }
-          ]
-        }
+        [
+          {
+            "Text named:of:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "noun",
+              "thing"
+            ]
+          }
+        ]
       ]
     },
     {
       "Pattern:rules:": [
         "report traveling",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "player travels",
-                          {
-                            "RenderTemplate:": "traveled."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Not:": {
-                    "Determine:arguments:": [
-                      "isPlayer",
+                  "Say:": {
+                    "Response:text:": [
+                      "player travels",
                       {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "obj",
-                              "@actor"
-                            ]
-                          }
-                        ]
+                            "RenderTemplate:": "traveled."
                       }
                     ]
                   }
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Not:": {
+                  "IsPlayer obj:": "@actor"
+                }
+
+              },
+              [
+                {
+                  "Say:": {
+                    "Response:text:": [
+                      "someone else travels",
+                      {
+                            "RenderTemplate:": "{The: .actor|capitalize!} went through {the: .noun}."
+                      }
+                    ]
+                  }
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:rules:": [
+        "can reach",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "traveling"
+                    ]
+                  },
+                  {
+                    "Cmp:is:txt:": [
+                      {
+                        "ParentOf obj:": "@actor"
+                      },
+                      {
+                        "Equals": true
+                      },
+                      {
+                        "LocationOf obj:": "@noun"
+                      }
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Comment:": "Tell the player that they've already accomplished the goal they are trying to achieve ( vs. that they can't accomplish what they are trying to achieve. )"
                 },
                 {
-                  "Act:": [
+                  "Let:be:": [
+                    "response",
                     {
-                      "Say:": {
+                      "FromTxt:": {
                         "Response:text:": [
-                          "someone else travels",
+                          "can't travel what's already there",
                           {
-                            "RenderTemplate:": "{The: .actor|capitalize!} went through {the: .noun}."
+                            "RenderTemplate:": "{The: .noun|capitalize!} {are: .noun} already here.\""
                           }
                         ]
                       }
@@ -396,134 +320,53 @@
                   ]
                 }
               ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  [
-    {
-      "Pattern:rules:": [
-        "can reach",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "traveling"
+                    ]
+                  },
+                  {
+                    "Cmp:is:txt:": [
+                      "@actor",
+                      {
+                        "Equals": true
+                      },
+                      "@noun"
+                    ]
+                  }
+                ]
+              },
+              [
                 {
-                  "AllTrue:": [
+                  "Let:be:": [
+                    "response",
                     {
-                      "Cmp:is:txt:": [
-                        "@action",
-                        "Equals",
-                        "traveling"
-                      ]
-                    },
-                    {
-                      "Cmp:is:txt:": [
-                        {
-                          "Determine:arguments:": [
-                            "parentOf",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@actor"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        "Equals",
-                        {
-                          "Determine:arguments:": [
-                            "locationOf",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@noun"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Comment:": "Tell the player that they've already accomplished the goal they are trying to achieve ( vs. that they can't accomplish what they are trying to achieve. )"
-                    },
-                    {
-                      "Let:be:": [
-                        "response",
-                        {
-                          "FromTxt:": {
-                            "Response:text:": [
-                              "can't travel what's already there",
-                              {
-                                "RenderTemplate:": "{The: .noun|capitalize!} {are: .noun} already here.\""
-                              }
-                            ]
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't travel yourself",
+                          {
+                            "RenderTemplate:": "{We:|capitalize!} lack the dexterity."
                           }
-                        }
-                      ]
+                        ]
+                      }
                     }
                   ]
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "AllTrue:": [
-                    {
-                      "Cmp:is:txt:": [
-                        "@action",
-                        "Equals",
-                        "traveling"
-                      ]
-                    },
-                    {
-                      "Cmp:is:txt:": [
-                        "@actor",
-                        "Equals",
-                        "@noun"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "response",
-                        {
-                          "FromTxt:": {
-                            "Response:text:": [
-                              "can't travel yourself",
-                              {
-                                "RenderTemplate:": "{We:|capitalize!} lack the dexterity."
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
     }
   ]
-]
+}

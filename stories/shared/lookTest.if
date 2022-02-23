@@ -1,10 +1,11 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "Comment:": "Since \"domains\" aren't yet hierarchical, to share objects across tests they have to be described globally."
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Nouns:depict:": [
         [
@@ -50,9 +51,10 @@
         ],
         "Kitchen"
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Make kinds:of:": [
         " cats",
@@ -148,9 +150,10 @@
         ],
         "Your aunt's very own witches hat, a Halloween favorite."
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Nouns:startAs:": [
         [
@@ -305,9 +308,10 @@
           "rusty knife"
         ]
       }
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Nouns:startAs:": [
         [
@@ -405,9 +409,10 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Nouns:depict:and:": [
         [
@@ -460,7 +465,7 @@
         [
           {
             "NounTraits:trait:": [
-              "",
+              "is",
               [
                 "fixed in place",
                 "closed"
@@ -621,9 +626,10 @@
         ],
         "Steam leaks from the top of a recently used espresso machine."
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "baseVis",
@@ -633,213 +639,156 @@
       ]
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "baseVis",
-        {
-          "Act:": [
-            {
-              "Repeating across:as:do:": [
+        [
+          {
+            "Repeating across:as:does:": [
+              {
+                "FromTxts:": [
+                  "cabinet",
+                  "kitchen",
+                  "shelf"
+                ]
+              },
+              {
+                "AsTxt:": "src"
+              },
+              [
                 {
-                  "FromTxts:": [
-                    "cabinet",
-                    "kitchen",
-                    "shelf"
-                  ]
-                },
-                {
-                  "AsTxt:": "src"
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Commas:": {
-                          "Act:": [
+                  "Say:": {
+                    "Commas does:": [
+                      {
+                        "Repeating across:as:does:": [
+                          {
+                            "FromTxts:": {
+                              "TransparentList obj:": {
+                                "FromTxt:": "@src"
+                              }
+                            }
+                          },
+                          {
+                            "AsTxt:": "it"
+                          },
+                          [
                             {
-                              "Repeating across:as:do:": [
-                                {
-                                  "FromTxts:": {
-                                    "Determine:arguments:": [
-                                      "transparentList",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "obj",
-                                              {
-                                                "FromTxt:": "@src"
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                },
-                                {
-                                  "AsTxt:": "it"
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "Say:": {
-                                        "RenderTemplate:": "{print_name: .it}"
-                                      }
-                                    }
-                                  ]
-                                }
-                              ]
+                              "Say:": {
+                                "RenderTemplate:": "{print_name: .it}"
+                              }
                             }
                           ]
-                        }
-                      }
-                    },
-                    {
-                      "Say:": "."
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Put:from:at:": [
-                {
-                  "ObjField:": "cabinet"
-                },
-                {
-                  "FromBool:": true
-                },
-                "closed"
-              ]
-            },
-            {
-              "Repeating across:as:do:": [
-                {
-                  "FromTxts:": {
-                    "Determine:arguments:": [
-                      "transparentList",
-                      {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "obj",
-                              {
-                                "FromTxt:": "cabinet"
-                              }
-                            ]
-                          }
                         ]
                       }
                     ]
                   }
                 },
                 {
-                  "AsTxt:": "it"
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "RenderTemplate:": "{.it}."
-                      }
-                    }
-                  ]
+                  "Say:": "."
                 }
               ]
-            },
-            {
-              "If:do:": [
+            ]
+          },
+          {
+            "Put:from:at:": [
+              {
+                "ObjField:": "cabinet"
+              },
+              {
+                "FromBool:": true
+              },
+              "closed"
+            ]
+          },
+          {
+            "Repeating across:as:does:": [
+              {
+                "FromTxts:": {
+                  "TransparentList obj:": {
+                    "FromTxt:": "cabinet"
+                  }
+                }
+              },
+              {
+                "AsTxt:": "it"
+              },
+              [
                 {
-                  "Cmp:is:num:": [
-                    {
-                      "Len:": {
-                        "FromTxts:": {
-                          "Determine:arguments:": [
-                            "transparentList",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    {
-                                      "FromTxt:": "cabinet"
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                  "Say:": {
+                    "RenderTemplate:": "{.it}."
+                  }
+                }
+              ]
+            ]
+          },
+          {
+            "If:does:": [
+              {
+                "Cmp:is:num:": [
+                  {
+                    "Len:": {
+                      "FromTxts:": {
+                        "TransparentList obj:": {
+                          "FromTxt:": "cabinet"
                         }
                       }
-                    },
-                    "OtherThan",
-                    1
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": "there should be limited visibility in a closed cabinet."
                     }
-                  ]
+                  },
+                  {
+                    "OtherThan": true
+                  },
+                  1
+                ]
+              },
+              [
+                {
+                  "Say:": "there should be limited visibility in a closed cabinet."
                 }
               ]
-            },
-            {
-              "Put:from:at:": [
-                {
-                  "ObjField:": "cabinet"
-                },
-                {
-                  "FromBool:": true
-                },
-                "open"
-              ]
-            },
-            {
-              "If:do:": [
-                {
-                  "Cmp:is:num:": [
-                    {
-                      "Len:": {
-                        "FromTxts:": {
-                          "Determine:arguments:": [
-                            "transparentList",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    {
-                                      "FromTxt:": "cabinet"
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+            ]
+          },
+          {
+            "Put:from:at:": [
+              {
+                "ObjField:": "cabinet"
+              },
+              {
+                "FromBool:": true
+              },
+              "open"
+            ]
+          },
+          {
+            "If:does:": [
+              {
+                "Cmp:is:num:": [
+                  {
+                    "Len:": {
+                      "FromTxts:": {
+                        "TransparentList obj:": {
+                          "FromTxt:": "cabinet"
                         }
                       }
-                    },
-                    "GreaterThan",
-                    1
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": "okay. cabinet is open again."
                     }
-                  ]
+                  },
+                  {
+                    "GreaterThan": true
+                  },
+                  1
+                ]
+              },
+              [
+                {
+                  "Say:": "okay. cabinet is open again."
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "lookObjectDescription",
@@ -849,91 +798,45 @@
       ]
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "lookObjectDescription",
-        {
-          "Act:": [
-            {
-              "Determine:arguments:": [
-                "print object description",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "hat"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "locale",
-                        {
-                          "FromTxt:": "kitchen"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Determine:arguments:": [
-                "print object description",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "shelf"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "locale",
-                        {
-                          "FromTxt:": "kitchen"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Determine:arguments:": [
-                "print object description",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "obj",
-                        {
-                          "FromTxt:": "machine"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "locale",
-                        {
-                          "FromTxt:": "kitchen"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+        [
+          {
+            "PrintObjectDescription obj:locale:": [
+              {
+                "FromTxt:": "hat"
+              },
+              {
+                "FromTxt:": "kitchen"
+              }
+            ]
+          },
+          {
+            "PrintObjectDescription obj:locale:": [
+              {
+                "FromTxt:": "shelf"
+              },
+              {
+                "FromTxt:": "kitchen"
+              }
+            ]
+          },
+          {
+            "PrintObjectDescription obj:locale:": [
+              {
+                "FromTxt:": "machine"
+              },
+              {
+                "FromTxt:": "kitchen"
+              }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "printing vantages",
@@ -943,122 +846,70 @@
       ]
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "printing vantages",
-        {
-          "Act:": [
-            {
-              "Determine:arguments:": [
-                "Print vantage",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "where",
-                        {
-                          "FromTxt:": "cabinet"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "inDarkness",
-                        {
-                          "FromBool:": true
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Say:": "....."
-            },
-            {
-              "Determine:arguments:": [
-                "Print vantage",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "where",
-                        {
-                          "FromTxt:": "cabinet"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Say:": "....."
-            },
-            {
-              "Put:from:at:": [
-                {
-                  "ObjField:": "cabinet"
-                },
-                {
-                  "FromBool:": true
-                },
-                "closed"
-              ]
-            },
-            {
-              "Determine:arguments:": [
-                "Print vantage",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "where",
-                        {
-                          "FromTxt:": "cabinet"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Say:": "....."
-            },
-            {
-              "Comment:": "remove the hook from the cabinet"
-            },
-            {
-              "Relate:to:via:": [
-                "kitchen",
-                "hook",
-                "whereabouts"
-              ]
-            },
-            {
-              "Determine:arguments:": [
-                "Print vantage",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "where",
-                        {
-                          "FromTxt:": "cabinet"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+        [
+          {
+            "PrintVantage where:inDarkness:": [
+              {
+                "FromTxt:": "cabinet"
+              },
+              {
+                "FromBool:": true
+              }
+            ]
+          },
+          {
+            "Say:": "....."
+          },
+          {
+            "PrintVantage where:": {
+              "FromTxt:": "cabinet"
             }
-          ]
-        }
+          },
+          {
+            "Say:": "....."
+          },
+          {
+            "Put:from:at:": [
+              {
+                "ObjField:": "cabinet"
+              },
+              {
+                "FromBool:": true
+              },
+              "closed"
+            ]
+          },
+          {
+            "PrintVantage where:": {
+              "FromTxt:": "cabinet"
+            }
+          },
+          {
+            "Say:": "....."
+          },
+          {
+            "Comment:": "remove the hook from the cabinet"
+          },
+          {
+            "Relate:to:via:": [
+              "kitchen",
+              "hook",
+              "whereabouts"
+            ]
+          },
+          {
+            "PrintVantage where:": {
+              "FromTxt:": "cabinet"
+            }
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "printing inline objects",
@@ -1068,34 +919,20 @@
       ]
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "printing inline objects",
-        {
-          "Act:": [
-            {
-              "Determine:arguments:": [
-                "print inline objects",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "objs",
-                        {
-                          "FromTxts:": [
-                            "mortar",
-                            "blender",
-                            "counter"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
+        [
+          {
+            "PrintInlineObjects objs:": {
+              "FromTxts:": [
+                "mortar",
+                "blender",
+                "counter"
               ]
             }
-          ]
-        }
+          }
+        ]
       ]
     }
   ]
-]
+}

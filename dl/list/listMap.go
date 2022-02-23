@@ -30,7 +30,7 @@ func (op *ListMap) remap(run rt.Runtime) (err error) {
 				break
 			} else {
 				if newVal, e := run.Call(pat, aff, []rt.Arg{
-					{"$1", &fromVal{inVal}},
+					{Name: "$1", From: &fromVal{inVal}},
 				}); e != nil {
 					// note: we treat no result as an error because
 					// we are trying to map *all* of the elements from one list into another

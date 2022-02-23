@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "GrammarDecl:": {
         "Directive:scans:": [
@@ -36,9 +36,10 @@
           ]
         ]
       }
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Event:action:args common:": [
         "attack",
@@ -49,219 +50,139 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "attacking",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:value:": [
-                {
-                  "Text named:of:": [
-                    "actor",
-                    "actor"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
+        [
+          {
+            "Text named:of:initially:": [
+              "actor",
+              "actor",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
                   }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
+                  "If:from:and:does:else:": [
+                    "resp",
                     {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
+                      "FromTxt:": {
+                        "CanReach actor:action:noun:": [
+                          "@actor",
+                          {
+                            "FromTxt:": "attacking"
+                          },
+                          "@noun"
+                        ]
+                      }
+                    },
                     {
-                      "If:from:and:do:else:": [
-                        "resp",
+                      "Not:": {
+                        "Is empty:": "@resp"
+                      }
+                    },
+                    [
+                      {
+                        "Say:": "@resp"
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
                         {
-                          "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can reach",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "attacking"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "Not:": {
-                            "Is empty:": "@resp"
-                          }
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": "@resp"
-                            }
+                          "ReportAttacking actor:noun:": [
+                            "@actor",
+                            "@noun"
                           ]
-                        },
-                        {
-                          "ElseDo:": {
-                            "Act:": [
-                              {
-                                "Determine:arguments:": [
-                                  "report attacking",
-                                  {
-                                    "Args:": [
-                                      {
-                                        "Arg:from:": [
-                                          "actor",
-                                          "@actor"
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "noun",
-                                          "@noun"
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
-                          }
                         }
                       ]
                     }
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "report attacking",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "actor",
-                "actor"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "noun",
-                "object"
-              ]
-            }
-          ]
-        }
+        [
+          {
+            "Text named:of:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "noun",
+              "object"
+            ]
+          }
+        ]
       ]
     },
     {
       "Pattern:rules:": [
         "report attacking",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "actor attacking",
-                          {
-                            "RenderTemplate:": "{the:.actor|capitalize!} attacks {the: .noun}."
-                          }
-                        ]
+                  "Say:": {
+                    "Response:text:": [
+                      "actor attacking",
+                      {
+                        "RenderTemplate:": "{the:.actor|capitalize!} attacks {the: .noun}."
                       }
-                    }
-                  ]
+                    ]
+                  }
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "player attacking",
-                          {
-                            "RenderTemplate:": "Violence isn't the answer."
-                          }
-                        ]
+                  "Say:": {
+                    "Response:text:": [
+                      "player attacking",
+                      {
+                        "RenderTemplate:": "Violence isn't the answer."
                       }
-                    }
-                  ]
+                    ]
+                  }
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
     }
   ]
-]
+}

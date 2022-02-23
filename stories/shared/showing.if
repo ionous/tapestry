@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "GrammarDecl:": {
         "Directive:scans:": [
@@ -98,90 +98,67 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "showing",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:value:": [
-                {
-                  "Text named:of:": [
-                    "actor",
-                    "actor"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
+        [
+          {
+            "Text named:of:initially:": [
+              "actor",
+              "actor",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
                   }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
+                  "If:from:and:does:else:": [
+                    "response",
                     {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
+                      "FromTxt:": {
+                        "CanHandle actor:action:noun:otherNoun:": [
+                          "@actor",
+                          {
+                            "FromTxt:": "showing"
+                          },
+                          "@noun",
+                          "@other noun"
+                        ]
+                      }
+                    },
                     {
-                      "If:from:and:do:else:": [
-                        "response",
+                      "Not:": {
+                        "Is empty:": "@response"
+                      }
+                    },
+                    [
+                      {
+                        "Say:": "@response"
+                      }
+                    ],
+                    {
+                      "ElseIf:from:and:does:else:": [
+                        "result",
                         {
                           "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can handle",
+                            "CanReach actor:action:noun:": [
+                              "@actor",
                               {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "showing"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "other noun",
-                                      "@other noun"
-                                    ]
-                                  }
-                                ]
-                              }
+                                "FromTxt:": "showing"
+                              },
+                              "@other noun"
                             ]
                           }
                         },
@@ -190,91 +167,19 @@
                             "Is empty:": "@response"
                           }
                         },
+                        [
+                          {
+                            "Say:": "@response"
+                          }
+                        ],
                         {
-                          "Act:": [
+                          "ElseDo does:": [
                             {
-                              "Say:": "@response"
-                            }
-                          ]
-                        },
-                        {
-                          "ElseIf:from:and:do:else:": [
-                            "result",
-                            {
-                              "FromTxt:": {
-                                "Determine:arguments:": [
-                                  "can reach",
-                                  {
-                                    "Args:": [
-                                      {
-                                        "Arg:from:": [
-                                          "actor",
-                                          "@actor"
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "action",
-                                          {
-                                            "FromTxt:": "showing"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "Arg:from:": [
-                                          "noun",
-                                          "@other noun"
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
-                            },
-                            {
-                              "Not:": {
-                                "Is empty:": "@response"
-                              }
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": "@response"
-                                }
+                              "ReportShowing actor:noun:otherNoun:": [
+                                "@actor",
+                                "@noun",
+                                "@other noun"
                               ]
-                            },
-                            {
-                              "ElseDo:": {
-                                "Act:": [
-                                  {
-                                    "Determine:arguments:": [
-                                      "report showing",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "actor",
-                                              "@actor"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "noun",
-                                              "@noun"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "other noun",
-                                              "@other noun"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
                             }
                           ]
                         }
@@ -283,102 +188,85 @@
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "report showing",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "actor",
-                "actor"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "noun",
-                "thing"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "other noun",
-                "actor"
-              ]
-            }
-          ]
-        }
+        [
+          {
+            "Text named:of:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "noun",
+              "thing"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "other noun",
+              "actor"
+            ]
+          }
+        ]
       ]
     },
     {
       "Pattern:rules:": [
         "report showing",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "player shows",
-                          {
-                            "RenderTemplate:": "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Not:": {
-                    "Determine:arguments:": [
-                      "isPlayer",
+                  "Say:": {
+                    "Response:text:": [
+                      "player shows",
                       {
-                        "Args:": [
-                          {
-                            "Arg:from:": [
-                              "obj",
-                              "@actor"
-                            ]
-                          }
-                        ]
+                        "RenderTemplate:": "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
                       }
                     ]
                   }
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "someone else shows",
-                          {
-                            "RenderTemplate:": "{The: .actor|capitalize!} shows off {the: .noun}."
-                          }
-                        ]
-                      }
-                    }
-                  ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Not:": {
+                  "IsPlayer obj:": "@actor"
+                }
+              },
+              [
+                {
+                  "Say:": {
+                    "Response:text:": [
+                      "someone else shows",
+                      {
+                        "RenderTemplate:": "{The: .actor|capitalize!} shows off {the: .noun}."
+                      }
+                    ]
+                  }
+                }
+              ]
+            ]
+          }
+        ]
       ]
     }
   ]
-]
+}

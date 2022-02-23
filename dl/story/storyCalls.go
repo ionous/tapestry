@@ -4,51 +4,32 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
-// transforms "story.Determine" into the "core.CallPattern" command.
-// while the two commands are equivalent, this provides a hook to verify
-// the caller's arguments and the pattern's parameters match up.
-func (op *Determine) ImportStub(k *Importer) (interface{}, error) {
-	refs, args := op.Arguments.xform(op.Name.String(), kindsOf.Pattern)
-	k.WriteEphemera(refs)
-	return &core.CallPattern{Pattern: op.Name, Arguments: args}, nil
+func importCall(op *core.CallPattern) *eph.EphRefs {
+	return refArgs(op.Pattern.String(), kindsOf.Pattern, op.Arguments)
 }
 
-func (op *Make) ImportStub(k *Importer) (interface{}, error) {
-	refs, args := op.Arguments.xform(op.Name, kindsOf.Record)
-	k.WriteEphemera(refs)
-	return &core.CallMake{Kind: op.Name, Arguments: args}, nil
-}
-
-func (op *Send) ImportStub(k *Importer) (interface{}, error) {
-	// note: this used to pass "kindOf.Event" but we dont need to be so strict.
-	refs, args := op.Arguments.xform(op.Event, kindsOf.Pattern)
-	k.WriteEphemera(refs)
-	return &core.CallSend{Event: op.Event, Path: op.Path, Arguments: args}, nil
-}
-
-func (stubs *Arguments) xform(k string, t kindsOf.Kinds) (retRefs *eph.EphRefs, retCall core.CallArgs) {
-	var args []core.CallArg
+func refArgs(k string, parentKind kindsOf.Kinds, args []rt.Arg) (ret *eph.EphRefs) {
 	var refs []eph.EphParams
-	if stubs != nil {
-		for _, arg := range stubs.Args {
-			args = append(args, core.CallArg{
-				Name: arg.Name, // string
-				From: arg.From, // assignment
-			})
-			//
-			refs = append(refs, eph.EphParams{
-				Name:     arg.Name,
-				Affinity: infinityToAffinity(arg.From),
-			})
-		}
+	for _, arg := range args {
+		args = append(args, rt.Arg{
+			Name: arg.Name, // string
+			From: arg.From, // assignment
+		})
+		//
+		refs = append(refs, eph.EphParams{
+			Name:     arg.Name,
+			Affinity: infinityToAffinity(arg.From),
+		})
 	}
-	retCall = core.CallArgs{Args: args}
-	retRefs = Refs(&eph.EphKinds{
-		Kinds:   k,
-		From:    t.String(),
+	ret = Refs(&eph.EphKinds{
+		Kinds: k,
+		// we dont actually know.
+		// its probably a pattern, but it could be a record just as well....
+		// From:    parentKind.String(),
 		Contain: refs,
 	})
 	return

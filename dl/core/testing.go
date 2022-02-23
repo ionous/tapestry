@@ -6,28 +6,23 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
-func NewActivity(exe ...rt.Execute) *Activity {
-	return &Activity{Exe: exe}
+func MakeActivity(exe ...rt.Execute) []rt.Execute {
+	return exe
 }
 
-func MakeActivity(exe ...rt.Execute) Activity {
-	return Activity{Exe: exe}
-}
-
-func Args(from ...rt.Assignment) CallArgs {
-	var p CallArgs
+func Args(from ...rt.Assignment) (ret []rt.Arg) {
 	for i, from := range from {
-		p.Args = append(p.Args, CallArg{
+		ret = append(ret, rt.Arg{
 			Name: W("$" + strconv.Itoa(i+1)),
 			From: from,
 		})
 	}
-	return p
+	return
 }
 
-func NamedArgs(name string, from rt.Assignment) CallArgs {
-	return CallArgs{Args: []CallArg{{
+func NamedArgs(name string, from rt.Assignment) []rt.Arg {
+	return []rt.Arg{{
 		Name: W(name),
 		From: from,
-	}}}
+	}}
 }

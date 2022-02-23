@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "TestStatement:test:": [
         "wearing test",
@@ -9,341 +9,213 @@
       ]
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "wearing test",
-        {
-          "Act:": [
-            {
-              "Say:": {
-                "RenderTemplate:": "The flower's ogp: {the: {parentOf: .flower}}, {.flower.possessiveness}."
-              }
-            },
-            {
-              "Say:": "Fail to re-wear the flower:"
-            },
-            {
-              "Determine:arguments:": [
-                "wearing",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "flower"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Say:": "Take off the flower:"
-            },
-            {
-              "Determine:arguments:": [
-                "removing",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "flower"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
-              }
-            },
-            {
-              "Say:": "Fail to re-remove the flower:"
-            },
-            {
-              "Determine:arguments:": [
-                "removing",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "flower"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Say:": "Wear the flower again:"
-            },
-            {
-              "Determine:arguments:": [
-                "wearing",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "flower"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
-              }
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
-              }
-            },
-            {
-              "Say:": "Fail to wear an unwearable:"
-            },
-            {
-              "Determine:arguments:": [
-                "wearing",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "knife"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
-              }
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
-              }
-            },
-            {
-              "Say:": "Fail to wear something not held:"
-            },
-            {
-              "Determine:arguments:": [
-                "wearing",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "purse"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Say:": "Fail to remove something not held:"
-            },
-            {
-              "Determine:arguments:": [
-                "removing",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "purse"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Say:": "Fail to put on something not reachable:"
-            },
-            {
-              "Determine:arguments:": [
-                "wearing",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "purse"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
-              }
+        [
+          {
+            "Say:": {
+              "RenderTemplate:": "The flower's ogp: {the: {parentOf: .flower}}, {.flower.possessiveness}."
             }
-          ]
-        }
+          },
+          {
+            "Say:": "Fail to re-wear the flower:"
+          },
+          {
+            "Wearing agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "flower"
+              }
+            ]
+          },
+          {
+            "Say:": "Take off the flower:"
+          },
+          {
+            "Removing agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "flower"
+              }
+            ]
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
+            }
+          },
+          {
+            "Say:": "Fail to re-remove the flower:"
+          },
+          {
+            "Removing agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "flower"
+              }
+            ]
+          },
+          {
+            "Say:": "Wear the flower again:"
+          },
+          {
+            "Wearing agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "flower"
+              }
+            ]
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
+            }
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
+            }
+          },
+          {
+            "Say:": "Fail to wear an unwearable:"
+          },
+          {
+            "Wearing agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "knife"
+              }
+            ]
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
+            }
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
+            }
+          },
+          {
+            "Say:": "Fail to wear something not held:"
+          },
+          {
+            "Wearing agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "purse"
+              }
+            ]
+          },
+          {
+            "Say:": "Fail to remove something not held:"
+          },
+          {
+            "Removing agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "purse"
+              }
+            ]
+          },
+          {
+            "Say:": "Fail to put on something not reachable:"
+          },
+          {
+            "Wearing agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "purse"
+              }
+            ]
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
+            }
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "wearing test",
-        {
-          "Story:": [
-            {
-              "Paragraph:": [
+        [
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              " whereabouts",
+              [
                 {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    " whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "flower"
-                        ]
-                      },
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "knife"
-                        ]
-                      }
-                    ],
-                    "is",
-                    [
-                      {
-                        "Noun:named:": [
-                          "our",
-                          "self"
-                        ]
-                      }
-                    ]
+                  "Noun:named:": [
+                    "the",
+                    "flower"
+                  ]
+                },
+                {
+                  "Noun:named:": [
+                    "the",
+                    "knife"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "our",
+                    "self"
                   ]
                 }
               ]
-            },
-            {
-              "Paragraph:": [
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              " whereabouts",
+              [
                 {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    " whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "purse"
-                        ]
-                      }
-                    ],
-                    "is",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "kitchen"
-                        ]
-                      }
-                    ]
+                  "Noun:named:": [
+                    "the",
+                    "purse"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "kitchen"
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
     }
   ]
-]
+}

@@ -5,7 +5,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/rel"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -833,215 +833,6 @@ func AreEither_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AreEither) (err e
 	return
 }
 
-// Argument
-type Argument struct {
-	Name        string        `if:"label=_,type=text"`
-	From        rt.Assignment `if:"label=from"`
-	UserComment string
-}
-
-func (*Argument) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Argument_Type,
-		Uses: composer.Type_Flow,
-		Lede: "arg",
-	}
-}
-
-const Argument_Type = "argument"
-const Argument_Field_Name = "$NAME"
-const Argument_Field_From = "$FROM"
-
-func (op *Argument) Marshal(m jsn.Marshaler) error {
-	return Argument_Marshal(m, op)
-}
-
-type Argument_Slice []Argument
-
-func (op *Argument_Slice) GetType() string { return Argument_Type }
-
-func (op *Argument_Slice) Marshal(m jsn.Marshaler) error {
-	return Argument_Repeats_Marshal(m, (*[]Argument)(op))
-}
-
-func (op *Argument_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Argument_Slice) SetSize(cnt int) {
-	var els []Argument
-	if cnt >= 0 {
-		els = make(Argument_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Argument_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Argument_Marshal(m, &(*op)[i])
-}
-
-func Argument_Repeats_Marshal(m jsn.Marshaler, vals *[]Argument) error {
-	return jsn.RepeatBlock(m, (*Argument_Slice)(vals))
-}
-
-func Argument_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Argument) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Argument_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Argument_Flow struct{ ptr *Argument }
-
-func (n Argument_Flow) GetType() string      { return Argument_Type }
-func (n Argument_Flow) GetLede() string      { return "arg" }
-func (n Argument_Flow) GetFlow() interface{} { return n.ptr }
-func (n Argument_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Argument); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Argument_Optional_Marshal(m jsn.Marshaler, pv **Argument) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Argument_Marshal(m, *pv)
-	} else if !enc {
-		var v Argument
-		if err = Argument_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Argument_Marshal(m jsn.Marshaler, val *Argument) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(Argument_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Argument_Field_Name)
-		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Argument_Field_Name))
-		}
-		e1 := m.MarshalKey("from", Argument_Field_From)
-		if e1 == nil {
-			e1 = rt.Assignment_Marshal(m, &val.From)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Argument_Field_From))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// Arguments
-type Arguments struct {
-	Args        []Argument `if:"label=_"`
-	UserComment string
-}
-
-func (*Arguments) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Arguments_Type,
-		Uses: composer.Type_Flow,
-		Lede: "args",
-	}
-}
-
-const Arguments_Type = "arguments"
-const Arguments_Field_Args = "$ARGS"
-
-func (op *Arguments) Marshal(m jsn.Marshaler) error {
-	return Arguments_Marshal(m, op)
-}
-
-type Arguments_Slice []Arguments
-
-func (op *Arguments_Slice) GetType() string { return Arguments_Type }
-
-func (op *Arguments_Slice) Marshal(m jsn.Marshaler) error {
-	return Arguments_Repeats_Marshal(m, (*[]Arguments)(op))
-}
-
-func (op *Arguments_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Arguments_Slice) SetSize(cnt int) {
-	var els []Arguments
-	if cnt >= 0 {
-		els = make(Arguments_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Arguments_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Arguments_Marshal(m, &(*op)[i])
-}
-
-func Arguments_Repeats_Marshal(m jsn.Marshaler, vals *[]Arguments) error {
-	return jsn.RepeatBlock(m, (*Arguments_Slice)(vals))
-}
-
-func Arguments_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Arguments) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Arguments_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Arguments_Flow struct{ ptr *Arguments }
-
-func (n Arguments_Flow) GetType() string      { return Arguments_Type }
-func (n Arguments_Flow) GetLede() string      { return "args" }
-func (n Arguments_Flow) GetFlow() interface{} { return n.ptr }
-func (n Arguments_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Arguments); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Arguments_Optional_Marshal(m jsn.Marshaler, pv **Arguments) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Arguments_Marshal(m, *pv)
-	} else if !enc {
-		var v Arguments
-		if err = Arguments_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Arguments_Marshal(m jsn.Marshaler, val *Arguments) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(Arguments_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Arguments_Field_Args)
-		if e0 == nil {
-			e0 = Argument_Repeats_Marshal(m, &val.Args)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Arguments_Field_Args))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // Aspect requires a user-specified string.
 type Aspect struct {
 	Str string
@@ -1120,7 +911,6 @@ func Aspect_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Aspect) (err error) 
 // AspectProperty
 type AspectProperty struct {
 	Aspect      string `if:"label=of,type=text"`
-	Comment     Lines  `if:"label=desc,optional"`
 	UserComment string
 }
 
@@ -1137,7 +927,6 @@ func (*AspectProperty) Compose() composer.Spec {
 
 const AspectProperty_Type = "aspect_property"
 const AspectProperty_Field_Aspect = "$ASPECT"
-const AspectProperty_Field_Comment = "$COMMENT"
 
 func (op *AspectProperty) Marshal(m jsn.Marshaler) error {
 	return AspectProperty_Marshal(m, op)
@@ -1212,17 +1001,10 @@ func AspectProperty_Marshal(m jsn.Marshaler, val *AspectProperty) (err error) {
 	if err = m.MarshalBlock(AspectProperty_Flow{val}); err == nil {
 		e0 := m.MarshalKey("of", AspectProperty_Field_Aspect)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Aspect)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Aspect)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", AspectProperty_Field_Aspect))
-		}
-		e1 := m.MarshalKey("desc", AspectProperty_Field_Comment)
-		if e1 == nil {
-			e1 = Lines_Optional_Marshal(m, &val.Comment)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", AspectProperty_Field_Comment))
 		}
 		m.EndBlock()
 	}
@@ -1343,6 +1125,7 @@ func AspectTraits_Marshal(m jsn.Marshaler, val *AspectTraits) (err error) {
 // BoolProperty
 type BoolProperty struct {
 	NamedProperty `if:"label=_"`
+	Initially     rt.BoolEval `if:"label=initially,optional"`
 	UserComment   string
 }
 
@@ -1361,7 +1144,7 @@ const BoolProperty_Type = "bool_property"
 const BoolProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const BoolProperty_Field_Name = "$NAME"
 const BoolProperty_Field_Type = "$TYPE"
-const BoolProperty_Field_Comment = "$COMMENT"
+const BoolProperty_Field_Initially = "$INITIALLY"
 
 func (op *BoolProperty) Marshal(m jsn.Marshaler) error {
 	return BoolProperty_Marshal(m, op)
@@ -1436,24 +1219,24 @@ func BoolProperty_Marshal(m jsn.Marshaler, val *BoolProperty) (err error) {
 	if err = m.MarshalBlock(BoolProperty_Flow{val}); err == nil {
 		e1 := m.MarshalKey("named", BoolProperty_Field_Name)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", BoolProperty_Field_Name))
 		}
 		e2 := m.MarshalKey("of", BoolProperty_Field_Type)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", BoolProperty_Field_Type))
 		}
-		e3 := m.MarshalKey("desc", BoolProperty_Field_Comment)
+		e3 := m.MarshalKey("initially", BoolProperty_Field_Initially)
 		if e3 == nil {
-			e3 = Lines_Optional_Marshal(m, &val.Comment)
+			e3 = rt.BoolEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", BoolProperty_Field_Comment))
+			m.Error(errutil.New(e3, "in flow at", BoolProperty_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -2098,124 +1881,6 @@ func CycleText_Marshal(m jsn.Marshaler, val *CycleText) (err error) {
 	return
 }
 
-// Determine
-type Determine struct {
-	Name        core.PatternName `if:"label=_"`
-	Arguments   *Arguments       `if:"label=arguments,optional"`
-	UserComment string
-}
-
-// User implemented slots:
-var _ rt.Execute = (*Determine)(nil)
-var _ rt.BoolEval = (*Determine)(nil)
-var _ rt.NumberEval = (*Determine)(nil)
-var _ rt.TextEval = (*Determine)(nil)
-var _ rt.RecordEval = (*Determine)(nil)
-var _ rt.NumListEval = (*Determine)(nil)
-var _ rt.TextListEval = (*Determine)(nil)
-var _ rt.RecordListEval = (*Determine)(nil)
-
-func (*Determine) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Determine_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Determine_Type = "determine"
-const Determine_Field_Name = "$NAME"
-const Determine_Field_Arguments = "$ARGUMENTS"
-
-func (op *Determine) Marshal(m jsn.Marshaler) error {
-	return Determine_Marshal(m, op)
-}
-
-type Determine_Slice []Determine
-
-func (op *Determine_Slice) GetType() string { return Determine_Type }
-
-func (op *Determine_Slice) Marshal(m jsn.Marshaler) error {
-	return Determine_Repeats_Marshal(m, (*[]Determine)(op))
-}
-
-func (op *Determine_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Determine_Slice) SetSize(cnt int) {
-	var els []Determine
-	if cnt >= 0 {
-		els = make(Determine_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Determine_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Determine_Marshal(m, &(*op)[i])
-}
-
-func Determine_Repeats_Marshal(m jsn.Marshaler, vals *[]Determine) error {
-	return jsn.RepeatBlock(m, (*Determine_Slice)(vals))
-}
-
-func Determine_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Determine) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Determine_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Determine_Flow struct{ ptr *Determine }
-
-func (n Determine_Flow) GetType() string      { return Determine_Type }
-func (n Determine_Flow) GetLede() string      { return Determine_Type }
-func (n Determine_Flow) GetFlow() interface{} { return n.ptr }
-func (n Determine_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Determine); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Determine_Optional_Marshal(m jsn.Marshaler, pv **Determine) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Determine_Marshal(m, *pv)
-	} else if !enc {
-		var v Determine
-		if err = Determine_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Determine_Marshal(m jsn.Marshaler, val *Determine) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(Determine_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Determine_Field_Name)
-		if e0 == nil {
-			e0 = core.PatternName_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Determine_Field_Name))
-		}
-		e1 := m.MarshalKey("arguments", Determine_Field_Arguments)
-		if e1 == nil {
-			e1 = Arguments_Optional_Marshal(m, &val.Arguments)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Determine_Field_Arguments))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // Determiner requires a predefined or user-specified string.
 type Determiner struct {
 	Str string
@@ -2416,11 +2081,11 @@ func EventBlock_Marshal(m jsn.Marshaler, val *EventBlock) (err error) {
 
 // EventHandler
 type EventHandler struct {
-	EventPhase   EventPhase     `if:"label=_"`
-	Event        EventName      `if:"label=event"`
-	Locals       *PatternLocals `if:"label=with,optional"`
-	PatternRules PatternRules   `if:"label=rules"`
-	UserComment  string
+	EventPhase  EventPhase     `if:"label=_"`
+	Event       EventName      `if:"label=event"`
+	Locals      []PropertySlot `if:"label=provides,optional"`
+	Rules       []PatternRule  `if:"label=rules"`
+	UserComment string
 }
 
 func (*EventHandler) Compose() composer.Spec {
@@ -2435,7 +2100,7 @@ const EventHandler_Type = "event_handler"
 const EventHandler_Field_EventPhase = "$EVENT_PHASE"
 const EventHandler_Field_Event = "$EVENT"
 const EventHandler_Field_Locals = "$LOCALS"
-const EventHandler_Field_PatternRules = "$PATTERN_RULES"
+const EventHandler_Field_Rules = "$RULES"
 
 func (op *EventHandler) Marshal(m jsn.Marshaler) error {
 	return EventHandler_Marshal(m, op)
@@ -2522,19 +2187,19 @@ func EventHandler_Marshal(m jsn.Marshaler, val *EventHandler) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EventHandler_Field_Event))
 		}
-		e2 := m.MarshalKey("with", EventHandler_Field_Locals)
+		e2 := m.MarshalKey("provides", EventHandler_Field_Locals)
 		if e2 == nil {
-			e2 = PatternLocals_Optional_Marshal(m, &val.Locals)
+			e2 = PropertySlot_Optional_Repeats_Marshal(m, &val.Locals)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", EventHandler_Field_Locals))
 		}
-		e3 := m.MarshalKey("rules", EventHandler_Field_PatternRules)
+		e3 := m.MarshalKey("rules", EventHandler_Field_Rules)
 		if e3 == nil {
-			e3 = PatternRules_Marshal(m, &val.PatternRules)
+			e3 = PatternRule_Repeats_Marshal(m, &val.Rules)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", EventHandler_Field_PatternRules))
+			m.Error(errutil.New(e3, "in flow at", EventHandler_Field_Rules))
 		}
 		m.EndBlock()
 	}
@@ -2808,6 +2473,9 @@ type GrammarDecl struct {
 	Grammar     grammar.GrammarMaker `if:"label=_"`
 	UserComment string
 }
+
+// User implemented slots:
+var _ StoryStatement = (*GrammarDecl)(nil)
 
 func (*GrammarDecl) Compose() composer.Spec {
 	return composer.Spec{
@@ -3526,324 +3194,6 @@ func Lines_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Lines) (err error) {
 	return
 }
 
-// LocalDecl
-type LocalDecl struct {
-	Local       PropertySlot `if:"label=_"`
-	Value       *LocalInit   `if:"label=value,optional"`
-	UserComment string
-}
-
-func (*LocalDecl) Compose() composer.Spec {
-	return composer.Spec{
-		Name: LocalDecl_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const LocalDecl_Type = "local_decl"
-const LocalDecl_Field_Local = "$LOCAL"
-const LocalDecl_Field_Value = "$VALUE"
-
-func (op *LocalDecl) Marshal(m jsn.Marshaler) error {
-	return LocalDecl_Marshal(m, op)
-}
-
-type LocalDecl_Slice []LocalDecl
-
-func (op *LocalDecl_Slice) GetType() string { return LocalDecl_Type }
-
-func (op *LocalDecl_Slice) Marshal(m jsn.Marshaler) error {
-	return LocalDecl_Repeats_Marshal(m, (*[]LocalDecl)(op))
-}
-
-func (op *LocalDecl_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *LocalDecl_Slice) SetSize(cnt int) {
-	var els []LocalDecl
-	if cnt >= 0 {
-		els = make(LocalDecl_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *LocalDecl_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return LocalDecl_Marshal(m, &(*op)[i])
-}
-
-func LocalDecl_Repeats_Marshal(m jsn.Marshaler, vals *[]LocalDecl) error {
-	return jsn.RepeatBlock(m, (*LocalDecl_Slice)(vals))
-}
-
-func LocalDecl_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]LocalDecl) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = LocalDecl_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type LocalDecl_Flow struct{ ptr *LocalDecl }
-
-func (n LocalDecl_Flow) GetType() string      { return LocalDecl_Type }
-func (n LocalDecl_Flow) GetLede() string      { return LocalDecl_Type }
-func (n LocalDecl_Flow) GetFlow() interface{} { return n.ptr }
-func (n LocalDecl_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*LocalDecl); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func LocalDecl_Optional_Marshal(m jsn.Marshaler, pv **LocalDecl) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = LocalDecl_Marshal(m, *pv)
-	} else if !enc {
-		var v LocalDecl
-		if err = LocalDecl_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func LocalDecl_Marshal(m jsn.Marshaler, val *LocalDecl) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(LocalDecl_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", LocalDecl_Field_Local)
-		if e0 == nil {
-			e0 = PropertySlot_Marshal(m, &val.Local)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", LocalDecl_Field_Local))
-		}
-		e1 := m.MarshalKey("value", LocalDecl_Field_Value)
-		if e1 == nil {
-			e1 = LocalInit_Optional_Marshal(m, &val.Value)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", LocalDecl_Field_Value))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// LocalInit
-type LocalInit struct {
-	Value       rt.Assignment `if:"label=_"`
-	UserComment string
-}
-
-func (*LocalInit) Compose() composer.Spec {
-	return composer.Spec{
-		Name: LocalInit_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const LocalInit_Type = "local_init"
-const LocalInit_Field_Value = "$VALUE"
-
-func (op *LocalInit) Marshal(m jsn.Marshaler) error {
-	return LocalInit_Marshal(m, op)
-}
-
-type LocalInit_Slice []LocalInit
-
-func (op *LocalInit_Slice) GetType() string { return LocalInit_Type }
-
-func (op *LocalInit_Slice) Marshal(m jsn.Marshaler) error {
-	return LocalInit_Repeats_Marshal(m, (*[]LocalInit)(op))
-}
-
-func (op *LocalInit_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *LocalInit_Slice) SetSize(cnt int) {
-	var els []LocalInit
-	if cnt >= 0 {
-		els = make(LocalInit_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *LocalInit_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return LocalInit_Marshal(m, &(*op)[i])
-}
-
-func LocalInit_Repeats_Marshal(m jsn.Marshaler, vals *[]LocalInit) error {
-	return jsn.RepeatBlock(m, (*LocalInit_Slice)(vals))
-}
-
-func LocalInit_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]LocalInit) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = LocalInit_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type LocalInit_Flow struct{ ptr *LocalInit }
-
-func (n LocalInit_Flow) GetType() string      { return LocalInit_Type }
-func (n LocalInit_Flow) GetLede() string      { return LocalInit_Type }
-func (n LocalInit_Flow) GetFlow() interface{} { return n.ptr }
-func (n LocalInit_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*LocalInit); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func LocalInit_Optional_Marshal(m jsn.Marshaler, pv **LocalInit) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = LocalInit_Marshal(m, *pv)
-	} else if !enc {
-		var v LocalInit
-		if err = LocalInit_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func LocalInit_Marshal(m jsn.Marshaler, val *LocalInit) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(LocalInit_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", LocalInit_Field_Value)
-		if e0 == nil {
-			e0 = rt.Assignment_Marshal(m, &val.Value)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", LocalInit_Field_Value))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// Make
-type Make struct {
-	Name        string     `if:"label=_,type=text"`
-	Arguments   *Arguments `if:"label=arguments,optional"`
-	UserComment string
-}
-
-// User implemented slots:
-var _ rt.RecordEval = (*Make)(nil)
-
-func (*Make) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Make_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Make_Type = "make"
-const Make_Field_Name = "$NAME"
-const Make_Field_Arguments = "$ARGUMENTS"
-
-func (op *Make) Marshal(m jsn.Marshaler) error {
-	return Make_Marshal(m, op)
-}
-
-type Make_Slice []Make
-
-func (op *Make_Slice) GetType() string { return Make_Type }
-
-func (op *Make_Slice) Marshal(m jsn.Marshaler) error {
-	return Make_Repeats_Marshal(m, (*[]Make)(op))
-}
-
-func (op *Make_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Make_Slice) SetSize(cnt int) {
-	var els []Make
-	if cnt >= 0 {
-		els = make(Make_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Make_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Make_Marshal(m, &(*op)[i])
-}
-
-func Make_Repeats_Marshal(m jsn.Marshaler, vals *[]Make) error {
-	return jsn.RepeatBlock(m, (*Make_Slice)(vals))
-}
-
-func Make_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Make) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Make_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Make_Flow struct{ ptr *Make }
-
-func (n Make_Flow) GetType() string      { return Make_Type }
-func (n Make_Flow) GetLede() string      { return Make_Type }
-func (n Make_Flow) GetFlow() interface{} { return n.ptr }
-func (n Make_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Make); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Make_Optional_Marshal(m jsn.Marshaler, pv **Make) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Make_Marshal(m, *pv)
-	} else if !enc {
-		var v Make
-		if err = Make_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Make_Marshal(m jsn.Marshaler, val *Make) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(Make_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Make_Field_Name)
-		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Make_Field_Name))
-		}
-		e1 := m.MarshalKey("arguments", Make_Field_Arguments)
-		if e1 == nil {
-			e1 = Arguments_Optional_Marshal(m, &val.Arguments)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Make_Field_Arguments))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // MakeOpposite
 type MakeOpposite struct {
 	Word        string `if:"label=_,type=text"`
@@ -3939,14 +3289,14 @@ func MakeOpposite_Marshal(m jsn.Marshaler, val *MakeOpposite) (err error) {
 	if err = m.MarshalBlock(MakeOpposite_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", MakeOpposite_Field_Word)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Word)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Word)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", MakeOpposite_Field_Word))
 		}
 		e1 := m.MarshalKey("opposite", MakeOpposite_Field_Opposite)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Opposite)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Opposite)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", MakeOpposite_Field_Opposite))
@@ -4051,14 +3401,14 @@ func MakePlural_Marshal(m jsn.Marshaler, val *MakePlural) (err error) {
 	if err = m.MarshalBlock(MakePlural_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", MakePlural_Field_Singular)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Singular)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Singular)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", MakePlural_Field_Singular))
 		}
 		e1 := m.MarshalKey("plural", MakePlural_Field_Plural)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Plural)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Plural)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", MakePlural_Field_Plural))
@@ -4824,7 +4174,6 @@ func NamedNoun_Marshal(m jsn.Marshaler, val *NamedNoun) (err error) {
 type NamedProperty struct {
 	Name        string `if:"label=_,type=text"`
 	Type        string `if:"label=type,optional,type=text"`
-	Comment     Lines  `if:"label=comment,optional"`
 	UserComment string
 }
 
@@ -4838,7 +4187,6 @@ func (*NamedProperty) Compose() composer.Spec {
 const NamedProperty_Type = "named_property"
 const NamedProperty_Field_Name = "$NAME"
 const NamedProperty_Field_Type = "$TYPE"
-const NamedProperty_Field_Comment = "$COMMENT"
 
 func (op *NamedProperty) Marshal(m jsn.Marshaler) error {
 	return NamedProperty_Marshal(m, op)
@@ -4913,24 +4261,17 @@ func NamedProperty_Marshal(m jsn.Marshaler, val *NamedProperty) (err error) {
 	if err = m.MarshalBlock(NamedProperty_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NamedProperty_Field_Name)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", NamedProperty_Field_Name))
 		}
 		e1 := m.MarshalKey("type", NamedProperty_Field_Type)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", NamedProperty_Field_Type))
-		}
-		e2 := m.MarshalKey("comment", NamedProperty_Field_Comment)
-		if e2 == nil {
-			e2 = Lines_Optional_Marshal(m, &val.Comment)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", NamedProperty_Field_Comment))
 		}
 		m.EndBlock()
 	}
@@ -5798,6 +5139,7 @@ func NounTraits_Marshal(m jsn.Marshaler, val *NounTraits) (err error) {
 // NumListProperty
 type NumListProperty struct {
 	NamedProperty `if:"label=_"`
+	Initially     rt.NumListEval `if:"label=initially,optional"`
 	UserComment   string
 }
 
@@ -5816,7 +5158,7 @@ const NumListProperty_Type = "num_list_property"
 const NumListProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const NumListProperty_Field_Name = "$NAME"
 const NumListProperty_Field_Type = "$TYPE"
-const NumListProperty_Field_Comment = "$COMMENT"
+const NumListProperty_Field_Initially = "$INITIALLY"
 
 func (op *NumListProperty) Marshal(m jsn.Marshaler) error {
 	return NumListProperty_Marshal(m, op)
@@ -5891,24 +5233,24 @@ func NumListProperty_Marshal(m jsn.Marshaler, val *NumListProperty) (err error) 
 	if err = m.MarshalBlock(NumListProperty_Flow{val}); err == nil {
 		e1 := m.MarshalKey("named", NumListProperty_Field_Name)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", NumListProperty_Field_Name))
 		}
 		e2 := m.MarshalKey("of", NumListProperty_Field_Type)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", NumListProperty_Field_Type))
 		}
-		e3 := m.MarshalKey("desc", NumListProperty_Field_Comment)
+		e3 := m.MarshalKey("initially", NumListProperty_Field_Initially)
 		if e3 == nil {
-			e3 = Lines_Optional_Marshal(m, &val.Comment)
+			e3 = rt.NumListEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", NumListProperty_Field_Comment))
+			m.Error(errutil.New(e3, "in flow at", NumListProperty_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -5918,6 +5260,7 @@ func NumListProperty_Marshal(m jsn.Marshaler, val *NumListProperty) (err error) 
 // NumberProperty
 type NumberProperty struct {
 	NamedProperty `if:"label=_"`
+	Initially     rt.NumberEval `if:"label=initially,optional"`
 	UserComment   string
 }
 
@@ -5936,7 +5279,7 @@ const NumberProperty_Type = "number_property"
 const NumberProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const NumberProperty_Field_Name = "$NAME"
 const NumberProperty_Field_Type = "$TYPE"
-const NumberProperty_Field_Comment = "$COMMENT"
+const NumberProperty_Field_Initially = "$INITIALLY"
 
 func (op *NumberProperty) Marshal(m jsn.Marshaler) error {
 	return NumberProperty_Marshal(m, op)
@@ -6011,24 +5354,24 @@ func NumberProperty_Marshal(m jsn.Marshaler, val *NumberProperty) (err error) {
 	if err = m.MarshalBlock(NumberProperty_Flow{val}); err == nil {
 		e1 := m.MarshalKey("named", NumberProperty_Field_Name)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", NumberProperty_Field_Name))
 		}
 		e2 := m.MarshalKey("of", NumberProperty_Field_Type)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", NumberProperty_Field_Type))
 		}
-		e3 := m.MarshalKey("desc", NumberProperty_Field_Comment)
+		e3 := m.MarshalKey("initially", NumberProperty_Field_Initially)
 		if e3 == nil {
-			e3 = Lines_Optional_Marshal(m, &val.Comment)
+			e3 = rt.NumberEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", NumberProperty_Field_Comment))
+			m.Error(errutil.New(e3, "in flow at", NumberProperty_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -6451,10 +5794,10 @@ func Paragraph_Marshal(m jsn.Marshaler, val *Paragraph) (err error) {
 
 // PatternActions Actions to take when using a pattern.
 type PatternActions struct {
-	Name          core.PatternName `if:"label=_"`
-	PatternLocals *PatternLocals   `if:"label=with,optional"`
-	PatternRules  PatternRules     `if:"label=rules"`
-	UserComment   string
+	Name        core.PatternName `if:"label=_"`
+	Locals      []PropertySlot   `if:"label=provides,optional"`
+	Rules       []PatternRule    `if:"label=rules"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -6470,8 +5813,8 @@ func (*PatternActions) Compose() composer.Spec {
 
 const PatternActions_Type = "pattern_actions"
 const PatternActions_Field_Name = "$NAME"
-const PatternActions_Field_PatternLocals = "$PATTERN_LOCALS"
-const PatternActions_Field_PatternRules = "$PATTERN_RULES"
+const PatternActions_Field_Locals = "$LOCALS"
+const PatternActions_Field_Rules = "$RULES"
 
 func (op *PatternActions) Marshal(m jsn.Marshaler) error {
 	return PatternActions_Marshal(m, op)
@@ -6551,19 +5894,19 @@ func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", PatternActions_Field_Name))
 		}
-		e1 := m.MarshalKey("with", PatternActions_Field_PatternLocals)
+		e1 := m.MarshalKey("provides", PatternActions_Field_Locals)
 		if e1 == nil {
-			e1 = PatternLocals_Optional_Marshal(m, &val.PatternLocals)
+			e1 = PropertySlot_Optional_Repeats_Marshal(m, &val.Locals)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", PatternActions_Field_PatternLocals))
+			m.Error(errutil.New(e1, "in flow at", PatternActions_Field_Locals))
 		}
-		e2 := m.MarshalKey("rules", PatternActions_Field_PatternRules)
+		e2 := m.MarshalKey("rules", PatternActions_Field_Rules)
 		if e2 == nil {
-			e2 = PatternRules_Marshal(m, &val.PatternRules)
+			e2 = PatternRule_Repeats_Marshal(m, &val.Rules)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", PatternActions_Field_PatternRules))
+			m.Error(errutil.New(e2, "in flow at", PatternActions_Field_Rules))
 		}
 		m.EndBlock()
 	}
@@ -6572,10 +5915,9 @@ func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
 
 // PatternDecl
 type PatternDecl struct {
-	Name          core.PatternName      `if:"label=_"`
-	Optvars       *PatternVariablesTail `if:"label=requires,optional"`
-	PatternReturn *PatternReturn        `if:"label=returns,optional"`
-	About         *Comment              `if:"label=about,optional"`
+	Name          core.PatternName `if:"label=_"`
+	Params        []PropertySlot   `if:"label=requires,optional"`
+	PatternReturn *PatternReturn   `if:"label=returns,optional"`
 	UserComment   string
 }
 
@@ -6592,9 +5934,8 @@ func (*PatternDecl) Compose() composer.Spec {
 
 const PatternDecl_Type = "pattern_decl"
 const PatternDecl_Field_Name = "$NAME"
-const PatternDecl_Field_Optvars = "$OPTVARS"
+const PatternDecl_Field_Params = "$PARAMS"
 const PatternDecl_Field_PatternReturn = "$PATTERN_RETURN"
-const PatternDecl_Field_About = "$ABOUT"
 
 func (op *PatternDecl) Marshal(m jsn.Marshaler) error {
 	return PatternDecl_Marshal(m, op)
@@ -6674,12 +6015,12 @@ func PatternDecl_Marshal(m jsn.Marshaler, val *PatternDecl) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", PatternDecl_Field_Name))
 		}
-		e1 := m.MarshalKey("requires", PatternDecl_Field_Optvars)
+		e1 := m.MarshalKey("requires", PatternDecl_Field_Params)
 		if e1 == nil {
-			e1 = PatternVariablesTail_Optional_Marshal(m, &val.Optvars)
+			e1 = PropertySlot_Optional_Repeats_Marshal(m, &val.Params)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", PatternDecl_Field_Optvars))
+			m.Error(errutil.New(e1, "in flow at", PatternDecl_Field_Params))
 		}
 		e2 := m.MarshalKey("returns", PatternDecl_Field_PatternReturn)
 		if e2 == nil {
@@ -6687,13 +6028,6 @@ func PatternDecl_Marshal(m jsn.Marshaler, val *PatternDecl) (err error) {
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", PatternDecl_Field_PatternReturn))
-		}
-		e3 := m.MarshalKey("about", PatternDecl_Field_About)
-		if e3 == nil {
-			e3 = Comment_Optional_Marshal(m, &val.About)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", PatternDecl_Field_About))
 		}
 		m.EndBlock()
 	}
@@ -6780,105 +6114,6 @@ func PatternFlags_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternFlags) error {
 func PatternFlags_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternFlags) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PatternFlags_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// PatternLocals
-type PatternLocals struct {
-	LocalDecl   []LocalDecl `if:"label=_"`
-	UserComment string
-}
-
-func (*PatternLocals) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PatternLocals_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const PatternLocals_Type = "pattern_locals"
-const PatternLocals_Field_LocalDecl = "$LOCAL_DECL"
-
-func (op *PatternLocals) Marshal(m jsn.Marshaler) error {
-	return PatternLocals_Marshal(m, op)
-}
-
-type PatternLocals_Slice []PatternLocals
-
-func (op *PatternLocals_Slice) GetType() string { return PatternLocals_Type }
-
-func (op *PatternLocals_Slice) Marshal(m jsn.Marshaler) error {
-	return PatternLocals_Repeats_Marshal(m, (*[]PatternLocals)(op))
-}
-
-func (op *PatternLocals_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PatternLocals_Slice) SetSize(cnt int) {
-	var els []PatternLocals
-	if cnt >= 0 {
-		els = make(PatternLocals_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PatternLocals_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PatternLocals_Marshal(m, &(*op)[i])
-}
-
-func PatternLocals_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternLocals) error {
-	return jsn.RepeatBlock(m, (*PatternLocals_Slice)(vals))
-}
-
-func PatternLocals_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternLocals) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PatternLocals_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type PatternLocals_Flow struct{ ptr *PatternLocals }
-
-func (n PatternLocals_Flow) GetType() string      { return PatternLocals_Type }
-func (n PatternLocals_Flow) GetLede() string      { return PatternLocals_Type }
-func (n PatternLocals_Flow) GetFlow() interface{} { return n.ptr }
-func (n PatternLocals_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*PatternLocals); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func PatternLocals_Optional_Marshal(m jsn.Marshaler, pv **PatternLocals) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = PatternLocals_Marshal(m, *pv)
-	} else if !enc {
-		var v PatternLocals
-		if err = PatternLocals_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func PatternLocals_Marshal(m jsn.Marshaler, val *PatternLocals) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(PatternLocals_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PatternLocals_Field_LocalDecl)
-		if e0 == nil {
-			e0 = LocalDecl_Repeats_Marshal(m, &val.LocalDecl)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PatternLocals_Field_LocalDecl))
-		}
-		m.EndBlock()
 	}
 	return
 }
@@ -6987,7 +6222,7 @@ func PatternReturn_Marshal(m jsn.Marshaler, val *PatternReturn) (err error) {
 type PatternRule struct {
 	Guard       rt.BoolEval  `if:"label=_"`
 	Flags       PatternFlags `if:"label=flags,optional"`
-	Hook        ProgramHook  `if:"label=hook"`
+	Does        []rt.Execute `if:"label=does"`
 	UserComment string
 }
 
@@ -7001,7 +6236,7 @@ func (*PatternRule) Compose() composer.Spec {
 const PatternRule_Type = "pattern_rule"
 const PatternRule_Field_Guard = "$GUARD"
 const PatternRule_Field_Flags = "$FLAGS"
-const PatternRule_Field_Hook = "$HOOK"
+const PatternRule_Field_Does = "$DOES"
 
 func (op *PatternRule) Marshal(m jsn.Marshaler) error {
 	return PatternRule_Marshal(m, op)
@@ -7088,111 +6323,12 @@ func PatternRule_Marshal(m jsn.Marshaler, val *PatternRule) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", PatternRule_Field_Flags))
 		}
-		e2 := m.MarshalKey("hook", PatternRule_Field_Hook)
+		e2 := m.MarshalKey("does", PatternRule_Field_Does)
 		if e2 == nil {
-			e2 = ProgramHook_Marshal(m, &val.Hook)
+			e2 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", PatternRule_Field_Hook))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// PatternRules
-type PatternRules struct {
-	PatternRule []PatternRule `if:"label=_,optional"`
-	UserComment string
-}
-
-func (*PatternRules) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PatternRules_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const PatternRules_Type = "pattern_rules"
-const PatternRules_Field_PatternRule = "$PATTERN_RULE"
-
-func (op *PatternRules) Marshal(m jsn.Marshaler) error {
-	return PatternRules_Marshal(m, op)
-}
-
-type PatternRules_Slice []PatternRules
-
-func (op *PatternRules_Slice) GetType() string { return PatternRules_Type }
-
-func (op *PatternRules_Slice) Marshal(m jsn.Marshaler) error {
-	return PatternRules_Repeats_Marshal(m, (*[]PatternRules)(op))
-}
-
-func (op *PatternRules_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PatternRules_Slice) SetSize(cnt int) {
-	var els []PatternRules
-	if cnt >= 0 {
-		els = make(PatternRules_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PatternRules_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PatternRules_Marshal(m, &(*op)[i])
-}
-
-func PatternRules_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternRules) error {
-	return jsn.RepeatBlock(m, (*PatternRules_Slice)(vals))
-}
-
-func PatternRules_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternRules) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PatternRules_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type PatternRules_Flow struct{ ptr *PatternRules }
-
-func (n PatternRules_Flow) GetType() string      { return PatternRules_Type }
-func (n PatternRules_Flow) GetLede() string      { return PatternRules_Type }
-func (n PatternRules_Flow) GetFlow() interface{} { return n.ptr }
-func (n PatternRules_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*PatternRules); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func PatternRules_Optional_Marshal(m jsn.Marshaler, pv **PatternRules) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = PatternRules_Marshal(m, *pv)
-	} else if !enc {
-		var v PatternRules
-		if err = PatternRules_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func PatternRules_Marshal(m jsn.Marshaler, val *PatternRules) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(PatternRules_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PatternRules_Field_PatternRule)
-		if e0 == nil {
-			e0 = PatternRule_Optional_Repeats_Marshal(m, &val.PatternRule)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PatternRules_Field_PatternRule))
+			m.Error(errutil.New(e2, "in flow at", PatternRule_Field_Does))
 		}
 		m.EndBlock()
 	}
@@ -7284,106 +6420,6 @@ func PatternType_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternType) (e
 	return
 }
 
-// PatternVariablesTail Storage for values used during the execution of a pattern.
-type PatternVariablesTail struct {
-	Props       []PropertySlot `if:"label=_"`
-	UserComment string
-}
-
-func (*PatternVariablesTail) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PatternVariablesTail_Type,
-		Uses: composer.Type_Flow,
-		Lede: "pattern_requires",
-	}
-}
-
-const PatternVariablesTail_Type = "pattern_variables_tail"
-const PatternVariablesTail_Field_Props = "$PROPS"
-
-func (op *PatternVariablesTail) Marshal(m jsn.Marshaler) error {
-	return PatternVariablesTail_Marshal(m, op)
-}
-
-type PatternVariablesTail_Slice []PatternVariablesTail
-
-func (op *PatternVariablesTail_Slice) GetType() string { return PatternVariablesTail_Type }
-
-func (op *PatternVariablesTail_Slice) Marshal(m jsn.Marshaler) error {
-	return PatternVariablesTail_Repeats_Marshal(m, (*[]PatternVariablesTail)(op))
-}
-
-func (op *PatternVariablesTail_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PatternVariablesTail_Slice) SetSize(cnt int) {
-	var els []PatternVariablesTail
-	if cnt >= 0 {
-		els = make(PatternVariablesTail_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PatternVariablesTail_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PatternVariablesTail_Marshal(m, &(*op)[i])
-}
-
-func PatternVariablesTail_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternVariablesTail) error {
-	return jsn.RepeatBlock(m, (*PatternVariablesTail_Slice)(vals))
-}
-
-func PatternVariablesTail_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternVariablesTail) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PatternVariablesTail_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type PatternVariablesTail_Flow struct{ ptr *PatternVariablesTail }
-
-func (n PatternVariablesTail_Flow) GetType() string      { return PatternVariablesTail_Type }
-func (n PatternVariablesTail_Flow) GetLede() string      { return "pattern_requires" }
-func (n PatternVariablesTail_Flow) GetFlow() interface{} { return n.ptr }
-func (n PatternVariablesTail_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*PatternVariablesTail); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func PatternVariablesTail_Optional_Marshal(m jsn.Marshaler, pv **PatternVariablesTail) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = PatternVariablesTail_Marshal(m, *pv)
-	} else if !enc {
-		var v PatternVariablesTail
-		if err = PatternVariablesTail_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func PatternVariablesTail_Marshal(m jsn.Marshaler, val *PatternVariablesTail) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(PatternVariablesTail_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PatternVariablesTail_Field_Props)
-		if e0 == nil {
-			e0 = PropertySlot_Repeats_Marshal(m, &val.Props)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PatternVariablesTail_Field_Props))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // PluralKinds requires a user-specified string.
 type PluralKinds struct {
 	Str string
@@ -7455,104 +6491,6 @@ func PluralKinds_Repeats_Marshal(m jsn.Marshaler, vals *[]PluralKinds) error {
 func PluralKinds_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PluralKinds) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PluralKinds_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// ProgramHook swaps between various options
-type ProgramHook struct {
-	Choice string
-	Value  interface{}
-}
-
-var ProgramHook_Optional_Marshal = ProgramHook_Marshal
-
-const ProgramHook_Activity_Opt = "$ACTIVITY"
-
-func (*ProgramHook) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ProgramHook_Type,
-		Uses: composer.Type_Swap,
-		Choices: []string{
-			ProgramHook_Activity_Opt,
-		},
-		Swaps: []interface{}{
-			(*core.Activity)(nil),
-		},
-	}
-}
-
-const ProgramHook_Type = "program_hook"
-
-func (op *ProgramHook) GetType() string { return ProgramHook_Type }
-
-func (op *ProgramHook) GetSwap() (string, interface{}) {
-	return op.Choice, op.Value
-}
-
-func (op *ProgramHook) SetSwap(c string) (okay bool) {
-	switch c {
-	case "":
-		op.Choice, op.Value = c, nil
-		okay = true
-	case ProgramHook_Activity_Opt:
-		op.Choice, op.Value = c, new(core.Activity)
-		okay = true
-	}
-	return
-}
-
-func (op *ProgramHook) Marshal(m jsn.Marshaler) error {
-	return ProgramHook_Marshal(m, op)
-}
-func ProgramHook_Marshal(m jsn.Marshaler, val *ProgramHook) (err error) {
-	if err = m.MarshalBlock(val); err == nil {
-		if _, ptr := val.GetSwap(); ptr != nil {
-			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-type ProgramHook_Slice []ProgramHook
-
-func (op *ProgramHook_Slice) GetType() string { return ProgramHook_Type }
-
-func (op *ProgramHook_Slice) Marshal(m jsn.Marshaler) error {
-	return ProgramHook_Repeats_Marshal(m, (*[]ProgramHook)(op))
-}
-
-func (op *ProgramHook_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ProgramHook_Slice) SetSize(cnt int) {
-	var els []ProgramHook
-	if cnt >= 0 {
-		els = make(ProgramHook_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ProgramHook_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ProgramHook_Marshal(m, &(*op)[i])
-}
-
-func ProgramHook_Repeats_Marshal(m jsn.Marshaler, vals *[]ProgramHook) error {
-	return jsn.RepeatBlock(m, (*ProgramHook_Slice)(vals))
-}
-
-func ProgramHook_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ProgramHook) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ProgramHook_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -7704,6 +6642,7 @@ func PropertySlot_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PropertySlot) 
 // RecordListProperty
 type RecordListProperty struct {
 	NamedProperty `if:"label=_"`
+	Initially     rt.RecordListEval `if:"label=initially,optional"`
 	UserComment   string
 }
 
@@ -7722,7 +6661,7 @@ const RecordListProperty_Type = "record_list_property"
 const RecordListProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const RecordListProperty_Field_Name = "$NAME"
 const RecordListProperty_Field_Type = "$TYPE"
-const RecordListProperty_Field_Comment = "$COMMENT"
+const RecordListProperty_Field_Initially = "$INITIALLY"
 
 func (op *RecordListProperty) Marshal(m jsn.Marshaler) error {
 	return RecordListProperty_Marshal(m, op)
@@ -7797,24 +6736,24 @@ func RecordListProperty_Marshal(m jsn.Marshaler, val *RecordListProperty) (err e
 	if err = m.MarshalBlock(RecordListProperty_Flow{val}); err == nil {
 		e1 := m.MarshalKey("named", RecordListProperty_Field_Name)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", RecordListProperty_Field_Name))
 		}
 		e2 := m.MarshalKey("of", RecordListProperty_Field_Type)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", RecordListProperty_Field_Type))
 		}
-		e3 := m.MarshalKey("desc", RecordListProperty_Field_Comment)
+		e3 := m.MarshalKey("initially", RecordListProperty_Field_Initially)
 		if e3 == nil {
-			e3 = Lines_Optional_Marshal(m, &val.Comment)
+			e3 = rt.RecordListEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", RecordListProperty_Field_Comment))
+			m.Error(errutil.New(e3, "in flow at", RecordListProperty_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -7824,6 +6763,7 @@ func RecordListProperty_Marshal(m jsn.Marshaler, val *RecordListProperty) (err e
 // RecordProperty
 type RecordProperty struct {
 	NamedProperty `if:"label=_"`
+	Initially     rt.RecordEval `if:"label=initially,optional"`
 	UserComment   string
 }
 
@@ -7842,7 +6782,7 @@ const RecordProperty_Type = "record_property"
 const RecordProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const RecordProperty_Field_Name = "$NAME"
 const RecordProperty_Field_Type = "$TYPE"
-const RecordProperty_Field_Comment = "$COMMENT"
+const RecordProperty_Field_Initially = "$INITIALLY"
 
 func (op *RecordProperty) Marshal(m jsn.Marshaler) error {
 	return RecordProperty_Marshal(m, op)
@@ -7917,24 +6857,24 @@ func RecordProperty_Marshal(m jsn.Marshaler, val *RecordProperty) (err error) {
 	if err = m.MarshalBlock(RecordProperty_Flow{val}); err == nil {
 		e1 := m.MarshalKey("named", RecordProperty_Field_Name)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", RecordProperty_Field_Name))
 		}
 		e2 := m.MarshalKey("of", RecordProperty_Field_Type)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", RecordProperty_Field_Type))
 		}
-		e3 := m.MarshalKey("desc", RecordProperty_Field_Comment)
+		e3 := m.MarshalKey("initially", RecordProperty_Field_Initially)
 		if e3 == nil {
-			e3 = Lines_Optional_Marshal(m, &val.Comment)
+			e3 = rt.RecordEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", RecordProperty_Field_Comment))
+			m.Error(errutil.New(e3, "in flow at", RecordProperty_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -8285,127 +7225,6 @@ func RenderTemplate_Marshal(m jsn.Marshaler, val *RenderTemplate) (err error) {
 	return
 }
 
-// Send
-type Send struct {
-	Event       string          `if:"label=_,type=text"`
-	Path        rt.TextListEval `if:"label=path"`
-	Arguments   *Arguments      `if:"label=arguments,optional"`
-	UserComment string
-}
-
-// User implemented slots:
-var _ rt.Execute = (*Send)(nil)
-var _ rt.BoolEval = (*Send)(nil)
-
-func (*Send) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Send_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Send_Type = "send"
-const Send_Field_Event = "$EVENT"
-const Send_Field_Path = "$PATH"
-const Send_Field_Arguments = "$ARGUMENTS"
-
-func (op *Send) Marshal(m jsn.Marshaler) error {
-	return Send_Marshal(m, op)
-}
-
-type Send_Slice []Send
-
-func (op *Send_Slice) GetType() string { return Send_Type }
-
-func (op *Send_Slice) Marshal(m jsn.Marshaler) error {
-	return Send_Repeats_Marshal(m, (*[]Send)(op))
-}
-
-func (op *Send_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Send_Slice) SetSize(cnt int) {
-	var els []Send
-	if cnt >= 0 {
-		els = make(Send_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Send_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Send_Marshal(m, &(*op)[i])
-}
-
-func Send_Repeats_Marshal(m jsn.Marshaler, vals *[]Send) error {
-	return jsn.RepeatBlock(m, (*Send_Slice)(vals))
-}
-
-func Send_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Send) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Send_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Send_Flow struct{ ptr *Send }
-
-func (n Send_Flow) GetType() string      { return Send_Type }
-func (n Send_Flow) GetLede() string      { return Send_Type }
-func (n Send_Flow) GetFlow() interface{} { return n.ptr }
-func (n Send_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Send); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Send_Optional_Marshal(m jsn.Marshaler, pv **Send) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Send_Marshal(m, *pv)
-	} else if !enc {
-		var v Send
-		if err = Send_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Send_Marshal(m jsn.Marshaler, val *Send) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(Send_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Send_Field_Event)
-		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Event)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Send_Field_Event))
-		}
-		e1 := m.MarshalKey("path", Send_Field_Path)
-		if e1 == nil {
-			e1 = rt.TextListEval_Marshal(m, &val.Path)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Send_Field_Path))
-		}
-		e2 := m.MarshalKey("arguments", Send_Field_Arguments)
-		if e2 == nil {
-			e2 = Arguments_Optional_Marshal(m, &val.Arguments)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", Send_Field_Arguments))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // ShuffleText
 type ShuffleText struct {
 	Parts       []rt.TextEval `if:"label=_"`
@@ -8687,7 +7506,7 @@ func StoppingText_Marshal(m jsn.Marshaler, val *StoppingText) (err error) {
 
 // Story
 type Story struct {
-	Paragraph   []Paragraph `if:"label=_"`
+	Paragraph   []Paragraph `if:"label=paragraphs"`
 	UserComment string
 }
 
@@ -8695,6 +7514,7 @@ func (*Story) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Story_Type,
 		Uses: composer.Type_Flow,
+		Lede: "story",
 	}
 }
 
@@ -8748,7 +7568,7 @@ func Story_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Story) (err error) {
 type Story_Flow struct{ ptr *Story }
 
 func (n Story_Flow) GetType() string      { return Story_Type }
-func (n Story_Flow) GetLede() string      { return Story_Type }
+func (n Story_Flow) GetLede() string      { return "story" }
 func (n Story_Flow) GetFlow() interface{} { return n.ptr }
 func (n Story_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*Story); ok {
@@ -8772,12 +7592,206 @@ func Story_Optional_Marshal(m jsn.Marshaler, pv **Story) (err error) {
 func Story_Marshal(m jsn.Marshaler, val *Story) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(Story_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Story_Field_Paragraph)
+		e0 := m.MarshalKey("paragraphs", Story_Field_Paragraph)
 		if e0 == nil {
 			e0 = Paragraph_Repeats_Marshal(m, &val.Paragraph)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Story_Field_Paragraph))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// StoryBreak
+type StoryBreak struct {
+	UserComment string
+}
+
+// User implemented slots:
+var _ StoryStatement = (*StoryBreak)(nil)
+
+func (*StoryBreak) Compose() composer.Spec {
+	return composer.Spec{
+		Name: StoryBreak_Type,
+		Uses: composer.Type_Flow,
+		Lede: "--",
+	}
+}
+
+const StoryBreak_Type = "story_break"
+
+func (op *StoryBreak) Marshal(m jsn.Marshaler) error {
+	return StoryBreak_Marshal(m, op)
+}
+
+type StoryBreak_Slice []StoryBreak
+
+func (op *StoryBreak_Slice) GetType() string { return StoryBreak_Type }
+
+func (op *StoryBreak_Slice) Marshal(m jsn.Marshaler) error {
+	return StoryBreak_Repeats_Marshal(m, (*[]StoryBreak)(op))
+}
+
+func (op *StoryBreak_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *StoryBreak_Slice) SetSize(cnt int) {
+	var els []StoryBreak
+	if cnt >= 0 {
+		els = make(StoryBreak_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *StoryBreak_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return StoryBreak_Marshal(m, &(*op)[i])
+}
+
+func StoryBreak_Repeats_Marshal(m jsn.Marshaler, vals *[]StoryBreak) error {
+	return jsn.RepeatBlock(m, (*StoryBreak_Slice)(vals))
+}
+
+func StoryBreak_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoryBreak) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = StoryBreak_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type StoryBreak_Flow struct{ ptr *StoryBreak }
+
+func (n StoryBreak_Flow) GetType() string      { return StoryBreak_Type }
+func (n StoryBreak_Flow) GetLede() string      { return "--" }
+func (n StoryBreak_Flow) GetFlow() interface{} { return n.ptr }
+func (n StoryBreak_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*StoryBreak); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func StoryBreak_Optional_Marshal(m jsn.Marshaler, pv **StoryBreak) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = StoryBreak_Marshal(m, *pv)
+	} else if !enc {
+		var v StoryBreak
+		if err = StoryBreak_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func StoryBreak_Marshal(m jsn.Marshaler, val *StoryBreak) (err error) {
+	m.SetComment(&val.UserComment)
+	if err = m.MarshalBlock(StoryBreak_Flow{val}); err == nil {
+		m.EndBlock()
+	}
+	return
+}
+
+// StoryFile
+type StoryFile struct {
+	StoryLines  []StoryStatement `if:"label=_"`
+	UserComment string
+}
+
+func (*StoryFile) Compose() composer.Spec {
+	return composer.Spec{
+		Name: StoryFile_Type,
+		Uses: composer.Type_Flow,
+		Lede: "tapestry",
+	}
+}
+
+const StoryFile_Type = "story_file"
+const StoryFile_Field_StoryLines = "$STORY_LINES"
+
+func (op *StoryFile) Marshal(m jsn.Marshaler) error {
+	return StoryFile_Marshal(m, op)
+}
+
+type StoryFile_Slice []StoryFile
+
+func (op *StoryFile_Slice) GetType() string { return StoryFile_Type }
+
+func (op *StoryFile_Slice) Marshal(m jsn.Marshaler) error {
+	return StoryFile_Repeats_Marshal(m, (*[]StoryFile)(op))
+}
+
+func (op *StoryFile_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *StoryFile_Slice) SetSize(cnt int) {
+	var els []StoryFile
+	if cnt >= 0 {
+		els = make(StoryFile_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *StoryFile_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return StoryFile_Marshal(m, &(*op)[i])
+}
+
+func StoryFile_Repeats_Marshal(m jsn.Marshaler, vals *[]StoryFile) error {
+	return jsn.RepeatBlock(m, (*StoryFile_Slice)(vals))
+}
+
+func StoryFile_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoryFile) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = StoryFile_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type StoryFile_Flow struct{ ptr *StoryFile }
+
+func (n StoryFile_Flow) GetType() string      { return StoryFile_Type }
+func (n StoryFile_Flow) GetLede() string      { return "tapestry" }
+func (n StoryFile_Flow) GetFlow() interface{} { return n.ptr }
+func (n StoryFile_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*StoryFile); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func StoryFile_Optional_Marshal(m jsn.Marshaler, pv **StoryFile) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = StoryFile_Marshal(m, *pv)
+	} else if !enc {
+		var v StoryFile
+		if err = StoryFile_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func StoryFile_Marshal(m jsn.Marshaler, val *StoryFile) (err error) {
+	m.SetComment(&val.UserComment)
+	if err = m.MarshalBlock(StoryFile_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", StoryFile_Field_StoryLines)
+		if e0 == nil {
+			e0 = StoryStatement_Repeats_Marshal(m, &val.StoryLines)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", StoryFile_Field_StoryLines))
 		}
 		m.EndBlock()
 	}
@@ -9040,8 +8054,8 @@ func TestOutput_Marshal(m jsn.Marshaler, val *TestOutput) (err error) {
 
 // TestRule
 type TestRule struct {
-	TestName    TestName    `if:"label=_"`
-	Hook        ProgramHook `if:"label=hook"`
+	TestName    TestName     `if:"label=_"`
+	Does        []rt.Execute `if:"label=does"`
 	UserComment string
 }
 
@@ -9057,7 +8071,7 @@ func (*TestRule) Compose() composer.Spec {
 
 const TestRule_Type = "test_rule"
 const TestRule_Field_TestName = "$TEST_NAME"
-const TestRule_Field_Hook = "$HOOK"
+const TestRule_Field_Does = "$DOES"
 
 func (op *TestRule) Marshal(m jsn.Marshaler) error {
 	return TestRule_Marshal(m, op)
@@ -9137,12 +8151,12 @@ func TestRule_Marshal(m jsn.Marshaler, val *TestRule) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", TestRule_Field_TestName))
 		}
-		e1 := m.MarshalKey("hook", TestRule_Field_Hook)
+		e1 := m.MarshalKey("does", TestRule_Field_Does)
 		if e1 == nil {
-			e1 = ProgramHook_Marshal(m, &val.Hook)
+			e1 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", TestRule_Field_Hook))
+			m.Error(errutil.New(e1, "in flow at", TestRule_Field_Does))
 		}
 		m.EndBlock()
 	}
@@ -9151,8 +8165,8 @@ func TestRule_Marshal(m jsn.Marshaler, val *TestRule) (err error) {
 
 // TestScene
 type TestScene struct {
-	TestName    TestName `if:"label=_"`
-	Story       Story    `if:"label=story"`
+	TestName    TestName         `if:"label=_"`
+	Story       []StoryStatement `if:"label=story"`
 	UserComment string
 }
 
@@ -9250,7 +8264,7 @@ func TestScene_Marshal(m jsn.Marshaler, val *TestScene) (err error) {
 		}
 		e1 := m.MarshalKey("story", TestScene_Field_Story)
 		if e1 == nil {
-			e1 = Story_Marshal(m, &val.Story)
+			e1 = StoryStatement_Repeats_Marshal(m, &val.Story)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", TestScene_Field_Story))
@@ -9443,6 +8457,7 @@ func Testing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Testing) (err error
 // TextListProperty
 type TextListProperty struct {
 	NamedProperty `if:"label=_"`
+	Initially     rt.TextListEval `if:"label=initially,optional"`
 	UserComment   string
 }
 
@@ -9461,7 +8476,7 @@ const TextListProperty_Type = "text_list_property"
 const TextListProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const TextListProperty_Field_Name = "$NAME"
 const TextListProperty_Field_Type = "$TYPE"
-const TextListProperty_Field_Comment = "$COMMENT"
+const TextListProperty_Field_Initially = "$INITIALLY"
 
 func (op *TextListProperty) Marshal(m jsn.Marshaler) error {
 	return TextListProperty_Marshal(m, op)
@@ -9536,24 +8551,24 @@ func TextListProperty_Marshal(m jsn.Marshaler, val *TextListProperty) (err error
 	if err = m.MarshalBlock(TextListProperty_Flow{val}); err == nil {
 		e1 := m.MarshalKey("named", TextListProperty_Field_Name)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", TextListProperty_Field_Name))
 		}
 		e2 := m.MarshalKey("of", TextListProperty_Field_Type)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", TextListProperty_Field_Type))
 		}
-		e3 := m.MarshalKey("desc", TextListProperty_Field_Comment)
+		e3 := m.MarshalKey("initially", TextListProperty_Field_Initially)
 		if e3 == nil {
-			e3 = Lines_Optional_Marshal(m, &val.Comment)
+			e3 = rt.TextListEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", TextListProperty_Field_Comment))
+			m.Error(errutil.New(e3, "in flow at", TextListProperty_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -9563,6 +8578,7 @@ func TextListProperty_Marshal(m jsn.Marshaler, val *TextListProperty) (err error
 // TextProperty
 type TextProperty struct {
 	NamedProperty `if:"label=_"`
+	Initially     rt.TextEval `if:"label=initially,optional"`
 	UserComment   string
 }
 
@@ -9581,7 +8597,7 @@ const TextProperty_Type = "text_property"
 const TextProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const TextProperty_Field_Name = "$NAME"
 const TextProperty_Field_Type = "$TYPE"
-const TextProperty_Field_Comment = "$COMMENT"
+const TextProperty_Field_Initially = "$INITIALLY"
 
 func (op *TextProperty) Marshal(m jsn.Marshaler) error {
 	return TextProperty_Marshal(m, op)
@@ -9656,24 +8672,24 @@ func TextProperty_Marshal(m jsn.Marshaler, val *TextProperty) (err error) {
 	if err = m.MarshalBlock(TextProperty_Flow{val}); err == nil {
 		e1 := m.MarshalKey("named", TextProperty_Field_Name)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", TextProperty_Field_Name))
 		}
 		e2 := m.MarshalKey("of", TextProperty_Field_Type)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", TextProperty_Field_Type))
 		}
-		e3 := m.MarshalKey("desc", TextProperty_Field_Comment)
+		e3 := m.MarshalKey("initially", TextProperty_Field_Initially)
 		if e3 == nil {
-			e3 = Lines_Optional_Marshal(m, &val.Comment)
+			e3 = rt.TextEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", TextProperty_Field_Comment))
+			m.Error(errutil.New(e3, "in flow at", TextProperty_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -9880,8 +8896,6 @@ var Slats = []composer.Composer{
 	(*AreAn)(nil),
 	(*AreBeing)(nil),
 	(*AreEither)(nil),
-	(*Argument)(nil),
-	(*Arguments)(nil),
 	(*Aspect)(nil),
 	(*AspectProperty)(nil),
 	(*AspectTraits)(nil),
@@ -9892,7 +8906,6 @@ var Slats = []composer.Composer{
 	(*CommonAction)(nil),
 	(*CountOf)(nil),
 	(*CycleText)(nil),
-	(*Determine)(nil),
 	(*Determiner)(nil),
 	(*EventBlock)(nil),
 	(*EventHandler)(nil),
@@ -9906,9 +8919,6 @@ var Slats = []composer.Composer{
 	(*KindsOfAspect)(nil),
 	(*KindsOfKind)(nil),
 	(*Lines)(nil),
-	(*LocalDecl)(nil),
-	(*LocalInit)(nil),
-	(*Make)(nil),
 	(*MakeOpposite)(nil),
 	(*MakePlural)(nil),
 	(*ManyToMany)(nil),
@@ -9935,25 +8945,22 @@ var Slats = []composer.Composer{
 	(*PatternActions)(nil),
 	(*PatternDecl)(nil),
 	(*PatternFlags)(nil),
-	(*PatternLocals)(nil),
 	(*PatternReturn)(nil),
 	(*PatternRule)(nil),
-	(*PatternRules)(nil),
 	(*PatternType)(nil),
-	(*PatternVariablesTail)(nil),
 	(*PluralKinds)(nil),
-	(*ProgramHook)(nil),
 	(*Property)(nil),
 	(*RecordListProperty)(nil),
 	(*RecordProperty)(nil),
 	(*RelationCardinality)(nil),
 	(*RelativeToNoun)(nil),
 	(*RenderTemplate)(nil),
-	(*Send)(nil),
 	(*ShuffleText)(nil),
 	(*SingularKind)(nil),
 	(*StoppingText)(nil),
 	(*Story)(nil),
+	(*StoryBreak)(nil),
+	(*StoryFile)(nil),
 	(*TestName)(nil),
 	(*TestOutput)(nil),
 	(*TestRule)(nil),
@@ -9966,19 +8973,17 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
+	562975275283375503:   (*StoryBreak)(nil),            /* -- */
 	7872120455849093108:  (*ActionContext)(nil),         /* ActionContext: */
 	14902711848163440508: (*ActionParams)(nil),          /* ActionParams common: */
 	11902859627634050329: (*ActionParams)(nil),          /* ActionParams dual: */
 	5868886119925925865:  (*ActionParams)(nil),          /* ActionParams none: */
-	6291103735245333139:  (*Argument)(nil),              /* Arg:from: */
-	2275326896920679506:  (*Arguments)(nil),             /* Args: */
 	4946346507935163764:  (*AspectProperty)(nil),        /* Aspect of: */
-	2627975827633552637:  (*AspectProperty)(nil),        /* Aspect of:desc: */
 	17855209504331534011: (*AspectTraits)(nil),          /* AspectTraits:traitPhrase: */
 	10466815184164589710: (*BoolProperty)(nil),          /* Bool named: */
-	15292113293401271919: (*BoolProperty)(nil),          /* Bool named:desc: */
+	16366331585663357089: (*BoolProperty)(nil),          /* Bool named:initially: */
 	7864268224293611023:  (*BoolProperty)(nil),          /* Bool named:of: */
-	12288912254770942240: (*BoolProperty)(nil),          /* Bool named:of:desc: */
+	1987807126378783020:  (*BoolProperty)(nil),          /* Bool named:of:initially: */
 	170374163879469822:   (*Certainties)(nil),           /* Certainties:areBeing:certainty:trait: */
 	15857890977690710700: (*Comment)(nil),               /* Comment: */
 	13295757043766156580: (*CommonAction)(nil),          /* CommonAction: */
@@ -9986,8 +8991,6 @@ var Signatures = map[uint64]interface{}{
 	10211567489959209123: (*CountOf)(nil),               /* CountOf:num: */
 	475310308664194536:   (*CycleText)(nil),             /* CycleText: */
 	16533349913402003729: (*MapDeparting)(nil),          /* Departing from:via:and:otherRoom: */
-	14117144937213193556: (*Determine)(nil),             /* Determine: */
-	18058198214790918510: (*Determine)(nil),             /* Determine:arguments: */
 	10917972213914269109: (*ActionDecl)(nil),            /* Event:action:args common: */
 	16786955135834098000: (*ActionDecl)(nil),            /* Event:action:args dual: */
 	12780627848155287324: (*ActionDecl)(nil),            /* Event:action:args none: */
@@ -10005,20 +9008,13 @@ var Signatures = map[uint64]interface{}{
 	16689641787061327381: (*KindsOfAspect)(nil),         /* KindsOfAspect: */
 	4120161504711896118:  (*EventBlock)(nil),            /* Listen kinds:handlers: */
 	16514490895609575777: (*EventBlock)(nil),            /* Listen noun:handlers: */
-	10446315654994385322: (*LocalDecl)(nil),             /* LocalDecl: */
-	6009252662016869003:  (*LocalDecl)(nil),             /* LocalDecl:value: */
-	11789909816860756800: (*LocalInit)(nil),             /* LocalInit: */
 	5919854034648203527:  (*KindsOfKind)(nil),           /* Make kinds:of: */
-	9981010364372027439:  (*Make)(nil),                  /* Make: */
-	12609627593403083413: (*Make)(nil),                  /* Make:arguments: */
 	17216176745763384228: (*MakeOpposite)(nil),          /* Make:opposite: */
 	3572160234867157749:  (*MakePlural)(nil),            /* Make:plural: */
 	17563761532337350103: (*ManyToMany)(nil),            /* ManyToMany:otherKinds: */
 	4129025779762507875:  (*ManyToOne)(nil),             /* ManyToOne:kind: */
 	7600243833025335851:  (*NamedProperty)(nil),         /* NamedProperty: */
-	8883280437292140850:  (*NamedProperty)(nil),         /* NamedProperty:comment: */
 	11281497065498302283: (*NamedProperty)(nil),         /* NamedProperty:type: */
-	847370382734809298:   (*NamedProperty)(nil),         /* NamedProperty:type:comment: */
 	9520200366645637656:  (*NamedNoun)(nil),             /* Noun:named: */
 	10597814521259612392: (*NounAssignment)(nil),        /* NounAssignment:nouns:lines: */
 	8083590999220488417:  (*NounRelation)(nil),          /* NounRelation areBeing:relation:otherNouns: */
@@ -10031,68 +9027,58 @@ var Signatures = map[uint64]interface{}{
 	6477696692861713863:  (*NounTraitStatement)(nil),    /* Nouns:startAs:and: */
 	18242559699550270796: (*NounTraits)(nil),            /* NounTraits:trait: */
 	1229800714295622509:  (*NumberProperty)(nil),        /* Number named: */
-	8220001352821667446:  (*NumberProperty)(nil),        /* Number named:desc: */
+	7910245677921199818:  (*NumberProperty)(nil),        /* Number named:initially: */
 	11728451174312232590: (*NumberProperty)(nil),        /* Number named:of: */
-	8225044541532672111:  (*NumberProperty)(nil),        /* Number named:of:desc: */
+	13691423776851670689: (*NumberProperty)(nil),        /* Number named:of:initially: */
 	10570788478167904864: (*NumListProperty)(nil),       /* NumList named: */
-	12067969820633710801: (*NumListProperty)(nil),       /* NumList named:desc: */
+	8886557488160492571:  (*NumListProperty)(nil),       /* NumList named:initially: */
 	1134638206967616033:  (*NumListProperty)(nil),       /* NumList named:of: */
-	4350453418069638626:  (*NumListProperty)(nil),       /* NumList named:of:desc: */
+	15396226383842865582: (*NumListProperty)(nil),       /* NumList named:of:initially: */
 	17075866407822548206: (*OneToMany)(nil),             /* OneToMany:kinds: */
 	13766274136867271026: (*OneToOne)(nil),              /* OneToOne:otherKind: */
 	18143853777230560632: (*PairedAction)(nil),          /* PairedAction: */
 	6457542997147343897:  (*Paragraph)(nil),             /* Paragraph */
 	1044755875845214073:  (*Paragraph)(nil),             /* Paragraph: */
 	11028694429729745801: (*PatternDecl)(nil),           /* Pattern: */
-	9822902173127317528:  (*PatternDecl)(nil),           /* Pattern:about: */
+	1067711078153659912:  (*PatternActions)(nil),        /* Pattern:provides:rules: */
 	9595265807710753233:  (*PatternDecl)(nil),           /* Pattern:requires: */
-	12912062952203186528: (*PatternDecl)(nil),           /* Pattern:requires:about: */
 	13010900631615283446: (*PatternDecl)(nil),           /* Pattern:requires:returns: */
-	17024654433952487599: (*PatternDecl)(nil),           /* Pattern:requires:returns:about: */
 	10545169234908038990: (*PatternDecl)(nil),           /* Pattern:returns: */
-	6157469696159691367:  (*PatternDecl)(nil),           /* Pattern:returns:about: */
 	18102878396089561802: (*PatternActions)(nil),        /* Pattern:rules: */
-	14327863709522811694: (*PatternActions)(nil),        /* Pattern:with:rules: */
-	16940656754612309445: (*PatternLocals)(nil),         /* PatternLocals: */
-	3777342850694276241:  (*PatternVariablesTail)(nil),  /* PatternRequires: */
 	3203894909373400694:  (*PatternReturn)(nil),         /* PatternResult: */
-	14391699440407036198: (*PatternRule)(nil),           /* PatternRule:flags:hook activity: */
-	15914753357447503965: (*PatternRule)(nil),           /* PatternRule:hook activity: */
-	15881043500959019380: (*PatternRules)(nil),          /* PatternRules */
-	12644281899387438986: (*PatternRules)(nil),          /* PatternRules: */
-	13417511286363622337: (*ProgramHook)(nil),           /* ProgramHook activity: */
+	10703761093736583840: (*PatternRule)(nil),           /* PatternRule:does: */
+	1493717172765332753:  (*PatternRule)(nil),           /* PatternRule:flags:does: */
 	9421894963555981921:  (*RecordProperty)(nil),        /* Record named: */
-	1627613176937258658:  (*RecordProperty)(nil),        /* Record named:desc: */
+	15214376251358756462: (*RecordProperty)(nil),        /* Record named:initially: */
 	15273128656504901402: (*RecordProperty)(nil),        /* Record named:of: */
-	8491419645379028179:  (*RecordProperty)(nil),        /* Record named:of:desc: */
+	2160178240840511853:  (*RecordProperty)(nil),        /* Record named:of:initially: */
 	8380731787009175721:  (*RecordListProperty)(nil),    /* RecordList named: */
-	13065085319992699434: (*RecordListProperty)(nil),    /* RecordList named:desc: */
+	1352251820022710870:  (*RecordListProperty)(nil),    /* RecordList named:initially: */
 	16326018873841140594: (*RecordListProperty)(nil),    /* RecordList named:of: */
-	8809350479853098315:  (*RecordListProperty)(nil),    /* RecordList named:of:desc: */
+	6036726744886535269:  (*RecordListProperty)(nil),    /* RecordList named:of:initially: */
 	14287924768394488954: (*RelationCardinality)(nil),   /* RelationCardinality manyToMany: */
 	10453256446593418889: (*RelationCardinality)(nil),   /* RelationCardinality manyToOne: */
 	18092929693239672593: (*RelationCardinality)(nil),   /* RelationCardinality oneToMany: */
 	5587008972147064084:  (*RelationCardinality)(nil),   /* RelationCardinality oneToOne: */
 	6898132702043823031:  (*RelativeToNoun)(nil),        /* RelativeToNoun:nouns:areBeing:otherNouns: */
 	15988073058027477451: (*RenderTemplate)(nil),        /* RenderTemplate: */
-	2420057392455761494:  (*Send)(nil),                  /* Send:path: */
-	10010483713146895284: (*Send)(nil),                  /* Send:path:arguments: */
 	7279273919312137397:  (*ShuffleText)(nil),           /* ShuffleText: */
 	10085329253831819088: (*StoppingText)(nil),          /* StoppingText: */
-	13392546219852761816: (*Story)(nil),                 /* Story: */
+	11597613116511938589: (*Story)(nil),                 /* Story paragraphs: */
+	5991962903091297123:  (*StoryFile)(nil),             /* Tapestry: */
 	15090827023293362138: (*TestOutput)(nil),            /* TestOutput: */
-	11231723833188820353: (*TestRule)(nil),              /* TestRule:hook activity: */
+	14623117004128374492: (*TestRule)(nil),              /* TestRule:does: */
 	15304439741055926590: (*TestScene)(nil),             /* TestScene:story: */
 	1385539489971009934:  (*TestStatement)(nil),         /* TestStatement:test: */
 	34813485952713023:    (*TextProperty)(nil),          /* Text named: */
-	8821446596613108912:  (*TextProperty)(nil),          /* Text named:desc: */
+	7689572425414234300:  (*TextProperty)(nil),          /* Text named:initially: */
 	15716906332929430280: (*TextProperty)(nil),          /* Text named:of: */
-	10950529590260468345: (*TextProperty)(nil),          /* Text named:of:desc: */
+	18145389830303432803: (*TextProperty)(nil),          /* Text named:of:initially: */
 	12060628209423567251: (*TextListProperty)(nil),      /* TextList named: */
-	8790232589946234908:  (*TextListProperty)(nil),      /* TextList named:desc: */
+	9375787334378235408:  (*TextListProperty)(nil),      /* TextList named:initially: */
 	17501273845802809220: (*TextListProperty)(nil),      /* TextList named:of: */
-	10102728286923952045: (*TextListProperty)(nil),      /* TextList named:of:desc: */
+	5231360902571035375:  (*TextListProperty)(nil),      /* TextList named:of:initially: */
 	14061432096605043790: (*TraitPhrase)(nil),           /* TraitPhrase:trait: */
+	8990910809673849454:  (*EventHandler)(nil),          /* With:event:provides:rules: */
 	3588173502446728488:  (*EventHandler)(nil),          /* With:event:rules: */
-	6066282364453737768:  (*EventHandler)(nil),          /* With:event:with:rules: */
 }

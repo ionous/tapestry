@@ -1,32 +1,30 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "--": "Determine whether an actor can touch some specific object.",
       "Pattern:requires:returns:": [
         "can reach",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "actor",
-                "actor"
-              ]
-            },
-            {
-              "Text named:": "action"
-            },
-            {
-              "Text named:of:desc:": [
-                "noun",
-                "thing",
-                ", the target the agent is trying to reach"
-              ]
-            },
-            {
-              "Bool named:": "requires light"
-            }
-          ]
-        },
+        [
+          {
+            "Text named:of:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "Text named:": "action"
+          },
+          {
+            "--": "the target the agent is trying to reach",
+            "Text named:of:": [
+              "noun",
+              "thing"
+            ]
+          },
+          {
+            "Bool named:": "requires light"
+          }
+        ],
         {
           "PatternResult:": {
             "Text named:": "response"
@@ -35,312 +33,99 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "can reach",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:": {
-                "Text named:of:": [
-                  "i",
-                  "object"
-                ]
-              }
-            },
-            {
-              "LocalDecl:": {
-                "Text named:of:": [
-                  "next",
-                  "object"
-                ]
-              }
-            },
-            {
-              "LocalDecl:": {
-                "Text named:": "dig error"
-              }
-            },
-            {
-              "LocalDecl:": {
-                "Number named:": "lca"
-              }
-            },
-            {
-              "LocalDecl:": {
-                "Text named:": "reach response"
-              }
-            },
-            {
-              "LocalDecl:": {
-                "Number named:": "reach error"
-              }
-            },
-            {
-              "LocalDecl:": {
-                "TextList named:": "path"
-              }
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+        [
+          {
+            "Text named:of:": [
+              "i",
+              "object"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "next",
+              "object"
+            ]
+          },
+          {
+            "Text named:": "dig error"
+          },
+          {
+            "Number named:": "lca"
+          },
+          {
+            "Text named:": "reach response"
+          },
+          {
+            "Number named:": "reach error"
+          },
+          {
+            "TextList named:": "path"
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
+                  "Let:be:": [
+                    "i",
+                    "@actor"
+                  ]
+                },
+                {
+                  "Repeating:does:": [
                     {
-                      "Let:be:": [
-                        "i",
-                        "@actor"
-                      ]
+                      "Not:": {
+                        "Is empty:": "@i"
+                      }
                     },
-                    {
-                      "Repeating:do:": [
-                        {
-                          "Not:": {
-                            "Is empty:": "@i"
+                    [
+                      {
+                        "Comment:": "There's no problem reaching yourself, so start by putting yourself in the list of visited places."
+                      },
+                      {
+                        "Put:into:": [
+                          "@i",
+                          {
+                            "IntoTxts:": "path"
                           }
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "--": "There's no problem reaching yourself, so start by putting yourself in the list of visited objects.",
-                              "Put:into:": [
-                                "@i",
-                                {
-                                  "IntoTxts:": "path"
-                                }
-                              ]
-                            },
-                            {
-                              "Let:be:": [
-                                "next",
-                                {
-                                  "FromTxt:": {
-                                    "Determine:arguments:": [
-                                      "parentOf",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "obj",
-                                              "@i"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "If:do:": [
-                                {
-                                  "Is empty:": "@reach response"
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "--": "Reach can only reject pairs. To force the acceptance of some particular source/target pair, reaching itself has to be customized.",
-                                      "If:from:and:do:": [
-                                        "response",
-                                        {
-                                          "FromTxt:": {
-                                            "Determine:arguments:": [
-                                              "reach up",
-                                              {
-                                                "Args:": [
-                                                  {
-                                                    "Arg:from:": [
-                                                      "fromObj",
-                                                      "@i"
-                                                    ]
-                                                  },
-                                                  {
-                                                    "Arg:from:": [
-                                                      "intoObj",
-                                                      "@next"
-                                                    ]
-                                                  },
-                                                  {
-                                                    "Arg:from:": [
-                                                      "actor",
-                                                      "@actor"
-                                                    ]
-                                                  },
-                                                  {
-                                                    "Arg:from:": [
-                                                      "noun",
-                                                      "@noun"
-                                                    ]
-                                                  },
-                                                  {
-                                                    "Arg:from:": [
-                                                      "action",
-                                                      "@action"
-                                                    ]
-                                                  }
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        },
-                                        {
-                                          "Not:": {
-                                            "Is empty:": "@response"
-                                          }
-                                        },
-                                        {
-                                          "Act:": [
-                                            {
-                                              "--": [
-                                                "This doesn't exit the loop.",
-                                                "It builds a complete hierarchy to help determine if the lca exists and if so, is the lca completely unreachable or merely blocked."
-                                              ],
-                                              "Let:be:": [
-                                                "reach error",
-                                                {
-                                                  "FromNum:": {
-                                                    "Len:": "@path"
-                                                  }
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Let:be:": [
-                                                "reach response",
-                                                "@response"
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "Let:be:": [
-                                "i",
-                                "@next"
-                              ]
+                        ]
+                      },
+                      {
+                        "Let:be:": [
+                          "next",
+                          {
+                            "FromTxt:": {
+                              "ParentOf obj:": "@i"
                             }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "--": "Simulate digging down from the (yet to be determined) lca by digging up from the target noun (until we find the lca.)",
-                      "Let:be:": [
-                        "i",
-                        "@noun"
-                      ]
-                    },
-                    {
-                      "Repeating:do:": [
-                        {
-                          "Not:": {
-                            "Is empty:": "@i"
                           }
-                        },
-                        {
-                          "Act:": [
+                        ]
+                      },
+                      {
+                        "If:does:": [
+                          {
+                            "Is empty:": "@reach response"
+                          },
+                          [
                             {
-                              "Let:be:": [
-                                "lca",
-                                {
-                                  "FromNum:": {
-                                    "Find:list:": [
-                                      "@i",
-                                      "@path"
-                                    ]
-                                  }
-                                }
-                              ]
+                              "Comment:": "Reach can only reject pairs. To force the acceptance of some particular source/target pair, reaching itself has to be customized. "
                             },
                             {
-                              "If:do:": [
-                                {
-                                  "--": "Exit once we've found the lca.",
-                                  "Cmp:is:num:": [
-                                    "@lca",
-                                    "GreaterThan",
-                                    0
-                                  ]
-                                },
-                                {
-                                  "Act:": [
-                                    "Break"
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "Let:be:": [
-                                "next",
-                                {
-                                  "FromTxt:": {
-                                    "Determine:arguments:": [
-                                      "parentOf",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "obj",
-                                              "@i"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "If:from:and:do:": [
+                              "If:from:and:does:": [
                                 "response",
                                 {
                                   "FromTxt:": {
-                                    "Determine:arguments:": [
-                                      "reach down",
-                                      {
-                                        "Args:": [
-                                          {
-                                            "Arg:from:": [
-                                              "fromObj",
-                                              "@next"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "intoObj",
-                                              "@i"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "actor",
-                                              "@actor"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "noun",
-                                              "@noun"
-                                            ]
-                                          },
-                                          {
-                                            "Arg:from:": [
-                                              "action",
-                                              "@action"
-                                            ]
-                                          }
-                                        ]
-                                      }
+                                    "ReachUp fromObj:intoObj:actor:noun:action:": [
+                                      "@i",
+                                      "@next",
+                                      "@actor",
+                                      "@noun",
+                                      "@action"
                                     ]
                                   }
                                 },
@@ -349,433 +134,540 @@
                                     "Is empty:": "@response"
                                   }
                                 },
-                                {
-                                  "Act:": [
-                                    {
-                                      "--": "Find the outermost dig error, updating the error each time.",
-                                      "Let:be:": [
-                                        "dig error",
-                                        "@response"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "Let:be:": [
-                                "i",
-                                "@next"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "--": "Return the best response.",
-                      "If:do:else:": [
-                        {
-                          "Cmp:is:num:": [
-                            "@lca",
-                            "Equals",
-                            0
-                          ]
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "--": "No lca ever found? That's the most important error.",
-                              "Let:be:": [
-                                "response",
-                                {
-                                  "FromTxt:": {
-                                    "Response:text:": [
-                                      "can't reach a common ancestor",
+                                [
+                                  {
+                                    "Let:be:": [
+                                      "reach error",
                                       {
-                                        "RenderTemplate:": "{They:.noun|capitalize!} {arent:.noun} available."
+                                        "FromNum:": {
+                                          "Len:": "@path"
+                                        }
                                       }
                                     ]
+                                  },
+                                  {
+                                    "Let:be:": [
+                                      "reach response",
+                                      "@response"
+                                    ]
+                                  },
+                                  {
+                                    "Comment:": "This doesn't exit the loop. \nIt builds a complete hierarchy to help determine if the lca exists and if so, is the lca completely unreachable or merely blocked."
                                   }
-                                }
+                                ]
                               ]
                             }
                           ]
-                        },
-                        {
-                          "ElseIf:do:else:": [
-                            {
-                              "Cmp:is:num:": [
-                                "@reach error",
-                                "LessThan",
-                                "@lca"
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {  
-                                  "--": "There was an error reaching up from the actor towards the lca.",
-                                  "Let:be:": [
-                                    "response",
-                                    "@reach response"
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "ElseIf:do:": [
-                                {
-                                  "Not:": {
-                                    "Is empty:": "@dig error"
-                                  }
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "--": "There was no error reaching up to the lca, so return any errors digging down to the noun.",
-                                      "Let:be:": [
-                                        "response",
-                                        "@dig error"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:flags:hook activity:": [
-                {
-                  "AllTrue:": [
-                    "@requires light",
-                    {
-                      "Get:from:": [
-                        "is in darkness",
-                        {
-                          "VarFields:": "actor"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                "after",
-                {
-                  "Act:": [
-                    {
-                      "--": [
-                        "Used to determine whether an action needing light can proceed.",
-                        "Returns some response text if the action is blocked.",
-                        "Relies on the player's \"is in darkness\" which is (usually) calculated once per turn ( in \"adjust light.\" )"
-                      ],
-                      "Let:be:": [
-                        "response",
-                        {
-                          "FromTxt:": {
-                            "Response:text:": [
-                              "can't act in the dark",
-                              {
-                                "RenderTemplate:": "It is pitch dark, and {we!} can't see a thing."
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  [
-    {
-      "Pattern:requires:returns:": [
-        "reach up",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "fromObj",
-                "object"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "intoObj",
-                "object"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "actor",
-                "object"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "noun",
-                "object"
-              ]
-            },
-            {
-              "Text named:": "action"
-            }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "Text named:": "response"
-          }
-        }
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "reach up",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "AllTrue:": [
-                    {
-                      "KindOf:is:": [
-                        "@fromObj",
-                        "containers"
-                      ]
-                    },
-                    {
-                      "Get obj:trait:": [
-                        "@fromObj",
-                        "closed"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "response",
-                        {
-                          "FromTxt:": {
-                            "Response:text:": [
-                              "can't reach outside closed containers",
-                              {
-                                "RenderTemplate:": "{The: .fromObj|capitalize!} {arent: .fromObj} open."
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "KindOf:is:": [
-                    "@fromObj",
-                    "rooms"
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "response",
-                        {
-                          "FromTxt:": {
-                            "Response:text:": [
-                              "can't reach outside rooms",
-                              {
-                                "RenderTemplate:": "{They:.noun|capitalize!} {arent:.noun} available."
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                "Always",
-                {
-                  "Act:": [
-                    {
-                      "Log:": {
-                        "FromTxt:": {
-                          "RenderTemplate:": "reach up: from:{.fromObj} -> into:{.intoObj}"
-                        }
+                        ]
+                      },
+                      {
+                        "Let:be:": [
+                          "i",
+                          "@next"
+                        ]
                       }
-                    }
+                    ]
                   ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  [
-    {
-      "Pattern:requires:returns:": [
-        "reach down",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "fromObj",
-                "object"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "intoObj",
-                "object"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "actor",
-                "object"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "noun",
-                "object"
-              ]
-            },
-            {
-              "Text named:": "action"
-            }
-          ]
-        },
-        {
-          "PatternResult:": {
-            "Text named:": "response"
-          }
-        }
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "reach down",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+                },
                 {
-                  "AllTrue:": [
-                    {
-                      "KindOf:is:": [
-                        "@intoObj",
-                        "containers"
-                      ]
-                    },
-                    {
-                      "Get obj:trait:": [
-                        "@intoObj",
-                        "closed"
-                      ]
-                    },
+                  "Comment:": "Simulate digging down from the (yet to be determined) lca by digging up from the target noun (until we find the lca.)"
+                },
+                {
+                  "Log:": {
+                    "FromTxts:": "@path"
+                  }
+                },
+                {
+                  "Let:be:": [
+                    "i",
+                    "@noun"
+                  ]
+                },
+                {
+                  "Repeating:does:": [
                     {
                       "Not:": {
-                        "Cmp:is:txt:": [
-                          "@intoObj",
-                          "Equals",
-                          "@noun"
+                        "Is empty:": "@i"
+                      }
+                    },
+                    [
+                      {
+                        "Let:be:": [
+                          "lca",
+                          {
+                            "FromNum:": {
+                              "Find:list:": [
+                                "@i",
+                                "@path"
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "If:does:": [
+                          {
+                            "Cmp:is:num:": [
+                              "@lca",
+                              {
+                                "GreaterThan": true
+                              },
+                              0
+                            ]
+                          },
+                          [
+                            {
+                              "Comment:": "Exit once we've found the lca."
+                            },
+                            {
+                              "Break": true
+                            }
+                          ]
+                        ]
+                      },
+                      {
+                        "Let:be:": [
+                          "next",
+                          {
+                            "FromTxt:": {
+                              "ParentOf obj:": "@i"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "If:from:and:does:": [
+                          "response",
+                          {
+                            "FromTxt:": {
+                              "ReachDown fromObj:intoObj:actor:noun:action:": [
+                                "@next",
+                                "@i",
+                                "@actor",
+                                "@noun",
+                                "@action"
+                              ]
+                            }
+                          },
+                          {
+                            "Not:": {
+                              "Is empty:": "@response"
+                            }
+                          },
+                          [
+                            {
+                              "Let:be:": [
+                                "dig error",
+                                "@response"
+                              ]
+                            },
+                            {
+                              "Comment:": "To find the outermost dig error keep going, \nupdating the error each time."
+                            }
+                          ]
+                        ]
+                      },
+                      {
+                        "Let:be:": [
+                          "i",
+                          "@next"
+                        ]
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Comment:": "Return the best response."
+                },
+                {
+                  "If:does:else:": [
+                    {
+                      "Cmp:is:num:": [
+                        "@lca",
+                        {
+                          "Equals": true
+                        },
+                        0
+                      ]
+                    },
+                    [
+                      {
+                        "Comment:": "No lca ever found? That's the most important error."
+                      },
+                      {
+                        "Let:be:": [
+                          "response",
+                          {
+                            "FromTxt:": {
+                              "Response:text:": [
+                                "can't reach a common ancestor",
+                                {
+                                  "RenderTemplate:": "{They:.noun|capitalize!} {arent:.noun} available."
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    {
+                      "ElseIf:does:else:": [
+                        {
+                          "Cmp:is:num:": [
+                            "@reach error",
+                            {
+                              "LessThan": true
+                            },
+                            "@lca"
+                          ]
+                        },
+                        [
+                          {
+                            "Comment:": "There is an error reaching up from the actor towards the lca."
+                          },
+                          {
+                            "Let:be:": [
+                              "response",
+                              "@reach response"
+                            ]
+                          }
+                        ],
+                        {
+                          "ElseIf:does:": [
+                            {
+                              "Not:": {
+                                "Is empty:": "@dig error"
+                              }
+                            },
+                            [
+                              {
+                                "Comment:": "There was no error reaching up to the lca, so return any errors digging down to the noun."
+                              },
+                              {
+                                "Let:be:": [
+                                  "response",
+                                  "@dig error"
+                                ]
+                              }
+                            ]
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:flags:does:": [
+              {
+                "AllTrue:": [
+                  "@requires light",
+                  {
+                    "Get:from:": [
+                      "is in darkness",
+                      {
+                        "VarFields:": "actor"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "after",
+              [
+                {
+                  "Comment:": "Used to determine whether an action needing light can proceed. Returns some response text if the action is blocked.  Relies on the player's \"is in darkness\" which is (usually) calculated just once per turn ( in \"adjust light.\" )"
+                },
+                {
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't act in the dark",
+                          {
+                            "RenderTemplate:": "It is pitch dark, and {we!} can't see a thing."
+                          }
                         ]
                       }
                     }
                   ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "response",
-                        {
-                          "FromTxt:": {
-                            "Response:text:": [
-                              "can't reach inside closed containers",
-                              {
-                                "RenderTemplate:": "{The: .intoObj|capitalize!} {arent: .intoObj} open."
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:returns:": [
+        "reach up",
+        [
+          {
+            "Text named:of:": [
+              "fromObj",
+              "object"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "intoObj",
+              "object"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "actor",
+              "object"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "noun",
+              "object"
+            ]
+          },
+          {
+            "Text named:": "action"
+          }
+        ],
+        {
+          "PatternResult:": {
+            "Text named:": "response"
+          }
+        }
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "reach up",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "KindOf:is:": [
+                      "@fromObj",
+                      "containers"
+                    ]
+                  },
+                  {
+                    "Get obj:trait:": [
+                      "@fromObj",
+                      "closed"
+                    ]
+                  }
+                ]
+              },
+              [
                 {
-                  "KindOf:is:": [
-                    "@intoObj",
-                    "rooms"
-                  ]
-                },
-                {
-                  "Act:": [
+                  "Let:be:": [
+                    "response",
                     {
-                      "Let:be:": [
-                        "response",
-                        {
-                          "FromTxt:": {
-                            "Response:text:": [
-                              "can't reach inside rooms",
-                              {
-                                "RenderTemplate:": "{We:|capitalize!} can't reach into {the: .intoObj}."
-                              }
-                            ]
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't reach outside closed containers",
+                          {
+                            "RenderTemplate:": "{The: .fromObj|capitalize!} {arent: .fromObj} open."
                           }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                "Always",
-                {
-                  "Act:": [
-                    {
-                      "Log:": {
-                        "FromTxt:": {
-                          "RenderTemplate:": "reach down: from:{.fromObj} -> into:{.intoObj}"
-                        }
+                        ]
                       }
                     }
                   ]
                 }
               ]
-            }
-          ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@fromObj",
+                  "rooms"
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't reach outside rooms",
+                          {
+                            "RenderTemplate:": "{They:.noun|capitalize!} {arent:.noun} available."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
+                {
+                  "Log:": {
+                    "FromTxt:": {
+                      "RenderTemplate:": "reach up: from:{.fromObj} -> into:{.intoObj}"
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:returns:": [
+        "reach down",
+        [
+          {
+            "Text named:of:": [
+              "fromObj",
+              "object"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "intoObj",
+              "object"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "actor",
+              "object"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "noun",
+              "object"
+            ]
+          },
+          {
+            "Text named:": "action"
+          }
+        ],
+        {
+          "PatternResult:": {
+            "Text named:": "response"
+          }
         }
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "reach down",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "KindOf:is:": [
+                      "@intoObj",
+                      "containers"
+                    ]
+                  },
+                  {
+                    "Get obj:trait:": [
+                      "@intoObj",
+                      "closed"
+                    ]
+                  },
+                  {
+                    "Not:": {
+                      "Cmp:is:txt:": [
+                        "@intoObj",
+                        {
+                          "Equals": true
+                        },
+                        "@noun"
+                      ]
+                    }
+                  }
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't reach inside closed containers",
+                          {
+                            "RenderTemplate:": "{The: .intoObj|capitalize!} {arent: .intoObj} open."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@intoObj",
+                  "rooms"
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't reach inside rooms",
+                          {
+                            "RenderTemplate:": "{We:|capitalize!} can't reach into {the: .intoObj}."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
+                {
+                  "Log:": {
+                    "FromTxt:": {
+                      "RenderTemplate:": "reach down: from:{.fromObj} -> into:{.intoObj}"
+                    }
+                  }
+                }
+              ]
+            ]
+          }
+        ]
       ]
     }
   ]
-]
+}

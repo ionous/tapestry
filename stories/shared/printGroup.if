@@ -1,199 +1,138 @@
-[
-  [
+{
+  "Tapestry:": [
     {
-      "Pattern:requires:returns:about:": [
+      "--": [
+        "Prints the objects in a pre-determined group.",
+        "Having this as its own pattern allows authors to add custom prefixes and suffixes using before and after rules."
+      ],
+      "Pattern:requires:returns:": [
         "print group",
-        {
-          "PatternRequires:": [
-            {
-              "Record named:of:": [
-                "group",
-                "object groups"
-              ]
-            }
-          ]
-        },
+        [
+          {
+            "Record named:of:": [
+              "group",
+              "object groups"
+            ]
+          }
+        ],
         {
           "PatternResult:": {
             "Bool named:": "success"
           }
-        },
-        {
-          "Comment:": "Prints the objects in a pre-determined group. Having this as its own pattern allows authors to add custom prefixes and suffixes using before and after rules."
         }
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "print group",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:value:": [
-                {
-                  "Record named:of:": [
-                    "grouping",
-                    "grouping"
-                  ]
-                },
-                {
-                  "LocalInit:": {
+        [
+          {
+            "Record named:of:initially:": [
+              "grouping",
+              "grouping",
+              {
+                "Get:from:": [
+                  "grouping",
+                  {
+                    "VarFields:": "group"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "TextList named:initially:": [
+              "objs",
+              {
+                "Get:from:": [
+                  "objects",
+                  {
+                    "VarFields:": "group"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
                     "Get:from:": [
-                      "grouping",
+                      "not hide objects",
                       {
-                        "VarFields:": "group"
+                        "VarFields:": "grouping"
                       }
                     ]
                   }
-                }
-              ]
-            },
-            {
-              "LocalDecl:value:": [
+                ]
+              },
+              [
                 {
-                  "TextList named:": "objs"
+                  "Comment:": "unless something else stops us, print a bracketed list of objects"
                 },
                 {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "objects",
-                      {
-                        "VarFields:": "group"
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "AllTrue:": [
+                  "If:does:else:": [
                     {
                       "Get:from:": [
-                        "not hide objects",
+                        "not hide size",
                         {
                           "VarFields:": "grouping"
                         }
                       ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Comment:": "unless something else stops us, print a bracketed list of objects"
                     },
-                    {
-                      "If:do:else:": [
-                        {
-                          "Get:from:": [
-                            "not hide size",
-                            {
-                              "VarFields:": "grouping"
-                            }
-                          ]
-                        },
-                        {
-                          "Act:": [
+                    [
+                      {
+                        "Say:": {
+                          "Brackets does:": [
                             {
                               "Say:": {
-                                "Brackets:": {
-                                  "Act:": [
-                                    {
-                                      "Say:": {
-                                        "Commas:": {
-                                          "Act:": [
-                                            {
-                                              "Repeating across:as:do:": [
-                                                "@objs",
-                                                {
-                                                  "AsTxt:": "obj"
-                                                },
-                                                {
-                                                  "Act:": [
-                                                    {
-                                                      "Determine:arguments:": [
-                                                        "print grouped object",
-                                                        {
-                                                          "Args:": [
-                                                            {
-                                                              "Arg:from:": [
-                                                                "obj",
-                                                                "@obj"
-                                                              ]
-                                                            },
-                                                            {
-                                                              "Arg:from:": [
-                                                                "grouping",
-                                                                "@grouping"
-                                                              ]
-                                                            }
-                                                          ]
-                                                        }
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
-                                              ]
-                                            }
+                                "Commas does:": [
+                                  {
+                                    "Repeating across:as:does:": [
+                                      "@objs",
+                                      {
+                                        "AsTxt:": "obj"
+                                      },
+                                      [
+                                        {
+                                          "PrintGroupedObject obj:grouping:": [
+                                            "@obj",
+                                            "@grouping"
                                           ]
                                         }
-                                      }
-                                    }
-                                  ]
-                                }
+                                      ]
+                                    ]
+                                  }
+                                ]
                               }
                             }
                           ]
-                        },
+                        }
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
                         {
-                          "ElseDo:": {
-                            "Act:": [
+                          "Say:": {
+                            "Commas does:": [
                               {
-                                "Say:": {
-                                  "Commas:": {
-                                    "Act:": [
-                                      {
-                                        "Repeating across:as:do:": [
-                                          "@objs",
-                                          {
-                                            "AsTxt:": "obj"
-                                          },
-                                          {
-                                            "Act:": [
-                                              {
-                                                "Determine:arguments:": [
-                                                  "print grouped object",
-                                                  {
-                                                    "Args:": [
-                                                      {
-                                                        "Arg:from:": [
-                                                          "obj",
-                                                          "@obj"
-                                                        ]
-                                                      },
-                                                      {
-                                                        "Arg:from:": [
-                                                          "grouping",
-                                                          "@grouping"
-                                                        ]
-                                                      }
-                                                    ]
-                                                  }
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                }
+                                "Repeating across:as:does:": [
+                                  "@objs",
+                                  {
+                                    "AsTxt:": "obj"
+                                  },
+                                  [
+                                    {
+                                      "PrintGroupedObject obj:grouping:": [
+                                        "@obj",
+                                        "@grouping"
+                                      ]
+                                    }
+                                  ]
+                                ]
                               }
                             ]
                           }
@@ -203,225 +142,186 @@
                   ]
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Get:from:": [
+                      "is hide size",
+                      {
+                        "VarFields:": "grouping"
+                      }
+                    ]
+                  },
+                  {
+                    "Get:from:": [
+                      "not hide label",
+                      {
+                        "VarFields:": "grouping"
+                      }
+                    ]
+                  }
+                ]
+              },
+              [
                 {
-                  "AllTrue:": [
-                    {
-                      "Get:from:": [
-                        "is hide size",
-                        {
-                          "VarFields:": "grouping"
-                        }
-                      ]
-                    },
-                    {
-                      "Get:from:": [
-                        "not hide label",
-                        {
-                          "VarFields:": "grouping"
-                        }
-                      ]
-                    }
-                  ]
+                  "Comment:": "print a label with no prefixed size."
                 },
                 {
-                  "Act:": [
+                  "Say:": {
+                    "Get:from:": [
+                      "label",
+                      {
+                        "VarFields:": "grouping"
+                      }
+                    ]
+                  }
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Get:from:": [
+                      "not hide size",
+                      {
+                        "VarFields:": "grouping"
+                      }
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Comment:": "print the size, and possibly a label, for a group of objects."
+                },
+                {
+                  "PrintSeveral obj:groupSize:label:": [
                     {
-                      "Comment:": "print a label with no prefixed size."
+                      "FromTxt:": {
+                        "Get:index:": [
+                          "@objs",
+                          1
+                        ]
+                      }
                     },
                     {
-                      "Say:": {
-                        "Get:from:": [
-                          "label",
+                      "FromNum:": {
+                        "Len:": "@objs"
+                      }
+                    },
+                    {
+                      "FromTxt:": {
+                        "Txt if:then:else:": [
                           {
-                            "VarFields:": "grouping"
-                          }
+                            "Get:from:": [
+                              "not hide label",
+                              {
+                                "VarFields:": "grouping"
+                              }
+                            ]
+                          },
+                          {
+                            "Get:from:": [
+                              "label",
+                              {
+                                "VarFields:": "grouping"
+                              }
+                            ]
+                          },
+                          ""
                         ]
                       }
                     }
                   ]
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "AllTrue:": [
-                    {
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Is empty:": {
                       "Get:from:": [
-                        "not hide size",
+                        "label",
                         {
                           "VarFields:": "grouping"
                         }
                       ]
                     }
-                  ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Comment:": "completely unobject groups; presumably just one for each group."
                 },
                 {
-                  "Act:": [
-                    {
-                      "Comment:": "print the size, and possibly a label, for a group of objects."
-                    },
-                    {
-                      "Determine:arguments:": [
-                        "print several",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                {
-                                  "FromTxt:": {
-                                    "Get:index:": [
-                                      "@objs",
-                                      1
-                                    ]
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "group size",
-                                {
-                                  "FromNum:": {
-                                    "Len:": "@objs"
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "Arg:from:": [
-                                "label",
-                                {
-                                  "FromTxt:": {
-                                    "Txt if:then:else:": [
-                                      {
-                                        "Get:from:": [
-                                          "not hide label",
-                                          {
-                                            "VarFields:": "grouping"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "Get:from:": [
-                                          "label",
-                                          {
-                                            "VarFields:": "grouping"
-                                          }
-                                        ]
-                                      },
-                                      ""
-                                    ]
-                                  }
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                  "PrintGroupedObject obj:": {
+                    "FromTxt:": {
+                      "Get:index:": [
+                        "@objs",
+                        1
                       ]
                     }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "AllTrue:": [
-                    {
-                      "Is empty:": {
-                        "Get:from:": [
-                          "label",
-                          {
-                            "VarFields:": "grouping"
-                          }
-                        ]
-                      }
-                    }
-                  ]
+                  }
                 },
                 {
-                  "Act:": [
+                  "Let:be:": [
+                    "success",
                     {
-                      "Comment:": "completely unobject groups; presumably just one for each group."
-                    },
-                    {
-                      "Determine:arguments:": [
-                        "Print grouped object",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                {
-                                  "FromTxt:": {
-                                    "Get:index:": [
-                                      "@objs",
-                                      1
-                                    ]
-                                  }
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Let:be:": [
-                        "success",
-                        {
-                          "FromBool:": true
-                        }
-                      ]
+                      "FromBool:": true
                     }
                   ]
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
-                    {
-                      "Log:": {
-                        "FromRec:": "@group"
-                      }
-                    }
-                  ]
+                  "Log:": {
+                    "FromRec:": "@group"
+                  }
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "print grouped object",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            },
-            {
-              "Record named:of:": [
-                "grouping",
-                "grouping"
-              ]
-            }
-          ]
-        }
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          },
+          {
+            "Record named:of:": [
+              "grouping",
+              "grouping"
+            ]
+          }
+        ]
       ]
     },
     {
@@ -430,35 +330,21 @@
     {
       "Pattern:rules:": [
         "print grouped object",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
-                    {
-                      "Determine:arguments:": [
-                        "print object",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@obj"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+                  "PrintObject obj:": "@obj"
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
     }
   ]
-]
+}

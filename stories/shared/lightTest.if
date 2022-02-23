@@ -1,15 +1,14 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "TestScene:story:": [
         "vision test",
-        {
-          "Story:": []
-        }
+        []
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "testing vision",
@@ -19,77 +18,75 @@
       ]
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "testing vision",
-        {
-          "Act:": [
-            {
-              "Put:from:at:": [
-                {
-                  "ObjField:": "Kitchen"
-                },
-                {
-                  "FromBool:": true
-                },
-                "unlit"
-              ]
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
-              }
-            },
-            {
-              "Put:from:at:": [
-                {
-                  "ObjField:": "Kitchen"
-                },
-                {
-                  "FromBool:": true
-                },
-                "lit"
-              ]
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
-              }
-            },
-            {
-              "Put:from:at:": [
-                {
-                  "ObjField:": "cabinet"
-                },
-                {
-                  "FromBool:": true
-                },
-                "closed"
-              ]
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
-              }
-            },
-            {
-              "Put:from:at:": [
-                {
-                  "ObjField:": "matches"
-                },
-                {
-                  "FromBool:": true
-                },
-                "lit"
-              ]
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
-              }
+        [
+          {
+            "Put:from:at:": [
+              {
+                "ObjField:": "Kitchen"
+              },
+              {
+                "FromBool:": true
+              },
+              "unlit"
+            ]
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
             }
-          ]
-        }
+          },
+          {
+            "Put:from:at:": [
+              {
+                "ObjField:": "Kitchen"
+              },
+              {
+                "FromBool:": true
+              },
+              "lit"
+            ]
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
+            }
+          },
+          {
+            "Put:from:at:": [
+              {
+                "ObjField:": "cabinet"
+              },
+              {
+                "FromBool:": true
+              },
+              "closed"
+            ]
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
+            }
+          },
+          {
+            "Put:from:at:": [
+              {
+                "ObjField:": "matches"
+              },
+              {
+                "FromBool:": true
+              },
+              "lit"
+            ]
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
+            }
+          }
+        ]
       ]
     }
   ]
-]
+}

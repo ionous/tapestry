@@ -34,8 +34,11 @@ class TypeSet {
     if (name in this.all) {
       throw new Error(`redefining type ${name}`);
     }
+    // ensure group names dont collide with command names
     if (type.uses !== "group") {
       this.all[ name ]= type;
+    } else {
+      this.all["_"+name]= type;
     }
     return type;
   }

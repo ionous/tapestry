@@ -9,12 +9,13 @@ func _() {
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
 	_ = x[PrintResponseNames-0]
-	_ = x[NumOptions-1]
+	_ = x[JsonMode-1]
+	_ = x[NumOptions-2]
 }
 
-const _Options_name = "PrintResponseNamesNumOptions"
+const _Options_name = "PrintResponseNamesJsonModeNumOptions"
 
-var _Options_index = [...]uint8{0, 18, 28}
+var _Options_index = [...]uint8{0, 18, 26, 36}
 
 func (i Options) String() string {
 	if i < 0 || i >= Options(len(_Options_index)-1) {

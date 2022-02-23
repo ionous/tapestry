@@ -39,13 +39,6 @@
                 "uses": "slot",
                 "desc": "Helper for counting values."
             },
-            "activity":
-            {
-                "uses": "flow",
-                "spec": "act {_%exe+execute}",
-                "slot": "execute",
-                "group": "hidden"
-            },
             "all_true":
             {
                 "uses": "flow",
@@ -89,7 +82,7 @@
             "bracket_text":
             {
                 "uses": "flow",
-                "spec": "brackets {_%do:activity}",
+                "spec": "brackets {does+execute}",
                 "slot": "text_eval",
                 "desc": "Sandwiches text printed during a block and puts them inside parenthesis '()'.",
                 "group": "printing"
@@ -105,29 +98,15 @@
             "buffer_text":
             {
                 "uses": "flow",
-                "spec": "buffers {_%do:activity}",
+                "spec": "buffers {does+execute}",
                 "slot": "text_eval",
                 "group": "printing"
-            },
-            "call_arg":
-            {
-                "uses": "flow",
-                "spec": "inarg {_%name:text} {from:assignment}",
-                "desc": "Runtime version of argument",
-                "group": "internal"
-            },
-            "call_args":
-            {
-                "uses": "flow",
-                "spec": "inargs {_%args+call_arg}",
-                "desc": "Runtime version of arguments",
-                "group": "internal"
             },
             "call_pattern":
             {
                 "uses": "flow",
-                "spec": "call_pattern {_%pattern:pattern_name} {args%arguments:call_args}",
-                "desc": "Runtime version of determine",
+                "spec": "determine {_%pattern:pattern_name} {args%arguments+arg}",
+                "desc": "Executes a pattern, and potentially returns a value.",
                 "slot":
                 [
                     "execute",
@@ -138,8 +117,7 @@
                     "num_list_eval",
                     "text_list_eval",
                     "record_list_eval"
-                ],
-                "group": "internal"
+                ]
             },
             "capitalize":
             {
@@ -152,7 +130,7 @@
             "choose_action":
             {
                 "uses": "flow",
-                "spec": "if {_%if:bool_eval} {do:activity} {else?brancher}",
+                "spec": "if {_%if:bool_eval} {does+execute} {else?brancher}",
                 "slot":
                 [
                     "execute",
@@ -164,21 +142,21 @@
             "choose_more":
             {
                 "uses": "flow",
-                "spec": "else_if {_%if:bool_eval} {do:activity} {else?brancher}",
+                "spec": "else_if {_%if:bool_eval} {does+execute} {else?brancher}",
                 "slot": "brancher",
                 "group": "misc"
             },
             "choose_more_value":
             {
                 "uses": "flow",
-                "spec": "else_if {_%assign:text} {from:assignment} {and%filter:bool_eval} {do:activity} {else?brancher}",
+                "spec": "else_if {_%assign:text} {from:assignment} {and%filter:bool_eval} {does+execute} {else?brancher}",
                 "slot": "brancher",
                 "group": "misc"
             },
             "choose_nothing_else":
             {
                 "uses": "flow",
-                "spec": "else_do {_%do:activity}",
+                "spec": "else_do {does+execute}",
                 "slot": "brancher",
                 "group": "misc"
             },
@@ -201,7 +179,7 @@
             "choose_value":
             {
                 "uses": "flow",
-                "spec": "if {_%assign:text} {from:assignment} {and%filter:bool_eval} {do:activity} {else?brancher}",
+                "spec": "if {_%assign:text} {from:assignment} {and%filter:bool_eval} {does+execute} {else?brancher}",
                 "slot":
                 [
                     "execute",
@@ -213,7 +191,7 @@
             "comma_text":
             {
                 "uses": "flow",
-                "spec": "commas {_%do:activity}",
+                "spec": "commas {does+execute}",
                 "slot": "text_eval",
                 "desc": "Separates words with commas, and 'and'.",
                 "group": "printing"
@@ -527,14 +505,6 @@
                 "desc": "The first value is less than the second value.",
                 "group": "comparison"
             },
-            "call_make":
-            {
-                "uses": "flow",
-                "spec": "call_make {_%kind:text} {args%arguments:call_args}",
-                "slot": "record_eval",
-                "desc": "Runtime version of make",
-                "group": "internal"
-            },
             "make_lowercase":
             {
                 "uses": "flow",
@@ -706,7 +676,7 @@
             "row":
             {
                 "uses": "flow",
-                "spec": "row {_%do:activity}",
+                "spec": "row {does+execute}",
                 "slot": "text_eval",
                 "desc": "A single line as part of a group of lines.",
                 "group": "printing"
@@ -714,7 +684,7 @@
             "rows":
             {
                 "uses": "flow",
-                "spec": "rows {_%do:activity}",
+                "spec": "rows {does+execute}",
                 "slot": "text_eval",
                 "desc": "Group text into successive lines.",
                 "group": "printing"
@@ -730,14 +700,16 @@
             "call_send":
             {
                 "uses": "flow",
-                "spec": "call_send {_%event:text} {to%path:text_list_eval} {args%arguments:call_args}",
-                "slot":
-                [
+                "spec": "send {_%path:text_list_eval} {event:bool_eval}",
+                "slot": [
                     "execute",
                     "bool_eval"
                 ],
-                "group": "internal",
-                "desc": "Runtime version of send"
+                "desc": [
+                    "Triggers a event, calling the passed event ( a pattern ) for the handlers of the objects on the passed path.",
+                    "Although the event advertises it can take any bool evaluation, only pattern calls are supported.",
+                    "Returns a true/false success value."
+                ]
             },
             "set_trait":
             {
@@ -750,7 +722,7 @@
             "slash_text":
             {
                 "uses": "flow",
-                "spec": "slashes {_%do:activity}",
+                "spec": "slashes {does+execute}",
                 "slot": "text_eval",
                 "desc": "Separates words with left-leaning slashes '/'.",
                 "group": "printing"
@@ -766,7 +738,7 @@
             "span_text":
             {
                 "uses": "flow",
-                "spec": "spaces {_%do:activity}",
+                "spec": "spaces {does+execute}",
                 "slot": "text_eval",
                 "desc": "Writes text with spaces between words.",
                 "group": "printing"
@@ -821,7 +793,7 @@
             "while":
             {
                 "uses": "flow",
-                "spec": "repeating {_%true:bool_eval} {do:activity}",
+                "spec": "repeating {_%true:bool_eval} {does+execute}",
                 "slot": "execute",
                 "desc": "Keep running a series of actions while a condition is true.",
                 "group": "flow"

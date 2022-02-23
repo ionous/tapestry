@@ -8,7 +8,8 @@ import (
 type State interface {
 	jsn.State
 	// substates write a fully completed value into us.
-	// fix -- maybe commit should return error? not sure.
+	// fix -- might be better to pass a completion callback into the states that need it
+	// could even pass a typed value then.
 	Commit(interface{})
 }
 
@@ -21,7 +22,9 @@ func (e Unhandled) Error() string {
 
 // StateMix implements the jsn.State interface
 // providing functions which can be overridden one at a time to customize functionality
+// returning false returns jsn.Missing from the State's relevant Marshal method.
 type StateMix struct {
+	Name     string // helpful sometimes for debugging
 	OnBlock  func(jsn.Block) error
 	OnMap    func(string, jsn.FlowBlock) bool
 	OnKey    func(string, string) error

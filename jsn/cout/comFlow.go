@@ -27,28 +27,40 @@ func (cf *comFlow) addMsgPair(label, choice string, value interface{}) {
 
 func (cf *comFlow) finalize() (ret interface{}) {
 	sig := cf.sig.String()
-	if cnt := len(cf.values); cnt == 0 {
-		ret = sig
-	} else {
-		var v interface{}
-		if cnt == 1 {
-			v = cf.values[0]
+	var v interface{}
+	var cmt interface{}
+	if str := cf.comment; len(str) > 0 {
+		if lines := strings.Split(str, "\n"); len(lines) > 1 {
+			cmt = lines
 		} else {
-			v = cf.values
+			cmt = str
 		}
-		m := map[string]interface{}{
-			sig: v,
-		}
-		if len(cf.comment) > 0 {
-			var out interface{}
-			if lines := strings.Split(cf.comment, "\n"); len(lines) > 0 {
-				out = lines
-			} else {
-				out = cf.comment
-			}
-			m["--"] = out
-		}
-		ret = m
 	}
-	return
+
+	switch vals := cf.values; len(vals) {
+	case 0:
+		// note: originally i collapsed calls with zero args down to just a string
+		// but in cases where commands get used to generate text --
+		// there's no way to differentiate b/t a command of zero params and plain text.
+		if sig != commentMarker {
+			v = true
+		} else if cmt == nil {
+			v = ""
+		} else {
+			v, cmt = cmt, nil
+		}
+	case 1:
+		v = vals[0]
+	default:
+		v = vals
+	}
+	m := map[string]interface{}{
+		sig: v,
+	}
+	if cmt != nil {
+		m[commentMarker] = cmt
+	}
+	return m
 }
+
+const commentMarker = "--"

@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "Kinds:have:": [
         "Things",
@@ -9,22 +9,21 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "print plural name",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "thing"
-              ]
-            }
-          ]
-        }
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "thing"
+            ]
+          }
+        ]
       ]
     },
     {
@@ -33,116 +32,110 @@
     {
       "Pattern:rules:": [
         "print plural name",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Plural of:": {
-                          "RenderTemplate:": "{.obj}"
-                        }
-                      }
+                  "Say:": {
+                    "Plural of:": {
+                      "RenderTemplate:": "{.obj}"
                     }
-                  ]
+                  }
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Cmp:is:txt:": [
-                    {
-                      "Get:from:": [
-                        "printed plural name",
-                        {
-                          "VarFields:": "obj"
-                        }
-                      ]
-                    },
-                    "OtherThan",
-                    ""
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "RenderTemplate:": "{.obj.printed_plural_name}"
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Cmp:is:txt:": [
+                  {
+                    "Get:from:": [
+                      "printed plural name",
+                      {
+                        "VarFields:": "obj"
                       }
-                    }
-                  ]
+                    ]
+                  },
+                  {
+                    "OtherThan": true
+                  },
+                  ""
+                ]
+              },
+              [
+                {
+                  "Say:": {
+                    "RenderTemplate:": "{.obj.printed_plural_name}"
+                  }
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "plural name printing",
-        {
-          "Story:": [
-            {
-              "Paragraph:": [
+        [
+          {
+            "Nouns:depict:": [
+              [
                 {
-                  "Nouns:depict:": [
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "flowerpot"
-                        ]
-                      },
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "dishes"
-                        ]
-                      },
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "spoon"
-                        ]
-                      }
-                    ],
-                    {
-                      "Kind:named:": [
-                        "are",
-                        "thing"
-                      ]
-                    }
+                  "Noun:named:": [
+                    "the",
+                    "flowerpot"
                   ]
                 },
                 {
-                  "NounAssignment:nouns:lines:": [
-                    "printed plural name",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "flowerpot"
-                        ]
-                      }
-                    ],
-                    "broken flower pots"
+                  "Noun:named:": [
+                    "the",
+                    "dishes"
+                  ]
+                },
+                {
+                  "Noun:named:": [
+                    "the",
+                    "spoon"
                   ]
                 }
-              ]
-            }
-          ]
-        }
+              ],
+              {
+                "Kind:named:": [
+                  "are",
+                  "thing"
+                ]
+              }
+            ]
+          },
+          {
+            "NounAssignment:nouns:lines:": [
+              "printed plural name",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "flowerpot"
+                  ]
+                }
+              ],
+              "broken flower pots"
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "plural name printing",
@@ -152,18 +145,16 @@
       ]
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "current_test",
-        {
-          "Act:": [
-            {
-              "Say:": {
-                "RenderTemplate:": "{print_plural_name: .flowerpot}, {print_plural_name: .dishes}, {print_plural_name: .spoon}"
-              }
+        [
+          {
+            "Say:": {
+              "RenderTemplate:": "{print_plural_name: .flowerpot}, {print_plural_name: .dishes}, {print_plural_name: .spoon}"
             }
-          ]
-        }
+          }
+        ]
       ]
     }
   ]
-]
+}

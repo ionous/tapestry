@@ -4,9 +4,24 @@ import (
 	"hash/fnv"
 	"io"
 	r "reflect"
+
+	"github.com/ionous/errutil"
 )
 
-func findType(sig uint64, regs []map[uint64]interface{}) (ret interface{}, okay bool) {
+type TypeCreator interface {
+	HasType(string) bool
+	NewFromSignature(string) (interface{}, error)
+}
+
+type Signatures []map[uint64]interface{}
+
+func (regs Signatures) HasType(key string) (okay bool) {
+	_, okay = regs.FindType(key)
+	return
+}
+
+func (regs Signatures) FindType(key string) (ret interface{}, okay bool) {
+	sig := Hash(key)
 	for _, reg := range regs {
 		if a, ok := reg[sig]; ok {
 			ret, okay = a, ok
@@ -16,8 +31,13 @@ func findType(sig uint64, regs []map[uint64]interface{}) (ret interface{}, okay 
 	return
 }
 
-func newFromType(cmd interface{}) interface{} {
-	return r.New(r.TypeOf(cmd).Elem()).Interface()
+func (regs Signatures) NewFromSignature(key string) (ret interface{}, err error) {
+	if cmd, ok := regs.FindType(key); !ok {
+		err = errutil.New("unknown signature", key)
+	} else {
+		ret = r.New(r.TypeOf(cmd).Elem()).Interface()
+	}
+	return
 }
 
 // Hash helper for generating signatures lookups

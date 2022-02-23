@@ -11,29 +11,27 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type Signatures []map[uint64]interface{}
-
 type xDecoder struct {
 	chart.Machine
-	reg        Signatures
+	TypeCreator
 	customSlot SlotDecoder
 	customFlow FlowDecoder
 }
 
-type SlotDecoder func(jsn.SlotBlock, json.RawMessage) error
-type FlowDecoder func(jsn.FlowBlock, json.RawMessage) error
+type SlotDecoder func(jsn.Marshaler, jsn.SlotBlock, json.RawMessage) error
+type FlowDecoder func(jsn.Marshaler, jsn.FlowBlock, json.RawMessage) error
 
 // Customization of the decoding process
 type Decoder xDecoder
 
-func NewDecoder(reg Signatures) *Decoder {
+func NewDecoder(reg TypeCreator) *Decoder {
 	d := &xDecoder{
-		reg:     reg,
-		Machine: chart.MakeDecoder(),
-		customSlot: func(jsn.SlotBlock, json.RawMessage) error {
+		TypeCreator: reg,
+		Machine:     chart.MakeDecoder(),
+		customSlot: func(jsn.Marshaler, jsn.SlotBlock, json.RawMessage) error {
 			return chart.Unhandled("no custom slot handler")
 		},
-		customFlow: func(jsn.FlowBlock, json.RawMessage) error {
+		customFlow: func(jsn.Marshaler, jsn.FlowBlock, json.RawMessage) error {
 			return chart.Unhandled("no custom flow handler")
 		},
 	}
@@ -56,7 +54,7 @@ func (b *Decoder) Decode(dst jsn.Marshalee, msg json.RawMessage) error {
 	return x.decode(dst, msg)
 }
 
-func Decode(dst jsn.Marshalee, msg json.RawMessage, reg Signatures) error {
+func Decode(dst jsn.Marshalee, msg json.RawMessage, reg TypeCreator) error {
 	dec := NewDecoder(reg)
 	return dec.Decode(dst, msg)
 }
@@ -70,23 +68,23 @@ func (dec *xDecoder) decode(dst jsn.Marshalee, msg json.RawMessage) error {
 }
 
 func (dec *xDecoder) readFlow(flow jsn.FlowBlock, msg json.RawMessage) (okay bool) {
-	if e := dec.customFlow(flow, msg); e == nil {
+	if e := dec.customFlow(dec, flow, msg); e == nil {
 		dec.Commit("customFlow")
 	} else {
 		var unhandled chart.Unhandled
 		if !errors.As(e, &unhandled) {
 			dec.Error(e)
-		} else if cmd, e := dec.readCmd(msg); e != nil {
+		} else if op, e := ReadOp(msg); e != nil {
 			dec.Error(e)
 		} else {
 			if dec.Machine.Comment != nil {
-				*dec.Machine.Comment = cmd.comment
+				*dec.Machine.Comment = op.Cmt
 				dec.Machine.Comment = nil
 			}
-			if flow, e := newFlowData(cmd); e != nil {
+			if flowData, e := newFlowData(op); e != nil {
 				dec.Error(e)
 			} else {
-				dec.PushState(dec.newFlow(flow))
+				dec.PushState(dec.newFlow(flowData))
 				okay = true
 			}
 		}
@@ -95,19 +93,25 @@ func (dec *xDecoder) readFlow(flow jsn.FlowBlock, msg json.RawMessage) (okay boo
 }
 
 func (dec *xDecoder) readSlot(slot jsn.SlotBlock, msg json.RawMessage) (okay bool) {
-	if e := dec.customSlot(slot, msg); e == nil {
+	if e := dec.customSlot(dec, slot, msg); e == nil {
 		dec.Commit("customSlot")
 	} else {
 		var unhandled chart.Unhandled
 		if !errors.As(e, &unhandled) {
 			dec.Error(e)
-		} else if cmd, e := dec.readCmd(msg); e != nil {
+		} else if op, e := ReadOp(msg); e != nil {
 			dec.Error(e)
-		} else if v := newFromType(cmd.reg); !slot.SetSlot(v) {
-			dec.Error(errutil.Fmt("couldn't put %T into slot %T", v, slot))
+		} else if v, e := dec.NewFromSignature(op.Key); e != nil {
+			dec.Error(e)
 		} else {
-			dec.PushState(dec.newSlot(cmd))
-			okay = true
+			//should we be doing this on "OnCommit" instead of before the contents of the slat have been read?
+			//( right now the caller calls Marshal on the slat -- but we could do it in here... )
+			if !slot.SetSlot(v) {
+				dec.Error(errutil.Fmt("couldn't put %T into slot %T", v, slot))
+			} else {
+				dec.PushState(dec.newSlot(op))
+				okay = true
+			}
 		}
 	}
 	return
@@ -115,18 +119,18 @@ func (dec *xDecoder) readSlot(slot jsn.SlotBlock, msg json.RawMessage) (okay boo
 
 func (dec *xDecoder) readFullSwap(p jsn.SwapBlock, msg json.RawMessage) (okay bool) {
 	// expanded swaps { "swapName choice:": <value> }
-	if cmd, e := dec.readCmd(msg); e != nil {
+	if op, e := ReadOp(msg); e != nil {
 		dec.Error(e)
-	} else if sig, e := cmd.getSignature(); e != nil {
+	} else if sig, args, e := op.ReadMsg(); e != nil {
 		dec.Error(e)
-	} else if len(sig.params) != 1 || len(sig.params[0].choice) > 0 {
-		dec.Error(errutil.New("expected exactly one choice in", cmd.key))
+	} else if len(sig.Params) != 1 || len(sig.Params[0].Choice) > 0 {
+		dec.Error(errutil.New("expected exactly one choice in", op.Key))
 	} else {
-		pick := newStringKey(sig.params[0].label)
+		pick := newStringKey(sig.Params[0].Label)
 		if ok := p.SetSwap(pick); !ok {
 			dec.Error(errutil.Fmt("swap has unexpected choice %q", pick))
 		} else {
-			dec.PushState(dec.newSwap(cmd.args))
+			dec.PushState(dec.newSwap(args[0]))
 			okay = true
 		}
 	}
@@ -292,14 +296,14 @@ func (dec *xDecoder) newSlice(msgs []json.RawMessage) *chart.StateMix {
 }
 
 // in compact format, the msg holds the slat which fills the slot
-func (dec *xDecoder) newSlot(cmd cmdData) *chart.StateMix {
+func (dec *xDecoder) newSlot(op Op) *chart.StateMix {
 	var next chart.StateMix
 	next.OnMap = func(string, jsn.FlowBlock) (okay bool) {
-		if flow, e := newFlowData(cmd); e != nil {
+		if flow, e := newFlowData(op); e != nil {
 			dec.Error(e)
 		} else {
 			if dec.Machine.Comment != nil {
-				*dec.Machine.Comment = cmd.comment
+				*dec.Machine.Comment = op.Cmt
 				dec.Machine.Comment = nil
 			}
 			dec.PushState(dec.newFlow(flow))
@@ -329,16 +333,17 @@ func (dec *xDecoder) newSwap(msg json.RawMessage) *chart.StateMix {
 }
 
 type cmdData struct {
-	reg     interface{}
-	key     string
-	args    json.RawMessage
-	comment string
+	Op 
+	outValue interface{}
 }
 
 func (c cmdData) getSignature() (ret sigReader, err error) {
 	err = ret.readSig(c.key)
 	return
 }
+
+// READCMD BECAME READ OP
+
 
 // retType: type registry nil pointer
 // retKey: raw signature in the json. ex. "Story:", "Always", or "Command some thing:else:"

@@ -1,6 +1,8 @@
 package core
 
 import (
+	"os"
+
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/rt/writer"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
@@ -14,8 +16,8 @@ var helloThereWorld = MakeActivity(
 
 func ExampleSpan() {
 	var run sayTester
-	run.SetWriter(writer.NewStdout())
-	if e := safe.WriteText(&run, &SpanText{Do: helloThereWorld}); e != nil {
+	run.SetWriter(os.Stdout)
+	if e := safe.WriteText(&run, &SpanText{Does: helloThereWorld}); e != nil {
 		panic(e)
 	}
 	// Output:
@@ -24,8 +26,8 @@ func ExampleSpan() {
 
 func ExampleBracket() {
 	var run sayTester
-	run.SetWriter(writer.NewStdout())
-	if e := safe.WriteText(&run, &BracketText{Do: helloThereWorld}); e != nil {
+	run.SetWriter(os.Stdout)
+	if e := safe.WriteText(&run, &BracketText{Does: helloThereWorld}); e != nil {
 		panic(e)
 	}
 	// Output:
@@ -34,8 +36,8 @@ func ExampleBracket() {
 
 func ExampleSlash() {
 	var run sayTester
-	run.SetWriter(writer.NewStdout())
-	if e := safe.WriteText(&run, &SlashText{Do: helloThereWorld}); e != nil {
+	run.SetWriter(os.Stdout)
+	if e := safe.WriteText(&run, &SlashText{Does: helloThereWorld}); e != nil {
 		panic(e)
 	}
 	// Output:
@@ -44,8 +46,8 @@ func ExampleSlash() {
 
 func ExampleCommas() {
 	var run sayTester
-	run.SetWriter(writer.NewStdout())
-	if e := safe.WriteText(&run, &CommaText{Do: helloThereWorld}); e != nil {
+	run.SetWriter(os.Stdout)
+	if e := safe.WriteText(&run, &CommaText{Does: helloThereWorld}); e != nil {
 		panic(e)
 	}
 	// Output:

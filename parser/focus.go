@@ -31,6 +31,7 @@ type Target struct {
 func (a *Target) Scan(ctx Context, bounds Bounds, start Cursor) (ret Result, err error) {
 	first, rest := a.Match[0], a.Match[1:]
 	errorDepth := -1
+	err = Underflow{Depth(start.Pos)} // not completely sure what a good default error is here...
 	// scan ahead for matches and determine how many words might match this target.
 	for cs := start; len(cs.CurrentWord()) > 0; cs = cs.Skip(1) {
 		if rl, e := scanAllOf(ctx, bounds, cs, rest); e != nil {

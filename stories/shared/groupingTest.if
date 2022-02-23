@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "Comment:": "FIX: right now we dont support having the same named objects in multiple domains. we should, especially for testing, something something consider domain hierarchy too.  "
     },
@@ -104,51 +104,45 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "no grouping",
-        {
-          "Story:": [
-            {
-              "Paragraph:": [
+        [
+          {
+            "Pattern:rules:": [
+              "assign grouping",
+              [
                 {
-                  "Pattern:rules:": [
-                    "assign grouping",
+                  "PatternRule:does:": [
                     {
-                      "PatternRules:": [
-                        {
-                          "PatternRule:hook activity:": [
-                            "Always",
-                            {
-                              "Act:": [
-                                {
-                                  "Comment:": "For patterns which return a value, assigning a return value ends the pattern matching: so end this pattern and block out the default handler."
-                                },
-                                {
-                                  "Let:be:": [
-                                    "grouping",
-                                    "@grouping"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
+                      "Always": true
+                    },
+                    [
+                      {
+                        "Comment:": "For patterns which return a value, assigning a return value ends the pattern matching: so end this pattern and block out the default handler."
+                      },
+                      {
+                        "Let:be:": [
+                          "grouping",
+                          "@grouping"
+                        ]
+                      }
+                    ]
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "no grouping",
@@ -161,41 +155,28 @@
       "Comment:": "Stops default grouping from even taking place. All objects are printed individually. "
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "no grouping",
-        {
-          "Act:": [
-            {
-              "Determine:arguments:": [
-                "print inline objects",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "objs",
-                        {
-                          "FromTxts:": [
-                            "Mildred",
-                            " apple",
-                            " pen",
-                            "triangles_1",
-                            "triangles_2",
-                            "cats_1",
-                            "cats_2"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
+        [
+          {
+            "PrintInlineObjects objs:": {
+              "FromTxts:": [
+                "Mildred",
+                " apple",
+                " pen",
+                "triangles_1",
+                "triangles_2",
+                "cats_1",
+                "cats_2"
               ]
             }
-          ]
-        }
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "default grouping",
@@ -208,41 +189,28 @@
       "Comment:": "Default grouping prints each set of counted nouns as a unit: ex. two triangles, or seventeen cats. "
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "default grouping",
-        {
-          "Act:": [
-            {
-              "Determine:arguments:": [
-                "print inline objects",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "objs",
-                        {
-                          "FromTxts:": [
-                            "Mildred",
-                            " apple",
-                            " pen",
-                            "triangles_1",
-                            "triangles_2",
-                            "cats_1",
-                            "cats_2"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
+        [
+          {
+            "PrintInlineObjects objs:": {
+              "FromTxts:": [
+                "Mildred",
+                " apple",
+                " pen",
+                "triangles_1",
+                "triangles_2",
+                "cats_1",
+                "cats_2"
               ]
             }
-          ]
-        }
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "custom few",
@@ -257,182 +225,143 @@
     {
       "TestScene:story:": [
         "custom few",
-        {
-          "Story:": [
-            {
-              "Paragraph:": [
+        [
+          {
+            "Pattern:rules:": [
+              "assign grouping",
+              [
                 {
-                  "Pattern:rules:": [
-                    "assign grouping",
+                  "PatternRule:does:": [
                     {
-                      "PatternRules:": [
-                        {
-                          "PatternRule:hook activity:": [
-                            {
-                              "KindOf:isExactly:": [
-                                "@obj",
-                                "props"
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromTxt:": "props"
-                                    },
-                                    "label"
-                                  ]
-                                },
-                                {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromBool:": true
-                                    },
-                                    "is hide label"
-                                  ]
-                                },
-                                {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromBool:": true
-                                    },
-                                    "is hide size"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                      "KindOf:isExactly:": [
+                        "@obj",
+                        "props"
                       ]
-                    }
+                    },
+                    [
+                      {
+                        "Put:from:at:": [
+                          {
+                            "VarField:": "grouping"
+                          },
+                          {
+                            "FromTxt:": "props"
+                          },
+                          "label"
+                        ]
+                      },
+                      {
+                        "Put:from:at:": [
+                          {
+                            "VarField:": "grouping"
+                          },
+                          {
+                            "FromBool:": true
+                          },
+                          "is hide label"
+                        ]
+                      },
+                      {
+                        "Put:from:at:": [
+                          {
+                            "VarField:": "grouping"
+                          },
+                          {
+                            "FromBool:": true
+                          },
+                          "is hide size"
+                        ]
+                      }
+                    ]
                   ]
                 }
               ]
-            },
-            {
-              "Paragraph:": [
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "Pattern:rules:": [
+              "print several",
+              [
                 {
-                  "Pattern:rules:": [
-                    "print several",
+                  "PatternRule:does:": [
                     {
-                      "PatternRules:": [
+                      "AllTrue:": [
                         {
-                          "PatternRule:hook activity:": [
+                          "KindOf:is:": [
+                            "@obj",
+                            "triangles"
+                          ]
+                        },
+                        {
+                          "Cmp:is:num:": [
+                            "@group size",
                             {
-                              "AllTrue:": [
-                                {
-                                  "KindOf:is:": [
-                                    "@obj",
-                                    "triangles"
-                                  ]
-                                },
-                                {
-                                  "Cmp:is:num:": [
-                                    "@group size",
-                                    "GreaterThan",
-                                    1
-                                  ]
-                                }
-                              ]
+                              "GreaterThan": true
                             },
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": "a few shapely trigons"
-                                }
-                              ]
-                            }
+                            1
                           ]
                         }
                       ]
-                    }
+                    },
+                    [
+                      {
+                        "Say:": "a few shapely trigons"
+                      }
+                    ]
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
     {
-      "TestRule:hook activity:": [
+      "--": ""
+    },
+    {
+      "TestRule:does:": [
         "custom few",
-        {
-          "Act:": [
-            {
-              "Say:": {
-                "Spaces:": {
-                  "Act:": [
-                    {
-                      "Determine:arguments:": [
-                        "print inline objects",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                {
-                                  "FromTxts:": [
-                                    "Mildred",
-                                    " apple",
-                                    " pen",
-                                    "triangles_1",
-                                    "triangles_2"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Say:": ";"
-                    },
-                    {
-                      "Determine:arguments:": [
-                        "print inline objects",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                {
-                                  "FromTxts:": [
-                                    "Mildred",
-                                    " apple",
-                                    " pen",
-                                    "triangles_1"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+        [
+          {
+            "Say:": {
+              "Spaces does:": [
+                {
+                  "PrintInlineObjects objs:": {
+                    "FromTxts:": [
+                      "Mildred",
+                      " apple",
+                      " pen",
+                      "triangles_1",
+                      "triangles_2"
+                    ]
+                  }
+                },
+                {
+                  "Say:": ";"
+                },
+                {
+                  "PrintInlineObjects objs:": {
+                    "FromTxts:": [
+                      "Mildred",
+                      " apple",
+                      " pen",
+                      "triangles_1"
+                    ]
+                  }
                 }
-              }
+              ]
             }
-          ]
-        }
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "custom replacement",
@@ -444,142 +373,106 @@
     {
       "TestScene:story:": [
         "custom replacement",
-        {
-          "Story:": [
-            {
-              "Paragraph:": [
+        [
+          {
+            "Pattern:rules:": [
+              "assign grouping",
+              [
                 {
-                  "Pattern:rules:": [
-                    "assign grouping",
+                  "PatternRule:does:": [
                     {
-                      "PatternRules:": [
-                        {
-                          "PatternRule:hook activity:": [
-                            {
-                              "KindOf:is:": [
-                                "@obj",
-                                "props"
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromTxt:": "some things"
-                                    },
-                                    "label"
-                                  ]
-                                },
-                                {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromBool:": true
-                                    },
-                                    "is hide size"
-                                  ]
-                                },
-                                {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromBool:": true
-                                    },
-                                    "is hide objects"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                      "KindOf:is:": [
+                        "@obj",
+                        "props"
                       ]
-                    }
+                    },
+                    [
+                      {
+                        "Put:from:at:": [
+                          {
+                            "VarField:": "grouping"
+                          },
+                          {
+                            "FromTxt:": "some things"
+                          },
+                          "label"
+                        ]
+                      },
+                      {
+                        "Put:from:at:": [
+                          {
+                            "VarField:": "grouping"
+                          },
+                          {
+                            "FromBool:": true
+                          },
+                          "is hide size"
+                        ]
+                      },
+                      {
+                        "Put:from:at:": [
+                          {
+                            "VarField:": "grouping"
+                          },
+                          {
+                            "FromBool:": true
+                          },
+                          "is hide objects"
+                        ]
+                      }
+                    ]
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Comment:": "deactivated: uncounted objects are their own groups now; so the triangles don't group with generic props. tbd: how to fix this style of group printing."
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "x custom replacement",
-        {
-          "Act:": [
-            {
-              "Say:": {
-                "Spaces:": {
-                  "Act:": [
-                    {
-                      "Determine:arguments:": [
-                        "print inline objects",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                {
-                                  "FromTxts:": [
-                                    "Mildred",
-                                    " apple",
-                                    " pen",
-                                    "triangles_1",
-                                    "triangles_2"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Say:": ";"
-                    },
-                    {
-                      "Determine:arguments:": [
-                        "print inline objects",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                {
-                                  "FromTxts:": [
-                                    "Mildred",
-                                    " apple"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+        [
+          {
+            "Say:": {
+              "Spaces does:": [
+                {
+                  "PrintInlineObjects objs:": {
+                    "FromTxts:": [
+                      "Mildred",
+                      " apple",
+                      " pen",
+                      "triangles_1",
+                      "triangles_2"
+                    ]
+                  }
+                },
+                {
+                  "Say:": ";"
+                },
+                {
+                  "PrintInlineObjects objs:": {
+                    "FromTxts:": [
+                      "Mildred",
+                      " apple"
+                    ]
+                  }
                 }
-              }
+              ]
             }
-          ]
-        }
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "custom fancy phrase",
@@ -591,210 +484,166 @@
     {
       "TestScene:story:": [
         "custom fancy phrase",
-        {
-          "Story:": [
-            {
-              "Paragraph:": [
+        [
+          {
+            "Pattern:rules:": [
+              "assign grouping",
+              [
                 {
-                  "Pattern:rules:": [
-                    "assign grouping",
+                  "PatternRule:does:": [
                     {
-                      "PatternRules:": [
-                        {
-                          "PatternRule:hook activity:": [
-                            {
-                              "KindOf:is:": [
-                                "@obj",
-                                "props"
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromTxt:": "the tiles"
-                                    },
-                                    "label"
-                                  ]
-                                },
-                                {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromBool:": true
-                                    },
-                                    "is hide size"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                      "KindOf:is:": [
+                        "@obj",
+                        "props"
                       ]
-                    }
+                    },
+                    [
+                      {
+                        "Put:from:at:": [
+                          {
+                            "VarField:": "grouping"
+                          },
+                          {
+                            "FromTxt:": "the tiles"
+                          },
+                          "label"
+                        ]
+                      },
+                      {
+                        "Put:from:at:": [
+                          {
+                            "VarField:": "grouping"
+                          },
+                          {
+                            "FromBool:": true
+                          },
+                          "is hide size"
+                        ]
+                      }
+                    ]
                   ]
                 }
               ]
-            },
-            {
-              "Paragraph:": [
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "Pattern:rules:": [
+              "print group",
+              [
                 {
-                  "Pattern:rules:": [
-                    "print group",
+                  "PatternRule:flags:does:": [
                     {
-                      "PatternRules:": [
+                      "Cmp:is:txt:": [
                         {
-                          "PatternRule:flags:hook activity:": [
+                          "Get:from:": [
+                            "label",
                             {
-                              "Cmp:is:txt:": [
-                                {
-                                  "Get:from:": [
-                                    "label",
-                                    {
-                                      "RecFields:": {
-                                        "Get:from:": [
-                                          "grouping",
-                                          {
-                                            "VarFields:": "group"
-                                          }
-                                        ]
-                                      }
-                                    }
-                                  ]
-                                },
-                                "Equals",
-                                "the tiles"
-                              ]
-                            },
-                            "before",
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": "from a Scrabble set"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Paragraph:": [
-                {
-                  "Pattern:rules:": [
-                    "print grouped object",
-                    {
-                      "PatternRules:": [
-                        {
-                          "PatternRule:hook activity:": [
-                            {
-                              "KindOf:is:": [
-                                "@obj",
-                                "scrabble tiles"
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "{.obj}"
+                              "RecFields:": {
+                                "Get:from:": [
+                                  "grouping",
+                                  {
+                                    "VarFields:": "group"
                                   }
-                                }
-                              ]
+                                ]
+                              }
                             }
                           ]
-                        }
+                        },
+                        {
+                          "Equals": true
+                        },
+                        "the tiles"
                       ]
-                    }
+                    },
+                    "before",
+                    [
+                      {
+                        "Say:": "from a Scrabble set"
+                      }
+                    ]
                   ]
                 }
               ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  [
-    {
-      "TestRule:hook activity:": [
-        "custom fancy phrase",
-        {
-          "Act:": [
-            {
-              "Say:": {
-                "Spaces:": {
-                  "Act:": [
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "Pattern:rules:": [
+              "print grouped object",
+              [
+                {
+                  "PatternRule:does:": [
                     {
-                      "Determine:arguments:": [
-                        "print inline objects",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                {
-                                  "FromTxts:": [
-                                    "x",
-                                    "w",
-                                    "f",
-                                    "y",
-                                    "z"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                      "KindOf:is:": [
+                        "@obj",
+                        "scrabble tiles"
                       ]
                     },
-                    {
-                      "Say:": ";"
-                    },
-                    {
-                      "Determine:arguments:": [
-                        "print inline objects",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                {
-                                  "FromTxts:": [
-                                    "Mildred",
-                                    "x",
-                                    "w",
-                                    "f",
-                                    "y",
-                                    "z"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                    [
+                      {
+                        "Say:": {
+                          "RenderTemplate:": "{.obj}"
                         }
-                      ]
-                    }
+                      }
+                    ]
                   ]
                 }
-              }
-            }
-          ]
-        }
+              ]
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
+    {
+      "TestRule:does:": [
+        "custom fancy phrase",
+        [
+          {
+            "Say:": {
+              "Spaces does:": [
+                {
+                  "PrintInlineObjects objs:": {
+                    "FromTxts:": [
+                      "x",
+                      "w",
+                      "f",
+                      "y",
+                      "z"
+                    ]
+                  }
+                },
+                {
+                  "Say:": ";"
+                },
+                {
+                  "PrintInlineObjects objs:": {
+                    "FromTxts:": [
+                      "Mildred",
+                      "x",
+                      "w",
+                      "f",
+                      "y",
+                      "z"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "custom parenthetical",
@@ -806,119 +655,92 @@
     {
       "TestScene:story:": [
         "custom parenthetical",
-        {
-          "Story:": [
-            {
-              "Paragraph:": [
+        [
+          {
+            "Pattern:rules:": [
+              "assign grouping",
+              [
                 {
-                  "Pattern:rules:": [
-                    "assign grouping",
+                  "PatternRule:does:": [
                     {
-                      "PatternRules:": [
-                        {
-                          "PatternRule:hook activity:": [
-                            {
-                              "KindOf:is:": [
-                                "@obj",
-                                "scrabble tiles"
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromTxt:": "scrabble tiles"
-                                    },
-                                    "label"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                      "KindOf:is:": [
+                        "@obj",
+                        "scrabble tiles"
                       ]
-                    }
+                    },
+                    [
+                      {
+                        "Put:from:at:": [
+                          {
+                            "VarField:": "grouping"
+                          },
+                          {
+                            "FromTxt:": "scrabble tiles"
+                          },
+                          "label"
+                        ]
+                      }
+                    ]
                   ]
                 }
               ]
-            },
-            {
-              "Paragraph:": [
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "Pattern:rules:": [
+              "print grouped object",
+              [
                 {
-                  "Pattern:rules:": [
-                    "print grouped object",
+                  "PatternRule:does:": [
                     {
-                      "PatternRules:": [
-                        {
-                          "PatternRule:hook activity:": [
-                            {
-                              "KindOf:is:": [
-                                "@obj",
-                                "scrabble tiles"
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": {
-                                    "RenderTemplate:": "{.obj}"
-                                  }
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                      "KindOf:is:": [
+                        "@obj",
+                        "scrabble tiles"
                       ]
-                    }
+                    },
+                    [
+                      {
+                        "Say:": {
+                          "RenderTemplate:": "{.obj}"
+                        }
+                      }
+                    ]
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
     {
-      "TestRule:hook activity:": [
+      "--": ""
+    },
+    {
+      "TestRule:does:": [
         "custom parenthetical",
-        {
-          "Act:": [
-            {
-              "Determine:arguments:": [
-                "print inline objects",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "objs",
-                        {
-                          "FromTxts:": [
-                            "Mildred",
-                            "x",
-                            "w",
-                            "f",
-                            "y",
-                            "z"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
+        [
+          {
+            "PrintInlineObjects objs:": {
+              "FromTxts:": [
+                "Mildred",
+                "x",
+                "w",
+                "f",
+                "y",
+                "z"
               ]
             }
-          ]
-        }
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "custom parenthetical articles",
@@ -930,87 +752,65 @@
     {
       "TestScene:story:": [
         "custom parenthetical articles",
-        {
-          "Story:": [
-            {
-              "Paragraph:": [
+        [
+          {
+            "Pattern:rules:": [
+              "assign grouping",
+              [
                 {
-                  "Pattern:rules:": [
-                    "assign grouping",
+                  "PatternRule:does:": [
                     {
-                      "PatternRules:": [
-                        {
-                          "PatternRule:hook activity:": [
-                            {
-                              "KindOf:is:": [
-                                "@obj",
-                                "scrabble tiles"
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromTxt:": "scrabble tiles"
-                                    },
-                                    "label"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                      "KindOf:is:": [
+                        "@obj",
+                        "scrabble tiles"
                       ]
-                    }
+                    },
+                    [
+                      {
+                        "Put:from:at:": [
+                          {
+                            "VarField:": "grouping"
+                          },
+                          {
+                            "FromTxt:": "scrabble tiles"
+                          },
+                          "label"
+                        ]
+                      }
+                    ]
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
     {
-      "TestRule:hook activity:": [
+      "--": ""
+    },
+    {
+      "TestRule:does:": [
         "custom parenthetical articles",
-        {
-          "Act:": [
-            {
-              "Determine:arguments:": [
-                "print inline objects",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "objs",
-                        {
-                          "FromTxts:": [
-                            "Mildred",
-                            "x",
-                            "w",
-                            "f",
-                            "y",
-                            "z"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
+        [
+          {
+            "PrintInlineObjects objs:": {
+              "FromTxts:": [
+                "Mildred",
+                "x",
+                "w",
+                "f",
+                "y",
+                "z"
               ]
             }
-          ]
-        }
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "custom unnamed parenthetical",
@@ -1022,119 +822,82 @@
     {
       "TestScene:story:": [
         "custom unnamed parenthetical",
-        {
-          "Story:": [
-            {
-              "Paragraph:": [
+        [
+          {
+            "Pattern:rules:": [
+              "assign grouping",
+              [
                 {
-                  "Pattern:rules:": [
-                    "assign grouping",
+                  "PatternRule:does:": [
                     {
-                      "PatternRules:": [
-                        {
-                          "PatternRule:hook activity:": [
-                            {
-                              "KindOf:is:": [
-                                "@obj",
-                                "props"
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Put:from:at:": [
-                                    {
-                                      "VarField:": "grouping"
-                                    },
-                                    {
-                                      "FromTxt:": "things"
-                                    },
-                                    "label"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                      "KindOf:is:": [
+                        "@obj",
+                        "props"
                       ]
-                    }
+                    },
+                    [
+                      {
+                        "Put:from:at:": [
+                          {
+                            "VarField:": "grouping"
+                          },
+                          {
+                            "FromTxt:": "things"
+                          },
+                          "label"
+                        ]
+                      }
+                    ]
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Comment:": "deactivated: uncounted objects are their own groups now; so the triangles don't group with generic props. tbd: how to fix this style of group printing."
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "x custom unnamed parenthetical",
-        {
-          "Act:": [
-            {
-              "Say:": {
-                "Spaces:": {
-                  "Act:": [
-                    {
-                      "Determine:arguments:": [
-                        "print inline objects",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                {
-                                  "FromTxts:": [
-                                    "Mildred",
-                                    " apple",
-                                    " pen",
-                                    "triangles_1"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "Say:": ";"
-                    },
-                    {
-                      "Determine:arguments:": [
-                        "print inline objects",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                {
-                                  "FromTxts:": [
-                                    "Mildred",
-                                    " apple",
-                                    " pen",
-                                    "triangles_1",
-                                    "triangles_2"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
+        [
+          {
+            "Say:": {
+              "Spaces does:": [
+                {
+                  "PrintInlineObjects objs:": {
+                    "FromTxts:": [
+                      "Mildred",
+                      " apple",
+                      " pen",
+                      "triangles_1"
+                    ]
+                  }
+                },
+                {
+                  "Say:": ";"
+                },
+                {
+                  "PrintInlineObjects objs:": {
+                    "FromTxts:": [
+                      "Mildred",
+                      " apple",
+                      " pen",
+                      "triangles_1",
+                      "triangles_2"
+                    ]
+                  }
                 }
-              }
+              ]
             }
-          ]
-        }
+          }
+        ]
       ]
     }
   ]
-]
+}

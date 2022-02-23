@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "TestStatement:test:": [
         "searching test",
@@ -9,182 +9,114 @@
       ]
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "searching test",
-        {
-          "Act:": [
-            {
-              "Determine:arguments:": [
-                "Searching",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "knife"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Determine:arguments:": [
-                "Searching",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "machine"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Determine:arguments:": [
-                "Searching",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "counter"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Determine:arguments:": [
-                "Searching",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "purse"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+        [
+          {
+            "Searching agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "knife"
+              }
+            ]
+          },
+          {
+            "Searching agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "machine"
+              }
+            ]
+          },
+          {
+            "Searching agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "counter"
+              }
+            ]
+          },
+          {
+            "Searching agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "purse"
+              }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "searching test",
-        {
-          "Story:": [
-            {
-              "Paragraph:": [
+        [
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              " whereabouts",
+              [
                 {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    " whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "flower"
-                        ]
-                      },
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "knife"
-                        ]
-                      }
-                    ],
-                    "is",
-                    [
-                      {
-                        "Noun:named:": [
-                          "our",
-                          "self"
-                        ]
-                      }
-                    ]
+                  "Noun:named:": [
+                    "the",
+                    "flower"
+                  ]
+                },
+                {
+                  "Noun:named:": [
+                    "the",
+                    "knife"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "our",
+                    "self"
                   ]
                 }
               ]
-            },
-            {
-              "Paragraph:": [
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              " whereabouts",
+              [
                 {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    " whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "purse"
-                        ]
-                      }
-                    ],
-                    "is",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "kitchen"
-                        ]
-                      }
-                    ]
+                  "Noun:named:": [
+                    "the",
+                    "purse"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "kitchen"
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
     }
   ]
-]
+}

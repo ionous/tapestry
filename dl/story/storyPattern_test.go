@@ -39,11 +39,10 @@ func TestPatternImport(t *testing.T) {
 func TestPatternParameterImport(t *testing.T) {
 	patternVariables := &story.PatternDecl{
 		Name: core.PatternName{Str: "corral"},
-		Optvars: &story.PatternVariablesTail{
-			Props: []story.PropertySlot{&story.TextProperty{NamedProperty: story.NamedProperty{
-				Name: "pet",
-				Type: "animal",
-			}}}},
+		Params: []story.PropertySlot{&story.TextProperty{NamedProperty: story.NamedProperty{
+			Name: "pet",
+			Type: "animal",
+		}}},
 	}
 	var els []eph.Ephemera
 	k := story.NewImporter(collectEphemera(&els), storyMarshaller)
@@ -92,10 +91,10 @@ func TestPatternRuleImport(t *testing.T) {
 				// this is the default timing:
 				When: eph.EphTiming{eph.EphTiming_During},
 				// exe is exactly what was specified:
-				Exe: &core.Activity{Exe: []rt.Execute{
+				Exe: []rt.Execute{
 					&core.SayText{Text: T("hello")},
 					&core.SayText{Text: T("hello")},
-				}},
+				},
 			},
 		}
 		if diff := pretty.Diff(els, expect); len(diff) > 0 {
@@ -113,22 +112,18 @@ var _pattern_actions = map[string]interface{}{
 			"type":  "pattern_name",
 			"value": "example",
 		},
-		"$PATTERN_RULES": map[string]interface{}{
-			"type": "pattern_rules",
-			"value": map[string]interface{}{
-				"$PATTERN_RULE": []interface{}{
-					map[string]interface{}{
-						"type": "pattern_rule",
+		"$RULES": []interface{}{
+			map[string]interface{}{
+				"type": "pattern_rule",
+				"value": map[string]interface{}{
+					"$GUARD": map[string]interface{}{
+						"type": "bool_eval",
 						"value": map[string]interface{}{
-							"$GUARD": map[string]interface{}{
-								"type": "bool_eval",
-								"value": map[string]interface{}{
-									"type":  "always",
-									"value": map[string]interface{}{},
-								}},
-							"$HOOK": map[string]interface{}{
-								"type": "program_hook",
-								"value": map[string]interface{}{
-									"$ACTIVITY": _pattern_activity,
-								}}}}}}}},
+							"type":  "always",
+							"value": map[string]interface{}{},
+						}},
+					"$DOES": []interface{}{
+						_say_exec,
+						_say_exec,
+					}}}}},
 }

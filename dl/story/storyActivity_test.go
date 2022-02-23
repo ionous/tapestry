@@ -5,9 +5,9 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 
 	"git.sr.ht/~ionous/tapestry/jsn/din"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/rt/writer"
@@ -17,31 +17,21 @@ import (
 
 // load and run some actions
 func TestStoryActivity(t *testing.T) {
-	var prog core.Activity
-	if b, e := json.Marshal(_pattern_activity); e != nil {
+	var prog rt.Execute
+	if b, e := json.Marshal(_say_exec); e != nil {
 		t.Fatal(e)
-	} else if e := din.Decode(&prog, tapestry.Registry(), b); e != nil {
+	} else if e := din.Decode(rt.Execute_Slot{&prog}, tapestry.Registry(), b); e != nil {
 		t.Fatal(e)
 	} else {
 		var run testRuntime
 		out := print.NewLines()
 		run.SetWriter(out)
-		if e := safe.Run(&run, &prog); e != nil {
+		if e := safe.Run(&run, prog); e != nil {
 			t.Fatal(e)
-		} else if diff := pretty.Diff(out.Lines(), []string{"hello", "hello"}); len(diff) > 0 {
+		} else if diff := pretty.Diff(out.Lines(), []string{"hello"}); len(diff) > 0 {
 			t.Fatal(diff)
 		}
 	}
-}
-
-var _pattern_activity = map[string]interface{}{
-	"type": "activity",
-	"value": map[string]interface{}{
-		"$EXE": []interface{}{
-			_say_exec,
-			_say_exec,
-		},
-	},
 }
 
 var _say_exec = map[string]interface{}{

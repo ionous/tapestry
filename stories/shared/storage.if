@@ -1,18 +1,16 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "Pattern:requires:returns:": [
         "provides storage",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        },
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          }
+        ],
         {
           "PatternResult:": {
             "Bool named:": "success"
@@ -26,71 +24,64 @@
     {
       "Pattern:rules:": [
         "provides storage",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@obj",
+                  "containers"
+                ]
+              },
+              [
                 {
-                  "KindOf:is:": [
-                    "@obj",
-                    "containers"
-                  ]
-                },
-                {
-                  "Act:": [
+                  "Let:be:": [
+                    "success",
                     {
-                      "Let:be:": [
-                        "success",
-                        {
-                          "FromBool:": true
-                        }
-                      ]
+                      "FromBool:": true
                     }
                   ]
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@obj",
+                  "supporters"
+                ]
+              },
+              [
                 {
-                  "KindOf:is:": [
-                    "@obj",
-                    "supporters"
-                  ]
-                },
-                {
-                  "Act:": [
+                  "Let:be:": [
+                    "success",
                     {
-                      "Let:be:": [
-                        "success",
-                        {
-                          "FromBool:": true
-                        }
-                      ]
+                      "FromBool:": true
                     }
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "shows storage",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        },
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          }
+        ],
         {
           "PatternResult:": {
             "Bool named:": "success"
@@ -104,74 +95,45 @@
     {
       "Pattern:rules:": [
         "shows storage",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "ProvidesStorage obj:": "@obj"
+              },
+              [
                 {
-                  "Determine:arguments:": [
-                    "provides storage",
+                  "Let:be:": [
+                    "success",
                     {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@obj"
-                          ]
+                      "FromBool:": {
+                        "Not:": {
+                          "FullyOpaque obj:": "@obj"
                         }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "success",
-                        {
-                          "FromBool:": {
-                            "Not:": {
-                              "Determine:arguments:": [
-                                "fully opaque",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "obj",
-                                        "@obj"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          }
-                        }
-                      ]
+                      }
                     }
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "visible storage",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "thing"
-              ]
-            }
-          ]
-        },
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "thing"
+            ]
+          }
+        ],
         {
           "PatternResult:": {
             "TextList named:": "out"
@@ -185,120 +147,89 @@
     {
       "Pattern:rules:": [
         "visible storage",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "ShowsStorage obj:": "@obj"
+              },
+              [
                 {
-                  "Determine:arguments:": [
-                    "shows storage",
+                  "Repeating across:as:does:": [
                     {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@obj"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
+                      "FromTxts:": {
+                        "ChildrenOf obj:": "@obj"
+                      }
+                    },
                     {
-                      "Repeating across:as:do:": [
-                        {
-                          "FromTxts:": {
-                            "Determine:arguments:": [
-                              "childrenOf",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "obj",
-                                      "@obj"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "AsTxt:": "it"
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "If:do:": [
+                      "AsTxt:": "it"
+                    },
+                    [
+                      {
+                        "If:does:": [
+                          {
+                            "Not:": {
+                              "AnyTrue:": [
                                 {
-                                  "Not:": {
-                                    "AnyTrue:": [
-                                      {
-                                        "Cmp:is:txt:": [
-                                          "@it",
-                                          "Equals",
-                                          {
-                                            "Get:from:": [
-                                              "pawn",
-                                              {
-                                                "ObjFields:": "player"
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "Get obj:trait:": [
-                                          "@it",
-                                          "scenery"
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                },
-                                {
-                                  "Act:": [
+                                  "Cmp:is:txt:": [
+                                    "@it",
                                     {
-                                      "Put:into:": [
-                                        "@it",
+                                      "Equals": true
+                                    },
+                                    {
+                                      "Get:from:": [
+                                        "pawn",
                                         {
-                                          "IntoTxts:": "out"
+                                          "ObjFields:": "player"
                                         }
                                       ]
                                     }
                                   ]
+                                },
+                                {
+                                  "Get obj:trait:": [
+                                    "@it",
+                                    "scenery"
+                                  ]
+                                }
+                              ]
+                            }
+                          },
+                          [
+                            {
+                              "Put:into:": [
+                                "@it",
+                                {
+                                  "IntoTxts:": "out"
                                 }
                               ]
                             }
                           ]
-                        }
-                      ]
-                    }
+                        ]
+                      }
+                    ]
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "allows storage",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        },
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          }
+        ],
         {
           "PatternResult:": {
             "Bool named:": "success"
@@ -312,74 +243,56 @@
     {
       "Pattern:rules:": [
         "allows storage",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "ProvidesStorage obj:": "@obj"
+              },
+              [
                 {
-                  "Determine:arguments:": [
-                    "provides storage",
+                  "Let:be:": [
+                    "success",
                     {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@obj"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "success",
-                        {
-                          "FromBool:": true
-                        }
-                      ]
+                      "FromBool:": true
                     }
                   ]
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "KindOf:is:": [
+                      "@obj",
+                      "containers"
+                    ]
+                  },
+                  {
+                    "Get obj:trait:": [
+                      "@obj",
+                      "closed"
+                    ]
+                  }
+                ]
+              },
+              [
                 {
-                  "AllTrue:": [
+                  "Let:be:": [
+                    "success",
                     {
-                      "KindOf:is:": [
-                        "@obj",
-                        "containers"
-                      ]
-                    },
-                    {
-                      "Get obj:trait:": [
-                        "@obj",
-                        "closed"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "success",
-                        {
-                          "FromBool:": false
-                        }
-                      ]
+                      "FromBool:": false
                     }
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
     }
   ]
-]
+}

@@ -53,7 +53,7 @@ func (op *ListEach) forEach(run rt.Runtime) (err error) {
 				} else if e := ls.SetIndexedField(last, g.BoolOf((i+1) == cnt)); e != nil {
 					err = e
 					break
-				} else if e := op.Do.Execute(run); e != nil {
+				} else if e := safe.RunAll(run, op.Does); e != nil {
 					var i core.DoInterrupt
 					if !errors.As(e, &i) {
 						err = e

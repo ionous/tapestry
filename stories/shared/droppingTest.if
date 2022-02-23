@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "TestStatement:test:": [
         "dropping test",
@@ -9,110 +9,73 @@
       ]
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "dropping test",
-        {
-          "Act:": [
-            {
-              "Say:": {
-                "RenderTemplate:": "The knife's ogp: {the: {parentOf: .knife}}."
-              }
-            },
-            {
-              "Determine:arguments:": [
-                "dropping",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "knife"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "The knife's newg: {the: {parentOf: .knife}}."
-              }
-            },
-            {
-              "Determine:arguments:": [
-                "dropping",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "agent",
-                        {
-                          "FromTxt:": "player"
-                        }
-                      ]
-                    },
-                    {
-                      "Arg:from:": [
-                        "noun",
-                        {
-                          "FromTxt:": "knife"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+        [
+          {
+            "Say:": {
+              "RenderTemplate:": "The knife's ogp: {the: {parentOf: .knife}}."
             }
-          ]
-        }
+          },
+          {
+            "Dropping agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "knife"
+              }
+            ]
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The knife's newg: {the: {parentOf: .knife}}."
+            }
+          },
+          {
+            "Dropping agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "knife"
+              }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "dropping test",
-        {
-          "Story:": [
-            {
-              "Paragraph:": [
+        [
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              " whereabouts",
+              [
                 {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    " whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "knife"
-                        ]
-                      }
-                    ],
-                    "is",
-                    [
-                      {
-                        "Noun:named:": [
-                          "our",
-                          "self"
-                        ]
-                      }
-                    ]
+                  "Noun:named:": [
+                    "the",
+                    "knife"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "our",
+                    "self"
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
     }
   ]
-]
+}

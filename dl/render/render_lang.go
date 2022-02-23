@@ -4,7 +4,7 @@ package render
 import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
@@ -395,7 +395,7 @@ func RenderName_Marshal(m jsn.Marshaler, val *RenderName) (err error) {
 	if err = m.MarshalBlock(RenderName_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderName_Field_Name)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", RenderName_Field_Name))
@@ -408,8 +408,7 @@ func RenderName_Marshal(m jsn.Marshaler, val *RenderName) (err error) {
 // RenderPattern printing is generally an activity b/c say is an activity
 // and we want the ability to say several things in series.
 type RenderPattern struct {
-	Pattern     core.PatternName `if:"label=_"`
-	Arguments   core.CallArgs    `if:"label=args"`
+	Call        core.CallPattern `if:"label=_"`
 	UserComment string
 }
 
@@ -426,8 +425,7 @@ func (*RenderPattern) Compose() composer.Spec {
 }
 
 const RenderPattern_Type = "render_pattern"
-const RenderPattern_Field_Pattern = "$PATTERN"
-const RenderPattern_Field_Arguments = "$ARGUMENTS"
+const RenderPattern_Field_Call = "$CALL"
 
 func (op *RenderPattern) Marshal(m jsn.Marshaler) error {
 	return RenderPattern_Marshal(m, op)
@@ -500,19 +498,12 @@ func RenderPattern_Optional_Marshal(m jsn.Marshaler, pv **RenderPattern) (err er
 func RenderPattern_Marshal(m jsn.Marshaler, val *RenderPattern) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(RenderPattern_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", RenderPattern_Field_Pattern)
+		e0 := m.MarshalKey("", RenderPattern_Field_Call)
 		if e0 == nil {
-			e0 = core.PatternName_Marshal(m, &val.Pattern)
+			e0 = core.CallPattern_Marshal(m, &val.Call)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", RenderPattern_Field_Pattern))
-		}
-		e1 := m.MarshalKey("args", RenderPattern_Field_Arguments)
-		if e1 == nil {
-			e1 = core.CallArgs_Marshal(m, &val.Arguments)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", RenderPattern_Field_Arguments))
+			m.Error(errutil.New(e0, "in flow at", RenderPattern_Field_Call))
 		}
 		m.EndBlock()
 	}
@@ -642,7 +633,7 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	9758431868100851810:  (*RenderPattern)(nil), /* Render:args: */
+	5630559623010957013:  (*RenderPattern)(nil), /* Render: */
 	16799527360025986462: (*RenderExp)(nil),     /* RenderExp: */
 	8103562808853847007:  (*RenderField)(nil),   /* RenderField: */
 	2017102261165852124:  (*RenderName)(nil),    /* RenderName: */

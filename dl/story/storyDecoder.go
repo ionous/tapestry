@@ -2,103 +2,77 @@ package story
 
 import (
 	"encoding/json"
-	"strings"
-	"unicode"
+	"errors"
 
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 
-// Story decode assumes a story file format.
-// It can read either a normal compact encoded value, or the special story encoded data.
-// ( see Encode for details. )
-func Decode(dst jsn.Marshalee, msg json.RawMessage, sig cin.Signatures) (err error) {
-	for i, b := range msg {
-		if !unicode.IsSpace(rune(b)) {
-			msg = msg[i:]
-			break
-		}
-	}
-	if len(msg) > 0 {
-		dec := cin.NewDecoder(sig).
-			SetFlowDecoder(CompactFlowDecoder).
-			SetSlotDecoder(CompactSlotDecoder)
-
-		switch msg[0] {
-		default:
-			err = dec.Decode(dst, msg)
-		case 'n':
-			// null?
-			if out, ok := dst.(*Story); !ok {
-				err = dec.Decode(dst, msg)
-			} else {
-				var empty string
-				if e := json.Unmarshal(msg, &empty); e != nil {
-					err = e
-				} else if len(empty) != 0 {
-					err = errutil.New("unexpected or invalid json")
-				} else {
-					out.Paragraph = make([]Paragraph, 0)
-				}
-			}
-		case '[':
-			// a quick if hacky way of reading compact paragraphs.
-			// ( otherwise we expect to see: {"Story:": [{"Paragraph:": [...cmds...]}, ...more paragraphs...]}
-			// instead of the nicer: "[[...cmds...], ...more paragraphs...]"
-			if out, ok := dst.(*Story); !ok {
-				err = errutil.New("expected story data")
-			} else {
-				var ps [][]json.RawMessage
-				if e := json.Unmarshal(msg, &ps); e != nil {
-					err = e
-				} else {
-				Loop:
-					for _, pmsg := range ps {
-						var p Paragraph
-						for _, msg := range pmsg {
-							var s StoryStatement
-							if e := dec.Decode(StoryStatement_Slot{&s}, msg); e != nil {
-								err = e
-								break Loop
-							} else {
-								p.StoryStatement = append(p.StoryStatement, s)
-							}
-						}
-						out.Paragraph = append(out.Paragraph, p)
-					}
-				}
-			}
-		}
-	}
-	return
+// Read a story from a story file.
+func Decode(dst jsn.Marshalee, msg json.RawMessage, sig cin.Signatures) error {
+	return decode(dst, msg, sig)
 }
 
-var CompactSlotDecoder = core.CompactSlotDecoder
+func decode(dst jsn.Marshalee, msg json.RawMessage, reg cin.TypeCreator) error {
+	return cin.NewDecoder(reg).
+		//SetFlowDecoder(CompactFlowDecoder).
+		SetSlotDecoder(CompactSlotDecoder).
+		Decode(dst, msg)
 
-// customized reader of compact data
-func CompactFlowDecoder(flow jsn.FlowBlock, msg json.RawMessage) (err error) {
-	switch typeName := flow.GetType(); typeName {
-	default:
-		err = chart.Unhandled("CustomFlow")
+	// re: flow decoder
+	// right now, we only get here when the flow is a member of a flow;
+	// when we know what the type is but havent tried to read from the msg yet.
+	// for slots to read a slat, the msg already would have been expanded into its final type.
+}
 
-	case NamedNoun_Type:
-		var str string
-		if e := json.Unmarshal(msg, &str); e != nil {
-			err = chart.Unhandled(typeName)
-		} else {
-			var out NamedNoun
-			str := strings.TrimSpace(str)
-			if space := strings.Index(str, " "); space < 0 {
-				out.Name.Str = str
-			} else {
-				jsn.MakeEnum(&out.Determiner, &out.Determiner.Str).SetValue(str[:space])
-				out.Name.Str = str[space+1:]
-			}
-			if !flow.SetFlow(&out) {
-				err = errutil.New("couldnt set result to flow", typeName, flow)
+//
+func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage) (err error) {
+	if err = core.CompactSlotDecoder(m, slot, msg); err != nil {
+		// keep this as the provisional error unless we figure out something else
+		var unhandled chart.Unhandled
+		if errors.As(err, &unhandled) {
+			switch typeName := slot.GetType(); typeName {
+			case
+				rt.Execute_Type,
+				rt.BoolEval_Type,
+				rt.NumberEval_Type,
+				rt.TextEval_Type,
+				rt.RecordEval_Type,
+				rt.NumListEval_Type,
+				rt.TextListEval_Type,
+				rt.RecordListEval_Type:
+				//
+				if op, e := cin.ReadOp(msg); e != nil {
+					err = e // if we cant parse it, the regular compact marshal isn't going to be able to either.
+				} else if reg := m.(cin.TypeCreator); !reg.HasType(op.Key) {
+					if sig, args, e := op.ReadMsg(); e != nil {
+						err = e
+					} else {
+						out := &core.CallPattern{Pattern: core.PatternName{sig.Name}}
+						if len(sig.Params) > 0 {
+							var call []rt.Arg
+							for i, p := range sig.Params {
+								var ptr rt.Assignment
+								if e := decode(rt.Assignment_Slot{&ptr}, args[i], reg); e != nil {
+									err = e
+									break
+								} else {
+									call = append(call, rt.Arg{Name: p.Label, From: ptr})
+								}
+							}
+							out.Arguments = call
+						}
+						if !slot.SetSlot(out) {
+							err = errutil.New("unexpected error setting slot")
+						} else {
+							err = nil // good to go,
+						}
+					}
+				}
 			}
 		}
 	}

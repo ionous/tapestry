@@ -57,7 +57,7 @@ func Chart(inFile, outFile, scope string) (ret int, err error) {
 							return
 						},
 					}
-					if t, e := template.New("chart").Funcs(funcMap).Parse(chartingTxt); e != nil {
+					if t, e := template.New("chart").Funcs(funcMap).Parse(chartingTmpl); e != nil {
 						err = e
 					} else if e := t.Execute(outf, rooms); e != nil {
 						err = e
@@ -82,5 +82,5 @@ var nounValueSql string
 //go:embed nounName.sql
 var nounNameSql string
 
-//go:embed charting.txt
-var chartingTxt string
+//go:embed charting.tmpl
+var chartingTmpl string

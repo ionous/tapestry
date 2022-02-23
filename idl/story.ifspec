@@ -14,10 +14,32 @@
                         "uses": "group",
                         "specs":
                         {
+                            "story_file":
+                            {
+                                "spec": "{_%story_lines+story_statement}",
+                                "sign": "tapestry:",
+                                "desc": [
+                                    "top level node, currently just for blockly",
+                                    "might eventually contain story metadata",
+                                    "ex. author, description..."
+                                ]
+                            },
+                            "story_break":
+                            {
+                                "spec": "story_break",
+                                "lede": "--",
+                                "group": "internal",
+                                "slot": "story_statement",
+                                "desc": [
+                                    "this cheats a bit by making the signature the same as the comment marker",
+                                    "that allows nodes which look like comments but are actually story breaks."
+                                ]
+                            },
                             "story":
                             {
                                 "uses": "flow",
-                                "spec": "{+paragraph}"
+                                "spec": "{+paragraph}",
+                                "sign": "story paragraphs:"
                             },
                             "paragraph":
                             {
@@ -54,14 +76,14 @@
                             {
                                 "uses": "flow",
                                 "slot": "story_statement",
-                                "spec": "While testing {test_name}: {story}",
+                                "spec": "While testing {test_name}: {story+story_statement}",
                                 "desc": "Create a scene for testing"
                             },
                             "test_rule":
                             {
                                 "uses": "flow",
                                 "slot": "story_statement",
-                                "spec": "To test {test_name}: {do%hook:program_hook}",
+                                "spec": "To test {test_name}: {does+execute}",
                                 "desc": "Add actions to a test"
                             },
                             "test_output":
@@ -212,8 +234,8 @@
                             "event_handler":
                             {
                                 "uses": "flow",
-                                "spec": "{event_phase} {the event%event:event_name} {with locals%locals?pattern_locals} do:{pattern_rules}",
-                                "sign": "with:event:with:rules:"
+                                "spec": "{event_phase} {the event%event:event_name} {provides%locals*property_slot} do:{rules+pattern_rule}",
+                                "sign": "with:event:provides:rules:"
                             },
                             "event_phase":
                             {
@@ -282,18 +304,12 @@
                             "pattern_decl":
                             {
                                 "slot": "story_statement",
-                                "spec": "Tp determine {name:pattern_name|quote} {parameters%optvars?pattern_variables_tail} {?pattern_return} {about?comment}.",
-                                "sign": "Pattern:requires:returns:about:",
+                                "spec": "To determine {name:pattern_name|quote} {params*property_slot} {?pattern_return}.",
+                                "sign": "Pattern:requires:returns:",
                                 "desc": [
                                     "Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.",
                                     "Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation."
                                 ]
-                            },
-                            "pattern_variables_tail":
-                            {
-                                "spec": "It requires {props+property_slot|comma-and}",
-                                "desc": "Pattern variables: Storage for values used during the execution of a pattern.",
-                                "sign": "pattern_requires:"
                             },
                             "pattern_type":
                             {
@@ -304,52 +320,20 @@
                             "pattern_actions":
                             {
                                 "slot": "story_statement",
-                                "spec": "To determine {pattern name%name:pattern_name} {?pattern_locals} do:{pattern_rules}",
+                                "spec": "To determine {pattern name%name:pattern_name} {locals*property_slot} do: {rules+pattern_rule}",
                                 "desc": "Add actions to a pattern: Actions to take when using a pattern.",
-                                "sign": "pattern:with:rules:"
-                            },
-                            "pattern_rules":
-                            {
-                                "uses": "flow",
-                                "spec": "{*pattern_rule}"
+                                "sign": "pattern:provides:rules:"
                             },
                             "pattern_rule":
                             {
                                 "uses": "flow",
-                                "spec": "When {conditions are met%guard:bool_eval}{continue%flags?pattern_flags}, then: {do%hook:program_hook}",
+                                "spec": "When {conditions are met%guard:bool_eval}{continue%flags?pattern_flags}, then: {does+execute}",
                                 "desc": "Rule"
                             },
                             "pattern_flags":
                             {
                                 "uses": "str",
                                 "spec": "{continue before%before}, {continue after%after}, {terminate}"
-                            },
-                            "pattern_locals":
-                            {
-                                "uses": "flow",
-                                "spec": "{+local_decl|comma-and}"
-                            },
-                            "local_decl":
-                            {
-                                "uses": "flow",
-                                "spec": "using {local:property_slot} {starting as%value?local_init}",
-                                "desc": "Local variables can use the parameters of a pattern to compute temporary values."
-                            },
-                            "local_init":
-                            {
-                                "uses": "flow",
-                                "spec": "starting as {value:assignment}",
-                                "desc": "Local variables can use the parameters of a pattern to compute temporary values."
-                            },
-                            "program_hook":
-                            {
-                                "uses": "swap",
-                                "spec": "do {actions%activity}",
-                                "group":
-                                [
-                                    "positioned",
-                                    "modeling"
-                                ]
                             },
                             "pattern_return":
                             {
@@ -488,7 +472,7 @@
                                 "desc": "Assign text to a noun: Assign text. Gives a noun one or more lines of text."
                             },
                             "named_property": {
-                                "spec": "named {name:text} ( {of%type?text} ) {comment?lines}",
+                                "spec": "named {name:text} ( {of%type?text} )",
                                 "embed": true
                             },    
                             "property_slot": {
@@ -497,45 +481,44 @@
                             },
                             "aspect_property": {
                                 "slot": "property_slot",
-                                "spec": "an aspect {aspect:text} {comment?lines}",
-                                "sign": "aspect of:desc:"
+                                "spec": "an aspect {aspect:text}",
+                                "sign": "aspect of:"
                             },
                             "bool_property": {
                                 "slot": "property_slot",
-                                "spec": "a true/false value {named_property}",
-                                "sign": "bool named:of:desc:"
+                                "spec": "a true/false value {named_property} {initially?bool_eval}",
+                                "sign": "bool named:of:initially:"
                             },
                             "number_property": {
                                 "slot": "property_slot",
-                                "spec": "a number {named_property}",
-                                "sign": "number named:of:desc:"
+                                "spec": "a number {named_property} {initially?number_eval}",
+                                "sign": "number named:of:initially:"
                             },
                             "text_property": {
                                 "slot": "property_slot",
-                                "spec": "some text {named_property}",
-                                "sign": "text named:of:desc:"
+                                "spec": "some text {named_property} {initially?text_eval}",
+                                "sign": "text named:of:initially:"
                             },
                             "num_list_property": {
                                 "slot": "property_slot",
-                                "spec": "a list of nums {named_property}",
-                                "sign": "num_list named:of:desc:"
+                                "spec": "a list of nums {named_property} {initially?num_list_eval}",
+                                "sign": "num_list named:of:initially:"
                             },
                             "text_list_property": {
                                 "slot": "property_slot",
-                                "spec": "a list of text {named_property}",
-                                "sign": "text_list named:of:desc:"
+                                "spec": "a list of text {named_property} {initially?text_list_eval}",
+                                "sign": "text_list named:of:initially:"
                             },
                             "record_property": {
                                 "slot": "property_slot",
-                                "spec": "a record {named_property}",
-                                "sign": "record named:of:desc:"
+                                "spec": "a record {named_property} {initially?record_eval}",
+                                "sign": "record named:of:initially:"
                             },
                             "record_list_property": {
                                 "slot": "property_slot",
-                                "spec": "a list of records {named_property}",
-                                "sign": "record_list named:of:desc:"
+                                "spec": "a list of records {named_property} {initially?record_list_eval}",
+                                "sign": "record_list named:of:initially:"
                             },
-
                             "certainties":
                             {
                                 "uses": "flow",
@@ -625,62 +608,6 @@
                         "uses": "group",
                         "specs":
                         {
-                            "determine":
-                            {
-                                "uses": "flow",
-                                "spec": "determine {_%name:pattern_name} {args%arguments?arguments}",
-                                "slot":
-                                [
-                                    "execute",
-                                    "bool_eval",
-                                    "number_eval",
-                                    "text_eval",
-                                    "record_eval",
-                                    "num_list_eval",
-                                    "text_list_eval",
-                                    "record_list_eval"
-                                ],
-                                "desc": "Runs a pattern, and potentially returns a value."
-                            },
-                            "make":
-                            {
-                                "uses": "flow",
-                                "spec": "make {_%name:text} {args%arguments?arguments}",
-                                "slot": "record_eval",
-                                "group": "misc"
-                            },
-                            "send":
-                            {
-                                "uses": "flow",
-                                "spec": "send {_%event:text} {to%path:text_list_eval} {args%arguments?arguments}",
-                                "slot":
-                                [
-                                    "execute",
-                                    "bool_eval"
-                                ],
-                                "desc": "Triggers a event, returns a true/false success value.",
-                                "group": "internal"
-                            },
-                            "argument":
-                            {
-                                "uses": "flow",
-                                "spec": "arg {_%name:text} {from:assignment}",
-                                "group":
-                                [
-                                    "positioned",
-                                    "modeling"
-                                ]
-                            },
-                            "arguments":
-                            {
-                                "uses": "flow",
-                                "spec": "args {_%args+argument}",
-                                "group":
-                                [
-                                    "positioned",
-                                    "modeling"
-                                ]
-                            },
                             "render_template":
                             {
                                 "uses": "flow",
@@ -741,6 +668,7 @@
                             {
                                 "uses": "flow",
                                 "spec": "understand {_%grammar:grammar_maker}",
+                                "slot": "story_statement",
                                 "desc": "Read what the player types and turn it into actions.",
                                 "group": "grammar"
                             }

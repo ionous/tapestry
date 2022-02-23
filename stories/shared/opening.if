@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "Event:action:args common:": [
         "open",
@@ -10,231 +10,122 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "opening",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:value:": [
-                {
-                  "Text named:of:": [
-                    "actor",
-                    "actor"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
+        [
+          {
+            "Text named:of:initially:": [
+              "actor",
+              "actor",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
                   }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
+                  "If:from:and:does:else:": [
+                    "resp",
                     {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
+                      "FromTxt:": {
+                        "CanReach actor:action:noun:": [
+                          "@actor",
+                          {
+                            "FromTxt:": "opening"
+                          },
+                          "@noun"
+                        ]
+                      }
+                    },
                     {
-                      "If:from:and:do:else:": [
-                        "resp",
+                      "Not:": {
+                        "Is empty:": "@resp"
+                      }
+                    },
+                    [
+                      {
+                        "Say:": "@resp"
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
                         {
-                          "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can reach",
-                              {
-                                "Args:": [
+                          "If:from:and:does:else:": [
+                            "resp",
+                            {
+                              "FromTxt:": {
+                                "CanUse actor:action:noun:": [
+                                  "@actor",
                                   {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
+                                    "FromTxt:": "opening"
                                   },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "opening"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  }
+                                  "@noun"
                                 ]
                               }
-                            ]
-                          }
-                        },
-                        {
-                          "Not:": {
-                            "Is empty:": "@resp"
-                          }
-                        },
-                        {
-                          "Act:": [
+                            },
                             {
-                              "Say:": "@resp"
+                              "Not:": {
+                                "Is empty:": "@resp"
+                              }
+                            },
+                            [
+                              {
+                                "Say:": "@resp"
+                              }
+                            ],
+                            {
+                              "ElseDo does:": [
+                                {
+                                  "Send:event:": [
+                                    {
+                                      "Capture obj:": "@noun"
+                                    },
+                                    {
+                                      "StateChange actor:noun:trait:guard:change:": [
+                                        "@actor",
+                                        "@noun",
+                                        {
+                                          "FromTxt:": "open"
+                                        },
+                                        {
+                                          "FromTxt:": "openable"
+                                        },
+                                        {
+                                          "FromTxt:": "open"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
                             }
                           ]
-                        },
-                        {
-                          "ElseDo:": {
-                            "Act:": [
-                              {
-                                "If:from:and:do:else:": [
-                                  "resp",
-                                  {
-                                    "FromTxt:": {
-                                      "Determine:arguments:": [
-                                        "can use",
-                                        {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "actor",
-                                                "@actor"
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "action",
-                                                {
-                                                  "FromTxt:": "opening"
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "noun",
-                                                "@noun"
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    "Not:": {
-                                      "Is empty:": "@resp"
-                                    }
-                                  },
-                                  {
-                                    "Act:": [
-                                      {
-                                        "Say:": "@resp"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "ElseDo:": {
-                                      "Act:": [
-                                        {
-                                          "Send:path:arguments:": [
-                                            "state change",
-                                            {
-                                              "Determine:arguments:": [
-                                                "parentsOf",
-                                                {
-                                                  "Args:": [
-                                                    {
-                                                      "Arg:from:": [
-                                                        "obj",
-                                                        "@noun"
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Args:": [
-                                                {
-                                                  "Arg:from:": [
-                                                    "actor",
-                                                    "@actor"
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "noun",
-                                                    "@noun"
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "trait",
-                                                    {
-                                                      "FromTxt:": "open"
-                                                    }
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "guard",
-                                                    {
-                                                      "FromTxt:": "openable"
-                                                    }
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "change",
-                                                    {
-                                                      "FromTxt:": "open"
-                                                    }
-                                                  ]
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  }
-                                ]
-                              }
-                            ]
-                          }
                         }
                       ]
                     }
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Event:action:args common:": [
         "close",
@@ -245,370 +136,100 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "closing",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:value:": [
-                {
-                  "Text named:of:": [
-                    "actor",
-                    "actor"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "If:from:and:do:else:": [
-                        "resp",
-                        {
-                          "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can reach",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "closing"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        },
-                        {
-                          "Not:": {
-                            "Is empty:": "@resp"
-                          }
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Say:": "@resp"
-                            }
-                          ]
-                        },
-                        {
-                          "ElseDo:": {
-                            "Act:": [
-                              {
-                                "If:from:and:do:else:": [
-                                  "resp",
-                                  {
-                                    "FromTxt:": {
-                                      "Determine:arguments:": [
-                                        "can use",
-                                        {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "actor",
-                                                "@actor"
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "action",
-                                                {
-                                                  "FromTxt:": "closing"
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "noun",
-                                                "@noun"
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    "Not:": {
-                                      "Is empty:": "@resp"
-                                    }
-                                  },
-                                  {
-                                    "Act:": [
-                                      {
-                                        "Say:": "@resp"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "ElseDo:": {
-                                      "Act:": [
-                                        {
-                                          "Send:path:arguments:": [
-                                            "state change",
-                                            {
-                                              "Determine:arguments:": [
-                                                "parentsOf",
-                                                {
-                                                  "Args:": [
-                                                    {
-                                                      "Arg:from:": [
-                                                        "obj",
-                                                        "@noun"
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Args:": [
-                                                {
-                                                  "Arg:from:": [
-                                                    "actor",
-                                                    "@actor"
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "noun",
-                                                    "@noun"
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "trait",
-                                                    {
-                                                      "FromTxt:": "closed"
-                                                    }
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "guard",
-                                                    {
-                                                      "FromTxt:": "openable"
-                                                    }
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "change",
-                                                    {
-                                                      "FromTxt:": "close"
-                                                    }
-                                                  ]
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  }
-                                ]
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  [
-    {
-      "Comment:": "Can't open when locked. "
-    },
-    {
-      "Pattern:rules:": [
-        "state changing",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "AllTrue:": [
-                    {
-                      "Cmp:is:txt:": [
-                        "@trait",
-                        "Equals",
-                        "open"
-                      ]
-                    },
-                    {
-                      "Get obj:trait:": [
-                        "@noun",
-                        "lockable"
-                      ]
-                    },
-                    {
-                      "Get obj:trait:": [
-                        "@noun",
-                        "locked"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "result",
-                        {
-                          "FromTxt:": {
-                            "Response:text:": [
-                              "can't open when locked",
-                              {
-                                "RenderTemplate:": "{They: .noun|capitalize!} seems to be locked."
-                              }
-                            ]
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  [
-    {
-      "Listen kinds:handlers:": [
-        "things",
         [
           {
-            "With:event:with:rules:": [
-              "after",
-              "state change",
+            "Text named:of:initially:": [
+              "actor",
+              "actor",
               {
-                "PatternLocals:": [
+                "Get:from:": [
+                  "pawn",
                   {
-                    "LocalDecl:": {
-                      "TextList named:desc:": [
-                        "concealed items",
-                        "initialized only when needed, for containers revealing their contents."
-                      ]
-                    }
+                    "VarFields:": "agent"
                   }
                 ]
-              },
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
               {
-                "PatternRules:": [
-                  {
-                    "PatternRule:hook activity:": [
-                      {
-                        "AllTrue:": [
+                "IsPlayer obj:": "@actor"
+              },
+              [
+                {
+                  "If:from:and:does:else:": [
+                    "resp",
+                    {
+                      "FromTxt:": {
+                        "CanReach actor:action:noun:": [
+                          "@actor",
                           {
-                            "Cmp:is:txt:": [
-                              "@trait",
-                              "Equals",
-                              "open"
-                            ]
+                            "FromTxt:": "closing"
                           },
-                          {
-                            "Determine:arguments:": [
-                              "isPlayer",
-                              {
-                                "Args:": [
+                          "@noun"
+                        ]
+                      }
+                    },
+                    {
+                      "Not:": {
+                        "Is empty:": "@resp"
+                      }
+                    },
+                    [
+                      {
+                        "Say:": "@resp"
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
+                        {
+                          "If:from:and:does:else:": [
+                            "resp",
+                            {
+                              "FromTxt:": {
+                                "CanUse actor:action:noun:": [
+                                  "@actor",
                                   {
-                                    "Arg:from:": [
-                                      "obj",
-                                      {
-                                        "FromTxt:": "@actor"
-                                      }
-                                    ]
-                                  }
+                                    "FromTxt:": "closing"
+                                  },
+                                  "@noun"
                                 ]
                               }
-                            ]
-                          },
-                          {
-                            "KindOf:is:": [
-                              "@noun",
-                              "containers"
-                            ]
-                          },
-                          {
-                            "Get obj:trait:": [
-                              "@noun",
-                              "opaque"
-                            ]
-                          },
-                          {
-                            "Not:": {
-                              "Determine:arguments:": [
-                                "ancestorOf",
+                            },
+                            {
+                              "Not:": {
+                                "Is empty:": "@resp"
+                              }
+                            },
+                            [
+                              {
+                                "Say:": "@resp"
+                              }
+                            ],
+                            {
+                              "ElseDo does:": [
                                 {
-                                  "Args:": [
+                                  "Send:event:": [
                                     {
-                                      "Arg:from:": [
-                                        "obj",
-                                        "@noun"
-                                      ]
+                                      "Capture obj:": "@noun"
                                     },
                                     {
-                                      "Arg:from:": [
-                                        "root",
+                                      "StateChange actor:noun:trait:guard:change:": [
+                                        "@actor",
+                                        "@noun",
                                         {
-                                          "FromTxt:": "@actor"
+                                          "FromTxt:": "closed"
+                                        },
+                                        {
+                                          "FromTxt:": "openable"
+                                        },
+                                        {
+                                          "FromTxt:": "close"
                                         }
                                       ]
                                     }
@@ -616,117 +237,224 @@
                                 }
                               ]
                             }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Comment:": "Can't open when locked. "
+    },
+    {
+      "Pattern:rules:": [
+        "state changing",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@trait",
+                      {
+                        "Equals": true
+                      },
+                      "open"
+                    ]
+                  },
+                  {
+                    "Get obj:trait:": [
+                      "@noun",
+                      "lockable"
+                    ]
+                  },
+                  {
+                    "Get obj:trait:": [
+                      "@noun",
+                      "locked"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "result",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't open when locked",
+                          {
+                            "RenderTemplate:": "{They: .noun|capitalize!} seems to be locked."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Listen kinds:handlers:": [
+        "things",
+        [
+          {
+            "With:event:provides:rules:": [
+              "after",
+              "state change",
+              [
+                {
+                  "--": "initialized only when needed, for containers revealing their contents.",
+                  "TextList named:": "concealed items"
+                }
+              ],
+              [
+                {
+                  "PatternRule:does:": [
+                    {
+                      "AllTrue:": [
+                        {
+                          "Cmp:is:txt:": [
+                            "@trait",
+                            {
+                              "Equals": true
+                            },
+                            "open"
+                          ]
+                        },
+                        {
+                          "IsPlayer obj:": {
+                            "FromTxt:": "@actor"
+                          }
+                        },
+                        {
+                          "KindOf:is:": [
+                            "@noun",
+                            "containers"
+                          ]
+                        },
+                        {
+                          "Get obj:trait:": [
+                            "@noun",
+                            "opaque"
+                          ]
+                        },
+                        {
+                          "Not:": {
+                            "AncestorOf obj:root:": [
+                              "@noun",
+                              {
+                                "FromTxt:": "@actor"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    },
+                    [
+                      {
+                        "Let:be:": [
+                          "concealed items",
+                          {
+                            "FromTxts:": {
+                              "VisibleStorage obj:": "@noun"
+                            }
                           }
                         ]
                       },
                       {
-                        "Act:": [
+                        "If:does:": [
                           {
-                            "Let:be:": [
-                              "concealed items",
+                            "Cmp:is:num:": [
                               {
-                                "FromTxts:": {
-                                  "Determine:arguments:": [
-                                    "visible storage",
-                                    {
-                                      "Args:": [
-                                        {
-                                          "Arg:from:": [
-                                            "obj",
-                                            "@noun"
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              }
-                            ]
-                          },
-                          {
-                            "If:do:": [
-                              {
-                                "Cmp:is:num:": [
-                                  {
-                                    "Len:": "@concealed items"
-                                  },
-                                  "GreaterThan",
-                                  0
-                                ]
+                                "Len:": "@concealed items"
                               },
                               {
-                                "Act:": [
+                                "GreaterThan": true
+                              },
+                              0
+                            ]
+                          },
+                          [
+                            {
+                              "Comment:": "inform doesn't print the inventory details when opening objects, so this doesn't either. "
+                            },
+                            {
+                              "Say:": {
+                                "Response:text:": [
+                                  "reveal newly visible objects",
                                   {
-                                    "Comment:": "inform doesn't print the inventory details when opening objects, so this doesn't either. "
-                                  },
-                                  {
-                                    "Say:": {
-                                      "Response:text:": [
-                                        "reveal newly visible objects",
-                                        {
-                                          "Spaces:": {
-                                            "Act:": [
-                                              {
-                                                "Say:": {
-                                                  "RenderTemplate:": "{We!|capitalize!} open {the: .noun}, revealing"
-                                                }
-                                              },
-                                              {
-                                                "Say:": {
-                                                  "Commas:": {
-                                                    "Act:": [
-                                                      {
-                                                        "Repeating across:as:do:": [
-                                                          "@concealed items",
-                                                          {
-                                                            "AsTxt:": "item"
-                                                          },
-                                                          {
-                                                            "Act:": [
-                                                              {
-                                                                "Say:": {
-                                                                  "RenderTemplate:": "{the: .item}"
-                                                                }
-                                                              }
-                                                            ]
-                                                          }
-                                                        ]
-                                                      }
-                                                    ]
-                                                  }
-                                                }
-                                              },
-                                              {
-                                                "Say:": "."
-                                              }
-                                            ]
-                                          }
-                                        }
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    "Let:be:": [
-                                      "success",
+                                    "Spaces does:": [
                                       {
-                                        "FromBool:": true
+                                        "Say:": {
+                                          "RenderTemplate:": "{We!|capitalize!} open {the: .noun}, revealing"
+                                        }
+                                      },
+                                      {
+                                        "Say:": {
+                                          "Commas does:": [
+                                            {
+                                              "Repeating across:as:does:": [
+                                                "@concealed items",
+                                                {
+                                                  "AsTxt:": "item"
+                                                },
+                                                [
+                                                  {
+                                                    "Say:": {
+                                                      "RenderTemplate:": "{the: .item}"
+                                                    }
+                                                  }
+                                                ]
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      {
+                                        "Say:": "."
                                       }
                                     ]
                                   }
                                 ]
                               }
-                            ]
-                          }
+                            },
+                            {
+                              "Let:be:": [
+                                "success",
+                                {
+                                  "FromBool:": true
+                                }
+                              ]
+                            }
+                          ]
                         ]
                       }
                     ]
-                  }
-                ]
-              }
+                  ]
+                }
+              ]
             ]
           }
         ]
       ]
     }
   ]
-]
+}

@@ -1,0 +1,43 @@
+{
+  "Spec:with group:": [
+    "example",
+    {
+      "Group uses:": [
+        {
+          "--": "Debug log.",
+          "Spec:with flow:": [
+            "debug_log",
+            {
+              "Flow uses:": [
+                {
+                  "Term:label:type:": [
+                    "num",
+                    "_",
+                    "number"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Debug log.",
+          "Spec:with flow:": [
+            "debug_log",
+            {
+              "Flow uses:": [
+                {
+                  "Term:label:type:": [
+                    "num",
+                    "_",
+                    "number"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

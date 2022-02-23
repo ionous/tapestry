@@ -7,14 +7,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/reader"
 	"git.sr.ht/~ionous/tapestry/dl/rel"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"github.com/ionous/errutil"
-
-	r "reflect"
 )
 
 var AllSlats = [][]composer.Composer{
@@ -23,6 +21,7 @@ var AllSlats = [][]composer.Composer{
 	grammar.Slats,
 	literal.Slats,
 	list.Slats,
+	prim.Slats,
 	reader.Slats,
 	rel.Slats,
 	render.Slats,
@@ -34,6 +33,7 @@ var AllSignatures = []map[uint64]interface{}{
 	grammar.Signatures,
 	literal.Signatures,
 	list.Signatures,
+	prim.Signatures,
 	reader.Signatures,
 	rel.Signatures,
 	render.Signatures,
@@ -41,36 +41,13 @@ var AllSignatures = []map[uint64]interface{}{
 	story.Signatures,
 }
 
-// note: if it were ever to turn out this is the only reflection needed
-// could replace with function callbacks that new() rather than just a generic r.Type
-type TypeRegistry map[string]r.Type
+var reg composer.TypeRegistry
 
-var reg TypeRegistry
-
-func Registry() TypeRegistry {
+func Registry() composer.TypeRegistry {
 	if reg == nil {
 		for _, slats := range AllSlats {
 			reg.RegisterTypes(slats)
 		}
 	}
 	return reg
-}
-
-func (reg *TypeRegistry) RegisterTypes(cmds []composer.Composer) (err error) {
-	if *(reg) == nil {
-		*(reg) = make(TypeRegistry)
-	}
-	for _, cmd := range cmds {
-		if spec := cmd.Compose(); len(spec.Name) == 0 {
-			e := errutil.Fmt("Missing type name %T", cmd)
-			errutil.Append(err, e)
-		} else if was, exists := (*reg)[spec.Name]; exists {
-			e := errutil.Fmt("Duplicate type name %q now: %T, was: %s", spec.Name, cmd, was.String())
-			errutil.Append(err, e)
-			break
-		} else {
-			(*reg)[spec.Name] = r.TypeOf(cmd).Elem()
-		}
-	}
-	return
 }

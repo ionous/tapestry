@@ -16,13 +16,17 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func FilesApi(cfg *Config) web.Resource {
+func FilesApi(cfg *web.Config) web.Resource {
 	return &web.Wrapper{
 		Finds: func(name string) (ret web.Resource) {
+			// by adding a trailing slash, walk'( will follow a symlink.
+			path := cfg.PathTo("stories") + "/"
 			switch name {
+			case "blocks":
+				where := storyFolder(path)
+				ret = blocksRoot{blocksFolder{where}}
 			case "stories":
-				// by adding a trailing slash, walk will follow a symlink.
-				where := storyFolder(filepath.Join(cfg.Root, "stories") + "/")
+				where := storyFolder(path)
 				ret = rootFolder{where}
 			}
 			return
@@ -49,13 +53,18 @@ func (d rootFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWriter)
 				e := errutil.New("cant save to", at)
 				err = errutil.Append(err, e)
 			} else {
-				var dst story.Story
+				var dst story.Story // composer hands back old format stories ( because that's what we give it )
 				if e := din.Decode(&dst, tapestry.Registry(), el.Story); e != nil {
 					err = e
-				} else if data, e := story.Encode(&dst); e != nil {
-					err = errutil.Append(err, e)
 				} else {
-					err = writeOut(at, data)
+					file := story.StoryFile{
+						StoryLines: dst.Reformat(),
+					}
+					if data, e := story.Encode(&file); e != nil {
+						err = errutil.Append(err, e)
+					} else {
+						err = writeOut(at, data)
+					}
 				}
 			}
 		}

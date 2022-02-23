@@ -7,7 +7,7 @@ import (
 )
 
 func SearchForCounters(i jsn.Marshalee) (okay bool) {
-	if ok, e := searchForType(i, core.CallTrigger_Type); e != nil {
+	if ok, e := searchForType(i, core.CallTrigger_Type); e != nil && e != jsn.Missing {
 		panic(e)
 	} else {
 		okay = ok

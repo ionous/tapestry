@@ -4,7 +4,7 @@ package list
 import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
@@ -555,7 +555,7 @@ type Erasing struct {
 	From        ListSource    `if:"label=from"`
 	AtIndex     rt.NumberEval `if:"label=at_index"`
 	As          string        `if:"label=as,type=text"`
-	Do          core.Activity `if:"label=do"`
+	Does        []rt.Execute  `if:"label=does"`
 	UserComment string
 }
 
@@ -574,7 +574,7 @@ const Erasing_Field_Count = "$COUNT"
 const Erasing_Field_From = "$FROM"
 const Erasing_Field_AtIndex = "$AT_INDEX"
 const Erasing_Field_As = "$AS"
-const Erasing_Field_Do = "$DO"
+const Erasing_Field_Does = "$DOES"
 
 func (op *Erasing) Marshal(m jsn.Marshaler) error {
 	return Erasing_Marshal(m, op)
@@ -670,17 +670,17 @@ func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
 		}
 		e3 := m.MarshalKey("as", Erasing_Field_As)
 		if e3 == nil {
-			e3 = literal.Text_Unboxed_Marshal(m, &val.As)
+			e3 = prim.Text_Unboxed_Marshal(m, &val.As)
 		}
 		if e3 != nil && e3 != jsn.Missing {
 			m.Error(errutil.New(e3, "in flow at", Erasing_Field_As))
 		}
-		e4 := m.MarshalKey("do", Erasing_Field_Do)
+		e4 := m.MarshalKey("does", Erasing_Field_Does)
 		if e4 == nil {
-			e4 = core.Activity_Marshal(m, &val.Do)
+			e4 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e4 != nil && e4 != jsn.Missing {
-			m.Error(errutil.New(e4, "in flow at", Erasing_Field_Do))
+			m.Error(errutil.New(e4, "in flow at", Erasing_Field_Does))
 		}
 		m.EndBlock()
 	}
@@ -692,7 +692,7 @@ type ErasingEdge struct {
 	From        ListSource    `if:"label=_"`
 	AtEdge      rt.BoolEval   `if:"label=at_front,optional"`
 	As          string        `if:"label=as,type=text"`
-	Do          core.Activity `if:"label=do"`
+	Does        []rt.Execute  `if:"label=does"`
 	Else        core.Brancher `if:"label=else,optional"`
 	UserComment string
 }
@@ -712,7 +712,7 @@ const ErasingEdge_Type = "erasing_edge"
 const ErasingEdge_Field_From = "$FROM"
 const ErasingEdge_Field_AtEdge = "$AT_EDGE"
 const ErasingEdge_Field_As = "$AS"
-const ErasingEdge_Field_Do = "$DO"
+const ErasingEdge_Field_Does = "$DOES"
 const ErasingEdge_Field_Else = "$ELSE"
 
 func (op *ErasingEdge) Marshal(m jsn.Marshaler) error {
@@ -802,17 +802,17 @@ func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 		}
 		e2 := m.MarshalKey("as", ErasingEdge_Field_As)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Marshal(m, &val.As)
+			e2 = prim.Text_Unboxed_Marshal(m, &val.As)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ErasingEdge_Field_As))
 		}
-		e3 := m.MarshalKey("do", ErasingEdge_Field_Do)
+		e3 := m.MarshalKey("does", ErasingEdge_Field_Does)
 		if e3 == nil {
-			e3 = core.Activity_Marshal(m, &val.Do)
+			e3 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", ErasingEdge_Field_Do))
+			m.Error(errutil.New(e3, "in flow at", ErasingEdge_Field_Does))
 		}
 		e4 := m.MarshalKey("else", ErasingEdge_Field_Else)
 		if e4 == nil {
@@ -1562,7 +1562,7 @@ func ListAt_Marshal(m jsn.Marshaler, val *ListAt) (err error) {
 type ListEach struct {
 	List        rt.Assignment `if:"label=across"`
 	As          ListIterator  `if:"label=as"`
-	Do          core.Activity `if:"label=do"`
+	Does        []rt.Execute  `if:"label=does"`
 	Else        core.Brancher `if:"label=else,optional"`
 	UserComment string
 }
@@ -1581,7 +1581,7 @@ func (*ListEach) Compose() composer.Spec {
 const ListEach_Type = "list_each"
 const ListEach_Field_List = "$LIST"
 const ListEach_Field_As = "$AS"
-const ListEach_Field_Do = "$DO"
+const ListEach_Field_Does = "$DOES"
 const ListEach_Field_Else = "$ELSE"
 
 func (op *ListEach) Marshal(m jsn.Marshaler) error {
@@ -1669,12 +1669,12 @@ func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListEach_Field_As))
 		}
-		e2 := m.MarshalKey("do", ListEach_Field_Do)
+		e2 := m.MarshalKey("does", ListEach_Field_Does)
 		if e2 == nil {
-			e2 = core.Activity_Marshal(m, &val.Do)
+			e2 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", ListEach_Field_Do))
+			m.Error(errutil.New(e2, "in flow at", ListEach_Field_Does))
 		}
 		e3 := m.MarshalKey("else", ListEach_Field_Else)
 		if e3 == nil {
@@ -1909,7 +1909,7 @@ func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
 		}
 		e2 := m.MarshalKey("using", ListGather_Field_Using)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Marshal(m, &val.Using)
+			e2 = prim.Text_Unboxed_Marshal(m, &val.Using)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ListGather_Field_Using))
@@ -2188,7 +2188,7 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 	if err = m.MarshalBlock(ListMap_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListMap_Field_ToList)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.ToList)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.ToList)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListMap_Field_ToList))
@@ -2202,7 +2202,7 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 		}
 		e2 := m.MarshalKey("using", ListMap_Field_UsingPattern)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Marshal(m, &val.UsingPattern)
+			e2 = prim.Text_Unboxed_Marshal(m, &val.UsingPattern)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ListMap_Field_UsingPattern))
@@ -2309,7 +2309,7 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 	if err = m.MarshalBlock(ListReduce_Flow{val}); err == nil {
 		e0 := m.MarshalKey("into", ListReduce_Field_IntoValue)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.IntoValue)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.IntoValue)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListReduce_Field_IntoValue))
@@ -2323,7 +2323,7 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 		}
 		e2 := m.MarshalKey("using", ListReduce_Field_UsingPattern)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Marshal(m, &val.UsingPattern)
+			e2 = prim.Text_Unboxed_Marshal(m, &val.UsingPattern)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ListReduce_Field_UsingPattern))
@@ -2533,7 +2533,7 @@ func ListSet_Marshal(m jsn.Marshaler, val *ListSet) (err error) {
 	if err = m.MarshalBlock(ListSet_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSet_Field_List)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.List)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSet_Field_List))
@@ -2790,7 +2790,7 @@ func ListSortNumbers_Marshal(m jsn.Marshaler, val *ListSortNumbers) (err error) 
 		}
 		e1 := m.MarshalKey("by_field", ListSortNumbers_Field_ByField)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.ByField)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.ByField)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListSortNumbers_Field_ByField))
@@ -2913,7 +2913,7 @@ func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
 		}
 		e1 := m.MarshalKey("by_field", ListSortText_Field_ByField)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.ByField)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.ByField)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListSortText_Field_ByField))
@@ -3039,7 +3039,7 @@ func ListSortUsing_Marshal(m jsn.Marshaler, val *ListSortUsing) (err error) {
 		}
 		e1 := m.MarshalKey("using", ListSortUsing_Field_Using)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Using)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Using)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListSortUsing_Field_Using))
@@ -3220,7 +3220,7 @@ func ListSplice_Marshal(m jsn.Marshaler, val *ListSplice) (err error) {
 	if err = m.MarshalBlock(ListSplice_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSplice_Field_List)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.List)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSplice_Field_List))
@@ -3733,11 +3733,11 @@ var Signatures = map[uint64]interface{}{
 	602674204343183133:   (*EraseEdge)(nil),       /* Erase: */
 	2379140516691405863:  (*EraseEdge)(nil),       /* Erase:atFront: */
 	18068640065349035914: (*EraseIndex)(nil),      /* Erase:from:atIndex: */
-	10199179765059749783: (*ErasingEdge)(nil),     /* Erasing:as:do: */
-	2253244220008480180:  (*ErasingEdge)(nil),     /* Erasing:as:do:else: */
-	4059879572017637653:  (*ErasingEdge)(nil),     /* Erasing:atFront:as:do: */
-	4832054959845425038:  (*ErasingEdge)(nil),     /* Erasing:atFront:as:do:else: */
-	15022408731321198722: (*Erasing)(nil),         /* Erasing:from:atIndex:as:do: */
+	18138731018283732895: (*ErasingEdge)(nil),     /* Erasing:as:does: */
+	9346092789410031916:  (*ErasingEdge)(nil),     /* Erasing:as:does:else: */
+	15331416331853754385: (*ErasingEdge)(nil),     /* Erasing:atFront:as:does: */
+	5204747510046770858:  (*ErasingEdge)(nil),     /* Erasing:atFront:as:does:else: */
+	333549251967229686:   (*Erasing)(nil),         /* Erasing:from:atIndex:as:does: */
 	10285751875873889942: (*ListFind)(nil),        /* Find:list: */
 	6334415563934548256:  (*ListGather)(nil),      /* Gather:from:using: */
 	486700160484864869:   (*ListAt)(nil),          /* Get:index: */
@@ -3754,8 +3754,8 @@ var Signatures = map[uint64]interface{}{
 	12654734042076112886: (*Range)(nil),           /* Range:from: */
 	17061865887297909749: (*Range)(nil),           /* Range:from:byStep: */
 	14826188473242626433: (*ListReduce)(nil),      /* Reduce into:fromList:using: */
-	5893619730181277740:  (*ListEach)(nil),        /* Repeating across:as:do: */
-	4018832586238090637:  (*ListEach)(nil),        /* Repeating across:as:do:else: */
+	4436696650994425060:  (*ListEach)(nil),        /* Repeating across:as:does: */
+	9394092098582830357:  (*ListEach)(nil),        /* Repeating across:as:does:else: */
 	13627278328240309351: (*ListReverse)(nil),     /* Reverse list: */
 	15586923045386932713: (*ListSet)(nil),         /* Set:index:from: */
 	16656583749567367441: (*ListSlice)(nil),       /* Slice: */

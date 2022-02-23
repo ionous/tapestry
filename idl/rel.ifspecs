@@ -1,0 +1,183 @@
+{
+  "--": "rel",
+  "Spec:with group:": [
+    "rel",
+    {
+      "Group contains:": [
+        {
+          "--": [
+            "Returns the implied relative of a noun (ex. the source in a one-to-many relation.)."
+          ],
+          "Spec:with flow:slots:": [
+            "reciprocal_of",
+            {
+              "flow:trim:uses:": [
+                "reciprocal",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "via",
+                      "relation_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "text_eval"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns the implied relative of a noun (ex. the sources of a many-to-many relation.)."
+          ],
+          "Spec:with flow:slots:": [
+            "reciprocals_of",
+            {
+              "flow:trim:uses:": [
+                "reciprocals",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "via",
+                      "relation_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "text_list_eval"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Relate two nouns."
+          ],
+          "Spec:with flow:slots:": [
+            "relate",
+            {
+              "flow trim:uses:": [
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "to",
+                      "to_object",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "via",
+                      "relation_name"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "execute"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:groups:": [
+            "relation_name",
+            {
+              "Str uses:": []
+            },
+            [
+              "positioned"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns the relative of a noun (ex. the target of a one-to-one relation.)."
+          ],
+          "Spec:with flow:slots:": [
+            "relative_of",
+            {
+              "flow:trim:uses:": [
+                "relative",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "via",
+                      "relation_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "text_eval"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation)."
+          ],
+          "Spec:with flow:slots:": [
+            "relatives_of",
+            {
+              "flow:trim:uses:": [
+                "relatives",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "via",
+                      "relation_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "object",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "text_list_eval"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

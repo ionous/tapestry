@@ -13,12 +13,15 @@ type Machine struct {
 	err      error
 }
 
-// MakeEncoder writes json data
+// MakeEncoder writes data from Tapestry's data-language structures.
+// Encoding *skips* empty in-memory structures ( ex. nil slices. )
 func MakeEncoder() Machine {
 	return makeMachine(true)
 }
 
-// MakeDecoder reads json data
+// MakeDecoder reads data into Tapestry's data-language structures.
+// Decoding visits the in-memory structures regardless of whether they currently have data
+// ( so that they can be filled with data from whatever source is being decoded. )
 func MakeDecoder() Machine {
 	return makeMachine(false)
 }
@@ -28,11 +31,15 @@ func makeMachine(encoding bool) Machine {
 	return Machine{encoding: encoding}
 }
 
-func (m *Machine) Marshal(tgt jsn.Marshalee, init State) error {
+func (m *Machine) Marshal(tgt jsn.Marshalee, init State) (err error) {
 	m.ChangeState(&StateMix{}) // fix. right now, if you try to Finish the initial state (ex. during tests) pop panics
 	m.PushState(init)
-	tgt.Marshal(m)
-	return m.err
+	if e := tgt.Marshal(m); e != nil {
+		err = e
+	} else {
+		err = m.err
+	}
+	return
 }
 
 // IsEncoding indicates whether the machine is writing json ( or reading json. )

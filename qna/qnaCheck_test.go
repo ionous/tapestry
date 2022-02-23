@@ -1,6 +1,7 @@
 package qna_test
 
 import (
+	"os"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/core"
@@ -16,17 +17,17 @@ func TestCheck(t *testing.T) {
 	prog := &qna.CheckOutput{
 		Name:   t.Name(),
 		Expect: "hello",
-		Test: &core.Activity{Exe: []rt.Execute{
+		Test: []rt.Execute{
 			&core.ChooseAction{
 				If: &literal.BoolValue{Bool: true},
-				Do: core.MakeActivity(&core.Say{
+				Does: core.MakeActivity(&core.Say{
 					Text: &literal.TextValue{Text: "hello"},
 				}),
 				Else: &core.ChooseNothingElse{
-					Do: core.MakeActivity(&core.Say{
+					Does: core.MakeActivity(&core.Say{
 						Text: &literal.TextValue{Text: "goodbye"},
 					})},
-			}}},
+			}},
 	}
 	if e := runTest(prog); e != nil {
 		t.Fatal(e)
@@ -35,7 +36,7 @@ func TestCheck(t *testing.T) {
 
 func runTest(prog *qna.CheckOutput) (err error) {
 	var run checkTester
-	run.SetWriter(print.NewAutoWriter(writer.NewStdout()))
+	run.SetWriter(print.NewAutoWriter(os.Stdout))
 	return prog.RunTest(&run)
 }
 

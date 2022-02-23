@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "GrammarDecl:": {
         "Directive:scans:": [
@@ -18,9 +18,10 @@
           ]
         ]
       }
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Event:action:args common:": [
         "kiss",
@@ -31,323 +32,206 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "kissing",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:value:": [
-                {
-                  "Text named:of:": [
-                    "actor",
-                    "actor"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
+        [
+          {
+            "Text named:of:initially:": [
+              "actor",
+              "actor",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
                   }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
+                  "If:from:and:does:else:": [
+                    "resp",
                     {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
+                      "FromTxt:": {
+                        "CanReach actor:action:noun:": [
+                          "@actor",
+                          {
+                            "FromTxt:": "kissing"
+                          },
+                          "@noun"
+                        ]
+                      }
+                    },
                     {
-                      "If:from:and:do:else:": [
-                        "resp",
+                      "Not:": {
+                        "Is empty:": "@resp"
+                      }
+                    },
+                    [
+                      {
+                        "Say:": "@resp"
+                      }
+                    ],
+                    {
+                      "ElseDo does:": [
                         {
-                          "FromTxt:": {
-                            "Determine:arguments:": [
-                              "can reach",
-                              {
-                                "Args:": [
+                          "If:from:and:does:else:": [
+                            "resp",
+                            {
+                              "FromTxt:": {
+                                "CanUse actor:action:noun:": [
+                                  "@actor",
                                   {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
+                                    "FromTxt:": "kissing"
                                   },
-                                  {
-                                    "Arg:from:": [
-                                      "action",
-                                      {
-                                        "FromTxt:": "kissing"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "noun",
-                                      "@noun"
-                                    ]
-                                  }
+                                  "@noun"
                                 ]
                               }
-                            ]
-                          }
-                        },
-                        {
-                          "Not:": {
-                            "Is empty:": "@resp"
-                          }
-                        },
-                        {
-                          "Act:": [
+                            },
                             {
-                              "Say:": "@resp"
+                              "Not:": {
+                                "Is empty:": "@resp"
+                              }
+                            },
+                            [
+                              {
+                                "Say:": "@resp"
+                              }
+                            ],
+                            {
+                              "ElseDo does:": [
+                                {
+                                  "Send:event:": [
+                                    {
+                                      "Capture obj:": "@noun"
+                                    },
+                                    {
+                                      "Kiss actor:noun:": [
+                                        "@actor",
+                                        "@noun"
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
                             }
                           ]
-                        },
-                        {
-                          "ElseDo:": {
-                            "Act:": [
-                              {
-                                "If:from:and:do:else:": [
-                                  "resp",
-                                  {
-                                    "FromTxt:": {
-                                      "Determine:arguments:": [
-                                        "can use",
-                                        {
-                                          "Args:": [
-                                            {
-                                              "Arg:from:": [
-                                                "actor",
-                                                "@actor"
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "action",
-                                                {
-                                                  "FromTxt:": "kissing"
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Arg:from:": [
-                                                "noun",
-                                                "@noun"
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    "Not:": {
-                                      "Is empty:": "@resp"
-                                    }
-                                  },
-                                  {
-                                    "Act:": [
-                                      {
-                                        "Say:": "@resp"
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "ElseDo:": {
-                                      "Act:": [
-                                        {
-                                          "Send:path:arguments:": [
-                                            "kiss",
-                                            {
-                                              "Determine:arguments:": [
-                                                "parentsOf",
-                                                {
-                                                  "Args:": [
-                                                    {
-                                                      "Arg:from:": [
-                                                        "obj",
-                                                        "@noun"
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
-                                              ]
-                                            },
-                                            {
-                                              "Args:": [
-                                                {
-                                                  "Arg:from:": [
-                                                    "actor",
-                                                    "@actor"
-                                                  ]
-                                                },
-                                                {
-                                                  "Arg:from:": [
-                                                    "noun",
-                                                    "@noun"
-                                                  ]
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  }
-                                ]
-                              }
-                            ]
-                          }
                         }
                       ]
                     }
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:rules:": [
         "can use",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "kissing"
+                    ]
+                  },
+                  {
+                    "IsPlayer obj:": "@actor"
+                  }
+                ]
+              },
+              [
                 {
-                  "AllTrue:": [
+                  "Let:be:": [
+                    "response",
                     {
-                      "Cmp:is:txt:": [
-                        "@action",
-                        "Equals",
-                        "kissing"
-                      ]
-                    },
-                    {
-                      "Determine:arguments:": [
-                        "isPlayer",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@actor"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "response",
-                        {
-                          "FromTxt:": {
-                            "Response:text:": [
-                              "can't kiss anything",
-                              {
-                                "RenderTemplate:": "{the:.noun|capitalize!} might not like that."
-                              }
-                            ]
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't kiss without consent",
+                          {
+                            "RenderTemplate:": "{the:.noun|capitalize!} might not like that."
                           }
-                        }
-                      ]
+                        ]
+                      }
                     }
                   ]
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "kissing"
+                    ]
+                  },
+                  {
+                    "Cmp:is:txt:": [
+                      "@actor",
+                      {
+                        "Equals": true
+                      },
+                      "@noun"
+                    ]
+                  },
+                  {
+                    "IsPlayer obj:": "@actor"
+                  }
+                ]
+              },
+              [
                 {
-                  "AllTrue:": [
+                  "Let:be:": [
+                    "response",
                     {
-                      "Cmp:is:txt:": [
-                        "@action",
-                        "Equals",
-                        "kissing"
-                      ]
-                    },
-                    {
-                      "Cmp:is:txt:": [
-                        "@actor",
-                        "Equals",
-                        "@noun"
-                      ]
-                    },
-                    {
-                      "Determine:arguments:": [
-                        "isPlayer",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@actor"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "response",
-                        {
-                          "FromTxt:": {
-                            "Response:text:": [
-                              "can't kiss yourself",
-                              {
-                                "RenderTemplate:": "{we:|capitalize!} don't get much from that."
-                              }
-                            ]
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't kiss yourself",
+                          {
+                            "RenderTemplate:": "{we:|capitalize!} don't get much from that."
                           }
-                        }
-                      ]
+                        ]
+                      }
                     }
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Listen kinds:handlers:": [
         "actors",
@@ -356,124 +240,93 @@
             "With:event:rules:": [
               "while",
               "kiss",
-              {
-                "PatternRules:": [
-                  {
-                    "PatternRule:hook activity:": [
-                      "Always",
+              [
+                {
+                  "PatternRule:does:": [
+                    {
+                      "Always": true
+                    },
+                    [
                       {
-                        "Act:": [
+                        "ReportKissing actor:": "@actor"
+                      },
+                      {
+                        "Let:be:": [
+                          "success",
                           {
-                            "Determine:arguments:": [
-                              "report kissing",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
-                          },
-                          {
-                            "Let:be:": [
-                              "success",
-                              {
-                                "FromBool:": true
-                              }
-                            ]
+                            "FromBool:": true
                           }
                         ]
                       }
                     ]
-                  }
-                ]
-              }
+                  ]
+                }
+              ]
             ]
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "report kissing",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "actor",
-                "actor"
-              ]
-            }
-          ]
-        }
+        [
+          {
+            "Text named:of:": [
+              "actor",
+              "actor"
+            ]
+          }
+        ]
       ]
     },
     {
       "Pattern:rules:": [
         "report kissing",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "actor kissing",
-                          {
-                            "RenderTemplate:": "{the:.actor|capitalize!} kisses {the:.noun}."
-                          }
-                        ]
+                  "Say:": {
+                    "Response:text:": [
+                      "actor kissing",
+                      {
+                        "RenderTemplate:": "{the:.actor|capitalize!} kisses {the:.noun}."
                       }
-                    }
-                  ]
+                    ]
+                  }
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "player kissing",
-                          {
-                            "RenderTemplate:": "{we:|capitalize!} kiss on {the:.noun}."
-                          }
-                        ]
+                  "Say:": {
+                    "Response:text:": [
+                      "player kissing",
+                      {
+                        "RenderTemplate:": "{we:|capitalize!} kiss on {the:.noun}."
                       }
-                    }
-                  ]
+                    ]
+                  }
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
     }
   ]
-]
+}

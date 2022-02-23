@@ -1,24 +1,22 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "Pattern:requires:": [
         "print several",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "thing"
-              ]
-            },
-            {
-              "Number named:": "group size"
-            },
-            {
-              "Text named:": "label"
-            }
-          ]
-        }
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "thing"
+            ]
+          },
+          {
+            "Number named:": "group size"
+          },
+          {
+            "Text named:": "label"
+          }
+        ]
       ]
     },
     {
@@ -27,112 +25,99 @@
     {
       "Pattern:rules:": [
         "print several",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Spaces:": {
-                          "Act:": [
+                  "Say:": {
+                    "Spaces does:": [
+                      {
+                        "Say:": {
+                          "RenderTemplate:": "{print_num_word: .group_size}"
+                        }
+                      },
+                      {
+                        "If:does:else:": [
+                          {
+                            "Is empty:": "@label"
+                          },
+                          [
                             {
                               "Say:": {
-                                "RenderTemplate:": "{print_num_word: .group_size}"
+                                "RenderTemplate:": "{if .group_size > 1}{print_plural_name: .obj}{else}{print_name: .obj}{end}"
                               }
-                            },
-                            {
-                              "If:do:else:": [
-                                {
-                                  "Is empty:": "@label"
-                                },
-                                {
-                                  "Act:": [
-                                    {
-                                      "Say:": {
-                                        "RenderTemplate:": "{if .group_size > 1}{print_plural_name: .obj}{else}{print_name: .obj}{end}"
-                                      }
-                                    }
-                                  ]
-                                },
-                                {
-                                  "ElseDo:": {
-                                    "Act:": [
-                                      {
-                                        "Say:": {
-                                          "RenderTemplate:": "{if .group_size > 1}{pluralize: .label}{else}{singularize: .label}{end}"
-                                        }
-                                      }
-                                    ]
-                                  }
-                                }
-                              ]
                             }
-                          ]
-                        }
+                          ],
+                          {
+                            "ElseDo does:": [
+                              {
+                                "Say:": {
+                                  "RenderTemplate:": "{if .group_size > 1}{pluralize: .label}{else}{singularize: .label}{end}"
+                                }
+                              }
+                            ]
+                          }
+                        ]
                       }
-                    }
-                  ]
+                    ]
+                  }
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "print several",
-        {
-          "Story:": [
-            {
-              "Paragraph:": [
+        [
+          {
+            "Nouns:depict:": [
+              [
                 {
-                  "Nouns:depict:": [
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "books"
-                        ]
-                      }
-                    ],
-                    {
-                      "Kind:named:": [
-                        "area",
-                        "thing"
-                      ]
-                    }
+                  "Noun:named:": [
+                    "the",
+                    "books"
                   ]
                 }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  [
-    {
-      "TestRule:hook activity:": [
-        "print several",
-        {
-          "Act:": [
-            {
-              "Say:": {
-                "RenderTemplate:": "{print_several: .books}\n{print_several: .books 5}"
+              ],
+              {
+                "Kind:named:": [
+                  "area",
+                  "thing"
+                ]
               }
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
+    {
+      "TestRule:does:": [
+        "print several",
+        [
+          {
+            "Say:": {
+              "RenderTemplate:": "{print_several: .books}\n{print_several: .books 5}"
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "print several",
@@ -142,4 +127,4 @@
       ]
     }
   ]
-]
+}

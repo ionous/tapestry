@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "Event:action:args none:": [
         "inventory",
@@ -8,93 +8,50 @@
       ]
     },
     {
-      "Pattern:with:rules:": [
+      "Pattern:provides:rules:": [
         "inventorying",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:value:": [
-                {
-                  "Text named:of:": [
-                    "actor",
-                    "object"
-                  ]
-                },
-                {
-                  "LocalInit:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "VarFields:": "agent"
-                      }
-                    ]
+        [
+          {
+            "Text named:of:initially:": [
+              "actor",
+              "object",
+              {
+                "Get:from:": [
+                  "pawn",
+                  {
+                    "VarFields:": "agent"
                   }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+                ]
+              }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": "@actor"
+              },
+              [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
+                  "Send:event:": [
                     {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            "@actor"
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
+                      "Capture obj:": "@actor"
+                    },
                     {
-                      "Send:path:arguments:": [
-                        "inventory",
-                        {
-                          "Determine:arguments:": [
-                            "parentsOf",
-                            {
-                              "Args:": [
-                                {
-                                  "Arg:from:": [
-                                    "obj",
-                                    "@actor"
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "actor",
-                                "@actor"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      "Inventory actor:": "@actor"
                     }
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Listen kinds:handlers:": [
         "actors",
@@ -103,163 +60,114 @@
             "With:event:rules:": [
               "while",
               "inventory",
-              {
-                "PatternRules:": [
-                  {
-                    "PatternRule:hook activity:": [
-                      "Always",
+              [
+                {
+                  "PatternRule:does:": [
+                    {
+                      "Always": true
+                    },
+                    [
                       {
-                        "Act:": [
+                        "PrintInventory actor:": "@actor"
+                      },
+                      {
+                        "Let:be:": [
+                          "success",
                           {
-                            "Determine:arguments:": [
-                              "Print inventory",
-                              {
-                                "Args:": [
-                                  {
-                                    "Arg:from:": [
-                                      "actor",
-                                      "@actor"
-                                    ]
-                                  }
-                                ]
-                              }
-                            ]
-                          },
-                          {
-                            "Let:be:": [
-                              "success",
-                              {
-                                "FromBool:": true
-                              }
-                            ]
+                            "FromBool:": true
                           }
                         ]
                       }
                     ]
-                  }
-                ]
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "print inventory",
+        [
+          {
+            "Text named:of:": [
+              "actor",
+              "actor"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:provides:rules:": [
+        "print inventory",
+        [
+          {
+            "TextList named:initially:": [
+              "kids",
+              {
+                "ChildrenOf obj:": "@actor"
               }
+            ]
+          }
+        ],
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
+                {
+                  "Say:": {
+                    "Response:text:": [
+                      "carrying nothing",
+                      {
+                        "RenderTemplate:": "{we:|capitalize!} {are:.actor} carrying nothing."
+                      }
+                    ]
+                  }
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Cmp:is:num:": [
+                  {
+                    "Len:": "@kids"
+                  },
+                  {
+                    "GreaterThan": true
+                  },
+                  0
+                ]
+              },
+              [
+                {
+                  "Say:": {
+                    "Response:text:": [
+                      "carrying something",
+                      {
+                        "RenderTemplate:": "You are carrying:"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "PrintBlocks objs:": "@kids"
+                }
+              ]
             ]
           }
         ]
       ]
     }
-  ],
-  [
-    {
-      "Pattern:requires:": [
-        "print inventory",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "actor",
-                "actor"
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Pattern:with:rules:": [
-        "print inventory",
-        {
-          "PatternLocals:": [
-            {
-              "LocalDecl:value:": [
-                {
-                  "TextList named:": "kids"
-                },
-                {
-                  "LocalInit:": {
-                    "FromTxts:": {
-                      "Determine:arguments:": [
-                        "childrenOf",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@actor"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "carrying nothing",
-                          {
-                            "RenderTemplate:": "{we:|capitalize!} {are:.actor} carrying nothing."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "PatternRule:hook activity:": [
-                {
-                  "Cmp:is:num:": [
-                    {
-                      "Len:": "@kids"
-                    },
-                    "GreaterThan",
-                    0
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Response:text:": [
-                          "carrying something",
-                          {
-                            "RenderTemplate:": "You are carrying:"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "Determine:arguments:": [
-                        "print blocks",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "objs",
-                                "@kids"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
   ]
-]
+}

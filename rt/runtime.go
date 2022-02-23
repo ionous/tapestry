@@ -1,9 +1,10 @@
 package rt
 
 import (
+	"io"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/writer"
 )
 
 // Scope - establishes local variables.
@@ -65,7 +66,7 @@ type Runtime interface {
 	// return a pseudo-random number
 	Random(inclusiveMin, exclusiveMax int) int
 	// Return the built-in writer, or the current override.
-	Writer() writer.Output
+	Writer() io.Writer
 	// Override the current writer
-	SetWriter(writer.Output) (prev writer.Output)
+	SetWriter(io.Writer) (prev io.Writer)
 }

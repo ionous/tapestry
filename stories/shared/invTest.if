@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "Nouns:depict:and:": [
         [
@@ -19,7 +19,7 @@
         [
           {
             "NounTraits:trait:": [
-              "",
+              "is",
               [
                 "wearable",
                 "worn"
@@ -48,7 +48,7 @@
         [
           {
             "NounTraits:trait:": [
-              "",
+              "is",
               [
                 "lit",
                 "wearable",
@@ -78,7 +78,7 @@
         [
           {
             "NounTraits:trait:": [
-              "",
+              "is",
               [
                 "openable",
                 "closed",
@@ -108,7 +108,7 @@
         [
           {
             "NounTraits:trait:": [
-              "",
+              "is",
               [
                 "openable",
                 "open"
@@ -137,7 +137,7 @@
         [
           {
             "NounTraits:trait:": [
-              "",
+              "is",
               [
                 "openable",
                 "open"
@@ -166,7 +166,7 @@
         [
           {
             "NounTraits:trait:": [
-              "",
+              "is",
               [
                 "wearable",
                 "openable",
@@ -196,7 +196,7 @@
         [
           {
             "NounTraits:trait:": [
-              "",
+              "is",
               [
                 "lit"
               ]
@@ -222,9 +222,10 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "RelativeToNoun:nouns:areBeing:otherNouns:": [
         "whereabouts",
@@ -314,9 +315,10 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "status printing test",
@@ -326,56 +328,55 @@
       ]
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "status printing test",
-        {
-          "Act:": [
-            {
-              "Say:": {
-                "RenderTemplate:": "{the: .flower}: {print_status:.flower}."
-              }
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{the: .headlamp}: {print_status:.headlamp}."
-              }
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{the: .secrets}: {print_status:.secrets}."
-              }
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{the: .wisdom}: {print_status:.wisdom true}."
-              }
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{the: .clutch}: {print_status:.clutch}."
-              }
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{the: .purse}: {print_status:.purse}."
-              }
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{the: .flashlight}: {print_status:.flashlight}."
-              }
-            },
-            {
-              "Say:": {
-                "RenderTemplate:": "{the: .coin}: {print_status:.coin}."
-              }
+        [
+          {
+            "Say:": {
+              "RenderTemplate:": "{the: .flower}: {print_status:.flower}."
             }
-          ]
-        }
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "{the: .headlamp}: {print_status:.headlamp}."
+            }
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "{the: .secrets}: {print_status:.secrets}."
+            }
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "{the: .wisdom}: {print_status:.wisdom true}."
+            }
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "{the: .clutch}: {print_status:.clutch}."
+            }
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "{the: .purse}: {print_status:.purse}."
+            }
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "{the: .flashlight}: {print_status:.flashlight}."
+            }
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "{the: .coin}: {print_status:.coin}."
+            }
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "default inventory",
@@ -388,32 +389,18 @@
       "Comment:": "Print inventory as a list."
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "default inventory",
-        {
-          "Act:": [
-            {
-              "Determine:arguments:": [
-                "Print inventory",
-                {
-                  "Args:": [
-                    {
-                      "Arg:from:": [
-                        "actor",
-                        {
-                          "FromTxt:": {
-                            "IdOf:": "Mildred"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+        [
+          {
+            "PrintInventory actor:": {
+              "FromTxt:": {
+                "IdOf:": "Mildred"
+              }
             }
-          ]
-        }
+          }
+        ]
       ]
     }
   ]
-]
+}

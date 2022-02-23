@@ -40,7 +40,7 @@ func Decode(dst jsn.Marshalee, msg json.RawMessage, sig cin.Signatures) error {
 }
 
 // unhandled reads are attempted via default readSlot evaluation.
-func CompactSlotDecoder(slot jsn.SlotBlock, msg json.RawMessage) (err error) {
+func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage) (err error) {
 	// switching on the slot ptr's type seems like it should work, but only results in untyped interfaces
 	switch typeName := slot.GetType(); typeName {
 	default:
@@ -61,7 +61,7 @@ func CompactSlotDecoder(slot jsn.SlotBlock, msg json.RawMessage) (err error) {
 				err = errutil.New("unexpected error setting slot")
 			}
 		} else if typeName != rt.Assignment_Type {
-			err = literal.CompactSlotDecoder(slot, msg)
+			err = literal.CompactSlotDecoder(m, slot, msg)
 		} else {
 			err = chart.Unhandled(typeName)
 		}

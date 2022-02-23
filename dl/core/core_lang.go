@@ -3,114 +3,11 @@ package core
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
-
-// Activity
-type Activity struct {
-	Exe         []rt.Execute `if:"label=_"`
-	UserComment string
-}
-
-// User implemented slots:
-var _ rt.Execute = (*Activity)(nil)
-
-func (*Activity) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Activity_Type,
-		Uses: composer.Type_Flow,
-		Lede: "act",
-	}
-}
-
-const Activity_Type = "activity"
-const Activity_Field_Exe = "$EXE"
-
-func (op *Activity) Marshal(m jsn.Marshaler) error {
-	return Activity_Marshal(m, op)
-}
-
-type Activity_Slice []Activity
-
-func (op *Activity_Slice) GetType() string { return Activity_Type }
-
-func (op *Activity_Slice) Marshal(m jsn.Marshaler) error {
-	return Activity_Repeats_Marshal(m, (*[]Activity)(op))
-}
-
-func (op *Activity_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Activity_Slice) SetSize(cnt int) {
-	var els []Activity
-	if cnt >= 0 {
-		els = make(Activity_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Activity_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Activity_Marshal(m, &(*op)[i])
-}
-
-func Activity_Repeats_Marshal(m jsn.Marshaler, vals *[]Activity) error {
-	return jsn.RepeatBlock(m, (*Activity_Slice)(vals))
-}
-
-func Activity_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Activity) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Activity_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Activity_Flow struct{ ptr *Activity }
-
-func (n Activity_Flow) GetType() string      { return Activity_Type }
-func (n Activity_Flow) GetLede() string      { return "act" }
-func (n Activity_Flow) GetFlow() interface{} { return n.ptr }
-func (n Activity_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Activity); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Activity_Optional_Marshal(m jsn.Marshaler, pv **Activity) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Activity_Marshal(m, *pv)
-	} else if !enc {
-		var v Activity
-		if err = Activity_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Activity_Marshal(m jsn.Marshaler, val *Activity) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(Activity_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Activity_Field_Exe)
-		if e0 == nil {
-			e0 = rt.Execute_Repeats_Marshal(m, &val.Exe)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Activity_Field_Exe))
-		}
-		m.EndBlock()
-	}
-	return
-}
 
 // AllTrue Returns true if all of the evaluations are true.
 type AllTrue struct {
@@ -803,7 +700,7 @@ func Blankline_Marshal(m jsn.Marshaler, val *Blankline) (err error) {
 
 // BracketText Sandwiches text printed during a block and puts them inside parenthesis '()'.
 type BracketText struct {
-	Do          Activity `if:"label=_"`
+	Does        []rt.Execute `if:"label=does"`
 	UserComment string
 }
 
@@ -819,7 +716,7 @@ func (*BracketText) Compose() composer.Spec {
 }
 
 const BracketText_Type = "bracket_text"
-const BracketText_Field_Do = "$DO"
+const BracketText_Field_Does = "$DOES"
 
 func (op *BracketText) Marshal(m jsn.Marshaler) error {
 	return BracketText_Marshal(m, op)
@@ -892,12 +789,12 @@ func BracketText_Optional_Marshal(m jsn.Marshaler, pv **BracketText) (err error)
 func BracketText_Marshal(m jsn.Marshaler, val *BracketText) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(BracketText_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", BracketText_Field_Do)
+		e0 := m.MarshalKey("does", BracketText_Field_Does)
 		if e0 == nil {
-			e0 = Activity_Marshal(m, &val.Do)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", BracketText_Field_Do))
+			m.Error(errutil.New(e0, "in flow at", BracketText_Field_Does))
 		}
 		m.EndBlock()
 	}
@@ -1068,7 +965,7 @@ func Break_Marshal(m jsn.Marshaler, val *Break) (err error) {
 
 // BufferText
 type BufferText struct {
-	Do          Activity `if:"label=_"`
+	Does        []rt.Execute `if:"label=does"`
 	UserComment string
 }
 
@@ -1084,7 +981,7 @@ func (*BufferText) Compose() composer.Spec {
 }
 
 const BufferText_Type = "buffer_text"
-const BufferText_Field_Do = "$DO"
+const BufferText_Field_Does = "$DOES"
 
 func (op *BufferText) Marshal(m jsn.Marshaler) error {
 	return BufferText_Marshal(m, op)
@@ -1157,221 +1054,12 @@ func BufferText_Optional_Marshal(m jsn.Marshaler, pv **BufferText) (err error) {
 func BufferText_Marshal(m jsn.Marshaler, val *BufferText) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(BufferText_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", BufferText_Field_Do)
+		e0 := m.MarshalKey("does", BufferText_Field_Does)
 		if e0 == nil {
-			e0 = Activity_Marshal(m, &val.Do)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", BufferText_Field_Do))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// CallArg Runtime version of argument
-type CallArg struct {
-	Name        string        `if:"label=_,type=text"`
-	From        rt.Assignment `if:"label=from"`
-	UserComment string
-}
-
-func (*CallArg) Compose() composer.Spec {
-	return composer.Spec{
-		Name: CallArg_Type,
-		Uses: composer.Type_Flow,
-		Lede: "inarg",
-	}
-}
-
-const CallArg_Type = "call_arg"
-const CallArg_Field_Name = "$NAME"
-const CallArg_Field_From = "$FROM"
-
-func (op *CallArg) Marshal(m jsn.Marshaler) error {
-	return CallArg_Marshal(m, op)
-}
-
-type CallArg_Slice []CallArg
-
-func (op *CallArg_Slice) GetType() string { return CallArg_Type }
-
-func (op *CallArg_Slice) Marshal(m jsn.Marshaler) error {
-	return CallArg_Repeats_Marshal(m, (*[]CallArg)(op))
-}
-
-func (op *CallArg_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *CallArg_Slice) SetSize(cnt int) {
-	var els []CallArg
-	if cnt >= 0 {
-		els = make(CallArg_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *CallArg_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return CallArg_Marshal(m, &(*op)[i])
-}
-
-func CallArg_Repeats_Marshal(m jsn.Marshaler, vals *[]CallArg) error {
-	return jsn.RepeatBlock(m, (*CallArg_Slice)(vals))
-}
-
-func CallArg_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CallArg) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = CallArg_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type CallArg_Flow struct{ ptr *CallArg }
-
-func (n CallArg_Flow) GetType() string      { return CallArg_Type }
-func (n CallArg_Flow) GetLede() string      { return "inarg" }
-func (n CallArg_Flow) GetFlow() interface{} { return n.ptr }
-func (n CallArg_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*CallArg); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func CallArg_Optional_Marshal(m jsn.Marshaler, pv **CallArg) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = CallArg_Marshal(m, *pv)
-	} else if !enc {
-		var v CallArg
-		if err = CallArg_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func CallArg_Marshal(m jsn.Marshaler, val *CallArg) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(CallArg_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", CallArg_Field_Name)
-		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", CallArg_Field_Name))
-		}
-		e1 := m.MarshalKey("from", CallArg_Field_From)
-		if e1 == nil {
-			e1 = rt.Assignment_Marshal(m, &val.From)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", CallArg_Field_From))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// CallArgs Runtime version of arguments
-type CallArgs struct {
-	Args        []CallArg `if:"label=_"`
-	UserComment string
-}
-
-func (*CallArgs) Compose() composer.Spec {
-	return composer.Spec{
-		Name: CallArgs_Type,
-		Uses: composer.Type_Flow,
-		Lede: "inargs",
-	}
-}
-
-const CallArgs_Type = "call_args"
-const CallArgs_Field_Args = "$ARGS"
-
-func (op *CallArgs) Marshal(m jsn.Marshaler) error {
-	return CallArgs_Marshal(m, op)
-}
-
-type CallArgs_Slice []CallArgs
-
-func (op *CallArgs_Slice) GetType() string { return CallArgs_Type }
-
-func (op *CallArgs_Slice) Marshal(m jsn.Marshaler) error {
-	return CallArgs_Repeats_Marshal(m, (*[]CallArgs)(op))
-}
-
-func (op *CallArgs_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *CallArgs_Slice) SetSize(cnt int) {
-	var els []CallArgs
-	if cnt >= 0 {
-		els = make(CallArgs_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *CallArgs_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return CallArgs_Marshal(m, &(*op)[i])
-}
-
-func CallArgs_Repeats_Marshal(m jsn.Marshaler, vals *[]CallArgs) error {
-	return jsn.RepeatBlock(m, (*CallArgs_Slice)(vals))
-}
-
-func CallArgs_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CallArgs) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = CallArgs_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type CallArgs_Flow struct{ ptr *CallArgs }
-
-func (n CallArgs_Flow) GetType() string      { return CallArgs_Type }
-func (n CallArgs_Flow) GetLede() string      { return "inargs" }
-func (n CallArgs_Flow) GetFlow() interface{} { return n.ptr }
-func (n CallArgs_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*CallArgs); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func CallArgs_Optional_Marshal(m jsn.Marshaler, pv **CallArgs) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = CallArgs_Marshal(m, *pv)
-	} else if !enc {
-		var v CallArgs
-		if err = CallArgs_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func CallArgs_Marshal(m jsn.Marshaler, val *CallArgs) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(CallArgs_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", CallArgs_Field_Args)
-		if e0 == nil {
-			e0 = CallArg_Repeats_Marshal(m, &val.Args)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", CallArgs_Field_Args))
+			m.Error(errutil.New(e0, "in flow at", BufferText_Field_Does))
 		}
 		m.EndBlock()
 	}
@@ -1473,7 +1161,7 @@ func CallCycle_Marshal(m jsn.Marshaler, val *CallCycle) (err error) {
 	if err = m.MarshalBlock(CallCycle_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallCycle_Field_Name)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallCycle_Field_Name))
@@ -1490,121 +1178,10 @@ func CallCycle_Marshal(m jsn.Marshaler, val *CallCycle) (err error) {
 	return
 }
 
-// CallMake Runtime version of make
-type CallMake struct {
-	Kind        string   `if:"label=_,type=text"`
-	Arguments   CallArgs `if:"label=args"`
-	UserComment string
-}
-
-// User implemented slots:
-var _ rt.RecordEval = (*CallMake)(nil)
-
-func (*CallMake) Compose() composer.Spec {
-	return composer.Spec{
-		Name: CallMake_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const CallMake_Type = "call_make"
-const CallMake_Field_Kind = "$KIND"
-const CallMake_Field_Arguments = "$ARGUMENTS"
-
-func (op *CallMake) Marshal(m jsn.Marshaler) error {
-	return CallMake_Marshal(m, op)
-}
-
-type CallMake_Slice []CallMake
-
-func (op *CallMake_Slice) GetType() string { return CallMake_Type }
-
-func (op *CallMake_Slice) Marshal(m jsn.Marshaler) error {
-	return CallMake_Repeats_Marshal(m, (*[]CallMake)(op))
-}
-
-func (op *CallMake_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *CallMake_Slice) SetSize(cnt int) {
-	var els []CallMake
-	if cnt >= 0 {
-		els = make(CallMake_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *CallMake_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return CallMake_Marshal(m, &(*op)[i])
-}
-
-func CallMake_Repeats_Marshal(m jsn.Marshaler, vals *[]CallMake) error {
-	return jsn.RepeatBlock(m, (*CallMake_Slice)(vals))
-}
-
-func CallMake_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CallMake) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = CallMake_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type CallMake_Flow struct{ ptr *CallMake }
-
-func (n CallMake_Flow) GetType() string      { return CallMake_Type }
-func (n CallMake_Flow) GetLede() string      { return CallMake_Type }
-func (n CallMake_Flow) GetFlow() interface{} { return n.ptr }
-func (n CallMake_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*CallMake); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func CallMake_Optional_Marshal(m jsn.Marshaler, pv **CallMake) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = CallMake_Marshal(m, *pv)
-	} else if !enc {
-		var v CallMake
-		if err = CallMake_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func CallMake_Marshal(m jsn.Marshaler, val *CallMake) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(CallMake_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", CallMake_Field_Kind)
-		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Kind)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", CallMake_Field_Kind))
-		}
-		e1 := m.MarshalKey("args", CallMake_Field_Arguments)
-		if e1 == nil {
-			e1 = CallArgs_Marshal(m, &val.Arguments)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", CallMake_Field_Arguments))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// CallPattern Runtime version of determine
+// CallPattern Executes a pattern, and potentially returns a value.
 type CallPattern struct {
 	Pattern     PatternName `if:"label=_"`
-	Arguments   CallArgs    `if:"label=args"`
+	Arguments   []rt.Arg    `if:"label=args"`
 	UserComment string
 }
 
@@ -1622,6 +1199,7 @@ func (*CallPattern) Compose() composer.Spec {
 	return composer.Spec{
 		Name: CallPattern_Type,
 		Uses: composer.Type_Flow,
+		Lede: "determine",
 	}
 }
 
@@ -1676,7 +1254,7 @@ func CallPattern_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CallPattern) (e
 type CallPattern_Flow struct{ ptr *CallPattern }
 
 func (n CallPattern_Flow) GetType() string      { return CallPattern_Type }
-func (n CallPattern_Flow) GetLede() string      { return CallPattern_Type }
+func (n CallPattern_Flow) GetLede() string      { return "determine" }
 func (n CallPattern_Flow) GetFlow() interface{} { return n.ptr }
 func (n CallPattern_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*CallPattern); ok {
@@ -1709,7 +1287,7 @@ func CallPattern_Marshal(m jsn.Marshaler, val *CallPattern) (err error) {
 		}
 		e1 := m.MarshalKey("args", CallPattern_Field_Arguments)
 		if e1 == nil {
-			e1 = CallArgs_Marshal(m, &val.Arguments)
+			e1 = rt.Arg_Repeats_Marshal(m, &val.Arguments)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", CallPattern_Field_Arguments))
@@ -1719,11 +1297,12 @@ func CallPattern_Marshal(m jsn.Marshaler, val *CallPattern) (err error) {
 	return
 }
 
-// CallSend Runtime version of send
+// CallSend Triggers a event, calling the passed event ( a pattern ) for the handlers of the objects on the passed path.
+// Although the event advertises it can take any bool evaluation, only pattern calls are supported.
+// Returns a true/false success value.
 type CallSend struct {
-	Event       string          `if:"label=_,type=text"`
-	Path        rt.TextListEval `if:"label=to"`
-	Arguments   CallArgs        `if:"label=args"`
+	Path        rt.TextListEval `if:"label=_"`
+	Event       rt.BoolEval     `if:"label=event"`
 	UserComment string
 }
 
@@ -1735,13 +1314,13 @@ func (*CallSend) Compose() composer.Spec {
 	return composer.Spec{
 		Name: CallSend_Type,
 		Uses: composer.Type_Flow,
+		Lede: "send",
 	}
 }
 
 const CallSend_Type = "call_send"
-const CallSend_Field_Event = "$EVENT"
 const CallSend_Field_Path = "$PATH"
-const CallSend_Field_Arguments = "$ARGUMENTS"
+const CallSend_Field_Event = "$EVENT"
 
 func (op *CallSend) Marshal(m jsn.Marshaler) error {
 	return CallSend_Marshal(m, op)
@@ -1790,7 +1369,7 @@ func CallSend_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CallSend) (err err
 type CallSend_Flow struct{ ptr *CallSend }
 
 func (n CallSend_Flow) GetType() string      { return CallSend_Type }
-func (n CallSend_Flow) GetLede() string      { return CallSend_Type }
+func (n CallSend_Flow) GetLede() string      { return "send" }
 func (n CallSend_Flow) GetFlow() interface{} { return n.ptr }
 func (n CallSend_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*CallSend); ok {
@@ -1814,26 +1393,19 @@ func CallSend_Optional_Marshal(m jsn.Marshaler, pv **CallSend) (err error) {
 func CallSend_Marshal(m jsn.Marshaler, val *CallSend) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(CallSend_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", CallSend_Field_Event)
+		e0 := m.MarshalKey("", CallSend_Field_Path)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Event)
+			e0 = rt.TextListEval_Marshal(m, &val.Path)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", CallSend_Field_Event))
+			m.Error(errutil.New(e0, "in flow at", CallSend_Field_Path))
 		}
-		e1 := m.MarshalKey("to", CallSend_Field_Path)
+		e1 := m.MarshalKey("event", CallSend_Field_Event)
 		if e1 == nil {
-			e1 = rt.TextListEval_Marshal(m, &val.Path)
+			e1 = rt.BoolEval_Marshal(m, &val.Event)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", CallSend_Field_Path))
-		}
-		e2 := m.MarshalKey("args", CallSend_Field_Arguments)
-		if e2 == nil {
-			e2 = CallArgs_Marshal(m, &val.Arguments)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", CallSend_Field_Arguments))
+			m.Error(errutil.New(e1, "in flow at", CallSend_Field_Event))
 		}
 		m.EndBlock()
 	}
@@ -1936,7 +1508,7 @@ func CallShuffle_Marshal(m jsn.Marshaler, val *CallShuffle) (err error) {
 	if err = m.MarshalBlock(CallShuffle_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallShuffle_Field_Name)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallShuffle_Field_Name))
@@ -2048,7 +1620,7 @@ func CallTerminal_Marshal(m jsn.Marshaler, val *CallTerminal) (err error) {
 	if err = m.MarshalBlock(CallTerminal_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallTerminal_Field_Name)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallTerminal_Field_Name))
@@ -2162,7 +1734,7 @@ func CallTrigger_Marshal(m jsn.Marshaler, val *CallTrigger) (err error) {
 	if err = m.MarshalBlock(CallTrigger_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallTrigger_Field_Name)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CallTrigger_Field_Name))
@@ -2290,9 +1862,9 @@ func Capitalize_Marshal(m jsn.Marshaler, val *Capitalize) (err error) {
 
 // ChooseAction An if statement.
 type ChooseAction struct {
-	If          rt.BoolEval `if:"label=_"`
-	Do          Activity    `if:"label=do"`
-	Else        Brancher    `if:"label=else,optional"`
+	If          rt.BoolEval  `if:"label=_"`
+	Does        []rt.Execute `if:"label=does"`
+	Else        Brancher     `if:"label=else,optional"`
 	UserComment string
 }
 
@@ -2310,7 +1882,7 @@ func (*ChooseAction) Compose() composer.Spec {
 
 const ChooseAction_Type = "choose_action"
 const ChooseAction_Field_If = "$IF"
-const ChooseAction_Field_Do = "$DO"
+const ChooseAction_Field_Does = "$DOES"
 const ChooseAction_Field_Else = "$ELSE"
 
 func (op *ChooseAction) Marshal(m jsn.Marshaler) error {
@@ -2391,12 +1963,12 @@ func ChooseAction_Marshal(m jsn.Marshaler, val *ChooseAction) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ChooseAction_Field_If))
 		}
-		e1 := m.MarshalKey("do", ChooseAction_Field_Do)
+		e1 := m.MarshalKey("does", ChooseAction_Field_Does)
 		if e1 == nil {
-			e1 = Activity_Marshal(m, &val.Do)
+			e1 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ChooseAction_Field_Do))
+			m.Error(errutil.New(e1, "in flow at", ChooseAction_Field_Does))
 		}
 		e2 := m.MarshalKey("else", ChooseAction_Field_Else)
 		if e2 == nil {
@@ -2412,9 +1984,9 @@ func ChooseAction_Marshal(m jsn.Marshaler, val *ChooseAction) (err error) {
 
 // ChooseMore
 type ChooseMore struct {
-	If          rt.BoolEval `if:"label=_"`
-	Do          Activity    `if:"label=do"`
-	Else        Brancher    `if:"label=else,optional"`
+	If          rt.BoolEval  `if:"label=_"`
+	Does        []rt.Execute `if:"label=does"`
+	Else        Brancher     `if:"label=else,optional"`
 	UserComment string
 }
 
@@ -2431,7 +2003,7 @@ func (*ChooseMore) Compose() composer.Spec {
 
 const ChooseMore_Type = "choose_more"
 const ChooseMore_Field_If = "$IF"
-const ChooseMore_Field_Do = "$DO"
+const ChooseMore_Field_Does = "$DOES"
 const ChooseMore_Field_Else = "$ELSE"
 
 func (op *ChooseMore) Marshal(m jsn.Marshaler) error {
@@ -2512,12 +2084,12 @@ func ChooseMore_Marshal(m jsn.Marshaler, val *ChooseMore) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ChooseMore_Field_If))
 		}
-		e1 := m.MarshalKey("do", ChooseMore_Field_Do)
+		e1 := m.MarshalKey("does", ChooseMore_Field_Does)
 		if e1 == nil {
-			e1 = Activity_Marshal(m, &val.Do)
+			e1 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ChooseMore_Field_Do))
+			m.Error(errutil.New(e1, "in flow at", ChooseMore_Field_Does))
 		}
 		e2 := m.MarshalKey("else", ChooseMore_Field_Else)
 		if e2 == nil {
@@ -2536,7 +2108,7 @@ type ChooseMoreValue struct {
 	Assign      string        `if:"label=_,type=text"`
 	From        rt.Assignment `if:"label=from"`
 	Filter      rt.BoolEval   `if:"label=and"`
-	Do          Activity      `if:"label=do"`
+	Does        []rt.Execute  `if:"label=does"`
 	Else        Brancher      `if:"label=else,optional"`
 	UserComment string
 }
@@ -2556,7 +2128,7 @@ const ChooseMoreValue_Type = "choose_more_value"
 const ChooseMoreValue_Field_Assign = "$ASSIGN"
 const ChooseMoreValue_Field_From = "$FROM"
 const ChooseMoreValue_Field_Filter = "$FILTER"
-const ChooseMoreValue_Field_Do = "$DO"
+const ChooseMoreValue_Field_Does = "$DOES"
 const ChooseMoreValue_Field_Else = "$ELSE"
 
 func (op *ChooseMoreValue) Marshal(m jsn.Marshaler) error {
@@ -2632,7 +2204,7 @@ func ChooseMoreValue_Marshal(m jsn.Marshaler, val *ChooseMoreValue) (err error) 
 	if err = m.MarshalBlock(ChooseMoreValue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ChooseMoreValue_Field_Assign)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Assign)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Assign)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ChooseMoreValue_Field_Assign))
@@ -2651,12 +2223,12 @@ func ChooseMoreValue_Marshal(m jsn.Marshaler, val *ChooseMoreValue) (err error) 
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ChooseMoreValue_Field_Filter))
 		}
-		e3 := m.MarshalKey("do", ChooseMoreValue_Field_Do)
+		e3 := m.MarshalKey("does", ChooseMoreValue_Field_Does)
 		if e3 == nil {
-			e3 = Activity_Marshal(m, &val.Do)
+			e3 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", ChooseMoreValue_Field_Do))
+			m.Error(errutil.New(e3, "in flow at", ChooseMoreValue_Field_Does))
 		}
 		e4 := m.MarshalKey("else", ChooseMoreValue_Field_Else)
 		if e4 == nil {
@@ -2672,7 +2244,7 @@ func ChooseMoreValue_Marshal(m jsn.Marshaler, val *ChooseMoreValue) (err error) 
 
 // ChooseNothingElse
 type ChooseNothingElse struct {
-	Do          Activity `if:"label=_"`
+	Does        []rt.Execute `if:"label=does"`
 	UserComment string
 }
 
@@ -2688,7 +2260,7 @@ func (*ChooseNothingElse) Compose() composer.Spec {
 }
 
 const ChooseNothingElse_Type = "choose_nothing_else"
-const ChooseNothingElse_Field_Do = "$DO"
+const ChooseNothingElse_Field_Does = "$DOES"
 
 func (op *ChooseNothingElse) Marshal(m jsn.Marshaler) error {
 	return ChooseNothingElse_Marshal(m, op)
@@ -2761,12 +2333,12 @@ func ChooseNothingElse_Optional_Marshal(m jsn.Marshaler, pv **ChooseNothingElse)
 func ChooseNothingElse_Marshal(m jsn.Marshaler, val *ChooseNothingElse) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(ChooseNothingElse_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ChooseNothingElse_Field_Do)
+		e0 := m.MarshalKey("does", ChooseNothingElse_Field_Does)
 		if e0 == nil {
-			e0 = Activity_Marshal(m, &val.Do)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ChooseNothingElse_Field_Do))
+			m.Error(errutil.New(e0, "in flow at", ChooseNothingElse_Field_Does))
 		}
 		m.EndBlock()
 	}
@@ -3020,7 +2592,7 @@ type ChooseValue struct {
 	Assign      string        `if:"label=_,type=text"`
 	From        rt.Assignment `if:"label=from"`
 	Filter      rt.BoolEval   `if:"label=and"`
-	Do          Activity      `if:"label=do"`
+	Does        []rt.Execute  `if:"label=does"`
 	Else        Brancher      `if:"label=else,optional"`
 	UserComment string
 }
@@ -3041,7 +2613,7 @@ const ChooseValue_Type = "choose_value"
 const ChooseValue_Field_Assign = "$ASSIGN"
 const ChooseValue_Field_From = "$FROM"
 const ChooseValue_Field_Filter = "$FILTER"
-const ChooseValue_Field_Do = "$DO"
+const ChooseValue_Field_Does = "$DOES"
 const ChooseValue_Field_Else = "$ELSE"
 
 func (op *ChooseValue) Marshal(m jsn.Marshaler) error {
@@ -3117,7 +2689,7 @@ func ChooseValue_Marshal(m jsn.Marshaler, val *ChooseValue) (err error) {
 	if err = m.MarshalBlock(ChooseValue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ChooseValue_Field_Assign)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Assign)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Assign)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ChooseValue_Field_Assign))
@@ -3136,12 +2708,12 @@ func ChooseValue_Marshal(m jsn.Marshaler, val *ChooseValue) (err error) {
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", ChooseValue_Field_Filter))
 		}
-		e3 := m.MarshalKey("do", ChooseValue_Field_Do)
+		e3 := m.MarshalKey("does", ChooseValue_Field_Does)
 		if e3 == nil {
-			e3 = Activity_Marshal(m, &val.Do)
+			e3 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", ChooseValue_Field_Do))
+			m.Error(errutil.New(e3, "in flow at", ChooseValue_Field_Does))
 		}
 		e4 := m.MarshalKey("else", ChooseValue_Field_Else)
 		if e4 == nil {
@@ -3157,7 +2729,7 @@ func ChooseValue_Marshal(m jsn.Marshaler, val *ChooseValue) (err error) {
 
 // CommaText Separates words with commas, and 'and'.
 type CommaText struct {
-	Do          Activity `if:"label=_"`
+	Does        []rt.Execute `if:"label=does"`
 	UserComment string
 }
 
@@ -3173,7 +2745,7 @@ func (*CommaText) Compose() composer.Spec {
 }
 
 const CommaText_Type = "comma_text"
-const CommaText_Field_Do = "$DO"
+const CommaText_Field_Does = "$DOES"
 
 func (op *CommaText) Marshal(m jsn.Marshaler) error {
 	return CommaText_Marshal(m, op)
@@ -3246,12 +2818,12 @@ func CommaText_Optional_Marshal(m jsn.Marshaler, pv **CommaText) (err error) {
 func CommaText_Marshal(m jsn.Marshaler, val *CommaText) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(CommaText_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", CommaText_Field_Do)
+		e0 := m.MarshalKey("does", CommaText_Field_Does)
 		if e0 == nil {
-			e0 = Activity_Marshal(m, &val.Do)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", CommaText_Field_Do))
+			m.Error(errutil.New(e0, "in flow at", CommaText_Field_Does))
 		}
 		m.EndBlock()
 	}
@@ -5077,7 +4649,7 @@ func GetAtField_Marshal(m jsn.Marshaler, val *GetAtField) (err error) {
 	if err = m.MarshalBlock(GetAtField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", GetAtField_Field_Field)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Field)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Field)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", GetAtField_Field_Field))
@@ -5389,7 +4961,7 @@ func HasDominion_Marshal(m jsn.Marshaler, val *HasDominion) (err error) {
 	if err = m.MarshalBlock(HasDominion_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", HasDominion_Field_Name)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", HasDominion_Field_Name))
@@ -6205,7 +5777,7 @@ func IsExactKindOf_Marshal(m jsn.Marshaler, val *IsExactKindOf) (err error) {
 		}
 		e1 := m.MarshalKey("is_exactly", IsExactKindOf_Field_Kind)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Kind)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Kind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", IsExactKindOf_Field_Kind))
@@ -6317,7 +5889,7 @@ func IsKindOf_Marshal(m jsn.Marshaler, val *IsKindOf) (err error) {
 		}
 		e1 := m.MarshalKey("is", IsKindOf_Field_Kind)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Kind)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Kind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", IsKindOf_Field_Kind))
@@ -6632,7 +6204,7 @@ func KindsOf_Marshal(m jsn.Marshaler, val *KindsOf) (err error) {
 	if err = m.MarshalBlock(KindsOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", KindsOf_Field_Kind)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Kind)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Kind)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", KindsOf_Field_Kind))
@@ -7352,7 +6924,7 @@ func Matches_Marshal(m jsn.Marshaler, val *Matches) (err error) {
 		}
 		e1 := m.MarshalKey("to", Matches_Field_Pattern)
 		if e1 == nil {
-			e1 = literal.Text_Unboxed_Marshal(m, &val.Pattern)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Pattern)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", Matches_Field_Pattern))
@@ -8556,7 +8128,7 @@ func PutAtField_Marshal(m jsn.Marshaler, val *PutAtField) (err error) {
 		}
 		e2 := m.MarshalKey("at", PutAtField_Field_AtField)
 		if e2 == nil {
-			e2 = literal.Text_Unboxed_Marshal(m, &val.AtField)
+			e2 = prim.Text_Unboxed_Marshal(m, &val.AtField)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", PutAtField_Field_AtField))
@@ -8884,7 +8456,7 @@ func Response_Marshal(m jsn.Marshaler, val *Response) (err error) {
 	if err = m.MarshalBlock(Response_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Response_Field_Name)
 		if e0 == nil {
-			e0 = literal.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Response_Field_Name))
@@ -8903,7 +8475,7 @@ func Response_Marshal(m jsn.Marshaler, val *Response) (err error) {
 
 // Row A single line as part of a group of lines.
 type Row struct {
-	Do          Activity `if:"label=_"`
+	Does        []rt.Execute `if:"label=does"`
 	UserComment string
 }
 
@@ -8918,7 +8490,7 @@ func (*Row) Compose() composer.Spec {
 }
 
 const Row_Type = "row"
-const Row_Field_Do = "$DO"
+const Row_Field_Does = "$DOES"
 
 func (op *Row) Marshal(m jsn.Marshaler) error {
 	return Row_Marshal(m, op)
@@ -8991,12 +8563,12 @@ func Row_Optional_Marshal(m jsn.Marshaler, pv **Row) (err error) {
 func Row_Marshal(m jsn.Marshaler, val *Row) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(Row_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Row_Field_Do)
+		e0 := m.MarshalKey("does", Row_Field_Does)
 		if e0 == nil {
-			e0 = Activity_Marshal(m, &val.Do)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Row_Field_Do))
+			m.Error(errutil.New(e0, "in flow at", Row_Field_Does))
 		}
 		m.EndBlock()
 	}
@@ -9005,7 +8577,7 @@ func Row_Marshal(m jsn.Marshaler, val *Row) (err error) {
 
 // Rows Group text into successive lines.
 type Rows struct {
-	Do          Activity `if:"label=_"`
+	Does        []rt.Execute `if:"label=does"`
 	UserComment string
 }
 
@@ -9020,7 +8592,7 @@ func (*Rows) Compose() composer.Spec {
 }
 
 const Rows_Type = "rows"
-const Rows_Field_Do = "$DO"
+const Rows_Field_Does = "$DOES"
 
 func (op *Rows) Marshal(m jsn.Marshaler) error {
 	return Rows_Marshal(m, op)
@@ -9093,12 +8665,12 @@ func Rows_Optional_Marshal(m jsn.Marshaler, pv **Rows) (err error) {
 func Rows_Marshal(m jsn.Marshaler, val *Rows) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(Rows_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Rows_Field_Do)
+		e0 := m.MarshalKey("does", Rows_Field_Does)
 		if e0 == nil {
-			e0 = Activity_Marshal(m, &val.Do)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Rows_Field_Do))
+			m.Error(errutil.New(e0, "in flow at", Rows_Field_Does))
 		}
 		m.EndBlock()
 	}
@@ -9425,7 +8997,7 @@ func Singularize_Marshal(m jsn.Marshaler, val *Singularize) (err error) {
 
 // SlashText Separates words with left-leaning slashes '/'.
 type SlashText struct {
-	Do          Activity `if:"label=_"`
+	Does        []rt.Execute `if:"label=does"`
 	UserComment string
 }
 
@@ -9441,7 +9013,7 @@ func (*SlashText) Compose() composer.Spec {
 }
 
 const SlashText_Type = "slash_text"
-const SlashText_Field_Do = "$DO"
+const SlashText_Field_Does = "$DOES"
 
 func (op *SlashText) Marshal(m jsn.Marshaler) error {
 	return SlashText_Marshal(m, op)
@@ -9514,12 +9086,12 @@ func SlashText_Optional_Marshal(m jsn.Marshaler, pv **SlashText) (err error) {
 func SlashText_Marshal(m jsn.Marshaler, val *SlashText) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(SlashText_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", SlashText_Field_Do)
+		e0 := m.MarshalKey("does", SlashText_Field_Does)
 		if e0 == nil {
-			e0 = Activity_Marshal(m, &val.Do)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", SlashText_Field_Do))
+			m.Error(errutil.New(e0, "in flow at", SlashText_Field_Does))
 		}
 		m.EndBlock()
 	}
@@ -9622,7 +9194,7 @@ func Softline_Marshal(m jsn.Marshaler, val *Softline) (err error) {
 
 // SpanText Writes text with spaces between words.
 type SpanText struct {
-	Do          Activity `if:"label=_"`
+	Does        []rt.Execute `if:"label=does"`
 	UserComment string
 }
 
@@ -9638,7 +9210,7 @@ func (*SpanText) Compose() composer.Spec {
 }
 
 const SpanText_Type = "span_text"
-const SpanText_Field_Do = "$DO"
+const SpanText_Field_Does = "$DOES"
 
 func (op *SpanText) Marshal(m jsn.Marshaler) error {
 	return SpanText_Marshal(m, op)
@@ -9711,12 +9283,12 @@ func SpanText_Optional_Marshal(m jsn.Marshaler, pv **SpanText) (err error) {
 func SpanText_Marshal(m jsn.Marshaler, val *SpanText) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(SpanText_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", SpanText_Field_Do)
+		e0 := m.MarshalKey("does", SpanText_Field_Does)
 		if e0 == nil {
-			e0 = Activity_Marshal(m, &val.Do)
+			e0 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", SpanText_Field_Do))
+			m.Error(errutil.New(e0, "in flow at", SpanText_Field_Does))
 		}
 		m.EndBlock()
 	}
@@ -10357,8 +9929,8 @@ func VariableName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]VariableName) 
 
 // While Keep running a series of actions while a condition is true.
 type While struct {
-	True        rt.BoolEval `if:"label=_"`
-	Do          Activity    `if:"label=do"`
+	True        rt.BoolEval  `if:"label=_"`
+	Does        []rt.Execute `if:"label=does"`
 	UserComment string
 }
 
@@ -10375,7 +9947,7 @@ func (*While) Compose() composer.Spec {
 
 const While_Type = "while"
 const While_Field_True = "$TRUE"
-const While_Field_Do = "$DO"
+const While_Field_Does = "$DOES"
 
 func (op *While) Marshal(m jsn.Marshaler) error {
 	return While_Marshal(m, op)
@@ -10455,12 +10027,12 @@ func While_Marshal(m jsn.Marshaler, val *While) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", While_Field_True))
 		}
-		e1 := m.MarshalKey("do", While_Field_Do)
+		e1 := m.MarshalKey("does", While_Field_Does)
 		if e1 == nil {
-			e1 = Activity_Marshal(m, &val.Do)
+			e1 = rt.Execute_Repeats_Marshal(m, &val.Does)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", While_Field_Do))
+			m.Error(errutil.New(e1, "in flow at", While_Field_Does))
 		}
 		m.EndBlock()
 	}
@@ -10476,7 +10048,6 @@ var Slots = []interface{}{
 }
 
 var Slats = []composer.Composer{
-	(*Activity)(nil),
 	(*AllTrue)(nil),
 	(*Always)(nil),
 	(*AnyTrue)(nil),
@@ -10487,10 +10058,7 @@ var Slats = []composer.Composer{
 	(*BracketText)(nil),
 	(*Break)(nil),
 	(*BufferText)(nil),
-	(*CallArg)(nil),
-	(*CallArgs)(nil),
 	(*CallCycle)(nil),
-	(*CallMake)(nil),
 	(*CallPattern)(nil),
 	(*CallSend)(nil),
 	(*CallShuffle)(nil),
@@ -10575,7 +10143,6 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	9563969450495003011:  (*Activity)(nil),          /* Act: */
 	15543013144495859017: (*TriggerSwitch)(nil),     /* After */
 	5766132082989451290:  (*AllTrue)(nil),           /* AllTrue: */
 	3551738626604328996:  (*Always)(nil),            /* Always */
@@ -10584,27 +10151,25 @@ var Signatures = map[uint64]interface{}{
 	8393987310376781689:  (*AtLeast)(nil),           /* AtLeast */
 	6318029524925488119:  (*AtMost)(nil),            /* AtMost */
 	653943369825436213:   (*Newline)(nil),           /* Br */
-	296659450533921070:   (*BracketText)(nil),       /* Brackets: */
+	17546504545392501805: (*BracketText)(nil),       /* Brackets does: */
 	5769182059867686040:  (*Break)(nil),             /* Break */
-	1468716792759951334:  (*BufferText)(nil),        /* Buffers: */
-	15946925553828934364: (*CallMake)(nil),          /* CallMake:args: */
-	15968985848252216970: (*CallPattern)(nil),       /* CallPattern:args: */
-	9001627797986963633:  (*CallSend)(nil),          /* CallSend:to:args: */
+	7472167589970264389:  (*BufferText)(nil),        /* Buffers does: */
 	11297042870903436571: (*Capitalize)(nil),        /* Capitalize: */
 	16120682472252114465: (*CompareNum)(nil),        /* Cmp:is:num: */
 	7447576730273512137:  (*CompareText)(nil),       /* Cmp:is:txt: */
-	10071311581658796529: (*CommaText)(nil),         /* Commas: */
+	9705946378688090116:  (*CommaText)(nil),         /* Commas does: */
 	1080512400466662143:  (*Includes)(nil),          /* Contains:part: */
 	275481607335946827:   (*CallCycle)(nil),         /* Cycle:over: */
 	15006778405246945707: (*DiffOf)(nil),            /* Dec: */
 	15857313894902256996: (*DiffOf)(nil),            /* Dec:by: */
+	6635658011727307529:  (*CallPattern)(nil),       /* Determine:args: */
 	9642860352247282847:  (*QuotientOf)(nil),        /* Div:by: */
 	8764800739954063190:  (*During)(nil),            /* During: */
-	10400553141435587369: (*ChooseNothingElse)(nil), /* ElseDo: */
-	6647835788319785576:  (*ChooseMore)(nil),        /* ElseIf:do: */
-	8891784798413013545:  (*ChooseMore)(nil),        /* ElseIf:do:else: */
-	8118318284549648335:  (*ChooseMoreValue)(nil),   /* ElseIf:from:and:do: */
-	15789793076434728188: (*ChooseMoreValue)(nil),   /* ElseIf:from:and:do:else: */
+	1643886961962084284:  (*ChooseNothingElse)(nil), /* ElseDo does: */
+	95699104088068840:    (*ChooseMore)(nil),        /* ElseIf:does: */
+	10039631382380782505: (*ChooseMore)(nil),        /* ElseIf:does:else: */
+	10128151123144382167: (*ChooseMoreValue)(nil),   /* ElseIf:from:and:does: */
+	17187853052612645748: (*ChooseMoreValue)(nil),   /* ElseIf:from:and:does:else: */
 	1753806270445300148:  (*Equal)(nil),             /* Equals */
 	15065524158993996740: (*TriggerCycle)(nil),      /* Every */
 	12958508767616079733: (*FromBool)(nil),          /* FromBool: */
@@ -10619,12 +10184,10 @@ var Signatures = map[uint64]interface{}{
 	60595651907097662:    (*GreaterThan)(nil),       /* GreaterThan */
 	7228360982355755098:  (*HasDominion)(nil),       /* HasDominion: */
 	10727511238220812609: (*IdOf)(nil),              /* IdOf: */
-	801098075024283221:   (*ChooseAction)(nil),      /* If:do: */
-	16837911797943566414: (*ChooseAction)(nil),      /* If:do:else: */
-	1980715091726959140:  (*ChooseValue)(nil),       /* If:from:and:do: */
-	7009621164357801941:  (*ChooseValue)(nil),       /* If:from:and:do:else: */
-	12587790669191301162: (*CallArg)(nil),           /* Inarg:from: */
-	5369402786275276311:  (*CallArgs)(nil),          /* Inargs: */
+	4416106167286066769:  (*ChooseAction)(nil),      /* If:does: */
+	3965500594677188970:  (*ChooseAction)(nil),      /* If:does:else: */
+	8034175131622277340:  (*ChooseValue)(nil),       /* If:from:and:does: */
+	9082975569244025373:  (*ChooseValue)(nil),       /* If:from:and:does:else: */
 	2338774282197734279:  (*SumOf)(nil),             /* Inc: */
 	13375523970040178104: (*SumOf)(nil),             /* Inc:by: */
 	3262909017575450402:  (*IsEmpty)(nil),           /* Is empty: */
@@ -10657,18 +10220,19 @@ var Signatures = map[uint64]interface{}{
 	4615224243559596965:  (*SetTrait)(nil),          /* Put obj:trait: */
 	4203536933166593903:  (*PutAtField)(nil),        /* Put:from:at: */
 	2612904280306907934:  (*FromRec)(nil),           /* RecFields: */
-	11869639038566752997: (*While)(nil),             /* Repeating:do: */
+	6841798841499903937:  (*While)(nil),             /* Repeating:does: */
 	7052086945096604332:  (*Response)(nil),          /* Response: */
 	4774612926507711811:  (*Response)(nil),          /* Response:text: */
 	1041569095092303606:  (*MakeReversed)(nil),      /* Reverse text: */
-	14613688398311225843: (*Row)(nil),               /* Row: */
-	3616198808268747974:  (*Rows)(nil),              /* Rows: */
+	15400833793795422186: (*Row)(nil),               /* Row does: */
+	4851703814681330981:  (*Rows)(nil),              /* Rows does: */
 	3730533159734531406:  (*SayText)(nil),           /* Say: */
+	1341867280488142101:  (*CallSend)(nil),          /* Send:event: */
 	1183160597042696586:  (*MakeSentenceCase)(nil),  /* Sentence: */
 	10296278955051288620: (*CallShuffle)(nil),       /* Shuffle:over: */
 	17621435589152331937: (*Singularize)(nil),       /* Singular of: */
-	2005944222973282288:  (*SlashText)(nil),         /* Slashes: */
-	13947012081139838056: (*SpanText)(nil),          /* Spaces: */
+	11648171001369123451: (*SlashText)(nil),         /* Slashes does: */
+	11009934463274191699: (*SpanText)(nil),          /* Spaces does: */
 	14740800495063051091: (*CallTerminal)(nil),      /* Stopping:over: */
 	14218506878958151209: (*MakeTitleCase)(nil),     /* Title: */
 	16403710471411569866: (*CallTrigger)(nil),       /* Trigger:on:num: */

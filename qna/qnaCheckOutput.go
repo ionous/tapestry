@@ -15,7 +15,7 @@ type CheckOutput struct {
 	Name   string
 	Domain string
 	Expect string // all tests generate text right now; fix: need to handle comparison of literal values
-	Test   rt.Execute
+	Test   []rt.Execute
 }
 
 func (t *CheckOutput) RunTest(run rt.Runtime) (err error) {
@@ -25,7 +25,7 @@ func (t *CheckOutput) RunTest(run rt.Runtime) (err error) {
 	if prev, e := run.ActivateDomain(t.Domain); e != nil {
 		err = e
 	} else {
-		if e := safe.Run(run, t.Test); e != nil {
+		if e := safe.RunAll(run, t.Test); e != nil {
 			err = errutil.Fmt("ng! %s test encountered error: %s", t.Name, e)
 		} else if res := buf.String(); res != t.Expect {
 			if eol := '\n'; strings.ContainsRune(res, eol) || strings.ContainsRune(t.Expect, eol) {

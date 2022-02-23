@@ -1,10 +1,11 @@
 package testutil
 
 import (
+	"io"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/writer"
 )
 
 // PanicRuntime implements Runtime throwing a panic for every method
@@ -42,10 +43,10 @@ func (PanicRuntime) GetField(target, field string) (g.Value, error) {
 func (PanicRuntime) SetField(target, field string, v g.Value) error {
 	panic("Runtime panic")
 }
-func (PanicRuntime) Writer() writer.Output {
+func (PanicRuntime) Writer() io.Writer {
 	panic("Runtime panic")
 }
-func (PanicRuntime) SetWriter(writer.Output) writer.Output {
+func (PanicRuntime) SetWriter(io.Writer) io.Writer {
 	panic("Runtime panic")
 }
 func (PanicRuntime) PushScope(rt.Scope) {

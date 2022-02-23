@@ -1,34 +1,33 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "--": "Determines whether an actor can manipulate some specific object.",
       "Pattern:requires:returns:": [
         "can handle",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "actor",
-                "actor"
-              ]
-            },
-            {
-              "Text named:": "action"
-            },
-            {
-              "Text named:of:": [
-                "noun",
-                "thing"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "other noun",
-                "thing"
-              ]
-            }
-          ]
-        },
+        [
+          {
+            "Text named:of:": [
+              "actor",
+              "actor"
+            ]
+          },
+          {
+            "Text named:": "action"
+          },
+          {
+            "Text named:of:": [
+              "noun",
+              "thing"
+            ]
+          },
+          {
+            "--": "not all actions have a second noun and that's okay",
+            "Text named:of:": [
+              "other noun",
+              "thing"
+            ]
+          }
+        ],
         {
           "PatternResult:": {
             "Text named:": "response"
@@ -39,55 +38,41 @@
     {
       "Pattern:rules:": [
         "can handle",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Cmp:is:txt:": [
+                  {
+                    "ParentOf obj:": "@noun"
+                  },
+                  {
+                    "OtherThan": true
+                  },
+                  "@actor"
+                ]
+              },
+              [
                 {
-                  "Cmp:is:txt:": [
+                  "Let:be:": [
+                    "response",
                     {
-                      "Determine:arguments:": [
-                        "parentOf",
-                        {
-                          "Args:": [
-                            {
-                              "Arg:from:": [
-                                "obj",
-                                "@noun"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    "OtherThan",
-                    "@actor"
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Let:be:": [
-                        "response",
-                        {
-                          "FromTxt:": {
-                            "Response:text:": [
-                              "can only use possessions",
-                              {
-                                "RenderTemplate:": "{we:|capitalize!} haven't got {those:.noun}!"
-                              }
-                            ]
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can only use possessions",
+                          {
+                            "RenderTemplate:": "{we:|capitalize!} haven't got {those:.noun}!"
                           }
-                        }
-                      ]
+                        ]
+                      }
                     }
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
     }
   ]
-]
+}

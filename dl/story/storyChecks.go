@@ -8,10 +8,8 @@ import (
 func (op *TestRule) ImportPhrase(k *Importer) (err error) {
 	if n, e := makeTestName(k, op.TestName); e != nil {
 		err = e
-	} else if exe, e := op.Hook.ImportProgram(k); e != nil {
-		err = e
 	} else {
-		k.WriteEphemera(&eph.EphChecks{Name: n, Exe: exe})
+		k.WriteEphemera(&eph.EphChecks{Name: n, Exe: op.Does})
 	}
 	return
 }

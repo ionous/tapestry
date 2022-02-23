@@ -117,7 +117,7 @@ func (n refValue) Index(i int) (ret Value) {
 }
 
 func (n refValue) FieldByName(f string) (ret Value, err error) {
-	name := lang.SpecialUnderscore(f)
+	name := lang.Underscore(f)
 	if v, e := n.Record().GetNamedField(name); e != nil {
 		err = e
 	} else {
@@ -128,7 +128,7 @@ func (n refValue) FieldByName(f string) (ret Value, err error) {
 
 func (n refValue) SetFieldByName(f string, v Value) (err error) {
 	rec := n.Record()
-	name := lang.SpecialUnderscore(f)
+	name := lang.Underscore(f)
 	newVal := CopyValue(v)
 	return rec.SetNamedField(name, newVal)
 }

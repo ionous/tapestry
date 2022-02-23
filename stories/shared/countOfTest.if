@@ -1,35 +1,32 @@
-[
-  [
+{
+  "Tapestry:": [
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "countOf",
-        {
-          "Act:": [
-            {
-              "Repeating across:as:do:": [
+        [
+          {
+            "Repeating across:as:does:": [
+              {
+                "FromNums:": {
+                  "Range:": 6
+                }
+              },
+              {
+                "AsNum:": "i"
+              },
+              [
                 {
-                  "FromNums:": {
-                    "Range:": 6
-                  }
-                },
-                {
-                  "AsNum:": "i"
-                },
-                {
-                  "Act:": [
-                    {
-                      "Determine:": "magic symbols"
-                    }
-                  ]
+                  "MagicSymbols": true
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestStatement:test:": [
         "countOf",
@@ -37,96 +34,89 @@
           "TestOutput:": "o*-*x*x"
         }
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "TestScene:story:": [
         "countOf",
-        {
-          "Story:": [
-            {
-              "Paragraph:": [
+        [
+          {
+            "Pattern:": "magic symbols"
+          },
+          {
+            "Pattern:rules:": [
+              "magic symbols",
+              [
                 {
-                  "Pattern:": "magic symbols"
+                  "PatternRule:does:": [
+                    {
+                      "Always": true
+                    },
+                    [
+                      {
+                        "Say:": "o"
+                      }
+                    ]
+                  ]
                 },
                 {
-                  "Pattern:rules:": [
-                    "magic symbols",
+                  "PatternRule:does:": [
                     {
-                      "PatternRules:": [
+                      "CountOf:num:": [
                         {
-                          "PatternRule:hook activity:": [
-                            "Always",
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": "o"
-                                }
-                              ]
-                            }
-                          ]
+                          "After": true
                         },
-                        {
-                          "PatternRule:hook activity:": [
-                            {
-                              "CountOf:num:": [
-                                "After",
-                                5
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": "x"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "PatternRule:hook activity:": [
-                            {
-                              "CountOf:num:": [
-                                "At",
-                                3
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": "-"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "PatternRule:hook activity:": [
-                            {
-                              "CountOf:num:": [
-                                "Every",
-                                2
-                              ]
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Say:": "*"
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                        5
                       ]
-                    }
+                    },
+                    [
+                      {
+                        "Say:": "x"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "PatternRule:does:": [
+                    {
+                      "CountOf:num:": [
+                        {
+                          "At": true
+                        },
+                        3
+                      ]
+                    },
+                    [
+                      {
+                        "Say:": "-"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "PatternRule:does:": [
+                    {
+                      "CountOf:num:": [
+                        {
+                          "Every": true
+                        },
+                        2
+                      ]
+                    },
+                    [
+                      {
+                        "Say:": "*"
+                      }
+                    ]
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
     }
   ]
-]
+}

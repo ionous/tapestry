@@ -1,0 +1,187 @@
+{
+  "--": "testdl",
+  "Spec:with group:": [
+    "testdl",
+    {
+      "Group contains:": [
+        {
+          "--": "",
+          "Spec:with str:": [
+            "test_bool",
+            {
+              "Str exclusively:uses:": [
+                true,
+                [
+                  {
+                    "Option:": "true"
+                  },
+                  {
+                    "Option:": "false"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
+            "test_embed",
+            {
+              "flow:uses:": [
+                "embed",
+                [
+                  {
+                    "Term:": "test_flow"
+                  }
+                ]
+              ]
+            },
+            [
+              "test_slot"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:": [
+            "test_flow",
+            {
+              "flow:uses:": [
+                "flow",
+                [
+                  {
+                    "Term:type:optional:": [
+                      "slot",
+                      "test_slot",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "txt",
+                      "test_txt",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "num",
+                      "test_num",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "bool",
+                      "test_bool",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "swap",
+                      "test_swap",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:optional:repeats:": [
+                      "slots",
+                      "test_slot",
+                      true,
+                      true
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "test_slot"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with num:": [
+            "test_num",
+            {
+              "Num uses:": []
+            }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with slot:": [
+            "test_slot",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:": [
+            "test_str",
+            {
+              "Str exclusively:uses:": [
+                true,
+                [
+                  {
+                    "Option:": "one"
+                  },
+                  {
+                    "Option:": "other"
+                  },
+                  {
+                    "Option:": "option"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with swap:": [
+            "test_swap",
+            {
+              "Swap between:": [
+                {
+                  "Pick:label:type:": [
+                    "a",
+                    "flow",
+                    "test_flow"
+                  ]
+                },
+                {
+                  "Pick:label:type:": [
+                    "b",
+                    "slot",
+                    "test_slot"
+                  ]
+                },
+                {
+                  "Pick:label:type:": [
+                    "c",
+                    "text",
+                    "test_txt"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:": [
+            "test_txt",
+            {
+              "Str uses:": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

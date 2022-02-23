@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "Make kinds:of:": [
         " agents",
@@ -49,9 +49,10 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Nouns:depict:": [
         [
@@ -137,22 +138,21 @@
           ]
         }
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:returns:": [
         "isPlayer",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        },
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          }
+        ],
         {
           "PatternResult:": {
             "Bool named:": "success"
@@ -163,79 +163,78 @@
     {
       "Pattern:rules:": [
         "isPlayer",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@obj",
+                  "actors"
+                ]
+              },
+              [
                 {
-                  "KindOf:is:": [
-                    "@obj",
-                    "actors"
-                  ]
-                },
-                {
-                  "Act:": [
+                  "Let:be:": [
+                    "success",
                     {
-                      "Let:be:": [
-                        "success",
-                        {
-                          "FromBool:": {
-                            "Cmp:is:txt:": [
-                              "@obj",
-                              "Equals",
+                      "FromBool:": {
+                        "Cmp:is:txt:": [
+                          "@obj",
+                          {
+                            "Equals": true
+                          },
+                          {
+                            "Get:from:": [
+                              "pawn",
                               {
-                                "Get:from:": [
-                                  "pawn",
-                                  {
-                                    "ObjFields:": "player"
-                                  }
-                                ]
+                                "ObjFields:": "player"
                               }
                             ]
                           }
-                        }
-                      ]
+                        ]
+                      }
                     }
                   ]
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@obj",
+                  "agents"
+                ]
+              },
+              [
                 {
-                  "KindOf:is:": [
-                    "@obj",
-                    "agents"
-                  ]
-                },
-                {
-                  "Act:": [
+                  "Let:be:": [
+                    "success",
                     {
-                      "Let:be:": [
-                        "success",
-                        {
-                          "FromBool:": {
-                            "Cmp:is:txt:": [
-                              "@obj",
-                              "Equals",
-                              {
-                                "IdOf:": "player"
-                              }
-                            ]
+                      "FromBool:": {
+                        "Cmp:is:txt:": [
+                          "@obj",
+                          {
+                            "Equals": true
+                          },
+                          {
+                            "IdOf:": "player"
                           }
-                        }
-                      ]
+                        ]
+                      }
                     }
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "RelativeToNoun:nouns:areBeing:otherNouns:": [
         " whereabouts",
@@ -257,44 +256,29 @@
           }
         ]
       ]
-    }
-  ],
-  [
+    },
     {
-      "TestRule:hook activity:": [
+      "--": ""
+    },
+    {
+      "TestRule:does:": [
         "player tests",
-        {
-          "Act:": [
-            {
-              "If:do:": [
+        [
+          {
+            "If:does:": [
+              {
+                "IsPlayer obj:": {
+                  "FromTxt:": "self"
+                }
+              },
+              [
                 {
-                  "Determine:arguments:": [
-                    "isPlayer",
-                    {
-                      "Args:": [
-                        {
-                          "Arg:from:": [
-                            "obj",
-                            {
-                              "FromTxt:": "self"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": "yes"
-                    }
-                  ]
+                  "Say:": "yes"
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
     },
     {
@@ -304,9 +288,10 @@
           "TestOutput:": "yes"
         }
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "GrammarDecl:": {
         "Alias:asNoun:": [
@@ -320,4 +305,4 @@
       }
     }
   ]
-]
+}

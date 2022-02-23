@@ -36,7 +36,7 @@ var collateGroups = testpat.Pattern{
 		{Name: "names", Affinity: affine.TextList},
 	},
 	Rules: []rt.Rule{{
-		Execute: core.NewActivity(
+		Execute: core.MakeActivity(
 			// walk collation.Groups for matching settings
 			&core.Assign{
 				Var: N("groups"),
@@ -46,7 +46,7 @@ var collateGroups = testpat.Pattern{
 			&list.ListEach{
 				List: V("groups"),
 				As:   &list.AsRec{Var: N("el")},
-				Do: core.MakeActivity(
+				Does: core.MakeActivity(
 					&core.ChooseAction{
 						If: &core.CallPattern{
 							Pattern: P("match_groups"),
@@ -55,7 +55,7 @@ var collateGroups = testpat.Pattern{
 								&core.GetAtField{From: &core.FromVar{Var: N("el")}, Field: W("settings")}),
 							// &core.Unpack{V("el"), "Settings"}),
 						},
-						Do: core.MakeActivity(
+						Does: core.MakeActivity(
 							&core.Assign{
 								Var:  N("idx"),
 								From: V("index"),
@@ -73,7 +73,7 @@ var collateGroups = testpat.Pattern{
 				// havent found a matching group?
 				// pack the object and its settings into it,
 				// push the group into the groups.
-				Do: core.MakeActivity(
+				Does: core.MakeActivity(
 					&list.PutEdge{
 						Into: &list.IntoTxtList{Var: N("names")},
 						// From: &core.Unpack{V("settings"), "name"},
@@ -85,7 +85,7 @@ var collateGroups = testpat.Pattern{
 				), // end true
 				// found a matching group?
 				// unpack it, add the object to it, then pack it up again.
-				Else: &core.ChooseNothingElse{Do: core.MakeActivity(
+				Else: &core.ChooseNothingElse{Does: core.MakeActivity(
 					&core.Assign{
 						Var:  N("group"),
 						From: &core.FromRecord{Val: &list.ListAt{List: V("groups"), Index: V("idx")}}},

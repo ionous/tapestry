@@ -1,15 +1,13 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "Pattern:requires:": [
         "We",
-        {
-          "PatternRequires:": [
-            {
-              "TextList named:": "names"
-            }
-          ]
-        }
+        [
+          {
+            "TextList named:": "names"
+          }
+        ]
       ]
     },
     {
@@ -18,136 +16,124 @@
     {
       "Pattern:rules:": [
         "We",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
-                    {
-                      "Say:": "you"
-                    }
-                  ]
+                  "Say:": "you"
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Comment:": "they, [we], [ey], it. "
     },
     {
       "Pattern:requires:": [
         "They",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "noun",
-                "object"
-              ]
-            }
-          ]
-        }
+        [
+          {
+            "Text named:of:": [
+              "noun",
+              "object"
+            ]
+          }
+        ]
       ]
     },
     {
       "Pattern:rules:": [
         "They",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
-                    {
-                      "Say:": "it"
-                    }
-                  ]
+                  "Say:": "it"
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Get obj:trait:": [
+                  "@noun",
+                  "plural named"
+                ]
+              },
+              [
                 {
-                  "Get obj:trait:": [
-                    "@noun",
-                    "plural named"
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": "they"
-                    }
-                  ]
+                  "Say:": "they"
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "Those",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "noun",
-                "object"
-              ]
-            }
-          ]
-        }
+        [
+          {
+            "Text named:of:": [
+              "noun",
+              "object"
+            ]
+          }
+        ]
       ]
     },
     {
       "Pattern:rules:": [
         "Those",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
-                    {
-                      "Say:": "that"
-                    }
-                  ]
+                  "Say:": "that"
                 }
               ]
-            },
-            {
-              "PatternRule:hook activity:": [
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Get obj:trait:": [
+                  "@noun",
+                  "plural named"
+                ]
+              },
+              [
                 {
-                  "Get obj:trait:": [
-                    "@noun",
-                    "plural named"
-                  ]
-                },
-                {
-                  "Act:": [
-                    {
-                      "Say:": "these"
-                    }
-                  ]
+                  "Say:": "these"
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
     }
   ]
-]
+}

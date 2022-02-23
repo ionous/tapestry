@@ -7,17 +7,12 @@ import (
 )
 
 func (op *PatternActions) ImportPhrase(k *Importer) (err error) {
-
 	patternName := op.Name.String()
-	var locals []eph.EphParams
-	if els := op.PatternLocals; els != nil {
-		locals = els.ImportLocals(k, patternName)
-	}
-	if len(locals) > 0 {
+	if locals := ImportLocals(k, patternName, op.Locals); len(locals) > 0 {
 		k.WriteEphemera(&eph.EphPatterns{Name: patternName, Locals: locals})
 	}
 	// write the rules last ( order doesnt matter except for tests )
-	return op.PatternRules.ImportRules(k, patternName, "", eph.EphTiming{})
+	return ImportRules(k, patternName, "", op.Rules, eph.EphTiming{})
 }
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
@@ -29,28 +24,22 @@ func (op *PatternDecl) ImportPhrase(k *Importer) (err error) {
 	return
 }
 
-func (op *PatternDecl) reduceProps() (ret []eph.EphParams) {
-	if els := op.Optvars; els != nil {
-		ret = reduceProps(els.Props)
-	}
-	return
+func (op *PatternDecl) reduceProps() []eph.EphParams {
+	return reduceProps(op.Params)
 }
 
-func (op *PatternRules) ImportRules(k *Importer, pattern, target string, flags eph.EphTiming) (err error) {
-	if els := op.PatternRule; els != nil {
-		for _, el := range els {
-			if e := el.importRule(k, pattern, target, flags); e != nil {
-				err = errutil.Append(err, e)
-			}
+func ImportRules(k *Importer, pattern, target string, els []PatternRule, flags eph.EphTiming) (err error) {
+	for _, el := range els {
+		if e := el.importRule(k, pattern, target, flags); e != nil {
+			err = errutil.Append(err, e)
 		}
 	}
 	return
 }
 
 func (op *PatternRule) importRule(k *Importer, pattern, target string, tgtFlags eph.EphTiming) (err error) {
-	if act, e := op.Hook.ImportProgram(k); e != nil {
-		err = e
-	} else if flags, e := op.Flags.ReadFlags(); e != nil {
+	act := op.Does
+	if flags, e := op.Flags.ReadFlags(); e != nil {
 		err = e
 	} else if len(flags.Str) > 0 && len(tgtFlags.Str) > 0 {
 		// ensure flags were only set via the rule or via the pattern
@@ -110,16 +99,11 @@ func (op *PatternFlags) ReadFlags() (ret eph.EphTiming, err error) {
 	return
 }
 
-func (op *PatternLocals) ImportLocals(k *Importer, patternName string) []eph.EphParams {
-	var out []eph.EphParams
-	for _, el := range op.LocalDecl {
-		p := el.Local.GetParam()
-		if init := el.Value; init != nil {
-			p.Initially = init.Value
-		}
-		out = append(out, p)
+func ImportLocals(k *Importer, patternName string, locals []PropertySlot) (ret []eph.EphParams) {
+	for _, el := range locals {
+		ret = append(ret, el.GetParam())
 	}
-	return out
+	return
 }
 
 func convertRes(res *PatternReturn) (ret *eph.EphParams) {

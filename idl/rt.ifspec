@@ -1,51 +1,44 @@
 {
-    "rt":
-    {
+    "rt": {
         "uses": "group",
-        "specs":
-        {
-            "assignment":
-            {
+        "specs": {
+            "arg": {
+                "spec": "arg {_%name:text} {from:assignment}",
+                "desc": "Runtime version of argument"
+            },
+            "assignment": {
                 "uses": "slot",
                 "desc": "Helper for setting variables."
             },
-            "bool_eval":
-            {
+            "bool_eval": {
                 "uses": "slot",
                 "desc": "Statements which return true/false values."
             },
-            "execute":
-            {
+            "execute": {
                 "uses": "slot",
                 "desc": "Run a series of statements."
             },
-            "number_eval":
-            {
+            "number_eval": {
                 "uses": "slot",
                 "desc": "Statements which return a number."
             },
-            "num_list_eval":
-            {
+            "num_list_eval": {
                 "uses": "slot",
                 "desc": "Statements which return a list of numbers."
             },
-            "record_eval":
-            {
+            "record_eval": {
                 "uses": "slot",
                 "desc": "Statements which return a record."
             },
-            "record_list_eval":
-            {
+            "record_list_eval": {
                 "uses": "slot",
                 "desc": "Statements which return a list of records."
             },
-            "text_eval":
-            {
+            "text_eval": {
                 "uses": "slot",
                 "desc": "Statements which return text."
             },
-            "text_list_eval":
-            {
+            "text_list_eval": {
                 "uses": "slot",
                 "desc": "Statements which return a list of text."
             }

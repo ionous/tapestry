@@ -1,0 +1,178 @@
+{
+  "--": "render",
+  "Spec:with group:": [
+    "render",
+    {
+      "Group contains:": [
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "render_exp",
+            {
+              "flow trim:uses:": [
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "expression",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "text_eval"
+            ],
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "render_field",
+            {
+              "flow trim:uses:": [
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "from_source_fields"
+            ],
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with str:": [
+            "render_flags",
+            {
+              "Str exclusively:uses:": [
+                true,
+                [
+                  {
+                    "Option:label:": [
+                      "render_as_var",
+                      "as_var"
+                    ]
+                  },
+                  {
+                    "Option:label:": [
+                      "render_as_obj",
+                      "as_obj"
+                    ]
+                  },
+                  {
+                    "Option:label:": [
+                      "render_as_any",
+                      "as_any"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "render_name",
+            {
+              "flow trim:uses:": [
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "text_eval"
+            ],
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": "",
+          "Spec:with flow:slots:groups:": [
+            "render_pattern",
+            {
+              "flow:trim:uses:": [
+                "render",
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "call",
+                      "call_pattern"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "assignment",
+              "text_eval"
+            ],
+            [
+              "internal"
+            ]
+          ]
+        },
+        {
+          "--": [
+            "returns the value of a variable or the id of an object."
+          ],
+          "Spec:with flow:slots:groups:": [
+            "render_ref",
+            {
+              "flow trim:uses:": [
+                true,
+                [
+                  {
+                    "Term:type:": [
+                      "name",
+                      "variable_name"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "flags",
+                      "render_flags"
+                    ]
+                  }
+                ]
+              ]
+            },
+            [
+              "assignment",
+              "number_eval",
+              "text_eval"
+            ],
+            [
+              "internal"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

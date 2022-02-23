@@ -3,6 +3,7 @@ package testpat
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
@@ -10,11 +11,11 @@ import (
 //
 func TestRuleSorting(t *testing.T) {
 	ps := []rt.Rule{
-		{RawFlags: float64(rt.Infix), Execute: Text("1")},
-		{RawFlags: float64(rt.Postfix), Execute: Text("2")},
-		{RawFlags: float64(rt.Prefix), Execute: Text("3")},
-		{RawFlags: float64(-1) /*Filter: Skip,*/, Execute: Text("0")},
-		{RawFlags: float64(rt.Postfix), Execute: Text("4")},
+		{RawFlags: float64(rt.Infix), Execute: core.MakeActivity(Text("1"))},
+		{RawFlags: float64(rt.Postfix), Execute: core.MakeActivity(Text("2"))},
+		{RawFlags: float64(rt.Prefix), Execute: core.MakeActivity(Text("3"))},
+		{RawFlags: float64(-1) /*Filter: Skip,*/, Execute: core.MakeActivity(Text("0"))},
+		{RawFlags: float64(rt.Postfix), Execute: core.MakeActivity(Text("4"))},
 	}
 	inds, flags := SortRules(ps)
 	if flags != (rt.Infix | rt.Prefix | rt.Postfix) {
@@ -22,7 +23,7 @@ func TestRuleSorting(t *testing.T) {
 	} else {
 		var got string
 		for _, i := range inds {
-			got += string(ps[i].Execute.(Text))
+			got += string(ps[i].Execute[0].(Text))
 		}
 		if got != "3142" {
 			t.Fatal("got", got)

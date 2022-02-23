@@ -1,24 +1,22 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "Pattern:requires:returns:": [
         "Move Object",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "dest",
-                "object"
-              ]
-            }
-          ]
-        },
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "dest",
+              "object"
+            ]
+          }
+        ],
         {
           "PatternResult:": {
             "Text named:": "response"
@@ -29,143 +27,121 @@
     {
       "Pattern:rules:": [
         "Move Object",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
+                  "If:does:else:": [
                     {
-                      "If:do:else:": [
+                      "Is empty:": "@obj"
+                    },
+                    [
+                      {
+                        "Let:be:": [
+                          "response",
+                          {
+                            "FromTxt:": {
+                              "Response:text:": [
+                                "You can't move nothing.",
+                                "You can't move nothing."
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    {
+                      "ElseIf:does:else:": [
                         {
-                          "Is empty:": "@obj"
+                          "Not:": {
+                            "KindOf:is:": [
+                              "@obj",
+                              "things"
+                            ]
+                          }
                         },
+                        [
+                          {
+                            "Let:be:": [
+                              "response",
+                              {
+                                "FromTxt:": {
+                                  "Response:text:": [
+                                    "You can only move things.",
+                                    "You can only move things."
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        ],
                         {
-                          "Act:": [
+                          "ElseDo does:": [
+                            {
+                              "If:does:": [
+                                {
+                                  "Get:from:": [
+                                    "worn",
+                                    {
+                                      "VarFields:": "obj"
+                                    }
+                                  ]
+                                },
+                                [
+                                  {
+                                    "Put:from:at:": [
+                                      {
+                                        "VarField:": "obj"
+                                      },
+                                      {
+                                        "FromBool:": true
+                                      },
+                                      "not worn"
+                                    ]
+                                  }
+                                ]
+                              ]
+                            },
+                            {
+                              "If:does:": [
+                                {
+                                  "Cmp:is:txt:": [
+                                    "@dest",
+                                    {
+                                      "OtherThan": true
+                                    },
+                                    {
+                                      "ParentOf obj:": "@obj"
+                                    }
+                                  ]
+                                },
+                                [
+                                  {
+                                    "Relate:to:via:": [
+                                      "@dest",
+                                      "@obj",
+                                      "whereabouts"
+                                    ]
+                                  }
+                                ]
+                              ]
+                            },
                             {
                               "Let:be:": [
                                 "response",
                                 {
                                   "FromTxt:": {
                                     "Response:text:": [
-                                      "You can't move nothing.",
-                                      "You can't move nothing."
+                                      "okay",
+                                      ""
                                     ]
                                   }
                                 }
                               ]
-                            }
-                          ]
-                        },
-                        {
-                          "ElseIf:do:else:": [
-                            {
-                              "Not:": {
-                                "KindOf:is:": [
-                                  "@obj",
-                                  "things"
-                                ]
-                              }
-                            },
-                            {
-                              "Act:": [
-                                {
-                                  "Let:be:": [
-                                    "response",
-                                    {
-                                      "FromTxt:": {
-                                        "Response:text:": [
-                                          "You can only move things.",
-                                          "You can only move things."
-                                        ]
-                                      }
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "ElseDo:": {
-                                "Act:": [
-                                  {
-                                    "If:do:": [
-                                      {
-                                        "Get:from:": [
-                                          "worn",
-                                          {
-                                            "VarFields:": "obj"
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "Act:": [
-                                          {
-                                            "Put:from:at:": [
-                                              {
-                                                "VarField:": "obj"
-                                              },
-                                              {
-                                                "FromBool:": true
-                                              },
-                                              "not worn"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "If:do:": [
-                                      {
-                                        "Cmp:is:txt:": [
-                                          "@dest",
-                                          "OtherThan",
-                                          {
-                                            "Determine:arguments:": [
-                                              "parentOf",
-                                              {
-                                                "Args:": [
-                                                  {
-                                                    "Arg:from:": [
-                                                      "obj",
-                                                      "@obj"
-                                                    ]
-                                                  }
-                                                ]
-                                              }
-                                            ]
-                                          }
-                                        ]
-                                      },
-                                      {
-                                        "Act:": [
-                                          {
-                                            "Relate:to:via:": [
-                                              "@dest",
-                                              "@obj",
-                                              "whereabouts"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    "Let:be:": [
-                                      "response",
-                                      {
-                                        "FromTxt:": {
-                                          "Response:text:": [
-                                            "okay",
-                                            ""
-                                          ]
-                                        }
-                                      }
-                                    ]
-                                  }
-                                ]
-                              }
                             }
                           ]
                         }
@@ -174,101 +150,95 @@
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "RemoveFromPlay",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            }
-          ]
-        }
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          }
+        ]
       ]
     },
     {
       "Pattern:rules:": [
         "RemoveFromPlay",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
+                  "If:does:": [
                     {
-                      "If:do:": [
-                        {
-                          "Is empty:": "@from"
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Log:": {
-                                "FromTxt:": "You can't remove nothing from play."
-                              }
-                            }
-                          ]
+                      "Is empty:": "@from"
+                    },
+                    [
+                      {
+                        "Log:": {
+                          "FromTxt:": "You can't remove nothing from play."
                         }
-                      ]
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Put:from:at:": [
+                    {
+                      "VarField:": "obj"
                     },
                     {
-                      "Put:from:at:": [
-                        {
-                          "VarField:": "obj"
-                        },
-                        {
-                          "FromBool:": true
-                        },
-                        "not worn"
-                      ]
+                      "FromBool:": true
                     },
-                    {
-                      "Relate:to:via:": [
-                        "",
-                        "@from",
-                        "whereabouts"
-                      ]
-                    }
+                    "not worn"
+                  ]
+                },
+                {
+                  "Relate:to:via:": [
+                    "",
+                    "@from",
+                    "whereabouts"
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
-    }
-  ],
-  [
+    },
+    {
+      "--": ""
+    },
     {
       "Pattern:requires:": [
         "WearObject",
-        {
-          "PatternRequires:": [
-            {
-              "Text named:of:": [
-                "obj",
-                "object"
-              ]
-            },
-            {
-              "Text named:of:": [
-                "actor",
-                "actor"
-              ]
-            }
-          ]
-        }
+        [
+          {
+            "Text named:of:": [
+              "obj",
+              "object"
+            ]
+          },
+          {
+            "Text named:of:": [
+              "actor",
+              "actor"
+            ]
+          }
+        ]
       ]
     },
     {
@@ -277,112 +247,71 @@
     {
       "Pattern:rules:": [
         "WearObject",
-        {
-          "PatternRules:": [
-            {
-              "PatternRule:hook activity:": [
-                "Always",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
                 {
-                  "Act:": [
+                  "If:does:": [
                     {
-                      "If:do:": [
+                      "Not:": {
+                        "Cmp:is:txt:": [
+                          {
+                            "HolderOf obj:": "@obj"
+                          },
+                          {
+                            "Equals": true
+                          },
+                          "@actor"
+                        ]
+                      }
+                    },
+                    [
+                      {
+                        "MoveObject obj:dest:": [
+                          "@obj",
+                          "@actor"
+                        ]
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "If:does:": [
+                    {
+                      "Cmp:is:txt:": [
                         {
-                          "Not:": {
-                            "Cmp:is:txt:": [
-                              {
-                                "Determine:arguments:": [
-                                  "holderOf",
-                                  {
-                                    "Args:": [
-                                      {
-                                        "Arg:from:": [
-                                          "obj",
-                                          "@obj"
-                                        ]
-                                      }
-                                    ]
-                                  }
-                                ]
-                              },
-                              "Equals",
-                              "@actor"
-                            ]
-                          }
+                          "HolderOf obj:": "@obj"
                         },
                         {
-                          "Act:": [
-                            {
-                              "Determine:arguments:": [
-                                "Move Object",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "obj",
-                                        "@obj"
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "dest",
-                                        "@actor"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
+                          "Equals": true
+                        },
+                        "@actor"
                       ]
                     },
-                    {
-                      "If:do:": [
-                        {
-                          "Cmp:is:txt:": [
-                            {
-                              "Determine:arguments:": [
-                                "holderOf",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "obj",
-                                        "@obj"
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            "Equals",
-                            "@actor"
-                          ]
-                        },
-                        {
-                          "Act:": [
-                            {
-                              "Put:from:at:": [
-                                {
-                                  "VarField:": "obj"
-                                },
-                                {
-                                  "FromBool:": true
-                                },
-                                "worn"
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
+                    [
+                      {
+                        "Put:from:at:": [
+                          {
+                            "VarField:": "obj"
+                          },
+                          {
+                            "FromBool:": true
+                          },
+                          "worn"
+                        ]
+                      }
+                    ]
                   ]
                 }
               ]
-            }
-          ]
-        }
+            ]
+          }
+        ]
       ]
     }
   ]
-]
+}

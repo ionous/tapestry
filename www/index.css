@@ -1,0 +1,138 @@
+@import 'normalize.css';
+
+/* body 100 is needed for blockly.... */
+html, body  { 
+  height: 100%;
+}
+
+.mk-mosaic {
+  display: grid;
+  grid-template-columns: 200px auto;
+  grid-template-rows: 2rem auto;
+  grid-gap: 0px 10px;
+  height: 100%;
+  margin: 5px;
+  font-family: sans-serif;
+  grid-template-areas: 
+    "header tools"
+    "sidebar editor"
+}
+
+/* unused right now.
+.mk-mosaic--nosidebar {
+  grid-template-areas: 
+    "header tools"
+    "editor editor"
+    "context context";
+}*/
+
+/**
+ * mk-blockly
+ */
+.mk-blockly {
+  grid-area: editor;
+  /*background-color: red;*/
+}
+
+.mk-tools {
+  grid-area: tools;
+  /*background-color: red;*/
+}
+
+.mk-header {
+  grid-area: header;
+  /*background-color: red;*/
+}
+.mk-header h1 {
+  margin: 0;
+  font-family: monospace;
+}
+
+/**
+ * mk-catalog
+ */
+.mk-catalog {
+  grid-area: sidebar;
+  overflow-y: auto;
+}
+.mk-folder-ctrl {
+  list-style-type: none;
+  padding-inline-start: 0px;
+}
+.mk-file-item__button::before {
+   content: "\1F4C4";
+   font-size: smaller;
+   padding-right: 3px;
+}
+.mk-folder-item__button--closed::before {
+   content: "\1F4C1"; 
+   padding-right: 3px;
+}
+.mk-folder-item__button--open::before {
+   content: "\1F4C2"; 
+   padding-right: 3px;
+}
+.mk-cat-button  {
+  display: block;
+}
+.mk-cat-button:hover {
+  /*background-color: white;*/
+  color: #0366d6;
+  cursor: pointer;
+}
+
+/**/
+
+.lv-status {
+  position: sticky;
+  top:0;
+  background-color: black;
+  color: white;
+}
+.lv-story {
+  margin-left: 0.25em;
+}
+.lv-prompt {
+  margin-top: 0.25em;
+  padding-bottom: 1em;
+  margin-left: 0.25em;
+}
+.lv-prompt input {
+  width: 90%;
+}
+.lv-no-outline {
+  border-style: none;
+}
+.lv-no-outline:focus {
+  outline: none; 
+}
+.lv-prompt {
+  position: relative;
+}
+/* fake blinking cursor contains the same text as the prompt
+and this positions that text overlapping it. */
+.lv-prompt i {
+  position: absolute;
+  top:0;
+  left:2ch;
+  border-right: solid;
+  border-width: 1px;
+  border-color: black;
+  font-style: normal;
+  animation: blink 1s linear infinite;
+  user-select: none;
+}
+/* hide the text used to place the blinking cursor */
+.lv-hidden {
+  width:auto;
+  visibility: hidden;
+  overflow: auto;
+}
+/* hide the fake blinking cursor when the input has the focus */
+.lv-prompt input:focus + i {
+    display: none;
+}
+@keyframes blink {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}

@@ -1,5 +1,5 @@
-[
-  [
+{
+  "Tapestry:": [
     {
       "TestStatement:test:": [
         "taking test",
@@ -9,507 +9,341 @@
       ]
     },
     {
-      "TestRule:hook activity:": [
+      "TestRule:does:": [
         "taking test",
-        {
-          "Act:": [
-            {
-              "Say:": {
-                "Rows:": {
-                  "Act:": [
-                    {
-                      "Say:": {
-                        "Row:": {
-                          "Act:": [
-                            {
-                              "Say:": "Fail to take from something closed:<br>"
-                            },
-                            {
-                              "Determine:arguments:": [
-                                "taking",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "coffee"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    {
-                      "Say:": {
-                        "Row:": {
-                          "Act:": [
-                            {
-                              "Say:": {
-                                "RenderTemplate:": "The apple's parent: {the: {parentOf: .apple}}."
-                              }
-                            },
-                            {
-                              "Say:": "Fail to steal:<br>"
-                            },
-                            {
-                              "Determine:arguments:": [
-                                "taking",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "apple"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    {
-                      "Say:": {
-                        "Row:": {
-                          "Act:": [
-                            {
-                              "Say:": "Fail to take possessions:<br>"
-                            },
-                            {
-                              "Determine:arguments:": [
-                                "taking",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "coin"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    {
-                      "Say:": {
-                        "Row:": {
-                          "Act:": [
-                            {
-                              "Say:": "Fail to take your container:<br>"
-                            },
-                            {
-                              "Determine:arguments:": [
-                                "taking",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "purse"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    {
-                      "Say:": {
-                        "Row:": {
-                          "Act:": [
-                            {
-                              "Say:": {
-                                "RenderTemplate:": "The knife's parent was: {the: {parentOf: .knife}}."
-                              }
-                            },
-                            {
-                              "Say:": "Okay, take something:<br>"
-                            },
-                            {
-                              "Determine:arguments:": [
-                                "taking",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "knife"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "Say:": {
-                                "RenderTemplate:": "The knife's parent is: {the: {parentOf: .knife}}."
-                              }
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    {
-                      "Say:": {
-                        "Row:": {
-                          "Act:": [
-                            {
-                              "Say:": "Fail to take your self:<br>"
-                            },
-                            {
-                              "Determine:arguments:": [
-                                "taking",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "self"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    {
-                      "Say:": {
-                        "Row:": {
-                          "Act:": [
-                            {
-                              "Say:": "Fail to take someone else:<br>"
-                            },
-                            {
-                              "Determine:arguments:": [
-                                "taking",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "mildred"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    {
-                      "Say:": {
-                        "Row:": {
-                          "Act:": [
-                            {
-                              "Say:": "Fail to take scenery:<br>"
-                            },
-                            {
-                              "Determine:arguments:": [
-                                "taking",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "cabinet"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    },
-                    {
-                      "Say:": {
-                        "Row:": {
-                          "Act:": [
-                            {
-                              "Say:": "Fail to take something fixed in place:<br>"
-                            },
-                            {
-                              "Determine:arguments:": [
-                                "taking",
-                                {
-                                  "Args:": [
-                                    {
-                                      "Arg:from:": [
-                                        "agent",
-                                        {
-                                          "FromTxt:": "player"
-                                        }
-                                      ]
-                                    },
-                                    {
-                                      "Arg:from:": [
-                                        "noun",
-                                        {
-                                          "FromTxt:": "machine"
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  [
-    {
-      "TestScene:story:": [
-        "taking test",
-        {
-          "Story:": [
-            {
-              "Paragraph:": [
+        [
+          {
+            "Say:": {
+              "Rows does:": [
                 {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    "whereabouts",
-                    [
+                  "Say:": {
+                    "Row does:": [
                       {
-                        "Noun:named:": [
-                          "our",
-                          "self"
-                        ]
-                      }
-                    ],
-                    "is",
-                    [
+                        "Say:": "Fail to take from something closed:<br>"
+                      },
                       {
-                        "Noun:named:": [
-                          "the",
-                          "purse"
+                        "Taking agent:noun:": [
+                          {
+                            "FromTxt:": "player"
+                          },
+                          {
+                            "FromTxt:": "coffee"
+                          }
                         ]
                       }
                     ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Paragraph:": [
+                  }
+                },
                 {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    "whereabouts",
-                    [
+                  "Say:": {
+                    "Row does:": [
                       {
-                        "Noun:named:": [
-                          "our",
-                          "Mildred"
+                        "Say:": {
+                          "RenderTemplate:": "The apple's parent: {the: {parentOf: .apple}}."
+                        }
+                      },
+                      {
+                        "Say:": "Fail to steal:<br>"
+                      },
+                      {
+                        "Taking agent:noun:": [
+                          {
+                            "FromTxt:": "player"
+                          },
+                          {
+                            "FromTxt:": "apple"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Say:": {
+                    "Row does:": [
+                      {
+                        "Say:": "Fail to take possessions:<br>"
+                      },
+                      {
+                        "Taking agent:noun:": [
+                          {
+                            "FromTxt:": "player"
+                          },
+                          {
+                            "FromTxt:": "coin"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Say:": {
+                    "Row does:": [
+                      {
+                        "Say:": "Fail to take your container:<br>"
+                      },
+                      {
+                        "Taking agent:noun:": [
+                          {
+                            "FromTxt:": "player"
+                          },
+                          {
+                            "FromTxt:": "purse"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Say:": {
+                    "Row does:": [
+                      {
+                        "Say:": {
+                          "RenderTemplate:": "The knife's parent was: {the: {parentOf: .knife}}."
+                        }
+                      },
+                      {
+                        "Say:": "Okay, take something:<br>"
+                      },
+                      {
+                        "Taking agent:noun:": [
+                          {
+                            "FromTxt:": "player"
+                          },
+                          {
+                            "FromTxt:": "knife"
+                          }
                         ]
                       },
                       {
-                        "Noun:named:": [
-                          "the",
-                          "purse"
-                        ]
-                      }
-                    ],
-                    "is",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          "kitchen"
-                        ]
+                        "Say:": {
+                          "RenderTemplate:": "The knife's parent is: {the: {parentOf: .knife}}."
+                        }
                       }
                     ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Paragraph:": [
+                  }
+                },
                 {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    "whereabouts",
-                    [
+                  "Say:": {
+                    "Row does:": [
                       {
-                        "Noun:named:": [
-                          "the",
-                          "coin"
-                        ]
-                      }
-                    ],
-                    "is",
-                    [
+                        "Say:": "Fail to take your self:<br>"
+                      },
                       {
-                        "Noun:named:": [
-                          "our",
-                          "self"
+                        "Taking agent:noun:": [
+                          {
+                            "FromTxt:": "player"
+                          },
+                          {
+                            "FromTxt:": "self"
+                          }
                         ]
                       }
                     ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Paragraph:": [
+                  }
+                },
                 {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    "whereabouts",
-                    [
+                  "Say:": {
+                    "Row does:": [
                       {
-                        "Noun:named:": [
-                          "the",
-                          "empire apple"
-                        ]
-                      }
-                    ],
-                    "is",
-                    [
+                        "Say:": "Fail to take someone else:<br>"
+                      },
                       {
-                        "Noun:named:": [
-                          "our",
-                          "Mildred"
+                        "Taking agent:noun:": [
+                          {
+                            "FromTxt:": "player"
+                          },
+                          {
+                            "FromTxt:": "mildred"
+                          }
                         ]
                       }
                     ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Paragraph:": [
+                  }
+                },
                 {
-                  "RelativeToNoun:nouns:areBeing:otherNouns:": [
-                    "whereabouts",
-                    [
+                  "Say:": {
+                    "Row does:": [
                       {
-                        "Noun:named:": [
-                          "the",
-                          "coffee"
-                        ]
-                      }
-                    ],
-                    "is",
-                    [
+                        "Say:": "Fail to take scenery:<br>"
+                      },
                       {
-                        "Noun:named:": [
-                          "the",
-                          "machine"
+                        "Taking agent:noun:": [
+                          {
+                            "FromTxt:": "player"
+                          },
+                          {
+                            "FromTxt:": "cabinet"
+                          }
                         ]
                       }
                     ]
-                  ]
+                  }
+                },
+                {
+                  "Say:": {
+                    "Row does:": [
+                      {
+                        "Say:": "Fail to take something fixed in place:<br>"
+                      },
+                      {
+                        "Taking agent:noun:": [
+                          {
+                            "FromTxt:": "player"
+                          },
+                          {
+                            "FromTxt:": "machine"
+                          }
+                        ]
+                      }
+                    ]
+                  }
                 }
               ]
             }
-          ]
-        }
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "TestScene:story:": [
+        "taking test",
+        [
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "our",
+                    "self"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "purse"
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "our",
+                    "Mildred"
+                  ]
+                },
+                {
+                  "Noun:named:": [
+                    "the",
+                    "purse"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "kitchen"
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "coin"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "our",
+                    "self"
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "empire apple"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "our",
+                    "Mildred"
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "coffee"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "machine"
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
       ]
     }
   ]
-]
+}

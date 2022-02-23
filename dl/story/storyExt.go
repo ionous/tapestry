@@ -29,52 +29,6 @@ func (*CycleText) GetText(rt.Runtime) (g.Value, error) {
 	panic("unexpected use of story method")
 }
 
-var _ StubImporter = (*Determine)(nil)
-
-func (*Determine) ImportPhrase(k *Importer) (err error) {
-	panic("unexpected use of story method")
-}
-
-func (*Determine) Execute(rt.Runtime) error {
-	panic("unexpected use of story method")
-}
-func (*Determine) GetBool(rt.Runtime) (g.Value, error) {
-	panic("unexpected use of story method")
-}
-func (*Determine) GetNumber(rt.Runtime) (g.Value, error) {
-	panic("unexpected use of story method")
-}
-func (*Determine) GetText(rt.Runtime) (g.Value, error) {
-	panic("unexpected use of story method")
-}
-func (*Determine) GetRecord(rt.Runtime) (g.Value, error) {
-	panic("unexpected use of story method")
-}
-func (*Determine) GetNumList(rt.Runtime) (g.Value, error) {
-	panic("unexpected use of story method")
-}
-func (*Determine) GetTextList(rt.Runtime) (g.Value, error) {
-	panic("unexpected use of story method")
-}
-func (*Determine) GetRecordList(rt.Runtime) (g.Value, error) {
-	panic("unexpected use of story method")
-}
-
-var _ StubImporter = (*Make)(nil)
-
-func (*Make) GetRecord(rt.Runtime) (g.Value, error) {
-	panic("unexpected use of story method")
-}
-
-var _ StubImporter = (*Send)(nil)
-
-func (*Send) GetBool(rt.Runtime) (g.Value, error) {
-	panic("unexpected use of story method")
-}
-func (*Send) Execute(rt.Runtime) error {
-	panic("unexpected use of story method")
-}
-
 var _ StubImporter = (*ShuffleText)(nil)
 
 func (*ShuffleText) GetText(rt.Runtime) (g.Value, error) {
