@@ -16,11 +16,11 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func FilesApi(cfg *Config) web.Resource {
+func FilesApi(cfg *web.Config) web.Resource {
 	return &web.Wrapper{
 		Finds: func(name string) (ret web.Resource) {
 			// by adding a trailing slash, walk'( will follow a symlink.
-			path := filepath.Join(cfg.Root, "stories") + "/"
+			path := cfg.PathTo("stories") + "/"
 			switch name {
 			case "blocks":
 				where := storyFolder(path)

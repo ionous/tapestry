@@ -10,7 +10,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/web"
 )
 
-func ShapesApi(cfg *Config) web.Resource {
+func ShapesApi(cfg *web.Config) web.Resource {
 	return &web.Wrapper{
 		Finds: func(str string) (ret web.Resource) {
 			if len(str) == 0 {

@@ -2,18 +2,20 @@ package composer
 
 import (
 	"context"
+	"encoding/json"
 	"io/fs"
 	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os/exec"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/web"
 )
 
 // Compose starts the composer server, this function doesnt return.
-func Compose(cfg *Config) {
+func Compose(cfg *web.Config, port int) {
 	// redirect from root.
 	http.HandleFunc("/index.html", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/compose/index.html", http.StatusMovedPermanently)
@@ -31,34 +33,51 @@ func Compose(cfg *Config) {
 		return context.WithValue(ctx, configKey, cfg)
 	}))
 
-	log.Println("Composer using", cfg.Root)
-	log.Println("Listening on port", cfg.PortString(), "...")
-	if e := http.ListenAndServe(cfg.PortString(), nil); e != nil {
+	log.Println("Composer using", cfg.PathTo())
+	log.Println("Listening on port", port, "...")
+	if e := http.ListenAndServe(web.Endpoint(port), nil); e != nil {
 		log.Fatal(e)
 	}
 }
 
-// starts the blockly editor, this function doesnt return.
-func Mosaic(cfg *Config) {
-
-	// configure server root
-	http.HandleFunc("/index.html", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/mosaic/index.html", http.StatusMovedPermanently)
-	})
-
+func HandleBackend(cfg *web.Config, name string) {
 	// in dev mode, we reflect all unhandled calls to port 3000
-	if m := cfg.Mosaic; !strings.HasPrefix(m, "http") {
-		panic("not implemented") // compiled, non-dev mode.
-		// http.Handle("/mosaic/", http.StripPrefix("/mosaic/", http.FileServer(http.Dir("./www"))))
-	} else if u, e := url.Parse(m); e != nil {
+	if u, e := url.Parse(web.Endpoint(3000, "localhost")); e != nil {
 		panic(e)
 	} else {
-		//
 		p := httputil.NewSingleHostReverseProxy(u)
-		// this is a bit questionable:
-		// basically i want everything but not any other apps
 		//
-		http.Handle("/", p)
+		http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			if len(r.Method) == 0 || r.Method == "GET" {
+				p.ServeHTTP(w, r)
+			} else if r.Method == "POST" && r.URL.Path == "/" {
+				// read a request from the client
+				// see Mosaic.vue onPlay which sends {play:true}
+				var cmd cmdFromClient
+				dec := json.NewDecoder(r.Body)
+				if e := dec.Decode(&cmd); e != nil {
+					log.Println(e)
+				} else if cmd.Play {
+					cmd := cfg.Cmd("serve")
+					args := []string{
+						"-in", cfg.PathTo("stories", "shared"),
+						"-out", cfg.Scratch("play.db"),
+						"-open",
+						// check
+					}
+					log.Println("playing", cmd, args)
+					go func() {
+						cmd := exec.Command(cmd, args...)
+						if e := cmd.Run(); e != nil {
+							log.Println(e)
+						}
+					}()
+				}
+			}
+		})
+
+		// tbd: basically i want everything but not any other apps
+		// http.Handle("/", p)
 		// http.Handle("/mosaic/", p)
 		// http.Handle("/index.css", p)
 		// http.Handle("/favicon.ico", p)
@@ -68,6 +87,17 @@ func Mosaic(cfg *Config) {
 		// http.Handle("/@vite/", p)
 		// http.Handle("/@id/", p)
 	}
+}
+
+// starts the blockly editor, this function doesnt return.
+func RunMosaic(cfg *web.Config, port int) {
+
+	// configure server root
+	http.HandleFunc("/index.html", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/mosaic/index.html", http.StatusMovedPermanently)
+	})
+
+	HandleBackend(cfg, "mosaic")
 
 	// blockly blocks ( from .if )
 	http.HandleFunc("/blocks/", web.HandleResourceWithContext(FilesApi(cfg), func(ctx context.Context) context.Context {
@@ -88,9 +118,9 @@ func Mosaic(cfg *Config) {
 	// 	return context.WithValue(ctx, configKey, cfg)
 	// }))
 
-	log.Println("Composer using", cfg.Root)
-	log.Println("Listening on port", cfg.PortString(), "...")
-	if e := http.ListenAndServe(cfg.PortString(), nil); e != nil {
+	log.Println("Composer using", cfg.PathTo())
+	log.Println("Listening on port", port, "...")
+	if e := http.ListenAndServe(web.Endpoint(port), nil); e != nil {
 		log.Fatal(e)
 	}
 }
@@ -143,4 +173,8 @@ func (fsys specFsSystem) Open(name string) (ret http.File, err error) {
 		ret = specFs{file}
 	}
 	return
+}
+
+type cmdFromClient struct {
+	Play bool `json:"play"`
 }

@@ -6,7 +6,10 @@
       ><div class="mk-header"
       ><h1>Tapestry</h1></div
       ><mk-toolbar
+        :save-enabled="canSave"
+        :play-enabled="canPlay"
         @save="onSave"
+        @play="onPlay"
       /><mk-catalog
         :catalog="catalog"
       /><mk-blockly 
@@ -23,8 +26,8 @@ import mkBlockly from './blockly/Blockly.vue'
 import mkCatalog from './catalog/Catalog.vue'
 import mkToolbar from './Toolbar.vue'
 import mkStartup from './Startup.vue'
-// import { RouterView } from 'vue-router'
 import { ref, onMounted } from 'vue'
+import http from '/lib/http.js'
 
 // appcfg comes through vite conifg.
 const catalog= new BlockCatalog(appcfg.mosaic + '/blocks/'); // only need one.
@@ -34,11 +37,17 @@ export default {
   setup(props) {
     let shapeData= ref(null);
     let toolboxData= ref(null);
+    let canPlay= ref(true);
+    let canSave= ref(true); // fix: toggle based on changes.
+                            // might be worth it to turn off "play" when save is on
+                            // ( or maybe change the text to replay or something )
     return {
       catalog, // unwatched.
       shapeData, 
       toolboxData,
       workspace: null,
+      canSave,
+      canPlay, 
       onStarted(b) {
         shapeData.value= Object.freeze(b.shapeData);
         toolboxData.value= Object.freeze(b.toolboxData);
@@ -55,6 +64,17 @@ export default {
         this.workspace.flush();
       }
       catalog.saveStories();
+    },
+    onPlay() {
+      console.log("play");
+      // maybe have to send a command to the client so it can run the exe
+      // could i suppose allow *it* to open the new tab/browser window
+      // technically *what* to play depends on the project... but not for the moment.
+      this.canPlay= false;
+      // 
+      http.post(appcfg.mosaic, {play:true}).finally(()=>{
+        this.canPlay= true;
+      });
     },
     onWorkspaceChanged(ws) {
       this.workspace= ws;

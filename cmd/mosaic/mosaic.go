@@ -5,6 +5,7 @@ import (
 	"go/build"
 
 	"git.sr.ht/~ionous/tapestry/composer"
+	"git.sr.ht/~ionous/tapestry/web"
 	"git.sr.ht/~ionous/tapestry/web/support"
 	"github.com/ionous/errutil"
 )
@@ -21,15 +22,11 @@ func main() {
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error")
 	flag.Parse()
 	//
-	cfg := composer.DevConfig(build.Default.GOPATH)
-	cfg.Port = 8080
-	cfg.Mosaic = "http://localhost:3000/" // dev backend; fix: need static version too
-	if len(dir) > 0 {
-		cfg.Root = dir
-	}
+	cfg := web.DevConfig(build.Default.GOPATH, dir)
+	//
 	if open {
-		support.OpenBrowser("http://localhost" + cfg.PortString())
+		support.OpenBrowser(web.Endpoint(8080, "localhost", "mosaic"))
 	}
 	// by design, this never returns.
-	composer.Mosaic(cfg)
+	composer.RunMosaic(cfg, 8080)
 }

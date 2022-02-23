@@ -5,6 +5,7 @@ import (
 	"go/build"
 
 	"git.sr.ht/~ionous/tapestry/composer"
+	"git.sr.ht/~ionous/tapestry/web"
 	"git.sr.ht/~ionous/tapestry/web/support"
 	"github.com/ionous/errutil"
 )
@@ -21,13 +22,10 @@ func main() {
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error")
 	flag.Parse()
 	//
-	cfg := composer.DevConfig(build.Default.GOPATH)
-	if len(dir) > 0 {
-		cfg.Root = dir
-	}
+	cfg := web.DevConfig(build.Default.GOPATH, dir)
 	if open {
-		support.OpenBrowser("http://localhost:3000/compose/")
+		support.OpenBrowser(web.Endpoint(3000, "localhost", "compose"))
 	}
 	// by design, this never returns.
-	composer.Compose(cfg)
+	composer.Compose(cfg, 3000)
 }
