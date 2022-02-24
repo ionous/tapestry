@@ -3,7 +3,6 @@ package cin
 import (
 	"encoding/json"
 	"errors"
-	"strings"
 	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/jsn"
@@ -330,83 +329,4 @@ func (dec *xDecoder) newSwap(msg json.RawMessage) *chart.StateMix {
 		dec.FinishState("empty swap")
 	}
 	return next
-}
-
-type cmdData struct {
-	Op 
-	outValue interface{}
-}
-
-func (c cmdData) getSignature() (ret sigReader, err error) {
-	err = ret.readSig(c.key)
-	return
-}
-
-// READCMD BECAME READ OP
-
-
-// retType: type registry nil pointer
-// retKey: raw signature in the json. ex. "Story:", "Always", or "Command some thing:else:"
-// retVal: json msg data to the right of the key
-func (dec *xDecoder) readCmd(msg json.RawMessage) (ret cmdData, err error) {
-	// ex. {"Story:":  [...]}
-	// except note that literals are stored as their value,
-	// functions with one parameter dont use the array, and
-	// functions without parameters are stored as simple strings.
-	var d map[string]json.RawMessage
-	if e := json.Unmarshal(msg, &d); e == nil {
-		var found bool
-		for k, args := range d {
-			if k == "--" {
-				if c, e := readComment(args); e != nil {
-					err = e
-					break
-				} else {
-					ret.comment = c
-				}
-			} else if found {
-				err = errutil.New("expected only a single key", d)
-				break
-			} else if t, ok := findType(Hash(k), dec.reg); !ok {
-				err = errutil.New("couldnt find type for signature", k)
-				break
-			} else {
-				ret.reg, ret.key, ret.args = t, k, args
-				found = true
-				continue // keep going to catch errors
-			}
-		}
-		if err == nil && !found {
-			err = errutil.New("expected a valid signature", d)
-		}
-	} else {
-		var k string // parameterless commands can be simple strings.
-		if e := json.Unmarshal(msg, &k); e != nil {
-			err = e
-		} else if t, ok := findType(Hash(k), dec.reg); !ok {
-			err = errutil.New("couldnt find type for string", k)
-		} else {
-			ret.reg, ret.key = t, k // no args, its parameterless
-		}
-	}
-	return
-}
-
-// reads a string or an array of strings.
-// note to self, dont read the comments.
-func readComment(msg json.RawMessage) (ret string, err error) {
-	var comment interface{}
-	if e := json.Unmarshal(msg, &comment); e != nil {
-		err = errutil.New("couldnt read comment", e)
-	} else {
-		switch c := comment.(type) {
-		case string:
-			ret = c
-		case []string:
-			ret = strings.Join(c, "\n")
-		default:
-			err = errutil.New("couldnt read comment")
-		}
-	}
-	return
 }

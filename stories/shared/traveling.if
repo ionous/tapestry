@@ -5,8 +5,10 @@
         "travel",
         "traveling",
         {
-          "--": "Traveling take one argument: the door to travel through.",
-          "--": "Future: allow directions too",
+          "--": [
+            "Traveling take one argument: the door to travel through.",
+            "Future: allow directions too"
+          ],
           "CommonAction:": "door"
         }
       ]
@@ -16,7 +18,7 @@
         "traveling",
         [
           {
-              "--": "Get the actor from the agent.",
+            "--": "Get the actor from the agent.",
             "Text named:of:initially:": [
               "actor",
               "actor",
@@ -25,21 +27,6 @@
                   "pawn",
                   {
                     "VarFields:": "agent"
-              "--": [
-                "If this is the player, make sure we can reach the door in question",
-                "and if not let the player know.",
-              ],
-                          "--": "'result' is the name of a new local variable containing the reach response.",
-                              "can handle",
-                                    ]
-                                  },
-                                  {
-                                    "Arg:from:": [
-                                      "requires light",
-                                      {
-                                        "FromBool:": true
-                                      }
-                                "--": "Send the travel event, and if nobody complains report traveling",
                   }
                 ]
               }
@@ -232,7 +219,7 @@
                     "Response:text:": [
                       "player travels",
                       {
-                            "RenderTemplate:": "traveled."
+                        "RenderTemplate:": "traveled."
                       }
                     ]
                   }
@@ -246,7 +233,6 @@
                 "Not:": {
                   "IsPlayer obj:": "@actor"
                 }
-
               },
               [
                 {
@@ -254,7 +240,7 @@
                     "Response:text:": [
                       "someone else travels",
                       {
-                            "RenderTemplate:": "{The: .actor|capitalize!} went through {the: .noun}."
+                        "RenderTemplate:": "{The: .actor|capitalize!} went through {the: .noun}."
                       }
                     ]
                   }

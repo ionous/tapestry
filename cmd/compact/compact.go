@@ -17,7 +17,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/blockly/block"
 	"git.sr.ht/~ionous/tapestry/blockly/unblock"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
@@ -244,36 +243,35 @@ func readOne(filePath string) (ret []byte, err error) {
 	return
 }
 
-
 // example of migrating one command to another.
 func xformStory(tgt jsn.Marshalee) (err error) {
 	return
 }
 
-// install a custom encoder.
-func init() {
-	story.CompactEncoder = func(m jsn.Marshaler, flow jsn.FlowBlock) error {
-		switch op := flow.GetFlow().(type) {
-		case *story.AspectProperty:
-			swap(&op.UserComment, &op.Comment)
-		case *story.BoolProperty:
-			swap(&op.UserComment, &op.NamedProperty.Comment)
-		case *story.NumberProperty:
-			swap(&op.UserComment, &op.NamedProperty.Comment)
-		case *story.NumListProperty:
-			swap(&op.UserComment, &op.NamedProperty.Comment)
-		case *story.RecordProperty:
-			swap(&op.UserComment, &op.NamedProperty.Comment)
-		case *story.RecordListProperty:
-			swap(&op.UserComment, &op.NamedProperty.Comment)
-		case *story.TextListProperty:
-			swap(&op.UserComment, &op.NamedProperty.Comment)
-		case *story.TextProperty:
-			swap(&op.UserComment, &op.NamedProperty.Comment)
-		}
-		return core.CompactEncoder(m, flow)
-	}
-}
+// // install a custom encoder.
+// func init() {
+// 	story.CompactEncoder = func(m jsn.Marshaler, flow jsn.FlowBlock) error {
+// 		switch op := flow.GetFlow().(type) {
+// 		case *story.AspectProperty:
+// 			swap(&op.UserComment, &op.Comment)
+// 		case *story.BoolProperty:
+// 			swap(&op.UserComment, &op.NamedProperty.Comment)
+// 		case *story.NumberProperty:
+// 			swap(&op.UserComment, &op.NamedProperty.Comment)
+// 		case *story.NumListProperty:
+// 			swap(&op.UserComment, &op.NamedProperty.Comment)
+// 		case *story.RecordProperty:
+// 			swap(&op.UserComment, &op.NamedProperty.Comment)
+// 		case *story.RecordListProperty:
+// 			swap(&op.UserComment, &op.NamedProperty.Comment)
+// 		case *story.TextListProperty:
+// 			swap(&op.UserComment, &op.NamedProperty.Comment)
+// 		case *story.TextProperty:
+// 			swap(&op.UserComment, &op.NamedProperty.Comment)
+// 		}
+// 		return core.CompactEncoder(m, flow)
+// 	}
+// }
 
 func swap(tgt *string, from *story.Lines) {
 	if len(*tgt) == 0 {
