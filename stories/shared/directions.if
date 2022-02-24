@@ -104,6 +104,28 @@
         "traversal",
         [
           {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "our",
+                    "self"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "lobby"
+                  ]
+                }
+              ]
+            ]
+          },
+          {
             "Nouns:depict:": [
               [
                 {

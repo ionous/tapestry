@@ -1,9 +1,6 @@
 {
   "Tapestry:": [
     {
-      "Comment:": "FIX: right now we dont support having the same named objects in multiple domains. we should, especially for testing, something something consider domain hierarchy too.  "
-    },
-    {
       "Nouns:depict:": [
         [
           {
