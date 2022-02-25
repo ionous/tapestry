@@ -2,13 +2,13 @@
   "Tapestry:": [
     {
       "Make kinds:of:": [
-        " agents",
+        "agents",
         "object"
       ]
     },
     {
       "Make kinds:of:": [
-        " players",
+        "players",
         "agent"
       ]
     },
@@ -237,7 +237,7 @@
     },
     {
       "RelativeToNoun:nouns:areBeing:otherNouns:": [
-        " whereabouts",
+        "whereabouts",
         [
           {
             "Noun:named:": [
