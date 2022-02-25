@@ -131,7 +131,11 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 					} else {
 						k.env.Recent.Test = n
 					}
-					k.WriteEphemera(&eph.EphBeginDomain{Name: n})
+					var req []string
+					if n := scene.Requires.String(); len(n) > 0 {
+						req = []string{n}
+					}
+					k.WriteEphemera(&eph.EphBeginDomain{Name: n, Requires: req})
 				}
 				return
 			},

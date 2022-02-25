@@ -30,6 +30,7 @@ const (
 	CompactExt  = ".if"
 )
 
+// Compile story files into a playable database.
 // ex. go run asm.go -in /Users/ionous/Documents/Tapestry/stories/shared -out /Users/ionous/Documents/Tapestry/build/play.db
 func main() {
 	var srcPath, outFile string

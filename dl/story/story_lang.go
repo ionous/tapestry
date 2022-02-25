@@ -8166,6 +8166,7 @@ func TestRule_Marshal(m jsn.Marshaler, val *TestRule) (err error) {
 // TestScene
 type TestScene struct {
 	TestName    TestName         `if:"label=_"`
+	Requires    TestName         `if:"label=requires,optional"`
 	Story       []StoryStatement `if:"label=story"`
 	UserComment string
 }
@@ -8182,6 +8183,7 @@ func (*TestScene) Compose() composer.Spec {
 
 const TestScene_Type = "test_scene"
 const TestScene_Field_TestName = "$TEST_NAME"
+const TestScene_Field_Requires = "$REQUIRES"
 const TestScene_Field_Story = "$STORY"
 
 func (op *TestScene) Marshal(m jsn.Marshaler) error {
@@ -8262,12 +8264,19 @@ func TestScene_Marshal(m jsn.Marshaler, val *TestScene) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", TestScene_Field_TestName))
 		}
-		e1 := m.MarshalKey("story", TestScene_Field_Story)
+		e1 := m.MarshalKey("requires", TestScene_Field_Requires)
 		if e1 == nil {
-			e1 = StoryStatement_Repeats_Marshal(m, &val.Story)
+			e1 = TestName_Optional_Marshal(m, &val.Requires)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", TestScene_Field_Story))
+			m.Error(errutil.New(e1, "in flow at", TestScene_Field_Requires))
+		}
+		e2 := m.MarshalKey("story", TestScene_Field_Story)
+		if e2 == nil {
+			e2 = StoryStatement_Repeats_Marshal(m, &val.Story)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", TestScene_Field_Story))
 		}
 		m.EndBlock()
 	}
@@ -9068,6 +9077,7 @@ var Signatures = map[uint64]interface{}{
 	5991962903091297123:  (*StoryFile)(nil),             /* Tapestry: */
 	15090827023293362138: (*TestOutput)(nil),            /* TestOutput: */
 	14623117004128374492: (*TestRule)(nil),              /* TestRule:does: */
+	9021114111717086258:  (*TestScene)(nil),             /* TestScene:requires:story: */
 	15304439741055926590: (*TestScene)(nil),             /* TestScene:story: */
 	1385539489971009934:  (*TestStatement)(nil),         /* TestStatement:test: */
 	34813485952713023:    (*TextProperty)(nil),          /* Text named: */

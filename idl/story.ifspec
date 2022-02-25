@@ -76,7 +76,7 @@
                             {
                                 "uses": "flow",
                                 "slot": "story_statement",
-                                "spec": "While testing {test_name}: {story+story_statement}",
+                                "spec": "While testing {test_name} {with%requires?test_name}: {story+story_statement}",
                                 "desc": "Create a scene for testing"
                             },
                             "test_rule":

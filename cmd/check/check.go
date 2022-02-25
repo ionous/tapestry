@@ -15,6 +15,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// Check loads an assembled database and runs (one or more) test scripts that it contains.
 // ex. go run check.go -in /Users/ionous/Documents/Tapestry/build/play.db
 func main() {
 	var inFile, testName string
