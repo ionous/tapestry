@@ -211,8 +211,9 @@
       "--": ""
     },
     {
-      "TestScene:story:": [
+      "TestScene:requires:story:": [
         "taking test",
+        "thingaverse",
         [
           {
             "RelativeToNoun:nouns:areBeing:otherNouns:": [

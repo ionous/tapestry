@@ -158,8 +158,9 @@
       "--": ""
     },
     {
-      "TestScene:story:": [
+      "TestScene:requires:story:": [
         "wearing test",
+        "thingaverse",
         [
           {
             "RelativeToNoun:nouns:areBeing:otherNouns:": [

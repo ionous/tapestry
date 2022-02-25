@@ -1,54 +1,370 @@
 {
-    "Tapestry:":
-    [
-        {
-            "Nouns:depict:":
-            [
-                [
-                    {
-                        "Noun:named:":
-                        [
-                            "our",
-                            "Mildred"
-                        ]
-                    }
-                ],
-                {
-                    "Kind:named:":
-                    [
-                        "isa",
-                        "actor"
-                    ]
-                }
+  "Tapestry:": [
+    {
+      "Nouns:depict:": [
+        [
+          {
+            "Noun:named:": [
+              "our",
+              "Mildred"
             ]
-        },
+          }
+        ],
         {
-            "Nouns:depict:":
-            [
-                [
-                    {
-                        "Noun:named:":
-                        [
-                            "an",
-                            "empire apple"
-                        ]
-                    },
-                    {
-                        "Noun:named:":
-                        [
-                            "a",
-                            "pen"
-                        ]
-                    }
-                ],
-                {
-                    "Kind:named:":
-                    [
-                        "area",
-                        "prop"
-                    ]
-                }
-            ]
+          "Kind:named:": [
+            "isa",
+            "actor"
+          ]
         }
-    ]
+      ]
+    },
+    {
+      "Nouns:depict:": [
+        [
+          {
+            "Noun:named:": [
+              "an",
+              "empire apple"
+            ]
+          },
+          {
+            "Noun:named:": [
+              "a",
+              "pen"
+            ]
+          }
+        ],
+        {
+          "Kind:named:": [
+            "area",
+            "prop"
+          ]
+        }
+      ]
+    },
+    {
+      "--": "A common set of objects for various tests.",
+      "TestScene:story:": [
+        "thingaverse",
+        [
+          {
+            "Nouns:depict:and:": [
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "flower"
+                  ]
+                }
+              ],
+              {
+                "Kind:named:": [
+                  "isa",
+                  "thing"
+                ]
+              },
+              [
+                {
+                  "NounTraits:trait:": [
+                    "is",
+                    [
+                      "wearable",
+                      "worn"
+                    ]
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "Nouns:depict:and:": [
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "headlamp"
+                  ]
+                }
+              ],
+              {
+                "Kind:named:": [
+                  "isa",
+                  "thing"
+                ]
+              },
+              [
+                {
+                  "NounTraits:trait:": [
+                    "is",
+                    [
+                      "lit",
+                      "wearable",
+                      "worn"
+                    ]
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "Nouns:depict:and:": [
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "flashlight"
+                  ]
+                }
+              ],
+              {
+                "Kind:named:": [
+                  "isa",
+                  "thing"
+                ]
+              },
+              [
+                {
+                  "NounTraits:trait:": [
+                    "is",
+                    [
+                      "lit"
+                    ]
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "Nouns:depict:and:": [
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "book of wisdom"
+                  ]
+                }
+              ],
+              {
+                "Kind:named:": [
+                  "isan",
+                  "container"
+                ]
+              },
+              [
+                {
+                  "NounTraits:trait:": [
+                    "is",
+                    [
+                      "openable",
+                      "open"
+                    ]
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "Nouns:depict:and:": [
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "book of secrets"
+                  ]
+                }
+              ],
+              {
+                "Kind:named:": [
+                  "isan",
+                  "container"
+                ]
+              },
+              [
+                {
+                  "NounTraits:trait:": [
+                    "is",
+                    [
+                      "openable",
+                      "closed",
+                      "locked"
+                    ]
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "Nouns:depict:and:": [
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "clutch"
+                  ]
+                }
+              ],
+              {
+                "Kind:named:": [
+                  "isan",
+                  "container"
+                ]
+              },
+              [
+                {
+                  "NounTraits:trait:": [
+                    "is",
+                    [
+                      "openable",
+                      "open"
+                    ]
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "Nouns:depict:and:": [
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "purse"
+                  ]
+                }
+              ],
+              {
+                "Kind:named:": [
+                  "isan",
+                  "container"
+                ]
+              },
+              [
+                {
+                  "NounTraits:trait:": [
+                    "is",
+                    [
+                      "wearable",
+                      "openable",
+                      "open"
+                    ]
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "Nouns:depict:": [
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "coin"
+                  ]
+                }
+              ],
+              {
+                "Kind:named:": [
+                  "isa",
+                  "thing"
+                ]
+              }
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "flower"
+                  ]
+                },
+                {
+                  "Noun:named:": [
+                    "the",
+                    "headlamp"
+                  ]
+                },
+                {
+                  "Noun:named:": [
+                    "the",
+                    "secrets"
+                  ]
+                },
+                {
+                  "Noun:named:": [
+                    "the",
+                    "wisdom"
+                  ]
+                },
+                {
+                  "Noun:named:": [
+                    "the",
+                    "clutch"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "our",
+                    "Mildred"
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "coin"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "purse"
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "purse"
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    "clutch"
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    }
+  ]
 }

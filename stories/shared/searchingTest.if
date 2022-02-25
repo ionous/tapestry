@@ -59,8 +59,9 @@
       "--": ""
     },
     {
-      "TestScene:story:": [
+      "TestScene:requires:story:": [
         "searching test",
+        "thingaverse",
         [
           {
             "RelativeToNoun:nouns:areBeing:otherNouns:": [

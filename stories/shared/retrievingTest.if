@@ -155,8 +155,9 @@
       "--": ""
     },
     {
-      "TestScene:story:": [
+      "TestScene:requires:story:": [
         "retrieving test",
+        "thingaverse",
         [
           {
             "RelativeToNoun:nouns:areBeing:otherNouns:": [

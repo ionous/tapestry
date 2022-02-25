@@ -265,11 +265,9 @@
       ]
     },
     {
-      "--": ""
-    },
-    {
-      "TestScene:story:": [
+      "TestScene:requires:story:": [
         "storing test",
+        "thingaverse",
         [
           {
             "RelativeToNoun:nouns:areBeing:otherNouns:": [
