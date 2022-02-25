@@ -267,7 +267,7 @@
     {
       "TestScene:requires:story:": [
         "storing test",
-        "thingaverse",
+        "Kitchenette",
         [
           {
             "RelativeToNoun:nouns:areBeing:otherNouns:": [

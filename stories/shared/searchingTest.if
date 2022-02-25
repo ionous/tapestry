@@ -61,7 +61,7 @@
     {
       "TestScene:requires:story:": [
         "searching test",
-        "thingaverse",
+        "Kitchenette",
         [
           {
             "RelativeToNoun:nouns:areBeing:otherNouns:": [

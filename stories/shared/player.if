@@ -236,31 +236,6 @@
       "--": ""
     },
     {
-      "RelativeToNoun:nouns:areBeing:otherNouns:": [
-        "whereabouts",
-        [
-          {
-            "Noun:named:": [
-              "our",
-              "self"
-            ]
-          }
-        ],
-        "is",
-        [
-          {
-            "Noun:named:": [
-              "our",
-              "kitchen"
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
       "TestRule:does:": [
         "player tests",
         [

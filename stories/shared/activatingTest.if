@@ -1,6 +1,15 @@
 {
   "Tapestry:": [
     {
+      "TestScene:requires:story:":
+      [
+          "activating test",
+          "Kitchenette",
+          [
+          ]
+        ]
+    },
+    {
       "TestStatement:test:": [
         "activating test",
         {

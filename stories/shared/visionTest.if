@@ -71,8 +71,9 @@
       "--": ""
     },
     {
-      "TestScene:story:": [
+      "TestScene:requires:story:": [
         "vision testing",
+        "Kitchenette",
         [
           {
             "Pattern:rules:": [

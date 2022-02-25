@@ -160,7 +160,7 @@
     {
       "TestScene:requires:story:": [
         "wearing test",
-        "thingaverse",
+        "Kitchenette",
         [
           {
             "RelativeToNoun:nouns:areBeing:otherNouns:": [

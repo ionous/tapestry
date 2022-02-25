@@ -157,7 +157,7 @@
     {
       "TestScene:requires:story:": [
         "retrieving test",
-        "thingaverse",
+        "Kitchenette",
         [
           {
             "RelativeToNoun:nouns:areBeing:otherNouns:": [

@@ -213,7 +213,7 @@
     {
       "TestScene:requires:story:": [
         "taking test",
-        "thingaverse",
+        "Kitchenette",
         [
           {
             "RelativeToNoun:nouns:areBeing:otherNouns:": [

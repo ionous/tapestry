@@ -345,6 +345,15 @@
       "--": ""
     },
     {
+      "TestScene:requires:story:":
+      [
+          "examining test",
+          "Kitchenette",
+          [
+          ]
+        ]
+    },
+    {
       "TestStatement:test:": [
         "examining test",
         {

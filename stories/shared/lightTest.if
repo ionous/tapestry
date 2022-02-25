@@ -1,8 +1,9 @@
 {
   "Tapestry:": [
     {
-      "TestScene:story:": [
+      "TestScene:requires:story:": [
         "vision test",
+        "Kitchenette",
         []
       ]
     },
@@ -11,7 +12,7 @@
     },
     {
       "TestStatement:test:": [
-        "testing vision",
+        "vision test",
         {
           "TestOutput:": "ok: The cabinet is dark.\nok: The cabinet has light.\nok: The cabinet is dark.\nok: The cabinet has light.\n"
         }
@@ -19,7 +20,7 @@
     },
     {
       "TestRule:does:": [
-        "testing vision",
+        "vision test",
         [
           {
             "Put:from:at:": [

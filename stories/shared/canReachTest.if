@@ -221,8 +221,9 @@
       "--": ""
     },
     {
-      "TestScene:story:": [
+      "TestScene:requires:story:": [
         "reach test",
+        "Kitchenette",
         [
           {
             "Nouns:depict:": [
