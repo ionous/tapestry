@@ -25,21 +25,19 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// go run play.go -in /Users/ionous/Documents/Tapestry/build/play.db
+// go run play.go -in /Users/ionous/Documents/Tapestry/build/play.db -scene kitchenette
 func main() {
-	var inFile, testString string
+	var inFile, testString, domain string
 	var json bool
 	flag.StringVar(&inFile, "in", "", "input file name (sqlite3)")
-	flag.StringVar(&testString, "test", "", "input test string")
+	flag.StringVar(&domain, "scene", "entire_game", "scene to start playing")
+	flag.StringVar(&testString, "test", "", "optional list of commands to run (non-interactive)")
 	flag.BoolVar(&json, "json", false, "expect input/output in json (default is plain text)")
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
 	flag.Parse()
 	debug.LogLevel = debug.LoggingLevel{debug.LoggingLevel_Warning}
-	var prompt string
-	if !json {
-		prompt = "> "
-	}
-	if cnt, e := playGame(inFile, testString, prompt, json); e != nil {
+
+	if cnt, e := playGame(inFile, testString, domain, json); e != nil {
 		errutil.PrintErrors(e, func(s string) { log.Println(s) })
 		if errutil.Panic {
 			log.Panic("mismatched")
@@ -51,7 +49,11 @@ func main() {
 
 // open db, select tests, de-gob and run them each in turn.
 // print the results, only error on critical errors
-func playGame(inFile, testString, prompt string, jsonMode bool) (ret int, err error) {
+func playGame(inFile, testString, domain string, jsonMode bool) (ret int, err error) {
+	var prompt string
+	if !jsonMode {
+		prompt = "> "
+	}
 	if inFile, e := filepath.Abs(inFile); e != nil {
 		err = e
 	} else if db, e := sql.Open(tables.DefaultDriver, inFile); e != nil {
@@ -73,10 +75,9 @@ func playGame(inFile, testString, prompt string, jsonMode bool) (ret int, err er
 				opt.SetOption(meta.JsonMode, g.BoolOf(jsonMode))
 				w = print.NewLineWriter(&bufferedText)
 			}
-
 			rx := qna.NewRuntimeOptions(w, qdb, opt, tapestry.AllSignatures)
-			run := play.NewPlaytime(rx, "player", "kitchen")
-			if _, e := run.ActivateDomain("entire_game"); e != nil {
+			run := play.NewPlaytime(rx)
+			if _, e := run.ActivateDomain(domain); e != nil {
 				err = e
 			} else {
 				parser := play.NewParser(run, grammar)
@@ -89,7 +90,9 @@ func playGame(inFile, testString, prompt string, jsonMode bool) (ret int, err er
 				} else {
 					reader := bufio.NewReader(os.Stdin)
 					for {
-						fmt.Printf(prompt)
+						if len(prompt) > 0 {
+							fmt.Printf(prompt)
+						}
 						if in, _ := reader.ReadString('\n'); len(in) <= 1 {
 							break
 						} else {

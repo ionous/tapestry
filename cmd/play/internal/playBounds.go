@@ -7,16 +7,30 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/parser"
+	"git.sr.ht/~ionous/tapestry/parser/ident"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 )
+
+func (pt *Playtime) getPawn() (ret string, err error) {
+	// probably could cache the player agent object
+	if player, e := pt.GetField(meta.ObjectValue, pt.player); e != nil {
+		err = e
+	} else if pawn, e := player.FieldByName("pawn"); e != nil {
+		err = e
+	} else {
+		ret = pawn.String()
+	}
+	return
+}
 
 // note: play has to attach to some specifics of a particular runtime to work
 // ex. childrenOf, transparentOf, etc.
 // enc is the enclosureOf the player
-func (pt *Playtime) LocationBounded(enc string) parser.Bounds {
+func (pt *Playtime) locationBounded(enc string) parser.Bounds {
 	return func(cb parser.NounVisitor) (ret bool) {
-		if kids, e := pt.Call("parser_bounds", affine.TextList, []rt.Arg{{
+		if kids, e := pt.Call(pt.bounds, affine.TextList, []rt.Arg{{
 			Name: "obj",
 			From: &core.FromValue{g.StringOf(enc)}},
 		}); e != nil && !errors.Is(e, rt.NoResult{}) {
@@ -33,9 +47,15 @@ func (pt *Playtime) LocationBounded(enc string) parser.Bounds {
 	}
 }
 
-// return bounds which include only the player object and nothing else.
-func (pt *Playtime) SelfBounded() parser.Bounds {
-	return func(cb parser.NounVisitor) (ret bool) {
-		return cb(&Noun{pt, pt.player})
+// return bounds which includes only the player object and nothing else.
+func (pt *Playtime) selfBounded() (ret parser.Bounds, err error) {
+	if pawn, e := pt.getPawn(); e != nil {
+		err = e
+	} else {
+		id := ident.IdOf(pawn)
+		ret = func(cb parser.NounVisitor) (ret bool) {
+			return cb(&Noun{pt, id})
+		}
 	}
+	return
 }

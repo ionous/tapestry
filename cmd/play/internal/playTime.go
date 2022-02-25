@@ -1,6 +1,8 @@
 package internal
 
 import (
+	"log"
+
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/parser/ident"
 	"git.sr.ht/~ionous/tapestry/qna"
@@ -12,18 +14,27 @@ import (
 // this is VERY rudimentary.
 type Playtime struct {
 	*qna.Runner
-	player   ident.Id
-	location string
+	player   string
+	relation string
+	bounds   string
 }
 
-func NewPlaytime(run *qna.Runner, player, startWhere string) *Playtime {
+func NewPlaytime(run *qna.Runner) *Playtime {
+	return NewCustomPlaytime(run, "player", "whereabouts", "parser_bounds")
+}
+
+// the named relation should yield a single object for the named player.
+// the bounds pattern should return the objects in that player's local area.
+func NewCustomPlaytime(run *qna.Runner, player, relation, bounds string) *Playtime {
 	return &Playtime{
 		Runner:   run,
-		location: startWhere,
-		player:   ident.IdOf(player),
+		player:   player,
+		relation: relation,
+		bounds:   bounds,
 	}
 }
 
+// step the world by running some command
 func (pt *Playtime) Play(name string, args []rt.Arg) (err error) {
 	// future: to differentiate b/t system actions and "timed" actions,
 	// consider using naming convention: ex. #save.
@@ -38,14 +49,36 @@ func (pt *Playtime) IsPlural(word string) bool {
 	return len(pl) > 0 && pl != word
 }
 
+var lastLocation string // debugging only
+
 func (pt *Playtime) GetPlayerBounds(where string) (ret parser.Bounds, err error) {
 	switch where {
 	case "":
-		ret = pt.LocationBounded(pt.location)
+		ret, err = pt.GetPlayerLocale()
 	case "self":
-		ret = pt.SelfBounded()
+		ret, err = pt.selfBounded() // only includes the player's pawn
 	default:
 		err = errutil.New("unknown player bounds", where)
+	}
+	return
+}
+
+func (pt *Playtime) GetPlayerLocale() (ret parser.Bounds, err error) {
+	if pawn, e := pt.getPawn(); e != nil {
+		err = e
+	} else if res, e := pt.ReciprocalsOf(pawn, pt.relation); e != nil {
+		err = e
+	} else {
+		var where = "nowhere!"
+		if res.Len() > 0 {
+			v := res.Index(0)
+			where = v.String()
+		}
+		if where != lastLocation {
+			log.Println("GetPlayerBounds", pt.player, pawn, where)
+			lastLocation = where
+		}
+		ret = pt.locationBounded(where) // calls the bounds pattern to return nouns near to the player.
 	}
 	return
 }
