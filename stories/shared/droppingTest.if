@@ -1,13 +1,11 @@
 {
   "Tapestry:": [
     {
-      "TestScene:requires:story:":
-      [
-          "dropping test",
-          "Kitchenette",
-          [
-          ]
-        ]
+      "TestScene:requires:story:": [
+        "dropping test",
+        "Kitchenette",
+        []
+      ]
     },
     {
       "TestStatement:test:": [

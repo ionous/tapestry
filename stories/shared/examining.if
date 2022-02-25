@@ -345,13 +345,11 @@
       "--": ""
     },
     {
-      "TestScene:requires:story:":
-      [
-          "examining test",
-          "Kitchenette",
-          [
-          ]
-        ]
+      "TestScene:requires:story:": [
+        "examining test",
+        "Kitchenette",
+        []
+      ]
     },
     {
       "TestStatement:test:": [

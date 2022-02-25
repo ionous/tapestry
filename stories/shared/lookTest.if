@@ -1,12 +1,11 @@
 {
   "Tapestry:": [
     {
-    "TestScene:requires:story:":
-      [
-          "baseVis",
-          "Kitchenette",
-          []
-        ]
+      "TestScene:requires:story:": [
+        "baseVis",
+        "Kitchenette",
+        []
+      ]
     },
     {
       "TestStatement:test:": [
@@ -168,12 +167,11 @@
       "--": ""
     },
     {
-    "TestScene:requires:story:":
-      [
-          "lookObjectDescription",
-          "Kitchenette",
-          []
-        ]
+      "TestScene:requires:story:": [
+        "lookObjectDescription",
+        "Kitchenette",
+        []
+      ]
     },
     {
       "TestStatement:test:": [
@@ -224,12 +222,11 @@
       "--": ""
     },
     {
-    "TestScene:requires:story:":
-      [
-          "printing vantages",
-          "Kitchenette",
-          []
-        ]
+      "TestScene:requires:story:": [
+        "printing vantages",
+        "Kitchenette",
+        []
+      ]
     },
     {
       "TestStatement:test:": [
@@ -305,12 +302,11 @@
       "--": ""
     },
     {
-    "TestScene:requires:story:":
-      [
-          "printing inline objects",
-          "Kitchenette",
-          []
-        ]
+      "TestScene:requires:story:": [
+        "printing inline objects",
+        "Kitchenette",
+        []
+      ]
     },
     {
       "TestStatement:test:": [

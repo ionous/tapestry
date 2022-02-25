@@ -68,7 +68,7 @@
     {
       "TestScene:requires:story:": [
         "default inventory",
-        "thingaverse",
+        "Kitchenette",
         []
       ]
     },
