@@ -34,31 +34,18 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options Options, signature
 				e := errutil.New("can only handle text values right now")
 				err = errutil.Append(err, e)
 			} else {
-				// fix? its necessary to reset the domain right now.
-				// not entirely clear why to me.
-				if _, e := qdb.ActivateDomain(""); e != nil {
-					err = errutil.Append(err, e)
-				} else {
-					w := print.NewAutoWriter(os.Stdout)
-					run := NewRuntimeOptions(w, qdb, options, tapestry.AllSignatures)
-					// fix! if we dont activate "entire_game" first, we wind up with multiple pairs active
-					// this is something to do with the way the pair query works
-					// when there is a relation in the entire_game that is supposed to be changed by a sub-domain.
-					if _, e := run.ActivateDomain("entire_game"); e != nil {
-						err = errutil.Append(err, e)
-					} else {
-						t := CheckOutput{
-							Name:   el.Name,
-							Domain: el.Domain,
-							Expect: expect.String(),
-							Test:   act,
-						}
-						if e := t.RunTest(run); e != nil {
-							err = errutil.Append(err, e)
-						}
-						ret++
-					}
+				w := print.NewAutoWriter(os.Stdout)
+				run := NewRuntimeOptions(w, qdb, options, tapestry.AllSignatures)
+				t := CheckOutput{
+					Name:   el.Name,
+					Domain: el.Domain,
+					Expect: expect.String(),
+					Test:   act,
 				}
+				if e := t.RunTest(run); e != nil {
+					err = errutil.Append(err, e)
+				}
+				ret++
 			}
 		}
 	}
