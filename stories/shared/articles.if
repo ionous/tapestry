@@ -16,7 +16,7 @@
     },
     {
       "AspectTraits:traitPhrase:": [
-        " pluralization",
+        "pluralization",
         {
           "TraitPhrase:trait:": [
             "canbe",
@@ -29,7 +29,7 @@
       ]
     },
     {
-      "KindsOfAspect:": " pluralization"
+      "KindsOfAspect:": "pluralization"
     },
     {
       "--": ""

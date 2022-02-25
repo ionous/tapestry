@@ -275,11 +275,11 @@
       "--": ""
     },
     {
-      "KindsOfAspect:": " activatability"
+      "KindsOfAspect:": "activatability"
     },
     {
       "AspectTraits:traitPhrase:": [
-        " activatability",
+        "activatability",
         {
           "TraitPhrase:trait:": [
             "canbe",
@@ -292,11 +292,11 @@
       ]
     },
     {
-      "KindsOfAspect:": " activation"
+      "KindsOfAspect:": "activation"
     },
     {
       "AspectTraits:traitPhrase:": [
-        " activation",
+        "activation",
         {
           "TraitPhrase:trait:": [
             "canbe",

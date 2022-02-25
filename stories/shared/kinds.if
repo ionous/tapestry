@@ -36,11 +36,11 @@
       ]
     },
     {
-      "KindsOfAspect:": " possessiveness"
+      "KindsOfAspect:": "possessiveness"
     },
     {
       "AspectTraits:traitPhrase:": [
-        " possessiveness",
+        "possessiveness",
         {
           "TraitPhrase:trait:": [
             "canbe",
@@ -53,11 +53,11 @@
       ]
     },
     {
-      "KindsOfAspect:": " portability"
+      "KindsOfAspect:": "portability"
     },
     {
       "AspectTraits:traitPhrase:": [
-        " portability",
+        "portability",
         {
           "TraitPhrase:trait:": [
             "either",
@@ -86,11 +86,11 @@
       ]
     },
     {
-      "KindsOfAspect:": " scenery status"
+      "KindsOfAspect:": "scenery status"
     },
     {
       "AspectTraits:traitPhrase:": [
-        " scenery status",
+        "scenery status",
         {
           "TraitPhrase:trait:": [
             "either",
@@ -133,11 +133,11 @@
       ]
     },
     {
-      "KindsOfAspect:": " mentionable"
+      "KindsOfAspect:": "mentionable"
     },
     {
       "AspectTraits:traitPhrase:": [
-        " mentionable",
+        "mentionable",
         {
           "TraitPhrase:trait:": [
             "either",
@@ -160,11 +160,11 @@
       ]
     },
     {
-      "KindsOfAspect:": " handleable"
+      "KindsOfAspect:": "handleable"
     },
     {
       "AspectTraits:traitPhrase:": [
-        " handleable",
+        "handleable",
         {
           "TraitPhrase:trait:": [
             "either",
@@ -177,11 +177,11 @@
       ]
     },
     {
-      "KindsOfAspect:": " wearability"
+      "KindsOfAspect:": "wearability"
     },
     {
       "AspectTraits:traitPhrase:": [
-        " wearability",
+        "wearability",
         {
           "TraitPhrase:trait:": [
             "canbe",
@@ -204,7 +204,7 @@
     },
     {
       "Make kinds:of:": [
-        " animals",
+        "animals",
         "actor"
       ]
     },
@@ -213,7 +213,7 @@
     },
     {
       "Make kinds:of:": [
-        " props",
+        "props",
         "thing"
       ]
     },
@@ -222,16 +222,16 @@
     },
     {
       "Make kinds:of:": [
-        " openers",
+        "openers",
         "prop"
       ]
     },
     {
-      "KindsOfAspect:": " open status"
+      "KindsOfAspect:": "open status"
     },
     {
       "AspectTraits:traitPhrase:": [
-        " open status",
+        "open status",
         {
           "TraitPhrase:trait:": [
             "either",
@@ -244,11 +244,11 @@
       ]
     },
     {
-      "KindsOfAspect:": " openability"
+      "KindsOfAspect:": "openability"
     },
     {
       "AspectTraits:traitPhrase:": [
-        " openability",
+        "openability",
         {
           "TraitPhrase:trait:": [
             "either",
@@ -261,11 +261,11 @@
       ]
     },
     {
-      "KindsOfAspect:": " locked status"
+      "KindsOfAspect:": "locked status"
     },
     {
       "AspectTraits:traitPhrase:": [
-        " locked status",
+        "locked status",
         {
           "TraitPhrase:trait:": [
             "either",
@@ -278,11 +278,11 @@
       ]
     },
     {
-      "KindsOfAspect:": " lockable status"
+      "KindsOfAspect:": "lockable status"
     },
     {
       "AspectTraits:traitPhrase:": [
-        " lockable status",
+        "lockable status",
         {
           "TraitPhrase:trait:": [
             "either",
@@ -318,16 +318,16 @@
     },
     {
       "Make kinds:of:": [
-        " containers",
+        "containers",
         "opener"
       ]
     },
     {
-      "KindsOfAspect:": " enterability"
+      "KindsOfAspect:": "enterability"
     },
     {
       "AspectTraits:traitPhrase:": [
-        " enterability",
+        "enterability",
         {
           "TraitPhrase:trait:": [
             "canbe",
@@ -340,11 +340,11 @@
       ]
     },
     {
-      "KindsOfAspect:": " opacity"
+      "KindsOfAspect:": "opacity"
     },
     {
       "AspectTraits:traitPhrase:": [
-        " opacity",
+        "opacity",
         {
           "TraitPhrase:trait:": [
             "either",
@@ -373,11 +373,11 @@
       "--": ""
     },
     {
-      "KindsOfAspect:": " illumination"
+      "KindsOfAspect:": "illumination"
     },
     {
       "AspectTraits:traitPhrase:": [
-        " illumination",
+        "illumination",
         {
           "TraitPhrase:trait:": [
             "either",
@@ -411,7 +411,7 @@
     },
     {
       "Certainties:areBeing:certainty:trait:": [
-        " rooms",
+        "rooms",
         "are",
         "usually",
         "lit"
@@ -422,7 +422,7 @@
     },
     {
       "Make kinds:of:": [
-        " supporters",
+        "supporters",
         "prop"
       ]
     },
@@ -431,7 +431,7 @@
     },
     {
       "Make kinds:of:": [
-        " rooms",
+        "rooms",
         "object"
       ]
     },
@@ -450,7 +450,7 @@
     },
     {
       "Make kinds:of:": [
-        " regions",
+        "regions",
         "object"
       ]
     }
