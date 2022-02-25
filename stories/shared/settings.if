@@ -7,6 +7,7 @@
       ]
     },
     {
+      "--": "Settings is a global singleton for controlling various gameplay options.",
       "Nouns:depict:": [
         [
           {
@@ -35,11 +36,11 @@
       ]
     },
     {
-      "KindsOfAspect:": " abbreviated room descriptions"
+      "KindsOfAspect:": "abbreviated room descriptions"
     },
     {
       "AspectTraits:traitPhrase:": [
-        " abbreviated room descriptions",
+        "abbreviated room descriptions",
         {
           "TraitPhrase:trait:": [
             "canbe",
