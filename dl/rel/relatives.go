@@ -53,7 +53,7 @@ func (op *ReciprocalOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 		if vs, e := run.ReciprocalsOf(noun, rel.String()); e != nil {
 			err = cmdError(op, e)
 		} else if cnt := vs.Len(); cnt > 1 {
-			e := errutil.New("expected at most one relative for", noun, "in", rel.Str)
+			e := errutil.New("expected at most one reciprocal for", noun, "in", rel.Str)
 			err = cmdError(op, e)
 		} else {
 			if cnt != 0 { // having no relatives is considered okay

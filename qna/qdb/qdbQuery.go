@@ -31,6 +31,8 @@ type Query struct {
 	reciprocalOf,
 	relateChanges,
 	relateNames,
+	activeDomains,
+	relatePairs,
 	relativesOf,
 	rulesFor *sql.Stmt
 
@@ -73,8 +75,24 @@ func (q *Query) ActivateDomain(name string) (ret string, err error) {
 			// alt: join run_pair requests with domain_activate
 			// ( would mean that "relate changes" is probably doing more work clearing old relations )
 			err = e
-		} else if _, e := q.relateChanges.Exec(name, act); e != nil {
-			err = e // add pairs that were just activated.
+		} else {
+			// if _, e := q.relateChanges.Exec(name, act); e != nil {
+			// 	err = e // add pairs that were just activated.
+			// }
+
+			// fix: relateChanges doesnt handle the case where,
+			// if multiple domains are being activated at once,
+			// that the more derived domain should clear conflicting pairs
+			// instead: every listed pair in the all the new domains get set.
+			if ds, e := scanStrings(q.activeDomains); e != nil {
+				err = e
+			} else {
+				for _, d := range ds {
+					if _, e := q.relatePairs.Exec(d); e != nil {
+						err = errutil.Append(err, e)
+					}
+				}
+			}
 		}
 		// so we can rollback on any error.
 		if err == nil {
@@ -401,6 +419,14 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		),
 		relateNames: ps.Prep(db,
 			newPairsFromNames+relatePair,
+		),
+		activeDomains: ps.Prep(db,
+			`select domain 
+			from domain_scope
+			order by domain`,
+		),
+		relatePairs: ps.Prep(db,
+			newPairsFromDomain+relatePair,
 		),
 		// type Relation struct {
 		// 	Kind, OtherKind, Cardinality string

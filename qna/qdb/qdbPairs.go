@@ -37,6 +37,15 @@ with newPairs as (
 	and dn.domain = ?1   -- select just the current named domain with dn
 )`
 
+var newPairsFromDomain = `
+with newPairs as (
+select domain, relKind, oneNoun, otherNoun, cardinality
+	from mdl_pair mp
+	join mdl_rel 
+	 using (relKind)
+	where mp.domain = ?1
+)`
+
 // fix? this doesnt change to see whether the nouns are compatible with the relation
 // ex. if oneNoun is compatible with mdl_rel.oneKind; for now, the caller does that instead...
 // ( see also: Runner.RelateTo )
