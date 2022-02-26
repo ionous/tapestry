@@ -11,7 +11,7 @@ import (
 )
 
 // usage:
-// 1. chart [-d=entire_game] -in play.db [-out chart.dot]
+// 1. chart [-d=tapestry] -in play.db [-out chart.dot]
 // 2. dot -Tpng chart.dot -o chart.png
 // example:
 // go run chart.go -d traversal -in /Users/ionous/Documents/Tapestry/build/play.db
@@ -29,7 +29,7 @@ func main() {
 			outFile = "chart.dot"
 		}
 		if len(scope) == 0 {
-			scope = "entire_game"
+			scope = "tapestry"
 		}
 		if _, e := chart.Chart(inFile, outFile, scope); e != nil {
 			log.Panic(e)

@@ -30,7 +30,7 @@ func main() {
 	var inFile, testString, domain string
 	var json bool
 	flag.StringVar(&inFile, "in", "", "input file name (sqlite3)")
-	flag.StringVar(&domain, "scene", "entire_game", "scene to start playing")
+	flag.StringVar(&domain, "scene", "tapestry", "scene to start playing")
 	flag.StringVar(&testString, "test", "", "optional list of commands to run (non-interactive)")
 	flag.BoolVar(&json, "json", false, "expect input/output in json (default is plain text)")
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")

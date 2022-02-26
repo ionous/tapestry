@@ -122,7 +122,7 @@ func collectEphemera(cat *eph.Catalog, out *error) story.WriterFun {
 	// fix: needs to be more clever eventually...
 	if e := cat.AddEphemera(
 		"asm",
-		&eph.EphBeginDomain{Name: "entire_game"}); e != nil {
+		&eph.EphBeginDomain{Name: "tapestry"}); e != nil {
 		panic(e)
 	}
 	// built in kinds -- see ephKinds.go
