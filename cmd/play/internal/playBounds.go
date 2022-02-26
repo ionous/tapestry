@@ -47,15 +47,12 @@ func (pt *Playtime) locationBounded(enc string) parser.Bounds {
 	}
 }
 
-// return bounds which includes only the player object and nothing else.
+// return bounds which includes only the player agent and nothing else.
+// fix: why this is the agent and not the pawn?
 func (pt *Playtime) selfBounded() (ret parser.Bounds, err error) {
-	if pawn, e := pt.getPawn(); e != nil {
-		err = e
-	} else {
-		id := ident.IdOf(pawn)
-		ret = func(cb parser.NounVisitor) (ret bool) {
-			return cb(&Noun{pt, id})
-		}
+	id := ident.IdOf(pt.player)
+	ret = func(cb parser.NounVisitor) (ret bool) {
+		return cb(&Noun{pt, id})
 	}
 	return
 }
