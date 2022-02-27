@@ -53,7 +53,9 @@ func Chart(inFile, outFile, scope string) (ret int, err error) {
 						},
 						"roomOfDoor": func(door string) (ret string, err error) {
 							// note: js strings are quoted, but graphvis doesn't seem to care.
-							err = nounValue.QueryRow(scope, "doors", "target", door).Scan(&door, &ret)
+							if e := nounValue.QueryRow(scope, "doors", "destination", door).Scan(&door, &ret); e != nil {
+								err = errutil.New(door, e)
+							}
 							return
 						},
 					}
