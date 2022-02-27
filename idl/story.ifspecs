@@ -912,19 +912,6 @@
           ]
         },
         {
-          "--": "A sequence of characters of any length spanning multiple lines.  Paragraphs are a prime example. Generally lines are some piece of the story that will be displayed to the player.  See also: text.",
-          "Spec:with str:groups:": [
-            "lines",
-            {
-              "Str uses:": []
-            },
-            [
-              "debug",
-              "language"
-            ]
-          ]
-        },
-        {
           "--": "The opposite of east is west.",
           "Spec:with flow:slots:groups:": [
             "make_opposite",

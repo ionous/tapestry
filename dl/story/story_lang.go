@@ -1459,7 +1459,7 @@ func Certainty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Certainty) (err e
 
 // Comment Information about the story for you and other authors.
 type Comment struct {
-	Lines       Lines `if:"label=_"`
+	Lines       prim.Lines `if:"label=_"`
 	UserComment string
 }
 
@@ -1550,7 +1550,7 @@ func Comment_Marshal(m jsn.Marshaler, val *Comment) (err error) {
 	if err = m.MarshalBlock(Comment_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Comment_Field_Lines)
 		if e0 == nil {
-			e0 = Lines_Marshal(m, &val.Lines)
+			e0 = prim.Lines_Marshal(m, &val.Lines)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Comment_Field_Lines))
@@ -3119,81 +3119,6 @@ func KindsOfKind_Marshal(m jsn.Marshaler, val *KindsOfKind) (err error) {
 	return
 }
 
-// Lines requires a user-specified string.
-type Lines struct {
-	Str string
-}
-
-func (op *Lines) String() string {
-	return op.Str
-}
-
-func (*Lines) Compose() composer.Spec {
-	return composer.Spec{
-		Name:        Lines_Type,
-		Uses:        composer.Type_Str,
-		OpenStrings: true,
-	}
-}
-
-const Lines_Type = "lines"
-
-func (op *Lines) Marshal(m jsn.Marshaler) error {
-	return Lines_Marshal(m, op)
-}
-
-func Lines_Optional_Marshal(m jsn.Marshaler, val *Lines) (err error) {
-	var zero Lines
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = Lines_Marshal(m, val)
-	}
-	return
-}
-
-func Lines_Marshal(m jsn.Marshaler, val *Lines) (err error) {
-	return m.MarshalValue(Lines_Type, &val.Str)
-}
-
-type Lines_Slice []Lines
-
-func (op *Lines_Slice) GetType() string { return Lines_Type }
-
-func (op *Lines_Slice) Marshal(m jsn.Marshaler) error {
-	return Lines_Repeats_Marshal(m, (*[]Lines)(op))
-}
-
-func (op *Lines_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Lines_Slice) SetSize(cnt int) {
-	var els []Lines
-	if cnt >= 0 {
-		els = make(Lines_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Lines_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Lines_Marshal(m, &(*op)[i])
-}
-
-func Lines_Repeats_Marshal(m jsn.Marshaler, vals *[]Lines) error {
-	return jsn.RepeatBlock(m, (*Lines_Slice)(vals))
-}
-
-func Lines_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Lines) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Lines_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
 // MakeOpposite
 type MakeOpposite struct {
 	Word        string `if:"label=_,type=text"`
@@ -4282,7 +4207,7 @@ func NamedProperty_Marshal(m jsn.Marshaler, val *NamedProperty) (err error) {
 type NounAssignment struct {
 	Property    Property    `if:"label=_"`
 	Nouns       []NamedNoun `if:"label=nouns"`
-	Lines       Lines       `if:"label=lines"`
+	Lines       prim.Lines  `if:"label=lines"`
 	UserComment string
 }
 
@@ -4388,7 +4313,7 @@ func NounAssignment_Marshal(m jsn.Marshaler, val *NounAssignment) (err error) {
 		}
 		e2 := m.MarshalKey("lines", NounAssignment_Field_Lines)
 		if e2 == nil {
-			e2 = Lines_Marshal(m, &val.Lines)
+			e2 = prim.Lines_Marshal(m, &val.Lines)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", NounAssignment_Field_Lines))
@@ -7125,7 +7050,7 @@ func RelativeToNoun_Marshal(m jsn.Marshaler, val *RelativeToNoun) (err error) {
 
 // RenderTemplate Parse text using templates.
 type RenderTemplate struct {
-	Template    Lines `if:"label=_"`
+	Template    prim.Lines `if:"label=_"`
 	UserComment string
 }
 
@@ -7215,7 +7140,7 @@ func RenderTemplate_Marshal(m jsn.Marshaler, val *RenderTemplate) (err error) {
 	if err = m.MarshalBlock(RenderTemplate_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderTemplate_Field_Template)
 		if e0 == nil {
-			e0 = Lines_Marshal(m, &val.Template)
+			e0 = prim.Lines_Marshal(m, &val.Template)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", RenderTemplate_Field_Template))
@@ -7952,7 +7877,7 @@ func TestName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestName) (err err
 
 // TestOutput Expect that a test uses 'Say' to print some specific text.
 type TestOutput struct {
-	Lines       Lines `if:"label=_"`
+	Lines       prim.Lines `if:"label=_"`
 	UserComment string
 }
 
@@ -8042,7 +7967,7 @@ func TestOutput_Marshal(m jsn.Marshaler, val *TestOutput) (err error) {
 	if err = m.MarshalBlock(TestOutput_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", TestOutput_Field_Lines)
 		if e0 == nil {
-			e0 = Lines_Marshal(m, &val.Lines)
+			e0 = prim.Lines_Marshal(m, &val.Lines)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", TestOutput_Field_Lines))
@@ -8927,7 +8852,6 @@ var Slats = []composer.Composer{
 	(*KindsHaveProperties)(nil),
 	(*KindsOfAspect)(nil),
 	(*KindsOfKind)(nil),
-	(*Lines)(nil),
 	(*MakeOpposite)(nil),
 	(*MakePlural)(nil),
 	(*ManyToMany)(nil),

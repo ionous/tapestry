@@ -38,6 +38,7 @@ func marshal(out io.Writer, cmd jsn.Marshalee, customFlow CustomFlow, indent boo
 	return
 }
 
+// remove go's trailing newline.
 // https://github.com/golang/go/issues/37083
 // or, they could have just provided an Set<Option> like SetEscapeHTML...
 type noNewLine struct {

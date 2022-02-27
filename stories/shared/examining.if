@@ -355,7 +355,16 @@
       "TestStatement:test:": [
         "examining test",
         {
-          "TestOutput:": "The blender is empty.\nYour aunt's very own witches hat, a Halloween favorite.\nIn the mortar is a pestle.\nOn the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.\nAn ancient teak wardrobe repurposed as a kitchen cupboard.\nIn the cabinet are a book of matches, a bottle of descaling solution, a fish hook, and a rusty knife.\nYou see nothing special about the blender.\n"
+          "TestOutput:": [
+            "The blender is empty.",
+            "Your aunt's very own witches hat, a Halloween favorite.",
+            "In the mortar is a pestle.",
+            "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.",
+            "An ancient teak wardrobe repurposed as a kitchen cupboard.",
+            "In the cabinet are a book of matches, a bottle of descaling solution, a fish hook, and a rusty knife.",
+            "You see nothing special about the blender.",
+            ""
+          ]
         }
       ]
     },

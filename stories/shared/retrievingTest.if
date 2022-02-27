@@ -4,7 +4,19 @@
       "TestStatement:test:": [
         "retrieving test",
         {
-          "TestOutput:": "  - Fail to retrieve from something closed:\n  The espresso machine isn't open.\n  - The soup's parent was: the shelf. Okay, retrieve from supporter:\n  Taken.The soup's parent is: you.\n  - The hook's parent was: the cabinet. Okay, retrieve from container:\n  Taken.The hook's parent is: you.\n  - Fail to retrieve incorrectly:\n  But it isn't there now.\n  - Fail to steal:\n  That seems to belong to Mildred.\n"
+          "TestOutput:": [
+            "  - Fail to retrieve from something closed:",
+            "  The espresso machine isn't open.",
+            "  - The soup's parent was: the shelf. Okay, retrieve from supporter:",
+            "  Taken.The soup's parent is: you.",
+            "  - The hook's parent was: the cabinet. Okay, retrieve from container:",
+            "  Taken.The hook's parent is: you.",
+            "  - Fail to retrieve incorrectly:",
+            "  But it isn't there now.",
+            "  - Fail to steal:",
+            "  That seems to belong to Mildred.",
+            ""
+          ]
         }
       ]
     },

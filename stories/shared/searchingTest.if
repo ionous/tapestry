@@ -4,7 +4,13 @@
       "TestStatement:test:": [
         "searching test",
         {
-          "TestOutput:": "You find nothing of interest.\nYou can't see inside, it is closed.\nOn the counter are the blender, the espresso machine, and the mortar.\nIn the purse is the coin.\n"
+          "TestOutput:": [
+            "You find nothing of interest.",
+            "You can't see inside, it is closed.",
+            "On the counter are the blender, the espresso machine, and the mortar.",
+            "In the purse is the coin.",
+            ""
+          ]
         }
       ]
     },

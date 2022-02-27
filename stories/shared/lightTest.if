@@ -14,7 +14,13 @@
       "TestStatement:test:": [
         "vision test",
         {
-          "TestOutput:": "ok: The cabinet is dark.\nok: The cabinet has light.\nok: The cabinet is dark.\nok: The cabinet has light.\n"
+          "TestOutput:": [
+            "ok: The cabinet is dark.",
+            "ok: The cabinet has light.",
+            "ok: The cabinet is dark.",
+            "ok: The cabinet has light.",
+            ""
+          ]
         }
       ]
     },

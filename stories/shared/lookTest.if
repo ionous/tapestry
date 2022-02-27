@@ -11,7 +11,14 @@
       "TestStatement:test:": [
         "baseVis",
         {
-          "TestOutput:": "cabinet and Kitchen.\nKitchen.\nshelf and Kitchen.\ncabinet.\nokay. cabinet is open again.\n"
+          "TestOutput:": [
+            "cabinet and Kitchen.",
+            "Kitchen.",
+            "shelf and Kitchen.",
+            "cabinet.",
+            "okay. cabinet is open again.",
+            ""
+          ]
         }
       ]
     },
@@ -177,7 +184,12 @@
       "TestStatement:test:": [
         "lookObjectDescription",
         {
-          "TestOutput:": "A pointed black hat lies discarded on the floor under a dusty shelf.\nOn the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.\nSteam leaks from the top of a recently used espresso machine.\n"
+          "TestOutput:": [
+            "A pointed black hat lies discarded on the floor under a dusty shelf.",
+            "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.",
+            "Steam leaks from the top of a recently used espresso machine.",
+            ""
+          ]
         }
       ]
     },
@@ -232,7 +244,26 @@
       "TestStatement:test:": [
         "printing vantages",
         {
-          "TestOutput:": "Darkness.\nIt is pitch dark, and you can't see a thing.\n.....\nKitchen (in the cabinet).\nYour Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake.\nA pointed black hat lies discarded on the floor under a dusty shelf.\nOn the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.\nYou can also see a broom, two cats, and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle)).\nBeneath your feet is a bright and shiny hook.\nIn the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife.\n.....\nThe cabinet.\nBeneath your feet is a bright and shiny hook.\nIn the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife.\n.....\nThe cabinet.\nIn the cabinet you can see a book of matches, a bottle of descaling solution, and a rusty knife.\n"
+          "TestOutput:": [
+            "Darkness.",
+            "It is pitch dark, and you can't see a thing.",
+            ".....",
+            "Kitchen (in the cabinet).",
+            "Your Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake.",
+            "A pointed black hat lies discarded on the floor under a dusty shelf.",
+            "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.",
+            "You can also see a broom, two cats, and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle)).",
+            "Beneath your feet is a bright and shiny hook.",
+            "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife.",
+            ".....",
+            "The cabinet.",
+            "Beneath your feet is a bright and shiny hook.",
+            "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife.",
+            ".....",
+            "The cabinet.",
+            "In the cabinet you can see a book of matches, a bottle of descaling solution, and a rusty knife.",
+            ""
+          ]
         }
       ]
     },

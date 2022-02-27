@@ -283,16 +283,6 @@
                                 ],
                                 "spec": "Note: {comment%lines}",
                                 "desc": "Add a note: Information about the story for you and other authors."
-                            },
-                            "lines":
-                            {
-                                "uses": "str",
-                                "desc":
-                                [
-                                    "A sequence of characters of any length spanning multiple lines.",
-                                    "Paragraphs are a prime example. Generally lines are some piece of the story that will be displayed to the player.",
-                                    "See also: text."
-                                ]
                             }
                         }
                     },

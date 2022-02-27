@@ -424,6 +424,7 @@
         "reach down",
         [
           {
+            "--": "Assuming we are able to reach the noun, check whether it actually allows storage right now. ( ex. open, not closed. )",
             "PatternRule:does:": [
               {
                 "AllTrue:": [
@@ -453,9 +454,6 @@
                 ]
               },
               [
-                {
-                  "Comment:": "Assuming we are able to reach the noun, check whether it actually allows storage right now. ( ex. open, not closed. )"
-                },
                 {
                   "Let:be:": [
                     "response",

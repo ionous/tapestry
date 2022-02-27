@@ -109,7 +109,10 @@
         [
           {
             "Say:": {
-              "RenderTemplate:": "{print_several: .books}\n{print_several: .books 5}"
+              "RenderTemplate:": [
+                "{print_several: .books}",
+                "{print_several: .books 5}"
+              ]
             }
           }
         ]
@@ -122,7 +125,10 @@
       "TestStatement:test:": [
         "print several",
         {
-          "TestOutput:": "zero books\nfive books"
+          "TestOutput:": [
+            "zero books",
+            "five books"
+          ]
         }
       ]
     }

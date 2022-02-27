@@ -271,7 +271,31 @@
       "TestStatement:test:": [
         "whereabouts",
         {
-          "TestOutput:": "Mildred's parent is the lab.\nThe basket's parent is the table.\nMildred is in the lab.\nThe scalpel is in the lab.\nThe table encloses the basket.\nThe basket encloses the apple.\nThe basket contains the apple.\nThe  contains the basket.\nThe  supports the apple.\nThe table supports the basket.\nThe basket's parent: table.\nThe scalpel's parent: Mildred.\nMildred owns the pen.\nThe  carries the pen.\nMildred carries the scalpel.\nThe pen is in Mildred's pocket.\nThe scalpel is worn by: .\nThe common ancestor of the pen and itself: pen.\nThe common ancestor of the pen and a sibling: Mildred.\nThe common ancestor of the sibling and a pen: Mildred.\nThe common ancestor of the pen and its owner: Mildred.\nThe common ancestor of the pen's owner and the pen: Mildred.\n"
+          "TestOutput:": [
+            "Mildred's parent is the lab.",
+            "The basket's parent is the table.",
+            "Mildred is in the lab.",
+            "The scalpel is in the lab.",
+            "The table encloses the basket.",
+            "The basket encloses the apple.",
+            "The basket contains the apple.",
+            "The  contains the basket.",
+            "The  supports the apple.",
+            "The table supports the basket.",
+            "The basket's parent: table.",
+            "The scalpel's parent: Mildred.",
+            "Mildred owns the pen.",
+            "The  carries the pen.",
+            "Mildred carries the scalpel.",
+            "The pen is in Mildred's pocket.",
+            "The scalpel is worn by: .",
+            "The common ancestor of the pen and itself: pen.",
+            "The common ancestor of the pen and a sibling: Mildred.",
+            "The common ancestor of the sibling and a pen: Mildred.",
+            "The common ancestor of the pen and its owner: Mildred.",
+            "The common ancestor of the pen's owner and the pen: Mildred.",
+            ""
+          ]
         }
       ]
     },
@@ -284,7 +308,26 @@
         [
           {
             "Say:": {
-              "RenderTemplate:": "Mildred's parent is {the: {parentOf: .Mildred}}.\nThe basket's parent is {the: {parentOf: .basket}}.\nMildred is in {the: {CurrentRoom: .Mildred}}.\nThe scalpel is in {the: {CurrentRoom: .scalpel}}.\n{The: {locationOf: .basket}|capitalize!} encloses the basket.\n{The: {locationOf: .apple}|capitalize!} encloses the apple.\n{The: {containerOf: .apple}|capitalize!} contains the apple.\n{The: {containerOf: .basket}|capitalize!} contains the basket.\n{The: {supporterOf: .apple}|capitalize!} supports the apple.\n{The: {supporterOf: .basket}|capitalize!} supports the basket.\nThe basket's parent: {name_of: {parentOf: .basket}}.\nThe scalpel's parent: {name_of: {parentOf: .scalpel}}.\n{The: {holderOf: .pen}|capitalize!} owns the pen.\n{The: {carrierOf: .pen}|capitalize!} carries the pen.\n{The: {carrierOf: .scalpel}|capitalize!} carries the scalpel.\nThe pen is in {the: {wearerOf: .pen}}'s pocket.\nThe scalpel is worn by: {name_of: {wearerOf: .scalpel}}.\n"
+              "RenderTemplate:": [
+                "Mildred's parent is {the: {parentOf: .Mildred}}.",
+                "The basket's parent is {the: {parentOf: .basket}}.",
+                "Mildred is in {the: {CurrentRoom: .Mildred}}.",
+                "The scalpel is in {the: {CurrentRoom: .scalpel}}.",
+                "{The: {locationOf: .basket}|capitalize!} encloses the basket.",
+                "{The: {locationOf: .apple}|capitalize!} encloses the apple.",
+                "{The: {containerOf: .apple}|capitalize!} contains the apple.",
+                "{The: {containerOf: .basket}|capitalize!} contains the basket.",
+                "{The: {supporterOf: .apple}|capitalize!} supports the apple.",
+                "{The: {supporterOf: .basket}|capitalize!} supports the basket.",
+                "The basket's parent: {name_of: {parentOf: .basket}}.",
+                "The scalpel's parent: {name_of: {parentOf: .scalpel}}.",
+                "{The: {holderOf: .pen}|capitalize!} owns the pen.",
+                "{The: {carrierOf: .pen}|capitalize!} carries the pen.",
+                "{The: {carrierOf: .scalpel}|capitalize!} carries the scalpel.",
+                "The pen is in {the: {wearerOf: .pen}}'s pocket.",
+                "The scalpel is worn by: {name_of: {wearerOf: .scalpel}}.",
+                ""
+              ]
             }
           },
           {

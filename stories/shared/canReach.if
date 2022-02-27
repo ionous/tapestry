@@ -152,7 +152,10 @@
                                     ]
                                   },
                                   {
-                                    "Comment:": "This doesn't exit the loop. \nIt builds a complete hierarchy to help determine if the lca exists and if so, is the lca completely unreachable or merely blocked."
+                                    "Comment:": [
+                                      "This doesn't exit the loop. ",
+                                      "It builds a complete hierarchy to help determine if the lca exists and if so, is the lca completely unreachable or merely blocked."
+                                    ]
                                   }
                                 ]
                               ]
@@ -262,7 +265,10 @@
                               ]
                             },
                             {
-                              "Comment:": "To find the outermost dig error keep going, \nupdating the error each time."
+                              "Comment:": [
+                                "To find the outermost dig error keep going, ",
+                                "updating the error each time."
+                              ]
                             }
                           ]
                         ]

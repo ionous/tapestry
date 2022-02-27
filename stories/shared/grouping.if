@@ -513,7 +513,10 @@
                   ]
                 },
                 {
-                  "Comment:": "haven't found a matching group?\npack the object and its settings into a group, and add it into the groups."
+                  "Comment:": [
+                    "haven't found a matching group?",
+                    "pack the object and its settings into a group, and add it into the groups."
+                  ]
                 },
                 {
                   "If:does:else:": [
@@ -572,7 +575,10 @@
                     {
                       "ElseDo does:": [
                         {
-                          "Comment:": "found a matching group?\nunpack it, add the object name to it, then pack it up again."
+                          "Comment:": [
+                            "found a matching group?",
+                            "unpack it, add the object name to it, then pack it up again."
+                          ]
                         },
                         {
                           "Let:be:": [

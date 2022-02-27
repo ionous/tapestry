@@ -253,9 +253,7 @@
       "--": ""
     },
     {
-      "Comment:": "Can't open when locked. "
-    },
-    {
+      "--": "Can't open when locked.",
       "Pattern:rules:": [
         "state changing",
         [

@@ -11,7 +11,13 @@
       "TestStatement:test:": [
         "dropping test",
         {
-          "TestOutput:": "The knife's ogp: you.\nDropped.\nThe knife's newg: the Kitchen.\nYou haven't got that!\n"
+          "TestOutput:": [
+            "The knife's ogp: you.",
+            "Dropped.",
+            "The knife's newg: the Kitchen.",
+            "You haven't got that!",
+            ""
+          ]
         }
       ]
     },

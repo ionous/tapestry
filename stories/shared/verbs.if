@@ -358,9 +358,7 @@
       "--": ""
     },
     {
-      "Comment:": "say the contraction aren't or isn't ( depending on the plural of the noun )"
-    },
-    {
+      "--": "Say the contraction aren't or isn't ( depending on the plural of the noun ).",
       "Pattern:requires:": [
         "Arent",
         [
@@ -412,6 +410,54 @@
               [
                 {
                   "Say:": "aren't"
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": "Say the contraction don't or doesn't ( depending on the plural of the noun ).",
+      "Pattern:requires:": [
+        "Dont",
+        [
+          {
+            "Text named:of:": [
+              "noun",
+              "object"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "Dont",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Always": true
+              },
+              [
+                {
+                  "Say:": "doesn't"
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Get obj:trait:": [
+                  "@noun",
+                  "plural named"
+                ]
+              },
+              [
+                {
+                  "Say:": "don't"
                 }
               ]
             ]

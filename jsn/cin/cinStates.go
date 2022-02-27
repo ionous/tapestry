@@ -3,6 +3,7 @@ package cin
 import (
 	"encoding/json"
 	"errors"
+	"strings"
 	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/jsn"
@@ -167,7 +168,14 @@ func (dec *xDecoder) readValue(pv interface{}, msg json.RawMessage) (err error) 
 		}
 	} else {
 		if e := json.Unmarshal(msg, pv); e != nil {
-			err = e // couldn't unmarshal directly into the target value?
+			err = e // preliminary
+			if pstr, isString := pv.(*string); isString {
+				var strs []string
+				if e := json.Unmarshal(msg, &strs); e == nil {
+					*pstr = strings.Join(strs, "\n")
+					err = nil
+				}
+			}
 		}
 	}
 	dec.Commit("new value")

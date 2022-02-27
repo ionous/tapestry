@@ -11,7 +11,17 @@
       "TestStatement:test:": [
         "status printing test",
         {
-          "TestOutput:": "the flower: (being worn).\nthe headlamp: (providing light and being worn).\nthe book of secrets: (closed and locked).\nthe book of wisdom: (open but empty).\nthe clutch: (open).\nthe purse: (open).\nthe flashlight: (providing light).\nthe coin: .\n"
+          "TestOutput:": [
+            "the flower: (being worn).",
+            "the headlamp: (providing light and being worn).",
+            "the book of secrets: (closed and locked).",
+            "the book of wisdom: (open but empty).",
+            "the clutch: (open).",
+            "the purse: (open).",
+            "the flashlight: (providing light).",
+            "the coin: .",
+            ""
+          ]
         }
       ]
     },
@@ -77,7 +87,17 @@
       "TestStatement:test:": [
         "default inventory",
         {
-          "TestOutput:": "You are carrying:\n  - a book of secrets (closed and locked)\n  - a book of wisdom (open but empty)\n  - a clutch (open) \n    - a purse (open) \n      - a coin\n  - a flower (being worn)\n  - a headlamp (providing light and being worn)\n"
+          "TestOutput:": [
+            "You are carrying:",
+            "  - a book of secrets (closed and locked)",
+            "  - a book of wisdom (open but empty)",
+            "  - a clutch (open) ",
+            "    - a purse (open) ",
+            "      - a coin",
+            "  - a flower (being worn)",
+            "  - a headlamp (providing light and being worn)",
+            ""
+          ]
         }
       ]
     },

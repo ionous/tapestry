@@ -6,7 +6,7 @@
         "traveling",
         {
           "--": [
-            "Traveling take one argument: the door to travel through.",
+            "Traveling takes one argument: the door to travel through.",
             "Future: allow directions too"
           ],
           "CommonAction:": "door"
@@ -42,10 +42,10 @@
               [
                 {
                   "If:from:and:does:else:": [
-                    "result",
+                    "resp",
                     {
                       "FromTxt:": {
-                        "CanHandle actor:action:noun:": [
+                        "CanReach actor:action:noun:": [
                           "@actor",
                           {
                             "FromTxt:": "traveling"
@@ -56,39 +56,69 @@
                     },
                     {
                       "Not:": {
-                        "Is empty:": "@result"
+                        "Is empty:": "@resp"
                       }
                     },
                     [
                       {
-                        "Say:": "@result"
+                        "Say:": "@resp"
                       }
                     ],
                     {
                       "ElseDo does:": [
                         {
-                          "If:does:": [
+                          "If:from:and:does:else:": [
+                            "resp",
                             {
-                              "Send:event:": [
-                                {
-                                  "Capture obj:": "@noun"
-                                },
-                                {
-                                  "Travel actor:noun:": [
-                                    "@actor",
-                                    "@noun"
-                                  ]
-                                }
-                              ]
-                            },
-                            [
-                              {
-                                "ReportTraveling actor:noun:": [
+                              "FromTxt:": {
+                                "CanUse actor:action:noun:": [
                                   "@actor",
+                                  {
+                                    "FromTxt:": "traveling"
+                                  },
                                   "@noun"
                                 ]
                               }
-                            ]
+                            },
+                            {
+                              "Not:": {
+                                "Is empty:": "@resp"
+                              }
+                            },
+                            [
+                              {
+                                "Say:": "@resp"
+                              }
+                            ],
+                            {
+                              "ElseDo does:": [
+                                {
+                                  "If:does:": [
+                                    {
+                                      "Send:event:": [
+                                        {
+                                          "Capture obj:": "@noun"
+                                        },
+                                        {
+                                          "Travel actor:noun:": [
+                                            "@actor",
+                                            "@noun"
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    [
+                                      {
+                                        "ReportTraveling actor:noun:": [
+                                          "@actor",
+                                          "@noun"
+                                        ]
+                                      }
+                                    ]
+                                  ]
+                                }
+                              ]
+                            }
                           ]
                         }
                       ]
@@ -111,7 +141,7 @@
           {
             "With:event:rules:": [
               "while",
-              "travel",
+              "traveling",
               [
                 {
                   "PatternRule:does:": [
@@ -157,7 +187,7 @@
                               {
                                 "Log:": {
                                   "FromTxt:": {
-                                    "RenderTemplate:": "{The: .actor} is taking {the: .noun} ..."
+                                    "RenderTemplate:": "{The: .actor} is traveling via {the: .noun} ..."
                                   }
                                 }
                               },
@@ -256,11 +286,12 @@
     },
     {
       "Pattern:rules:": [
-        "can reach",
+        "can use",
         [
           {
             "PatternRule:does:": [
               {
+                "--": "can only travel to valid destinations",
                 "AllTrue:": [
                   {
                     "Cmp:is:txt:": [
@@ -272,33 +303,32 @@
                     ]
                   },
                   {
-                    "Cmp:is:txt:": [
-                      {
-                        "ParentOf obj:": "@actor"
-                      },
-                      {
-                        "Equals": true
-                      },
-                      {
-                        "LocationOf obj:": "@noun"
-                      }
-                    ]
+                    "Not:": {
+                      "KindOf:is:": [
+                        {
+                          "Get:from:": [
+                            "destination",
+                            {
+                              "ObjFields:": "@noun"
+                            }
+                          ]
+                        },
+                        "rooms"
+                      ]
+                    }
                   }
                 ]
               },
               [
-                {
-                  "Comment:": "Tell the player that they've already accomplished the goal they are trying to achieve ( vs. that they can't accomplish what they are trying to achieve. )"
-                },
                 {
                   "Let:be:": [
                     "response",
                     {
                       "FromTxt:": {
                         "Response:text:": [
-                          "can't travel what's already there",
+                          "can only travel to a destination",
                           {
-                            "RenderTemplate:": "{The: .noun|capitalize!} {are: .noun} already here.\""
+                            "RenderTemplate:": "{They: .noun|capitalize!} {dont:.noun} lead anywhere."
                           }
                         ]
                       }
@@ -322,12 +352,9 @@
                     ]
                   },
                   {
-                    "Cmp:is:txt:": [
-                      "@actor",
-                      {
-                        "Equals": true
-                      },
-                      "@noun"
+                    "Get obj:trait:": [
+                      "@noun",
+                      "closed"
                     ]
                   }
                 ]
@@ -339,9 +366,55 @@
                     {
                       "FromTxt:": {
                         "Response:text:": [
-                          "can't travel yourself",
+                          "can't travel through closed doors",
                           {
-                            "RenderTemplate:": "{We:|capitalize!} lack the dexterity."
+                            "RenderTemplate:": "{The: .noun|capitalize!} is closed."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      {
+                        "Equals": true
+                      },
+                      "traveling"
+                    ]
+                  },
+                  {
+                    "Get obj:trait:": [
+                      "@noun",
+                      "closed"
+                    ]
+                  },
+                  {
+                    "Get obj:trait:": [
+                      "@noun",
+                      "locked"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Let:be:": [
+                    "response",
+                    {
+                      "FromTxt:": {
+                        "Response:text:": [
+                          "can't travel through locked doors",
+                          {
+                            "RenderTemplate:": "{The: .noun|capitalize!} is locked."
                           }
                         ]
                       }

@@ -803,7 +803,10 @@
               },
               [
                 {
-                  "Comment:": "a. mentioned supporters\nthis prints \"on the...\" for any supporters mentioned by the scenery supporters rule or mentioned by the author."
+                  "Comment:": [
+                    "a. mentioned supporters",
+                    "this prints \"on the...\" for any supporters mentioned by the scenery supporters rule or mentioned by the author."
+                  ]
                 },
                 {
                   "PrintInlineStorage obj:": "@obj"
@@ -831,7 +834,10 @@
               },
               [
                 {
-                  "Comment:": "b. scenery supporters \nthis sets up supporters for use by the next rule in a way that's easy to disable by authors"
+                  "Comment:": [
+                    "b. scenery supporters ",
+                    "this sets up supporters for use by the next rule in a way that's easy to disable by authors"
+                  ]
                 },
                 {
                   "Mention obj:": "@obj"

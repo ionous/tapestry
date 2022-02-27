@@ -11,7 +11,16 @@
       "TestStatement:test:": [
         "activating test",
         {
-          "TestOutput:": "The control status: deactivated.\nYou switch on the espresso controls.\nThe control status: activated.\nYou switch off the espresso controls.\nThe control status: deactivated.\nTry to activate a regular object.\nIt isn't something you can switch on.\n"
+          "TestOutput:": [
+            "The control status: deactivated.",
+            "You switch on the espresso controls.",
+            "The control status: activated.",
+            "You switch off the espresso controls.",
+            "The control status: deactivated.",
+            "Try to activate a regular object.",
+            "It isn't something you can switch on.",
+            ""
+          ]
         }
       ]
     },

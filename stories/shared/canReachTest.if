@@ -4,7 +4,14 @@
       "TestStatement:test:": [
         "reach test",
         {
-          "TestOutput:": "okay: The espresso machine isn't open.\nokay: reached outside the open cabinet.\nokay: reached inside the open espresso machine.\nokay: The cabinet isn't open.\nokay: It isn't available.\n"
+          "TestOutput:": [
+            "okay: The espresso machine isn't open.",
+            "okay: reached outside the open cabinet.",
+            "okay: reached inside the open espresso machine.",
+            "okay: The cabinet isn't open.",
+            "okay: It isn't available.",
+            ""
+          ]
         }
       ]
     },

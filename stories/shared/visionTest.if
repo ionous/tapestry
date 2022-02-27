@@ -4,7 +4,14 @@
       "TestStatement:test:": [
         "vision testing",
         {
-          "TestOutput:": "ok: started in light.\nIt is now pitch dark in here!\nok: left in the dark.\nThe light, it burns.\nok: expected darkness.\n"
+          "TestOutput:": [
+            "ok: started in light.",
+            "It is now pitch dark in here!",
+            "ok: left in the dark.",
+            "The light, it burns.",
+            "ok: expected darkness.",
+            ""
+          ]
         }
       ]
     },

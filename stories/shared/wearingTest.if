@@ -4,7 +4,24 @@
       "TestStatement:test:": [
         "wearing test",
         {
-          "TestOutput:": "The flower's ogp: you, worn.\nFail to re-wear the flower:It is already worn.\nTake off the flower:You take off the flower.\nThe flower's newg: you, not_worn.\nFail to re-remove the flower:You aren't wearing that!\nWear the flower again:You put on the flower.\nThe flower's newg: you, worn.\nThe knife's parent: you, not_worn.\nFail to wear an unwearable:It isn't something you can put on.\nThe knife's parent: you, not_worn.\nThe purse's parent: the Kitchen, not_worn.\nFail to wear something not held:You haven't got that!\nFail to remove something not held:You haven't got that!\nFail to put on something not reachable:You haven't got that!\nThe purse's parent: the Kitchen, not_worn.\n"
+          "TestOutput:": [
+            "The flower's ogp: you, worn.",
+            "Fail to re-wear the flower:It is already worn.",
+            "Take off the flower:You take off the flower.",
+            "The flower's newg: you, not_worn.",
+            "Fail to re-remove the flower:You aren't wearing that!",
+            "Wear the flower again:You put on the flower.",
+            "The flower's newg: you, worn.",
+            "The knife's parent: you, not_worn.",
+            "Fail to wear an unwearable:It isn't something you can put on.",
+            "The knife's parent: you, not_worn.",
+            "The purse's parent: the Kitchen, not_worn.",
+            "Fail to wear something not held:You haven't got that!",
+            "Fail to remove something not held:You haven't got that!",
+            "Fail to put on something not reachable:You haven't got that!",
+            "The purse's parent: the Kitchen, not_worn.",
+            ""
+          ]
         }
       ]
     },

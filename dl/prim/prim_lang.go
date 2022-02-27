@@ -141,6 +141,81 @@ func Bool_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Bool) (err error) {
 	return
 }
 
+// Lines requires a user-specified string.
+type Lines struct {
+	Str string
+}
+
+func (op *Lines) String() string {
+	return op.Str
+}
+
+func (*Lines) Compose() composer.Spec {
+	return composer.Spec{
+		Name:        Lines_Type,
+		Uses:        composer.Type_Str,
+		OpenStrings: true,
+	}
+}
+
+const Lines_Type = "lines"
+
+func (op *Lines) Marshal(m jsn.Marshaler) error {
+	return Lines_Marshal(m, op)
+}
+
+func Lines_Optional_Marshal(m jsn.Marshaler, val *Lines) (err error) {
+	var zero Lines
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = Lines_Marshal(m, val)
+	}
+	return
+}
+
+func Lines_Marshal(m jsn.Marshaler, val *Lines) (err error) {
+	return m.MarshalValue(Lines_Type, &val.Str)
+}
+
+type Lines_Slice []Lines
+
+func (op *Lines_Slice) GetType() string { return Lines_Type }
+
+func (op *Lines_Slice) Marshal(m jsn.Marshaler) error {
+	return Lines_Repeats_Marshal(m, (*[]Lines)(op))
+}
+
+func (op *Lines_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Lines_Slice) SetSize(cnt int) {
+	var els []Lines
+	if cnt >= 0 {
+		els = make(Lines_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Lines_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Lines_Marshal(m, &(*op)[i])
+}
+
+func Lines_Repeats_Marshal(m jsn.Marshaler, vals *[]Lines) error {
+	return jsn.RepeatBlock(m, (*Lines_Slice)(vals))
+}
+
+func Lines_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Lines) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = Lines_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
 // Number requires a string.
 type Number struct {
 	Num float64
@@ -392,6 +467,7 @@ func Text_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Text) (err error) {
 
 var Slats = []composer.Composer{
 	(*Bool)(nil),
+	(*Lines)(nil),
 	(*Number)(nil),
 	(*Text)(nil),
 }

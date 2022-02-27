@@ -2,6 +2,7 @@ package cout
 
 import (
 	"errors"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
@@ -44,7 +45,13 @@ func unpack(pv interface{}) (ret interface{}) {
 	case interface{ GetValue() interface{} }:
 		ret = pv.GetValue()
 	default:
-		ret = pv
+		ret = pv // provisionally
+		if pstr, isString := pv.(*string); isString {
+			strs := strings.Split(*pstr, "\n")
+			if len(strs) > 1 {
+				ret = strs
+			}
+		}
 	}
 	return
 }
