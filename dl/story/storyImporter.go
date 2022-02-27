@@ -15,7 +15,6 @@ type Importer struct {
 	// sometimes the importer needs to define a singleton like type or instance
 	oneTime       map[string]bool
 	autoCounter   Counters
-	entireGame    string
 	env           StoryEnv
 	activityDepth int
 	writer        WriterFun
