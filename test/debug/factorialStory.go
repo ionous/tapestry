@@ -2,6 +2,7 @@ package debug
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
@@ -16,7 +17,7 @@ var FactorialStory = &story.Story{
 				},
 				Test: &story.TestOutput{
 					UserComment: "3! should equal 6",
-					Lines: story.Lines{
+					Lines: prim.Lines{
 						Str: "6",
 					}}},
 			&story.TestRule{
