@@ -16,6 +16,7 @@ import (
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/blockly/block"
 	"git.sr.ht/~ionous/tapestry/blockly/unblock"
+	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn"
@@ -273,7 +274,7 @@ func xformStory(tgt jsn.Marshalee) (err error) {
 // 	}
 // }
 
-func swap(tgt *string, from *story.Lines) {
+func swap(tgt *string, from *prim.Lines) {
 	if len(*tgt) == 0 {
 		*tgt = from.Str
 		from.Str = ""
