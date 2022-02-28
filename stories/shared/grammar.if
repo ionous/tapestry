@@ -241,7 +241,41 @@
       }
     },
     {
-      "--": ""
+      "--": "entering"
+    },
+    {
+      "GrammarDecl:": {
+        "Directive:scans:": [
+          [
+            "enter",
+            "cross",
+            "sit on",
+            "sit on top of",
+            "sit in",
+            "sit inside",
+            "stand on"
+          ],
+          [
+            {
+              "AnyOf:": [
+                {
+                  "AllOf:": [
+                    {
+                      "Noun:": "things"
+                    },
+                    {
+                      "As:": "entering"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "--": "examining"
     },
     {
       "GrammarDecl:": {
@@ -265,7 +299,7 @@
       }
     },
     {
-      "--": ""
+      "--": "getting in/from; taking"
     },
     {
       "GrammarDecl:": {
@@ -276,6 +310,37 @@
           [
             {
               "AnyOf:": [
+                {
+                  "AllOf:": [
+                    {
+                      "Words:": [
+                        "in",
+                        "on"
+                      ]
+                    },
+                    {
+                      "As:": "entering"
+                    }
+                  ]
+                },
+                {
+                  "AllOf:": [
+                    {
+                      "Words:": [
+                        "in",
+                        "into",
+                        "on",
+                        "onto"
+                      ]
+                    },
+                    {
+                      "Noun:": "things"
+                    },
+                    {
+                      "As:": "entering"
+                    }
+                  ]
+                },
                 {
                   "AllOf:": [
                     {
@@ -306,6 +371,54 @@
                     },
                     {
                       "As:": "taking"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "--": "go (enter)"
+    },
+    {
+      "GrammarDecl:": {
+        "Directive:scans:": [
+          [
+            "go",
+            "run",
+            "walk"
+          ],
+          [
+            {
+              "AnyOf:": [
+                {
+                  "AllOf:": [
+                    {
+                      "Words:": [
+                        "in",
+                        "into",
+                        "inside",
+                        "through"
+                      ]
+                    },
+                    {
+                      "Noun:": "things"
+                    },
+                    {
+                      "As:": "entering"
+                    }
+                  ]
+                },
+                {
+                  "AllOf:": [
+                    {
+                      "Noun:": "things"
+                    },
+                    {
+                      "As:": "entering"
                     }
                   ]
                 }

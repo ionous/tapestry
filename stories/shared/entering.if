@@ -2,11 +2,11 @@
   "Tapestry:": [
     {
       "Event:action:args common:": [
-        "travel",
-        "traveling",
+        "enter",
+        "entering",
         {
           "--": [
-            "Traveling takes one argument: the door to travel through.",
+            "Entering takes one argument: the door to travel through.",
             "Future: allow directions too"
           ],
           "CommonAction:": "door"
@@ -15,7 +15,7 @@
     },
     {
       "Pattern:provides:rules:": [
-        "traveling",
+        "entering",
         [
           {
             "--": "Get the actor from the agent.",
@@ -48,7 +48,7 @@
                         "CanReach actor:action:noun:": [
                           "@actor",
                           {
-                            "FromTxt:": "traveling"
+                            "FromTxt:": "entering"
                           },
                           "@noun"
                         ]
@@ -74,7 +74,7 @@
                                 "CanUse actor:action:noun:": [
                                   "@actor",
                                   {
-                                    "FromTxt:": "traveling"
+                                    "FromTxt:": "entering"
                                   },
                                   "@noun"
                                 ]
@@ -100,7 +100,7 @@
                                           "Capture obj:": "@noun"
                                         },
                                         {
-                                          "Travel actor:noun:": [
+                                          "Enter actor:noun:": [
                                             "@actor",
                                             "@noun"
                                           ]
@@ -109,7 +109,7 @@
                                     },
                                     [
                                       {
-                                        "ReportTraveling actor:noun:": [
+                                        "ReportEntering actor:noun:": [
                                           "@actor",
                                           "@noun"
                                         ]
@@ -141,7 +141,7 @@
           {
             "With:event:rules:": [
               "while",
-              "traveling",
+              "entering",
               [
                 {
                   "PatternRule:does:": [
@@ -187,7 +187,7 @@
                               {
                                 "Log:": {
                                   "FromTxt:": {
-                                    "RenderTemplate:": "{The: .actor} is traveling via {the: .noun} ..."
+                                    "RenderTemplate:": "{The: .actor} is entering via {the: .noun} ..."
                                   }
                                 }
                               },
@@ -217,7 +217,7 @@
     },
     {
       "Pattern:requires:": [
-        "report traveling",
+        "report entering",
         [
           {
             "Text named:of:": [
@@ -236,7 +236,7 @@
     },
     {
       "Pattern:rules:": [
-        "report traveling",
+        "report entering",
         [
           {
             "PatternRule:does:": [
@@ -299,7 +299,7 @@
                       {
                         "Equals": true
                       },
-                      "traveling"
+                      "entering"
                     ]
                   },
                   {
@@ -348,7 +348,7 @@
                       {
                         "Equals": true
                       },
-                      "traveling"
+                      "entering"
                     ]
                   },
                   {
@@ -368,7 +368,7 @@
                         "Response:text:": [
                           "can't travel through closed doors",
                           {
-                            "RenderTemplate:": "{The: .noun|capitalize!} is closed."
+                            "RenderTemplate:": "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be closed."
                           }
                         ]
                       }
@@ -388,7 +388,7 @@
                       {
                         "Equals": true
                       },
-                      "traveling"
+                      "entering"
                     ]
                   },
                   {
@@ -414,7 +414,7 @@
                         "Response:text:": [
                           "can't travel through locked doors",
                           {
-                            "RenderTemplate:": "{The: .noun|capitalize!} is locked."
+                            "RenderTemplate:": "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
                           }
                         ]
                       }

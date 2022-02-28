@@ -293,7 +293,7 @@
                         "Response:text:": [
                           "can't open when locked",
                           {
-                            "RenderTemplate:": "{They: .noun|capitalize!} seems to be locked."
+                            "RenderTemplate:": "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
                           }
                         ]
                       }

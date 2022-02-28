@@ -38,7 +38,7 @@
               },
               [
                 {
-                  "--": "Determine the grouping values for each object",
+                  "--": "Determine the grouping values, one for for each object.",
                   "Map:fromList:using:": [
                     "groupings",
                     "@objs",
@@ -46,7 +46,7 @@
                   ]
                 },
                 {
-                  "--": "Separate the objects based on their grouping values.",
+                  "--": "Separate the objects based on their grouping values, one for each group.",
                   "Reduce into:fromList:using:": [
                     "groups",
                     "@groupings",

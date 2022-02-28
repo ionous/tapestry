@@ -682,12 +682,17 @@
                             },
                             {
                               "If:does:": [
-                                {
+                                {"AllTrue:": [{
                                   "Get obj:trait:": [
                                     "@it",
                                     "not mentioned"
                                   ]
-                                },
+                                },{
+                                  "Get obj:trait:": [
+                                    "@it",
+                                    "not scenery"
+                                  ]
+                                }]},
                                 [
                                   {
                                     "Put:into:": [

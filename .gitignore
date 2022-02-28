@@ -6,6 +6,8 @@ cmd/asm/asm
 cmd/atlas/atlas
 cmd/bgen/bgen
 cmd/chart/chart
+cmd/chart/chart.dot
+cmd/chart/chart.png
 cmd/check/check
 cmd/compact/compact
 cmd/compose/compose
