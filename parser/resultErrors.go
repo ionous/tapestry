@@ -62,7 +62,7 @@ func (a MissingObject) Error() string {
 	return errutil.Sprintf("missing an object at %d", a.Depth)
 }
 func (NoSuchObjects) Error() string {
-	return "you cant see any such things"
+	return "You can't see any such things."
 }
 func (Overflow) Error() string {
 	return "too many words"
@@ -71,5 +71,5 @@ func (Underflow) Error() string {
 	return "too few words"
 }
 func (UnknownObject) Error() string {
-	return "you can't see any such thing"
+	return "You can't see any such thing."
 }

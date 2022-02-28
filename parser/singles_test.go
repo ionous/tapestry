@@ -3,6 +3,7 @@ package parser_test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/parser"
 	"github.com/ionous/sliceOf"
 )
 
@@ -59,10 +60,13 @@ func TestParser(t *testing.T) {
 			}
 		}
 	})
-	t.Run("look no dir", func(t *testing.T) {
+	// note: changed the errors to return the last one of the deepest depth
+	// rather than the first one. most of the time that seems to make more sense.
+	t.Run("look something", func(t *testing.T) {
 		e := parse(t, ctx, grammar,
 			Phrases("look something"),
-			&ErrorGoal{"too many words"})
+			// &ErrorGoal{"too many words"})
+			&ErrorGoal{parser.MismatchedWord{"under", "something", 1}.Error()})
 		if e != nil {
 			t.Fatal(e)
 		}

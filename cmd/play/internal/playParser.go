@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -65,7 +66,8 @@ func (p *Parser) Step(words string) (ret *Result, err error) {
 		// case parser.Underflow:
 
 		// "you can't see any such thing"
-		// case parser.UnknownObject:
+		case parser.UnknownObject:
+			fmt.Println(e)
 
 		case nil:
 			switch res := res.(type) {

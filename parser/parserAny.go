@@ -17,8 +17,8 @@ func (m *AnyOf) Scan(ctx Context, bounds Bounds, cs Cursor) (ret Result, err err
 			if res, e := m.Match[i].Scan(ctx, bounds, cs); e == nil {
 				ret, err = res, nil
 				break
-			} else if d := DepthOf(e); d > errorDepth {
-				err, errorDepth = e, d
+			} else if d := DepthOf(e); d >= errorDepth {
+				err, errorDepth = e, d // we track the "deepest" / latest error.
 				// keep looking for success
 			}
 		}

@@ -35,8 +35,8 @@ func (a *Target) Scan(ctx Context, bounds Bounds, start Cursor) (ret Result, err
 	// scan ahead for matches and determine how many words might match this target.
 	for cs := start; len(cs.CurrentWord()) > 0; cs = cs.Skip(1) {
 		if rl, e := scanAllOf(ctx, bounds, cs, rest); e != nil {
-			// like anyOf, we track the "deepest" error.
-			if d := DepthOf(e); d > errorDepth {
+			// like anyOf, we track the "deepest" / latest error.
+			if d := DepthOf(e); d >= errorDepth {
 				err, errorDepth = e, d
 			}
 			continue // keep looking for success

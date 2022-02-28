@@ -77,7 +77,7 @@ func TestFocus(t *testing.T) {
 	t.Run("drop error", func(t *testing.T) {
 		e := parse(t, ctx, grammar,
 			Phrases("drop cart"),
-			&ErrorGoal{"you can't see any such thing"})
+			&ErrorGoal{"You can't see any such thing."})
 		if e != nil {
 			t.Fatal("expected an error")
 		}
