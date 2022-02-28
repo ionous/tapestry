@@ -34,10 +34,12 @@ const (
 // ex. go run asm.go -in /Users/ionous/Documents/Tapestry/stories/shared -out /Users/ionous/Documents/Tapestry/build/play.db
 func main() {
 	var srcPath, outFile string
-	var check bool
+	var checkAll bool
+	var checkOne string
 	flag.StringVar(&srcPath, "in", "", "input file or directory name (json)")
 	flag.StringVar(&outFile, "out", "", "optional output filename (sqlite3)")
-	flag.BoolVar(&check, "check", false, "run check after importing?")
+	flag.BoolVar(&checkAll, "check", false, "run check after importing?")
+	flag.StringVar(&checkOne, "run", "", "run check on one test after importing?")
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
 	// var printStories bool
 	// printStories:= flag.Bool("log", false, "write imported stories to console")
@@ -67,8 +69,8 @@ func main() {
 		log.Println("assembling....")
 		if e := Assemble(&cat, outFile); e != nil {
 			log.Fatalln(e)
-		} else if check {
-			if cnt, e := checkFile(outFile); e != nil {
+		} else if checkAll || len(checkOne) > 0 {
+			if cnt, e := checkFile(outFile, checkOne); e != nil {
 				log.Fatalln(e)
 			} else {
 				log.Println("Checked", cnt, outFile)
@@ -77,7 +79,7 @@ func main() {
 	}
 }
 
-func checkFile(inFile string) (ret int, err error) {
+func checkFile(inFile, testName string) (ret int, err error) {
 	if db, e := sql.Open(tables.DefaultDriver, inFile); e != nil {
 		err = errutil.New("couldn't open db", inFile, e)
 	} else {
@@ -85,9 +87,8 @@ func checkFile(inFile string) (ret int, err error) {
 		if e := tables.CreateRun(db); e != nil {
 			err = e
 		} else {
-			filter := ""
 			opt := qna.NewOptions()
-			ret, err = qna.CheckAll(db, filter, opt, tapestry.AllSignatures)
+			ret, err = qna.CheckAll(db, testName, opt, tapestry.AllSignatures)
 		}
 	}
 	return
