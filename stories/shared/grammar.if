@@ -241,7 +241,7 @@
       }
     },
     {
-      "--": "entering"
+      "--": "traveling"
     },
     {
       "GrammarDecl:": {
@@ -264,7 +264,7 @@
                       "Noun:": "things"
                     },
                     {
-                      "As:": "entering"
+                      "As:": "traveling"
                     }
                   ]
                 }
@@ -319,7 +319,7 @@
                       ]
                     },
                     {
-                      "As:": "entering"
+                      "As:": "traveling"
                     }
                   ]
                 },
@@ -337,7 +337,7 @@
                       "Noun:": "things"
                     },
                     {
-                      "As:": "entering"
+                      "As:": "traveling"
                     }
                   ]
                 },
@@ -408,7 +408,7 @@
                       "Noun:": "things"
                     },
                     {
-                      "As:": "entering"
+                      "As:": "traveling"
                     }
                   ]
                 },
@@ -418,7 +418,7 @@
                       "Noun:": "things"
                     },
                     {
-                      "As:": "entering"
+                      "As:": "traveling"
                     }
                   ]
                 }

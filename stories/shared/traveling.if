@@ -3,10 +3,10 @@
     {
       "Event:action:args common:": [
         "enter",
-        "entering",
+        "traveling",
         {
           "--": [
-            "Entering takes one argument: the door to travel through.",
+            "Traveling takes one argument: the door to travel through.",
             "Future: allow directions too"
           ],
           "CommonAction:": "door"
@@ -15,7 +15,7 @@
     },
     {
       "Pattern:provides:rules:": [
-        "entering",
+        "traveling",
         [
           {
             "--": "Get the actor from the agent.",
@@ -48,7 +48,7 @@
                         "CanReach actor:action:noun:": [
                           "@actor",
                           {
-                            "FromTxt:": "entering"
+                            "FromTxt:": "traveling"
                           },
                           "@noun"
                         ]
@@ -74,7 +74,7 @@
                                 "CanUse actor:action:noun:": [
                                   "@actor",
                                   {
-                                    "FromTxt:": "entering"
+                                    "FromTxt:": "traveling"
                                   },
                                   "@noun"
                                 ]
@@ -109,7 +109,7 @@
                                     },
                                     [
                                       {
-                                        "ReportEntering actor:noun:": [
+                                        "ReportTraveling actor:noun:": [
                                           "@actor",
                                           "@noun"
                                         ]
@@ -141,7 +141,7 @@
           {
             "With:event:rules:": [
               "while",
-              "entering",
+              "traveling",
               [
                 {
                   "PatternRule:does:": [
@@ -187,7 +187,7 @@
                               {
                                 "Log:": {
                                   "FromTxt:": {
-                                    "RenderTemplate:": "{The: .actor} is entering via {the: .noun} ..."
+                                    "RenderTemplate:": "{The: .actor} is traveling via {the: .noun} ..."
                                   }
                                 }
                               },
@@ -217,7 +217,7 @@
     },
     {
       "Pattern:requires:": [
-        "report entering",
+        "report traveling",
         [
           {
             "Text named:of:": [
@@ -236,7 +236,7 @@
     },
     {
       "Pattern:rules:": [
-        "report entering",
+        "report traveling",
         [
           {
             "PatternRule:does:": [
@@ -299,7 +299,7 @@
                       {
                         "Equals": true
                       },
-                      "entering"
+                      "traveling"
                     ]
                   },
                   {
@@ -348,7 +348,7 @@
                       {
                         "Equals": true
                       },
-                      "entering"
+                      "traveling"
                     ]
                   },
                   {
@@ -388,7 +388,7 @@
                       {
                         "Equals": true
                       },
-                      "entering"
+                      "traveling"
                     ]
                   },
                   {

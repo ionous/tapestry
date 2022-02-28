@@ -22,7 +22,7 @@
               "what we want therefore is to execute input from the player instead",
               "so that we can get a 'im sorry dave'",
               "maybe a separate kind of test that (intersperses?) commands and expected output",
-              "{ 'Entering agent:noun:': [{'FromTxt:': 'player'},{'FromTxt:': 'red door'} ]}"
+              "{ 'Traveling agent:noun:': [{'FromTxt:': 'player'},{'FromTxt:': 'red door'} ]}"
             ],
       "TestRule:does:": [
         "traversal", [
@@ -33,7 +33,7 @@
             }
         },
           {
-            "Entering agent:noun:": [
+            "Traveling agent:noun:": [
             {
               "FromTxt:": "player"
             },
@@ -42,7 +42,7 @@
             }
         ]},
         {
-          "Entering agent:noun:": [
+          "Traveling agent:noun:": [
             {
               "FromTxt:": "player"
             },
@@ -60,7 +60,7 @@
             }
           ]
         },{
-          "Entering agent:noun:": [
+          "Traveling agent:noun:": [
             {
               "FromTxt:": "player"
             },
