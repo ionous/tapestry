@@ -101,7 +101,7 @@ func (dec *xDecoder) readSlot(slot jsn.SlotBlock, msg json.RawMessage) (okay boo
 			dec.Error(e)
 		} else if op, e := ReadOp(msg); e != nil {
 			dec.Error(e)
-		} else if v, e := dec.NewFromSignature(op.Key); e != nil {
+		} else if v, e := dec.NewFromSignature(op.Sig); e != nil {
 			dec.Error(e)
 		} else {
 			//should we be doing this on "OnCommit" instead of before the contents of the slat have been read?
@@ -124,7 +124,7 @@ func (dec *xDecoder) readFullSwap(p jsn.SwapBlock, msg json.RawMessage) (okay bo
 	} else if sig, args, e := op.ReadMsg(); e != nil {
 		dec.Error(e)
 	} else if len(sig.Params) != 1 || len(sig.Params[0].Choice) > 0 {
-		dec.Error(errutil.New("expected exactly one choice in", op.Key))
+		dec.Error(errutil.New("expected exactly one choice in", op.Sig))
 	} else {
 		pick := newStringKey(sig.Params[0].Label)
 		if ok := p.SetSwap(pick); !ok {

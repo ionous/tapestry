@@ -33,6 +33,7 @@ func decode(dst jsn.Marshalee, msg json.RawMessage, reg cin.TypeCreator) error {
 func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage) (err error) {
 	if err = core.CompactSlotDecoder(m, slot, msg); err != nil {
 		// keep this as the provisional error unless we figure out something else
+		// ( important so that callers can see the original unhandled value if any )
 		var unhandled chart.Unhandled
 		if errors.As(err, &unhandled) {
 			switch typeName := slot.GetType(); typeName {
@@ -45,31 +46,36 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 				rt.NumListEval_Type,
 				rt.TextListEval_Type,
 				rt.RecordListEval_Type:
-				//
+				// read the command as if it were a standard compact encoded golang struct.
+				// ( at this point, we can overwrite the unhandled error since we are trying to handle it. )
 				if op, e := cin.ReadOp(msg); e != nil {
-					err = e // if we cant parse it, the regular compact marshal isn't going to be able to either.
-				} else if reg := m.(cin.TypeCreator); !reg.HasType(op.Key) {
+					err = e
+				} else if reg := m.(cin.TypeCreator); !reg.HasType(op.Sig) {
+					// if we didn't find it, then we'll treat it as a pattern call.
+					// ( it will error out later in assembly if no such pattern exists )
 					if sig, args, e := op.ReadMsg(); e != nil {
 						err = e
 					} else {
 						out := &core.CallPattern{Pattern: core.PatternName{sig.Name}}
-						if len(sig.Params) > 0 {
-							var call []rt.Arg
-							for i, p := range sig.Params {
-								var ptr rt.Assignment
-								if e := decode(rt.Assignment_Slot{&ptr}, args[i], reg); e != nil {
-									err = e
-									break
-								} else {
-									call = append(call, rt.Arg{Name: p.Label, From: ptr})
-								}
+						var call []rt.Arg
+						for i, p := range sig.Params {
+							var ptr rt.Assignment
+							if e := decode(rt.Assignment_Slot{&ptr}, args[i], reg); e != nil {
+								err = e
+								break
+							} else {
+								call = append(call, rt.Arg{Name: p.Label, From: ptr})
 							}
-							out.Arguments = call
 						}
-						if !slot.SetSlot(out) {
-							err = errutil.New("unexpected error setting slot")
-						} else {
-							err = nil // good to go,
+						if len(sig.Params) == len(call) {
+							out.Arguments = call
+							if slot.SetSlot(out) {
+								err = nil // good to go
+							} else {
+								// we tried handle the command, parsed it even, but failed to assign it:
+								// report that back as an error.
+								err = errutil.New("unexpected error setting slot")
+							}
 						}
 					}
 				}

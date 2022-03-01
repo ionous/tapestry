@@ -7,16 +7,17 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// Op represents a partial decoding of a command in the compact format.
+// ex. {"Sig:":  <Msg>, "--": "Cmt"}
+// ( note: the registry uses the raw signature without additional processing to find associated golang struct )
 type Op struct {
-	Key string          // unparsed signature
+	Sig string          // raw signature containing one or more colon separators
 	Cmt string          // comment from "--" fields
 	Msg json.RawMessage // probably an array of values
 }
 
-// ex. {"Story:":  [...]}
-// except note that literals are stored as a single literal value;
-// functions with one parameter dont use the array, and
-// functions without parameters are stored as simple strings.
+// ReadOp - interpret the passed json as the start of a compact command.
+// fix? replace this with a custom implementation of json.Unmarshaler ( UnmarshalJSON() )
 func ReadOp(msg json.RawMessage) (ret Op, err error) {
 	var d map[string]json.RawMessage
 	if e := json.Unmarshal(msg, &d); e != nil {
@@ -27,13 +28,16 @@ func ReadOp(msg json.RawMessage) (ret Op, err error) {
 	return
 }
 
+// ReadMsg - given a valid Op, split out its call signature and associated parameters.
+// Errors if the number of separators in its sig differs from the the number of parameters in its msg.
 func (op *Op) ReadMsg() (retSig Signature, retArgs []json.RawMessage, err error) {
-	// we allow ( require really ) single arguments to be stored directly
-	// rather than embedded in an array
-	// to make it optional, we'd really need a parallel parser to attempt to interpret the argument bytes in multiple ways.
-	if sig, e := ReadSignature(op.Key); e != nil {
+	if sig, e := ReadSignature(op.Sig); e != nil {
 		err = e
 	} else {
+		// we *require* that single arguments get stored directly ( rather than embedded in an array. )
+		// ideally it would be optional, but it gets a bit weird when the single argument is itself an array.
+		// there's no way to distinguish that case without knowing the desired format of the argument ( and we dont here. )
+		// fix? maybe the cout should always use an array.... it just seemed verbose at the time.
 		var args []json.RawMessage
 		pn := len(sig.Params)
 		if pn == 1 {
@@ -67,19 +71,19 @@ func parseOp(d map[string]json.RawMessage) (ret Op, err error) {
 				}
 				out.Cmt = strings.Join(lines, "\n")
 			}
-		} else if len(out.Key) > 0 {
+		} else if len(out.Sig) > 0 {
 			err = errutil.New("expected only a single key", d)
 			break
 		} else {
-			out.Key, out.Msg = k, v
+			out.Sig, out.Msg = k, v
 			continue // keep going to catch errors
 		}
 	}
 	if err == nil {
 		// in the case that there was no command but there was a comment marker
 		// let the command *be* the comment marker
-		if len(out.Key) == 0 && hadComment {
-			out.Key = commentMarker
+		if len(out.Sig) == 0 && hadComment {
+			out.Sig = commentMarker
 		}
 		ret = out
 	}
