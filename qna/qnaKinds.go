@@ -5,6 +5,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/generic"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"github.com/ionous/errutil"
 )
 
@@ -48,12 +49,30 @@ func (run *Runner) buildKind(k string) (ret cachedKind, err error) {
 	} else if fs, e := run.getFieldSet(k, path); e != nil {
 		err = errutil.Fmt("error while building kind %q, %w", k, e)
 	} else {
-		// fix? this is maybe a little odd... because when the domain changes, so will the kinds
-		// ( unless maybe we precache them all or change kind query to use a fixed (set of) domains
-		//   and record the domain into the cache; and/or build an in memory tree of kinds as a cache. )
-		kinds := generic.Kinds(run)
-		kind := g.NewKind(kinds, k, path, fs.fields)
-		ret = cachedKind{kind, fs.init}
+		// fix? kinds and fields can be zero for both empty kinds and non-existent kinds
+		// this tries to figure out which is which to properly report errors
+		// ideally, this could be done at query time.
+		var okay bool
+		if len(path) > 0 || len(fs.fields) > 0 {
+			okay = true
+		} else {
+			for _, x := range kindsOf.DefaultKinds {
+				if k == x.String() {
+					okay = true
+					break
+				}
+			}
+		}
+		if !okay {
+			err = errutil.New("no such kind", k)
+		} else {
+			// fix? this is maybe a little odd... because when the domain changes, so will the kinds
+			// ( unless maybe we precache them all or change kind query to use a fixed (set of) domains
+			//   and record the domain into the cache; and/or build an in memory tree of kinds as a cache. )
+			kinds := generic.Kinds(run)
+			kind := g.NewKind(kinds, k, path, fs.fields)
+			ret = cachedKind{kind, fs.init}
+		}
 	}
 	return
 }
