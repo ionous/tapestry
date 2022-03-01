@@ -7,6 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -14,7 +15,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry"
 	play "git.sr.ht/~ionous/tapestry/cmd/play/internal"
-	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -28,14 +28,17 @@ import (
 // go run play.go -in /Users/ionous/Documents/Tapestry/build/play.db -scene kitchenette
 func main() {
 	var inFile, testString, domain string
-	var json bool
+	var json, debugging bool
 	flag.StringVar(&inFile, "in", "", "input file name (sqlite3)")
 	flag.StringVar(&domain, "scene", "tapestry", "scene to start playing")
 	flag.StringVar(&testString, "test", "", "optional list of commands to run (non-interactive)")
 	flag.BoolVar(&json, "json", false, "expect input/output in json (default is plain text)")
+	flag.BoolVar(&debugging, "debug", false, "extra debugging output?")
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
 	flag.Parse()
-	debug.LogLevel = debug.LoggingLevel{debug.LoggingLevel_Warning}
+	if !debugging {
+		log.SetOutput(ioutil.Discard)
+	}
 
 	if cnt, e := playGame(inFile, testString, domain, json); e != nil {
 		errutil.PrintErrors(e, func(s string) { log.Println(s) })
