@@ -14,7 +14,7 @@ func (op *RelativeOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 		ret = g.Empty
 	} else {
 		noun, rel := a, op.Via
-		if vs, e := run.ReciprocalsOf(noun, rel.String()); e != nil {
+		if vs, e := run.RelativesOf(noun, rel.String()); e != nil {
 			err = cmdError(op, e)
 		} else if cnt := vs.Len(); cnt > 1 {
 			e := errutil.New("expected at most one relative for", noun, "in", rel)
