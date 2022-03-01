@@ -1,6 +1,6 @@
 {
   "Tapestry:": [
-     {
+    {
       "TestStatement:test:": [
         "traversal",
         {
@@ -10,65 +10,69 @@
             "It doesn't lead anywhere.",
             "They seem to be closed.",
             "You open the double doors.",
-            "traveled.",
-            ""
+            "Foyer.",
+            "You can see a curtain."
           ]
         }
       ]
     },
     {
-      "--":     [
-              "fix: running commands on invalid nouns causes an error",
-              "what we want therefore is to execute input from the player instead",
-              "so that we can get a 'im sorry dave'",
-              "maybe a separate kind of test that (intersperses?) commands and expected output",
-              "{ 'Traveling agent:noun:': [{'FromTxt:': 'player'},{'FromTxt:': 'red door'} ]}"
-            ],
+      "--": [
+        "fix: running commands on invalid nouns causes an error",
+        "what we want therefore is to execute input from the player instead",
+        "so that we can get a 'im sorry dave'",
+        "maybe a separate kind of test that (intersperses?) commands and expected output",
+        "{ 'Traveling agent:noun:': [{'FromTxt:': 'player'},{'FromTxt:': 'red door'} ]}"
+      ],
       "TestRule:does:": [
-        "traversal", [
+        "traversal",
+        [
           {
-            "looking agent:": 
-            {
+            "Looking agent:": {
               "FromTxt:": "player"
             }
-        },
+          },
           {
             "Traveling agent:noun:": [
-            {
-              "FromTxt:": "player"
-            },
-            {
-              "FromTxt:": "faux door"
-            }
-        ]},
-        {
-          "Traveling agent:noun:": [
-            {
-              "FromTxt:": "player"
-            },
-            {
-              "FromTxt:": "double doors"
-            }
-          ]
-        },{
-          "Opening agent:noun:": [
-            {
-              "FromTxt:": "player"
-            },
-            {
-              "FromTxt:": "double doors"
-            }
-          ]
-        },{
-          "Traveling agent:noun:": [
-            {
-              "FromTxt:": "player"
-            },
-            {
-              "FromTxt:": "double doors"
-            }
-          ]
-        }]
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "faux door"
+              }
+            ]
+          },
+          {
+            "Traveling agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "double doors"
+              }
+            ]
+          },
+          {
+            "Opening agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "double doors"
+              }
+            ]
+          },
+          {
+            "Traveling agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "double doors"
+              }
+            ]
+          }
+        ]
       ]
     },
     {
@@ -172,31 +176,31 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "parapet"
+                    "Parapet"
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "foyer"
+                    "Foyer"
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "cloak room"
+                    "Cloak Room"
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "basement"
+                    "Basement"
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "outside"
+                    "Outside"
                   ]
                 }
               ],
@@ -349,11 +353,12 @@
         ]
       ]
     },
-   
-    {"--": [
-      "fix: currently values are not scoped, so we can't easily test a locked/closed door yet",
-      "once either that is done, or commencement or scene activation events, we could hook that to lock the door.",
-      "we could also test unlocking the door via a player command once the lock/unlocking actions exist."
-    ]}
+    {
+      "--": [
+        "fix: currently values are not scoped, so we can't easily test a locked/closed door yet",
+        "once either that is done, or commencement or scene activation events, we could hook that to lock the door.",
+        "we could also test unlocking the door via a player command once the lock/unlocking actions exist."
+      ]
+    }
   ]
 }

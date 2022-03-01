@@ -2,7 +2,7 @@
   "Tapestry:": [
     {
       "Event:action:args common:": [
-        "enter",
+        "travel",
         "traveling",
         {
           "--": [
@@ -27,6 +27,21 @@
                   "pawn",
                   {
                     "VarFields:": "agent"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "--": "Get the destination from the door.",
+            "Text named:of:initially:": [
+              "destination",
+              "room",
+              {
+                "Get:from:": [
+                  "destination",
+                  {
+                    "VarFields:": "noun"
                   }
                 ]
               }
@@ -71,12 +86,13 @@
                             "resp",
                             {
                               "FromTxt:": {
-                                "CanUse actor:action:noun:": [
+                                "CanUse actor:action:noun:otherNoun:": [
                                   "@actor",
                                   {
                                     "FromTxt:": "traveling"
                                   },
-                                  "@noun"
+                                  "@noun",
+                                  "@destination"
                                 ]
                               }
                             },
@@ -100,7 +116,7 @@
                                           "Capture obj:": "@noun"
                                         },
                                         {
-                                          "Enter actor:noun:": [
+                                          "Travel actor:noun:": [
                                             "@actor",
                                             "@noun"
                                           ]
@@ -139,9 +155,24 @@
         "things",
         [
           {
-            "With:event:rules:": [
+            "With:event:provides:rules:": [
               "while",
-              "traveling",
+              "travel",
+              [{
+                "--": "Get the destination from the door.",
+                "Text named:of:initially:": [
+                  "destination",
+                  "room",
+                  {
+                    "Get:from:": [
+                      "destination",
+                      {
+                        "VarFields:": "noun"
+                      }
+                    ]
+                  }
+                ]
+              }],
               [
                 {
                   "PatternRule:does:": [
@@ -155,12 +186,8 @@
                           {
                             "FromTxt:": {
                               "MoveObject obj:dest:": [
-                                "@noun",
-                                {
-                                  "FromTxt:": {
-                                    "ParentOf obj:": "@actor"
-                                  }
-                                }
+                                "@actor",
+                                "@destination"
                               ]
                             }
                           },
@@ -187,7 +214,7 @@
                               {
                                 "Log:": {
                                   "FromTxt:": {
-                                    "RenderTemplate:": "{The: .actor} is traveling via {the: .noun} ..."
+                                    "RenderTemplate:": "{The: .actor} {are: .actor} traveling to {the: .destination} via {the: .noun} ..."
                                   }
                                 }
                               },
@@ -245,14 +272,21 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player travels",
-                      {
-                        "RenderTemplate:": "traveled."
+                  "PrintVantage where:inDarkness:": [
+                    {
+                      "FromTxt:": {
+                        "ParentOf obj:": "@actor"
                       }
-                    ]
-                  }
+                    },
+                    {
+                      "Get:from:": [
+                        "is in darkness",
+                        {
+                          "VarFields:": "actor"
+                        }
+                      ]
+                    }
+                  ]
                 }
               ]
             ]
@@ -305,14 +339,7 @@
                   {
                     "Not:": {
                       "KindOf:is:": [
-                        {
-                          "Get:from:": [
-                            "destination",
-                            {
-                              "ObjFields:": "@noun"
-                            }
-                          ]
-                        },
+                        "@other noun",
                         "rooms"
                       ]
                     }

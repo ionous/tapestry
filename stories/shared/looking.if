@@ -158,6 +158,13 @@
               },
               [
                 {
+                  "Log:": {
+                    "FromTxt:": {
+                      "RenderTemplate:": "print vantage: from:{.where}"
+                    }
+                  }
+                },
+                {
                   "SetEverythingUnmentioned": true
                 },
                 {
@@ -682,17 +689,22 @@
                             },
                             {
                               "If:does:": [
-                                {"AllTrue:": [{
-                                  "Get obj:trait:": [
-                                    "@it",
-                                    "not mentioned"
+                                {
+                                  "AllTrue:": [
+                                    {
+                                      "Get obj:trait:": [
+                                        "@it",
+                                        "not mentioned"
+                                      ]
+                                    },
+                                    {
+                                      "Get obj:trait:": [
+                                        "@it",
+                                        "not scenery"
+                                      ]
+                                    }
                                   ]
-                                },{
-                                  "Get obj:trait:": [
-                                    "@it",
-                                    "not scenery"
-                                  ]
-                                }]},
+                                },
                                 [
                                   {
                                     "Put:into:": [
