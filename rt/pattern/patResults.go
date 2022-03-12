@@ -11,14 +11,15 @@ import (
 // track the number of times a particular field gets successfully written to.
 // implements rt.Scope
 type Results struct {
-	rec                  *g.Record
-	resultField          string
-	expectedAff          affine.Affinity
-	resultSets, ranCount int
-	ranFlags             rt.Flags
+	rec         *g.Record
+	resultField string          // variable name for the result of the pattern (if any)
+	expectedAff affine.Affinity // the type of the result
+	resultCount int             // number of times the result field was written to
+	currRules   int             // number of rules that were run
+	currFlags   rt.Flags        // which phases have run, still have to run?
 }
 
-// fix; itd be nice at least to cleanout expectedAff if possible.
+// fix. itd be nice at least to cleanout expectedAff if possible.
 func NewResults(run rt.Runtime, name string, res string, aff affine.Affinity, parts []string, args []rt.Arg) (ret *Results, err error) {
 	if rec, e := newPattern(run, name, parts, args); e != nil {
 		err = e
@@ -48,7 +49,7 @@ func (rw *Results) SetFieldByName(field string, val g.Value) (err error) {
 	if e := rw.rec.SetNamedField(field, val); e != nil {
 		err = e
 	} else if field == rw.resultField {
-		rw.resultSets++
+		rw.resultCount++
 	}
 	return
 }
@@ -73,13 +74,13 @@ func (rw *Results) ComputedResult() bool {
 	// did it compute a result; or -- if it wasnt expecting a result -- did at least something happen?
 	// fix: right now aff is coming from the caller. that seems wrong.
 	// why cant the caller just safe.Check the result is what they want.
-	return rw.resultSets > 0 || (len(rw.expectedAff) == 0 && rw.ranCount > 0)
+	return rw.resultCount > 0 || (len(rw.expectedAff) == 0 && rw.currRules > 0)
 }
 
 func (rw *Results) reset() {
-	rw.resultSets = 0
-	rw.ranCount = 0
-	rw.ranFlags = 0
+	rw.resultCount = 0
+	rw.currRules = 0
+	rw.currFlags = 0
 }
 
 // GetResult returns a default value if none was computed.
@@ -90,7 +91,7 @@ func (rw *Results) GetResult() (ret g.Value, err error) {
 		if aff == affine.Bool {
 			// should it be any rule? just the infix rule?
 			// probably always using a return flag would be best.
-			ret = g.BoolOf(rw.ranFlags&rt.Infix != 0)
+			ret = g.BoolOf(rw.currFlags&rt.Infix != 0)
 		} else if len(aff) != 0 {
 			err = errutil.New("caller expected", aff, "returned nothing")
 		}
@@ -131,19 +132,19 @@ func (rw *Results) ApplyRules(run rt.Runtime, rules []rt.Rule, flags rt.Flags) (
 	return
 }
 
-// ApplyRule - note: assumes whatever scope is needed to run the pattern has already been setup.
+// ApplyRule - assumes whatever scope is needed to run the pattern has already been setup.
 // returns remaining flags.
 func (rw *Results) ApplyRule(run rt.Runtime, rule rt.Rule, flags rt.Flags) (ret rt.Flags, err error) {
-	resultSets := rw.resultSets // check if rule changes this.
-	if ranFlag, e := ApplyRule(run, rule, flags); e != nil {
+	resultCount := rw.resultCount // check if rule changes this.
+	if ranFlag, e := apply(run, rule, flags); e != nil {
 		err = errutil.New(e, "while applying", rule.Name)
 	} else {
 		var didSomething bool
 		if ranFlag != 0 {
-			rw.ranCount++
-			rw.ranFlags |= ranFlag
+			rw.currRules++
+			rw.currFlags |= ranFlag
 			// did the rule return a value ( or did it run and doesn't expect an explicit return )
-			didSomething = len(rw.resultField) == 0 || rw.resultSets > resultSets
+			didSomething = len(rw.resultField) == 0 || rw.resultCount > resultCount
 		}
 		//
 		if !didSomething {
@@ -158,11 +159,14 @@ func (rw *Results) ApplyRule(run rt.Runtime, rule rt.Rule, flags rt.Flags) (ret 
 }
 
 // return the flags of the rule if it ran; even if it didnt return anything.
-func ApplyRule(run rt.Runtime, rule rt.Rule, allow rt.Flags) (ret rt.Flags, err error) {
-	if flags := rule.Flags(); (allow&flags != 0) || (flags&rt.Filter != 0) { // Filter means run always
+func apply(run rt.Runtime, rule rt.Rule, allow rt.Flags) (ret rt.Flags, err error) {
+	// get the rule's flags and see whether we should run the rule
+	// rt.Filter is a flag for filters that need to always evalute (ex. counters)
+	if flags := rule.Flags(); (allow&flags != 0) || (flags&rt.Filter != 0) {
+		// actually run the filter:
 		if ok, e := safe.GetOptionalBool(run, rule.Filter, true); e != nil {
 			err = e
-		} else if ok.Bool() && allow&flags != 0 {
+		} else if ok.Bool() && allow&flags != 0 { // check whether the filter succeeded and whether the rule is actually supposed to run.
 			if e := safe.RunAll(run, rule.Execute); e != nil {
 				err = e
 			} else {

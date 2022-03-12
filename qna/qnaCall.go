@@ -11,6 +11,8 @@ import (
 )
 
 // note: this is mirrored/mimicked in package testpat
+// note: in order to generate appropriate defaults ( ex. a record of the right type )
+// can return both a both meaningful value *and* an error
 func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.Value, err error) {
 	name := lang.Underscore(pat) // fix: why are people calling this with untransformed names
 	if cached, e := run.getKind(name); e != nil {
@@ -48,9 +50,9 @@ func (run *Runner) Call(pat string, aff affine.Affinity, args []rt.Arg) (ret g.V
 			} else if v, e := res.GetResult(); e != nil {
 				err = e
 			} else {
-				// breaks precedence to return a value and an error
-				// in order to generate appropriate default returns ( ex. a record of the right type )
-				// while still informing the caller of lack of pattern decision in a concise manner.
+				// warning: in order to generate appropriate defaults ( ex. a record of the right type )
+				// while still informing the caller of lack of pattern decision in a concise manner
+				// can return both a valid value and an error
 				ret = v
 				if !res.ComputedResult() {
 					err = rt.NoResult{}

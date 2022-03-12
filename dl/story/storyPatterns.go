@@ -11,7 +11,7 @@ func (op *PatternActions) ImportPhrase(k *Importer) (err error) {
 	if locals := ImportLocals(k, patternName, op.Locals); len(locals) > 0 {
 		k.WriteEphemera(&eph.EphPatterns{Name: patternName, Locals: locals})
 	}
-	// write the rules last ( order doesnt matter except for tests )
+	// write the rules last ( order doesnt matter except it helps with test output consistency )
 	return ImportRules(k, patternName, "", op.Rules, eph.EphTiming{})
 }
 
@@ -28,6 +28,7 @@ func (op *PatternDecl) reduceProps() []eph.EphParams {
 	return reduceProps(op.Params)
 }
 
+// note:  statements can set flags for a bunch of rules at once or within each rule separately, but not both.
 func ImportRules(k *Importer, pattern, target string, els []PatternRule, flags eph.EphTiming) (err error) {
 	for _, el := range els {
 		if e := el.importRule(k, pattern, target, flags); e != nil {
