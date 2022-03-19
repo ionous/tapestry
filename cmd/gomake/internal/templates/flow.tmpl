@@ -1,0 +1,20 @@
+{{with $type := . -}}
+// {{Pascal .Name}}
+{{- if .UserComment }}
+{{- range $i, $el := Lines .UserComment -}} 
+{{- if $i }}
+//{{end -}}
+{{""}} {{$el}} 
+{{- end}}{{end}}{{/* end of user comments */}}
+type {{Pascal .Name}} struct {
+{{with $terms := .Spec.Value.Terms -}}
+{{range $terms}}{{/* loop over terms */ -}}
+{{""}}	{{if .Name}}{{Pascal .Name}}{{else}}{{Pascal .Key}}{{end}} {{TermType . -}}
+{{""}}	`if:"{{- if .Private}}internal{{else}}label={{if TermIsAnon $type .}}_{{else}}{{.Key}}{{end}}{{end}}
+{{- if .Optional}},optional{{end}}
+{{- if IsUnboxed $type}}{{end}}"`
+{{end}}{{/*ends range $terms*/ -}}
+{{end}}{{/*ends $terms*/ -}}
+{{""}}	UserComment string
+}
+{{end}}{{/*ends $type*/}}
