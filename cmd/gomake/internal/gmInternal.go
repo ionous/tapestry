@@ -42,10 +42,13 @@ func WriteSpecs(realout io.Writer, files fs.FS) (err error) {
 			}
 		}
 		// run "gofmt" on the source
-		if me, e := format.Source(out.Bytes()); e != nil {
-			err = e
+		if res := out.Bytes(); err != nil {
+			realout.Write(res)
+		} else if gofmt, e := format.Source(res); e != nil {
+			err = errutil.New(e, "while formating source")
+			realout.Write(res)
 		} else {
-			realout.Write(me)
+			realout.Write(gofmt)
 		}
 	}
 	return

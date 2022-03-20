@@ -1,0 +1,34 @@
+{{with $type := . -}}
+func (*{{Pascal .Name}}) Compose() composer.Spec {
+  return composer.Spec{
+    Name: {{Pascal .Name}}_Type,
+    Uses: composer.Type_{{Pascal (Uses .)}},
+{{if eq (Uses .) "flow" -}}
+{{if .Spec.Value.Name -}}
+{{"\t\t"}}Lede: "{{.Spec.Value.Name}}",
+{{end -}}
+{{else if eq (Uses .) "str" -}}
+{{if not .Spec.Value.Exclusively}}OpenStrings: true,{{end}}
+{{if .Spec.Value.Uses -}}
+    Choices: []string {
+      {{range .Spec.Value.Uses}}{{Pascal $type.Name}}_{{Tokenize .Name}}, {{end}}
+     },
+    Strings: []string{  {{/* fix: i think this wrong; it should be .Label when that exists  */}}
+      {{range .Spec.Value.Uses}}"{{.Name}}", {{end}}
+    },
+{{end -}}
+{{else if eq (Uses .) "swap" -}}
+    Choices: []string {
+		{{range .Spec.Value.Between}}{{Pascal $type.Name}}_{{Tokenize .Name}}_opt, {{end}}
+     },
+    Swaps: []interface{} {
+{{range .Spec.Value.Between -}}
+      (*{{if .Type}}{{ScopeOf .Type}}{{Pascal .Type}}{{else}}{{ScopeOf .Name}}{{Pascal .Name}}{{end}})(nil),
+{{end}}{{/* end range over slots*/ -}}
+    },
+{{end -}}
+{{"\t"}}}
+}
+
+const {{Pascal .Name}}_Type = "{{.Name}}"
+{{end}}{{/*ends $type*/}}
