@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
-	"git.sr.ht/~ionous/tapestry/dl/reader"
 	"git.sr.ht/~ionous/tapestry/dl/rel"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/dl/story"
@@ -22,7 +21,6 @@ var AllSlats = [][]composer.Composer{
 	literal.Slats,
 	list.Slats,
 	prim.Slats,
-	reader.Slats,
 	rel.Slats,
 	render.Slats,
 	story.Slats,
@@ -34,7 +32,6 @@ var AllSignatures = []map[uint64]interface{}{
 	literal.Signatures,
 	list.Signatures,
 	prim.Signatures,
-	reader.Signatures,
 	rel.Signatures,
 	render.Signatures,
 	rt.Signatures,
