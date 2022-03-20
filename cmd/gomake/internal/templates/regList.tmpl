@@ -1,0 +1,7 @@
+{{if .List}}
+var {{.Name}} = []{{.Type}}{
+{{range .List -}}
+  (*{{Pascal .}})(nil),
+{{end}}
+}
+{{end}}

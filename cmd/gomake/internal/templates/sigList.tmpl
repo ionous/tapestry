@@ -1,0 +1,5 @@
+var Signatures = map[uint64]interface{}{
+{{range . -}}
+  {{.Hash}}: (*{{Pascal .Type}})(nil), /* {{.Sig}} */
+{{end -}}
+}

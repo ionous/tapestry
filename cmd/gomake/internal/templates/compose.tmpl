@@ -11,7 +11,7 @@ func (*{{Pascal .Name}}) Compose() composer.Spec {
 {{if not .Spec.Value.Exclusively}}OpenStrings: true,{{end}}
 {{if .Spec.Value.Uses -}}
     Choices: []string {
-      {{range .Spec.Value.Uses}}{{Pascal $type.Name}}_{{Tokenize .Name}}, {{end}}
+      {{range .Spec.Value.Uses}}{{Pascal $type.Name}}_{{.Name}}, {{end}}
      },
     Strings: []string{  {{/* fix: i think this wrong; it should be .Label when that exists  */}}
       {{range .Spec.Value.Uses}}"{{.Name}}", {{end}}
@@ -19,7 +19,7 @@ func (*{{Pascal .Name}}) Compose() composer.Spec {
 {{end -}}
 {{else if eq (Uses .) "swap" -}}
     Choices: []string {
-		{{range .Spec.Value.Between}}{{Pascal $type.Name}}_{{Tokenize .Name}}_opt, {{end}}
+		{{range .Spec.Value.Between}}{{Pascal $type.Name}}_{{.Name}}_opt, {{end}}
      },
     Swaps: []interface{} {
 {{range .Spec.Value.Between -}}

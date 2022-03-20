@@ -24,8 +24,23 @@ func (ctx *Context) GroupOf(typeName string) (ret string, okay bool) {
 // private types dont have a typespec
 // ( ex. those declared manually by an implementation )
 func (ctx *Context) GetTypeSpec(typeName string) (ret *spec.TypeSpec, okay bool) {
-	typeSpec, ok := ctx.types.Types[typeName]
-	return typeSpec, ok
+	block, ok := ctx.types.Types[typeName]
+	return block, ok
+}
+
+func (ctx *Context) TermsOf(block *spec.TypeSpec) []Term {
+	flow := block.Spec.Value.(*spec.FlowSpec)
+	terms := make([]Term, len(flow.Terms))
+	var pubCount int
+	for i, t := range flow.Terms {
+		pi := -1
+		if !t.Private {
+			pi = pubCount
+			pubCount++
+		}
+		terms[i] = Term{ctx, flow, t, pi}
+	}
+	return terms
 }
 
 // return the package qualifier for the passed typename

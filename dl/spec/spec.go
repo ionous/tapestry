@@ -32,6 +32,11 @@ func (op *TermSpec) TypeName() (ret string) {
 	return
 }
 
+// tokenized field
+func (op *TermSpec) Value() (ret string) {
+	return "$" + strings.ToUpper(op.Field())
+}
+
 // return english human friendly text.
 func (op *ChoiceSpec) FriendlyName() (ret string) {
 	if n := op.Label; len(n) > 0 {

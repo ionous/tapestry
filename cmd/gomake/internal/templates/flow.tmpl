@@ -11,10 +11,10 @@
 */}}
 type {{Pascal .Name}} struct {
 {{range Terms .}}{{/* loop over terms */ -}}
-{{""}}	{{Pascal .GoId}} {{.GoDecl -}}
+{{""}}	{{Pascal .Field}} {{.GoDecl -}}
 {{""}}	`if:"{{- if .Private}}internal{{else}}label={{if .IsInline}}_{{else}}{{.Key}}{{end}}{{end}}
 {{- if .Optional}},optional{{end}}
-{{- if .IsUnboxed}},type={{.GoType}}{{end}}"`
+{{- if .IsUnboxed}},type={{.TypeName}}{{end}}"`
 {{end}}{{/*ends range $terms*/ -}}
 {{""}}	UserComment string
 }
@@ -32,7 +32,7 @@ var _ {{ScopeOf $slot}}{{Pascal $slot}} = (*{{Pascal $type.Name}})(nil)
     keys for each of the public members
 */ -}}
 {{range Terms .}}{{/* loop over terms */ -}}
-const {{Pascal $type.Name}}_Field_{{Pascal .GoId}} = "{{Tokenize .GoId}}";
+const {{Pascal $type.Name}}_Field_{{Pascal .Field}} = "{{.Value}}"
 {{end}}{{/*ends range $terms*/ -}}
 {{- /*
     marshal interface
@@ -41,9 +41,7 @@ const {{Pascal $type.Name}}_Field_{{Pascal .GoId}} = "{{Tokenize .GoId}}";
 {{- /*
     repeating
 */ -}}
-{{if ne .Name "position"}}{{/* fix: position should be removed */}}
 {{template "repeating.tmpl" (RepeatData .Name false)}}
-{{end}}{{/* end not position */}}
 {{- /*
     flow contents
 */ -}}
@@ -76,16 +74,16 @@ func {{Pascal .Name}}_Marshal(m jsn.Marshaler, val *{{Pascal .Name}}) (err error
   m.SetComment(&val.UserComment)
   if err = m.MarshalBlock({{Pascal .Name}}_Flow{val}); err == nil {
 {{- range $i, $term:= Terms .}}{{/* loop over terms */}}{{if not .Private}}
-    e{{$i}} := m.MarshalKey("{{if not .IsInline}}{{.GoId}}{{end}}", {{Pascal $type.Name}}_Field_{{Pascal .GoId}})
+    e{{$i}} := m.MarshalKey("{{if not .IsInline}}{{.Field}}{{end}}", {{Pascal $type.Name}}_Field_{{Pascal .Field}})
     if e{{$i}} == nil {
-      e{{$i}} = {{ScopeOf .GoType}}{{Pascal .GoType -}}
+      e{{$i}} = {{ScopeOf .TypeName}}{{Pascal .TypeName -}}
       {{if .IsUnboxed}}_Unboxed{{end -}}
       {{if .Optional}}_Optional{{end -}}
       {{if .Repeats}}_Repeats{{end -}}
-      _Marshal(m, &val.{{Pascal .GoId}})
+      _Marshal(m, &val.{{Pascal .Field}})
     }
     if e{{$i}} != nil && e{{$i}} != jsn.Missing {
-      m.Error(errutil.New(e{{$i}}, "in flow at", {{Pascal $type.Name}}_Field_{{Pascal .GoId}}))
+      m.Error(errutil.New(e{{$i}}, "in flow at", {{Pascal $type.Name}}_Field_{{Pascal .Field}}))
     }
 {{- end}}{{end}}
     m.EndBlock()

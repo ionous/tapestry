@@ -15,12 +15,14 @@ func newTemplates(ctx *Context) (*template.Template, error) {
 	//
 	funcMap := template.FuncMap{
 		"Lines": func(s string) []string {
-			return strings.Split(s, "\n")
+			lines := strings.Split(s, "\n")
+			// fix... backwards compat:
+			if last := len(lines) - 1; last >= 0 && strings.HasSuffix(lines[last], ".") {
+				lines[last] = strings.TrimSuffix(lines[last], ".")
+			}
+			return lines
 		},
 		"Pascal": pascal,
-		"Tokenize": func(k string) string {
-			return "$" + strings.ToUpper(k)
-		},
 		//
 		// more specific things:
 		//
@@ -31,31 +33,12 @@ func newTemplates(ctx *Context) (*template.Template, error) {
 			_, okay = unbox[typeName]
 			return
 		},
-		"Terms": func(typeSpec *spec.TypeSpec) []Term {
-			flow := typeSpec.Spec.Value.(*spec.FlowSpec)
-			terms := make([]Term, len(flow.Terms))
-			var pubCount int
-			for i, t := range flow.Terms {
-				pi := -1
-				if !t.Private {
-					pi = pubCount
-					pubCount++
-				}
-				terms[i] = Term{ctx, flow, t, pi}
-			}
-			return terms
+		"Terms": func(block *spec.TypeSpec) []Term {
+			return ctx.TermsOf(block)
 		},
-		"Uses": func(typeSpec *spec.TypeSpec) string {
-			return map[string]string{
-				spec.UsesSpec_Flow_Opt:  "flow",
-				spec.UsesSpec_Slot_Opt:  "slot",
-				spec.UsesSpec_Swap_Opt:  "swap",
-				spec.UsesSpec_Num_Opt:   "num",
-				spec.UsesSpec_Str_Opt:   "str",
-				spec.UsesSpec_Group_Opt: "group",
-			}[typeSpec.Spec.Choice]
+		"Uses": func(block *spec.TypeSpec) string {
+			return specShortName(block)
 		},
-
 		"RepeatData": func(name string, unboxed bool) any {
 			// {{>repeat name=(Pascal name) mod="_Unboxed" el=(Unboxed name)}}
 			var mod, el string
@@ -72,4 +55,15 @@ func newTemplates(ctx *Context) (*template.Template, error) {
 		},
 	}
 	return template.New("").Funcs(funcMap).ParseFS(tempFS, "templates/*.tmpl")
+}
+
+func specShortName(block *spec.TypeSpec) string {
+	return map[string]string{
+		spec.UsesSpec_Flow_Opt:  "flow",
+		spec.UsesSpec_Slot_Opt:  "slot",
+		spec.UsesSpec_Swap_Opt:  "swap",
+		spec.UsesSpec_Num_Opt:   "num",
+		spec.UsesSpec_Str_Opt:   "str",
+		spec.UsesSpec_Group_Opt: "group",
+	}[block.Spec.Choice]
 }

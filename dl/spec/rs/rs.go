@@ -85,10 +85,10 @@ func readSpec(types *TypeSpecs, files fs.FS, fileName string) (ret *spec.TypeSpe
 	return
 }
 
-func importTypes(types *TypeSpecs, typeSpec *spec.TypeSpec) error {
+func importTypes(types *TypeSpecs, block *spec.TypeSpec) error {
 	var currGroups []string
 	enc := chart.MakeEncoder()
-	return enc.Marshal(typeSpec, story.Map(&enc, story.BlockMap{
+	return enc.Marshal(block, story.Map(&enc, story.BlockMap{
 		spec.TypeSpec_Type: story.KeyMap{
 			story.BlockStart: func(b jsn.Block, _ interface{}) (err error) {
 				if flow, ok := b.(jsn.FlowBlock); ok {
