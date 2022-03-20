@@ -15,40 +15,48 @@ import (
 
 // reads all of the files in the passed filesystem as ifspecs
 // generate golang structs
-func WriteSpecs(realout io.Writer, files fs.FS) (err error) {
-	if types, e := rs.FromSpecs(files); e != nil {
+func WriteSpecs(ifspecs fs.FS, onGroup func(string, []byte)) (err error) {
+	if types, e := rs.FromSpecs(ifspecs); e != nil {
 		err = e
 	} else {
-		var out bytes.Buffer
 		ctx := &Context{types: types}
 		if tps, e := newTemplates(ctx); e != nil {
 			err = e
 		} else {
 			w := StructWriter{types, tps}
 			for _, groupType := range types.Groups {
+				groupName := groupType.Name
+				ctx.currentGroup = groupName
 				groupSpec := groupType.Spec.Value.(*spec.GroupSpec)
 				typeNames := make([]string, 0, len(groupSpec.Specs))
 				for _, t := range groupSpec.Specs {
 					typeNames = append(typeNames, t.Name)
 				}
 				sort.Strings(typeNames) // in-place
-				ctx.currentGroup = groupType.Name
+				var out bytes.Buffer
+				tps.ExecuteTemplate(&out, "fileHeader.tmpl", map[string]any{
+					"Package": groupName,
+					"Imports": []string{},
+				})
 				for _, key := range typeNames {
 					blockType := types.Types[key]
 					if e := w.WriteStruct(&out, blockType); e != nil {
 						err = errutil.Append(err, errutil.New(e, "couldnt process", key))
 					}
 				}
+
+				// get whatever we can of the output errors or no.
+				res := out.Bytes()
+				// if the writing worked okay, run "gofmt" on the source
+				if err == nil {
+					if gofmt, e := format.Source(res); e != nil {
+						err = errutil.Append(err, errutil.New(e, "while formating", groupName))
+					} else {
+						res = gofmt
+					}
+				}
+				onGroup(groupName, res)
 			}
-		}
-		// run "gofmt" on the source
-		if res := out.Bytes(); err != nil {
-			realout.Write(res)
-		} else if gofmt, e := format.Source(res); e != nil {
-			err = errutil.New(e, "while formating source")
-			realout.Write(res)
-		} else {
-			realout.Write(gofmt)
 		}
 	}
 	return

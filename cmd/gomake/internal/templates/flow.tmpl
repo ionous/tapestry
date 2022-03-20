@@ -32,7 +32,7 @@ var _ {{ScopeOf $slot}}{{Pascal $slot}} = (*{{Pascal $type.Name}})(nil)
     keys for each of the public members
 */ -}}
 {{range Terms .}}{{/* loop over terms */ -}}
-const {{Pascal .GoType}}_Field_{{Pascal .GoId}} = "{{Tokenize .GoId}}";
+const {{Pascal $type.Name}}_Field_{{Pascal .GoId}} = "{{Tokenize .GoId}}";
 {{end}}{{/*ends range $terms*/ -}}
 {{- /*
     marshal interface
@@ -76,7 +76,7 @@ func {{Pascal .Name}}_Marshal(m jsn.Marshaler, val *{{Pascal .Name}}) (err error
   m.SetComment(&val.UserComment)
   if err = m.MarshalBlock({{Pascal .Name}}_Flow{val}); err == nil {
 {{- range $i, $term:= Terms .}}{{/* loop over terms */}}{{if not .Private}}
-    e{{$i}} := m.MarshalKey("{{.Name}}", {{Pascal $type.Name}}_Field_{{Pascal .GoId}})
+    e{{$i}} := m.MarshalKey("{{if not .IsInline}}{{.GoId}}{{end}}", {{Pascal $type.Name}}_Field_{{Pascal .GoId}})
     if e{{$i}} == nil {
       e{{$i}} = {{ScopeOf .GoType}}{{Pascal .GoType -}}
       {{if .IsUnboxed}}_Unboxed{{end -}}
