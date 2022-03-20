@@ -1,6 +1,6 @@
 module git.sr.ht/~ionous/tapestry
 
-go 1.16
+go 1.18
 
 require (
 	github.com/ionous/errutil v0.0.0-20210301225645-f05ff1857722
@@ -11,3 +11,5 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.6
 	github.com/reiver/go-porterstemmer v1.0.1
 )
+
+require github.com/kr/text v0.1.0 // indirect
