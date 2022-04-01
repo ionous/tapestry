@@ -15,10 +15,12 @@ import (
 )
 
 // type name to type spec lookup
+// the map of types differs from what's on disk.
+// it excludes groups as types and instead puts those in the groups array.
+// it also adds any group containers as members of each type's group list
 type TypeSpecs struct {
-	Types map[string]*spec.TypeSpec // modified from what's on disk to include any containing groups.
-	//                                ( ordered so the first group is a top group )
-	Groups []*spec.TypeSpec // list of all top level groups encountered
+	Types  map[string]*spec.TypeSpec
+	Groups []*spec.TypeSpec
 }
 
 // return a list of sorted keys

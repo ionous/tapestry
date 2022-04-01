@@ -30,7 +30,7 @@ func newTemplates(ctx *Context) (*template.Template, error) {
 			return ctx.scopeOf(typeName)
 		},
 		"IsUnboxed": func(typeName string) (okay bool) {
-			_, okay = unbox[typeName]
+			_, okay = ctx.unbox[typeName]
 			return
 		},
 		"Terms": func(block *spec.TypeSpec) []Term {
@@ -46,7 +46,7 @@ func newTemplates(ctx *Context) (*template.Template, error) {
 			if !unboxed {
 				el = pas
 			} else {
-				el = unbox[name]
+				el = ctx.unbox[name]
 				mod = "_Unboxed"
 			}
 			return struct {

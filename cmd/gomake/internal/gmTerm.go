@@ -11,7 +11,7 @@ type Term struct {
 }
 
 func (t *Term) IsUnboxed() (okay bool) {
-	_, okay = unbox[t.TypeName()]
+	_, okay = t.ctx.unbox[t.TypeName()]
 	return
 }
 

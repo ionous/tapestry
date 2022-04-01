@@ -5,11 +5,6 @@ import (
 	"unicode"
 )
 
-// when generating some kinds of simple types...
-// replace the specified typename with specified primitive.
-// types that map to numbers, etc. are added as unbox automatically.
-var unbox = map[string]string{"text": "string", "bool": "bool"}
-
 // underscore_name to PascalCase
 func pascal(s string) string {
 	var out strings.Builder

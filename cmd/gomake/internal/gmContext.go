@@ -9,6 +9,11 @@ import (
 type Context struct {
 	currentGroup string
 	types        rs.TypeSpecs
+
+	// when generating some kinds of simple types...
+	// replace the specified typename with specified primitive.
+	// types that map to numbers, etc. are added as unbox automatically.
+	unbox map[string]string
 }
 
 func (ctx *Context) GroupOf(typeName string) (ret string, okay bool) {
@@ -54,7 +59,7 @@ func (ctx *Context) scopeOf(typeName string) (ret string) {
 
 // return the fully qualified typename
 func (ctx *Context) scopedName(typeName string, ignoreUnboxing bool) (ret string) {
-	if unboxType, ok := unbox[typeName]; ok && !ignoreUnboxing {
+	if unboxType, ok := ctx.unbox[typeName]; ok && !ignoreUnboxing {
 		ret = unboxType
 	} else {
 		ret = ctx.scopeOf(typeName) + pascal(typeName)

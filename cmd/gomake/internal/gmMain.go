@@ -17,7 +17,18 @@ func WriteSpecs(ifspecs fs.FS, onGroup func(string, []byte)) (err error) {
 	if types, e := rs.FromSpecs(ifspecs); e != nil {
 		err = e
 	} else {
-		ctx := &Context{types: types}
+		// generate slot names, unboxed types, and other useful info.
+		ctx := &Context{types: types} // types is rs.TypeSpecs
+		ctx.unbox = map[string]string{"text": "string", "bool": "bool"}
+		for typeName, t := range types.Types {
+			if t.Spec.Choice == spec.UsesSpec_Num_Opt {
+				if n := t.Spec.Value.(*spec.NumSpec); !n.Exclusively {
+					ctx.unbox[typeName] = "float64"
+				}
+
+			}
+		}
+
 		if tps, e := newTemplates(ctx); e != nil {
 			err = e
 		} else {
