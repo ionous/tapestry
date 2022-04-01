@@ -17,9 +17,9 @@ func newTemplates(ctx *Context) (*template.Template, error) {
 		"Lines": func(s string) []string {
 			lines := strings.Split(s, "\n")
 			// fix... backwards compat:
-			if last := len(lines) - 1; last >= 0 && strings.HasSuffix(lines[last], ".") {
-				lines[last] = strings.TrimSuffix(lines[last], ".")
-			}
+			// if last := len(lines) - 1; last >= 0 && strings.HasSuffix(lines[last], ".") {
+			// 	lines[last] = strings.TrimSuffix(lines[last], ".")
+			// }
 			return lines
 		},
 		"Pascal": pascal,
