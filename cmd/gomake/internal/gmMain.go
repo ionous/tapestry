@@ -2,7 +2,6 @@ package gomake
 
 import (
 	"bytes"
-	"go/format"
 	"io/fs"
 	"sort"
 
@@ -13,7 +12,7 @@ import (
 
 // reads all of the files in the passed filesystem as ifspecs
 // generate golang structs
-func WriteSpecs(ifspecs fs.FS, onGroup func(string, []byte)) (err error) {
+func WriteSpecs(ifspecs fs.FS, onGroup func(string, []byte) error) (err error) {
 	if types, e := rs.FromSpecs(ifspecs); e != nil {
 		err = e
 	} else {
@@ -64,16 +63,9 @@ func WriteSpecs(ifspecs fs.FS, onGroup func(string, []byte)) (err error) {
 					}
 
 					// get whatever we can of the output errors or no.
-					res := out.Bytes()
-					// if the writing worked okay, run "gofmt" on the source
-					if err == nil {
-						if gofmt, e := format.Source(res); e != nil {
-							err = errutil.Append(err, errutil.New(e, "while formating", groupName))
-						} else {
-							res = gofmt
-						}
+					if e := onGroup(groupName, out.Bytes()); e != nil {
+						err = errutil.Append(err, e)
 					}
-					onGroup(groupName, res)
 				}
 			}
 		}
