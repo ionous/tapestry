@@ -25,7 +25,7 @@ type {{Pascal .Name}} struct {
 // User implemented slots:
 {{- range $slot := .Slots }}
 var _ {{ScopeOf $slot}}{{Pascal $slot}} = (*{{Pascal $type.Name}})(nil)
-{{end}}{{/*ends range slots*/}}
+{{- end}}{{/*ends range slots*/}}
 {{end }}{{/*ends if slots*/}}
 {{template "compose.tmpl" .}}
 {{- /*
@@ -74,7 +74,7 @@ func {{Pascal .Name}}_Marshal(m jsn.Marshaler, val *{{Pascal .Name}}) (err error
   m.SetComment(&val.UserComment)
   if err = m.MarshalBlock({{Pascal .Name}}_Flow{val}); err == nil {
 {{- range $i, $term:= Terms .}}{{/* loop over terms */}}{{if not .Private}}
-    e{{$i}} := m.MarshalKey("{{if not .IsInline}}{{.Field}}{{end}}", {{Pascal $type.Name}}_Field_{{Pascal .Field}})
+    e{{$i}} := m.MarshalKey("{{if not .IsInline}}{{.Key}}{{end}}", {{Pascal $type.Name}}_Field_{{Pascal .Field}})
     if e{{$i}} == nil {
       e{{$i}} = {{ScopeOf .TypeName}}{{Pascal .TypeName -}}
       {{if .IsUnboxed}}_Unboxed{{end -}}
