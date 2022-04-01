@@ -4,8 +4,8 @@
     code doc 
 */ -}}
 {{- if .UserComment }}
-{{- range $i, $el := Lines .UserComment -}} 
-{{- if $i }}//{{end}}{{""}} {{$el}}{{end}}{{end}}
+{{- range $i, $el := Lines .UserComment }}{{ if $i }}
+//{{end}}{{""}} {{$el}}{{end}}{{end}}
 {{- /*
     struct decl
 */}}
@@ -31,9 +31,9 @@ var _ {{ScopeOf $slot}}{{Pascal $slot}} = (*{{Pascal $type.Name}})(nil)
 {{- /*
     keys for each of the public members
 */ -}}
-{{range Terms .}}{{/* loop over terms */ -}}
+{{range Terms .}}{{/* loop over terms */ -}}{{if not .Private -}}
 const {{Pascal $type.Name}}_Field_{{Pascal .Field}} = "{{.Value}}"
-{{end}}{{/*ends range $terms*/ -}}
+{{end}}{{end}}{{/*ends range $terms*/ -}}
 {{- /*
     marshal interface
 */ -}}
