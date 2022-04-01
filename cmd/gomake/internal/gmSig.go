@@ -42,7 +42,7 @@ func sigParts(flow *spec.FlowSpec, commandName string, types rs.TypeSpecs) [][]s
 		}
 		var sel string
 		if pi = pi + 1; pi > 1 || !flow.Trim {
-			sel = camelize(p.Field())
+			sel = camelize(p.Key)
 		}
 		pt := types.Types[p.TypeName()]
 		if simpleSwap := !p.Repeats && pt.Spec.Choice == spec.UsesSpec_Swap_Opt; !simpleSwap {
