@@ -38,7 +38,7 @@ const {{Pascal $type.Name}}_Field_{{Pascal .Field}} = "{{.Value}}"
     marshal interface
 */ -}}
 {{template "marshalSignature.tmpl" .}}
-{{- /*
+{{/*
     repeating
 */ -}}
 {{template "repeating.tmpl" (RepeatData .Name false)}}
