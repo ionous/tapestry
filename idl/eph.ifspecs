@@ -93,7 +93,10 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+              "A set of related object states such that exactly one member of the set is true for a given object at a single time.",
+              "Generates an implicit kind of 'aspect' where every field of the kind is a boolean property."
+          ],
           "Spec:with flow:slots:": [
             "eph_aspects",
             {
@@ -292,7 +295,12 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+              "A new type deriving from another existing type.",
+              "The new kind has all of the properties of all of its ancestor kinds",
+              "and it can be used wherever one of its ancestor kinds is needed.",
+              "( The reverse isn't true because the new kind can have its own unique properties not available to its ancestors. )"
+          ],
           "Spec:with flow:slots:": [
             "eph_kinds",
             {
@@ -376,7 +384,11 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+              "Rules for transforming plural text to singular text and back again.",
+              "Used by the assembler to help interpret author definitions,", 
+              "and at runtime to help the parser interpret user input."
+          ],
           "Spec:with flow:slots:": [
             "eph_opposites",
             {
@@ -404,7 +416,11 @@
           ]
         },
         {
-          "--": "",
+          "--":  [
+              "'Affinity' designates the storage type of a given parameter",
+              "while 'class' is used to indicate an interpretation of that parameter, for example a reference to a kind.",
+              "Pattern locals can have an initial value, other uses of parameter cannot."
+          ],
           "Spec:with flow:": [
             "eph_params",
             {
@@ -445,7 +461,14 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+              "Patterns provide author reusable code.",
+              "The parameters define values provided by the caller.",
+              "Locals provide scratch values for use during pattern processing.",
+              "The result allows the pattern to return a value to the caller of pattern.",
+              "While multiple pattern commands can be used to define a pattern,",
+              "the set of arguments and the return can only be specified once."
+          ],
           "Spec:with flow:slots:": [
             "eph_patterns",
             {
@@ -492,7 +515,11 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+              "Rules for transforming plural text to singular text and back again.",
+              "Used by the assembler to help interpret author definitions,", 
+              "and at runtime to help the parser interpret user input."
+          ],
           "Spec:with flow:slots:": [
             "eph_plurals",
             {
@@ -520,7 +547,10 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+              "Implies some fact about the world that will be defined elsewhere.",
+              "Reuses the set of ephemera to limit redefinition. Not all are valid."
+           ],
           "Spec:with flow:slots:": [
             "eph_refs",
             {
@@ -696,7 +726,13 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+              "Give a noun a specific value at startup.",
+              "Initialization is somewhat simplistic:",
+              "1. Initial values are not scoped to domains, triggers must be used to change values when domains begin and end.",
+              "2. The values inside of records can be set using a 'path' to find them, however individual values within lists cannot be set.",
+              "Note: when using a path, the path addresses the noun first, the named field - referring to the inner most record - last."
+          ],
           "Spec:with flow:slots:": [
             "eph_values",
             {
