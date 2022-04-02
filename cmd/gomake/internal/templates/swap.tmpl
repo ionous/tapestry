@@ -1,0 +1,49 @@
+{{with $type := . -}}
+// {{Pascal .Name}} swaps between various options
+type {{Pascal .Name}} struct {
+  Choice string
+  Value  interface{}
+}
+var {{Pascal .Name}}_Optional_Marshal = {{Pascal .Name}}_Marshal
+
+{{range .Spec.Value.Between}}
+const {{Pascal $type.Name}}_{{Pascal .Name}}_Opt= "{{.Value}}";
+{{- end}}
+
+{{template "compose.tmpl" .}}
+
+func (op* {{Pascal .Name}}) GetType() string { return {{Pascal .Name}}_Type }
+
+func (op* {{Pascal .Name}}) GetSwap() (string, interface{}) {
+  return op.Choice, op.Value
+}
+
+func (op* {{Pascal .Name}}) SetSwap(c string) (okay bool) {
+  switch c {
+  case "":
+    op.Choice, op.Value = c, nil
+    okay = true
+{{- range .Spec.Value.Between}}
+  case {{Pascal $type.Name}}_{{Pascal .Name}}_Opt:
+    op.Choice, op.Value = c, new({{Pascal .TypeName}})
+    okay = true
+{{- end}}
+  }
+  return
+}
+
+{{template "marshalSignature.tmpl" . }}
+func {{Pascal .Name}}_Marshal(m jsn.Marshaler, val *{{Pascal .Name}}) (err error) {
+  if err = m.MarshalBlock(val); err == nil {
+    if _, ptr := val.GetSwap(); ptr != nil {
+      if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+        m.Error(e)
+      }
+    }
+    m.EndBlock()
+  }
+  return
+}
+
+{{template "repeating.tmpl" (RepeatData .Name false)}}
+{{end}}{{/*ends $type*/}}

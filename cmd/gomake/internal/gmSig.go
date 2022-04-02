@@ -36,21 +36,24 @@ func makeSig(typeName string, sig string) Sig {
 func sigParts(flow *spec.FlowSpec, commandName string, types rs.TypeSpecs) [][]string {
 	var sets = [][]string{{commandName}}
 	var pi int
-	for _, p := range flow.Terms {
-		if p.Private {
+	for _, term := range flow.Terms {
+		if term.Private {
 			continue
 		}
 		var sel string
 		if pi = pi + 1; pi > 1 || !flow.Trim {
-			sel = camelize(p.Key)
+			sel = camelize(term.Key)
 		}
-		pt := types.Types[p.TypeName()]
-		if simpleSwap := !p.Repeats && pt.Spec.Choice == spec.UsesSpec_Swap_Opt; !simpleSwap {
+		pt := types.Types[term.TypeName()]
+		if simpleSwap := !term.Repeats && pt.Spec.Choice == spec.UsesSpec_Swap_Opt; !simpleSwap {
 			var rest [][]string
 			for _, a := range sets {
-				rest = append(rest, append(a, sel))
+				// without copy, the reserve gets re-used, causes a sharing of memory between slices
+				// it feels like there should be some simpler way to trigger a reallocing append
+				copy := append([]string{}, append(a, sel)...)
+				rest = append(rest, copy)
 			}
-			if !p.Optional {
+			if !term.Optional {
 				sets = rest
 			} else {
 				sets = append(sets, rest...)
@@ -61,7 +64,8 @@ func sigParts(flow *spec.FlowSpec, commandName string, types rs.TypeSpecs) [][]s
 			for _, c := range pt.Spec.Value.(*spec.SwapSpec).Between {
 				choice := sel + " " + camelize(c.Name)
 				for _, a := range sets {
-					mul = append(mul, append(a, choice))
+					copy := append([]string{}, append(a, choice)...)
+					mul = append(mul, copy)
 				}
 			}
 			sets = mul
