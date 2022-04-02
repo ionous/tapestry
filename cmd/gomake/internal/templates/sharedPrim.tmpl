@@ -1,0 +1,57 @@
+{{- with $type := . }}
+// {{Pascal .Name}} requires a
+{{- if .Spec.Value.Uses}} predefined{{end}}
+{{- if not .Spec.Value.Exclusively}}
+  {{- if .Spec.Value.Uses}} or{{end}} user-specified
+{{- end}} {{if eq (Uses .) "num"}}number{{else}}string{{end}}.
+type {{Pascal .Name}} struct {
+  {{Pascal (Uses .)}} {{if eq (Uses .) "num"}}float64{{else}}string{{end}}
+}
+{{if eq (Uses .) "str"}}
+func (op *{{Pascal .Name}}) String() string {
+  return op.Str
+}
+{{end}}
+{{range .Spec.Value.Uses}}
+const {{Pascal $type.Name}}_{{Pascal .Name}}= "{{.Value}}";
+{{- end}}
+
+{{template "compose.tmpl" .}}
+{{- /*
+    marshal interface
+*/ -}}
+{{template "marshalSignature.tmpl" .}}
+{{if Unbox .Name}}
+{{template "repeating.tmpl" (RepeatData .Name true)}}
+
+func {{Pascal .Name}}_Unboxed_Optional_Marshal(m jsn.Marshaler, val *{{Unbox .Name}}) (err error) {
+  var zero {{Unbox .Name}}
+  if enc := m.IsEncoding(); !enc || *val != zero {
+    err = {{Pascal .Name}}_Unboxed_Marshal(m, val)
+  }
+  return
+}
+
+func {{Pascal .Name}}_Unboxed_Marshal(m jsn.Marshaler, val *{{Unbox .Name}}) error {
+  return m.MarshalValue({{Pascal .Name}}_Type, jsn.Box{{Pascal (Unbox .Name)}}(val))
+}
+{{- end}} {{/* end IsUnboxed */}}
+
+func {{Pascal .Name}}_Optional_Marshal(m jsn.Marshaler, val *{{Pascal .Name}}) (err error) {
+  var zero {{Pascal .Name}}
+  if enc := m.IsEncoding(); !enc || val.{{Pascal (Uses .)}} != zero.{{Pascal (Uses .)}} {
+     err = {{Pascal .Name}}_Marshal(m, val)
+  }
+  return
+}
+
+func {{Pascal .Name}}_Marshal(m jsn.Marshaler, val *{{Pascal .Name}}) (err error) {
+  return m.MarshalValue({{Pascal .Name}}_Type, {{if .Spec.Value.Uses -}}
+    jsn.MakeEnum(val, &val.Str){{else -}}
+    &val.{{Pascal (Uses .)}}{{end -}}
+  )
+}
+
+{{template "repeating.tmpl" (RepeatData .Name false)}}
+{{/* end of with */ -}}
+{{end}}

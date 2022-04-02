@@ -17,8 +17,10 @@ func newTemplates(ctx *Context) (*template.Template, error) {
 		"Lines": func(s string) []string {
 			lines := strings.Split(s, "\n")
 			// fix... backwards compat:
-			// if last := len(lines) - 1; last >= 0 && strings.HasSuffix(lines[last], ".") {
-			// 	lines[last] = strings.TrimSuffix(lines[last], ".")
+			// if last := len(lines) - 1; last == 0 {
+			// 	if line := lines[0]; strings.HasSuffix(line, ".") {
+			// 		lines[0] = line[:len(line)-1]
+			// 	}
 			// }
 			return lines
 		},
@@ -29,9 +31,8 @@ func newTemplates(ctx *Context) (*template.Template, error) {
 		"ScopeOf": func(typeName string) string {
 			return ctx.scopeOf(typeName)
 		},
-		"IsUnboxed": func(typeName string) (okay bool) {
-			_, okay = ctx.unbox[typeName]
-			return
+		"Unbox": func(typeName string) string {
+			return ctx.unbox[typeName]
 		},
 		"Terms": func(block *spec.TypeSpec) []Term {
 			return ctx.TermsOf(block)
