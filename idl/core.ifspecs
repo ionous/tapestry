@@ -15,7 +15,7 @@
               "logic"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -41,7 +41,7 @@
               "logic"
             ],
             {
-              "flow uses:": []
+              "Flow uses:": []
             }
           ]
         },
@@ -56,7 +56,7 @@
               "logic"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -82,7 +82,7 @@
               "variables"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "let",
                 true,
                 [
@@ -115,7 +115,7 @@
               "comparison"
             ],
             {
-              "flow uses:": []
+              "Flow uses:": []
             }
           ]
         },
@@ -130,7 +130,7 @@
               "comparison"
             ],
             {
-              "flow uses:": []
+              "Flow uses:": []
             }
           ]
         },
@@ -145,7 +145,7 @@
               "printing"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "p",
                 []
               ]
@@ -163,7 +163,7 @@
               "printing"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "brackets",
                 [
                   {
@@ -198,7 +198,7 @@
               "flow"
             ],
             {
-              "flow uses:": []
+              "Flow uses:": []
             }
           ]
         },
@@ -212,7 +212,7 @@
               "printing"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "buffers",
                 [
                   {
@@ -238,7 +238,7 @@
               "internal"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "cycle",
                 true,
                 [
@@ -276,7 +276,7 @@
               "record_list_eval"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "determine",
                 true,
                 [
@@ -312,7 +312,7 @@
               "bool_eval"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "send",
                 true,
                 [
@@ -344,7 +344,7 @@
               "internal"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "shuffle",
                 true,
                 [
@@ -385,7 +385,7 @@
               "internal"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "stopping",
                 true,
                 [
@@ -419,7 +419,7 @@
               "internal"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "trigger",
                 true,
                 [
@@ -457,7 +457,7 @@
               "format"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -483,7 +483,7 @@
               "misc"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "if",
                 true,
                 [
@@ -522,7 +522,7 @@
               "misc"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "else_if",
                 true,
                 [
@@ -561,7 +561,7 @@
               "misc"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "else_if",
                 true,
                 [
@@ -613,7 +613,7 @@
               "misc"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "else_do",
                 [
                   {
@@ -639,7 +639,7 @@
               "math"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "num",
                 [
                   {
@@ -679,7 +679,7 @@
               "format"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "txt",
                 [
                   {
@@ -720,7 +720,7 @@
               "misc"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "if",
                 true,
                 [
@@ -773,7 +773,7 @@
               "printing"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "commas",
                 [
                   {
@@ -808,7 +808,7 @@
               "logic"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "cmp",
                 true,
                 [
@@ -847,7 +847,7 @@
               "logic"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "cmp",
                 true,
                 [
@@ -886,7 +886,7 @@
               "math"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "dec",
                 true,
                 [
@@ -921,7 +921,7 @@
               "patterns"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -946,7 +946,7 @@
               "comparison"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "equals",
                 []
               ]
@@ -964,7 +964,7 @@
               "variables"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -989,7 +989,7 @@
               "variables"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -1014,7 +1014,7 @@
               "variables"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "from_nums",
                 true,
                 [
@@ -1040,7 +1040,7 @@
               "misc"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "obj_fields",
                 true,
                 [
@@ -1066,7 +1066,7 @@
               "misc"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "rec_fields",
                 true,
                 [
@@ -1092,7 +1092,7 @@
               "variables"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "from_rec",
                 true,
                 [
@@ -1118,7 +1118,7 @@
               "variables"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "from_recs",
                 true,
                 [
@@ -1153,7 +1153,7 @@
               "variables"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "from_txt",
                 true,
                 [
@@ -1179,7 +1179,7 @@
               "variables"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "from_txts",
                 true,
                 [
@@ -1205,7 +1205,7 @@
               "misc"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "var_fields",
                 true,
                 [
@@ -1238,7 +1238,7 @@
               "variables"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "get",
                 true,
                 [
@@ -1277,7 +1277,7 @@
               "variables"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "var",
                 true,
                 [
@@ -1303,7 +1303,7 @@
               "comparison"
             ],
             {
-              "flow uses:": []
+              "Flow uses:": []
             }
           ]
         },
@@ -1317,7 +1317,7 @@
               "logic"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -1342,7 +1342,7 @@
               "objects"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "get",
                 [
                   {
@@ -1374,7 +1374,7 @@
               "objects"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -1399,7 +1399,7 @@
               "strings"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "contains",
                 true,
                 [
@@ -1431,7 +1431,7 @@
               "misc"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "obj_field",
                 true,
                 [
@@ -1466,7 +1466,7 @@
               "misc"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "var_field",
                 true,
                 [
@@ -1492,7 +1492,7 @@
               "strings"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "is",
                 [
                   {
@@ -1518,7 +1518,7 @@
               "objects"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "kind_of",
                 true,
                 [
@@ -1551,7 +1551,7 @@
               "objects"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "kind_of",
                 true,
                 [
@@ -1584,7 +1584,7 @@
               "strings"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -1617,7 +1617,7 @@
               "objects"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -1642,7 +1642,7 @@
               "objects"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -1667,7 +1667,7 @@
               "comparison"
             ],
             {
-              "flow uses:": []
+              "Flow uses:": []
             }
           ]
         },
@@ -1682,7 +1682,7 @@
               "format"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "lower",
                 true,
                 [
@@ -1708,7 +1708,7 @@
               "format"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "reverse",
                 [
                   {
@@ -1733,7 +1733,7 @@
               "format"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "sentence",
                 true,
                 [
@@ -1759,7 +1759,7 @@
               "format"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "title",
                 true,
                 [
@@ -1785,7 +1785,7 @@
               "format"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "upper",
                 true,
                 [
@@ -1811,7 +1811,7 @@
               "matching"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -1850,7 +1850,7 @@
               "objects"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -1875,7 +1875,7 @@
               "logic"
             ],
             {
-              "flow uses:": []
+              "Flow uses:": []
             }
           ]
         },
@@ -1890,7 +1890,7 @@
               "printing"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "br",
                 []
               ]
@@ -1908,7 +1908,7 @@
               "flow"
             ],
             {
-              "flow uses:": []
+              "Flow uses:": []
             }
           ]
         },
@@ -1923,7 +1923,7 @@
               "logic"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -1948,7 +1948,7 @@
               "objects"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "is",
                 [
                   {
@@ -1985,7 +1985,7 @@
               "format"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "plural",
                 [
                   {
@@ -2011,7 +2011,7 @@
               "printing"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "numeral",
                 true,
                 [
@@ -2037,7 +2037,7 @@
               "printing"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "numeral",
                 [
                   {
@@ -2063,7 +2063,7 @@
               "math"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "mul",
                 true,
                 [
@@ -2096,7 +2096,7 @@
               "variables"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "put",
                 true,
                 [
@@ -2135,7 +2135,7 @@
               "math"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "div",
                 true,
                 [
@@ -2168,7 +2168,7 @@
               "math"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "mod",
                 true,
                 [
@@ -2201,7 +2201,7 @@
               "output"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -2233,7 +2233,7 @@
               "printing"
             ],
             {
-              "flow uses:": [
+              "Flow uses:": [
                 {
                   "Term:type:repeats:": [
                     "does",
@@ -2256,7 +2256,7 @@
               "printing"
             ],
             {
-              "flow uses:": [
+              "Flow uses:": [
                 {
                   "Term:type:repeats:": [
                     "does",
@@ -2279,7 +2279,7 @@
               "printing"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "say",
                 true,
                 [
@@ -2305,7 +2305,7 @@
               "objects"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "put",
                 [
                   {
@@ -2337,7 +2337,7 @@
               "format"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "singular",
                 [
                   {
@@ -2363,7 +2363,7 @@
               "printing"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "slashes",
                 [
                   {
@@ -2389,7 +2389,7 @@
               "printing"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "wbr",
                 []
               ]
@@ -2407,7 +2407,7 @@
               "printing"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "spaces",
                 [
                   {
@@ -2433,7 +2433,7 @@
               "math"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "inc",
                 true,
                 [
@@ -2475,7 +2475,7 @@
               "comparison"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "every",
                 []
               ]
@@ -2492,7 +2492,7 @@
               "comparison"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "at",
                 []
               ]
@@ -2509,7 +2509,7 @@
               "comparison"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "after",
                 []
               ]
@@ -2527,7 +2527,7 @@
               "comparison"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "other_than",
                 []
               ]
@@ -2556,7 +2556,7 @@
               "flow"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "repeating",
                 true,
                 [

@@ -12,7 +12,7 @@
           "Spec:with flow:": [
             "choice_spec",
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "pick",
                 true,
                 [
@@ -50,7 +50,7 @@
           "Spec:with flow:": [
             "flow_spec",
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "flow",
                 true,
                 [
@@ -93,7 +93,7 @@
           "Spec:with flow:": [
             "group_spec",
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "group",
                 [
                   {
@@ -117,7 +117,7 @@
           "Spec:with flow:": [
             "num_spec",
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "num",
                 [
                   {
@@ -147,7 +147,7 @@
           "Spec:with flow:": [
             "option_spec",
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "option",
                 true,
                 [
@@ -177,7 +177,7 @@
           "Spec:with flow:": [
             "slot_spec",
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "slot",
                 []
               ]
@@ -192,7 +192,7 @@
           "Spec:with flow:": [
             "str_spec",
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "str",
                 [
                   {
@@ -219,7 +219,7 @@
           "Spec:with flow:": [
             "swap_spec",
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "swap",
                 [
                   {
@@ -243,7 +243,7 @@
           "Spec:with flow:": [
             "term_spec",
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "term",
                 true,
                 [
@@ -298,7 +298,7 @@
           "Spec:with flow:": [
             "type_spec",
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "spec",
                 true,
                 [

@@ -14,7 +14,7 @@
               "internal"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -42,7 +42,7 @@
               "internal"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -103,7 +103,7 @@
               "internal"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -132,7 +132,7 @@
               "internal"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "render",
                 true,
                 [
@@ -160,7 +160,7 @@
               "internal"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {

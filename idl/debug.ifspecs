@@ -12,7 +12,7 @@
               "execute"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "log",
                 true,
                 [
@@ -43,7 +43,7 @@
               "execute"
             ],
             {
-              "flow uses:": [
+              "Flow uses:": [
                 {
                   "Term:name:type:optional:": [
                     "why",

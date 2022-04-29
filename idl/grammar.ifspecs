@@ -12,7 +12,7 @@
               "scanner_maker"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "as",
                 true,
                 [
@@ -35,7 +35,7 @@
               "grammar_maker"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -64,7 +64,7 @@
               "scanner_maker"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -87,7 +87,7 @@
               "scanner_maker"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -110,7 +110,7 @@
               "grammar_maker"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -140,7 +140,7 @@
               "internal"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -171,7 +171,7 @@
               "scanner_maker"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -193,7 +193,7 @@
               "scanner_maker"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -216,7 +216,7 @@
               "scanner_maker"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -248,7 +248,7 @@
               "scanner_maker"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -270,7 +270,7 @@
               "scanner_maker"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {

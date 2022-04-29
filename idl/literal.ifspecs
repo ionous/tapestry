@@ -13,7 +13,7 @@
               "literal_value"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "bool",
                 true,
                 [
@@ -37,7 +37,7 @@
           "Spec:with flow:": [
             "field_value",
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "field",
                 [
                   {
@@ -71,7 +71,7 @@
               "internal"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "fields",
                 true,
                 [
@@ -105,7 +105,7 @@
               "literal_value"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "num",
                 true,
                 [
@@ -136,7 +136,7 @@
               "literal_value"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "nums",
                 true,
                 [
@@ -168,7 +168,7 @@
               "literal_value"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "rec",
                 true,
                 [
@@ -206,7 +206,7 @@
               "literal_value"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "recs",
                 true,
                 [
@@ -245,7 +245,7 @@
               "literal_value"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "txt",
                 true,
                 [
@@ -273,7 +273,7 @@
               "literal_value"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "txts",
                 true,
                 [

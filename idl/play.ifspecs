@@ -12,7 +12,7 @@
               "play_message"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "play",
                 [
                   {
@@ -43,7 +43,7 @@
               "play_message"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "play",
                 [
                   {
@@ -90,7 +90,7 @@
               "play_message"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "play",
                 [
                   {

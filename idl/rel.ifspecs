@@ -12,7 +12,7 @@
               "text_eval"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "reciprocal",
                 true,
                 [
@@ -41,7 +41,7 @@
               "text_list_eval"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "reciprocals",
                 true,
                 [
@@ -70,7 +70,7 @@
               "execute"
             ],
             {
-              "flow trim:uses:": [
+              "Flow trim:uses:": [
                 true,
                 [
                   {
@@ -116,7 +116,7 @@
               "text_eval"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "relative",
                 true,
                 [
@@ -145,7 +145,7 @@
               "text_list_eval"
             ],
             {
-              "flow:trim:uses:": [
+              "Flow:trim:uses:": [
                 "relatives",
                 true,
                 [

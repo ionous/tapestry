@@ -29,7 +29,7 @@
               "test_slot"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "embed",
                 [
                   {
@@ -47,7 +47,7 @@
               "test_slot"
             ],
             {
-              "flow:uses:": [
+              "Flow:uses:": [
                 "flow",
                 [
                   {
