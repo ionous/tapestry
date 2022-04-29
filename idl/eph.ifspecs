@@ -43,9 +43,11 @@
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "eph_aliases",
+            [
+              "ephemera"
+            ],
             {
               "flow:uses:": [
                 "eph",
@@ -67,16 +69,15 @@
                   }
                 ]
               ]
-            },
-            [
-              "ephemera"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "eph_always",
+            [
+              "eph_pattern_helpers"
+            ],
             {
               "Str exclusively:uses:": [
                 true,
@@ -86,10 +87,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "eph_pattern_helpers"
-            ]
+            }
           ]
         },
         {
@@ -97,8 +95,11 @@
             "A set of related object states such that exactly one member of the set is true for a given object at a single time.",
             "Generates an implicit kind of 'aspect' where every field of the kind is a boolean property."
           ],
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "eph_aspects",
+            [
+              "ephemera"
+            ],
             {
               "flow:uses:": [
                 "eph",
@@ -118,14 +119,10 @@
                   }
                 ]
               ]
-            },
-            [
-              "ephemera"
-            ]
+            }
           ]
         },
         {
-          "--": "",
           "Spec:with flow:": [
             "eph_at",
             {
@@ -150,9 +147,11 @@
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "eph_begin_domain",
+            [
+              "ephemera"
+            ],
             {
               "flow:uses:": [
                 "eph",
@@ -173,16 +172,15 @@
                   }
                 ]
               ]
-            },
-            [
-              "ephemera"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with swap:groups:": [
+          "Spec:groups:with swap:": [
             "eph_cardinality",
+            [
+              "eph_relation_helpers"
+            ],
             {
               "Swap between:": [
                 {
@@ -198,16 +196,15 @@
                   "Pick:": "many_many"
                 }
               ]
-            },
-            [
-              "eph_relation_helpers"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "eph_checks",
+            [
+              "ephemera"
+            ],
             {
               "flow:uses:": [
                 "eph",
@@ -236,16 +233,15 @@
                   }
                 ]
               ]
-            },
-            [
-              "ephemera"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "eph_directives",
+            [
+              "ephemera"
+            ],
             {
               "flow:uses:": [
                 "eph",
@@ -265,16 +261,15 @@
                   }
                 ]
               ]
-            },
-            [
-              "ephemera"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "eph_end_domain",
+            [
+              "ephemera"
+            ],
             {
               "flow:uses:": [
                 "eph",
@@ -288,10 +283,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "ephemera"
-            ]
+            }
           ]
         },
         {
@@ -301,8 +293,11 @@
             "and it can be used wherever one of its ancestor kinds is needed.",
             "( The reverse isn't true because the new kind can have its own unique properties not available to its ancestors. )"
           ],
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "eph_kinds",
+            [
+              "ephemera"
+            ],
             {
               "flow:uses:": [
                 "eph",
@@ -328,14 +323,10 @@
                   }
                 ]
               ]
-            },
-            [
-              "ephemera"
-            ]
+            }
           ]
         },
         {
-          "--": "",
           "Spec:with flow:": [
             "eph_list",
             {
@@ -356,9 +347,11 @@
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "eph_nouns",
+            [
+              "ephemera"
+            ],
             {
               "flow:uses:": [
                 "eph",
@@ -377,10 +370,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "ephemera"
-            ]
+            }
           ]
         },
         {
@@ -389,8 +379,11 @@
             "Used by the assembler to help interpret author definitions,",
             "and at runtime to help the parser interpret user input."
           ],
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "eph_opposites",
+            [
+              "ephemera"
+            ],
             {
               "flow:uses:": [
                 "eph",
@@ -409,10 +402,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "ephemera"
-            ]
+            }
           ]
         },
         {
@@ -469,8 +459,11 @@
             "While multiple pattern commands can be used to define a pattern,",
             "the set of arguments and the return can only be specified once."
           ],
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "eph_patterns",
+            [
+              "ephemera"
+            ],
             {
               "flow:uses:": [
                 "eph",
@@ -508,10 +501,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "ephemera"
-            ]
+            }
           ]
         },
         {
@@ -520,8 +510,11 @@
             "Used by the assembler to help interpret author definitions,",
             "and at runtime to help the parser interpret user input."
           ],
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "eph_plurals",
+            [
+              "ephemera"
+            ],
             {
               "flow:uses:": [
                 "eph",
@@ -540,10 +533,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "ephemera"
-            ]
+            }
           ]
         },
         {
@@ -551,8 +541,11 @@
             "Implies some fact about the world that will be defined elsewhere.",
             "Reuses the set of ephemera to limit redefinition. Not all are valid."
           ],
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "eph_refs",
+            [
+              "ephemera"
+            ],
             {
               "flow:uses:": [
                 "eph",
@@ -566,16 +559,15 @@
                   }
                 ]
               ]
-            },
-            [
-              "ephemera"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "eph_relations",
+            [
+              "ephemera"
+            ],
             {
               "flow:trim:uses:": [
                 "eph",
@@ -596,16 +588,15 @@
                   }
                 ]
               ]
-            },
-            [
-              "ephemera"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "eph_relatives",
+            [
+              "ephemera"
+            ],
             {
               "flow:trim:uses:": [
                 "eph",
@@ -633,16 +624,15 @@
                   }
                 ]
               ]
-            },
-            [
-              "ephemera"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "eph_rules",
+            [
+              "ephemera"
+            ],
             {
               "flow:uses:": [
                 "eph",
@@ -691,16 +681,15 @@
                   }
                 ]
               ]
-            },
-            [
-              "ephemera"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "eph_timing",
+            [
+              "eph_pattern_helpers"
+            ],
             {
               "Str exclusively:uses:": [
                 true,
@@ -719,10 +708,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "eph_pattern_helpers"
-            ]
+            }
           ]
         },
         {
@@ -733,8 +719,11 @@
             "2. The values inside of records can be set using a 'path' to find them, however individual values within lists cannot be set.",
             "Note: when using a path, the path addresses the noun first, the named field - referring to the inner most record - last."
           ],
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "eph_values",
+            [
+              "ephemera"
+            ],
             {
               "flow:uses:": [
                 "eph",
@@ -768,14 +757,10 @@
                   }
                 ]
               ]
-            },
-            [
-              "ephemera"
-            ]
+            }
           ]
         },
         {
-          "--": "",
           "Spec:with slot:": [
             "ephemera",
             {
@@ -784,9 +769,11 @@
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "many_many",
+            [
+              "eph_relation_helpers"
+            ],
             {
               "flow:trim:uses:": [
                 "kinds",
@@ -807,16 +794,15 @@
                   }
                 ]
               ]
-            },
-            [
-              "eph_relation_helpers"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "many_one",
+            [
+              "eph_relation_helpers"
+            ],
             {
               "flow:trim:uses:": [
                 "kinds",
@@ -837,16 +823,15 @@
                   }
                 ]
               ]
-            },
-            [
-              "eph_relation_helpers"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "one_many",
+            [
+              "eph_relation_helpers"
+            ],
             {
               "flow:trim:uses:": [
                 "kind",
@@ -867,16 +852,15 @@
                   }
                 ]
               ]
-            },
-            [
-              "eph_relation_helpers"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "one_one",
+            [
+              "eph_relation_helpers"
+            ],
             {
               "flow:trim:uses:": [
                 "kind",
@@ -897,10 +881,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "eph_relation_helpers"
-            ]
+            }
           ]
         }
       ]

@@ -5,11 +5,12 @@
     {
       "Group contains:": [
         {
-          "--": [
-            "Debug log."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Debug log.",
+          "Spec:slots:with flow:": [
             "debug_log",
+            [
+              "execute"
+            ],
             {
               "flow:trim:uses:": [
                 "log",
@@ -31,18 +32,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Statement which does nothing."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Statement which does nothing.",
+          "Spec:slots:with flow:": [
             "do_nothing",
+            [
+              "execute"
+            ],
             {
               "flow uses:": [
                 {
@@ -54,14 +53,10 @@
                   ]
                 }
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
-          "--": "",
           "Spec:with str:": [
             "logging_level",
             {

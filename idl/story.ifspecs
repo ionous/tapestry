@@ -5,9 +5,12 @@
     {
       "Group contains:": [
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "abstract_action",
+            [
+              "debug",
+              "events"
+            ],
             {
               "Str exclusively:uses:": [
                 true,
@@ -17,17 +20,17 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "events"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "action_context",
+            [
+              "debug",
+              "events",
+              "positioned"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "and one {$kind} ( the other noun )",
@@ -41,18 +44,20 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "events",
-              "positioned"
-            ]
+            }
           ]
         },
         {
           "--": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "action_decl",
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "events"
+            ],
             {
               "flow:phrase:trim:uses:": [
                 "Event",
@@ -79,34 +84,29 @@
                   }
                 ]
               ]
-            },
-            [
-              "story_statement"
-            ],
-            [
-              "debug",
-              "events"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "action_name",
-            {
-              "Str uses:": []
-            },
             [
               "debug",
               "events",
               "positioned"
-            ]
+            ],
+            {
+              "Str uses:": []
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with swap:groups:": [
+          "Spec:groups:with swap:": [
             "action_params",
+            [
+              "debug",
+              "events"
+            ],
             {
               "Swap between:": [
                 {
@@ -131,17 +131,16 @@
                   ]
                 }
               ]
-            },
-            [
-              "debug",
-              "events"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "ana",
+            [
+              "debug",
+              "misc"
+            ],
             {
               "Str exclusively:uses:": [
                 true,
@@ -154,17 +153,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "misc"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "are_an",
+            [
+              "debug",
+              "misc"
+            ],
             {
               "Str exclusively:uses:": [
                 true,
@@ -201,17 +199,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "misc"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "are_being",
+            [
+              "debug",
+              "misc"
+            ],
             {
               "Str exclusively:uses:": [
                 true,
@@ -224,17 +221,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "misc"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "are_either",
+            [
+              "debug",
+              "properties"
+            ],
             {
               "Str exclusively:uses:": [
                 true,
@@ -253,31 +249,32 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "properties"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "aspect",
-            {
-              "Str uses:": []
-            },
             [
               "debug",
               "traits",
               "positioned"
-            ]
+            ],
+            {
+              "Str uses:": []
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "aspect_property",
+            [
+              "property_slot"
+            ],
+            [
+              "debug",
+              "properties"
+            ],
             {
               "flow:phrase:uses:": [
                 "aspect",
@@ -292,20 +289,20 @@
                   }
                 ]
               ]
-            },
-            [
-              "property_slot"
-            ],
-            [
-              "debug",
-              "properties"
-            ]
+            }
           ]
         },
         {
           "--": "Add traits to an aspect",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "aspect_traits",
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "traits"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "{$aspect} {$trait_phrase}",
@@ -319,20 +316,19 @@
                   }
                 ]
               ]
-            },
-            [
-              "story_statement"
-            ],
-            [
-              "debug",
-              "traits"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "bool_property",
+            [
+              "property_slot"
+            ],
+            [
+              "debug",
+              "properties"
+            ],
             {
               "flow:phrase:uses:": [
                 "bool",
@@ -362,20 +358,20 @@
                   }
                 ]
               ]
-            },
-            [
-              "property_slot"
-            ],
-            [
-              "debug",
-              "properties"
-            ]
+            }
           ]
         },
         {
           "--": "Give a kind a trait",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "certainties",
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "properties"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "{$plural_kinds} {$are_being} {$certainty} {$trait}.",
@@ -395,22 +391,18 @@
                   }
                 ]
               ]
-            },
-            [
-              "story_statement"
-            ],
-            [
-              "debug",
-              "properties"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Whether an trait applies to a kind of noun."
-          ],
-          "Spec:with str:groups:": [
+          "--": "Whether an trait applies to a kind of noun.",
+          "Spec:groups:with str:": [
             "certainty",
+            [
+              "debug",
+              "properties",
+              "positioned"
+            ],
             {
               "Str exclusively:uses:": [
                 true,
@@ -429,12 +421,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "properties",
-              "positioned"
-            ]
+            }
           ]
         },
         {
@@ -442,8 +429,16 @@
             "Add a note.",
             "Information about the story for you and other authors."
           ],
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "comment",
+            [
+              "story_statement",
+              "execute"
+            ],
+            [
+              "debug",
+              "language"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "Note: {comment$lines}",
@@ -454,21 +449,17 @@
                   }
                 ]
               ]
-            },
-            [
-              "story_statement",
-              "execute"
-            ],
-            [
-              "debug",
-              "language"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "common_action",
+            [
+              "debug",
+              "events",
+              "positioned"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "one {$kind} ( the noun ) {$action_context}",
@@ -488,12 +479,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "events",
-              "positioned"
-            ]
+            }
           ]
         },
         {
@@ -501,8 +487,17 @@
             "A guard which returns true based on a counter.",
             "Counters start at zero and are incremented every time the guard gets checked."
           ],
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "count_of",
+            [
+              "bool_eval"
+            ],
+            [
+              "debug",
+              "stubs",
+              "logic",
+              "positioned"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "trigger {_$trigger} {$num}",
@@ -519,22 +514,22 @@
                   }
                 ]
               ]
-            },
-            [
-              "bool_eval"
-            ],
-            [
-              "debug",
-              "stubs",
-              "logic",
-              "positioned"
-            ]
+            }
           ]
         },
         {
           "--": "When called multiple times, returns each of its inputs in turn.",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "cycle_text",
+            [
+              "text_eval"
+            ],
+            [
+              "debug",
+              "stubs",
+              "output",
+              "positioned"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "cycle {_$parts}",
@@ -549,22 +544,17 @@
                   }
                 ]
               ]
-            },
-            [
-              "text_eval"
-            ],
-            [
-              "debug",
-              "stubs",
-              "output",
-              "positioned"
-            ]
+            }
           ]
         },
         {
           "--": "Determiners: modify a word they are associated to designate specificity or, sometimes, a count.  For instance: \"some\" fish hooks, \"a\" pineapple, \"75\" triangles, \"our\" Trevor.",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "determiner",
+            [
+              "debug",
+              "nouns"
+            ],
             {
               "Str uses:": [
                 {
@@ -580,11 +570,7 @@
                   "Option:": "our"
                 }
               ]
-            },
-            [
-              "debug",
-              "nouns"
-            ]
+            }
           ]
         },
         {
@@ -592,8 +578,16 @@
             "Declare event listeners.",
             "Listeners let objects in the game world react to changes before, during, or after they happen."
           ],
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "event_block",
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "events",
+              "positioned"
+            ],
             {
               "flow:phrase:trim:uses:": [
                 "listen",
@@ -615,21 +609,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "story_statement"
-            ],
-            [
-              "debug",
-              "events",
-              "positioned"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "event_handler",
+            [
+              "debug",
+              "events"
+            ],
             {
               "flow:phrase:trim:uses:": [
                 "with",
@@ -663,31 +652,29 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "events"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "event_name",
-            {
-              "Str uses:": []
-            },
             [
               "debug",
               "events",
               "positioned"
-            ]
+            ],
+            {
+              "Str uses:": []
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "event_phase",
+            [
+              "debug",
+              "events"
+            ],
             {
               "Str exclusively:uses:": [
                 true,
@@ -706,17 +693,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "events"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with swap:groups:": [
+          "Spec:groups:with swap:": [
             "event_target",
+            [
+              "debug",
+              "events"
+            ],
             {
               "Swap between:": [
                 {
@@ -732,17 +718,21 @@
                   ]
                 }
               ]
-            },
-            [
-              "debug",
-              "events"
-            ]
+            }
           ]
         },
         {
           "--": "Read what the player types and turn it into actions.",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "grammar_decl",
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "stubs",
+              "grammar"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "understand {_$grammar}",
@@ -756,21 +746,19 @@
                   }
                 ]
               ]
-            },
-            [
-              "story_statement"
-            ],
-            [
-              "debug",
-              "stubs",
-              "grammar"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "kind_of_noun",
+            [
+              "noun_continuation"
+            ],
+            [
+              "debug",
+              "nouns"
+            ],
             {
               "flow:phrase:trim:uses:": [
                 "Kind",
@@ -789,20 +777,19 @@
                   }
                 ]
               ]
-            },
-            [
-              "noun_continuation"
-            ],
-            [
-              "debug",
-              "nouns"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "kind_of_relation",
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "relations"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "{$relation} relates {$cardinality}",
@@ -822,20 +809,20 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "--": "Add properties to a kind",
+          "Spec:slots:groups:with flow:": [
+            "kinds_have_properties",
             [
               "story_statement"
             ],
             [
               "debug",
-              "relations"
-            ]
-          ]
-        },
-        {
-          "--": "Add properties to a kind",
-          "Spec:with flow:slots:groups:": [
-            "kinds_have_properties",
+              "kinds"
+            ],
             {
               "flow:phrase:trim:uses:": [
                 "Kinds",
@@ -855,20 +842,19 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "Spec:slots:groups:with flow:": [
+            "kinds_of_aspect",
             [
               "story_statement"
             ],
             [
               "debug",
-              "kinds"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
-            "kinds_of_aspect",
+              "traits"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "{$aspect} is a kind of value.",
@@ -879,20 +865,20 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "--": "Declare a kind",
+          "Spec:slots:groups:with flow:": [
+            "kinds_of_kind",
             [
               "story_statement"
             ],
             [
               "debug",
-              "traits"
-            ]
-          ]
-        },
-        {
-          "--": "Declare a kind",
-          "Spec:with flow:slots:groups:": [
-            "kinds_of_kind",
+              "kinds"
+            ],
             {
               "flow:phrase:uses:": [
                 "Make",
@@ -912,20 +898,20 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "--": "The opposite of east is west.",
+          "Spec:slots:groups:with flow:": [
+            "make_opposite",
             [
               "story_statement"
             ],
             [
               "debug",
-              "kinds"
-            ]
-          ]
-        },
-        {
-          "--": "The opposite of east is west.",
-          "Spec:with flow:slots:groups:": [
-            "make_opposite",
+              "language"
+            ],
             {
               "flow:phrase:trim:uses:": [
                 "make",
@@ -946,14 +932,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "story_statement"
-            ],
-            [
-              "debug",
-              "language"
-            ]
+            }
           ]
         },
         {
@@ -961,8 +940,15 @@
             "The plural of person is people.",
             "The plural of person is persons."
           ],
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "make_plural",
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "language"
+            ],
             {
               "flow:phrase:trim:uses:": [
                 "make",
@@ -983,20 +969,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "story_statement"
-            ],
-            [
-              "debug",
-              "language"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "many_to_many",
+            [
+              "debug",
+              "relations"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "many {$kinds} to many {$other_kinds}",
@@ -1016,17 +998,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "relations"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "many_to_one",
+            [
+              "debug",
+              "relations"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "many {$kinds} to one {$kind}",
@@ -1046,17 +1027,17 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "relations"
-            ]
+            }
           ]
         },
         {
           "--": "Chooses between a one-way and a two-way connection between rooms.  Generally, this only makes sense for map headings, but it at least causes 'departing' to check that a reverse connection exists.  Note: moving from one room leads you into another somewhat generically.  Sometimes its useful to position the player on entry to a new room based on where they came from.  Using, a previous room or last used door can do the trick.",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "map_connection",
+            [
+              "debug",
+              "map_making"
+            ],
             {
               "Str exclusively:uses:": [
                 true,
@@ -1069,19 +1050,21 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "map_making"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Leaving a room by by going through a door ( ex. departing the house via the front door... )."
-          ],
-          "Spec:with flow:slots:groups:": [
+          "--": "Leaving a room by by going through a door ( ex. departing the house via the front door... ).",
+          "Spec:slots:groups:with flow:": [
             "map_departing",
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "map_making",
+              "modeling"
+            ],
             {
               "flow:uses:": [
                 "departing",
@@ -1114,7 +1097,27 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "--": "A heading for movement within the game, often connecting one room within the game to another.  The most commonly used are standard compass directions like 'north', 'east', 'south', and 'west'.",
+          "Spec:groups:with str:": [
+            "map_direction",
+            [
+              "debug",
+              "map_making",
+              "modeling"
+            ],
+            {
+              "Str uses:": []
+            }
+          ]
+        },
+        {
+          "--": "Leaving a room by moving in a compass direction ( ex. heading east... ).",
+          "Spec:slots:groups:with flow:": [
+            "map_heading",
             [
               "story_statement"
             ],
@@ -1122,29 +1125,7 @@
               "debug",
               "map_making",
               "modeling"
-            ]
-          ]
-        },
-        {
-          "--": "A heading for movement within the game, often connecting one room within the game to another.  The most commonly used are standard compass directions like 'north', 'east', 'south', and 'west'.",
-          "Spec:with str:groups:": [
-            "map_direction",
-            {
-              "Str uses:": []
-            },
-            [
-              "debug",
-              "map_making",
-              "modeling"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "Leaving a room by moving in a compass direction ( ex. heading east... )."
-          ],
-          "Spec:with flow:slots:groups:": [
-            "map_heading",
+            ],
             {
               "flow:trim:uses:": [
                 "heading",
@@ -1185,21 +1166,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "story_statement"
-            ],
-            [
-              "debug",
-              "map_making",
-              "modeling"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "named_noun",
+            [
+              "debug",
+              "nouns"
+            ],
             {
               "flow:phrase:trim:uses:": [
                 "Noun",
@@ -1218,17 +1194,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "nouns"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "named_property",
+            [
+              "debug",
+              "properties"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "named {$name} ( {of$type} )",
@@ -1249,11 +1224,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "properties"
-            ]
+            }
           ]
         },
         {
@@ -1262,8 +1233,15 @@
             "Assign text.",
             "Gives a noun one or more lines of text."
           ],
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "noun_assignment",
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "properties"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "The {$property} of {$nouns} is {the text$lines}",
@@ -1284,33 +1262,31 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "Spec:groups:with slot:": [
+            "noun_continuation",
+            [
+              "debug",
+              "nouns"
+            ],
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
+          "Spec:slots:groups:with flow:": [
+            "noun_kind_statement",
             [
               "story_statement"
             ],
             [
               "debug",
-              "properties"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with slot:groups:": [
-            "noun_continuation",
-            {
-              "Slot": true
-            },
-            [
-              "debug",
               "nouns"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
-            "noun_kind_statement",
+            ],
             {
               "flow:phrase:trim:uses:": [
                 "Nouns",
@@ -1341,34 +1317,33 @@
                   }
                 ]
               ]
-            },
-            [
-              "story_statement"
-            ],
-            [
-              "debug",
-              "nouns"
-            ]
+            }
           ]
         },
         {
           "--": "Noun name: Some specific person, place, or thing; or, more rarely, a kind.  Proper names are usually capitalized:  For example, maybe: 'Haruki', 'Jane', or 'Toronto'.  Common names are usually not capitalized. For example, maybe: 'table', 'chair', or 'dog park'.  A set of duplicate object uses their kind. For instance: twelve 'cats'.`",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "noun_name",
-            {
-              "Str uses:": []
-            },
             [
               "debug",
               "nouns",
               "positioned"
-            ]
+            ],
+            {
+              "Str uses:": []
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "noun_relation",
+            [
+              "noun_continuation"
+            ],
+            [
+              "debug",
+              "nouns"
+            ],
             {
               "flow phrase:uses:": [
                 "{$are_being} {$relation} {$other_nouns}",
@@ -1394,20 +1369,19 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "Spec:slots:groups:with flow:": [
+            "noun_relation_statement",
             [
-              "noun_continuation"
+              "story_statement"
             ],
             [
               "debug",
               "nouns"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
-            "noun_relation_statement",
+            ],
             {
               "flow:phrase:trim:uses:": [
                 "Nouns",
@@ -1438,20 +1412,19 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "Spec:slots:groups:with flow:": [
+            "noun_trait_statement",
             [
               "story_statement"
             ],
             [
               "debug",
               "nouns"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
-            "noun_trait_statement",
+            ],
             {
               "flow:phrase:trim:uses:": [
                 "Nouns",
@@ -1482,20 +1455,19 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "Spec:slots:groups:with flow:": [
+            "noun_traits",
             [
-              "story_statement"
+              "noun_continuation"
             ],
             [
               "debug",
               "nouns"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
-            "noun_traits",
+            ],
             {
               "flow phrase:trim:uses:": [
                 "{$are_being} {$trait}",
@@ -1512,20 +1484,19 @@
                   }
                 ]
               ]
-            },
-            [
-              "noun_continuation"
-            ],
-            [
-              "debug",
-              "nouns"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "num_list_property",
+            [
+              "property_slot"
+            ],
+            [
+              "debug",
+              "properties"
+            ],
             {
               "flow:phrase:uses:": [
                 "num_list",
@@ -1555,20 +1526,19 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "Spec:slots:groups:with flow:": [
+            "number_property",
             [
               "property_slot"
             ],
             [
               "debug",
               "properties"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
-            "number_property",
+            ],
             {
               "flow:phrase:uses:": [
                 "number",
@@ -1598,20 +1568,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "property_slot"
-            ],
-            [
-              "debug",
-              "properties"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "one_to_many",
+            [
+              "debug",
+              "relations"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "one {$kind} to many {$kinds}",
@@ -1631,17 +1597,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "relations"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "one_to_one",
+            [
+              "debug",
+              "relations"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "one {$kind} to one {$other_kind}",
@@ -1661,17 +1626,17 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "relations"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "paired_action",
+            [
+              "debug",
+              "events",
+              "positioned"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "two {$kinds} ( the noun and other noun )",
@@ -1685,18 +1650,17 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "events",
-              "positioned"
-            ]
+            }
           ]
         },
         {
           "--": "Phrases",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "paragraph",
+            [
+              "debug",
+              "statements"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "{$story_statement}",
@@ -1711,11 +1675,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "statements"
-            ]
+            }
           ]
         },
         {
@@ -1723,8 +1683,15 @@
             "Add actions to a pattern.",
             "Actions to take when using a pattern."
           ],
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "pattern_actions",
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "patterns"
+            ],
             {
               "flow:phrase:trim:uses:": [
                 "pattern",
@@ -1755,20 +1722,20 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "--": "Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.  Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation.",
+          "Spec:slots:groups:with flow:": [
+            "pattern_decl",
             [
               "story_statement"
             ],
             [
               "debug",
               "patterns"
-            ]
-          ]
-        },
-        {
-          "--": "Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.  Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation.",
-          "Spec:with flow:slots:groups:": [
-            "pattern_decl",
+            ],
             {
               "flow:phrase:trim:uses:": [
                 "Pattern",
@@ -1799,20 +1766,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "story_statement"
-            ],
-            [
-              "debug",
-              "patterns"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "pattern_flags",
+            [
+              "debug",
+              "patterns"
+            ],
             {
               "Str exclusively:uses:": [
                 true,
@@ -1834,17 +1797,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "patterns"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "pattern_return",
+            [
+              "debug",
+              "patterns"
+            ],
             {
               "flow:phrase:trim:uses:": [
                 "pattern_result",
@@ -1859,17 +1821,17 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "patterns"
-            ]
+            }
           ]
         },
         {
           "--": "Rule",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "pattern_rule",
+            [
+              "debug",
+              "patterns"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "When {conditions are met$guard}{continue$flags}, then: {$does}",
@@ -1897,17 +1859,17 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "patterns"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "pattern_type",
+            [
+              "debug",
+              "patterns",
+              "positioned"
+            ],
             {
               "Str uses:": [
                 {
@@ -1920,59 +1882,59 @@
                   "Option:": "events"
                 }
               ]
-            },
-            [
-              "debug",
-              "patterns",
-              "positioned"
-            ]
+            }
           ]
         },
         {
           "--": "The plural name of a type of similar nouns.  For example: animals, containers, etc.",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "plural_kinds",
-            {
-              "Str uses:": []
-            },
             [
               "debug",
               "kinds",
               "positioned"
-            ]
+            ],
+            {
+              "Str uses:": []
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "property",
-            {
-              "Str uses:": []
-            },
             [
               "debug",
               "properties",
               "positioned"
-            ]
+            ],
+            {
+              "Str uses:": []
+            }
           ]
         },
         {
           "--": "future: each slot should support an appropriate 'starting as' initial value",
-          "Spec:with slot:groups:": [
+          "Spec:groups:with slot:": [
             "property_slot",
-            {
-              "Slot": true
-            },
             [
               "debug",
               "properties"
-            ]
+            ],
+            {
+              "Slot": true
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "record_list_property",
+            [
+              "property_slot"
+            ],
+            [
+              "debug",
+              "properties"
+            ],
             {
               "flow:phrase:uses:": [
                 "record_list",
@@ -2002,20 +1964,19 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "Spec:slots:groups:with flow:": [
+            "record_property",
             [
               "property_slot"
             ],
             [
               "debug",
               "properties"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
-            "record_property",
+            ],
             {
               "flow:phrase:uses:": [
                 "record",
@@ -2045,20 +2006,17 @@
                   }
                 ]
               ]
-            },
-            [
-              "property_slot"
-            ],
-            [
-              "debug",
-              "properties"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with swap:groups:": [
+          "Spec:groups:with swap:": [
             "relation_cardinality",
+            [
+              "debug",
+              "relations",
+              "positioned"
+            ],
             {
               "Swap between:": [
                 {
@@ -2074,18 +2032,20 @@
                   "Pick:": "many_to_many"
                 }
               ]
-            },
-            [
-              "debug",
-              "relations",
-              "positioned"
-            ]
+            }
           ]
         },
         {
           "--": "Relate nouns to each other",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "relative_to_noun",
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "nouns"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "The {$relation} of {$nouns} {$are_being} {$other_nouns}.",
@@ -2116,14 +2076,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "story_statement"
-            ],
-            [
-              "debug",
-              "nouns"
-            ]
+            }
           ]
         },
         {
@@ -2131,8 +2084,16 @@
             "Parse text using templates.",
             "See: https://github.com/ionous/iffy/wiki/Templates."
           ],
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "render_template",
+            [
+              "text_eval"
+            ],
+            [
+              "debug",
+              "stubs",
+              "format"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "render_template {_$template}",
@@ -2146,21 +2107,22 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "--": "When called multiple times returns its inputs at random.",
+          "Spec:slots:groups:with flow:": [
+            "shuffle_text",
             [
               "text_eval"
             ],
             [
               "debug",
               "stubs",
-              "format"
-            ]
-          ]
-        },
-        {
-          "--": "When called multiple times returns its inputs at random.",
-          "Spec:with flow:slots:groups:": [
-            "shuffle_text",
+              "output",
+              "positioned"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "shuffle {_$parts}",
@@ -2175,7 +2137,27 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "--": "Describes a type of similar nouns.  For example: an animal, a container, etc.",
+          "Spec:groups:with str:": [
+            "singular_kind",
+            [
+              "debug",
+              "kinds",
+              "positioned"
+            ],
+            {
+              "Str uses:": []
+            }
+          ]
+        },
+        {
+          "--": "When called multiple times returns each of its inputs in turn, sticking to the last one.",
+          "Spec:slots:groups:with flow:": [
+            "stopping_text",
             [
               "text_eval"
             ],
@@ -2184,27 +2166,7 @@
               "stubs",
               "output",
               "positioned"
-            ]
-          ]
-        },
-        {
-          "--": "Describes a type of similar nouns.  For example: an animal, a container, etc.",
-          "Spec:with str:groups:": [
-            "singular_kind",
-            {
-              "Str uses:": []
-            },
-            [
-              "debug",
-              "kinds",
-              "positioned"
-            ]
-          ]
-        },
-        {
-          "--": "When called multiple times returns each of its inputs in turn, sticking to the last one.",
-          "Spec:with flow:slots:groups:": [
-            "stopping_text",
+            ],
             {
               "flow phrase:trim:uses:": [
                 "stopping {_$parts}",
@@ -2219,22 +2181,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "text_eval"
-            ],
-            [
-              "debug",
-              "stubs",
-              "output",
-              "positioned"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "story",
+            [
+              "debug",
+              "statements"
+            ],
             {
               "flow phrase:uses:": [
                 "{paragraph$paragraph}",
@@ -2248,25 +2204,13 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "statements"
-            ]
+            }
           ]
         },
         {
           "--": "this cheats a bit by making the signature the same as the comment marker  that allows nodes which look like comments but are actually story breaks.",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "story_break",
-            {
-              "flow:phrase:trim:uses:": [
-                "--",
-                "story_break",
-                true,
-                []
-              ]
-            },
             [
               "story_statement"
             ],
@@ -2274,13 +2218,25 @@
               "debug",
               "statements",
               "internal"
-            ]
+            ],
+            {
+              "flow:phrase:trim:uses:": [
+                "--",
+                "story_break",
+                true,
+                []
+              ]
+            }
           ]
         },
         {
           "--": "top level node, currently just for blockly  might eventually contain story metadata  ex. author, description...",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "story_file",
+            [
+              "debug",
+              "statements"
+            ],
             {
               "flow:phrase:trim:uses:": [
                 "tapestry",
@@ -2296,30 +2252,30 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "statements"
-            ]
+            }
           ]
         },
         {
           "--": "Phrase",
-          "Spec:with slot:groups:": [
+          "Spec:groups:with slot:": [
             "story_statement",
-            {
-              "Slot": true
-            },
             [
               "debug",
               "statements"
-            ]
+            ],
+            {
+              "Slot": true
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "test_name",
+            [
+              "debug",
+              "tests",
+              "positioned"
+            ],
             {
               "Str uses:": [
                 {
@@ -2329,20 +2285,20 @@
                   ]
                 }
               ]
-            },
-            [
-              "debug",
-              "tests",
-              "positioned"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Expect that a test uses 'Say' to print some specific text."
-          ],
-          "Spec:with flow:slots:groups:": [
+          "--": "Expect that a test uses 'Say' to print some specific text.",
+          "Spec:slots:groups:with flow:": [
             "test_output",
+            [
+              "testing"
+            ],
+            [
+              "debug",
+              "tests"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "output {$lines}.",
@@ -2353,20 +2309,20 @@
                   }
                 ]
               ]
-            },
-            [
-              "testing"
-            ],
-            [
-              "debug",
-              "tests"
-            ]
+            }
           ]
         },
         {
           "--": "Add actions to a test",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "test_rule",
+            [
+              "story_statement"
+            ],
+            [
+              "debug",
+              "tests"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "To test {$test_name}: {$does}",
@@ -2384,20 +2340,20 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "--": "Create a scene for testing",
+          "Spec:slots:groups:with flow:": [
+            "test_scene",
             [
               "story_statement"
             ],
             [
               "debug",
               "tests"
-            ]
-          ]
-        },
-        {
-          "--": "Create a scene for testing",
-          "Spec:with flow:slots:groups:": [
-            "test_scene",
+            ],
             {
               "flow phrase:trim:uses:": [
                 "While testing {$test_name} {with$requires}: {$story}",
@@ -2422,20 +2378,21 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "--": "Describe test results",
+          "Spec:slots:groups:with flow:": [
+            "test_statement",
             [
               "story_statement"
             ],
             [
               "debug",
-              "tests"
-            ]
-          ]
-        },
-        {
-          "--": "Describe test results",
-          "Spec:with flow:slots:groups:": [
-            "test_statement",
+              "tests",
+              "positioned"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "Expect {$test_name} to {expectation$test}",
@@ -2452,34 +2409,32 @@
                   }
                 ]
               ]
-            },
-            [
-              "story_statement"
-            ],
-            [
-              "debug",
-              "tests",
-              "positioned"
-            ]
+            }
           ]
         },
         {
           "--": "Run a series of tests.",
-          "Spec:with slot:groups:": [
+          "Spec:groups:with slot:": [
             "testing",
-            {
-              "Slot": true
-            },
             [
               "debug",
               "tests"
-            ]
+            ],
+            {
+              "Slot": true
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "text_list_property",
+            [
+              "property_slot"
+            ],
+            [
+              "debug",
+              "properties"
+            ],
             {
               "flow:phrase:uses:": [
                 "text_list",
@@ -2509,20 +2464,19 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "Spec:slots:groups:with flow:": [
+            "text_property",
             [
               "property_slot"
             ],
             [
               "debug",
               "properties"
-            ]
-          ]
-        },
-        {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
-            "text_property",
+            ],
             {
               "flow:phrase:uses:": [
                 "text",
@@ -2552,34 +2506,29 @@
                   }
                 ]
               ]
-            },
-            [
-              "property_slot"
-            ],
-            [
-              "debug",
-              "properties"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "trait",
-            {
-              "Str uses:": []
-            },
             [
               "debug",
               "traits",
               "positioned"
-            ]
+            ],
+            {
+              "Str uses:": []
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:groups:": [
+          "Spec:groups:with flow:": [
             "trait_phrase",
+            [
+              "debug",
+              "traits"
+            ],
             {
               "flow phrase:trim:uses:": [
                 "{$are_either} {$trait}.",
@@ -2596,11 +2545,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "debug",
-              "traits"
-            ]
+            }
           ]
         }
       ]

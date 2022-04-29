@@ -5,11 +5,12 @@
     {
       "Group contains:": [
         {
-          "--": [
-            "makes a parser scanner producing a script defined action."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "makes a parser scanner producing a script defined action.",
+          "Spec:slots:with flow:": [
             "action",
+            [
+              "scanner_maker"
+            ],
             {
               "flow:trim:uses:": [
                 "as",
@@ -23,18 +24,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "scanner_maker"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "allows the user to refer to a noun by one or more other terms."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "allows the user to refer to a noun by one or more other terms.",
+          "Spec:slots:with flow:": [
             "alias",
+            [
+              "grammar_maker"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -54,18 +53,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "grammar_maker"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "makes a parser scanner."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "makes a parser scanner.",
+          "Spec:slots:with flow:": [
             "all_of",
+            [
+              "scanner_maker"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -79,18 +76,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "scanner_maker"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "makes a parser scanner."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "makes a parser scanner.",
+          "Spec:slots:with flow:": [
             "any_of",
+            [
+              "scanner_maker"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -104,18 +99,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "scanner_maker"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "starts a parser scanner."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "starts a parser scanner.",
+          "Spec:slots:with flow:": [
             "directive",
+            [
+              "grammar_maker"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -136,18 +129,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "grammar_maker"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Read what the player types and turn it into actions."
-          ],
-          "Spec:with flow:groups:": [
+          "--": "Read what the player types and turn it into actions.",
+          "Spec:groups:with flow:": [
             "grammar",
+            [
+              "internal"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -160,10 +151,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "internal"
-            ]
+            }
           ]
         },
         {
@@ -176,11 +164,12 @@
           ]
         },
         {
-          "--": [
-            "makes a parser scanner."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "makes a parser scanner.",
+          "Spec:slots:with flow:": [
             "noun",
+            [
+              "scanner_maker"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -193,18 +182,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "scanner_maker"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "makes a parser scanner."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "makes a parser scanner.",
+          "Spec:slots:with flow:": [
             "retarget",
+            [
+              "scanner_maker"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -218,18 +205,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "scanner_maker"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "makes a parser scanner."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "makes a parser scanner.",
+          "Spec:slots:with flow:": [
             "reverse",
+            [
+              "scanner_maker"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -243,10 +228,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "scanner_maker"
-            ]
+            }
           ]
         },
         {
@@ -259,11 +241,12 @@
           ]
         },
         {
-          "--": [
-            "makes a parser scanner which matches the player. ( the player string is just to make the composer happy. )."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "makes a parser scanner which matches the player. ( the player string is just to make the composer happy. ).",
+          "Spec:slots:with flow:": [
             "self",
+            [
+              "scanner_maker"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -276,18 +259,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "scanner_maker"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "makes a parser scanner."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "makes a parser scanner.",
+          "Spec:slots:with flow:": [
             "words",
+            [
+              "scanner_maker"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -301,10 +282,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "scanner_maker"
-            ]
+            }
           ]
         }
       ]

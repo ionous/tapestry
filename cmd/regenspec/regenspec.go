@@ -1,5 +1,5 @@
 // Package main for 'regenspec'.
-// from the big json Type, generate .if style commands which are capable of generating that Type.
+// from the big json typespec, generate .ifspec style commands which are capable of generating that type.
 package main
 
 import (

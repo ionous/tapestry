@@ -1028,9 +1028,9 @@ func TermSpec_Marshal(m jsn.Marshaler, val *TermSpec) (err error) {
 // TypeSpec can optionally fit one or more slots, or be part of one or more groups.
 type TypeSpec struct {
 	Name        string   `if:"label=_,type=text"`
-	Spec        UsesSpec `if:"label=with"`
 	Slots       []string `if:"label=slots,optional,type=text"`
 	Groups      []string `if:"label=groups,optional,type=text"`
+	Spec        UsesSpec `if:"label=with"`
 	UserComment string
 }
 
@@ -1044,9 +1044,9 @@ func (*TypeSpec) Compose() composer.Spec {
 
 const TypeSpec_Type = "type_spec"
 const TypeSpec_Field_Name = "$NAME"
-const TypeSpec_Field_Spec = "$SPEC"
 const TypeSpec_Field_Slots = "$SLOTS"
 const TypeSpec_Field_Groups = "$GROUPS"
+const TypeSpec_Field_Spec = "$SPEC"
 
 func (op *TypeSpec) Marshal(m jsn.Marshaler) error {
 	return TypeSpec_Marshal(m, op)
@@ -1126,26 +1126,26 @@ func TypeSpec_Marshal(m jsn.Marshaler, val *TypeSpec) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", TypeSpec_Field_Name))
 		}
-		e1 := m.MarshalKey("with", TypeSpec_Field_Spec)
+		e1 := m.MarshalKey("slots", TypeSpec_Field_Slots)
 		if e1 == nil {
-			e1 = UsesSpec_Marshal(m, &val.Spec)
+			e1 = prim.Text_Unboxed_Optional_Repeats_Marshal(m, &val.Slots)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", TypeSpec_Field_Spec))
+			m.Error(errutil.New(e1, "in flow at", TypeSpec_Field_Slots))
 		}
-		e2 := m.MarshalKey("slots", TypeSpec_Field_Slots)
+		e2 := m.MarshalKey("groups", TypeSpec_Field_Groups)
 		if e2 == nil {
-			e2 = prim.Text_Unboxed_Optional_Repeats_Marshal(m, &val.Slots)
+			e2 = prim.Text_Unboxed_Optional_Repeats_Marshal(m, &val.Groups)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", TypeSpec_Field_Slots))
+			m.Error(errutil.New(e2, "in flow at", TypeSpec_Field_Groups))
 		}
-		e3 := m.MarshalKey("groups", TypeSpec_Field_Groups)
+		e3 := m.MarshalKey("with", TypeSpec_Field_Spec)
 		if e3 == nil {
-			e3 = prim.Text_Unboxed_Optional_Repeats_Marshal(m, &val.Groups)
+			e3 = UsesSpec_Marshal(m, &val.Spec)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", TypeSpec_Field_Groups))
+			m.Error(errutil.New(e3, "in flow at", TypeSpec_Field_Spec))
 		}
 		m.EndBlock()
 	}
@@ -1308,30 +1308,30 @@ var Signatures = map[uint64]interface{}{
 	6404764409320714584:  (*ChoiceSpec)(nil), /* Pick:label:type: */
 	8961232031828440580:  (*ChoiceSpec)(nil), /* Pick:type: */
 	10492849629325543857: (*SlotSpec)(nil),   /* Slot */
+	17485902661291661948: (*TypeSpec)(nil),   /* Spec:groups:with flow: */
+	17417948388962479437: (*TypeSpec)(nil),   /* Spec:groups:with group: */
+	4116744036832007200:  (*TypeSpec)(nil),   /* Spec:groups:with num: */
+	14451625265593984708: (*TypeSpec)(nil),   /* Spec:groups:with slot: */
+	7847085851758485277:  (*TypeSpec)(nil),   /* Spec:groups:with str: */
+	15096092061144629293: (*TypeSpec)(nil),   /* Spec:groups:with swap: */
+	5788656145002585531:  (*TypeSpec)(nil),   /* Spec:slots:groups:with flow: */
+	2507119670160696732:  (*TypeSpec)(nil),   /* Spec:slots:groups:with group: */
+	6967971190068921277:  (*TypeSpec)(nil),   /* Spec:slots:groups:with num: */
+	8822933540700262771:  (*TypeSpec)(nil),   /* Spec:slots:groups:with slot: */
+	14255553336076960684: (*TypeSpec)(nil),   /* Spec:slots:groups:with str: */
+	14958032321477141646: (*TypeSpec)(nil),   /* Spec:slots:groups:with swap: */
+	12158415875727800091: (*TypeSpec)(nil),   /* Spec:slots:with flow: */
+	2058056700198914812:  (*TypeSpec)(nil),   /* Spec:slots:with group: */
+	12924911410748986525: (*TypeSpec)(nil),   /* Spec:slots:with num: */
+	15192693271425477331: (*TypeSpec)(nil),   /* Spec:slots:with slot: */
+	1520725515772350988:  (*TypeSpec)(nil),   /* Spec:slots:with str: */
+	2880907241004393582:  (*TypeSpec)(nil),   /* Spec:slots:with swap: */
 	12144554005550117210: (*TypeSpec)(nil),   /* Spec:with flow: */
-	497889463482890592:   (*TypeSpec)(nil),   /* Spec:with flow:groups: */
-	5941365286786658487:  (*TypeSpec)(nil),   /* Spec:with flow:slots: */
-	7900636779608357335:  (*TypeSpec)(nil),   /* Spec:with flow:slots:groups: */
 	18279802407160252863: (*TypeSpec)(nil),   /* Spec:with group: */
-	11886971382853909391: (*TypeSpec)(nil),   /* Spec:with group:groups: */
-	16322594678548734926: (*TypeSpec)(nil),   /* Spec:with group:slots: */
-	17921219200437264740: (*TypeSpec)(nil),   /* Spec:with group:slots:groups: */
 	9821026128543823202:  (*TypeSpec)(nil),   /* Spec:with num: */
-	9282326498200358936:  (*TypeSpec)(nil),   /* Spec:with num:groups: */
-	1759740253933574095:  (*TypeSpec)(nil),   /* Spec:with num:slots: */
-	15848440571553573599: (*TypeSpec)(nil),   /* Spec:with num:slots:groups: */
 	7278989256844955438:  (*TypeSpec)(nil),   /* Spec:with slot: */
-	473921710161890372:   (*TypeSpec)(nil),   /* Spec:with slot:groups: */
-	18414115882259002931: (*TypeSpec)(nil),   /* Spec:with slot:slots: */
-	895712732983637107:   (*TypeSpec)(nil),   /* Spec:with slot:slots:groups: */
 	17614241350246502339: (*TypeSpec)(nil),   /* Spec:with str: */
-	8030796173377277123:  (*TypeSpec)(nil),   /* Spec:with str:groups: */
-	14574050193726175914: (*TypeSpec)(nil),   /* Spec:with str:slots: */
-	12009768773850717552: (*TypeSpec)(nil),   /* Spec:with str:slots:groups: */
 	13597584408969322871: (*TypeSpec)(nil),   /* Spec:with swap: */
-	2973719814219399447:  (*TypeSpec)(nil),   /* Spec:with swap:groups: */
-	13288259472233109526: (*TypeSpec)(nil),   /* Spec:with swap:slots: */
-	2175737895519279228:  (*TypeSpec)(nil),   /* Spec:with swap:slots:groups: */
 	8582367713278291167:  (*StrSpec)(nil),    /* Str exclusively:uses: */
 	13984444229646943790: (*StrSpec)(nil),    /* Str uses: */
 	7464120135721846248:  (*SwapSpec)(nil),   /* Swap between: */

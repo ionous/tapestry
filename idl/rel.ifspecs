@@ -5,11 +5,12 @@
     {
       "Group contains:": [
         {
-          "--": [
-            "Returns the implied relative of a noun (ex. the source in a one-to-many relation.)."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Returns the implied relative of a noun (ex. the source in a one-to-many relation.).",
+          "Spec:slots:with flow:": [
             "reciprocal_of",
+            [
+              "text_eval"
+            ],
             {
               "flow:trim:uses:": [
                 "reciprocal",
@@ -29,18 +30,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "text_eval"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Returns the implied relative of a noun (ex. the sources of a many-to-many relation.)."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Returns the implied relative of a noun (ex. the sources of a many-to-many relation.).",
+          "Spec:slots:with flow:": [
             "reciprocals_of",
+            [
+              "text_list_eval"
+            ],
             {
               "flow:trim:uses:": [
                 "reciprocals",
@@ -60,18 +59,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "text_list_eval"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Relate two nouns."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Relate two nouns.",
+          "Spec:slots:with flow:": [
             "relate",
+            [
+              "execute"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -97,30 +94,27 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with str:groups:": [
+          "Spec:groups:with str:": [
             "relation_name",
-            {
-              "Str uses:": []
-            },
             [
               "positioned"
-            ]
+            ],
+            {
+              "Str uses:": []
+            }
           ]
         },
         {
-          "--": [
-            "Returns the relative of a noun (ex. the target of a one-to-one relation.)."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Returns the relative of a noun (ex. the target of a one-to-one relation.).",
+          "Spec:slots:with flow:": [
             "relative_of",
+            [
+              "text_eval"
+            ],
             {
               "flow:trim:uses:": [
                 "relative",
@@ -140,18 +134,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "text_eval"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation)."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).",
+          "Spec:slots:with flow:": [
             "relatives_of",
+            [
+              "text_list_eval"
+            ],
             {
               "flow:trim:uses:": [
                 "relatives",
@@ -171,10 +163,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "text_list_eval"
-            ]
+            }
           ]
         }
       ]

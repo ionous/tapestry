@@ -5,11 +5,12 @@
     {
       "Group contains:": [
         {
-          "--": [
-            "Define the name of a number variable."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Define the name of a number variable.",
+          "Spec:slots:with flow:": [
             "as_num",
+            [
+              "list_iterator"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -22,18 +23,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "list_iterator"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Define the name of a record variable."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Define the name of a record variable.",
+          "Spec:slots:with flow:": [
             "as_rec",
+            [
+              "list_iterator"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -46,18 +45,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "list_iterator"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Define the name of a text variable."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Define the name of a text variable.",
+          "Spec:slots:with flow:": [
             "as_txt",
+            [
+              "list_iterator"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -70,18 +67,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "list_iterator"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Erase at edge: Remove one or more values from a list."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Erase at edge: Remove one or more values from a list.",
+          "Spec:slots:with flow:": [
             "erase_edge",
+            [
+              "execute"
+            ],
             {
               "flow:trim:uses:": [
                 "erase",
@@ -103,18 +98,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Erase at index: Remove one or more values from a list."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Erase at index: Remove one or more values from a list.",
+          "Spec:slots:with flow:": [
             "erase_index",
+            [
+              "execute"
+            ],
             {
               "flow:trim:uses:": [
                 "erase",
@@ -140,18 +133,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.",
+          "Spec:slots:with flow:": [
             "erasing",
+            [
+              "execute"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -189,18 +180,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.",
+          "Spec:slots:with flow:": [
             "erasing_edge",
+            [
+              "execute"
+            ],
             {
               "flow:trim:uses:": [
                 "erasing",
@@ -242,18 +231,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Uses a list of numbers."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Uses a list of numbers.",
+          "Spec:slots:with flow:": [
             "from_num_list",
+            [
+              "list_source"
+            ],
             {
               "flow:trim:uses:": [
                 "var_of_nums",
@@ -267,18 +254,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "list_source"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Uses a list of records."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Uses a list of records.",
+          "Spec:slots:with flow:": [
             "from_rec_list",
+            [
+              "list_source"
+            ],
             {
               "flow:trim:uses:": [
                 "var_of_recs",
@@ -292,18 +277,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "list_source"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Uses a list of text."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Uses a list of text.",
+          "Spec:slots:with flow:": [
             "from_txt_list",
+            [
+              "list_source"
+            ],
             {
               "flow:trim:uses:": [
                 "var_of_txts",
@@ -317,18 +300,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "list_source"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Targets a list of numbers."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Targets a list of numbers.",
+          "Spec:slots:with flow:": [
             "into_num_list",
+            [
+              "list_target"
+            ],
             {
               "flow:trim:uses:": [
                 "into_nums",
@@ -342,18 +323,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "list_target"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Targets a list of records."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Targets a list of records.",
+          "Spec:slots:with flow:": [
             "into_rec_list",
+            [
+              "list_target"
+            ],
             {
               "flow:trim:uses:": [
                 "into_recs",
@@ -367,18 +346,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "list_target"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Targets a list of text."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Targets a list of text.",
+          "Spec:slots:with flow:": [
             "into_txt_list",
+            [
+              "list_target"
+            ],
             {
               "flow:trim:uses:": [
                 "into_txts",
@@ -392,18 +369,18 @@
                   }
                 ]
               ]
-            },
-            [
-              "list_target"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Get a value from a list. The first element is is index 1."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Get a value from a list. The first element is is index 1.",
+          "Spec:slots:with flow:": [
             "list_at",
+            [
+              "number_eval",
+              "text_eval",
+              "record_eval"
+            ],
             {
               "flow:trim:uses:": [
                 "get",
@@ -423,20 +400,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "number_eval",
-              "text_eval",
-              "record_eval"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Loops over the elements in the passed list, or runs the 'else' activity if empty."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Loops over the elements in the passed list, or runs the 'else' activity if empty.",
+          "Spec:slots:with flow:": [
             "list_each",
+            [
+              "execute"
+            ],
             {
               "flow:uses:": [
                 "repeating",
@@ -470,18 +443,17 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Search a list for a specific value."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Search a list for a specific value.",
+          "Spec:slots:with flow:": [
             "list_find",
+            [
+              "bool_eval",
+              "number_eval"
+            ],
             {
               "flow:trim:uses:": [
                 "find",
@@ -501,17 +473,11 @@
                   }
                 ]
               ]
-            },
-            [
-              "bool_eval",
-              "number_eval"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather."
-          ],
+          "--": "Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather.",
           "Spec:with flow:": [
             "list_gather",
             {
@@ -552,11 +518,12 @@
           ]
         },
         {
-          "--": [
-            "Determines the number of values in a list."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Determines the number of values in a list.",
+          "Spec:slots:with flow:": [
             "list_len",
+            [
+              "number_eval"
+            ],
             {
               "flow:trim:uses:": [
                 "len",
@@ -570,18 +537,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "number_eval"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Transform the values from one list and place the results in another list. The designated pattern is called with each value from the 'from list', one value at a time."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Transform the values from one list and place the results in another list. The designated pattern is called with each value from the 'from list', one value at a time.",
+          "Spec:slots:with flow:": [
             "list_map",
+            [
+              "execute"
+            ],
             {
               "flow:trim:uses:": [
                 "map",
@@ -608,18 +573,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record )."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record ).",
+          "Spec:slots:with flow:": [
             "list_reduce",
+            [
+              "execute"
+            ],
             {
               "flow:uses:": [
                 "reduce",
@@ -646,18 +609,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Reverse a list."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Reverse a list.",
+          "Spec:slots:with flow:": [
             "list_reverse",
+            [
+              "execute"
+            ],
             {
               "flow:uses:": [
                 "reverse",
@@ -670,18 +631,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Overwrite an existing value in a list."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Overwrite an existing value in a list.",
+          "Spec:slots:with flow:": [
             "list_set",
+            [
+              "execute"
+            ],
             {
               "flow:trim:uses:": [
                 "set",
@@ -707,10 +666,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
@@ -723,8 +679,13 @@
             "When end is omitted, copy up to and including the last element;",
             "and do the same if the end is greater than the length"
           ],
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "list_slice",
+            [
+              "num_list_eval",
+              "text_list_eval",
+              "record_list_eval"
+            ],
             {
               "flow:trim:uses:": [
                 "slice",
@@ -752,18 +713,15 @@
                   }
                 ]
               ]
-            },
-            [
-              "num_list_eval",
-              "text_list_eval",
-              "record_list_eval"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "list_sort_numbers",
+            [
+              "execute"
+            ],
             {
               "flow:trim:uses:": [
                 "sort_numbers",
@@ -790,18 +748,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Rearrange the elements in the named list by using the designated pattern to test pairs of elements."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Rearrange the elements in the named list by using the designated pattern to test pairs of elements.",
+          "Spec:slots:with flow:": [
             "list_sort_text",
+            [
+              "execute"
+            ],
             {
               "flow:trim:uses:": [
                 "sort_texts",
@@ -835,18 +791,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Rearrange the elements in the named list by using the designated pattern to test pairs of elements."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Rearrange the elements in the named list by using the designated pattern to test pairs of elements.",
+          "Spec:slots:with flow:": [
             "list_sort_using",
+            [
+              "execute"
+            ],
             {
               "flow:trim:uses:": [
                 "sort",
@@ -866,10 +820,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
@@ -882,11 +833,15 @@
           ]
         },
         {
-          "--": [
-            "Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list's length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list's length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.",
+          "Spec:slots:with flow:": [
             "list_splice",
+            [
+              "execute",
+              "num_list_eval",
+              "text_list_eval",
+              "record_list_eval"
+            ],
             {
               "flow:trim:uses:": [
                 "splice",
@@ -918,13 +873,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute",
-              "num_list_eval",
-              "text_list_eval",
-              "record_list_eval"
-            ]
+            }
           ]
         },
         {
@@ -937,11 +886,12 @@
           ]
         },
         {
-          "--": [
-            "Add a value to a list."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Add a value to a list.",
+          "Spec:slots:with flow:": [
             "put_edge",
+            [
+              "execute"
+            ],
             {
               "flow:trim:uses:": [
                 "put",
@@ -969,18 +919,16 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Replace one value in a list with another."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Replace one value in a list with another.",
+          "Spec:slots:with flow:": [
             "put_index",
+            [
+              "execute"
+            ],
             {
               "flow:trim:uses:": [
                 "put",
@@ -1006,10 +954,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "execute"
-            ]
+            }
           ]
         },
         {
@@ -1021,8 +966,11 @@
             "A positive step ends the series when the returned value would exceed stop",
             "while a negative step ends before generating a value less than stop."
           ],
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "range",
+            [
+              "num_list_eval"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -1049,10 +997,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "num_list_eval"
-            ]
+            }
           ]
         }
       ]

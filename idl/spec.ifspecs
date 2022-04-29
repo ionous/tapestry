@@ -89,9 +89,7 @@
           ]
         },
         {
-          "--": [
-            "a collection of one or more other specs."
-          ],
+          "--": "a collection of one or more other specs.",
           "Spec:with flow:": [
             "group_spec",
             {
@@ -217,9 +215,7 @@
           ]
         },
         {
-          "--": [
-            "specifies a choice between one or more other types."
-          ],
+          "--": "specifies a choice between one or more other types.",
           "Spec:with flow:": [
             "swap_spec",
             {
@@ -298,9 +294,7 @@
           ]
         },
         {
-          "--": [
-            "can optionally fit one or more slots, or be part of one or more groups."
-          ],
+          "--": "can optionally fit one or more slots, or be part of one or more groups.",
           "Spec:with flow:": [
             "type_spec",
             {
@@ -312,13 +306,6 @@
                     "Term:type:": [
                       "name",
                       "text"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "with",
-                      "spec",
-                      "uses_spec"
                     ]
                   },
                   {
@@ -336,6 +323,13 @@
                       true,
                       true
                     ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "with",
+                      "spec",
+                      "uses_spec"
+                    ]
                   }
                 ]
               ]
@@ -343,7 +337,6 @@
           ]
         },
         {
-          "--": "",
           "Spec:with swap:": [
             "uses_spec",
             {

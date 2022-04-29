@@ -5,11 +5,13 @@
     {
       "Group contains:": [
         {
-          "--": [
-            "Specify an explicit true or false."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Specify an explicit true or false.",
+          "Spec:slots:with flow:": [
             "bool_value",
+            [
+              "bool_eval",
+              "literal_value"
+            ],
             {
               "flow:trim:uses:": [
                 "bool",
@@ -27,17 +29,11 @@
                   }
                 ]
               ]
-            },
-            [
-              "bool_eval",
-              "literal_value"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "A fixed value of a record."
-          ],
+          "--": "A fixed value of a record.",
           "Spec:with flow:": [
             "field_value",
             {
@@ -66,8 +62,14 @@
             "A series of values all for the same record.",
             "While it can be specified wherever a literal value can, it only has meaning when the record type is known."
           ],
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "field_values",
+            [
+              "literal_value"
+            ],
+            [
+              "internal"
+            ],
             {
               "flow:trim:uses:": [
                 "fields",
@@ -82,13 +84,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "literal_value"
-            ],
-            [
-              "internal"
-            ]
+            }
           ]
         },
         {
@@ -101,11 +97,13 @@
           ]
         },
         {
-          "--": [
-            "Specify a particular number."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Specify a particular number.",
+          "Spec:slots:with flow:": [
             "num_value",
+            [
+              "number_eval",
+              "literal_value"
+            ],
             {
               "flow:trim:uses:": [
                 "num",
@@ -126,19 +124,17 @@
                   }
                 ]
               ]
-            },
-            [
-              "number_eval",
-              "literal_value"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Number List: Specify a list of numbers."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Number List: Specify a list of numbers.",
+          "Spec:slots:with flow:": [
             "num_values",
+            [
+              "num_list_eval",
+              "literal_value"
+            ],
             {
               "flow:trim:uses:": [
                 "nums",
@@ -160,19 +156,17 @@
                   }
                 ]
               ]
-            },
-            [
-              "num_list_eval",
-              "literal_value"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Specify a record composed of literal values."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Specify a record composed of literal values.",
+          "Spec:slots:with flow:": [
             "record_value",
+            [
+              "record_eval",
+              "literal_value"
+            ],
             {
               "flow:trim:uses:": [
                 "rec",
@@ -200,19 +194,17 @@
                   }
                 ]
               ]
-            },
-            [
-              "record_eval",
-              "literal_value"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Specify a series of records, all of the same kind."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Specify a series of records, all of the same kind.",
+          "Spec:slots:with flow:": [
             "record_values",
+            [
+              "record_list_eval",
+              "literal_value"
+            ],
             {
               "flow:trim:uses:": [
                 "recs",
@@ -241,19 +233,17 @@
                   }
                 ]
               ]
-            },
-            [
-              "record_list_eval",
-              "literal_value"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Specify a small bit of text."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Specify a small bit of text.",
+          "Spec:slots:with flow:": [
             "text_value",
+            [
+              "text_eval",
+              "literal_value"
+            ],
             {
               "flow:trim:uses:": [
                 "txt",
@@ -271,19 +261,17 @@
                   }
                 ]
               ]
-            },
-            [
-              "text_eval",
-              "literal_value"
-            ]
+            }
           ]
         },
         {
-          "--": [
-            "Text List: Specifies a set of text values."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "Text List: Specifies a set of text values.",
+          "Spec:slots:with flow:": [
             "text_values",
+            [
+              "text_list_eval",
+              "literal_value"
+            ],
             {
               "flow:trim:uses:": [
                 "txts",
@@ -305,11 +293,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "text_list_eval",
-              "literal_value"
-            ]
+            }
           ]
         }
       ]

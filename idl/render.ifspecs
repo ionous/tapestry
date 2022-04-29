@@ -5,9 +5,14 @@
     {
       "Group contains:": [
         {
-          "--": "",
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "render_exp",
+            [
+              "text_eval"
+            ],
+            [
+              "internal"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -20,13 +25,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "text_eval"
-            ],
-            [
-              "internal"
-            ]
+            }
           ]
         },
         {
@@ -34,8 +33,14 @@
             "in template phrases, picks between record variables, object variables, and named global objects.",
             "ex. could be \"ringBearer\", \"SamWise\", or \"frodo\""
           ],
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "render_field",
+            [
+              "from_source_fields"
+            ],
+            [
+              "internal"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -48,17 +53,10 @@
                   }
                 ]
               ]
-            },
-            [
-              "from_source_fields"
-            ],
-            [
-              "internal"
-            ]
+            }
           ]
         },
         {
-          "--": "",
           "Spec:with str:": [
             "render_flags",
             {
@@ -96,8 +94,14 @@
             "if the name isn't a variable but refers to some object: return that object's printed object name.",
             "otherwise, its an error."
           ],
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "render_name",
+            [
+              "text_eval"
+            ],
+            [
+              "internal"
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -110,13 +114,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "text_eval"
-            ],
-            [
-              "internal"
-            ]
+            }
           ]
         },
         {
@@ -124,8 +122,15 @@
             "printing is generally an activity b/c say is an activity",
             "and we want the ability to say several things in series."
           ],
-          "Spec:with flow:slots:groups:": [
+          "Spec:slots:groups:with flow:": [
             "render_pattern",
+            [
+              "assignment",
+              "text_eval"
+            ],
+            [
+              "internal"
+            ],
             {
               "flow:trim:uses:": [
                 "render",
@@ -139,22 +144,21 @@
                   }
                 ]
               ]
-            },
+            }
+          ]
+        },
+        {
+          "--": "returns the value of a variable or the id of an object.",
+          "Spec:slots:groups:with flow:": [
+            "render_ref",
             [
               "assignment",
+              "number_eval",
               "text_eval"
             ],
             [
               "internal"
-            ]
-          ]
-        },
-        {
-          "--": [
-            "returns the value of a variable or the id of an object."
-          ],
-          "Spec:with flow:slots:groups:": [
-            "render_ref",
+            ],
             {
               "flow trim:uses:": [
                 true,
@@ -173,15 +177,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "assignment",
-              "number_eval",
-              "text_eval"
-            ],
-            [
-              "internal"
-            ]
+            }
           ]
         }
       ]

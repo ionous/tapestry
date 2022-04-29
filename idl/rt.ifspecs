@@ -5,9 +5,7 @@
     {
       "Group contains:": [
         {
-          "--": [
-            "Runtime version of argument."
-          ],
+          "--": "Runtime version of argument.",
           "Spec:with flow:": [
             "arg",
             {

@@ -5,7 +5,6 @@
     {
       "Group contains:": [
         {
-          "--": "",
           "Spec:with str:": [
             "test_bool",
             {
@@ -24,9 +23,11 @@
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "test_embed",
+            [
+              "test_slot"
+            ],
             {
               "flow:uses:": [
                 "embed",
@@ -36,16 +37,15 @@
                   }
                 ]
               ]
-            },
-            [
-              "test_slot"
-            ]
+            }
           ]
         },
         {
-          "--": "",
-          "Spec:with flow:slots:": [
+          "Spec:slots:with flow:": [
             "test_flow",
+            [
+              "test_slot"
+            ],
             {
               "flow:uses:": [
                 "flow",
@@ -95,14 +95,10 @@
                   }
                 ]
               ]
-            },
-            [
-              "test_slot"
-            ]
+            }
           ]
         },
         {
-          "--": "",
           "Spec:with num:": [
             "test_num",
             {
@@ -111,7 +107,6 @@
           ]
         },
         {
-          "--": "",
           "Spec:with slot:": [
             "test_slot",
             {
@@ -120,7 +115,6 @@
           ]
         },
         {
-          "--": "",
           "Spec:with str:": [
             "test_str",
             {
@@ -142,7 +136,6 @@
           ]
         },
         {
-          "--": "",
           "Spec:with swap:": [
             "test_swap",
             {
@@ -173,7 +166,6 @@
           ]
         },
         {
-          "--": "",
           "Spec:with str:": [
             "test_txt",
             {

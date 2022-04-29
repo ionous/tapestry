@@ -5,11 +5,12 @@
     {
       "Group contains:": [
         {
-          "--": [
-            "a log message that can optionally be displayed to the client."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "a log message that can optionally be displayed to the client.",
+          "Spec:slots:with flow:": [
             "play_log",
+            [
+              "play_message"
+            ],
             {
               "flow:uses:": [
                 "play",
@@ -22,10 +23,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "play_message"
-            ]
+            }
           ]
         },
         {
@@ -38,11 +36,12 @@
           ]
         },
         {
-          "--": [
-            "app level change in state."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "app level change in state.",
+          "Spec:slots:with flow:": [
             "play_mode",
+            [
+              "play_message"
+            ],
             {
               "flow:uses:": [
                 "play",
@@ -55,10 +54,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "play_message"
-            ]
+            }
           ]
         },
         {
@@ -87,11 +83,12 @@
           ]
         },
         {
-          "--": [
-            "output from the game itself."
-          ],
-          "Spec:with flow:slots:": [
+          "--": "output from the game itself.",
+          "Spec:slots:with flow:": [
             "play_out",
+            [
+              "play_message"
+            ],
             {
               "flow:uses:": [
                 "play",
@@ -104,10 +101,7 @@
                   }
                 ]
               ]
-            },
-            [
-              "play_message"
-            ]
+            }
           ]
         }
       ]
