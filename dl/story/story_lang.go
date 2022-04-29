@@ -193,7 +193,7 @@ func ActionContext_Marshal(m jsn.Marshaler, val *ActionContext) (err error) {
 	return
 }
 
-// ActionDecl
+// ActionDecl Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.
 type ActionDecl struct {
 	Event        EventName    `if:"label=_"`
 	Action       ActionName   `if:"label=action"`
@@ -1011,7 +1011,7 @@ func AspectProperty_Marshal(m jsn.Marshaler, val *AspectProperty) (err error) {
 	return
 }
 
-// AspectTraits
+// AspectTraits Add traits to an aspect
 type AspectTraits struct {
 	Aspect      Aspect      `if:"label=_"`
 	TraitPhrase TraitPhrase `if:"label=trait_phrase"`
@@ -1124,9 +1124,10 @@ func AspectTraits_Marshal(m jsn.Marshaler, val *AspectTraits) (err error) {
 
 // BoolProperty
 type BoolProperty struct {
-	NamedProperty `if:"label=_"`
-	Initially     rt.BoolEval `if:"label=initially,optional"`
-	UserComment   string
+	Name        string      `if:"label=named,type=text"`
+	Type        string      `if:"label=of,optional,type=text"`
+	Initially   rt.BoolEval `if:"label=initially,optional"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -1141,7 +1142,6 @@ func (*BoolProperty) Compose() composer.Spec {
 }
 
 const BoolProperty_Type = "bool_property"
-const BoolProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const BoolProperty_Field_Name = "$NAME"
 const BoolProperty_Field_Type = "$TYPE"
 const BoolProperty_Field_Initially = "$INITIALLY"
@@ -1217,33 +1217,33 @@ func BoolProperty_Optional_Marshal(m jsn.Marshaler, pv **BoolProperty) (err erro
 func BoolProperty_Marshal(m jsn.Marshaler, val *BoolProperty) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(BoolProperty_Flow{val}); err == nil {
-		e1 := m.MarshalKey("named", BoolProperty_Field_Name)
+		e0 := m.MarshalKey("named", BoolProperty_Field_Name)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", BoolProperty_Field_Name))
+		}
+		e1 := m.MarshalKey("of", BoolProperty_Field_Type)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", BoolProperty_Field_Name))
+			m.Error(errutil.New(e1, "in flow at", BoolProperty_Field_Type))
 		}
-		e2 := m.MarshalKey("of", BoolProperty_Field_Type)
+		e2 := m.MarshalKey("initially", BoolProperty_Field_Initially)
 		if e2 == nil {
-			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = rt.BoolEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", BoolProperty_Field_Type))
-		}
-		e3 := m.MarshalKey("initially", BoolProperty_Field_Initially)
-		if e3 == nil {
-			e3 = rt.BoolEval_Optional_Marshal(m, &val.Initially)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", BoolProperty_Field_Initially))
+			m.Error(errutil.New(e2, "in flow at", BoolProperty_Field_Initially))
 		}
 		m.EndBlock()
 	}
 	return
 }
 
-// Certainties
+// Certainties Give a kind a trait
 type Certainties struct {
 	PluralKinds PluralKinds `if:"label=_"`
 	AreBeing    AreBeing    `if:"label=are_being"`
@@ -1457,7 +1457,8 @@ func Certainty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Certainty) (err e
 	return
 }
 
-// Comment Information about the story for you and other authors.
+// Comment Add a note.
+// Information about the story for you and other authors.
 type Comment struct {
 	Lines       prim.Lines `if:"label=_"`
 	UserComment string
@@ -1669,6 +1670,7 @@ func CommonAction_Marshal(m jsn.Marshaler, val *CommonAction) (err error) {
 }
 
 // CountOf A guard which returns true based on a counter.
+// Counters start at zero and are incremented every time the guard gets checked.
 type CountOf struct {
 	Trigger     core.Trigger  `if:"label=_"`
 	Num         rt.NumberEval `if:"label=num"`
@@ -1779,7 +1781,7 @@ func CountOf_Marshal(m jsn.Marshaler, val *CountOf) (err error) {
 	return
 }
 
-// CycleText
+// CycleText When called multiple times, returns each of its inputs in turn.
 type CycleText struct {
 	Parts       []rt.TextEval `if:"label=_"`
 	UserComment string
@@ -1967,7 +1969,8 @@ func Determiner_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Determiner) (err
 	return
 }
 
-// EventBlock Listeners let objects in the game world react to changes before, during, or after they happen.
+// EventBlock Declare event listeners.
+// Listeners let objects in the game world react to changes before, during, or after they happen.
 type EventBlock struct {
 	Target      EventTarget    `if:"label=_"`
 	Handlers    []EventHandler `if:"label=handlers"`
@@ -2468,7 +2471,7 @@ func EventTarget_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EventTarget) (e
 	return
 }
 
-// GrammarDecl
+// GrammarDecl Read what the player types and turn it into actions.
 type GrammarDecl struct {
 	Grammar     grammar.GrammarMaker `if:"label=_"`
 	UserComment string
@@ -2793,7 +2796,7 @@ func KindOfRelation_Marshal(m jsn.Marshaler, val *KindOfRelation) (err error) {
 	return
 }
 
-// KindsHaveProperties
+// KindsHaveProperties Add properties to a kind
 type KindsHaveProperties struct {
 	PluralKinds PluralKinds    `if:"label=_"`
 	Props       []PropertySlot `if:"label=have"`
@@ -3007,7 +3010,7 @@ func KindsOfAspect_Marshal(m jsn.Marshaler, val *KindsOfAspect) (err error) {
 	return
 }
 
-// KindsOfKind
+// KindsOfKind Declare a kind
 type KindsOfKind struct {
 	PluralKinds  PluralKinds  `if:"label=kinds"`
 	SingularKind SingularKind `if:"label=of"`
@@ -3119,7 +3122,7 @@ func KindsOfKind_Marshal(m jsn.Marshaler, val *KindsOfKind) (err error) {
 	return
 }
 
-// MakeOpposite
+// MakeOpposite The opposite of east is west.
 type MakeOpposite struct {
 	Word        string `if:"label=_,type=text"`
 	Opposite    string `if:"label=opposite,type=text"`
@@ -3232,6 +3235,7 @@ func MakeOpposite_Marshal(m jsn.Marshaler, val *MakeOpposite) (err error) {
 }
 
 // MakePlural The plural of person is people.
+// The plural of person is persons.
 type MakePlural struct {
 	Singular    string `if:"label=_,type=text"`
 	Plural      string `if:"label=plural,type=text"`
@@ -3642,7 +3646,7 @@ func MapConnection_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapConnection
 	return
 }
 
-// MapDeparting Leaving a room by by going through a door ( ex. departing the house via the front door... )
+// MapDeparting Leaving a room by by going through a door ( ex. departing the house via the front door... ).
 type MapDeparting struct {
 	Room          NamedNoun     `if:"label=from"`
 	Door          NamedNoun     `if:"label=via"`
@@ -3847,7 +3851,7 @@ func MapDirection_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapDirection) 
 	return
 }
 
-// MapHeading Leaving a room by moving in a compass direction ( ex. heading east... )
+// MapHeading Leaving a room by moving in a compass direction ( ex. heading east... ).
 type MapHeading struct {
 	Dir           MapDirection  `if:"label=_"`
 	Room          NamedNoun     `if:"label=from"`
@@ -4203,7 +4207,9 @@ func NamedProperty_Marshal(m jsn.Marshaler, val *NamedProperty) (err error) {
 	return
 }
 
-// NounAssignment Assign text.
+// NounAssignment Assign text to a noun.
+// Assign text.
+// Gives a noun one or more lines of text.
 type NounAssignment struct {
 	Property    Property    `if:"label=_"`
 	Nouns       []NamedNoun `if:"label=nouns"`
@@ -5063,9 +5069,10 @@ func NounTraits_Marshal(m jsn.Marshaler, val *NounTraits) (err error) {
 
 // NumListProperty
 type NumListProperty struct {
-	NamedProperty `if:"label=_"`
-	Initially     rt.NumListEval `if:"label=initially,optional"`
-	UserComment   string
+	Name        string         `if:"label=named,type=text"`
+	Type        string         `if:"label=of,optional,type=text"`
+	Initially   rt.NumListEval `if:"label=initially,optional"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -5080,7 +5087,6 @@ func (*NumListProperty) Compose() composer.Spec {
 }
 
 const NumListProperty_Type = "num_list_property"
-const NumListProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const NumListProperty_Field_Name = "$NAME"
 const NumListProperty_Field_Type = "$TYPE"
 const NumListProperty_Field_Initially = "$INITIALLY"
@@ -5156,26 +5162,26 @@ func NumListProperty_Optional_Marshal(m jsn.Marshaler, pv **NumListProperty) (er
 func NumListProperty_Marshal(m jsn.Marshaler, val *NumListProperty) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(NumListProperty_Flow{val}); err == nil {
-		e1 := m.MarshalKey("named", NumListProperty_Field_Name)
+		e0 := m.MarshalKey("named", NumListProperty_Field_Name)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", NumListProperty_Field_Name))
+		}
+		e1 := m.MarshalKey("of", NumListProperty_Field_Type)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NumListProperty_Field_Name))
+			m.Error(errutil.New(e1, "in flow at", NumListProperty_Field_Type))
 		}
-		e2 := m.MarshalKey("of", NumListProperty_Field_Type)
+		e2 := m.MarshalKey("initially", NumListProperty_Field_Initially)
 		if e2 == nil {
-			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = rt.NumListEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", NumListProperty_Field_Type))
-		}
-		e3 := m.MarshalKey("initially", NumListProperty_Field_Initially)
-		if e3 == nil {
-			e3 = rt.NumListEval_Optional_Marshal(m, &val.Initially)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", NumListProperty_Field_Initially))
+			m.Error(errutil.New(e2, "in flow at", NumListProperty_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -5184,9 +5190,10 @@ func NumListProperty_Marshal(m jsn.Marshaler, val *NumListProperty) (err error) 
 
 // NumberProperty
 type NumberProperty struct {
-	NamedProperty `if:"label=_"`
-	Initially     rt.NumberEval `if:"label=initially,optional"`
-	UserComment   string
+	Name        string        `if:"label=named,type=text"`
+	Type        string        `if:"label=of,optional,type=text"`
+	Initially   rt.NumberEval `if:"label=initially,optional"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -5201,7 +5208,6 @@ func (*NumberProperty) Compose() composer.Spec {
 }
 
 const NumberProperty_Type = "number_property"
-const NumberProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const NumberProperty_Field_Name = "$NAME"
 const NumberProperty_Field_Type = "$TYPE"
 const NumberProperty_Field_Initially = "$INITIALLY"
@@ -5277,26 +5283,26 @@ func NumberProperty_Optional_Marshal(m jsn.Marshaler, pv **NumberProperty) (err 
 func NumberProperty_Marshal(m jsn.Marshaler, val *NumberProperty) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(NumberProperty_Flow{val}); err == nil {
-		e1 := m.MarshalKey("named", NumberProperty_Field_Name)
+		e0 := m.MarshalKey("named", NumberProperty_Field_Name)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", NumberProperty_Field_Name))
+		}
+		e1 := m.MarshalKey("of", NumberProperty_Field_Type)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NumberProperty_Field_Name))
+			m.Error(errutil.New(e1, "in flow at", NumberProperty_Field_Type))
 		}
-		e2 := m.MarshalKey("of", NumberProperty_Field_Type)
+		e2 := m.MarshalKey("initially", NumberProperty_Field_Initially)
 		if e2 == nil {
-			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = rt.NumberEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", NumberProperty_Field_Type))
-		}
-		e3 := m.MarshalKey("initially", NumberProperty_Field_Initially)
-		if e3 == nil {
-			e3 = rt.NumberEval_Optional_Marshal(m, &val.Initially)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", NumberProperty_Field_Initially))
+			m.Error(errutil.New(e2, "in flow at", NumberProperty_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -5618,7 +5624,7 @@ func PairedAction_Marshal(m jsn.Marshaler, val *PairedAction) (err error) {
 	return
 }
 
-// Paragraph
+// Paragraph Phrases
 type Paragraph struct {
 	StoryStatement []StoryStatement `if:"label=_,optional"`
 	UserComment    string
@@ -5717,7 +5723,8 @@ func Paragraph_Marshal(m jsn.Marshaler, val *Paragraph) (err error) {
 	return
 }
 
-// PatternActions Actions to take when using a pattern.
+// PatternActions Add actions to a pattern.
+// Actions to take when using a pattern.
 type PatternActions struct {
 	Name        core.PatternName `if:"label=_"`
 	Locals      []PropertySlot   `if:"label=provides,optional"`
@@ -5838,7 +5845,7 @@ func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
 	return
 }
 
-// PatternDecl
+// PatternDecl Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.  Each function in a given pattern has "guards" which determine whether the function applies in a particular situation.
 type PatternDecl struct {
 	Name          core.PatternName `if:"label=_"`
 	Params        []PropertySlot   `if:"label=requires,optional"`
@@ -6143,7 +6150,7 @@ func PatternReturn_Marshal(m jsn.Marshaler, val *PatternReturn) (err error) {
 	return
 }
 
-// PatternRule
+// PatternRule Rule
 type PatternRule struct {
 	Guard       rt.BoolEval  `if:"label=_"`
 	Flags       PatternFlags `if:"label=flags,optional"`
@@ -6566,9 +6573,10 @@ func PropertySlot_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PropertySlot) 
 
 // RecordListProperty
 type RecordListProperty struct {
-	NamedProperty `if:"label=_"`
-	Initially     rt.RecordListEval `if:"label=initially,optional"`
-	UserComment   string
+	Name        string            `if:"label=named,type=text"`
+	Type        string            `if:"label=of,optional,type=text"`
+	Initially   rt.RecordListEval `if:"label=initially,optional"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -6583,7 +6591,6 @@ func (*RecordListProperty) Compose() composer.Spec {
 }
 
 const RecordListProperty_Type = "record_list_property"
-const RecordListProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const RecordListProperty_Field_Name = "$NAME"
 const RecordListProperty_Field_Type = "$TYPE"
 const RecordListProperty_Field_Initially = "$INITIALLY"
@@ -6659,26 +6666,26 @@ func RecordListProperty_Optional_Marshal(m jsn.Marshaler, pv **RecordListPropert
 func RecordListProperty_Marshal(m jsn.Marshaler, val *RecordListProperty) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(RecordListProperty_Flow{val}); err == nil {
-		e1 := m.MarshalKey("named", RecordListProperty_Field_Name)
+		e0 := m.MarshalKey("named", RecordListProperty_Field_Name)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RecordListProperty_Field_Name))
+		}
+		e1 := m.MarshalKey("of", RecordListProperty_Field_Type)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", RecordListProperty_Field_Name))
+			m.Error(errutil.New(e1, "in flow at", RecordListProperty_Field_Type))
 		}
-		e2 := m.MarshalKey("of", RecordListProperty_Field_Type)
+		e2 := m.MarshalKey("initially", RecordListProperty_Field_Initially)
 		if e2 == nil {
-			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = rt.RecordListEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", RecordListProperty_Field_Type))
-		}
-		e3 := m.MarshalKey("initially", RecordListProperty_Field_Initially)
-		if e3 == nil {
-			e3 = rt.RecordListEval_Optional_Marshal(m, &val.Initially)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", RecordListProperty_Field_Initially))
+			m.Error(errutil.New(e2, "in flow at", RecordListProperty_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -6687,9 +6694,10 @@ func RecordListProperty_Marshal(m jsn.Marshaler, val *RecordListProperty) (err e
 
 // RecordProperty
 type RecordProperty struct {
-	NamedProperty `if:"label=_"`
-	Initially     rt.RecordEval `if:"label=initially,optional"`
-	UserComment   string
+	Name        string        `if:"label=named,type=text"`
+	Type        string        `if:"label=of,optional,type=text"`
+	Initially   rt.RecordEval `if:"label=initially,optional"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -6704,7 +6712,6 @@ func (*RecordProperty) Compose() composer.Spec {
 }
 
 const RecordProperty_Type = "record_property"
-const RecordProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const RecordProperty_Field_Name = "$NAME"
 const RecordProperty_Field_Type = "$TYPE"
 const RecordProperty_Field_Initially = "$INITIALLY"
@@ -6780,26 +6787,26 @@ func RecordProperty_Optional_Marshal(m jsn.Marshaler, pv **RecordProperty) (err 
 func RecordProperty_Marshal(m jsn.Marshaler, val *RecordProperty) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(RecordProperty_Flow{val}); err == nil {
-		e1 := m.MarshalKey("named", RecordProperty_Field_Name)
+		e0 := m.MarshalKey("named", RecordProperty_Field_Name)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RecordProperty_Field_Name))
+		}
+		e1 := m.MarshalKey("of", RecordProperty_Field_Type)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", RecordProperty_Field_Name))
+			m.Error(errutil.New(e1, "in flow at", RecordProperty_Field_Type))
 		}
-		e2 := m.MarshalKey("of", RecordProperty_Field_Type)
+		e2 := m.MarshalKey("initially", RecordProperty_Field_Initially)
 		if e2 == nil {
-			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = rt.RecordEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", RecordProperty_Field_Type))
-		}
-		e3 := m.MarshalKey("initially", RecordProperty_Field_Initially)
-		if e3 == nil {
-			e3 = rt.RecordEval_Optional_Marshal(m, &val.Initially)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", RecordProperty_Field_Initially))
+			m.Error(errutil.New(e2, "in flow at", RecordProperty_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -6919,7 +6926,7 @@ func RelationCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Relatio
 	return
 }
 
-// RelativeToNoun
+// RelativeToNoun Relate nouns to each other
 type RelativeToNoun struct {
 	Relation    rel.RelationName `if:"label=_"`
 	Nouns       []NamedNoun      `if:"label=nouns"`
@@ -7049,6 +7056,7 @@ func RelativeToNoun_Marshal(m jsn.Marshaler, val *RelativeToNoun) (err error) {
 }
 
 // RenderTemplate Parse text using templates.
+// See: https://github.com/ionous/iffy/wiki/Templates.
 type RenderTemplate struct {
 	Template    prim.Lines `if:"label=_"`
 	UserComment string
@@ -7150,7 +7158,7 @@ func RenderTemplate_Marshal(m jsn.Marshaler, val *RenderTemplate) (err error) {
 	return
 }
 
-// ShuffleText
+// ShuffleText When called multiple times returns its inputs at random.
 type ShuffleText struct {
 	Parts       []rt.TextEval `if:"label=_"`
 	UserComment string
@@ -7327,7 +7335,7 @@ func SingularKind_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SingularKind) 
 	return
 }
 
-// StoppingText
+// StoppingText When called multiple times returns each of its inputs in turn, sticking to the last one.
 type StoppingText struct {
 	Parts       []rt.TextEval `if:"label=_"`
 	UserComment string
@@ -7439,7 +7447,6 @@ func (*Story) Compose() composer.Spec {
 	return composer.Spec{
 		Name: Story_Type,
 		Uses: composer.Type_Flow,
-		Lede: "story",
 	}
 }
 
@@ -7493,7 +7500,7 @@ func Story_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Story) (err error) {
 type Story_Flow struct{ ptr *Story }
 
 func (n Story_Flow) GetType() string      { return Story_Type }
-func (n Story_Flow) GetLede() string      { return "story" }
+func (n Story_Flow) GetLede() string      { return Story_Type }
 func (n Story_Flow) GetFlow() interface{} { return n.ptr }
 func (n Story_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*Story); ok {
@@ -7529,7 +7536,7 @@ func Story_Marshal(m jsn.Marshaler, val *Story) (err error) {
 	return
 }
 
-// StoryBreak
+// StoryBreak this cheats a bit by making the signature the same as the comment marker  that allows nodes which look like comments but are actually story breaks.
 type StoryBreak struct {
 	UserComment string
 }
@@ -7623,7 +7630,7 @@ func StoryBreak_Marshal(m jsn.Marshaler, val *StoryBreak) (err error) {
 	return
 }
 
-// StoryFile
+// StoryFile top level node, currently just for blockly  might eventually contain story metadata  ex. author, description...
 type StoryFile struct {
 	StoryLines  []StoryStatement `if:"label=_"`
 	UserComment string
@@ -7977,7 +7984,7 @@ func TestOutput_Marshal(m jsn.Marshaler, val *TestOutput) (err error) {
 	return
 }
 
-// TestRule
+// TestRule Add actions to a test
 type TestRule struct {
 	TestName    TestName     `if:"label=_"`
 	Does        []rt.Execute `if:"label=does"`
@@ -8088,7 +8095,7 @@ func TestRule_Marshal(m jsn.Marshaler, val *TestRule) (err error) {
 	return
 }
 
-// TestScene
+// TestScene Create a scene for testing
 type TestScene struct {
 	TestName    TestName         `if:"label=_"`
 	Requires    TestName         `if:"label=requires,optional"`
@@ -8208,7 +8215,7 @@ func TestScene_Marshal(m jsn.Marshaler, val *TestScene) (err error) {
 	return
 }
 
-// TestStatement
+// TestStatement Describe test results
 type TestStatement struct {
 	TestName    TestName `if:"label=_"`
 	Test        Testing  `if:"label=test"`
@@ -8390,9 +8397,10 @@ func Testing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Testing) (err error
 
 // TextListProperty
 type TextListProperty struct {
-	NamedProperty `if:"label=_"`
-	Initially     rt.TextListEval `if:"label=initially,optional"`
-	UserComment   string
+	Name        string          `if:"label=named,type=text"`
+	Type        string          `if:"label=of,optional,type=text"`
+	Initially   rt.TextListEval `if:"label=initially,optional"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -8407,7 +8415,6 @@ func (*TextListProperty) Compose() composer.Spec {
 }
 
 const TextListProperty_Type = "text_list_property"
-const TextListProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const TextListProperty_Field_Name = "$NAME"
 const TextListProperty_Field_Type = "$TYPE"
 const TextListProperty_Field_Initially = "$INITIALLY"
@@ -8483,26 +8490,26 @@ func TextListProperty_Optional_Marshal(m jsn.Marshaler, pv **TextListProperty) (
 func TextListProperty_Marshal(m jsn.Marshaler, val *TextListProperty) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(TextListProperty_Flow{val}); err == nil {
-		e1 := m.MarshalKey("named", TextListProperty_Field_Name)
+		e0 := m.MarshalKey("named", TextListProperty_Field_Name)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", TextListProperty_Field_Name))
+		}
+		e1 := m.MarshalKey("of", TextListProperty_Field_Type)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", TextListProperty_Field_Name))
+			m.Error(errutil.New(e1, "in flow at", TextListProperty_Field_Type))
 		}
-		e2 := m.MarshalKey("of", TextListProperty_Field_Type)
+		e2 := m.MarshalKey("initially", TextListProperty_Field_Initially)
 		if e2 == nil {
-			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = rt.TextListEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", TextListProperty_Field_Type))
-		}
-		e3 := m.MarshalKey("initially", TextListProperty_Field_Initially)
-		if e3 == nil {
-			e3 = rt.TextListEval_Optional_Marshal(m, &val.Initially)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", TextListProperty_Field_Initially))
+			m.Error(errutil.New(e2, "in flow at", TextListProperty_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -8511,9 +8518,10 @@ func TextListProperty_Marshal(m jsn.Marshaler, val *TextListProperty) (err error
 
 // TextProperty
 type TextProperty struct {
-	NamedProperty `if:"label=_"`
-	Initially     rt.TextEval `if:"label=initially,optional"`
-	UserComment   string
+	Name        string      `if:"label=named,type=text"`
+	Type        string      `if:"label=of,optional,type=text"`
+	Initially   rt.TextEval `if:"label=initially,optional"`
+	UserComment string
 }
 
 // User implemented slots:
@@ -8528,7 +8536,6 @@ func (*TextProperty) Compose() composer.Spec {
 }
 
 const TextProperty_Type = "text_property"
-const TextProperty_Field_NamedProperty = "$NAMED_PROPERTY"
 const TextProperty_Field_Name = "$NAME"
 const TextProperty_Field_Type = "$TYPE"
 const TextProperty_Field_Initially = "$INITIALLY"
@@ -8604,26 +8611,26 @@ func TextProperty_Optional_Marshal(m jsn.Marshaler, pv **TextProperty) (err erro
 func TextProperty_Marshal(m jsn.Marshaler, val *TextProperty) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(TextProperty_Flow{val}); err == nil {
-		e1 := m.MarshalKey("named", TextProperty_Field_Name)
+		e0 := m.MarshalKey("named", TextProperty_Field_Name)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", TextProperty_Field_Name))
+		}
+		e1 := m.MarshalKey("of", TextProperty_Field_Type)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Marshal(m, &val.Name)
+			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", TextProperty_Field_Name))
+			m.Error(errutil.New(e1, "in flow at", TextProperty_Field_Type))
 		}
-		e2 := m.MarshalKey("of", TextProperty_Field_Type)
+		e2 := m.MarshalKey("initially", TextProperty_Field_Initially)
 		if e2 == nil {
-			e2 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
+			e2 = rt.TextEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", TextProperty_Field_Type))
-		}
-		e3 := m.MarshalKey("initially", TextProperty_Field_Initially)
-		if e3 == nil {
-			e3 = rt.TextEval_Optional_Marshal(m, &val.Initially)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", TextProperty_Field_Initially))
+			m.Error(errutil.New(e2, "in flow at", TextProperty_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -8952,21 +8959,21 @@ var Signatures = map[uint64]interface{}{
 	10597814521259612392: (*NounAssignment)(nil),        /* NounAssignment:nouns:lines: */
 	8083590999220488417:  (*NounRelation)(nil),          /* NounRelation areBeing:relation:otherNouns: */
 	13866328623609632054: (*NounRelation)(nil),          /* NounRelation relation:otherNouns: */
+	18242559699550270796: (*NounTraits)(nil),            /* NounTraits:trait: */
 	8247237765145046011:  (*NounKindStatement)(nil),     /* Nouns:depict: */
 	1536901872737498210:  (*NounKindStatement)(nil),     /* Nouns:depict:and: */
 	4857113966700454246:  (*NounRelationStatement)(nil), /* Nouns:relateTo: */
 	13786092048070202991: (*NounRelationStatement)(nil), /* Nouns:relateTo:and: */
 	8260825061526765438:  (*NounTraitStatement)(nil),    /* Nouns:startAs: */
 	6477696692861713863:  (*NounTraitStatement)(nil),    /* Nouns:startAs:and: */
-	18242559699550270796: (*NounTraits)(nil),            /* NounTraits:trait: */
-	1229800714295622509:  (*NumberProperty)(nil),        /* Number named: */
-	7910245677921199818:  (*NumberProperty)(nil),        /* Number named:initially: */
-	11728451174312232590: (*NumberProperty)(nil),        /* Number named:of: */
-	13691423776851670689: (*NumberProperty)(nil),        /* Number named:of:initially: */
 	10570788478167904864: (*NumListProperty)(nil),       /* NumList named: */
 	8886557488160492571:  (*NumListProperty)(nil),       /* NumList named:initially: */
 	1134638206967616033:  (*NumListProperty)(nil),       /* NumList named:of: */
 	15396226383842865582: (*NumListProperty)(nil),       /* NumList named:of:initially: */
+	1229800714295622509:  (*NumberProperty)(nil),        /* Number named: */
+	7910245677921199818:  (*NumberProperty)(nil),        /* Number named:initially: */
+	11728451174312232590: (*NumberProperty)(nil),        /* Number named:of: */
+	13691423776851670689: (*NumberProperty)(nil),        /* Number named:of:initially: */
 	17075866407822548206: (*OneToMany)(nil),             /* OneToMany:kinds: */
 	13766274136867271026: (*OneToOne)(nil),              /* OneToOne:otherKind: */
 	18143853777230560632: (*PairedAction)(nil),          /* PairedAction: */

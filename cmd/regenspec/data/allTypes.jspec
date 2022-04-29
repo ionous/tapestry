@@ -140,6 +140,14 @@
       "patterns"
     ]
   },
+  "_play": {
+    "name": "play",
+    "desc": "play",
+    "uses": "group",
+    "group": [
+      "play"
+    ]
+  },
   "_prim": {
     "name": "prim",
     "desc": "prim",
@@ -156,14 +164,6 @@
       "story",
       "debug",
       "properties"
-    ]
-  },
-  "_reader": {
-    "name": "reader",
-    "desc": "reader",
-    "uses": "group",
-    "group": [
-      "reader"
     ]
   },
   "_rel": {
@@ -8681,12 +8681,10 @@
   },
   "lines": {
     "name": "lines",
-    "desc": "A sequence of characters of any length spanning multiple lines.  Paragraphs are a prime example. Generally lines are some piece of the story that will be displayed to the player.  See also: text.",
+    "desc": "A sequence of characters of any length spanning multiple lines.  See also: text.",
     "uses": "str",
     "group": [
-      "story",
-      "debug",
-      "language"
+      "prim"
     ],
     "with": {
       "tokens": [
@@ -8698,8 +8696,8 @@
           "value": null,
           "key": "$LINES",
           "internal": false,
-          "tag": "_",
-          "sel": ""
+          "tag": "lines",
+          "sel": "lines"
         }
       }
     },
@@ -8709,8 +8707,8 @@
         "value": null,
         "key": "$LINES",
         "internal": false,
-        "tag": "_",
-        "sel": ""
+        "tag": "lines",
+        "sel": "lines"
       }
     ]
   },
@@ -11486,6 +11484,8 @@
         "noun_continuation"
       ]
     },
+    "lede": "noun_relation",
+    "sign": "noun_relation are_being:relation:other_nouns:",
     "params": [
       {
         "label": "are being",
@@ -13074,6 +13074,231 @@
       }
     ]
   },
+  "play_log": {
+    "name": "play_log",
+    "uses": "flow",
+    "group": [
+      "play"
+    ],
+    "with": {
+      "tokens": [
+        "play",
+        " ",
+        "log",
+        ": ",
+        "$LOG"
+      ],
+      "params": {
+        "$LOG": {
+          "label": "log",
+          "type": "text",
+          "key": "$LOG",
+          "internal": false,
+          "tag": "log",
+          "sel": "log"
+        }
+      },
+      "slots": [
+        "play_message"
+      ]
+    },
+    "desc": {
+      "label": "Play Log",
+      "short": "a log message that can optionally be displayed to the client"
+    },
+    "params": [
+      {
+        "label": "log",
+        "type": "text",
+        "key": "$LOG",
+        "internal": false,
+        "tag": "log",
+        "sel": "log"
+      }
+    ]
+  },
+  "play_message": {
+    "name": "play_message",
+    "desc": "a client-server message for the play app",
+    "uses": "slot",
+    "group": [
+      "play"
+    ],
+    "params": []
+  },
+  "play_mode": {
+    "name": "play_mode",
+    "uses": "flow",
+    "group": [
+      "play"
+    ],
+    "with": {
+      "tokens": [
+        "play",
+        " ",
+        "mode",
+        ": ",
+        "$MODE"
+      ],
+      "params": {
+        "$MODE": {
+          "label": "mode",
+          "type": "play_modes",
+          "key": "$MODE",
+          "internal": false,
+          "tag": "mode",
+          "sel": "mode"
+        }
+      },
+      "slots": [
+        "play_message"
+      ]
+    },
+    "desc": {
+      "label": "Play Mode",
+      "short": "app level change in state"
+    },
+    "params": [
+      {
+        "label": "mode",
+        "type": "play_modes",
+        "key": "$MODE",
+        "internal": false,
+        "tag": "mode",
+        "sel": "mode"
+      }
+    ]
+  },
+  "play_modes": {
+    "name": "play_modes",
+    "desc": "enum for play play_mode",
+    "uses": "str",
+    "group": [
+      "play"
+    ],
+    "with": {
+      "tokens": [
+        "$ASM",
+        ", ",
+        "$PLAY",
+        ", ",
+        "$COMPLETE",
+        ", or ",
+        "$ERROR"
+      ],
+      "params": {
+        "$ASM": {
+          "label": "asm",
+          "value": "asm",
+          "key": "$ASM",
+          "internal": false,
+          "tag": "asm",
+          "sel": "asm"
+        },
+        "$PLAY": {
+          "label": "play",
+          "value": "play",
+          "key": "$PLAY",
+          "internal": false,
+          "tag": "play",
+          "sel": "play"
+        },
+        "$COMPLETE": {
+          "label": "complete",
+          "value": "complete",
+          "key": "$COMPLETE",
+          "internal": false,
+          "tag": "complete",
+          "sel": "complete"
+        },
+        "$ERROR": {
+          "label": "error",
+          "value": "error",
+          "key": "$ERROR",
+          "internal": false,
+          "tag": "error",
+          "sel": "error"
+        }
+      }
+    },
+    "params": [
+      {
+        "label": "asm",
+        "value": "asm",
+        "key": "$ASM",
+        "internal": false,
+        "tag": "asm",
+        "sel": "asm"
+      },
+      {
+        "label": "play",
+        "value": "play",
+        "key": "$PLAY",
+        "internal": false,
+        "tag": "play",
+        "sel": "play"
+      },
+      {
+        "label": "complete",
+        "value": "complete",
+        "key": "$COMPLETE",
+        "internal": false,
+        "tag": "complete",
+        "sel": "complete"
+      },
+      {
+        "label": "error",
+        "value": "error",
+        "key": "$ERROR",
+        "internal": false,
+        "tag": "error",
+        "sel": "error"
+      }
+    ]
+  },
+  "play_out": {
+    "name": "play_out",
+    "uses": "flow",
+    "group": [
+      "play"
+    ],
+    "with": {
+      "tokens": [
+        "play",
+        " ",
+        "out",
+        ": ",
+        "$OUT"
+      ],
+      "params": {
+        "$OUT": {
+          "label": "out",
+          "type": "text",
+          "key": "$OUT",
+          "internal": false,
+          "tag": "out",
+          "sel": "out"
+        }
+      },
+      "slots": [
+        "play_message"
+      ]
+    },
+    "desc": {
+      "label": "Play Out",
+      "short": "output from the game itself"
+    },
+    "params": [
+      {
+        "label": "out",
+        "type": "text",
+        "key": "$OUT",
+        "internal": false,
+        "tag": "out",
+        "sel": "out"
+      }
+    ]
+  },
   "plural_kinds": {
     "name": "plural_kinds",
     "desc": "The plural name of a type of similar nouns.  For example: animals, containers, etc.",
@@ -13151,65 +13376,6 @@
         "internal": false,
         "tag": "of",
         "sel": "of"
-      }
-    ]
-  },
-  "position": {
-    "name": "position",
-    "uses": "flow",
-    "group": [
-      "reader",
-      "internal"
-    ],
-    "with": {
-      "tokens": [
-        "src",
-        ": ",
-        "$OFFSET",
-        ", ",
-        "in",
-        ": ",
-        "$SOURCE"
-      ],
-      "params": {
-        "$OFFSET": {
-          "label": "_",
-          "type": "text",
-          "key": "$OFFSET",
-          "internal": false,
-          "tag": "_",
-          "sel": ""
-        },
-        "$SOURCE": {
-          "label": "in",
-          "type": "text",
-          "key": "$SOURCE",
-          "internal": false,
-          "tag": "in",
-          "sel": "in"
-        }
-      }
-    },
-    "desc": {
-      "label": "Position",
-      "short": "Identifies the location of a specific command ( ex. from an .if file )."
-    },
-    "params": [
-      {
-        "label": "_",
-        "type": "text",
-        "key": "$OFFSET",
-        "internal": false,
-        "tag": "_",
-        "sel": ""
-      },
-      {
-        "label": "in",
-        "type": "text",
-        "key": "$SOURCE",
-        "internal": false,
-        "tag": "in",
-        "sel": "in"
       }
     ]
   },
@@ -16734,6 +16900,8 @@
       "tokens": [
         "While testing ",
         "$TEST_NAME",
+        " ",
+        "$REQUIRES",
         ": ",
         "$STORY"
       ],
@@ -16745,6 +16913,15 @@
           "internal": false,
           "tag": "_",
           "sel": ""
+        },
+        "$REQUIRES": {
+          "label": "with",
+          "type": "test_name",
+          "optional": true,
+          "key": "$REQUIRES",
+          "internal": false,
+          "tag": "requires",
+          "sel": "requires"
         },
         "$STORY": {
           "label": "story",
@@ -16768,6 +16945,15 @@
         "internal": false,
         "tag": "_",
         "sel": ""
+      },
+      {
+        "label": "with",
+        "type": "test_name",
+        "optional": true,
+        "key": "$REQUIRES",
+        "internal": false,
+        "tag": "requires",
+        "sel": "requires"
       },
       {
         "label": "story",

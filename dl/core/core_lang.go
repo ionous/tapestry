@@ -1066,7 +1066,7 @@ func BufferText_Marshal(m jsn.Marshaler, val *BufferText) (err error) {
 	return
 }
 
-// CallCycle Runtime version of cycle_text
+// CallCycle Runtime version of cycle_text.
 type CallCycle struct {
 	Name        string        `if:"label=_,type=text"`
 	Parts       []rt.TextEval `if:"label=over"`
@@ -1412,7 +1412,7 @@ func CallSend_Marshal(m jsn.Marshaler, val *CallSend) (err error) {
 	return
 }
 
-// CallShuffle Runtime version of shuffle_text
+// CallShuffle Runtime version of shuffle_text.
 type CallShuffle struct {
 	Name        string        `if:"label=_,type=text"`
 	Parts       []rt.TextEval `if:"label=over"`
@@ -1525,7 +1525,7 @@ func CallShuffle_Marshal(m jsn.Marshaler, val *CallShuffle) (err error) {
 	return
 }
 
-// CallTerminal Runtime version of stopping_text
+// CallTerminal Runtime version of stopping_text.
 type CallTerminal struct {
 	Name        string        `if:"label=_,type=text"`
 	Parts       []rt.TextEval `if:"label=over"`
@@ -1637,7 +1637,7 @@ func CallTerminal_Marshal(m jsn.Marshaler, val *CallTerminal) (err error) {
 	return
 }
 
-// CallTrigger Runtime version of count_of
+// CallTrigger Runtime version of count_of.
 type CallTrigger struct {
 	Name        string        `if:"label=_,type=text"`
 	Trigger     Trigger       `if:"label=on"`
@@ -3020,7 +3020,7 @@ func CompareNum_Marshal(m jsn.Marshaler, val *CompareNum) (err error) {
 	return
 }
 
-// CompareText True if eq,ne,gt,lt,ge,le two strings ( lexical. )
+// CompareText True if eq,ne,gt,lt,ge,le two strings ( lexical. ).
 type CompareText struct {
 	A           rt.TextEval `if:"label=_"`
 	Is          Comparator  `if:"label=is"`
@@ -5469,7 +5469,7 @@ func IntoTargetFields_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoTarget
 	return
 }
 
-// IntoVar Targets an object or record stored in a variable
+// IntoVar Targets an object or record stored in a variable.
 type IntoVar struct {
 	Var         VariableName `if:"label=_"`
 	UserComment string
@@ -7596,7 +7596,7 @@ func PatternName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternName) (e
 	return
 }
 
-// Pluralize Returns the plural form of a singular word. (ex. apples for apple. )
+// Pluralize Returns the plural form of a singular word. (ex. apples for apple. ).
 type Pluralize struct {
 	Text        rt.TextEval `if:"label=of"`
 	UserComment string
@@ -7802,7 +7802,7 @@ func PrintNum_Marshal(m jsn.Marshaler, val *PrintNum) (err error) {
 	return
 }
 
-// PrintNumWord Writes a number in plain english: eg. 'one'
+// PrintNumWord Writes a number in plain english: eg. 'one'.
 type PrintNumWord struct {
 	Num         rt.NumberEval `if:"label=words"`
 	UserComment string
@@ -8017,7 +8017,7 @@ func ProductOf_Marshal(m jsn.Marshaler, val *ProductOf) (err error) {
 	return
 }
 
-// PutAtField Put a value into the field of an record or object
+// PutAtField Put a value into the field of an record or object.
 type PutAtField struct {
 	Into        IntoTargetFields `if:"label=_"`
 	From        rt.Assignment    `if:"label=from"`
@@ -8892,7 +8892,7 @@ func SetTrait_Marshal(m jsn.Marshaler, val *SetTrait) (err error) {
 	return
 }
 
-// Singularize Returns the singular form of a plural word. (ex. apple for apples )
+// Singularize Returns the singular form of a plural word. (ex. apple for apples ).
 type Singularize struct {
 	Text        rt.TextEval `if:"label=of"`
 	UserComment string
@@ -9098,7 +9098,7 @@ func SlashText_Marshal(m jsn.Marshaler, val *SlashText) (err error) {
 	return
 }
 
-// Softline Start a new line ( if not already at a new line. )
+// Softline Start a new line ( if not already at a new line. ).
 type Softline struct {
 	UserComment string
 }

@@ -1,12 +1,12 @@
 {
 	"flow{{if .Flow}}:{{else}} {{end -}}
 	     {{if .Phrase}}phrase:{{end -}}
-	     {{if .Trim}}trim:{{end -}}
+	     {{if .Inline}}trim:{{end -}}
 	     uses:": [
 {{- if .Flow}}"{{.Flow}}", {{end}}
 {{- if .Phrase}}"{{.Phrase}}", {{end}}
-{{- if .Trim}}true, {{end}}
-{{- if or .Flow .Phrase .Trim }}[{{end}}
+{{- if .Inline}}true, {{end}}
+{{- if or .Flow .Phrase .Inline }}[{{end}}
 {{ range $i, $v := .Terms }}{{if $i}},{{end}}
 			{
 				"Term:
@@ -26,6 +26,6 @@
 			{{- if or .Labeled .Typed .Private .Optional .Repeats}}]{{end -}}
 			}
 {{ end }}
-{{- if or .Flow .Phrase .Trim }}]{{end}}
+{{- if or .Flow .Phrase .Inline }}]{{end}}
 	]
 }

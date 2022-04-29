@@ -1,6 +1,10 @@
 package regen
 
-import "strings"
+import (
+	"strings"
+
+	"git.sr.ht/~ionous/tapestry/jsn/cin"
+)
 
 type Type struct {
 	m map[string]interface{}
@@ -68,6 +72,11 @@ func (t *Type) LiteralComment() string {
 			}
 			if short != "" {
 				ar = append(ar, short)
+			} else {
+				// sometimes makeops spits out "short" as an array *sigh*
+				if lines := ListOf("short", desc); len(lines) > 0 {
+					ar = append(ar, lines...)
+				}
 			}
 			if long != "" {
 				ar = append(ar, long)
@@ -154,15 +163,23 @@ func (t *Type) Flow() (ret string) {
 				ret = s
 			}
 		}
+	} else if lede := StringOf("lede", t.m); len(lede) > 0 {
+		if lede != t.Name() {
+			ret = lede
+		}
+	} else if sig := t.Sign(); sig != nil {
+		ret = sig.Name
 	}
 	return
 }
 
 // for flow: is the first label anonymous
 // (note: all english phrases are this way automatically )
-func (t *Type) Trim() (ret bool) {
+func (t *Type) Inline() (ret bool) {
 	if english, _ := t.Tokens(); english {
-		ret = true
+		if sig := t.Sign(); sig == nil || len(sig.Params) == 0 || len(sig.Params[0].Label) == 0 {
+			ret = true
+		}
 	} else if ts := t.Terms(); len(ts) > 0 {
 		ret = ts[0].Label == "_"
 	}
@@ -178,14 +195,8 @@ func (t *Type) Terms() []Param {
 		_, tokens := t.Tokens()
 		for _, k := range tokens {
 			if len(k) > 0 && k[0] == '$' {
-				v := MapOf(k, ps)
-				terms = append(terms, Param{
-					Name:     Detokenize(k),
-					Label:    StringOf("label", v),
-					Type:     StringOf("type", v),
-					Repeats:  BoolOf("repeats", v),
-					Optional: BoolOf("optional", v),
-				})
+				p := makeParam(k, ps)
+				terms = append(terms, p)
 			}
 		}
 		t.params = terms
@@ -217,19 +228,40 @@ func (t *Type) Tokens() (bool, []string) {
 func (t *Type) Phrase() (ret string) {
 	english, tokens := t.Tokens()
 	if english {
+		w := MapOf("with", t.m)
+		ps := MapOf("params", w)
+
 		var b strings.Builder
+		// the order of the tokens is the same as our terms; see Terms()
 		for _, k := range tokens {
 			if len(k) > 0 {
 				if k[0] != '$' {
 					b.WriteString(k)
 				} else {
+					n := strings.ToLower(k)
+					// we need to write the english label if it doesnt match the term's label
+					if p := makeParam(k, ps); p.Phrased() {
+						n = p.Phrasing + n
+					}
 					b.WriteRune('{')
-					b.WriteString(strings.ToLower(k))
+					b.WriteString(n)
 					b.WriteRune('}')
 				}
 			}
 		}
 		ret = b.String()
+	}
+	return
+}
+
+// was there an explicit signature specified?
+// ( true for some of the story specs. )
+// ex ."sign": "Event:action:args:",
+func (t *Type) Sign() (ret *cin.Signature) {
+	if sign := StringOf("sign", t.m); len(sign) > 0 {
+		if x, e := cin.ReadSignature(sign); e == nil {
+			ret = &x
+		}
 	}
 	return
 }

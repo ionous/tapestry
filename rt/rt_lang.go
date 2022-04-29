@@ -8,7 +8,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Arg Runtime version of argument
+// Arg Runtime version of argument.
 type Arg struct {
 	Name        string     `if:"label=_,type=text"`
 	From        Assignment `if:"label=from"`

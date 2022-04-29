@@ -8,7 +8,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// PlayLog a log message that can optionally be displayed to the client
+// PlayLog a log message that can optionally be displayed to the client.
 type PlayLog struct {
 	Log         string `if:"label=log,type=text"`
 	UserComment string
@@ -180,7 +180,7 @@ func PlayMessage_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PlayMessage) (e
 	return
 }
 
-// PlayMode app level change in state
+// PlayMode app level change in state.
 type PlayMode struct {
 	Mode        PlayModes `if:"label=mode"`
 	UserComment string
@@ -368,7 +368,7 @@ func PlayModes_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PlayModes) (err e
 	return
 }
 
-// PlayOut output from the game itself
+// PlayOut output from the game itself.
 type PlayOut struct {
 	Out         string `if:"label=out,type=text"`
 	UserComment string

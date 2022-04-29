@@ -29,13 +29,13 @@ var FactorialStory = &story.Story{
 			&story.PatternDecl{
 				Name: factorialName,
 				PatternReturn: &story.PatternReturn{Result: &story.NumberProperty{
-					UserComment:   "the result uses the same variable as the pattern input does",
-					NamedProperty: numberDecl,
+					UserComment: "the result uses the same variable as the pattern input does",
+					Name:        numVar.Str,
 				}},
 				Params: []story.PropertySlot{
 					&story.NumberProperty{
-						UserComment:   "just one argument, a number called 'num'",
-						NamedProperty: numberDecl,
+						UserComment: "just one argument, a number called 'num'",
+						Name:        numVar.Str,
 					}},
 			},
 			&story.PatternActions{
@@ -103,5 +103,3 @@ var FactorialIsZero = &core.CompareNum{
 
 var factorialName = core.PatternName{Str: "factorial"}
 var numVar = core.VariableName{Str: "num"}
-
-var numberDecl = story.NamedProperty{Name: numVar.Str}

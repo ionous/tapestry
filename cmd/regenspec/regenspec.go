@@ -25,6 +25,11 @@ func main() {
 }
 
 // generated manually via makeops
+// fix: in an ideal world this be using the original typespec format not the munged json output by makeops
+// the munged output is a lot simpler. this is a step to maybe getting that right.
+// ( though, ultimately the authority of the format should probably be written in the format,
+//   so maybe the original typespec format was only useful as a stepping stone. )
+
 //go:embed data/allTypes.jspec
 var allBytes []byte
 

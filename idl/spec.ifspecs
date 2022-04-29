@@ -5,7 +5,10 @@
     {
       "Group contains:": [
         {
-          "--": "",
+          "--": [
+            "for swap choices",
+            "if either label or type are not specified, they are derived from the name."
+          ],
           "Spec:with flow:": [
             "choice_spec",
             {
@@ -39,7 +42,11 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+            "name: overrides the name of the operation used in compact story files.",
+            "phrase: english text with embedded tokens referring to existing terms.",
+            "trim: whether the first term should be left off when calling the command."
+          ],
           "Spec:with flow:": [
             "flow_spec",
             {
@@ -82,7 +89,9 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+            "a collection of one or more other specs."
+          ],
           "Spec:with flow:": [
             "group_spec",
             {
@@ -103,7 +112,10 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+            "when exclusive is true means the user can only specify one of the options",
+            "otherwise the options are treated as hints."
+          ],
           "Spec:with flow:": [
             "num_spec",
             {
@@ -130,7 +142,10 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+            "for string options",
+            "if the label isnt specified, its derived from the name."
+          ],
           "Spec:with flow:": [
             "option_spec",
             {
@@ -157,7 +172,10 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+            "A member of a flow which any of the other types can opt into.",
+            "Aka an interface."
+          ],
           "Spec:with flow:": [
             "slot_spec",
             {
@@ -169,7 +187,10 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+            "when exclusive is true means the user can only specify one of the options",
+            "otherwise the options are treated as hints."
+          ],
           "Spec:with flow:": [
             "str_spec",
             {
@@ -218,7 +239,11 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+            "a member of a flow",
+            "the key gets used as the name and label, unless an explicit name is specified.",
+            "the type is derived from the name."
+          ],
           "Spec:with flow:": [
             "term_spec",
             {

@@ -316,7 +316,7 @@ func AsTxt_Marshal(m jsn.Marshaler, val *AsTxt) (err error) {
 	return
 }
 
-// EraseEdge Erase at edge: Remove one or more values from a list
+// EraseEdge Erase at edge: Remove one or more values from a list.
 type EraseEdge struct {
 	From        ListSource  `if:"label=_"`
 	AtEdge      rt.BoolEval `if:"label=at_front,optional"`
@@ -428,7 +428,7 @@ func EraseEdge_Marshal(m jsn.Marshaler, val *EraseEdge) (err error) {
 	return
 }
 
-// EraseIndex Erase at index: Remove one or more values from a list
+// EraseIndex Erase at index: Remove one or more values from a list.
 type EraseIndex struct {
 	Count       rt.NumberEval `if:"label=_"`
 	From        ListSource    `if:"label=from"`
@@ -826,7 +826,7 @@ func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 	return
 }
 
-// FromNumList Uses a list of numbers
+// FromNumList Uses a list of numbers.
 type FromNumList struct {
 	Var         core.VariableName `if:"label=_"`
 	UserComment string
@@ -929,7 +929,7 @@ func FromNumList_Marshal(m jsn.Marshaler, val *FromNumList) (err error) {
 	return
 }
 
-// FromRecList Uses a list of records
+// FromRecList Uses a list of records.
 type FromRecList struct {
 	Var         core.VariableName `if:"label=_"`
 	UserComment string
@@ -1032,7 +1032,7 @@ func FromRecList_Marshal(m jsn.Marshaler, val *FromRecList) (err error) {
 	return
 }
 
-// FromTxtList Uses a list of text
+// FromTxtList Uses a list of text.
 type FromTxtList struct {
 	Var         core.VariableName `if:"label=_"`
 	UserComment string
@@ -1135,7 +1135,7 @@ func FromTxtList_Marshal(m jsn.Marshaler, val *FromTxtList) (err error) {
 	return
 }
 
-// IntoNumList Targets a list of numbers
+// IntoNumList Targets a list of numbers.
 type IntoNumList struct {
 	Var         core.VariableName `if:"label=_"`
 	UserComment string
@@ -1238,7 +1238,7 @@ func IntoNumList_Marshal(m jsn.Marshaler, val *IntoNumList) (err error) {
 	return
 }
 
-// IntoRecList Targets a list of records
+// IntoRecList Targets a list of records.
 type IntoRecList struct {
 	Var         core.VariableName `if:"label=_"`
 	UserComment string
@@ -1341,7 +1341,7 @@ func IntoRecList_Marshal(m jsn.Marshaler, val *IntoRecList) (err error) {
 	return
 }
 
-// IntoTxtList Targets a list of text
+// IntoTxtList Targets a list of text.
 type IntoTxtList struct {
 	Var         core.VariableName `if:"label=_"`
 	UserComment string
@@ -3320,7 +3320,7 @@ func ListTarget_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListTarget) (err
 	return
 }
 
-// PutEdge Add a value to a list
+// PutEdge Add a value to a list.
 type PutEdge struct {
 	From        rt.Assignment `if:"label=_"`
 	Into        ListTarget    `if:"label=into"`
@@ -3441,7 +3441,7 @@ func PutEdge_Marshal(m jsn.Marshaler, val *PutEdge) (err error) {
 	return
 }
 
-// PutIndex Replace one value in a list with another
+// PutIndex Replace one value in a list with another.
 type PutIndex struct {
 	From        rt.Assignment `if:"label=_"`
 	Into        ListTarget    `if:"label=into"`

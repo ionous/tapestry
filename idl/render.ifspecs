@@ -30,7 +30,10 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+            "in template phrases, picks between record variables, object variables, and named global objects.",
+            "ex. could be \"ringBearer\", \"SamWise\", or \"frodo\""
+          ],
           "Spec:with flow:slots:groups:": [
             "render_field",
             {
@@ -86,7 +89,13 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+            "handles changing a template like {.boombip} into text.",
+            "if the name is a variable containing an object name: return the printed object name ( via \"print name\" )",
+            "if the name is a variable with some other text: return that text.",
+            "if the name isn't a variable but refers to some object: return that object's printed object name.",
+            "otherwise, its an error."
+          ],
           "Spec:with flow:slots:groups:": [
             "render_name",
             {
@@ -111,7 +120,10 @@
           ]
         },
         {
-          "--": "",
+          "--": [
+            "printing is generally an activity b/c say is an activity",
+            "and we want the ability to say several things in series."
+          ],
           "Spec:with flow:slots:groups:": [
             "render_pattern",
             {

@@ -142,8 +142,9 @@
                             },
                             "noun_relation":
                             {
-                                "spec": "{?are_being} {relation:relation_name} {other_nouns+named_noun|comma-and}",
-                                "slot": "noun_continuation"
+                                "spec": "{are_being?are_being} {relation:relation_name} {other_nouns+named_noun|comma-and}",
+                                "slot": "noun_continuation",
+                                "sign": "noun_relation are_being:relation:other_nouns:"
                             },
                             "named_noun":
                             {
@@ -461,10 +462,6 @@
                                 "spec": "The {property} of {nouns+named_noun} is {the text%lines|quote}",
                                 "desc": "Assign text to a noun: Assign text. Gives a noun one or more lines of text."
                             },
-                            "named_property": {
-                                "spec": "named {name:text} ( {of%type?text} )",
-                                "embed": true
-                            },    
                             "property_slot": {
                                 "uses": "slot",
                                 "desc": ["future: each slot should support an appropriate 'starting as' initial value"]

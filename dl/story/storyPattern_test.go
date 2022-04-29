@@ -39,10 +39,10 @@ func TestPatternImport(t *testing.T) {
 func TestPatternParameterImport(t *testing.T) {
 	patternVariables := &story.PatternDecl{
 		Name: core.PatternName{Str: "corral"},
-		Params: []story.PropertySlot{&story.TextProperty{NamedProperty: story.NamedProperty{
+		Params: []story.PropertySlot{&story.TextProperty{
 			Name: "pet",
 			Type: "animal",
-		}}},
+		}},
 	}
 	var els []eph.Ephemera
 	k := story.NewImporter(collectEphemera(&els), storyMarshaller)

@@ -8,7 +8,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// ReciprocalOf Returns the implied relative of a noun (ex. the source in a one-to-many relation.)
+// ReciprocalOf Returns the implied relative of a noun (ex. the source in a one-to-many relation.).
 type ReciprocalOf struct {
 	Via         RelationName `if:"label=_"`
 	Object      rt.TextEval  `if:"label=object"`
@@ -120,7 +120,7 @@ func ReciprocalOf_Marshal(m jsn.Marshaler, val *ReciprocalOf) (err error) {
 	return
 }
 
-// ReciprocalsOf Returns the implied relative of a noun (ex. the sources of a many-to-many relation.)
+// ReciprocalsOf Returns the implied relative of a noun (ex. the sources of a many-to-many relation.).
 type ReciprocalsOf struct {
 	Via         RelationName `if:"label=_"`
 	Object      rt.TextEval  `if:"label=object"`
@@ -427,7 +427,7 @@ func RelationName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RelationName) 
 	return
 }
 
-// RelativeOf Returns the relative of a noun (ex. the target of a one-to-one relation.)
+// RelativeOf Returns the relative of a noun (ex. the target of a one-to-one relation.).
 type RelativeOf struct {
 	Via         RelationName `if:"label=_"`
 	Object      rt.TextEval  `if:"label=object"`

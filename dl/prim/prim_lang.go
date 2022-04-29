@@ -216,7 +216,7 @@ func Lines_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Lines) (err error) {
 	return
 }
 
-// Number requires a string.
+// Number requires a user-specified number.
 type Number struct {
 	Num float64
 }

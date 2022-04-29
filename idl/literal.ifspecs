@@ -63,8 +63,8 @@
         },
         {
           "--": [
-              "A series of values all for the same record.",
-              "While it can be specified wherever a literal value can, it only has meaning when the record type is known."
+            "A series of values all for the same record.",
+            "While it can be specified wherever a literal value can, it only has meaning when the record type is known."
           ],
           "Spec:with flow:slots:groups:": [
             "field_values",

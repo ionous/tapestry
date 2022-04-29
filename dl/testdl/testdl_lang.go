@@ -341,7 +341,7 @@ func TestFlow_Marshal(m jsn.Marshaler, val *TestFlow) (err error) {
 	return
 }
 
-// TestNum requires a string.
+// TestNum requires a user-specified number.
 type TestNum struct {
 	Num float64
 }

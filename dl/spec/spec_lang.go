@@ -778,7 +778,7 @@ func StrSpec_Marshal(m jsn.Marshaler, val *StrSpec) (err error) {
 	return
 }
 
-// SwapSpec specifies a choice between one or more other types
+// SwapSpec specifies a choice between one or more other types.
 type SwapSpec struct {
 	Between     []ChoiceSpec `if:"label=between"`
 	UserComment string

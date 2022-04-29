@@ -222,7 +222,7 @@ func Alias_Marshal(m jsn.Marshaler, val *Alias) (err error) {
 	return
 }
 
-// AllOf makes a parser scanner
+// AllOf makes a parser scanner.
 type AllOf struct {
 	Series      []ScannerMaker `if:"label=_"`
 	UserComment string
@@ -324,7 +324,7 @@ func AllOf_Marshal(m jsn.Marshaler, val *AllOf) (err error) {
 	return
 }
 
-// AnyOf makes a parser scanner
+// AnyOf makes a parser scanner.
 type AnyOf struct {
 	Options     []ScannerMaker `if:"label=_"`
 	UserComment string
@@ -426,7 +426,7 @@ func AnyOf_Marshal(m jsn.Marshaler, val *AnyOf) (err error) {
 	return
 }
 
-// Directive starts a parser scanner
+// Directive starts a parser scanner.
 type Directive struct {
 	Lede        []string       `if:"label=_,type=text"`
 	Scans       []ScannerMaker `if:"label=scans"`
@@ -705,7 +705,7 @@ func GrammarMaker_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]GrammarMaker) 
 	return
 }
 
-// Noun makes a parser scanner
+// Noun makes a parser scanner.
 type Noun struct {
 	Kind        string `if:"label=_,type=text"`
 	UserComment string
@@ -807,7 +807,7 @@ func Noun_Marshal(m jsn.Marshaler, val *Noun) (err error) {
 	return
 }
 
-// Retarget makes a parser scanner
+// Retarget makes a parser scanner.
 type Retarget struct {
 	Span        []ScannerMaker `if:"label=_"`
 	UserComment string
@@ -909,7 +909,7 @@ func Retarget_Marshal(m jsn.Marshaler, val *Retarget) (err error) {
 	return
 }
 
-// Reverse makes a parser scanner
+// Reverse makes a parser scanner.
 type Reverse struct {
 	Reverses    []ScannerMaker `if:"label=_"`
 	UserComment string
@@ -1080,7 +1080,7 @@ func ScannerMaker_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ScannerMaker) 
 	return
 }
 
-// Self makes a parser scanner which matches the player. ( the player string is just to make the composer happy. )
+// Self makes a parser scanner which matches the player. ( the player string is just to make the composer happy. ).
 type Self struct {
 	Player      string `if:"label=_,type=text"`
 	UserComment string
@@ -1182,7 +1182,7 @@ func Self_Marshal(m jsn.Marshaler, val *Self) (err error) {
 	return
 }
 
-// Words makes a parser scanner
+// Words makes a parser scanner.
 type Words struct {
 	Words       []string `if:"label=_,type=text"`
 	UserComment string

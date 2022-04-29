@@ -31,13 +31,13 @@ func main() {
 				path = path[:len(path)-2]
 			}
 			path = filepath.Join(path, groupName, groupName+"_lang.go")
-			// use https://pkg.go.dev/golang.org/x/tools/cmd/goimports to add imports and format the source
+			// uses goimports to add imports and format the source
 			if formatted, e := imports.Process(path, b, nil); e != nil {
 				err = errutil.New(e, "while formatting", groupName)
 			} else {
 				b = formatted
 			}
-			if fp, e := os.Create(path /*temp*/ + "_"); e != nil {
+			if fp, e := os.Create(path); e != nil {
 				err = e // writing errors take precedence over the formatting error
 			} else {
 				fp.Write(b)

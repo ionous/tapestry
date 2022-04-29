@@ -54,26 +54,28 @@
           "Spec:with flow:slots:groups:": [
             "action_decl",
             {
-              "flow phrase:trim:uses:": [
-                "Agents can {$event} and {$action} requires {$action_params}.",
+              "flow:phrase:trim:uses:": [
+                "Event",
+                "Agents can {act$event} and {acting$action} requires {action params$action_params}.",
                 true,
                 [
                   {
-                    "Term:name:type:": [
-                      "act",
+                    "Term:type:": [
                       "event",
                       "event_name"
                     ]
                   },
                   {
-                    "Term:name:type:": [
-                      "acting",
+                    "Term:type:": [
                       "action",
                       "action_name"
                     ]
                   },
                   {
-                    "Term:": "action_params"
+                    "Term:name:": [
+                      "args",
+                      "action_params"
+                    ]
                   }
                 ]
               ]
@@ -277,12 +279,13 @@
           "Spec:with flow:slots:groups:": [
             "aspect_property",
             {
-              "flow phrase:trim:uses:": [
-                "an aspect {$aspect}",
-                true,
+              "flow:phrase:uses:": [
+                "aspect",
+                "an aspect {aspect$aspect}",
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "of",
                       "aspect",
                       "text"
                     ]
@@ -331,12 +334,13 @@
           "Spec:with flow:slots:groups:": [
             "bool_property",
             {
-              "flow phrase:trim:uses:": [
-                "a true/false value named {$name} ( {$type} ) {$initially}",
-                true,
+              "flow:phrase:uses:": [
+                "bool",
+                "a true/false value named {name$name} ( {$type} ) {$initially}",
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "named",
                       "name",
                       "text"
                     ]
@@ -442,14 +446,11 @@
             "comment",
             {
               "flow phrase:trim:uses:": [
-                "Note: {$lines}",
+                "Note: {comment$lines}",
                 true,
                 [
                   {
-                    "Term:name:": [
-                      "comment",
-                      "lines"
-                    ]
+                    "Term:": "lines"
                   }
                 ]
               ]
@@ -504,7 +505,7 @@
             "count_of",
             {
               "flow phrase:trim:uses:": [
-                "trigger {$trigger} {$num}",
+                "trigger {_$trigger} {$num}",
                 true,
                 [
                   {
@@ -536,7 +537,7 @@
             "cycle_text",
             {
               "flow phrase:trim:uses:": [
-                "cycle {$parts}",
+                "cycle {_$parts}",
                 true,
                 [
                   {
@@ -594,13 +595,13 @@
           "Spec:with flow:slots:groups:": [
             "event_block",
             {
-              "flow phrase:trim:uses:": [
-                "For {$target} {$handlers}",
+              "flow:phrase:trim:uses:": [
+                "listen",
+                "For {the target$target} {$handlers}",
                 true,
                 [
                   {
-                    "Term:name:type:": [
-                      "the target",
+                    "Term:type:": [
                       "target",
                       "event_target"
                     ]
@@ -630,16 +631,16 @@
           "Spec:with flow:groups:": [
             "event_handler",
             {
-              "flow phrase:trim:uses:": [
-                "{$event_phase} {$event} {$locals} do:{$rules}",
+              "flow:phrase:trim:uses:": [
+                "with",
+                "{$event_phase} {the event$event} {$locals} do:{$rules}",
                 true,
                 [
                   {
                     "Term:": "event_phase"
                   },
                   {
-                    "Term:name:type:": [
-                      "the event",
+                    "Term:type:": [
                       "event",
                       "event_name"
                     ]
@@ -744,7 +745,7 @@
             "grammar_decl",
             {
               "flow phrase:trim:uses:": [
-                "understand {$grammar}",
+                "understand {_$grammar}",
                 true,
                 [
                   {
@@ -771,15 +772,17 @@
           "Spec:with flow:slots:groups:": [
             "kind_of_noun",
             {
-              "flow phrase:trim:uses:": [
-                "{$are_an} {$kind}",
+              "flow:phrase:trim:uses:": [
+                "Kind",
+                "{$are_an} {kind$kind}",
                 true,
                 [
                   {
                     "Term:": "are_an"
                   },
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "named",
                       "kind",
                       "singular_kind"
                     ]
@@ -834,15 +837,17 @@
           "Spec:with flow:slots:groups:": [
             "kinds_have_properties",
             {
-              "flow phrase:trim:uses:": [
-                "{$plural_kinds} have {$props}.",
+              "flow:phrase:trim:uses:": [
+                "Kinds",
+                "{$plural_kinds} have {props$props}.",
                 true,
                 [
                   {
                     "Term:": "plural_kinds"
                   },
                   {
-                    "Term:type:repeats:": [
+                    "Term:name:type:repeats:": [
+                      "have",
                       "props",
                       "property_slot",
                       true
@@ -889,15 +894,21 @@
           "Spec:with flow:slots:groups:": [
             "kinds_of_kind",
             {
-              "flow phrase:trim:uses:": [
-                "{$plural_kinds} are a kind of {$singular_kind}.",
-                true,
+              "flow:phrase:uses:": [
+                "Make",
+                "{plural kinds$plural_kinds} are a kind of {singular kind$singular_kind}.",
                 [
                   {
-                    "Term:": "plural_kinds"
+                    "Term:name:": [
+                      "kinds",
+                      "plural_kinds"
+                    ]
                   },
                   {
-                    "Term:": "singular_kind"
+                    "Term:name:": [
+                      "of",
+                      "singular_kind"
+                    ]
                   }
                 ]
               ]
@@ -916,7 +927,8 @@
           "Spec:with flow:slots:groups:": [
             "make_opposite",
             {
-              "flow phrase:trim:uses:": [
+              "flow:phrase:trim:uses:": [
+                "make",
                 "The opposite of {$word} is the {$opposite}.",
                 true,
                 [
@@ -952,7 +964,8 @@
           "Spec:with flow:slots:groups:": [
             "make_plural",
             {
-              "flow phrase:trim:uses:": [
+              "flow:phrase:trim:uses:": [
+                "make",
                 "The plural of {$singular} is {$plural}.",
                 true,
                 [
@@ -1188,15 +1201,17 @@
           "Spec:with flow:groups:": [
             "named_noun",
             {
-              "flow phrase:trim:uses:": [
-                "{$determiner} {$name}",
+              "flow:phrase:trim:uses:": [
+                "Noun",
+                "{$determiner} {name$name}",
                 true,
                 [
                   {
                     "Term:": "determiner"
                   },
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "named",
                       "name",
                       "noun_name"
                     ]
@@ -1216,7 +1231,7 @@
             "named_property",
             {
               "flow phrase:trim:uses:": [
-                "named {$name} ( {$type} )",
+                "named {$name} ( {of$type} )",
                 true,
                 [
                   {
@@ -1226,8 +1241,7 @@
                     ]
                   },
                   {
-                    "Term:name:type:optional:": [
-                      "of",
+                    "Term:type:optional:": [
                       "type",
                       "text",
                       true
@@ -1252,7 +1266,7 @@
             "noun_assignment",
             {
               "flow phrase:trim:uses:": [
-                "The {$property} of {$nouns} is {$lines}",
+                "The {$property} of {$nouns} is {the text$lines}",
                 true,
                 [
                   {
@@ -1266,10 +1280,7 @@
                     ]
                   },
                   {
-                    "Term:name:": [
-                      "the text",
-                      "lines"
-                    ]
+                    "Term:": "lines"
                   }
                 ]
               ]
@@ -1301,8 +1312,9 @@
           "Spec:with flow:slots:groups:": [
             "noun_kind_statement",
             {
-              "flow phrase:trim:uses:": [
-                "{$nouns} {$kind_of_noun} {$more}.",
+              "flow:phrase:trim:uses:": [
+                "Nouns",
+                "{$nouns} {is a kind$kind_of_noun} {$more}.",
                 true,
                 [
                   {
@@ -1314,7 +1326,7 @@
                   },
                   {
                     "Term:name:": [
-                      "is a kind",
+                      "depict",
                       "kind_of_noun"
                     ]
                   },
@@ -1358,9 +1370,8 @@
           "Spec:with flow:slots:groups:": [
             "noun_relation",
             {
-              "flow phrase:trim:uses:": [
+              "flow phrase:uses:": [
                 "{$are_being} {$relation} {$other_nouns}",
-                true,
                 [
                   {
                     "Term:optional:": [
@@ -1398,8 +1409,9 @@
           "Spec:with flow:slots:groups:": [
             "noun_relation_statement",
             {
-              "flow phrase:trim:uses:": [
-                "{$nouns} {$noun_relation} {$more}.",
+              "flow:phrase:trim:uses:": [
+                "Nouns",
+                "{$nouns} {noun relation$noun_relation} {$more}.",
                 true,
                 [
                   {
@@ -1410,7 +1422,10 @@
                     ]
                   },
                   {
-                    "Term:": "noun_relation"
+                    "Term:name:": [
+                      "relate_to",
+                      "noun_relation"
+                    ]
                   },
                   {
                     "Term:name:type:optional:repeats:": [
@@ -1438,8 +1453,9 @@
           "Spec:with flow:slots:groups:": [
             "noun_trait_statement",
             {
-              "flow phrase:trim:uses:": [
-                "{$nouns} {$noun_traits} {$more}.",
+              "flow:phrase:trim:uses:": [
+                "Nouns",
+                "{$nouns} {noun traits$noun_traits} {$more}.",
                 true,
                 [
                   {
@@ -1450,7 +1466,10 @@
                     ]
                   },
                   {
-                    "Term:": "noun_traits"
+                    "Term:name:": [
+                      "start_as",
+                      "noun_traits"
+                    ]
                   },
                   {
                     "Term:name:type:optional:repeats:": [
@@ -1508,12 +1527,13 @@
           "Spec:with flow:slots:groups:": [
             "num_list_property",
             {
-              "flow phrase:trim:uses:": [
-                "a list of nums named {$name} ( {$type} ) {$initially}",
-                true,
+              "flow:phrase:uses:": [
+                "num_list",
+                "a list of nums named {name$name} ( {$type} ) {$initially}",
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "named",
                       "name",
                       "text"
                     ]
@@ -1550,12 +1570,13 @@
           "Spec:with flow:slots:groups:": [
             "number_property",
             {
-              "flow phrase:trim:uses:": [
-                "a number named {$name} ( {$type} ) {$initially}",
-                true,
+              "flow:phrase:uses:": [
+                "number",
+                "a number named {name$name} ( {$type} ) {$initially}",
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "named",
                       "name",
                       "text"
                     ]
@@ -1705,19 +1726,20 @@
           "Spec:with flow:slots:groups:": [
             "pattern_actions",
             {
-              "flow phrase:trim:uses:": [
-                "To determine {$name} {$locals} do: {$rules}",
+              "flow:phrase:trim:uses:": [
+                "pattern",
+                "To determine {pattern name$name} {locals$locals} do: {$rules}",
                 true,
                 [
                   {
-                    "Term:name:type:": [
-                      "pattern name",
+                    "Term:type:": [
                       "name",
                       "pattern_name"
                     ]
                   },
                   {
-                    "Term:type:optional:repeats:": [
+                    "Term:name:type:optional:repeats:": [
+                      "provides",
                       "locals",
                       "property_slot",
                       true,
@@ -1748,8 +1770,9 @@
           "Spec:with flow:slots:groups:": [
             "pattern_decl",
             {
-              "flow phrase:trim:uses:": [
-                "To determine {$name} {$params} {$pattern_return}.",
+              "flow:phrase:trim:uses:": [
+                "Pattern",
+                "To determine {$name} {params$params} {pattern return$pattern_return}.",
                 true,
                 [
                   {
@@ -1759,7 +1782,8 @@
                     ]
                   },
                   {
-                    "Term:type:optional:repeats:": [
+                    "Term:name:type:optional:repeats:": [
+                      "requires",
                       "params",
                       "property_slot",
                       true,
@@ -1767,7 +1791,8 @@
                     ]
                   },
                   {
-                    "Term:optional:": [
+                    "Term:name:optional:": [
+                      "returns",
                       "pattern_return",
                       true
                     ]
@@ -1821,7 +1846,8 @@
           "Spec:with flow:groups:": [
             "pattern_return",
             {
-              "flow phrase:trim:uses:": [
+              "flow:phrase:trim:uses:": [
+                "pattern_result",
                 "returning {$result}",
                 true,
                 [
@@ -1846,19 +1872,17 @@
             "pattern_rule",
             {
               "flow phrase:trim:uses:": [
-                "When {$guard}{$flags}, then: {$does}",
+                "When {conditions are met$guard}{continue$flags}, then: {$does}",
                 true,
                 [
                   {
-                    "Term:name:type:": [
-                      "conditions are met",
+                    "Term:type:": [
                       "guard",
                       "bool_eval"
                     ]
                   },
                   {
-                    "Term:name:type:optional:": [
-                      "continue",
+                    "Term:type:optional:": [
                       "flags",
                       "pattern_flags",
                       true
@@ -1950,12 +1974,13 @@
           "Spec:with flow:slots:groups:": [
             "record_list_property",
             {
-              "flow phrase:trim:uses:": [
-                "a list of records named {$name} ( {$type} ) {$initially}",
-                true,
+              "flow:phrase:uses:": [
+                "record_list",
+                "a list of records named {name$name} ( {$type} ) {$initially}",
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "named",
                       "name",
                       "text"
                     ]
@@ -1992,12 +2017,13 @@
           "Spec:with flow:slots:groups:": [
             "record_property",
             {
-              "flow phrase:trim:uses:": [
-                "a record named {$name} ( {$type} ) {$initially}",
-                true,
+              "flow:phrase:uses:": [
+                "record",
+                "a record named {name$name} ( {$type} ) {$initially}",
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "named",
                       "name",
                       "text"
                     ]
@@ -2109,7 +2135,7 @@
             "render_template",
             {
               "flow phrase:trim:uses:": [
-                "render_template {$template}",
+                "render_template {_$template}",
                 true,
                 [
                   {
@@ -2137,7 +2163,7 @@
             "shuffle_text",
             {
               "flow phrase:trim:uses:": [
-                "shuffle {$parts}",
+                "shuffle {_$parts}",
                 true,
                 [
                   {
@@ -2181,7 +2207,7 @@
             "stopping_text",
             {
               "flow phrase:trim:uses:": [
-                "stopping {$parts}",
+                "stopping {_$parts}",
                 true,
                 [
                   {
@@ -2210,12 +2236,12 @@
           "Spec:with flow:groups:": [
             "story",
             {
-              "flow phrase:trim:uses:": [
-                "{$paragraph}",
-                true,
+              "flow phrase:uses:": [
+                "{paragraph$paragraph}",
                 [
                   {
-                    "Term:repeats:": [
+                    "Term:name:repeats:": [
+                      "paragraphs",
                       "paragraph",
                       true
                     ]
@@ -2234,7 +2260,8 @@
           "Spec:with flow:slots:groups:": [
             "story_break",
             {
-              "flow phrase:trim:uses:": [
+              "flow:phrase:trim:uses:": [
+                "--",
                 "story_break",
                 true,
                 []
@@ -2255,8 +2282,9 @@
           "Spec:with flow:groups:": [
             "story_file",
             {
-              "flow phrase:trim:uses:": [
-                "{$story_lines}",
+              "flow:phrase:trim:uses:": [
+                "tapestry",
+                "{_$story_lines}",
                 true,
                 [
                   {
@@ -2372,11 +2400,18 @@
             "test_scene",
             {
               "flow phrase:trim:uses:": [
-                "While testing {$test_name}: {$story}",
+                "While testing {$test_name} {with$requires}: {$story}",
                 true,
                 [
                   {
                     "Term:": "test_name"
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "requires",
+                      "test_name",
+                      true
+                    ]
                   },
                   {
                     "Term:type:repeats:": [
@@ -2403,15 +2438,14 @@
             "test_statement",
             {
               "flow phrase:trim:uses:": [
-                "Expect {$test_name} to {$test}",
+                "Expect {$test_name} to {expectation$test}",
                 true,
                 [
                   {
                     "Term:": "test_name"
                   },
                   {
-                    "Term:name:type:": [
-                      "expectation",
+                    "Term:type:": [
                       "test",
                       "testing"
                     ]
@@ -2447,12 +2481,13 @@
           "Spec:with flow:slots:groups:": [
             "text_list_property",
             {
-              "flow phrase:trim:uses:": [
-                "a list of text named {$name} ( {$type} ) {$initially}",
-                true,
+              "flow:phrase:uses:": [
+                "text_list",
+                "a list of text named {name$name} ( {$type} ) {$initially}",
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "named",
                       "name",
                       "text"
                     ]
@@ -2489,12 +2524,13 @@
           "Spec:with flow:slots:groups:": [
             "text_property",
             {
-              "flow phrase:trim:uses:": [
-                "some text named {$name} ( {$type} ) {$initially}",
-                true,
+              "flow:phrase:uses:": [
+                "text",
+                "some text named {name$name} ( {$type} ) {$initially}",
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "named",
                       "name",
                       "text"
                     ]

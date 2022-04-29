@@ -9,7 +9,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// DebugLog Debug log
+// DebugLog Debug log.
 type DebugLog struct {
 	Value       rt.Assignment `if:"label=_"`
 	LogLevel    LoggingLevel  `if:"label=as,optional"`

@@ -7,7 +7,7 @@
             "play_message":
             {
                 "uses": "slot",
-                "desc": "a client-server message for the play play app"
+                "desc": "a client-server message for the play app"
             },
             "play_log":
             {
