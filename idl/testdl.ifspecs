@@ -25,9 +25,7 @@
         {
           "Spec:slots:with flow:": [
             "test_embed",
-            [
-              "test_slot"
-            ],
+            "test_slot",
             {
               "Flow:uses:": [
                 "embed",
@@ -43,9 +41,7 @@
         {
           "Spec:slots:with flow:": [
             "test_flow",
-            [
-              "test_slot"
-            ],
+            "test_slot",
             {
               "Flow:uses:": [
                 "flow",

@@ -47,6 +47,7 @@ func unpack(pv interface{}) (ret interface{}) {
 	default:
 		ret = pv // provisionally
 		if pstr, isString := pv.(*string); isString {
+			// handle writing a string containing multiple lines as an array of single strings.
 			strs := strings.Split(*pstr, "\n")
 			if len(strs) > 1 {
 				ret = strs
@@ -108,13 +109,21 @@ func (m *xEncoder) addBlock(next *chart.StateMix) *chart.StateMix {
 		}
 		return okay
 	}
-	next.OnRepeat = func(t string, vs jsn.SliceBlock) bool {
-		var slice []interface{}
-		if cnt := vs.GetSize(); cnt >= 0 {
-			slice = make([]interface{}, 0, cnt)
+
+	// returns true if the individual values are epxected to be written.
+	next.OnRepeat = func(t string, vs jsn.SliceBlock) (okay bool) {
+		if pv, ok := vs.(interface{ GetCompactValue() interface{} }); ok {
+			// see also cinState's readRepeat
+			m.Commit(pv.GetCompactValue())
+		} else {
+			var slice []interface{}
+			if cnt := vs.GetSize(); cnt >= 0 {
+				slice = make([]interface{}, 0, cnt)
+			}
+			m.PushState(m.newSlice(slice))
+			okay = true // means
 		}
-		m.PushState(m.newSlice(slice))
-		return true
+		return
 	}
 	// next.OnEnd... gets determined by the specific block
 	return next
@@ -149,6 +158,7 @@ func (m *xEncoder) newKeyValue(prev chart.StateMix, d *comFlow, key string) *cha
 }
 
 // every slice pushes a brand new machine
+// we accumulate values into vals, and later write them all at once
 func (m *xEncoder) newSlice(vals []interface{}) *chart.StateMix {
 	next := m.newValue(m.newBlock())
 	// a new value is being added to our slice

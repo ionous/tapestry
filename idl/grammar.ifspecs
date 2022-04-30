@@ -8,9 +8,7 @@
           "--": "makes a parser scanner producing a script defined action.",
           "Spec:slots:with flow:": [
             "action",
-            [
-              "scanner_maker"
-            ],
+            "scanner_maker",
             {
               "Flow:trim:uses:": [
                 "as",
@@ -31,9 +29,7 @@
           "--": "allows the user to refer to a noun by one or more other terms.",
           "Spec:slots:with flow:": [
             "alias",
-            [
-              "grammar_maker"
-            ],
+            "grammar_maker",
             {
               "Flow trim:uses:": [
                 true,
@@ -60,9 +56,7 @@
           "--": "makes a parser scanner.",
           "Spec:slots:with flow:": [
             "all_of",
-            [
-              "scanner_maker"
-            ],
+            "scanner_maker",
             {
               "Flow trim:uses:": [
                 true,
@@ -83,9 +77,7 @@
           "--": "makes a parser scanner.",
           "Spec:slots:with flow:": [
             "any_of",
-            [
-              "scanner_maker"
-            ],
+            "scanner_maker",
             {
               "Flow trim:uses:": [
                 true,
@@ -106,9 +98,7 @@
           "--": "starts a parser scanner.",
           "Spec:slots:with flow:": [
             "directive",
-            [
-              "grammar_maker"
-            ],
+            "grammar_maker",
             {
               "Flow trim:uses:": [
                 true,
@@ -136,9 +126,7 @@
           "--": "Read what the player types and turn it into actions.",
           "Spec:groups:with flow:": [
             "grammar",
-            [
-              "internal"
-            ],
+            "internal",
             {
               "Flow trim:uses:": [
                 true,
@@ -167,9 +155,7 @@
           "--": "makes a parser scanner.",
           "Spec:slots:with flow:": [
             "noun",
-            [
-              "scanner_maker"
-            ],
+            "scanner_maker",
             {
               "Flow trim:uses:": [
                 true,
@@ -189,9 +175,7 @@
           "--": "makes a parser scanner.",
           "Spec:slots:with flow:": [
             "retarget",
-            [
-              "scanner_maker"
-            ],
+            "scanner_maker",
             {
               "Flow trim:uses:": [
                 true,
@@ -212,9 +196,7 @@
           "--": "makes a parser scanner.",
           "Spec:slots:with flow:": [
             "reverse",
-            [
-              "scanner_maker"
-            ],
+            "scanner_maker",
             {
               "Flow trim:uses:": [
                 true,
@@ -244,9 +226,7 @@
           "--": "makes a parser scanner which matches the player. ( the player string is just to make the composer happy. ).",
           "Spec:slots:with flow:": [
             "self",
-            [
-              "scanner_maker"
-            ],
+            "scanner_maker",
             {
               "Flow trim:uses:": [
                 true,
@@ -266,9 +246,7 @@
           "--": "makes a parser scanner.",
           "Spec:slots:with flow:": [
             "words",
-            [
-              "scanner_maker"
-            ],
+            "scanner_maker",
             {
               "Flow trim:uses:": [
                 true,

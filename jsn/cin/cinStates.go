@@ -137,25 +137,25 @@ func (dec *xDecoder) readFullSwap(p jsn.SwapBlock, msg json.RawMessage) (okay bo
 	return
 }
 
-func (dec *xDecoder) readRepeat(slice jsn.SliceBlock, msg json.RawMessage) (okay bool) {
+func (dec *xDecoder) readRepeat(slice jsn.SliceBlock, msg json.RawMessage) bool {
+	// see also: comStates's handling of slices which implement "GetCompactValue"
 	var msgs []json.RawMessage
-	if e := json.Unmarshal(msg, &msgs); e != nil {
-		dec.Error(e)
-	} else {
-		// to distinguish b/t missing and empty repeats, set even if size zero.
-		// note: we don't get here if the record was missing
-		var next *chart.StateMix
-		cnt := len(msgs)
-		slice.SetSize(cnt)
-		if cnt == 0 {
-			next = chart.NewBlockResult(&dec.Machine, "empty slice")
-		} else {
-			next = dec.newSlice(msgs)
-		}
-		dec.PushState(next)
-		okay = true
+	e := json.Unmarshal(msg, &msgs)
+	if e != nil {
+		msgs = []json.RawMessage{msg}
 	}
-	return
+	// to distinguish b/t missing and empty repeats, set even if size zero.
+	// note: we don't get here if the record was missing
+	var next *chart.StateMix
+	cnt := len(msgs)
+	slice.SetSize(cnt)
+	if cnt == 0 {
+		next = chart.NewBlockResult(&dec.Machine, "empty slice")
+	} else {
+		next = dec.newSlice(msgs)
+	}
+	dec.PushState(next)
+	return true
 }
 
 func (dec *xDecoder) readValue(pv interface{}, msg json.RawMessage) (err error) {
@@ -170,10 +170,11 @@ func (dec *xDecoder) readValue(pv interface{}, msg json.RawMessage) (err error) 
 		if e := json.Unmarshal(msg, pv); e != nil {
 			err = e // preliminary
 			if pstr, isString := pv.(*string); isString {
+				// handle an reading into a single string where an array (of lines) was provided
 				var strs []string
 				if e := json.Unmarshal(msg, &strs); e == nil {
 					*pstr = strings.Join(strs, "\n")
-					err = nil
+					err = nil // succeeded reading, clear provisional error
 				}
 			}
 		}

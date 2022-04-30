@@ -324,9 +324,7 @@
           {
             "GrammarDecl:": {
               "Alias:asNoun:": [
-                [
-                  "blade"
-                ],
+                "blade",
                 "rusty knife"
               ]
             }

@@ -64,12 +64,8 @@
           ],
           "Spec:slots:groups:with flow:": [
             "field_values",
-            [
-              "literal_value"
-            ],
-            [
-              "internal"
-            ],
+            "literal_value",
+            "internal",
             {
               "Flow:trim:uses:": [
                 "fields",

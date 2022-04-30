@@ -30,9 +30,7 @@
                       "Noun:": "things"
                     },
                     {
-                      "Words:": [
-                        "to"
-                      ]
+                      "Words:": "to"
                     },
                     {
                       "Self:": "player"
@@ -65,9 +63,7 @@
                       "Noun:": "things"
                     },
                     {
-                      "Words:": [
-                        "to"
-                      ]
+                      "Words:": "to"
                     },
                     {
                       "Noun:": "actors"

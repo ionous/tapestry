@@ -7,12 +7,8 @@
         {
           "Spec:slots:groups:with flow:": [
             "render_exp",
-            [
-              "text_eval"
-            ],
-            [
-              "internal"
-            ],
+            "text_eval",
+            "internal",
             {
               "Flow trim:uses:": [
                 true,
@@ -35,12 +31,8 @@
           ],
           "Spec:slots:groups:with flow:": [
             "render_field",
-            [
-              "from_source_fields"
-            ],
-            [
-              "internal"
-            ],
+            "from_source_fields",
+            "internal",
             {
               "Flow trim:uses:": [
                 true,
@@ -96,12 +88,8 @@
           ],
           "Spec:slots:groups:with flow:": [
             "render_name",
-            [
-              "text_eval"
-            ],
-            [
-              "internal"
-            ],
+            "text_eval",
+            "internal",
             {
               "Flow trim:uses:": [
                 true,
@@ -128,9 +116,7 @@
               "assignment",
               "text_eval"
             ],
-            [
-              "internal"
-            ],
+            "internal",
             {
               "Flow:trim:uses:": [
                 "render",
@@ -156,9 +142,7 @@
               "number_eval",
               "text_eval"
             ],
-            [
-              "internal"
-            ],
+            "internal",
             {
               "Flow trim:uses:": [
                 true,

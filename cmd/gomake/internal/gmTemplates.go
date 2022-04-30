@@ -15,14 +15,7 @@ func newTemplates(ctx *Context) (*template.Template, error) {
 	//
 	funcMap := template.FuncMap{
 		"Lines": func(s string) []string {
-			lines := strings.Split(s, "\n")
-			// fix... backwards compat:
-			// if last := len(lines) - 1; last == 0 {
-			// 	if line := lines[0]; strings.HasSuffix(line, ".") {
-			// 		lines[0] = line[:len(line)-1]
-			// 	}
-			// }
-			return lines
+			return strings.Split(s, "\n")
 		},
 		"Pascal": pascal,
 		//

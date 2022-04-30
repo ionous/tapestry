@@ -8,9 +8,7 @@
           "--": "a log message that can optionally be displayed to the client.",
           "Spec:slots:with flow:": [
             "play_log",
-            [
-              "play_message"
-            ],
+            "play_message",
             {
               "Flow:uses:": [
                 "play",
@@ -39,9 +37,7 @@
           "--": "app level change in state.",
           "Spec:slots:with flow:": [
             "play_mode",
-            [
-              "play_message"
-            ],
+            "play_message",
             {
               "Flow:uses:": [
                 "play",
@@ -86,9 +82,7 @@
           "--": "output from the game itself.",
           "Spec:slots:with flow:": [
             "play_out",
-            [
-              "play_message"
-            ],
+            "play_message",
             {
               "Flow:uses:": [
                 "play",

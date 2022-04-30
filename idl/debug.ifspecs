@@ -8,9 +8,7 @@
           "--": "Debug log.",
           "Spec:slots:with flow:": [
             "debug_log",
-            [
-              "execute"
-            ],
+            "execute",
             {
               "Flow:trim:uses:": [
                 "log",
@@ -39,9 +37,7 @@
           "--": "Statement which does nothing.",
           "Spec:slots:with flow:": [
             "do_nothing",
-            [
-              "execute"
-            ],
+            "execute",
             {
               "Flow uses:": [
                 {

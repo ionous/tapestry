@@ -8,9 +8,7 @@
           "--": "Returns the implied relative of a noun (ex. the source in a one-to-many relation.).",
           "Spec:slots:with flow:": [
             "reciprocal_of",
-            [
-              "text_eval"
-            ],
+            "text_eval",
             {
               "Flow:trim:uses:": [
                 "reciprocal",
@@ -37,9 +35,7 @@
           "--": "Returns the implied relative of a noun (ex. the sources of a many-to-many relation.).",
           "Spec:slots:with flow:": [
             "reciprocals_of",
-            [
-              "text_list_eval"
-            ],
+            "text_list_eval",
             {
               "Flow:trim:uses:": [
                 "reciprocals",
@@ -66,9 +62,7 @@
           "--": "Relate two nouns.",
           "Spec:slots:with flow:": [
             "relate",
-            [
-              "execute"
-            ],
+            "execute",
             {
               "Flow trim:uses:": [
                 true,
@@ -100,9 +94,7 @@
         {
           "Spec:groups:with str:": [
             "relation_name",
-            [
-              "positioned"
-            ],
+            "positioned",
             {
               "Str uses:": []
             }
@@ -112,9 +104,7 @@
           "--": "Returns the relative of a noun (ex. the target of a one-to-one relation.).",
           "Spec:slots:with flow:": [
             "relative_of",
-            [
-              "text_eval"
-            ],
+            "text_eval",
             {
               "Flow:trim:uses:": [
                 "relative",
@@ -141,9 +131,7 @@
           "--": "Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).",
           "Spec:slots:with flow:": [
             "relatives_of",
-            [
-              "text_list_eval"
-            ],
+            "text_list_eval",
             {
               "Flow:trim:uses:": [
                 "relatives",

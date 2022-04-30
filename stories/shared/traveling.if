@@ -158,21 +158,23 @@
             "With:event:provides:rules:": [
               "while",
               "travel",
-              [{
-                "--": "Get the destination from the door.",
-                "Text named:of:initially:": [
-                  "destination",
-                  "room",
-                  {
-                    "Get:from:": [
-                      "destination",
-                      {
-                        "VarFields:": "noun"
-                      }
-                    ]
-                  }
-                ]
-              }],
+              [
+                {
+                  "--": "Get the destination from the door.",
+                  "Text named:of:initially:": [
+                    "destination",
+                    "room",
+                    {
+                      "Get:from:": [
+                        "destination",
+                        {
+                          "VarFields:": "noun"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
               [
                 {
                   "PatternRule:does:": [

@@ -59,7 +59,9 @@ func oppositeExt(ext string) (ret string) {
 // go build compact.go; for f in ../regenspec/out/*.ifspecs; do ./compact -pretty -in $f -out $f; done;
 // go build compact.go; for f in ../../stories/shared/*.if; do ./compact -pretty -in $f -out .block; done;
 // go build compact.go; for f in ../../stories/shared/*.block; do ./compact -pretty -in $f -out .if; done;
-
+//
+// windows:
+// for %i in (..\..\stories\shared\*.if) do ( compact -pretty -in %i -out %i )
 func main() {
 	var inFile, outFile string
 	var pretty bool

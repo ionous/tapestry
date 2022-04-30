@@ -8,12 +8,8 @@
           "--": "Returns true if all of the evaluations are true.",
           "Spec:slots:groups:with flow:": [
             "all_true",
-            [
-              "bool_eval"
-            ],
-            [
-              "logic"
-            ],
+            "bool_eval",
+            "logic",
             {
               "Flow trim:uses:": [
                 true,
@@ -34,12 +30,8 @@
           "--": "Returns true.",
           "Spec:slots:groups:with flow:": [
             "always",
-            [
-              "bool_eval"
-            ],
-            [
-              "logic"
-            ],
+            "bool_eval",
+            "logic",
             {
               "Flow uses:": []
             }
@@ -49,12 +41,8 @@
           "--": "Returns true if any of the evaluations are true.",
           "Spec:slots:groups:with flow:": [
             "any_true",
-            [
-              "bool_eval"
-            ],
-            [
-              "logic"
-            ],
+            "bool_eval",
+            "logic",
             {
               "Flow trim:uses:": [
                 true,
@@ -75,12 +63,8 @@
           "--": "Assigns a variable to a value.",
           "Spec:slots:groups:with flow:": [
             "assign",
-            [
-              "execute"
-            ],
-            [
-              "variables"
-            ],
+            "execute",
+            "variables",
             {
               "Flow:trim:uses:": [
                 "let",
@@ -108,12 +92,8 @@
           "--": "The first value is greater than or equal to the second value.",
           "Spec:slots:groups:with flow:": [
             "at_least",
-            [
-              "comparator"
-            ],
-            [
-              "comparison"
-            ],
+            "comparator",
+            "comparison",
             {
               "Flow uses:": []
             }
@@ -123,12 +103,8 @@
           "--": "The first value is less than or equal to the second value.",
           "Spec:slots:groups:with flow:": [
             "at_most",
-            [
-              "comparator"
-            ],
-            [
-              "comparison"
-            ],
+            "comparator",
+            "comparison",
             {
               "Flow uses:": []
             }
@@ -138,12 +114,8 @@
           "--": "Add a single blank line following some text.",
           "Spec:slots:groups:with flow:": [
             "blankline",
-            [
-              "execute"
-            ],
-            [
-              "printing"
-            ],
+            "execute",
+            "printing",
             {
               "Flow:uses:": [
                 "p",
@@ -156,12 +128,8 @@
           "--": "Sandwiches text printed during a block and puts them inside parenthesis '()'.",
           "Spec:slots:groups:with flow:": [
             "bracket_text",
-            [
-              "text_eval"
-            ],
-            [
-              "printing"
-            ],
+            "text_eval",
+            "printing",
             {
               "Flow:uses:": [
                 "brackets",
@@ -191,12 +159,8 @@
           "--": "In a repeating loop, exit the loop.",
           "Spec:slots:groups:with flow:": [
             "break",
-            [
-              "execute"
-            ],
-            [
-              "flow"
-            ],
+            "execute",
+            "flow",
             {
               "Flow uses:": []
             }
@@ -205,12 +169,8 @@
         {
           "Spec:slots:groups:with flow:": [
             "buffer_text",
-            [
-              "text_eval"
-            ],
-            [
-              "printing"
-            ],
+            "text_eval",
+            "printing",
             {
               "Flow:uses:": [
                 "buffers",
@@ -231,12 +191,8 @@
           "--": "Runtime version of cycle_text.",
           "Spec:slots:groups:with flow:": [
             "call_cycle",
-            [
-              "text_eval"
-            ],
-            [
-              "internal"
-            ],
+            "text_eval",
+            "internal",
             {
               "Flow:trim:uses:": [
                 "cycle",
@@ -337,12 +293,8 @@
           "--": "Runtime version of shuffle_text.",
           "Spec:slots:groups:with flow:": [
             "call_shuffle",
-            [
-              "text_eval"
-            ],
-            [
-              "internal"
-            ],
+            "text_eval",
+            "internal",
             {
               "Flow:trim:uses:": [
                 "shuffle",
@@ -378,12 +330,8 @@
           "--": "Runtime version of stopping_text.",
           "Spec:slots:groups:with flow:": [
             "call_terminal",
-            [
-              "text_eval"
-            ],
-            [
-              "internal"
-            ],
+            "text_eval",
+            "internal",
             {
               "Flow:trim:uses:": [
                 "stopping",
@@ -412,12 +360,8 @@
           "--": "Runtime version of count_of.",
           "Spec:slots:groups:with flow:": [
             "call_trigger",
-            [
-              "bool_eval"
-            ],
-            [
-              "internal"
-            ],
+            "bool_eval",
+            "internal",
             {
               "Flow:trim:uses:": [
                 "trigger",
@@ -450,12 +394,8 @@
           "--": "Returns new text, with the first letter turned into uppercase.",
           "Spec:slots:groups:with flow:": [
             "capitalize",
-            [
-              "text_eval"
-            ],
-            [
-              "format"
-            ],
+            "text_eval",
+            "format",
             {
               "Flow trim:uses:": [
                 true,
@@ -479,9 +419,7 @@
               "execute",
               "brancher"
             ],
-            [
-              "misc"
-            ],
+            "misc",
             {
               "Flow:trim:uses:": [
                 "if",
@@ -515,12 +453,8 @@
         {
           "Spec:slots:groups:with flow:": [
             "choose_more",
-            [
-              "brancher"
-            ],
-            [
-              "misc"
-            ],
+            "brancher",
+            "misc",
             {
               "Flow:trim:uses:": [
                 "else_if",
@@ -554,12 +488,8 @@
         {
           "Spec:slots:groups:with flow:": [
             "choose_more_value",
-            [
-              "brancher"
-            ],
-            [
-              "misc"
-            ],
+            "brancher",
+            "misc",
             {
               "Flow:trim:uses:": [
                 "else_if",
@@ -606,12 +536,8 @@
         {
           "Spec:slots:groups:with flow:": [
             "choose_nothing_else",
-            [
-              "brancher"
-            ],
-            [
-              "misc"
-            ],
+            "brancher",
+            "misc",
             {
               "Flow:uses:": [
                 "else_do",
@@ -632,12 +558,8 @@
           "--": "Pick one of two numbers based on a boolean test.",
           "Spec:slots:groups:with flow:": [
             "choose_num",
-            [
-              "number_eval"
-            ],
-            [
-              "math"
-            ],
+            "number_eval",
+            "math",
             {
               "Flow:uses:": [
                 "num",
@@ -672,12 +594,8 @@
           "--": "Pick one of two strings based on a boolean test.",
           "Spec:slots:groups:with flow:": [
             "choose_text",
-            [
-              "text_eval"
-            ],
-            [
-              "format"
-            ],
+            "text_eval",
+            "format",
             {
               "Flow:uses:": [
                 "txt",
@@ -716,9 +634,7 @@
               "execute",
               "brancher"
             ],
-            [
-              "misc"
-            ],
+            "misc",
             {
               "Flow:trim:uses:": [
                 "if",
@@ -766,12 +682,8 @@
           "--": "Separates words with commas, and 'and'.",
           "Spec:slots:groups:with flow:": [
             "comma_text",
-            [
-              "text_eval"
-            ],
-            [
-              "printing"
-            ],
+            "text_eval",
+            "printing",
             {
               "Flow:uses:": [
                 "commas",
@@ -801,12 +713,8 @@
           "--": "True if eq,ne,gt,lt,ge,le two numbers.",
           "Spec:slots:groups:with flow:": [
             "compare_num",
-            [
-              "bool_eval"
-            ],
-            [
-              "logic"
-            ],
+            "bool_eval",
+            "logic",
             {
               "Flow:trim:uses:": [
                 "cmp",
@@ -840,12 +748,8 @@
           "--": "True if eq,ne,gt,lt,ge,le two strings ( lexical. ).",
           "Spec:slots:groups:with flow:": [
             "compare_text",
-            [
-              "bool_eval"
-            ],
-            [
-              "logic"
-            ],
+            "bool_eval",
+            "logic",
             {
               "Flow:trim:uses:": [
                 "cmp",
@@ -879,12 +783,8 @@
           "--": "Subtract two numbers.",
           "Spec:slots:groups:with flow:": [
             "diff_of",
-            [
-              "number_eval"
-            ],
-            [
-              "math"
-            ],
+            "number_eval",
+            "math",
             {
               "Flow:trim:uses:": [
                 "dec",
@@ -917,9 +817,7 @@
               "bool_eval",
               "number_eval"
             ],
-            [
-              "patterns"
-            ],
+            "patterns",
             {
               "Flow trim:uses:": [
                 true,
@@ -939,12 +837,8 @@
           "--": "Two values exactly match.",
           "Spec:slots:groups:with flow:": [
             "equal",
-            [
-              "comparator"
-            ],
-            [
-              "comparison"
-            ],
+            "comparator",
+            "comparison",
             {
               "Flow:uses:": [
                 "equals",
@@ -957,12 +851,8 @@
           "--": "Assigns the calculated boolean value.",
           "Spec:slots:groups:with flow:": [
             "from_bool",
-            [
-              "assignment"
-            ],
-            [
-              "variables"
-            ],
+            "assignment",
+            "variables",
             {
               "Flow trim:uses:": [
                 true,
@@ -982,12 +872,8 @@
           "--": "Assigns the calculated number.",
           "Spec:slots:groups:with flow:": [
             "from_num",
-            [
-              "assignment"
-            ],
-            [
-              "variables"
-            ],
+            "assignment",
+            "variables",
             {
               "Flow trim:uses:": [
                 true,
@@ -1007,12 +893,8 @@
           "--": "Assigns the calculated numbers.",
           "Spec:slots:groups:with flow:": [
             "from_numbers",
-            [
-              "assignment"
-            ],
-            [
-              "variables"
-            ],
+            "assignment",
+            "variables",
             {
               "Flow:trim:uses:": [
                 "from_nums",
@@ -1033,12 +915,8 @@
           "--": "Targets an object with a computed name.",
           "Spec:slots:groups:with flow:": [
             "from_obj",
-            [
-              "from_source_fields"
-            ],
-            [
-              "misc"
-            ],
+            "from_source_fields",
+            "misc",
             {
               "Flow:trim:uses:": [
                 "obj_fields",
@@ -1059,12 +937,8 @@
           "--": "Targets a record stored in a record.",
           "Spec:slots:groups:with flow:": [
             "from_rec",
-            [
-              "from_source_fields"
-            ],
-            [
-              "misc"
-            ],
+            "from_source_fields",
+            "misc",
             {
               "Flow:trim:uses:": [
                 "rec_fields",
@@ -1085,12 +959,8 @@
           "--": "Assigns the calculated record.",
           "Spec:slots:groups:with flow:": [
             "from_record",
-            [
-              "assignment"
-            ],
-            [
-              "variables"
-            ],
+            "assignment",
+            "variables",
             {
               "Flow:trim:uses:": [
                 "from_rec",
@@ -1111,12 +981,8 @@
           "--": "Assigns the calculated records.",
           "Spec:slots:groups:with flow:": [
             "from_records",
-            [
-              "assignment"
-            ],
-            [
-              "variables"
-            ],
+            "assignment",
+            "variables",
             {
               "Flow:trim:uses:": [
                 "from_recs",
@@ -1146,12 +1012,8 @@
           "--": "Assigns the calculated piece of text.",
           "Spec:slots:groups:with flow:": [
             "from_text",
-            [
-              "assignment"
-            ],
-            [
-              "variables"
-            ],
+            "assignment",
+            "variables",
             {
               "Flow:trim:uses:": [
                 "from_txt",
@@ -1172,12 +1034,8 @@
           "--": "Assigns the calculated texts.",
           "Spec:slots:groups:with flow:": [
             "from_texts",
-            [
-              "assignment"
-            ],
-            [
-              "variables"
-            ],
+            "assignment",
+            "variables",
             {
               "Flow:trim:uses:": [
                 "from_txts",
@@ -1198,12 +1056,8 @@
           "--": "Targets a record stored in a variable.",
           "Spec:slots:groups:with flow:": [
             "from_var",
-            [
-              "from_source_fields"
-            ],
-            [
-              "misc"
-            ],
+            "from_source_fields",
+            "misc",
             {
               "Flow:trim:uses:": [
                 "var_fields",
@@ -1234,9 +1088,7 @@
               "text_list_eval",
               "record_list_eval"
             ],
-            [
-              "variables"
-            ],
+            "variables",
             {
               "Flow:trim:uses:": [
                 "get",
@@ -1273,9 +1125,7 @@
               "text_list_eval",
               "record_list_eval"
             ],
-            [
-              "variables"
-            ],
+            "variables",
             {
               "Flow:trim:uses:": [
                 "var",
@@ -1296,12 +1146,8 @@
           "--": "The first value is larger than the second value.",
           "Spec:slots:groups:with flow:": [
             "greater_than",
-            [
-              "comparator"
-            ],
-            [
-              "comparison"
-            ],
+            "comparator",
+            "comparison",
             {
               "Flow uses:": []
             }
@@ -1310,12 +1156,8 @@
         {
           "Spec:slots:groups:with flow:": [
             "has_dominion",
-            [
-              "bool_eval"
-            ],
-            [
-              "logic"
-            ],
+            "bool_eval",
+            "logic",
             {
               "Flow trim:uses:": [
                 true,
@@ -1335,12 +1177,8 @@
           "--": "Return true if the object is currently in the requested state.",
           "Spec:slots:groups:with flow:": [
             "has_trait",
-            [
-              "bool_eval"
-            ],
-            [
-              "objects"
-            ],
+            "bool_eval",
+            "objects",
             {
               "Flow:uses:": [
                 "get",
@@ -1367,12 +1205,8 @@
           "--": "A unique object identifier.",
           "Spec:slots:groups:with flow:": [
             "id_of",
-            [
-              "text_eval"
-            ],
-            [
-              "objects"
-            ],
+            "text_eval",
+            "objects",
             {
               "Flow trim:uses:": [
                 true,
@@ -1392,12 +1226,8 @@
           "--": "True if text contains text.",
           "Spec:slots:groups:with flow:": [
             "includes",
-            [
-              "bool_eval"
-            ],
-            [
-              "strings"
-            ],
+            "bool_eval",
+            "strings",
             {
               "Flow:trim:uses:": [
                 "contains",
@@ -1424,12 +1254,8 @@
           "--": "Targets an object with a computed name.",
           "Spec:slots:groups:with flow:": [
             "into_obj",
-            [
-              "into_target_fields"
-            ],
-            [
-              "misc"
-            ],
+            "into_target_fields",
+            "misc",
             {
               "Flow:trim:uses:": [
                 "obj_field",
@@ -1459,12 +1285,8 @@
           "--": "Targets an object or record stored in a variable.",
           "Spec:slots:groups:with flow:": [
             "into_var",
-            [
-              "into_target_fields"
-            ],
-            [
-              "misc"
-            ],
+            "into_target_fields",
+            "misc",
             {
               "Flow:trim:uses:": [
                 "var_field",
@@ -1485,12 +1307,8 @@
           "--": "True if the text is empty.",
           "Spec:slots:groups:with flow:": [
             "is_empty",
-            [
-              "bool_eval"
-            ],
-            [
-              "strings"
-            ],
+            "bool_eval",
+            "strings",
             {
               "Flow:uses:": [
                 "is",
@@ -1511,12 +1329,8 @@
           "--": "True if the object is exactly the named kind.",
           "Spec:slots:groups:with flow:": [
             "is_exact_kind_of",
-            [
-              "bool_eval"
-            ],
-            [
-              "objects"
-            ],
+            "bool_eval",
+            "objects",
             {
               "Flow:trim:uses:": [
                 "kind_of",
@@ -1544,12 +1358,8 @@
           "--": "True if the object is compatible with the named kind.",
           "Spec:slots:groups:with flow:": [
             "is_kind_of",
-            [
-              "bool_eval"
-            ],
-            [
-              "objects"
-            ],
+            "bool_eval",
+            "objects",
             {
               "Flow:trim:uses:": [
                 "kind_of",
@@ -1577,12 +1387,8 @@
           "--": "Returns multiple pieces of text as a single new piece of text.",
           "Spec:slots:groups:with flow:": [
             "join",
-            [
-              "text_eval"
-            ],
-            [
-              "strings"
-            ],
+            "text_eval",
+            "strings",
             {
               "Flow trim:uses:": [
                 true,
@@ -1610,12 +1416,8 @@
           "--": "Friendly name of the object's kind.",
           "Spec:slots:groups:with flow:": [
             "kind_of",
-            [
-              "text_eval"
-            ],
-            [
-              "objects"
-            ],
+            "text_eval",
+            "objects",
             {
               "Flow trim:uses:": [
                 true,
@@ -1635,12 +1437,8 @@
           "--": "A list of compatible kinds.",
           "Spec:slots:groups:with flow:": [
             "kinds_of",
-            [
-              "text_list_eval"
-            ],
-            [
-              "objects"
-            ],
+            "text_list_eval",
+            "objects",
             {
               "Flow trim:uses:": [
                 true,
@@ -1660,12 +1458,8 @@
           "--": "The first value is less than the second value.",
           "Spec:slots:groups:with flow:": [
             "less_than",
-            [
-              "comparator"
-            ],
-            [
-              "comparison"
-            ],
+            "comparator",
+            "comparison",
             {
               "Flow uses:": []
             }
@@ -1675,12 +1469,8 @@
           "--": "Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'.",
           "Spec:slots:groups:with flow:": [
             "make_lowercase",
-            [
-              "text_eval"
-            ],
-            [
-              "format"
-            ],
+            "text_eval",
+            "format",
             {
               "Flow:trim:uses:": [
                 "lower",
@@ -1701,12 +1491,8 @@
           "--": "Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'.",
           "Spec:slots:groups:with flow:": [
             "make_reversed",
-            [
-              "text_eval"
-            ],
-            [
-              "format"
-            ],
+            "text_eval",
+            "format",
             {
               "Flow:uses:": [
                 "reverse",
@@ -1726,12 +1512,8 @@
           "--": "Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'.",
           "Spec:slots:groups:with flow:": [
             "make_sentence_case",
-            [
-              "text_eval"
-            ],
-            [
-              "format"
-            ],
+            "text_eval",
+            "format",
             {
               "Flow:trim:uses:": [
                 "sentence",
@@ -1752,12 +1534,8 @@
           "--": "Returns new text, starting each word with a capital letter. For example, 'Empire Apple' from 'empire apple'.",
           "Spec:slots:groups:with flow:": [
             "make_title_case",
-            [
-              "text_eval"
-            ],
-            [
-              "format"
-            ],
+            "text_eval",
+            "format",
             {
               "Flow:trim:uses:": [
                 "title",
@@ -1778,12 +1556,8 @@
           "--": "Returns new text, with every letter turned into uppercase. For example, 'APPLE' from 'apple'.",
           "Spec:slots:groups:with flow:": [
             "make_uppercase",
-            [
-              "text_eval"
-            ],
-            [
-              "format"
-            ],
+            "text_eval",
+            "format",
             {
               "Flow:trim:uses:": [
                 "upper",
@@ -1804,12 +1578,8 @@
           "--": "Determine whether the specified text is similar to the specified regular expression.",
           "Spec:slots:groups:with flow:": [
             "matches",
-            [
-              "bool_eval"
-            ],
-            [
-              "matching"
-            ],
+            "bool_eval",
+            "matching",
             {
               "Flow trim:uses:": [
                 true,
@@ -1843,12 +1613,8 @@
           "--": "Full name of the object.",
           "Spec:slots:groups:with flow:": [
             "name_of",
-            [
-              "text_eval"
-            ],
-            [
-              "objects"
-            ],
+            "text_eval",
+            "objects",
             {
               "Flow trim:uses:": [
                 true,
@@ -1868,12 +1634,8 @@
           "--": "Returns false.",
           "Spec:slots:groups:with flow:": [
             "never",
-            [
-              "bool_eval"
-            ],
-            [
-              "logic"
-            ],
+            "bool_eval",
+            "logic",
             {
               "Flow uses:": []
             }
@@ -1883,12 +1645,8 @@
           "--": "Start a new line.",
           "Spec:slots:groups:with flow:": [
             "newline",
-            [
-              "execute"
-            ],
-            [
-              "printing"
-            ],
+            "execute",
+            "printing",
             {
               "Flow:uses:": [
                 "br",
@@ -1901,12 +1659,8 @@
           "--": "In a repeating loop, try the next iteration of the loop.",
           "Spec:slots:groups:with flow:": [
             "next",
-            [
-              "execute"
-            ],
-            [
-              "flow"
-            ],
+            "execute",
+            "flow",
             {
               "Flow uses:": []
             }
@@ -1916,12 +1670,8 @@
           "--": "Returns the opposite value.",
           "Spec:slots:groups:with flow:": [
             "not",
-            [
-              "bool_eval"
-            ],
-            [
-              "logic"
-            ],
+            "bool_eval",
+            "logic",
             {
               "Flow trim:uses:": [
                 true,
@@ -1941,12 +1691,8 @@
           "--": "Returns whether there is a object of the specified name.",
           "Spec:slots:groups:with flow:": [
             "object_exists",
-            [
-              "bool_eval"
-            ],
-            [
-              "objects"
-            ],
+            "bool_eval",
+            "objects",
             {
               "Flow:uses:": [
                 "is",
@@ -1966,9 +1712,7 @@
         {
           "Spec:groups:with str:": [
             "pattern_name",
-            [
-              "positioned"
-            ],
+            "positioned",
             {
               "Str uses:": []
             }
@@ -1978,12 +1722,8 @@
           "--": "Returns the plural form of a singular word. (ex. apples for apple. ).",
           "Spec:slots:groups:with flow:": [
             "pluralize",
-            [
-              "text_eval"
-            ],
-            [
-              "format"
-            ],
+            "text_eval",
+            "format",
             {
               "Flow:uses:": [
                 "plural",
@@ -2004,12 +1744,8 @@
           "--": "Writes a number using numerals, eg. '1'.",
           "Spec:slots:groups:with flow:": [
             "print_num",
-            [
-              "text_eval"
-            ],
-            [
-              "printing"
-            ],
+            "text_eval",
+            "printing",
             {
               "Flow:trim:uses:": [
                 "numeral",
@@ -2030,12 +1766,8 @@
           "--": "Writes a number in plain english: eg. 'one'.",
           "Spec:slots:groups:with flow:": [
             "print_num_word",
-            [
-              "text_eval"
-            ],
-            [
-              "printing"
-            ],
+            "text_eval",
+            "printing",
             {
               "Flow:uses:": [
                 "numeral",
@@ -2056,12 +1788,8 @@
           "--": "Multiply two numbers.",
           "Spec:slots:groups:with flow:": [
             "product_of",
-            [
-              "number_eval"
-            ],
-            [
-              "math"
-            ],
+            "number_eval",
+            "math",
             {
               "Flow:trim:uses:": [
                 "mul",
@@ -2089,12 +1817,8 @@
           "--": "Put a value into the field of an record or object.",
           "Spec:slots:groups:with flow:": [
             "put_at_field",
-            [
-              "execute"
-            ],
-            [
-              "variables"
-            ],
+            "execute",
+            "variables",
             {
               "Flow:trim:uses:": [
                 "put",
@@ -2128,12 +1852,8 @@
           "--": "Divide one number by another.",
           "Spec:slots:groups:with flow:": [
             "quotient_of",
-            [
-              "number_eval"
-            ],
-            [
-              "math"
-            ],
+            "number_eval",
+            "math",
             {
               "Flow:trim:uses:": [
                 "div",
@@ -2161,12 +1881,8 @@
           "--": "Divide one number by another, and return the remainder.",
           "Spec:slots:groups:with flow:": [
             "remainder_of",
-            [
-              "number_eval"
-            ],
-            [
-              "math"
-            ],
+            "number_eval",
+            "math",
             {
               "Flow:trim:uses:": [
                 "mod",
@@ -2194,12 +1910,8 @@
           "--": "Generate text in a replaceable manner.",
           "Spec:slots:groups:with flow:": [
             "response",
-            [
-              "text_eval"
-            ],
-            [
-              "output"
-            ],
+            "text_eval",
+            "output",
             {
               "Flow trim:uses:": [
                 true,
@@ -2226,12 +1938,8 @@
           "--": "A single line as part of a group of lines.",
           "Spec:slots:groups:with flow:": [
             "row",
-            [
-              "text_eval"
-            ],
-            [
-              "printing"
-            ],
+            "text_eval",
+            "printing",
             {
               "Flow uses:": [
                 {
@@ -2249,12 +1957,8 @@
           "--": "Group text into successive lines.",
           "Spec:slots:groups:with flow:": [
             "rows",
-            [
-              "text_eval"
-            ],
-            [
-              "printing"
-            ],
+            "text_eval",
+            "printing",
             {
               "Flow uses:": [
                 {
@@ -2272,12 +1976,8 @@
           "--": "Print some bit of text to the player.",
           "Spec:slots:groups:with flow:": [
             "say_text",
-            [
-              "execute"
-            ],
-            [
-              "printing"
-            ],
+            "execute",
+            "printing",
             {
               "Flow:trim:uses:": [
                 "say",
@@ -2298,12 +1998,8 @@
           "--": "Put an object into a particular state.",
           "Spec:slots:groups:with flow:": [
             "set_trait",
-            [
-              "execute"
-            ],
-            [
-              "objects"
-            ],
+            "execute",
+            "objects",
             {
               "Flow:uses:": [
                 "put",
@@ -2330,12 +2026,8 @@
           "--": "Returns the singular form of a plural word. (ex. apple for apples ).",
           "Spec:slots:groups:with flow:": [
             "singularize",
-            [
-              "text_eval"
-            ],
-            [
-              "format"
-            ],
+            "text_eval",
+            "format",
             {
               "Flow:uses:": [
                 "singular",
@@ -2356,12 +2048,8 @@
           "--": "Separates words with left-leaning slashes '/'.",
           "Spec:slots:groups:with flow:": [
             "slash_text",
-            [
-              "text_eval"
-            ],
-            [
-              "printing"
-            ],
+            "text_eval",
+            "printing",
             {
               "Flow:uses:": [
                 "slashes",
@@ -2382,12 +2070,8 @@
           "--": "Start a new line ( if not already at a new line. ).",
           "Spec:slots:groups:with flow:": [
             "softline",
-            [
-              "execute"
-            ],
-            [
-              "printing"
-            ],
+            "execute",
+            "printing",
             {
               "Flow:uses:": [
                 "wbr",
@@ -2400,12 +2084,8 @@
           "--": "Writes text with spaces between words.",
           "Spec:slots:groups:with flow:": [
             "span_text",
-            [
-              "text_eval"
-            ],
-            [
-              "printing"
-            ],
+            "text_eval",
+            "printing",
             {
               "Flow:uses:": [
                 "spaces",
@@ -2426,12 +2106,8 @@
           "--": "Add two numbers.",
           "Spec:slots:groups:with flow:": [
             "sum_of",
-            [
-              "number_eval"
-            ],
-            [
-              "math"
-            ],
+            "number_eval",
+            "math",
             {
               "Flow:trim:uses:": [
                 "inc",
@@ -2468,12 +2144,8 @@
         {
           "Spec:slots:groups:with flow:": [
             "trigger_cycle",
-            [
-              "trigger"
-            ],
-            [
-              "comparison"
-            ],
+            "trigger",
+            "comparison",
             {
               "Flow:uses:": [
                 "every",
@@ -2485,12 +2157,8 @@
         {
           "Spec:slots:groups:with flow:": [
             "trigger_once",
-            [
-              "trigger"
-            ],
-            [
-              "comparison"
-            ],
+            "trigger",
+            "comparison",
             {
               "Flow:uses:": [
                 "at",
@@ -2502,12 +2170,8 @@
         {
           "Spec:slots:groups:with flow:": [
             "trigger_switch",
-            [
-              "trigger"
-            ],
-            [
-              "comparison"
-            ],
+            "trigger",
+            "comparison",
             {
               "Flow:uses:": [
                 "after",
@@ -2520,12 +2184,8 @@
           "--": "The first value doesn't equal the second value.",
           "Spec:slots:groups:with flow:": [
             "unequal",
-            [
-              "comparator"
-            ],
-            [
-              "comparison"
-            ],
+            "comparator",
+            "comparison",
             {
               "Flow:uses:": [
                 "other_than",
@@ -2537,9 +2197,7 @@
         {
           "Spec:groups:with str:": [
             "variable_name",
-            [
-              "positioned"
-            ],
+            "positioned",
             {
               "Str uses:": []
             }
@@ -2549,12 +2207,8 @@
           "--": "Keep running a series of actions while a condition is true.",
           "Spec:slots:groups:with flow:": [
             "while",
-            [
-              "execute"
-            ],
-            [
-              "flow"
-            ],
+            "execute",
+            "flow",
             {
               "Flow:trim:uses:": [
                 "repeating",

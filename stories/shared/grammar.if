@@ -13,9 +13,7 @@
                 {
                   "AllOf:": [
                     {
-                      "Words:": [
-                        "inventory"
-                      ]
+                      "Words:": "inventory"
                     },
                     {
                       "As:": "inventorying"
@@ -44,18 +42,14 @@
     {
       "GrammarDecl:": {
         "Directive:scans:": [
-          [
-            "close"
-          ],
+          "close",
           [
             {
               "AnyOf:": [
                 {
                   "AllOf:": [
                     {
-                      "Words:": [
-                        "off"
-                      ]
+                      "Words:": "off"
                     },
                     {
                       "Noun:": "things"
@@ -68,9 +62,7 @@
                 {
                   "AllOf:": [
                     {
-                      "Words:": [
-                        "off"
-                      ]
+                      "Words:": "off"
                     },
                     {
                       "Noun:": "things"
@@ -90,9 +82,7 @@
                         {
                           "AllOf:": [
                             {
-                              "Words:": [
-                                "off"
-                              ]
+                              "Words:": "off"
                             },
                             {
                               "As:": "deactivating"
@@ -102,9 +92,7 @@
                         {
                           "AllOf:": [
                             {
-                              "Words:": [
-                                "up"
-                              ]
+                              "Words:": "up"
                             },
                             {
                               "As:": "closing"
@@ -130,18 +118,14 @@
     {
       "GrammarDecl:": {
         "Directive:scans:": [
-          [
-            "cover"
-          ],
+          "cover",
           [
             {
               "AnyOf:": [
                 {
                   "AllOf:": [
                     {
-                      "Words:": [
-                        "up"
-                      ]
+                      "Words:": "up"
                     },
                     {
                       "Noun:": "things"
@@ -203,9 +187,7 @@
     {
       "GrammarDecl:": {
         "Directive:scans:": [
-          [
-            "drop"
-          ],
+          "drop",
           [
             {
               "Noun:": "things"
@@ -304,9 +286,7 @@
     {
       "GrammarDecl:": {
         "Directive:scans:": [
-          [
-            "get"
-          ],
+          "get",
           [
             {
               "AnyOf:": [
@@ -453,9 +433,7 @@
     {
       "GrammarDecl:": {
         "Directive:scans:": [
-          [
-            "insert"
-          ],
+          "insert",
           [
             {
               "Noun:": "things"
@@ -492,9 +470,7 @@
                 {
                   "AllOf:": [
                     {
-                      "Words:": [
-                        "at"
-                      ]
+                      "Words:": "at"
                     },
                     {
                       "Noun:": "things"
@@ -526,9 +502,7 @@
                 {
                   "AllOf:": [
                     {
-                      "Words:": [
-                        "under"
-                      ]
+                      "Words:": "under"
                     },
                     {
                       "Noun:": "things"
@@ -593,18 +567,14 @@
     {
       "GrammarDecl:": {
         "Directive:scans:": [
-          [
-            "pick"
-          ],
+          "pick",
           [
             {
               "AnyOf:": [
                 {
                   "AllOf:": [
                     {
-                      "Words:": [
-                        "up"
-                      ]
+                      "Words:": "up"
                     },
                     {
                       "Noun:": "things"
@@ -620,9 +590,7 @@
                       "Noun:": "things"
                     },
                     {
-                      "Words:": [
-                        "up"
-                      ]
+                      "Words:": "up"
                     },
                     {
                       "As:": "taking"
@@ -641,18 +609,14 @@
     {
       "GrammarDecl:": {
         "Directive:scans:": [
-          [
-            "put"
-          ],
+          "put",
           [
             {
               "AnyOf:": [
                 {
                   "AllOf:": [
                     {
-                      "Words:": [
-                        "on"
-                      ]
+                      "Words:": "on"
                     },
                     {
                       "Noun:": "things"
@@ -690,9 +654,7 @@
                         {
                           "AllOf:": [
                             {
-                              "Words:": [
-                                "on"
-                              ]
+                              "Words:": "on"
                             },
                             {
                               "AnyOf:": [
@@ -729,9 +691,7 @@
     {
       "GrammarDecl:": {
         "Directive:scans:": [
-          [
-            "read"
-          ],
+          "read",
           [
             {
               "Noun:": "things"
@@ -749,9 +709,7 @@
     {
       "GrammarDecl:": {
         "Directive:scans:": [
-          [
-            "remove"
-          ],
+          "remove",
           [
             {
               "AnyOf:": [
@@ -763,9 +721,7 @@
                           "Noun:": "things"
                         },
                         {
-                          "Words:": [
-                            "from"
-                          ]
+                          "Words:": "from"
                         },
                         {
                           "Noun:": "things"
@@ -799,9 +755,7 @@
     {
       "GrammarDecl:": {
         "Directive:scans:": [
-          [
-            "search"
-          ],
+          "search",
           [
             {
               "Noun:": "things"
@@ -832,9 +786,7 @@
                 {
                   "AllOf:": [
                     {
-                      "Words:": [
-                        "on"
-                      ]
+                      "Words:": "on"
                     },
                     {
                       "Noun:": "things"
@@ -847,9 +799,7 @@
                 {
                   "AllOf:": [
                     {
-                      "Words:": [
-                        "off"
-                      ]
+                      "Words:": "off"
                     },
                     {
                       "Noun:": "things"
@@ -869,9 +819,7 @@
                         {
                           "AllOf:": [
                             {
-                              "Words:": [
-                                "on"
-                              ]
+                              "Words:": "on"
                             },
                             {
                               "As:": "activating"
@@ -881,9 +829,7 @@
                         {
                           "AllOf:": [
                             {
-                              "Words:": [
-                                "off"
-                              ]
+                              "Words:": "off"
                             },
                             {
                               "As:": "deactivating"
@@ -906,18 +852,14 @@
     {
       "GrammarDecl:": {
         "Directive:scans:": [
-          [
-            "shut"
-          ],
+          "shut",
           [
             {
               "AnyOf:": [
                 {
                   "AllOf:": [
                     {
-                      "Words:": [
-                        "off"
-                      ]
+                      "Words:": "off"
                     },
                     {
                       "Noun:": "things"
@@ -930,9 +872,7 @@
                 {
                   "AllOf:": [
                     {
-                      "Words:": [
-                        "up"
-                      ]
+                      "Words:": "up"
                     },
                     {
                       "Noun:": "things"
@@ -952,9 +892,7 @@
                         {
                           "AllOf:": [
                             {
-                              "Words:": [
-                                "off"
-                              ]
+                              "Words:": "off"
                             },
                             {
                               "As:": "deactivating"
@@ -964,9 +902,7 @@
                         {
                           "AllOf:": [
                             {
-                              "Words:": [
-                                "up"
-                              ]
+                              "Words:": "up"
                             },
                             {
                               "As:": "closing"
@@ -992,18 +928,14 @@
     {
       "GrammarDecl:": {
         "Directive:scans:": [
-          [
-            "take"
-          ],
+          "take",
           [
             {
               "AnyOf:": [
                 {
                   "AllOf:": [
                     {
-                      "Words:": [
-                        "inventory"
-                      ]
+                      "Words:": "inventory"
                     },
                     {
                       "As:": "inventorying"
@@ -1013,9 +945,7 @@
                 {
                   "AllOf:": [
                     {
-                      "Words:": [
-                        "off"
-                      ]
+                      "Words:": "off"
                     },
                     {
                       "Noun:": "things"

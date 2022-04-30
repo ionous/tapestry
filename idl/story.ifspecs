@@ -51,9 +51,7 @@
           "--": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
           "Spec:slots:groups:with flow:": [
             "action_decl",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "events"
@@ -268,9 +266,7 @@
         {
           "Spec:slots:groups:with flow:": [
             "aspect_property",
-            [
-              "property_slot"
-            ],
+            "property_slot",
             [
               "debug",
               "properties"
@@ -296,9 +292,7 @@
           "--": "Add traits to an aspect",
           "Spec:slots:groups:with flow:": [
             "aspect_traits",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "traits"
@@ -322,9 +316,7 @@
         {
           "Spec:slots:groups:with flow:": [
             "bool_property",
-            [
-              "property_slot"
-            ],
+            "property_slot",
             [
               "debug",
               "properties"
@@ -365,9 +357,7 @@
           "--": "Give a kind a trait",
           "Spec:slots:groups:with flow:": [
             "certainties",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "properties"
@@ -489,9 +479,7 @@
           ],
           "Spec:slots:groups:with flow:": [
             "count_of",
-            [
-              "bool_eval"
-            ],
+            "bool_eval",
             [
               "debug",
               "stubs",
@@ -521,9 +509,7 @@
           "--": "When called multiple times, returns each of its inputs in turn.",
           "Spec:slots:groups:with flow:": [
             "cycle_text",
-            [
-              "text_eval"
-            ],
+            "text_eval",
             [
               "debug",
               "stubs",
@@ -580,9 +566,7 @@
           ],
           "Spec:slots:groups:with flow:": [
             "event_block",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "events",
@@ -725,9 +709,7 @@
           "--": "Read what the player types and turn it into actions.",
           "Spec:slots:groups:with flow:": [
             "grammar_decl",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "stubs",
@@ -752,9 +734,7 @@
         {
           "Spec:slots:groups:with flow:": [
             "kind_of_noun",
-            [
-              "noun_continuation"
-            ],
+            "noun_continuation",
             [
               "debug",
               "nouns"
@@ -783,9 +763,7 @@
         {
           "Spec:slots:groups:with flow:": [
             "kind_of_relation",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "relations"
@@ -816,9 +794,7 @@
           "--": "Add properties to a kind",
           "Spec:slots:groups:with flow:": [
             "kinds_have_properties",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "kinds"
@@ -848,9 +824,7 @@
         {
           "Spec:slots:groups:with flow:": [
             "kinds_of_aspect",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "traits"
@@ -872,9 +846,7 @@
           "--": "Declare a kind",
           "Spec:slots:groups:with flow:": [
             "kinds_of_kind",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "kinds"
@@ -905,9 +877,7 @@
           "--": "The opposite of east is west.",
           "Spec:slots:groups:with flow:": [
             "make_opposite",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "language"
@@ -942,9 +912,7 @@
           ],
           "Spec:slots:groups:with flow:": [
             "make_plural",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "language"
@@ -1057,9 +1025,7 @@
           "--": "Leaving a room by by going through a door ( ex. departing the house via the front door... ).",
           "Spec:slots:groups:with flow:": [
             "map_departing",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "map_making",
@@ -1118,9 +1084,7 @@
           "--": "Leaving a room by moving in a compass direction ( ex. heading east... ).",
           "Spec:slots:groups:with flow:": [
             "map_heading",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "map_making",
@@ -1235,9 +1199,7 @@
           ],
           "Spec:slots:groups:with flow:": [
             "noun_assignment",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "properties"
@@ -1280,9 +1242,7 @@
         {
           "Spec:slots:groups:with flow:": [
             "noun_kind_statement",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "nouns"
@@ -1337,9 +1297,7 @@
         {
           "Spec:slots:groups:with flow:": [
             "noun_relation",
-            [
-              "noun_continuation"
-            ],
+            "noun_continuation",
             [
               "debug",
               "nouns"
@@ -1375,9 +1333,7 @@
         {
           "Spec:slots:groups:with flow:": [
             "noun_relation_statement",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "nouns"
@@ -1418,9 +1374,7 @@
         {
           "Spec:slots:groups:with flow:": [
             "noun_trait_statement",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "nouns"
@@ -1461,9 +1415,7 @@
         {
           "Spec:slots:groups:with flow:": [
             "noun_traits",
-            [
-              "noun_continuation"
-            ],
+            "noun_continuation",
             [
               "debug",
               "nouns"
@@ -1490,9 +1442,7 @@
         {
           "Spec:slots:groups:with flow:": [
             "num_list_property",
-            [
-              "property_slot"
-            ],
+            "property_slot",
             [
               "debug",
               "properties"
@@ -1532,9 +1482,7 @@
         {
           "Spec:slots:groups:with flow:": [
             "number_property",
-            [
-              "property_slot"
-            ],
+            "property_slot",
             [
               "debug",
               "properties"
@@ -1685,9 +1633,7 @@
           ],
           "Spec:slots:groups:with flow:": [
             "pattern_actions",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "patterns"
@@ -1729,9 +1675,7 @@
           "--": "Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.  Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation.",
           "Spec:slots:groups:with flow:": [
             "pattern_decl",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "patterns"
@@ -1928,9 +1872,7 @@
         {
           "Spec:slots:groups:with flow:": [
             "record_list_property",
-            [
-              "property_slot"
-            ],
+            "property_slot",
             [
               "debug",
               "properties"
@@ -1970,9 +1912,7 @@
         {
           "Spec:slots:groups:with flow:": [
             "record_property",
-            [
-              "property_slot"
-            ],
+            "property_slot",
             [
               "debug",
               "properties"
@@ -2039,9 +1979,7 @@
           "--": "Relate nouns to each other",
           "Spec:slots:groups:with flow:": [
             "relative_to_noun",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "nouns"
@@ -2086,9 +2024,7 @@
           ],
           "Spec:slots:groups:with flow:": [
             "render_template",
-            [
-              "text_eval"
-            ],
+            "text_eval",
             [
               "debug",
               "stubs",
@@ -2114,9 +2050,7 @@
           "--": "When called multiple times returns its inputs at random.",
           "Spec:slots:groups:with flow:": [
             "shuffle_text",
-            [
-              "text_eval"
-            ],
+            "text_eval",
             [
               "debug",
               "stubs",
@@ -2158,9 +2092,7 @@
           "--": "When called multiple times returns each of its inputs in turn, sticking to the last one.",
           "Spec:slots:groups:with flow:": [
             "stopping_text",
-            [
-              "text_eval"
-            ],
+            "text_eval",
             [
               "debug",
               "stubs",
@@ -2211,9 +2143,7 @@
           "--": "this cheats a bit by making the signature the same as the comment marker  that allows nodes which look like comments but are actually story breaks.",
           "Spec:slots:groups:with flow:": [
             "story_break",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "statements",
@@ -2292,9 +2222,7 @@
           "--": "Expect that a test uses 'Say' to print some specific text.",
           "Spec:slots:groups:with flow:": [
             "test_output",
-            [
-              "testing"
-            ],
+            "testing",
             [
               "debug",
               "tests"
@@ -2316,9 +2244,7 @@
           "--": "Add actions to a test",
           "Spec:slots:groups:with flow:": [
             "test_rule",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "tests"
@@ -2347,9 +2273,7 @@
           "--": "Create a scene for testing",
           "Spec:slots:groups:with flow:": [
             "test_scene",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "tests"
@@ -2385,9 +2309,7 @@
           "--": "Describe test results",
           "Spec:slots:groups:with flow:": [
             "test_statement",
-            [
-              "story_statement"
-            ],
+            "story_statement",
             [
               "debug",
               "tests",
@@ -2428,9 +2350,7 @@
         {
           "Spec:slots:groups:with flow:": [
             "text_list_property",
-            [
-              "property_slot"
-            ],
+            "property_slot",
             [
               "debug",
               "properties"
@@ -2470,9 +2390,7 @@
         {
           "Spec:slots:groups:with flow:": [
             "text_property",
-            [
-              "property_slot"
-            ],
+            "property_slot",
             [
               "debug",
               "properties"

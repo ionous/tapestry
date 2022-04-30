@@ -45,9 +45,7 @@
         {
           "Spec:slots:with flow:": [
             "eph_aliases",
-            [
-              "ephemera"
-            ],
+            "ephemera",
             {
               "Flow:uses:": [
                 "eph",
@@ -75,9 +73,7 @@
         {
           "Spec:groups:with str:": [
             "eph_always",
-            [
-              "eph_pattern_helpers"
-            ],
+            "eph_pattern_helpers",
             {
               "Str exclusively:uses:": [
                 true,
@@ -97,9 +93,7 @@
           ],
           "Spec:slots:with flow:": [
             "eph_aspects",
-            [
-              "ephemera"
-            ],
+            "ephemera",
             {
               "Flow:uses:": [
                 "eph",
@@ -149,9 +143,7 @@
         {
           "Spec:slots:with flow:": [
             "eph_begin_domain",
-            [
-              "ephemera"
-            ],
+            "ephemera",
             {
               "Flow:uses:": [
                 "eph",
@@ -178,9 +170,7 @@
         {
           "Spec:groups:with swap:": [
             "eph_cardinality",
-            [
-              "eph_relation_helpers"
-            ],
+            "eph_relation_helpers",
             {
               "Swap between:": [
                 {
@@ -202,9 +192,7 @@
         {
           "Spec:slots:with flow:": [
             "eph_checks",
-            [
-              "ephemera"
-            ],
+            "ephemera",
             {
               "Flow:uses:": [
                 "eph",
@@ -239,9 +227,7 @@
         {
           "Spec:slots:with flow:": [
             "eph_directives",
-            [
-              "ephemera"
-            ],
+            "ephemera",
             {
               "Flow:uses:": [
                 "eph",
@@ -267,9 +253,7 @@
         {
           "Spec:slots:with flow:": [
             "eph_end_domain",
-            [
-              "ephemera"
-            ],
+            "ephemera",
             {
               "Flow:uses:": [
                 "eph",
@@ -295,9 +279,7 @@
           ],
           "Spec:slots:with flow:": [
             "eph_kinds",
-            [
-              "ephemera"
-            ],
+            "ephemera",
             {
               "Flow:uses:": [
                 "eph",
@@ -349,9 +331,7 @@
         {
           "Spec:slots:with flow:": [
             "eph_nouns",
-            [
-              "ephemera"
-            ],
+            "ephemera",
             {
               "Flow:uses:": [
                 "eph",
@@ -381,9 +361,7 @@
           ],
           "Spec:slots:with flow:": [
             "eph_opposites",
-            [
-              "ephemera"
-            ],
+            "ephemera",
             {
               "Flow:uses:": [
                 "eph",
@@ -461,9 +439,7 @@
           ],
           "Spec:slots:with flow:": [
             "eph_patterns",
-            [
-              "ephemera"
-            ],
+            "ephemera",
             {
               "Flow:uses:": [
                 "eph",
@@ -512,9 +488,7 @@
           ],
           "Spec:slots:with flow:": [
             "eph_plurals",
-            [
-              "ephemera"
-            ],
+            "ephemera",
             {
               "Flow:uses:": [
                 "eph",
@@ -543,9 +517,7 @@
           ],
           "Spec:slots:with flow:": [
             "eph_refs",
-            [
-              "ephemera"
-            ],
+            "ephemera",
             {
               "Flow:uses:": [
                 "eph",
@@ -565,9 +537,7 @@
         {
           "Spec:slots:with flow:": [
             "eph_relations",
-            [
-              "ephemera"
-            ],
+            "ephemera",
             {
               "Flow:trim:uses:": [
                 "eph",
@@ -594,9 +564,7 @@
         {
           "Spec:slots:with flow:": [
             "eph_relatives",
-            [
-              "ephemera"
-            ],
+            "ephemera",
             {
               "Flow:trim:uses:": [
                 "eph",
@@ -630,9 +598,7 @@
         {
           "Spec:slots:with flow:": [
             "eph_rules",
-            [
-              "ephemera"
-            ],
+            "ephemera",
             {
               "Flow:uses:": [
                 "eph",
@@ -687,9 +653,7 @@
         {
           "Spec:groups:with str:": [
             "eph_timing",
-            [
-              "eph_pattern_helpers"
-            ],
+            "eph_pattern_helpers",
             {
               "Str exclusively:uses:": [
                 true,
@@ -721,9 +685,7 @@
           ],
           "Spec:slots:with flow:": [
             "eph_values",
-            [
-              "ephemera"
-            ],
+            "ephemera",
             {
               "Flow:uses:": [
                 "eph",
@@ -771,9 +733,7 @@
         {
           "Spec:groups:with flow:": [
             "many_many",
-            [
-              "eph_relation_helpers"
-            ],
+            "eph_relation_helpers",
             {
               "Flow:trim:uses:": [
                 "kinds",
@@ -800,9 +760,7 @@
         {
           "Spec:groups:with flow:": [
             "many_one",
-            [
-              "eph_relation_helpers"
-            ],
+            "eph_relation_helpers",
             {
               "Flow:trim:uses:": [
                 "kinds",
@@ -829,9 +787,7 @@
         {
           "Spec:groups:with flow:": [
             "one_many",
-            [
-              "eph_relation_helpers"
-            ],
+            "eph_relation_helpers",
             {
               "Flow:trim:uses:": [
                 "kind",
@@ -858,9 +814,7 @@
         {
           "Spec:groups:with flow:": [
             "one_one",
-            [
-              "eph_relation_helpers"
-            ],
+            "eph_relation_helpers",
             {
               "Flow:trim:uses:": [
                 "kind",
