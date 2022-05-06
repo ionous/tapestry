@@ -62,6 +62,7 @@ func oppositeExt(ext string) (ret string) {
 //
 // windows:
 // for %i in (..\..\stories\shared\*.if) do ( compact -pretty -in %i -out %i )
+// for %i in (..\..\idl\*.ifspecs) do ( compact -pretty -in %i -out %i )
 func main() {
 	var inFile, outFile string
 	var pretty bool
@@ -167,7 +168,7 @@ func decodeEncodeSpec(in, out string, pretty bool) (err error) {
 		err = e
 	} else if e := cin.Decode(&dst, b, cin.Signatures(tapestry.AllSignatures)); e != nil {
 		err = e
-	} else if data, e := cout.Encode(&dst, nil); e != nil {
+	} else if data, e := cout.Encode(&dst, customSpecEncoder); e != nil {
 		err = e
 	} else {
 		err = writeOut(out, data, pretty)
@@ -250,6 +251,35 @@ func readOne(filePath string) (ret []byte, err error) {
 func xformStory(tgt jsn.Marshalee) (err error) {
 	return
 }
+
+// define  a custom spec encoder.
+var customSpecEncoder cout.CustomFlow = nil
+
+// example removing "trime" for underscore names
+// func init() {
+// 	customSpecEncoder = func(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
+// 		switch op := flow.GetFlow().(type) {
+// 		case *spec.FlowSpec:
+// 			if op.Trim {
+// 				if len(op.Terms) == 0 {
+// 					panic("empty terms " + op.Name)
+// 				}
+// 				if op.Terms[0].Name != "" {
+// 					panic("unexpected name " + op.Name + " " + op.Terms[0].Name)
+// 				}
+// 				if op.Terms[0].Key == "" {
+// 					panic("unexpected key " + op.Name)
+// 				} else {
+// 					op.Terms[0].Name = op.Terms[0].Key
+// 					op.Terms[0].Key = "_"
+// 				}
+// 				op.Trim = false
+// 			}
+// 		}
+// 		// we haven't serialized it -- just poked at its memory
+// 		return chart.Unhandled("no custom encoder")
+// 	}
+// }
 
 // // install a custom encoder.
 // func init() {

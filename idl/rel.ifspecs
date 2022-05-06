@@ -10,12 +10,12 @@
             "reciprocal_of",
             "text_eval",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "reciprocal",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "via",
                       "relation_name"
                     ]
@@ -37,12 +37,12 @@
             "reciprocals_of",
             "text_list_eval",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "reciprocals",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "via",
                       "relation_name"
                     ]
@@ -64,29 +64,27 @@
             "relate",
             "execute",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "object",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "to",
-                      "to_object",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "via",
-                      "relation_name"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "object",
+                    "text_eval"
+                  ]
+                },
+                {
+                  "Term:name:type:": [
+                    "to",
+                    "to_object",
+                    "text_eval"
+                  ]
+                },
+                {
+                  "Term:type:": [
+                    "via",
+                    "relation_name"
+                  ]
+                }
               ]
             }
           ]
@@ -106,12 +104,12 @@
             "relative_of",
             "text_eval",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "relative",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "via",
                       "relation_name"
                     ]
@@ -133,12 +131,12 @@
             "relatives_of",
             "text_list_eval",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "relatives",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "via",
                       "relation_name"
                     ]

@@ -32,12 +32,12 @@
               "positioned"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "and one {$kind} ( the other noun )",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "kind",
                       "singular_kind"
                     ]
@@ -57,13 +57,13 @@
               "events"
             ],
             {
-              "Flow:phrase:trim:uses:": [
+              "Flow:phrase:uses:": [
                 "Event",
                 "Agents can {act$event} and {acting$action} requires {action params$action_params}.",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "event",
                       "event_name"
                     ]
@@ -298,12 +298,14 @@
               "traits"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "{$aspect} {$trait_phrase}",
-                true,
                 [
                   {
-                    "Term:": "aspect"
+                    "Term:name:": [
+                      "_",
+                      "aspect"
+                    ]
                   },
                   {
                     "Term:": "trait_phrase"
@@ -363,12 +365,14 @@
               "properties"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "{$plural_kinds} {$are_being} {$certainty} {$trait}.",
-                true,
                 [
                   {
-                    "Term:": "plural_kinds"
+                    "Term:name:": [
+                      "_",
+                      "plural_kinds"
+                    ]
                   },
                   {
                     "Term:": "are_being"
@@ -430,12 +434,14 @@
               "language"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "Note: {comment$lines}",
-                true,
                 [
                   {
-                    "Term:": "lines"
+                    "Term:name:": [
+                      "_",
+                      "lines"
+                    ]
                   }
                 ]
               ]
@@ -451,12 +457,12 @@
               "positioned"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "one {$kind} ( the noun ) {$action_context}",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "kind",
                       "singular_kind"
                     ]
@@ -487,12 +493,14 @@
               "positioned"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "trigger {_$trigger} {$num}",
-                true,
                 [
                   {
-                    "Term:": "trigger"
+                    "Term:name:": [
+                      "_",
+                      "trigger"
+                    ]
                   },
                   {
                     "Term:type:": [
@@ -517,12 +525,12 @@
               "positioned"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "cycle {_$parts}",
-                true,
                 [
                   {
-                    "Term:type:repeats:": [
+                    "Term:name:type:repeats:": [
+                      "_",
                       "parts",
                       "text_eval",
                       true
@@ -573,13 +581,13 @@
               "positioned"
             ],
             {
-              "Flow:phrase:trim:uses:": [
+              "Flow:phrase:uses:": [
                 "listen",
                 "For {the target$target} {$handlers}",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "target",
                       "event_target"
                     ]
@@ -604,13 +612,15 @@
               "events"
             ],
             {
-              "Flow:phrase:trim:uses:": [
+              "Flow:phrase:uses:": [
                 "with",
                 "{$event_phase} {the event$event} {$locals} do:{$rules}",
-                true,
                 [
                   {
-                    "Term:": "event_phase"
+                    "Term:name:": [
+                      "_",
+                      "event_phase"
+                    ]
                   },
                   {
                     "Term:type:": [
@@ -716,12 +726,12 @@
               "grammar"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "understand {_$grammar}",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "grammar",
                       "grammar_maker"
                     ]
@@ -740,13 +750,15 @@
               "nouns"
             ],
             {
-              "Flow:phrase:trim:uses:": [
+              "Flow:phrase:uses:": [
                 "Kind",
                 "{$are_an} {kind$kind}",
-                true,
                 [
                   {
-                    "Term:": "are_an"
+                    "Term:name:": [
+                      "_",
+                      "are_an"
+                    ]
                   },
                   {
                     "Term:name:type:": [
@@ -769,12 +781,12 @@
               "relations"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "{$relation} relates {$cardinality}",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "relation",
                       "relation_name"
                     ]
@@ -800,13 +812,15 @@
               "kinds"
             ],
             {
-              "Flow:phrase:trim:uses:": [
+              "Flow:phrase:uses:": [
                 "Kinds",
                 "{$plural_kinds} have {props$props}.",
-                true,
                 [
                   {
-                    "Term:": "plural_kinds"
+                    "Term:name:": [
+                      "_",
+                      "plural_kinds"
+                    ]
                   },
                   {
                     "Term:name:type:repeats:": [
@@ -830,12 +844,14 @@
               "traits"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "{$aspect} is a kind of value.",
-                true,
                 [
                   {
-                    "Term:": "aspect"
+                    "Term:name:": [
+                      "_",
+                      "aspect"
+                    ]
                   }
                 ]
               ]
@@ -883,13 +899,13 @@
               "language"
             ],
             {
-              "Flow:phrase:trim:uses:": [
+              "Flow:phrase:uses:": [
                 "make",
                 "The opposite of {$word} is the {$opposite}.",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "word",
                       "text"
                     ]
@@ -918,13 +934,13 @@
               "language"
             ],
             {
-              "Flow:phrase:trim:uses:": [
+              "Flow:phrase:uses:": [
                 "make",
                 "The plural of {$singular} is {$plural}.",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "singular",
                       "text"
                     ]
@@ -948,12 +964,12 @@
               "relations"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "many {$kinds} to many {$other_kinds}",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "kinds",
                       "plural_kinds"
                     ]
@@ -977,12 +993,12 @@
               "relations"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "many {$kinds} to one {$kind}",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "kinds",
                       "plural_kinds"
                     ]
@@ -1091,12 +1107,12 @@
               "modeling"
             ],
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "heading",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "dir",
                       "map_direction"
                     ]
@@ -1141,13 +1157,15 @@
               "nouns"
             ],
             {
-              "Flow:phrase:trim:uses:": [
+              "Flow:phrase:uses:": [
                 "Noun",
                 "{$determiner} {name$name}",
-                true,
                 [
                   {
-                    "Term:": "determiner"
+                    "Term:name:": [
+                      "_",
+                      "determiner"
+                    ]
                   },
                   {
                     "Term:name:type:": [
@@ -1169,12 +1187,12 @@
               "properties"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "named {$name} ( {of$type} )",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "name",
                       "text"
                     ]
@@ -1205,12 +1223,14 @@
               "properties"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "The {$property} of {$nouns} is {the text$lines}",
-                true,
                 [
                   {
-                    "Term:": "property"
+                    "Term:name:": [
+                      "_",
+                      "property"
+                    ]
                   },
                   {
                     "Term:type:repeats:": [
@@ -1248,13 +1268,13 @@
               "nouns"
             ],
             {
-              "Flow:phrase:trim:uses:": [
+              "Flow:phrase:uses:": [
                 "Nouns",
                 "{$nouns} {is a kind$kind_of_noun} {$more}.",
-                true,
                 [
                   {
-                    "Term:type:repeats:": [
+                    "Term:name:type:repeats:": [
+                      "_",
                       "nouns",
                       "named_noun",
                       true
@@ -1339,13 +1359,13 @@
               "nouns"
             ],
             {
-              "Flow:phrase:trim:uses:": [
+              "Flow:phrase:uses:": [
                 "Nouns",
                 "{$nouns} {noun relation$noun_relation} {$more}.",
-                true,
                 [
                   {
-                    "Term:type:repeats:": [
+                    "Term:name:type:repeats:": [
+                      "_",
                       "nouns",
                       "named_noun",
                       true
@@ -1380,13 +1400,13 @@
               "nouns"
             ],
             {
-              "Flow:phrase:trim:uses:": [
+              "Flow:phrase:uses:": [
                 "Nouns",
                 "{$nouns} {noun traits$noun_traits} {$more}.",
-                true,
                 [
                   {
-                    "Term:type:repeats:": [
+                    "Term:name:type:repeats:": [
+                      "_",
                       "nouns",
                       "named_noun",
                       true
@@ -1421,12 +1441,14 @@
               "nouns"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "{$are_being} {$trait}",
-                true,
                 [
                   {
-                    "Term:": "are_being"
+                    "Term:name:": [
+                      "_",
+                      "are_being"
+                    ]
                   },
                   {
                     "Term:repeats:": [
@@ -1527,12 +1549,12 @@
               "relations"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "one {$kind} to many {$kinds}",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "kind",
                       "singular_kind"
                     ]
@@ -1556,12 +1578,12 @@
               "relations"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "one {$kind} to one {$other_kind}",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "kind",
                       "singular_kind"
                     ]
@@ -1586,12 +1608,12 @@
               "positioned"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "two {$kinds} ( the noun and other noun )",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "kinds",
                       "plural_kinds"
                     ]
@@ -1610,12 +1632,12 @@
               "statements"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "{$story_statement}",
-                true,
                 [
                   {
-                    "Term:optional:repeats:": [
+                    "Term:name:optional:repeats:": [
+                      "_",
                       "story_statement",
                       true,
                       true
@@ -1639,13 +1661,13 @@
               "patterns"
             ],
             {
-              "Flow:phrase:trim:uses:": [
+              "Flow:phrase:uses:": [
                 "pattern",
                 "To determine {pattern name$name} {locals$locals} do: {$rules}",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "name",
                       "pattern_name"
                     ]
@@ -1681,13 +1703,13 @@
               "patterns"
             ],
             {
-              "Flow:phrase:trim:uses:": [
+              "Flow:phrase:uses:": [
                 "Pattern",
                 "To determine {$name} {params$params} {pattern return$pattern_return}.",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "name",
                       "pattern_name"
                     ]
@@ -1752,13 +1774,13 @@
               "patterns"
             ],
             {
-              "Flow:phrase:trim:uses:": [
+              "Flow:phrase:uses:": [
                 "pattern_result",
                 "returning {$result}",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "result",
                       "property_slot"
                     ]
@@ -1777,12 +1799,12 @@
               "patterns"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "When {conditions are met$guard}{continue$flags}, then: {$does}",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "guard",
                       "bool_eval"
                     ]
@@ -1985,12 +2007,12 @@
               "nouns"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "The {$relation} of {$nouns} {$are_being} {$other_nouns}.",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "relation",
                       "relation_name"
                     ]
@@ -2031,12 +2053,12 @@
               "format"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "render_template {_$template}",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "template",
                       "lines"
                     ]
@@ -2058,12 +2080,12 @@
               "positioned"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "shuffle {_$parts}",
-                true,
                 [
                   {
-                    "Term:type:repeats:": [
+                    "Term:name:type:repeats:": [
+                      "_",
                       "parts",
                       "text_eval",
                       true
@@ -2100,12 +2122,12 @@
               "positioned"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "stopping {_$parts}",
-                true,
                 [
                   {
-                    "Term:type:repeats:": [
+                    "Term:name:type:repeats:": [
+                      "_",
                       "parts",
                       "text_eval",
                       true
@@ -2150,10 +2172,9 @@
               "internal"
             ],
             {
-              "Flow:phrase:trim:uses:": [
+              "Flow:phrase:uses:": [
                 "--",
                 "story_break",
-                true,
                 []
               ]
             }
@@ -2168,13 +2189,13 @@
               "statements"
             ],
             {
-              "Flow:phrase:trim:uses:": [
+              "Flow:phrase:uses:": [
                 "tapestry",
                 "{_$story_lines}",
-                true,
                 [
                   {
-                    "Term:type:repeats:": [
+                    "Term:name:type:repeats:": [
+                      "_",
                       "story_lines",
                       "story_statement",
                       true
@@ -2228,12 +2249,14 @@
               "tests"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "output {$lines}.",
-                true,
                 [
                   {
-                    "Term:": "lines"
+                    "Term:name:": [
+                      "_",
+                      "lines"
+                    ]
                   }
                 ]
               ]
@@ -2250,12 +2273,14 @@
               "tests"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "To test {$test_name}: {$does}",
-                true,
                 [
                   {
-                    "Term:": "test_name"
+                    "Term:name:": [
+                      "_",
+                      "test_name"
+                    ]
                   },
                   {
                     "Term:type:repeats:": [
@@ -2279,12 +2304,14 @@
               "tests"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "While testing {$test_name} {with$requires}: {$story}",
-                true,
                 [
                   {
-                    "Term:": "test_name"
+                    "Term:name:": [
+                      "_",
+                      "test_name"
+                    ]
                   },
                   {
                     "Term:type:optional:": [
@@ -2316,12 +2343,14 @@
               "positioned"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "Expect {$test_name} to {expectation$test}",
-                true,
                 [
                   {
-                    "Term:": "test_name"
+                    "Term:name:": [
+                      "_",
+                      "test_name"
+                    ]
                   },
                   {
                     "Term:type:": [
@@ -2448,12 +2477,14 @@
               "traits"
             ],
             {
-              "Flow phrase:trim:uses:": [
+              "Flow phrase:uses:": [
                 "{$are_either} {$trait}.",
-                true,
                 [
                   {
-                    "Term:": "are_either"
+                    "Term:name:": [
+                      "_",
+                      "are_either"
+                    ]
                   },
                   {
                     "Term:repeats:": [

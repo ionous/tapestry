@@ -10,12 +10,12 @@
             "debug_log",
             "execute",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "log",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "value",
                       "assignment"
                     ]

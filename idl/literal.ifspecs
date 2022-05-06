@@ -13,12 +13,14 @@
               "literal_value"
             ],
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "bool",
-                true,
                 [
                   {
-                    "Term:": "bool"
+                    "Term:name:": [
+                      "_",
+                      "bool"
+                    ]
                   },
                   {
                     "Term:type:optional:": [
@@ -67,12 +69,12 @@
             "literal_value",
             "internal",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "fields",
-                true,
                 [
                   {
-                    "Term:type:repeats:": [
+                    "Term:name:type:repeats:": [
+                      "_",
                       "contains",
                       "field_value",
                       true
@@ -101,12 +103,12 @@
               "literal_value"
             ],
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "num",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "num",
                       "number"
                     ]
@@ -132,12 +134,12 @@
               "literal_value"
             ],
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "nums",
-                true,
                 [
                   {
-                    "Term:type:repeats:": [
+                    "Term:name:type:repeats:": [
+                      "_",
                       "values",
                       "number",
                       true
@@ -164,12 +166,12 @@
               "literal_value"
             ],
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "rec",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "kind",
                       "text"
                     ]
@@ -202,12 +204,12 @@
               "literal_value"
             ],
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "recs",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "kind",
                       "text"
                     ]
@@ -241,12 +243,14 @@
               "literal_value"
             ],
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "txt",
-                true,
                 [
                   {
-                    "Term:": "text"
+                    "Term:name:": [
+                      "_",
+                      "text"
+                    ]
                   },
                   {
                     "Term:type:optional:": [
@@ -269,12 +273,12 @@
               "literal_value"
             ],
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "txts",
-                true,
                 [
                   {
-                    "Term:type:repeats:": [
+                    "Term:name:type:repeats:": [
+                      "_",
                       "values",
                       "text",
                       true

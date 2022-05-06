@@ -129,11 +129,9 @@ func ChoiceSpec_Marshal(m jsn.Marshaler, val *ChoiceSpec) (err error) {
 
 // FlowSpec name: overrides the name of the operation used in compact story files.
 // phrase: english text with embedded tokens referring to existing terms.
-// trim: whether the first term should be left off when calling the command.
 type FlowSpec struct {
 	Name        string     `if:"label=_,optional,type=text"`
 	Phrase      string     `if:"label=phrase,optional,type=text"`
-	Trim        bool       `if:"label=trim,optional,type=bool"`
 	Terms       []TermSpec `if:"label=uses"`
 	UserComment string
 }
@@ -149,7 +147,6 @@ func (*FlowSpec) Compose() composer.Spec {
 const FlowSpec_Type = "flow_spec"
 const FlowSpec_Field_Name = "$NAME"
 const FlowSpec_Field_Phrase = "$PHRASE"
-const FlowSpec_Field_Trim = "$TRIM"
 const FlowSpec_Field_Terms = "$TERMS"
 
 func (op *FlowSpec) Marshal(m jsn.Marshaler) error {
@@ -237,19 +234,12 @@ func FlowSpec_Marshal(m jsn.Marshaler, val *FlowSpec) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", FlowSpec_Field_Phrase))
 		}
-		e2 := m.MarshalKey("trim", FlowSpec_Field_Trim)
+		e2 := m.MarshalKey("uses", FlowSpec_Field_Terms)
 		if e2 == nil {
-			e2 = prim.Bool_Unboxed_Optional_Marshal(m, &val.Trim)
+			e2 = TermSpec_Repeats_Marshal(m, &val.Terms)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", FlowSpec_Field_Trim))
-		}
-		e3 := m.MarshalKey("uses", FlowSpec_Field_Terms)
-		if e3 == nil {
-			e3 = TermSpec_Repeats_Marshal(m, &val.Terms)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", FlowSpec_Field_Terms))
+			m.Error(errutil.New(e2, "in flow at", FlowSpec_Field_Terms))
 		}
 		m.EndBlock()
 	}
@@ -1290,13 +1280,9 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	9267001613811785344:  (*FlowSpec)(nil),   /* Flow phrase:trim:uses: */
 	14698812208590391766: (*FlowSpec)(nil),   /* Flow phrase:uses: */
-	13773892289426298999: (*FlowSpec)(nil),   /* Flow trim:uses: */
 	8905948956105429135:  (*FlowSpec)(nil),   /* Flow uses: */
-	8459090360485129410:  (*FlowSpec)(nil),   /* Flow:phrase:trim:uses: */
 	7595234708931350060:  (*FlowSpec)(nil),   /* Flow:phrase:uses: */
-	7881340419361857857:  (*FlowSpec)(nil),   /* Flow:trim:uses: */
 	2613986620197267333:  (*FlowSpec)(nil),   /* Flow:uses: */
 	138586504350168357:   (*GroupSpec)(nil),  /* Group contains: */
 	9596524370352414924:  (*NumSpec)(nil),    /* Num exclusively:uses: */

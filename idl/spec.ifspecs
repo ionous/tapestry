@@ -12,12 +12,12 @@
           "Spec:with flow:": [
             "choice_spec",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "pick",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "name",
                       "text"
                     ]
@@ -44,18 +44,17 @@
         {
           "--": [
             "name: overrides the name of the operation used in compact story files.",
-            "phrase: english text with embedded tokens referring to existing terms.",
-            "trim: whether the first term should be left off when calling the command."
+            "phrase: english text with embedded tokens referring to existing terms."
           ],
           "Spec:with flow:": [
             "flow_spec",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "flow",
-                true,
                 [
                   {
-                    "Term:type:optional:": [
+                    "Term:name:type:optional:": [
+                      "_",
                       "name",
                       "text",
                       true
@@ -65,13 +64,6 @@
                     "Term:type:optional:": [
                       "phrase",
                       "text",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "trim",
-                      "bool",
                       true
                     ]
                   },
@@ -147,12 +139,12 @@
           "Spec:with flow:": [
             "option_spec",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "option",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "name",
                       "text"
                     ]
@@ -243,12 +235,12 @@
           "Spec:with flow:": [
             "term_spec",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "term",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "key",
                       "text"
                     ]
@@ -298,12 +290,12 @@
           "Spec:with flow:": [
             "type_spec",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "spec",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "name",
                       "text"
                     ]

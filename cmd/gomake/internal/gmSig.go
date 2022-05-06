@@ -35,13 +35,12 @@ func makeSig(typeName string, sig string) Sig {
 // where each signature an array of parts.
 func sigParts(flow *spec.FlowSpec, commandName string, types rs.TypeSpecs) [][]string {
 	var sets = [][]string{{commandName}}
-	var pi int
 	for _, term := range flow.Terms {
 		if term.Private {
 			continue
 		}
 		var sel string
-		if pi = pi + 1; pi > 1 || !flow.Trim {
+		if !term.IsAnonymous() {
 			sel = camelize(term.Key)
 		}
 		pt := types.Types[term.TypeName()]

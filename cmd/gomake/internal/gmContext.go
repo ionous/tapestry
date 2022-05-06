@@ -36,14 +36,8 @@ func (ctx *Context) GetTypeSpec(typeName string) (ret *spec.TypeSpec, okay bool)
 func (ctx *Context) TermsOf(block *spec.TypeSpec) []Term {
 	flow := block.Spec.Value.(*spec.FlowSpec)
 	terms := make([]Term, len(flow.Terms))
-	var pubCount int
 	for i, t := range flow.Terms {
-		pi := -1
-		if !t.Private {
-			pi = pubCount
-			pubCount++
-		}
-		terms[i] = Term{ctx, flow, t, pi}
+		terms[i] = Term{ctx, flow, t}
 	}
 	return terms
 }

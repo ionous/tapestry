@@ -10,16 +10,14 @@
             "text_eval",
             "internal",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "expression",
-                      "text_eval"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "expression",
+                    "text_eval"
+                  ]
+                }
               ]
             }
           ]
@@ -34,16 +32,14 @@
             "from_source_fields",
             "internal",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "text_eval"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "name",
+                    "text_eval"
+                  ]
+                }
               ]
             }
           ]
@@ -91,16 +87,14 @@
             "text_eval",
             "internal",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "text"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "name",
+                    "text"
+                  ]
+                }
               ]
             }
           ]
@@ -118,12 +112,12 @@
             ],
             "internal",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "render",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "call",
                       "call_pattern"
                     ]
@@ -144,22 +138,20 @@
             ],
             "internal",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "variable_name"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "flags",
-                      "render_flags"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "name",
+                    "variable_name"
+                  ]
+                },
+                {
+                  "Term:type:": [
+                    "flags",
+                    "render_flags"
+                  ]
+                }
               ]
             }
           ]

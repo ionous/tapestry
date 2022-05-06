@@ -9,22 +9,20 @@
           "Spec:with flow:": [
             "arg",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "from",
-                      "assignment"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "name",
+                    "text"
+                  ]
+                },
+                {
+                  "Term:type:": [
+                    "from",
+                    "assignment"
+                  ]
+                }
               ]
             }
           ]

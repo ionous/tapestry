@@ -12,7 +12,7 @@
 type {{Pascal .Name}} struct {
 {{range Terms .}}{{/* loop over terms */ -}}
 {{""}}	{{Pascal .Field}} {{.GoDecl -}}
-{{""}}	`if:"{{- if .Private}}internal{{else}}label={{if .IsInline}}_{{else}}{{.Key}}{{end}}{{end}}
+{{""}}	`if:"{{- if .Private}}internal{{else}}label={{if .IsAnonymous}}_{{else}}{{.Key}}{{end}}{{end}}
 {{- if .Optional}},optional{{end}}
 {{- if .IsUnboxed}},type={{.TypeName}}{{end}}"`
 {{end}}{{/*ends range $terms*/ -}}
@@ -74,7 +74,7 @@ func {{Pascal .Name}}_Marshal(m jsn.Marshaler, val *{{Pascal .Name}}) (err error
   m.SetComment(&val.UserComment)
   if err = m.MarshalBlock({{Pascal .Name}}_Flow{val}); err == nil {
 {{- range $i, $term:= Terms .}}{{/* loop over terms */}}{{if not .Private}}
-    e{{$i}} := m.MarshalKey("{{if not .IsInline}}{{.Key}}{{end}}", {{Pascal $type.Name}}_Field_{{Pascal .Field}})
+    e{{$i}} := m.MarshalKey("{{if not .IsAnonymous}}{{.Key}}{{end}}", {{Pascal $type.Name}}_Field_{{Pascal .Field}})
     if e{{$i}} == nil {
       e{{$i}} = {{ScopeOf .TypeName}}{{Pascal .TypeName -}}
       {{if .IsUnboxed}}_Unboxed{{end -}}

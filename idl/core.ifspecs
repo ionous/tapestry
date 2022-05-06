@@ -11,17 +11,15 @@
             "bool_eval",
             "logic",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "test",
-                      "bool_eval",
-                      true
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:repeats:": [
+                    "_",
+                    "test",
+                    "bool_eval",
+                    true
+                  ]
+                }
               ]
             }
           ]
@@ -44,17 +42,15 @@
             "bool_eval",
             "logic",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "test",
-                      "bool_eval",
-                      true
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:repeats:": [
+                    "_",
+                    "test",
+                    "bool_eval",
+                    true
+                  ]
+                }
               ]
             }
           ]
@@ -66,12 +62,12 @@
             "execute",
             "variables",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "let",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "var",
                       "variable_name"
                     ]
@@ -194,12 +190,12 @@
             "text_eval",
             "internal",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "cycle",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "name",
                       "text"
                     ]
@@ -232,12 +228,12 @@
               "record_list_eval"
             ],
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "determine",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "pattern",
                       "pattern_name"
                     ]
@@ -268,12 +264,12 @@
               "bool_eval"
             ],
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "send",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "path",
                       "text_list_eval"
                     ]
@@ -296,12 +292,12 @@
             "text_eval",
             "internal",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "shuffle",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "name",
                       "text"
                     ]
@@ -333,12 +329,12 @@
             "text_eval",
             "internal",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "stopping",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "name",
                       "text"
                     ]
@@ -363,12 +359,12 @@
             "bool_eval",
             "internal",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "trigger",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "name",
                       "text"
                     ]
@@ -397,16 +393,14 @@
             "text_eval",
             "format",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "text",
-                      "text_eval"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "text",
+                    "text_eval"
+                  ]
+                }
               ]
             }
           ]
@@ -421,12 +415,12 @@
             ],
             "misc",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "if",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "if",
                       "bool_eval"
                     ]
@@ -456,12 +450,12 @@
             "brancher",
             "misc",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "else_if",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "if",
                       "bool_eval"
                     ]
@@ -491,12 +485,12 @@
             "brancher",
             "misc",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "else_if",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "assign",
                       "text"
                     ]
@@ -636,12 +630,12 @@
             ],
             "misc",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "if",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "assign",
                       "text"
                     ]
@@ -716,12 +710,12 @@
             "bool_eval",
             "logic",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "cmp",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "a",
                       "number_eval"
                     ]
@@ -751,12 +745,12 @@
             "bool_eval",
             "logic",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "cmp",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "a",
                       "text_eval"
                     ]
@@ -786,12 +780,12 @@
             "number_eval",
             "math",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "dec",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "a",
                       "number_eval"
                     ]
@@ -819,16 +813,14 @@
             ],
             "patterns",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "pattern",
-                      "pattern_name"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "pattern",
+                    "pattern_name"
+                  ]
+                }
               ]
             }
           ]
@@ -854,16 +846,14 @@
             "assignment",
             "variables",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "val",
-                      "bool_eval"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "val",
+                    "bool_eval"
+                  ]
+                }
               ]
             }
           ]
@@ -875,16 +865,14 @@
             "assignment",
             "variables",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "val",
-                      "number_eval"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "val",
+                    "number_eval"
+                  ]
+                }
               ]
             }
           ]
@@ -896,12 +884,12 @@
             "assignment",
             "variables",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "from_nums",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "vals",
                       "num_list_eval"
                     ]
@@ -918,12 +906,12 @@
             "from_source_fields",
             "misc",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "obj_fields",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "object",
                       "text_eval"
                     ]
@@ -940,12 +928,12 @@
             "from_source_fields",
             "misc",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "rec_fields",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "rec",
                       "record_eval"
                     ]
@@ -962,12 +950,12 @@
             "assignment",
             "variables",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "from_rec",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "val",
                       "record_eval"
                     ]
@@ -984,12 +972,12 @@
             "assignment",
             "variables",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "from_recs",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "vals",
                       "record_list_eval"
                     ]
@@ -1015,12 +1003,12 @@
             "assignment",
             "variables",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "from_txt",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "val",
                       "text_eval"
                     ]
@@ -1037,12 +1025,12 @@
             "assignment",
             "variables",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "from_txts",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "vals",
                       "text_list_eval"
                     ]
@@ -1059,12 +1047,12 @@
             "from_source_fields",
             "misc",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "var_fields",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "var",
                       "variable_name"
                     ]
@@ -1090,12 +1078,12 @@
             ],
             "variables",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "get",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "field",
                       "text"
                     ]
@@ -1127,12 +1115,12 @@
             ],
             "variables",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "var",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "name",
                       "variable_name"
                     ]
@@ -1159,16 +1147,14 @@
             "bool_eval",
             "logic",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "text"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "name",
+                    "text"
+                  ]
+                }
               ]
             }
           ]
@@ -1208,16 +1194,14 @@
             "text_eval",
             "objects",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "object",
-                      "text_eval"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "object",
+                    "text_eval"
+                  ]
+                }
               ]
             }
           ]
@@ -1229,12 +1213,12 @@
             "bool_eval",
             "strings",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "contains",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "text",
                       "text_eval"
                     ]
@@ -1257,12 +1241,12 @@
             "into_target_fields",
             "misc",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "obj_field",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "object",
                       "text_eval"
                     ]
@@ -1288,12 +1272,12 @@
             "into_target_fields",
             "misc",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "var_field",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "var",
                       "variable_name"
                     ]
@@ -1332,12 +1316,12 @@
             "bool_eval",
             "objects",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "kind_of",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "object",
                       "text_eval"
                     ]
@@ -1361,12 +1345,12 @@
             "bool_eval",
             "objects",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "kind_of",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "object",
                       "text_eval"
                     ]
@@ -1390,24 +1374,22 @@
             "text_eval",
             "strings",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:optional:": [
-                      "sep",
-                      "text_eval",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:repeats:": [
-                      "parts",
-                      "text_eval",
-                      true
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:optional:": [
+                    "_",
+                    "sep",
+                    "text_eval",
+                    true
+                  ]
+                },
+                {
+                  "Term:type:repeats:": [
+                    "parts",
+                    "text_eval",
+                    true
+                  ]
+                }
               ]
             }
           ]
@@ -1419,16 +1401,14 @@
             "text_eval",
             "objects",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "object",
-                      "text_eval"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "object",
+                    "text_eval"
+                  ]
+                }
               ]
             }
           ]
@@ -1440,16 +1420,14 @@
             "text_list_eval",
             "objects",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "kind",
-                      "text"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "kind",
+                    "text"
+                  ]
+                }
               ]
             }
           ]
@@ -1472,12 +1450,12 @@
             "text_eval",
             "format",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "lower",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "text",
                       "text_eval"
                     ]
@@ -1515,12 +1493,12 @@
             "text_eval",
             "format",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "sentence",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "text",
                       "text_eval"
                     ]
@@ -1537,12 +1515,12 @@
             "text_eval",
             "format",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "title",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "text",
                       "text_eval"
                     ]
@@ -1559,12 +1537,12 @@
             "text_eval",
             "format",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "upper",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "text",
                       "text_eval"
                     ]
@@ -1581,30 +1559,28 @@
             "bool_eval",
             "matching",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "text",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "to",
-                      "pattern",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:private:": [
-                      "cache",
-                      "match_cache",
-                      true
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "text",
+                    "text_eval"
+                  ]
+                },
+                {
+                  "Term:name:type:": [
+                    "to",
+                    "pattern",
+                    "text"
+                  ]
+                },
+                {
+                  "Term:type:private:": [
+                    "cache",
+                    "match_cache",
+                    true
+                  ]
+                }
               ]
             }
           ]
@@ -1616,16 +1592,14 @@
             "text_eval",
             "objects",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "object",
-                      "text_eval"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "object",
+                    "text_eval"
+                  ]
+                }
               ]
             }
           ]
@@ -1673,16 +1647,14 @@
             "bool_eval",
             "logic",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "test",
-                      "bool_eval"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "test",
+                    "bool_eval"
+                  ]
+                }
               ]
             }
           ]
@@ -1747,12 +1719,12 @@
             "text_eval",
             "printing",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "numeral",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "num",
                       "number_eval"
                     ]
@@ -1791,12 +1763,12 @@
             "number_eval",
             "math",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "mul",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "a",
                       "number_eval"
                     ]
@@ -1820,12 +1792,12 @@
             "execute",
             "variables",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "put",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "into",
                       "into_target_fields"
                     ]
@@ -1855,12 +1827,12 @@
             "number_eval",
             "math",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "div",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "a",
                       "number_eval"
                     ]
@@ -1884,12 +1856,12 @@
             "number_eval",
             "math",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "mod",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "a",
                       "number_eval"
                     ]
@@ -1913,23 +1885,21 @@
             "text_eval",
             "output",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "name",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "text",
-                      "text_eval",
-                      true
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "name",
+                    "text"
+                  ]
+                },
+                {
+                  "Term:type:optional:": [
+                    "text",
+                    "text_eval",
+                    true
+                  ]
+                }
               ]
             }
           ]
@@ -1979,12 +1949,12 @@
             "execute",
             "printing",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "say",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "text",
                       "text_eval"
                     ]
@@ -2109,12 +2079,12 @@
             "number_eval",
             "math",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "inc",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "a",
                       "number_eval"
                     ]
@@ -2210,12 +2180,12 @@
             "execute",
             "flow",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "repeating",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "true",
                       "bool_eval"
                     ]

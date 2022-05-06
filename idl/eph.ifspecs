@@ -539,12 +539,12 @@
             "eph_relations",
             "ephemera",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "eph",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "rel",
                       "text"
                     ]
@@ -566,12 +566,12 @@
             "eph_relatives",
             "ephemera",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "eph",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "rel",
                       "text"
                     ]
@@ -735,12 +735,12 @@
             "many_many",
             "eph_relation_helpers",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "kinds",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "kinds",
                       "text"
                     ]
@@ -762,12 +762,12 @@
             "many_one",
             "eph_relation_helpers",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "kinds",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "kinds",
                       "text"
                     ]
@@ -789,12 +789,12 @@
             "one_many",
             "eph_relation_helpers",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "kind",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "kind",
                       "text"
                     ]
@@ -816,12 +816,12 @@
             "one_one",
             "eph_relation_helpers",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "kind",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "kind",
                       "text"
                     ]

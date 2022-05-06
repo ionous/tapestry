@@ -10,16 +10,14 @@
             "as_num",
             "list_iterator",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "var",
-                      "variable_name"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "var",
+                    "variable_name"
+                  ]
+                }
               ]
             }
           ]
@@ -30,16 +28,14 @@
             "as_rec",
             "list_iterator",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "var",
-                      "variable_name"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "var",
+                    "variable_name"
+                  ]
+                }
               ]
             }
           ]
@@ -50,16 +46,14 @@
             "as_txt",
             "list_iterator",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "var",
-                      "variable_name"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "var",
+                    "variable_name"
+                  ]
+                }
               ]
             }
           ]
@@ -70,12 +64,12 @@
             "erase_edge",
             "execute",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "erase",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "from",
                       "list_source"
                     ]
@@ -99,12 +93,12 @@
             "erase_index",
             "execute",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "erase",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "count",
                       "number_eval"
                     ]
@@ -132,41 +126,39 @@
             "erasing",
             "execute",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "count",
-                      "number_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "from",
-                      "list_source"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "at_index",
-                      "number_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "as",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:repeats:": [
-                      "does",
-                      "execute",
-                      true
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "count",
+                    "number_eval"
+                  ]
+                },
+                {
+                  "Term:type:": [
+                    "from",
+                    "list_source"
+                  ]
+                },
+                {
+                  "Term:type:": [
+                    "at_index",
+                    "number_eval"
+                  ]
+                },
+                {
+                  "Term:type:": [
+                    "as",
+                    "text"
+                  ]
+                },
+                {
+                  "Term:type:repeats:": [
+                    "does",
+                    "execute",
+                    true
+                  ]
+                }
               ]
             }
           ]
@@ -177,12 +169,12 @@
             "erasing_edge",
             "execute",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "erasing",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "from",
                       "list_source"
                     ]
@@ -226,12 +218,12 @@
             "from_num_list",
             "list_source",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "var_of_nums",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "var",
                       "variable_name"
                     ]
@@ -247,12 +239,12 @@
             "from_rec_list",
             "list_source",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "var_of_recs",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "var",
                       "variable_name"
                     ]
@@ -268,12 +260,12 @@
             "from_txt_list",
             "list_source",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "var_of_txts",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "var",
                       "variable_name"
                     ]
@@ -289,12 +281,12 @@
             "into_num_list",
             "list_target",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "into_nums",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "var",
                       "variable_name"
                     ]
@@ -310,12 +302,12 @@
             "into_rec_list",
             "list_target",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "into_recs",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "var",
                       "variable_name"
                     ]
@@ -331,12 +323,12 @@
             "into_txt_list",
             "list_target",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "into_txts",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "var",
                       "variable_name"
                     ]
@@ -356,12 +348,12 @@
               "record_eval"
             ],
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "get",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "list",
                       "assignment"
                     ]
@@ -427,12 +419,12 @@
               "number_eval"
             ],
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "find",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "value",
                       "assignment"
                     ]
@@ -453,12 +445,12 @@
           "Spec:with flow:": [
             "list_gather",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "gather",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "var",
                       "variable_name"
                     ]
@@ -495,12 +487,12 @@
             "list_len",
             "number_eval",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "len",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "list",
                       "assignment"
                     ]
@@ -516,12 +508,12 @@
             "list_map",
             "execute",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "map",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "to_list",
                       "text"
                     ]
@@ -604,12 +596,12 @@
             "list_set",
             "execute",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "set",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "list",
                       "text"
                     ]
@@ -649,12 +641,12 @@
               "record_list_eval"
             ],
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "slice",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "list",
                       "assignment"
                     ]
@@ -683,12 +675,12 @@
             "list_sort_numbers",
             "execute",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "sort_numbers",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "var",
                       "variable_name"
                     ]
@@ -717,12 +709,12 @@
             "list_sort_text",
             "execute",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "sort_texts",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "var",
                       "variable_name"
                     ]
@@ -758,12 +750,12 @@
             "list_sort_using",
             "execute",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "sort",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "var",
                       "variable_name"
                     ]
@@ -799,12 +791,12 @@
               "record_list_eval"
             ],
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "splice",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "list",
                       "text"
                     ]
@@ -847,12 +839,12 @@
             "put_edge",
             "execute",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "put",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "from",
                       "assignment"
                     ]
@@ -882,12 +874,12 @@
             "put_index",
             "execute",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "put",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "from",
                       "assignment"
                     ]
@@ -922,30 +914,28 @@
             "range",
             "num_list_eval",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "to",
-                      "number_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "from",
-                      "number_eval",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "by_step",
-                      "number_eval",
-                      true
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "to",
+                    "number_eval"
+                  ]
+                },
+                {
+                  "Term:type:optional:": [
+                    "from",
+                    "number_eval",
+                    true
+                  ]
+                },
+                {
+                  "Term:type:optional:": [
+                    "by_step",
+                    "number_eval",
+                    true
+                  ]
+                }
               ]
             }
           ]

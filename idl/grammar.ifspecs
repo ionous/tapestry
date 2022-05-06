@@ -10,12 +10,12 @@
             "action",
             "scanner_maker",
             {
-              "Flow:trim:uses:": [
+              "Flow:uses:": [
                 "as",
-                true,
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "action",
                       "text"
                     ]
@@ -31,23 +31,21 @@
             "alias",
             "grammar_maker",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "names",
-                      "text",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "as_noun",
-                      "text"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:repeats:": [
+                    "_",
+                    "names",
+                    "text",
+                    true
+                  ]
+                },
+                {
+                  "Term:type:": [
+                    "as_noun",
+                    "text"
+                  ]
+                }
               ]
             }
           ]
@@ -58,17 +56,15 @@
             "all_of",
             "scanner_maker",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "series",
-                      "scanner_maker",
-                      true
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:repeats:": [
+                    "_",
+                    "series",
+                    "scanner_maker",
+                    true
+                  ]
+                }
               ]
             }
           ]
@@ -79,17 +75,15 @@
             "any_of",
             "scanner_maker",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "options",
-                      "scanner_maker",
-                      true
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:repeats:": [
+                    "_",
+                    "options",
+                    "scanner_maker",
+                    true
+                  ]
+                }
               ]
             }
           ]
@@ -100,24 +94,22 @@
             "directive",
             "grammar_maker",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "lede",
-                      "text",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:repeats:": [
-                      "scans",
-                      "scanner_maker",
-                      true
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:repeats:": [
+                    "_",
+                    "lede",
+                    "text",
+                    true
+                  ]
+                },
+                {
+                  "Term:type:repeats:": [
+                    "scans",
+                    "scanner_maker",
+                    true
+                  ]
+                }
               ]
             }
           ]
@@ -128,16 +120,14 @@
             "grammar",
             "internal",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "grammar",
-                      "grammar_maker"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "grammar",
+                    "grammar_maker"
+                  ]
+                }
               ]
             }
           ]
@@ -157,16 +147,14 @@
             "noun",
             "scanner_maker",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "kind",
-                      "text"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "kind",
+                    "text"
+                  ]
+                }
               ]
             }
           ]
@@ -177,17 +165,15 @@
             "retarget",
             "scanner_maker",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "span",
-                      "scanner_maker",
-                      true
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:repeats:": [
+                    "_",
+                    "span",
+                    "scanner_maker",
+                    true
+                  ]
+                }
               ]
             }
           ]
@@ -198,17 +184,15 @@
             "reverse",
             "scanner_maker",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "reverses",
-                      "scanner_maker",
-                      true
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:repeats:": [
+                    "_",
+                    "reverses",
+                    "scanner_maker",
+                    true
+                  ]
+                }
               ]
             }
           ]
@@ -228,16 +212,14 @@
             "self",
             "scanner_maker",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:": [
-                      "player",
-                      "text"
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "player",
+                    "text"
+                  ]
+                }
               ]
             }
           ]
@@ -248,17 +230,15 @@
             "words",
             "scanner_maker",
             {
-              "Flow trim:uses:": [
-                true,
-                [
-                  {
-                    "Term:type:repeats:": [
-                      "words",
-                      "text",
-                      true
-                    ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:type:repeats:": [
+                    "_",
+                    "words",
+                    "text",
+                    true
+                  ]
+                }
               ]
             }
           ]
