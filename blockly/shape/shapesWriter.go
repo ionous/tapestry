@@ -43,9 +43,9 @@ func (w *ShapeWriter) writeSlotBlock(block *js.Builder, blockType *spec.TypeSpec
 func (w *ShapeWriter) writeStandalone(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
 	// we simply pretend we're a flow of one anonymous member.
 	okay = w._writeShape(block, blockType.Name, blockType, []spec.TermSpec{{
-		Key:  "",
-		Name: blockType.Name,
-		Type: blockType.Name,
+		Label: "",
+		Name:  blockType.Name,
+		Type:  blockType.Name,
 	}})
 	return okay
 }

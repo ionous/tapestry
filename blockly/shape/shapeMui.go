@@ -47,7 +47,7 @@ func (w *ShapeWriter) writeMuiInput(args *js.Builder, term spec.TermSpec) (ret i
 
 // note: writes a leading comma :/
 func writeMuiTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) (ret int) {
-	name, label := term.Field(), term.FriendlyName()
+	label, name := term.Label, term.ParameterName()
 	// stacked elements dont need to repeat inputs: one input allows multiple blocks.
 	// ( and if they are optional, we'll want to use a checkbox )
 	stacks, _ := slotStacks(termType)
@@ -78,7 +78,7 @@ func writeMuiTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec)
 					// unique name needed for blockly undo
 					Q("name").R(js.Colon).Brace(js.Quotes,
 					func(val *js.Builder) {
-						val.X(term.Field()).R(js.Score).S("edit")
+						val.X(name).R(js.Score).S("edit")
 					})
 			})
 
@@ -91,7 +91,7 @@ func writeMuiTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec)
 					// unique name needed for blockly undo:
 					Q("name").R(js.Colon).Brace(js.Quotes,
 					func(val *js.Builder) {
-						val.X(term.Field()).R(js.Score).S("edit")
+						val.X(name).R(js.Score).S("edit")
 					})
 			})
 	}

@@ -228,9 +228,9 @@
         },
         {
           "--": [
-            "a member of a flow",
-            "the key gets used as the name and label, unless an explicit name is specified.",
-            "the type is derived from the name."
+            "A member of a flow.",
+            "The label doubles as the parameter name unless an explicit name is specified.",
+            "The type, if not specified, uses the name."
           ],
           "Spec:with flow:": [
             "term_spec",
@@ -241,7 +241,7 @@
                   {
                     "Term:name:type:": [
                       "_",
-                      "key",
+                      "label",
                       "text"
                     ]
                   },

@@ -868,11 +868,11 @@ func SwapSpec_Marshal(m jsn.Marshaler, val *SwapSpec) (err error) {
 	return
 }
 
-// TermSpec a member of a flow
-// the key gets used as the name and label, unless an explicit name is specified.
-// the type is derived from the name.
+// TermSpec A member of a flow.
+// The label doubles as the parameter name unless an explicit name is specified.
+// The type, if not specified, uses the name.
 type TermSpec struct {
-	Key         string `if:"label=_,type=text"`
+	Label       string `if:"label=_,type=text"`
 	Name        string `if:"label=name,optional,type=text"`
 	Type        string `if:"label=type,optional,type=text"`
 	Private     bool   `if:"label=private,optional,type=bool"`
@@ -890,7 +890,7 @@ func (*TermSpec) Compose() composer.Spec {
 }
 
 const TermSpec_Type = "term_spec"
-const TermSpec_Field_Key = "$KEY"
+const TermSpec_Field_Label = "$LABEL"
 const TermSpec_Field_Name = "$NAME"
 const TermSpec_Field_Type = "$TYPE"
 const TermSpec_Field_Private = "$PRIVATE"
@@ -968,12 +968,12 @@ func TermSpec_Optional_Marshal(m jsn.Marshaler, pv **TermSpec) (err error) {
 func TermSpec_Marshal(m jsn.Marshaler, val *TermSpec) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(TermSpec_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", TermSpec_Field_Key)
+		e0 := m.MarshalKey("", TermSpec_Field_Label)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Key)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Label)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", TermSpec_Field_Key))
+			m.Error(errutil.New(e0, "in flow at", TermSpec_Field_Label))
 		}
 		e1 := m.MarshalKey("name", TermSpec_Field_Name)
 		if e1 == nil {

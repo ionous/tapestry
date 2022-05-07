@@ -51,10 +51,12 @@ func (w *ShapeWriter) writeFieldDefs(args *js.Builder, term spec.TermSpec) {
 
 func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 	// write the label for this term.
-	if l := term.FriendlyName(); len(l) > 0 {
-		writeLabel(args, l)
-		args.R(js.Comma)
+	if !term.IsAnonymous() {
+		writeLabel(args, term.Label)
+	} else {
+		writeLabel(args, term.Name)
 	}
+	args.R(js.Comma)
 	// write other fields while collecting information for the trailing input:
 	var checks []string
 	var inputType = bconst.InputDummy
@@ -152,7 +154,7 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 	}
 	// write the input that all of the above fields are a part of:
 	args.Brace(js.Obj, func(tail *js.Builder) {
-		tail.Kv("name", strings.ToUpper(term.Field())).R(js.Comma)
+		tail.Kv("name", strings.ToUpper(term.ParameterName())).R(js.Comma)
 		tail.Kv("type", inputType)
 		appendChecks(tail, "checks", checks)
 

@@ -41,7 +41,7 @@ func sigParts(flow *spec.FlowSpec, commandName string, types rs.TypeSpecs) [][]s
 		}
 		var sel string
 		if !term.IsAnonymous() {
-			sel = camelize(term.Key)
+			sel = camelize(term.Label)
 		}
 		pt := types.Types[term.TypeName()]
 		if simpleSwap := !term.Repeats && pt.Spec.Choice == spec.UsesSpec_Swap_Opt; !simpleSwap {
