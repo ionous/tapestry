@@ -18,7 +18,7 @@ func (op *TermSpec) IsAnonymous() bool {
 }
 
 // return the explicit parameter name, or the label if nothing explicit was defined.
-func (op *TermSpec) ParameterName() (ret string) {
+func (op *TermSpec) Field() (ret string) {
 	if len(op.Name) > 0 {
 		ret = op.Name
 	} else {
@@ -33,14 +33,14 @@ func (op *TermSpec) TypeName() (ret string) {
 	if len(op.Type) > 0 {
 		ret = op.Type
 	} else {
-		ret = op.ParameterName()
+		ret = op.Field()
 	}
 	return
 }
 
 // tokenized field
 func (op *TermSpec) Value() (ret string) {
-	return "$" + strings.ToUpper(op.ParameterName())
+	return "$" + strings.ToUpper(op.Field())
 }
 
 //--------------------------
