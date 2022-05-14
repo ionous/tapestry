@@ -1,4 +1,4 @@
-// Generates a playable database from a story file.
+// Compile story files into a playable database.
 package main
 
 import (
@@ -30,9 +30,15 @@ const (
 	CompactExt  = ".if"
 )
 
-// Compile story files into a playable database.
-// ex. go run asm.go -in /Users/ionous/Documents/Tapestry/stories/shared -out /Users/ionous/Documents/Tapestry/build/play.db
+const ExampleUsage = /**/
+"go run asm.go -in /Users/ionous/Documents/Tapestry/stories/shared -out /Users/ionous/Documents/Tapestry/build/play.db -check"
+
 func main() {
+	usage := flag.Usage
+	flag.Usage = func() {
+		usage()
+		println("ex.", ExampleUsage)
+	}
 	var srcPath, outFile string
 	var checkAll bool
 	var checkOne string
