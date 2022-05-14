@@ -108,6 +108,7 @@
             "render_pattern",
             [
               "assignment",
+              "bool_eval",
               "text_eval"
             ],
             "internal",
@@ -133,6 +134,7 @@
             "render_ref",
             [
               "assignment",
+              "bool_eval",
               "number_eval",
               "text_eval"
             ],
