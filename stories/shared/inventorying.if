@@ -12,7 +12,7 @@
         "inventorying",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "actor",
               "object",
               {
@@ -95,7 +95,7 @@
         "print inventory",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "actor",
               "actor"
             ]
@@ -108,7 +108,7 @@
         "print inventory",
         [
           {
-            "TextList named:initially:": [
+            "TextList:initially:": [
               "kids",
               {
                 "ChildrenOf obj:": "@actor"

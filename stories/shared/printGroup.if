@@ -9,7 +9,7 @@
         "print group",
         [
           {
-            "Record named:of:": [
+            "Record:kind:": [
               "group",
               "object groups"
             ]
@@ -17,7 +17,7 @@
         ],
         {
           "PatternResult:": {
-            "Bool named:": "success"
+            "Bool:": "success"
           }
         }
       ]
@@ -27,7 +27,7 @@
         "print group",
         [
           {
-            "Record named:of:initially:": [
+            "Record:kind:initially:": [
               "grouping",
               "grouping",
               {
@@ -41,7 +41,7 @@
             ]
           },
           {
-            "TextList named:initially:": [
+            "TextList:initially:": [
               "objs",
               {
                 "Get:from:": [
@@ -310,13 +310,13 @@
         "print grouped object",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
           },
           {
-            "Record named:of:": [
+            "Record:kind:": [
               "grouping",
               "grouping"
             ]

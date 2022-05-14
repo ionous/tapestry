@@ -19,7 +19,7 @@
         [
           {
             "--": "Get the actor from the agent.",
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "actor",
               "actor",
               {
@@ -34,7 +34,7 @@
           },
           {
             "--": "Get the destination from the door.",
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "destination",
               "room",
               {
@@ -161,7 +161,7 @@
               [
                 {
                   "--": "Get the destination from the door.",
-                  "Text named:of:initially:": [
+                  "Text:kind:initially:": [
                     "destination",
                     "room",
                     {
@@ -249,13 +249,13 @@
         "report traveling",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "actor",
               "actor"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "thing"
             ]

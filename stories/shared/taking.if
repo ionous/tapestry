@@ -14,7 +14,7 @@
         "taking",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "actor",
               "actor",
               {
@@ -184,13 +184,13 @@
         "report taking",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "actor",
               "actor"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "thing"
             ]

@@ -28,12 +28,12 @@ var FactorialStory = &story.Story{
 			},
 			&story.PatternDecl{
 				Name: factorialName,
-				PatternReturn: &story.PatternReturn{Result: &story.NumberProperty{
+				PatternReturn: &story.PatternReturn{Result: &story.NumberField{
 					UserComment: "the result uses the same variable as the pattern input does",
 					Name:        numVar.Str,
 				}},
-				Params: []story.PropertySlot{
-					&story.NumberProperty{
+				Params: []story.Field{
+					&story.NumberField{
 						UserComment: "just one argument, a number called 'num'",
 						Name:        numVar.Str,
 					}},

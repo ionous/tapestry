@@ -14,7 +14,7 @@
         "searching",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "actor",
               "actor",
               {
@@ -107,13 +107,13 @@
         "report searching",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "actor",
               "actor"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "thing"
             ]
@@ -126,7 +126,7 @@
         "report searching",
         [
           {
-            "TextList named:": "items"
+            "TextList:": "items"
           }
         ],
         [

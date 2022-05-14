@@ -5,30 +5,30 @@
         "state change",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "actor",
               "actor"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "thing"
             ]
           },
           {
-            "Text named:": "trait"
+            "Text:": "trait"
           },
           {
-            "Text named:": "guard"
+            "Text:": "guard"
           },
           {
-            "Text named:": "change"
+            "Text:": "change"
           }
         ],
         {
           "PatternResult:": {
-            "Bool named:": "success"
+            "Bool:": "success"
           }
         }
       ]
@@ -196,27 +196,27 @@
         "state changing",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "object"
             ]
           },
           {
             "--": "the trait we're changing to",
-            "Text named:": "trait"
+            "Text:": "trait"
           },
           {
             "--": "a trait which blocks the noun from changing",
-            "Text named:": "guard"
+            "Text:": "guard"
           },
           {
             "--": "some text which describes the action",
-            "Text named:": "change"
+            "Text:": "change"
           }
         ],
         {
           "PatternResult:": {
-            "Text named:": "result"
+            "Text:": "result"
           }
         }
       ]

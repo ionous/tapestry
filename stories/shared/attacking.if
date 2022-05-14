@@ -54,7 +54,7 @@
         "attacking",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "actor",
               "actor",
               {
@@ -125,13 +125,13 @@
         "report attacking",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "actor",
               "actor"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "object"
             ]

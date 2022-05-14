@@ -14,7 +14,7 @@
         "activating",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "actor",
               "actor",
               {
@@ -140,7 +140,7 @@
         "deactivating",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "actor",
               "actor",
               {
@@ -253,7 +253,7 @@
       "--": ""
     },
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "Devices",
         "prop"
       ]
@@ -263,10 +263,10 @@
         "Devices",
         [
           {
-            "Aspect of:": "activatability"
+            "Aspect:": "activatability"
           },
           {
-            "Aspect of:": "activation"
+            "Aspect:": "activation"
           }
         ]
       ]

@@ -5,7 +5,7 @@
         "We",
         [
           {
-            "TextList named:": "names"
+            "TextList:": "names"
           }
         ]
       ]
@@ -43,7 +43,7 @@
         "They",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "object"
             ]
@@ -93,7 +93,7 @@
         "Those",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "object"
             ]

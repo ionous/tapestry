@@ -5,12 +5,12 @@
         "starts with vowel",
         [
           {
-            "Text named:": "text"
+            "Text:": "text"
           }
         ],
         {
           "PatternResult:": {
-            "Bool named:": "matching"
+            "Bool:": "matching"
           }
         }
       ]

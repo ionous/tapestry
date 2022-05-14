@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "things",
         "kind"
       ]
@@ -11,7 +11,7 @@
         "Things",
         [
           {
-            "Text named:": "printed name"
+            "Text:": "printed name"
           }
         ]
       ]
@@ -104,7 +104,7 @@
         "print name",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -201,7 +201,7 @@
         "mention",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]

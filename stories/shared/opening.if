@@ -14,7 +14,7 @@
         "opening",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "actor",
               "actor",
               {
@@ -140,7 +140,7 @@
         "closing",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "actor",
               "actor",
               {
@@ -320,7 +320,7 @@
               [
                 {
                   "--": "initialized only when needed, for containers revealing their contents.",
-                  "TextList named:": "concealed items"
+                  "TextList:": "concealed items"
                 }
               ],
               [

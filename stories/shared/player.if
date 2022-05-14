@@ -1,13 +1,13 @@
 {
   "Tapestry:": [
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "agents",
         "object"
       ]
     },
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "players",
         "agent"
       ]
@@ -35,7 +35,7 @@
         "Agents",
         [
           {
-            "Text named:": "pawn"
+            "Text:": "pawn"
           }
         ]
       ]
@@ -45,7 +45,7 @@
         "Actors",
         [
           {
-            "Bool named:": "in darkness"
+            "Bool:": "in darkness"
           }
         ]
       ]
@@ -147,7 +147,7 @@
         "isPlayer",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -155,7 +155,7 @@
         ],
         {
           "PatternResult:": {
-            "Bool named:": "success"
+            "Bool:": "success"
           }
         }
       ]

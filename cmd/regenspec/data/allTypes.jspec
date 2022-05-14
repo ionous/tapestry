@@ -1480,7 +1480,7 @@
         }
       },
       "slots": [
-        "property_slot"
+        "field"
       ]
     },
     "lede": "aspect",
@@ -1807,7 +1807,7 @@
         }
       },
       "slots": [
-        "property_slot"
+        "field"
       ]
     },
     "lede": "bool",
@@ -6373,7 +6373,7 @@
         },
         "$LOCALS": {
           "label": "provides",
-          "type": "property_slot",
+          "type": "field",
           "optional": true,
           "repeats": true,
           "key": "$LOCALS",
@@ -6414,7 +6414,7 @@
       },
       {
         "label": "provides",
-        "type": "property_slot",
+        "type": "field",
         "optional": true,
         "repeats": true,
         "key": "$LOCALS",
@@ -8478,7 +8478,7 @@
         },
         "$PROPS": {
           "label": "props",
-          "type": "property_slot",
+          "type": "field",
           "repeats": true,
           "filters": [
             "comma-and"
@@ -8506,7 +8506,7 @@
       },
       {
         "label": "props",
-        "type": "property_slot",
+        "type": "field",
         "repeats": true,
         "filters": [
           "comma-and"
@@ -8637,7 +8637,7 @@
       ]
     },
     "lede": "Make",
-    "sign": "Make kinds:of:",
+    "sign": "Make:kind:",
     "params": [
       {
         "label": "plural kinds",
@@ -11825,7 +11825,7 @@
         }
       },
       "slots": [
-        "property_slot"
+        "field"
       ]
     },
     "lede": "num_list",
@@ -12143,7 +12143,7 @@
         }
       },
       "slots": [
-        "property_slot"
+        "field"
       ]
     },
     "lede": "number",
@@ -12624,7 +12624,7 @@
         },
         "$LOCALS": {
           "label": "locals",
-          "type": "property_slot",
+          "type": "field",
           "optional": true,
           "repeats": true,
           "key": "$LOCALS",
@@ -12659,7 +12659,7 @@
       },
       {
         "label": "locals",
-        "type": "property_slot",
+        "type": "field",
         "optional": true,
         "repeats": true,
         "key": "$LOCALS",
@@ -12711,7 +12711,7 @@
         },
         "$PARAMS": {
           "label": "params",
-          "type": "property_slot",
+          "type": "field",
           "optional": true,
           "repeats": true,
           "key": "$PARAMS",
@@ -12749,7 +12749,7 @@
       },
       {
         "label": "params",
-        "type": "property_slot",
+        "type": "field",
         "optional": true,
         "repeats": true,
         "key": "$PARAMS",
@@ -12887,7 +12887,7 @@
       "params": {
         "$RESULT": {
           "label": "result",
-          "type": "property_slot",
+          "type": "field",
           "key": "$RESULT",
           "internal": false,
           "tag": "_",
@@ -12901,7 +12901,7 @@
     "params": [
       {
         "label": "result",
-        "type": "property_slot",
+        "type": "field",
         "key": "$RESULT",
         "internal": false,
         "tag": "_",
@@ -13562,8 +13562,8 @@
       }
     ]
   },
-  "property_slot": {
-    "name": "property_slot",
+  "field": {
+    "name": "field",
     "desc": "future: each slot should support an appropriate 'starting as' initial value",
     "uses": "slot",
     "group": [
@@ -14172,7 +14172,7 @@
         }
       },
       "slots": [
-        "property_slot"
+        "field"
       ]
     },
     "lede": "record_list",
@@ -14276,7 +14276,7 @@
         }
       },
       "slots": [
-        "property_slot"
+        "field"
       ]
     },
     "lede": "record",
@@ -17322,7 +17322,7 @@
         }
       },
       "slots": [
-        "property_slot"
+        "field"
       ]
     },
     "lede": "text_list",
@@ -17426,7 +17426,7 @@
         }
       },
       "slots": [
-        "property_slot"
+        "field"
       ]
     },
     "lede": "text",

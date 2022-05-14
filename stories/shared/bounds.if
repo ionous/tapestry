@@ -5,7 +5,7 @@
         "parser bounds",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -13,7 +13,7 @@
         ],
         {
           "PatternResult:": {
-            "TextList named:": "bounds"
+            "TextList:": "bounds"
           }
         }
       ]
@@ -23,7 +23,7 @@
         "parser bounds",
         [
           {
-            "TextList named:": "queue"
+            "TextList:": "queue"
           }
         ],
         [

@@ -5,13 +5,13 @@
         "Move Object",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "dest",
               "object"
             ]
@@ -19,7 +19,7 @@
         ],
         {
           "PatternResult:": {
-            "Text named:": "response"
+            "Text:": "response"
           }
         }
       ]
@@ -163,7 +163,7 @@
         "RemoveFromPlay",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -227,13 +227,13 @@
         "WearObject",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "actor",
               "actor"
             ]

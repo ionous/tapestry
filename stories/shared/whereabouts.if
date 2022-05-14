@@ -27,7 +27,7 @@
         "parentOf",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -35,7 +35,7 @@
         ],
         {
           "PatternResult:": {
-            "Text named:of:": [
+            "Text:kind:": [
               "parent",
               "object"
             ]
@@ -116,7 +116,7 @@
         "Capture",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -124,7 +124,7 @@
         ],
         {
           "PatternResult:": {
-            "TextList named:": "list"
+            "TextList:": "list"
           }
         }
       ]
@@ -134,7 +134,7 @@
         "Capture",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "it",
               "object",
               "@obj"
@@ -193,7 +193,7 @@
         "childrenOf",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -201,7 +201,7 @@
         ],
         {
           "PatternResult:": {
-            "TextList named:": "kids"
+            "TextList:": "kids"
           }
         }
       ]
@@ -244,7 +244,7 @@
         "CurrentRoom",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -252,7 +252,7 @@
         ],
         {
           "PatternResult:": {
-            "Text named:of:": [
+            "Text:kind:": [
               "room",
               "room"
             ]
@@ -265,7 +265,7 @@
         "CurrentRoom",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "search",
               "object",
               "@obj"
@@ -360,13 +360,13 @@
         "Common Ancestor",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "object",
               "object"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "other object",
               "object"
             ]
@@ -374,7 +374,7 @@
         ],
         {
           "PatternResult:": {
-            "Text named:of:": [
+            "Text:kind:": [
               "ancestor",
               "object"
             ]
@@ -387,13 +387,13 @@
         "Common Ancestor",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "o1",
               "object"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "o2",
               "object"
             ]
@@ -569,13 +569,13 @@
         "ancestorOf",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "root",
               "object"
             ]
@@ -584,7 +584,7 @@
         {
           "PatternResult:": {
             "--": "true if one object acts as the ancestor of another.",
-            "Bool named:": "isAncestor"
+            "Bool:": "isAncestor"
           }
         }
       ]
@@ -594,7 +594,7 @@
         "ancestorOf",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "up",
               "object"
             ]
@@ -716,7 +716,7 @@
         "locationOf",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -724,7 +724,7 @@
         ],
         {
           "PatternResult:": {
-            "Text named:of:": [
+            "Text:kind:": [
               "location",
               "object"
             ]
@@ -737,7 +737,7 @@
         "locationOf",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "parent",
               "object",
               {
@@ -802,7 +802,7 @@
         "SupporterOf",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -810,7 +810,7 @@
         ],
         {
           "PatternResult:": {
-            "Text named:of:": [
+            "Text:kind:": [
               "supporter",
               "supporter"
             ]
@@ -823,7 +823,7 @@
         "SupporterOf",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "parent",
               "object",
               {
@@ -872,7 +872,7 @@
         "ContainerOf",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -880,7 +880,7 @@
         ],
         {
           "PatternResult:": {
-            "Text named:of:": [
+            "Text:kind:": [
               "container",
               "container"
             ]
@@ -893,7 +893,7 @@
         "ContainerOf",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "parent",
               "object",
               {
@@ -942,7 +942,7 @@
         "holderOf",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -950,7 +950,7 @@
         ],
         {
           "PatternResult:": {
-            "Text named:of:": [
+            "Text:kind:": [
               "owner",
               "actor"
             ]
@@ -963,7 +963,7 @@
         "holderOf",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "parent",
               "object"
             ]
@@ -1022,7 +1022,7 @@
         "CarrierOf",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -1030,7 +1030,7 @@
         ],
         {
           "PatternResult:": {
-            "Text named:of:": [
+            "Text:kind:": [
               "carrier",
               "object"
             ]
@@ -1043,7 +1043,7 @@
         "CarrierOf",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "parent",
               "object"
             ]
@@ -1114,7 +1114,7 @@
         "WearerOf",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -1122,7 +1122,7 @@
         ],
         {
           "PatternResult:": {
-            "Text named:of:": [
+            "Text:kind:": [
               "wearer",
               "object"
             ]
@@ -1135,7 +1135,7 @@
         "WearerOf",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "parent",
               "object"
             ]

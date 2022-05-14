@@ -6,10 +6,10 @@
         [
           {
             "--": "when not set it will use the article from the declaration of the noun; example: \"some\" soldiers.",
-            "Text named:": "indefinite article"
+            "Text:": "indefinite article"
           },
           {
-            "Aspect of:": "pluralization"
+            "Aspect:": "pluralization"
           }
         ]
       ]
@@ -134,7 +134,7 @@
         "A",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "object"
             ]
@@ -176,7 +176,7 @@
         "The",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "object"
             ]
@@ -221,16 +221,16 @@
         "Print article",
         [
           {
-            "Text named:": "article"
+            "Text:": "article"
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
           },
           {
-            "Text named:": "name"
+            "Text:": "name"
           }
         ]
       ]

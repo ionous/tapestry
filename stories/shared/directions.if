@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "Compasses",
         "records"
       ]
@@ -11,7 +11,7 @@
         "Rooms",
         [
           {
-            "Record named:": "compass"
+            "Record:": "compass"
           }
         ]
       ]
@@ -21,37 +21,37 @@
         "Compasses",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "north",
               "door"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "east",
               "door"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "south",
               "door"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "west",
               "door"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "up",
               "door"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "down",
               "door"
             ]
@@ -78,7 +78,7 @@
       ]
     },
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "Doors",
         "opener"
       ]
@@ -88,7 +88,7 @@
         "Doors",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "destination",
               "room"
             ]

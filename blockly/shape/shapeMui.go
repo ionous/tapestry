@@ -47,7 +47,7 @@ func (w *ShapeWriter) writeMuiInput(args *js.Builder, term spec.TermSpec) (ret i
 
 // note: writes a leading comma :/
 func writeMuiTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) (ret int) {
-	label, name := term.Label, term.ParameterName()
+	label, name := term.Label, term.Field()
 	// stacked elements dont need to repeat inputs: one input allows multiple blocks.
 	// ( and if they are optional, we'll want to use a checkbox )
 	stacks, _ := slotStacks(termType)

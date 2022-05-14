@@ -31,7 +31,7 @@
         "jumping",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "actor",
               "object",
               {
@@ -69,7 +69,7 @@
         "report jumping",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "actor",
               "actor"
             ]

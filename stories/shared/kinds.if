@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "Objects",
         "kind"
       ]
@@ -11,7 +11,7 @@
         "Objects",
         [
           {
-            "Text named:": "description"
+            "Text:": "description"
           }
         ]
       ]
@@ -21,7 +21,7 @@
         "Objects",
         [
           {
-            "Text named:": "grouping label"
+            "Text:": "grouping label"
           }
         ]
       ]
@@ -30,7 +30,7 @@
       "--": ""
     },
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "Things",
         "object"
       ]
@@ -74,13 +74,13 @@
         "Things",
         [
           {
-            "Aspect of:": "portability"
+            "Aspect:": "portability"
           },
           {
-            "Aspect of:": "possessiveness"
+            "Aspect:": "possessiveness"
           },
           {
-            "Aspect of:": "wearability"
+            "Aspect:": "wearability"
           }
         ]
       ]
@@ -107,7 +107,7 @@
         "Things",
         [
           {
-            "Aspect of:": "scenery status"
+            "Aspect:": "scenery status"
           }
         ]
       ]
@@ -117,7 +117,7 @@
         "Things",
         [
           {
-            "Text named:": "initial appearance"
+            "Text:": "initial appearance"
           }
         ]
       ]
@@ -127,7 +127,7 @@
         "Things",
         [
           {
-            "Aspect of:": "mentionable"
+            "Aspect:": "mentionable"
           }
         ]
       ]
@@ -154,7 +154,7 @@
         "Things",
         [
           {
-            "Aspect of:": "handleable"
+            "Aspect:": "handleable"
           }
         ]
       ]
@@ -197,13 +197,13 @@
       "--": ""
     },
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "Actors",
         "thing"
       ]
     },
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "animals",
         "actor"
       ]
@@ -212,7 +212,7 @@
       "--": ""
     },
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "props",
         "thing"
       ]
@@ -221,7 +221,7 @@
       "--": ""
     },
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "openers",
         "prop"
       ]
@@ -299,16 +299,16 @@
         "Openers",
         [
           {
-            "Aspect of:": "open status"
+            "Aspect:": "open status"
           },
           {
-            "Aspect of:": "openability"
+            "Aspect:": "openability"
           },
           {
-            "Aspect of:": "locked status"
+            "Aspect:": "locked status"
           },
           {
-            "Aspect of:": "lockable status"
+            "Aspect:": "lockable status"
           }
         ]
       ]
@@ -317,7 +317,7 @@
       "--": ""
     },
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "containers",
         "opener"
       ]
@@ -361,10 +361,10 @@
         "Containers",
         [
           {
-            "Aspect of:": "enterability"
+            "Aspect:": "enterability"
           },
           {
-            "Aspect of:": "opacity"
+            "Aspect:": "opacity"
           }
         ]
       ]
@@ -394,7 +394,7 @@
         "Things",
         [
           {
-            "Aspect of:": "illumination"
+            "Aspect:": "illumination"
           }
         ]
       ]
@@ -404,7 +404,7 @@
         "Rooms",
         [
           {
-            "Aspect of:": "illumination"
+            "Aspect:": "illumination"
           }
         ]
       ]
@@ -421,7 +421,7 @@
       "--": ""
     },
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "supporters",
         "prop"
       ]
@@ -430,7 +430,7 @@
       "--": ""
     },
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "rooms",
         "object"
       ]
@@ -440,7 +440,7 @@
         "Rooms",
         [
           {
-            "Bool named:": "visited"
+            "Bool:": "visited"
           }
         ]
       ]
@@ -449,7 +449,7 @@
       "--": ""
     },
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "regions",
         "object"
       ]

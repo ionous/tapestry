@@ -908,39 +908,39 @@ func Aspect_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Aspect) (err error) 
 	return
 }
 
-// AspectProperty
-type AspectProperty struct {
-	Aspect      string `if:"label=of,type=text"`
+// AspectField
+type AspectField struct {
+	Aspect      string `if:"label=_,type=text"`
 	UserComment string
 }
 
 // User implemented slots:
-var _ PropertySlot = (*AspectProperty)(nil)
+var _ Field = (*AspectField)(nil)
 
-func (*AspectProperty) Compose() composer.Spec {
+func (*AspectField) Compose() composer.Spec {
 	return composer.Spec{
-		Name: AspectProperty_Type,
+		Name: AspectField_Type,
 		Uses: composer.Type_Flow,
 		Lede: "aspect",
 	}
 }
 
-const AspectProperty_Type = "aspect_property"
-const AspectProperty_Field_Aspect = "$ASPECT"
+const AspectField_Type = "aspect_field"
+const AspectField_Field_Aspect = "$ASPECT"
 
-func (op *AspectProperty) Marshal(m jsn.Marshaler) error {
-	return AspectProperty_Marshal(m, op)
+func (op *AspectField) Marshal(m jsn.Marshaler) error {
+	return AspectField_Marshal(m, op)
 }
 
-type AspectProperty_Slice []AspectProperty
+type AspectField_Slice []AspectField
 
-func (op *AspectProperty_Slice) GetType() string { return AspectProperty_Type }
+func (op *AspectField_Slice) GetType() string { return AspectField_Type }
 
-func (op *AspectProperty_Slice) Marshal(m jsn.Marshaler) error {
-	return AspectProperty_Repeats_Marshal(m, (*[]AspectProperty)(op))
+func (op *AspectField_Slice) Marshal(m jsn.Marshaler) error {
+	return AspectField_Repeats_Marshal(m, (*[]AspectField)(op))
 }
 
-func (op *AspectProperty_Slice) GetSize() (ret int) {
+func (op *AspectField_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -949,62 +949,62 @@ func (op *AspectProperty_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *AspectProperty_Slice) SetSize(cnt int) {
-	var els []AspectProperty
+func (op *AspectField_Slice) SetSize(cnt int) {
+	var els []AspectField
 	if cnt >= 0 {
-		els = make(AspectProperty_Slice, cnt)
+		els = make(AspectField_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *AspectProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return AspectProperty_Marshal(m, &(*op)[i])
+func (op *AspectField_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return AspectField_Marshal(m, &(*op)[i])
 }
 
-func AspectProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]AspectProperty) error {
-	return jsn.RepeatBlock(m, (*AspectProperty_Slice)(vals))
+func AspectField_Repeats_Marshal(m jsn.Marshaler, vals *[]AspectField) error {
+	return jsn.RepeatBlock(m, (*AspectField_Slice)(vals))
 }
 
-func AspectProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AspectProperty) (err error) {
+func AspectField_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AspectField) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = AspectProperty_Repeats_Marshal(m, pv)
+		err = AspectField_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type AspectProperty_Flow struct{ ptr *AspectProperty }
+type AspectField_Flow struct{ ptr *AspectField }
 
-func (n AspectProperty_Flow) GetType() string      { return AspectProperty_Type }
-func (n AspectProperty_Flow) GetLede() string      { return "aspect" }
-func (n AspectProperty_Flow) GetFlow() interface{} { return n.ptr }
-func (n AspectProperty_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*AspectProperty); ok {
+func (n AspectField_Flow) GetType() string      { return AspectField_Type }
+func (n AspectField_Flow) GetLede() string      { return "aspect" }
+func (n AspectField_Flow) GetFlow() interface{} { return n.ptr }
+func (n AspectField_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*AspectField); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func AspectProperty_Optional_Marshal(m jsn.Marshaler, pv **AspectProperty) (err error) {
+func AspectField_Optional_Marshal(m jsn.Marshaler, pv **AspectField) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = AspectProperty_Marshal(m, *pv)
+		err = AspectField_Marshal(m, *pv)
 	} else if !enc {
-		var v AspectProperty
-		if err = AspectProperty_Marshal(m, &v); err == nil {
+		var v AspectField
+		if err = AspectField_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func AspectProperty_Marshal(m jsn.Marshaler, val *AspectProperty) (err error) {
+func AspectField_Marshal(m jsn.Marshaler, val *AspectField) (err error) {
 	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(AspectProperty_Flow{val}); err == nil {
-		e0 := m.MarshalKey("of", AspectProperty_Field_Aspect)
+	if err = m.MarshalBlock(AspectField_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", AspectField_Field_Aspect)
 		if e0 == nil {
 			e0 = prim.Text_Unboxed_Marshal(m, &val.Aspect)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", AspectProperty_Field_Aspect))
+			m.Error(errutil.New(e0, "in flow at", AspectField_Field_Aspect))
 		}
 		m.EndBlock()
 	}
@@ -1122,43 +1122,43 @@ func AspectTraits_Marshal(m jsn.Marshaler, val *AspectTraits) (err error) {
 	return
 }
 
-// BoolProperty
-type BoolProperty struct {
-	Name        string      `if:"label=named,type=text"`
-	Type        string      `if:"label=of,optional,type=text"`
+// BoolField
+type BoolField struct {
+	Name        string      `if:"label=_,type=text"`
+	Type        string      `if:"label=kind,optional,type=text"`
 	Initially   rt.BoolEval `if:"label=initially,optional"`
 	UserComment string
 }
 
 // User implemented slots:
-var _ PropertySlot = (*BoolProperty)(nil)
+var _ Field = (*BoolField)(nil)
 
-func (*BoolProperty) Compose() composer.Spec {
+func (*BoolField) Compose() composer.Spec {
 	return composer.Spec{
-		Name: BoolProperty_Type,
+		Name: BoolField_Type,
 		Uses: composer.Type_Flow,
 		Lede: "bool",
 	}
 }
 
-const BoolProperty_Type = "bool_property"
-const BoolProperty_Field_Name = "$NAME"
-const BoolProperty_Field_Type = "$TYPE"
-const BoolProperty_Field_Initially = "$INITIALLY"
+const BoolField_Type = "bool_field"
+const BoolField_Field_Name = "$NAME"
+const BoolField_Field_Type = "$TYPE"
+const BoolField_Field_Initially = "$INITIALLY"
 
-func (op *BoolProperty) Marshal(m jsn.Marshaler) error {
-	return BoolProperty_Marshal(m, op)
+func (op *BoolField) Marshal(m jsn.Marshaler) error {
+	return BoolField_Marshal(m, op)
 }
 
-type BoolProperty_Slice []BoolProperty
+type BoolField_Slice []BoolField
 
-func (op *BoolProperty_Slice) GetType() string { return BoolProperty_Type }
+func (op *BoolField_Slice) GetType() string { return BoolField_Type }
 
-func (op *BoolProperty_Slice) Marshal(m jsn.Marshaler) error {
-	return BoolProperty_Repeats_Marshal(m, (*[]BoolProperty)(op))
+func (op *BoolField_Slice) Marshal(m jsn.Marshaler) error {
+	return BoolField_Repeats_Marshal(m, (*[]BoolField)(op))
 }
 
-func (op *BoolProperty_Slice) GetSize() (ret int) {
+func (op *BoolField_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -1167,76 +1167,76 @@ func (op *BoolProperty_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *BoolProperty_Slice) SetSize(cnt int) {
-	var els []BoolProperty
+func (op *BoolField_Slice) SetSize(cnt int) {
+	var els []BoolField
 	if cnt >= 0 {
-		els = make(BoolProperty_Slice, cnt)
+		els = make(BoolField_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *BoolProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return BoolProperty_Marshal(m, &(*op)[i])
+func (op *BoolField_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return BoolField_Marshal(m, &(*op)[i])
 }
 
-func BoolProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]BoolProperty) error {
-	return jsn.RepeatBlock(m, (*BoolProperty_Slice)(vals))
+func BoolField_Repeats_Marshal(m jsn.Marshaler, vals *[]BoolField) error {
+	return jsn.RepeatBlock(m, (*BoolField_Slice)(vals))
 }
 
-func BoolProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]BoolProperty) (err error) {
+func BoolField_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]BoolField) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = BoolProperty_Repeats_Marshal(m, pv)
+		err = BoolField_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type BoolProperty_Flow struct{ ptr *BoolProperty }
+type BoolField_Flow struct{ ptr *BoolField }
 
-func (n BoolProperty_Flow) GetType() string      { return BoolProperty_Type }
-func (n BoolProperty_Flow) GetLede() string      { return "bool" }
-func (n BoolProperty_Flow) GetFlow() interface{} { return n.ptr }
-func (n BoolProperty_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*BoolProperty); ok {
+func (n BoolField_Flow) GetType() string      { return BoolField_Type }
+func (n BoolField_Flow) GetLede() string      { return "bool" }
+func (n BoolField_Flow) GetFlow() interface{} { return n.ptr }
+func (n BoolField_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*BoolField); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func BoolProperty_Optional_Marshal(m jsn.Marshaler, pv **BoolProperty) (err error) {
+func BoolField_Optional_Marshal(m jsn.Marshaler, pv **BoolField) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = BoolProperty_Marshal(m, *pv)
+		err = BoolField_Marshal(m, *pv)
 	} else if !enc {
-		var v BoolProperty
-		if err = BoolProperty_Marshal(m, &v); err == nil {
+		var v BoolField
+		if err = BoolField_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func BoolProperty_Marshal(m jsn.Marshaler, val *BoolProperty) (err error) {
+func BoolField_Marshal(m jsn.Marshaler, val *BoolField) (err error) {
 	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(BoolProperty_Flow{val}); err == nil {
-		e0 := m.MarshalKey("named", BoolProperty_Field_Name)
+	if err = m.MarshalBlock(BoolField_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", BoolField_Field_Name)
 		if e0 == nil {
 			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", BoolProperty_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", BoolField_Field_Name))
 		}
-		e1 := m.MarshalKey("of", BoolProperty_Field_Type)
+		e1 := m.MarshalKey("kind", BoolField_Field_Type)
 		if e1 == nil {
 			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", BoolProperty_Field_Type))
+			m.Error(errutil.New(e1, "in flow at", BoolField_Field_Type))
 		}
-		e2 := m.MarshalKey("initially", BoolProperty_Field_Initially)
+		e2 := m.MarshalKey("initially", BoolField_Field_Initially)
 		if e2 == nil {
 			e2 = rt.BoolEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", BoolProperty_Field_Initially))
+			m.Error(errutil.New(e2, "in flow at", BoolField_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -2084,10 +2084,10 @@ func EventBlock_Marshal(m jsn.Marshaler, val *EventBlock) (err error) {
 
 // EventHandler
 type EventHandler struct {
-	EventPhase  EventPhase     `if:"label=_"`
-	Event       EventName      `if:"label=event"`
-	Locals      []PropertySlot `if:"label=provides,optional"`
-	Rules       []PatternRule  `if:"label=rules"`
+	EventPhase  EventPhase    `if:"label=_"`
+	Event       EventName     `if:"label=event"`
+	Locals      []Field       `if:"label=provides,optional"`
+	Rules       []PatternRule `if:"label=rules"`
 	UserComment string
 }
 
@@ -2192,7 +2192,7 @@ func EventHandler_Marshal(m jsn.Marshaler, val *EventHandler) (err error) {
 		}
 		e2 := m.MarshalKey("provides", EventHandler_Field_Locals)
 		if e2 == nil {
-			e2 = PropertySlot_Optional_Repeats_Marshal(m, &val.Locals)
+			e2 = Field_Optional_Repeats_Marshal(m, &val.Locals)
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", EventHandler_Field_Locals))
@@ -2467,6 +2467,75 @@ func EventTarget_Repeats_Marshal(m jsn.Marshaler, vals *[]EventTarget) error {
 func EventTarget_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EventTarget) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
 		err = EventTarget_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+const Field_Type = "field"
+
+var Field_Optional_Marshal = Field_Marshal
+
+type Field_Slot struct{ Value *Field }
+
+func (at Field_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
+		}
+		m.EndBlock()
+	}
+	return
+}
+func (at Field_Slot) GetType() string              { return Field_Type }
+func (at Field_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at Field_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(Field)
+	return
+}
+
+func Field_Marshal(m jsn.Marshaler, ptr *Field) (err error) {
+	slot := Field_Slot{ptr}
+	return slot.Marshal(m)
+}
+
+type Field_Slice []Field
+
+func (op *Field_Slice) GetType() string { return Field_Type }
+
+func (op *Field_Slice) Marshal(m jsn.Marshaler) error {
+	return Field_Repeats_Marshal(m, (*[]Field)(op))
+}
+
+func (op *Field_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Field_Slice) SetSize(cnt int) {
+	var els []Field
+	if cnt >= 0 {
+		els = make(Field_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Field_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Field_Marshal(m, &(*op)[i])
+}
+
+func Field_Repeats_Marshal(m jsn.Marshaler, vals *[]Field) error {
+	return jsn.RepeatBlock(m, (*Field_Slice)(vals))
+}
+
+func Field_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Field) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = Field_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -2798,8 +2867,8 @@ func KindOfRelation_Marshal(m jsn.Marshaler, val *KindOfRelation) (err error) {
 
 // KindsHaveProperties Add properties to a kind
 type KindsHaveProperties struct {
-	PluralKinds PluralKinds    `if:"label=_"`
-	Props       []PropertySlot `if:"label=have"`
+	PluralKinds PluralKinds `if:"label=_"`
+	Props       []Field     `if:"label=have"`
 	UserComment string
 }
 
@@ -2898,7 +2967,7 @@ func KindsHaveProperties_Marshal(m jsn.Marshaler, val *KindsHaveProperties) (err
 		}
 		e1 := m.MarshalKey("have", KindsHaveProperties_Field_Props)
 		if e1 == nil {
-			e1 = PropertySlot_Repeats_Marshal(m, &val.Props)
+			e1 = Field_Repeats_Marshal(m, &val.Props)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", KindsHaveProperties_Field_Props))
@@ -3012,8 +3081,8 @@ func KindsOfAspect_Marshal(m jsn.Marshaler, val *KindsOfAspect) (err error) {
 
 // KindsOfKind Declare a kind
 type KindsOfKind struct {
-	PluralKinds  PluralKinds  `if:"label=kinds"`
-	SingularKind SingularKind `if:"label=of"`
+	PluralKinds  PluralKinds  `if:"label=_"`
+	SingularKind SingularKind `if:"label=kind"`
 	UserComment  string
 }
 
@@ -3103,14 +3172,14 @@ func KindsOfKind_Optional_Marshal(m jsn.Marshaler, pv **KindsOfKind) (err error)
 func KindsOfKind_Marshal(m jsn.Marshaler, val *KindsOfKind) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(KindsOfKind_Flow{val}); err == nil {
-		e0 := m.MarshalKey("kinds", KindsOfKind_Field_PluralKinds)
+		e0 := m.MarshalKey("", KindsOfKind_Field_PluralKinds)
 		if e0 == nil {
 			e0 = PluralKinds_Marshal(m, &val.PluralKinds)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", KindsOfKind_Field_PluralKinds))
 		}
-		e1 := m.MarshalKey("of", KindsOfKind_Field_SingularKind)
+		e1 := m.MarshalKey("kind", KindsOfKind_Field_SingularKind)
 		if e1 == nil {
 			e1 = SingularKind_Marshal(m, &val.SingularKind)
 		}
@@ -3990,6 +4059,114 @@ func MapHeading_Marshal(m jsn.Marshaler, val *MapHeading) (err error) {
 	return
 }
 
+// NamedField
+type NamedField struct {
+	Name        string `if:"label=_,type=text"`
+	Type        string `if:"label=type,optional,type=text"`
+	UserComment string
+}
+
+func (*NamedField) Compose() composer.Spec {
+	return composer.Spec{
+		Name: NamedField_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const NamedField_Type = "named_field"
+const NamedField_Field_Name = "$NAME"
+const NamedField_Field_Type = "$TYPE"
+
+func (op *NamedField) Marshal(m jsn.Marshaler) error {
+	return NamedField_Marshal(m, op)
+}
+
+type NamedField_Slice []NamedField
+
+func (op *NamedField_Slice) GetType() string { return NamedField_Type }
+
+func (op *NamedField_Slice) Marshal(m jsn.Marshaler) error {
+	return NamedField_Repeats_Marshal(m, (*[]NamedField)(op))
+}
+
+func (op *NamedField_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *NamedField_Slice) SetSize(cnt int) {
+	var els []NamedField
+	if cnt >= 0 {
+		els = make(NamedField_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *NamedField_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NamedField_Marshal(m, &(*op)[i])
+}
+
+func NamedField_Repeats_Marshal(m jsn.Marshaler, vals *[]NamedField) error {
+	return jsn.RepeatBlock(m, (*NamedField_Slice)(vals))
+}
+
+func NamedField_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NamedField) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = NamedField_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type NamedField_Flow struct{ ptr *NamedField }
+
+func (n NamedField_Flow) GetType() string      { return NamedField_Type }
+func (n NamedField_Flow) GetLede() string      { return NamedField_Type }
+func (n NamedField_Flow) GetFlow() interface{} { return n.ptr }
+func (n NamedField_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*NamedField); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func NamedField_Optional_Marshal(m jsn.Marshaler, pv **NamedField) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = NamedField_Marshal(m, *pv)
+	} else if !enc {
+		var v NamedField
+		if err = NamedField_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func NamedField_Marshal(m jsn.Marshaler, val *NamedField) (err error) {
+	m.SetComment(&val.UserComment)
+	if err = m.MarshalBlock(NamedField_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", NamedField_Field_Name)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", NamedField_Field_Name))
+		}
+		e1 := m.MarshalKey("type", NamedField_Field_Type)
+		if e1 == nil {
+			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", NamedField_Field_Type))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // NamedNoun
 type NamedNoun struct {
 	Determiner  Determiner `if:"label=_"`
@@ -4093,114 +4270,6 @@ func NamedNoun_Marshal(m jsn.Marshaler, val *NamedNoun) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", NamedNoun_Field_Name))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// NamedProperty
-type NamedProperty struct {
-	Name        string `if:"label=_,type=text"`
-	Type        string `if:"label=type,optional,type=text"`
-	UserComment string
-}
-
-func (*NamedProperty) Compose() composer.Spec {
-	return composer.Spec{
-		Name: NamedProperty_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const NamedProperty_Type = "named_property"
-const NamedProperty_Field_Name = "$NAME"
-const NamedProperty_Field_Type = "$TYPE"
-
-func (op *NamedProperty) Marshal(m jsn.Marshaler) error {
-	return NamedProperty_Marshal(m, op)
-}
-
-type NamedProperty_Slice []NamedProperty
-
-func (op *NamedProperty_Slice) GetType() string { return NamedProperty_Type }
-
-func (op *NamedProperty_Slice) Marshal(m jsn.Marshaler) error {
-	return NamedProperty_Repeats_Marshal(m, (*[]NamedProperty)(op))
-}
-
-func (op *NamedProperty_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *NamedProperty_Slice) SetSize(cnt int) {
-	var els []NamedProperty
-	if cnt >= 0 {
-		els = make(NamedProperty_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *NamedProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NamedProperty_Marshal(m, &(*op)[i])
-}
-
-func NamedProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]NamedProperty) error {
-	return jsn.RepeatBlock(m, (*NamedProperty_Slice)(vals))
-}
-
-func NamedProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NamedProperty) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = NamedProperty_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type NamedProperty_Flow struct{ ptr *NamedProperty }
-
-func (n NamedProperty_Flow) GetType() string      { return NamedProperty_Type }
-func (n NamedProperty_Flow) GetLede() string      { return NamedProperty_Type }
-func (n NamedProperty_Flow) GetFlow() interface{} { return n.ptr }
-func (n NamedProperty_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*NamedProperty); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func NamedProperty_Optional_Marshal(m jsn.Marshaler, pv **NamedProperty) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = NamedProperty_Marshal(m, *pv)
-	} else if !enc {
-		var v NamedProperty
-		if err = NamedProperty_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func NamedProperty_Marshal(m jsn.Marshaler, val *NamedProperty) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(NamedProperty_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", NamedProperty_Field_Name)
-		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", NamedProperty_Field_Name))
-		}
-		e1 := m.MarshalKey("type", NamedProperty_Field_Type)
-		if e1 == nil {
-			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NamedProperty_Field_Type))
 		}
 		m.EndBlock()
 	}
@@ -5067,43 +5136,43 @@ func NounTraits_Marshal(m jsn.Marshaler, val *NounTraits) (err error) {
 	return
 }
 
-// NumListProperty
-type NumListProperty struct {
-	Name        string         `if:"label=named,type=text"`
-	Type        string         `if:"label=of,optional,type=text"`
+// NumListField
+type NumListField struct {
+	Name        string         `if:"label=_,type=text"`
+	Type        string         `if:"label=kind,optional,type=text"`
 	Initially   rt.NumListEval `if:"label=initially,optional"`
 	UserComment string
 }
 
 // User implemented slots:
-var _ PropertySlot = (*NumListProperty)(nil)
+var _ Field = (*NumListField)(nil)
 
-func (*NumListProperty) Compose() composer.Spec {
+func (*NumListField) Compose() composer.Spec {
 	return composer.Spec{
-		Name: NumListProperty_Type,
+		Name: NumListField_Type,
 		Uses: composer.Type_Flow,
 		Lede: "num_list",
 	}
 }
 
-const NumListProperty_Type = "num_list_property"
-const NumListProperty_Field_Name = "$NAME"
-const NumListProperty_Field_Type = "$TYPE"
-const NumListProperty_Field_Initially = "$INITIALLY"
+const NumListField_Type = "num_list_field"
+const NumListField_Field_Name = "$NAME"
+const NumListField_Field_Type = "$TYPE"
+const NumListField_Field_Initially = "$INITIALLY"
 
-func (op *NumListProperty) Marshal(m jsn.Marshaler) error {
-	return NumListProperty_Marshal(m, op)
+func (op *NumListField) Marshal(m jsn.Marshaler) error {
+	return NumListField_Marshal(m, op)
 }
 
-type NumListProperty_Slice []NumListProperty
+type NumListField_Slice []NumListField
 
-func (op *NumListProperty_Slice) GetType() string { return NumListProperty_Type }
+func (op *NumListField_Slice) GetType() string { return NumListField_Type }
 
-func (op *NumListProperty_Slice) Marshal(m jsn.Marshaler) error {
-	return NumListProperty_Repeats_Marshal(m, (*[]NumListProperty)(op))
+func (op *NumListField_Slice) Marshal(m jsn.Marshaler) error {
+	return NumListField_Repeats_Marshal(m, (*[]NumListField)(op))
 }
 
-func (op *NumListProperty_Slice) GetSize() (ret int) {
+func (op *NumListField_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -5112,119 +5181,119 @@ func (op *NumListProperty_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *NumListProperty_Slice) SetSize(cnt int) {
-	var els []NumListProperty
+func (op *NumListField_Slice) SetSize(cnt int) {
+	var els []NumListField
 	if cnt >= 0 {
-		els = make(NumListProperty_Slice, cnt)
+		els = make(NumListField_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *NumListProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NumListProperty_Marshal(m, &(*op)[i])
+func (op *NumListField_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NumListField_Marshal(m, &(*op)[i])
 }
 
-func NumListProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]NumListProperty) error {
-	return jsn.RepeatBlock(m, (*NumListProperty_Slice)(vals))
+func NumListField_Repeats_Marshal(m jsn.Marshaler, vals *[]NumListField) error {
+	return jsn.RepeatBlock(m, (*NumListField_Slice)(vals))
 }
 
-func NumListProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NumListProperty) (err error) {
+func NumListField_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NumListField) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = NumListProperty_Repeats_Marshal(m, pv)
+		err = NumListField_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type NumListProperty_Flow struct{ ptr *NumListProperty }
+type NumListField_Flow struct{ ptr *NumListField }
 
-func (n NumListProperty_Flow) GetType() string      { return NumListProperty_Type }
-func (n NumListProperty_Flow) GetLede() string      { return "num_list" }
-func (n NumListProperty_Flow) GetFlow() interface{} { return n.ptr }
-func (n NumListProperty_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*NumListProperty); ok {
+func (n NumListField_Flow) GetType() string      { return NumListField_Type }
+func (n NumListField_Flow) GetLede() string      { return "num_list" }
+func (n NumListField_Flow) GetFlow() interface{} { return n.ptr }
+func (n NumListField_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*NumListField); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func NumListProperty_Optional_Marshal(m jsn.Marshaler, pv **NumListProperty) (err error) {
+func NumListField_Optional_Marshal(m jsn.Marshaler, pv **NumListField) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = NumListProperty_Marshal(m, *pv)
+		err = NumListField_Marshal(m, *pv)
 	} else if !enc {
-		var v NumListProperty
-		if err = NumListProperty_Marshal(m, &v); err == nil {
+		var v NumListField
+		if err = NumListField_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func NumListProperty_Marshal(m jsn.Marshaler, val *NumListProperty) (err error) {
+func NumListField_Marshal(m jsn.Marshaler, val *NumListField) (err error) {
 	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(NumListProperty_Flow{val}); err == nil {
-		e0 := m.MarshalKey("named", NumListProperty_Field_Name)
+	if err = m.MarshalBlock(NumListField_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", NumListField_Field_Name)
 		if e0 == nil {
 			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", NumListProperty_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", NumListField_Field_Name))
 		}
-		e1 := m.MarshalKey("of", NumListProperty_Field_Type)
+		e1 := m.MarshalKey("kind", NumListField_Field_Type)
 		if e1 == nil {
 			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NumListProperty_Field_Type))
+			m.Error(errutil.New(e1, "in flow at", NumListField_Field_Type))
 		}
-		e2 := m.MarshalKey("initially", NumListProperty_Field_Initially)
+		e2 := m.MarshalKey("initially", NumListField_Field_Initially)
 		if e2 == nil {
 			e2 = rt.NumListEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", NumListProperty_Field_Initially))
+			m.Error(errutil.New(e2, "in flow at", NumListField_Field_Initially))
 		}
 		m.EndBlock()
 	}
 	return
 }
 
-// NumberProperty
-type NumberProperty struct {
-	Name        string        `if:"label=named,type=text"`
-	Type        string        `if:"label=of,optional,type=text"`
+// NumberField
+type NumberField struct {
+	Name        string        `if:"label=_,type=text"`
+	Type        string        `if:"label=kind,optional,type=text"`
 	Initially   rt.NumberEval `if:"label=initially,optional"`
 	UserComment string
 }
 
 // User implemented slots:
-var _ PropertySlot = (*NumberProperty)(nil)
+var _ Field = (*NumberField)(nil)
 
-func (*NumberProperty) Compose() composer.Spec {
+func (*NumberField) Compose() composer.Spec {
 	return composer.Spec{
-		Name: NumberProperty_Type,
+		Name: NumberField_Type,
 		Uses: composer.Type_Flow,
 		Lede: "number",
 	}
 }
 
-const NumberProperty_Type = "number_property"
-const NumberProperty_Field_Name = "$NAME"
-const NumberProperty_Field_Type = "$TYPE"
-const NumberProperty_Field_Initially = "$INITIALLY"
+const NumberField_Type = "number_field"
+const NumberField_Field_Name = "$NAME"
+const NumberField_Field_Type = "$TYPE"
+const NumberField_Field_Initially = "$INITIALLY"
 
-func (op *NumberProperty) Marshal(m jsn.Marshaler) error {
-	return NumberProperty_Marshal(m, op)
+func (op *NumberField) Marshal(m jsn.Marshaler) error {
+	return NumberField_Marshal(m, op)
 }
 
-type NumberProperty_Slice []NumberProperty
+type NumberField_Slice []NumberField
 
-func (op *NumberProperty_Slice) GetType() string { return NumberProperty_Type }
+func (op *NumberField_Slice) GetType() string { return NumberField_Type }
 
-func (op *NumberProperty_Slice) Marshal(m jsn.Marshaler) error {
-	return NumberProperty_Repeats_Marshal(m, (*[]NumberProperty)(op))
+func (op *NumberField_Slice) Marshal(m jsn.Marshaler) error {
+	return NumberField_Repeats_Marshal(m, (*[]NumberField)(op))
 }
 
-func (op *NumberProperty_Slice) GetSize() (ret int) {
+func (op *NumberField_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -5233,76 +5302,76 @@ func (op *NumberProperty_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *NumberProperty_Slice) SetSize(cnt int) {
-	var els []NumberProperty
+func (op *NumberField_Slice) SetSize(cnt int) {
+	var els []NumberField
 	if cnt >= 0 {
-		els = make(NumberProperty_Slice, cnt)
+		els = make(NumberField_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *NumberProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NumberProperty_Marshal(m, &(*op)[i])
+func (op *NumberField_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return NumberField_Marshal(m, &(*op)[i])
 }
 
-func NumberProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]NumberProperty) error {
-	return jsn.RepeatBlock(m, (*NumberProperty_Slice)(vals))
+func NumberField_Repeats_Marshal(m jsn.Marshaler, vals *[]NumberField) error {
+	return jsn.RepeatBlock(m, (*NumberField_Slice)(vals))
 }
 
-func NumberProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NumberProperty) (err error) {
+func NumberField_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NumberField) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = NumberProperty_Repeats_Marshal(m, pv)
+		err = NumberField_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type NumberProperty_Flow struct{ ptr *NumberProperty }
+type NumberField_Flow struct{ ptr *NumberField }
 
-func (n NumberProperty_Flow) GetType() string      { return NumberProperty_Type }
-func (n NumberProperty_Flow) GetLede() string      { return "number" }
-func (n NumberProperty_Flow) GetFlow() interface{} { return n.ptr }
-func (n NumberProperty_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*NumberProperty); ok {
+func (n NumberField_Flow) GetType() string      { return NumberField_Type }
+func (n NumberField_Flow) GetLede() string      { return "number" }
+func (n NumberField_Flow) GetFlow() interface{} { return n.ptr }
+func (n NumberField_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*NumberField); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func NumberProperty_Optional_Marshal(m jsn.Marshaler, pv **NumberProperty) (err error) {
+func NumberField_Optional_Marshal(m jsn.Marshaler, pv **NumberField) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = NumberProperty_Marshal(m, *pv)
+		err = NumberField_Marshal(m, *pv)
 	} else if !enc {
-		var v NumberProperty
-		if err = NumberProperty_Marshal(m, &v); err == nil {
+		var v NumberField
+		if err = NumberField_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func NumberProperty_Marshal(m jsn.Marshaler, val *NumberProperty) (err error) {
+func NumberField_Marshal(m jsn.Marshaler, val *NumberField) (err error) {
 	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(NumberProperty_Flow{val}); err == nil {
-		e0 := m.MarshalKey("named", NumberProperty_Field_Name)
+	if err = m.MarshalBlock(NumberField_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", NumberField_Field_Name)
 		if e0 == nil {
 			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", NumberProperty_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", NumberField_Field_Name))
 		}
-		e1 := m.MarshalKey("of", NumberProperty_Field_Type)
+		e1 := m.MarshalKey("kind", NumberField_Field_Type)
 		if e1 == nil {
 			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NumberProperty_Field_Type))
+			m.Error(errutil.New(e1, "in flow at", NumberField_Field_Type))
 		}
-		e2 := m.MarshalKey("initially", NumberProperty_Field_Initially)
+		e2 := m.MarshalKey("initially", NumberField_Field_Initially)
 		if e2 == nil {
 			e2 = rt.NumberEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", NumberProperty_Field_Initially))
+			m.Error(errutil.New(e2, "in flow at", NumberField_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -5727,7 +5796,7 @@ func Paragraph_Marshal(m jsn.Marshaler, val *Paragraph) (err error) {
 // Actions to take when using a pattern.
 type PatternActions struct {
 	Name        core.PatternName `if:"label=_"`
-	Locals      []PropertySlot   `if:"label=provides,optional"`
+	Locals      []Field          `if:"label=provides,optional"`
 	Rules       []PatternRule    `if:"label=rules"`
 	UserComment string
 }
@@ -5828,7 +5897,7 @@ func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
 		}
 		e1 := m.MarshalKey("provides", PatternActions_Field_Locals)
 		if e1 == nil {
-			e1 = PropertySlot_Optional_Repeats_Marshal(m, &val.Locals)
+			e1 = Field_Optional_Repeats_Marshal(m, &val.Locals)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", PatternActions_Field_Locals))
@@ -5848,7 +5917,7 @@ func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
 // PatternDecl Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.  Each function in a given pattern has "guards" which determine whether the function applies in a particular situation.
 type PatternDecl struct {
 	Name          core.PatternName `if:"label=_"`
-	Params        []PropertySlot   `if:"label=requires,optional"`
+	Params        []Field          `if:"label=requires,optional"`
 	PatternReturn *PatternReturn   `if:"label=returns,optional"`
 	UserComment   string
 }
@@ -5949,7 +6018,7 @@ func PatternDecl_Marshal(m jsn.Marshaler, val *PatternDecl) (err error) {
 		}
 		e1 := m.MarshalKey("requires", PatternDecl_Field_Params)
 		if e1 == nil {
-			e1 = PropertySlot_Optional_Repeats_Marshal(m, &val.Params)
+			e1 = Field_Optional_Repeats_Marshal(m, &val.Params)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", PatternDecl_Field_Params))
@@ -6052,7 +6121,7 @@ func PatternFlags_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternFlags) 
 
 // PatternReturn
 type PatternReturn struct {
-	Result      PropertySlot `if:"label=_"`
+	Result      Field `if:"label=_"`
 	UserComment string
 }
 
@@ -6140,7 +6209,7 @@ func PatternReturn_Marshal(m jsn.Marshaler, val *PatternReturn) (err error) {
 	if err = m.MarshalBlock(PatternReturn_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", PatternReturn_Field_Result)
 		if e0 == nil {
-			e0 = PropertySlot_Marshal(m, &val.Result)
+			e0 = Field_Marshal(m, &val.Result)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", PatternReturn_Field_Result))
@@ -6502,233 +6571,43 @@ func Property_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Property) (err err
 	return
 }
 
-const PropertySlot_Type = "property_slot"
-
-var PropertySlot_Optional_Marshal = PropertySlot_Marshal
-
-type PropertySlot_Slot struct{ Value *PropertySlot }
-
-func (at PropertySlot_Slot) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(at); err == nil {
-		if a, ok := at.GetSlot(); ok {
-			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-func (at PropertySlot_Slot) GetType() string              { return PropertySlot_Type }
-func (at PropertySlot_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at PropertySlot_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(PropertySlot)
-	return
-}
-
-func PropertySlot_Marshal(m jsn.Marshaler, ptr *PropertySlot) (err error) {
-	slot := PropertySlot_Slot{ptr}
-	return slot.Marshal(m)
-}
-
-type PropertySlot_Slice []PropertySlot
-
-func (op *PropertySlot_Slice) GetType() string { return PropertySlot_Type }
-
-func (op *PropertySlot_Slice) Marshal(m jsn.Marshaler) error {
-	return PropertySlot_Repeats_Marshal(m, (*[]PropertySlot)(op))
-}
-
-func (op *PropertySlot_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PropertySlot_Slice) SetSize(cnt int) {
-	var els []PropertySlot
-	if cnt >= 0 {
-		els = make(PropertySlot_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PropertySlot_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PropertySlot_Marshal(m, &(*op)[i])
-}
-
-func PropertySlot_Repeats_Marshal(m jsn.Marshaler, vals *[]PropertySlot) error {
-	return jsn.RepeatBlock(m, (*PropertySlot_Slice)(vals))
-}
-
-func PropertySlot_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PropertySlot) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PropertySlot_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// RecordListProperty
-type RecordListProperty struct {
-	Name        string            `if:"label=named,type=text"`
-	Type        string            `if:"label=of,optional,type=text"`
-	Initially   rt.RecordListEval `if:"label=initially,optional"`
-	UserComment string
-}
-
-// User implemented slots:
-var _ PropertySlot = (*RecordListProperty)(nil)
-
-func (*RecordListProperty) Compose() composer.Spec {
-	return composer.Spec{
-		Name: RecordListProperty_Type,
-		Uses: composer.Type_Flow,
-		Lede: "record_list",
-	}
-}
-
-const RecordListProperty_Type = "record_list_property"
-const RecordListProperty_Field_Name = "$NAME"
-const RecordListProperty_Field_Type = "$TYPE"
-const RecordListProperty_Field_Initially = "$INITIALLY"
-
-func (op *RecordListProperty) Marshal(m jsn.Marshaler) error {
-	return RecordListProperty_Marshal(m, op)
-}
-
-type RecordListProperty_Slice []RecordListProperty
-
-func (op *RecordListProperty_Slice) GetType() string { return RecordListProperty_Type }
-
-func (op *RecordListProperty_Slice) Marshal(m jsn.Marshaler) error {
-	return RecordListProperty_Repeats_Marshal(m, (*[]RecordListProperty)(op))
-}
-
-func (op *RecordListProperty_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *RecordListProperty_Slice) SetSize(cnt int) {
-	var els []RecordListProperty
-	if cnt >= 0 {
-		els = make(RecordListProperty_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *RecordListProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return RecordListProperty_Marshal(m, &(*op)[i])
-}
-
-func RecordListProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordListProperty) error {
-	return jsn.RepeatBlock(m, (*RecordListProperty_Slice)(vals))
-}
-
-func RecordListProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordListProperty) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = RecordListProperty_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type RecordListProperty_Flow struct{ ptr *RecordListProperty }
-
-func (n RecordListProperty_Flow) GetType() string      { return RecordListProperty_Type }
-func (n RecordListProperty_Flow) GetLede() string      { return "record_list" }
-func (n RecordListProperty_Flow) GetFlow() interface{} { return n.ptr }
-func (n RecordListProperty_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*RecordListProperty); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func RecordListProperty_Optional_Marshal(m jsn.Marshaler, pv **RecordListProperty) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = RecordListProperty_Marshal(m, *pv)
-	} else if !enc {
-		var v RecordListProperty
-		if err = RecordListProperty_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func RecordListProperty_Marshal(m jsn.Marshaler, val *RecordListProperty) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(RecordListProperty_Flow{val}); err == nil {
-		e0 := m.MarshalKey("named", RecordListProperty_Field_Name)
-		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", RecordListProperty_Field_Name))
-		}
-		e1 := m.MarshalKey("of", RecordListProperty_Field_Type)
-		if e1 == nil {
-			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", RecordListProperty_Field_Type))
-		}
-		e2 := m.MarshalKey("initially", RecordListProperty_Field_Initially)
-		if e2 == nil {
-			e2 = rt.RecordListEval_Optional_Marshal(m, &val.Initially)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", RecordListProperty_Field_Initially))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// RecordProperty
-type RecordProperty struct {
-	Name        string        `if:"label=named,type=text"`
-	Type        string        `if:"label=of,optional,type=text"`
+// RecordField
+type RecordField struct {
+	Name        string        `if:"label=_,type=text"`
+	Type        string        `if:"label=kind,optional,type=text"`
 	Initially   rt.RecordEval `if:"label=initially,optional"`
 	UserComment string
 }
 
 // User implemented slots:
-var _ PropertySlot = (*RecordProperty)(nil)
+var _ Field = (*RecordField)(nil)
 
-func (*RecordProperty) Compose() composer.Spec {
+func (*RecordField) Compose() composer.Spec {
 	return composer.Spec{
-		Name: RecordProperty_Type,
+		Name: RecordField_Type,
 		Uses: composer.Type_Flow,
 		Lede: "record",
 	}
 }
 
-const RecordProperty_Type = "record_property"
-const RecordProperty_Field_Name = "$NAME"
-const RecordProperty_Field_Type = "$TYPE"
-const RecordProperty_Field_Initially = "$INITIALLY"
+const RecordField_Type = "record_field"
+const RecordField_Field_Name = "$NAME"
+const RecordField_Field_Type = "$TYPE"
+const RecordField_Field_Initially = "$INITIALLY"
 
-func (op *RecordProperty) Marshal(m jsn.Marshaler) error {
-	return RecordProperty_Marshal(m, op)
+func (op *RecordField) Marshal(m jsn.Marshaler) error {
+	return RecordField_Marshal(m, op)
 }
 
-type RecordProperty_Slice []RecordProperty
+type RecordField_Slice []RecordField
 
-func (op *RecordProperty_Slice) GetType() string { return RecordProperty_Type }
+func (op *RecordField_Slice) GetType() string { return RecordField_Type }
 
-func (op *RecordProperty_Slice) Marshal(m jsn.Marshaler) error {
-	return RecordProperty_Repeats_Marshal(m, (*[]RecordProperty)(op))
+func (op *RecordField_Slice) Marshal(m jsn.Marshaler) error {
+	return RecordField_Repeats_Marshal(m, (*[]RecordField)(op))
 }
 
-func (op *RecordProperty_Slice) GetSize() (ret int) {
+func (op *RecordField_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -6737,76 +6616,197 @@ func (op *RecordProperty_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *RecordProperty_Slice) SetSize(cnt int) {
-	var els []RecordProperty
+func (op *RecordField_Slice) SetSize(cnt int) {
+	var els []RecordField
 	if cnt >= 0 {
-		els = make(RecordProperty_Slice, cnt)
+		els = make(RecordField_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *RecordProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return RecordProperty_Marshal(m, &(*op)[i])
+func (op *RecordField_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RecordField_Marshal(m, &(*op)[i])
 }
 
-func RecordProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordProperty) error {
-	return jsn.RepeatBlock(m, (*RecordProperty_Slice)(vals))
+func RecordField_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordField) error {
+	return jsn.RepeatBlock(m, (*RecordField_Slice)(vals))
 }
 
-func RecordProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordProperty) (err error) {
+func RecordField_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordField) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = RecordProperty_Repeats_Marshal(m, pv)
+		err = RecordField_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type RecordProperty_Flow struct{ ptr *RecordProperty }
+type RecordField_Flow struct{ ptr *RecordField }
 
-func (n RecordProperty_Flow) GetType() string      { return RecordProperty_Type }
-func (n RecordProperty_Flow) GetLede() string      { return "record" }
-func (n RecordProperty_Flow) GetFlow() interface{} { return n.ptr }
-func (n RecordProperty_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*RecordProperty); ok {
+func (n RecordField_Flow) GetType() string      { return RecordField_Type }
+func (n RecordField_Flow) GetLede() string      { return "record" }
+func (n RecordField_Flow) GetFlow() interface{} { return n.ptr }
+func (n RecordField_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RecordField); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func RecordProperty_Optional_Marshal(m jsn.Marshaler, pv **RecordProperty) (err error) {
+func RecordField_Optional_Marshal(m jsn.Marshaler, pv **RecordField) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = RecordProperty_Marshal(m, *pv)
+		err = RecordField_Marshal(m, *pv)
 	} else if !enc {
-		var v RecordProperty
-		if err = RecordProperty_Marshal(m, &v); err == nil {
+		var v RecordField
+		if err = RecordField_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func RecordProperty_Marshal(m jsn.Marshaler, val *RecordProperty) (err error) {
+func RecordField_Marshal(m jsn.Marshaler, val *RecordField) (err error) {
 	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(RecordProperty_Flow{val}); err == nil {
-		e0 := m.MarshalKey("named", RecordProperty_Field_Name)
+	if err = m.MarshalBlock(RecordField_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", RecordField_Field_Name)
 		if e0 == nil {
 			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", RecordProperty_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", RecordField_Field_Name))
 		}
-		e1 := m.MarshalKey("of", RecordProperty_Field_Type)
+		e1 := m.MarshalKey("kind", RecordField_Field_Type)
 		if e1 == nil {
 			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", RecordProperty_Field_Type))
+			m.Error(errutil.New(e1, "in flow at", RecordField_Field_Type))
 		}
-		e2 := m.MarshalKey("initially", RecordProperty_Field_Initially)
+		e2 := m.MarshalKey("initially", RecordField_Field_Initially)
 		if e2 == nil {
 			e2 = rt.RecordEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", RecordProperty_Field_Initially))
+			m.Error(errutil.New(e2, "in flow at", RecordField_Field_Initially))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// RecordListField
+type RecordListField struct {
+	Name        string            `if:"label=_,type=text"`
+	Type        string            `if:"label=kind,optional,type=text"`
+	Initially   rt.RecordListEval `if:"label=initially,optional"`
+	UserComment string
+}
+
+// User implemented slots:
+var _ Field = (*RecordListField)(nil)
+
+func (*RecordListField) Compose() composer.Spec {
+	return composer.Spec{
+		Name: RecordListField_Type,
+		Uses: composer.Type_Flow,
+		Lede: "record_list",
+	}
+}
+
+const RecordListField_Type = "record_list_field"
+const RecordListField_Field_Name = "$NAME"
+const RecordListField_Field_Type = "$TYPE"
+const RecordListField_Field_Initially = "$INITIALLY"
+
+func (op *RecordListField) Marshal(m jsn.Marshaler) error {
+	return RecordListField_Marshal(m, op)
+}
+
+type RecordListField_Slice []RecordListField
+
+func (op *RecordListField_Slice) GetType() string { return RecordListField_Type }
+
+func (op *RecordListField_Slice) Marshal(m jsn.Marshaler) error {
+	return RecordListField_Repeats_Marshal(m, (*[]RecordListField)(op))
+}
+
+func (op *RecordListField_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RecordListField_Slice) SetSize(cnt int) {
+	var els []RecordListField
+	if cnt >= 0 {
+		els = make(RecordListField_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RecordListField_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RecordListField_Marshal(m, &(*op)[i])
+}
+
+func RecordListField_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordListField) error {
+	return jsn.RepeatBlock(m, (*RecordListField_Slice)(vals))
+}
+
+func RecordListField_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordListField) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = RecordListField_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type RecordListField_Flow struct{ ptr *RecordListField }
+
+func (n RecordListField_Flow) GetType() string      { return RecordListField_Type }
+func (n RecordListField_Flow) GetLede() string      { return "record_list" }
+func (n RecordListField_Flow) GetFlow() interface{} { return n.ptr }
+func (n RecordListField_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RecordListField); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func RecordListField_Optional_Marshal(m jsn.Marshaler, pv **RecordListField) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = RecordListField_Marshal(m, *pv)
+	} else if !enc {
+		var v RecordListField
+		if err = RecordListField_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func RecordListField_Marshal(m jsn.Marshaler, val *RecordListField) (err error) {
+	m.SetComment(&val.UserComment)
+	if err = m.MarshalBlock(RecordListField_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", RecordListField_Field_Name)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RecordListField_Field_Name))
+		}
+		e1 := m.MarshalKey("kind", RecordListField_Field_Type)
+		if e1 == nil {
+			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", RecordListField_Field_Type))
+		}
+		e2 := m.MarshalKey("initially", RecordListField_Field_Initially)
+		if e2 == nil {
+			e2 = rt.RecordListEval_Optional_Marshal(m, &val.Initially)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", RecordListField_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -8395,43 +8395,43 @@ func Testing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Testing) (err error
 	return
 }
 
-// TextListProperty
-type TextListProperty struct {
-	Name        string          `if:"label=named,type=text"`
-	Type        string          `if:"label=of,optional,type=text"`
-	Initially   rt.TextListEval `if:"label=initially,optional"`
+// TextField
+type TextField struct {
+	Name        string      `if:"label=_,type=text"`
+	Type        string      `if:"label=kind,optional,type=text"`
+	Initially   rt.TextEval `if:"label=initially,optional"`
 	UserComment string
 }
 
 // User implemented slots:
-var _ PropertySlot = (*TextListProperty)(nil)
+var _ Field = (*TextField)(nil)
 
-func (*TextListProperty) Compose() composer.Spec {
+func (*TextField) Compose() composer.Spec {
 	return composer.Spec{
-		Name: TextListProperty_Type,
+		Name: TextField_Type,
 		Uses: composer.Type_Flow,
-		Lede: "text_list",
+		Lede: "text",
 	}
 }
 
-const TextListProperty_Type = "text_list_property"
-const TextListProperty_Field_Name = "$NAME"
-const TextListProperty_Field_Type = "$TYPE"
-const TextListProperty_Field_Initially = "$INITIALLY"
+const TextField_Type = "text_field"
+const TextField_Field_Name = "$NAME"
+const TextField_Field_Type = "$TYPE"
+const TextField_Field_Initially = "$INITIALLY"
 
-func (op *TextListProperty) Marshal(m jsn.Marshaler) error {
-	return TextListProperty_Marshal(m, op)
+func (op *TextField) Marshal(m jsn.Marshaler) error {
+	return TextField_Marshal(m, op)
 }
 
-type TextListProperty_Slice []TextListProperty
+type TextField_Slice []TextField
 
-func (op *TextListProperty_Slice) GetType() string { return TextListProperty_Type }
+func (op *TextField_Slice) GetType() string { return TextField_Type }
 
-func (op *TextListProperty_Slice) Marshal(m jsn.Marshaler) error {
-	return TextListProperty_Repeats_Marshal(m, (*[]TextListProperty)(op))
+func (op *TextField_Slice) Marshal(m jsn.Marshaler) error {
+	return TextField_Repeats_Marshal(m, (*[]TextField)(op))
 }
 
-func (op *TextListProperty_Slice) GetSize() (ret int) {
+func (op *TextField_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -8440,119 +8440,119 @@ func (op *TextListProperty_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *TextListProperty_Slice) SetSize(cnt int) {
-	var els []TextListProperty
+func (op *TextField_Slice) SetSize(cnt int) {
+	var els []TextField
 	if cnt >= 0 {
-		els = make(TextListProperty_Slice, cnt)
+		els = make(TextField_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *TextListProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return TextListProperty_Marshal(m, &(*op)[i])
+func (op *TextField_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return TextField_Marshal(m, &(*op)[i])
 }
 
-func TextListProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]TextListProperty) error {
-	return jsn.RepeatBlock(m, (*TextListProperty_Slice)(vals))
+func TextField_Repeats_Marshal(m jsn.Marshaler, vals *[]TextField) error {
+	return jsn.RepeatBlock(m, (*TextField_Slice)(vals))
 }
 
-func TextListProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TextListProperty) (err error) {
+func TextField_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TextField) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = TextListProperty_Repeats_Marshal(m, pv)
+		err = TextField_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type TextListProperty_Flow struct{ ptr *TextListProperty }
+type TextField_Flow struct{ ptr *TextField }
 
-func (n TextListProperty_Flow) GetType() string      { return TextListProperty_Type }
-func (n TextListProperty_Flow) GetLede() string      { return "text_list" }
-func (n TextListProperty_Flow) GetFlow() interface{} { return n.ptr }
-func (n TextListProperty_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*TextListProperty); ok {
+func (n TextField_Flow) GetType() string      { return TextField_Type }
+func (n TextField_Flow) GetLede() string      { return "text" }
+func (n TextField_Flow) GetFlow() interface{} { return n.ptr }
+func (n TextField_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*TextField); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func TextListProperty_Optional_Marshal(m jsn.Marshaler, pv **TextListProperty) (err error) {
+func TextField_Optional_Marshal(m jsn.Marshaler, pv **TextField) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = TextListProperty_Marshal(m, *pv)
+		err = TextField_Marshal(m, *pv)
 	} else if !enc {
-		var v TextListProperty
-		if err = TextListProperty_Marshal(m, &v); err == nil {
+		var v TextField
+		if err = TextField_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func TextListProperty_Marshal(m jsn.Marshaler, val *TextListProperty) (err error) {
+func TextField_Marshal(m jsn.Marshaler, val *TextField) (err error) {
 	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(TextListProperty_Flow{val}); err == nil {
-		e0 := m.MarshalKey("named", TextListProperty_Field_Name)
+	if err = m.MarshalBlock(TextField_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", TextField_Field_Name)
 		if e0 == nil {
 			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", TextListProperty_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", TextField_Field_Name))
 		}
-		e1 := m.MarshalKey("of", TextListProperty_Field_Type)
+		e1 := m.MarshalKey("kind", TextField_Field_Type)
 		if e1 == nil {
 			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", TextListProperty_Field_Type))
+			m.Error(errutil.New(e1, "in flow at", TextField_Field_Type))
 		}
-		e2 := m.MarshalKey("initially", TextListProperty_Field_Initially)
+		e2 := m.MarshalKey("initially", TextField_Field_Initially)
 		if e2 == nil {
-			e2 = rt.TextListEval_Optional_Marshal(m, &val.Initially)
+			e2 = rt.TextEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", TextListProperty_Field_Initially))
+			m.Error(errutil.New(e2, "in flow at", TextField_Field_Initially))
 		}
 		m.EndBlock()
 	}
 	return
 }
 
-// TextProperty
-type TextProperty struct {
-	Name        string      `if:"label=named,type=text"`
-	Type        string      `if:"label=of,optional,type=text"`
-	Initially   rt.TextEval `if:"label=initially,optional"`
+// TextListField
+type TextListField struct {
+	Name        string          `if:"label=_,type=text"`
+	Type        string          `if:"label=kind,optional,type=text"`
+	Initially   rt.TextListEval `if:"label=initially,optional"`
 	UserComment string
 }
 
 // User implemented slots:
-var _ PropertySlot = (*TextProperty)(nil)
+var _ Field = (*TextListField)(nil)
 
-func (*TextProperty) Compose() composer.Spec {
+func (*TextListField) Compose() composer.Spec {
 	return composer.Spec{
-		Name: TextProperty_Type,
+		Name: TextListField_Type,
 		Uses: composer.Type_Flow,
-		Lede: "text",
+		Lede: "text_list",
 	}
 }
 
-const TextProperty_Type = "text_property"
-const TextProperty_Field_Name = "$NAME"
-const TextProperty_Field_Type = "$TYPE"
-const TextProperty_Field_Initially = "$INITIALLY"
+const TextListField_Type = "text_list_field"
+const TextListField_Field_Name = "$NAME"
+const TextListField_Field_Type = "$TYPE"
+const TextListField_Field_Initially = "$INITIALLY"
 
-func (op *TextProperty) Marshal(m jsn.Marshaler) error {
-	return TextProperty_Marshal(m, op)
+func (op *TextListField) Marshal(m jsn.Marshaler) error {
+	return TextListField_Marshal(m, op)
 }
 
-type TextProperty_Slice []TextProperty
+type TextListField_Slice []TextListField
 
-func (op *TextProperty_Slice) GetType() string { return TextProperty_Type }
+func (op *TextListField_Slice) GetType() string { return TextListField_Type }
 
-func (op *TextProperty_Slice) Marshal(m jsn.Marshaler) error {
-	return TextProperty_Repeats_Marshal(m, (*[]TextProperty)(op))
+func (op *TextListField_Slice) Marshal(m jsn.Marshaler) error {
+	return TextListField_Repeats_Marshal(m, (*[]TextListField)(op))
 }
 
-func (op *TextProperty_Slice) GetSize() (ret int) {
+func (op *TextListField_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -8561,76 +8561,76 @@ func (op *TextProperty_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *TextProperty_Slice) SetSize(cnt int) {
-	var els []TextProperty
+func (op *TextListField_Slice) SetSize(cnt int) {
+	var els []TextListField
 	if cnt >= 0 {
-		els = make(TextProperty_Slice, cnt)
+		els = make(TextListField_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *TextProperty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return TextProperty_Marshal(m, &(*op)[i])
+func (op *TextListField_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return TextListField_Marshal(m, &(*op)[i])
 }
 
-func TextProperty_Repeats_Marshal(m jsn.Marshaler, vals *[]TextProperty) error {
-	return jsn.RepeatBlock(m, (*TextProperty_Slice)(vals))
+func TextListField_Repeats_Marshal(m jsn.Marshaler, vals *[]TextListField) error {
+	return jsn.RepeatBlock(m, (*TextListField_Slice)(vals))
 }
 
-func TextProperty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TextProperty) (err error) {
+func TextListField_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TextListField) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = TextProperty_Repeats_Marshal(m, pv)
+		err = TextListField_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type TextProperty_Flow struct{ ptr *TextProperty }
+type TextListField_Flow struct{ ptr *TextListField }
 
-func (n TextProperty_Flow) GetType() string      { return TextProperty_Type }
-func (n TextProperty_Flow) GetLede() string      { return "text" }
-func (n TextProperty_Flow) GetFlow() interface{} { return n.ptr }
-func (n TextProperty_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*TextProperty); ok {
+func (n TextListField_Flow) GetType() string      { return TextListField_Type }
+func (n TextListField_Flow) GetLede() string      { return "text_list" }
+func (n TextListField_Flow) GetFlow() interface{} { return n.ptr }
+func (n TextListField_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*TextListField); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func TextProperty_Optional_Marshal(m jsn.Marshaler, pv **TextProperty) (err error) {
+func TextListField_Optional_Marshal(m jsn.Marshaler, pv **TextListField) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = TextProperty_Marshal(m, *pv)
+		err = TextListField_Marshal(m, *pv)
 	} else if !enc {
-		var v TextProperty
-		if err = TextProperty_Marshal(m, &v); err == nil {
+		var v TextListField
+		if err = TextListField_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func TextProperty_Marshal(m jsn.Marshaler, val *TextProperty) (err error) {
+func TextListField_Marshal(m jsn.Marshaler, val *TextListField) (err error) {
 	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(TextProperty_Flow{val}); err == nil {
-		e0 := m.MarshalKey("named", TextProperty_Field_Name)
+	if err = m.MarshalBlock(TextListField_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", TextListField_Field_Name)
 		if e0 == nil {
 			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", TextProperty_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", TextListField_Field_Name))
 		}
-		e1 := m.MarshalKey("of", TextProperty_Field_Type)
+		e1 := m.MarshalKey("kind", TextListField_Field_Type)
 		if e1 == nil {
 			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", TextProperty_Field_Type))
+			m.Error(errutil.New(e1, "in flow at", TextListField_Field_Type))
 		}
-		e2 := m.MarshalKey("initially", TextProperty_Field_Initially)
+		e2 := m.MarshalKey("initially", TextListField_Field_Initially)
 		if e2 == nil {
-			e2 = rt.TextEval_Optional_Marshal(m, &val.Initially)
+			e2 = rt.TextListEval_Optional_Marshal(m, &val.Initially)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", TextProperty_Field_Initially))
+			m.Error(errutil.New(e2, "in flow at", TextListField_Field_Initially))
 		}
 		m.EndBlock()
 	}
@@ -8821,8 +8821,8 @@ func TraitPhrase_Marshal(m jsn.Marshaler, val *TraitPhrase) (err error) {
 }
 
 var Slots = []interface{}{
+	(*Field)(nil),
 	(*NounContinuation)(nil),
-	(*PropertySlot)(nil),
 	(*StoryStatement)(nil),
 	(*Testing)(nil),
 }
@@ -8838,9 +8838,9 @@ var Slats = []composer.Composer{
 	(*AreBeing)(nil),
 	(*AreEither)(nil),
 	(*Aspect)(nil),
-	(*AspectProperty)(nil),
+	(*AspectField)(nil),
 	(*AspectTraits)(nil),
-	(*BoolProperty)(nil),
+	(*BoolField)(nil),
 	(*Certainties)(nil),
 	(*Certainty)(nil),
 	(*Comment)(nil),
@@ -8867,8 +8867,8 @@ var Slats = []composer.Composer{
 	(*MapDeparting)(nil),
 	(*MapDirection)(nil),
 	(*MapHeading)(nil),
+	(*NamedField)(nil),
 	(*NamedNoun)(nil),
-	(*NamedProperty)(nil),
 	(*NounAssignment)(nil),
 	(*NounKindStatement)(nil),
 	(*NounName)(nil),
@@ -8876,8 +8876,8 @@ var Slats = []composer.Composer{
 	(*NounRelationStatement)(nil),
 	(*NounTraitStatement)(nil),
 	(*NounTraits)(nil),
-	(*NumListProperty)(nil),
-	(*NumberProperty)(nil),
+	(*NumListField)(nil),
+	(*NumberField)(nil),
 	(*OneToMany)(nil),
 	(*OneToOne)(nil),
 	(*PairedAction)(nil),
@@ -8890,8 +8890,8 @@ var Slats = []composer.Composer{
 	(*PatternType)(nil),
 	(*PluralKinds)(nil),
 	(*Property)(nil),
-	(*RecordListProperty)(nil),
-	(*RecordProperty)(nil),
+	(*RecordField)(nil),
+	(*RecordListField)(nil),
 	(*RelationCardinality)(nil),
 	(*RelativeToNoun)(nil),
 	(*RenderTemplate)(nil),
@@ -8906,20 +8906,20 @@ var Slats = []composer.Composer{
 	(*TestRule)(nil),
 	(*TestScene)(nil),
 	(*TestStatement)(nil),
-	(*TextListProperty)(nil),
-	(*TextProperty)(nil),
+	(*TextField)(nil),
+	(*TextListField)(nil),
 	(*Trait)(nil),
 	(*TraitPhrase)(nil),
 }
 
 var Signatures = map[uint64]interface{}{
 	4360765066804052293:  (*StoryBreak)(nil),            /* story_statement=-- */
-	3055624122984962869:  (*AspectProperty)(nil),        /* property_slot=Aspect of: */
+	5917691408841273556:  (*AspectField)(nil),           /* field=Aspect: */
 	16852603647561115409: (*AspectTraits)(nil),          /* story_statement=AspectTraits:traitPhrase: */
-	600673131843288641:   (*BoolProperty)(nil),          /* property_slot=Bool named: */
-	2141278945415792718:  (*BoolProperty)(nil),          /* property_slot=Bool named:initially: */
-	11254276721192504826: (*BoolProperty)(nil),          /* property_slot=Bool named:of: */
-	4034472262465657165:  (*BoolProperty)(nil),          /* property_slot=Bool named:of:initially: */
+	929259210929400392:   (*BoolField)(nil),             /* field=Bool: */
+	8800077586553476131:  (*BoolField)(nil),             /* field=Bool:initially: */
+	12371124790835217408: (*BoolField)(nil),             /* field=Bool:kind: */
+	3110376293195187131:  (*BoolField)(nil),             /* field=Bool:kind:initially: */
 	6843411504396242728:  (*Certainties)(nil),           /* story_statement=Certainties:areBeing:certainty:trait: */
 	3991849378064754806:  (*Comment)(nil),               /* execute=Comment: */
 	16586092333187989882: (*Comment)(nil),               /* story_statement=Comment: */
@@ -8941,7 +8941,7 @@ var Signatures = map[uint64]interface{}{
 	6308831945803832851:  (*KindsOfAspect)(nil),         /* story_statement=KindsOfAspect: */
 	17526933228095224780: (*EventBlock)(nil),            /* story_statement=Listen kinds:handlers: */
 	12304970653546840411: (*EventBlock)(nil),            /* story_statement=Listen noun:handlers: */
-	12806142882004605925: (*KindsOfKind)(nil),           /* story_statement=Make kinds:of: */
+	4364279276143636783:  (*KindsOfKind)(nil),           /* story_statement=Make:kind: */
 	12130342806058120266: (*MakeOpposite)(nil),          /* story_statement=Make:opposite: */
 	8107023930195182683:  (*MakePlural)(nil),            /* story_statement=Make:plural: */
 	8983976057391918886:  (*NounAssignment)(nil),        /* story_statement=NounAssignment:nouns:lines: */
@@ -8954,28 +8954,28 @@ var Signatures = map[uint64]interface{}{
 	3302808320047972257:  (*NounRelationStatement)(nil), /* story_statement=Nouns:relateTo:and: */
 	4416345853480779800:  (*NounTraitStatement)(nil),    /* story_statement=Nouns:startAs: */
 	77311373495214865:    (*NounTraitStatement)(nil),    /* story_statement=Nouns:startAs:and: */
-	3632140064389357697:  (*NumListProperty)(nil),       /* property_slot=NumList named: */
-	8843558661760314894:  (*NumListProperty)(nil),       /* property_slot=NumList named:initially: */
-	6316816516493569978:  (*NumListProperty)(nil),       /* property_slot=NumList named:of: */
-	10101552429168724365: (*NumListProperty)(nil),       /* property_slot=NumList named:of:initially: */
-	13613090255929436662: (*NumberProperty)(nil),        /* property_slot=Number named: */
-	11594110483990305609: (*NumberProperty)(nil),        /* property_slot=Number named:initially: */
-	17426979154761828839: (*NumberProperty)(nil),        /* property_slot=Number named:of: */
-	8235631203063050340:  (*NumberProperty)(nil),        /* property_slot=Number named:of:initially: */
+	17312507452399750264: (*NumListField)(nil),          /* field=NumList: */
+	13189420990506792051: (*NumListField)(nil),          /* field=NumList:initially: */
+	9348125496154177200:  (*NumListField)(nil),          /* field=NumList:kind: */
+	1285150463477439883:  (*NumListField)(nil),          /* field=NumList:kind:initially: */
+	8487518704472251667:  (*NumberField)(nil),           /* field=Number: */
+	12240858331879781776: (*NumberField)(nil),           /* field=Number:initially: */
+	16068510506387834393: (*NumberField)(nil),           /* field=Number:kind: */
+	931083588704034470:   (*NumberField)(nil),           /* field=Number:kind:initially: */
 	11805892574345609795: (*PatternDecl)(nil),           /* story_statement=Pattern: */
 	5803330913337388662:  (*PatternActions)(nil),        /* story_statement=Pattern:provides:rules: */
 	17499264412780813319: (*PatternDecl)(nil),           /* story_statement=Pattern:requires: */
 	10828994360773868920: (*PatternDecl)(nil),           /* story_statement=Pattern:requires:returns: */
 	13721253842616561476: (*PatternDecl)(nil),           /* story_statement=Pattern:returns: */
 	15334083968500114832: (*PatternActions)(nil),        /* story_statement=Pattern:rules: */
-	30830958997542602:    (*RecordProperty)(nil),        /* property_slot=Record named: */
-	1014285141707815805:  (*RecordProperty)(nil),        /* property_slot=Record named:initially: */
-	1389701048447412307:  (*RecordProperty)(nil),        /* property_slot=Record named:of: */
-	16145308775162245200: (*RecordProperty)(nil),        /* property_slot=Record named:of:initially: */
-	15508514792632361310: (*RecordListProperty)(nil),    /* property_slot=RecordList named: */
-	8134578648873852177:  (*RecordListProperty)(nil),    /* property_slot=RecordList named:initially: */
-	14491147041470625055: (*RecordListProperty)(nil),    /* property_slot=RecordList named:of: */
-	6571036076042788508:  (*RecordListProperty)(nil),    /* property_slot=RecordList named:of:initially: */
+	8137307643484617139:  (*RecordField)(nil),           /* field=Record: */
+	14268486262656655408: (*RecordField)(nil),           /* field=Record:initially: */
+	355191898393732025:   (*RecordField)(nil),           /* field=Record:kind: */
+	17210787958517369542: (*RecordField)(nil),           /* field=Record:kind:initially: */
+	11959710305603894939: (*RecordListField)(nil),       /* field=RecordList: */
+	11931798142536216664: (*RecordListField)(nil),       /* field=RecordList:initially: */
+	1057635318610052945:  (*RecordListField)(nil),       /* field=RecordList:kind: */
+	1164224146587824190:  (*RecordListField)(nil),       /* field=RecordList:kind:initially: */
 	12491084454766142785: (*RelativeToNoun)(nil),        /* story_statement=RelativeToNoun:nouns:areBeing:otherNouns: */
 	1267533044749019804:  (*RenderTemplate)(nil),        /* text_eval=RenderTemplate: */
 	9910951906340888308:  (*ShuffleText)(nil),           /* text_eval=ShuffleText: */
@@ -8985,12 +8985,12 @@ var Signatures = map[uint64]interface{}{
 	6067507595098270936:  (*TestScene)(nil),             /* story_statement=TestScene:requires:story: */
 	16926625243474179200: (*TestScene)(nil),             /* story_statement=TestScene:story: */
 	18392173108575885320: (*TestStatement)(nil),         /* story_statement=TestStatement:test: */
-	975348122597452680:   (*TextProperty)(nil),          /* property_slot=Text named: */
-	12708017229696204003: (*TextProperty)(nil),          /* property_slot=Text named:initially: */
-	11563760963122221721: (*TextProperty)(nil),          /* property_slot=Text named:of: */
-	8882874031820615462:  (*TextProperty)(nil),          /* property_slot=Text named:of:initially: */
-	9717033131248849232:  (*TextListProperty)(nil),      /* property_slot=TextList named: */
-	2116031153541628075:  (*TextListProperty)(nil),      /* property_slot=TextList named:initially: */
-	9089109906123824209:  (*TextListProperty)(nil),      /* property_slot=TextList named:of: */
-	16262824828750294334: (*TextListProperty)(nil),      /* property_slot=TextList named:of:initially: */
+	8130344761444222709:  (*TextField)(nil),             /* field=Text: */
+	6524581251606795538:  (*TextField)(nil),             /* field=Text:initially: */
+	17964742375211875755: (*TextField)(nil),             /* field=Text:kind: */
+	9452278286570155464:  (*TextField)(nil),             /* field=Text:kind:initially: */
+	10624393162610648969: (*TextListField)(nil),         /* field=TextList: */
+	16555060041426966326: (*TextListField)(nil),         /* field=TextList:initially: */
+	5819932921227536375:  (*TextListField)(nil),         /* field=TextList:kind: */
+	3965346382920662612:  (*TextListField)(nil),         /* field=TextList:kind:initially: */
 }

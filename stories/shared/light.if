@@ -5,7 +5,7 @@
         "fully opaque",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -13,7 +13,7 @@
         ],
         {
           "PatternResult:": {
-            "Bool named:": "result"
+            "Bool:": "result"
           }
         }
       ]
@@ -112,7 +112,7 @@
         "transparentOf",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -120,7 +120,7 @@
         ],
         {
           "PatternResult:": {
-            "Text named:of:": [
+            "Text:kind:": [
               "result",
               "object"
             ]
@@ -133,7 +133,7 @@
         "transparentOf",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "parent",
               "object",
               {
@@ -196,7 +196,7 @@
         "transparentList",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -204,7 +204,7 @@
         ],
         {
           "PatternResult:": {
-            "TextList named:": "list"
+            "TextList:": "list"
           }
         }
       ]
@@ -267,7 +267,7 @@
         "contains light",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "spot",
               "object"
             ]
@@ -275,7 +275,7 @@
         ],
         {
           "PatternResult:": {
-            "Bool named:": "result"
+            "Bool:": "result"
           }
         }
       ]
@@ -288,10 +288,10 @@
         "contains light",
         [
           {
-            "TextList named:": "queue"
+            "TextList:": "queue"
           },
           {
-            "Text named:": "ceiling"
+            "Text:": "ceiling"
           }
         ],
         [

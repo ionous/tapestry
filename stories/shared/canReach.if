@@ -6,28 +6,28 @@
         "can reach",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "actor",
               "actor"
             ]
           },
           {
-            "Text named:": "action"
+            "Text:": "action"
           },
           {
             "--": "the target the agent is trying to reach",
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "thing"
             ]
           },
           {
-            "Bool named:": "requires light"
+            "Bool:": "requires light"
           }
         ],
         {
           "PatternResult:": {
-            "Text named:": "response"
+            "Text:": "response"
           }
         }
       ]
@@ -37,31 +37,31 @@
         "can reach",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "i",
               "object"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "next",
               "object"
             ]
           },
           {
-            "Text named:": "dig error"
+            "Text:": "dig error"
           },
           {
-            "Number named:": "lca"
+            "Number:": "lca"
           },
           {
-            "Text named:": "reach response"
+            "Text:": "reach response"
           },
           {
-            "Number named:": "reach error"
+            "Number:": "reach error"
           },
           {
-            "TextList named:": "path"
+            "TextList:": "path"
           }
         ],
         [
@@ -414,36 +414,36 @@
         "reach up",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "fromObj",
               "object"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "intoObj",
               "object"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "actor",
               "object"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "object"
             ]
           },
           {
-            "Text named:": "action"
+            "Text:": "action"
           }
         ],
         {
           "PatternResult:": {
-            "Text named:": "response"
+            "Text:": "response"
           }
         }
       ]
@@ -543,36 +543,36 @@
         "reach down",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "fromObj",
               "object"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "intoObj",
               "object"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "actor",
               "object"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "object"
             ]
           },
           {
-            "Text named:": "action"
+            "Text:": "action"
           }
         ],
         {
           "PatternResult:": {
-            "Text named:": "response"
+            "Text:": "response"
           }
         }
       ]

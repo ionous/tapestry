@@ -5,7 +5,7 @@
         "print inline objects",
         [
           {
-            "TextList named:": "objs"
+            "TextList:": "objs"
           }
         ]
       ]
@@ -15,7 +15,7 @@
         "print inline objects",
         [
           {
-            "RecordList named:of:initially:": [
+            "RecordList:kind:initially:": [
               "groups",
               "object group",
               {
@@ -70,7 +70,7 @@
         "print blocks",
         [
           {
-            "TextList named:": "objs"
+            "TextList:": "objs"
           }
         ]
       ]
@@ -80,7 +80,7 @@
         "print blocks",
         [
           {
-            "RecordList named:of:initially:": [
+            "RecordList:kind:initially:": [
               "groups",
               "object group",
               {
@@ -135,7 +135,7 @@
         "print object",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -151,7 +151,7 @@
         "print object",
         [
           {
-            "Number named:initially:": [
+            "Number:initially:": [
               "inline depth",
               {
                 "During:": "print inline objects"
@@ -159,7 +159,7 @@
             ]
           },
           {
-            "Number named:initially:": [
+            "Number:initially:": [
               "block depth",
               {
                 "During:": "print blocks"
@@ -270,7 +270,7 @@
         "print block",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -283,7 +283,7 @@
         "print block",
         [
           {
-            "TextList named:initially:": [
+            "TextList:initially:": [
               "kids",
               {
                 "VisibleStorage obj:": "@obj"
@@ -291,7 +291,7 @@
             ]
           },
           {
-            "Bool named:initially:": [
+            "Bool:initially:": [
               "hasKids",
               {
                 "Cmp:is:num:": [
@@ -357,7 +357,7 @@
         "print inline storage",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -365,7 +365,7 @@
         ],
         {
           "PatternResult:": {
-            "Bool named:": "success"
+            "Bool:": "success"
           }
         }
       ]
@@ -375,7 +375,7 @@
         "print inline storage",
         [
           {
-            "TextList named:initially:": [
+            "TextList:initially:": [
               "kids",
               {
                 "VisibleStorage obj:": "@obj"
@@ -430,7 +430,7 @@
         "print details",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -446,7 +446,7 @@
         "print details",
         [
           {
-            "TextList named:initially:": [
+            "TextList:initially:": [
               "kids",
               {
                 "VisibleStorage obj:": "@obj"
@@ -553,18 +553,18 @@
         "print status",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
           },
           {
-            "Bool named:": "isEmpty"
+            "Bool:": "isEmpty"
           }
         ],
         {
           "PatternResult:": {
-            "Bool named:": "skip"
+            "Bool:": "skip"
           }
         }
       ]
@@ -620,18 +620,18 @@
         "print inner status",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
           },
           {
-            "Bool named:": "isEmpty"
+            "Bool:": "isEmpty"
           }
         ],
         {
           "PatternResult:": {
-            "Bool named:": "skip"
+            "Bool:": "skip"
           }
         }
       ]

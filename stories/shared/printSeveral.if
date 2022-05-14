@@ -5,16 +5,16 @@
         "print several",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "thing"
             ]
           },
           {
-            "Number named:": "group size"
+            "Number:": "group size"
           },
           {
-            "Text named:": "label"
+            "Text:": "label"
           }
         ]
       ]

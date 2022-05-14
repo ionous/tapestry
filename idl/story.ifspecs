@@ -265,8 +265,8 @@
         },
         {
           "Spec:slots:groups:with flow:": [
-            "aspect_property",
-            "property_slot",
+            "aspect_field",
+            "field",
             [
               "debug",
               "properties"
@@ -278,7 +278,7 @@
                 [
                   {
                     "Term:name:type:": [
-                      "of",
+                      "_",
                       "aspect",
                       "text"
                     ]
@@ -317,8 +317,8 @@
         },
         {
           "Spec:slots:groups:with flow:": [
-            "bool_property",
-            "property_slot",
+            "bool_field",
+            "field",
             [
               "debug",
               "properties"
@@ -330,14 +330,14 @@
                 [
                   {
                     "Term:name:type:": [
-                      "named",
+                      "_",
                       "name",
                       "text"
                     ]
                   },
                   {
                     "Term:name:type:optional:": [
-                      "of",
+                      "kind",
                       "type",
                       "text",
                       true
@@ -632,7 +632,7 @@
                     "Term:name:type:optional:repeats:": [
                       "provides",
                       "locals",
-                      "property_slot",
+                      "field",
                       true,
                       true
                     ]
@@ -826,7 +826,7 @@
                     "Term:name:type:repeats:": [
                       "have",
                       "props",
-                      "property_slot",
+                      "field",
                       true
                     ]
                   }
@@ -874,13 +874,13 @@
                 [
                   {
                     "Term:name:": [
-                      "kinds",
+                      "_",
                       "plural_kinds"
                     ]
                   },
                   {
                     "Term:name:": [
-                      "of",
+                      "kind",
                       "singular_kind"
                     ]
                   }
@@ -1181,7 +1181,7 @@
         },
         {
           "Spec:groups:with flow:": [
-            "named_property",
+            "named_field",
             [
               "debug",
               "properties"
@@ -1463,8 +1463,8 @@
         },
         {
           "Spec:slots:groups:with flow:": [
-            "num_list_property",
-            "property_slot",
+            "num_list_field",
+            "field",
             [
               "debug",
               "properties"
@@ -1476,14 +1476,14 @@
                 [
                   {
                     "Term:name:type:": [
-                      "named",
+                      "_",
                       "name",
                       "text"
                     ]
                   },
                   {
                     "Term:name:type:optional:": [
-                      "of",
+                      "kind",
                       "type",
                       "text",
                       true
@@ -1503,8 +1503,8 @@
         },
         {
           "Spec:slots:groups:with flow:": [
-            "number_property",
-            "property_slot",
+            "number_field",
+            "field",
             [
               "debug",
               "properties"
@@ -1516,14 +1516,14 @@
                 [
                   {
                     "Term:name:type:": [
-                      "named",
+                      "_",
                       "name",
                       "text"
                     ]
                   },
                   {
                     "Term:name:type:optional:": [
-                      "of",
+                      "kind",
                       "type",
                       "text",
                       true
@@ -1676,7 +1676,7 @@
                     "Term:name:type:optional:repeats:": [
                       "provides",
                       "locals",
-                      "property_slot",
+                      "field",
                       true,
                       true
                     ]
@@ -1718,7 +1718,7 @@
                     "Term:name:type:optional:repeats:": [
                       "requires",
                       "params",
-                      "property_slot",
+                      "field",
                       true,
                       true
                     ]
@@ -1782,7 +1782,7 @@
                     "Term:name:type:": [
                       "_",
                       "result",
-                      "property_slot"
+                      "field"
                     ]
                   }
                 ]
@@ -1881,7 +1881,7 @@
         {
           "--": "future: each slot should support an appropriate 'starting as' initial value",
           "Spec:groups:with slot:": [
-            "property_slot",
+            "field",
             [
               "debug",
               "properties"
@@ -1893,8 +1893,8 @@
         },
         {
           "Spec:slots:groups:with flow:": [
-            "record_list_property",
-            "property_slot",
+            "record_list_field",
+            "field",
             [
               "debug",
               "properties"
@@ -1906,14 +1906,14 @@
                 [
                   {
                     "Term:name:type:": [
-                      "named",
+                      "_",
                       "name",
                       "text"
                     ]
                   },
                   {
                     "Term:name:type:optional:": [
-                      "of",
+                      "kind",
                       "type",
                       "text",
                       true
@@ -1933,8 +1933,8 @@
         },
         {
           "Spec:slots:groups:with flow:": [
-            "record_property",
-            "property_slot",
+            "record_field",
+            "field",
             [
               "debug",
               "properties"
@@ -1946,14 +1946,14 @@
                 [
                   {
                     "Term:name:type:": [
-                      "named",
+                      "_",
                       "name",
                       "text"
                     ]
                   },
                   {
                     "Term:name:type:optional:": [
-                      "of",
+                      "kind",
                       "type",
                       "text",
                       true
@@ -2378,8 +2378,8 @@
         },
         {
           "Spec:slots:groups:with flow:": [
-            "text_list_property",
-            "property_slot",
+            "text_list_field",
+            "field",
             [
               "debug",
               "properties"
@@ -2391,14 +2391,14 @@
                 [
                   {
                     "Term:name:type:": [
-                      "named",
+                      "_",
                       "name",
                       "text"
                     ]
                   },
                   {
                     "Term:name:type:optional:": [
-                      "of",
+                      "kind",
                       "type",
                       "text",
                       true
@@ -2418,8 +2418,8 @@
         },
         {
           "Spec:slots:groups:with flow:": [
-            "text_property",
-            "property_slot",
+            "text_field",
+            "field",
             [
               "debug",
               "properties"
@@ -2431,14 +2431,14 @@
                 [
                   {
                     "Term:name:type:": [
-                      "named",
+                      "_",
                       "name",
                       "text"
                     ]
                   },
                   {
                     "Term:name:type:optional:": [
-                      "of",
+                      "kind",
                       "type",
                       "text",
                       true

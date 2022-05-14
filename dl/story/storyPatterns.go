@@ -100,7 +100,7 @@ func (op *PatternFlags) ReadFlags() (ret eph.EphTiming, err error) {
 	return
 }
 
-func ImportLocals(k *Importer, patternName string, locals []PropertySlot) (ret []eph.EphParams) {
+func ImportLocals(k *Importer, patternName string, locals []Field) (ret []eph.EphParams) {
 	for _, el := range locals {
 		ret = append(ret, el.GetParam())
 	}
@@ -115,7 +115,7 @@ func convertRes(res *PatternReturn) (ret *eph.EphParams) {
 	return
 }
 
-func reduceProps(els []PropertySlot) []eph.EphParams {
+func reduceProps(els []Field) []eph.EphParams {
 	var out []eph.EphParams
 	for _, el := range els {
 		out = append(out, el.GetParam())

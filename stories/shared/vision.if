@@ -11,7 +11,7 @@
         "adjust light",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "actor",
               "actor",
               {
@@ -25,7 +25,7 @@
             ]
           },
           {
-            "Bool named:initially:": [
+            "Bool:initially:": [
               "was lit",
               {
                 "Get obj:trait:": [
@@ -36,7 +36,7 @@
             ]
           },
           {
-            "Bool named:initially:": [
+            "Bool:initially:": [
               "now lit",
               {
                 "ContainsLight spot:": "@actor"

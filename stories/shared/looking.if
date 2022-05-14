@@ -12,7 +12,7 @@
         "looking",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "actor",
               "object",
               {
@@ -62,7 +62,7 @@
               "look",
               [
                 {
-                  "Text named:of:initially:": [
+                  "Text:kind:initially:": [
                     "location",
                     "object",
                     {
@@ -116,14 +116,14 @@
         "Print vantage",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "where",
               "object"
             ]
           },
           {
             "--": "for testing, darkness gets passed in as a flag.",
-            "Bool named:": "inDarkness"
+            "Bool:": "inDarkness"
           }
         ]
       ]
@@ -133,7 +133,7 @@
         "Print vantage",
         [
           {
-            "TextList named:initially:": [
+            "TextList:initially:": [
               "enclosures",
               {
                 "TransparentList obj:": "@where"
@@ -141,7 +141,7 @@
             ]
           },
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "room",
               "object",
               {
@@ -355,7 +355,7 @@
         "PrintDarkHeader",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "room",
               "room"
             ]
@@ -395,7 +395,7 @@
         "PrintDarkDescription",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "room",
               "room"
             ]
@@ -435,13 +435,13 @@
         "PrintLocaleTitle",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "room",
               "room"
             ]
           },
           {
-            "TextList named:": "enclosures"
+            "TextList:": "enclosures"
           }
         ]
       ]
@@ -451,7 +451,7 @@
         "PrintLocaleTitle",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "ceiling",
               "object",
               {
@@ -515,7 +515,7 @@
         "PrintLocaleSubtitle",
         [
           {
-            "TextList named:": "enclosures"
+            "TextList:": "enclosures"
           }
         ]
       ]
@@ -525,7 +525,7 @@
         "PrintLocaleSubtitle",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "ceiling",
               "object",
               {
@@ -593,19 +593,19 @@
         "PrintLocaleDescription",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "where",
               "object"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "viewpoint",
               "object"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "room",
               "room"
             ]
@@ -618,7 +618,7 @@
         "PrintLocaleDescription",
         [
           {
-            "TextList named:initially:": [
+            "TextList:initially:": [
               "kids",
               {
                 "ChildrenOf obj:": "@where"
@@ -626,7 +626,7 @@
             ]
           },
           {
-            "Number named:initially:": [
+            "Number:initially:": [
               "previousMentions",
               {
                 "Get:from:": [
@@ -639,7 +639,7 @@
             ]
           },
           {
-            "TextList named:": "remainingKids"
+            "TextList:": "remainingKids"
           }
         ],
         [
@@ -810,13 +810,13 @@
         "print object description",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "locale",
               "object"
             ]
@@ -824,7 +824,7 @@
         ],
         {
           "PatternResult:": {
-            "Bool named:": "success"
+            "Bool:": "success"
           }
         }
       ]
@@ -950,13 +950,13 @@
         "PrintImpressionOf",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "locale",
               "object"
             ]
@@ -964,7 +964,7 @@
         ],
         {
           "PatternResult:": {
-            "Bool named:": "success"
+            "Bool:": "success"
           }
         }
       ]
@@ -974,7 +974,7 @@
         "PrintImpressionOf",
         [
           {
-            "Bool named:initially:": [
+            "Bool:initially:": [
               "first look",
               {
                 "AllTrue:": [
@@ -1099,19 +1099,19 @@
         "CanAlsoSee",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "where",
               "object"
             ]
           },
           {
-            "Bool named:": "here"
+            "Bool:": "here"
           },
           {
-            "TextList named:": "children"
+            "TextList:": "children"
           },
           {
-            "Bool named:": "firstMention"
+            "Bool:": "firstMention"
           }
         ]
       ]

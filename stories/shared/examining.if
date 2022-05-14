@@ -14,7 +14,7 @@
         "examining",
         [
           {
-            "Text named:of:initially:": [
+            "Text:kind:initially:": [
               "actor",
               "actor",
               {
@@ -134,7 +134,7 @@
         "Print description",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -147,7 +147,7 @@
         "Print description",
         [
           {
-            "Text named:initially:": [
+            "Text:initially:": [
               "description",
               {
                 "Get:from:": [
@@ -219,7 +219,7 @@
         "Print particulars",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -227,7 +227,7 @@
         ],
         {
           "PatternResult:": {
-            "Bool named:": "success"
+            "Bool:": "success"
           }
         }
       ]

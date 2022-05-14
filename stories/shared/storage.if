@@ -5,7 +5,7 @@
         "provides storage",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -13,7 +13,7 @@
         ],
         {
           "PatternResult:": {
-            "Bool named:": "success"
+            "Bool:": "success"
           }
         }
       ]
@@ -76,7 +76,7 @@
         "shows storage",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -84,7 +84,7 @@
         ],
         {
           "PatternResult:": {
-            "Bool named:": "success"
+            "Bool:": "success"
           }
         }
       ]
@@ -128,7 +128,7 @@
         "visible storage",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "thing"
             ]
@@ -136,7 +136,7 @@
         ],
         {
           "PatternResult:": {
-            "TextList named:": "out"
+            "TextList:": "out"
           }
         }
       ]
@@ -224,7 +224,7 @@
         "allows storage",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -232,7 +232,7 @@
         ],
         {
           "PatternResult:": {
-            "Bool named:": "success"
+            "Bool:": "success"
           }
         }
       ]

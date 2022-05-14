@@ -235,7 +235,7 @@
                             "event_handler":
                             {
                                 "uses": "flow",
-                                "spec": "{event_phase} {the event%event:event_name} {provides%locals*property_slot} do:{rules+pattern_rule}",
+                                "spec": "{event_phase} {the event%event:event_name} {provides%locals*field} do:{rules+pattern_rule}",
                                 "sign": "with:event:provides:rules:"
                             },
                             "event_phase":
@@ -295,7 +295,7 @@
                             "pattern_decl":
                             {
                                 "slot": "story_statement",
-                                "spec": "To determine {name:pattern_name|quote} {params*property_slot} {?pattern_return}.",
+                                "spec": "To determine {name:pattern_name|quote} {params*field} {?pattern_return}.",
                                 "sign": "Pattern:requires:returns:",
                                 "desc": [
                                     "Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.",
@@ -311,7 +311,7 @@
                             "pattern_actions":
                             {
                                 "slot": "story_statement",
-                                "spec": "To determine {pattern name%name:pattern_name} {locals*property_slot} do: {rules+pattern_rule}",
+                                "spec": "To determine {pattern name%name:pattern_name} {locals*field} do: {rules+pattern_rule}",
                                 "desc": "Add actions to a pattern: Actions to take when using a pattern.",
                                 "sign": "pattern:provides:rules:"
                             },
@@ -329,7 +329,7 @@
                             "pattern_return":
                             {
                                 "uses": "flow",
-                                "spec": "returning {result:property_slot}",
+                                "spec": "returning {result:field}",
                                 "sign": "pattern_result:"
                             }
                         }
@@ -381,13 +381,13 @@
                             "kinds_of_kind":
                             {
                                 "spec": "{plural_kinds} are a kind of {singular_kind}.",
-                                "sign": "Make kinds:of:",
+                                "sign": "Make:kind:",
                                 "slot": "story_statement",
                                 "desc": "Declare a kind"
                             },
                             "kinds_have_properties":
                             {
-                                "spec": "{plural_kinds} have {props+property_slot|comma-and}.",
+                                "spec": "{plural_kinds} have {props+field|comma-and}.",
                                 "sign": "Kinds:have:",
                                 "slot": "story_statement",
                                 "desc": "Add properties to a kind"
@@ -462,47 +462,47 @@
                                 "spec": "The {property} of {nouns+named_noun} is {the text%lines|quote}",
                                 "desc": "Assign text to a noun: Assign text. Gives a noun one or more lines of text."
                             },
-                            "property_slot": {
+                            "field": {
                                 "uses": "slot",
                                 "desc": ["future: each slot should support an appropriate 'starting as' initial value"]
                             },
-                            "aspect_property": {
-                                "slot": "property_slot",
+                            "aspect_field": {
+                                "slot": "field",
                                 "spec": "an aspect {aspect:text}",
-                                "sign": "aspect of:"
+                                "sign": "aspect:"
                             },
-                            "bool_property": {
-                                "slot": "property_slot",
+                            "bool_field": {
+                                "slot": "field",
                                 "spec": "a true/false value {named_property} {initially?bool_eval}",
                                 "sign": "bool named:of:initially:"
                             },
-                            "number_property": {
-                                "slot": "property_slot",
+                            "number_field": {
+                                "slot": "field",
                                 "spec": "a number {named_property} {initially?number_eval}",
                                 "sign": "number named:of:initially:"
                             },
-                            "text_property": {
-                                "slot": "property_slot",
+                            "text_field": {
+                                "slot": "field",
                                 "spec": "some text {named_property} {initially?text_eval}",
                                 "sign": "text named:of:initially:"
                             },
-                            "num_list_property": {
-                                "slot": "property_slot",
+                            "num_list_field": {
+                                "slot": "field",
                                 "spec": "a list of nums {named_property} {initially?num_list_eval}",
                                 "sign": "num_list named:of:initially:"
                             },
-                            "text_list_property": {
-                                "slot": "property_slot",
+                            "text_list_field": {
+                                "slot": "field",
                                 "spec": "a list of text {named_property} {initially?text_list_eval}",
                                 "sign": "text_list named:of:initially:"
                             },
-                            "record_property": {
-                                "slot": "property_slot",
+                            "record_field": {
+                                "slot": "field",
                                 "spec": "a record {named_property} {initially?record_eval}",
                                 "sign": "record named:of:initially:"
                             },
-                            "record_list_property": {
-                                "slot": "property_slot",
+                            "record_list_field": {
+                                "slot": "field",
                                 "spec": "a list of records {named_property} {initially?record_list_eval}",
                                 "sign": "record_list named:of:initially:"
                             },

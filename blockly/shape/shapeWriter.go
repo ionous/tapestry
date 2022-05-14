@@ -154,7 +154,7 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 	}
 	// write the input that all of the above fields are a part of:
 	args.Brace(js.Obj, func(tail *js.Builder) {
-		tail.Kv("name", strings.ToUpper(term.ParameterName())).R(js.Comma)
+		tail.Kv("name", strings.ToUpper(term.Field())).R(js.Comma)
 		tail.Kv("type", inputType)
 		appendChecks(tail, "checks", checks)
 

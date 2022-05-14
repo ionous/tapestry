@@ -5,12 +5,12 @@
         "verbing",
         [
           {
-            "Text named:": "verb"
+            "Text:": "verb"
           }
         ],
         {
           "PatternResult:": {
-            "Text named:": "result"
+            "Text:": "result"
           }
         }
       ]
@@ -48,7 +48,7 @@
         "contain",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "object"
             ]
@@ -102,7 +102,7 @@
         "On",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "object"
             ]
@@ -156,7 +156,7 @@
         "Off",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "object"
             ]
@@ -210,13 +210,13 @@
         "Are",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "object"
             ]
           },
           {
-            "TextList named:": "names"
+            "TextList:": "names"
           }
         ]
       ]
@@ -300,7 +300,7 @@
         "Are not",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "object"
             ]
@@ -363,7 +363,7 @@
         "Arent",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "object"
             ]
@@ -423,7 +423,7 @@
         "Dont",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "object"
             ]

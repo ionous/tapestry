@@ -10,23 +10,23 @@
         "can use",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "actor",
               "actor"
             ]
           },
           {
-            "Text named:": "action"
+            "Text:": "action"
           },
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "noun",
               "thing"
             ]
           },
           {
             "--": "note: not all actions have a second noun and that's okay",
-            "Text named:of:": [
+            "Text:kind:": [
               "other noun",
               "thing"
             ]
@@ -34,7 +34,7 @@
         ],
         {
           "PatternResult:": {
-            "Text named:": "response"
+            "Text:": "response"
           }
         }
       ]

@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "Settings",
         "object"
       ]
@@ -30,7 +30,7 @@
         "Settings",
         [
           {
-            "Aspect of:": "abbreviated room descriptions"
+            "Aspect:": "abbreviated room descriptions"
           }
         ]
       ]
@@ -58,7 +58,7 @@
         "Settings",
         [
           {
-            "Bool named:": "darkness witnessed"
+            "Bool:": "darkness witnessed"
           }
         ]
       ]
@@ -69,7 +69,7 @@
         [
           {
             "--": "incremented whenever an object name gets printed. see \"mention object\" and \"print name\".",
-            "Number named:": "mentions"
+            "Number:": "mentions"
           }
         ]
       ]

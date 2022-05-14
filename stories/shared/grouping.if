@@ -6,12 +6,12 @@
         "make groups",
         [
           {
-            "TextList named:": "objs"
+            "TextList:": "objs"
           }
         ],
         {
           "PatternResult:": {
-            "RecordList named:of:": [
+            "RecordList:kind:": [
               "groups",
               "object group"
             ]
@@ -24,7 +24,7 @@
         "make groups",
         [
           {
-            "RecordList named:of:": [
+            "RecordList:kind:": [
               "groupings",
               "grouping"
             ]
@@ -67,7 +67,7 @@
         "assign grouping",
         [
           {
-            "Text named:of:": [
+            "Text:kind:": [
               "obj",
               "object"
             ]
@@ -75,7 +75,7 @@
         ],
         {
           "PatternResult:": {
-            "Record named:of:": [
+            "Record:kind:": [
               "grouping",
               "grouping"
             ]
@@ -88,7 +88,7 @@
         "assign grouping",
         [
           {
-            "Record named:of:initially:": [
+            "Record:kind:initially:": [
               "grouping",
               "grouping",
               {
@@ -184,7 +184,7 @@
       "--": ""
     },
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "Groupings",
         "record"
       ]
@@ -195,19 +195,19 @@
         [
           {
             "--": "the name of an object the grouping describes",
-            "Text named:": "name"
+            "Text:": "name"
           },
           {
-            "Text named:": "label"
+            "Text:": "label"
           },
           {
-            "Bool named:": "hide label"
+            "Bool:": "hide label"
           },
           {
-            "Bool named:": "hide size"
+            "Bool:": "hide size"
           },
           {
-            "Bool named:": "hide objects"
+            "Bool:": "hide objects"
           }
         ]
       ]
@@ -216,7 +216,7 @@
       "--": ""
     },
     {
-      "Make kinds:of:": [
+      "Make:kind:": [
         "Object groups",
         "records"
       ]
@@ -226,13 +226,13 @@
         "Object groups",
         [
           {
-            "Record named:of:": [
+            "Record:kind:": [
               "grouping",
               "groupings"
             ]
           },
           {
-            "TextList named:": "objects"
+            "TextList:": "objects"
           }
         ]
       ]
@@ -245,13 +245,13 @@
         "match groups",
         [
           {
-            "Record named:of:": [
+            "Record:kind:": [
               "first",
               "grouping"
             ]
           },
           {
-            "Record named:of:": [
+            "Record:kind:": [
               "second",
               "grouping"
             ]
@@ -259,7 +259,7 @@
         ],
         {
           "PatternResult:": {
-            "Bool named:": "matching"
+            "Bool:": "matching"
           }
         }
       ]
@@ -428,13 +428,13 @@
         "collate groups",
         [
           {
-            "Record named:of:": [
+            "Record:kind:": [
               "grouping",
               "grouping"
             ]
           },
           {
-            "RecordList named:of:": [
+            "RecordList:kind:": [
               "groups",
               "object group"
             ]
@@ -442,7 +442,7 @@
         ],
         {
           "PatternResult:": {
-            "RecordList named:of:": [
+            "RecordList:kind:": [
               "groups",
               "object group"
             ]
@@ -455,16 +455,16 @@
         "collate groups",
         [
           {
-            "Number named:": "idx"
+            "Number:": "idx"
           },
           {
-            "Record named:of:": [
+            "Record:kind:": [
               "group",
               "object group"
             ]
           },
           {
-            "TextList named:": "names"
+            "TextList:": "names"
           }
         ],
         [
