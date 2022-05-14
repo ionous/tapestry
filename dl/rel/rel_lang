@@ -661,9 +661,9 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	6987621383789599381:  (*ReciprocalOf)(nil),  /* text_eval=Reciprocal:object: */
-	16170704865359856399: (*ReciprocalsOf)(nil), /* text_list_eval=Reciprocals:object: */
-	15160920709871392391: (*Relate)(nil),        /* execute=Relate:to:via: */
-	14535552277213572673: (*RelativeOf)(nil),    /* text_eval=Relative:object: */
-	13180339401044333799: (*RelativesOf)(nil),   /* text_list_eval=Relatives:object: */
+	5323107627729585663:  (*ReciprocalOf)(nil),  /* Reciprocal:object:=text_eval */
+	409163563704673637:   (*ReciprocalsOf)(nil), /* Reciprocals:object:=text_list_eval */
+	10329373528354376823: (*Relate)(nil),        /* Relate:to:via:=execute */
+	11283733677539544871: (*RelativeOf)(nil),    /* Relative:object:=text_eval */
+	1321738967680032925:  (*RelativesOf)(nil),   /* Relatives:object:=text_list_eval */
 }

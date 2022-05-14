@@ -1,0 +1,1055 @@
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\act.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\activating.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\activatingTest.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\articles.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\attacking.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\bounds.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\canHandle.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\canReach.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\canReachTest.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\canUse.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\countOfTest.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\directions.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\dropping.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\droppingTest.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\examining.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\giving.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\grammar.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\grouping.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\groupingTest.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\invTest.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\inventorying.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\jumping.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\kinds.if
+certainties not implemented
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\kissing.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\kitchenette.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\light.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\lightTest.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\lookTest.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\looking.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\move.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\names.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\opening.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\peeking.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\player.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\plurals.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\printGroup.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\printObjects.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\printSeveral.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\pronouns.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\retrieving.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\retrievingTest.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\searching.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\searchingTest.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\settings.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\showing.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\smelling.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\storage.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\storing.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\storingTest.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\taking.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\takingTest.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\thingaverse.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\traveling.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\traversalTest.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\verbs.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\vision.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\visionTest.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\vowels.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\waiting.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\wearing.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\wearingTest.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\whereTest.if
+2022/05/13 18:06:28 reading C:\Users\ionous\Documents\Tapestry\stories\shared\whereabouts.if
+2022/05/13 18:06:28 assembling....
+2022/05/13 18:06:28 Warning: Duplicated objects,indefinite_article was "indefinite_article" at 62 now "indefinite_article" for kind "objects" in domain "tapestry"
+2022/05/13 18:06:28 Warning: Duplicated collate_groups,groups was "groups" at 320 now "groups" for kind "collate_groups" in domain "tapestry"
+2022/05/13 18:06:28 Warning: duplicate noun definition at 1577 for noun "mildred"
+2022/05/13 18:06:28 Warning: duplicate noun definition at 1582 for noun "empire_apple"
+2022/05/13 18:06:28 Warning: duplicate noun definition at 1583 for noun "pen"
+2022/05/13 18:06:28 Warning: Duplicated mildred,noun_types was "proper_named" at 1318 now "proper_named"
+2022/05/13 18:06:28 Warning: Duplicated mildred,noun_types was "proper_named" at 991 now "proper_named"
+2022/05/13 18:06:28 Warning: Duplicated mildred,noun_types was "proper_named" at 995 now "proper_named"
+2022/05/13 18:06:28 Warning: Duplicated mildred,noun_types was "proper_named" at 1205 now "proper_named"
+2022/05/13 18:06:28 Warning: Duplicated mildred,noun_types was "proper_named" at 1281 now "proper_named"
+2022/05/13 18:06:28 Warning: Duplicated mildred,noun_types was "proper_named" at 1285 now "proper_named"
+2022/05/13 18:06:28 Warning: Duplicated mildred,noun_types was "proper_named" at 1576 now "proper_named"
+2022/05/13 18:06:28 Warning: Duplicated mildred,noun_types was "proper_named" at 1584 now "proper_named"
+2022/05/13 18:06:28 Warning: Duplicated mildred,noun_types was "proper_named" at 1588 now "proper_named"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,rusty_knife was "cabinet" at 578 now "self" in domain "kitchenette"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,rusty_knife was "cabinet" at 578 now "self" in domain "kitchenette"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,self was "kitchen" at 550 now "cabinet" in domain "kitchenette"
+2022/05/13 18:06:28 Warning: Duplicated rel,whereabouts,self was "kitchen" at 550 now "kitchen" in domain "kitchenette"
+2022/05/13 18:06:28 Warning: Duplicated rel,whereabouts,coffee_beans was "espresso_machine" at 599 now "espresso_machine" in domain "kitchenette"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,flower was "mildred" at 1319 now "self" in domain "thingaverse"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,rusty_knife was "cabinet" at 578 now "self" in domain "kitchenette"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,purse was "clutch" at 1325 now "kitchen" in domain "thingaverse"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,coffee_beans was "espresso_machine" at 599 now "self" in domain "kitchenette"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,coin was "purse" at 1324 now "self" in domain "thingaverse"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,clutch was "mildred" at 1323 now "self" in domain "thingaverse"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,rusty_knife was "cabinet" at 578 now "self" in domain "kitchenette"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,flower was "mildred" at 1319 now "self" in domain "thingaverse"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,self was "kitchen" at 550 now "purse" in domain "kitchenette"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,purse was "clutch" at 1325 now "kitchen" in domain "thingaverse"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,coin was "purse" at 1324 now "self" in domain "thingaverse"
+2022/05/13 18:06:28 Warning: Duplicated rel,whereabouts,coffee_beans was "espresso_machine" at 599 now "espresso_machine" in domain "kitchenette"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,flower was "mildred" at 1319 now "self" in domain "thingaverse"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,rusty_knife was "cabinet" at 578 now "self" in domain "kitchenette"
+2022/05/13 18:06:28 Warning: Redefined rel,whereabouts,purse was "clutch" at 1325 now "kitchen" in domain "thingaverse"
+refs not implemented
+2022/05/13 18:06:28 Warning: check "custom_replacement" at 367 is missing an expectation or program
+2022/05/13 18:06:28 Warning: check "custom_unnamed_parenthetical" at 398 is missing an expectation or program
+2022/05/13 18:06:28 Warning: check "x_custom_replacement" at 375 is missing an expectation or program
+2022/05/13 18:06:28 Warning: check "x_custom_unnamed_parenthetical" at 404 is missing an expectation or program
+2022/05/13 18:06:28 writing 1754 entries
+2022/05/13 18:06:29 -- Checking: articles articles
+2022/05/13 18:06:29 ok. test articles got "You can only just make out a lamp-post.\nYou can only just make out Trevor.\nYou can only just make out some soldiers.\nA lamp-post can be made out in the mist.\nTrevor can be made out in the mist.\nSome soldiers can be made out in the mist.\nYou can only just make out the lamp-post.\nYou can only just make out Trevor.\nYou can only just make out the soldiers.\nThe lamp-post may be a trick of the mist.\nTrevor may be a trick of the mist.\nThe soldiers may be a trick of the mist.\nYou can only just make out Trevor.\n"
+2022/05/13 18:06:29 -- Checking: count_of count_of
+2022/05/13 18:06:29 ok. test count_of got "o*-*x*x"
+2022/05/13 18:06:29 -- Checking: custom_fancy_phrase custom_fancy_phrase
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "x",
+        "label":        "the tiles",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "is_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"x", "w", "f", "y", "z"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "clarence",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"clarence"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "x",
+        "label":        "the tiles",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "is_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"x", "w", "f", "y", "z"},
+}
+2022/05/13 18:06:29 ok. test custom_fancy_phrase got "the tiles X, W, F, Y, and Z from a Scrabble set; Clarence and the tiles X, W, F, Y, and Z from a Scrabble set"
+2022/05/13 18:06:29 -- Checking: custom_few custom_few
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "clarence",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"clarence"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_objects": "not_hide_objects",
+        "name":         "empire_apple",
+        "label":        "props",
+        "hide_label":   "is_hide_label",
+        "hide_size":    "is_hide_size",
+    },
+    "objects": []string{"empire_apple", "pen"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_size":    "not_hide_size",
+        "hide_objects": "is_hide_objects",
+        "name":         "triangles_1",
+        "label":        "triangles",
+        "hide_label":   "is_hide_label",
+    },
+    "objects": []string{"triangles_1", "triangles_2"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_objects": "not_hide_objects",
+        "name":         "clarence",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+    },
+    "objects": []string{"clarence"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_label":   "is_hide_label",
+        "hide_size":    "is_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "empire_apple",
+        "label":        "props",
+    },
+    "objects": []string{"empire_apple", "pen"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "objects":  []string{"triangles_1"},
+    "grouping": map[string]interface {}{
+        "name":         "triangles_1",
+        "label":        "triangles",
+        "hide_label":   "is_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "is_hide_objects",
+    },
+}
+2022/05/13 18:06:29 ok. test custom_few got "Clarence, an empire apple and a pen, and a few shapely trigons; Clarence, an empire apple and a pen, and one triangle"
+2022/05/13 18:06:29 -- Checking: custom_parenthetical custom_parenthetical
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "clarence",
+    },
+    "objects": []string{"clarence"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "label":        "scrabble tiles",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "x",
+    },
+    "objects": []string{"x", "w", "f", "y", "z"},
+}
+2022/05/13 18:06:29 ok. test custom_parenthetical got "Clarence and five scrabble tiles (X, W, F, Y, and Z)"
+2022/05/13 18:06:29 -- Checking: custom_parenthetical_articles custom_parenthetical_articles
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "clarence",
+        "label":        "",
+    },
+    "objects": []string{"clarence"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "x",
+        "label":        "scrabble tiles",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"x", "w", "f", "y", "z"},
+}
+2022/05/13 18:06:29 ok. test custom_parenthetical_articles got "Clarence and five scrabble tiles (a X, a W, a F, a Y, and a Z)"
+2022/05/13 18:06:29 -- Checking: default_grouping default_grouping
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "clarence",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"clarence"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "empire_apple",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+    },
+    "objects": []string{"empire_apple"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "objects":  []string{"pen"},
+    "grouping": map[string]interface {}{
+        "name":         "pen",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "triangles_1",
+        "label":        "triangles",
+        "hide_label":   "is_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "is_hide_objects",
+    },
+    "objects": []string{"triangles_1", "triangles_2"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "label":        "cats",
+        "hide_label":   "is_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "is_hide_objects",
+        "name":         "cats_1",
+    },
+    "objects": []string{"cats_1", "cats_2"},
+}
+2022/05/13 18:06:29 ok. test default_grouping got "Clarence, an empire apple, a pen, two triangles, and two cats"
+2022/05/13 18:06:29 -- Checking: no_grouping no_grouping
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "clarence",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+    },
+    "objects": []string{"clarence"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "empire_apple",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"empire_apple"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "pen",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"pen"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "triangles_1",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"triangles_1"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "triangles_2",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"triangles_2"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "objects":  []string{"cats_1"},
+    "grouping": map[string]interface {}{
+        "name":         "cats_1",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "objects":  []string{"cats_2"},
+    "grouping": map[string]interface {}{
+        "name":         "cats_2",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+}
+2022/05/13 18:06:29 ok. test no_grouping got "Clarence, an empire apple, a pen, a triangle, a triangle, a cat, and a cat"
+2022/05/13 18:06:29 -- Checking: name_of_a_kind name_of_a_kind
+2022/05/13 18:06:29 ok. test name_of_a_kind got "named object, thing"
+2022/05/13 18:06:29 -- Checking: player_tests player_tests
+2022/05/13 18:06:29 ok. test player_tests got "yes"
+2022/05/13 18:06:29 -- Checking: plural_name_printing plural_name_printing
+2022/05/13 18:06:29 ok. test plural_name_printing got "broken flower pots, dishes, spoons"
+2022/05/13 18:06:29 -- Checking: print_several print_several
+2022/05/13 18:06:29 ok. test print_several got "zero books\nfive books"
+2022/05/13 18:06:29 -- Checking: activating_test activating_test
+2022/05/13 18:06:29 # note reach up: from:you -> into:Kitchen
+2022/05/13 18:06:29 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:29 # note [self kitchen]
+2022/05/13 18:06:29 # note reach down: from:Kitchen -> into:espresso controls
+2022/05/13 18:06:29 # note reach up: from:you -> into:Kitchen
+2022/05/13 18:06:29 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:29 # note [self kitchen]
+2022/05/13 18:06:29 # note reach down: from:Kitchen -> into:espresso controls
+2022/05/13 18:06:29 # note reach up: from:you -> into:Kitchen
+2022/05/13 18:06:29 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:29 # note [self kitchen]
+2022/05/13 18:06:29 # note reach down: from:you -> into:rusty knife
+2022/05/13 18:06:29 ok. test activating_test got "The control status: deactivated.\nYou switch on the espresso controls.\nThe control status: activated.\nYou switch off the espresso controls.\nThe control status: deactivated.\nTry to activate a regular object.\nIt isn't something you can switch on.\n"
+2022/05/13 18:06:29 -- Checking: base_vis base_vis
+2022/05/13 18:06:29 ok. test base_vis got "cabinet and Kitchen.\nKitchen.\nshelf and Kitchen.\ncabinet.\nokay. cabinet is open again.\n"
+2022/05/13 18:06:29 -- Checking: default_inventory default_inventory
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "book_of_secrets",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"book_of_secrets"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "book_of_wisdom",
+    },
+    "objects": []string{"book_of_wisdom"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "clutch",
+        "label":        "",
+    },
+    "objects": []string{"clutch"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "purse",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"purse"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_objects": "not_hide_objects",
+        "name":         "coin",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+    },
+    "objects": []string{"coin"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "flower",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"flower"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "headlamp",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"headlamp"},
+}
+2022/05/13 18:06:29 ok. test default_inventory got "You are carrying:\n  - a book of secrets (closed and locked)\n  - a book of wisdom (open but empty)\n  - a clutch (open) \n    - a purse (open) \n      - a coin\n  - a flower (being worn)\n  - a headlamp (providing light and being worn)\n"
+2022/05/13 18:06:29 -- Checking: dropping_test dropping_test
+2022/05/13 18:06:29 # note you is taking the rusty knife ...
+2022/05/13 18:06:29 ok. test dropping_test got "The knife's ogp: you.\nDropped.\nThe knife's newg: the Kitchen.\nYou haven't got that!\n"
+2022/05/13 18:06:29 -- Checking: examining_test examining_test
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "pestle",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"pestle"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "can_of_potato_leek_soup",
+    },
+    "objects": []string{"can_of_potato_leek_soup"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "can_of_tomatoes",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"can_of_tomatoes"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "tin_of_deflating_powder",
+        "label":        "",
+    },
+    "objects": []string{"tin_of_deflating_powder"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "book_of_matches",
+    },
+    "objects": []string{"book_of_matches"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "bottle_of_descaling_solution",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+    },
+    "objects": []string{"bottle_of_descaling_solution"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "fish_hook",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"fish_hook"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "rusty_knife",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"rusty_knife"},
+}
+2022/05/13 18:06:29 ok. test examining_test got "The blender is empty.\nYour aunt's very own witches hat, a Halloween favorite.\nIn the mortar is a pestle.\nOn the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.\nAn ancient teak wardrobe repurposed as a kitchen cupboard.\nIn the cabinet are a book of matches, a bottle of descaling solution, a fish hook, and a rusty knife.\nYou see nothing special about the blender.\n"
+2022/05/13 18:06:29 -- Checking: look_object_description look_object_description
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "can_of_potato_leek_soup",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"can_of_potato_leek_soup"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "can_of_tomatoes",
+        "label":        "",
+    },
+    "objects": []string{"can_of_tomatoes"},
+}
+2022/05/13 18:06:29 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "tin_of_deflating_powder",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"tin_of_deflating_powder"},
+}
+2022/05/13 18:06:29 ok. test look_object_description got "A pointed black hat lies discarded on the floor under a dusty shelf.\nOn the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.\nSteam leaks from the top of a recently used espresso machine.\n"
+2022/05/13 18:06:29 -- Checking: printing_inline_objects printing_inline_objects
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "objects":  []string{"mortar"},
+    "grouping": map[string]interface {}{
+        "name":         "mortar",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "pestle",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"pestle"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "blender",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"blender"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "counter",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"counter"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "blender",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"blender"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "espresso_machine",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+    },
+    "objects": []string{"espresso_machine"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "mortar",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"mortar"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "pestle",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+    },
+    "objects": []string{"pestle"},
+}
+2022/05/13 18:06:30 ok. test printing_inline_objects got "a mortar (in which is a pestle), a blender (empty), and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle))"
+2022/05/13 18:06:30 -- Checking: printing_vantages printing_vantages
+2022/05/13 18:06:30 # note print vantage: from:cabinet
+2022/05/13 18:06:30 # note print vantage: from:cabinet
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_objects": "not_hide_objects",
+        "name":         "can_of_potato_leek_soup",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+    },
+    "objects": []string{"can_of_potato_leek_soup"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "can_of_tomatoes",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"can_of_tomatoes"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "tin_of_deflating_powder",
+        "label":        "",
+    },
+    "objects": []string{"tin_of_deflating_powder"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "broom",
+    },
+    "objects": []string{"broom"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "cats_3",
+        "label":        "cats",
+        "hide_label":   "is_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "is_hide_objects",
+    },
+    "objects": []string{"cats_3", "cats_4"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "counter",
+        "label":        "",
+    },
+    "objects": []string{"counter"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "blender",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"blender"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "espresso_machine",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"espresso_machine"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "mortar",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"mortar"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "pestle",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+    },
+    "objects": []string{"pestle"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "book_of_matches",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"book_of_matches"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "bottle_of_descaling_solution",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"bottle_of_descaling_solution"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "rusty_knife",
+    },
+    "objects": []string{"rusty_knife"},
+}
+2022/05/13 18:06:30 # note print vantage: from:cabinet
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "book_of_matches",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"book_of_matches"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "bottle_of_descaling_solution",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"bottle_of_descaling_solution"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "objects":  []string{"rusty_knife"},
+    "grouping": map[string]interface {}{
+        "hide_objects": "not_hide_objects",
+        "name":         "rusty_knife",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+    },
+}
+2022/05/13 18:06:30 # note print vantage: from:cabinet
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "book_of_matches",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"book_of_matches"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "bottle_of_descaling_solution",
+        "label":        "",
+    },
+    "objects": []string{"bottle_of_descaling_solution"},
+}
+2022/05/13 18:06:30 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "name":         "rusty_knife",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+    },
+    "objects": []string{"rusty_knife"},
+}
+2022/05/13 18:06:30 ok. test printing_vantages got "Darkness.\nIt is pitch dark, and you can't see a thing.\n.....\nKitchen (in the cabinet).\nYour Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake.\nA pointed black hat lies discarded on the floor under a dusty shelf.\nOn the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.\nYou can also see a broom, two cats, and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle)).\nBeneath your feet is a bright and shiny hook.\nIn the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife.\n.....\nThe cabinet.\nBeneath your feet is a bright and shiny hook.\nIn the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife.\n.....\nThe cabinet.\nIn the cabinet you can see a book of matches, a bottle of descaling solution, and a rusty knife.\n"
+2022/05/13 18:06:30 -- Checking: reach_test reach_test
+2022/05/13 18:06:30 # note reach up: from:you -> into:cabinet
+2022/05/13 18:06:30 # note reach up: from:cabinet -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self cabinet kitchen]
+2022/05/13 18:06:30 # note reach down: from:espresso machine -> into:coffee beans
+2022/05/13 18:06:30 # note reach down: from:counter -> into:espresso machine
+2022/05/13 18:06:30 # note reach down: from:Kitchen -> into:counter
+2022/05/13 18:06:30 # note reach up: from:you -> into:cabinet
+2022/05/13 18:06:30 # note reach up: from:cabinet -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self cabinet kitchen]
+2022/05/13 18:06:30 # note reach down: from:shelf -> into:can of tomatoes
+2022/05/13 18:06:30 # note reach down: from:Kitchen -> into:shelf
+2022/05/13 18:06:30 # note reach up: from:you -> into:cabinet
+2022/05/13 18:06:30 # note reach up: from:cabinet -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self cabinet kitchen]
+2022/05/13 18:06:30 # note reach down: from:espresso machine -> into:coffee beans
+2022/05/13 18:06:30 # note reach down: from:counter -> into:espresso machine
+2022/05/13 18:06:30 # note reach down: from:Kitchen -> into:counter
+2022/05/13 18:06:30 # note reach up: from:you -> into:cabinet
+2022/05/13 18:06:30 # note reach up: from:cabinet -> into:Kitchen
+2022/05/13 18:06:30 # note [self cabinet kitchen]
+2022/05/13 18:06:30 # note reach down: from:shelf -> into:can of tomatoes
+2022/05/13 18:06:30 # note reach down: from:Kitchen -> into:shelf
+2022/05/13 18:06:30 # note reach up: from:you -> into:cabinet
+2022/05/13 18:06:30 # note reach up: from:cabinet -> into:Kitchen
+2022/05/13 18:06:30 # note [self cabinet kitchen]
+2022/05/13 18:06:30 # note reach down: from: -> into:other worldly cloak
+2022/05/13 18:06:30 ok. test reach_test got "okay: The espresso machine isn't open.\nokay: reached outside the open cabinet.\nokay: reached inside the open espresso machine.\nokay: The cabinet isn't open.\nokay: It isn't available.\n"
+2022/05/13 18:06:30 -- Checking: retrieving_test retrieving_test
+2022/05/13 18:06:30 # note reach up: from:you -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self kitchen]
+2022/05/13 18:06:30 # note reach down: from:espresso machine -> into:coffee beans
+2022/05/13 18:06:30 # note reach down: from:counter -> into:espresso machine
+2022/05/13 18:06:30 # note reach down: from:Kitchen -> into:counter
+2022/05/13 18:06:30 # note reach up: from:you -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self kitchen]
+2022/05/13 18:06:30 # note reach down: from:shelf -> into:can of potato leek soup
+2022/05/13 18:06:30 # note reach down: from:Kitchen -> into:shelf
+2022/05/13 18:06:30 # note you is taking the can of potato leek soup...
+2022/05/13 18:06:30 # note reach up: from:you -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self kitchen]
+2022/05/13 18:06:30 # note reach down: from:cabinet -> into:fish hook
+2022/05/13 18:06:30 # note reach down: from:Kitchen -> into:cabinet
+2022/05/13 18:06:30 # note you is taking the fish hook...
+2022/05/13 18:06:30 # note reach up: from:you -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self kitchen]
+2022/05/13 18:06:30 # note reach down: from:Kitchen -> into:hat
+2022/05/13 18:06:30 # note reach up: from:you -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self kitchen]
+2022/05/13 18:06:30 # note reach down: from:Kitchen -> into:Mildred
+2022/05/13 18:06:30 ok. test retrieving_test got "  - Fail to retrieve from something closed:\n  The espresso machine isn't open.\n  - The soup's parent was: the shelf. Okay, retrieve from supporter:\n  Taken.The soup's parent is: you.\n  - The hook's parent was: the cabinet. Okay, retrieve from container:\n  Taken.The hook's parent is: you.\n  - Fail to retrieve incorrectly:\n  But it isn't there now.\n  - Fail to steal:\n  That seems to belong to Mildred.\n"
+2022/05/13 18:06:30 -- Checking: searching_test searching_test
+2022/05/13 18:06:30 # note reach up: from:you -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self kitchen]
+2022/05/13 18:06:30 # note reach down: from:Kitchen -> into:counter
+2022/05/13 18:06:30 # note reach up: from:you -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self kitchen]
+2022/05/13 18:06:30 # note reach down: from:Kitchen -> into:purse
+2022/05/13 18:06:30 ok. test searching_test got "You find nothing of interest.\nYou can't see inside, it is closed.\nOn the counter are the blender, the espresso machine, and the mortar.\nIn the purse is the coin.\n"
+2022/05/13 18:06:30 -- Checking: storing_test storing_test
+2022/05/13 18:06:30 # note you storing the clutch to Mildred.
+2022/05/13 18:06:30 # note reach up: from:you -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self kitchen]
+2022/05/13 18:06:30 # note you storing the coffee beans to the espresso machine.
+2022/05/13 18:06:30 # note reach up: from:you -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self kitchen]
+2022/05/13 18:06:30 # note reach down: from:Kitchen -> into:counter
+2022/05/13 18:06:30 # note you storing the clutch to the purse.
+2022/05/13 18:06:30 # note you storing the coffee beans to the purse.
+2022/05/13 18:06:30 # note reach up: from:you -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self kitchen]
+2022/05/13 18:06:30 # note reach down: from:clutch -> into:purse
+2022/05/13 18:06:30 # note reach down: from:you -> into:clutch
+2022/05/13 18:06:30 # note you storing the coin to the shelf.
+2022/05/13 18:06:30 # note reach up: from:you -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self kitchen]
+2022/05/13 18:06:30 # note reach down: from:Kitchen -> into:shelf
+2022/05/13 18:06:30 # note you storing the flower to the shelf.
+2022/05/13 18:06:30 # note you storing the broom to the cabinet.
+2022/05/13 18:06:30 # note you storing the rusty knife to the purse.
+2022/05/13 18:06:30 # note reach up: from:you -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self kitchen]
+2022/05/13 18:06:30 # note reach down: from:clutch -> into:purse
+2022/05/13 18:06:30 # note reach down: from:you -> into:clutch
+2022/05/13 18:06:30 # note you storing the purse to the book of wisdom.
+2022/05/13 18:06:30 ok. test storing_test got "  - Fail to store something into an actor:\n  That seems to belong to Mildred.clutch parent: clutch.\n  - Fail to store something into a closed container:\n  The counter is closed.coffee parent: self.\n  - Fail to store something into something nested:\n  You can't put  that in itself.clutch parent: self.\n  - Okay, store something into an open container:\n  You put the coffee beans in the purse.coffee parent: purse.\n  - Okay, store something onto a supporter:\n  You put the coin on the shelf.coin parent: shelf.\n  - Fail to store something worn:\n  You would have to take that off first.flower parent: self.\n  - Fail to store something not held:\n  You haven't got that!broom parent: kitchen.\n  - Okay, store something into something held:\n  You put the rusty knife in the purse.knife parent: purse.\n  - Fail to store something to somewhere unreachable:\n  You haven't got that!purse parent: clutch.\n"
+2022/05/13 18:06:30 -- Checking: taking_test taking_test
+2022/05/13 18:06:30 # note reach up: from:you -> into:purse
+2022/05/13 18:06:30 # note reach up: from:purse -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self purse kitchen]
+2022/05/13 18:06:30 # note reach down: from:espresso machine -> into:coffee beans
+2022/05/13 18:06:30 # note reach down: from:counter -> into:espresso machine
+2022/05/13 18:06:30 # note reach down: from:Kitchen -> into:counter
+2022/05/13 18:06:30 # note reach up: from:you -> into:purse
+2022/05/13 18:06:30 # note reach up: from:purse -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self purse kitchen]
+2022/05/13 18:06:30 # note reach down: from:Kitchen -> into:Mildred
+2022/05/13 18:06:30 # note reach up: from:you -> into:purse
+2022/05/13 18:06:30 # note reach up: from:purse -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self purse kitchen]
+2022/05/13 18:06:30 # note [self purse kitchen]
+2022/05/13 18:06:30 # note reach up: from:you -> into:purse
+2022/05/13 18:06:30 # note reach up: from:purse -> into:Kitchen
+2022/05/13 18:06:30 # note reach up: from:Kitchen -> into:
+2022/05/13 18:06:30 # note [self purse kitchen]
+2022/05/13 18:06:30 # note reach down: from:cabinet -> into:rusty knife
+2022/05/13 18:06:30 # note reach down: from:Kitchen -> into:cabinet
+2022/05/13 18:06:30 # note you is taking the rusty knife...
+2022/05/13 18:06:30 ok. test taking_test got "  - Fail to take from something closed:\n  The espresso machine isn't open.\n  - The apple's parent: Mildred. Fail to steal:\n  That seems to belong to Mildred.\n  - Fail to take possessions:\n  You already have that.\n  - Fail to take your container:\n  You would have to get out first.\n  - The knife's parent was: the cabinet. Okay, take something:\n  Taken.The knife's parent is: you.\n  - Fail to take your self:\n  You are always self-possessed.\n  - Fail to take someone else:\n  I don't suppose Mildred would care for that.\n  - Fail to take scenery:\n  It is hardly portable.\n  - Fail to take something fixed in place:\n  It is fixed in place.\n"
+2022/05/13 18:06:30 -- Checking: vision_testing vision_testing
+2022/05/13 18:06:30 ok. test vision_testing got "ok: started in light.\nIt is now pitch dark in here!\nok: left in the dark.\nThe light, it burns.\nok: expected darkness.\n"
+2022/05/13 18:06:30 -- Checking: wearing_test wearing_test
+2022/05/13 18:06:30 ok. test wearing_test got "The flower's ogp: you, worn.\nFail to re-wear the flower:It is already worn.\nTake off the flower:You take off the flower.\nThe flower's newg: you, not_worn.\nFail to re-remove the flower:You aren't wearing that!\nWear the flower again:You put on the flower.\nThe flower's newg: you, worn.\nThe knife's parent: you, not_worn.\nFail to wear an unwearable:It isn't something you can put on.\nThe knife's parent: you, not_worn.\nThe purse's parent: the Kitchen, not_worn.\nFail to wear something not held:You haven't got that!\nFail to remove something not held:You haven't got that!\nFail to put on something not reachable:You haven't got that!\nThe purse's parent: the Kitchen, not_worn.\n"
+2022/05/13 18:06:30 -- Checking: status_printing_test status_printing_test
+2022/05/13 18:06:30 ok. test status_printing_test got "the flower: (being worn).\nthe headlamp: (providing light and being worn).\nthe book of secrets: (closed and locked).\nthe book of wisdom: (open but empty).\nthe clutch: (open).\nthe purse: (open).\nthe flashlight: (providing light).\nthe coin: .\n"
+2022/05/13 18:06:30 -- Checking: whereabouts whereabouts
+2022/05/13 18:06:30 ok. test whereabouts got "Mildred's parent is the lab.\nThe basket's parent is the table.\nMildred is in the lab.\nThe scalpel is in the lab.\nThe table encloses the basket.\nThe basket encloses the apple.\nThe basket contains the apple.\nThe  contains the basket.\nThe  supports the apple.\nThe table supports the basket.\nThe basket's parent: table.\nThe scalpel's parent: Mildred.\nMildred owns the pen.\nThe  carries the pen.\nMildred carries the scalpel.\nThe pen is in Mildred's pocket.\nThe scalpel is worn by: .\nThe common ancestor of the pen and itself: pen.\nThe common ancestor of the pen and a sibling: Mildred.\nThe common ancestor of the sibling and a pen: Mildred.\nThe common ancestor of the pen and its owner: Mildred.\nThe common ancestor of the pen's owner and the pen: Mildred.\n"
+2022/05/13 18:06:30 -- Checking: traversal traversal
+2022/05/13 18:06:31 # note print vantage: from:Lobby
+2022/05/13 18:06:31 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+        "hide_objects": "not_hide_objects",
+        "name":         "double_doors",
+        "label":        "",
+    },
+    "objects": []string{"double_doors"},
+}
+2022/05/13 18:06:31 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_objects": "not_hide_objects",
+        "name":         "faux_door",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+    },
+    "objects": []string{"faux_door"},
+}
+2022/05/13 18:06:31 # note reach up: from:you -> into:Lobby
+2022/05/13 18:06:31 # note reach up: from:Lobby -> into:
+2022/05/13 18:06:31 # note [self lobby]
+2022/05/13 18:06:31 # note reach down: from:Lobby -> into:faux door
+2022/05/13 18:06:31 # note reach up: from:you -> into:Lobby
+2022/05/13 18:06:31 # note reach up: from:Lobby -> into:
+2022/05/13 18:06:31 # note [self lobby]
+2022/05/13 18:06:31 # note reach down: from:Lobby -> into:double doors
+2022/05/13 18:06:31 # note reach up: from:you -> into:Lobby
+2022/05/13 18:06:31 # note reach up: from:Lobby -> into:
+2022/05/13 18:06:31 # note [self lobby]
+2022/05/13 18:06:31 # note reach down: from:Lobby -> into:double doors
+2022/05/13 18:06:31 # note reach up: from:you -> into:Lobby
+2022/05/13 18:06:31 # note reach up: from:Lobby -> into:
+2022/05/13 18:06:31 # note [self lobby]
+2022/05/13 18:06:31 # note reach down: from:Lobby -> into:double doors
+2022/05/13 18:06:31 # note you are traveling to the Foyer via the double doors ...
+2022/05/13 18:06:31 # note print vantage: from:Foyer
+2022/05/13 18:06:31 # note map[string]interface {}{
+    "grouping": map[string]interface {}{
+        "hide_objects": "not_hide_objects",
+        "name":         "curtain",
+        "label":        "",
+        "hide_label":   "not_hide_label",
+        "hide_size":    "not_hide_size",
+    },
+    "objects": []string{"curtain"},
+}
+2022/05/13 18:06:31 ok. test traversal got "Lobby.\nYou can see some double doors and a faux door.\nIt doesn't lead anywhere.\nThey seem to be closed.\nYou open the double doors.\nFoyer.\nYou can see a curtain.\n"
+2022/05/13 18:06:31 -- Checking: vowels vowels
+2022/05/13 18:06:31 ok. test vowels got "ok"
+2022/05/13 18:06:31 unknown signature {4746120800157405595 assignment=Determine:args:}
+unknown signature {4746120800157405595 assignment=Determine:args:}
+unknown signature {4746120800157405595 assignment=Determine:args:}
+unknown signature {4746120800157405595 assignment=Determine:args:}
+exit status 1

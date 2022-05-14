@@ -1304,14 +1304,14 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	10322292321972431108: (*Alias)(nil),     /* grammar_maker=Alias:asNoun: */
-	10740453355331089621: (*AllOf)(nil),     /* scanner_maker=AllOf: */
-	17379347258926967174: (*AnyOf)(nil),     /* scanner_maker=AnyOf: */
-	9513197071073824621:  (*Action)(nil),    /* scanner_maker=As: */
-	3139964255630909885:  (*Directive)(nil), /* grammar_maker=Directive:scans: */
-	4932583886962667953:  (*Noun)(nil),      /* scanner_maker=Noun: */
-	7324699817922923089:  (*Retarget)(nil),  /* scanner_maker=Retarget: */
-	15857934419606450901: (*Reverse)(nil),   /* scanner_maker=Reverse: */
-	5951604050986778367:  (*Self)(nil),      /* scanner_maker=Self: */
-	15460804987301738344: (*Words)(nil),     /* scanner_maker=Words: */
+	7355242986360937932:  (*Alias)(nil),     /* Alias:asNoun:=grammar_maker */
+	182519427107503617:   (*AllOf)(nil),     /* AllOf:=scanner_maker */
+	9180344837021456958:  (*AnyOf)(nil),     /* AnyOf:=scanner_maker */
+	6982767815629712249:  (*Action)(nil),    /* As:=scanner_maker */
+	9468919998375025739:  (*Directive)(nil), /* Directive:scans:=grammar_maker */
+	10421807733651720773: (*Noun)(nil),      /* Noun:=scanner_maker */
+	5882319492678455573:  (*Retarget)(nil),  /* Retarget:=scanner_maker */
+	5954244352672057425:  (*Reverse)(nil),   /* Reverse:=scanner_maker */
+	5348279202342348475:  (*Self)(nil),      /* Self:=scanner_maker */
+	13373298978128440752: (*Words)(nil),     /* Words:=scanner_maker */
 }

@@ -50,7 +50,7 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 				// ( at this point, we can overwrite the unhandled error since we are trying to handle it. )
 				if op, e := cin.ReadOp(msg); e != nil {
 					err = e
-				} else if reg := m.(cin.TypeCreator); !reg.HasType(op.Sig) {
+				} else if reg := m.(cin.TypeCreator); !reg.HasType(cin.Hash(op.Sig, typeName)) {
 					// if we didn't find it, then we'll treat it as a pattern call.
 					// ( it will error out later in assembly if no such pattern exists )
 					if sig, args, e := op.ReadMsg(); e != nil {

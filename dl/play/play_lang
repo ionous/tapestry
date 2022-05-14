@@ -483,7 +483,7 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	17624726337788752012: (*PlayLog)(nil),  /* play_message=Play log: */
-	4988029522939467359:  (*PlayMode)(nil), /* play_message=Play mode: */
-	14741822345399231886: (*PlayOut)(nil),  /* play_message=Play out: */
+	16225627943413760086: (*PlayLog)(nil),  /* Play log:=play_message */
+	18013210508306439153: (*PlayMode)(nil), /* Play mode:=play_message */
+	17277100540751521728: (*PlayOut)(nil),  /* Play out:=play_message */
 }

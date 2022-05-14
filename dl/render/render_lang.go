@@ -414,6 +414,7 @@ type RenderPattern struct {
 
 // User implemented slots:
 var _ rt.Assignment = (*RenderPattern)(nil)
+var _ rt.BoolEval = (*RenderPattern)(nil)
 var _ rt.TextEval = (*RenderPattern)(nil)
 
 func (*RenderPattern) Compose() composer.Spec {
@@ -519,6 +520,7 @@ type RenderRef struct {
 
 // User implemented slots:
 var _ rt.Assignment = (*RenderRef)(nil)
+var _ rt.BoolEval = (*RenderRef)(nil)
 var _ rt.NumberEval = (*RenderRef)(nil)
 var _ rt.TextEval = (*RenderRef)(nil)
 
@@ -633,9 +635,14 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	5630559623010957013:  (*RenderPattern)(nil), /* Render: */
-	16799527360025986462: (*RenderExp)(nil),     /* RenderExp: */
-	8103562808853847007:  (*RenderField)(nil),   /* RenderField: */
-	2017102261165852124:  (*RenderName)(nil),    /* RenderName: */
-	615784906923963755:   (*RenderRef)(nil),     /* RenderRef:flags: */
+	9866174808090639891:  (*RenderPattern)(nil), /* assignment=Render: */
+	9599213113608064507:  (*RenderPattern)(nil), /* bool_eval=Render: */
+	10993729462470844314: (*RenderPattern)(nil), /* text_eval=Render: */
+	6246561451082451915:  (*RenderExp)(nil),     /* text_eval=RenderExp: */
+	15474094145874753222: (*RenderField)(nil),   /* from_source_fields=RenderField: */
+	4328811686385928991:  (*RenderName)(nil),    /* text_eval=RenderName: */
+	1031538011446919677:  (*RenderRef)(nil),     /* assignment=RenderRef:flags: */
+	14782521615539531797: (*RenderRef)(nil),     /* bool_eval=RenderRef:flags: */
+	11391759806425422016: (*RenderRef)(nil),     /* number_eval=RenderRef:flags: */
+	869058050138137118:   (*RenderRef)(nil),     /* text_eval=RenderRef:flags: */
 }

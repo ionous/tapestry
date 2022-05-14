@@ -101,7 +101,7 @@ func (dec *xDecoder) readSlot(slot jsn.SlotBlock, msg json.RawMessage) (okay boo
 			dec.Error(e)
 		} else if op, e := ReadOp(msg); e != nil {
 			dec.Error(e)
-		} else if v, e := dec.NewFromSignature(op.Sig); e != nil {
+		} else if v, e := dec.NewFromSignature(Hash(op.Sig, slot.GetType())); e != nil {
 			dec.Error(e)
 		} else {
 			//should we be doing this on "OnCommit" instead of before the contents of the slat have been read?

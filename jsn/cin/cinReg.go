@@ -8,22 +8,22 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// Generate instances of go types from .if file signatures.
 type TypeCreator interface {
-	HasType(string) bool
-	NewFromSignature(string) (interface{}, error)
+	HasType(Hashed) bool
+	NewFromSignature(Hashed) (interface{}, error)
 }
 
 type Signatures []map[uint64]interface{}
 
-func (regs Signatures) HasType(key string) (okay bool) {
-	_, okay = regs.FindType(key)
+func (regs Signatures) HasType(sig Hashed) (okay bool) {
+	_, okay = regs.FindType(sig)
 	return
 }
 
-func (regs Signatures) FindType(key string) (ret interface{}, okay bool) {
-	sig := Hash(key)
+func (regs Signatures) FindType(sig Hashed) (ret interface{}, okay bool) {
 	for _, reg := range regs {
-		if a, ok := reg[sig]; ok {
+		if a, ok := reg[sig.Value]; ok {
 			ret, okay = a, ok
 			break
 		}
@@ -31,18 +31,29 @@ func (regs Signatures) FindType(key string) (ret interface{}, okay bool) {
 	return
 }
 
-func (regs Signatures) NewFromSignature(key string) (ret interface{}, err error) {
-	if cmd, ok := regs.FindType(key); !ok {
-		err = errutil.New("unknown signature", key)
+func (regs Signatures) NewFromSignature(sig Hashed) (ret interface{}, err error) {
+	if cmd, ok := regs.FindType(sig); !ok {
+		err = errutil.New("unknown signature", sig)
 	} else {
 		ret = r.New(r.TypeOf(cmd).Elem()).Interface()
 	}
 	return
 }
 
+type Hashed struct {
+	Value  uint64
+	String string
+}
+
 // Hash helper for generating signatures lookups
-func Hash(k string) uint64 {
+// the slat includes all of the colon separated labels used to indicate a given type.
+// the slot specifes the typename the slat fits into.
+func Hash(slat, slot string) Hashed {
+	str := slat
+	if len(slot) > 0 {
+		str = slot + "=" + slat
+	}
 	w := fnv.New64a()
-	io.WriteString(w, k)
-	return w.Sum64()
+	io.WriteString(w, str)
+	return Hashed{Value: w.Sum64(), String: str}
 }

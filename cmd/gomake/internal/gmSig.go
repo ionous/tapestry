@@ -1,13 +1,12 @@
 package gomake
 
 import (
-	"hash/fnv"
-	"io"
 	"log"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
+	"git.sr.ht/~ionous/tapestry/jsn/cin"
 )
 
 type Sig struct {
@@ -16,19 +15,32 @@ type Sig struct {
 	Hash uint64 // ex. 6291103735245333139
 }
 
-func makeSig(typeName string, sig string) Sig {
+func makeSig(t *spec.TypeSpec, sig string) (ret []Sig) {
 	if strings.Contains(sig, "::") ||
 		strings.Contains(sig, "_") ||
 		strings.Contains(sig, ": ") {
-		log.Fatalln("bad signature for", typeName, sig)
+		log.Fatalln("bad signature for", t.Name, sig)
 	}
-	w := fnv.New64a()
-	io.WriteString(w, sig)
-	return Sig{
-		Hash: w.Sum64(),
-		Type: typeName,
-		Sig:  sig,
+	// we dont generally need signatures for structs
+	// b/c we aren't trying to create those types dynamically from the signature
+	// we already have the type, and we're simply deserializing the fields into that type.
+	// if len(t.Slots) == 0 {
+	// 	h := cin.Hash(sig, "")
+	// 	ret = append(ret, Sig{
+	// 		Type: t.Name,
+	// 		Sig:  h.String,
+	// 		Hash: h.Value,
+	// 	})
+	// }
+	for _, slotType := range t.Slots {
+		h := cin.Hash(sig, slotType)
+		ret = append(ret, Sig{
+			Type: t.Name,
+			Sig:  h.String,
+			Hash: h.Value,
+		})
 	}
+	return
 }
 
 // loop over a subset of parameters generating signatures

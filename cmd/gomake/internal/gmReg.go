@@ -42,7 +42,7 @@ func (reg *RegistrationLists) addSwap(t *spec.TypeSpec) {
 	commandName := pascal(t.Name)
 	for _, pick := range swap.Between {
 		sel := camelize(pick.Name)
-		reg.sigs = append(reg.sigs, makeSig(t.Name, commandName+" "+sel+":"))
+		reg.sigs = append(reg.sigs, makeSig(t, commandName+" "+sel+":")...)
 	}
 }
 
@@ -66,7 +66,7 @@ func (reg *RegistrationLists) addFlow(t *spec.TypeSpec) {
 				sig += strings.Join(rest, ":") + ":"
 			}
 		}
-		reg.sigs = append(reg.sigs, makeSig(t.Name, sig))
+		reg.sigs = append(reg.sigs, makeSig(t, sig)...)
 	}
 }
 
@@ -75,7 +75,10 @@ func (reg *RegistrationLists) Write(w io.Writer, tps *template.Template) (err er
 	sort.Strings(reg.slots)
 	sort.Strings(reg.slats)
 	sort.Slice(reg.sigs, func(i, j int) bool {
-		return reg.sigs[i].Sig < reg.sigs[j].Sig
+		a, b := reg.sigs[i], reg.sigs[j]
+		as := strings.Split(a.Sig, "=")
+		bs := strings.Split(b.Sig, "=")
+		return as[1] < bs[1] || (as[1] == bs[1] && (as[0] < bs[0]))
 	})
 	// write registration lists
 	if e := tps.ExecuteTemplate(w, "regList.tmpl", map[string]any{
