@@ -49,7 +49,7 @@ var _text_eval = map[string]interface{}{
 	"value": map[string]interface{}{
 		"type": "text_value",
 		"value": map[string]interface{}{
-			"$TEXT": map[string]interface{}{
+			"$VALUE": map[string]interface{}{
 				"type":  "text",
 				"value": "hello",
 			},

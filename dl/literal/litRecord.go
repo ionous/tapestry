@@ -9,18 +9,18 @@ Loop:
 		field, value := fv.Field, fv.Value
 		switch v := value.(type) {
 		case *BoolValue:
-			i = v.Bool
+			i = v.Value
 		case *NumValue:
-			i = v.Num
+			i = v.Value
 		case *TextValue:
-			i = v.Text
+			i = v.Value
 		case *NumValues:
 			i = v.Values
 		case *TextValues:
 			i = v.Values
-		case *FieldValues:
+		case *FieldList:
 			next := make(map[string]interface{})
-			marshalFields(next, v.Contains)
+			marshalFields(next, v.Fields)
 			i = next
 		default:
 			err = errutil.Fmt("marshalFields unhandled literal %T", value)
@@ -37,11 +37,11 @@ Loop:
 		var i LiteralValue
 		switch v := val.(type) {
 		case bool:
-			i = &BoolValue{Bool: v}
+			i = &BoolValue{Value: v}
 		case string:
-			i = &TextValue{Text: v}
+			i = &TextValue{Value: v}
 		case float64:
-			i = &NumValue{Num: v}
+			i = &NumValue{Value: v}
 		case []float64:
 			i = &NumValues{Values: v}
 		case []string:
@@ -51,7 +51,7 @@ Loop:
 				err = e
 				break Loop
 			} else {
-				i = &FieldValues{Contains: x}
+				i = &FieldList{Fields: x}
 			}
 		default:
 			err = errutil.Fmt("unmarshalFields unhandled literal %T", v)

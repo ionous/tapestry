@@ -104,19 +104,19 @@ func (k *Importer) AddImplicitAspect(aspect, kind string, traits ...string) {
 // so that states can be composited not specified in one big monolith.
 func importStory(k *Importer, tgt jsn.Marshalee) error {
 	ts := chart.MakeEncoder()
-	return ts.Marshal(tgt, Map(&ts, BlockMap{
-		rt.Execute_Type: KeyMap{
-			BlockStart: func(b jsn.Block, _ interface{}) (err error) {
+	return ts.Marshal(tgt, chart.Map(&ts, chart.BlockMap{
+		rt.Execute_Type: chart.KeyMap{
+			chart.BlockStart: func(b jsn.Block, _ interface{}) (err error) {
 				k.activityDepth++
 				return
 			},
-			BlockEnd: func(b jsn.Block, _ interface{}) (err error) {
+			chart.BlockEnd: func(b jsn.Block, _ interface{}) (err error) {
 				k.activityDepth--
 				return
 			},
 		},
-		TestScene_Type: KeyMap{
-			BlockStart: func(b jsn.Block, v interface{}) (err error) {
+		TestScene_Type: chart.KeyMap{
+			chart.BlockStart: func(b jsn.Block, v interface{}) (err error) {
 				if flow, ok := b.(jsn.FlowBlock); !ok {
 					err = errutil.Fmt("trying to post import something other than a flow")
 				} else if scene, ok := flow.GetFlow().(*TestScene); !ok {
@@ -138,13 +138,13 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 				}
 				return
 			},
-			BlockEnd: func(b jsn.Block, _ interface{}) (err error) {
+			chart.BlockEnd: func(b jsn.Block, _ interface{}) (err error) {
 				k.WriteEphemera(&eph.EphEndDomain{})
 				return
 			},
 		},
-		StoryStatement_Type: KeyMap{
-			BlockEnd: func(b jsn.Block, v interface{}) (err error) {
+		StoryStatement_Type: chart.KeyMap{
+			chart.BlockEnd: func(b jsn.Block, v interface{}) (err error) {
 				// sometimes we also get slice blocks...
 				if slot, ok := b.(jsn.SlotBlock); ok {
 					// sometimes we get empty slots...
@@ -159,8 +159,8 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 				return
 			},
 		},
-		core.CallPattern_Type: KeyMap{
-			BlockStart: func(b jsn.Block, v interface{}) (err error) {
+		core.CallPattern_Type: chart.KeyMap{
+			chart.BlockStart: func(b jsn.Block, v interface{}) (err error) {
 				if flow, ok := b.(jsn.FlowBlock); !ok {
 					err = errutil.Fmt("trying to import something other than a flow")
 				} else if op, ok := flow.GetFlow().(*core.CallPattern); !ok {
@@ -171,8 +171,8 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 				return
 			},
 		},
-		core.Response_Type: KeyMap{
-			BlockStart: func(b jsn.Block, v interface{}) (err error) {
+		core.Response_Type: chart.KeyMap{
+			chart.BlockStart: func(b jsn.Block, v interface{}) (err error) {
 				if flow, ok := b.(jsn.FlowBlock); !ok {
 					err = errutil.Fmt("trying to import something other than a flow")
 				} else if resp, ok := flow.GetFlow().(*core.Response); !ok {
@@ -190,8 +190,8 @@ func importStory(k *Importer, tgt jsn.Marshalee) error {
 				return
 			},
 		},
-		OtherBlocks: KeyMap{
-			BlockStart: func(b jsn.Block, v interface{}) (err error) {
+		chart.OtherBlocks: chart.KeyMap{
+			chart.BlockStart: func(b jsn.Block, v interface{}) (err error) {
 				switch newBlock := b.(type) {
 				case jsn.SlotBlock:
 					if slat, ok := newBlock.GetSlot(); !ok {

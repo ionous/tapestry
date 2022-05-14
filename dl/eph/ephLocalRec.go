@@ -44,7 +44,7 @@ func (in *innerRecord) nestedWrite(noun, field, at string, val literal.LiteralVa
 	} else {
 		// redo the field and value if setting a trait
 		if aspect := fd.name; aspect != field {
-			field, val = aspect, &literal.TextValue{Text: field}
+			field, val = aspect, &literal.TextValue{Value: field}
 		}
 		// if an old field exists, compare.
 		if oldVal, ok := in.findField(fd.name); ok {
@@ -68,14 +68,14 @@ func (rp *localRecord) ensureRecords(at string, path []string) (ret innerRecord,
 			err = errutil.Fmt("couldnt find record of %q", fd.class)
 			break
 		} else if oldVal, ok := it.findField(fd.name); !ok {
-			nextRec := new(literal.FieldValues)
+			nextRec := new(literal.FieldList)
 			it.appendField(fd.name, nextRec)
-			it = innerRecord{nextKind, &nextRec.Contains}
-		} else if nextRec, ok := oldVal.(*literal.FieldValues); !ok {
+			it = innerRecord{nextKind, &nextRec.Fields}
+		} else if nextRec, ok := oldVal.(*literal.FieldList); !ok {
 			err = errutil.New("field value isnt a record")
 			break
 		} else {
-			it = innerRecord{nextKind, &nextRec.Contains}
+			it = innerRecord{nextKind, &nextRec.Fields}
 		}
 	}
 	if err == nil {

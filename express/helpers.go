@@ -7,10 +7,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
-func B(b bool) *literal.BoolValue   { return &literal.BoolValue{Bool: b} }
-func I(n int) *literal.NumValue     { return &literal.NumValue{Num: float64(n)} }
-func F(n float64) *literal.NumValue { return &literal.NumValue{Num: n} }
-func T(s string) *literal.TextValue { return &literal.TextValue{Text: s} }
+func B(b bool) *literal.BoolValue   { return &literal.BoolValue{Value: b} }
+func I(n int) *literal.NumValue     { return &literal.NumValue{Value: float64(n)} }
+func F(n float64) *literal.NumValue { return &literal.NumValue{Value: n} }
+func T(s string) *literal.TextValue { return &literal.TextValue{Value: s} }
 
 func P(p string) core.PatternName  { return core.PatternName{Str: p} }
 func N(s string) core.VariableName { return core.VariableName{Str: s} }

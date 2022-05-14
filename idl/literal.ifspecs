@@ -17,14 +17,14 @@
                 "bool",
                 [
                   {
-                    "Term:name:": [
-                      "_",
+                    "Term:type:": [
+                      "value",
                       "bool"
                     ]
                   },
                   {
                     "Term:type:optional:": [
-                      "class",
+                      "kind",
                       "text",
                       true
                     ]
@@ -43,7 +43,8 @@
                 "field",
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "_",
                       "field",
                       "text"
                     ]
@@ -65,17 +66,17 @@
             "While it can be specified wherever a literal value can, it only has meaning when the record type is known."
           ],
           "Spec:slots:groups:with flow:": [
-            "field_values",
+            "field_list",
             "literal_value",
             "internal",
             {
               "Flow:uses:": [
-                "fields",
+                "field_list",
                 [
                   {
                     "Term:name:type:repeats:": [
                       "_",
-                      "contains",
+                      "fields",
                       "field_value",
                       true
                     ]
@@ -107,15 +108,14 @@
                 "num",
                 [
                   {
-                    "Term:name:type:": [
-                      "_",
-                      "num",
+                    "Term:type:": [
+                      "value",
                       "number"
                     ]
                   },
                   {
                     "Term:type:optional:": [
-                      "class",
+                      "kind",
                       "text",
                       true
                     ]
@@ -135,11 +135,10 @@
             ],
             {
               "Flow:uses:": [
-                "nums",
+                "num",
                 [
                   {
-                    "Term:name:type:repeats:": [
-                      "_",
+                    "Term:type:repeats:": [
                       "values",
                       "number",
                       true
@@ -147,7 +146,7 @@
                   },
                   {
                     "Term:type:optional:": [
-                      "class",
+                      "kind",
                       "text",
                       true
                     ]
@@ -167,7 +166,7 @@
             ],
             {
               "Flow:uses:": [
-                "rec",
+                "record",
                 [
                   {
                     "Term:name:type:": [
@@ -198,14 +197,14 @@
         {
           "--": "Specify a series of records, all of the same kind.",
           "Spec:slots:with flow:": [
-            "record_values",
+            "record_list",
             [
               "record_list_eval",
               "literal_value"
             ],
             {
               "Flow:uses:": [
-                "recs",
+                "record",
                 [
                   {
                     "Term:name:type:": [
@@ -216,9 +215,9 @@
                   },
                   {
                     "Term:name:type:repeats:": [
-                      "containing",
-                      "els",
-                      "field_values",
+                      "values",
+                      "records",
+                      "field_list",
                       true
                     ]
                   },
@@ -244,17 +243,17 @@
             ],
             {
               "Flow:uses:": [
-                "txt",
+                "text",
                 [
                   {
-                    "Term:name:": [
-                      "_",
+                    "Term:type:": [
+                      "value",
                       "text"
                     ]
                   },
                   {
                     "Term:type:optional:": [
-                      "class",
+                      "kind",
                       "text",
                       true
                     ]
@@ -274,11 +273,10 @@
             ],
             {
               "Flow:uses:": [
-                "txts",
+                "text",
                 [
                   {
-                    "Term:name:type:repeats:": [
-                      "_",
+                    "Term:type:repeats:": [
                       "values",
                       "text",
                       true
@@ -286,7 +284,7 @@
                   },
                   {
                     "Term:type:optional:": [
-                      "class",
+                      "kind",
                       "text",
                       true
                     ]

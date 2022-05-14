@@ -73,14 +73,14 @@ func TestRecordRecursion(t *testing.T) {
 		Kind: "fruit",
 		Fields: []literal.FieldValue{{
 			Field: "name",
-			Value: &literal.TextValue{Text: "pomegranate"},
+			Value: &literal.TextValue{Value: "pomegranate"},
 		}, {
 			Field: "fruit",
 			Value: &literal.RecordValue{
 				Kind: "fruit",
 				Fields: []literal.FieldValue{{
 					Field: "name",
-					Value: &literal.TextValue{Text: "aril"},
+					Value: &literal.TextValue{Value: "aril"},
 				}},
 			},
 		}},
@@ -108,13 +108,13 @@ func TestInnerRecord(t *testing.T) {
 		Kind: "fruit",
 		Fields: []literal.FieldValue{{
 			Field: "name",
-			Value: &literal.TextValue{Text: "pomegranate"},
+			Value: &literal.TextValue{Value: "pomegranate"},
 		}, {
 			Field: "fruit",
-			Value: &literal.FieldValues{
-				Contains: []literal.FieldValue{{
+			Value: &literal.FieldList{
+				Fields: []literal.FieldValue{{
 					Field: "name",
-					Value: &literal.TextValue{Text: "aril"},
+					Value: &literal.TextValue{Value: "aril"},
 				}},
 			},
 		}},
@@ -136,7 +136,7 @@ func textFields(els ...string) (ret []literal.FieldValue) {
 		a, b := els[i], els[i+1]
 		ret = append(ret, literal.FieldValue{
 			Field: a,
-			Value: &literal.TextValue{Text: b},
+			Value: &literal.TextValue{Value: b},
 		})
 	}
 	return

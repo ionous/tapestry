@@ -37,7 +37,7 @@ func (rc *RecordCache) GetRecord(run rt.Runtime, kind string, fields []FieldValu
 	return
 }
 
-func (rc *RecordsCache) GetRecords(run rt.Runtime, kind string, els []FieldValues) (ret g.Value, err error) {
+func (rc *RecordsCache) GetRecords(run rt.Runtime, kind string, els []FieldList) (ret g.Value, err error) {
 	if rc.recs == nil {
 		if k, e := run.GetKindByName(kind); e != nil {
 			err = e
@@ -53,10 +53,10 @@ func (rc *RecordsCache) GetRecords(run rt.Runtime, kind string, els []FieldValue
 	return
 }
 
-func buildRecords(run rt.Runtime, k *g.Kind, els []FieldValues) (ret []*g.Record, err error) {
+func buildRecords(run rt.Runtime, k *g.Kind, els []FieldList) (ret []*g.Record, err error) {
 	var out []*g.Record
 	for _, el := range els {
-		if v, e := buildRecord(run, k, el.Contains); e != nil {
+		if v, e := buildRecord(run, k, el.Fields); e != nil {
 			err = e
 			break
 		} else {
@@ -103,11 +103,11 @@ func buildRecord(run rt.Runtime, k *g.Kind, fields []FieldValue) (ret *g.Record,
 }
 
 func makeValue(run rt.Runtime, ft g.Field, val LiteralValue) (ret g.Value, err error) {
-	if fvs, ok := val.(*FieldValues); !ok {
+	if fvs, ok := val.(*FieldList); !ok {
 		ret, err = val.GetAssignedValue(run)
 	} else if fvk, e := run.GetKindByName(ft.Type); e != nil {
 		err = e
-	} else if c, e := buildRecord(run, fvk, fvs.Contains); e != nil {
+	} else if c, e := buildRecord(run, fvk, fvs.Fields); e != nil {
 		err = e
 	} else {
 		ret = g.RecordOf(c)

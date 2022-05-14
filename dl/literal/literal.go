@@ -22,7 +22,7 @@ func (op *BoolValue) Affinity() affine.Affinity {
 
 // String uses strconv.FormatBool.
 func (op *BoolValue) String() string {
-	return strconv.FormatBool(op.Bool)
+	return strconv.FormatBool(op.Value)
 }
 
 func (op *BoolValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
@@ -31,7 +31,7 @@ func (op *BoolValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
 
 // GetBool implements rt.BoolEval; providing the dl with a boolean literal.
 func (op *BoolValue) GetBool(rt.Runtime) (ret g.Value, _ error) {
-	ret = g.BoolOf(op.Bool)
+	ret = g.BoolOf(op.Value)
 	return
 }
 
@@ -42,17 +42,17 @@ func (op *NumValue) Affinity() affine.Affinity {
 
 // Int converts to native int.
 func (op *NumValue) Int() int {
-	return int(op.Num)
+	return int(op.Value)
 }
 
 // Float converts to native float.
 func (op *NumValue) Float() float64 {
-	return op.Num
+	return op.Value
 }
 
 // String returns a nicely formatted float, with no decimal point when possible.
 func (op *NumValue) String() string {
-	return strconv.FormatFloat(op.Num, 'g', -1, 64)
+	return strconv.FormatFloat(op.Value, 'g', -1, 64)
 }
 
 func (op *NumValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
@@ -61,7 +61,7 @@ func (op *NumValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
 
 // GetNumber implements rt.NumberEval providing the dl with a number literal.
 func (op *NumValue) GetNumber(rt.Runtime) (ret g.Value, _ error) {
-	ret = g.FloatOf(op.Num)
+	ret = g.FloatOf(op.Value)
 	return
 }
 
@@ -72,7 +72,7 @@ func (op *TextValue) Affinity() affine.Affinity {
 
 // String returns the text.
 func (op *TextValue) String() string {
-	return op.Text
+	return op.Value
 }
 
 func (op *TextValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
@@ -81,7 +81,7 @@ func (op *TextValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
 
 // GetText implements interface rt.TextEval providing the dl with a text literal.
 func (op *TextValue) GetText(run rt.Runtime) (ret g.Value, _ error) {
-	ret = g.StringOf(op.Text)
+	ret = g.StringOf(op.Value)
 	return
 }
 
@@ -132,30 +132,30 @@ func (op *RecordValue) GetRecord(run rt.Runtime) (g.Value, error) {
 }
 
 // Affinity returns affine.RecordList
-func (op *RecordValues) Affinity() affine.Affinity {
+func (op *RecordList) Affinity() affine.Affinity {
 	return affine.RecordList
 }
 
-func (op *RecordValues) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+func (op *RecordList) GetAssignedValue(run rt.Runtime) (g.Value, error) {
 	return op.GetRecordList(run)
 }
 
 // GetNumList implements rt.RecordListEval providing the dl with a literal list of records.
-func (op *RecordValues) GetRecordList(run rt.Runtime) (ret g.Value, _ error) {
-	return op.Cache.GetRecords(run, op.Kind, op.Els)
+func (op *RecordList) GetRecordList(run rt.Runtime) (ret g.Value, _ error) {
+	return op.Cache.GetRecords(run, op.Kind, op.Records)
 }
 
 // unimplemented: returns empty string.
-func (op *FieldValues) Affinity() affine.Affinity {
+func (op *FieldList) Affinity() affine.Affinity {
 	return ""
 }
 
 // unimplemented: panics.
-func (op *FieldValues) String() (ret string) {
+func (op *FieldList) String() (ret string) {
 	panic("field values are not intended to be comparable")
 }
 
 // unimplemented: panics.
-func (op *FieldValues) GetAssignedValue(run rt.Runtime) (g.Value, error) {
+func (op *FieldList) GetAssignedValue(run rt.Runtime) (g.Value, error) {
 	panic("field values should only be used in record literals")
 }

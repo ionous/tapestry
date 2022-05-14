@@ -46,25 +46,25 @@ var Pairs = []struct {
 }`}, {
   // repeats of a specific flow
   /*test*/ "Slice",
-  &literal.FieldValues{
-    Contains: []literal.FieldValue{{
+  &literal.FieldList{
+    Fields: []literal.FieldValue{{
       Field: "first",
       Value: &literal.NumValue{
-        Num: 5,
+        Value: 5,
       }}, {
       Field: "second",
       Value: &literal.TextValue{
-        Text: "five",
+        Value: "five",
       }},
     },
   }, `{
-  "type": "field_values",
+  "type": "field_list",
   "id": "test-1",
   "extraState": {
-    "CONTAINS": 2
+    "FIELDS": 2
   },
   "inputs": {
-    "CONTAINS0": {
+    "FIELDS0": {
       "block": {
         "type": "field_value",
         "id": "test-2",
@@ -81,17 +81,17 @@ var Pairs = []struct {
               "type": "num_value",
               "id": "test-3",
               "extraState": {
-                "NUM": 1
+                "VALUE": 1
               },
               "fields": {
-                "NUM": 5
+                "VALUE": 5
               }
             }
           }
         }
       }
     },
-    "CONTAINS1": {
+    "FIELDS1": {
       "block": {
         "type": "field_value",
         "id": "test-4",
@@ -108,10 +108,10 @@ var Pairs = []struct {
               "type": "text_value",
               "id": "test-5",
               "extraState": {
-                "TEXT": 1
+                "VALUE": 1
               },
               "fields": {
-                "TEXT": "five"
+                "VALUE": "five"
               }
             }
           }
@@ -147,7 +147,7 @@ var Pairs = []struct {
   &literal.FieldValue{
     Field: "test",
     Value: &literal.NumValue{
-      Num: 5,
+      Value: 5,
     }}, `{
   "type": "field_value",
   "id": "test-1",
@@ -164,10 +164,10 @@ var Pairs = []struct {
         "type": "num_value",
         "id": "test-2",
         "extraState": {
-          "NUM": 1
+          "VALUE": 1
         },
         "fields": {
-          "NUM": 5
+          "VALUE": 5
         }
       }
     }
@@ -206,14 +206,14 @@ var Pairs = []struct {
   // ------------------------------------------------------------
   // test a block with a field:value pair (use some literal text)
   /*test*/ "Field",
-  &literal.TextValue{Text: "hello world"}, `{
+  &literal.TextValue{Value: "hello world"}, `{
   "type": "text_value",
   "id": "test-1",
   "extraState": {
-    "TEXT": 1
+    "VALUE": 1
   },
   "fields": {
-    "TEXT": "hello world"
+    "VALUE": "hello world"
   }
 }`}, {
   // ------------------------------------------------------------

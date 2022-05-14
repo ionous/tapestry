@@ -11,8 +11,8 @@ import (
 
 // BoolValue Specify an explicit true or false.
 type BoolValue struct {
-	Bool        bool   `if:"label=_,type=bool"`
-	Class       string `if:"label=class,optional,type=text"`
+	Value       bool   `if:"label=value,type=bool"`
+	Kind        string `if:"label=kind,optional,type=text"`
 	UserComment string
 }
 
@@ -29,8 +29,8 @@ func (*BoolValue) Compose() composer.Spec {
 }
 
 const BoolValue_Type = "bool_value"
-const BoolValue_Field_Bool = "$BOOL"
-const BoolValue_Field_Class = "$CLASS"
+const BoolValue_Field_Value = "$VALUE"
+const BoolValue_Field_Kind = "$KIND"
 
 func (op *BoolValue) Marshal(m jsn.Marshaler) error {
 	return BoolValue_Marshal(m, op)
@@ -103,19 +103,123 @@ func BoolValue_Optional_Marshal(m jsn.Marshaler, pv **BoolValue) (err error) {
 func BoolValue_Marshal(m jsn.Marshaler, val *BoolValue) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(BoolValue_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", BoolValue_Field_Bool)
+		e0 := m.MarshalKey("value", BoolValue_Field_Value)
 		if e0 == nil {
-			e0 = prim.Bool_Unboxed_Marshal(m, &val.Bool)
+			e0 = prim.Bool_Unboxed_Marshal(m, &val.Value)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", BoolValue_Field_Bool))
+			m.Error(errutil.New(e0, "in flow at", BoolValue_Field_Value))
 		}
-		e1 := m.MarshalKey("class", BoolValue_Field_Class)
+		e1 := m.MarshalKey("kind", BoolValue_Field_Kind)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Class)
+			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Kind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", BoolValue_Field_Class))
+			m.Error(errutil.New(e1, "in flow at", BoolValue_Field_Kind))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// FieldList A series of values all for the same record.
+// While it can be specified wherever a literal value can, it only has meaning when the record type is known.
+type FieldList struct {
+	Fields      []FieldValue `if:"label=_"`
+	UserComment string
+}
+
+// User implemented slots:
+var _ LiteralValue = (*FieldList)(nil)
+
+func (*FieldList) Compose() composer.Spec {
+	return composer.Spec{
+		Name: FieldList_Type,
+		Uses: composer.Type_Flow,
+		Lede: "field_list",
+	}
+}
+
+const FieldList_Type = "field_list"
+const FieldList_Field_Fields = "$FIELDS"
+
+func (op *FieldList) Marshal(m jsn.Marshaler) error {
+	return FieldList_Marshal(m, op)
+}
+
+type FieldList_Slice []FieldList
+
+func (op *FieldList_Slice) GetType() string { return FieldList_Type }
+
+func (op *FieldList_Slice) Marshal(m jsn.Marshaler) error {
+	return FieldList_Repeats_Marshal(m, (*[]FieldList)(op))
+}
+
+func (op *FieldList_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *FieldList_Slice) SetSize(cnt int) {
+	var els []FieldList
+	if cnt >= 0 {
+		els = make(FieldList_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *FieldList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return FieldList_Marshal(m, &(*op)[i])
+}
+
+func FieldList_Repeats_Marshal(m jsn.Marshaler, vals *[]FieldList) error {
+	return jsn.RepeatBlock(m, (*FieldList_Slice)(vals))
+}
+
+func FieldList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FieldList) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = FieldList_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type FieldList_Flow struct{ ptr *FieldList }
+
+func (n FieldList_Flow) GetType() string      { return FieldList_Type }
+func (n FieldList_Flow) GetLede() string      { return "field_list" }
+func (n FieldList_Flow) GetFlow() interface{} { return n.ptr }
+func (n FieldList_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*FieldList); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func FieldList_Optional_Marshal(m jsn.Marshaler, pv **FieldList) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = FieldList_Marshal(m, *pv)
+	} else if !enc {
+		var v FieldList
+		if err = FieldList_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func FieldList_Marshal(m jsn.Marshaler, val *FieldList) (err error) {
+	m.SetComment(&val.UserComment)
+	if err = m.MarshalBlock(FieldList_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", FieldList_Field_Fields)
+		if e0 == nil {
+			e0 = FieldValue_Repeats_Marshal(m, &val.Fields)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", FieldList_Field_Fields))
 		}
 		m.EndBlock()
 	}
@@ -124,7 +228,7 @@ func BoolValue_Marshal(m jsn.Marshaler, val *BoolValue) (err error) {
 
 // FieldValue A fixed value of a record.
 type FieldValue struct {
-	Field       string       `if:"label=field,type=text"`
+	Field       string       `if:"label=_,type=text"`
 	Value       LiteralValue `if:"label=value"`
 	UserComment string
 }
@@ -212,7 +316,7 @@ func FieldValue_Optional_Marshal(m jsn.Marshaler, pv **FieldValue) (err error) {
 func FieldValue_Marshal(m jsn.Marshaler, val *FieldValue) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(FieldValue_Flow{val}); err == nil {
-		e0 := m.MarshalKey("field", FieldValue_Field_Field)
+		e0 := m.MarshalKey("", FieldValue_Field_Field)
 		if e0 == nil {
 			e0 = prim.Text_Unboxed_Marshal(m, &val.Field)
 		}
@@ -225,110 +329,6 @@ func FieldValue_Marshal(m jsn.Marshaler, val *FieldValue) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", FieldValue_Field_Value))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// FieldValues A series of values all for the same record.
-// While it can be specified wherever a literal value can, it only has meaning when the record type is known.
-type FieldValues struct {
-	Contains    []FieldValue `if:"label=_"`
-	UserComment string
-}
-
-// User implemented slots:
-var _ LiteralValue = (*FieldValues)(nil)
-
-func (*FieldValues) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FieldValues_Type,
-		Uses: composer.Type_Flow,
-		Lede: "fields",
-	}
-}
-
-const FieldValues_Type = "field_values"
-const FieldValues_Field_Contains = "$CONTAINS"
-
-func (op *FieldValues) Marshal(m jsn.Marshaler) error {
-	return FieldValues_Marshal(m, op)
-}
-
-type FieldValues_Slice []FieldValues
-
-func (op *FieldValues_Slice) GetType() string { return FieldValues_Type }
-
-func (op *FieldValues_Slice) Marshal(m jsn.Marshaler) error {
-	return FieldValues_Repeats_Marshal(m, (*[]FieldValues)(op))
-}
-
-func (op *FieldValues_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FieldValues_Slice) SetSize(cnt int) {
-	var els []FieldValues
-	if cnt >= 0 {
-		els = make(FieldValues_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FieldValues_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FieldValues_Marshal(m, &(*op)[i])
-}
-
-func FieldValues_Repeats_Marshal(m jsn.Marshaler, vals *[]FieldValues) error {
-	return jsn.RepeatBlock(m, (*FieldValues_Slice)(vals))
-}
-
-func FieldValues_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FieldValues) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FieldValues_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FieldValues_Flow struct{ ptr *FieldValues }
-
-func (n FieldValues_Flow) GetType() string      { return FieldValues_Type }
-func (n FieldValues_Flow) GetLede() string      { return "fields" }
-func (n FieldValues_Flow) GetFlow() interface{} { return n.ptr }
-func (n FieldValues_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FieldValues); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FieldValues_Optional_Marshal(m jsn.Marshaler, pv **FieldValues) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FieldValues_Marshal(m, *pv)
-	} else if !enc {
-		var v FieldValues
-		if err = FieldValues_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FieldValues_Marshal(m jsn.Marshaler, val *FieldValues) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(FieldValues_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FieldValues_Field_Contains)
-		if e0 == nil {
-			e0 = FieldValue_Repeats_Marshal(m, &val.Contains)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FieldValues_Field_Contains))
 		}
 		m.EndBlock()
 	}
@@ -406,8 +406,8 @@ func LiteralValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]LiteralValue) 
 
 // NumValue Specify a particular number.
 type NumValue struct {
-	Num         float64 `if:"label=_,type=number"`
-	Class       string  `if:"label=class,optional,type=text"`
+	Value       float64 `if:"label=value,type=number"`
+	Kind        string  `if:"label=kind,optional,type=text"`
 	UserComment string
 }
 
@@ -424,8 +424,8 @@ func (*NumValue) Compose() composer.Spec {
 }
 
 const NumValue_Type = "num_value"
-const NumValue_Field_Num = "$NUM"
-const NumValue_Field_Class = "$CLASS"
+const NumValue_Field_Value = "$VALUE"
+const NumValue_Field_Kind = "$KIND"
 
 func (op *NumValue) Marshal(m jsn.Marshaler) error {
 	return NumValue_Marshal(m, op)
@@ -498,19 +498,19 @@ func NumValue_Optional_Marshal(m jsn.Marshaler, pv **NumValue) (err error) {
 func NumValue_Marshal(m jsn.Marshaler, val *NumValue) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(NumValue_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", NumValue_Field_Num)
+		e0 := m.MarshalKey("value", NumValue_Field_Value)
 		if e0 == nil {
-			e0 = prim.Number_Unboxed_Marshal(m, &val.Num)
+			e0 = prim.Number_Unboxed_Marshal(m, &val.Value)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", NumValue_Field_Num))
+			m.Error(errutil.New(e0, "in flow at", NumValue_Field_Value))
 		}
-		e1 := m.MarshalKey("class", NumValue_Field_Class)
+		e1 := m.MarshalKey("kind", NumValue_Field_Kind)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Class)
+			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Kind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NumValue_Field_Class))
+			m.Error(errutil.New(e1, "in flow at", NumValue_Field_Kind))
 		}
 		m.EndBlock()
 	}
@@ -519,8 +519,8 @@ func NumValue_Marshal(m jsn.Marshaler, val *NumValue) (err error) {
 
 // NumValues Number List: Specify a list of numbers.
 type NumValues struct {
-	Values      []float64 `if:"label=_,type=number"`
-	Class       string    `if:"label=class,optional,type=text"`
+	Values      []float64 `if:"label=values,type=number"`
+	Kind        string    `if:"label=kind,optional,type=text"`
 	UserComment string
 }
 
@@ -532,13 +532,13 @@ func (*NumValues) Compose() composer.Spec {
 	return composer.Spec{
 		Name: NumValues_Type,
 		Uses: composer.Type_Flow,
-		Lede: "nums",
+		Lede: "num",
 	}
 }
 
 const NumValues_Type = "num_values"
 const NumValues_Field_Values = "$VALUES"
-const NumValues_Field_Class = "$CLASS"
+const NumValues_Field_Kind = "$KIND"
 
 func (op *NumValues) Marshal(m jsn.Marshaler) error {
 	return NumValues_Marshal(m, op)
@@ -587,7 +587,7 @@ func NumValues_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NumValues) (err e
 type NumValues_Flow struct{ ptr *NumValues }
 
 func (n NumValues_Flow) GetType() string      { return NumValues_Type }
-func (n NumValues_Flow) GetLede() string      { return "nums" }
+func (n NumValues_Flow) GetLede() string      { return "num" }
 func (n NumValues_Flow) GetFlow() interface{} { return n.ptr }
 func (n NumValues_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*NumValues); ok {
@@ -611,19 +611,133 @@ func NumValues_Optional_Marshal(m jsn.Marshaler, pv **NumValues) (err error) {
 func NumValues_Marshal(m jsn.Marshaler, val *NumValues) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(NumValues_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", NumValues_Field_Values)
+		e0 := m.MarshalKey("values", NumValues_Field_Values)
 		if e0 == nil {
 			e0 = prim.Number_Unboxed_Repeats_Marshal(m, &val.Values)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", NumValues_Field_Values))
 		}
-		e1 := m.MarshalKey("class", NumValues_Field_Class)
+		e1 := m.MarshalKey("kind", NumValues_Field_Kind)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Class)
+			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Kind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NumValues_Field_Class))
+			m.Error(errutil.New(e1, "in flow at", NumValues_Field_Kind))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// RecordList Specify a series of records, all of the same kind.
+type RecordList struct {
+	Kind        string       `if:"label=_,type=text"`
+	Records     []FieldList  `if:"label=values"`
+	Cache       RecordsCache `if:"internal"`
+	UserComment string
+}
+
+// User implemented slots:
+var _ rt.RecordListEval = (*RecordList)(nil)
+var _ LiteralValue = (*RecordList)(nil)
+
+func (*RecordList) Compose() composer.Spec {
+	return composer.Spec{
+		Name: RecordList_Type,
+		Uses: composer.Type_Flow,
+		Lede: "record",
+	}
+}
+
+const RecordList_Type = "record_list"
+const RecordList_Field_Kind = "$KIND"
+const RecordList_Field_Records = "$RECORDS"
+
+func (op *RecordList) Marshal(m jsn.Marshaler) error {
+	return RecordList_Marshal(m, op)
+}
+
+type RecordList_Slice []RecordList
+
+func (op *RecordList_Slice) GetType() string { return RecordList_Type }
+
+func (op *RecordList_Slice) Marshal(m jsn.Marshaler) error {
+	return RecordList_Repeats_Marshal(m, (*[]RecordList)(op))
+}
+
+func (op *RecordList_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RecordList_Slice) SetSize(cnt int) {
+	var els []RecordList
+	if cnt >= 0 {
+		els = make(RecordList_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RecordList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RecordList_Marshal(m, &(*op)[i])
+}
+
+func RecordList_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordList) error {
+	return jsn.RepeatBlock(m, (*RecordList_Slice)(vals))
+}
+
+func RecordList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordList) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = RecordList_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type RecordList_Flow struct{ ptr *RecordList }
+
+func (n RecordList_Flow) GetType() string      { return RecordList_Type }
+func (n RecordList_Flow) GetLede() string      { return "record" }
+func (n RecordList_Flow) GetFlow() interface{} { return n.ptr }
+func (n RecordList_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RecordList); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func RecordList_Optional_Marshal(m jsn.Marshaler, pv **RecordList) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = RecordList_Marshal(m, *pv)
+	} else if !enc {
+		var v RecordList
+		if err = RecordList_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func RecordList_Marshal(m jsn.Marshaler, val *RecordList) (err error) {
+	m.SetComment(&val.UserComment)
+	if err = m.MarshalBlock(RecordList_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", RecordList_Field_Kind)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Kind)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RecordList_Field_Kind))
+		}
+		e1 := m.MarshalKey("values", RecordList_Field_Records)
+		if e1 == nil {
+			e1 = FieldList_Repeats_Marshal(m, &val.Records)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", RecordList_Field_Records))
 		}
 		m.EndBlock()
 	}
@@ -646,7 +760,7 @@ func (*RecordValue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: RecordValue_Type,
 		Uses: composer.Type_Flow,
-		Lede: "rec",
+		Lede: "record",
 	}
 }
 
@@ -701,7 +815,7 @@ func RecordValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordValue) (e
 type RecordValue_Flow struct{ ptr *RecordValue }
 
 func (n RecordValue_Flow) GetType() string      { return RecordValue_Type }
-func (n RecordValue_Flow) GetLede() string      { return "rec" }
+func (n RecordValue_Flow) GetLede() string      { return "record" }
 func (n RecordValue_Flow) GetFlow() interface{} { return n.ptr }
 func (n RecordValue_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*RecordValue); ok {
@@ -744,124 +858,10 @@ func RecordValue_Marshal(m jsn.Marshaler, val *RecordValue) (err error) {
 	return
 }
 
-// RecordValues Specify a series of records, all of the same kind.
-type RecordValues struct {
-	Kind        string        `if:"label=_,type=text"`
-	Els         []FieldValues `if:"label=containing"`
-	Cache       RecordsCache  `if:"internal"`
-	UserComment string
-}
-
-// User implemented slots:
-var _ rt.RecordListEval = (*RecordValues)(nil)
-var _ LiteralValue = (*RecordValues)(nil)
-
-func (*RecordValues) Compose() composer.Spec {
-	return composer.Spec{
-		Name: RecordValues_Type,
-		Uses: composer.Type_Flow,
-		Lede: "recs",
-	}
-}
-
-const RecordValues_Type = "record_values"
-const RecordValues_Field_Kind = "$KIND"
-const RecordValues_Field_Els = "$ELS"
-
-func (op *RecordValues) Marshal(m jsn.Marshaler) error {
-	return RecordValues_Marshal(m, op)
-}
-
-type RecordValues_Slice []RecordValues
-
-func (op *RecordValues_Slice) GetType() string { return RecordValues_Type }
-
-func (op *RecordValues_Slice) Marshal(m jsn.Marshaler) error {
-	return RecordValues_Repeats_Marshal(m, (*[]RecordValues)(op))
-}
-
-func (op *RecordValues_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *RecordValues_Slice) SetSize(cnt int) {
-	var els []RecordValues
-	if cnt >= 0 {
-		els = make(RecordValues_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *RecordValues_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return RecordValues_Marshal(m, &(*op)[i])
-}
-
-func RecordValues_Repeats_Marshal(m jsn.Marshaler, vals *[]RecordValues) error {
-	return jsn.RepeatBlock(m, (*RecordValues_Slice)(vals))
-}
-
-func RecordValues_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RecordValues) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = RecordValues_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type RecordValues_Flow struct{ ptr *RecordValues }
-
-func (n RecordValues_Flow) GetType() string      { return RecordValues_Type }
-func (n RecordValues_Flow) GetLede() string      { return "recs" }
-func (n RecordValues_Flow) GetFlow() interface{} { return n.ptr }
-func (n RecordValues_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*RecordValues); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func RecordValues_Optional_Marshal(m jsn.Marshaler, pv **RecordValues) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = RecordValues_Marshal(m, *pv)
-	} else if !enc {
-		var v RecordValues
-		if err = RecordValues_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func RecordValues_Marshal(m jsn.Marshaler, val *RecordValues) (err error) {
-	m.SetComment(&val.UserComment)
-	if err = m.MarshalBlock(RecordValues_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", RecordValues_Field_Kind)
-		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Kind)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", RecordValues_Field_Kind))
-		}
-		e1 := m.MarshalKey("containing", RecordValues_Field_Els)
-		if e1 == nil {
-			e1 = FieldValues_Repeats_Marshal(m, &val.Els)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", RecordValues_Field_Els))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // TextValue Specify a small bit of text.
 type TextValue struct {
-	Text        string `if:"label=_,type=text"`
-	Class       string `if:"label=class,optional,type=text"`
+	Value       string `if:"label=value,type=text"`
+	Kind        string `if:"label=kind,optional,type=text"`
 	UserComment string
 }
 
@@ -873,13 +873,13 @@ func (*TextValue) Compose() composer.Spec {
 	return composer.Spec{
 		Name: TextValue_Type,
 		Uses: composer.Type_Flow,
-		Lede: "txt",
+		Lede: "text",
 	}
 }
 
 const TextValue_Type = "text_value"
-const TextValue_Field_Text = "$TEXT"
-const TextValue_Field_Class = "$CLASS"
+const TextValue_Field_Value = "$VALUE"
+const TextValue_Field_Kind = "$KIND"
 
 func (op *TextValue) Marshal(m jsn.Marshaler) error {
 	return TextValue_Marshal(m, op)
@@ -928,7 +928,7 @@ func TextValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TextValue) (err e
 type TextValue_Flow struct{ ptr *TextValue }
 
 func (n TextValue_Flow) GetType() string      { return TextValue_Type }
-func (n TextValue_Flow) GetLede() string      { return "txt" }
+func (n TextValue_Flow) GetLede() string      { return "text" }
 func (n TextValue_Flow) GetFlow() interface{} { return n.ptr }
 func (n TextValue_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*TextValue); ok {
@@ -952,19 +952,19 @@ func TextValue_Optional_Marshal(m jsn.Marshaler, pv **TextValue) (err error) {
 func TextValue_Marshal(m jsn.Marshaler, val *TextValue) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(TextValue_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", TextValue_Field_Text)
+		e0 := m.MarshalKey("value", TextValue_Field_Value)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Text)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Value)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", TextValue_Field_Text))
+			m.Error(errutil.New(e0, "in flow at", TextValue_Field_Value))
 		}
-		e1 := m.MarshalKey("class", TextValue_Field_Class)
+		e1 := m.MarshalKey("kind", TextValue_Field_Kind)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Class)
+			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Kind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", TextValue_Field_Class))
+			m.Error(errutil.New(e1, "in flow at", TextValue_Field_Kind))
 		}
 		m.EndBlock()
 	}
@@ -973,8 +973,8 @@ func TextValue_Marshal(m jsn.Marshaler, val *TextValue) (err error) {
 
 // TextValues Text List: Specifies a set of text values.
 type TextValues struct {
-	Values      []string `if:"label=_,type=text"`
-	Class       string   `if:"label=class,optional,type=text"`
+	Values      []string `if:"label=values,type=text"`
+	Kind        string   `if:"label=kind,optional,type=text"`
 	UserComment string
 }
 
@@ -986,13 +986,13 @@ func (*TextValues) Compose() composer.Spec {
 	return composer.Spec{
 		Name: TextValues_Type,
 		Uses: composer.Type_Flow,
-		Lede: "txts",
+		Lede: "text",
 	}
 }
 
 const TextValues_Type = "text_values"
 const TextValues_Field_Values = "$VALUES"
-const TextValues_Field_Class = "$CLASS"
+const TextValues_Field_Kind = "$KIND"
 
 func (op *TextValues) Marshal(m jsn.Marshaler) error {
 	return TextValues_Marshal(m, op)
@@ -1041,7 +1041,7 @@ func TextValues_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TextValues) (err
 type TextValues_Flow struct{ ptr *TextValues }
 
 func (n TextValues_Flow) GetType() string      { return TextValues_Type }
-func (n TextValues_Flow) GetLede() string      { return "txts" }
+func (n TextValues_Flow) GetLede() string      { return "text" }
 func (n TextValues_Flow) GetFlow() interface{} { return n.ptr }
 func (n TextValues_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*TextValues); ok {
@@ -1065,19 +1065,19 @@ func TextValues_Optional_Marshal(m jsn.Marshaler, pv **TextValues) (err error) {
 func TextValues_Marshal(m jsn.Marshaler, val *TextValues) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(TextValues_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", TextValues_Field_Values)
+		e0 := m.MarshalKey("values", TextValues_Field_Values)
 		if e0 == nil {
 			e0 = prim.Text_Unboxed_Repeats_Marshal(m, &val.Values)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", TextValues_Field_Values))
 		}
-		e1 := m.MarshalKey("class", TextValues_Field_Class)
+		e1 := m.MarshalKey("kind", TextValues_Field_Kind)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Class)
+			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Kind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", TextValues_Field_Class))
+			m.Error(errutil.New(e1, "in flow at", TextValues_Field_Kind))
 		}
 		m.EndBlock()
 	}
@@ -1090,40 +1090,40 @@ var Slots = []interface{}{
 
 var Slats = []composer.Composer{
 	(*BoolValue)(nil),
+	(*FieldList)(nil),
 	(*FieldValue)(nil),
-	(*FieldValues)(nil),
 	(*NumValue)(nil),
 	(*NumValues)(nil),
+	(*RecordList)(nil),
 	(*RecordValue)(nil),
-	(*RecordValues)(nil),
 	(*TextValue)(nil),
 	(*TextValues)(nil),
 }
 
 var Signatures = map[uint64]interface{}{
-	1949078217737575331:  (*BoolValue)(nil),    /* bool_eval=Bool: */
-	10481381284080410489: (*BoolValue)(nil),    /* literal_value=Bool: */
-	14922204417871839933: (*BoolValue)(nil),    /* bool_eval=Bool:class: */
-	7098098590079797627:  (*BoolValue)(nil),    /* literal_value=Bool:class: */
-	12256488637101423262: (*FieldValues)(nil),  /* literal_value=Fields: */
-	2220603612539786023:  (*NumValue)(nil),     /* literal_value=Num: */
-	10663447740269278420: (*NumValue)(nil),     /* number_eval=Num: */
-	16094411235613841545: (*NumValue)(nil),     /* literal_value=Num:class: */
-	16341822528025338642: (*NumValue)(nil),     /* number_eval=Num:class: */
-	13851537369653930514: (*NumValues)(nil),    /* literal_value=Nums: */
-	8492052486604083523:  (*NumValues)(nil),    /* num_list_eval=Nums: */
-	9973906443325162824:  (*NumValues)(nil),    /* literal_value=Nums:class: */
-	12974290844101992413: (*NumValues)(nil),    /* num_list_eval=Nums:class: */
-	6862199822724330802:  (*RecordValue)(nil),  /* literal_value=Rec:fields: */
-	16337065588024365943: (*RecordValue)(nil),  /* record_eval=Rec:fields: */
-	5499748270253498966:  (*RecordValues)(nil), /* literal_value=Recs:containing: */
-	18446331963904118528: (*RecordValues)(nil), /* record_list_eval=Recs:containing: */
-	8803372825537509011:  (*TextValue)(nil),    /* literal_value=Txt: */
-	14005876991812964858: (*TextValue)(nil),    /* text_eval=Txt: */
-	6758594403154922061:  (*TextValue)(nil),    /* literal_value=Txt:class: */
-	16813837251215225200: (*TextValue)(nil),    /* text_eval=Txt:class: */
-	1652844167065051238:  (*TextValues)(nil),   /* literal_value=Txts: */
-	1815133684057348810:  (*TextValues)(nil),   /* text_list_eval=Txts: */
-	13860936754897380500: (*TextValues)(nil),   /* literal_value=Txts:class: */
-	14997407136781483936: (*TextValues)(nil),   /* text_list_eval=Txts:class: */
+	2028829358589965004:  (*BoolValue)(nil),   /* bool_eval=Bool value: */
+	11511029631426206694: (*BoolValue)(nil),   /* literal_value=Bool value: */
+	10808478223495627740: (*BoolValue)(nil),   /* bool_eval=Bool value:kind: */
+	3205100557739257174:  (*BoolValue)(nil),   /* literal_value=Bool value:kind: */
+	3071550758741756995:  (*FieldList)(nil),   /* literal_value=FieldList: */
+	15362209855253663632: (*NumValue)(nil),    /* literal_value=Num value: */
+	1356784465987892467:  (*NumValue)(nil),    /* number_eval=Num value: */
+	607468628506983640:   (*NumValue)(nil),    /* literal_value=Num value:kind: */
+	9731162713682842745:  (*NumValue)(nil),    /* number_eval=Num value:kind: */
+	12282038377752822419: (*NumValues)(nil),   /* literal_value=Num values: */
+	8089072108541894314:  (*NumValues)(nil),   /* num_list_eval=Num values: */
+	16844579494806292121: (*NumValues)(nil),   /* literal_value=Num values:kind: */
+	18166562587031464546: (*NumValues)(nil),   /* num_list_eval=Num values:kind: */
+	5942123174065535899:  (*RecordValue)(nil), /* literal_value=Record:fields: */
+	5794725022419893180:  (*RecordValue)(nil), /* record_eval=Record:fields: */
+	8711768526197034738:  (*RecordList)(nil),  /* literal_value=Record:values: */
+	14652198550804167624: (*RecordList)(nil),  /* record_list_eval=Record:values: */
+	13114183353368545439: (*TextValue)(nil),   /* literal_value=Text value: */
+	4705033170011872932:  (*TextValue)(nil),   /* text_eval=Text value: */
+	6339203747835692413:  (*TextValue)(nil),   /* literal_value=Text value:kind: */
+	18213962910681037476: (*TextValue)(nil),   /* text_eval=Text value:kind: */
+	2231933745037898906:  (*TextValues)(nil),  /* literal_value=Text values: */
+	5151885117815687006:  (*TextValues)(nil),  /* text_list_eval=Text values: */
+	4866602258857929938:  (*TextValues)(nil),  /* literal_value=Text values:kind: */
+	10847058762172166526: (*TextValues)(nil),  /* text_list_eval=Text values:kind: */
 }

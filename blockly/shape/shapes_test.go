@@ -34,7 +34,7 @@ func TestRepeatingContainers(t *testing.T) {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(reps,
 		[]repeatingContainer{
-			{"field_values", "field_value"},
+			{"field_list", "field_value"},
 			{"paragraph", "story_statement"},
 		}); len(diff) > 0 {
 		for _, rep := range reps {

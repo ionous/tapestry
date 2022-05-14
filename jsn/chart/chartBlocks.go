@@ -1,13 +1,13 @@
-package story
+package chart
 
 import (
 	"git.sr.ht/~ionous/tapestry/jsn"
-	"git.sr.ht/~ionous/tapestry/jsn/chart"
 )
 
 // block type to key handler
 type BlockMap map[string]KeyMap
 type KeyMap map[string]func(jsn.Block, interface{}) error
+type BlockStack []jsn.Block
 
 const BlockEnd = "$end"
 const BlockStart = "$start"
@@ -34,7 +34,7 @@ func (kvm KeyMap) call(b jsn.Block, key string, val interface{}) (err error) {
 	return
 }
 
-func Map(m *chart.Machine, callbacks BlockMap) (scope *BlockScope) {
+func Map(m *Machine, callbacks BlockMap) (scope *BlockScope) {
 	return &BlockScope{m: m, callbacks: callbacks}
 }
 
@@ -47,7 +47,7 @@ type BlockScope struct {
 	// 3. pass marshaler or some sort of "machine" interface
 	//  as a parameter to end (and,or all calls)
 	// 4. always pop on end.
-	m         *chart.Machine
+	m         *Machine
 	Blocks    BlockStack
 	callbacks BlockMap
 	atKey     string
@@ -95,4 +95,24 @@ func (n *BlockScope) EndBlock() {
 	if e := n.callbacks.call(was, BlockEnd, parent); e != nil && e != jsn.Missing {
 		n.m.Error(e)
 	}
+}
+
+func (k *BlockStack) Push(b jsn.Block) {
+	(*k) = append(*k, b)
+}
+
+func (k *BlockStack) Top() (ret jsn.Block) {
+	if end := len(*k) - 1; end >= 0 {
+		ret = (*k)[end]
+	}
+	return
+}
+
+// return false if empty
+func (k *BlockStack) Pop() (ret jsn.Block, okay bool) {
+	if end := len(*k) - 1; end >= 0 {
+		ret, (*k) = (*k)[end], (*k)[:end]
+		okay = true
+	}
+	return
 }

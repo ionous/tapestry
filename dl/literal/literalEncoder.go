@@ -17,13 +17,13 @@ func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 		err = chart.Unhandled(typeName)
 
 	case *BoolValue:
-		err = m.MarshalValue(typeName, out.Bool)
+		err = m.MarshalValue(typeName, out.Value)
 
 	case *NumValue:
-		err = m.MarshalValue(typeName, out.Num)
+		err = m.MarshalValue(typeName, out.Value)
 
 	case *TextValue:
-		err = m.MarshalValue(typeName, out.Text)
+		err = m.MarshalValue(typeName, out.Value)
 
 	case *NumValues:
 		err = m.MarshalValue(typeName, out.Values)
@@ -35,9 +35,9 @@ func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 	// since that's generally recoverable from knowing the names of the fields
 	// it might be better to allow that though, and only remove that info on the special compact encoding
 	// otherwise writing are reading arent exactly idempotent ( writes from fields but generates a record )
-	case *FieldValues:
+	case *FieldList:
 		obj := make(map[string]interface{})
-		if e := marshalFields(obj, out.Contains); e != nil {
+		if e := marshalFields(obj, out.Fields); e != nil {
 			err = e
 		} else {
 			err = m.MarshalValue(typeName, obj)
@@ -55,11 +55,11 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 	return
 }
 
-func ReadLiteral(aff affine.Affinity, cls string, msg json.RawMessage) (ret LiteralValue, err error) {
+func ReadLiteral(aff affine.Affinity, kind string, msg json.RawMessage) (ret LiteralValue, err error) {
 	// most literals write themselves in the same way as the eval shortcuts
 	// record doesnt yet? have a way to distinguish b/t the literal json and the eval json, so context matters.
 	if aff != affine.Record {
-		ret, err = readLiteral(aff.String()+"_eval", cls, msg)
+		ret, err = readLiteral(aff.String()+"_eval", kind, msg)
 	} else {
 		var obj map[string]interface{}
 		if e := json.Unmarshal(msg, &obj); e != nil {
@@ -67,13 +67,13 @@ func ReadLiteral(aff affine.Affinity, cls string, msg json.RawMessage) (ret Lite
 		} else if fields, e := unmarshalFields(obj); e != nil {
 			err = e
 		} else {
-			ret = &RecordValue{Kind: cls, Fields: fields}
+			ret = &RecordValue{Kind: kind, Fields: fields}
 		}
 	}
 	return
 }
 
-func readLiteral(typeName, cls string, msg json.RawMessage) (ret LiteralValue, err error) {
+func readLiteral(typeName, kind string, msg json.RawMessage) (ret LiteralValue, err error) {
 	// when decoding, we havent created the command yet ( we're doing that now )
 	// so we have to switch on the typename not the value in the slot.
 	switch typeName {
@@ -85,7 +85,7 @@ func readLiteral(typeName, cls string, msg json.RawMessage) (ret LiteralValue, e
 		if e := json.Unmarshal(msg, &val); e != nil {
 			err = chart.Unhandled(typeName)
 		} else {
-			ret = &BoolValue{Bool: val, Class: cls}
+			ret = &BoolValue{Value: val, Kind: kind}
 		}
 
 	case rt.NumberEval_Type:
@@ -93,7 +93,7 @@ func readLiteral(typeName, cls string, msg json.RawMessage) (ret LiteralValue, e
 		if e := json.Unmarshal(msg, &val); e != nil {
 			err = chart.Unhandled(typeName)
 		} else {
-			ret = &NumValue{Num: val, Class: cls}
+			ret = &NumValue{Value: val, Kind: kind}
 		}
 
 	case rt.TextEval_Type:
@@ -101,7 +101,7 @@ func readLiteral(typeName, cls string, msg json.RawMessage) (ret LiteralValue, e
 		if e := json.Unmarshal(msg, &val); e != nil {
 			err = chart.Unhandled(typeName)
 		} else {
-			ret = &TextValue{Text: val, Class: cls}
+			ret = &TextValue{Value: val, Kind: kind}
 		}
 
 	case rt.NumListEval_Type:
@@ -109,7 +109,7 @@ func readLiteral(typeName, cls string, msg json.RawMessage) (ret LiteralValue, e
 		if e := json.Unmarshal(msg, &val); e != nil {
 			err = chart.Unhandled(typeName)
 		} else {
-			ret = &NumValues{Values: val, Class: cls}
+			ret = &NumValues{Values: val, Kind: kind}
 		}
 
 	case rt.TextListEval_Type:
@@ -117,7 +117,7 @@ func readLiteral(typeName, cls string, msg json.RawMessage) (ret LiteralValue, e
 		if e := json.Unmarshal(msg, &val); e != nil {
 			err = chart.Unhandled(typeName)
 		} else {
-			ret = &TextValues{Values: val, Class: cls}
+			ret = &TextValues{Values: val, Kind: kind}
 		}
 		// note: trying to read a record literal into a record eval slot wouldnt work well
 		// it could differentiate b/t a record and command --

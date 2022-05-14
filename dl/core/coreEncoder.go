@@ -21,7 +21,7 @@ func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 	case *literal.TextValue:
 		// if the text starts with an @, skip it:
 		// ( ie. dont confuse the rare text literal starting with an ampersand, with GetVar )
-		if str := ptr.Text; len(str) > 0 && str[0] == '@' {
+		if str := ptr.Value; len(str) > 0 && str[0] == '@' {
 			err = chart.Unhandled(typeName)
 		} else {
 			err = literal.CompactEncoder(m, flow)

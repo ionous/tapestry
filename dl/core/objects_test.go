@@ -17,11 +17,11 @@ func TestObjects(t *testing.T) {
 
 	run := modelTest{objClass: map[string]string{
 		// objects:
-		"this": base.Text,
-		"that": derived.Text,
+		"this": base.Value,
+		"that": derived.Value,
 		// hierarchy:
-		"base":    base.Text,
-		"derived": base.Text + "," + derived.Text,
+		"base":    base.Value,
+		"derived": base.Value + "," + derived.Value,
 	}}
 
 	t.Run("exists", func(t *testing.T) {
@@ -35,22 +35,22 @@ func TestObjects(t *testing.T) {
 	t.Run("kind_of", func(t *testing.T) {
 		if cls, e := safe.GetText(&run, &KindOf{Object: this}); e != nil {
 			t.Fatal(e)
-		} else if cls.String() != base.Text {
+		} else if cls.String() != base.Value {
 			t.Fatal("unexpected", cls)
 		}
 	})
 	t.Run("is_kind_of", func(t *testing.T) {
-		if e := testTrue(t, &run, &IsKindOf{Object: this, Kind: base.Text}); e != nil {
+		if e := testTrue(t, &run, &IsKindOf{Object: this, Kind: base.Value}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &IsKindOf{Object: that, Kind: base.Text}); e != nil {
+		if e := testTrue(t, &run, &IsKindOf{Object: that, Kind: base.Value}); e != nil {
 			t.Fatal(e)
 		}
 
-		if e := testTrue(t, &run, &IsKindOf{Object: that, Kind: derived.Text}); e != nil {
+		if e := testTrue(t, &run, &IsKindOf{Object: that, Kind: derived.Value}); e != nil {
 			t.Fatal(e)
 		}
-		if e := testTrue(t, &run, &Not{Test: &IsKindOf{Object: this, Kind: derived.Text}}); e != nil {
+		if e := testTrue(t, &run, &Not{Test: &IsKindOf{Object: this, Kind: derived.Value}}); e != nil {
 			t.Fatal(e)
 		}
 	})

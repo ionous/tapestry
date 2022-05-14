@@ -5,9 +5,7 @@ import (
 	"io/fs"
 	"sort"
 
-	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
-	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
@@ -74,8 +72,8 @@ func readSpec(types *TypeSpecs, files fs.FS, fileName string) (ret *spec.TypeSpe
 		// the outer one is always (supposed to be) a group
 		var blockType spec.TypeSpec
 		if e := cin.Decode(&blockType, b, cin.Signatures{
-			spec.Signatures, // we are reading specs so we need the spec signatures
-			prim.Signatures, // and some of those commands use the primitive types.
+			//	spec.Signatures, // we are reading specs so we need the spec signatures
+			//prim.Signatures, // and some of those commands use the primitive types.
 		}); e != nil {
 			err = e
 		} else if e := importTypes(types, &blockType); e != nil {
@@ -90,9 +88,9 @@ func readSpec(types *TypeSpecs, files fs.FS, fileName string) (ret *spec.TypeSpe
 func importTypes(types *TypeSpecs, block *spec.TypeSpec) error {
 	var currGroups []string
 	enc := chart.MakeEncoder()
-	return enc.Marshal(block, story.Map(&enc, story.BlockMap{
-		spec.TypeSpec_Type: story.KeyMap{
-			story.BlockStart: func(b jsn.Block, _ interface{}) (err error) {
+	return enc.Marshal(block, chart.Map(&enc, chart.BlockMap{
+		spec.TypeSpec_Type: chart.KeyMap{
+			chart.BlockStart: func(b jsn.Block, _ interface{}) (err error) {
 				if flow, ok := b.(jsn.FlowBlock); ok {
 					if blockType, ok := flow.GetFlow().(*spec.TypeSpec); ok {
 						switch blockType.Spec.Choice {
@@ -111,7 +109,7 @@ func importTypes(types *TypeSpecs, block *spec.TypeSpec) error {
 				}
 				return
 			},
-			story.BlockEnd: func(b jsn.Block, _ interface{}) (err error) {
+			chart.BlockEnd: func(b jsn.Block, _ interface{}) (err error) {
 				if flow, ok := b.(jsn.FlowBlock); ok {
 					if blockType, ok := flow.GetFlow().(*spec.TypeSpec); ok {
 						switch blockType.Spec.Choice {

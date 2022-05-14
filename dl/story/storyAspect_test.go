@@ -25,8 +25,8 @@ func TestEventually(t *testing.T) {
 	var out []string
 	ts := chart.MakeEncoder()
 	if e := ts.Marshal(&asp,
-		story.Map(&ts, story.BlockMap{
-			story.AspectTraits_Type: story.KeyMap{
+		chart.Map(&ts, chart.BlockMap{
+			story.AspectTraits_Type: chart.KeyMap{
 				story.AspectTraits_Field_Aspect: func(b jsn.Block, v interface{}) (err error) {
 					aspect = *v.(*string)
 					return
@@ -55,9 +55,9 @@ func TestEndBlock(t *testing.T) {
 	found := false
 	ts := chart.MakeEncoder()
 	if e := ts.Marshal(&asp,
-		story.Map(&ts, story.BlockMap{
-			story.Certainties_Type: story.KeyMap{
-				story.BlockEnd: func(b jsn.Block, v interface{}) (err error) {
+		chart.Map(&ts, chart.BlockMap{
+			story.Certainties_Type: chart.KeyMap{
+				chart.BlockEnd: func(b jsn.Block, v interface{}) (err error) {
 					cs := b.(jsn.FlowBlock).GetFlow().(*story.Certainties) // ick
 					found = cs.PluralKinds.Str == "test"
 					return

@@ -13,15 +13,15 @@ import (
 func TestBoolChoice(t *testing.T) {
   if e := testBlocks(
     &literal.BoolValue{
-      Bool: true,
+      Value: true,
     }, `{
   "type": "bool_value",
   "id": "test-1",
   "extraState": {
-    "BOOL": 1
+    "VALUE": 1
   },
   "fields": {
-    "BOOL": "$TRUE"
+    "VALUE": "$TRUE"
   }
 }`); e != nil {
     t.Fatal(e)

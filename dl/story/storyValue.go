@@ -6,7 +6,7 @@ import (
 )
 
 func EveryValueOf(m *chart.Machine, typeName string, fn func(interface{}) error) chart.State {
-	var blocks BlockStack
+	var blocks chart.BlockStack
 	return &chart.StateMix{
 		OnBlock: func(b jsn.Block) (err error) {
 			blocks.Push(b)
