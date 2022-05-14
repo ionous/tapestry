@@ -1,3 +1,5 @@
+// The content server provides access to a pre-built story database.
+// It optionally builds story files into the database and runs unit tests on them.
 package main
 
 import (

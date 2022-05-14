@@ -5,7 +5,7 @@ import (
 	"io"
 	"log"
 	"os/exec"
-	"path"
+	"path/filepath"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/web"
@@ -20,7 +20,7 @@ func tempTest(ctx context.Context, file string, in io.Reader) (err error) {
 		err = errutil.New("unexpected path", file, "from", base)
 	} else {
 		// note: .Split keeps a trailing slash, .Dir does not.
-		dir, _ := path.Split(file[len(base)+1:])
+		dir, _ := filepath.Split(file[len(base)+1:])
 		const shared = "shared/"
 		const stories = "stories/"
 		// we'll always include the shared files in our build

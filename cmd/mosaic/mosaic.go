@@ -1,3 +1,5 @@
+// Run the blockly editor.
+// Note: currently requires running the npm content server in tapestry/www. ( > npm run dev )
 package main
 
 import (

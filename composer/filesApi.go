@@ -19,8 +19,8 @@ import (
 func FilesApi(cfg *web.Config) web.Resource {
 	return &web.Wrapper{
 		Finds: func(name string) (ret web.Resource) {
-			// by adding a trailing slash, walk'( will follow a symlink.
-			path := cfg.PathTo("stories") + "/"
+			// by adding a trailing slash, walk will follow a symlink.
+			path := cfg.PathTo("stories") + string(filepath.Separator)
 			switch name {
 			case "blocks":
 				where := storyFolder(path)

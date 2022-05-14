@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"os"
 	"path"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -16,11 +17,11 @@ type Config struct {
 }
 
 func (cfg *Config) Scratch(parts ...string) string {
-	return path.Join(append([]string{cfg.data, "build"}, parts...)...)
+	return filepath.Join(append([]string{cfg.data, "build"}, parts...)...)
 }
 
 func (cfg *Config) PathTo(parts ...string) string {
-	return path.Join(append([]string{cfg.data}, parts...)...)
+	return filepath.Join(append([]string{cfg.data}, parts...)...)
 }
 
 // Rather than creating one big app, for now, tapestry is split into a bunch of separate commands.
