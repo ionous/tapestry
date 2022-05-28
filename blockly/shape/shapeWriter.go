@@ -118,8 +118,8 @@ func (fd *fieldDef) writeField(args *js.Builder) (okay bool) {
 			args.R(js.Comma)
 		}
 		okay = true
-		args.Kv("name", fd.name()).R(js.Comma)
 		args.Brace(js.Obj, func(field *js.Builder) {
+			args.Kv("name", fd.name()).R(js.Comma)
 			field.Kv("type", bconst.FieldNumber)
 		})
 

@@ -161,6 +161,7 @@ safeRegister('tapestry_generic_mutation', Blockly.Extensions.registerMutator, {
     mui.initSvg();
     mui.inputList.forEach(function(min/*, index, array*/) {
       min.fieldRow.forEach(function(field/*, index, array*/) {
+        // "extraState" contains our desired block appearance
         const wants= self.getExtraState(min.name);
         if (field instanceof Blockly.FieldCheckbox) {
           field.setValue(!!wants);
@@ -171,37 +172,44 @@ safeRegister('tapestry_generic_mutation', Blockly.Extensions.registerMutator, {
     });
     return mui;
   },
-  // modifies the real block based on changes from the MUI. ( called by blockly )
+  // called by blockly: modifies the desired block extraState based on the MUI, then updates the shape from that state.
   compose: function(mui) {
     const self= this;   // our real, workspace, block.
     const customData= shapeData[self.type];
     const shapeDef= customData.shapeDef;
-    // first: modify the "extraState" based on the mui's current status
+    // first: modify our desired "extraState" based on the mui editor's current status.
     shapeDef.forEach(function(fieldDefs, index/*, array*/) {
       const inputDef= fieldDefs[fieldDefs.length-1];
-      // get the mui input ( it might not exist, ex. for fields that arent mutable )
-      const min= mui.getInput(inputDef.name);
-      // get the primary edit field
-      const field= min && min.fieldRow.find(function(field/*, index, array*/) {
-        return !!field.name;
+      fieldDefs.forEach(function(fieldDef) {
+        // find notable fields or inputs in our real block's shape definition
+        // ( dummy inputs wind up having the same name as their editing field, 
+        //   we dont need to check the same value twice so filter it )
+        if (fieldDef === inputDef || (fieldDef.name && fieldDef.name !== inputDef.name)) {
+          // get the mui input ( it might not exist, ex. for fields that arent mutable )
+          const min = mui.getInput(fieldDef.name);
+          // get the primary edit field
+          const muiField = min && min.fieldRow.find(function(muiField/*, index, array*/) {
+            return !!muiField.name;
+          });
+          // record the status of the mui field
+          if (muiField instanceof Blockly.FieldCheckbox) {
+            const isChecked= muiField.getValueBoolean();
+            self.setExtraState(min.name, isChecked?1:0);
+          } else if (muiField instanceof Blockly.FieldNumber) {
+            const itemCount= fmuiField.getValue();
+            self.setExtraState(min.name, itemCount);
+          }
+        }
       });
-      // record the edited status
-      if (field instanceof Blockly.FieldCheckbox) {
-        const isChecked= field.getValueBoolean();
-        self.setExtraState(min.name, isChecked?1:0);
-      } else if (field instanceof Blockly.FieldNumber) {
-        const itemCount= field.getValue();
-        self.setExtraState(min.name, itemCount);
-      }
     });
-    // then: build the block from the "extraState"
+    // now: build the block from the desired values ( the "extraState" ) we just generated.
     this.updateShape_();  // lives on tapestry_generic_mixin
     this.setShadow(false);
   }
 });
 
-// create a shape's non-mutable fields and inputs
-// [ this gives us strict ordering for all the fields ]
+// create a shape's non-mutable fields and inputs;
+// loadExtraState takes care of the rest.
 // relies on the generic mutation and mixin having already been added.
 safeRegister('tapestry_generic_extension', Blockly.Extensions.register, function() {
   var self = this;       // refers to the block that the extension is being run on
@@ -210,19 +218,24 @@ safeRegister('tapestry_generic_extension', Blockly.Extensions.register, function
   // self.setCommentText("");
   const customData= shapeData[self.type];
   const shapeDef= customData.shapeDef;
-
   // an array of field-input sets
   shapeDef.forEach(function(fieldDefs/*, index, array*/) {
     // the last entry is always an input ( ex. possibly a dummy or a connector )
     const inputDef = fieldDefs[fieldDefs.length-1];
-    if (!inputDef.optional) {        // only initializes required inputs; loadExtraState takes care of the rest.
+    // and we're only worrying about the required fields and inputs here.
+    if (!inputDef.optional) {        
+      // notable fields (and inputs) are given names and we tell updateShape that they exist.
+      fieldDefs.forEach(function(fieldDef) {
+        if (fieldDef.name)  {
+          self.setItemState(fieldDef.name, 1);    // track what we're about to have.
+          self.setExtraState(fieldDef.name, 1);   // track what we want: noting, it gets overwritten by loading saves.
+        }
+      });
+      // create the initial input ( which potentially includes a row of fields )
       let name= inputDef.name;
-      self.setItemState(name, 1);    // track what we're about to have.
-      self.setExtraState(name, 1);   // track what we want: but note, this is usually overwritten if coming from a file.
-      if (inputDef.repeats) {        // note: stackable inputs are not flagged as "repeats"
+      if (inputDef.repeats) {        // note: stackable inputs are marked as non-repeating in the shapeDef
         name += "0";                 // counters are "name", inputs are "name#" for updateShape_()
       }
-      // create the initial input
       self.createInput(name, fieldDefs);
     }
   });
@@ -405,10 +418,10 @@ safeRegister('tapestry_generic_mixin', Blockly.Extensions.registerMixin, {
       const fieldDef= fieldDefs[i];
       const field= Blockly.fieldRegistry.fromJson(fieldDef);
       field.fieldDef= fieldDef;
-      // note: the field doesnt get its name from the definition; instead you have to set it during append.
-      // also: dummy inputs dont count when being saved, so we have to scope it
-      let fieldName;
-      if (!(field instanceof Blockly.FieldLabel)) {
+      // note: the field actually doesnt get its name from the definition; instead you have to set it during append.
+      // and when generating names, we have to make sure they are all unique: scoped to the input.
+      let fieldName= fieldDef.name;
+      if (!fieldName && !(field instanceof Blockly.FieldLabel)) {
         fieldName= inputName;
         if (fieldCount++ > 0) {
           fieldName += "-" + fieldCount;
