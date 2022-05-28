@@ -2,7 +2,6 @@ package shape
 
 import (
 	"log"
-	"strings"
 
 	"git.sr.ht/~ionous/tapestry/blockly/bconst"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
@@ -10,7 +9,7 @@ import (
 )
 
 // write the args0 and message0 key-values.
-func (w *ShapeWriter) writeShapeDef(out *js.Builder, blockType *spec.TypeSpec, terms []spec.TermSpec) {
+func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spec.TypeSpec, terms []spec.TermSpec) {
 	out.WriteString(`"extensions":["tapestry_generic_mixin","tapestry_generic_extension"],`)
 	hasMutator := blockType.Spec.Choice == spec.UsesSpec_Flow_Opt
 	if hasMutator {
@@ -23,71 +22,68 @@ func (w *ShapeWriter) writeShapeDef(out *js.Builder, blockType *spec.TypeSpec, t
 			}
 			custom.Q("shapeDef").R(js.Colon).
 				Brace(js.Array, func(mui *js.Builder) {
-					var csv int
+					csv := OptionalComma{Builder: mui}
+					// fake an initial term
+					queue := []fieldDef{{
+						term: spec.TermSpec{
+							Label: lede,
+						},
+					}}
 					for _, term := range terms {
 						if term.Private {
 							continue // skip private terms
+						} else if fd, e := w.newFieldDef(term); e != nil {
+							log.Fatalln(e) // exit if we couldnt create the field def
+						} else if !fd.canCombine() {
+							// write earlier items ( if any )
+							if queue != nil {
+								csv.Comma()
+								flushQueue(out, queue)
+								queue = nil
+							}
+							// write this term all on its own.
+							csv.Comma()
+							mui.Brace(js.Array, func(args *js.Builder) {
+								if fd.writeField(args) {
+									csv.Comma()
+								}
+								fd.writeInput(args)
+							})
+						} else {
+							// allow this to join earlier terms
+							queue = append(queue, fd)
+							// but write all those terms and this one just added if we can't continue afterwards
+							if !fd.canContinue() {
+								csv.Comma()
+								flushQueue(out, queue)
+								queue = nil
+							}
 						}
-						if csv = csv + 1; csv > 1 {
-							mui.R(js.Comma)
-						}
-						mui.Brace(js.Array, func(args *js.Builder) {
-							w.writeFieldDefs(args, term)
-						})
+					}
+					// after all terms
+					if queue != nil {
+						csv.Comma()
+						flushQueue(out, queue)
 					}
 				})
 		})
 }
 
-//
-func (w *ShapeWriter) writeFieldDefs(args *js.Builder, term spec.TermSpec) {
-	typeName := term.TypeName() // lookup spec
-	if termType, ok := w.Types[typeName]; !ok {
-		log.Fatalln("missing named type", typeName)
-	} else {
-		writeTerm(args, term, termType)
+// returns true if it wrote things
+func (fd *fieldDef) writeField(args *js.Builder) (okay bool) {
+	// write a leading label ( for non-anonymous fields )
+	if label := fd.blocklyLabel(); len(label) > 0 {
+		writeLabel(args, label)
+		okay = true
 	}
-}
-
-func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
-	// write the label for this term.
-	if !term.IsAnonymous() {
-		writeLabel(args, term.Label)
-	} else {
-		writeLabel(args, term.Name)
-	}
-	args.R(js.Comma)
-	// write other fields while collecting information for the trailing input:
-	var checks []string
-	var inputType = bconst.InputDummy
-	var shadow string
-	//
-	switch kind := termType.Spec.Choice; kind {
-
-	case spec.UsesSpec_Flow_Opt:
-		// a flow goes here: tbd: but probably a shadow
-		// it only has the input, no special fields
-		inputType, checks = bconst.InputValue, []string{termType.Name}
-		shadow = termType.Name
-
-	case spec.UsesSpec_Slot_Opt:
-		// inputType might be a statement_input stack, or a single ( maybe repeatable ) input
-		// regardless, it only has the input, no special fields.
-		slot := bconst.FindSlotRule(termType.Name)
-		inputType, checks = slot.InputType(), []string{slot.SlotType()}
-		// if we are stack, we want to force a non-repeating input; one stack can already handle multiple blocks.
-		// fix? we dont handle the case of a stack of one element; not sure that it exists in practice.
-		if slot.Stack {
-			term.Repeats = false
-		}
-
+	// possibly write some other editable fields
+	switch fd.termType() {
 	case spec.UsesSpec_Swap_Opt:
-		swap := termType.Spec.Value.(*spec.SwapSpec)
-		inputType = bconst.InputValue
-		// allows all the types and changes the swap depending on what gets connected
-		for _, pick := range swap.Between {
-			checks = append(checks, pick.TypeName())
+		swap := fd.typeSpec.Spec.Value.(*spec.SwapSpec)
+		if okay {
+			args.R(js.Comma)
 		}
+		okay = true
 		args.Brace(js.Obj, func(field *js.Builder) {
 			field.
 				Kv("type", bconst.FieldDropdown).R(js.Comma).
@@ -115,22 +111,27 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 							swaps.Kv(pick.Value(), pick.TypeName())
 						}
 					})
-		}).R(js.Comma)
+		})
 
 	case spec.UsesSpec_Num_Opt:
+		if okay {
+			args.R(js.Comma)
+		}
+		okay = true
+		args.Kv("name", fd.name()).R(js.Comma)
 		args.Brace(js.Obj, func(field *js.Builder) {
 			field.Kv("type", bconst.FieldNumber)
-		}).R(js.Comma)
+		})
 
 	case spec.UsesSpec_Str_Opt:
-		// other options:
-		// spellcheck: true/false
-		// text: the default value
-		str := termType.Spec.Value.(*spec.StrSpec)
-		// open:
-		// closed:
+		// other options: spellcheck: true/false; text: the default value; open:; closed:
+		if okay {
+			args.R(js.Comma)
+		}
+		okay = true
 		args.Brace(js.Obj, func(field *js.Builder) {
-			if !str.Exclusively {
+			field.Kv("name", fd.name()).R(js.Comma)
+			if str := fd.typeSpec.Spec.Value.(*spec.StrSpec); !str.Exclusively {
 				field.Kv("type", bconst.FieldText)
 			} else {
 				field.Kv("type", bconst.FieldDropdown).R(js.Comma).
@@ -147,28 +148,29 @@ func writeTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) {
 							}
 						})
 			}
-		}).R(js.Comma)
-
-	default:
-		log.Fatalln("unknown spec type", kind)
+		})
 	}
-	// write the input that all of the above fields are a part of:
+	return
+}
+
+// write a blockly input to contain the passed field
+func (fd *fieldDef) writeInput(args *js.Builder) {
 	args.Brace(js.Obj, func(tail *js.Builder) {
-		tail.Kv("name", strings.ToUpper(term.Field())).R(js.Comma)
+		inputType, checks := fd.inputChecks()
+		tail.Kv("name", fd.name()).R(js.Comma)
 		tail.Kv("type", inputType)
 		appendChecks(tail, "checks", checks)
-
-		if len(shadow) > 0 {
+		if shadow := fd.shadow(); len(shadow) > 0 {
 			tail.R(js.Comma).Kv("shadow", shadow)
 		}
-		if term.Optional {
+		if fd.term.Optional {
 			tail.R(js.Comma).Q("optional").R(js.Colon).S("true")
 		}
-		if term.Repeats {
+		if fd.usesRepeatingInput() {
 			tail.R(js.Comma).Q("repeats").R(js.Colon).S("true")
 		}
 	})
-	return
+
 }
 
 func appendChecks(tail *js.Builder, label string, checks []string) {

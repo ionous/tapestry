@@ -67,8 +67,9 @@ func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spe
 	stacks, values := slotStacks(blockType)
 	// we write to partial so that we can potentially have two blocks
 	var partial js.Builder
+	// MOD-stravis... try without this.
 	// write the label for the block itself; aka the lede.
-	partial.Kv("message0", name)
+	// partial.Kv("message0", name).R(js.Comma)
 	// color
 	var colour string = bconst.COLOUR_HUE // default
 	if len(values) > 0 {                  // we take on the color of the first slot specified
@@ -78,7 +79,6 @@ func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spe
 		slot := bconst.FindSlotRule(stacks[0])
 		colour = slot.Colour
 	}
-	partial.R(js.Comma)
 	if len(colour) > 0 {
 		partial.Kv("colour", colour)
 	} else {
@@ -91,7 +91,7 @@ func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spe
 	partial.R(js.Comma)
 
 	// write the terms:
-	w.writeShapeDef(&partial, blockType, terms)
+	w.writeShapeDef(&partial, name, blockType, terms)
 
 	// are we stackable? ( ex. story statement or executable )
 	if len(stacks) > 0 {

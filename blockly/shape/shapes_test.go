@@ -83,7 +83,6 @@ func findRepeatingContainers(files fs.FS) (ret []repeatingContainer, err error) 
 func TestStoryFileShape(t *testing.T) {
 	expect := `{
   "type": "story_file",
-  "message0": "tapestry",
   "colour": "%{BKY_COLOUR_HUE}",
   "tooltip": "top level node, currently just for blockly  might eventually contain story metadata  ex. author, description...",
   "extensions": [
@@ -97,7 +96,7 @@ func TestStoryFileShape(t *testing.T) {
       [
         {
           "type": "field_label",
-          "text": "story_lines"
+          "text": "tapestry"
         },
         {
           "name": "STORY_LINES",
@@ -113,6 +112,87 @@ func TestStoryFileShape(t *testing.T) {
 	if ts, e := rs.ReadSpec(idl.Specs, "story.ifspecs"); e != nil {
 		t.Fatal(e)
 	} else if x, ok := ts.Types["story_file"]; !ok {
+		t.Fatal("missing story file type")
+	} else {
+		var out js.Builder
+		w := shape.ShapeWriter{ts}
+		w.WriteShape(&out, x)
+		//
+		if str, e := indent(out.String()); e != nil {
+			t.Fatal(e, str)
+		} else if diff := pretty.Diff(str, expect); len(diff) > 0 {
+			t.Log(str)
+			t.Fatal("ng", diff)
+		}
+	}
+}
+
+// make sure that story file has no output and one stacked input.
+func TestStoryTextShape(t *testing.T) {
+	expect := `{
+  "type": "text_field",
+  "output": [
+    "text_field",
+    "field"
+  ],
+  "colour": "%{BKY_COLOUR_HUE}",
+  "extensions": [
+    "tapestry_generic_mixin",
+    "tapestry_generic_extension"
+  ],
+  "mutator": "tapestry_generic_mutation",
+  "customData": {
+    "mui": "_text_field_mutator",
+    "shapeDef": [
+      [
+        {
+          "type": "field_label",
+          "text": "text"
+        },
+        {
+          "name": "NAME",
+          "type": "field_input"
+        },
+        {
+          "name": "NAME",
+          "type": "input_dummy"
+        }
+      ],
+      [
+        {
+          "type": "field_label",
+          "text": "kind"
+        },
+        {
+          "name": "TYPE",
+          "type": "field_input"
+        },
+        {
+          "name": "TYPE",
+          "type": "input_dummy",
+          "optional": true
+        }
+      ],
+      [
+        {
+          "type": "field_label",
+          "text": "initially"
+        },
+        {
+          "name": "INITIALLY",
+          "type": "input_value",
+          "checks": [
+            "text_eval"
+          ],
+          "optional": true
+        }
+      ]
+    ]
+  }
+}`
+	if ts, e := rs.FromSpecs(idl.Specs); e != nil {
+		t.Fatal(e)
+	} else if x, ok := ts.Types["text_field"]; !ok {
 		t.Fatal("missing story file type")
 	} else {
 		var out js.Builder

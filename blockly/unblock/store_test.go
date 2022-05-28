@@ -38,7 +38,7 @@ func TestStoring(t *testing.T) {
 }
 
 // for now just tests that it can load into the in memory structures without error
-func xTestUnblockStructs(t *testing.T) {
+func TestUnblockStructs(t *testing.T) {
 	var bff unblock.File
 	if e := json.Unmarshal(storeTest, &bff); e != nil {
 		t.Fatal(e)
