@@ -12,10 +12,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// ex. go run mosaic.go -in /Users/ionous/Documents/Tapestry -open
-// the specified directory needs two sub-directories:
-// 1. "stories" - containing .if files
-// 2. "ifspec"  - containing .ifspecs
 func main() {
 	var dir string
 	var open bool
@@ -23,12 +19,32 @@ func main() {
 	flag.BoolVar(&open, "open", false, "open a new browser window.")
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error")
 	flag.Parse()
+	if len(dir) == 0 {
+		flag.Usage()
+		return
+	}
 	//
-	cfg := web.DevConfig(build.Default.GOPATH, dir)
 	//
 	if open {
 		support.OpenBrowser(web.Endpoint(8080, "localhost", "mosaic"))
 	}
 	// by design, this never returns.
-	composer.RunMosaic(cfg, 8080)
+	composer.RunMosaic(web.DevConfig(build.Default.GOPATH, dir), 8080)
+}
+
+const AppDescription = //
+`Mosaic: starts the backend for Tapestry's blockly editor providing shape definitions, save/load functionality, etc.
+
+Requires a directory containing two sub-directories:
+	1. "stories" - containing .if files ( the target for save/load )
+	2. "ifspec"  - containing .ifspecs ( these define how to present the story content )
+`
+const AddExample = "go run mosaic.go -in /Users/ionous/Documents/Tapestry -open"
+
+func init() {
+	flag.Usage = func() {
+		println(AppDescription)
+		flag.PrintDefaults()
+		println("\nex.", AddExample)
+	}
 }

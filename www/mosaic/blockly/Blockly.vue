@@ -56,6 +56,9 @@ export default {
     pendingLoad= null;
   },
   methods: {
+    // the browser url has changed and a new story file has been requested: 
+    // remember the current workspace and retrieve the requested file
+    // ( from memory or from the server depending on if we've seen it before )
     onRouteChanged(params) {
       const { catalog } = this;
       if (params && params.editPath !== undefined) {
@@ -76,9 +79,9 @@ export default {
         }
       }
     },
-    // receives a successfully loaded file
-    // keeps looping until the result is the file currently desired by the user.
-    // ( eg. if the user clicked something different in the meantime )
+    // receives a successfully loaded file ( ex. from a changed route )
+    // keeps looping until the result is the file currently desired by the author.
+    // ( eg. if the author clicked something different in the meantime )
     _onFileLoaded(file) {
       const { catalog } = this;
       if (file.path !== pendingLoad) {
@@ -99,12 +102,15 @@ export default {
         }
       }
     },
+    // use blockly serialization to store the file data to memory
+    // ( actual save to disk via the server saves the whole catalog at once )
     storeCurrentWorkspace(file) {
       if (workspace && file && (file===currentFile)) { 
         const pod= Blockly.serialization.workspaces.save(workspace);
         file.updateContents(JSON.stringify(pod));
       }
     },
+    // window event to let blockly know to update its canvas.
     onResize() {
       // Compute the absolute coordinates and dimensions of blocklyArea.
       let element = blocklyArea;
@@ -133,22 +139,21 @@ function safeRegister(name, fn, obj) {
   fn(name, obj);
 }
 
-// name: name for the mutator, referenced by the block json.
-// mixinObj: Contains mutator methods, and any other data to copy to a new block.
-// opt_helperFn: Called after a block with this mutation has first been created.
-// opt_blockList: A list of blocks to appear in the flyout of the mutator dialog.
+// custom mutation callbacks for modifying blockly shapes.
+// note: save/loadExtraState are *required* by blockly and they can *only* live in the mutator.
+// ( ex. the "insertion manager" uses those as part of dragging blocks. )
+// this implementation leverages tapestry_generic_mixin ( also needed for non-mutating shapes. )
 safeRegister('tapestry_generic_mutation', Blockly.Extensions.registerMutator, {
-  // these are required functions, even if we decide not to serialize into blockly format.
-  // ( ex. the "insertion manager" uses this as part of dragging blocks. )
-  // however, they can *only* live in the mutator.
+  // return a copy of the current "extraState" containing the mutation ( called by blockly )
   saveExtraState() {
     return Object.assign({}, this.extraState);
   },
+  // called by blockly
   loadExtraState(extraState) {
     this.extraState= Object.assign({}, extraState);
-    this.updateShape_();
+    this.updateShape_(); // lives on tapestry_generic_mixin
   },
-  // create the MUI from the block's desired state
+  // create the MUI from the block's desired state ( called by blockly )  
   decompose: function(workspace) {
     const self= this; // the block we are creating the mui from.
     const customData= shapeData[self.type];
@@ -166,14 +171,12 @@ safeRegister('tapestry_generic_mutation', Blockly.Extensions.registerMutator, {
     });
     return mui;
   },
-  // modifies the real block based on changes from the MUI.
-  // 1: modify the "extra state" based on the mui status.
-  // 2: update the block from the extra state.
+  // modifies the real block based on changes from the MUI. ( called by blockly )
   compose: function(mui) {
     const self= this;   // our real, workspace, block.
     const customData= shapeData[self.type];
     const shapeDef= customData.shapeDef;
-    //
+    // first: modify the "extraState" based on the mui's current status
     shapeDef.forEach(function(fieldDefs, index/*, array*/) {
       const inputDef= fieldDefs[fieldDefs.length-1];
       // get the mui input ( it might not exist, ex. for fields that arent mutable )
@@ -191,24 +194,27 @@ safeRegister('tapestry_generic_mutation', Blockly.Extensions.registerMutator, {
         self.setExtraState(min.name, itemCount);
       }
     });
-    this.updateShape_();
+    // then: build the block from the "extraState"
+    this.updateShape_();  // lives on tapestry_generic_mixin
     this.setShadow(false);
   }
 });
 
-// uses the same data as the generic mutation to initialize the non-mutable fields
+// create a shape's non-mutable fields and inputs
 // [ this gives us strict ordering for all the fields ]
-// note: the generic mutation and mixin have already been added.
+// relies on the generic mutation and mixin having already been added.
 safeRegister('tapestry_generic_extension', Blockly.Extensions.register, function() {
-  var self = this; // this refers to the block that the extension is being run on
-  self.extraState= {};
-  self.itemState= {};
+  var self = this;       // refers to the block that the extension is being run on
+  self.extraState= {};   // tracks the desired block appearance ( see tapestry_generic_mixin )
+  self.itemState= {};    // tracks the actual block appearance ( see tapestry_generic_mixin )
   // self.setCommentText("");
   const customData= shapeData[self.type];
   const shapeDef= customData.shapeDef;
+
   // an array of field-input sets
   shapeDef.forEach(function(fieldDefs/*, index, array*/) {
-    const inputDef= fieldDefs[fieldDefs.length-1];
+    // the last entry is always an input ( ex. possibly a dummy or a connector )
+    const inputDef = fieldDefs[fieldDefs.length-1];
     if (!inputDef.optional) {        // only initializes required inputs; loadExtraState takes care of the rest.
       let name= inputDef.name;
       self.setItemState(name, 1);    // track what we're about to have.
@@ -233,7 +239,8 @@ safeRegister('tapestry_generic_mixin', Blockly.Extensions.registerMixin, {
   setExtraState(name, itemCount)  {
     return this.extraState[ name ]= itemCount;
   },
-  // item state tracks our *desired* block appearance
+  // item state tracks our actual block appearance
+  // ( everything starts at 0, not present. ) 
   getItemState(name)  {
     return this.itemState[ name ] || 0;
   },
@@ -245,25 +252,26 @@ safeRegister('tapestry_generic_mixin', Blockly.Extensions.registerMixin, {
 
   // given the named input, return its index.
   // ( blockly's getInput() returns the actual input itself )
-  findInputIndex(name, from=0) {
-    let found= -1;
-    for (let i= from; i< this.inputList.length; i++) {
-      const input= this.inputList[i];
-      if (input.name === name) {
-        found= i;
-        break
-      }
-    }
-    return found;
-  },
+  // findInputIndex(name, from=0) {
+  //   let found= -1;
+  //   for (let i= from; i< this.inputList.length; i++) {
+  //     const input= this.inputList[i];
+  //     if (input.name === name) {
+  //       found= i;
+  //       break
+  //     }
+  //   }
+  //   return found;
+  // },
 
   // update the workspace block based on its current desired state
+  // ( called from load and the mutation's compose )
   updateShape_: function() {
     const self= this;   // our real, workspace, block.
     const customData= shapeData[self.type];
     const shapeDef= customData.shapeDef;
     let insertAfter= 0;    // index in the ws block. inserting after index 0, the initial header.
-    //
+    // shapeDef is tapestry's custom data format.
     shapeDef.forEach(function(fieldDefs, index/*, array*/) {
       const inputDef= fieldDefs[fieldDefs.length-1];
       const inputName= inputDef.name;
@@ -300,13 +308,16 @@ safeRegister('tapestry_generic_mixin', Blockly.Extensions.registerMixin, {
     });
   },
 
-  // called by swap dropdowns to disconnect incompatible blocks after the user swaps the value.
+  // disconnect incompatible blocks after the author selects a new option from a swap's dropdown.
+  // [ this is a custom validator callback bound in createInput ]
   onSwapChanged(inputName, fieldDef, newValue) {
     const allowedType= fieldDef.swaps[newValue];
     const input= this.getInput(inputName);
     const targetConnection= input.connection && input.connection.targetConnection;
     if (targetConnection) {
-      const checks= targetConnection.getCheck(); // null if everything is allowed; rare.
+      // blockly function which returns a list of compatible value types
+      // ( null if everything is allowed; rare. )
+      const checks= targetConnection.getCheck();
       const stillCompatible= !checks || checks.includes(allowedType);
       if (!stillCompatible) {
         targetConnection.disconnect(); // bumps the disconnecting block away automatically.
@@ -314,7 +325,8 @@ safeRegister('tapestry_generic_mixin', Blockly.Extensions.registerMixin, {
     }
   },
 
-  // 1. search for swaps, and change the swap to match the input type.
+  // blockly change notification ( responding to changes made by authors )
+  // this searches for swaps, and changes the swap to match the input type.
   onchange: function(e) {
     // move events are used for connections
     if (e.type === Blockly.Events.BLOCK_MOVE) {
@@ -336,6 +348,8 @@ safeRegister('tapestry_generic_mixin', Blockly.Extensions.registerMixin, {
   },
 
   // update the value of a swap based on its current (new) input block.
+  // ( ie. when an author tries to connect a block to a swappable input
+  //   change the swap's combo box to match. )
   _updateSwap: function(input, field) {
     // if the input is a swap:
     const swaps= field.fieldDef && field.fieldDef.swaps;
@@ -346,7 +360,9 @@ safeRegister('tapestry_generic_mixin', Blockly.Extensions.registerMixin, {
         // first check the current value ....
         const currOpt= field.getValue();
         const currType= swaps[currOpt];
-        const checks= targetConnection.getCheck(); // null if everything is allowed; rare.
+        // blockly function which returns a list of compatible value types
+        // ( null if everything is allowed; rare. )
+        const checks= targetConnection.getCheck(); 
         const stillCompatible= !checks || checks.includes(currType);
         if (!stillCompatible) {
           for (let k in swaps) {
@@ -398,8 +414,10 @@ safeRegister('tapestry_generic_mixin', Blockly.Extensions.registerMixin, {
           fieldName += "-" + fieldCount;
         }
       }
+      // add a validator to disconnect incompatible blocks after a combo box change. 
       if ((fieldDef.swaps) && (field instanceof Blockly.FieldDropdown)) {
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
+        // use bind to give the callback some helpful parameters.
+        // ( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind )
         field.setValidator(this.onSwapChanged.bind(this, inputName, fieldDef));
       }
       newInput.appendField(field, fieldName);
