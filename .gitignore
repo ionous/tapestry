@@ -21,5 +21,6 @@ cmd/regenspec/regenspec
 cmd/serve/serve
 cmd/spec/spec
 cmd/stem/stem
+www/dist
 *.zip
 *.go_
