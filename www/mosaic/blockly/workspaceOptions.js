@@ -17,9 +17,9 @@ export default {
   },          // { scrollbars, drag, wheel }. Configures how users can move around the workspace.
   // oneBasedIndex:    // If true list and string operations should index from 1, if false index from 0. Defaults to true.
   // readOnly:         // If true, prevent the user from editing. Suppresses the toolbox and trashcan. Defaults to false.
-  renderer:  "thrasos", //  Determines the renderer used by blockly.  Pre-packaged renderers include
-                      // 'geras' (the default),
-                      // 'thrasos', and
+  renderer:  "geras", //  Determines the renderer used by blockly.  Pre-packaged renderers include
+                      // 'geras'  -- top aligns labels
+                      // 'thrasos' -- puts block labels in the middle
                       // 'zelos' (a scratch-like renderer) -- has rounded internal blocks
   // rtl: // If true, mirror the editor (for Arabic or Hebrew locales). See RTL demo. Defaults to false.
   scrollbars: true,   // Takes an object where the horizontal property determines if horizontal scrolling is enabled and

@@ -93,19 +93,16 @@ func TestStoryFileShape(t *testing.T) {
   "customData": {
     "mui": "_story_file_mutator",
     "shapeDef": [
-      [
-        {
-          "type": "field_label",
-          "text": "tapestry"
-        },
-        {
-          "name": "STORY_LINES",
-          "type": "input_statement",
-          "checks": [
-            "_story_statement_stack"
-          ]
-        }
-      ]
+      {
+        "label": "Tapestry"
+      },
+      {
+        "name": "STORY_LINES",
+        "type": "input_statement",
+        "checks": [
+          "_story_statement_stack"
+        ]
+      }
     ]
   }
 }`
@@ -144,49 +141,28 @@ func TestStoryTextShape(t *testing.T) {
   "customData": {
     "mui": "_text_field_mutator",
     "shapeDef": [
-      [
-        {
-          "type": "field_label",
-          "text": "text"
-        },
-        {
-          "name": "NAME",
-          "type": "field_input"
-        },
-        {
-          "name": "NAME",
-          "type": "input_dummy"
-        }
-      ],
-      [
-        {
-          "type": "field_label",
-          "text": "kind"
-        },
-        {
-          "name": "TYPE",
-          "type": "field_input"
-        },
-        {
-          "name": "TYPE",
-          "type": "input_dummy",
-          "optional": true
-        }
-      ],
-      [
-        {
-          "type": "field_label",
-          "text": "initially"
-        },
-        {
-          "name": "INITIALLY",
-          "type": "input_value",
-          "checks": [
-            "text_eval"
-          ],
-          "optional": true
-        }
-      ]
+      {
+        "label": "Text"
+      },
+      {
+        "name": "NAME",
+        "type": "field_input"
+      },
+      {
+        "label": "kind",
+        "name": "TYPE",
+        "type": "field_input",
+        "optional": true
+      },
+      {
+        "label": "initially",
+        "name": "INITIALLY",
+        "type": "input_value",
+        "checks": [
+          "text_eval"
+        ],
+        "optional": true
+      }
     ]
   }
 }`

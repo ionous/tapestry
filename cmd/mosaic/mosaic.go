@@ -32,19 +32,19 @@ func main() {
 	composer.RunMosaic(web.DevConfig(build.Default.GOPATH, dir), 8080)
 }
 
-const AppDescription = //
+const Description = //
 `Mosaic: starts the backend for Tapestry's blockly editor providing shape definitions, save/load functionality, etc.
 
 Requires a directory containing two sub-directories:
 	1. "stories" - containing .if files ( the target for save/load )
 	2. "ifspec"  - containing .ifspecs ( these define how to present the story content )
 `
-const AddExample = "go run mosaic.go -in /Users/ionous/Documents/Tapestry -open"
+const Example = "go build mosaic.go && mosaic.exe -in /Users/ionous/Documents/Tapestry -open"
 
 func init() {
 	flag.Usage = func() {
-		println(AppDescription)
+		println(Description)
 		flag.PrintDefaults()
-		println("\nex.", AddExample)
+		println("\nex.", Example)
 	}
 }

@@ -13,12 +13,7 @@ func (w *ShapeWriter) writeMuiMsgArgs(out *js.Builder, blockType *spec.TypeSpec,
 	var argCount int
 	out.
 		Q("args0").R(js.Colon).Brace(js.Array, func(args *js.Builder) {
-		var header string
-		if lede := flow.Name; len(lede) > 0 {
-			header = lede
-		} else {
-			header = blockType.Name
-		}
+		header := flow.FriendlyLede(blockType)
 		argCount += writeDummy(args, "", header)
 		for _, term := range flow.Terms {
 			if !term.Private {

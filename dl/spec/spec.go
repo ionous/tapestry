@@ -1,13 +1,39 @@
 package spec
 
-import "strings"
+import (
+	"strings"
+	"unicode"
+)
 
 //--------------------------
 // TypeSpec:
 
-// fix: this isnt right currently i dont think
+// change one_two into "One two"
 func (op *TypeSpec) FriendlyName() string {
-	return strings.Join(strings.Split(op.Name, "_"), " ")
+	return FriendlyName(op.Name, false)
+}
+
+func FriendlyName(n string, capAllWords bool) (ret string) {
+	var b strings.Builder
+	cap := true
+	for i, s := range strings.Split(n, "_") {
+		if i > 0 {
+			b.WriteRune(' ')
+		}
+		if !cap {
+			b.WriteString(s)
+		} else {
+			for j, r := range s {
+				if j == 0 {
+					b.WriteRune(unicode.ToUpper(r))
+				} else {
+					b.WriteRune(r)
+				}
+			}
+			cap = capAllWords
+		}
+	}
+	return b.String()
 }
 
 //--------------------------
@@ -67,6 +93,16 @@ func (op *ChoiceSpec) TypeName() (ret string) {
 		ret = op.Type
 	} else {
 		ret = op.Name
+	}
+	return
+}
+
+//--------------------------
+func (op *FlowSpec) FriendlyLede(blockType *TypeSpec) (ret string) {
+	if lede := op.Name; len(lede) > 0 {
+		ret = FriendlyName(lede, false)
+	} else {
+		ret = FriendlyName(blockType.Name, false)
 	}
 	return
 }

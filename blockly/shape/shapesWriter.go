@@ -42,7 +42,8 @@ func (w *ShapeWriter) writeSlotBlock(block *js.Builder, blockType *spec.TypeSpec
 // ( for simple types or maybe all of them ) and change the block's input on selection.
 func (w *ShapeWriter) writeStandalone(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
 	// we simply pretend we're a flow of one anonymous member.
-	okay = w._writeShape(block, blockType.Name, blockType, []spec.TermSpec{{
+	name := spec.FriendlyName(blockType.Name, false)
+	okay = w._writeShape(block, name, blockType, []spec.TermSpec{{
 		Label: "",
 		Name:  blockType.Name,
 		Type:  blockType.Name,
@@ -52,10 +53,7 @@ func (w *ShapeWriter) writeStandalone(block *js.Builder, blockType *spec.TypeSpe
 
 func (w *ShapeWriter) writeFlowBlock(block *js.Builder, blockType *spec.TypeSpec) bool {
 	flow := blockType.Spec.Value.(*spec.FlowSpec)
-	name := blockType.Name
-	if n := flow.Name; len(n) > 0 {
-		name = n
-	}
+	name := flow.FriendlyLede(blockType)
 	return w._writeShape(block, name, blockType, flow.Terms)
 }
 

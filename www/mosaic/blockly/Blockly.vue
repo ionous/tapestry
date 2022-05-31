@@ -6,6 +6,8 @@
 import Blockly from 'blockly';
 import Cataloger from '/mosaic/catalog/cataloger.js'
 import WorkspaceOptions from './workspaceOptions.js'
+import ShapeReader  from './shapeReader.js'
+import ShapeWriter from './shapeWriter.js'
 
 Blockly.WorkspaceAudio.prototype.preload= function(){};
 
@@ -155,14 +157,14 @@ safeRegister('tapestry_generic_mutation', Blockly.Extensions.registerMutator, {
   },
   // create the MUI from the block's desired state ( called by blockly )  
   decompose: function(workspace) {
-    const self= this; // the block we are creating the mui from.
-    const customData= shapeData[self.type];
+    const blockType = this.type;
+    const customData = shapeData[blockType];
     const mui = workspace.newBlock(customData.mui); // ex. "_text_value_mutator"
     mui.initSvg();
-    mui.inputList.forEach(function(min/*, index, array*/) {
-      min.fieldRow.forEach(function(field/*, index, array*/) {
+    mui.inputList.forEach((min/*, index, array*/) => {
+      min.fieldRow.forEach((field/*, index, array*/) => {
         // "extraState" contains our desired block appearance
-        const wants= self.getExtraState(min.name);
+        const wants= this.getExtraState(min.name);
         if (field instanceof Blockly.FieldCheckbox) {
           field.setValue(!!wants);
         } else if (field instanceof Blockly.FieldNumber) {
@@ -172,73 +174,62 @@ safeRegister('tapestry_generic_mutation', Blockly.Extensions.registerMutator, {
     });
     return mui;
   },
-  // called by blockly: modifies the desired block extraState based on the MUI, then updates the shape from that state.
+  // called by blockly to modify the desiredState based on the MUI, then updates the workspace shape from that.
   compose: function(mui) {
-    const self= this;   // our real, workspace, block.
-    const customData= shapeData[self.type];
-    const shapeDef= customData.shapeDef;
-    // first: modify our desired "extraState" based on the mui editor's current status.
-    shapeDef.forEach(function(fieldDefs, index/*, array*/) {
-      const inputDef= fieldDefs[fieldDefs.length-1];
-      fieldDefs.forEach(function(fieldDef) {
-        // find notable fields or inputs in our real block's shape definition
-        // ( dummy inputs wind up having the same name as their editing field, 
-        //   we dont need to check the same value twice so filter it )
-        if (fieldDef === inputDef || (fieldDef.name && fieldDef.name !== inputDef.name)) {
-          // get the mui input ( it might not exist, ex. for fields that arent mutable )
-          const min = mui.getInput(fieldDef.name);
-          // get the primary edit field
-          const muiField = min && min.fieldRow.find(function(muiField/*, index, array*/) {
-            return !!muiField.name;
-          });
-          // record the status of the mui field
-          if (muiField instanceof Blockly.FieldCheckbox) {
-            const isChecked= muiField.getValueBoolean();
-            self.setExtraState(min.name, isChecked?1:0);
-          } else if (muiField instanceof Blockly.FieldNumber) {
-            const itemCount= fmuiField.getValue();
-            self.setExtraState(min.name, itemCount);
-          }
-        }
+    const blockType = this.type;
+    const customData = shapeData[blockType];
+    const shapeDef = customData.shapeDef;
+    // first: modify our "extraState" based on the mui editor.
+    shapeDef.forEach((itemDef) => {
+      // get the mui input ( it might not exist, ex. for fields that arent mutable or even notable )
+      const min = itemDef.name && mui.getInput(itemDef.name);
+      // get the primary edit field
+      const muiField = min && min.fieldRow.find(function(muiField/*, index, array*/) {
+        return !!muiField.name;
       });
+      // record the status of the mui field
+      if (muiField instanceof Blockly.FieldCheckbox) {
+        const isChecked= muiField.getValueBoolean();
+        this.setExtraState(min.name, isChecked?1:0);
+      } else if (muiField instanceof Blockly.FieldNumber) {
+        const itemCount= muiField.getValue();
+        this.setExtraState(min.name, itemCount);
+      }
     });
-    // now: build the block from the desired values ( the "extraState" ) we just generated.
+    // now: build the block ( and itemState ) from the extraState we just determined.
     this.updateShape_();  // lives on tapestry_generic_mixin
     this.setShadow(false);
   }
 });
 
-// create a shape's non-mutable fields and inputs;
-// loadExtraState takes care of the rest.
+// create a shape's non-mutable fields and inputs;  loadExtraState takes care of the rest.
 // relies on the generic mutation and mixin having already been added.
 safeRegister('tapestry_generic_extension', Blockly.Extensions.register, function() {
-  var self = this;       // refers to the block that the extension is being run on
-  self.extraState= {};   // tracks the desired block appearance ( see tapestry_generic_mixin )
-  self.itemState= {};    // tracks the actual block appearance ( see tapestry_generic_mixin )
-  // self.setCommentText("");
-  const customData= shapeData[self.type];
+  this.extraState= {};   // tracks the mutation state: the desired block appearance ( see tapestry_generic_mixin )
+  this.itemState= {};    // tracks the workspace state: the actual block appearance ( see tapestry_generic_mixin )
+  // this.setCommentText("");
+  const blockType = this.type;
+  const customData= shapeData[blockType];
   const shapeDef= customData.shapeDef;
-  // an array of field-input sets
-  shapeDef.forEach(function(fieldDefs/*, index, array*/) {
-    // the last entry is always an input ( ex. possibly a dummy or a connector )
-    const inputDef = fieldDefs[fieldDefs.length-1];
-    // and we're only worrying about the required fields and inputs here.
-    if (!inputDef.optional) {        
-      // notable fields (and inputs) are given names and we tell updateShape that they exist.
-      fieldDefs.forEach(function(fieldDef) {
-        if (fieldDef.name)  {
-          self.setItemState(fieldDef.name, 1);    // track what we're about to have.
-          self.setExtraState(fieldDef.name, 1);   // track what we want: noting, it gets overwritten by loading saves.
-        }
-      });
-      // create the initial input ( which potentially includes a row of fields )
-      let name= inputDef.name;
-      if (inputDef.repeats) {        // note: stackable inputs are marked as non-repeating in the shapeDef
-        name += "0";                 // counters are "name", inputs are "name#" for updateShape_()
+  const shapeWriter= new ShapeWriter(this, ({input, field})=> {
+    this.onItemAdded(input,field);
+  })
+  // create our default workspace state,
+  // then blockly will load extraState and we will mutate into the desired shape.
+  shapeDef.forEach((itemDef/*, index, array*/) => {
+    if (itemDef.optional) {
+      console.assert(itemDef.name); // optional elements should have a name.
+    } else {
+      // we track all notable optional/non-optional items to simplify updateShape
+      // ( though we're only worrying about the required fields and inputs here. )
+      if (itemDef.name)  {
+        this.setItemState(itemDef.name, 1);    // what we're about to have.
+        this.setExtraState(itemDef.name, 1);   // what we want: overwritten by loading saves.
       }
-      self.createInput(name, fieldDefs);
+      shapeWriter.createItems(itemDef, 0, 1);
     }
   });
+  shapeWriter.finalize();
 });
 
 // mix for helper functions
@@ -263,75 +254,73 @@ safeRegister('tapestry_generic_mixin', Blockly.Extensions.registerMixin, {
   // extraState: {}, // created by the generic extension "constructor"...
   // itemState: {},  // so they dont wind up shared across instances.
 
-  // given the named input, return its index.
-  // ( blockly's getInput() returns the actual input itself )
-  // findInputIndex(name, from=0) {
-  //   let found= -1;
-  //   for (let i= from; i< this.inputList.length; i++) {
-  //     const input= this.inputList[i];
-  //     if (input.name === name) {
-  //       found= i;
-  //       break
-  //     }
-  //   }
-  //   return found;
-  // },
-
   // update the workspace block based on its current desired state
   // ( called from load and the mutation's compose )
   updateShape_: function() {
-    const self= this;   // our real, workspace, block.
-    const customData= shapeData[self.type];
-    const shapeDef= customData.shapeDef;
-    let insertAfter= 0;    // index in the ws block. inserting after index 0, the initial header.
-    // shapeDef is tapestry's custom data format.
-    shapeDef.forEach(function(fieldDefs, index/*, array*/) {
-      const inputDef= fieldDefs[fieldDefs.length-1];
-      const inputName= inputDef.name;
-      // this setup handles some cases where extraState has info where its not needed.
-      // ( ex. the block generator records the number of stacked inputs even tho that's... wrong. )
-      const want= self.getExtraState(inputName, inputDef.optional?0:1);
-      let have= self.getItemState(inputName);
-      if (want == have) {
-        insertAfter += inputDef.repeats? have: 1;
+    const blockType = this.type;
+    const customData = shapeData[blockType];
+    const shapeDef = customData.shapeDef;
+    //
+    const shapeReader = new ShapeReader(this);
+    const shapeWriter = new ShapeWriter(this, (item, field)=> {
+      this.onItemAdded(item, field);
+    })
+    // traversing in tapestry's shapeDef order to track the desired position of fields.
+    // this alg handles some cases where extraState has info where its not needed.
+    // ( ex. the block generator records the number of stacked inputs even tho that's wrong. )
+    shapeDef.forEach((itemDef) => {
+      const itemName= itemDef.name;
+      let want, have;
+      if (!itemName) { // we assume we have 1 of all non-notable items, default to zero of everything else.
+        want = 1, have = 1;
       } else {
-        self.setItemState(inputName, want);
-        // note: the 'repeat' status is disabled for "stackable slots" by the tapestry block generator
-        // and other repeating fields are represented by numbers even when they are optional.
-        // ie. zero means a non-existent optional repeating field.
-        if (inputDef.repeats) {
-          while (have > want) {
-            --have; // if we want zero, the last removed is name0.
-            self.removeInput(inputName + have);
-          }
-          insertAfter+= have;
-          while (have < want) {
-            // if we have zero, the first added is name0.
-            self.createInput(inputName+have, fieldDefs, ++insertAfter);
-            ++have;
-          }
-        } else if (!want) {
-          self.removeInput(inputName, /*opt_quiet:dont error if not there.*/ true);
-        } else if (!have) {
-          self.createInput(inputName, fieldDefs, ++insertAfter);
-        } else {
-          ++insertAfter; // want and have and not repeating.
+        have = this.getItemState(itemName);
+        want = this.getExtraState(itemName, itemDef.optional? 0: 1);
+        // fix? stacks can report > 1 elements due to the block generator on the golang side.
+        if (!itemDef.repeats && want > 1) {
+          want = 1
         }
+        this.setItemState(itemName, want);
+      }
+      // transfer the left/top most items first.
+      // ( transfer items even if counts match: mutation can cause items to move b/t inputs )
+      const transfer= want > have? have: want;
+      if (transfer) {
+        shapeReader.takeItems(itemName, have, (item)=>{
+          if (item.field) {
+           shapeWriter.transferField(item.field);
+         } else {
+           shapeWriter.transferInput(item.input);
+         }
+        });
+      }
+      const destroy = have-want;
+      if (destroy> 0) {
+        shapeReader.takeItems(itemName, destroy, (item)=>{
+          item.removeFrom(this);
+        });
+      }
+      const add = want- have;
+      if (add) {
+        // to keep the writer and reader in sync:
+        // push the reader forward by the number of new inputs created.
+        const inputCount= shapeWriter.createItems(itemDef, have, add);
+        shapeReader.adjust(inputCount);
       }
     });
+    shapeWriter.finalize();
   },
 
   // disconnect incompatible blocks after the author selects a new option from a swap's dropdown.
   // [ this is a custom validator callback bound in createInput ]
-  onSwapChanged(inputName, fieldDef, newValue) {
-    const allowedType= fieldDef.swaps[newValue];
+  onSwapChanged(inputName, swaps, newValue) {
     const input= this.getInput(inputName);
     const targetConnection= input.connection && input.connection.targetConnection;
     if (targetConnection) {
       // blockly function which returns a list of compatible value types
       // ( null if everything is allowed; rare. )
       const checks= targetConnection.getCheck();
-      const stillCompatible= !checks || checks.includes(allowedType);
+      const stillCompatible= !checks || checks.includes(swaps[newValue]);
       if (!stillCompatible) {
         targetConnection.disconnect(); // bumps the disconnecting block away automatically.
       }
@@ -347,7 +336,7 @@ safeRegister('tapestry_generic_mixin', Blockly.Extensions.registerMixin, {
       if (e.newParentId === this.id) {
         // find the input that's being connected to
         const input= this.getInput(e.newInputName);
-        if (input && input.inputDef) {
+        if (input && input.itemDef) {
           // ends when field is nil because array is exhausted.
           for (let i = 0, field; (field = input.fieldRow[i]); i++) {
             if (field.name === input.name) {
@@ -365,7 +354,7 @@ safeRegister('tapestry_generic_mixin', Blockly.Extensions.registerMixin, {
   //   change the swap's combo box to match. )
   _updateSwap: function(input, field) {
     // if the input is a swap:
-    const swaps= field.fieldDef && field.fieldDef.swaps;
+    const swaps= field.itemDef && field.itemDef.swaps;
     if (swaps) {
       const targetConnection= input.connection && input.connection.targetConnection;
       // assuming something is connected
@@ -389,69 +378,35 @@ safeRegister('tapestry_generic_mixin', Blockly.Extensions.registerMixin, {
       }
     }
   },
-
-  // allows overrides of the input name to handle repeated elements
-  createInput: function(inputName, fieldDefs, atIndex) {
-    const inputDef= fieldDefs[fieldDefs.length-1];
-    const appendFn= {
-      // note: the names "statement_input" etc.
-      // only have meaning for the json descriptions --
-      // and the public interface doesn't have a generic append
-      'input_dummy': 'appendDummyInput',
-      'input_value': 'appendValueInput',
-      'input_statement': 'appendStatementInput',
-    }[inputDef.type];
-    if (!appendFn) {
-      throw new Error(`Tapestry mutation couldn't create ${inputName} of ${inputDef.type}`);
-    }
-    const newInput= this[appendFn](inputName);
-    newInput.inputDef= inputDef;
-    const newIndex= this.inputList.length-1;
-    if (atIndex && atIndex < newIndex) {
-      this.moveNumberedInputBefore(newIndex, atIndex);
-    }
-    if (inputDef.check) {
-      newInput.setCheck(inputDef.check);
-    }
-    let fieldCount=0;
-    for (let i=0; i<fieldDefs.length-1; i++) {
-      const fieldDef= fieldDefs[i];
-      const field= Blockly.fieldRegistry.fromJson(fieldDef);
-      field.fieldDef= fieldDef;
-      // note: the field actually doesnt get its name from the definition; instead you have to set it during append.
-      // and when generating names, we have to make sure they are all unique: scoped to the input.
-      let fieldName= fieldDef.name;
-      if (!fieldName && !(field instanceof Blockly.FieldLabel)) {
-        fieldName= inputName;
-        if (fieldCount++ > 0) {
-          fieldName += "-" + fieldCount;
-        }
-      }
-      // add a validator to disconnect incompatible blocks after a combo box change. 
-      if ((fieldDef.swaps) && (field instanceof Blockly.FieldDropdown)) {
+  // callback from ShapeWriter whenever an input is created or a field is added to an input ( for this block )
+  onItemAdded(input, field) {
+    if (field)  {
+      // add a validator to disconnect incompatible blocks after a combo box change.
+      const swaps= field.itemDef && field.itemDef.swaps; // ex. { "$KINDS": "plural_kinds", "$NOUN": "named_noun" }
+      if (swaps && (field instanceof Blockly.FieldDropdown)) {
         // use bind to give the callback some helpful parameters.
         // ( https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind )
-        field.setValidator(this.onSwapChanged.bind(this, inputName, fieldDef));
+        field.setValidator(this.onSwapChanged.bind(this, input.name, swaps));
       }
-      newInput.appendField(field, fieldName);
+    } else if (input) {
+      // means that we created something other than a dummy input
+      // and we should give it an initial value
+      const isToolbox = this.workspace !== Blockly.mainWorkspace;
+      const itemDef = input.itemDef;
+      if (isToolbox && itemDef.shadow) {
+        const sub = this.workspace.newBlock(itemDef.shadow);
+        // guess at a bunch of random things to make this show up correctly.
+        // render is needed otherwise drag crashes trying to access a null location,
+        // and initSvg is needed before render.
+        // shadow is needed for the toolbox otherwise we get a random extra block when drag starts.
+        sub.initSvg(); // needed before render is called
+        sub.render(false); // false means: only re/render this block.
+        sub.setShadow(true); // shadow cleans up better when done; but you can connect other values
+        // sub.setDeletable(false);
+        // sub.setMovable(false);
+        input.connection.connect(sub.outputConnection);
+      }
     }
-    // means that we created something other than a dummy input
-    // and we should give it an initial value
-    const isToolbox= this.workspace!==Blockly.mainWorkspace;
-    if (isToolbox && inputDef.shadow) {
-      const sub = this.workspace.newBlock(inputDef.shadow);
-      // guess at a bunch of random things to make this show up correctly.
-      // render is needed otherwise drag crashes trying to access a null location,
-      // and initSvg is needed before render.
-      // shadow is needed for the toolbox otherwise we get a random extra block when drag starts.
-      sub.initSvg(); // needed before render is called
-      sub.render(false); // false means: only re/render this block.
-      sub.setShadow(true); // shadow cleans up better when done; but you can connect other values
-      // sub.setDeletable(false);
-      // sub.setMovable(false);
-      newInput.connection.connect(sub.outputConnection);
-    }
-    return newInput;
   }
 });
 
