@@ -19,7 +19,7 @@ export default class ShapeReader {
     for (let i = 0; i < count; ) {
       const item = this.getNext();
       if (!item.validate(itemName)) {
-        console.warn("couldn't validate item");
+        console.warn(`couldn't validate item named ${itemName} at ${i} of ${count}`);
         break;
       }
       if (!itemName || item.name()) {

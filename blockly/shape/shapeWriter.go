@@ -41,8 +41,11 @@ func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spe
 								if label := fd.blocklyLabel(); len(label) > 0 {
 									out.Kv("label", label).R(js.Comma)
 								}
+								// every term needs a name ( for blockly's sake )
 								out.Kv("name", fd.name()).R(js.Comma)
+								// write the contents of the term
 								fn(out, fd)
+								// write optional, and repeating status
 								if fd.term.Optional {
 									out.R(js.Comma).Q("optional").R(js.Colon).S("true")
 								}
@@ -130,7 +133,10 @@ func writeSwap(out *js.Builder, fd *fieldDef) {
 	for _, pick := range swap.Between {
 		checks = append(checks, pick.TypeName())
 	}
+	// close off the dropdown item def, and open an input item def
+	// the caller will close that out.
 	out.R(js.Obj[1]).R(js.Comma).R(js.Obj[0])
+	out.Kv("name", fd.name()).R(js.Comma)
 	writeInput(out, fd, bconst.InputValue, checks)
 	return
 }
