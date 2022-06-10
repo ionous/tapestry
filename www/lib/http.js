@@ -1,4 +1,5 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+// readJson indicates whether to parse the response as json formatted data.
 async function send(url, method, data, readJson) {
   // Default options are marked with *
   const response = await fetch(url, {
@@ -34,10 +35,12 @@ export default {
     });
   },
 
+  // readJson indicates whether to parse the response as json formatted data.
   async post(url, data = {}, readJson=false) {
     return send(url, 'POST', data, readJson);
   },
 
+  // readJson indicates whether to parse the response as json formatted data.
   async put(url, data = {}, readJson=false) {
     return send(url, 'PUT', data, readJson);
   }

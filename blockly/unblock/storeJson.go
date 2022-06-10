@@ -8,16 +8,23 @@ import (
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
+// describes a blockly file
+// https://developers.google.com/blockly/guides/configure/web/serialization?hl=en
 type File struct {
 	TopBlocks `json:"blocks"`
 }
 
+// file formatting info inside every blockly json file
 type TopBlocks struct {
-	LanguageVersion float64 `json:"languageVersion"`
-	Blocks          []Info  `json:"blocks"`
+	LanguageVersion float64     `json:"languageVersion"`
+	Blocks          []BlockInfo `json:"blocks"`
 }
 
-type Info struct {
+// a stored blockly block
+// recursive in the sense that inputs can contain other blocks
+// note while in shape definitions fields are stored inside of inputs;
+// in block data fields get stored separate from inputs, keyed by field name.
+type BlockInfo struct {
 	Id         string         `json:"id"`
 	Type       string         `json:"type"`
 	ExtraState map[string]int `json:"extraState"`
@@ -27,10 +34,12 @@ type Info struct {
 	Next       *Input         `json:"next"`
 }
 
+// a blockly input contains a blockly block.
 type Input struct {
-	*Info `json:"block"`
+	*BlockInfo `json:"block"`
 }
 
+// blockly stores comments inside of the icon representing the comment
 type Icons struct {
 	Comment *Comment `json:"comment"`
 }
@@ -44,7 +53,7 @@ type Comment struct {
 	Width  int    `json:"width"`
 }
 
-func (tb *TopBlocks) FindFirst(typeName string) (ret *Info, okay bool) {
+func (tb *TopBlocks) FindFirst(typeName string) (ret *BlockInfo, okay bool) {
 	for _, b := range tb.Blocks {
 		if b.Type == typeName {
 			ret, okay = &b, true
@@ -63,19 +72,19 @@ func (bi *Input) CountNext() (ret int) {
 }
 
 // return the number of term# formatted fields
-func (bi *Info) CountFields(term string) (retStart, retCnt int) {
+func (bi *BlockInfo) CountFields(term string) (retStart, retCnt int) {
 	return count(term, bi.Fields)
 }
 
 // return the number of term# formatted inputs
-func (bi *Info) CountInputs(term string) (retStart, retCnt int) {
+func (bi *BlockInfo) CountInputs(term string) (retStart, retCnt int) {
 	return count(term, bi.Inputs)
 }
 
-func (bi *Info) ReadInput(i int) (ret Input, err error) {
+func (bi *BlockInfo) ReadInput(i int) (ret Input, err error) {
 	if e := json.Unmarshal(bi.Inputs[i].Msg, &ret); e != nil {
 		err = e
-	} else if ret.Info == nil {
+	} else if ret.BlockInfo == nil {
 		err = jsn.Missing
 	}
 	return

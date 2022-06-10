@@ -90,7 +90,7 @@ export default class BlockCatalog extends Cataloger {
       }
       if (out.length>0) {
         this._saving = next; // stores the save id for debugging.
-        console.log("saving", out.length, "files");
+        console.log(`saving ${out.length} files via ${this.base}`);
         http.put(this.base, out).then((res)=>{
           console.log("SAVED:", res);
           this._saved= next;

@@ -60,17 +60,17 @@ func TestCountField(t *testing.T) {
 		{Key: "b2"},
 		{Key: "c"},
 	}
-	// if i, cnt := (&store.Info{
+	// if i, cnt := (&store.BlockInfo{
 	// 	Fields: fields,
 	// }).CountField("a"); cnt != 0 {
 	// 	t.Fatal("a", i, cnt)
 	// }
-	// if i, cnt := (&store.Info{
+	// if i, cnt := (&store.BlockInfo{
 	// 	Fields: fields,
 	// }).CountField("b"); i != 1 || cnt != 3 {
 	// 	t.Fatal("b", i, cnt)
 	// }
-	if i, cnt := (&unblock.Info{
+	if i, cnt := (&unblock.BlockInfo{
 		Fields: fields[1:2],
 	}).CountFields("b"); i != 0 || cnt != 1 {
 		t.Fatal("b", i, cnt)
@@ -78,7 +78,7 @@ func TestCountField(t *testing.T) {
 }
 
 func testUnblock(reg unblock.TypeCreator, expect jsn.Marshalee, msg string) (err error) {
-	var top unblock.Info
+	var top unblock.BlockInfo
 	if e := json.Unmarshal([]byte(msg), &top); e != nil {
 		err = e
 	} else {

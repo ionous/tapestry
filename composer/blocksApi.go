@@ -44,6 +44,9 @@ func (d blocksFolder) Find(sub string) (ret web.Resource) {
 	return
 }
 
+// save a bunch of files:
+// the mosasic editor sends multiple files at once so this handlesave at the root folder level.
+// because the same path written twice with the same data should have the same result... this uses put.
 func (d blocksFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
 	var els []struct {
 		Path     string          `json:"path"`
@@ -80,11 +83,13 @@ func (d blocksFile) Find(sub string) (none web.Resource) {
 }
 
 // files dont support posting; returns error
+// ( blocksFolder however support put )
 func (d blocksFile) Post(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
 	return errutil.New("unsupported post", d)
 }
 
 // files dont support putting; returns error
+// ( blocksFolder however support put )
 func (d blocksFile) Put(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
 	return errutil.New("unsupported put", d)
 }
