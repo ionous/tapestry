@@ -14,19 +14,15 @@ import (
 	"golang.org/x/tools/imports"
 )
 
-const ExampleUsage = "go run gomake.go -out ../../dl"
-
 func main() {
 	var out string
-	usage := flag.Usage
-	flag.Usage = func() {
-		usage()
-		println("ex.", ExampleUsage)
-	}
-	flag.StringVar(&out, "out", "temp", "optional output directory")
+	flag.StringVar(&out, "out", "", "output directory")
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
 	flag.Parse()
-	if path, e := filepath.Abs(out); e != nil {
+	if len(out) == 0 {
+		flag.Usage()
+	} else if path, e := filepath.Abs(out); e != nil {
+		flag.Usage()
 		log.Fatal(e)
 	} else {
 		dlLike := strings.HasSuffix(path, string(filepath.Separator)+"dl")
@@ -55,5 +51,19 @@ func main() {
 		}); e != nil {
 			log.Fatal(e)
 		}
+	}
+}
+
+const Description = //
+`gomake generates go language serialization code for reading and writing .if files.
+Currently, the compiler embeds the .ifspecs descriptions into the gomake executable.
+`
+const Example = "go run gomake.go -out ../../dl"
+
+func init() {
+	flag.Usage = func() {
+		println(Description)
+		flag.PrintDefaults()
+		println("\nex.", Example)
 	}
 }

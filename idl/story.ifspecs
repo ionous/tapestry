@@ -7,10 +7,7 @@
         {
           "Spec:groups:with str:": [
             "abstract_action",
-            [
-              "debug",
-              "events"
-            ],
+            "events",
             {
               "Str exclusively:uses:": [
                 true,
@@ -26,11 +23,7 @@
         {
           "Spec:groups:with flow:": [
             "action_context",
-            [
-              "debug",
-              "events",
-              "positioned"
-            ],
+            "events",
             {
               "Flow phrase:uses:": [
                 "and one {$kind} ( the other noun )",
@@ -52,10 +45,7 @@
           "Spec:slots:groups:with flow:": [
             "action_decl",
             "story_statement",
-            [
-              "debug",
-              "events"
-            ],
+            "events",
             {
               "Flow:phrase:uses:": [
                 "Event",
@@ -88,11 +78,7 @@
         {
           "Spec:groups:with str:": [
             "action_name",
-            [
-              "debug",
-              "events",
-              "positioned"
-            ],
+            "events",
             {
               "Str uses:": []
             }
@@ -101,10 +87,7 @@
         {
           "Spec:groups:with swap:": [
             "action_params",
-            [
-              "debug",
-              "events"
-            ],
+            "events",
             {
               "Swap between:": [
                 {
@@ -133,12 +116,8 @@
           ]
         },
         {
-          "Spec:groups:with str:": [
+          "Spec:with str:": [
             "ana",
-            [
-              "debug",
-              "misc"
-            ],
             {
               "Str exclusively:uses:": [
                 true,
@@ -155,12 +134,8 @@
           ]
         },
         {
-          "Spec:groups:with str:": [
+          "Spec:with str:": [
             "are_an",
-            [
-              "debug",
-              "misc"
-            ],
             {
               "Str exclusively:uses:": [
                 true,
@@ -201,12 +176,8 @@
           ]
         },
         {
-          "Spec:groups:with str:": [
+          "Spec:with str:": [
             "are_being",
-            [
-              "debug",
-              "misc"
-            ],
             {
               "Str exclusively:uses:": [
                 true,
@@ -223,12 +194,8 @@
           ]
         },
         {
-          "Spec:groups:with str:": [
+          "Spec:with str:": [
             "are_either",
-            [
-              "debug",
-              "properties"
-            ],
             {
               "Str exclusively:uses:": [
                 true,
@@ -253,11 +220,7 @@
         {
           "Spec:groups:with str:": [
             "aspect",
-            [
-              "debug",
               "traits",
-              "positioned"
-            ],
             {
               "Str uses:": []
             }
@@ -267,10 +230,7 @@
           "Spec:slots:groups:with flow:": [
             "aspect_field",
             "field",
-            [
-              "debug",
-              "properties"
-            ],
+            "properties",
             {
               "Flow:phrase:uses:": [
                 "aspect",
@@ -293,10 +253,7 @@
           "Spec:slots:groups:with flow:": [
             "aspect_traits",
             "story_statement",
-            [
-              "debug",
-              "traits"
-            ],
+            "traits",
             {
               "Flow phrase:uses:": [
                 "{$aspect} {$trait_phrase}",
@@ -319,10 +276,7 @@
           "Spec:slots:groups:with flow:": [
             "bool_field",
             "field",
-            [
-              "debug",
-              "properties"
-            ],
+            "properties",
             {
               "Flow:phrase:uses:": [
                 "bool",
@@ -360,10 +314,7 @@
           "Spec:slots:groups:with flow:": [
             "certainties",
             "story_statement",
-            [
-              "debug",
-              "properties"
-            ],
+            "properties",
             {
               "Flow phrase:uses:": [
                 "{$plural_kinds} {$are_being} {$certainty} {$trait}.",
@@ -392,11 +343,7 @@
           "--": "Whether an trait applies to a kind of noun.",
           "Spec:groups:with str:": [
             "certainty",
-            [
-              "debug",
-              "properties",
-              "positioned"
-            ],
+            "properties",
             {
               "Str exclusively:uses:": [
                 true,
@@ -429,10 +376,7 @@
               "story_statement",
               "execute"
             ],
-            [
-              "debug",
-              "language"
-            ],
+            "language",
             {
               "Flow phrase:uses:": [
                 "Note: {comment$lines}",
@@ -451,11 +395,7 @@
         {
           "Spec:groups:with flow:": [
             "common_action",
-            [
-              "debug",
-              "events",
-              "positioned"
-            ],
+            "events",
             {
               "Flow phrase:uses:": [
                 "one {$kind} ( the noun ) {$action_context}",
@@ -486,12 +426,7 @@
           "Spec:slots:groups:with flow:": [
             "count_of",
             "bool_eval",
-            [
-              "debug",
-              "stubs",
-              "logic",
-              "positioned"
-            ],
+            "logic",
             {
               "Flow phrase:uses:": [
                 "trigger {_$trigger} {$num}",
@@ -518,12 +453,7 @@
           "Spec:slots:groups:with flow:": [
             "cycle_text",
             "text_eval",
-            [
-              "debug",
-              "stubs",
-              "output",
-              "positioned"
-            ],
+            "output",
             {
               "Flow phrase:uses:": [
                 "cycle {_$parts}",
@@ -545,10 +475,7 @@
           "--": "Determiners: modify a word they are associated to designate specificity or, sometimes, a count.  For instance: \"some\" fish hooks, \"a\" pineapple, \"75\" triangles, \"our\" Trevor.",
           "Spec:groups:with str:": [
             "determiner",
-            [
-              "debug",
-              "nouns"
-            ],
+              "nouns",
             {
               "Str uses:": [
                 {
@@ -575,11 +502,7 @@
           "Spec:slots:groups:with flow:": [
             "event_block",
             "story_statement",
-            [
-              "debug",
-              "events",
-              "positioned"
-            ],
+            "events",
             {
               "Flow:phrase:uses:": [
                 "listen",
@@ -607,10 +530,7 @@
         {
           "Spec:groups:with flow:": [
             "event_handler",
-            [
-              "debug",
-              "events"
-            ],
+            "events",
             {
               "Flow:phrase:uses:": [
                 "with",
@@ -652,11 +572,7 @@
         {
           "Spec:groups:with str:": [
             "event_name",
-            [
-              "debug",
-              "events",
-              "positioned"
-            ],
+            "events",
             {
               "Str uses:": []
             }
@@ -665,10 +581,7 @@
         {
           "Spec:groups:with str:": [
             "event_phase",
-            [
-              "debug",
-              "events"
-            ],
+            "events",
             {
               "Str exclusively:uses:": [
                 true,
@@ -693,10 +606,7 @@
         {
           "Spec:groups:with swap:": [
             "event_target",
-            [
-              "debug",
-              "events"
-            ],
+            "events",
             {
               "Swap between:": [
                 {
@@ -720,11 +630,7 @@
           "Spec:slots:groups:with flow:": [
             "grammar_decl",
             "story_statement",
-            [
-              "debug",
-              "stubs",
-              "grammar"
-            ],
+            "grammar",
             {
               "Flow phrase:uses:": [
                 "understand {_$grammar}",
@@ -745,10 +651,7 @@
           "Spec:slots:groups:with flow:": [
             "kind_of_noun",
             "noun_continuation",
-            [
-              "debug",
-              "nouns"
-            ],
+            "nouns",
             {
               "Flow:phrase:uses:": [
                 "Kind",
@@ -776,10 +679,7 @@
           "Spec:slots:groups:with flow:": [
             "kind_of_relation",
             "story_statement",
-            [
-              "debug",
-              "relations"
-            ],
+            "relations",
             {
               "Flow phrase:uses:": [
                 "{$relation} relates {$cardinality}",
@@ -807,10 +707,7 @@
           "Spec:slots:groups:with flow:": [
             "kinds_have_properties",
             "story_statement",
-            [
-              "debug",
-              "kinds"
-            ],
+            "kinds",
             {
               "Flow:phrase:uses:": [
                 "Kinds",
@@ -839,10 +736,7 @@
           "Spec:slots:groups:with flow:": [
             "kinds_of_aspect",
             "story_statement",
-            [
-              "debug",
-              "traits"
-            ],
+            "traits",
             {
               "Flow phrase:uses:": [
                 "{$aspect} is a kind of value.",
@@ -863,10 +757,7 @@
           "Spec:slots:groups:with flow:": [
             "kinds_of_kind",
             "story_statement",
-            [
-              "debug",
-              "kinds"
-            ],
+            "kinds",
             {
               "Flow:phrase:uses:": [
                 "Make",
@@ -894,10 +785,7 @@
           "Spec:slots:groups:with flow:": [
             "make_opposite",
             "story_statement",
-            [
-              "debug",
-              "language"
-            ],
+            "language",
             {
               "Flow:phrase:uses:": [
                 "make",
@@ -929,10 +817,7 @@
           "Spec:slots:groups:with flow:": [
             "make_plural",
             "story_statement",
-            [
-              "debug",
-              "language"
-            ],
+            "language",
             {
               "Flow:phrase:uses:": [
                 "make",
@@ -959,10 +844,7 @@
         {
           "Spec:groups:with flow:": [
             "many_to_many",
-            [
-              "debug",
-              "relations"
-            ],
+            "relations",
             {
               "Flow phrase:uses:": [
                 "many {$kinds} to many {$other_kinds}",
@@ -988,10 +870,7 @@
         {
           "Spec:groups:with flow:": [
             "many_to_one",
-            [
-              "debug",
-              "relations"
-            ],
+            "relations",
             {
               "Flow phrase:uses:": [
                 "many {$kinds} to one {$kind}",
@@ -1018,10 +897,7 @@
           "--": "Chooses between a one-way and a two-way connection between rooms.  Generally, this only makes sense for map headings, but it at least causes 'departing' to check that a reverse connection exists.  Note: moving from one room leads you into another somewhat generically.  Sometimes its useful to position the player on entry to a new room based on where they came from.  Using, a previous room or last used door can do the trick.",
           "Spec:groups:with str:": [
             "map_connection",
-            [
-              "debug",
-              "map_making"
-            ],
+            "map_making",
             {
               "Str exclusively:uses:": [
                 true,
@@ -1043,7 +919,6 @@
             "map_departing",
             "story_statement",
             [
-              "debug",
               "map_making",
               "modeling"
             ],
@@ -1087,7 +962,6 @@
           "Spec:groups:with str:": [
             "map_direction",
             [
-              "debug",
               "map_making",
               "modeling"
             ],
@@ -1102,7 +976,6 @@
             "map_heading",
             "story_statement",
             [
-              "debug",
               "map_making",
               "modeling"
             ],
@@ -1152,10 +1025,7 @@
         {
           "Spec:groups:with flow:": [
             "named_noun",
-            [
-              "debug",
-              "nouns"
-            ],
+            "nouns",
             {
               "Flow:phrase:uses:": [
                 "Noun",
@@ -1182,10 +1052,7 @@
         {
           "Spec:groups:with flow:": [
             "named_field",
-            [
-              "debug",
-              "properties"
-            ],
+            "properties",
             {
               "Flow phrase:uses:": [
                 "named {$name} ( {of$type} )",
@@ -1218,10 +1085,7 @@
           "Spec:slots:groups:with flow:": [
             "noun_assignment",
             "story_statement",
-            [
-              "debug",
-              "properties"
-            ],
+            "properties",
             {
               "Flow phrase:uses:": [
                 "The {$property} of {$nouns} is {the text$lines}",
@@ -1250,10 +1114,7 @@
         {
           "Spec:groups:with slot:": [
             "noun_continuation",
-            [
-              "debug",
-              "nouns"
-            ],
+            "nouns",
             {
               "Slot": true
             }
@@ -1263,10 +1124,7 @@
           "Spec:slots:groups:with flow:": [
             "noun_kind_statement",
             "story_statement",
-            [
-              "debug",
-              "nouns"
-            ],
+            "nouns",
             {
               "Flow:phrase:uses:": [
                 "Nouns",
@@ -1304,11 +1162,7 @@
           "--": "Noun name: Some specific person, place, or thing; or, more rarely, a kind.  Proper names are usually capitalized:  For example, maybe: 'Haruki', 'Jane', or 'Toronto'.  Common names are usually not capitalized. For example, maybe: 'table', 'chair', or 'dog park'.  A set of duplicate object uses their kind. For instance: twelve 'cats'.`",
           "Spec:groups:with str:": [
             "noun_name",
-            [
-              "debug",
-              "nouns",
-              "positioned"
-            ],
+            "nouns",
             {
               "Str uses:": []
             }
@@ -1318,10 +1172,7 @@
           "Spec:slots:groups:with flow:": [
             "noun_relation",
             "noun_continuation",
-            [
-              "debug",
-              "nouns"
-            ],
+            "nouns",
             {
               "Flow phrase:uses:": [
                 "{$are_being} {$relation} {$other_nouns}",
@@ -1354,10 +1205,7 @@
           "Spec:slots:groups:with flow:": [
             "noun_relation_statement",
             "story_statement",
-            [
-              "debug",
-              "nouns"
-            ],
+            "nouns",
             {
               "Flow:phrase:uses:": [
                 "Nouns",
@@ -1395,10 +1243,7 @@
           "Spec:slots:groups:with flow:": [
             "noun_trait_statement",
             "story_statement",
-            [
-              "debug",
-              "nouns"
-            ],
+            "nouns",
             {
               "Flow:phrase:uses:": [
                 "Nouns",
@@ -1436,10 +1281,7 @@
           "Spec:slots:groups:with flow:": [
             "noun_traits",
             "noun_continuation",
-            [
-              "debug",
-              "nouns"
-            ],
+            "nouns",
             {
               "Flow phrase:uses:": [
                 "{$are_being} {$trait}",
@@ -1465,10 +1307,7 @@
           "Spec:slots:groups:with flow:": [
             "num_list_field",
             "field",
-            [
-              "debug",
-              "properties"
-            ],
+            "properties",
             {
               "Flow:phrase:uses:": [
                 "num_list",
@@ -1505,10 +1344,7 @@
           "Spec:slots:groups:with flow:": [
             "number_field",
             "field",
-            [
-              "debug",
-              "properties"
-            ],
+            "properties",
             {
               "Flow:phrase:uses:": [
                 "number",
@@ -1544,10 +1380,7 @@
         {
           "Spec:groups:with flow:": [
             "one_to_many",
-            [
-              "debug",
-              "relations"
-            ],
+            "relations",
             {
               "Flow phrase:uses:": [
                 "one {$kind} to many {$kinds}",
@@ -1573,10 +1406,7 @@
         {
           "Spec:groups:with flow:": [
             "one_to_one",
-            [
-              "debug",
-              "relations"
-            ],
+            "relations",
             {
               "Flow phrase:uses:": [
                 "one {$kind} to one {$other_kind}",
@@ -1602,11 +1432,7 @@
         {
           "Spec:groups:with flow:": [
             "paired_action",
-            [
-              "debug",
-              "events",
-              "positioned"
-            ],
+            "events",
             {
               "Flow phrase:uses:": [
                 "two {$kinds} ( the noun and other noun )",
@@ -1627,10 +1453,7 @@
           "--": "Phrases",
           "Spec:groups:with flow:": [
             "paragraph",
-            [
-              "debug",
-              "statements"
-            ],
+            "statements",
             {
               "Flow phrase:uses:": [
                 "{$story_statement}",
@@ -1656,10 +1479,7 @@
           "Spec:slots:groups:with flow:": [
             "pattern_actions",
             "story_statement",
-            [
-              "debug",
-              "patterns"
-            ],
+            "patterns",
             {
               "Flow:phrase:uses:": [
                 "pattern",
@@ -1698,10 +1518,7 @@
           "Spec:slots:groups:with flow:": [
             "pattern_decl",
             "story_statement",
-            [
-              "debug",
-              "patterns"
-            ],
+            "patterns",
             {
               "Flow:phrase:uses:": [
                 "Pattern",
@@ -1738,10 +1555,7 @@
         {
           "Spec:groups:with str:": [
             "pattern_flags",
-            [
-              "debug",
-              "patterns"
-            ],
+            "patterns",
             {
               "Str exclusively:uses:": [
                 true,
@@ -1769,10 +1583,7 @@
         {
           "Spec:groups:with flow:": [
             "pattern_return",
-            [
-              "debug",
-              "patterns"
-            ],
+            "patterns",
             {
               "Flow:phrase:uses:": [
                 "pattern_result",
@@ -1794,10 +1605,7 @@
           "--": "Rule",
           "Spec:groups:with flow:": [
             "pattern_rule",
-            [
-              "debug",
-              "patterns"
-            ],
+            "patterns",
             {
               "Flow phrase:uses:": [
                 "When {conditions are met$guard}{continue$flags}, then: {$does}",
@@ -1831,11 +1639,7 @@
         {
           "Spec:groups:with str:": [
             "pattern_type",
-            [
-              "debug",
-              "patterns",
-              "positioned"
-            ],
+            "patterns",
             {
               "Str uses:": [
                 {
@@ -1855,11 +1659,7 @@
           "--": "The plural name of a type of similar nouns.  For example: animals, containers, etc.",
           "Spec:groups:with str:": [
             "plural_kinds",
-            [
-              "debug",
-              "kinds",
-              "positioned"
-            ],
+            "kinds",
             {
               "Str uses:": []
             }
@@ -1868,11 +1668,7 @@
         {
           "Spec:groups:with str:": [
             "property",
-            [
-              "debug",
-              "properties",
-              "positioned"
-            ],
+            "properties",
             {
               "Str uses:": []
             }
@@ -1882,10 +1678,7 @@
           "--": "future: each slot should support an appropriate 'starting as' initial value",
           "Spec:groups:with slot:": [
             "field",
-            [
-              "debug",
-              "properties"
-            ],
+            "properties",
             {
               "Slot": true
             }
@@ -1895,10 +1688,7 @@
           "Spec:slots:groups:with flow:": [
             "record_list_field",
             "field",
-            [
-              "debug",
-              "properties"
-            ],
+            "properties",
             {
               "Flow:phrase:uses:": [
                 "record_list",
@@ -1935,10 +1725,7 @@
           "Spec:slots:groups:with flow:": [
             "record_field",
             "field",
-            [
-              "debug",
-              "properties"
-            ],
+            "properties",
             {
               "Flow:phrase:uses:": [
                 "record",
@@ -1974,11 +1761,7 @@
         {
           "Spec:groups:with swap:": [
             "relation_cardinality",
-            [
-              "debug",
-              "relations",
-              "positioned"
-            ],
+            "relations",
             {
               "Swap between:": [
                 {
@@ -2002,10 +1785,7 @@
           "Spec:slots:groups:with flow:": [
             "relative_to_noun",
             "story_statement",
-            [
-              "debug",
-              "nouns"
-            ],
+            "nouns",
             {
               "Flow phrase:uses:": [
                 "The {$relation} of {$nouns} {$are_being} {$other_nouns}.",
@@ -2047,11 +1827,7 @@
           "Spec:slots:groups:with flow:": [
             "render_template",
             "text_eval",
-            [
-              "debug",
-              "stubs",
-              "format"
-            ],
+            "format",
             {
               "Flow phrase:uses:": [
                 "render_template {_$template}",
@@ -2073,12 +1849,7 @@
           "Spec:slots:groups:with flow:": [
             "shuffle_text",
             "text_eval",
-            [
-              "debug",
-              "stubs",
-              "output",
-              "positioned"
-            ],
+            "output",
             {
               "Flow phrase:uses:": [
                 "shuffle {_$parts}",
@@ -2100,11 +1871,7 @@
           "--": "Describes a type of similar nouns.  For example: an animal, a container, etc.",
           "Spec:groups:with str:": [
             "singular_kind",
-            [
-              "debug",
-              "kinds",
-              "positioned"
-            ],
+            "kinds",
             {
               "Str uses:": []
             }
@@ -2115,12 +1882,7 @@
           "Spec:slots:groups:with flow:": [
             "stopping_text",
             "text_eval",
-            [
-              "debug",
-              "stubs",
-              "output",
-              "positioned"
-            ],
+            "output",
             {
               "Flow phrase:uses:": [
                 "stopping {_$parts}",
@@ -2141,10 +1903,7 @@
         {
           "Spec:groups:with flow:": [
             "story",
-            [
-              "debug",
-              "statements"
-            ],
+            "statements",
             {
               "Flow phrase:uses:": [
                 "{paragraph$paragraph}",
@@ -2167,7 +1926,6 @@
             "story_break",
             "story_statement",
             [
-              "debug",
               "statements",
               "internal"
             ],
@@ -2184,10 +1942,7 @@
           "--": "top level node, currently just for blockly  might eventually contain story metadata  ex. author, description...",
           "Spec:groups:with flow:": [
             "story_file",
-            [
-              "debug",
-              "statements"
-            ],
+            "statements",
             {
               "Flow:phrase:uses:": [
                 "tapestry",
@@ -2210,10 +1965,7 @@
           "--": "Phrase",
           "Spec:groups:with slot:": [
             "story_statement",
-            [
-              "debug",
-              "statements"
-            ],
+            "statements",
             {
               "Slot": true
             }
@@ -2222,11 +1974,7 @@
         {
           "Spec:groups:with str:": [
             "test_name",
-            [
-              "debug",
-              "tests",
-              "positioned"
-            ],
+            "tests",
             {
               "Str uses:": [
                 {
@@ -2244,10 +1992,7 @@
           "Spec:slots:groups:with flow:": [
             "test_output",
             "testing",
-            [
-              "debug",
-              "tests"
-            ],
+            "tests",
             {
               "Flow phrase:uses:": [
                 "output {$lines}.",
@@ -2268,10 +2013,7 @@
           "Spec:slots:groups:with flow:": [
             "test_rule",
             "story_statement",
-            [
-              "debug",
-              "tests"
-            ],
+            "tests",
             {
               "Flow phrase:uses:": [
                 "To test {$test_name}: {$does}",
@@ -2299,10 +2041,7 @@
           "Spec:slots:groups:with flow:": [
             "test_scene",
             "story_statement",
-            [
-              "debug",
-              "tests"
-            ],
+            "tests",
             {
               "Flow phrase:uses:": [
                 "While testing {$test_name} {with$requires}: {$story}",
@@ -2337,11 +2076,7 @@
           "Spec:slots:groups:with flow:": [
             "test_statement",
             "story_statement",
-            [
-              "debug",
-              "tests",
-              "positioned"
-            ],
+            "tests",
             {
               "Flow phrase:uses:": [
                 "Expect {$test_name} to {expectation$test}",
@@ -2367,10 +2102,7 @@
           "--": "Run a series of tests.",
           "Spec:groups:with slot:": [
             "testing",
-            [
-              "debug",
-              "tests"
-            ],
+            "tests",
             {
               "Slot": true
             }
@@ -2380,10 +2112,7 @@
           "Spec:slots:groups:with flow:": [
             "text_list_field",
             "field",
-            [
-              "debug",
-              "properties"
-            ],
+            "properties",
             {
               "Flow:phrase:uses:": [
                 "text_list",
@@ -2420,10 +2149,7 @@
           "Spec:slots:groups:with flow:": [
             "text_field",
             "field",
-            [
-              "debug",
-              "properties"
-            ],
+            "properties",
             {
               "Flow:phrase:uses:": [
                 "text",
@@ -2459,11 +2185,7 @@
         {
           "Spec:groups:with str:": [
             "trait",
-            [
-              "debug",
-              "traits",
-              "positioned"
-            ],
+            "traits",
             {
               "Str uses:": []
             }
@@ -2472,10 +2194,7 @@
         {
           "Spec:groups:with flow:": [
             "trait_phrase",
-            [
-              "debug",
-              "traits"
-            ],
+            "traits",
             {
               "Flow phrase:uses:": [
                 "{$are_either} {$trait}.",

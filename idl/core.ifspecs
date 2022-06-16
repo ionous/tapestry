@@ -1682,9 +1682,8 @@
           ]
         },
         {
-          "Spec:groups:with str:": [
+          "Spec:with str:": [
             "pattern_name",
-            "positioned",
             {
               "Str uses:": []
             }
@@ -2165,9 +2164,8 @@
           ]
         },
         {
-          "Spec:groups:with str:": [
+          "Spec:with str:": [
             "variable_name",
-            "positioned",
             {
               "Str uses:": []
             }

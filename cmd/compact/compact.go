@@ -16,7 +16,6 @@ import (
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/blockly/block"
 	"git.sr.ht/~ionous/tapestry/blockly/unblock"
-	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn"
@@ -47,22 +46,6 @@ func oppositeExt(ext string) (ret string) {
 	return
 }
 
-// ex. go run compact.go -in ../../stories/blank.ifx [-out ../../stories/]
-//
-// bulk conversion:
-//
-// from the generated .if files, generate the .ifx files:
-// go build compact.go; for f in ../../stories/*.if; do ./compact -in $f; done;
-//
-// or, load and rewrite the .if files
-// go build compact.go; for f in ../../stories/shared/*.if; do ./compact -pretty -in $f -out .if; done;
-// go build compact.go; for f in ../regenspec/out/*.ifspecs; do ./compact -pretty -in $f -out $f; done;
-// go build compact.go; for f in ../../stories/shared/*.if; do ./compact -pretty -in $f -out .block; done;
-// go build compact.go; for f in ../../stories/shared/*.block; do ./compact -pretty -in $f -out .if; done;
-//
-// windows:
-// for %i in (..\..\stories\shared\*.if) do ( compact -pretty -in %i -out %i )
-// for %i in (..\..\idl\*.ifspecs) do ( compact -pretty -in %i -out %i )
 func main() {
 	var inFile, outFile string
 	var pretty bool
@@ -72,7 +55,7 @@ func main() {
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
 	flag.Parse()
 	if len(inFile) == 0 {
-		println("requires an input file")
+		flag.Usage()
 	} else {
 		inExt := filepath.Ext(inFile)
 		var allExts strings.Builder
@@ -181,7 +164,7 @@ var compact = xform{
 		return story.Decode(dst, b, tapestry.AllSignatures)
 	},
 	func(src jsn.Marshalee) (interface{}, error) {
-		return cout.Encode(src, story.CompactEncoder)
+		return cout.Encode(src, customStoryEncoder)
 	},
 }
 var detailed = xform{
@@ -254,8 +237,9 @@ func xformStory(tgt jsn.Marshalee) (err error) {
 
 // define  a custom spec encoder.
 var customSpecEncoder cout.CustomFlow = nil
+var customStoryEncoder = story.CompactEncoder
 
-// example removing "trime" for underscore names
+// example removing "trim" for underscore names
 // func init() {
 // 	customSpecEncoder = func(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 // 		switch op := flow.GetFlow().(type) {
@@ -281,9 +265,9 @@ var customSpecEncoder cout.CustomFlow = nil
 // 	}
 // }
 
-// // install a custom encoder.
+// install a custom encoder to rewrite things
 // func init() {
-// 	story.CompactEncoder = func(m jsn.Marshaler, flow jsn.FlowBlock) error {
+// 	customStoryEncoder = func(m jsn.Marshaler, flow jsn.FlowBlock) error {
 // 		switch op := flow.GetFlow().(type) {
 // 		case *story.AspectProperty:
 // 			swap(&op.UserComment, &op.Comment)
@@ -306,9 +290,32 @@ var customSpecEncoder cout.CustomFlow = nil
 // 	}
 // }
 
-func swap(tgt *string, from *prim.Lines) {
-	if len(*tgt) == 0 {
-		*tgt = from.Str
-		from.Str = ""
+const Description = //
+`Transforms detailed format json files to their compact format, and back again.
+`
+const Example = `
+ex. go run compact.go -in ../../stories/blank.ifx [-out ../../stories/]
+
+bulk conversion examples:
+
+from the generated .if files, generate the .ifx files:
+	go build compact.go; for f in ../../stories/*.if; do ./compact -in $f; done;
+
+	or, load and rewrite the .if files
+	go build compact.go; for f in ../../stories/shared/*.if; do ./compact -pretty -in $f -out .if; done;
+	go build compact.go; for f in ../regenspec/out/*.ifspecs; do ./compact -pretty -in $f -out $f; done;
+	go build compact.go; for f in ../../stories/shared/*.if; do ./compact -pretty -in $f -out .block; done;
+	go build compact.go; for f in ../../stories/shared/*.block; do ./compact -pretty -in $f -out .if; done;
+
+windows:
+	for %i in (..\..\stories\shared\*.if) do ( compact -pretty -in %i -out %i )
+	for %i in (..\..\idl\*.ifspecs) do ( compact -pretty -in %i -out %i )
+`
+
+func init() {
+	flag.Usage = func() {
+		println(Description)
+		flag.PrintDefaults()
+		println(Example)
 	}
 }

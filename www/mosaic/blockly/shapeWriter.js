@@ -50,6 +50,7 @@ export default class ShapeWriter {
         const fieldNum = ofs++; // pin for our callback.
         this.pendingFields.push((input)=> {
           const field = Blockly.fieldRegistry.fromJson(itemDef);
+          field.maxDisplayLength = 1024;
           field.itemDef = itemDef; // mainly to give swaps access to their choices.
           const fieldName = itemDef.name + (itemDef.repeats? fieldNum: "");
           input.appendField(field, fieldName); // field names are assigned at append time :'(
