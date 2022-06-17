@@ -8,13 +8,13 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type fieldDef struct {
+type shapeField struct {
 	term     spec.TermSpec
 	typeSpec *spec.TypeSpec
 	slot     bconst.SlotRule
 }
 
-func (w *ShapeWriter) newFieldDef(term spec.TermSpec) (ret *fieldDef, err error) {
+func (w *ShapeWriter) newFieldDef(term spec.TermSpec) (ret *shapeField, err error) {
 	typeName := term.TypeName() // lookup spec
 	if typeSpec, ok := w.Types[typeName]; !ok {
 		err = errutil.New("missing named type", typeName)
@@ -25,18 +25,18 @@ func (w *ShapeWriter) newFieldDef(term spec.TermSpec) (ret *fieldDef, err error)
 			// regardless, it only has the input, no special fields.
 			slot = bconst.FindSlotRule(typeSpec.Name)
 		}
-		ret = &fieldDef{term, typeSpec, slot}
+		ret = &shapeField{term, typeSpec, slot}
 	}
 	return
 }
 
-func (fd *fieldDef) name() string {
+func (fd *shapeField) name() string {
 	return strings.ToUpper(fd.term.Field())
 }
 
 // will we need a label for required anonymous terms?
 // maybe at least for the mui?
-func (fd *fieldDef) blocklyLabel() (ret string) {
+func (fd *shapeField) blocklyLabel() (ret string) {
 	if !fd.term.IsAnonymous() {
 		ret = strings.Join(strings.Split(fd.term.Label, "_"), " ")
 	} /*else {
@@ -45,7 +45,7 @@ func (fd *fieldDef) blocklyLabel() (ret string) {
 	return
 }
 
-func (fd *fieldDef) shadow() (ret string) {
+func (fd *shapeField) shadow() (ret string) {
 	switch fd.termType() {
 	case spec.UsesSpec_Num_Opt, spec.UsesSpec_Flow_Opt:
 		ret = fd.typeSpec.Name
@@ -54,7 +54,7 @@ func (fd *fieldDef) shadow() (ret string) {
 }
 
 // handle our fake field for the leading label.
-func (fd *fieldDef) termType() (ret string) {
+func (fd *shapeField) termType() (ret string) {
 	if fd.typeSpec != nil {
 		ret = fd.typeSpec.Spec.Choice
 	}

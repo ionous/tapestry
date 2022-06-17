@@ -57,7 +57,7 @@ func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *B
 		// a member of the dl whose value in blockly might exist in bff.inputs, .fields, or .next;
 		// it depends on the next OnXxx: callback.
 		OnKey: func(_ string, field string) (noerr error) {
-			// termName must match shapeWriter's fieldDef.name() which is specified as upper(TermSpec.Field())
+			// termName must match shapeWriter's shapeField.name() which is specified as upper(TermSpec.Field())
 			// the code generator passes this callback constants for the field parameter ( via gomake's flow.tmpl )
 			// ex. StoryFile_Field_StoryLines = term.Value() = "$" + upper(TermSpec.Field())
 			termName = field[1:]

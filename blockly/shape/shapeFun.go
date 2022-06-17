@@ -6,7 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
-var writeFn = map[string]func(*js.Builder, *fieldDef){
+var writeFn = map[string]func(*js.Builder, *shapeField){
 	spec.UsesSpec_Flow_Opt:  writeFlow,
 	spec.UsesSpec_Slot_Opt:  writeSlot,
 	spec.UsesSpec_Swap_Opt:  writeSwap,
@@ -15,11 +15,11 @@ var writeFn = map[string]func(*js.Builder, *fieldDef){
 	spec.UsesSpec_Group_Opt: nil,
 }
 
-func writeNum(out *js.Builder, fd *fieldDef) {
+func writeNum(out *js.Builder, fd *shapeField) {
 	out.Kv("type", bconst.FieldNumber)
 }
 
-func writeStr(out *js.Builder, fd *fieldDef) {
+func writeStr(out *js.Builder, fd *shapeField) {
 	// other options possible: spellcheck: true/false; text: the default value.
 	if str := fd.typeSpec.Spec.Value.(*spec.StrSpec); !str.Exclusively {
 		out.Kv("type", bconst.FieldText)
@@ -41,18 +41,18 @@ func writeStr(out *js.Builder, fd *fieldDef) {
 	return
 }
 
-func writeFlow(out *js.Builder, fd *fieldDef) {
+func writeFlow(out *js.Builder, fd *shapeField) {
 	writeInput(out, fd, bconst.InputValue, []string{fd.typeSpec.Name})
 }
 
-func writeSlot(out *js.Builder, fd *fieldDef) {
+func writeSlot(out *js.Builder, fd *shapeField) {
 	// inputType might be a statement_input stack, or a single ( maybe repeatable ) input
 	writeInput(out, fd, fd.slot.InputType(), []string{fd.slot.SlotType()})
 }
 
 // swaps are output as two items: one for the combo box editor, and one for the input plug.
 // they are associated in mosaic by giving the blockly field and the blockly input the same name.
-func writeSwap(out *js.Builder, fd *fieldDef) {
+func writeSwap(out *js.Builder, fd *shapeField) {
 	swap := fd.typeSpec.Spec.Value.(*spec.SwapSpec)
 	out.
 		Kv("name", fd.name()).R(js.Comma).
@@ -96,7 +96,7 @@ func writeSwap(out *js.Builder, fd *fieldDef) {
 }
 
 // write an input for the fields that need it.
-func writeInput(out *js.Builder, fd *fieldDef, inputType string, checks []string) {
+func writeInput(out *js.Builder, fd *shapeField, inputType string, checks []string) {
 	out.Kv("type", inputType)
 	appendChecks(out, "checks", checks)
 	if shadow := fd.shadow(); len(shadow) > 0 {

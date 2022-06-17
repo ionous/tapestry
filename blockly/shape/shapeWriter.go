@@ -100,7 +100,7 @@ func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spe
 			appendString(out, partial.String())
 		}).R(js.Comma)
 	}
-	if rootBlock := rootBlocks.IsRoot(blockType.Name); !rootBlock {
+	if rootBlock := IsRootBlock(blockType.Name); !rootBlock {
 		values = append([]string{blockType.Name}, values...)
 	}
 	block.Brace(js.Obj, func(out *js.Builder) {
