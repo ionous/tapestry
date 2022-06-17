@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/blockly/bconst"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
-	"git.sr.ht/~ionous/tapestry/web/js"
 	"github.com/ionous/errutil"
 )
 
@@ -60,13 +59,4 @@ func (fd *fieldDef) termType() (ret string) {
 		ret = fd.typeSpec.Spec.Choice
 	}
 	return
-}
-
-var writeFn = map[string]func(*js.Builder, *fieldDef){
-	spec.UsesSpec_Flow_Opt:  writeFlow,
-	spec.UsesSpec_Slot_Opt:  writeSlot,
-	spec.UsesSpec_Swap_Opt:  writeSwap,
-	spec.UsesSpec_Num_Opt:   writeNum,
-	spec.UsesSpec_Str_Opt:   writeStr,
-	spec.UsesSpec_Group_Opt: nil,
 }
