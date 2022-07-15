@@ -8,9 +8,24 @@ import (
 //--------------------------
 // TypeSpec:
 
+func (op *TypeSpec) InGroup(g string) (okay bool) {
+	for _, n := range op.Groups {
+		if n == g {
+			okay = true
+			break
+		}
+	}
+	return
+}
+
 // change one_two into "One two"
-func (op *TypeSpec) FriendlyName() string {
-	return FriendlyName(op.Name, false)
+func (op *TypeSpec) FriendlyName() (ret string) {
+	if flow, ok := op.Spec.Value.(*FlowSpec); ok {
+		ret = flow.FriendlyLede(op)
+	} else {
+		ret = FriendlyName(op.Name, false)
+	}
+	return
 }
 
 func FriendlyName(n string, capAllWords bool) (ret string) {

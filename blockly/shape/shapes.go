@@ -13,7 +13,7 @@ func FromSpecs(files fs.FS) (ret string, err error) {
 	if ts, e := rs.FromSpecs(files); e != nil {
 		err = e
 	} else {
-		w := ShapeWriter{ts}
+		w := NewShapeWriter(ts)
 		ret = js.Embrace(js.Array, func(out *js.Builder) {
 			var comma bool
 			for _, key := range ts.Keys() {

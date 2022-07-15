@@ -1,27 +1,34 @@
 package shape
 
 import (
+	"strings"
+
 	"git.sr.ht/~ionous/tapestry/blockly/bconst"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
-var writeFn = map[string]func(*js.Builder, *shapeField){
-	spec.UsesSpec_Flow_Opt:  writeFlow,
-	spec.UsesSpec_Slot_Opt:  writeSlot,
-	spec.UsesSpec_Swap_Opt:  writeSwap,
-	spec.UsesSpec_Num_Opt:   writeNum,
-	spec.UsesSpec_Str_Opt:   writeStr,
-	spec.UsesSpec_Group_Opt: nil,
+var fieldWriter = map[string]func(*js.Builder, spec.TermSpec, *spec.TypeSpec){
+	spec.UsesSpec_Flow_Opt: writeFlowField,
+	spec.UsesSpec_Slot_Opt: writeSlotField,
+	spec.UsesSpec_Swap_Opt: writeSwapField,
+	spec.UsesSpec_Num_Opt:  writeNumField,
+	spec.UsesSpec_Str_Opt:  writeStrField,
+	// fields dont use groups, so we COULD highjack it for labels
+	//spec.UsesSpec_Group_Opt: writeLabelField,
 }
 
-func writeNum(out *js.Builder, fd *shapeField) {
+func writeLabelField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
+	out.Kv("label", term.Label)
+}
+
+func writeNumField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
 	out.Kv("type", bconst.FieldNumber)
 }
 
-func writeStr(out *js.Builder, fd *shapeField) {
+func writeStrField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
 	// other options possible: spellcheck: true/false; text: the default value.
-	if str := fd.typeSpec.Spec.Value.(*spec.StrSpec); !str.Exclusively {
+	if str := typeSpec.Spec.Value.(*spec.StrSpec); !str.Exclusively {
 		out.Kv("type", bconst.FieldText)
 	} else {
 		out.Kv("type", bconst.FieldDropdown).R(js.Comma).
@@ -41,23 +48,25 @@ func writeStr(out *js.Builder, fd *shapeField) {
 	return
 }
 
-func writeFlow(out *js.Builder, fd *shapeField) {
-	writeInput(out, fd, bconst.InputValue, []string{fd.typeSpec.Name})
+func writeFlowField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
+	writeInput(out, bconst.InputValue, "", []string{typeSpec.Name})
 }
 
-func writeSlot(out *js.Builder, fd *shapeField) {
+func writeSlotField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
 	// inputType might be a statement_input stack, or a single ( maybe repeatable ) input
-	writeInput(out, fd, fd.slot.InputType(), []string{fd.slot.SlotType()})
+	slot := bconst.FindSlotRule(typeSpec.Name)
+	writeInput(out, slot.InputType(), "", []string{slot.SlotType()})
 }
 
 // swaps are output as two items: one for the combo box editor, and one for the input plug.
 // they are associated in mosaic by giving the blockly field and the blockly input the same name.
-func writeSwap(out *js.Builder, fd *shapeField) {
-	swap := fd.typeSpec.Spec.Value.(*spec.SwapSpec)
+func writeSwapField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
+	swap := typeSpec.Spec.Value.(*spec.SwapSpec)
 	out.
-		Kv("name", fd.name()).R(js.Comma).
 		Kv("type", bconst.FieldDropdown).R(js.Comma).
-		// write the blockly dropdown data
+		// write the blockly dropdown data: a displayed label and a resulting key value.
+		// the idea is that different translations could display different labels for the same value.
+		// ex: [ "flow", "$FLOW" ]
 		Q("options").R(js.Colon).
 		Brace(js.Array,
 			func(options *js.Builder) {
@@ -70,7 +79,9 @@ func writeSwap(out *js.Builder, fd *shapeField) {
 					})
 				}
 			}).R(js.Comma).
-		// write info on how to change the input when swapping types
+		// write info on how to change the block with different selections.
+		// ties the key to the specific type:  ex. "$FLOW": "flow_spec".
+		// while each key can only appear once, different keys can theoretically map to a single type.
 		Q("swaps").R(js.Colon).
 		Brace(js.Obj,
 			func(swaps *js.Builder) {
@@ -87,33 +98,33 @@ func writeSwap(out *js.Builder, fd *shapeField) {
 	for _, pick := range swap.Between {
 		checks = append(checks, pick.TypeName())
 	}
-	// close off the dropdown item def, and open an input item def
-	// the caller will close that out.
+	// close off the dropdown item def, and open an input item def; the caller will close it out.
+	//
+	// fix: not every swap needs to generate an input: a swap of strings for instance.
+	// it'd probably make more sense for the blockly side to determine the need based on the swap.
+	// that'd save having to generate standalone blocks for open strs and nums.
 	out.R(js.Obj[1]).R(js.Comma).R(js.Obj[0])
-	out.Kv("name", fd.name()).R(js.Comma)
-	writeInput(out, fd, bconst.InputValue, checks)
+
+	fieldName := strings.ToUpper(term.Field())
+
+	out.Kv("name", fieldName).R(js.Comma)
+	writeInput(out, bconst.InputValue, getShadow(typeSpec), checks)
 	return
 }
 
 // write an input for the fields that need it.
-func writeInput(out *js.Builder, fd *shapeField, inputType string, checks []string) {
+func writeInput(out *js.Builder, inputType, shadow string, checks []string) {
 	out.Kv("type", inputType)
 	appendChecks(out, "checks", checks)
-	if shadow := fd.shadow(); len(shadow) > 0 {
+	if len(shadow) > 0 {
 		out.R(js.Comma).Kv("shadow", shadow)
 	}
 }
 
-func appendChecks(out *js.Builder, label string, checks []string) {
-	if len(checks) > 0 {
-		out.R(js.Comma).
-			Q(label).R(js.Colon).Brace(js.Array, func(check *js.Builder) {
-			for i, c := range checks {
-				if i > 0 {
-					check.R(js.Comma)
-				}
-				check.Q(c)
-			}
-		})
+func getShadow(typeSpec *spec.TypeSpec) (ret string) {
+	switch typeSpec.Spec.Choice {
+	case spec.UsesSpec_Num_Opt, spec.UsesSpec_Flow_Opt:
+		ret = typeSpec.Name
 	}
+	return
 }

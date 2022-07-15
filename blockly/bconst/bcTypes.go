@@ -1,10 +1,13 @@
 package bconst
 
-// return the passed type name formatted for use as a stacked block
-func StackedName(name string) string {
-	return "_" + name + "_stack"
+// transform the passed block name into the name of its corresponding stacked block.
+// ex. _name_stack
+func StackedName(blockType string) string {
+	return "_" + blockType + "_stack"
 }
 
-func MutatorName(name string) string {
-	return "_" + name + "_mutator"
+// transform the passed block name into the name of its corresponding mutator block.
+// ex. _name_mutator
+func MutatorName(blockType string) string {
+	return "_" + blockType + "_mutator"
 }

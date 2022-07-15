@@ -13,6 +13,10 @@ type ShapeWriter struct {
 	rs.TypeSpecs
 }
 
+func NewShapeWriter(ts rs.TypeSpecs) *ShapeWriter {
+	return &ShapeWriter{ts}
+}
+
 // return any fields which need mutation
 func (w *ShapeWriter) WriteShape(block *js.Builder, blockType *spec.TypeSpec) (okay bool) {
 	switch t := blockType.Spec.Choice; t {
@@ -89,7 +93,7 @@ func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spe
 	partial.R(js.Comma)
 
 	// write the terms:
-	w.writeShapeDef(&partial, name, blockType, terms)
+	w.writeShapeDef(&partial, name, blockType, publicTerms(terms))
 
 	// are we stackable? ( ex. story statement or executable )
 	if len(stacks) > 0 {
@@ -100,7 +104,7 @@ func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spe
 			appendString(out, partial.String())
 		}).R(js.Comma)
 	}
-	if rootBlock := IsRootBlock(blockType.Name); !rootBlock {
+	if rootBlock := blockType.InGroup(RootBlock); !rootBlock {
 		values = append([]string{blockType.Name}, values...)
 	}
 	block.Brace(js.Obj, func(out *js.Builder) {
@@ -114,15 +118,12 @@ func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spe
 // write the args0 and message0 key-values.
 func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spec.TypeSpec, terms []spec.TermSpec) {
 	out.WriteString(`"extensions":["tapestry_generic_mixin","tapestry_generic_extension"],`)
-	hasMutator := blockType.Spec.Choice == spec.UsesSpec_Flow_Opt
+	hasMutator := len(terms) > 0 && blockType.Spec.Choice == spec.UsesSpec_Flow_Opt
 	if hasMutator {
 		out.Kv("mutator", "tapestry_generic_mutation").R(js.Comma)
 	}
 	out.Q("customData").R(js.Colon).
 		Brace(js.Obj, func(custom *js.Builder) {
-			if hasMutator {
-				custom.Kv("mui", bconst.MutatorName(blockType.Name)).R(js.Comma)
-			}
 			custom.Q("shapeDef").R(js.Colon).
 				Brace(js.Array, func(out *js.Builder) {
 					// an initial item containing just the lede
@@ -131,11 +132,9 @@ func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spe
 					})
 					// now any following terms as their own items
 					for _, term := range terms {
-						if term.Private {
-							continue // skip private terms
-						} else if fd, e := w.newFieldDef(term); e != nil {
+						if fd, e := w.newFieldDef(term); e != nil {
 							log.Fatalln(e) // exit if we couldnt create the field def
-						} else if fn, ok := writeFn[fd.termType()]; !ok {
+						} else if fn, ok := fieldWriter[fd.termType()]; !ok {
 							log.Fatalln("unknown term type", fd.termType())
 						} else if fn != nil {
 							out.R(js.Comma)
@@ -147,7 +146,7 @@ func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spe
 								// every term needs a name ( for blockly's sake )
 								out.Kv("name", fd.name()).R(js.Comma)
 								// write the contents of the term
-								fn(out, fd)
+								fn(out, fd.term, fd.typeSpec)
 								// write optional, and repeating status
 								if fd.term.Optional {
 									out.R(js.Comma).Q("optional").R(js.Colon).S("true")
@@ -164,63 +163,13 @@ func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spe
 		})
 }
 
-// write the args0 and message0 key-values.
-func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spec.TypeSpec, terms []spec.TermSpec) {
-	out.WriteString(`"extensions":["tapestry_generic_mixin","tapestry_generic_extension"],`)
-	hasMutator := blockType.Spec.Choice == spec.UsesSpec_Flow_Opt
-	if hasMutator {
-		out.Kv("mutator", "tapestry_generic_mutation").R(js.Comma)
+func publicTerms(terms []spec.TermSpec) (ret []spec.TermSpec) {
+	for _, t := range terms {
+		if !t.Private {
+			ret = append(ret, t)
+		}
 	}
-	out.Q("customData").R(js.Colon).
-		Brace(js.Obj, func(custom *js.Builder) {
-			if hasMutator {
-				custom.Kv("mui", bconst.MutatorName(blockType.Name)).R(js.Comma)
-			}
-			custom.Q("shapeDef").R(js.Colon).
-				Brace(js.Array, func(out *js.Builder) {
-					// an initial item containing just the lede
-					out.Brace(js.Obj, func(out *js.Builder) {
-						out.Kv("label", lede)
-					})
-					// now any following terms as their own items
-					for _, term := range terms {
-						if term.Private {
-							continue // skip private terms
-						} else if fd, e := w.newFieldDef(term); e != nil {
-							log.Fatalln(e) // exit if we couldnt create the field def
-						} else if fn, ok := writeFn[fd.termType()]; !ok {
-							log.Fatalln("unknown term type", fd.termType())
-						} else if fn != nil {
-							out.R(js.Comma)
-							out.Brace(js.Obj, func(out *js.Builder) {
-								// add a label for non-anonymous fields
-								if label := fd.blocklyLabel(); len(label) > 0 {
-									out.Kv("label", label).R(js.Comma)
-								}
-								// every term needs a name ( for blockly's sake )
-								out.Kv("name", fd.name()).R(js.Comma)
-								// write the contents of the term
-								fn(out, fd)
-								// write optional, and repeating status
-								if fd.term.Optional {
-									out.R(js.Comma).Q("optional").R(js.Colon).S("true")
-								}
-								// if we are stack, we want to force a non-repeating input; one stack can already handle multiple blocks.
-								// fix? we dont handle the case of a stack of one element; not sure that it exists in practice.
-								if !fd.slot.Stack && fd.term.Repeats {
-									out.R(js.Comma).Q("repeats").R(js.Colon).S("true")
-								}
-							})
-						}
-					}
-				})
-		})
-}
-
-func appendString(out *js.Builder, s string) {
-	if len(s) > 0 {
-		out.R(js.Comma).S(s)
-	}
+	return
 }
 
 // split the slots that this type supports into "stacks" and "values"

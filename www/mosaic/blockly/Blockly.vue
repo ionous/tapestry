@@ -159,7 +159,7 @@ safeRegister('tapestry_generic_mutation', Blockly.Extensions.registerMutator, {
   decompose: function(workspace) {
     const blockType = this.type;
     const customData = shapeData[blockType];
-    const mui = workspace.newBlock(customData.mui); // ex. "_text_value_mutator"
+    const mui = workspace.newBlock(`_${blockType}_mutator`); // ex. "_text_value_mutator"
     mui.initSvg();
     mui.inputList.forEach((min/*, index, array*/) => {
       min.fieldRow.forEach((field/*, index, array*/) => {

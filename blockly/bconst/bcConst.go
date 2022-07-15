@@ -13,14 +13,18 @@ const (
 )
 
 const (
-	FieldCheckbox  = "field_checkbox"
-	FieldDropdown  = "field_dropdown"
-	FieldText      = "field_input"
-	FieldLabel     = "field_label"
-	FieldNumber    = "field_number"
+	FieldCheckbox = "field_checkbox"
+	FieldDropdown = "field_dropdown"
+	FieldText     = "field_input"
+	FieldLabel    = "field_label"
+	FieldNumber   = "field_number"
+	// blocks can stack vertically ( or link horizontally )
 	InputStatement = "input_statement"
-	InputValue     = "input_value"
-	InputDummy     = "input_dummy"
+	// blocks can link horizontally ( or stack vertically )
+	InputValue = "input_value"
+	// fields are partitioned into rows of inputs;
+	// if a row doesnt need connect with other blocks, it can use a dummy input.
+	InputDummy = "input_dummy"
 )
 
 // https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks

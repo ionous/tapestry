@@ -45,14 +45,6 @@ func (fd *shapeField) blocklyLabel() (ret string) {
 	return
 }
 
-func (fd *shapeField) shadow() (ret string) {
-	switch fd.termType() {
-	case spec.UsesSpec_Num_Opt, spec.UsesSpec_Flow_Opt:
-		ret = fd.typeSpec.Name
-	}
-	return
-}
-
 // handle our fake field for the leading label.
 func (fd *shapeField) termType() (ret string) {
 	if fd.typeSpec != nil {

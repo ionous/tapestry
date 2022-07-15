@@ -7,39 +7,75 @@ import (
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
-// write a number of fields, followed by the input that they merge down into
-// using blockly json's message interpolation syntax.
-func writeDummy(args *js.Builder, name, label string, fields ...func(*js.Builder)) (ret int) {
+// "append" b/c preceeded by a comma if needed
+func appendString(out *js.Builder, s string) {
+	if len(s) > 0 {
+		out.R(js.Comma).S(s)
+	}
+}
+
+// "append" b/c preceeded by a comma if needed
+func appendKv(out *js.Builder, k, v string) {
+	if len(v) > 0 {
+		out.R(js.Comma).Kv(k, v)
+	}
+}
+
+// "append" b/c preceeded by a comma if needed
+func appendColour(out *js.Builder, colour string) {
+	if len(colour) == 0 {
+		colour = bconst.COLOUR_HUE
+	}
+	out.R(js.Comma).Kv("colour", colour)
+}
+
+// "append" b/c preceeded by a comma if needed
+func appendChecks(out *js.Builder, label string, checks []string) {
+	if len(checks) > 0 {
+		out.R(js.Comma).
+			Q(label).R(js.Colon).Brace(js.Array, func(check *js.Builder) {
+			for i, c := range checks {
+				if i > 0 {
+					check.R(js.Comma)
+				}
+				check.Q(c)
+			}
+		})
+	}
+}
+
+func writeShapeDef(out *js.Builder, cb func(*js.Builder)) {
+	out.WriteString(`,"extensions":["tapestry_generic_mixin","tapestry_generic_extension"]`)
+	out.R(js.Comma).Q("customData").R(js.Colon).
+		Brace(js.Obj, func(custom *js.Builder) {
+			out.Q("shapeDef").R(js.Colon).
+				Brace(js.Array, cb)
+		})
+}
+
+// write a number of fields followed by their dummy input owner
+// returning the number of items written.
+func writeDummy(out *js.Builder, name, label string, fields ...func(*js.Builder)) (ret int) {
 	// write any leading text as a field
 	if n := label; len(n) > 0 {
-		writeLabel(args, n)
+		writeLabel(out, n)
+		out.R(js.Comma)
 		ret++
 	}
 	// write the explicit fields
-	if len(fields) > 0 {
-		args.R(js.Comma)
-		ret += writeFields(args, fields...)
-	}
-	// write the input the fields are a part of
-	args.R(js.Comma).
-		Brace(js.Obj, func(tail *js.Builder) {
-			if n := name; len(n) > 0 {
-				tail.Kv("name", strings.ToUpper(n)).R(js.Comma)
-			}
-			tail.Kv("type", bconst.InputDummy)
-			ret++
-		})
-	return
-}
-
-func writeFields(out *js.Builder, fields ...func(*js.Builder)) (ret int) {
-	for i, field := range fields {
-		if i > 0 {
-			out.R(js.Comma)
-		}
+	for _, field := range fields {
 		out.Brace(js.Obj, field)
+		out.R(js.Comma)
 		ret++
 	}
+	// write the input the fields are a part of
+	out.Brace(js.Obj, func(tail *js.Builder) {
+		if n := name; len(n) > 0 {
+			tail.Kv("name", strings.ToUpper(n)).R(js.Comma)
+		}
+		tail.Kv("type", bconst.InputDummy)
+		ret++
+	})
 	return
 }
 

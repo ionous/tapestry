@@ -473,9 +473,8 @@
         },
         {
           "--": "Determiners: modify a word they are associated to designate specificity or, sometimes, a count.  For instance: \"some\" fish hooks, \"a\" pineapple, \"75\" triangles, \"our\" Trevor.",
-          "Spec:groups:with str:": [
+          "Spec:with str:": [
             "determiner",
-              "nouns",
             {
               "Str uses:": [
                 {
@@ -1027,9 +1026,8 @@
             "named_noun",
             "nouns",
             {
-              "Flow:phrase:uses:": [
+              "Flow:uses:": [
                 "Noun",
-                "{$determiner} {name$name}",
                 [
                   {
                     "Term:name:": [
@@ -1942,7 +1940,10 @@
           "--": "top level node, currently just for blockly  might eventually contain story metadata  ex. author, description...",
           "Spec:groups:with flow:": [
             "story_file",
-            "statements",
+            [
+              "statements",
+              "mosaic:root_block"
+            ],
             {
               "Flow:phrase:uses:": [
                 "tapestry",

@@ -91,7 +91,6 @@ func TestStoryFileShape(t *testing.T) {
   ],
   "mutator": "tapestry_generic_mutation",
   "customData": {
-    "mui": "_story_file_mutator",
     "shapeDef": [
       {
         "label": "Tapestry"
@@ -139,7 +138,6 @@ func TestStoryTextShape(t *testing.T) {
   ],
   "mutator": "tapestry_generic_mutation",
   "customData": {
-    "mui": "_text_field_mutator",
     "shapeDef": [
       {
         "label": "Text"
