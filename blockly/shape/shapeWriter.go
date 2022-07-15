@@ -118,7 +118,11 @@ func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spe
 // write the args0 and message0 key-values.
 func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spec.TypeSpec, terms []spec.TermSpec) {
 	out.WriteString(`"extensions":["tapestry_generic_mixin","tapestry_generic_extension"],`)
-	hasMutator := len(terms) > 0 && blockType.Spec.Choice == spec.UsesSpec_Flow_Opt
+	// note: currently if  excluding empty term sets causes a problem because the block output generates an extraState object that's empty: {}
+	// blockly in blocks.js loadExtraState() believes that's valid data; sees we don't have the mutator loadExtraState function
+	// and therefore tries to parse the empty object as xml... which raises an (uncaught) exception: stopping the whole page from loading.
+	// ( so much power this one little line )
+	hasMutator := /*len(terms) > 0 &&*/ blockType.Spec.Choice == spec.UsesSpec_Flow_Opt
 	if hasMutator {
 		out.Kv("mutator", "tapestry_generic_mutation").R(js.Comma)
 	}

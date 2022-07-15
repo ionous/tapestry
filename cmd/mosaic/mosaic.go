@@ -34,6 +34,7 @@ func main() {
 
 const Description = //
 `Mosaic: starts the backend for Tapestry's blockly editor providing shape definitions, save/load functionality, etc.
+Currently requires separately running the npm content server in tapestry/www. ( > npm run dev )
 
 Requires a directory containing two sub-directories:
 	1. "stories" - containing .if files ( the target for save/load )
