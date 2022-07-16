@@ -3,6 +3,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -36,6 +37,7 @@ func main() {
 			path = filepath.Join(base, groupName+"_lang.go")
 			// uses goimports to add imports and format the source
 			if formatted, e := imports.Process(path, b, nil); e != nil {
+				fmt.Println(string(b))
 				err = errutil.New(e, "while formatting", groupName)
 			} else {
 				b = formatted

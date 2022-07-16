@@ -472,7 +472,51 @@
           ]
         },
         {
-          "--": "Determiners: modify a word they are associated to designate specificity or, sometimes, a count.  For instance: \"some\" fish hooks, \"a\" pineapple, \"75\" triangles, \"our\" Trevor.",
+          "Spec:with slot:": [
+            "named_noun",
+            {
+              "Slot": true
+            }
+          ]
+        },
+
+        {
+          "Spec:with slot:": [
+            "singular_noun",
+            {
+              "Slot": true
+            }
+          ]
+        },
+
+        {
+          "Spec:slots:with flow:": [
+            "common_noun",
+            ["named_noun",
+            "singular_noun"],
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                      "_",
+                      "determiner",
+                      "determiner"
+                    ]
+                },
+                {
+                  "Term:type:": [
+                      "noun",
+                      "noun_named"
+                    ]
+                }
+              ]
+            }
+          ]
+        },
+
+
+        {
+          "--": "Determiners: modify a word they are associated to designate specificity.  For instance: \"some\" fish hooks, \"a\" pineapple, \"our\" Trevor.",
           "Spec:with str:": [
             "determiner",
             {
@@ -488,11 +532,54 @@
                 },
                 {
                   "Option:": "our"
+                },
+                {
+                  "Option:": "some"
                 }
               ]
             }
           ]
         },
+
+
+        {
+          "--": "Noun name: Some specific person, place, or thing; or, more rarely, a kind. Proper names are usually capitalized:  For example, maybe: 'Haruki', 'Jane', or 'Toronto'. Common names are usually not capitalized. For example, maybe: 'table', 'chair', or 'dog park'.",
+          "Spec:slots:with str:": [
+            "noun_named",
+            ["named_noun",
+            "singular_noun"],
+            {
+              "Str uses:": []
+            }
+          ]
+        },
+
+
+        {
+          "Spec:slots:with flow:": [
+            "counted_nouns",
+            "named_noun",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                      "_",
+                      "count",
+                      "text"
+                    ]
+                },
+                {
+                  "Term:type:": [
+                      "kinds",
+                      "plural_kinds"
+                    ]
+                }
+              ]
+            }
+          ]
+        },
+
+
         {
           "--": [
             "Declare event listeners.",
@@ -617,7 +704,7 @@
                 {
                   "Pick:type:": [
                     "noun",
-                    "named_noun"
+                    "singular_noun"
                   ]
                 }
               ]
@@ -929,14 +1016,14 @@
                     "Term:name:type:": [
                       "from",
                       "room",
-                      "named_noun"
+                      "singular_noun"
                     ]
                   },
                   {
                     "Term:name:type:": [
                       "via",
                       "door",
-                      "named_noun"
+                      "singular_noun"
                     ]
                   },
                   {
@@ -948,7 +1035,7 @@
                   {
                     "Term:type:": [
                       "other_room",
-                      "named_noun"
+                      "singular_noun"
                     ]
                   }
                 ]
@@ -993,14 +1080,14 @@
                     "Term:name:type:": [
                       "from",
                       "room",
-                      "named_noun"
+                      "singular_noun"
                     ]
                   },
                   {
                     "Term:name:type:optional:": [
                       "via",
                       "door",
-                      "named_noun",
+                      "singular_noun",
                       true
                     ]
                   },
@@ -1013,7 +1100,7 @@
                   {
                     "Term:type:": [
                       "other_room",
-                      "named_noun"
+                      "singular_noun"
                     ]
                   }
                 ]
@@ -1021,32 +1108,7 @@
             }
           ]
         },
-        {
-          "Spec:groups:with flow:": [
-            "named_noun",
-            "nouns",
-            {
-              "Flow:uses:": [
-                "Noun",
-                [
-                  {
-                    "Term:name:": [
-                      "_",
-                      "determiner"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "named",
-                      "name",
-                      "noun_name"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
+
         {
           "Spec:groups:with flow:": [
             "named_field",
@@ -1132,7 +1194,7 @@
                     "Term:name:type:repeats:": [
                       "_",
                       "nouns",
-                      "named_noun",
+                      "singular_noun",
                       true
                     ]
                   },
@@ -1153,16 +1215,6 @@
                   }
                 ]
               ]
-            }
-          ]
-        },
-        {
-          "--": "Noun name: Some specific person, place, or thing; or, more rarely, a kind.  Proper names are usually capitalized:  For example, maybe: 'Haruki', 'Jane', or 'Toronto'.  Common names are usually not capitalized. For example, maybe: 'table', 'chair', or 'dog park'.  A set of duplicate object uses their kind. For instance: twelve 'cats'.`",
-          "Spec:groups:with str:": [
-            "noun_name",
-            "nouns",
-            {
-              "Str uses:": []
             }
           ]
         },
@@ -1654,7 +1706,7 @@
           ]
         },
         {
-          "--": "The plural name of a type of similar nouns.  For example: animals, containers, etc.",
+          "--": "The plural name of a type of similar nouns. For example: animals, containers, etc.",
           "Spec:groups:with str:": [
             "plural_kinds",
             "kinds",

@@ -24,7 +24,7 @@ func TestImportNamedNouns(t *testing.T) {
 		"a gaggle of", "robot sheep",
 	}; i < len(nouns); i += 2 {
 		n := makeNoun(nouns[i], nouns[i+1])
-		if e := n.ImportNouns(k); e != nil {
+		if e := n.ImportNoun(k); e != nil {
 			t.Fatal(e, "at", i)
 		}
 	}

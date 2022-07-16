@@ -10,15 +10,11 @@ func (op *PluralKinds) GetName(k *Importer) (ret string, err error) {
 	return
 }
 
-func (op *NamedNoun) GetName(k *Importer) (ret string, err error) {
-	err = errutil.New("named noun for event block not implemented")
-	return
-}
-
 func (op *EventBlock) ImportPhrase(k *Importer) (err error) {
 	if opt, ok := op.Target.Value.(interface {
 		GetName(*Importer) (string, error)
 	}); !ok {
+		// fix: not yet implemented for "NamedNoun" and should be.
 		err = errutil.Fmt("unknown event block target %T", opt)
 	} else if tgt, e := opt.GetName(k); e != nil {
 		err = e

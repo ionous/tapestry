@@ -64,7 +64,11 @@ type NounContinuation interface {
 }
 
 func (op *NounKindStatement) ImportPhrase(k *Importer) error {
-	return importNounPhrase(k, op.Nouns, &op.KindOfNoun, op.More)
+	var yuck []NamedNoun // cast the elements to their less specific type
+	for _, n := range op.Nouns {
+		yuck = append(yuck, n)
+	}
+	return importNounPhrase(k, yuck, &op.KindOfNoun, op.More)
 }
 
 func (op *NounTraitStatement) ImportPhrase(k *Importer) error {
