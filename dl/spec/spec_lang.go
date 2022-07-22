@@ -349,6 +349,7 @@ func GroupSpec_Marshal(m jsn.Marshaler, val *GroupSpec) (err error) {
 // NumSpec when exclusive is true means the user can only specify one of the options
 // otherwise the options are treated as hints.
 type NumSpec struct {
+	Name        string    `if:"label=_,optional,type=text"`
 	Exclusively bool      `if:"label=exclusively,optional,type=bool"`
 	Uses        []float64 `if:"label=uses,type=number"`
 	UserComment string
@@ -363,6 +364,7 @@ func (*NumSpec) Compose() composer.Spec {
 }
 
 const NumSpec_Type = "num_spec"
+const NumSpec_Field_Name = "$NAME"
 const NumSpec_Field_Exclusively = "$EXCLUSIVELY"
 const NumSpec_Field_Uses = "$USES"
 
@@ -437,19 +439,26 @@ func NumSpec_Optional_Marshal(m jsn.Marshaler, pv **NumSpec) (err error) {
 func NumSpec_Marshal(m jsn.Marshaler, val *NumSpec) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(NumSpec_Flow{val}); err == nil {
-		e0 := m.MarshalKey("exclusively", NumSpec_Field_Exclusively)
+		e0 := m.MarshalKey("", NumSpec_Field_Name)
 		if e0 == nil {
-			e0 = prim.Bool_Unboxed_Optional_Marshal(m, &val.Exclusively)
+			e0 = prim.Text_Unboxed_Optional_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", NumSpec_Field_Exclusively))
+			m.Error(errutil.New(e0, "in flow at", NumSpec_Field_Name))
 		}
-		e1 := m.MarshalKey("uses", NumSpec_Field_Uses)
+		e1 := m.MarshalKey("exclusively", NumSpec_Field_Exclusively)
 		if e1 == nil {
-			e1 = prim.Number_Unboxed_Repeats_Marshal(m, &val.Uses)
+			e1 = prim.Bool_Unboxed_Optional_Marshal(m, &val.Exclusively)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NumSpec_Field_Uses))
+			m.Error(errutil.New(e1, "in flow at", NumSpec_Field_Exclusively))
+		}
+		e2 := m.MarshalKey("uses", NumSpec_Field_Uses)
+		if e2 == nil {
+			e2 = prim.Number_Unboxed_Repeats_Marshal(m, &val.Uses)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", NumSpec_Field_Uses))
 		}
 		m.EndBlock()
 	}
@@ -661,6 +670,7 @@ func SlotSpec_Marshal(m jsn.Marshaler, val *SlotSpec) (err error) {
 // StrSpec when exclusive is true means the user can only specify one of the options
 // otherwise the options are treated as hints.
 type StrSpec struct {
+	Name        string       `if:"label=_,optional,type=text"`
 	Exclusively bool         `if:"label=exclusively,optional,type=bool"`
 	Uses        []OptionSpec `if:"label=uses"`
 	UserComment string
@@ -675,6 +685,7 @@ func (*StrSpec) Compose() composer.Spec {
 }
 
 const StrSpec_Type = "str_spec"
+const StrSpec_Field_Name = "$NAME"
 const StrSpec_Field_Exclusively = "$EXCLUSIVELY"
 const StrSpec_Field_Uses = "$USES"
 
@@ -749,19 +760,26 @@ func StrSpec_Optional_Marshal(m jsn.Marshaler, pv **StrSpec) (err error) {
 func StrSpec_Marshal(m jsn.Marshaler, val *StrSpec) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(StrSpec_Flow{val}); err == nil {
-		e0 := m.MarshalKey("exclusively", StrSpec_Field_Exclusively)
+		e0 := m.MarshalKey("", StrSpec_Field_Name)
 		if e0 == nil {
-			e0 = prim.Bool_Unboxed_Optional_Marshal(m, &val.Exclusively)
+			e0 = prim.Text_Unboxed_Optional_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", StrSpec_Field_Exclusively))
+			m.Error(errutil.New(e0, "in flow at", StrSpec_Field_Name))
 		}
-		e1 := m.MarshalKey("uses", StrSpec_Field_Uses)
+		e1 := m.MarshalKey("exclusively", StrSpec_Field_Exclusively)
 		if e1 == nil {
-			e1 = OptionSpec_Repeats_Marshal(m, &val.Uses)
+			e1 = prim.Bool_Unboxed_Optional_Marshal(m, &val.Exclusively)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", StrSpec_Field_Uses))
+			m.Error(errutil.New(e1, "in flow at", StrSpec_Field_Exclusively))
+		}
+		e2 := m.MarshalKey("uses", StrSpec_Field_Uses)
+		if e2 == nil {
+			e2 = OptionSpec_Repeats_Marshal(m, &val.Uses)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", StrSpec_Field_Uses))
 		}
 		m.EndBlock()
 	}
@@ -770,6 +788,7 @@ func StrSpec_Marshal(m jsn.Marshaler, val *StrSpec) (err error) {
 
 // SwapSpec specifies a choice between one or more other types.
 type SwapSpec struct {
+	Name        string       `if:"label=_,optional,type=text"`
 	Between     []ChoiceSpec `if:"label=between"`
 	UserComment string
 }
@@ -783,6 +802,7 @@ func (*SwapSpec) Compose() composer.Spec {
 }
 
 const SwapSpec_Type = "swap_spec"
+const SwapSpec_Field_Name = "$NAME"
 const SwapSpec_Field_Between = "$BETWEEN"
 
 func (op *SwapSpec) Marshal(m jsn.Marshaler) error {
@@ -856,12 +876,19 @@ func SwapSpec_Optional_Marshal(m jsn.Marshaler, pv **SwapSpec) (err error) {
 func SwapSpec_Marshal(m jsn.Marshaler, val *SwapSpec) (err error) {
 	m.SetComment(&val.UserComment)
 	if err = m.MarshalBlock(SwapSpec_Flow{val}); err == nil {
-		e0 := m.MarshalKey("between", SwapSpec_Field_Between)
+		e0 := m.MarshalKey("", SwapSpec_Field_Name)
 		if e0 == nil {
-			e0 = ChoiceSpec_Repeats_Marshal(m, &val.Between)
+			e0 = prim.Text_Unboxed_Optional_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", SwapSpec_Field_Between))
+			m.Error(errutil.New(e0, "in flow at", SwapSpec_Field_Name))
+		}
+		e1 := m.MarshalKey("between", SwapSpec_Field_Between)
+		if e1 == nil {
+			e1 = ChoiceSpec_Repeats_Marshal(m, &val.Between)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", SwapSpec_Field_Between))
 		}
 		m.EndBlock()
 	}

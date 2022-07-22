@@ -126,7 +126,7 @@ func (d *StateMix) MarshalValue(typeName string, pv interface{}) (err error) {
 	if call := d.OnValue; call != nil {
 		err = call(typeName, pv)
 	} else {
-		err = Unhandled(errutil.Sprint("MarshalValue", typeName, pv))
+		err = Unhandled(errutil.Sprintf("MarshalValue %s %T", typeName, pv))
 	}
 	return
 }

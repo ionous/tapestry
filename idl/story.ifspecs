@@ -495,20 +495,24 @@
             ["named_noun",
             "singular_noun"],
             {
-              "Flow uses:": [
-                {
-                  "Term:name:type:": [
-                      "_",
-                      "determiner",
-                      "determiner"
-                    ]
-                },
-                {
-                  "Term:type:": [
-                      "noun",
-                      "noun_named"
-                    ]
-                }
+              "Flow:uses:": [
+                "noun",
+                [
+                  {
+                    "Term:name:type:": [
+                        "_",
+                        "determiner",
+                        "determiner"
+                      ]
+                  },
+                  {
+                    "Term:name:type:": [
+                        "named",
+                        "noun",
+                        "noun_named"
+                      ]
+                  }
+                ]
               ]
             }
           ]
@@ -549,7 +553,7 @@
             ["named_noun",
             "singular_noun"],
             {
-              "Str uses:": []
+              "Str:uses:": [ "noun", [] ]
             }
           ]
         },

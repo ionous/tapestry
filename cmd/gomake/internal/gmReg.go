@@ -27,18 +27,35 @@ func (reg *RegistrationLists) AddType(t *spec.TypeSpec) {
 		reg.slats = append(reg.slats, t.Name)
 
 		// add signatures:
-		switch t.Spec.Choice {
-		case spec.UsesSpec_Flow_Opt:
-			reg.addFlow(t)
+		switch v := t.Spec.Value.(type) {
+		case *spec.FlowSpec:
+			reg.addFlow(t, v)
 
-		case spec.UsesSpec_Swap_Opt:
-			reg.addSwap(t)
+		case *spec.SwapSpec:
+			reg.addSwap(t, v)
+
+		case *spec.StrSpec:
+			reg.addPrim(t, v.Name)
+
+		case *spec.NumSpec:
+			reg.addPrim(t, v.Name)
 		}
 	}
 }
 
-func (reg *RegistrationLists) addSwap(t *spec.TypeSpec) {
-	swap := t.Spec.Value.(*spec.SwapSpec)
+func (reg *RegistrationLists) addPrim(t *spec.TypeSpec, lede string) {
+	if len(lede) == 0 {
+		lede = t.Name
+	}
+	commandName := pascal(lede)
+	reg.sigs = append(reg.sigs, makeSig(t, commandName+":")...)
+}
+
+func (reg *RegistrationLists) addSwap(t *spec.TypeSpec, swap *spec.SwapSpec) {
+	lede := swap.Name
+	if len(lede) == 0 {
+		lede = t.Name
+	}
 	commandName := pascal(t.Name)
 	for _, pick := range swap.Between {
 		sel := camelize(pick.Name)
@@ -46,8 +63,7 @@ func (reg *RegistrationLists) addSwap(t *spec.TypeSpec) {
 	}
 }
 
-func (reg *RegistrationLists) addFlow(t *spec.TypeSpec) {
-	flow := t.Spec.Value.(*spec.FlowSpec)
+func (reg *RegistrationLists) addFlow(t *spec.TypeSpec, flow *spec.FlowSpec) {
 	lede := flow.Name
 	if len(lede) == 0 {
 		lede = t.Name

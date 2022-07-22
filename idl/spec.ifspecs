@@ -113,6 +113,14 @@
                 "num",
                 [
                   {
+                    "Term:name:type:optional:": [
+                      "_",
+                      "name",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
                     "Term:type:optional:": [
                       "exclusively",
                       "bool",
@@ -188,6 +196,14 @@
                 "str",
                 [
                   {
+                    "Term:name:type:optional:": [
+                      "_",
+                      "name",
+                      "text",
+                      true
+                    ]
+                  },
+                  {
                     "Term:type:optional:": [
                       "exclusively",
                       "bool",
@@ -214,6 +230,14 @@
               "Flow:uses:": [
                 "swap",
                 [
+                  {
+                    "Term:name:type:optional:": [
+                      "_",
+                      "name",
+                      "text",
+                      true
+                    ]
+                  },
                   {
                     "Term:type:repeats:": [
                       "between",

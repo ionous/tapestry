@@ -319,6 +319,16 @@ func (dec *xDecoder) newSlot(op Op) *chart.StateMix {
 		}
 		return
 	}
+	next.OnValue = func(typeName string, pv interface{}) (err error) {
+		if sig, args, e := op.ReadMsg(); e != nil {
+			dec.Error(e)
+		} else if len(args) != 1 {
+			dec.Error(errutil.New("unexpected number of args", sig.Name, len(args)))
+		} else {
+			err = dec.readValue(pv, args[0])
+		}
+		return
+	}
 	next.OnCommit = func(interface{}) {
 		dec.ChangeState(chart.NewBlockResult(&dec.Machine, "slot end"))
 	}
