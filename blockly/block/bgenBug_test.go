@@ -52,19 +52,19 @@ func TestStringChoice(t *testing.T) {
 // their text should hold normal text not $KEY values
 func TestStringHints(t *testing.T) {
   if e := testBlocks(
-    &story.NamedNoun{
+    &story.CommonNoun{
       Determiner: story.Determiner{Str: story.Determiner_The},
-      Name:       story.NounName{Str: "table"},
+      Noun:       story.NounNamed{Str: "table"},
     }, `{
-  "type": "named_noun",
+  "type": "common_noun",
   "id": "test-1",
   "extraState": {
     "DETERMINER": 1,
-    "NAME": 1
+    "NOUN": 1
   },
   "fields": {
     "DETERMINER": "the",
-    "NAME": "table"
+    "NOUN": "table"
   }
 }`); e != nil {
     t.Fatal(e)
