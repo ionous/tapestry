@@ -138,8 +138,21 @@ func (op *CommonNoun) ImportNoun(k *Importer) (err error) {
 		// set the indefinite article field
 		k.WriteEphemera(&eph.EphValues{Noun: op.Noun.NounName(), Field: "indefinite_article", Value: T(detStr)})
 	}
-
 	op.Noun.addNoun(k, detStr)
+	return
+}
+
+func (op *ProperNoun) NounName() string {
+	return op.Noun.NounName()
+}
+
+func (op *ProperNoun) UniformString() (ret string, err error) {
+	return op.Noun.UniformString()
+}
+
+func (op *ProperNoun) ImportNoun(k *Importer) (err error) {
+	declareNounClass(k)
+	op.Noun.addNoun(k, "our")
 	return
 }
 
@@ -153,12 +166,6 @@ func (n *NounNamed) UniformString() (ret string, err error) {
 	} else {
 		ret = u
 	}
-	return
-}
-
-func (op *NounNamed) ImportNoun(k *Importer) (err error) {
-	declareNounClass(k)
-	op.addNoun(k, "our")
 	return
 }
 

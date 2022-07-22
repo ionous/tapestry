@@ -15,10 +15,7 @@
             "Nouns:depict:": [
               [
                 {
-                  "Noun:named:": [
-                    "our",
-                    "Mildred"
-                  ]
+                  "Noun:": "Mildred"
                 }
               ],
               {
@@ -123,10 +120,7 @@
                   ]
                 },
                 {
-                  "Noun:named:": [
-                    "our",
-                    "Mildred"
-                  ]
+                  "Noun:": "Mildred"
                 }
               ],
               {
@@ -199,10 +193,7 @@
                   "whereabouts",
                   [
                     {
-                      "Noun:named:": [
-                        "our",
-                        "Mildred"
-                      ]
+                      "Noun:": "Mildred"
                     }
                   ]
                 ]

@@ -158,7 +158,10 @@ func (op *MapConnection) isTwoWay() bool {
 
 // return the name of a noun based on the name of the current noun
 func dependentNoun(n SingularNoun, name string) SingularNoun {
-	return &NounNamed{Str: n.NounName() + "-" + name}
+	return &CommonNoun{
+		Determiner: Determiner{"our"},
+		Noun:       NounNamed{Str: n.NounName() + "-" + name},
+	}
 }
 
 func nounOf(n SingularNoun, kind string) *eph.EphNouns {

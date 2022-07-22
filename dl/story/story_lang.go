@@ -1672,7 +1672,7 @@ func CommonAction_Marshal(m jsn.Marshaler, val *CommonAction) (err error) {
 // CommonNoun
 type CommonNoun struct {
 	Determiner  Determiner `if:"label=_"`
-	Noun        NounNamed  `if:"label=noun"`
+	Noun        NounNamed  `if:"label=named"`
 	UserComment string
 }
 
@@ -1684,6 +1684,7 @@ func (*CommonNoun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: CommonNoun_Type,
 		Uses: composer.Type_Flow,
+		Lede: "noun",
 	}
 }
 
@@ -1738,7 +1739,7 @@ func CommonNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CommonNoun) (err
 type CommonNoun_Flow struct{ ptr *CommonNoun }
 
 func (n CommonNoun_Flow) GetType() string      { return CommonNoun_Type }
-func (n CommonNoun_Flow) GetLede() string      { return CommonNoun_Type }
+func (n CommonNoun_Flow) GetLede() string      { return "noun" }
 func (n CommonNoun_Flow) GetFlow() interface{} { return n.ptr }
 func (n CommonNoun_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*CommonNoun); ok {
@@ -1769,7 +1770,7 @@ func CommonNoun_Marshal(m jsn.Marshaler, val *CommonNoun) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CommonNoun_Field_Determiner))
 		}
-		e1 := m.MarshalKey("noun", CommonNoun_Field_Noun)
+		e1 := m.MarshalKey("named", CommonNoun_Field_Noun)
 		if e1 == nil {
 			e1 = NounNamed_Marshal(m, &val.Noun)
 		}
@@ -1896,7 +1897,7 @@ func CountOf_Marshal(m jsn.Marshaler, val *CountOf) (err error) {
 // CountedNouns
 type CountedNouns struct {
 	Count       string      `if:"label=_,type=text"`
-	Kinds       PluralKinds `if:"label=kinds"`
+	Kinds       PluralKinds `if:"label=named"`
 	UserComment string
 }
 
@@ -1907,6 +1908,7 @@ func (*CountedNouns) Compose() composer.Spec {
 	return composer.Spec{
 		Name: CountedNouns_Type,
 		Uses: composer.Type_Flow,
+		Lede: "nouns",
 	}
 }
 
@@ -1961,7 +1963,7 @@ func CountedNouns_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CountedNouns) 
 type CountedNouns_Flow struct{ ptr *CountedNouns }
 
 func (n CountedNouns_Flow) GetType() string      { return CountedNouns_Type }
-func (n CountedNouns_Flow) GetLede() string      { return CountedNouns_Type }
+func (n CountedNouns_Flow) GetLede() string      { return "nouns" }
 func (n CountedNouns_Flow) GetFlow() interface{} { return n.ptr }
 func (n CountedNouns_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*CountedNouns); ok {
@@ -1992,7 +1994,7 @@ func CountedNouns_Marshal(m jsn.Marshaler, val *CountedNouns) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CountedNouns_Field_Count))
 		}
-		e1 := m.MarshalKey("kinds", CountedNouns_Field_Kinds)
+		e1 := m.MarshalKey("named", CountedNouns_Field_Kinds)
 		if e1 == nil {
 			e1 = PluralKinds_Marshal(m, &val.Kinds)
 		}
@@ -2119,7 +2121,6 @@ const Determiner_A = "$A"
 const Determiner_An = "$AN"
 const Determiner_The = "$THE"
 const Determiner_Our = "$OUR"
-const Determiner_Some = "$SOME"
 
 func (*Determiner) Compose() composer.Spec {
 	return composer.Spec{
@@ -2127,10 +2128,10 @@ func (*Determiner) Compose() composer.Spec {
 		Uses:        composer.Type_Str,
 		OpenStrings: true,
 		Choices: []string{
-			Determiner_A, Determiner_An, Determiner_The, Determiner_Our, Determiner_Some,
+			Determiner_A, Determiner_An, Determiner_The, Determiner_Our,
 		},
 		Strings: []string{
-			"a", "an", "the", "our", "some",
+			"a", "an", "the", "our",
 		},
 	}
 }
@@ -4653,7 +4654,7 @@ func NounContinuation_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounContin
 
 // NounKindStatement
 type NounKindStatement struct {
-	Nouns       []SingularNoun     `if:"label=_"`
+	Nouns       []NamedNoun        `if:"label=_"`
 	KindOfNoun  KindOfNoun         `if:"label=depict"`
 	More        []NounContinuation `if:"label=and,optional"`
 	UserComment string
@@ -4748,7 +4749,7 @@ func NounKindStatement_Marshal(m jsn.Marshaler, val *NounKindStatement) (err err
 	if err = m.MarshalBlock(NounKindStatement_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NounKindStatement_Field_Nouns)
 		if e0 == nil {
-			e0 = SingularNoun_Repeats_Marshal(m, &val.Nouns)
+			e0 = NamedNoun_Repeats_Marshal(m, &val.Nouns)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", NounKindStatement_Field_Nouns))
@@ -6676,6 +6677,110 @@ func PluralKinds_Repeats_Marshal(m jsn.Marshaler, vals *[]PluralKinds) error {
 func PluralKinds_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PluralKinds) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PluralKinds_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+// ProperNoun A specific person, place, or thing. Proper names are usually capitalized:  For example, maybe: 'Haruki', 'Jane', or 'Toronto'.
+type ProperNoun struct {
+	Noun        NounNamed `if:"label=_"`
+	UserComment string
+}
+
+// User implemented slots:
+var _ NamedNoun = (*ProperNoun)(nil)
+var _ SingularNoun = (*ProperNoun)(nil)
+
+func (*ProperNoun) Compose() composer.Spec {
+	return composer.Spec{
+		Name: ProperNoun_Type,
+		Uses: composer.Type_Flow,
+		Lede: "noun",
+	}
+}
+
+const ProperNoun_Type = "proper_noun"
+const ProperNoun_Field_Noun = "$NOUN"
+
+func (op *ProperNoun) Marshal(m jsn.Marshaler) error {
+	return ProperNoun_Marshal(m, op)
+}
+
+type ProperNoun_Slice []ProperNoun
+
+func (op *ProperNoun_Slice) GetType() string { return ProperNoun_Type }
+
+func (op *ProperNoun_Slice) Marshal(m jsn.Marshaler) error {
+	return ProperNoun_Repeats_Marshal(m, (*[]ProperNoun)(op))
+}
+
+func (op *ProperNoun_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ProperNoun_Slice) SetSize(cnt int) {
+	var els []ProperNoun
+	if cnt >= 0 {
+		els = make(ProperNoun_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ProperNoun_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ProperNoun_Marshal(m, &(*op)[i])
+}
+
+func ProperNoun_Repeats_Marshal(m jsn.Marshaler, vals *[]ProperNoun) error {
+	return jsn.RepeatBlock(m, (*ProperNoun_Slice)(vals))
+}
+
+func ProperNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ProperNoun) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = ProperNoun_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type ProperNoun_Flow struct{ ptr *ProperNoun }
+
+func (n ProperNoun_Flow) GetType() string      { return ProperNoun_Type }
+func (n ProperNoun_Flow) GetLede() string      { return "noun" }
+func (n ProperNoun_Flow) GetFlow() interface{} { return n.ptr }
+func (n ProperNoun_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ProperNoun); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func ProperNoun_Optional_Marshal(m jsn.Marshaler, pv **ProperNoun) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ProperNoun_Marshal(m, *pv)
+	} else if !enc {
+		var v ProperNoun
+		if err = ProperNoun_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func ProperNoun_Marshal(m jsn.Marshaler, val *ProperNoun) (err error) {
+	m.SetComment(&val.UserComment)
+	if err = m.MarshalBlock(ProperNoun_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", ProperNoun_Field_Noun)
+		if e0 == nil {
+			e0 = NounNamed_Marshal(m, &val.Noun)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ProperNoun_Field_Noun))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -9145,6 +9250,7 @@ var Slats = []composer.Composer{
 	(*PatternRule)(nil),
 	(*PatternType)(nil),
 	(*PluralKinds)(nil),
+	(*ProperNoun)(nil),
 	(*Property)(nil),
 	(*RecordField)(nil),
 	(*RecordListField)(nil),
@@ -9179,10 +9285,7 @@ var Signatures = map[uint64]interface{}{
 	6843411504396242728:  (*Certainties)(nil),           /* story_statement=Certainties:areBeing:certainty:trait: */
 	3991849378064754806:  (*Comment)(nil),               /* execute=Comment: */
 	16586092333187989882: (*Comment)(nil),               /* story_statement=Comment: */
-	11299166877564805747: (*CommonNoun)(nil),            /* named_noun=CommonNoun:noun: */
-	9189615417023155253:  (*CommonNoun)(nil),            /* singular_noun=CommonNoun:noun: */
 	10143132576483224253: (*CountOf)(nil),               /* bool_eval=CountOf:num: */
-	11148823164696324650: (*CountedNouns)(nil),          /* named_noun=CountedNouns:kinds: */
 	231398832069830353:   (*CycleText)(nil),             /* text_eval=CycleText: */
 	12862689211056047959: (*MapDeparting)(nil),          /* story_statement=Departing from:via:and:otherRoom: */
 	12226644017914492267: (*ActionDecl)(nil),            /* story_statement=Event:action:args common: */
@@ -9203,12 +9306,17 @@ var Signatures = map[uint64]interface{}{
 	4364279276143636783:  (*KindsOfKind)(nil),           /* story_statement=Make:kind: */
 	12130342806058120266: (*MakeOpposite)(nil),          /* story_statement=Make:opposite: */
 	8107023930195182683:  (*MakePlural)(nil),            /* story_statement=Make:plural: */
+	7315903014127055020:  (*ProperNoun)(nil),            /* named_noun=Noun: */
+	2148674162701691978:  (*ProperNoun)(nil),            /* singular_noun=Noun: */
+	6508739485154276153:  (*CommonNoun)(nil),            /* named_noun=Noun:named: */
+	9335207376881300111:  (*CommonNoun)(nil),            /* singular_noun=Noun:named: */
 	8983976057391918886:  (*NounAssignment)(nil),        /* story_statement=NounAssignment:nouns:lines: */
 	9140865151012438596:  (*NounRelation)(nil),          /* noun_continuation=NounRelation areBeing:relation:otherNouns: */
 	10679174935447767001: (*NounRelation)(nil),          /* noun_continuation=NounRelation relation:otherNouns: */
 	10231941673534471951: (*NounTraits)(nil),            /* noun_continuation=NounTraits:trait: */
 	2819811603870068065:  (*NounKindStatement)(nil),     /* story_statement=Nouns:depict: */
 	6526395371997792336:  (*NounKindStatement)(nil),     /* story_statement=Nouns:depict:and: */
+	1119385123956310430:  (*CountedNouns)(nil),          /* named_noun=Nouns:named: */
 	14408552188370402952: (*NounRelationStatement)(nil), /* story_statement=Nouns:relateTo: */
 	3302808320047972257:  (*NounRelationStatement)(nil), /* story_statement=Nouns:relateTo:and: */
 	4416345853480779800:  (*NounTraitStatement)(nil),    /* story_statement=Nouns:startAs: */

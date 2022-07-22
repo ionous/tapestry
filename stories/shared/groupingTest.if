@@ -9,10 +9,7 @@
             "Nouns:depict:": [
               [
                 {
-                  "Noun:named:": [
-                    "our",
-                    "Clarence"
-                  ]
+                  "Noun:": "Clarence"
                 }
               ],
               {
@@ -27,7 +24,7 @@
             "Nouns:depict:": [
               [
                 {
-                  "Noun:named:": [
+                  "Nouns:named:": [
                     "two",
                     "cats"
                   ]
@@ -57,7 +54,7 @@
                   ]
                 },
                 {
-                  "Noun:named:": [
+                  "Nouns:named:": [
                     "two",
                     "triangles"
                   ]

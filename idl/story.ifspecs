@@ -495,6 +495,7 @@
             ["named_noun",
             "singular_noun"],
             {
+              "--": "Some person, place, or thing which lacks a specific name. For example, maybe: 'teacher', 'chalk', or 'dog park'.",
               "Flow:uses:": [
                 "noun",
                 [
@@ -518,9 +519,32 @@
           ]
         },
 
+        {
+          "--":  "A specific person, place, or thing. Proper names are usually capitalized:  For example, maybe: 'Haruki', 'Jane', or 'Toronto'.",
+          "Spec:slots:with flow:": [
+            "proper_noun",
+            ["named_noun",
+            "singular_noun"],
+            {
+              "Flow:uses:": [
+                "noun",
+                [
+                  {
+                    "Term:name:type:": [
+                        "_",
+                        "noun",
+                        "noun_named"
+                      ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+
 
         {
-          "--": "Determiners: modify a word they are associated to designate specificity.  For instance: \"some\" fish hooks, \"a\" pineapple, \"our\" Trevor.",
+          "--": "Determiners: modify a noun to designate specificity.  For instance: \"some\" fish hooks, \"a\" pineapple, \"our\" Trevor.",
           "Spec:with str:": [
             "determiner",
             {
@@ -536,48 +560,44 @@
                 },
                 {
                   "Option:": "our"
-                },
-                {
-                  "Option:": "some"
                 }
               ]
             }
           ]
         },
 
-
         {
-          "--": "Noun name: Some specific person, place, or thing; or, more rarely, a kind. Proper names are usually capitalized:  For example, maybe: 'Haruki', 'Jane', or 'Toronto'. Common names are usually not capitalized. For example, maybe: 'table', 'chair', or 'dog park'.",
-          "Spec:slots:with str:": [
+          "Spec:with str:": [
             "noun_named",
-            ["named_noun",
-            "singular_noun"],
             {
-              "Str:uses:": [ "noun", [] ]
+              "Str uses:": []
             }
           ]
         },
-
 
         {
           "Spec:slots:with flow:": [
             "counted_nouns",
             "named_noun",
             {
-              "Flow uses:": [
-                {
-                  "Term:name:type:": [
-                      "_",
-                      "count",
-                      "text"
-                    ]
-                },
-                {
-                  "Term:type:": [
-                      "kinds",
-                      "plural_kinds"
-                    ]
-                }
+              "Flow:uses:": [
+                "nouns",
+                [
+                  {
+                    "Term:name:type:": [
+                        "_",
+                        "count",
+                        "text"
+                      ]
+                  },
+                  {
+                    "Term:name:type:": [
+                        "named",
+                        "kinds",
+                        "plural_kinds"
+                      ]
+                  }
+                ]
               ]
             }
           ]
@@ -1198,7 +1218,7 @@
                     "Term:name:type:repeats:": [
                       "_",
                       "nouns",
-                      "singular_noun",
+                      "named_noun",
                       true
                     ]
                   },

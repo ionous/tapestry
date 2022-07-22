@@ -137,7 +137,7 @@ func countedNouns(kind string, cnt int) (out []eph.Ephemera) {
 
 func textParam(name string) eph.EphParams {
 	return eph.EphParams{
-		Affinity: eph.Affinity{eph.Affinity_Text},
+		Affinity: eph.Affinity{Str: eph.Affinity_Text},
 		Name:     name,
 	}
 }

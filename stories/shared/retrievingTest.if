@@ -176,16 +176,10 @@
               "whereabouts",
               [
                 {
-                  "Noun:named:": [
-                    "our",
-                    "self"
-                  ]
+                  "Noun:": "self"
                 },
                 {
-                  "Noun:named:": [
-                    "our",
-                    "Mildred"
-                  ]
+                  "Noun:": "Mildred"
                 }
               ],
               "is",
@@ -241,10 +235,7 @@
               "is",
               [
                 {
-                  "Noun:named:": [
-                    "our",
-                    "Mildred"
-                  ]
+                  "Noun:": "Mildred"
                 }
               ]
             ]

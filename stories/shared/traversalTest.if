@@ -85,10 +85,7 @@
               "whereabouts",
               [
                 {
-                  "Noun:named:": [
-                    "our",
-                    "self"
-                  ]
+                  "Noun:": "self"
                 }
               ],
               "is",
@@ -126,7 +123,7 @@
               [
                 {
                   "Noun:named:": [
-                    "our",
+                    "the",
                     "faux door"
                   ]
                 }

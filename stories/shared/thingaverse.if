@@ -9,10 +9,7 @@
             "Nouns:depict:": [
               [
                 {
-                  "Noun:named:": [
-                    "our",
-                    "Mildred"
-                  ]
+                  "Noun:": "Mildred"
                 }
               ],
               {
@@ -311,10 +308,7 @@
               "is",
               [
                 {
-                  "Noun:named:": [
-                    "our",
-                    "Mildred"
-                  ]
+                  "Noun:": "Mildred"
                 }
               ]
             ]

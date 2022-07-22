@@ -11,17 +11,14 @@
               "whereabouts",
               [
                 {
-                  "Noun:named:": [
-                    "our",
-                    "self"
-                  ]
+                  "Noun:": "self"
                 }
               ],
               "is",
               [
                 {
                   "Noun:named:": [
-                    "our",
+                    "the",
                     "kitchen"
                   ]
                 }
@@ -99,7 +96,7 @@
                   ]
                 },
                 {
-                  "Noun:named:": [
+                  "Nouns:named:": [
                     "two",
                     "cats"
                   ]

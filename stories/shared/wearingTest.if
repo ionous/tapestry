@@ -199,10 +199,7 @@
               "is",
               [
                 {
-                  "Noun:named:": [
-                    "our",
-                    "self"
-                  ]
+                  "Noun:": "self"
                 }
               ]
             ]
