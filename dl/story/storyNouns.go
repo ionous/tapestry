@@ -142,27 +142,27 @@ func (op *CommonNoun) ImportNoun(k *Importer) (err error) {
 	return
 }
 
-func (op *ProperNoun) NounName() string {
-	return op.Noun.NounName()
+func (op *NounNamed) NounName() string {
+	return op.Name.NounName()
 }
 
-func (op *ProperNoun) UniformString() (ret string, err error) {
-	return op.Noun.UniformString()
+func (op *NounNamed) UniformString() (string, error) {
+	return op.Name.UniformString()
 }
 
-func (op *ProperNoun) ImportNoun(k *Importer) (err error) {
+func (op *NounNamed) ImportNoun(k *Importer) (err error) {
 	declareNounClass(k)
-	op.Noun.addNoun(k, "our")
+	op.addNoun(k, "our")
 	return
 }
 
-func (op *NounNamed) NounName() string {
+func (op *NounName) NounName() string {
 	return strings.TrimSpace(op.Str)
 }
 
-func (n *NounNamed) UniformString() (ret string, err error) {
-	if u, ok := eph.UniformString(n.Str); !ok {
-		err = eph.InvalidString(n.Str)
+func (op *NounName) UniformString() (ret string, err error) {
+	if u, ok := eph.UniformString(op.Str); !ok {
+		err = eph.InvalidString(op.Str)
 	} else {
 		ret = u
 	}

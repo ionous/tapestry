@@ -99,7 +99,7 @@ func TestImportNamedNouns(t *testing.T) {
 func makeNoun(det, name string) story.NamedNoun {
 	return &story.CommonNoun{
 		Determiner: story.Determiner{Str: det},
-		Noun:       story.NounNamed{Str: name},
+		Noun:       story.NounNamed{Name: story.NounName{Str: name}},
 	}
 }
 

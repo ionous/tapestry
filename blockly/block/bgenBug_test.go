@@ -54,7 +54,7 @@ func TestStringHints(t *testing.T) {
   if e := testBlocks(
     &story.CommonNoun{
       Determiner: story.Determiner{Str: story.Determiner_The},
-      Noun:       story.NounNamed{Str: "table"},
+      Noun:       story.NounNamed{Name: story.NounName{Str: "table"}},
     }, `{
   "type": "common_noun",
   "id": "test-1",
@@ -63,8 +63,21 @@ func TestStringHints(t *testing.T) {
     "NOUN": 1
   },
   "fields": {
-    "DETERMINER": "the",
-    "NOUN": "table"
+    "DETERMINER": "the"
+  },
+  "inputs": {
+    "NOUN": {
+      "block": {
+        "type": "noun_named",
+        "id": "test-2",
+        "extraState": {
+          "NAME": 1
+        },
+        "fields": {
+          "NAME": "table"
+        }
+      }
+    }
   }
 }`); e != nil {
     t.Fatal(e)

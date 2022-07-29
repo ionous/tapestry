@@ -160,7 +160,7 @@ func (op *MapConnection) isTwoWay() bool {
 func dependentNoun(n SingularNoun, name string) SingularNoun {
 	return &CommonNoun{
 		Determiner: Determiner{"our"},
-		Noun:       NounNamed{Str: n.NounName() + "-" + name},
+		Noun:       NounNamed{Name: NounName{n.NounName() + "-" + name}},
 	}
 }
 

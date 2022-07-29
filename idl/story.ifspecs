@@ -220,7 +220,7 @@
         {
           "Spec:groups:with str:": [
             "aspect",
-              "traits",
+            "traits",
             {
               "Str uses:": []
             }
@@ -479,7 +479,6 @@
             }
           ]
         },
-
         {
           "Spec:with slot:": [
             "singular_noun",
@@ -490,61 +489,60 @@
         },
 
         {
+          "--": [
+            "A specific person, place or thing.",
+            "When used with a determiner typically implies a common noun ( 'the cat', 'some fish', 'a snack'. )",
+            "When used alone usually implies a proper noun ( 'Hikaru', 'Genesis', or 'Beta Regula One'. )"
+          ],
+          "Spec:slots:with flow:": [
+            "noun_named",
+            [
+              "named_noun",
+              "singular_noun"
+            ],
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "name",
+                    "noun_name"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+             "Some person, place, or thing which lacks a specific name.",
+             "For example, maybe: 'a helicopter', 'some hooded figures', or 'the dog park'."
+          ],
           "Spec:slots:with flow:": [
             "common_noun",
-            ["named_noun",
-            "singular_noun"],
+            [
+              "named_noun",
+              "singular_noun"
+            ],
             {
-              "--": "Some person, place, or thing which lacks a specific name. For example, maybe: 'teacher', 'chalk', or 'dog park'.",
-              "Flow:uses:": [
-                "noun",
-                [
-                  {
-                    "Term:name:type:": [
-                        "_",
-                        "determiner",
-                        "determiner"
-                      ]
-                  },
-                  {
-                    "Term:name:type:": [
-                        "named",
-                        "noun",
-                        "noun_named"
-                      ]
-                  }
-                ]
+              "Flow uses:": [
+                {
+                  "Term:name:": [
+                    "_",
+                    "determiner"
+                  ]
+                },
+                {
+                  "Term:type:": [
+                    "noun",
+                    "noun_named"
+                  ]
+                }
               ]
             }
           ]
         },
-
         {
-          "--":  "A specific person, place, or thing. Proper names are usually capitalized:  For example, maybe: 'Haruki', 'Jane', or 'Toronto'.",
-          "Spec:slots:with flow:": [
-            "proper_noun",
-            ["named_noun",
-            "singular_noun"],
-            {
-              "Flow:uses:": [
-                "noun",
-                [
-                  {
-                    "Term:name:type:": [
-                        "_",
-                        "noun",
-                        "noun_named"
-                      ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-
-
-        {
-          "--": "Determiners: modify a noun to designate specificity.  For instance: \"some\" fish hooks, \"a\" pineapple, \"our\" Trevor.",
           "Spec:with str:": [
             "determiner",
             {
@@ -565,16 +563,14 @@
             }
           ]
         },
-
         {
           "Spec:with str:": [
-            "noun_named",
+            "noun_name",
             {
               "Str uses:": []
             }
           ]
         },
-
         {
           "Spec:slots:with flow:": [
             "counted_nouns",
@@ -585,25 +581,23 @@
                 [
                   {
                     "Term:name:type:": [
-                        "_",
-                        "count",
-                        "text"
-                      ]
+                      "_",
+                      "count",
+                      "text"
+                    ]
                   },
                   {
                     "Term:name:type:": [
-                        "named",
-                        "kinds",
-                        "plural_kinds"
-                      ]
+                      "named",
+                      "kinds",
+                      "plural_kinds"
+                    ]
                   }
                 ]
               ]
             }
           ]
         },
-
-
         {
           "--": [
             "Declare event listeners.",
@@ -1132,7 +1126,6 @@
             }
           ]
         },
-
         {
           "Spec:groups:with flow:": [
             "named_field",
