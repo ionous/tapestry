@@ -1101,6 +1101,7 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
+	17656638186047966738: (*FieldValue)(nil),  /* Field:value: */
 	2028829358589965004:  (*BoolValue)(nil),   /* bool_eval=Bool value: */
 	11511029631426206694: (*BoolValue)(nil),   /* literal_value=Bool value: */
 	10808478223495627740: (*BoolValue)(nil),   /* bool_eval=Bool value:kind: */

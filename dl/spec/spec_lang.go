@@ -1306,4 +1306,89 @@ var Slats = []composer.Composer{
 	(*UsesSpec)(nil),
 }
 
-var Signatures = map[uint64]interface{}{}
+var Signatures = map[uint64]interface{}{
+	14698812208590391766: (*FlowSpec)(nil),   /* Flow phrase:uses: */
+	8905948956105429135:  (*FlowSpec)(nil),   /* Flow uses: */
+	7595234708931350060:  (*FlowSpec)(nil),   /* Flow:phrase:uses: */
+	2613986620197267333:  (*FlowSpec)(nil),   /* Flow:uses: */
+	138586504350168357:   (*GroupSpec)(nil),  /* Group contains: */
+	9596524370352414924:  (*NumSpec)(nil),    /* Num exclusively:uses: */
+	15841691970385929929: (*NumSpec)(nil),    /* Num uses: */
+	5727702813760381158:  (*NumSpec)(nil),    /* Num:exclusively:uses: */
+	12482362841218587987: (*NumSpec)(nil),    /* Num:uses: */
+	5060730203210562250:  (*OptionSpec)(nil), /* Option: */
+	2942004952747038014:  (*OptionSpec)(nil), /* Option:label: */
+	8392859005396761062:  (*ChoiceSpec)(nil), /* Pick: */
+	10192590430810142114: (*ChoiceSpec)(nil), /* Pick:label: */
+	6404764409320714584:  (*ChoiceSpec)(nil), /* Pick:label:type: */
+	8961232031828440580:  (*ChoiceSpec)(nil), /* Pick:type: */
+	10492849629325543857: (*SlotSpec)(nil),   /* Slot */
+	17485902661291661948: (*TypeSpec)(nil),   /* Spec:groups:with flow: */
+	17417948388962479437: (*TypeSpec)(nil),   /* Spec:groups:with group: */
+	4116744036832007200:  (*TypeSpec)(nil),   /* Spec:groups:with num: */
+	14451625265593984708: (*TypeSpec)(nil),   /* Spec:groups:with slot: */
+	7847085851758485277:  (*TypeSpec)(nil),   /* Spec:groups:with str: */
+	15096092061144629293: (*TypeSpec)(nil),   /* Spec:groups:with swap: */
+	5788656145002585531:  (*TypeSpec)(nil),   /* Spec:slots:groups:with flow: */
+	2507119670160696732:  (*TypeSpec)(nil),   /* Spec:slots:groups:with group: */
+	6967971190068921277:  (*TypeSpec)(nil),   /* Spec:slots:groups:with num: */
+	8822933540700262771:  (*TypeSpec)(nil),   /* Spec:slots:groups:with slot: */
+	14255553336076960684: (*TypeSpec)(nil),   /* Spec:slots:groups:with str: */
+	14958032321477141646: (*TypeSpec)(nil),   /* Spec:slots:groups:with swap: */
+	12158415875727800091: (*TypeSpec)(nil),   /* Spec:slots:with flow: */
+	2058056700198914812:  (*TypeSpec)(nil),   /* Spec:slots:with group: */
+	12924911410748986525: (*TypeSpec)(nil),   /* Spec:slots:with num: */
+	15192693271425477331: (*TypeSpec)(nil),   /* Spec:slots:with slot: */
+	1520725515772350988:  (*TypeSpec)(nil),   /* Spec:slots:with str: */
+	2880907241004393582:  (*TypeSpec)(nil),   /* Spec:slots:with swap: */
+	12144554005550117210: (*TypeSpec)(nil),   /* Spec:with flow: */
+	18279802407160252863: (*TypeSpec)(nil),   /* Spec:with group: */
+	9821026128543823202:  (*TypeSpec)(nil),   /* Spec:with num: */
+	7278989256844955438:  (*TypeSpec)(nil),   /* Spec:with slot: */
+	17614241350246502339: (*TypeSpec)(nil),   /* Spec:with str: */
+	13597584408969322871: (*TypeSpec)(nil),   /* Spec:with swap: */
+	8582367713278291167:  (*StrSpec)(nil),    /* Str exclusively:uses: */
+	13984444229646943790: (*StrSpec)(nil),    /* Str uses: */
+	10668987574759716109: (*StrSpec)(nil),    /* Str:exclusively:uses: */
+	428528925856302860:   (*StrSpec)(nil),    /* Str:uses: */
+	7464120135721846248:  (*SwapSpec)(nil),   /* Swap between: */
+	11989329170787493114: (*SwapSpec)(nil),   /* Swap:between: */
+	15304434050446929015: (*TermSpec)(nil),   /* Term: */
+	1908770916544404618:  (*TermSpec)(nil),   /* Term:name: */
+	17493832597660097384: (*TermSpec)(nil),   /* Term:name:optional: */
+	10725022187143183618: (*TermSpec)(nil),   /* Term:name:optional:repeats: */
+	4977282734720197993:  (*TermSpec)(nil),   /* Term:name:private: */
+	15797853350075264797: (*TermSpec)(nil),   /* Term:name:private:optional: */
+	4115812042834722363:  (*TermSpec)(nil),   /* Term:name:private:optional:repeats: */
+	879887130050172383:   (*TermSpec)(nil),   /* Term:name:private:repeats: */
+	9693871627066126088:  (*TermSpec)(nil),   /* Term:name:repeats: */
+	14926838499984539376: (*TermSpec)(nil),   /* Term:name:type: */
+	8114448813652831122:  (*TermSpec)(nil),   /* Term:name:type:optional: */
+	492122786547772928:   (*TermSpec)(nil),   /* Term:name:type:optional:repeats: */
+	15623635766246171155: (*TermSpec)(nil),   /* Term:name:type:private: */
+	15651998130776576987: (*TermSpec)(nil),   /* Term:name:type:private:optional: */
+	18146194056106062933: (*TermSpec)(nil),   /* Term:name:type:private:optional:repeats: */
+	3100397852351784925:  (*TermSpec)(nil),   /* Term:name:type:private:repeats: */
+	2434020794060870746:  (*TermSpec)(nil),   /* Term:name:type:repeats: */
+	388572864592520623:   (*TermSpec)(nil),   /* Term:optional: */
+	15437561936737348737: (*TermSpec)(nil),   /* Term:optional:repeats: */
+	2080513686410551768:  (*TermSpec)(nil),   /* Term:private: */
+	9375811883841958090:  (*TermSpec)(nil),   /* Term:private:optional: */
+	250186011862547400:   (*TermSpec)(nil),   /* Term:private:optional:repeats: */
+	1412567880106050386:  (*TermSpec)(nil),   /* Term:private:repeats: */
+	5884140170322273081:  (*TermSpec)(nil),   /* Term:repeats: */
+	16790547352605647791: (*TermSpec)(nil),   /* Term:type: */
+	148296051051493815:   (*TermSpec)(nil),   /* Term:type:optional: */
+	11348649781638926841: (*TermSpec)(nil),   /* Term:type:optional:repeats: */
+	8106935495453137808:  (*TermSpec)(nil),   /* Term:type:private: */
+	11399967267716567474: (*TermSpec)(nil),   /* Term:type:private:optional: */
+	7000278554921529504:  (*TermSpec)(nil),   /* Term:type:private:optional:repeats: */
+	12085390846926567418: (*TermSpec)(nil),   /* Term:type:private:repeats: */
+	6606983442525629057:  (*TermSpec)(nil),   /* Term:type:repeats: */
+	18192555626865043140: (*UsesSpec)(nil),   /* UsesSpec flow: */
+	12509906366465792917: (*UsesSpec)(nil),   /* UsesSpec group: */
+	9657992029678132728:  (*UsesSpec)(nil),   /* UsesSpec num: */
+	7859797713207631340:  (*UsesSpec)(nil),   /* UsesSpec slot: */
+	2626842383597263285:  (*UsesSpec)(nil),   /* UsesSpec str: */
+	4680024026168720597:  (*UsesSpec)(nil),   /* UsesSpec swap: */
+}

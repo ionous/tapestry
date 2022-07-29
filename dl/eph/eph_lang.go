@@ -3148,6 +3148,23 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
+	5836720772794648281:  (*Affinity)(nil),       /* Affinity: */
+	9182060341586636438:  (*EphAt)(nil),          /* Eph at:eph: */
+	12259359132675429189: (*EphParams)(nil),      /* Eph have:called: */
+	16868970960604249858: (*EphParams)(nil),      /* Eph have:called:initially: */
+	277028977564474262:   (*EphParams)(nil),      /* Eph have:called:of: */
+	16991751007965772137: (*EphParams)(nil),      /* Eph have:called:of:initially: */
+	11648725103497180078: (*EphList)(nil),        /* Eph list: */
+	2686821152326169213:  (*EphAlways)(nil),      /* EphAlways: */
+	18342259850011553446: (*EphCardinality)(nil), /* EphCardinality manyMany: */
+	874627862825420357:   (*EphCardinality)(nil), /* EphCardinality manyOne: */
+	13014334328963404635: (*EphCardinality)(nil), /* EphCardinality oneMany: */
+	12717235098097470366: (*EphCardinality)(nil), /* EphCardinality oneOne: */
+	2349101510842402488:  (*EphTiming)(nil),      /* EphTiming: */
+	11329972991603205158: (*OneOne)(nil),         /* Kind:toKind: */
+	8349208709908405809:  (*OneMany)(nil),        /* Kind:toKinds: */
+	15407091527463396937: (*ManyOne)(nil),        /* Kinds:toKind: */
+	13111067660678472252: (*ManyMany)(nil),       /* Kinds:toKinds: */
 	5916329907914983828:  (*EphAspects)(nil),     /* ephemera=Eph aspects:traits: */
 	10555617802178579157: (*EphChecks)(nil),      /* ephemera=Eph check:does: */
 	9233733686439242010:  (*EphChecks)(nil),      /* ephemera=Eph check:expect:does: */

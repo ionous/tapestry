@@ -1304,6 +1304,7 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
+	15013060695242199180: (*Grammar)(nil),   /* Grammar: */
 	10322292321972431108: (*Alias)(nil),     /* grammar_maker=Alias:asNoun: */
 	10740453355331089621: (*AllOf)(nil),     /* scanner_maker=AllOf: */
 	17379347258926967174: (*AnyOf)(nil),     /* scanner_maker=AnyOf: */

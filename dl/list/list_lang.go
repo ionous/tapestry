@@ -3727,6 +3727,7 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
+	6334415563934548256:  (*ListGather)(nil),      /* Gather:from:using: */
 	17577768627337399713: (*AsNum)(nil),           /* list_iterator=AsNum: */
 	6572817319640344459:  (*AsRec)(nil),           /* list_iterator=AsRec: */
 	8904662885358797385:  (*AsTxt)(nil),           /* list_iterator=AsTxt: */

@@ -317,8 +317,9 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	14645287343365598707: (*DoNothing)(nil), /* execute=DoNothing */
-	12243119421914882789: (*DoNothing)(nil), /* execute=DoNothing why: */
-	17230987244745403983: (*DebugLog)(nil),  /* execute=Log: */
-	9146550673186999987:  (*DebugLog)(nil),  /* execute=Log:as: */
+	15823738440204397330: (*LoggingLevel)(nil), /* LoggingLevel: */
+	14645287343365598707: (*DoNothing)(nil),    /* execute=DoNothing */
+	12243119421914882789: (*DoNothing)(nil),    /* execute=DoNothing why: */
+	17230987244745403983: (*DebugLog)(nil),     /* execute=Log: */
+	9146550673186999987:  (*DebugLog)(nil),     /* execute=Log:as: */
 }

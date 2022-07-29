@@ -71,10 +71,8 @@ func readSpec(types *TypeSpecs, files fs.FS, fileName string) (ret *spec.TypeSpe
 	} else {
 		// the outer one is always (supposed to be) a group
 		var blockType spec.TypeSpec
-		if e := cin.Decode(&blockType, b, cin.Signatures{
-			//	spec.Signatures, // we are reading specs so we need the spec signatures
-			//prim.Signatures, // and some of those commands use the primitive types.
-		}); e != nil {
+		// note: we don't have to pass signatures, because .ifspecs always use concrete types.
+		if e := cin.Decode(&blockType, b, nil); e != nil {
 			err = e
 		} else if e := importTypes(types, &blockType); e != nil {
 			err = e

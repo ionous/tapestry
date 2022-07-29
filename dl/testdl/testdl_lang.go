@@ -814,6 +814,13 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
+	5375871781273392485:  (*TestBool)(nil),  /* TestBool: */
+	2921095451308776491:  (*TestNum)(nil),   /* TestNum: */
+	8940712013797765950:  (*TestStr)(nil),   /* TestStr: */
+	7140800509473528945:  (*TestSwap)(nil),  /* TestSwap a: */
+	7137983560682620038:  (*TestSwap)(nil),  /* TestSwap b: */
+	7138970922124564291:  (*TestSwap)(nil),  /* TestSwap c: */
+	9144781193212880495:  (*TestTxt)(nil),   /* TestTxt: */
 	4674877661722404900:  (*TestEmbed)(nil), /* test_slot=Embed testFlow: */
 	4003780789222026231:  (*TestFlow)(nil),  /* test_slot=Flow bool:swap a: */
 	18277657393474104982: (*TestFlow)(nil),  /* test_slot=Flow bool:swap a:slots: */

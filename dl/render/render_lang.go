@@ -635,6 +635,7 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
+	13441549517428071082: (*RenderFlags)(nil),   /* RenderFlags: */
 	9866174808090639891:  (*RenderPattern)(nil), /* assignment=Render: */
 	9599213113608064507:  (*RenderPattern)(nil), /* bool_eval=Render: */
 	10993729462470844314: (*RenderPattern)(nil), /* text_eval=Render: */

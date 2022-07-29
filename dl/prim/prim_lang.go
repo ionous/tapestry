@@ -472,4 +472,9 @@ var Slats = []composer.Composer{
 	(*Text)(nil),
 }
 
-var Signatures = map[uint64]interface{}{}
+var Signatures = map[uint64]interface{}{
+	1736897526516691909:  (*Bool)(nil),   /* Bool: */
+	16705119881164468210: (*Lines)(nil),  /* Lines: */
+	5524275432872349646:  (*Number)(nil), /* Number: */
+	3128978846958847468:  (*Text)(nil),   /* Text: */
+}

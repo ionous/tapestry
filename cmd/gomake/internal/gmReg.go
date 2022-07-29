@@ -92,10 +92,9 @@ func (reg *RegistrationLists) Write(w io.Writer, tps *template.Template) (err er
 	sort.Strings(reg.slats)
 	sort.Slice(reg.sigs, func(i, j int) bool {
 		a, b := reg.sigs[i], reg.sigs[j]
-		as := strings.Split(a.Sig, "=")
-		bs := strings.Split(b.Sig, "=")
-		return as[1] < bs[1] || (as[1] == bs[1] && (as[0] < bs[0]))
+		return a.IsLessThan(b)
 	})
+
 	// write registration lists
 	if e := tps.ExecuteTemplate(w, "regList.tmpl", map[string]any{
 		"Name": "Slots",

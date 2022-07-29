@@ -10,10 +10,32 @@ import (
 )
 
 type Sig struct {
-	Type string // ex. Arg.
-	Sig  string // ex. "Arg:from:"
-	Hash uint64 // ex. 6291103735245333139
+	Type     string // ex. Arg.
+	Sig      string // ex. "Arg:from:"
+	Hash     uint64 // ex. 6291103735245333139
+	Optional bool
 }
+
+func (a *Sig) IsLessThan(b Sig) (okay bool) {
+	as, bs := a.parts(), b.parts()
+	if ac, bc := len(as), len(bs); ac < bc {
+		okay = true
+	} else if ac == bc {
+		multipart := ac > 1
+		if multipart && as[1] < bs[1] {
+			okay = true
+		} else if !multipart || as[1] == bs[1] {
+			okay = as[0] < bs[0]
+		}
+	}
+	return
+}
+
+func (a *Sig) parts() []string {
+	return strings.Split(a.Sig, "=")
+}
+
+var _empty []string = []string{""}
 
 func makeSig(t *spec.TypeSpec, sig string) (ret []Sig) {
 	if strings.Contains(sig, "::") ||
@@ -24,14 +46,16 @@ func makeSig(t *spec.TypeSpec, sig string) (ret []Sig) {
 	// we dont generally need signatures for structs
 	// b/c we aren't trying to create those types dynamically from the signature
 	// we already have the type, and we're simply deserializing the fields into that type.
-	// if len(t.Slots) == 0 {
-	// 	h := cin.Hash(sig, "")
-	// 	ret = append(ret, Sig{
-	// 		Type: t.Name,
-	// 		Sig:  h.String,
-	// 		Hash: h.Value,
-	// 	})
-	// }
+	// ( still it's nice to see them )
+	if len(t.Slots) == 0 {
+		h := cin.Hash(sig, "")
+		ret = append(ret, Sig{
+			Type:     t.Name,
+			Sig:      h.String,
+			Hash:     h.Value,
+			Optional: true,
+		})
+	}
 	for _, slotType := range t.Slots {
 		h := cin.Hash(sig, slotType)
 		ret = append(ret, Sig{
