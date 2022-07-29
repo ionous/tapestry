@@ -29,13 +29,17 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "named object"
+                    {
+                      "Noun:": "named object"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "unnamed object"
+                    {
+                      "Noun:": "unnamed object"
+                    }
                   ]
                 }
               ],
@@ -53,7 +57,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "unnamed object"
+                    {
+                      "Noun:": "unnamed object"
+                    }
                   ]
                 }
               ],

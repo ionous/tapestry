@@ -93,7 +93,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "Lobby"
+                    {
+                      "Noun:": "Lobby"
+                    }
                   ]
                 }
               ]
@@ -105,7 +107,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "faux door"
+                    {
+                      "Noun:": "faux door"
+                    }
                   ]
                 }
               ],
@@ -124,7 +128,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "faux door"
+                    {
+                      "Noun:": "faux door"
+                    }
                   ]
                 }
               ],
@@ -133,7 +139,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "Lobby"
+                    {
+                      "Noun:": "Lobby"
+                    }
                   ]
                 }
               ]
@@ -145,7 +153,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "double doors"
+                    {
+                      "Noun:": "double doors"
+                    }
                   ]
                 }
               ],
@@ -168,37 +178,49 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "Lobby"
+                    {
+                      "Noun:": "Lobby"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "Parapet"
+                    {
+                      "Noun:": "Parapet"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "Foyer"
+                    {
+                      "Noun:": "Foyer"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "Cloak Room"
+                    {
+                      "Noun:": "Cloak Room"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "Basement"
+                    {
+                      "Noun:": "Basement"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "Outside"
+                    {
+                      "Noun:": "Outside"
+                    }
                   ]
                 }
               ],
@@ -216,20 +238,26 @@
               {
                 "Noun:named:": [
                   "the",
-                  "Lobby"
+                  {
+                    "Noun:": "Lobby"
+                  }
                 ]
               },
               {
                 "Noun:named:": [
                   "the",
-                  "double doors"
+                  {
+                    "Noun:": "double doors"
+                  }
                 ]
               },
               "arriving_at",
               {
                 "Noun:named:": [
                   "the",
-                  "foyer"
+                  {
+                    "Noun:": "foyer"
+                  }
                 ]
               }
             ]
@@ -240,14 +268,18 @@
               {
                 "Noun:named:": [
                   "the",
-                  "Lobby"
+                  {
+                    "Noun:": "Lobby"
+                  }
                 ]
               },
               "arriving_at",
               {
                 "Noun:named:": [
                   "the",
-                  "basement"
+                  {
+                    "Noun:": "basement"
+                  }
                 ]
               }
             ]
@@ -258,14 +290,18 @@
               {
                 "Noun:named:": [
                   "the",
-                  "Lobby"
+                  {
+                    "Noun:": "Lobby"
+                  }
                 ]
               },
               "connecting_to",
               {
                 "Noun:named:": [
                   "the",
-                  "parapet"
+                  {
+                    "Noun:": "parapet"
+                  }
                 ]
               }
             ]
@@ -276,14 +312,18 @@
               {
                 "Noun:named:": [
                   "the",
-                  "foyer"
+                  {
+                    "Noun:": "foyer"
+                  }
                 ]
               },
               "connecting_to",
               {
                 "Noun:named:": [
                   "the",
-                  "outside"
+                  {
+                    "Noun:": "outside"
+                  }
                 ]
               }
             ]
@@ -294,14 +334,18 @@
               {
                 "Noun:named:": [
                   "the",
-                  "foyer"
+                  {
+                    "Noun:": "foyer"
+                  }
                 ]
               },
               "arriving_at",
               {
                 "Noun:named:": [
                   "the",
-                  "Lobby"
+                  {
+                    "Noun:": "Lobby"
+                  }
                 ]
               }
             ]
@@ -312,20 +356,26 @@
               {
                 "Noun:named:": [
                   "the",
-                  "foyer"
+                  {
+                    "Noun:": "foyer"
+                  }
                 ]
               },
               {
                 "Noun:named:": [
                   "the",
-                  "curtain"
+                  {
+                    "Noun:": "curtain"
+                  }
                 ]
               },
               "connecting_to",
               {
                 "Noun:named:": [
                   "the",
-                  "cloak room"
+                  {
+                    "Noun:": "cloak room"
+                  }
                 ]
               }
             ]
@@ -336,14 +386,18 @@
               {
                 "Noun:named:": [
                   "the",
-                  "basement"
+                  {
+                    "Noun:": "basement"
+                  }
                 ]
               },
               "arriving_at",
               {
                 "Noun:named:": [
                   "the",
-                  "outside"
+                  {
+                    "Noun:": "outside"
+                  }
                 ]
               }
             ]

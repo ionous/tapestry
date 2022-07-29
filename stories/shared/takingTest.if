@@ -248,7 +248,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "purse"
+                    {
+                      "Noun:": "purse"
+                    }
                   ]
                 }
               ]
@@ -267,7 +269,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "purse"
+                    {
+                      "Noun:": "purse"
+                    }
                   ]
                 }
               ],
@@ -276,7 +280,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "kitchen"
+                    {
+                      "Noun:": "kitchen"
+                    }
                   ]
                 }
               ]
@@ -292,7 +298,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "coin"
+                    {
+                      "Noun:": "coin"
+                    }
                   ]
                 }
               ],
@@ -314,7 +322,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "empire apple"
+                    {
+                      "Noun:": "empire apple"
+                    }
                   ]
                 }
               ],
@@ -336,7 +346,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "coffee"
+                    {
+                      "Noun:": "coffee"
+                    }
                   ]
                 }
               ],
@@ -345,7 +357,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "machine"
+                    {
+                      "Noun:": "machine"
+                    }
                   ]
                 }
               ]

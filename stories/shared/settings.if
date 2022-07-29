@@ -13,7 +13,9 @@
           {
             "Noun:named:": [
               "our",
-              "settings"
+              {
+                "Noun:": "settings"
+              }
             ]
           }
         ],

@@ -85,7 +85,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "books"
+                    {
+                      "Noun:": "books"
+                    }
                   ]
                 }
               ],

@@ -6,7 +6,9 @@
           {
             "Noun:named:": [
               "the",
-              "cabin"
+              {
+                "Noun:": "cabin"
+              }
             ]
           }
         ],
@@ -18,14 +20,18 @@
         }
       ]
     },
-    {"--": ""},
+    {
+      "--": ""
+    },
     {
       "Nouns:relateTo:": [
         [
           {
             "Noun:named:": [
               "the",
-              "cabin"
+              {
+                "Noun:": "cabin"
+              }
             ]
           }
         ],
@@ -36,7 +42,9 @@
               {
                 "Noun:named:": [
                   "a",
-                  "glass case"
+                  {
+                    "Noun:": "glass case"
+                  }
                 ]
               }
             ]
@@ -51,7 +59,9 @@
           {
             "Noun:named:": [
               "the",
-              "glass case"
+              {
+                "Noun:": "glass case"
+              }
             ]
           }
         ],
@@ -60,7 +70,9 @@
           {
             "Noun:named:": [
               "a",
-              "collection of fishing rods"
+              {
+                "Noun:": "collection of fishing rods"
+              }
             ]
           }
         ]
@@ -72,7 +84,9 @@
           {
             "Noun:named:": [
               "the",
-              "case"
+              {
+                "Noun:": "case"
+              }
             ]
           }
         ],
@@ -95,7 +109,9 @@
           {
             "Noun:named:": [
               "the",
-              "case"
+              {
+                "Noun:": "case"
+              }
             ]
           }
         ],
@@ -115,7 +131,9 @@
           {
             "Noun:named:": [
               "the",
-              "small silver key"
+              {
+                "Noun:": "small silver key"
+              }
             ]
           }
         ],
@@ -126,7 +144,9 @@
               {
                 "Noun:named:": [
                   "the",
-                  "case"
+                  {
+                    "Noun:": "case"
+                  }
                 ]
               }
             ]
@@ -140,7 +160,9 @@
           {
             "Noun:named:": [
               "the",
-              "bench"
+              {
+                "Noun:": "bench"
+              }
             ]
           }
         ],
@@ -152,7 +174,9 @@
               {
                 "Noun:named:": [
                   "the",
-                  "cabin"
+                  {
+                    "Noun:": "cabin"
+                  }
                 ]
               }
             ]
@@ -167,7 +191,9 @@
           {
             "Noun:named:": [
               "the",
-              "bench"
+              {
+                "Noun:": "bench"
+              }
             ]
           }
         ],
@@ -176,7 +202,9 @@
           {
             "Noun:named:": [
               "some",
-              "blue vinyl cushions"
+              {
+                "Noun:": "blue vinyl cushions"
+              }
             ]
           }
         ]
@@ -188,7 +216,9 @@
           {
             "Noun:named:": [
               "the",
-              "bench"
+              {
+                "Noun:": "bench"
+              }
             ]
           }
         ],
@@ -209,7 +239,9 @@
           {
             "Noun:named:": [
               "the",
-              "cushions"
+              {
+                "Noun:": "cushions"
+              }
             ]
           }
         ],

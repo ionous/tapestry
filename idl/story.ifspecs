@@ -487,7 +487,6 @@
             }
           ]
         },
-
         {
           "--": [
             "A specific person, place or thing.",
@@ -501,22 +500,25 @@
               "singular_noun"
             ],
             {
-              "Flow uses:": [
-                {
-                  "Term:name:type:": [
-                    "_",
-                    "name",
-                    "noun_name"
-                  ]
-                }
+              "Flow:uses:": [
+                "noun",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "name",
+                      "noun_name"
+                    ]
+                  }
+                ]
               ]
             }
           ]
         },
         {
           "--": [
-             "Some person, place, or thing which lacks a specific name.",
-             "For example, maybe: 'a helicopter', 'some hooded figures', or 'the dog park'."
+            "Some person, place, or thing which lacks a specific name.",
+            "For example, maybe: 'a helicopter', 'some hooded figures', or 'the dog park'."
           ],
           "Spec:slots:with flow:": [
             "common_noun",
@@ -525,19 +527,23 @@
               "singular_noun"
             ],
             {
-              "Flow uses:": [
-                {
-                  "Term:name:": [
-                    "_",
-                    "determiner"
-                  ]
-                },
-                {
-                  "Term:type:": [
-                    "noun",
-                    "noun_named"
-                  ]
-                }
+              "Flow:uses:": [
+                "noun",
+                [
+                  {
+                    "Term:name:": [
+                      "_",
+                      "determiner"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "named",
+                      "noun",
+                      "noun_named"
+                    ]
+                  }
+                ]
               ]
             }
           ]

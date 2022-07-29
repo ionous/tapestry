@@ -296,31 +296,41 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "coffee"
+                    {
+                      "Noun:": "coffee"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "coin"
+                    {
+                      "Noun:": "coin"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "clutch"
+                    {
+                      "Noun:": "clutch"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "knife"
+                    {
+                      "Noun:": "knife"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "flower"
+                    {
+                      "Noun:": "flower"
+                    }
                   ]
                 }
               ],
@@ -328,7 +338,6 @@
               [
                 {
                   "Noun:": "self"
-
                 }
               ]
             ]
@@ -346,7 +355,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "kitchen"
+                    {
+                      "Noun:": "kitchen"
+                    }
                   ]
                 }
               ]

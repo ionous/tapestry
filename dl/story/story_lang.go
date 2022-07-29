@@ -1673,7 +1673,7 @@ func CommonAction_Marshal(m jsn.Marshaler, val *CommonAction) (err error) {
 // For example, maybe: 'a helicopter', 'some hooded figures', or 'the dog park'.
 type CommonNoun struct {
 	Determiner  Determiner `if:"label=_"`
-	Noun        NounNamed  `if:"label=noun"`
+	Noun        NounNamed  `if:"label=named"`
 	UserComment string
 }
 
@@ -1685,6 +1685,7 @@ func (*CommonNoun) Compose() composer.Spec {
 	return composer.Spec{
 		Name: CommonNoun_Type,
 		Uses: composer.Type_Flow,
+		Lede: "noun",
 	}
 }
 
@@ -1739,7 +1740,7 @@ func CommonNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CommonNoun) (err
 type CommonNoun_Flow struct{ ptr *CommonNoun }
 
 func (n CommonNoun_Flow) GetType() string      { return CommonNoun_Type }
-func (n CommonNoun_Flow) GetLede() string      { return CommonNoun_Type }
+func (n CommonNoun_Flow) GetLede() string      { return "noun" }
 func (n CommonNoun_Flow) GetFlow() interface{} { return n.ptr }
 func (n CommonNoun_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*CommonNoun); ok {
@@ -1770,7 +1771,7 @@ func CommonNoun_Marshal(m jsn.Marshaler, val *CommonNoun) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CommonNoun_Field_Determiner))
 		}
-		e1 := m.MarshalKey("noun", CommonNoun_Field_Noun)
+		e1 := m.MarshalKey("named", CommonNoun_Field_Noun)
 		if e1 == nil {
 			e1 = NounNamed_Marshal(m, &val.Noun)
 		}
@@ -4864,6 +4865,7 @@ func (*NounNamed) Compose() composer.Spec {
 	return composer.Spec{
 		Name: NounNamed_Type,
 		Uses: composer.Type_Flow,
+		Lede: "noun",
 	}
 }
 
@@ -4917,7 +4919,7 @@ func NounNamed_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounNamed) (err e
 type NounNamed_Flow struct{ ptr *NounNamed }
 
 func (n NounNamed_Flow) GetType() string      { return NounNamed_Type }
-func (n NounNamed_Flow) GetLede() string      { return NounNamed_Type }
+func (n NounNamed_Flow) GetLede() string      { return "noun" }
 func (n NounNamed_Flow) GetFlow() interface{} { return n.ptr }
 func (n NounNamed_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*NounNamed); ok {
@@ -9336,8 +9338,6 @@ var Signatures = map[uint64]interface{}{
 	6843411504396242728:  (*Certainties)(nil),           /* story_statement=Certainties:areBeing:certainty:trait: */
 	3991849378064754806:  (*Comment)(nil),               /* execute=Comment: */
 	16586092333187989882: (*Comment)(nil),               /* story_statement=Comment: */
-	11299166877564805747: (*CommonNoun)(nil),            /* named_noun=CommonNoun:noun: */
-	9189615417023155253:  (*CommonNoun)(nil),            /* singular_noun=CommonNoun:noun: */
 	10143132576483224253: (*CountOf)(nil),               /* bool_eval=CountOf:num: */
 	231398832069830353:   (*CycleText)(nil),             /* text_eval=CycleText: */
 	12862689211056047959: (*MapDeparting)(nil),          /* story_statement=Departing from:via:and:otherRoom: */
@@ -9359,9 +9359,11 @@ var Signatures = map[uint64]interface{}{
 	4364279276143636783:  (*KindsOfKind)(nil),           /* story_statement=Make:kind: */
 	12130342806058120266: (*MakeOpposite)(nil),          /* story_statement=Make:opposite: */
 	8107023930195182683:  (*MakePlural)(nil),            /* story_statement=Make:plural: */
+	7315903014127055020:  (*NounNamed)(nil),             /* named_noun=Noun: */
+	2148674162701691978:  (*NounNamed)(nil),             /* singular_noun=Noun: */
+	6508739485154276153:  (*CommonNoun)(nil),            /* named_noun=Noun:named: */
+	9335207376881300111:  (*CommonNoun)(nil),            /* singular_noun=Noun:named: */
 	8983976057391918886:  (*NounAssignment)(nil),        /* story_statement=NounAssignment:nouns:lines: */
-	506298294123479507:   (*NounNamed)(nil),             /* named_noun=NounNamed: */
-	2651796878026559761:  (*NounNamed)(nil),             /* singular_noun=NounNamed: */
 	9140865151012438596:  (*NounRelation)(nil),          /* noun_continuation=NounRelation areBeing:relation:otherNouns: */
 	10679174935447767001: (*NounRelation)(nil),          /* noun_continuation=NounRelation relation:otherNouns: */
 	10231941673534471951: (*NounTraits)(nil),            /* noun_continuation=NounTraits:trait: */

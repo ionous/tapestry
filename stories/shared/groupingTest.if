@@ -44,13 +44,17 @@
                 {
                   "Noun:named:": [
                     "an",
-                    "empire apple"
+                    {
+                      "Noun:": "empire apple"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "a",
-                    "pen"
+                    {
+                      "Noun:": "pen"
+                    }
                   ]
                 },
                 {
@@ -92,31 +96,41 @@
                 {
                   "Noun:named:": [
                     "an",
-                    "X"
+                    {
+                      "Noun:": "X"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "a",
-                    "W"
+                    {
+                      "Noun:": "W"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "an",
-                    "F"
+                    {
+                      "Noun:": "F"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "a",
-                    "Y"
+                    {
+                      "Noun:": "Y"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "a",
-                    "Z"
+                    {
+                      "Noun:": "Z"
+                    }
                   ]
                 }
               ],

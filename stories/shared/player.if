@@ -18,7 +18,9 @@
           {
             "Noun:named:": [
               "the",
-              "player"
+              {
+                "Noun:": "player"
+              }
             ]
           }
         ],
@@ -92,7 +94,9 @@
           {
             "Noun:named:": [
               "the",
-              "player"
+              {
+                "Noun:": "player"
+              }
             ]
           }
         ],

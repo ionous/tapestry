@@ -238,7 +238,9 @@
                 {
                   "Noun:named:": [
                     "an",
-                    "other worldly cloak"
+                    {
+                      "Noun:": "other worldly cloak"
+                    }
                   ]
                 }
               ],
@@ -269,7 +271,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "cabinet"
+                    {
+                      "Noun:": "cabinet"
+                    }
                   ]
                 }
               ]

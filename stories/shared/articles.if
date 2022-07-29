@@ -44,13 +44,17 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "lamp-post"
+                    {
+                      "Noun:": "lamp-post"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "some",
-                    "soldiers"
+                    {
+                      "Noun:": "soldiers"
+                    }
                   ]
                 },
                 {

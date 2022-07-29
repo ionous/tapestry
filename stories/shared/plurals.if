@@ -92,19 +92,25 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "flowerpot"
+                    {
+                      "Noun:": "flowerpot"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "dishes"
+                    {
+                      "Noun:": "dishes"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "spoon"
+                    {
+                      "Noun:": "spoon"
+                    }
                   ]
                 }
               ],
@@ -123,7 +129,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "flowerpot"
+                    {
+                      "Noun:": "flowerpot"
+                    }
                   ]
                 }
               ],

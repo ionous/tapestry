@@ -187,7 +187,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "kitchen"
+                    {
+                      "Noun:": "kitchen"
+                    }
                   ]
                 }
               ]
@@ -203,7 +205,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "coffee"
+                    {
+                      "Noun:": "coffee"
+                    }
                   ]
                 }
               ],
@@ -212,7 +216,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "machine"
+                    {
+                      "Noun:": "machine"
+                    }
                   ]
                 }
               ]
@@ -228,7 +234,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "empire apple"
+                    {
+                      "Noun:": "empire apple"
+                    }
                   ]
                 }
               ],

@@ -76,13 +76,17 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "flower"
+                    {
+                      "Noun:": "flower"
+                    }
                   ]
                 },
                 {
                   "Noun:named:": [
                     "the",
-                    "knife"
+                    {
+                      "Noun:": "knife"
+                    }
                   ]
                 }
               ],
@@ -104,7 +108,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "purse"
+                    {
+                      "Noun:": "purse"
+                    }
                   ]
                 }
               ],
@@ -113,7 +119,9 @@
                 {
                   "Noun:named:": [
                     "the",
-                    "kitchen"
+                    {
+                      "Noun:": "kitchen"
+                    }
                   ]
                 }
               ]
