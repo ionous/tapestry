@@ -493,12 +493,13 @@
             "When used with a determiner typically implies a common noun ( 'the cat', 'some fish', 'a snack'. )",
             "When used alone usually implies a proper noun ( 'Hikaru', 'Genesis', or 'Beta Regula One'. )"
           ],
-          "Spec:slots:with flow:": [
+          "Spec:slots:groups:with flow:": [
             "noun_named",
             [
               "named_noun",
               "singular_noun"
             ],
+            "mosaic:inline_block",
             {
               "Flow:uses:": [
                 "noun",
@@ -520,12 +521,13 @@
             "Some person, place, or thing which lacks a specific name.",
             "For example, maybe: 'a helicopter', 'some hooded figures', or 'the dog park'."
           ],
-          "Spec:slots:with flow:": [
+          "Spec:slots:groups:with flow:": [
             "common_noun",
             [
               "named_noun",
               "singular_noun"
             ],
+            "mosaic:inline_block",
             {
               "Flow:uses:": [
                 "noun",

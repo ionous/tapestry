@@ -99,9 +99,9 @@ func importTypes(types *TypeSpecs, block *spec.TypeSpec) error {
 
 						default:
 							types.Types[blockType.Name] = blockType
-							// add in all of the parent groups --
-							// they take precedence over the extra groups listed
-							blockType.Groups = append(currGroups, blockType.Groups...)
+							// add any parent groups; they take precedence over the inline ones.
+							// ( append to an empty array to make sure each blockType gets its own copy )
+							blockType.Groups = append([]string{}, append(currGroups, blockType.Groups...)...)
 						}
 					}
 				}

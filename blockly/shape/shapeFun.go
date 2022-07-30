@@ -18,9 +18,9 @@ var fieldWriter = map[string]func(*js.Builder, spec.TermSpec, *spec.TypeSpec){
 	//spec.UsesSpec_Group_Opt: writeLabelField,
 }
 
-func writeLabelField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
-	out.Kv("label", term.Label)
-}
+//func writeLabelField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
+//out.Kv("label", term.Label)
+//}
 
 func writeNumField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
 	out.Kv("type", bconst.FieldNumber)

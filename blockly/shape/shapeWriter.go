@@ -69,9 +69,6 @@ func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spe
 	stacks, values := slotStacks(blockType)
 	// we write to partial so that we can potentially have two blocks
 	var partial js.Builder
-	// MOD-stravis... try without this.
-	// write the label for the block itself; aka the lede.
-	// partial.Kv("message0", name).R(js.Comma)
 	// color
 	var colour string = bconst.COLOUR_HUE // default
 	if len(values) > 0 {                  // we take on the color of the first slot specified
@@ -123,6 +120,7 @@ func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spe
 	// and therefore tries to parse the empty object as xml... which raises an (uncaught) exception: stopping the whole page from loading.
 	// ( so much power this one little line )
 	hasMutator := /*len(terms) > 0 &&*/ blockType.Spec.Choice == spec.UsesSpec_Flow_Opt
+	inlineBlock := blockType.InGroup(InlineBlock)
 	if hasMutator {
 		out.Kv("mutator", "tapestry_generic_mutation").R(js.Comma)
 	}
@@ -131,9 +129,16 @@ func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spe
 			custom.Q("shapeDef").R(js.Colon).
 				Brace(js.Array, func(out *js.Builder) {
 					// an initial item containing just the lede
-					out.Brace(js.Obj, func(out *js.Builder) {
-						out.Kv("label", lede)
-					})
+					var comma bool
+					if !inlineBlock {
+						out.Brace(js.Obj, func(out *js.Builder) {
+							if lede == "Noun" {
+								print("here")
+							}
+							out.Kv("label", lede)
+						})
+						comma = true
+					}
 					// now any following terms as their own items
 					for _, term := range terms {
 						if fd, e := w.newFieldDef(term); e != nil {
@@ -141,10 +146,13 @@ func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spe
 						} else if fn, ok := fieldWriter[fd.termType()]; !ok {
 							log.Fatalln("unknown term type", fd.termType())
 						} else if fn != nil {
-							out.R(js.Comma)
+							if comma {
+								out.R(js.Comma)
+							}
+							comma = true
 							out.Brace(js.Obj, func(out *js.Builder) {
 								// add a label for non-anonymous fields
-								if label := fd.blocklyLabel(); len(label) > 0 {
+								if label := fd.blocklyLabel(); !inlineBlock && len(label) > 0 {
 									out.Kv("label", label).R(js.Comma)
 								}
 								// every term needs a name ( for blockly's sake )
