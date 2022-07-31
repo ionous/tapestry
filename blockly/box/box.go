@@ -2,6 +2,7 @@ package box
 
 import (
 	"io/fs"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/blockly/bconst"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
@@ -33,15 +34,48 @@ func FromSpecs(files fs.FS) (ret string, err error) {
 								Q("contents").R(js.Colon).Brace(js.Array, func(els *js.Builder) {
 								var b block
 								for _, blockType := range group.Specs {
-									// only flows
-									if _, ok := blockType.Spec.Value.(*spec.FlowSpec); ok {
+									// only write flows to the toolbox
+									if flow, ok := blockType.Spec.Value.(*spec.FlowSpec); ok {
 										stacks, outputs := slotStacks(&blockType)
+
+										terms := func() {
+											var fields bool
+											for _, term := range flow.Terms {
+												var placeholder string
+												if a, ok := ts.Types[term.TypeName()]; ok {
+													if str, ok := a.Spec.Value.(*spec.StrSpec); ok {
+														if len(str.Uses) == 0 {
+															if !term.IsAnonymous() {
+																placeholder = term.Label
+															} else {
+																placeholder = term.Name
+															}
+														}
+													}
+												}
+												if len(placeholder) > 0 {
+													els.R(js.Comma)
+													if !fields {
+														fields = true
+														els.Q("fields").R(js.Colon).R(js.Obj[0])
+													}
+													fieldName := strings.ToUpper(term.Field())
+													els.Kv(fieldName, strings.Replace(placeholder, "_", "", -1))
+												}
+
+											}
+											// close if opened
+											if fields {
+												els.R(js.Obj[1])
+											}
+										}
 										if stacks {
-											b.Write(els, bconst.StackedName(blockType.Name))
+											b.Write(els, bconst.StackedName(blockType.Name), terms)
 										}
 										if outputs {
-											b.Write(els, blockType.Name)
+											b.Write(els, blockType.Name, terms)
 										}
+
 									}
 								}
 							})
@@ -56,7 +90,7 @@ func FromSpecs(files fs.FS) (ret string, err error) {
 
 type block int
 
-func (b *block) Write(els *js.Builder, name string) {
+func (b *block) Write(els *js.Builder, name string, hack func()) {
 	if *b = (*b) + 1; *b > 1 {
 		els.R(js.Comma)
 	}
@@ -64,6 +98,7 @@ func (b *block) Write(els *js.Builder, name string) {
 		el.
 			Kv("kind", "block").R(js.Comma).
 			Kv("type", name)
+		hack()
 	})
 }
 
