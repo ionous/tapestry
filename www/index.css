@@ -138,6 +138,8 @@ and this positions that text overlapping it. */
 }
 
 /* an attempt to get the specificity up */
-.blocklyEditableText > text.blocklyText.mosaicDefaultText  {
+.blocklyEditableText > text.blocklyText.placeholderText  {
   fill: dimgrey;
+  font-weight: bolder;
+  font-size: smaller;
 }

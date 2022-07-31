@@ -23,16 +23,12 @@ export default class MosaicTextField extends Blockly.FieldTextInput {
 
   // from field.js
   createTextElement_() {
-    this.textElement_ = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.TEXT, {
-          'class': !this.useDefaultDisplay() ? 'blocklyText' : 'blocklyText mosaicDefaultText',
-        },
-        this.fieldGroup_);
-    if (this.getConstants().FIELD_TEXT_BASELINE_CENTER) {
-      this.textElement_.setAttribute('dominant-baseline', 'central');
+    // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text
+    super.createTextElement_();
+    if (this.useDefaultDisplay()) {
+      // index.css has .blocklyEditableText > text.blocklyText.placeholderText
+      this.textElement_.classList.add('placeholderText');
     }
-    this.textContent_ = document.createTextNode('');
-    this.textElement_.appendChild(this.textContent_);
   }
 }
 
