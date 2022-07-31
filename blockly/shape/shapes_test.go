@@ -144,12 +144,14 @@ func TestStoryTextShape(t *testing.T) {
       },
       {
         "name": "NAME",
-        "type": "field_input"
+        "type": "mosaic_text_field",
+        "text": "name"
       },
       {
         "label": "kind",
         "name": "TYPE",
-        "type": "field_input",
+        "type": "mosaic_text_field",
+        "text": "kind",
         "optional": true
       },
       {

@@ -9,7 +9,7 @@ func (op *ChoiceSpec) FriendlyName() (ret string) {
 	} else {
 		ret = op.Name
 	}
-	return
+	return strings.Replace(ret, "_", " ", -1)
 }
 
 // the value for the swap

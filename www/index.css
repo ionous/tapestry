@@ -136,3 +136,8 @@ and this positions that text overlapping it. */
   from { opacity: 1; }
   to { opacity: 0; }
 }
+
+/* an attempt to get the specificity up */
+.blocklyEditableText > text.blocklyText.mosaicDefaultText  {
+  fill: dimgrey;
+}

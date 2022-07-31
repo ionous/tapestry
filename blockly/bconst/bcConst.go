@@ -32,6 +32,8 @@ const (
 // other types: field_colour, field_number, field_angle, field_variable, field_label, field_image, input_dummy
 
 const (
-	// alternative class for str fields.
-	CustomFieldDropdown = "field_dropdown_str"
+	// alternative class for str fields so that open strs with choices can use dropdowns.
+	MosaicStrField = "mosaic_str_field"
+	// alternative class for text fields so all text can have placeholder text.
+	MosaicTextField = "mosaic_text_field"
 )

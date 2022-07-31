@@ -29,11 +29,20 @@ func writeNumField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec)
 func writeStrField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
 	// other options possible: spellcheck: true/false; text: the default value.
 	if str := typeSpec.Spec.Value.(*spec.StrSpec); len(str.Uses) == 0 {
-		out.Kv("type", bconst.FieldText)
+		out.Kv("type", bconst.MosaicTextField)
+		var placeholder string
+		if !term.IsAnonymous() {
+			placeholder = term.Label
+		} else {
+			placeholder = term.Name
+		}
+		if len(placeholder) > 0 {
+			out.R(js.Comma).Kv("text", strings.Replace(placeholder, "_", " ", -1))
+		}
 	} else {
 		fieldType := bconst.FieldDropdown
 		if !str.Exclusively {
-			fieldType = bconst.CustomFieldDropdown
+			fieldType = bconst.MosaicStrField
 		}
 		out.Kv("type", fieldType).R(js.Comma).
 			Q("options").R(js.Colon).

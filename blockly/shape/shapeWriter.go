@@ -132,9 +132,6 @@ func (w *ShapeWriter) writeShapeDef(out *js.Builder, lede string, blockType *spe
 					var comma bool
 					if !inlineBlock {
 						out.Brace(js.Obj, func(out *js.Builder) {
-							if lede == "Noun" {
-								print("here")
-							}
 							out.Kv("label", lede)
 						})
 						comma = true

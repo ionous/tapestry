@@ -4,10 +4,10 @@ import Blockly from 'blockly';
 
 // for open strs with choices: allow authors to type their own custom text
 // ( ex. determiners )
-export default class CustomFieldDropdown extends Blockly.FieldDropdown {
+export default class MosaicStrField extends Blockly.FieldDropdown {
   // called via class.fromJson()
   // menuGenerator: an array of tuples: ex. [['are', '$ARE'], ...]
-  // opt_config:{ name:'ARE_BEING', label:'are being',  options:the same menuGenerator array, type:'field_dropdown_str' }
+  // opt_config:{ name:'ARE_BEING', label:'are being',  options:the same menuGenerator array, type:'mosaic_str' }
   // it's not clear why FieldDropdown.fromJson() passes the options twice; we don't since we throw the value out anyway.
   constructor(_menuGenerator, opt_validator, opt_config) {
     const options = opt_config.options; // is it okay to not copy this? unclear.
@@ -80,13 +80,13 @@ export default class CustomFieldDropdown extends Blockly.FieldDropdown {
   }
 }
 
-CustomFieldDropdown.fromJson = function(options) {
+MosaicStrField.fromJson = function(options) {
   // replace "%{BKY_MY_MSG}" with the value in Msg['MY_MSG'].
   // var value = Blockly.utils.replaceMessageReferences(options['value']);
-  return new CustomFieldDropdown(/*options['options']*/null, undefined, options);
+  return new MosaicStrField(/*options['options']*/null, undefined, options);
 };
 
 
 // no validation. im not even sure why blockly has validation for dropdowns in the first place.
 // the options are already validated so the only way their dropdown value could fail is their own code going wrong.
-CustomFieldDropdown.prototype.doClassValidation_ = function(opt_newValue) {};
+MosaicStrField.prototype.doClassValidation_ = function(opt_newValue) {};

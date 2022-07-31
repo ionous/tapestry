@@ -31,10 +31,11 @@ export default class ShapeWriter {
   }
   // create one or more new items
   createItems(itemDef, ofs, want) {
-    let prevIndex = this.currentIndex;
-    let input = itemDef.type && itemDef.type.startsWith("input_");
-    let field = itemDef.type && itemDef.type.startsWith("field_");
-    let label = itemDef.label;
+    const prevIndex = this.currentIndex;
+    const typeName =  itemDef.type || '';
+    const input = typeName.startsWith("input_");
+    const field = typeName.startsWith("field_") || (typeName.startsWith('mosaic_') && typeName.endsWith('_field'));
+    const label = itemDef.label;
     console.assert(input||field||label, `invalid itemDef ${itemDef}`);
     for (let i=0; i<want; i++) {
       if (label && !ofs) {
