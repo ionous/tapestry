@@ -28,10 +28,14 @@ func writeNumField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec)
 
 func writeStrField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
 	// other options possible: spellcheck: true/false; text: the default value.
-	if str := typeSpec.Spec.Value.(*spec.StrSpec); !str.Exclusively {
+	if str := typeSpec.Spec.Value.(*spec.StrSpec); len(str.Uses) == 0 {
 		out.Kv("type", bconst.FieldText)
 	} else {
-		out.Kv("type", bconst.FieldDropdown).R(js.Comma).
+		fieldType := bconst.FieldDropdown
+		if !str.Exclusively {
+			fieldType = bconst.CustomFieldDropdown
+		}
+		out.Kv("type", fieldType).R(js.Comma).
 			Q("options").R(js.Colon).
 			Brace(js.Array,
 				func(options *js.Builder) {

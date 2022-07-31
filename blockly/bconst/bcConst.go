@@ -1,5 +1,6 @@
 package bconst
 
+// defaults for colors are in blockly-master\msg\messages.js
 const (
 	COLOUR_HUE            = "%{BKY_COLOUR_HUE}"
 	LISTS_HUE             = "%{BKY_LISTS_HUE}"
@@ -29,3 +30,8 @@ const (
 
 // https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks
 // other types: field_colour, field_number, field_angle, field_variable, field_label, field_image, input_dummy
+
+const (
+	// alternative class for str fields.
+	CustomFieldDropdown = "field_dropdown_str"
+)

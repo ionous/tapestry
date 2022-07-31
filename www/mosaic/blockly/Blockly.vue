@@ -8,8 +8,11 @@ import Cataloger from '/mosaic/catalog/cataloger.js'
 import WorkspaceOptions from './workspaceOptions.js'
 import ShapeReader  from './shapeReader.js'
 import ShapeWriter from './shapeWriter.js'
+import CustomFieldDropdown from './strDropdown.js'
 
 Blockly.WorkspaceAudio.prototype.preload= function(){};
+
+Blockly.fieldRegistry.register('field_dropdown_str', CustomFieldDropdown);
 
 // https://developers.google.com/blockly/guides/configure/web/resizable
 let workspace, blocklyArea, blocklyDiv;
