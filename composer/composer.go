@@ -97,7 +97,15 @@ func RunMosaic(cfg *web.Config, port int) {
 		http.Redirect(w, r, "/mosaic/index.html", http.StatusMovedPermanently)
 	})
 
-	HandleBackend(cfg, "mosaic")
+	if prod := cfg.Prod(); len(prod) == 0 {
+		HandleBackend(cfg, "mosaic")
+	} else {
+		//	paths ending with / indicate subtrees ( otherwise it assumes a single resource. )
+		// longer paths [ really path patterns ] take precedence.
+		// so a bare slash means: all paths not otherwise matched.
+		// 'Dir' is a typed string which implements an Fs/Filesystem restricted to the specified tree.
+		http.Handle("/", http.FileServer(http.Dir(prod)))
+	}
 
 	// blockly blocks ( from .if )
 	http.HandleFunc("/blocks/", web.HandleResourceWithContext(FilesApi(cfg), func(ctx context.Context) context.Context {

@@ -2,6 +2,7 @@ package web
 
 import (
 	"log"
+	"mime"
 	"net/url"
 	"os"
 	"path"
@@ -14,6 +15,7 @@ import (
 type Config struct {
 	cmds string // base directory for commands
 	data string // base directory for data
+	prod string // if this exists: a packaged set of frontend assets
 }
 
 func (cfg *Config) Scratch(parts ...string) string {
@@ -27,6 +29,17 @@ func (cfg *Config) PathTo(parts ...string) string {
 // Rather than creating one big app, for now, tapestry is split into a bunch of separate commands.
 func (cfg *Config) Cmd(which string) string {
 	return path.Join(cfg.cmds, "bin", which)
+}
+
+// empty string if not production
+func (cfg *Config) Prod() string {
+	return cfg.prod
+}
+
+func DevDist(cmdDir, dataDir, distDir string) *Config {
+	cfg := DevConfig(cmdDir, dataDir)
+	cfg.prod = distDir
+	return cfg
 }
 
 // DevConfig creates a reasonable(?) config based on the developer go path.
@@ -51,4 +64,10 @@ func Endpoint(port int, parts ...string) (ret string) {
 		ret = u.String() + "/"
 	}
 	return
+}
+
+// see: https://github.com/golang/go/issues/32350
+// https://go-review.googlesource.com/c/go/+/406894/ will be fixed in 1.19
+func init() {
+	_ = mime.AddExtensionType(".js", "text/javascript")
 }
