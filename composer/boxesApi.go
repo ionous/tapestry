@@ -10,7 +10,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/web"
 )
 
-func BoxesApi(cfg *web.Config) web.Resource {
+func BoxesApi(*web.Config) web.Resource {
 	return &web.Wrapper{
 		Finds: func(str string) (ret web.Resource) {
 			if len(str) == 0 {

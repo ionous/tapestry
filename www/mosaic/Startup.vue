@@ -7,8 +7,8 @@ import Blockly from 'blockly';
 import { inject } from 'vue'
 
 // shapes is an array of blockly shape data.
-const shapesUrl= 'http://localhost:8080/shapes/';
-const toolboxUrl= 'http://localhost:8080/boxes/';
+const shapesUrl= appcfg.mosaic + '/shapes/';
+const toolboxUrl= appcfg.mosaic + '/boxes/';
 
 export default {
   // reports back on shapeData

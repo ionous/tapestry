@@ -19,3 +19,7 @@ require (
 	golang.org/x/sys v0.0.0-20211019181941-9d821ace8654 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 )
+
+
+// for local debugging:
+// replace github.com/wailsapp/wails/v2 v2.0.0-beta.42 => C:\Dev\Go\pkg\mod\github.com\wailsapp\wails\v2@v2.0.0-beta.42

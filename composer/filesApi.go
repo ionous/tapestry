@@ -23,9 +23,11 @@ func FilesApi(cfg *web.Config) web.Resource {
 			path := cfg.PathTo("stories") + string(filepath.Separator)
 			switch name {
 			case "blocks":
+				// generates blockly files out of .if files
 				where := storyFolder(path)
 				ret = blocksRoot{blocksFolder{where}}
 			case "stories":
+				// serves raw .if files ( compact json format )
 				where := storyFolder(path)
 				ret = rootFolder{where}
 			}

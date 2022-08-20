@@ -21,9 +21,11 @@ func HandleResource(root Resource) http.HandlerFunc {
 // providing responses to http get and post requests.
 func HandleResourceWithContext(root Resource, xform func(context.Context) context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Println("( handling", r.URL.Path, r.Method, ")")
+		//log.Println("( handling", r.URL.Path, r.Method, ")")
 		if e := handleResponse(w, r, root, xform); e != nil {
-			log.Println(e)
+			// note: handle response already sets http.Error;
+			// so this is just for local logging purposes.
+			log.Println("error handling", r.URL.Path, r.Method, e)
 		}
 	}
 }

@@ -12,6 +12,7 @@ import (
 )
 
 // Config contains paths to the standalone console utils.
+
 type Config struct {
 	cmds string // base directory for commands
 	data string // base directory for data
@@ -57,11 +58,14 @@ func DevConfig(cmdDir, dataDir string) *Config {
 	}
 }
 
+// Given a port and a path return a url string `http://path...:port[/]`
 func Endpoint(port int, parts ...string) (ret string) {
 	ret = ":" + strconv.Itoa(port)
 	if len(parts) > 0 {
 		u := url.URL{Scheme: "http", Host: parts[0] + ret, Path: strings.Join(parts[1:], "/")}
-		ret = u.String() + "/"
+		if len(parts) > 0 {
+			ret = u.String() + "/"
+		}
 	}
 	return
 }

@@ -3,6 +3,7 @@ package composer
 import (
 	"context"
 	"encoding/json"
+	"git.sr.ht/~ionous/tapestry/web"
 	"io/fs"
 	"log"
 	"net/http"
@@ -10,8 +11,6 @@ import (
 	"net/url"
 	"os/exec"
 	"strings"
-
-	"git.sr.ht/~ionous/tapestry/web"
 )
 
 // Compose starts the composer server, this function doesnt return.
@@ -93,11 +92,10 @@ func HandleBackend(cfg *web.Config, name string) {
 func RunMosaic(cfg *web.Config, port int) {
 
 	// configure server root
-	http.HandleFunc("/index.html", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/mosaic/index.html", http.StatusMovedPermanently)
-	})
+	RedirectIndex(http.DefaultServeMux, "mosaic")
 
 	if prod := cfg.Prod(); len(prod) == 0 {
+		// reflect to the content server
 		HandleBackend(cfg, "mosaic")
 	} else {
 		//	paths ending with / indicate subtrees ( otherwise it assumes a single resource. )
@@ -107,30 +105,44 @@ func RunMosaic(cfg *web.Config, port int) {
 		http.Handle("/", http.FileServer(http.Dir(prod)))
 	}
 
-	// blockly blocks ( from .if )
-	http.HandleFunc("/blocks/", web.HandleResourceWithContext(FilesApi(cfg), func(ctx context.Context) context.Context {
-		return context.WithValue(ctx, configKey, cfg)
-	}))
-
-	// blockly shape files ( from .ifspecs )
-	http.Handle("/shapes/", http.StripPrefix("/shapes/", web.HandleResourceWithContext(ShapesApi(cfg), func(ctx context.Context) context.Context {
-		return context.WithValue(ctx, configKey, cfg)
-	})))
-
-	// blockly shape files ( from .ifspecs )
-	http.Handle("/boxes/", http.StripPrefix("/boxes/", web.HandleResourceWithContext(BoxesApi(cfg), func(ctx context.Context) context.Context {
-		return context.WithValue(ctx, configKey, cfg)
-	})))
-
-	// http.HandleFunc("/stories/", web.HandleResourceWithContext(FilesApi(cfg), func(ctx context.Context) context.Context {
-	// 	return context.WithValue(ctx, configKey, cfg)
-	// }))
+	// DefaultServeMux
 
 	log.Println("Composer using", cfg.PathTo())
 	log.Println("Listening on port", port, "...")
 	if e := http.ListenAndServe(web.Endpoint(port), nil); e != nil {
 		log.Fatal(e)
 	}
+}
+
+// redirect a raw request for index.html to the index of a particular (vue) app
+func RedirectIndex(mux *http.ServeMux, dst string) {
+	http.HandleFunc("/index.html", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/"+dst+"/index.html", http.StatusMovedPermanently)
+	})
+}
+
+// TODO: chop down web.Config
+// do you actually need HandleWithContext when done this way?
+func Register(cfg *web.Config, mux *http.ServeMux) {
+	// raw story files ( because why not )
+	mux.Handle("/stories/", web.HandleResourceWithContext(FilesApi(cfg), func(ctx context.Context) context.Context {
+		return context.WithValue(ctx, configKey, cfg)
+	}))
+
+	// blockly blocks ( from .if )
+	mux.Handle("/blocks/", web.HandleResourceWithContext(FilesApi(cfg), func(ctx context.Context) context.Context {
+		return context.WithValue(ctx, configKey, cfg)
+	}))
+
+	// blockly shape files ( from .ifspecs )
+	mux.Handle("/shapes/", http.StripPrefix("/shapes/", web.HandleResourceWithContext(ShapesApi(cfg), func(ctx context.Context) context.Context {
+		return context.WithValue(ctx, configKey, cfg)
+	})))
+
+	// blockly shape files ( from .ifspecs )
+	mux.Handle("/boxes/", http.StripPrefix("/boxes/", web.HandleResourceWithContext(BoxesApi(cfg), func(ctx context.Context) context.Context {
+		return context.WithValue(ctx, configKey, cfg)
+	})))
 }
 
 type key int
