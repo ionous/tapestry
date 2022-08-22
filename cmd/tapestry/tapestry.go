@@ -13,7 +13,6 @@ import (
 
 	tap "git.sr.ht/~ionous/tapestry/cmd/tapestry/internal"
 
-	"git.sr.ht/~ionous/tapestry/composer"
 	"git.sr.ht/~ionous/tapestry/web"
 	"github.com/ionous/errutil"
 	"github.com/wailsapp/wails/v2"
@@ -45,17 +44,35 @@ func main() {
 
 		// redirect index.html to the mosaic app.
 		// [ doesnt work for wails -- it looks for a built in index.html ]
-		composer.RedirectIndex(mux, "mosaic")
+		// composer.RedirectIndex(mux, "mosaic")
 
-		// FIX: kill this.
-		cfg := web.DevConfig(build.Default.GOPATH, dir)
-		composer.Register(cfg, mux)
+		// FIX: remove the "cmdDir"
+		cfg := tap.DevConfig(build.Default.GOPATH, dir)
+
+		// raw story files ( because why not )
+		mux.Handle("/stories/", web.HandleResource(tap.FilesApi(cfg)))
+
+		// blockly blocks ( from .if )
+		mux.Handle("/blocks/", web.HandleResource(tap.FilesApi(cfg)))
+
+		// blockly shape files ( from .ifspecs )
+		mux.Handle("/shapes/", http.StripPrefix("/shapes/", web.HandleResource(tap.ShapesApi(cfg))))
+
+		// blockly shape files ( from .ifspecs )
+		mux.Handle("/boxes/", http.StripPrefix("/boxes/", web.HandleResource(tap.BoxesApi(cfg))))
+
+		// fix: serve .ifspecs from package idl?
+		// below is the older .ifspec endpoint --
+		// not clear if that's desirable at this pint...
 
 		if tap.BuildConfig == tap.Prod {
 			// prod redirects unknown url requests to our embedded assets
 			// note: package http will tack on index.html redirects for bare directories automatically.
 			// and, for good or ill, it will serve directories of files as actual directory listings
-			mux.Handle("/", http.FileServer(http.FS(tap.Frontend)))
+			mux.Handle("/", web.MethodHandler{
+				http.MethodGet:  http.FileServer(http.FS(tap.Frontend)),
+				http.MethodPost: tap.HandleCommands(cfg),
+			})
 
 		} else {
 			// web and dev start a custom server to listen for incoming requests
@@ -69,10 +86,11 @@ func main() {
 				log.Fatal(e)
 			} else {
 				// anything not handled by "mux" gets sent to the vite backend.
-				p := httputil.NewSingleHostReverseProxy(viteBackend)
-				mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-					p.ServeHTTP(w, r)
+				mux.Handle("/", web.MethodHandler{
+					http.MethodGet:  httputil.NewSingleHostReverseProxy(viteBackend),
+					http.MethodPost: tap.HandleCommands(cfg),
 				})
+
 			}
 
 			// web mode stops here
@@ -81,7 +99,10 @@ func main() {
 			}
 
 			// dev mode starts the tapestry server; then continues on to start the wails webkit browser.
-			go startBackend(listenTo, corsWrapper{"http://wails.localhost", mux})
+			// the server has to tell the browser that its okay to make requests from the webkit origin.
+			// wails webkit requests pages from: "http://wails.localhost"
+			// the webapps ask for ( and post/put data at ) "http://localhost:8080"
+			go startBackend(listenTo, web.HandleCors("http://wails.localhost", mux))
 
 			// fix? having these commented out skips activating the wails dev server.
 			// i haven't quite figured out how to integrate it with succesfully with backend
@@ -91,29 +112,6 @@ func main() {
 		}
 		// doesn't return.
 		runWails(width, height, mux)
-	}
-}
-
-// required so that wails webkit is allowed to make requests into the backend.
-// the server has to tell the browser that its okay to make requests from the webkit origin.
-// wails webkit requests pages from: "http://wails.localhost"
-// the webapps ask for ( and post/put data at ) "http://localhost:8080"
-type corsWrapper struct {
-	s string
-	h http.Handler
-}
-
-// tbd: could this expose a nicer set of things?
-func (c corsWrapper) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	h := w.Header()
-	h.Set("Access-Control-Allow-Origin", c.s)
-	log.Println("processing", req.Host, req.Method, req.URL.String())
-	if req.Method == http.MethodOptions {
-		h.Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT")
-		h.Set("Access-Control-Allow-Headers", "Content-Type")
-		w.WriteHeader(http.StatusOK)
-	} else {
-		c.h.ServeHTTP(w, req)
 	}
 }
 
