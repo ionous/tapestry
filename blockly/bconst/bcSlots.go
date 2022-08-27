@@ -55,6 +55,7 @@ func (slot *SlotRule) SlotType() (ret string) {
 }
 
 // tbd: would it make more sense to use groups for this?
+
 var slots = []SlotRule{{
 	Name:   literal.LiteralValue_Type,
 	Colour: MATH_HUE,

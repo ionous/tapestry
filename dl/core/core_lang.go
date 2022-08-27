@@ -11,8 +11,8 @@ import (
 
 // AllTrue Returns true if all of the evaluations are true.
 type AllTrue struct {
-	Test        []rt.BoolEval `if:"label=_"`
-	UserComment string
+	Test   []rt.BoolEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -97,7 +97,7 @@ func AllTrue_Optional_Marshal(m jsn.Marshaler, pv **AllTrue) (err error) {
 }
 
 func AllTrue_Marshal(m jsn.Marshaler, val *AllTrue) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(AllTrue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AllTrue_Field_Test)
 		if e0 == nil {
@@ -113,7 +113,7 @@ func AllTrue_Marshal(m jsn.Marshaler, val *AllTrue) (err error) {
 
 // Always Returns true.
 type Always struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -197,7 +197,7 @@ func Always_Optional_Marshal(m jsn.Marshaler, pv **Always) (err error) {
 }
 
 func Always_Marshal(m jsn.Marshaler, val *Always) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Always_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -206,8 +206,8 @@ func Always_Marshal(m jsn.Marshaler, val *Always) (err error) {
 
 // AnyTrue Returns true if any of the evaluations are true.
 type AnyTrue struct {
-	Test        []rt.BoolEval `if:"label=_"`
-	UserComment string
+	Test   []rt.BoolEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -292,7 +292,7 @@ func AnyTrue_Optional_Marshal(m jsn.Marshaler, pv **AnyTrue) (err error) {
 }
 
 func AnyTrue_Marshal(m jsn.Marshaler, val *AnyTrue) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(AnyTrue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AnyTrue_Field_Test)
 		if e0 == nil {
@@ -308,9 +308,9 @@ func AnyTrue_Marshal(m jsn.Marshaler, val *AnyTrue) (err error) {
 
 // Assign Assigns a variable to a value.
 type Assign struct {
-	Var         VariableName  `if:"label=_"`
-	From        rt.Assignment `if:"label=be"`
-	UserComment string
+	Var    VariableName  `if:"label=_"`
+	From   rt.Assignment `if:"label=be"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -397,7 +397,7 @@ func Assign_Optional_Marshal(m jsn.Marshaler, pv **Assign) (err error) {
 }
 
 func Assign_Marshal(m jsn.Marshaler, val *Assign) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Assign_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Assign_Field_Var)
 		if e0 == nil {
@@ -420,7 +420,7 @@ func Assign_Marshal(m jsn.Marshaler, val *Assign) (err error) {
 
 // AtLeast The first value is greater than or equal to the second value.
 type AtLeast struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -504,7 +504,7 @@ func AtLeast_Optional_Marshal(m jsn.Marshaler, pv **AtLeast) (err error) {
 }
 
 func AtLeast_Marshal(m jsn.Marshaler, val *AtLeast) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(AtLeast_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -513,7 +513,7 @@ func AtLeast_Marshal(m jsn.Marshaler, val *AtLeast) (err error) {
 
 // AtMost The first value is less than or equal to the second value.
 type AtMost struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -597,7 +597,7 @@ func AtMost_Optional_Marshal(m jsn.Marshaler, pv **AtMost) (err error) {
 }
 
 func AtMost_Marshal(m jsn.Marshaler, val *AtMost) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(AtMost_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -606,7 +606,7 @@ func AtMost_Marshal(m jsn.Marshaler, val *AtMost) (err error) {
 
 // Blankline Add a single blank line following some text.
 type Blankline struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -691,7 +691,7 @@ func Blankline_Optional_Marshal(m jsn.Marshaler, pv **Blankline) (err error) {
 }
 
 func Blankline_Marshal(m jsn.Marshaler, val *Blankline) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Blankline_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -700,8 +700,8 @@ func Blankline_Marshal(m jsn.Marshaler, val *Blankline) (err error) {
 
 // BracketText Sandwiches text printed during a block and puts them inside parenthesis '()'.
 type BracketText struct {
-	Does        []rt.Execute `if:"label=does"`
-	UserComment string
+	Does   []rt.Execute `if:"label=does"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -787,7 +787,7 @@ func BracketText_Optional_Marshal(m jsn.Marshaler, pv **BracketText) (err error)
 }
 
 func BracketText_Marshal(m jsn.Marshaler, val *BracketText) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(BracketText_Flow{val}); err == nil {
 		e0 := m.MarshalKey("does", BracketText_Field_Does)
 		if e0 == nil {
@@ -872,7 +872,7 @@ func Brancher_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Brancher) (err err
 
 // Break In a repeating loop, exit the loop.
 type Break struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -956,7 +956,7 @@ func Break_Optional_Marshal(m jsn.Marshaler, pv **Break) (err error) {
 }
 
 func Break_Marshal(m jsn.Marshaler, val *Break) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Break_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -965,8 +965,8 @@ func Break_Marshal(m jsn.Marshaler, val *Break) (err error) {
 
 // BufferText
 type BufferText struct {
-	Does        []rt.Execute `if:"label=does"`
-	UserComment string
+	Does   []rt.Execute `if:"label=does"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1052,7 +1052,7 @@ func BufferText_Optional_Marshal(m jsn.Marshaler, pv **BufferText) (err error) {
 }
 
 func BufferText_Marshal(m jsn.Marshaler, val *BufferText) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(BufferText_Flow{val}); err == nil {
 		e0 := m.MarshalKey("does", BufferText_Field_Does)
 		if e0 == nil {
@@ -1068,9 +1068,9 @@ func BufferText_Marshal(m jsn.Marshaler, val *BufferText) (err error) {
 
 // CallCycle Runtime version of cycle_text.
 type CallCycle struct {
-	Name        string        `if:"label=_,type=text"`
-	Parts       []rt.TextEval `if:"label=over"`
-	UserComment string
+	Name   string        `if:"label=_,type=text"`
+	Parts  []rt.TextEval `if:"label=over"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1157,7 +1157,7 @@ func CallCycle_Optional_Marshal(m jsn.Marshaler, pv **CallCycle) (err error) {
 }
 
 func CallCycle_Marshal(m jsn.Marshaler, val *CallCycle) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(CallCycle_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallCycle_Field_Name)
 		if e0 == nil {
@@ -1180,9 +1180,9 @@ func CallCycle_Marshal(m jsn.Marshaler, val *CallCycle) (err error) {
 
 // CallPattern Executes a pattern, and potentially returns a value.
 type CallPattern struct {
-	Pattern     PatternName `if:"label=_"`
-	Arguments   []rt.Arg    `if:"label=args"`
-	UserComment string
+	Pattern   PatternName `if:"label=_"`
+	Arguments []rt.Arg    `if:"label=args"`
+	Markup    map[string]any
 }
 
 // User implemented slots:
@@ -1276,7 +1276,7 @@ func CallPattern_Optional_Marshal(m jsn.Marshaler, pv **CallPattern) (err error)
 }
 
 func CallPattern_Marshal(m jsn.Marshaler, val *CallPattern) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(CallPattern_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallPattern_Field_Pattern)
 		if e0 == nil {
@@ -1301,9 +1301,9 @@ func CallPattern_Marshal(m jsn.Marshaler, val *CallPattern) (err error) {
 // Although the event advertises it can take any bool evaluation, only pattern calls are supported.
 // Returns a true/false success value.
 type CallSend struct {
-	Path        rt.TextListEval `if:"label=_"`
-	Event       rt.BoolEval     `if:"label=event"`
-	UserComment string
+	Path   rt.TextListEval `if:"label=_"`
+	Event  rt.BoolEval     `if:"label=event"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1391,7 +1391,7 @@ func CallSend_Optional_Marshal(m jsn.Marshaler, pv **CallSend) (err error) {
 }
 
 func CallSend_Marshal(m jsn.Marshaler, val *CallSend) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(CallSend_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallSend_Field_Path)
 		if e0 == nil {
@@ -1414,10 +1414,10 @@ func CallSend_Marshal(m jsn.Marshaler, val *CallSend) (err error) {
 
 // CallShuffle Runtime version of shuffle_text.
 type CallShuffle struct {
-	Name        string        `if:"label=_,type=text"`
-	Parts       []rt.TextEval `if:"label=over"`
-	Indices     Shuffler      `if:"internal"`
-	UserComment string
+	Name    string        `if:"label=_,type=text"`
+	Parts   []rt.TextEval `if:"label=over"`
+	Indices Shuffler      `if:"internal"`
+	Markup  map[string]any
 }
 
 // User implemented slots:
@@ -1504,7 +1504,7 @@ func CallShuffle_Optional_Marshal(m jsn.Marshaler, pv **CallShuffle) (err error)
 }
 
 func CallShuffle_Marshal(m jsn.Marshaler, val *CallShuffle) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(CallShuffle_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallShuffle_Field_Name)
 		if e0 == nil {
@@ -1527,9 +1527,9 @@ func CallShuffle_Marshal(m jsn.Marshaler, val *CallShuffle) (err error) {
 
 // CallTerminal Runtime version of stopping_text.
 type CallTerminal struct {
-	Name        string        `if:"label=_,type=text"`
-	Parts       []rt.TextEval `if:"label=over"`
-	UserComment string
+	Name   string        `if:"label=_,type=text"`
+	Parts  []rt.TextEval `if:"label=over"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1616,7 +1616,7 @@ func CallTerminal_Optional_Marshal(m jsn.Marshaler, pv **CallTerminal) (err erro
 }
 
 func CallTerminal_Marshal(m jsn.Marshaler, val *CallTerminal) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(CallTerminal_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallTerminal_Field_Name)
 		if e0 == nil {
@@ -1639,10 +1639,10 @@ func CallTerminal_Marshal(m jsn.Marshaler, val *CallTerminal) (err error) {
 
 // CallTrigger Runtime version of count_of.
 type CallTrigger struct {
-	Name        string        `if:"label=_,type=text"`
-	Trigger     Trigger       `if:"label=on"`
-	Num         rt.NumberEval `if:"label=num"`
-	UserComment string
+	Name    string        `if:"label=_,type=text"`
+	Trigger Trigger       `if:"label=on"`
+	Num     rt.NumberEval `if:"label=num"`
+	Markup  map[string]any
 }
 
 // User implemented slots:
@@ -1730,7 +1730,7 @@ func CallTrigger_Optional_Marshal(m jsn.Marshaler, pv **CallTrigger) (err error)
 }
 
 func CallTrigger_Marshal(m jsn.Marshaler, val *CallTrigger) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(CallTrigger_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CallTrigger_Field_Name)
 		if e0 == nil {
@@ -1760,8 +1760,8 @@ func CallTrigger_Marshal(m jsn.Marshaler, val *CallTrigger) (err error) {
 
 // Capitalize Returns new text, with the first letter turned into uppercase.
 type Capitalize struct {
-	Text        rt.TextEval `if:"label=_"`
-	UserComment string
+	Text   rt.TextEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1846,7 +1846,7 @@ func Capitalize_Optional_Marshal(m jsn.Marshaler, pv **Capitalize) (err error) {
 }
 
 func Capitalize_Marshal(m jsn.Marshaler, val *Capitalize) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Capitalize_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Capitalize_Field_Text)
 		if e0 == nil {
@@ -1862,10 +1862,10 @@ func Capitalize_Marshal(m jsn.Marshaler, val *Capitalize) (err error) {
 
 // ChooseAction An if statement.
 type ChooseAction struct {
-	If          rt.BoolEval  `if:"label=_"`
-	Does        []rt.Execute `if:"label=does"`
-	Else        Brancher     `if:"label=else,optional"`
-	UserComment string
+	If     rt.BoolEval  `if:"label=_"`
+	Does   []rt.Execute `if:"label=does"`
+	Else   Brancher     `if:"label=else,optional"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1954,7 +1954,7 @@ func ChooseAction_Optional_Marshal(m jsn.Marshaler, pv **ChooseAction) (err erro
 }
 
 func ChooseAction_Marshal(m jsn.Marshaler, val *ChooseAction) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ChooseAction_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ChooseAction_Field_If)
 		if e0 == nil {
@@ -1984,10 +1984,10 @@ func ChooseAction_Marshal(m jsn.Marshaler, val *ChooseAction) (err error) {
 
 // ChooseMore
 type ChooseMore struct {
-	If          rt.BoolEval  `if:"label=_"`
-	Does        []rt.Execute `if:"label=does"`
-	Else        Brancher     `if:"label=else,optional"`
-	UserComment string
+	If     rt.BoolEval  `if:"label=_"`
+	Does   []rt.Execute `if:"label=does"`
+	Else   Brancher     `if:"label=else,optional"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -2075,7 +2075,7 @@ func ChooseMore_Optional_Marshal(m jsn.Marshaler, pv **ChooseMore) (err error) {
 }
 
 func ChooseMore_Marshal(m jsn.Marshaler, val *ChooseMore) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ChooseMore_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ChooseMore_Field_If)
 		if e0 == nil {
@@ -2105,12 +2105,12 @@ func ChooseMore_Marshal(m jsn.Marshaler, val *ChooseMore) (err error) {
 
 // ChooseMoreValue
 type ChooseMoreValue struct {
-	Assign      string        `if:"label=_,type=text"`
-	From        rt.Assignment `if:"label=from"`
-	Filter      rt.BoolEval   `if:"label=and"`
-	Does        []rt.Execute  `if:"label=does"`
-	Else        Brancher      `if:"label=else,optional"`
-	UserComment string
+	Assign string        `if:"label=_,type=text"`
+	From   rt.Assignment `if:"label=from"`
+	Filter rt.BoolEval   `if:"label=and"`
+	Does   []rt.Execute  `if:"label=does"`
+	Else   Brancher      `if:"label=else,optional"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -2200,7 +2200,7 @@ func ChooseMoreValue_Optional_Marshal(m jsn.Marshaler, pv **ChooseMoreValue) (er
 }
 
 func ChooseMoreValue_Marshal(m jsn.Marshaler, val *ChooseMoreValue) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ChooseMoreValue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ChooseMoreValue_Field_Assign)
 		if e0 == nil {
@@ -2244,8 +2244,8 @@ func ChooseMoreValue_Marshal(m jsn.Marshaler, val *ChooseMoreValue) (err error) 
 
 // ChooseNothingElse
 type ChooseNothingElse struct {
-	Does        []rt.Execute `if:"label=does"`
-	UserComment string
+	Does   []rt.Execute `if:"label=does"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -2331,7 +2331,7 @@ func ChooseNothingElse_Optional_Marshal(m jsn.Marshaler, pv **ChooseNothingElse)
 }
 
 func ChooseNothingElse_Marshal(m jsn.Marshaler, val *ChooseNothingElse) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ChooseNothingElse_Flow{val}); err == nil {
 		e0 := m.MarshalKey("does", ChooseNothingElse_Field_Does)
 		if e0 == nil {
@@ -2347,10 +2347,10 @@ func ChooseNothingElse_Marshal(m jsn.Marshaler, val *ChooseNothingElse) (err err
 
 // ChooseNum Pick one of two numbers based on a boolean test.
 type ChooseNum struct {
-	If          rt.BoolEval   `if:"label=if"`
-	True        rt.NumberEval `if:"label=then"`
-	False       rt.NumberEval `if:"label=else,optional"`
-	UserComment string
+	If     rt.BoolEval   `if:"label=if"`
+	True   rt.NumberEval `if:"label=then"`
+	False  rt.NumberEval `if:"label=else,optional"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -2438,7 +2438,7 @@ func ChooseNum_Optional_Marshal(m jsn.Marshaler, pv **ChooseNum) (err error) {
 }
 
 func ChooseNum_Marshal(m jsn.Marshaler, val *ChooseNum) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ChooseNum_Flow{val}); err == nil {
 		e0 := m.MarshalKey("if", ChooseNum_Field_If)
 		if e0 == nil {
@@ -2468,10 +2468,10 @@ func ChooseNum_Marshal(m jsn.Marshaler, val *ChooseNum) (err error) {
 
 // ChooseText Pick one of two strings based on a boolean test.
 type ChooseText struct {
-	If          rt.BoolEval `if:"label=if"`
-	True        rt.TextEval `if:"label=then"`
-	False       rt.TextEval `if:"label=else,optional"`
-	UserComment string
+	If     rt.BoolEval `if:"label=if"`
+	True   rt.TextEval `if:"label=then"`
+	False  rt.TextEval `if:"label=else,optional"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -2559,7 +2559,7 @@ func ChooseText_Optional_Marshal(m jsn.Marshaler, pv **ChooseText) (err error) {
 }
 
 func ChooseText_Marshal(m jsn.Marshaler, val *ChooseText) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ChooseText_Flow{val}); err == nil {
 		e0 := m.MarshalKey("if", ChooseText_Field_If)
 		if e0 == nil {
@@ -2589,12 +2589,12 @@ func ChooseText_Marshal(m jsn.Marshaler, val *ChooseText) (err error) {
 
 // ChooseValue An if statement with local assignment.
 type ChooseValue struct {
-	Assign      string        `if:"label=_,type=text"`
-	From        rt.Assignment `if:"label=from"`
-	Filter      rt.BoolEval   `if:"label=and"`
-	Does        []rt.Execute  `if:"label=does"`
-	Else        Brancher      `if:"label=else,optional"`
-	UserComment string
+	Assign string        `if:"label=_,type=text"`
+	From   rt.Assignment `if:"label=from"`
+	Filter rt.BoolEval   `if:"label=and"`
+	Does   []rt.Execute  `if:"label=does"`
+	Else   Brancher      `if:"label=else,optional"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -2685,7 +2685,7 @@ func ChooseValue_Optional_Marshal(m jsn.Marshaler, pv **ChooseValue) (err error)
 }
 
 func ChooseValue_Marshal(m jsn.Marshaler, val *ChooseValue) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ChooseValue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ChooseValue_Field_Assign)
 		if e0 == nil {
@@ -2729,8 +2729,8 @@ func ChooseValue_Marshal(m jsn.Marshaler, val *ChooseValue) (err error) {
 
 // CommaText Separates words with commas, and 'and'.
 type CommaText struct {
-	Does        []rt.Execute `if:"label=does"`
-	UserComment string
+	Does   []rt.Execute `if:"label=does"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -2816,7 +2816,7 @@ func CommaText_Optional_Marshal(m jsn.Marshaler, pv **CommaText) (err error) {
 }
 
 func CommaText_Marshal(m jsn.Marshaler, val *CommaText) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(CommaText_Flow{val}); err == nil {
 		e0 := m.MarshalKey("does", CommaText_Field_Does)
 		if e0 == nil {
@@ -2901,10 +2901,10 @@ func Comparator_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Comparator) (err
 
 // CompareNum True if eq,ne,gt,lt,ge,le two numbers.
 type CompareNum struct {
-	A           rt.NumberEval `if:"label=_"`
-	Is          Comparator    `if:"label=is"`
-	B           rt.NumberEval `if:"label=num"`
-	UserComment string
+	A      rt.NumberEval `if:"label=_"`
+	Is     Comparator    `if:"label=is"`
+	B      rt.NumberEval `if:"label=num"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -2992,7 +2992,7 @@ func CompareNum_Optional_Marshal(m jsn.Marshaler, pv **CompareNum) (err error) {
 }
 
 func CompareNum_Marshal(m jsn.Marshaler, val *CompareNum) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(CompareNum_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CompareNum_Field_A)
 		if e0 == nil {
@@ -3022,10 +3022,10 @@ func CompareNum_Marshal(m jsn.Marshaler, val *CompareNum) (err error) {
 
 // CompareText True if eq,ne,gt,lt,ge,le two strings ( lexical. ).
 type CompareText struct {
-	A           rt.TextEval `if:"label=_"`
-	Is          Comparator  `if:"label=is"`
-	B           rt.TextEval `if:"label=txt"`
-	UserComment string
+	A      rt.TextEval `if:"label=_"`
+	Is     Comparator  `if:"label=is"`
+	B      rt.TextEval `if:"label=txt"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -3113,7 +3113,7 @@ func CompareText_Optional_Marshal(m jsn.Marshaler, pv **CompareText) (err error)
 }
 
 func CompareText_Marshal(m jsn.Marshaler, val *CompareText) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(CompareText_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CompareText_Field_A)
 		if e0 == nil {
@@ -3143,9 +3143,9 @@ func CompareText_Marshal(m jsn.Marshaler, val *CompareText) (err error) {
 
 // DiffOf Subtract two numbers.
 type DiffOf struct {
-	A           rt.NumberEval `if:"label=_"`
-	B           rt.NumberEval `if:"label=by,optional"`
-	UserComment string
+	A      rt.NumberEval `if:"label=_"`
+	B      rt.NumberEval `if:"label=by,optional"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -3232,7 +3232,7 @@ func DiffOf_Optional_Marshal(m jsn.Marshaler, pv **DiffOf) (err error) {
 }
 
 func DiffOf_Marshal(m jsn.Marshaler, val *DiffOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(DiffOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", DiffOf_Field_A)
 		if e0 == nil {
@@ -3255,8 +3255,8 @@ func DiffOf_Marshal(m jsn.Marshaler, val *DiffOf) (err error) {
 
 // During Decide whether a pattern is running.
 type During struct {
-	Pattern     PatternName `if:"label=_"`
-	UserComment string
+	Pattern PatternName `if:"label=_"`
+	Markup  map[string]any
 }
 
 // User implemented slots:
@@ -3342,7 +3342,7 @@ func During_Optional_Marshal(m jsn.Marshaler, pv **During) (err error) {
 }
 
 func During_Marshal(m jsn.Marshaler, val *During) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(During_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", During_Field_Pattern)
 		if e0 == nil {
@@ -3358,7 +3358,7 @@ func During_Marshal(m jsn.Marshaler, val *During) (err error) {
 
 // Equal Two values exactly match.
 type Equal struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -3443,7 +3443,7 @@ func Equal_Optional_Marshal(m jsn.Marshaler, pv **Equal) (err error) {
 }
 
 func Equal_Marshal(m jsn.Marshaler, val *Equal) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Equal_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -3452,8 +3452,8 @@ func Equal_Marshal(m jsn.Marshaler, val *Equal) (err error) {
 
 // FromBool Assigns the calculated boolean value.
 type FromBool struct {
-	Val         rt.BoolEval `if:"label=_"`
-	UserComment string
+	Val    rt.BoolEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -3538,7 +3538,7 @@ func FromBool_Optional_Marshal(m jsn.Marshaler, pv **FromBool) (err error) {
 }
 
 func FromBool_Marshal(m jsn.Marshaler, val *FromBool) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(FromBool_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromBool_Field_Val)
 		if e0 == nil {
@@ -3554,8 +3554,8 @@ func FromBool_Marshal(m jsn.Marshaler, val *FromBool) (err error) {
 
 // FromNum Assigns the calculated number.
 type FromNum struct {
-	Val         rt.NumberEval `if:"label=_"`
-	UserComment string
+	Val    rt.NumberEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -3640,7 +3640,7 @@ func FromNum_Optional_Marshal(m jsn.Marshaler, pv **FromNum) (err error) {
 }
 
 func FromNum_Marshal(m jsn.Marshaler, val *FromNum) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(FromNum_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromNum_Field_Val)
 		if e0 == nil {
@@ -3656,8 +3656,8 @@ func FromNum_Marshal(m jsn.Marshaler, val *FromNum) (err error) {
 
 // FromNumbers Assigns the calculated numbers.
 type FromNumbers struct {
-	Vals        rt.NumListEval `if:"label=_"`
-	UserComment string
+	Vals   rt.NumListEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -3743,7 +3743,7 @@ func FromNumbers_Optional_Marshal(m jsn.Marshaler, pv **FromNumbers) (err error)
 }
 
 func FromNumbers_Marshal(m jsn.Marshaler, val *FromNumbers) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(FromNumbers_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromNumbers_Field_Vals)
 		if e0 == nil {
@@ -3759,8 +3759,8 @@ func FromNumbers_Marshal(m jsn.Marshaler, val *FromNumbers) (err error) {
 
 // FromObj Targets an object with a computed name.
 type FromObj struct {
-	Object      rt.TextEval `if:"label=_"`
-	UserComment string
+	Object rt.TextEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -3846,7 +3846,7 @@ func FromObj_Optional_Marshal(m jsn.Marshaler, pv **FromObj) (err error) {
 }
 
 func FromObj_Marshal(m jsn.Marshaler, val *FromObj) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(FromObj_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromObj_Field_Object)
 		if e0 == nil {
@@ -3862,8 +3862,8 @@ func FromObj_Marshal(m jsn.Marshaler, val *FromObj) (err error) {
 
 // FromRec Targets a record stored in a record.
 type FromRec struct {
-	Rec         rt.RecordEval `if:"label=_"`
-	UserComment string
+	Rec    rt.RecordEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -3949,7 +3949,7 @@ func FromRec_Optional_Marshal(m jsn.Marshaler, pv **FromRec) (err error) {
 }
 
 func FromRec_Marshal(m jsn.Marshaler, val *FromRec) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(FromRec_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromRec_Field_Rec)
 		if e0 == nil {
@@ -3965,8 +3965,8 @@ func FromRec_Marshal(m jsn.Marshaler, val *FromRec) (err error) {
 
 // FromRecord Assigns the calculated record.
 type FromRecord struct {
-	Val         rt.RecordEval `if:"label=_"`
-	UserComment string
+	Val    rt.RecordEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -4052,7 +4052,7 @@ func FromRecord_Optional_Marshal(m jsn.Marshaler, pv **FromRecord) (err error) {
 }
 
 func FromRecord_Marshal(m jsn.Marshaler, val *FromRecord) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(FromRecord_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromRecord_Field_Val)
 		if e0 == nil {
@@ -4068,8 +4068,8 @@ func FromRecord_Marshal(m jsn.Marshaler, val *FromRecord) (err error) {
 
 // FromRecords Assigns the calculated records.
 type FromRecords struct {
-	Vals        rt.RecordListEval `if:"label=_"`
-	UserComment string
+	Vals   rt.RecordListEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -4155,7 +4155,7 @@ func FromRecords_Optional_Marshal(m jsn.Marshaler, pv **FromRecords) (err error)
 }
 
 func FromRecords_Marshal(m jsn.Marshaler, val *FromRecords) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(FromRecords_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromRecords_Field_Vals)
 		if e0 == nil {
@@ -4240,8 +4240,8 @@ func FromSourceFields_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromSource
 
 // FromText Assigns the calculated piece of text.
 type FromText struct {
-	Val         rt.TextEval `if:"label=_"`
-	UserComment string
+	Val    rt.TextEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -4327,7 +4327,7 @@ func FromText_Optional_Marshal(m jsn.Marshaler, pv **FromText) (err error) {
 }
 
 func FromText_Marshal(m jsn.Marshaler, val *FromText) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(FromText_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromText_Field_Val)
 		if e0 == nil {
@@ -4343,8 +4343,8 @@ func FromText_Marshal(m jsn.Marshaler, val *FromText) (err error) {
 
 // FromTexts Assigns the calculated texts.
 type FromTexts struct {
-	Vals        rt.TextListEval `if:"label=_"`
-	UserComment string
+	Vals   rt.TextListEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -4430,7 +4430,7 @@ func FromTexts_Optional_Marshal(m jsn.Marshaler, pv **FromTexts) (err error) {
 }
 
 func FromTexts_Marshal(m jsn.Marshaler, val *FromTexts) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(FromTexts_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromTexts_Field_Vals)
 		if e0 == nil {
@@ -4446,8 +4446,8 @@ func FromTexts_Marshal(m jsn.Marshaler, val *FromTexts) (err error) {
 
 // FromVar Targets a record stored in a variable.
 type FromVar struct {
-	Var         VariableName `if:"label=_"`
-	UserComment string
+	Var    VariableName `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -4533,7 +4533,7 @@ func FromVar_Optional_Marshal(m jsn.Marshaler, pv **FromVar) (err error) {
 }
 
 func FromVar_Marshal(m jsn.Marshaler, val *FromVar) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(FromVar_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromVar_Field_Var)
 		if e0 == nil {
@@ -4549,9 +4549,9 @@ func FromVar_Marshal(m jsn.Marshaler, val *FromVar) (err error) {
 
 // GetAtField Get a value from a record.
 type GetAtField struct {
-	Field       string           `if:"label=_,type=text"`
-	From        FromSourceFields `if:"label=from"`
-	UserComment string
+	Field  string           `if:"label=_,type=text"`
+	From   FromSourceFields `if:"label=from"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -4645,7 +4645,7 @@ func GetAtField_Optional_Marshal(m jsn.Marshaler, pv **GetAtField) (err error) {
 }
 
 func GetAtField_Marshal(m jsn.Marshaler, val *GetAtField) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(GetAtField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", GetAtField_Field_Field)
 		if e0 == nil {
@@ -4668,8 +4668,8 @@ func GetAtField_Marshal(m jsn.Marshaler, val *GetAtField) (err error) {
 
 // GetVar Get Variable: Return the value of the named variable.
 type GetVar struct {
-	Name        VariableName `if:"label=_"`
-	UserComment string
+	Name   VariableName `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -4762,7 +4762,7 @@ func GetVar_Optional_Marshal(m jsn.Marshaler, pv **GetVar) (err error) {
 }
 
 func GetVar_Marshal(m jsn.Marshaler, val *GetVar) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(GetVar_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", GetVar_Field_Name)
 		if e0 == nil {
@@ -4778,7 +4778,7 @@ func GetVar_Marshal(m jsn.Marshaler, val *GetVar) (err error) {
 
 // GreaterThan The first value is larger than the second value.
 type GreaterThan struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -4862,7 +4862,7 @@ func GreaterThan_Optional_Marshal(m jsn.Marshaler, pv **GreaterThan) (err error)
 }
 
 func GreaterThan_Marshal(m jsn.Marshaler, val *GreaterThan) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(GreaterThan_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -4871,8 +4871,8 @@ func GreaterThan_Marshal(m jsn.Marshaler, val *GreaterThan) (err error) {
 
 // HasDominion
 type HasDominion struct {
-	Name        string `if:"label=_,type=text"`
-	UserComment string
+	Name   string `if:"label=_,type=text"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -4957,7 +4957,7 @@ func HasDominion_Optional_Marshal(m jsn.Marshaler, pv **HasDominion) (err error)
 }
 
 func HasDominion_Marshal(m jsn.Marshaler, val *HasDominion) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(HasDominion_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", HasDominion_Field_Name)
 		if e0 == nil {
@@ -4973,9 +4973,9 @@ func HasDominion_Marshal(m jsn.Marshaler, val *HasDominion) (err error) {
 
 // HasTrait Return true if the object is currently in the requested state.
 type HasTrait struct {
-	Object      rt.TextEval `if:"label=obj"`
-	Trait       rt.TextEval `if:"label=trait"`
-	UserComment string
+	Object rt.TextEval `if:"label=obj"`
+	Trait  rt.TextEval `if:"label=trait"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -5062,7 +5062,7 @@ func HasTrait_Optional_Marshal(m jsn.Marshaler, pv **HasTrait) (err error) {
 }
 
 func HasTrait_Marshal(m jsn.Marshaler, val *HasTrait) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(HasTrait_Flow{val}); err == nil {
 		e0 := m.MarshalKey("obj", HasTrait_Field_Object)
 		if e0 == nil {
@@ -5085,8 +5085,8 @@ func HasTrait_Marshal(m jsn.Marshaler, val *HasTrait) (err error) {
 
 // IdOf A unique object identifier.
 type IdOf struct {
-	Object      rt.TextEval `if:"label=_"`
-	UserComment string
+	Object rt.TextEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -5171,7 +5171,7 @@ func IdOf_Optional_Marshal(m jsn.Marshaler, pv **IdOf) (err error) {
 }
 
 func IdOf_Marshal(m jsn.Marshaler, val *IdOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(IdOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", IdOf_Field_Object)
 		if e0 == nil {
@@ -5187,9 +5187,9 @@ func IdOf_Marshal(m jsn.Marshaler, val *IdOf) (err error) {
 
 // Includes True if text contains text.
 type Includes struct {
-	Text        rt.TextEval `if:"label=_"`
-	Part        rt.TextEval `if:"label=part"`
-	UserComment string
+	Text   rt.TextEval `if:"label=_"`
+	Part   rt.TextEval `if:"label=part"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -5276,7 +5276,7 @@ func Includes_Optional_Marshal(m jsn.Marshaler, pv **Includes) (err error) {
 }
 
 func Includes_Marshal(m jsn.Marshaler, val *Includes) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Includes_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Includes_Field_Text)
 		if e0 == nil {
@@ -5299,8 +5299,8 @@ func Includes_Marshal(m jsn.Marshaler, val *Includes) (err error) {
 
 // IntoObj Targets an object with a computed name.
 type IntoObj struct {
-	Object      rt.TextEval `if:"label=_"`
-	UserComment string
+	Object rt.TextEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -5386,7 +5386,7 @@ func IntoObj_Optional_Marshal(m jsn.Marshaler, pv **IntoObj) (err error) {
 }
 
 func IntoObj_Marshal(m jsn.Marshaler, val *IntoObj) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(IntoObj_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", IntoObj_Field_Object)
 		if e0 == nil {
@@ -5471,8 +5471,8 @@ func IntoTargetFields_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoTarget
 
 // IntoVar Targets an object or record stored in a variable.
 type IntoVar struct {
-	Var         VariableName `if:"label=_"`
-	UserComment string
+	Var    VariableName `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -5558,7 +5558,7 @@ func IntoVar_Optional_Marshal(m jsn.Marshaler, pv **IntoVar) (err error) {
 }
 
 func IntoVar_Marshal(m jsn.Marshaler, val *IntoVar) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(IntoVar_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", IntoVar_Field_Var)
 		if e0 == nil {
@@ -5574,8 +5574,8 @@ func IntoVar_Marshal(m jsn.Marshaler, val *IntoVar) (err error) {
 
 // IsEmpty True if the text is empty.
 type IsEmpty struct {
-	Text        rt.TextEval `if:"label=empty"`
-	UserComment string
+	Text   rt.TextEval `if:"label=empty"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -5661,7 +5661,7 @@ func IsEmpty_Optional_Marshal(m jsn.Marshaler, pv **IsEmpty) (err error) {
 }
 
 func IsEmpty_Marshal(m jsn.Marshaler, val *IsEmpty) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(IsEmpty_Flow{val}); err == nil {
 		e0 := m.MarshalKey("empty", IsEmpty_Field_Text)
 		if e0 == nil {
@@ -5677,9 +5677,9 @@ func IsEmpty_Marshal(m jsn.Marshaler, val *IsEmpty) (err error) {
 
 // IsExactKindOf True if the object is exactly the named kind.
 type IsExactKindOf struct {
-	Object      rt.TextEval `if:"label=_"`
-	Kind        string      `if:"label=is_exactly,type=text"`
-	UserComment string
+	Object rt.TextEval `if:"label=_"`
+	Kind   string      `if:"label=is_exactly,type=text"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -5766,7 +5766,7 @@ func IsExactKindOf_Optional_Marshal(m jsn.Marshaler, pv **IsExactKindOf) (err er
 }
 
 func IsExactKindOf_Marshal(m jsn.Marshaler, val *IsExactKindOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(IsExactKindOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", IsExactKindOf_Field_Object)
 		if e0 == nil {
@@ -5789,9 +5789,9 @@ func IsExactKindOf_Marshal(m jsn.Marshaler, val *IsExactKindOf) (err error) {
 
 // IsKindOf True if the object is compatible with the named kind.
 type IsKindOf struct {
-	Object      rt.TextEval `if:"label=_"`
-	Kind        string      `if:"label=is,type=text"`
-	UserComment string
+	Object rt.TextEval `if:"label=_"`
+	Kind   string      `if:"label=is,type=text"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -5878,7 +5878,7 @@ func IsKindOf_Optional_Marshal(m jsn.Marshaler, pv **IsKindOf) (err error) {
 }
 
 func IsKindOf_Marshal(m jsn.Marshaler, val *IsKindOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(IsKindOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", IsKindOf_Field_Object)
 		if e0 == nil {
@@ -5901,9 +5901,9 @@ func IsKindOf_Marshal(m jsn.Marshaler, val *IsKindOf) (err error) {
 
 // Join Returns multiple pieces of text as a single new piece of text.
 type Join struct {
-	Sep         rt.TextEval   `if:"label=_,optional"`
-	Parts       []rt.TextEval `if:"label=parts"`
-	UserComment string
+	Sep    rt.TextEval   `if:"label=_,optional"`
+	Parts  []rt.TextEval `if:"label=parts"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -5989,7 +5989,7 @@ func Join_Optional_Marshal(m jsn.Marshaler, pv **Join) (err error) {
 }
 
 func Join_Marshal(m jsn.Marshaler, val *Join) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Join_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Join_Field_Sep)
 		if e0 == nil {
@@ -6012,8 +6012,8 @@ func Join_Marshal(m jsn.Marshaler, val *Join) (err error) {
 
 // KindOf Friendly name of the object's kind.
 type KindOf struct {
-	Object      rt.TextEval `if:"label=_"`
-	UserComment string
+	Object rt.TextEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -6098,7 +6098,7 @@ func KindOf_Optional_Marshal(m jsn.Marshaler, pv **KindOf) (err error) {
 }
 
 func KindOf_Marshal(m jsn.Marshaler, val *KindOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(KindOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", KindOf_Field_Object)
 		if e0 == nil {
@@ -6114,8 +6114,8 @@ func KindOf_Marshal(m jsn.Marshaler, val *KindOf) (err error) {
 
 // KindsOf A list of compatible kinds.
 type KindsOf struct {
-	Kind        string `if:"label=_,type=text"`
-	UserComment string
+	Kind   string `if:"label=_,type=text"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -6200,7 +6200,7 @@ func KindsOf_Optional_Marshal(m jsn.Marshaler, pv **KindsOf) (err error) {
 }
 
 func KindsOf_Marshal(m jsn.Marshaler, val *KindsOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(KindsOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", KindsOf_Field_Kind)
 		if e0 == nil {
@@ -6216,7 +6216,7 @@ func KindsOf_Marshal(m jsn.Marshaler, val *KindsOf) (err error) {
 
 // LessThan The first value is less than the second value.
 type LessThan struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -6300,7 +6300,7 @@ func LessThan_Optional_Marshal(m jsn.Marshaler, pv **LessThan) (err error) {
 }
 
 func LessThan_Marshal(m jsn.Marshaler, val *LessThan) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(LessThan_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -6309,8 +6309,8 @@ func LessThan_Marshal(m jsn.Marshaler, val *LessThan) (err error) {
 
 // MakeLowercase Returns new text, with every letter turned into lowercase. For example, 'shout' from 'SHOUT'.
 type MakeLowercase struct {
-	Text        rt.TextEval `if:"label=_"`
-	UserComment string
+	Text   rt.TextEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -6396,7 +6396,7 @@ func MakeLowercase_Optional_Marshal(m jsn.Marshaler, pv **MakeLowercase) (err er
 }
 
 func MakeLowercase_Marshal(m jsn.Marshaler, val *MakeLowercase) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(MakeLowercase_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", MakeLowercase_Field_Text)
 		if e0 == nil {
@@ -6412,8 +6412,8 @@ func MakeLowercase_Marshal(m jsn.Marshaler, val *MakeLowercase) (err error) {
 
 // MakeReversed Returns new text flipped back to front. For example, 'elppA' from 'Apple', or 'noon' from 'noon'.
 type MakeReversed struct {
-	Text        rt.TextEval `if:"label=text"`
-	UserComment string
+	Text   rt.TextEval `if:"label=text"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -6499,7 +6499,7 @@ func MakeReversed_Optional_Marshal(m jsn.Marshaler, pv **MakeReversed) (err erro
 }
 
 func MakeReversed_Marshal(m jsn.Marshaler, val *MakeReversed) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(MakeReversed_Flow{val}); err == nil {
 		e0 := m.MarshalKey("text", MakeReversed_Field_Text)
 		if e0 == nil {
@@ -6515,8 +6515,8 @@ func MakeReversed_Marshal(m jsn.Marshaler, val *MakeReversed) (err error) {
 
 // MakeSentenceCase Returns new text, start each sentence with a capital letter. For example, 'Empire Apple.' from 'Empire apple.'.
 type MakeSentenceCase struct {
-	Text        rt.TextEval `if:"label=_"`
-	UserComment string
+	Text   rt.TextEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -6602,7 +6602,7 @@ func MakeSentenceCase_Optional_Marshal(m jsn.Marshaler, pv **MakeSentenceCase) (
 }
 
 func MakeSentenceCase_Marshal(m jsn.Marshaler, val *MakeSentenceCase) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(MakeSentenceCase_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", MakeSentenceCase_Field_Text)
 		if e0 == nil {
@@ -6618,8 +6618,8 @@ func MakeSentenceCase_Marshal(m jsn.Marshaler, val *MakeSentenceCase) (err error
 
 // MakeTitleCase Returns new text, starting each word with a capital letter. For example, 'Empire Apple' from 'empire apple'.
 type MakeTitleCase struct {
-	Text        rt.TextEval `if:"label=_"`
-	UserComment string
+	Text   rt.TextEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -6705,7 +6705,7 @@ func MakeTitleCase_Optional_Marshal(m jsn.Marshaler, pv **MakeTitleCase) (err er
 }
 
 func MakeTitleCase_Marshal(m jsn.Marshaler, val *MakeTitleCase) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(MakeTitleCase_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", MakeTitleCase_Field_Text)
 		if e0 == nil {
@@ -6721,8 +6721,8 @@ func MakeTitleCase_Marshal(m jsn.Marshaler, val *MakeTitleCase) (err error) {
 
 // MakeUppercase Returns new text, with every letter turned into uppercase. For example, 'APPLE' from 'apple'.
 type MakeUppercase struct {
-	Text        rt.TextEval `if:"label=_"`
-	UserComment string
+	Text   rt.TextEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -6808,7 +6808,7 @@ func MakeUppercase_Optional_Marshal(m jsn.Marshaler, pv **MakeUppercase) (err er
 }
 
 func MakeUppercase_Marshal(m jsn.Marshaler, val *MakeUppercase) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(MakeUppercase_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", MakeUppercase_Field_Text)
 		if e0 == nil {
@@ -6824,10 +6824,10 @@ func MakeUppercase_Marshal(m jsn.Marshaler, val *MakeUppercase) (err error) {
 
 // Matches Determine whether the specified text is similar to the specified regular expression.
 type Matches struct {
-	Text        rt.TextEval `if:"label=_"`
-	Pattern     string      `if:"label=to,type=text"`
-	Cache       MatchCache  `if:"internal"`
-	UserComment string
+	Text    rt.TextEval `if:"label=_"`
+	Pattern string      `if:"label=to,type=text"`
+	Cache   MatchCache  `if:"internal"`
+	Markup  map[string]any
 }
 
 // User implemented slots:
@@ -6913,7 +6913,7 @@ func Matches_Optional_Marshal(m jsn.Marshaler, pv **Matches) (err error) {
 }
 
 func Matches_Marshal(m jsn.Marshaler, val *Matches) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Matches_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Matches_Field_Text)
 		if e0 == nil {
@@ -6936,8 +6936,8 @@ func Matches_Marshal(m jsn.Marshaler, val *Matches) (err error) {
 
 // NameOf Full name of the object.
 type NameOf struct {
-	Object      rt.TextEval `if:"label=_"`
-	UserComment string
+	Object rt.TextEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -7022,7 +7022,7 @@ func NameOf_Optional_Marshal(m jsn.Marshaler, pv **NameOf) (err error) {
 }
 
 func NameOf_Marshal(m jsn.Marshaler, val *NameOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(NameOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NameOf_Field_Object)
 		if e0 == nil {
@@ -7038,7 +7038,7 @@ func NameOf_Marshal(m jsn.Marshaler, val *NameOf) (err error) {
 
 // Never Returns false.
 type Never struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -7122,7 +7122,7 @@ func Never_Optional_Marshal(m jsn.Marshaler, pv **Never) (err error) {
 }
 
 func Never_Marshal(m jsn.Marshaler, val *Never) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Never_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -7131,7 +7131,7 @@ func Never_Marshal(m jsn.Marshaler, val *Never) (err error) {
 
 // Newline Start a new line.
 type Newline struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -7216,7 +7216,7 @@ func Newline_Optional_Marshal(m jsn.Marshaler, pv **Newline) (err error) {
 }
 
 func Newline_Marshal(m jsn.Marshaler, val *Newline) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Newline_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -7225,7 +7225,7 @@ func Newline_Marshal(m jsn.Marshaler, val *Newline) (err error) {
 
 // Next In a repeating loop, try the next iteration of the loop.
 type Next struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -7309,7 +7309,7 @@ func Next_Optional_Marshal(m jsn.Marshaler, pv **Next) (err error) {
 }
 
 func Next_Marshal(m jsn.Marshaler, val *Next) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Next_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -7318,8 +7318,8 @@ func Next_Marshal(m jsn.Marshaler, val *Next) (err error) {
 
 // Not Returns the opposite value.
 type Not struct {
-	Test        rt.BoolEval `if:"label=_"`
-	UserComment string
+	Test   rt.BoolEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -7404,7 +7404,7 @@ func Not_Optional_Marshal(m jsn.Marshaler, pv **Not) (err error) {
 }
 
 func Not_Marshal(m jsn.Marshaler, val *Not) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Not_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Not_Field_Test)
 		if e0 == nil {
@@ -7420,8 +7420,8 @@ func Not_Marshal(m jsn.Marshaler, val *Not) (err error) {
 
 // ObjectExists Returns whether there is a object of the specified name.
 type ObjectExists struct {
-	Object      rt.TextEval `if:"label=valid"`
-	UserComment string
+	Object rt.TextEval `if:"label=valid"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -7507,7 +7507,7 @@ func ObjectExists_Optional_Marshal(m jsn.Marshaler, pv **ObjectExists) (err erro
 }
 
 func ObjectExists_Marshal(m jsn.Marshaler, val *ObjectExists) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ObjectExists_Flow{val}); err == nil {
 		e0 := m.MarshalKey("valid", ObjectExists_Field_Object)
 		if e0 == nil {
@@ -7598,8 +7598,8 @@ func PatternName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternName) (e
 
 // Pluralize Returns the plural form of a singular word. (ex. apples for apple. ).
 type Pluralize struct {
-	Text        rt.TextEval `if:"label=of"`
-	UserComment string
+	Text   rt.TextEval `if:"label=of"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -7685,7 +7685,7 @@ func Pluralize_Optional_Marshal(m jsn.Marshaler, pv **Pluralize) (err error) {
 }
 
 func Pluralize_Marshal(m jsn.Marshaler, val *Pluralize) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Pluralize_Flow{val}); err == nil {
 		e0 := m.MarshalKey("of", Pluralize_Field_Text)
 		if e0 == nil {
@@ -7701,8 +7701,8 @@ func Pluralize_Marshal(m jsn.Marshaler, val *Pluralize) (err error) {
 
 // PrintNum Writes a number using numerals, eg. '1'.
 type PrintNum struct {
-	Num         rt.NumberEval `if:"label=_"`
-	UserComment string
+	Num    rt.NumberEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -7788,7 +7788,7 @@ func PrintNum_Optional_Marshal(m jsn.Marshaler, pv **PrintNum) (err error) {
 }
 
 func PrintNum_Marshal(m jsn.Marshaler, val *PrintNum) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PrintNum_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", PrintNum_Field_Num)
 		if e0 == nil {
@@ -7804,8 +7804,8 @@ func PrintNum_Marshal(m jsn.Marshaler, val *PrintNum) (err error) {
 
 // PrintNumWord Writes a number in plain english: eg. 'one'.
 type PrintNumWord struct {
-	Num         rt.NumberEval `if:"label=words"`
-	UserComment string
+	Num    rt.NumberEval `if:"label=words"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -7891,7 +7891,7 @@ func PrintNumWord_Optional_Marshal(m jsn.Marshaler, pv **PrintNumWord) (err erro
 }
 
 func PrintNumWord_Marshal(m jsn.Marshaler, val *PrintNumWord) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PrintNumWord_Flow{val}); err == nil {
 		e0 := m.MarshalKey("words", PrintNumWord_Field_Num)
 		if e0 == nil {
@@ -7907,9 +7907,9 @@ func PrintNumWord_Marshal(m jsn.Marshaler, val *PrintNumWord) (err error) {
 
 // ProductOf Multiply two numbers.
 type ProductOf struct {
-	A           rt.NumberEval `if:"label=_"`
-	B           rt.NumberEval `if:"label=by"`
-	UserComment string
+	A      rt.NumberEval `if:"label=_"`
+	B      rt.NumberEval `if:"label=by"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -7996,7 +7996,7 @@ func ProductOf_Optional_Marshal(m jsn.Marshaler, pv **ProductOf) (err error) {
 }
 
 func ProductOf_Marshal(m jsn.Marshaler, val *ProductOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ProductOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ProductOf_Field_A)
 		if e0 == nil {
@@ -8019,10 +8019,10 @@ func ProductOf_Marshal(m jsn.Marshaler, val *ProductOf) (err error) {
 
 // PutAtField Put a value into the field of an record or object.
 type PutAtField struct {
-	Into        IntoTargetFields `if:"label=_"`
-	From        rt.Assignment    `if:"label=from"`
-	AtField     string           `if:"label=at,type=text"`
-	UserComment string
+	Into    IntoTargetFields `if:"label=_"`
+	From    rt.Assignment    `if:"label=from"`
+	AtField string           `if:"label=at,type=text"`
+	Markup  map[string]any
 }
 
 // User implemented slots:
@@ -8110,7 +8110,7 @@ func PutAtField_Optional_Marshal(m jsn.Marshaler, pv **PutAtField) (err error) {
 }
 
 func PutAtField_Marshal(m jsn.Marshaler, val *PutAtField) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PutAtField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", PutAtField_Field_Into)
 		if e0 == nil {
@@ -8140,9 +8140,9 @@ func PutAtField_Marshal(m jsn.Marshaler, val *PutAtField) (err error) {
 
 // QuotientOf Divide one number by another.
 type QuotientOf struct {
-	A           rt.NumberEval `if:"label=_"`
-	B           rt.NumberEval `if:"label=by"`
-	UserComment string
+	A      rt.NumberEval `if:"label=_"`
+	B      rt.NumberEval `if:"label=by"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -8229,7 +8229,7 @@ func QuotientOf_Optional_Marshal(m jsn.Marshaler, pv **QuotientOf) (err error) {
 }
 
 func QuotientOf_Marshal(m jsn.Marshaler, val *QuotientOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(QuotientOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", QuotientOf_Field_A)
 		if e0 == nil {
@@ -8252,9 +8252,9 @@ func QuotientOf_Marshal(m jsn.Marshaler, val *QuotientOf) (err error) {
 
 // RemainderOf Divide one number by another, and return the remainder.
 type RemainderOf struct {
-	A           rt.NumberEval `if:"label=_"`
-	B           rt.NumberEval `if:"label=by"`
-	UserComment string
+	A      rt.NumberEval `if:"label=_"`
+	B      rt.NumberEval `if:"label=by"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -8341,7 +8341,7 @@ func RemainderOf_Optional_Marshal(m jsn.Marshaler, pv **RemainderOf) (err error)
 }
 
 func RemainderOf_Marshal(m jsn.Marshaler, val *RemainderOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RemainderOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RemainderOf_Field_A)
 		if e0 == nil {
@@ -8364,9 +8364,9 @@ func RemainderOf_Marshal(m jsn.Marshaler, val *RemainderOf) (err error) {
 
 // Response Generate text in a replaceable manner.
 type Response struct {
-	Name        string      `if:"label=_,type=text"`
-	Text        rt.TextEval `if:"label=text,optional"`
-	UserComment string
+	Name   string      `if:"label=_,type=text"`
+	Text   rt.TextEval `if:"label=text,optional"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -8452,7 +8452,7 @@ func Response_Optional_Marshal(m jsn.Marshaler, pv **Response) (err error) {
 }
 
 func Response_Marshal(m jsn.Marshaler, val *Response) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Response_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Response_Field_Name)
 		if e0 == nil {
@@ -8475,8 +8475,8 @@ func Response_Marshal(m jsn.Marshaler, val *Response) (err error) {
 
 // Row A single line as part of a group of lines.
 type Row struct {
-	Does        []rt.Execute `if:"label=does"`
-	UserComment string
+	Does   []rt.Execute `if:"label=does"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -8561,7 +8561,7 @@ func Row_Optional_Marshal(m jsn.Marshaler, pv **Row) (err error) {
 }
 
 func Row_Marshal(m jsn.Marshaler, val *Row) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Row_Flow{val}); err == nil {
 		e0 := m.MarshalKey("does", Row_Field_Does)
 		if e0 == nil {
@@ -8577,8 +8577,8 @@ func Row_Marshal(m jsn.Marshaler, val *Row) (err error) {
 
 // Rows Group text into successive lines.
 type Rows struct {
-	Does        []rt.Execute `if:"label=does"`
-	UserComment string
+	Does   []rt.Execute `if:"label=does"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -8663,7 +8663,7 @@ func Rows_Optional_Marshal(m jsn.Marshaler, pv **Rows) (err error) {
 }
 
 func Rows_Marshal(m jsn.Marshaler, val *Rows) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Rows_Flow{val}); err == nil {
 		e0 := m.MarshalKey("does", Rows_Field_Does)
 		if e0 == nil {
@@ -8679,8 +8679,8 @@ func Rows_Marshal(m jsn.Marshaler, val *Rows) (err error) {
 
 // SayText Print some bit of text to the player.
 type SayText struct {
-	Text        rt.TextEval `if:"label=_"`
-	UserComment string
+	Text   rt.TextEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -8766,7 +8766,7 @@ func SayText_Optional_Marshal(m jsn.Marshaler, pv **SayText) (err error) {
 }
 
 func SayText_Marshal(m jsn.Marshaler, val *SayText) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(SayText_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", SayText_Field_Text)
 		if e0 == nil {
@@ -8782,9 +8782,9 @@ func SayText_Marshal(m jsn.Marshaler, val *SayText) (err error) {
 
 // SetTrait Put an object into a particular state.
 type SetTrait struct {
-	Object      rt.TextEval `if:"label=obj"`
-	Trait       rt.TextEval `if:"label=trait"`
-	UserComment string
+	Object rt.TextEval `if:"label=obj"`
+	Trait  rt.TextEval `if:"label=trait"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -8871,7 +8871,7 @@ func SetTrait_Optional_Marshal(m jsn.Marshaler, pv **SetTrait) (err error) {
 }
 
 func SetTrait_Marshal(m jsn.Marshaler, val *SetTrait) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(SetTrait_Flow{val}); err == nil {
 		e0 := m.MarshalKey("obj", SetTrait_Field_Object)
 		if e0 == nil {
@@ -8894,8 +8894,8 @@ func SetTrait_Marshal(m jsn.Marshaler, val *SetTrait) (err error) {
 
 // Singularize Returns the singular form of a plural word. (ex. apple for apples ).
 type Singularize struct {
-	Text        rt.TextEval `if:"label=of"`
-	UserComment string
+	Text   rt.TextEval `if:"label=of"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -8981,7 +8981,7 @@ func Singularize_Optional_Marshal(m jsn.Marshaler, pv **Singularize) (err error)
 }
 
 func Singularize_Marshal(m jsn.Marshaler, val *Singularize) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Singularize_Flow{val}); err == nil {
 		e0 := m.MarshalKey("of", Singularize_Field_Text)
 		if e0 == nil {
@@ -8997,8 +8997,8 @@ func Singularize_Marshal(m jsn.Marshaler, val *Singularize) (err error) {
 
 // SlashText Separates words with left-leaning slashes '/'.
 type SlashText struct {
-	Does        []rt.Execute `if:"label=does"`
-	UserComment string
+	Does   []rt.Execute `if:"label=does"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -9084,7 +9084,7 @@ func SlashText_Optional_Marshal(m jsn.Marshaler, pv **SlashText) (err error) {
 }
 
 func SlashText_Marshal(m jsn.Marshaler, val *SlashText) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(SlashText_Flow{val}); err == nil {
 		e0 := m.MarshalKey("does", SlashText_Field_Does)
 		if e0 == nil {
@@ -9100,7 +9100,7 @@ func SlashText_Marshal(m jsn.Marshaler, val *SlashText) (err error) {
 
 // Softline Start a new line ( if not already at a new line. ).
 type Softline struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -9185,7 +9185,7 @@ func Softline_Optional_Marshal(m jsn.Marshaler, pv **Softline) (err error) {
 }
 
 func Softline_Marshal(m jsn.Marshaler, val *Softline) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Softline_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -9194,8 +9194,8 @@ func Softline_Marshal(m jsn.Marshaler, val *Softline) (err error) {
 
 // SpanText Writes text with spaces between words.
 type SpanText struct {
-	Does        []rt.Execute `if:"label=does"`
-	UserComment string
+	Does   []rt.Execute `if:"label=does"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -9281,7 +9281,7 @@ func SpanText_Optional_Marshal(m jsn.Marshaler, pv **SpanText) (err error) {
 }
 
 func SpanText_Marshal(m jsn.Marshaler, val *SpanText) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(SpanText_Flow{val}); err == nil {
 		e0 := m.MarshalKey("does", SpanText_Field_Does)
 		if e0 == nil {
@@ -9297,9 +9297,9 @@ func SpanText_Marshal(m jsn.Marshaler, val *SpanText) (err error) {
 
 // SumOf Add two numbers.
 type SumOf struct {
-	A           rt.NumberEval `if:"label=_"`
-	B           rt.NumberEval `if:"label=by,optional"`
-	UserComment string
+	A      rt.NumberEval `if:"label=_"`
+	B      rt.NumberEval `if:"label=by,optional"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -9386,7 +9386,7 @@ func SumOf_Optional_Marshal(m jsn.Marshaler, pv **SumOf) (err error) {
 }
 
 func SumOf_Marshal(m jsn.Marshaler, val *SumOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(SumOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", SumOf_Field_A)
 		if e0 == nil {
@@ -9478,7 +9478,7 @@ func Trigger_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Trigger) (err error
 
 // TriggerCycle
 type TriggerCycle struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -9563,7 +9563,7 @@ func TriggerCycle_Optional_Marshal(m jsn.Marshaler, pv **TriggerCycle) (err erro
 }
 
 func TriggerCycle_Marshal(m jsn.Marshaler, val *TriggerCycle) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(TriggerCycle_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -9572,7 +9572,7 @@ func TriggerCycle_Marshal(m jsn.Marshaler, val *TriggerCycle) (err error) {
 
 // TriggerOnce
 type TriggerOnce struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -9657,7 +9657,7 @@ func TriggerOnce_Optional_Marshal(m jsn.Marshaler, pv **TriggerOnce) (err error)
 }
 
 func TriggerOnce_Marshal(m jsn.Marshaler, val *TriggerOnce) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(TriggerOnce_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -9666,7 +9666,7 @@ func TriggerOnce_Marshal(m jsn.Marshaler, val *TriggerOnce) (err error) {
 
 // TriggerSwitch
 type TriggerSwitch struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -9751,7 +9751,7 @@ func TriggerSwitch_Optional_Marshal(m jsn.Marshaler, pv **TriggerSwitch) (err er
 }
 
 func TriggerSwitch_Marshal(m jsn.Marshaler, val *TriggerSwitch) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(TriggerSwitch_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -9760,7 +9760,7 @@ func TriggerSwitch_Marshal(m jsn.Marshaler, val *TriggerSwitch) (err error) {
 
 // Unequal The first value doesn't equal the second value.
 type Unequal struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -9845,7 +9845,7 @@ func Unequal_Optional_Marshal(m jsn.Marshaler, pv **Unequal) (err error) {
 }
 
 func Unequal_Marshal(m jsn.Marshaler, val *Unequal) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Unequal_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -9929,9 +9929,9 @@ func VariableName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]VariableName) 
 
 // While Keep running a series of actions while a condition is true.
 type While struct {
-	True        rt.BoolEval  `if:"label=_"`
-	Does        []rt.Execute `if:"label=does"`
-	UserComment string
+	True   rt.BoolEval  `if:"label=_"`
+	Does   []rt.Execute `if:"label=does"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -10018,7 +10018,7 @@ func While_Optional_Marshal(m jsn.Marshaler, pv **While) (err error) {
 }
 
 func While_Marshal(m jsn.Marshaler, val *While) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(While_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", While_Field_True)
 		if e0 == nil {

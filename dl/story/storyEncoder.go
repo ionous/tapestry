@@ -74,8 +74,8 @@ func recase(str string, cap bool) string {
 func (op *Story) Reformat() (out []StoryStatement) {
 	for i, p := range op.Paragraph {
 		// every new paragraph, write a "story break"
-		if i > 0 || len(p.UserComment) > 0 {
-			out = append(out, &StoryBreak{p.UserComment})
+		if i > 0 || len(p.Markup) > 0 {
+			out = append(out, &StoryBreak{p.Markup})
 		}
 		// add all the lines of the paragraph to the output.
 		for _, s := range p.StoryStatement {
@@ -95,13 +95,13 @@ func ReformatStory(lines []StoryStatement) (out Story) {
 		} else if i == 0 {
 			// if the first statement was a story break,
 			// that was just a helper to store the first paragraph's comment.
-			p.UserComment = br.UserComment
+			p.Markup = br.Markup
 		} else {
 			// any (other) story breaks generate new paragraphs
 			// ( so first, flush our old one )
 			out.Paragraph = append(out.Paragraph, p)
 			// the comment from the break is the comment of the new paragraph
-			p = Paragraph{UserComment: br.UserComment}
+			p = Paragraph{Markup: br.Markup}
 		}
 	}
 	// flush any pending paragraph

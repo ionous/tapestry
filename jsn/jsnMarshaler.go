@@ -14,8 +14,10 @@ type Marshalee interface {
 type Marshaler interface {
 	// is the implementation writing json or reading it.
 	IsEncoding() bool
-	// sets a unique id for the next block or primitive value.
-	SetComment(*string)
+	// sets custom data for the next block or primitive value.
+	// markup can sometimes include comments, source file&line info, blockly colours, etc.
+	// things that add meaning to a value without changing the fundamental nature of that value.
+	SetMarkup(pmap *map[string]any)
 	// report an error
 	// errors for values inside of blocks are generally reported here
 	// otherwise they are returned on the stack.

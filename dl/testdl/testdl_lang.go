@@ -92,8 +92,8 @@ func TestBool_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestBool) (err err
 
 // TestEmbed
 type TestEmbed struct {
-	TestFlow    TestFlow `if:"label=test_flow"`
-	UserComment string
+	TestFlow TestFlow `if:"label=test_flow"`
+	Markup   map[string]any
 }
 
 // User implemented slots:
@@ -179,7 +179,7 @@ func TestEmbed_Optional_Marshal(m jsn.Marshaler, pv **TestEmbed) (err error) {
 }
 
 func TestEmbed_Marshal(m jsn.Marshaler, val *TestEmbed) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(TestEmbed_Flow{val}); err == nil {
 		e0 := m.MarshalKey("test_flow", TestEmbed_Field_TestFlow)
 		if e0 == nil {
@@ -195,13 +195,13 @@ func TestEmbed_Marshal(m jsn.Marshaler, val *TestEmbed) (err error) {
 
 // TestFlow
 type TestFlow struct {
-	Slot        TestSlot   `if:"label=slot,optional"`
-	Txt         TestTxt    `if:"label=txt,optional"`
-	Num         float64    `if:"label=num,optional,type=test_num"`
-	Bool        TestBool   `if:"label=bool,optional"`
-	Swap        TestSwap   `if:"label=swap,optional"`
-	Slots       []TestSlot `if:"label=slots,optional"`
-	UserComment string
+	Slot   TestSlot   `if:"label=slot,optional"`
+	Txt    TestTxt    `if:"label=txt,optional"`
+	Num    float64    `if:"label=num,optional,type=test_num"`
+	Bool   TestBool   `if:"label=bool,optional"`
+	Swap   TestSwap   `if:"label=swap,optional"`
+	Slots  []TestSlot `if:"label=slots,optional"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -292,7 +292,7 @@ func TestFlow_Optional_Marshal(m jsn.Marshaler, pv **TestFlow) (err error) {
 }
 
 func TestFlow_Marshal(m jsn.Marshaler, val *TestFlow) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(TestFlow_Flow{val}); err == nil {
 		e0 := m.MarshalKey("slot", TestFlow_Field_Slot)
 		if e0 == nil {

@@ -12,8 +12,8 @@ import (
 
 // RenderExp
 type RenderExp struct {
-	Expression  rt.TextEval `if:"label=_"`
-	UserComment string
+	Expression rt.TextEval `if:"label=_"`
+	Markup     map[string]any
 }
 
 // User implemented slots:
@@ -98,7 +98,7 @@ func RenderExp_Optional_Marshal(m jsn.Marshaler, pv **RenderExp) (err error) {
 }
 
 func RenderExp_Marshal(m jsn.Marshaler, val *RenderExp) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RenderExp_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderExp_Field_Expression)
 		if e0 == nil {
@@ -115,8 +115,8 @@ func RenderExp_Marshal(m jsn.Marshaler, val *RenderExp) (err error) {
 // RenderField in template phrases, picks between record variables, object variables, and named global objects.
 // ex. could be "ringBearer", "SamWise", or "frodo"
 type RenderField struct {
-	Name        rt.TextEval `if:"label=_"`
-	UserComment string
+	Name   rt.TextEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -201,7 +201,7 @@ func RenderField_Optional_Marshal(m jsn.Marshaler, pv **RenderField) (err error)
 }
 
 func RenderField_Marshal(m jsn.Marshaler, val *RenderField) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RenderField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderField_Field_Name)
 		if e0 == nil {
@@ -305,8 +305,8 @@ func RenderFlags_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderFlags) (e
 // if the name isn't a variable but refers to some object: return that object's printed object name.
 // otherwise, its an error.
 type RenderName struct {
-	Name        string `if:"label=_,type=text"`
-	UserComment string
+	Name   string `if:"label=_,type=text"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -391,7 +391,7 @@ func RenderName_Optional_Marshal(m jsn.Marshaler, pv **RenderName) (err error) {
 }
 
 func RenderName_Marshal(m jsn.Marshaler, val *RenderName) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RenderName_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderName_Field_Name)
 		if e0 == nil {
@@ -408,8 +408,8 @@ func RenderName_Marshal(m jsn.Marshaler, val *RenderName) (err error) {
 // RenderPattern printing is generally an activity b/c say is an activity
 // and we want the ability to say several things in series.
 type RenderPattern struct {
-	Call        core.CallPattern `if:"label=_"`
-	UserComment string
+	Call   core.CallPattern `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -497,7 +497,7 @@ func RenderPattern_Optional_Marshal(m jsn.Marshaler, pv **RenderPattern) (err er
 }
 
 func RenderPattern_Marshal(m jsn.Marshaler, val *RenderPattern) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RenderPattern_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderPattern_Field_Call)
 		if e0 == nil {
@@ -513,9 +513,9 @@ func RenderPattern_Marshal(m jsn.Marshaler, val *RenderPattern) (err error) {
 
 // RenderRef returns the value of a variable or the id of an object.
 type RenderRef struct {
-	Name        core.VariableName `if:"label=_"`
-	Flags       RenderFlags       `if:"label=flags"`
-	UserComment string
+	Name   core.VariableName `if:"label=_"`
+	Flags  RenderFlags       `if:"label=flags"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -604,7 +604,7 @@ func RenderRef_Optional_Marshal(m jsn.Marshaler, pv **RenderRef) (err error) {
 }
 
 func RenderRef_Marshal(m jsn.Marshaler, val *RenderRef) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RenderRef_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderRef_Field_Name)
 		if e0 == nil {

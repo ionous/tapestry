@@ -11,10 +11,10 @@ import (
 // ChoiceSpec for swap choices
 // if either label or type are not specified, they are derived from the name.
 type ChoiceSpec struct {
-	Name        string `if:"label=_,type=text"`
-	Label       string `if:"label=label,optional,type=text"`
-	Type        string `if:"label=type,optional,type=text"`
-	UserComment string
+	Name   string `if:"label=_,type=text"`
+	Label  string `if:"label=label,optional,type=text"`
+	Type   string `if:"label=type,optional,type=text"`
+	Markup map[string]any
 }
 
 func (*ChoiceSpec) Compose() composer.Spec {
@@ -99,7 +99,7 @@ func ChoiceSpec_Optional_Marshal(m jsn.Marshaler, pv **ChoiceSpec) (err error) {
 }
 
 func ChoiceSpec_Marshal(m jsn.Marshaler, val *ChoiceSpec) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ChoiceSpec_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ChoiceSpec_Field_Name)
 		if e0 == nil {
@@ -130,10 +130,10 @@ func ChoiceSpec_Marshal(m jsn.Marshaler, val *ChoiceSpec) (err error) {
 // FlowSpec name: overrides the name of the operation used in compact story files.
 // phrase: english text with embedded tokens referring to existing terms.
 type FlowSpec struct {
-	Name        string     `if:"label=_,optional,type=text"`
-	Phrase      string     `if:"label=phrase,optional,type=text"`
-	Terms       []TermSpec `if:"label=uses"`
-	UserComment string
+	Name   string     `if:"label=_,optional,type=text"`
+	Phrase string     `if:"label=phrase,optional,type=text"`
+	Terms  []TermSpec `if:"label=uses"`
+	Markup map[string]any
 }
 
 func (*FlowSpec) Compose() composer.Spec {
@@ -218,7 +218,7 @@ func FlowSpec_Optional_Marshal(m jsn.Marshaler, pv **FlowSpec) (err error) {
 }
 
 func FlowSpec_Marshal(m jsn.Marshaler, val *FlowSpec) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(FlowSpec_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FlowSpec_Field_Name)
 		if e0 == nil {
@@ -248,8 +248,8 @@ func FlowSpec_Marshal(m jsn.Marshaler, val *FlowSpec) (err error) {
 
 // GroupSpec a collection of one or more other specs.
 type GroupSpec struct {
-	Specs       []TypeSpec `if:"label=contains"`
-	UserComment string
+	Specs  []TypeSpec `if:"label=contains"`
+	Markup map[string]any
 }
 
 func (*GroupSpec) Compose() composer.Spec {
@@ -332,7 +332,7 @@ func GroupSpec_Optional_Marshal(m jsn.Marshaler, pv **GroupSpec) (err error) {
 }
 
 func GroupSpec_Marshal(m jsn.Marshaler, val *GroupSpec) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(GroupSpec_Flow{val}); err == nil {
 		e0 := m.MarshalKey("contains", GroupSpec_Field_Specs)
 		if e0 == nil {
@@ -352,7 +352,7 @@ type NumSpec struct {
 	Name        string    `if:"label=_,optional,type=text"`
 	Exclusively bool      `if:"label=exclusively,optional,type=bool"`
 	Uses        []float64 `if:"label=uses,type=number"`
-	UserComment string
+	Markup      map[string]any
 }
 
 func (*NumSpec) Compose() composer.Spec {
@@ -437,7 +437,7 @@ func NumSpec_Optional_Marshal(m jsn.Marshaler, pv **NumSpec) (err error) {
 }
 
 func NumSpec_Marshal(m jsn.Marshaler, val *NumSpec) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(NumSpec_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NumSpec_Field_Name)
 		if e0 == nil {
@@ -468,9 +468,9 @@ func NumSpec_Marshal(m jsn.Marshaler, val *NumSpec) (err error) {
 // OptionSpec for string options
 // if the label isnt specified, its derived from the name.
 type OptionSpec struct {
-	Name        string `if:"label=_,type=text"`
-	Label       string `if:"label=label,optional,type=text"`
-	UserComment string
+	Name   string `if:"label=_,type=text"`
+	Label  string `if:"label=label,optional,type=text"`
+	Markup map[string]any
 }
 
 func (*OptionSpec) Compose() composer.Spec {
@@ -554,7 +554,7 @@ func OptionSpec_Optional_Marshal(m jsn.Marshaler, pv **OptionSpec) (err error) {
 }
 
 func OptionSpec_Marshal(m jsn.Marshaler, val *OptionSpec) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(OptionSpec_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", OptionSpec_Field_Name)
 		if e0 == nil {
@@ -578,7 +578,7 @@ func OptionSpec_Marshal(m jsn.Marshaler, val *OptionSpec) (err error) {
 // SlotSpec A member of a flow which any of the other types can opt into.
 // Aka an interface.
 type SlotSpec struct {
-	UserComment string
+	Markup map[string]any
 }
 
 func (*SlotSpec) Compose() composer.Spec {
@@ -660,7 +660,7 @@ func SlotSpec_Optional_Marshal(m jsn.Marshaler, pv **SlotSpec) (err error) {
 }
 
 func SlotSpec_Marshal(m jsn.Marshaler, val *SlotSpec) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(SlotSpec_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -673,7 +673,7 @@ type StrSpec struct {
 	Name        string       `if:"label=_,optional,type=text"`
 	Exclusively bool         `if:"label=exclusively,optional,type=bool"`
 	Uses        []OptionSpec `if:"label=uses"`
-	UserComment string
+	Markup      map[string]any
 }
 
 func (*StrSpec) Compose() composer.Spec {
@@ -758,7 +758,7 @@ func StrSpec_Optional_Marshal(m jsn.Marshaler, pv **StrSpec) (err error) {
 }
 
 func StrSpec_Marshal(m jsn.Marshaler, val *StrSpec) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(StrSpec_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", StrSpec_Field_Name)
 		if e0 == nil {
@@ -788,9 +788,9 @@ func StrSpec_Marshal(m jsn.Marshaler, val *StrSpec) (err error) {
 
 // SwapSpec specifies a choice between one or more other types.
 type SwapSpec struct {
-	Name        string       `if:"label=_,optional,type=text"`
-	Between     []ChoiceSpec `if:"label=between"`
-	UserComment string
+	Name    string       `if:"label=_,optional,type=text"`
+	Between []ChoiceSpec `if:"label=between"`
+	Markup  map[string]any
 }
 
 func (*SwapSpec) Compose() composer.Spec {
@@ -874,7 +874,7 @@ func SwapSpec_Optional_Marshal(m jsn.Marshaler, pv **SwapSpec) (err error) {
 }
 
 func SwapSpec_Marshal(m jsn.Marshaler, val *SwapSpec) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(SwapSpec_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", SwapSpec_Field_Name)
 		if e0 == nil {
@@ -899,13 +899,13 @@ func SwapSpec_Marshal(m jsn.Marshaler, val *SwapSpec) (err error) {
 // The label doubles as the parameter name unless an explicit name is specified.
 // The type, if not specified, uses the name.
 type TermSpec struct {
-	Label       string `if:"label=_,type=text"`
-	Name        string `if:"label=name,optional,type=text"`
-	Type        string `if:"label=type,optional,type=text"`
-	Private     bool   `if:"label=private,optional,type=bool"`
-	Optional    bool   `if:"label=optional,optional,type=bool"`
-	Repeats     bool   `if:"label=repeats,optional,type=bool"`
-	UserComment string
+	Label    string `if:"label=_,type=text"`
+	Name     string `if:"label=name,optional,type=text"`
+	Type     string `if:"label=type,optional,type=text"`
+	Private  bool   `if:"label=private,optional,type=bool"`
+	Optional bool   `if:"label=optional,optional,type=bool"`
+	Repeats  bool   `if:"label=repeats,optional,type=bool"`
+	Markup   map[string]any
 }
 
 func (*TermSpec) Compose() composer.Spec {
@@ -993,7 +993,7 @@ func TermSpec_Optional_Marshal(m jsn.Marshaler, pv **TermSpec) (err error) {
 }
 
 func TermSpec_Marshal(m jsn.Marshaler, val *TermSpec) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(TermSpec_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", TermSpec_Field_Label)
 		if e0 == nil {
@@ -1044,11 +1044,11 @@ func TermSpec_Marshal(m jsn.Marshaler, val *TermSpec) (err error) {
 
 // TypeSpec can optionally fit one or more slots, or be part of one or more groups.
 type TypeSpec struct {
-	Name        string   `if:"label=_,type=text"`
-	Slots       []string `if:"label=slots,optional,type=text"`
-	Groups      []string `if:"label=groups,optional,type=text"`
-	Spec        UsesSpec `if:"label=with"`
-	UserComment string
+	Name   string   `if:"label=_,type=text"`
+	Slots  []string `if:"label=slots,optional,type=text"`
+	Groups []string `if:"label=groups,optional,type=text"`
+	Spec   UsesSpec `if:"label=with"`
+	Markup map[string]any
 }
 
 func (*TypeSpec) Compose() composer.Spec {
@@ -1134,7 +1134,7 @@ func TypeSpec_Optional_Marshal(m jsn.Marshaler, pv **TypeSpec) (err error) {
 }
 
 func TypeSpec_Marshal(m jsn.Marshaler, val *TypeSpec) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(TypeSpec_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", TypeSpec_Field_Name)
 		if e0 == nil {

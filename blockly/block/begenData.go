@@ -1,6 +1,10 @@
 package block
 
-import "git.sr.ht/~ionous/tapestry/web/js"
+import (
+	"strings"
+
+	"git.sr.ht/~ionous/tapestry/web/js"
+)
 
 // helper for writing the inner bits of a blockly block definition
 // ( ex. anything inside of "block" or "shadow" keys )
@@ -9,7 +13,7 @@ type blockData struct {
 	zeroPos                    bool
 	fields, inputs, extraState js.Builder
 	allowExtraData             bool
-	comment                    string
+	markup                     map[string]any
 }
 
 // start a new input connection from this block to some new block
@@ -83,7 +87,7 @@ func (b *blockData) writeTo(out *js.Builder) {
 	}
 
 	// comment, if any:
-	if cmt := b.comment; len(cmt) > 0 {
+	if cmt := comment(b.markup); len(cmt) > 0 {
 		out.R(js.Comma).
 			Q("icons").R(js.Colon).Brace(js.Obj, func(icons *js.Builder) {
 			icons.Q("comment").R(js.Colon).Brace(js.Obj, func(com *js.Builder) {
@@ -102,6 +106,16 @@ func (b *blockData) writeTo(out *js.Builder) {
 	if els := &b.inputs; els.Len() > 0 {
 		writeContents(out, "inputs", els)
 	}
+}
+
+func comment(markup map[string]any) (ret string) {
+	switch cmt := markup["comment"].(type) {
+	case string:
+		ret = cmt
+	case []string:
+		ret = strings.Join(cmt, "\n")
+	}
+	return
 }
 
 // helper to write a key:object where the object {} contains some arbitrary contents.

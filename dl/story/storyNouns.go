@@ -71,7 +71,7 @@ func (op *CountedNouns) ImportNoun(k *Importer) (err error) {
 		kindOrKinds := op.Kinds.String()
 		names := make([]string, cnt)
 		for i := 0; i < cnt; i++ {
-			noun := k.newCounter(kindOrKinds, "")
+			noun := k.newCounter(kindOrKinds, nil)
 			k.Env().Recent.Nouns.Add(noun) // for relations, etc.
 			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: "counted", Value: B(true)})
 			names[i] = noun

@@ -8,12 +8,12 @@ import (
 )
 
 // Op represents a partial decoding of a command in the compact format.
-// ex. {"Sig:":  <Msg>, "--": "Cmt"}
+// ex. {"Sig:":  <Msg>, "--": "Markup"}
 // ( note: the registry uses the raw signature without additional processing to find associated golang struct )
 type Op struct {
-	Sig string          // raw signature containing one or more colon separators
-	Cmt string          // comment from "--" fields
-	Msg json.RawMessage // probably an array of values
+	Sig    string          // raw signature containing one or more colon separators
+	Markup map[string]any  // metadata from "--" fields
+	Msg    json.RawMessage // probably an array of values
 }
 
 // ReadOp - interpret the passed json as the start of a compact command.
@@ -26,6 +26,13 @@ func ReadOp(msg json.RawMessage) (ret Op, err error) {
 		ret, err = parseOp(d) // start by trying to read the {} format
 	}
 	return
+}
+
+func (op *Op) AddMarkup(k string, value any) {
+	if op.Markup == nil {
+		op.Markup = make(map[string]any)
+	}
+	op.Markup[k] = value
 }
 
 // ReadMsg - given a valid Op, split out its call signature and associated parameters.
@@ -59,17 +66,15 @@ func (op *Op) ReadMsg() (retSig Signature, retArgs []json.RawMessage, err error)
 
 func parseOp(d map[string]json.RawMessage) (ret Op, err error) {
 	var out Op
-	var hadComment bool
 	for k, v := range d {
-		if k == commentMarker {
-			hadComment = true
-			if e := json.Unmarshal(v, &out.Cmt); e != nil {
-				var lines []string
-				if e := json.Unmarshal(v, &lines); e != nil {
-					err = errutil.New("couldnt read comment", e)
-					break
-				}
-				out.Cmt = strings.Join(lines, "\n")
+		if strings.HasPrefix(k, markupMarker) {
+			var value any
+			if e := json.Unmarshal(v, &value); e != nil {
+				err = errutil.New("couldnt read markup at", k, e)
+			} else if key := k[len(markupMarker):]; len(key) == 0 {
+				out.AddMarkup("comment", value)
+			} else {
+				out.AddMarkup(key, value)
 			}
 		} else if len(out.Sig) > 0 {
 			err = errutil.New("expected only a single key", d)
@@ -82,12 +87,14 @@ func parseOp(d map[string]json.RawMessage) (ret Op, err error) {
 	if err == nil {
 		// in the case that there was no command but there was a comment marker
 		// let the command *be* the comment marker
-		if len(out.Sig) == 0 && hadComment {
-			out.Sig = commentMarker
+		if len(out.Sig) == 0 {
+			if _, ok := out.Markup["comment"]; ok {
+				out.Sig = markupMarker
+			}
 		}
 		ret = out
 	}
 	return
 }
 
-const commentMarker = "--"
+const markupMarker = "--"

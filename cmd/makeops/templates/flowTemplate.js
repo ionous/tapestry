@@ -18,7 +18,7 @@ type {{Pascal name}} struct {
   {{~#if optional}},optional{{/if}}\
   {{~#if (Unboxed type)}},type={{type}}{{/if}}"\`
 {{/unless}}{{/each~}}
-  UserComment string
+  Metadata map[string]any
 }
 {{#if with.slots}}
 // User implemented slots:
@@ -61,7 +61,7 @@ func {{Pascal name}}_Optional_Marshal(m jsn.Marshaler, pv **{{Pascal name}}) (er
 }
 
 func {{Pascal name}}_Marshal(m jsn.Marshaler, val *{{Pascal name}}) (err error) {
-  m.SetComment(&val.UserComment)
+  m.SetMetadata(val.Metadata)
   if err = m.MarshalBlock({{Pascal name}}_Flow{val}); err == nil {
 {{~#each params}}{{#unless internal}}{{#unless expanded}}
     e{{@index}} := m.MarshalKey("{{sel}}", {{Pascal ../name}}_Field_{{Pascal key}})

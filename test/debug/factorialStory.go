@@ -7,6 +7,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
+func UserComment(s string) map[string]any {
+	return map[string]any{"comment": s}
+}
+
 // a program that can check factorials
 var FactorialStory = &story.Story{
 	Paragraph: []story.Paragraph{{
@@ -16,7 +20,7 @@ var FactorialStory = &story.Story{
 					Str: "factorial",
 				},
 				Test: &story.TestOutput{
-					UserComment: "3! should equal 6",
+					Markup: UserComment("3! should equal 6"),
 					Lines: prim.Lines{
 						Str: "6",
 					}}},
@@ -29,13 +33,13 @@ var FactorialStory = &story.Story{
 			&story.PatternDecl{
 				Name: factorialName,
 				PatternReturn: &story.PatternReturn{Result: &story.NumberField{
-					UserComment: "the result uses the same variable as the pattern input does",
-					Name:        numVar.Str,
+					Markup: UserComment("the result uses the same variable as the pattern input does"),
+					Name:   numVar.Str,
 				}},
 				Params: []story.Field{
 					&story.NumberField{
-						UserComment: "just one argument, a number called 'num'",
-						Name:        numVar.Str,
+						Markup: UserComment("just one argument, a number called 'num'"),
+						Name:   numVar.Str,
 					}},
 			},
 			&story.PatternActions{
@@ -47,9 +51,9 @@ var FactorialStory = &story.Story{
 			&story.PatternActions{
 				Name: factorialName,
 				Rules: []story.PatternRule{{
-					UserComment: "the rule considered first is the rule that was written last:",
-					Guard:       FactorialIsZero,
-					Does:        FactorialUseOne,
+					Markup: UserComment("the rule considered first is the rule that was written last:"),
+					Guard:  FactorialIsZero,
+					Does:   FactorialUseOne,
 				}},
 			}},
 	}},
@@ -64,8 +68,8 @@ var FactorialCheck = []rt.Execute{
 				Arguments: []rt.Arg{rt.Arg{
 					Name: "num",
 					From: &core.FromNum{
-						UserComment: "start the factorial with '3'",
-						Val:         F(3),
+						Markup: UserComment("start the factorial with '3'"),
+						Val:    F(3),
 					},
 				}}},
 		}},
@@ -89,17 +93,17 @@ var FactorialUseOne = []rt.Execute{
 	&core.Assign{
 		Var: numVar,
 		From: &core.FromNum{
-			Val:         F(1),
-			UserComment: "...return 1.",
+			Val:    F(1),
+			Markup: UserComment("...return 1."),
 		},
 	},
 }
 
 var FactorialIsZero = &core.CompareNum{
-	UserComment: "so, when we've reached 0...",
-	A:           &core.GetVar{Name: numVar},
-	Is:          &core.Equal{},
-	B:           F(0)}
+	Markup: UserComment("so, when we've reached 0..."),
+	A:      &core.GetVar{Name: numVar},
+	Is:     &core.Equal{},
+	B:      F(0)}
 
 var factorialName = core.PatternName{Str: "factorial"}
 var numVar = core.VariableName{Str: "num"}

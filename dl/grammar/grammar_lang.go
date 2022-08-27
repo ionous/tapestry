@@ -10,8 +10,8 @@ import (
 
 // Action makes a parser scanner producing a script defined action.
 type Action struct {
-	Action      string `if:"label=_,type=text"`
-	UserComment string
+	Action string `if:"label=_,type=text"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -97,7 +97,7 @@ func Action_Optional_Marshal(m jsn.Marshaler, pv **Action) (err error) {
 }
 
 func Action_Marshal(m jsn.Marshaler, val *Action) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Action_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Action_Field_Action)
 		if e0 == nil {
@@ -113,9 +113,9 @@ func Action_Marshal(m jsn.Marshaler, val *Action) (err error) {
 
 // Alias allows the user to refer to a noun by one or more other terms.
 type Alias struct {
-	Names       []string `if:"label=_,type=text"`
-	AsNoun      string   `if:"label=as_noun,type=text"`
-	UserComment string
+	Names  []string `if:"label=_,type=text"`
+	AsNoun string   `if:"label=as_noun,type=text"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -201,7 +201,7 @@ func Alias_Optional_Marshal(m jsn.Marshaler, pv **Alias) (err error) {
 }
 
 func Alias_Marshal(m jsn.Marshaler, val *Alias) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Alias_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Alias_Field_Names)
 		if e0 == nil {
@@ -224,8 +224,8 @@ func Alias_Marshal(m jsn.Marshaler, val *Alias) (err error) {
 
 // AllOf makes a parser scanner.
 type AllOf struct {
-	Series      []ScannerMaker `if:"label=_"`
-	UserComment string
+	Series []ScannerMaker `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -310,7 +310,7 @@ func AllOf_Optional_Marshal(m jsn.Marshaler, pv **AllOf) (err error) {
 }
 
 func AllOf_Marshal(m jsn.Marshaler, val *AllOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(AllOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AllOf_Field_Series)
 		if e0 == nil {
@@ -326,8 +326,8 @@ func AllOf_Marshal(m jsn.Marshaler, val *AllOf) (err error) {
 
 // AnyOf makes a parser scanner.
 type AnyOf struct {
-	Options     []ScannerMaker `if:"label=_"`
-	UserComment string
+	Options []ScannerMaker `if:"label=_"`
+	Markup  map[string]any
 }
 
 // User implemented slots:
@@ -412,7 +412,7 @@ func AnyOf_Optional_Marshal(m jsn.Marshaler, pv **AnyOf) (err error) {
 }
 
 func AnyOf_Marshal(m jsn.Marshaler, val *AnyOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(AnyOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AnyOf_Field_Options)
 		if e0 == nil {
@@ -428,9 +428,9 @@ func AnyOf_Marshal(m jsn.Marshaler, val *AnyOf) (err error) {
 
 // Directive starts a parser scanner.
 type Directive struct {
-	Lede        []string       `if:"label=_,type=text"`
-	Scans       []ScannerMaker `if:"label=scans"`
-	UserComment string
+	Lede   []string       `if:"label=_,type=text"`
+	Scans  []ScannerMaker `if:"label=scans"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -516,7 +516,7 @@ func Directive_Optional_Marshal(m jsn.Marshaler, pv **Directive) (err error) {
 }
 
 func Directive_Marshal(m jsn.Marshaler, val *Directive) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Directive_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Directive_Field_Lede)
 		if e0 == nil {
@@ -539,8 +539,8 @@ func Directive_Marshal(m jsn.Marshaler, val *Directive) (err error) {
 
 // Grammar Read what the player types and turn it into actions.
 type Grammar struct {
-	Grammar     GrammarMaker `if:"label=_"`
-	UserComment string
+	Grammar GrammarMaker `if:"label=_"`
+	Markup  map[string]any
 }
 
 func (*Grammar) Compose() composer.Spec {
@@ -622,7 +622,7 @@ func Grammar_Optional_Marshal(m jsn.Marshaler, pv **Grammar) (err error) {
 }
 
 func Grammar_Marshal(m jsn.Marshaler, val *Grammar) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Grammar_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Grammar_Field_Grammar)
 		if e0 == nil {
@@ -707,8 +707,8 @@ func GrammarMaker_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]GrammarMaker) 
 
 // Noun makes a parser scanner.
 type Noun struct {
-	Kind        string `if:"label=_,type=text"`
-	UserComment string
+	Kind   string `if:"label=_,type=text"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -793,7 +793,7 @@ func Noun_Optional_Marshal(m jsn.Marshaler, pv **Noun) (err error) {
 }
 
 func Noun_Marshal(m jsn.Marshaler, val *Noun) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Noun_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Noun_Field_Kind)
 		if e0 == nil {
@@ -809,8 +809,8 @@ func Noun_Marshal(m jsn.Marshaler, val *Noun) (err error) {
 
 // Retarget makes a parser scanner.
 type Retarget struct {
-	Span        []ScannerMaker `if:"label=_"`
-	UserComment string
+	Span   []ScannerMaker `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -895,7 +895,7 @@ func Retarget_Optional_Marshal(m jsn.Marshaler, pv **Retarget) (err error) {
 }
 
 func Retarget_Marshal(m jsn.Marshaler, val *Retarget) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Retarget_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Retarget_Field_Span)
 		if e0 == nil {
@@ -911,8 +911,8 @@ func Retarget_Marshal(m jsn.Marshaler, val *Retarget) (err error) {
 
 // Reverse makes a parser scanner.
 type Reverse struct {
-	Reverses    []ScannerMaker `if:"label=_"`
-	UserComment string
+	Reverses []ScannerMaker `if:"label=_"`
+	Markup   map[string]any
 }
 
 // User implemented slots:
@@ -997,7 +997,7 @@ func Reverse_Optional_Marshal(m jsn.Marshaler, pv **Reverse) (err error) {
 }
 
 func Reverse_Marshal(m jsn.Marshaler, val *Reverse) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Reverse_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Reverse_Field_Reverses)
 		if e0 == nil {
@@ -1082,8 +1082,8 @@ func ScannerMaker_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ScannerMaker) 
 
 // Self makes a parser scanner which matches the player. ( the player string is just to make the composer happy. ).
 type Self struct {
-	Player      string `if:"label=_,type=text"`
-	UserComment string
+	Player string `if:"label=_,type=text"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1168,7 +1168,7 @@ func Self_Optional_Marshal(m jsn.Marshaler, pv **Self) (err error) {
 }
 
 func Self_Marshal(m jsn.Marshaler, val *Self) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Self_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Self_Field_Player)
 		if e0 == nil {
@@ -1184,8 +1184,8 @@ func Self_Marshal(m jsn.Marshaler, val *Self) (err error) {
 
 // Words makes a parser scanner.
 type Words struct {
-	Words       []string `if:"label=_,type=text"`
-	UserComment string
+	Words  []string `if:"label=_,type=text"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1270,7 +1270,7 @@ func Words_Optional_Marshal(m jsn.Marshaler, pv **Words) (err error) {
 }
 
 func Words_Marshal(m jsn.Marshaler, val *Words) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Words_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Words_Field_Words)
 		if e0 == nil {

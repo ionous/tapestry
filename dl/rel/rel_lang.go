@@ -10,9 +10,9 @@ import (
 
 // ReciprocalOf Returns the implied relative of a noun (ex. the source in a one-to-many relation.).
 type ReciprocalOf struct {
-	Via         RelationName `if:"label=_"`
-	Object      rt.TextEval  `if:"label=object"`
-	UserComment string
+	Via    RelationName `if:"label=_"`
+	Object rt.TextEval  `if:"label=object"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -99,7 +99,7 @@ func ReciprocalOf_Optional_Marshal(m jsn.Marshaler, pv **ReciprocalOf) (err erro
 }
 
 func ReciprocalOf_Marshal(m jsn.Marshaler, val *ReciprocalOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ReciprocalOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ReciprocalOf_Field_Via)
 		if e0 == nil {
@@ -122,9 +122,9 @@ func ReciprocalOf_Marshal(m jsn.Marshaler, val *ReciprocalOf) (err error) {
 
 // ReciprocalsOf Returns the implied relative of a noun (ex. the sources of a many-to-many relation.).
 type ReciprocalsOf struct {
-	Via         RelationName `if:"label=_"`
-	Object      rt.TextEval  `if:"label=object"`
-	UserComment string
+	Via    RelationName `if:"label=_"`
+	Object rt.TextEval  `if:"label=object"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -211,7 +211,7 @@ func ReciprocalsOf_Optional_Marshal(m jsn.Marshaler, pv **ReciprocalsOf) (err er
 }
 
 func ReciprocalsOf_Marshal(m jsn.Marshaler, val *ReciprocalsOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ReciprocalsOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ReciprocalsOf_Field_Via)
 		if e0 == nil {
@@ -234,10 +234,10 @@ func ReciprocalsOf_Marshal(m jsn.Marshaler, val *ReciprocalsOf) (err error) {
 
 // Relate Relate two nouns.
 type Relate struct {
-	Object      rt.TextEval  `if:"label=_"`
-	ToObject    rt.TextEval  `if:"label=to"`
-	Via         RelationName `if:"label=via"`
-	UserComment string
+	Object   rt.TextEval  `if:"label=_"`
+	ToObject rt.TextEval  `if:"label=to"`
+	Via      RelationName `if:"label=via"`
+	Markup   map[string]any
 }
 
 // User implemented slots:
@@ -324,7 +324,7 @@ func Relate_Optional_Marshal(m jsn.Marshaler, pv **Relate) (err error) {
 }
 
 func Relate_Marshal(m jsn.Marshaler, val *Relate) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Relate_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Relate_Field_Object)
 		if e0 == nil {
@@ -429,9 +429,9 @@ func RelationName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RelationName) 
 
 // RelativeOf Returns the relative of a noun (ex. the target of a one-to-one relation.).
 type RelativeOf struct {
-	Via         RelationName `if:"label=_"`
-	Object      rt.TextEval  `if:"label=object"`
-	UserComment string
+	Via    RelationName `if:"label=_"`
+	Object rt.TextEval  `if:"label=object"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -518,7 +518,7 @@ func RelativeOf_Optional_Marshal(m jsn.Marshaler, pv **RelativeOf) (err error) {
 }
 
 func RelativeOf_Marshal(m jsn.Marshaler, val *RelativeOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RelativeOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RelativeOf_Field_Via)
 		if e0 == nil {
@@ -541,9 +541,9 @@ func RelativeOf_Marshal(m jsn.Marshaler, val *RelativeOf) (err error) {
 
 // RelativesOf Returns the relatives of a noun as a list of names (ex. the targets of one-to-many relation).
 type RelativesOf struct {
-	Via         RelationName `if:"label=_"`
-	Object      rt.TextEval  `if:"label=object"`
-	UserComment string
+	Via    RelationName `if:"label=_"`
+	Object rt.TextEval  `if:"label=object"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -630,7 +630,7 @@ func RelativesOf_Optional_Marshal(m jsn.Marshaler, pv **RelativesOf) (err error)
 }
 
 func RelativesOf_Marshal(m jsn.Marshaler, val *RelativesOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RelativesOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RelativesOf_Field_Via)
 		if e0 == nil {

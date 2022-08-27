@@ -96,8 +96,8 @@ func AbstractAction_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AbstractActi
 
 // ActionContext
 type ActionContext struct {
-	Kind        SingularKind `if:"label=_"`
-	UserComment string
+	Kind   SingularKind `if:"label=_"`
+	Markup map[string]any
 }
 
 func (*ActionContext) Compose() composer.Spec {
@@ -179,7 +179,7 @@ func ActionContext_Optional_Marshal(m jsn.Marshaler, pv **ActionContext) (err er
 }
 
 func ActionContext_Marshal(m jsn.Marshaler, val *ActionContext) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ActionContext_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ActionContext_Field_Kind)
 		if e0 == nil {
@@ -198,7 +198,7 @@ type ActionDecl struct {
 	Event        EventName    `if:"label=_"`
 	Action       ActionName   `if:"label=action"`
 	ActionParams ActionParams `if:"label=args"`
-	UserComment  string
+	Markup       map[string]any
 }
 
 // User implemented slots:
@@ -286,7 +286,7 @@ func ActionDecl_Optional_Marshal(m jsn.Marshaler, pv **ActionDecl) (err error) {
 }
 
 func ActionDecl_Marshal(m jsn.Marshaler, val *ActionDecl) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ActionDecl_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ActionDecl_Field_Event)
 		if e0 == nil {
@@ -910,8 +910,8 @@ func Aspect_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Aspect) (err error) 
 
 // AspectField
 type AspectField struct {
-	Aspect      string `if:"label=_,type=text"`
-	UserComment string
+	Aspect string `if:"label=_,type=text"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -997,7 +997,7 @@ func AspectField_Optional_Marshal(m jsn.Marshaler, pv **AspectField) (err error)
 }
 
 func AspectField_Marshal(m jsn.Marshaler, val *AspectField) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(AspectField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AspectField_Field_Aspect)
 		if e0 == nil {
@@ -1015,7 +1015,7 @@ func AspectField_Marshal(m jsn.Marshaler, val *AspectField) (err error) {
 type AspectTraits struct {
 	Aspect      Aspect      `if:"label=_"`
 	TraitPhrase TraitPhrase `if:"label=trait_phrase"`
-	UserComment string
+	Markup      map[string]any
 }
 
 // User implemented slots:
@@ -1101,7 +1101,7 @@ func AspectTraits_Optional_Marshal(m jsn.Marshaler, pv **AspectTraits) (err erro
 }
 
 func AspectTraits_Marshal(m jsn.Marshaler, val *AspectTraits) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(AspectTraits_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AspectTraits_Field_Aspect)
 		if e0 == nil {
@@ -1124,10 +1124,10 @@ func AspectTraits_Marshal(m jsn.Marshaler, val *AspectTraits) (err error) {
 
 // BoolField
 type BoolField struct {
-	Name        string      `if:"label=_,type=text"`
-	Type        string      `if:"label=kind,optional,type=text"`
-	Initially   rt.BoolEval `if:"label=initially,optional"`
-	UserComment string
+	Name      string      `if:"label=_,type=text"`
+	Type      string      `if:"label=kind,optional,type=text"`
+	Initially rt.BoolEval `if:"label=initially,optional"`
+	Markup    map[string]any
 }
 
 // User implemented slots:
@@ -1215,7 +1215,7 @@ func BoolField_Optional_Marshal(m jsn.Marshaler, pv **BoolField) (err error) {
 }
 
 func BoolField_Marshal(m jsn.Marshaler, val *BoolField) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(BoolField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", BoolField_Field_Name)
 		if e0 == nil {
@@ -1249,7 +1249,7 @@ type Certainties struct {
 	AreBeing    AreBeing    `if:"label=are_being"`
 	Certainty   Certainty   `if:"label=certainty"`
 	Trait       Trait       `if:"label=trait"`
-	UserComment string
+	Markup      map[string]any
 }
 
 // User implemented slots:
@@ -1337,7 +1337,7 @@ func Certainties_Optional_Marshal(m jsn.Marshaler, pv **Certainties) (err error)
 }
 
 func Certainties_Marshal(m jsn.Marshaler, val *Certainties) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Certainties_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Certainties_Field_PluralKinds)
 		if e0 == nil {
@@ -1460,8 +1460,8 @@ func Certainty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Certainty) (err e
 // Comment Add a note.
 // Information about the story for you and other authors.
 type Comment struct {
-	Lines       prim.Lines `if:"label=_"`
-	UserComment string
+	Lines  prim.Lines `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1547,7 +1547,7 @@ func Comment_Optional_Marshal(m jsn.Marshaler, pv **Comment) (err error) {
 }
 
 func Comment_Marshal(m jsn.Marshaler, val *Comment) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Comment_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Comment_Field_Lines)
 		if e0 == nil {
@@ -1565,7 +1565,7 @@ func Comment_Marshal(m jsn.Marshaler, val *Comment) (err error) {
 type CommonAction struct {
 	Kind          SingularKind   `if:"label=_"`
 	ActionContext *ActionContext `if:"label=action_context,optional"`
-	UserComment   string
+	Markup        map[string]any
 }
 
 func (*CommonAction) Compose() composer.Spec {
@@ -1648,7 +1648,7 @@ func CommonAction_Optional_Marshal(m jsn.Marshaler, pv **CommonAction) (err erro
 }
 
 func CommonAction_Marshal(m jsn.Marshaler, val *CommonAction) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(CommonAction_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CommonAction_Field_Kind)
 		if e0 == nil {
@@ -1672,9 +1672,9 @@ func CommonAction_Marshal(m jsn.Marshaler, val *CommonAction) (err error) {
 // CommonNoun Some person, place, or thing which lacks a specific name.
 // For example, maybe: 'a helicopter', 'some hooded figures', or 'the dog park'.
 type CommonNoun struct {
-	Determiner  Determiner `if:"label=_"`
-	Noun        NounNamed  `if:"label=named"`
-	UserComment string
+	Determiner Determiner `if:"label=_"`
+	Noun       NounNamed  `if:"label=named"`
+	Markup     map[string]any
 }
 
 // User implemented slots:
@@ -1762,7 +1762,7 @@ func CommonNoun_Optional_Marshal(m jsn.Marshaler, pv **CommonNoun) (err error) {
 }
 
 func CommonNoun_Marshal(m jsn.Marshaler, val *CommonNoun) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(CommonNoun_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CommonNoun_Field_Determiner)
 		if e0 == nil {
@@ -1786,9 +1786,9 @@ func CommonNoun_Marshal(m jsn.Marshaler, val *CommonNoun) (err error) {
 // CountOf A guard which returns true based on a counter.
 // Counters start at zero and are incremented every time the guard gets checked.
 type CountOf struct {
-	Trigger     core.Trigger  `if:"label=_"`
-	Num         rt.NumberEval `if:"label=num"`
-	UserComment string
+	Trigger core.Trigger  `if:"label=_"`
+	Num     rt.NumberEval `if:"label=num"`
+	Markup  map[string]any
 }
 
 // User implemented slots:
@@ -1874,7 +1874,7 @@ func CountOf_Optional_Marshal(m jsn.Marshaler, pv **CountOf) (err error) {
 }
 
 func CountOf_Marshal(m jsn.Marshaler, val *CountOf) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(CountOf_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CountOf_Field_Trigger)
 		if e0 == nil {
@@ -1897,9 +1897,9 @@ func CountOf_Marshal(m jsn.Marshaler, val *CountOf) (err error) {
 
 // CountedNouns
 type CountedNouns struct {
-	Count       string      `if:"label=_,type=text"`
-	Kinds       PluralKinds `if:"label=named"`
-	UserComment string
+	Count  string      `if:"label=_,type=text"`
+	Kinds  PluralKinds `if:"label=named"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1986,7 +1986,7 @@ func CountedNouns_Optional_Marshal(m jsn.Marshaler, pv **CountedNouns) (err erro
 }
 
 func CountedNouns_Marshal(m jsn.Marshaler, val *CountedNouns) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(CountedNouns_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CountedNouns_Field_Count)
 		if e0 == nil {
@@ -2009,8 +2009,8 @@ func CountedNouns_Marshal(m jsn.Marshaler, val *CountedNouns) (err error) {
 
 // CycleText When called multiple times, returns each of its inputs in turn.
 type CycleText struct {
-	Parts       []rt.TextEval `if:"label=_"`
-	UserComment string
+	Parts  []rt.TextEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -2095,7 +2095,7 @@ func CycleText_Optional_Marshal(m jsn.Marshaler, pv **CycleText) (err error) {
 }
 
 func CycleText_Marshal(m jsn.Marshaler, val *CycleText) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(CycleText_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CycleText_Field_Parts)
 		if e0 == nil {
@@ -2198,9 +2198,9 @@ func Determiner_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Determiner) (err
 // EventBlock Declare event listeners.
 // Listeners let objects in the game world react to changes before, during, or after they happen.
 type EventBlock struct {
-	Target      EventTarget    `if:"label=_"`
-	Handlers    []EventHandler `if:"label=handlers"`
-	UserComment string
+	Target   EventTarget    `if:"label=_"`
+	Handlers []EventHandler `if:"label=handlers"`
+	Markup   map[string]any
 }
 
 // User implemented slots:
@@ -2287,7 +2287,7 @@ func EventBlock_Optional_Marshal(m jsn.Marshaler, pv **EventBlock) (err error) {
 }
 
 func EventBlock_Marshal(m jsn.Marshaler, val *EventBlock) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(EventBlock_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", EventBlock_Field_Target)
 		if e0 == nil {
@@ -2310,11 +2310,11 @@ func EventBlock_Marshal(m jsn.Marshaler, val *EventBlock) (err error) {
 
 // EventHandler
 type EventHandler struct {
-	EventPhase  EventPhase    `if:"label=_"`
-	Event       EventName     `if:"label=event"`
-	Locals      []Field       `if:"label=provides,optional"`
-	Rules       []PatternRule `if:"label=rules"`
-	UserComment string
+	EventPhase EventPhase    `if:"label=_"`
+	Event      EventName     `if:"label=event"`
+	Locals     []Field       `if:"label=provides,optional"`
+	Rules      []PatternRule `if:"label=rules"`
+	Markup     map[string]any
 }
 
 func (*EventHandler) Compose() composer.Spec {
@@ -2400,7 +2400,7 @@ func EventHandler_Optional_Marshal(m jsn.Marshaler, pv **EventHandler) (err erro
 }
 
 func EventHandler_Marshal(m jsn.Marshaler, val *EventHandler) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(EventHandler_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", EventHandler_Field_EventPhase)
 		if e0 == nil {
@@ -2768,8 +2768,8 @@ func Field_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Field) (err error) {
 
 // GrammarDecl Read what the player types and turn it into actions.
 type GrammarDecl struct {
-	Grammar     grammar.GrammarMaker `if:"label=_"`
-	UserComment string
+	Grammar grammar.GrammarMaker `if:"label=_"`
+	Markup  map[string]any
 }
 
 // User implemented slots:
@@ -2854,7 +2854,7 @@ func GrammarDecl_Optional_Marshal(m jsn.Marshaler, pv **GrammarDecl) (err error)
 }
 
 func GrammarDecl_Marshal(m jsn.Marshaler, val *GrammarDecl) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(GrammarDecl_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", GrammarDecl_Field_Grammar)
 		if e0 == nil {
@@ -2870,9 +2870,9 @@ func GrammarDecl_Marshal(m jsn.Marshaler, val *GrammarDecl) (err error) {
 
 // KindOfNoun
 type KindOfNoun struct {
-	AreAn       AreAn        `if:"label=_"`
-	Kind        SingularKind `if:"label=named"`
-	UserComment string
+	AreAn  AreAn        `if:"label=_"`
+	Kind   SingularKind `if:"label=named"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -2959,7 +2959,7 @@ func KindOfNoun_Optional_Marshal(m jsn.Marshaler, pv **KindOfNoun) (err error) {
 }
 
 func KindOfNoun_Marshal(m jsn.Marshaler, val *KindOfNoun) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(KindOfNoun_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", KindOfNoun_Field_AreAn)
 		if e0 == nil {
@@ -2984,7 +2984,7 @@ func KindOfNoun_Marshal(m jsn.Marshaler, val *KindOfNoun) (err error) {
 type KindOfRelation struct {
 	Relation    rel.RelationName    `if:"label=_"`
 	Cardinality RelationCardinality `if:"label=cardinality"`
-	UserComment string
+	Markup      map[string]any
 }
 
 // User implemented slots:
@@ -3070,7 +3070,7 @@ func KindOfRelation_Optional_Marshal(m jsn.Marshaler, pv **KindOfRelation) (err 
 }
 
 func KindOfRelation_Marshal(m jsn.Marshaler, val *KindOfRelation) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(KindOfRelation_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", KindOfRelation_Field_Relation)
 		if e0 == nil {
@@ -3095,7 +3095,7 @@ func KindOfRelation_Marshal(m jsn.Marshaler, val *KindOfRelation) (err error) {
 type KindsHaveProperties struct {
 	PluralKinds PluralKinds `if:"label=_"`
 	Props       []Field     `if:"label=have"`
-	UserComment string
+	Markup      map[string]any
 }
 
 // User implemented slots:
@@ -3182,7 +3182,7 @@ func KindsHaveProperties_Optional_Marshal(m jsn.Marshaler, pv **KindsHavePropert
 }
 
 func KindsHaveProperties_Marshal(m jsn.Marshaler, val *KindsHaveProperties) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(KindsHaveProperties_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", KindsHaveProperties_Field_PluralKinds)
 		if e0 == nil {
@@ -3205,8 +3205,8 @@ func KindsHaveProperties_Marshal(m jsn.Marshaler, val *KindsHaveProperties) (err
 
 // KindsOfAspect
 type KindsOfAspect struct {
-	Aspect      Aspect `if:"label=_"`
-	UserComment string
+	Aspect Aspect `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -3291,7 +3291,7 @@ func KindsOfAspect_Optional_Marshal(m jsn.Marshaler, pv **KindsOfAspect) (err er
 }
 
 func KindsOfAspect_Marshal(m jsn.Marshaler, val *KindsOfAspect) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(KindsOfAspect_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", KindsOfAspect_Field_Aspect)
 		if e0 == nil {
@@ -3309,7 +3309,7 @@ func KindsOfAspect_Marshal(m jsn.Marshaler, val *KindsOfAspect) (err error) {
 type KindsOfKind struct {
 	PluralKinds  PluralKinds  `if:"label=_"`
 	SingularKind SingularKind `if:"label=kind"`
-	UserComment  string
+	Markup       map[string]any
 }
 
 // User implemented slots:
@@ -3396,7 +3396,7 @@ func KindsOfKind_Optional_Marshal(m jsn.Marshaler, pv **KindsOfKind) (err error)
 }
 
 func KindsOfKind_Marshal(m jsn.Marshaler, val *KindsOfKind) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(KindsOfKind_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", KindsOfKind_Field_PluralKinds)
 		if e0 == nil {
@@ -3419,9 +3419,9 @@ func KindsOfKind_Marshal(m jsn.Marshaler, val *KindsOfKind) (err error) {
 
 // MakeOpposite The opposite of east is west.
 type MakeOpposite struct {
-	Word        string `if:"label=_,type=text"`
-	Opposite    string `if:"label=opposite,type=text"`
-	UserComment string
+	Word     string `if:"label=_,type=text"`
+	Opposite string `if:"label=opposite,type=text"`
+	Markup   map[string]any
 }
 
 // User implemented slots:
@@ -3508,7 +3508,7 @@ func MakeOpposite_Optional_Marshal(m jsn.Marshaler, pv **MakeOpposite) (err erro
 }
 
 func MakeOpposite_Marshal(m jsn.Marshaler, val *MakeOpposite) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(MakeOpposite_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", MakeOpposite_Field_Word)
 		if e0 == nil {
@@ -3532,9 +3532,9 @@ func MakeOpposite_Marshal(m jsn.Marshaler, val *MakeOpposite) (err error) {
 // MakePlural The plural of person is people.
 // The plural of person is persons.
 type MakePlural struct {
-	Singular    string `if:"label=_,type=text"`
-	Plural      string `if:"label=plural,type=text"`
-	UserComment string
+	Singular string `if:"label=_,type=text"`
+	Plural   string `if:"label=plural,type=text"`
+	Markup   map[string]any
 }
 
 // User implemented slots:
@@ -3621,7 +3621,7 @@ func MakePlural_Optional_Marshal(m jsn.Marshaler, pv **MakePlural) (err error) {
 }
 
 func MakePlural_Marshal(m jsn.Marshaler, val *MakePlural) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(MakePlural_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", MakePlural_Field_Singular)
 		if e0 == nil {
@@ -3644,9 +3644,9 @@ func MakePlural_Marshal(m jsn.Marshaler, val *MakePlural) (err error) {
 
 // ManyToMany
 type ManyToMany struct {
-	Kinds       PluralKinds `if:"label=_"`
-	OtherKinds  PluralKinds `if:"label=other_kinds"`
-	UserComment string
+	Kinds      PluralKinds `if:"label=_"`
+	OtherKinds PluralKinds `if:"label=other_kinds"`
+	Markup     map[string]any
 }
 
 func (*ManyToMany) Compose() composer.Spec {
@@ -3729,7 +3729,7 @@ func ManyToMany_Optional_Marshal(m jsn.Marshaler, pv **ManyToMany) (err error) {
 }
 
 func ManyToMany_Marshal(m jsn.Marshaler, val *ManyToMany) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ManyToMany_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ManyToMany_Field_Kinds)
 		if e0 == nil {
@@ -3752,9 +3752,9 @@ func ManyToMany_Marshal(m jsn.Marshaler, val *ManyToMany) (err error) {
 
 // ManyToOne
 type ManyToOne struct {
-	Kinds       PluralKinds  `if:"label=_"`
-	Kind        SingularKind `if:"label=kind"`
-	UserComment string
+	Kinds  PluralKinds  `if:"label=_"`
+	Kind   SingularKind `if:"label=kind"`
+	Markup map[string]any
 }
 
 func (*ManyToOne) Compose() composer.Spec {
@@ -3837,7 +3837,7 @@ func ManyToOne_Optional_Marshal(m jsn.Marshaler, pv **ManyToOne) (err error) {
 }
 
 func ManyToOne_Marshal(m jsn.Marshaler, val *ManyToOne) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ManyToOne_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ManyToOne_Field_Kinds)
 		if e0 == nil {
@@ -3947,7 +3947,7 @@ type MapDeparting struct {
 	Door          SingularNoun  `if:"label=via"`
 	MapConnection MapConnection `if:"label=and"`
 	OtherRoom     SingularNoun  `if:"label=other_room"`
-	UserComment   string
+	Markup        map[string]any
 }
 
 // User implemented slots:
@@ -4036,7 +4036,7 @@ func MapDeparting_Optional_Marshal(m jsn.Marshaler, pv **MapDeparting) (err erro
 }
 
 func MapDeparting_Marshal(m jsn.Marshaler, val *MapDeparting) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(MapDeparting_Flow{val}); err == nil {
 		e0 := m.MarshalKey("from", MapDeparting_Field_Room)
 		if e0 == nil {
@@ -4153,7 +4153,7 @@ type MapHeading struct {
 	Door          SingularNoun  `if:"label=via,optional"`
 	MapConnection MapConnection `if:"label=and"`
 	OtherRoom     SingularNoun  `if:"label=other_room"`
-	UserComment   string
+	Markup        map[string]any
 }
 
 // User implemented slots:
@@ -4243,7 +4243,7 @@ func MapHeading_Optional_Marshal(m jsn.Marshaler, pv **MapHeading) (err error) {
 }
 
 func MapHeading_Marshal(m jsn.Marshaler, val *MapHeading) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(MapHeading_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", MapHeading_Field_Dir)
 		if e0 == nil {
@@ -4287,9 +4287,9 @@ func MapHeading_Marshal(m jsn.Marshaler, val *MapHeading) (err error) {
 
 // NamedField
 type NamedField struct {
-	Name        string `if:"label=_,type=text"`
-	Type        string `if:"label=type,optional,type=text"`
-	UserComment string
+	Name   string `if:"label=_,type=text"`
+	Type   string `if:"label=type,optional,type=text"`
+	Markup map[string]any
 }
 
 func (*NamedField) Compose() composer.Spec {
@@ -4372,7 +4372,7 @@ func NamedField_Optional_Marshal(m jsn.Marshaler, pv **NamedField) (err error) {
 }
 
 func NamedField_Marshal(m jsn.Marshaler, val *NamedField) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(NamedField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NamedField_Field_Name)
 		if e0 == nil {
@@ -4466,10 +4466,10 @@ func NamedNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NamedNoun) (err e
 // Assign text.
 // Gives a noun one or more lines of text.
 type NounAssignment struct {
-	Property    Property    `if:"label=_"`
-	Nouns       []NamedNoun `if:"label=nouns"`
-	Lines       prim.Lines  `if:"label=lines"`
-	UserComment string
+	Property Property    `if:"label=_"`
+	Nouns    []NamedNoun `if:"label=nouns"`
+	Lines    prim.Lines  `if:"label=lines"`
+	Markup   map[string]any
 }
 
 // User implemented slots:
@@ -4556,7 +4556,7 @@ func NounAssignment_Optional_Marshal(m jsn.Marshaler, pv **NounAssignment) (err 
 }
 
 func NounAssignment_Marshal(m jsn.Marshaler, val *NounAssignment) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(NounAssignment_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NounAssignment_Field_Property)
 		if e0 == nil {
@@ -4655,10 +4655,10 @@ func NounContinuation_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounContin
 
 // NounKindStatement
 type NounKindStatement struct {
-	Nouns       []NamedNoun        `if:"label=_"`
-	KindOfNoun  KindOfNoun         `if:"label=depict"`
-	More        []NounContinuation `if:"label=and,optional"`
-	UserComment string
+	Nouns      []NamedNoun        `if:"label=_"`
+	KindOfNoun KindOfNoun         `if:"label=depict"`
+	More       []NounContinuation `if:"label=and,optional"`
+	Markup     map[string]any
 }
 
 // User implemented slots:
@@ -4746,7 +4746,7 @@ func NounKindStatement_Optional_Marshal(m jsn.Marshaler, pv **NounKindStatement)
 }
 
 func NounKindStatement_Marshal(m jsn.Marshaler, val *NounKindStatement) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(NounKindStatement_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NounKindStatement_Field_Nouns)
 		if e0 == nil {
@@ -4853,8 +4853,8 @@ func NounName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounName) (err err
 // When used with a determiner typically implies a common noun ( 'the cat', 'some fish', 'a snack'. )
 // When used alone usually implies a proper noun ( 'Hikaru', 'Genesis', or 'Beta Regula One'. )
 type NounNamed struct {
-	Name        NounName `if:"label=_"`
-	UserComment string
+	Name   NounName `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -4941,7 +4941,7 @@ func NounNamed_Optional_Marshal(m jsn.Marshaler, pv **NounNamed) (err error) {
 }
 
 func NounNamed_Marshal(m jsn.Marshaler, val *NounNamed) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(NounNamed_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NounNamed_Field_Name)
 		if e0 == nil {
@@ -4957,10 +4957,10 @@ func NounNamed_Marshal(m jsn.Marshaler, val *NounNamed) (err error) {
 
 // NounRelation
 type NounRelation struct {
-	AreBeing    AreBeing         `if:"label=are_being,optional"`
-	Relation    rel.RelationName `if:"label=relation"`
-	OtherNouns  []NamedNoun      `if:"label=other_nouns"`
-	UserComment string
+	AreBeing   AreBeing         `if:"label=are_being,optional"`
+	Relation   rel.RelationName `if:"label=relation"`
+	OtherNouns []NamedNoun      `if:"label=other_nouns"`
+	Markup     map[string]any
 }
 
 // User implemented slots:
@@ -5047,7 +5047,7 @@ func NounRelation_Optional_Marshal(m jsn.Marshaler, pv **NounRelation) (err erro
 }
 
 func NounRelation_Marshal(m jsn.Marshaler, val *NounRelation) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(NounRelation_Flow{val}); err == nil {
 		e0 := m.MarshalKey("are_being", NounRelation_Field_AreBeing)
 		if e0 == nil {
@@ -5080,7 +5080,7 @@ type NounRelationStatement struct {
 	Nouns        []NamedNoun        `if:"label=_"`
 	NounRelation NounRelation       `if:"label=relate_to"`
 	More         []NounContinuation `if:"label=and,optional"`
-	UserComment  string
+	Markup       map[string]any
 }
 
 // User implemented slots:
@@ -5168,7 +5168,7 @@ func NounRelationStatement_Optional_Marshal(m jsn.Marshaler, pv **NounRelationSt
 }
 
 func NounRelationStatement_Marshal(m jsn.Marshaler, val *NounRelationStatement) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(NounRelationStatement_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NounRelationStatement_Field_Nouns)
 		if e0 == nil {
@@ -5198,10 +5198,10 @@ func NounRelationStatement_Marshal(m jsn.Marshaler, val *NounRelationStatement) 
 
 // NounTraitStatement
 type NounTraitStatement struct {
-	Nouns       []NamedNoun        `if:"label=_"`
-	NounTraits  NounTraits         `if:"label=start_as"`
-	More        []NounContinuation `if:"label=and,optional"`
-	UserComment string
+	Nouns      []NamedNoun        `if:"label=_"`
+	NounTraits NounTraits         `if:"label=start_as"`
+	More       []NounContinuation `if:"label=and,optional"`
+	Markup     map[string]any
 }
 
 // User implemented slots:
@@ -5289,7 +5289,7 @@ func NounTraitStatement_Optional_Marshal(m jsn.Marshaler, pv **NounTraitStatemen
 }
 
 func NounTraitStatement_Marshal(m jsn.Marshaler, val *NounTraitStatement) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(NounTraitStatement_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NounTraitStatement_Field_Nouns)
 		if e0 == nil {
@@ -5319,9 +5319,9 @@ func NounTraitStatement_Marshal(m jsn.Marshaler, val *NounTraitStatement) (err e
 
 // NounTraits
 type NounTraits struct {
-	AreBeing    AreBeing `if:"label=_"`
-	Trait       []Trait  `if:"label=trait"`
-	UserComment string
+	AreBeing AreBeing `if:"label=_"`
+	Trait    []Trait  `if:"label=trait"`
+	Markup   map[string]any
 }
 
 // User implemented slots:
@@ -5407,7 +5407,7 @@ func NounTraits_Optional_Marshal(m jsn.Marshaler, pv **NounTraits) (err error) {
 }
 
 func NounTraits_Marshal(m jsn.Marshaler, val *NounTraits) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(NounTraits_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NounTraits_Field_AreBeing)
 		if e0 == nil {
@@ -5430,10 +5430,10 @@ func NounTraits_Marshal(m jsn.Marshaler, val *NounTraits) (err error) {
 
 // NumListField
 type NumListField struct {
-	Name        string         `if:"label=_,type=text"`
-	Type        string         `if:"label=kind,optional,type=text"`
-	Initially   rt.NumListEval `if:"label=initially,optional"`
-	UserComment string
+	Name      string         `if:"label=_,type=text"`
+	Type      string         `if:"label=kind,optional,type=text"`
+	Initially rt.NumListEval `if:"label=initially,optional"`
+	Markup    map[string]any
 }
 
 // User implemented slots:
@@ -5521,7 +5521,7 @@ func NumListField_Optional_Marshal(m jsn.Marshaler, pv **NumListField) (err erro
 }
 
 func NumListField_Marshal(m jsn.Marshaler, val *NumListField) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(NumListField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NumListField_Field_Name)
 		if e0 == nil {
@@ -5551,10 +5551,10 @@ func NumListField_Marshal(m jsn.Marshaler, val *NumListField) (err error) {
 
 // NumberField
 type NumberField struct {
-	Name        string        `if:"label=_,type=text"`
-	Type        string        `if:"label=kind,optional,type=text"`
-	Initially   rt.NumberEval `if:"label=initially,optional"`
-	UserComment string
+	Name      string        `if:"label=_,type=text"`
+	Type      string        `if:"label=kind,optional,type=text"`
+	Initially rt.NumberEval `if:"label=initially,optional"`
+	Markup    map[string]any
 }
 
 // User implemented slots:
@@ -5642,7 +5642,7 @@ func NumberField_Optional_Marshal(m jsn.Marshaler, pv **NumberField) (err error)
 }
 
 func NumberField_Marshal(m jsn.Marshaler, val *NumberField) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(NumberField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", NumberField_Field_Name)
 		if e0 == nil {
@@ -5672,9 +5672,9 @@ func NumberField_Marshal(m jsn.Marshaler, val *NumberField) (err error) {
 
 // OneToMany
 type OneToMany struct {
-	Kind        SingularKind `if:"label=_"`
-	Kinds       PluralKinds  `if:"label=kinds"`
-	UserComment string
+	Kind   SingularKind `if:"label=_"`
+	Kinds  PluralKinds  `if:"label=kinds"`
+	Markup map[string]any
 }
 
 func (*OneToMany) Compose() composer.Spec {
@@ -5757,7 +5757,7 @@ func OneToMany_Optional_Marshal(m jsn.Marshaler, pv **OneToMany) (err error) {
 }
 
 func OneToMany_Marshal(m jsn.Marshaler, val *OneToMany) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(OneToMany_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", OneToMany_Field_Kind)
 		if e0 == nil {
@@ -5780,9 +5780,9 @@ func OneToMany_Marshal(m jsn.Marshaler, val *OneToMany) (err error) {
 
 // OneToOne
 type OneToOne struct {
-	Kind        SingularKind `if:"label=_"`
-	OtherKind   SingularKind `if:"label=other_kind"`
-	UserComment string
+	Kind      SingularKind `if:"label=_"`
+	OtherKind SingularKind `if:"label=other_kind"`
+	Markup    map[string]any
 }
 
 func (*OneToOne) Compose() composer.Spec {
@@ -5865,7 +5865,7 @@ func OneToOne_Optional_Marshal(m jsn.Marshaler, pv **OneToOne) (err error) {
 }
 
 func OneToOne_Marshal(m jsn.Marshaler, val *OneToOne) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(OneToOne_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", OneToOne_Field_Kind)
 		if e0 == nil {
@@ -5888,8 +5888,8 @@ func OneToOne_Marshal(m jsn.Marshaler, val *OneToOne) (err error) {
 
 // PairedAction
 type PairedAction struct {
-	Kinds       PluralKinds `if:"label=_"`
-	UserComment string
+	Kinds  PluralKinds `if:"label=_"`
+	Markup map[string]any
 }
 
 func (*PairedAction) Compose() composer.Spec {
@@ -5971,7 +5971,7 @@ func PairedAction_Optional_Marshal(m jsn.Marshaler, pv **PairedAction) (err erro
 }
 
 func PairedAction_Marshal(m jsn.Marshaler, val *PairedAction) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PairedAction_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", PairedAction_Field_Kinds)
 		if e0 == nil {
@@ -5988,7 +5988,7 @@ func PairedAction_Marshal(m jsn.Marshaler, val *PairedAction) (err error) {
 // Paragraph Phrases
 type Paragraph struct {
 	StoryStatement []StoryStatement `if:"label=_,optional"`
-	UserComment    string
+	Markup         map[string]any
 }
 
 func (*Paragraph) Compose() composer.Spec {
@@ -6070,7 +6070,7 @@ func Paragraph_Optional_Marshal(m jsn.Marshaler, pv **Paragraph) (err error) {
 }
 
 func Paragraph_Marshal(m jsn.Marshaler, val *Paragraph) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Paragraph_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Paragraph_Field_StoryStatement)
 		if e0 == nil {
@@ -6087,10 +6087,10 @@ func Paragraph_Marshal(m jsn.Marshaler, val *Paragraph) (err error) {
 // PatternActions Add actions to a pattern.
 // Actions to take when using a pattern.
 type PatternActions struct {
-	Name        core.PatternName `if:"label=_"`
-	Locals      []Field          `if:"label=provides,optional"`
-	Rules       []PatternRule    `if:"label=rules"`
-	UserComment string
+	Name   core.PatternName `if:"label=_"`
+	Locals []Field          `if:"label=provides,optional"`
+	Rules  []PatternRule    `if:"label=rules"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -6178,7 +6178,7 @@ func PatternActions_Optional_Marshal(m jsn.Marshaler, pv **PatternActions) (err 
 }
 
 func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PatternActions_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", PatternActions_Field_Name)
 		if e0 == nil {
@@ -6211,7 +6211,7 @@ type PatternDecl struct {
 	Name          core.PatternName `if:"label=_"`
 	Params        []Field          `if:"label=requires,optional"`
 	PatternReturn *PatternReturn   `if:"label=returns,optional"`
-	UserComment   string
+	Markup        map[string]any
 }
 
 // User implemented slots:
@@ -6299,7 +6299,7 @@ func PatternDecl_Optional_Marshal(m jsn.Marshaler, pv **PatternDecl) (err error)
 }
 
 func PatternDecl_Marshal(m jsn.Marshaler, val *PatternDecl) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PatternDecl_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", PatternDecl_Field_Name)
 		if e0 == nil {
@@ -6413,8 +6413,8 @@ func PatternFlags_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternFlags) 
 
 // PatternReturn
 type PatternReturn struct {
-	Result      Field `if:"label=_"`
-	UserComment string
+	Result Field `if:"label=_"`
+	Markup map[string]any
 }
 
 func (*PatternReturn) Compose() composer.Spec {
@@ -6497,7 +6497,7 @@ func PatternReturn_Optional_Marshal(m jsn.Marshaler, pv **PatternReturn) (err er
 }
 
 func PatternReturn_Marshal(m jsn.Marshaler, val *PatternReturn) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PatternReturn_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", PatternReturn_Field_Result)
 		if e0 == nil {
@@ -6513,10 +6513,10 @@ func PatternReturn_Marshal(m jsn.Marshaler, val *PatternReturn) (err error) {
 
 // PatternRule Rule
 type PatternRule struct {
-	Guard       rt.BoolEval  `if:"label=_"`
-	Flags       PatternFlags `if:"label=flags,optional"`
-	Does        []rt.Execute `if:"label=does"`
-	UserComment string
+	Guard  rt.BoolEval  `if:"label=_"`
+	Flags  PatternFlags `if:"label=flags,optional"`
+	Does   []rt.Execute `if:"label=does"`
+	Markup map[string]any
 }
 
 func (*PatternRule) Compose() composer.Spec {
@@ -6600,7 +6600,7 @@ func PatternRule_Optional_Marshal(m jsn.Marshaler, pv **PatternRule) (err error)
 }
 
 func PatternRule_Marshal(m jsn.Marshaler, val *PatternRule) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PatternRule_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", PatternRule_Field_Guard)
 		if e0 == nil {
@@ -6865,10 +6865,10 @@ func Property_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Property) (err err
 
 // RecordField
 type RecordField struct {
-	Name        string        `if:"label=_,type=text"`
-	Type        string        `if:"label=kind,optional,type=text"`
-	Initially   rt.RecordEval `if:"label=initially,optional"`
-	UserComment string
+	Name      string        `if:"label=_,type=text"`
+	Type      string        `if:"label=kind,optional,type=text"`
+	Initially rt.RecordEval `if:"label=initially,optional"`
+	Markup    map[string]any
 }
 
 // User implemented slots:
@@ -6956,7 +6956,7 @@ func RecordField_Optional_Marshal(m jsn.Marshaler, pv **RecordField) (err error)
 }
 
 func RecordField_Marshal(m jsn.Marshaler, val *RecordField) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RecordField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RecordField_Field_Name)
 		if e0 == nil {
@@ -6986,10 +6986,10 @@ func RecordField_Marshal(m jsn.Marshaler, val *RecordField) (err error) {
 
 // RecordListField
 type RecordListField struct {
-	Name        string            `if:"label=_,type=text"`
-	Type        string            `if:"label=kind,optional,type=text"`
-	Initially   rt.RecordListEval `if:"label=initially,optional"`
-	UserComment string
+	Name      string            `if:"label=_,type=text"`
+	Type      string            `if:"label=kind,optional,type=text"`
+	Initially rt.RecordListEval `if:"label=initially,optional"`
+	Markup    map[string]any
 }
 
 // User implemented slots:
@@ -7077,7 +7077,7 @@ func RecordListField_Optional_Marshal(m jsn.Marshaler, pv **RecordListField) (er
 }
 
 func RecordListField_Marshal(m jsn.Marshaler, val *RecordListField) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RecordListField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RecordListField_Field_Name)
 		if e0 == nil {
@@ -7220,11 +7220,11 @@ func RelationCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Relatio
 
 // RelativeToNoun Relate nouns to each other
 type RelativeToNoun struct {
-	Relation    rel.RelationName `if:"label=_"`
-	Nouns       []NamedNoun      `if:"label=nouns"`
-	AreBeing    AreBeing         `if:"label=are_being"`
-	OtherNouns  []NamedNoun      `if:"label=other_nouns"`
-	UserComment string
+	Relation   rel.RelationName `if:"label=_"`
+	Nouns      []NamedNoun      `if:"label=nouns"`
+	AreBeing   AreBeing         `if:"label=are_being"`
+	OtherNouns []NamedNoun      `if:"label=other_nouns"`
+	Markup     map[string]any
 }
 
 // User implemented slots:
@@ -7312,7 +7312,7 @@ func RelativeToNoun_Optional_Marshal(m jsn.Marshaler, pv **RelativeToNoun) (err 
 }
 
 func RelativeToNoun_Marshal(m jsn.Marshaler, val *RelativeToNoun) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RelativeToNoun_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RelativeToNoun_Field_Relation)
 		if e0 == nil {
@@ -7350,8 +7350,8 @@ func RelativeToNoun_Marshal(m jsn.Marshaler, val *RelativeToNoun) (err error) {
 // RenderTemplate Parse text using templates.
 // See: https://github.com/ionous/iffy/wiki/Templates.
 type RenderTemplate struct {
-	Template    prim.Lines `if:"label=_"`
-	UserComment string
+	Template prim.Lines `if:"label=_"`
+	Markup   map[string]any
 }
 
 // User implemented slots:
@@ -7436,7 +7436,7 @@ func RenderTemplate_Optional_Marshal(m jsn.Marshaler, pv **RenderTemplate) (err 
 }
 
 func RenderTemplate_Marshal(m jsn.Marshaler, val *RenderTemplate) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RenderTemplate_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderTemplate_Field_Template)
 		if e0 == nil {
@@ -7452,8 +7452,8 @@ func RenderTemplate_Marshal(m jsn.Marshaler, val *RenderTemplate) (err error) {
 
 // ShuffleText When called multiple times returns its inputs at random.
 type ShuffleText struct {
-	Parts       []rt.TextEval `if:"label=_"`
-	UserComment string
+	Parts  []rt.TextEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -7538,7 +7538,7 @@ func ShuffleText_Optional_Marshal(m jsn.Marshaler, pv **ShuffleText) (err error)
 }
 
 func ShuffleText_Marshal(m jsn.Marshaler, val *ShuffleText) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ShuffleText_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ShuffleText_Field_Parts)
 		if e0 == nil {
@@ -7698,8 +7698,8 @@ func SingularNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SingularNoun) 
 
 // StoppingText When called multiple times returns each of its inputs in turn, sticking to the last one.
 type StoppingText struct {
-	Parts       []rt.TextEval `if:"label=_"`
-	UserComment string
+	Parts  []rt.TextEval `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -7784,7 +7784,7 @@ func StoppingText_Optional_Marshal(m jsn.Marshaler, pv **StoppingText) (err erro
 }
 
 func StoppingText_Marshal(m jsn.Marshaler, val *StoppingText) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(StoppingText_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", StoppingText_Field_Parts)
 		if e0 == nil {
@@ -7800,8 +7800,8 @@ func StoppingText_Marshal(m jsn.Marshaler, val *StoppingText) (err error) {
 
 // Story
 type Story struct {
-	Paragraph   []Paragraph `if:"label=paragraphs"`
-	UserComment string
+	Paragraph []Paragraph `if:"label=paragraphs"`
+	Markup    map[string]any
 }
 
 func (*Story) Compose() composer.Spec {
@@ -7883,7 +7883,7 @@ func Story_Optional_Marshal(m jsn.Marshaler, pv **Story) (err error) {
 }
 
 func Story_Marshal(m jsn.Marshaler, val *Story) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Story_Flow{val}); err == nil {
 		e0 := m.MarshalKey("paragraphs", Story_Field_Paragraph)
 		if e0 == nil {
@@ -7899,7 +7899,7 @@ func Story_Marshal(m jsn.Marshaler, val *Story) (err error) {
 
 // StoryBreak this cheats a bit by making the signature the same as the comment marker  that allows nodes which look like comments but are actually story breaks.
 type StoryBreak struct {
-	UserComment string
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -7984,7 +7984,7 @@ func StoryBreak_Optional_Marshal(m jsn.Marshaler, pv **StoryBreak) (err error) {
 }
 
 func StoryBreak_Marshal(m jsn.Marshaler, val *StoryBreak) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(StoryBreak_Flow{val}); err == nil {
 		m.EndBlock()
 	}
@@ -7993,8 +7993,8 @@ func StoryBreak_Marshal(m jsn.Marshaler, val *StoryBreak) (err error) {
 
 // StoryFile top level node, currently just for blockly  might eventually contain story metadata  ex. author, description...
 type StoryFile struct {
-	StoryLines  []StoryStatement `if:"label=_"`
-	UserComment string
+	StoryLines []StoryStatement `if:"label=_"`
+	Markup     map[string]any
 }
 
 func (*StoryFile) Compose() composer.Spec {
@@ -8077,7 +8077,7 @@ func StoryFile_Optional_Marshal(m jsn.Marshaler, pv **StoryFile) (err error) {
 }
 
 func StoryFile_Marshal(m jsn.Marshaler, val *StoryFile) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(StoryFile_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", StoryFile_Field_StoryLines)
 		if e0 == nil {
@@ -8245,8 +8245,8 @@ func TestName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestName) (err err
 
 // TestOutput Expect that a test uses 'Say' to print some specific text.
 type TestOutput struct {
-	Lines       prim.Lines `if:"label=_"`
-	UserComment string
+	Lines  prim.Lines `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -8331,7 +8331,7 @@ func TestOutput_Optional_Marshal(m jsn.Marshaler, pv **TestOutput) (err error) {
 }
 
 func TestOutput_Marshal(m jsn.Marshaler, val *TestOutput) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(TestOutput_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", TestOutput_Field_Lines)
 		if e0 == nil {
@@ -8347,9 +8347,9 @@ func TestOutput_Marshal(m jsn.Marshaler, val *TestOutput) (err error) {
 
 // TestRule Add actions to a test
 type TestRule struct {
-	TestName    TestName     `if:"label=_"`
-	Does        []rt.Execute `if:"label=does"`
-	UserComment string
+	TestName TestName     `if:"label=_"`
+	Does     []rt.Execute `if:"label=does"`
+	Markup   map[string]any
 }
 
 // User implemented slots:
@@ -8435,7 +8435,7 @@ func TestRule_Optional_Marshal(m jsn.Marshaler, pv **TestRule) (err error) {
 }
 
 func TestRule_Marshal(m jsn.Marshaler, val *TestRule) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(TestRule_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", TestRule_Field_TestName)
 		if e0 == nil {
@@ -8458,10 +8458,10 @@ func TestRule_Marshal(m jsn.Marshaler, val *TestRule) (err error) {
 
 // TestScene Create a scene for testing
 type TestScene struct {
-	TestName    TestName         `if:"label=_"`
-	Requires    TestName         `if:"label=requires,optional"`
-	Story       []StoryStatement `if:"label=story"`
-	UserComment string
+	TestName TestName         `if:"label=_"`
+	Requires TestName         `if:"label=requires,optional"`
+	Story    []StoryStatement `if:"label=story"`
+	Markup   map[string]any
 }
 
 // User implemented slots:
@@ -8548,7 +8548,7 @@ func TestScene_Optional_Marshal(m jsn.Marshaler, pv **TestScene) (err error) {
 }
 
 func TestScene_Marshal(m jsn.Marshaler, val *TestScene) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(TestScene_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", TestScene_Field_TestName)
 		if e0 == nil {
@@ -8578,9 +8578,9 @@ func TestScene_Marshal(m jsn.Marshaler, val *TestScene) (err error) {
 
 // TestStatement Describe test results
 type TestStatement struct {
-	TestName    TestName `if:"label=_"`
-	Test        Testing  `if:"label=test"`
-	UserComment string
+	TestName TestName `if:"label=_"`
+	Test     Testing  `if:"label=test"`
+	Markup   map[string]any
 }
 
 // User implemented slots:
@@ -8666,7 +8666,7 @@ func TestStatement_Optional_Marshal(m jsn.Marshaler, pv **TestStatement) (err er
 }
 
 func TestStatement_Marshal(m jsn.Marshaler, val *TestStatement) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(TestStatement_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", TestStatement_Field_TestName)
 		if e0 == nil {
@@ -8758,10 +8758,10 @@ func Testing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Testing) (err error
 
 // TextField
 type TextField struct {
-	Name        string      `if:"label=_,type=text"`
-	Type        string      `if:"label=kind,optional,type=text"`
-	Initially   rt.TextEval `if:"label=initially,optional"`
-	UserComment string
+	Name      string      `if:"label=_,type=text"`
+	Type      string      `if:"label=kind,optional,type=text"`
+	Initially rt.TextEval `if:"label=initially,optional"`
+	Markup    map[string]any
 }
 
 // User implemented slots:
@@ -8849,7 +8849,7 @@ func TextField_Optional_Marshal(m jsn.Marshaler, pv **TextField) (err error) {
 }
 
 func TextField_Marshal(m jsn.Marshaler, val *TextField) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(TextField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", TextField_Field_Name)
 		if e0 == nil {
@@ -8879,10 +8879,10 @@ func TextField_Marshal(m jsn.Marshaler, val *TextField) (err error) {
 
 // TextListField
 type TextListField struct {
-	Name        string          `if:"label=_,type=text"`
-	Type        string          `if:"label=kind,optional,type=text"`
-	Initially   rt.TextListEval `if:"label=initially,optional"`
-	UserComment string
+	Name      string          `if:"label=_,type=text"`
+	Type      string          `if:"label=kind,optional,type=text"`
+	Initially rt.TextListEval `if:"label=initially,optional"`
+	Markup    map[string]any
 }
 
 // User implemented slots:
@@ -8970,7 +8970,7 @@ func TextListField_Optional_Marshal(m jsn.Marshaler, pv **TextListField) (err er
 }
 
 func TextListField_Marshal(m jsn.Marshaler, val *TextListField) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(TextListField_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", TextListField_Field_Name)
 		if e0 == nil {
@@ -9075,9 +9075,9 @@ func Trait_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Trait) (err error) {
 
 // TraitPhrase
 type TraitPhrase struct {
-	AreEither   AreEither `if:"label=_"`
-	Trait       []Trait   `if:"label=trait"`
-	UserComment string
+	AreEither AreEither `if:"label=_"`
+	Trait     []Trait   `if:"label=trait"`
+	Markup    map[string]any
 }
 
 func (*TraitPhrase) Compose() composer.Spec {
@@ -9160,7 +9160,7 @@ func TraitPhrase_Optional_Marshal(m jsn.Marshaler, pv **TraitPhrase) (err error)
 }
 
 func TraitPhrase_Marshal(m jsn.Marshaler, val *TraitPhrase) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(TraitPhrase_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", TraitPhrase_Field_AreEither)
 		if e0 == nil {

@@ -72,10 +72,16 @@ func (dec *xDecoder) addBlock(pm *json.RawMessage, next *chart.StateMix) *chart.
 		if e := json.Unmarshal(*pm, &d); e != nil {
 			dec.Error(e)
 		} else {
-			if dec.Machine.Comment != nil {
-				*dec.Machine.Comment = d.Id
-				dec.Machine.Comment = nil
+			// fix: make separate markup for ids?
+			if id := d.Id; len(id) > 0 {
+				if ptr := dec.Machine.Markout; ptr != nil {
+					if *ptr == nil {
+						*ptr = make(map[string]any)
+					}
+					(*ptr)["comment"] = d.Id
+				}
 			}
+			dec.Machine.Markout = nil
 			if d.Type != typeName {
 				dec.Error(errutil.New("expected", typeName, "found", d.Type))
 			} else {

@@ -9,7 +9,7 @@ type Machine struct {
 	State
 	encoding bool
 	stack    chartStack
-	Comment  *string
+	Markout  *map[string]any // has to be a pointer, so we can create it during deserialization
 	err      error
 }
 
@@ -47,8 +47,8 @@ func (m *Machine) IsEncoding() bool {
 	return m.encoding
 }
 
-func (m *Machine) SetComment(pid *string) {
-	m.Comment = pid
+func (m *Machine) SetMarkup(markout *map[string]any) {
+	m.Markout = markout
 }
 
 // Data returns the accumulated script tree ready for serialization
@@ -71,7 +71,7 @@ func (m *Machine) PushState(d State) {
 
 // FinishState - end the current state,
 // and send the passed data ( presumably from the current state ) to the most recent prior state.
-func (m *Machine) FinishState(data interface{}) {
+func (m *Machine) FinishState(data any) {
 	m.State = m.stack.pop()
 	m.State.Commit(data)
 }

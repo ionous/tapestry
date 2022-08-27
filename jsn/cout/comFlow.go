@@ -1,66 +1,57 @@
 package cout
 
-import "strings"
-
 type comFlow struct {
-	sig     Sig
-	values  []interface{}
-	comment string
+	sig    Sig
+	params []any
+	markup map[string]any
 }
 
-func newComFlow(lede, comment string) *comFlow {
+func newComFlow(lede string, markup map[string]any) *comFlow {
 	var cf comFlow
 	cf.sig.WriteLede(lede)
-	cf.comment = comment
+	cf.markup = markup
 	return &cf
 }
 
-func (cf *comFlow) addMsg(label string, value interface{}) {
+func (cf *comFlow) addMsg(label string, value any) {
 	cf.sig.WriteLabel(label)
-	cf.values = append(cf.values, value)
+	cf.params = append(cf.params, value)
 }
 
-func (cf *comFlow) addMsgPair(label, choice string, value interface{}) {
+func (cf *comFlow) addMsgPair(label, choice string, value any) {
 	cf.sig.WriteLabelPair(label, choice)
-	cf.values = append(cf.values, value)
+	cf.params = append(cf.params, value)
 }
 
-func (cf *comFlow) finalize() (ret interface{}) {
-	sig := cf.sig.String()
-	var v interface{}
-	var cmt interface{}
-	if str := cf.comment; len(str) > 0 {
-		if lines := strings.Split(str, "\n"); len(lines) > 1 {
-			cmt = lines
-		} else {
-			cmt = str
+// build a map that we get serialized to json
+func (cf *comFlow) finalize() map[string]any {
+	m := make(map[string]any)
+	if sig := cf.sig.String(); len(sig) > 0 && sig != markupMarker {
+		switch vals := cf.params; len(vals) {
+		// zero parameters { "sig": true }
+		case 0:
+			// note: originally i collapsed calls with zero args down to just a string
+			// but in cases where commands get used to generate text
+			// there's no way to differentiate b/t a command of zero params and plain text.
+			m[sig] = true
+		// one parameter { "sig": value }
+		case 1:
+			m[sig] = vals[0]
+		// multiple parameters { "sig": [comma,separated,values] }
+		default:
+			m[sig] = vals
 		}
 	}
-
-	switch vals := cf.values; len(vals) {
-	case 0:
-		// note: originally i collapsed calls with zero args down to just a string
-		// but in cases where commands get used to generate text --
-		// there's no way to differentiate b/t a command of zero params and plain text.
-		if sig != commentMarker {
-			v = true
-		} else if cmt == nil {
-			v = ""
+	for k, v := range cf.markup {
+		if k == "comment" {
+			// { "--": "here's a story of a lovely comment, which was writing up some very lovely words." }
+			m[markupMarker] = v
 		} else {
-			v, cmt = cmt, nil
+			// { "--color": 5 }
+			m[markupMarker+k] = v
 		}
-	case 1:
-		v = vals[0]
-	default:
-		v = vals
-	}
-	m := map[string]interface{}{
-		sig: v,
-	}
-	if cmt != nil {
-		m[commentMarker] = cmt
 	}
 	return m
 }
 
-const commentMarker = "--"
+const markupMarker = "--"

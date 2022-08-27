@@ -13,6 +13,14 @@ const (
 	VARIABLES_HUE         = "%{BKY_VARIABLES_HUE}"
 )
 
+// "BKY_DEFAULT_COLOR"
+type Colour int
+
+//go:generate stringer -type=Colour -linecomment
+const (
+	DefaultColor Colour = iota // %{BKY_TAPCOLOR_DEFAULT}
+)
+
 const (
 	FieldCheckbox = "field_checkbox"
 	FieldDropdown = "field_dropdown"

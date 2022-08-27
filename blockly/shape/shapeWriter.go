@@ -2,6 +2,7 @@ package shape
 
 import (
 	"log"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/blockly/bconst"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
@@ -70,21 +71,21 @@ func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spe
 	// we write to partial so that we can potentially have two blocks
 	var partial js.Builder
 	// color
-	var colour string = bconst.COLOUR_HUE // default
-	if len(values) > 0 {                  // we take on the color of the first slot specified
+	var colour string    // default
+	if len(values) > 0 { // we take on the color of the first slot specified
 		slot := bconst.FindSlotRule(values[0])
 		colour = slot.Colour
 	} else if len(stacks) > 0 {
 		slot := bconst.FindSlotRule(stacks[0])
 		colour = slot.Colour
 	}
-	if len(colour) > 0 {
-		partial.Kv("colour", colour)
-	} else {
-		partial.Kv("colour", bconst.COLOUR_HUE)
+	if len(colour) == 0 {
+		colour = bconst.COLOUR_HUE
 	}
+	partial.Kv("colour", colour)
+
 	// comment
-	if cmt := blockType.UserComment; len(cmt) > 0 {
+	if cmt := comment(blockType.Markup); len(cmt) > 0 {
 		partial.R(js.Comma).Kv("tooltip", cmt)
 	}
 	partial.R(js.Comma)
@@ -110,6 +111,16 @@ func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spe
 		appendString(out, partial.String())
 	})
 	return true
+}
+
+func comment(markup map[string]any) (ret string) {
+	switch cmt := markup["comment"].(type) {
+	case string:
+		ret = cmt
+	case []string:
+		ret = strings.Join(cmt, "\n")
+	}
+	return
 }
 
 // write the args0 and message0 key-values.

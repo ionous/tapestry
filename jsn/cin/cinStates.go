@@ -77,9 +77,8 @@ func (dec *xDecoder) readFlow(flow jsn.FlowBlock, msg json.RawMessage) (okay boo
 		} else if op, e := ReadOp(msg); e != nil {
 			dec.Error(e)
 		} else {
-			if dec.Machine.Comment != nil {
-				*dec.Machine.Comment = op.Cmt
-				dec.Machine.Comment = nil
+			if ptr := dec.Machine.Markout; ptr != nil {
+				*ptr, dec.Machine.Markout = op.Markup, nil
 			}
 			if flowData, e := newFlowData(op); e != nil {
 				dec.Error(e)
@@ -310,9 +309,8 @@ func (dec *xDecoder) newSlot(op Op) *chart.StateMix {
 		if flow, e := newFlowData(op); e != nil {
 			dec.Error(e)
 		} else {
-			if dec.Machine.Comment != nil {
-				*dec.Machine.Comment = op.Cmt
-				dec.Machine.Comment = nil
+			if ptr := dec.Machine.Markout; ptr != nil {
+				*ptr, dec.Machine.Markout = op.Markup, nil
 			}
 			dec.PushState(dec.newFlow(flow))
 			okay = true

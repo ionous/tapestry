@@ -10,9 +10,9 @@ import (
 
 // Arg Runtime version of argument.
 type Arg struct {
-	Name        string     `if:"label=_,type=text"`
-	From        Assignment `if:"label=from"`
-	UserComment string
+	Name   string     `if:"label=_,type=text"`
+	From   Assignment `if:"label=from"`
+	Markup map[string]any
 }
 
 func (*Arg) Compose() composer.Spec {
@@ -95,7 +95,7 @@ func Arg_Optional_Marshal(m jsn.Marshaler, pv **Arg) (err error) {
 }
 
 func Arg_Marshal(m jsn.Marshaler, val *Arg) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Arg_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Arg_Field_Name)
 		if e0 == nil {

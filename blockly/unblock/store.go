@@ -47,9 +47,12 @@ func NewBlock(m *chart.Machine, reg TypeCreator, bff *BlockInfo) *chart.StateMix
 // since this is using the standard decoder, deserialization is based on the go type.
 func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *BlockInfo) *chart.StateMix {
 	var termName string // pulled from the golang key
-	if m.Comment != nil {
-		if c := bff.Icons.Comment; c != nil {
-			*m.Comment = c.Text
+	if ptr := m.Markout; ptr != nil {
+		if c := bff.Icons.Comment; c != nil && len(c.Text) > 0 {
+			if *ptr == nil {
+				*ptr = make(map[string]any)
+			}
+			(*ptr)["comment"] = c.Text
 		}
 	}
 	return &chart.StateMix{

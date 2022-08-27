@@ -30,6 +30,15 @@ func newTemplates(ctx *Context) (*template.Template, error) {
 		"Terms": func(block *spec.TypeSpec) []Term {
 			return ctx.TermsOf(block)
 		},
+		"UserComment": func(block *spec.TypeSpec) (ret []string) {
+			switch cmt := block.Markup["comment"].(type) {
+			case string:
+				ret = []string{cmt}
+			case []string:
+				ret = cmt
+			}
+			return
+		},
 		"Uses": func(block *spec.TypeSpec) string {
 			return specShortName(block)
 		},

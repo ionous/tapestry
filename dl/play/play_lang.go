@@ -10,8 +10,8 @@ import (
 
 // PlayLog a log message that can optionally be displayed to the client.
 type PlayLog struct {
-	Log         string `if:"label=log,type=text"`
-	UserComment string
+	Log    string `if:"label=log,type=text"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -97,7 +97,7 @@ func PlayLog_Optional_Marshal(m jsn.Marshaler, pv **PlayLog) (err error) {
 }
 
 func PlayLog_Marshal(m jsn.Marshaler, val *PlayLog) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PlayLog_Flow{val}); err == nil {
 		e0 := m.MarshalKey("log", PlayLog_Field_Log)
 		if e0 == nil {
@@ -182,8 +182,8 @@ func PlayMessage_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PlayMessage) (e
 
 // PlayMode app level change in state.
 type PlayMode struct {
-	Mode        PlayModes `if:"label=mode"`
-	UserComment string
+	Mode   PlayModes `if:"label=mode"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -269,7 +269,7 @@ func PlayMode_Optional_Marshal(m jsn.Marshaler, pv **PlayMode) (err error) {
 }
 
 func PlayMode_Marshal(m jsn.Marshaler, val *PlayMode) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PlayMode_Flow{val}); err == nil {
 		e0 := m.MarshalKey("mode", PlayMode_Field_Mode)
 		if e0 == nil {
@@ -370,8 +370,8 @@ func PlayModes_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PlayModes) (err e
 
 // PlayOut output from the game itself.
 type PlayOut struct {
-	Out         string `if:"label=out,type=text"`
-	UserComment string
+	Out    string `if:"label=out,type=text"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -457,7 +457,7 @@ func PlayOut_Optional_Marshal(m jsn.Marshaler, pv **PlayOut) (err error) {
 }
 
 func PlayOut_Marshal(m jsn.Marshaler, val *PlayOut) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PlayOut_Flow{val}); err == nil {
 		e0 := m.MarshalKey("out", PlayOut_Field_Out)
 		if e0 == nil {

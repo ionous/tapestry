@@ -4,7 +4,7 @@
     code doc 
 */ -}}
 {{- if .UserComment }}
-{{- range $i, $el := Lines .UserComment }}{{ if $i }}
+{{- range $i, $el := .UserComment }}{{ if $i }}
 //{{end}}{{""}} {{$el}}{{end}}{{end}}
 {{- /*
     struct decl
@@ -16,7 +16,7 @@ type {{Pascal .Name}} struct {
 {{- if .Optional}},optional{{end}}
 {{- if .IsUnboxed}},type={{.TypeName}}{{end}}"`
 {{end}}{{/*ends range $terms*/ -}}
-{{""}}	UserComment string
+{{""}}	Metadata map[string]any
 }
 {{- /*
     slots
@@ -71,7 +71,7 @@ func {{Pascal .Name}}_Optional_Marshal(m jsn.Marshaler, pv **{{Pascal .Name}}) (
 }
 
 func {{Pascal .Name}}_Marshal(m jsn.Marshaler, val *{{Pascal .Name}}) (err error) {
-  m.SetComment(&val.UserComment)
+  m.StoreMetadata(&val.Metadata)
   if err = m.MarshalBlock({{Pascal .Name}}_Flow{val}); err == nil {
 {{- range $i, $term:= Terms .}}{{/* loop over terms */}}{{if not .Private}}
     e{{$i}} := m.MarshalKey("{{if not .IsAnonymous}}{{.Label}}{{end}}", {{Pascal $type.Name}}_Field_{{Pascal .Field}})

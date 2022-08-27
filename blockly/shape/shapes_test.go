@@ -84,7 +84,7 @@ func TestStoryFileShape(t *testing.T) {
 	expect := `{
   "type": "story_file",
   "colour": "%{BKY_COLOUR_HUE}",
-  "tooltip": "top level node, currently just for blockly  might eventually contain story metadata  ex. author, description...",
+  "tooltip": "top level node, currently just for blockly might eventually contain story metadata  ex. author, description...",
   "extensions": [
     "tapestry_generic_mixin",
     "tapestry_generic_extension"

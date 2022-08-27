@@ -1,6 +1,8 @@
 package dout
 
 import (
+	"strings"
+
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"github.com/ionous/errutil"
@@ -50,10 +52,15 @@ func newBlock(m *chart.Machine) *chart.StateMix {
 
 func addBlock(m *chart.Machine, next *chart.StateMix) *chart.StateMix {
 	next.OnMap = func(typeName string, _ jsn.FlowBlock) bool {
-		var id string
-		if m.Comment != nil {
-			id = *m.Comment
-			m.Comment = nil
+		var id string // fix: separate "id" from "comment"?
+		if ptr := m.Markout; ptr != nil {
+			switch cmt := (*ptr)["comment"].(type) {
+			case string:
+				id = cmt
+			case []string:
+				id = strings.Join(cmt, "\n")
+			}
+			m.Markout = nil
 		}
 		m.PushState(newFlow(m, detMap{
 			Id:     id,

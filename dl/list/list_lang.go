@@ -12,8 +12,8 @@ import (
 
 // AsNum Define the name of a number variable.
 type AsNum struct {
-	Var         core.VariableName `if:"label=_"`
-	UserComment string
+	Var    core.VariableName `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -98,7 +98,7 @@ func AsNum_Optional_Marshal(m jsn.Marshaler, pv **AsNum) (err error) {
 }
 
 func AsNum_Marshal(m jsn.Marshaler, val *AsNum) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(AsNum_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AsNum_Field_Var)
 		if e0 == nil {
@@ -114,8 +114,8 @@ func AsNum_Marshal(m jsn.Marshaler, val *AsNum) (err error) {
 
 // AsRec Define the name of a record variable.
 type AsRec struct {
-	Var         core.VariableName `if:"label=_"`
-	UserComment string
+	Var    core.VariableName `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -200,7 +200,7 @@ func AsRec_Optional_Marshal(m jsn.Marshaler, pv **AsRec) (err error) {
 }
 
 func AsRec_Marshal(m jsn.Marshaler, val *AsRec) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(AsRec_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AsRec_Field_Var)
 		if e0 == nil {
@@ -216,8 +216,8 @@ func AsRec_Marshal(m jsn.Marshaler, val *AsRec) (err error) {
 
 // AsTxt Define the name of a text variable.
 type AsTxt struct {
-	Var         core.VariableName `if:"label=_"`
-	UserComment string
+	Var    core.VariableName `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -302,7 +302,7 @@ func AsTxt_Optional_Marshal(m jsn.Marshaler, pv **AsTxt) (err error) {
 }
 
 func AsTxt_Marshal(m jsn.Marshaler, val *AsTxt) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(AsTxt_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", AsTxt_Field_Var)
 		if e0 == nil {
@@ -318,9 +318,9 @@ func AsTxt_Marshal(m jsn.Marshaler, val *AsTxt) (err error) {
 
 // EraseEdge Erase at edge: Remove one or more values from a list.
 type EraseEdge struct {
-	From        ListSource  `if:"label=_"`
-	AtEdge      rt.BoolEval `if:"label=at_front,optional"`
-	UserComment string
+	From   ListSource  `if:"label=_"`
+	AtEdge rt.BoolEval `if:"label=at_front,optional"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -407,7 +407,7 @@ func EraseEdge_Optional_Marshal(m jsn.Marshaler, pv **EraseEdge) (err error) {
 }
 
 func EraseEdge_Marshal(m jsn.Marshaler, val *EraseEdge) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(EraseEdge_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", EraseEdge_Field_From)
 		if e0 == nil {
@@ -430,10 +430,10 @@ func EraseEdge_Marshal(m jsn.Marshaler, val *EraseEdge) (err error) {
 
 // EraseIndex Erase at index: Remove one or more values from a list.
 type EraseIndex struct {
-	Count       rt.NumberEval `if:"label=_"`
-	From        ListSource    `if:"label=from"`
-	AtIndex     rt.NumberEval `if:"label=at_index"`
-	UserComment string
+	Count   rt.NumberEval `if:"label=_"`
+	From    ListSource    `if:"label=from"`
+	AtIndex rt.NumberEval `if:"label=at_index"`
+	Markup  map[string]any
 }
 
 // User implemented slots:
@@ -521,7 +521,7 @@ func EraseIndex_Optional_Marshal(m jsn.Marshaler, pv **EraseIndex) (err error) {
 }
 
 func EraseIndex_Marshal(m jsn.Marshaler, val *EraseIndex) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(EraseIndex_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", EraseIndex_Field_Count)
 		if e0 == nil {
@@ -551,12 +551,12 @@ func EraseIndex_Marshal(m jsn.Marshaler, val *EraseIndex) (err error) {
 
 // Erasing Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
 type Erasing struct {
-	Count       rt.NumberEval `if:"label=_"`
-	From        ListSource    `if:"label=from"`
-	AtIndex     rt.NumberEval `if:"label=at_index"`
-	As          string        `if:"label=as,type=text"`
-	Does        []rt.Execute  `if:"label=does"`
-	UserComment string
+	Count   rt.NumberEval `if:"label=_"`
+	From    ListSource    `if:"label=from"`
+	AtIndex rt.NumberEval `if:"label=at_index"`
+	As      string        `if:"label=as,type=text"`
+	Does    []rt.Execute  `if:"label=does"`
+	Markup  map[string]any
 }
 
 // User implemented slots:
@@ -645,7 +645,7 @@ func Erasing_Optional_Marshal(m jsn.Marshaler, pv **Erasing) (err error) {
 }
 
 func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Erasing_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Erasing_Field_Count)
 		if e0 == nil {
@@ -689,12 +689,12 @@ func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
 
 // ErasingEdge Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
 type ErasingEdge struct {
-	From        ListSource    `if:"label=_"`
-	AtEdge      rt.BoolEval   `if:"label=at_front,optional"`
-	As          string        `if:"label=as,type=text"`
-	Does        []rt.Execute  `if:"label=does"`
-	Else        core.Brancher `if:"label=else,optional"`
-	UserComment string
+	From   ListSource    `if:"label=_"`
+	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
+	As     string        `if:"label=as,type=text"`
+	Does   []rt.Execute  `if:"label=does"`
+	Else   core.Brancher `if:"label=else,optional"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -784,7 +784,7 @@ func ErasingEdge_Optional_Marshal(m jsn.Marshaler, pv **ErasingEdge) (err error)
 }
 
 func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ErasingEdge_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ErasingEdge_Field_From)
 		if e0 == nil {
@@ -828,8 +828,8 @@ func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 
 // FromNumList Uses a list of numbers.
 type FromNumList struct {
-	Var         core.VariableName `if:"label=_"`
-	UserComment string
+	Var    core.VariableName `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -915,7 +915,7 @@ func FromNumList_Optional_Marshal(m jsn.Marshaler, pv **FromNumList) (err error)
 }
 
 func FromNumList_Marshal(m jsn.Marshaler, val *FromNumList) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(FromNumList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromNumList_Field_Var)
 		if e0 == nil {
@@ -931,8 +931,8 @@ func FromNumList_Marshal(m jsn.Marshaler, val *FromNumList) (err error) {
 
 // FromRecList Uses a list of records.
 type FromRecList struct {
-	Var         core.VariableName `if:"label=_"`
-	UserComment string
+	Var    core.VariableName `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1018,7 +1018,7 @@ func FromRecList_Optional_Marshal(m jsn.Marshaler, pv **FromRecList) (err error)
 }
 
 func FromRecList_Marshal(m jsn.Marshaler, val *FromRecList) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(FromRecList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromRecList_Field_Var)
 		if e0 == nil {
@@ -1034,8 +1034,8 @@ func FromRecList_Marshal(m jsn.Marshaler, val *FromRecList) (err error) {
 
 // FromTxtList Uses a list of text.
 type FromTxtList struct {
-	Var         core.VariableName `if:"label=_"`
-	UserComment string
+	Var    core.VariableName `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1121,7 +1121,7 @@ func FromTxtList_Optional_Marshal(m jsn.Marshaler, pv **FromTxtList) (err error)
 }
 
 func FromTxtList_Marshal(m jsn.Marshaler, val *FromTxtList) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(FromTxtList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", FromTxtList_Field_Var)
 		if e0 == nil {
@@ -1137,8 +1137,8 @@ func FromTxtList_Marshal(m jsn.Marshaler, val *FromTxtList) (err error) {
 
 // IntoNumList Targets a list of numbers.
 type IntoNumList struct {
-	Var         core.VariableName `if:"label=_"`
-	UserComment string
+	Var    core.VariableName `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1224,7 +1224,7 @@ func IntoNumList_Optional_Marshal(m jsn.Marshaler, pv **IntoNumList) (err error)
 }
 
 func IntoNumList_Marshal(m jsn.Marshaler, val *IntoNumList) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(IntoNumList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", IntoNumList_Field_Var)
 		if e0 == nil {
@@ -1240,8 +1240,8 @@ func IntoNumList_Marshal(m jsn.Marshaler, val *IntoNumList) (err error) {
 
 // IntoRecList Targets a list of records.
 type IntoRecList struct {
-	Var         core.VariableName `if:"label=_"`
-	UserComment string
+	Var    core.VariableName `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1327,7 +1327,7 @@ func IntoRecList_Optional_Marshal(m jsn.Marshaler, pv **IntoRecList) (err error)
 }
 
 func IntoRecList_Marshal(m jsn.Marshaler, val *IntoRecList) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(IntoRecList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", IntoRecList_Field_Var)
 		if e0 == nil {
@@ -1343,8 +1343,8 @@ func IntoRecList_Marshal(m jsn.Marshaler, val *IntoRecList) (err error) {
 
 // IntoTxtList Targets a list of text.
 type IntoTxtList struct {
-	Var         core.VariableName `if:"label=_"`
-	UserComment string
+	Var    core.VariableName `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1430,7 +1430,7 @@ func IntoTxtList_Optional_Marshal(m jsn.Marshaler, pv **IntoTxtList) (err error)
 }
 
 func IntoTxtList_Marshal(m jsn.Marshaler, val *IntoTxtList) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(IntoTxtList_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", IntoTxtList_Field_Var)
 		if e0 == nil {
@@ -1446,9 +1446,9 @@ func IntoTxtList_Marshal(m jsn.Marshaler, val *IntoTxtList) (err error) {
 
 // ListAt Get a value from a list. The first element is is index 1.
 type ListAt struct {
-	List        rt.Assignment `if:"label=_"`
-	Index       rt.NumberEval `if:"label=index"`
-	UserComment string
+	List   rt.Assignment `if:"label=_"`
+	Index  rt.NumberEval `if:"label=index"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1537,7 +1537,7 @@ func ListAt_Optional_Marshal(m jsn.Marshaler, pv **ListAt) (err error) {
 }
 
 func ListAt_Marshal(m jsn.Marshaler, val *ListAt) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListAt_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListAt_Field_List)
 		if e0 == nil {
@@ -1560,11 +1560,11 @@ func ListAt_Marshal(m jsn.Marshaler, val *ListAt) (err error) {
 
 // ListEach Loops over the elements in the passed list, or runs the 'else' activity if empty.
 type ListEach struct {
-	List        rt.Assignment `if:"label=across"`
-	As          ListIterator  `if:"label=as"`
-	Does        []rt.Execute  `if:"label=does"`
-	Else        core.Brancher `if:"label=else,optional"`
-	UserComment string
+	List   rt.Assignment `if:"label=across"`
+	As     ListIterator  `if:"label=as"`
+	Does   []rt.Execute  `if:"label=does"`
+	Else   core.Brancher `if:"label=else,optional"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1653,7 +1653,7 @@ func ListEach_Optional_Marshal(m jsn.Marshaler, pv **ListEach) (err error) {
 }
 
 func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListEach_Flow{val}); err == nil {
 		e0 := m.MarshalKey("across", ListEach_Field_List)
 		if e0 == nil {
@@ -1690,9 +1690,9 @@ func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
 
 // ListFind Search a list for a specific value.
 type ListFind struct {
-	Value       rt.Assignment `if:"label=_"`
-	List        rt.Assignment `if:"label=list"`
-	UserComment string
+	Value  rt.Assignment `if:"label=_"`
+	List   rt.Assignment `if:"label=list"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -1780,7 +1780,7 @@ func ListFind_Optional_Marshal(m jsn.Marshaler, pv **ListFind) (err error) {
 }
 
 func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListFind_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListFind_Field_Value)
 		if e0 == nil {
@@ -1803,10 +1803,10 @@ func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
 
 // ListGather Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather.
 type ListGather struct {
-	Var         core.VariableName `if:"label=_"`
-	From        ListSource        `if:"label=from"`
-	Using       string            `if:"label=using,type=text"`
-	UserComment string
+	Var    core.VariableName `if:"label=_"`
+	From   ListSource        `if:"label=from"`
+	Using  string            `if:"label=using,type=text"`
+	Markup map[string]any
 }
 
 func (*ListGather) Compose() composer.Spec {
@@ -1891,7 +1891,7 @@ func ListGather_Optional_Marshal(m jsn.Marshaler, pv **ListGather) (err error) {
 }
 
 func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListGather_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListGather_Field_Var)
 		if e0 == nil {
@@ -1990,8 +1990,8 @@ func ListIterator_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListIterator) 
 
 // ListLen Determines the number of values in a list.
 type ListLen struct {
-	List        rt.Assignment `if:"label=_"`
-	UserComment string
+	List   rt.Assignment `if:"label=_"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -2077,7 +2077,7 @@ func ListLen_Optional_Marshal(m jsn.Marshaler, pv **ListLen) (err error) {
 }
 
 func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListLen_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListLen_Field_List)
 		if e0 == nil {
@@ -2096,7 +2096,7 @@ type ListMap struct {
 	ToList       string        `if:"label=_,type=text"`
 	FromList     rt.Assignment `if:"label=from_list"`
 	UsingPattern string        `if:"label=using,type=text"`
-	UserComment  string
+	Markup       map[string]any
 }
 
 // User implemented slots:
@@ -2184,7 +2184,7 @@ func ListMap_Optional_Marshal(m jsn.Marshaler, pv **ListMap) (err error) {
 }
 
 func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListMap_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListMap_Field_ToList)
 		if e0 == nil {
@@ -2217,7 +2217,7 @@ type ListReduce struct {
 	IntoValue    string        `if:"label=into,type=text"`
 	FromList     rt.Assignment `if:"label=from_list"`
 	UsingPattern string        `if:"label=using,type=text"`
-	UserComment  string
+	Markup       map[string]any
 }
 
 // User implemented slots:
@@ -2305,7 +2305,7 @@ func ListReduce_Optional_Marshal(m jsn.Marshaler, pv **ListReduce) (err error) {
 }
 
 func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListReduce_Flow{val}); err == nil {
 		e0 := m.MarshalKey("into", ListReduce_Field_IntoValue)
 		if e0 == nil {
@@ -2335,8 +2335,8 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 
 // ListReverse Reverse a list.
 type ListReverse struct {
-	List        ListSource `if:"label=list"`
-	UserComment string
+	List   ListSource `if:"label=list"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -2422,7 +2422,7 @@ func ListReverse_Optional_Marshal(m jsn.Marshaler, pv **ListReverse) (err error)
 }
 
 func ListReverse_Marshal(m jsn.Marshaler, val *ListReverse) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListReverse_Flow{val}); err == nil {
 		e0 := m.MarshalKey("list", ListReverse_Field_List)
 		if e0 == nil {
@@ -2438,10 +2438,10 @@ func ListReverse_Marshal(m jsn.Marshaler, val *ListReverse) (err error) {
 
 // ListSet Overwrite an existing value in a list.
 type ListSet struct {
-	List        string        `if:"label=_,type=text"`
-	Index       rt.NumberEval `if:"label=index"`
-	From        rt.Assignment `if:"label=from"`
-	UserComment string
+	List   string        `if:"label=_,type=text"`
+	Index  rt.NumberEval `if:"label=index"`
+	From   rt.Assignment `if:"label=from"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -2529,7 +2529,7 @@ func ListSet_Optional_Marshal(m jsn.Marshaler, pv **ListSet) (err error) {
 }
 
 func ListSet_Marshal(m jsn.Marshaler, val *ListSet) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListSet_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSet_Field_List)
 		if e0 == nil {
@@ -2565,10 +2565,10 @@ func ListSet_Marshal(m jsn.Marshaler, val *ListSet) (err error) {
 // When end is omitted, copy up to and including the last element;
 // and do the same if the end is greater than the length
 type ListSlice struct {
-	List        rt.Assignment `if:"label=_"`
-	Start       rt.NumberEval `if:"label=start,optional"`
-	End         rt.NumberEval `if:"label=end,optional"`
-	UserComment string
+	List   rt.Assignment `if:"label=_"`
+	Start  rt.NumberEval `if:"label=start,optional"`
+	End    rt.NumberEval `if:"label=end,optional"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -2658,7 +2658,7 @@ func ListSlice_Optional_Marshal(m jsn.Marshaler, pv **ListSlice) (err error) {
 }
 
 func ListSlice_Marshal(m jsn.Marshaler, val *ListSlice) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListSlice_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSlice_Field_List)
 		if e0 == nil {
@@ -2688,10 +2688,10 @@ func ListSlice_Marshal(m jsn.Marshaler, val *ListSlice) (err error) {
 
 // ListSortNumbers
 type ListSortNumbers struct {
-	Var         core.VariableName `if:"label=_"`
-	ByField     string            `if:"label=by_field,type=text"`
-	Descending  rt.BoolEval       `if:"label=descending,optional"`
-	UserComment string
+	Var        core.VariableName `if:"label=_"`
+	ByField    string            `if:"label=by_field,type=text"`
+	Descending rt.BoolEval       `if:"label=descending,optional"`
+	Markup     map[string]any
 }
 
 // User implemented slots:
@@ -2779,7 +2779,7 @@ func ListSortNumbers_Optional_Marshal(m jsn.Marshaler, pv **ListSortNumbers) (er
 }
 
 func ListSortNumbers_Marshal(m jsn.Marshaler, val *ListSortNumbers) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListSortNumbers_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSortNumbers_Field_Var)
 		if e0 == nil {
@@ -2809,11 +2809,11 @@ func ListSortNumbers_Marshal(m jsn.Marshaler, val *ListSortNumbers) (err error) 
 
 // ListSortText Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 type ListSortText struct {
-	Var         core.VariableName `if:"label=_"`
-	ByField     string            `if:"label=by_field,type=text"`
-	Descending  rt.BoolEval       `if:"label=descending,optional"`
-	UsingCase   rt.BoolEval       `if:"label=using_case,optional"`
-	UserComment string
+	Var        core.VariableName `if:"label=_"`
+	ByField    string            `if:"label=by_field,type=text"`
+	Descending rt.BoolEval       `if:"label=descending,optional"`
+	UsingCase  rt.BoolEval       `if:"label=using_case,optional"`
+	Markup     map[string]any
 }
 
 // User implemented slots:
@@ -2902,7 +2902,7 @@ func ListSortText_Optional_Marshal(m jsn.Marshaler, pv **ListSortText) (err erro
 }
 
 func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListSortText_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSortText_Field_Var)
 		if e0 == nil {
@@ -2939,9 +2939,9 @@ func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
 
 // ListSortUsing Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 type ListSortUsing struct {
-	Var         core.VariableName `if:"label=_"`
-	Using       string            `if:"label=using,type=text"`
-	UserComment string
+	Var    core.VariableName `if:"label=_"`
+	Using  string            `if:"label=using,type=text"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -3028,7 +3028,7 @@ func ListSortUsing_Optional_Marshal(m jsn.Marshaler, pv **ListSortUsing) (err er
 }
 
 func ListSortUsing_Marshal(m jsn.Marshaler, val *ListSortUsing) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListSortUsing_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSortUsing_Field_Var)
 		if e0 == nil {
@@ -3120,11 +3120,11 @@ func ListSource_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSource) (err
 
 // ListSplice Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list's length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.
 type ListSplice struct {
-	List        string        `if:"label=_,type=text"`
-	Start       rt.NumberEval `if:"label=start"`
-	Remove      rt.NumberEval `if:"label=remove"`
-	Insert      rt.Assignment `if:"label=insert"`
-	UserComment string
+	List   string        `if:"label=_,type=text"`
+	Start  rt.NumberEval `if:"label=start"`
+	Remove rt.NumberEval `if:"label=remove"`
+	Insert rt.Assignment `if:"label=insert"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -3216,7 +3216,7 @@ func ListSplice_Optional_Marshal(m jsn.Marshaler, pv **ListSplice) (err error) {
 }
 
 func ListSplice_Marshal(m jsn.Marshaler, val *ListSplice) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListSplice_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSplice_Field_List)
 		if e0 == nil {
@@ -3322,10 +3322,10 @@ func ListTarget_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListTarget) (err
 
 // PutEdge Add a value to a list.
 type PutEdge struct {
-	From        rt.Assignment `if:"label=_"`
-	Into        ListTarget    `if:"label=into"`
-	AtEdge      rt.BoolEval   `if:"label=at_front,optional"`
-	UserComment string
+	From   rt.Assignment `if:"label=_"`
+	Into   ListTarget    `if:"label=into"`
+	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -3413,7 +3413,7 @@ func PutEdge_Optional_Marshal(m jsn.Marshaler, pv **PutEdge) (err error) {
 }
 
 func PutEdge_Marshal(m jsn.Marshaler, val *PutEdge) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PutEdge_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", PutEdge_Field_From)
 		if e0 == nil {
@@ -3443,10 +3443,10 @@ func PutEdge_Marshal(m jsn.Marshaler, val *PutEdge) (err error) {
 
 // PutIndex Replace one value in a list with another.
 type PutIndex struct {
-	From        rt.Assignment `if:"label=_"`
-	Into        ListTarget    `if:"label=into"`
-	AtIndex     rt.NumberEval `if:"label=at_index"`
-	UserComment string
+	From    rt.Assignment `if:"label=_"`
+	Into    ListTarget    `if:"label=into"`
+	AtIndex rt.NumberEval `if:"label=at_index"`
+	Markup  map[string]any
 }
 
 // User implemented slots:
@@ -3534,7 +3534,7 @@ func PutIndex_Optional_Marshal(m jsn.Marshaler, pv **PutIndex) (err error) {
 }
 
 func PutIndex_Marshal(m jsn.Marshaler, val *PutIndex) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PutIndex_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", PutIndex_Field_From)
 		if e0 == nil {
@@ -3569,10 +3569,10 @@ func PutIndex_Marshal(m jsn.Marshaler, val *PutIndex) (err error) {
 // A positive step ends the series when the returned value would exceed stop
 // while a negative step ends before generating a value less than stop.
 type Range struct {
-	To          rt.NumberEval `if:"label=_"`
-	From        rt.NumberEval `if:"label=from,optional"`
-	ByStep      rt.NumberEval `if:"label=by_step,optional"`
-	UserComment string
+	To     rt.NumberEval `if:"label=_"`
+	From   rt.NumberEval `if:"label=from,optional"`
+	ByStep rt.NumberEval `if:"label=by_step,optional"`
+	Markup map[string]any
 }
 
 // User implemented slots:
@@ -3659,7 +3659,7 @@ func Range_Optional_Marshal(m jsn.Marshaler, pv **Range) (err error) {
 }
 
 func Range_Marshal(m jsn.Marshaler, val *Range) (err error) {
-	m.SetComment(&val.UserComment)
+	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Range_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", Range_Field_To)
 		if e0 == nil {
