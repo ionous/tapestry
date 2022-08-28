@@ -83,7 +83,7 @@ func findRepeatingContainers(files fs.FS) (ret []repeatingContainer, err error) 
 func TestStoryFileShape(t *testing.T) {
 	expect := `{
   "type": "story_file",
-  "colour": "%{BKY_COLOUR_HUE}",
+  "colour": "%{BKY_TAP_HUE_ROOT}",
   "tooltip": "top level node, currently just for blockly might eventually contain story metadata  ex. author, description...",
   "extensions": [
     "tapestry_generic_mixin",
@@ -131,7 +131,7 @@ func TestStoryTextShape(t *testing.T) {
     "text_field",
     "field"
   ],
-  "colour": "%{BKY_COLOUR_HUE}",
+  "colour": "%{BKY_TAP_HUE}",
   "extensions": [
     "tapestry_generic_mixin",
     "tapestry_generic_extension"

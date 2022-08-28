@@ -22,14 +22,6 @@ func appendKv(out *js.Builder, k, v string) {
 }
 
 // "append" b/c preceeded by a comma if needed
-func appendColour(out *js.Builder, colour string) {
-	if len(colour) == 0 {
-		colour = bconst.COLOUR_HUE
-	}
-	out.R(js.Comma).Kv("colour", colour)
-}
-
-// "append" b/c preceeded by a comma if needed
 func appendChecks(out *js.Builder, label string, checks []string) {
 	if len(checks) > 0 {
 		out.R(js.Comma).

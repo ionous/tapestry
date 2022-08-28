@@ -9,7 +9,7 @@ import (
 // writes a slice of repeating flows.
 // unlike stacks, repeated inputs are all in the same block.
 // ( ex. "inputs": { "CONTAINS0": {...}, "CONTAINS1": {...}, ... } )
-func newSlice(m *chart.Machine, term string, inputs *js.Builder) *chart.StateMix {
+func (m *bgen) newSlice(term string, inputs *js.Builder) *chart.StateMix {
 	open, close, cnt := js.Obj[0], js.Obj[1], 0
 	return &chart.StateMix{
 		OnMap: func(typeName string, flow jsn.FlowBlock) bool {
@@ -22,7 +22,7 @@ func newSlice(m *chart.Machine, term string, inputs *js.Builder) *chart.StateMix
 			}).R(js.Colon).R(open).
 				Q("block").R(js.Colon).R(open)
 			cnt++
-			m.PushState(newInnerFlow(m, inputs, typeName))
+			m.PushState(m.newInnerFlow(inputs, typeName))
 			return true
 		},
 		// when a child state ( the inner block ) has finished

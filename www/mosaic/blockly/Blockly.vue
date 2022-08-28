@@ -12,6 +12,7 @@ import MosaicTextField from "./mosaicTextField.js";
 import tapestryMutator from "./tapestryMutator.js";
 import tapestryExtensions from "./tapestryExtensions.js";
 import tapestryHelpers from "./tapestryHelpers.js";
+import "./customColors.js";
 
 // todo: there are issues with the audio preloading...
 Blockly.WorkspaceAudio.prototype.preload = function () {};
@@ -45,7 +46,6 @@ export default {
         this.onResize();
         Blockly.svgResize(workspace);
         this.onRouteChanged(this.$route.params);
-
       }
     }
   },
@@ -128,7 +128,8 @@ export default {
       do {
         x += element.offsetLeft;
         y += element.offsetTop;
-        element = element.offsetParent;
+        // element = element.offsetParent;
+        break; // blockly's example walks all the way up to the top... why?
       } while (element);
       // Position blocklyDiv over blocklyArea.
       blocklyDiv.style.left = x + "px";
@@ -144,7 +145,7 @@ export default {
 function registerExtension(name, obj) {
   const registry = Blockly.Extensions;
   if (registry.isRegistered(name)) {
-      registry.unregister(name);
+    registry.unregister(name);
   }
   registry.register(name, obj);
 }
@@ -162,11 +163,12 @@ function registerFieldType(name, obj) {
 registerFieldType("mosaic_str_field", MosaicStrField);
 registerFieldType("mosaic_text_field", MosaicTextField);
 registerExtension("tapestry_generic_mutation", tapestryMutator);
-registerExtension("tapestry_generic_extension",
+registerExtension(
+  "tapestry_generic_extension",
   tapestryExtensions({
     getShapeData(blockType) {
       return shapeData[blockType];
-    }
+    },
   })
 );
 registerExtension("tapestry_generic_mixin", tapestryHelpers);

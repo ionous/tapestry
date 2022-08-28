@@ -35,7 +35,7 @@ func FromSpecs(files fs.FS) (ret string, err error) {
 								for _, blockType := range group.Specs {
 									// only flows
 									if _, ok := blockType.Spec.Value.(*spec.FlowSpec); ok {
-										stacks, outputs := slotStacks(&blockType)
+										stacks, outputs := slotStacks(&ts, &blockType)
 										if stacks {
 											b.Write(els, bconst.StackedName(blockType.Name))
 										}
@@ -67,10 +67,10 @@ func (b *block) Write(els *js.Builder, name string) {
 	})
 }
 
-// split the slots that this type supports into "stacks" and "values"
-func slotStacks(blockType *spec.TypeSpec) (stacks, outputs bool) {
+// split the slots that this type supports into "stacks" and "outputs"
+func slotStacks(types bconst.Types, blockType *spec.TypeSpec) (stacks, outputs bool) {
 	for _, s := range blockType.Slots {
-		slotRule := bconst.FindSlotRule(s)
+		slotRule := bconst.FindSlotRule(types, s)
 		if slotRule.Stack {
 			stacks = true
 		} else {

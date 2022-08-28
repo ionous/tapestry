@@ -23,7 +23,7 @@ func (w *ShapeWriter) newFieldDef(term spec.TermSpec) (ret *shapeField, err erro
 		if typeSpec.Spec.Choice == spec.UsesSpec_Slot_Opt {
 			// inputType might be a statement_input stack, or a single ( maybe repeatable ) input
 			// regardless, it only has the input, no special fields.
-			slot = bconst.FindSlotRule(typeSpec.Name)
+			slot = bconst.FindSlotRule(w, typeSpec.Name)
 		}
 		ret = &shapeField{term, typeSpec, slot}
 	}

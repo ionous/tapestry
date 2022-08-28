@@ -3,13 +3,15 @@ package tap
 import (
 	"path"
 	"path/filepath"
+
+	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
 )
 
 // Config contains paths to the standalone console utils.
 type Config struct {
-	cmds string // base directory for commands
-	data string // base directory for data
-	prod string // if this exists: a packaged set of frontend assets
+	cmds  string // base directory for commands
+	data  string // base directory for data
+	types rs.TypeSpecs
 }
 
 func (cfg *Config) Scratch(parts ...string) string {
@@ -25,15 +27,11 @@ func (cfg *Config) Cmd(which string) string {
 	return path.Join(cfg.cmds, "bin", which)
 }
 
-// empty string if not production
-func (cfg *Config) Prod() string {
-	return cfg.prod
-}
-
-// DevConfig creates a reasonable(?) config based on the developer go path.
-func DevConfig(cmdDir, dataDir string) *Config {
+// Configure creates a reasonable(?) config based on the developer go path.
+func Configure(types rs.TypeSpecs, cmdDir, dataDir string) *Config {
 	return &Config{
-		cmds: cmdDir,
-		data: dataDir,
+		types: types,
+		cmds:  cmdDir,
+		data:  dataDir,
 	}
 }

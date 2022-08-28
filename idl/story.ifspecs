@@ -2015,6 +2015,7 @@
         },
         {
           "--": "top level node, currently just for blockly might eventually contain story metadata  ex. author, description...",
+          "--blockly-color": "TAP_HUE_ROOT",
           "Spec:groups:with flow:": [
             "story_file",
             [
@@ -2041,6 +2042,8 @@
         },
         {
           "--": "Phrase",
+          "--blockly-color": "VARIABLES_HUE",
+          "--blockly-stack": true,
           "Spec:groups:with slot:": [
             "story_statement",
             "statements",

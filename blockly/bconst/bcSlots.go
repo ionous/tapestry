@@ -1,22 +1,21 @@
 package bconst
 
-import (
-	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/rt"
-)
+import "git.sr.ht/~ionous/tapestry/dl/spec"
 
-func FindSlotRule(name string) (ret SlotRule) {
-	var found bool
-	for _, s := range slots {
-		if s.Name == name {
-			ret, found = s, true
-			break
-		}
-	}
-	if !found {
+type Types interface {
+	FindType(string) (*spec.TypeSpec, bool)
+}
+
+// pass the name of the slot
+func FindSlotRule(types Types, name string) (ret SlotRule) {
+	if slot, ok := types.FindType(name); !ok {
+		ret = SlotRule{Name: name}
+	} else {
+		stacks, _ := slot.Markup[StackMarkup].(bool)
 		ret = SlotRule{
-			Name: name,
+			Name:   name,
+			Stack:  stacks,
+			Colour: BlockColor(slot),
 		}
 	}
 	return
@@ -53,42 +52,3 @@ func (slot *SlotRule) SlotType() (ret string) {
 	}
 	return
 }
-
-// tbd: would it make more sense to use groups for this?
-
-var slots = []SlotRule{{
-	Name:   literal.LiteralValue_Type,
-	Colour: MATH_HUE,
-}, {
-	Name:   rt.Execute_Type,
-	Colour: PROCEDURES_HUE,
-	Stack:  true,
-}, {
-	Name:   rt.Assignment_Type,
-	Colour: PROCEDURES_HUE,
-}, {
-	Name:   rt.BoolEval_Type,
-	Colour: LOGIC_HUE,
-}, {
-	Name:   rt.NumberEval_Type,
-	Colour: MATH_HUE,
-}, {
-	Name:   rt.TextEval_Type,
-	Colour: TEXTS_HUE,
-}, {
-	Name:   rt.NumListEval_Type,
-	Colour: MATH_HUE,
-}, {
-	Name:   rt.TextListEval_Type,
-	Colour: TEXTS_HUE,
-}, {
-	Name:   rt.RecordEval_Type,
-	Colour: LISTS_HUE,
-}, {
-	Name:   rt.RecordListEval_Type,
-	Colour: LISTS_HUE,
-}, {
-	Name:   story.StoryStatement_Type,
-	Colour: VARIABLES_HUE,
-	Stack:  true,
-}}

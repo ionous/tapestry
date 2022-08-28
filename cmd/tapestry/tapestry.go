@@ -12,6 +12,8 @@ import (
 	"strconv"
 
 	tap "git.sr.ht/~ionous/tapestry/cmd/tapestry/internal"
+	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
+	"git.sr.ht/~ionous/tapestry/idl"
 
 	"git.sr.ht/~ionous/tapestry/web"
 	"github.com/ionous/errutil"
@@ -39,6 +41,8 @@ func main() {
 	if dir, e := folder.GetFolder(); e != nil {
 		log.Println(e)
 		flag.Usage()
+	} else if types, e := rs.FromSpecs(idl.Specs); e != nil {
+		log.Fatal(e)
 	} else {
 		mux := http.NewServeMux()
 
@@ -47,7 +51,7 @@ func main() {
 		// composer.RedirectIndex(mux, "mosaic")
 
 		// FIX: remove the "cmdDir"
-		cfg := tap.DevConfig(build.Default.GOPATH, dir)
+		cfg := tap.Configure(types, build.Default.GOPATH, dir)
 
 		// raw story files ( because why not )
 		mux.Handle("/stories/", web.HandleResource(tap.FilesApi(cfg)))

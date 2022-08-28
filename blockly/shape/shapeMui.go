@@ -35,17 +35,17 @@ func (w *ShapeWriter) writeMuiInput(args *js.Builder, term spec.TermSpec) (ret i
 	if termType, ok := w.Types[typeName]; !ok {
 		log.Fatalln("missing named type", typeName)
 	} else {
-		ret = writeMuiTerm(args, term, termType)
+		ret = w.writeMuiTerm(args, term, termType)
 	}
 	return
 }
 
 // note: writes a leading comma :/
-func writeMuiTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) (ret int) {
+func (w *ShapeWriter) writeMuiTerm(args *js.Builder, term spec.TermSpec, termType *spec.TypeSpec) (ret int) {
 	label, name := term.Label, term.Field()
 	// stacked elements dont need to repeat inputs: one input allows multiple blocks.
 	// ( and if they are optional, we'll want to use a checkbox )
-	stacks, _ := slotStacks(termType)
+	stacks, _ := slotStacks(w, termType)
 	if term.Repeats && len(stacks) == 0 {
 		// for the mui: insist on having a label.
 		if len(label) == 0 {

@@ -1,25 +1,11 @@
 package bconst
 
-// defaults for colors are in blockly-master\msg\messages.js
-const (
-	COLOUR_HUE            = "%{BKY_COLOUR_HUE}"
-	LISTS_HUE             = "%{BKY_LISTS_HUE}"
-	LOGIC_HUE             = "%{BKY_LOGIC_HUE}"
-	LOOPS_HUE             = "%{BKY_LOOPS_HUE}"
-	MATH_HUE              = "%{BKY_MATH_HUE}"
-	PROCEDURES_HUE        = "%{BKY_PROCEDURES_HUE}"
-	TEXTS_HUE             = "%{BKY_TEXTS_HUE}"
-	VARIABLES_DYNAMIC_HUE = "%{BKY_VARIABLES_DYNAMIC_HUE}"
-	VARIABLES_HUE         = "%{BKY_VARIABLES_HUE}"
-)
+// yup.
+const DefaultColor = "TAP_HUE"
 
-// "BKY_DEFAULT_COLOR"
-type Colour int
-
-//go:generate stringer -type=Colour -linecomment
-const (
-	DefaultColor Colour = iota // %{BKY_TAPCOLOR_DEFAULT}
-)
+// tapestry typespec markup
+const ColorMarkup = "blockly-color"
+const StackMarkup = "blockly-stack"
 
 const (
 	FieldCheckbox = "field_checkbox"

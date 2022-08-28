@@ -8,6 +8,8 @@ import (
 
   "git.sr.ht/~ionous/tapestry/blockly/block"
   "git.sr.ht/~ionous/tapestry/blockly/test"
+  "git.sr.ht/~ionous/tapestry/dl/spec/rs"
+  "git.sr.ht/~ionous/tapestry/idl"
   "git.sr.ht/~ionous/tapestry/jsn"
   "git.sr.ht/~ionous/tapestry/jsn/chart"
   "git.sr.ht/~ionous/tapestry/web/js"
@@ -33,7 +35,9 @@ func testBlocks(src jsn.Marshalee, expect string) (err error) {
   }
   var out js.Builder
   enc := chart.MakeEncoder()
-  if e := enc.Marshal(src, block.NewTopBlock(&enc, &out, false)); e != nil {
+  if ts, e := rs.FromSpecs(idl.Specs); e != nil {
+    err = e
+  } else if e := enc.Marshal(src, block.NewTopBlock(&enc, &ts, &out, false)); e != nil {
     err = errutil.New(e, "failed marshal")
   } else if str, e := indent(out.String()); e != nil {
     err = errutil.New(e, "invalid json", str)

@@ -6,13 +6,13 @@ import (
 )
 
 // see also: newSwap
-func newSlot(m *chart.Machine, term string, blk *blockData) *chart.StateMix {
+func (m *bgen) newSlot(term string, blk *blockData) *chart.StateMix {
 	was := -1
 	return &chart.StateMix{
 		OnBlock: func(block jsn.Block) (err error) {
 			was = blk.startInput(term)
 			_, ok := block.(jsn.FlowBlock)
-			m.PushState(newInnerBlock(m, &blk.inputs, block.GetType(), ok))
+			m.PushState(m.newInnerBlock(&blk.inputs, block.GetType(), ok))
 			return
 		},
 		OnEnd: func() {

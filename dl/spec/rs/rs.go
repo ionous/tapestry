@@ -21,6 +21,13 @@ type TypeSpecs struct {
 	Groups []*spec.TypeSpec
 }
 
+func (types *TypeSpecs) FindType(name string) (ret *spec.TypeSpec, okay bool) {
+	if t, ok := types.Types[name]; ok {
+		ret, okay = t, true
+	}
+	return
+}
+
 // return a list of sorted keys
 func (types *TypeSpecs) Keys() []string {
 	keys := make([]string, 0, len(types.Types))

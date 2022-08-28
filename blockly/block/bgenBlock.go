@@ -1,6 +1,7 @@
 package block
 
 import (
+	"git.sr.ht/~ionous/tapestry/blockly/bconst"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/web/js"
@@ -8,7 +9,8 @@ import (
 
 // writes a new block into what might be the topLevel array of blocks,
 // or the value of a block or shadow key.
-func NewTopBlock(m *chart.Machine, blk *js.Builder, _zeroPos bool) chart.State {
+func NewTopBlock(cm *chart.Machine, types bconst.Types, blk *js.Builder, _zeroPos bool) chart.State {
+	m := bgen{cm, types}
 	open, close := js.Obj[0], js.Obj[1]
 	zeroPos = _zeroPos
 	return &chart.StateMix{
@@ -16,7 +18,7 @@ func NewTopBlock(m *chart.Machine, blk *js.Builder, _zeroPos bool) chart.State {
 		// later, a member of our flow
 		OnMap: func(typeName string, flow jsn.FlowBlock) (okay bool) {
 			blk.R(open)
-			m.PushState(newInnerFlow(m, blk, typeName))
+			m.PushState(m.newInnerFlow(blk, typeName))
 			return true
 		},
 		// listen to the end of the inner block
@@ -27,15 +29,20 @@ func NewTopBlock(m *chart.Machine, blk *js.Builder, _zeroPos bool) chart.State {
 	}
 }
 
+type bgen struct {
+	*chart.Machine
+	types bconst.Types
+}
+
 var zeroPos = false
 
 // writes most of the contents of a block, without its surrounding {}
 // ( to support the nested linked lists of blocks used for stacks )
-func newInnerFlow(m *chart.Machine, body *js.Builder, typeName string) *chart.StateMix {
-	return newInnerBlock(m, body, typeName, true)
+func (m *bgen) newInnerFlow(body *js.Builder, typeName string) *chart.StateMix {
+	return m.newInnerBlock(body, typeName, true)
 }
 
-func newInnerBlock(m *chart.Machine, body *js.Builder, typeName string, allowExtraData bool) *chart.StateMix {
+func (m *bgen) newInnerBlock(body *js.Builder, typeName string, allowExtraData bool) *chart.StateMix {
 	var markup map[string]any
 	if ptr := m.Markout; ptr != nil {
 		markup, m.Markout = *ptr, nil
@@ -58,7 +65,7 @@ func newInnerBlock(m *chart.Machine, body *js.Builder, typeName string, allowExt
 		// a member that is a flow.
 		OnMap: func(_ string, flow jsn.FlowBlock) (alwaysTrue bool) {
 			was := blk.startInput(term)
-			inner := newInnerFlow(m, &blk.inputs, flow.GetType())
+			inner := m.newInnerFlow(&blk.inputs, flow.GetType())
 			m.PushState(inner)
 			defaultEnding := inner.OnEnd
 			inner.OnEnd = func() {
@@ -70,13 +77,13 @@ func newInnerBlock(m *chart.Machine, body *js.Builder, typeName string, allowExt
 
 		// a value that fills a slot; this will be an input
 		OnSlot: func(string, jsn.SlotBlock) (alwaysTrue bool) {
-			m.PushState(newSlot(m, term, &blk))
+			m.PushState(m.newSlot(term, &blk))
 			return true
 		},
 
 		// a member that's a swap
 		OnSwap: func(_ string, swap jsn.SwapBlock) (alwaysTrue bool) {
-			m.PushState(newSwap(m, term, swap, &blk))
+			m.PushState(m.newSwap(term, swap, &blk))
 			return true
 		},
 
@@ -84,7 +91,7 @@ func newInnerBlock(m *chart.Machine, body *js.Builder, typeName string, allowExt
 		OnRepeat: func(_ string, slice jsn.SliceBlock) (okay bool) {
 			if cnt := slice.GetSize(); cnt > 0 {
 				blk.writeCount(term, cnt)
-				m.PushState(newRepeat(m, term, &blk))
+				m.PushState(m.newRepeat(term, &blk))
 				okay = true
 			}
 			return

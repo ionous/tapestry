@@ -11,7 +11,7 @@ import (
 // stacks in blockly are.... interesting.
 // they are a nested linked list of values.
 // this writes the inner halves of the list
-func newStack(m *chart.Machine, term string, blk *blockData) *chart.StateMix {
+func (m *bgen) newStack(term string, blk *blockData) *chart.StateMix {
 	// the whole chain is going to be encapsulated by object braces {}
 	// we try to keep the same state going for as long as we can...
 	var cnt int
@@ -32,7 +32,7 @@ func newStack(m *chart.Machine, term string, blk *blockData) *chart.StateMix {
 					Q("block").R(js.Colon).R(open)
 			}
 			cnt++ // increment here (rather than OnSlot) to skip any empty slots.
-			m.PushState(newInnerFlow(m, &blk.inputs, bconst.StackedName(typeName)))
+			m.PushState(m.newInnerFlow(&blk.inputs, bconst.StackedName(typeName)))
 			return true
 		},
 		// called after each slot and slot.

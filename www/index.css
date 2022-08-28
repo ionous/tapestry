@@ -12,11 +12,11 @@ body {
 
 .mk-mosaic {
   display: grid;
-  grid-template-columns: 200px auto;
-  grid-template-rows: 2rem auto;
-  grid-gap: 0px 10px;
+  /* width of the columns */
+  grid-template-columns: 180px auto;
+  /* height of the rows */
+  grid-template-rows: 37px auto;
   height: 100%;
-  margin: 5px;
   font-family: sans-serif;
   grid-template-areas: 
     "header tools"
@@ -32,25 +32,45 @@ body {
 }*/
 
 /**
- * mk-blockly
+ * mk-blockly; note the workspace is floated separately
+ * reload is needed after adjusting the column/row heights
  */
 .mk-blockly {
   grid-area: editor;
-  /*background-color: red;*/
+  background-color: #EEEEEE; /* the almost hidden frame to the right and bottom of the scrollbars */
 }
 
 .mk-tools {
   grid-area: tools;
-  /*background-color: red;*/
+  background-color:  #3268dc;
+  font-family: Roboto,sans-serif;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+button {
+  background-color: #EEEEEE;
+  color: #3268dc;
+  border: none;
+  border-radius: 3px;
+  margin: 3px;
 }
 
 .mk-header {
   grid-area: header;
-  /*background-color: red;*/
 }
 .mk-header h1 {
   margin: 0;
-  font-family: monospace;
+  padding-left: 1rem;
+  color: white;
+  background-color:  #3268dc;
+  font-family: Roboto,sans-serif;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+
+.blocklySvg {
+  background-color: #EEEEEE;
 }
 
 /**
@@ -59,6 +79,7 @@ body {
 .mk-catalog {
   grid-area: sidebar;
   overflow-y: auto;
+  background-color: #EEEEEE;
 }
 .mk-folder-ctrl {
   list-style-type: none;
@@ -147,4 +168,11 @@ and this positions that text overlapping it. */
   fill: dimgrey;
   font-weight: bolder;
   font-size: smaller;
+}
+
+.blocklyToolboxDiv {
+  background-color: rgba(0, 0, 0, .50);
+  color: white;
+  font-family: Roboto,sans-serif;
+  line-height: 1.25rem;
 }

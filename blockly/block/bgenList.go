@@ -7,7 +7,7 @@ import (
 
 // writes a fields ( in dummy inputs ) representing a repeating set of primitives.
 // "fields": { "VALUES0": "a", "VALUES1": "b"... }
-func newList(m *chart.Machine, term string, fields *js.Builder) *chart.StateMix {
+func (m *bgen) newList(term string, fields *js.Builder) *chart.StateMix {
 	var cnt int
 	return &chart.StateMix{
 		OnValue: func(_ string, pv interface{}) (err error) {

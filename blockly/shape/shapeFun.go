@@ -8,7 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
-var fieldWriter = map[string]func(*js.Builder, spec.TermSpec, *spec.TypeSpec){
+var fieldWriter = map[string]func(*ShapeWriter, *js.Builder, spec.TermSpec, *spec.TypeSpec){
 	spec.UsesSpec_Flow_Opt: writeFlowField,
 	spec.UsesSpec_Slot_Opt: writeSlotField,
 	spec.UsesSpec_Swap_Opt: writeSwapField,
@@ -22,11 +22,11 @@ var fieldWriter = map[string]func(*js.Builder, spec.TermSpec, *spec.TypeSpec){
 //out.Kv("label", term.Label)
 //}
 
-func writeNumField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
+func writeNumField(w *ShapeWriter, out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
 	out.Kv("type", bconst.FieldNumber)
 }
 
-func writeStrField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
+func writeStrField(w *ShapeWriter, out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
 	// other options possible: spellcheck: true/false; text: the default value.
 	if str := typeSpec.Spec.Value.(*spec.StrSpec); len(str.Uses) == 0 {
 		out.Kv("type", bconst.MosaicTextField)
@@ -61,19 +61,19 @@ func writeStrField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec)
 	return
 }
 
-func writeFlowField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
+func writeFlowField(w *ShapeWriter, out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
 	writeInput(out, bconst.InputValue, "", []string{typeSpec.Name})
 }
 
-func writeSlotField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
+func writeSlotField(w *ShapeWriter, out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
 	// inputType might be a statement_input stack, or a single ( maybe repeatable ) input
-	slot := bconst.FindSlotRule(typeSpec.Name)
+	slot := bconst.FindSlotRule(w, typeSpec.Name)
 	writeInput(out, slot.InputType(), "", []string{slot.SlotType()})
 }
 
 // swaps are output as two items: one for the combo box editor, and one for the input plug.
 // they are associated in mosaic by giving the blockly field and the blockly input the same name.
-func writeSwapField(out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
+func writeSwapField(w *ShapeWriter, out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
 	swap := typeSpec.Spec.Value.(*spec.SwapSpec)
 	out.
 		Kv("type", bconst.FieldDropdown).R(js.Comma).

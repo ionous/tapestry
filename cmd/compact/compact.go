@@ -17,7 +17,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/blockly/block"
 	"git.sr.ht/~ionous/tapestry/blockly/unblock"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
+	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/idl"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
@@ -181,10 +183,22 @@ var blockly = xform{
 		return unblock.Decode(dst, "story_file", tapestry.Registry(), b)
 	},
 	// turn some dl structures into a block file
-	func(src jsn.Marshalee) (interface{}, error) {
-		return block.Convert(src)
+	func(src jsn.Marshalee) (ret interface{}, err error) {
+		// load the typespecs on demand then cache them
+		if ptypes == nil {
+			if ts, e := rs.FromSpecs(idl.Specs); e != nil {
+				err = e
+			} else {
+				ptypes = &ts
+			}
+		}
+		if err == nil {
+			ret, err = block.Convert(ptypes, src)
+		}
+		return
 	},
 }
+var ptypes *rs.TypeSpecs // cache of loaded typespecs
 
 func writeOut(outPath string, data interface{}, pretty bool) (err error) {
 	log.Println("writing", outPath)

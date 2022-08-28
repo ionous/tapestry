@@ -11,13 +11,13 @@ import (
 
 // we are basically the same as slot
 // we just write a choice of the swap to the block's fields
-func newSwap(m *chart.Machine, term string, swap jsn.SwapBlock, blk *blockData) chart.State {
+func (m *bgen) newSwap(term string, swap jsn.SwapBlock, blk *blockData) chart.State {
 	was := -1
 	return &chart.StateMix{
 		OnBlock: func(block jsn.Block) (err error) {
-			if was, err = openSwap(blk, term, swap); err == nil {
+			if was, err = m.openSwap(blk, term, swap); err == nil {
 				_, ok := block.(jsn.FlowBlock)
-				m.PushState(newInnerBlock(m, &blk.inputs, block.GetType(), ok))
+				m.PushState(m.newInnerBlock(&blk.inputs, block.GetType(), ok))
 			}
 			return
 		},
@@ -25,7 +25,7 @@ func newSwap(m *chart.Machine, term string, swap jsn.SwapBlock, blk *blockData) 
 		// this matches the btypes swap/standalone setup:
 		// an input for every swap.
 		OnValue: func(typeName string, pv interface{}) (err error) {
-			if was, err = openSwap(blk, term, swap); err == nil {
+			if was, err = m.openSwap(blk, term, swap); err == nil {
 				field := strings.ToUpper(typeName) // see: shape.writeStandalone
 				faux := blockData{id: NewId(), typeName: typeName}
 				if e := faux.writeValue(field, pv); e != nil {
@@ -46,7 +46,7 @@ func newSwap(m *chart.Machine, term string, swap jsn.SwapBlock, blk *blockData) 
 	}
 }
 
-func openSwap(blk *blockData, term string, swap jsn.SwapBlock) (ret int, err error) {
+func (m *bgen) openSwap(blk *blockData, term string, swap jsn.SwapBlock) (ret int, err error) {
 	if choice, _ := swap.GetSwap(); len(choice) == 0 {
 		err = errutil.New("expected valid choice")
 	} else {

@@ -9,7 +9,7 @@ import (
 // writes a list of inputs representing a repeating set of slots.
 // unlike stacks, repeated inputs are all in the same block.
 // "inputs": { "CONTAINS0": {"block":{...}}, "CONTAINS1": {"block":{...}}, ... }
-func newSeries(m *chart.Machine, term string, inputs *js.Builder) *chart.StateMix {
+func (m *bgen) newSeries(term string, inputs *js.Builder) *chart.StateMix {
 	open, close := js.Obj[0], js.Obj[1]
 	var cnt int
 	var writingSlot bool
@@ -31,7 +31,7 @@ func newSeries(m *chart.Machine, term string, inputs *js.Builder) *chart.StateMi
 				R(js.Colon).R(open).
 				Q("block").
 				R(js.Colon).R(open)
-			m.PushState(newInnerFlow(m, inputs, typeName))
+			m.PushState(m.newInnerFlow(inputs, typeName))
 			return true
 		},
 		// when a child ( the inner block ) has finished

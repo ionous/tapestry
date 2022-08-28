@@ -11,28 +11,28 @@ import (
 //
 // fix: doesnt handle repeating swaps there are none that i know of currently
 //      and not quite sure what they'd look like off hand....
-func newRepeat(m *chart.Machine, term string, blk *blockData) chart.State {
+func (m *bgen) newRepeat(term string, blk *blockData) chart.State {
 	return &chart.StateMix{
 		// ex. a series of a specific flow
 		OnMap: func(typeName string, flow jsn.FlowBlock) bool {
-			next := newSlice(m, term, &blk.inputs)
+			next := m.newSlice(term, &blk.inputs)
 			m.PushState(next)
 			return next.OnMap(typeName, flow)
 		},
 		// possibly a single stack, or a series of inputs
 		OnSlot: func(slotType string, slotBlock jsn.SlotBlock) bool {
 			var next *chart.StateMix
-			if slot := bconst.FindSlotRule(slotType); slot.Stack {
-				next = newStack(m, term, blk)
+			if slot := bconst.FindSlotRule(m.types, slotType); slot.Stack {
+				next = m.newStack(term, blk)
 			} else {
-				next = newSeries(m, term, &blk.inputs)
+				next = m.newSeries(term, &blk.inputs)
 			}
 			m.PushState(next)
 			return next.OnSlot(slotType, slotBlock)
 		},
 		// a series of fields
 		OnValue: func(n string, pv interface{}) error {
-			next := newList(m, term, &blk.fields)
+			next := m.newList(term, &blk.fields)
 			m.PushState(next)
 			return next.OnValue(n, pv)
 		},
