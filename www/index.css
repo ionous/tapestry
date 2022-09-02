@@ -17,7 +17,7 @@ body {
   /* height of the rows */
   grid-template-rows: 37px auto;
   height: 100%;
-  font-family: sans-serif;
+  font-family: ui-sans-serif, sans-serif;
   grid-template-areas: 
     "header tools"
     "sidebar editor"
@@ -39,35 +39,38 @@ body {
   grid-area: editor;
   background-color: #EEEEEE; /* the almost hidden frame to the right and bottom of the scrollbars */
 }
-
 .mk-tools {
   grid-area: tools;
-  background-color:  #3268dc;
+  background-color:  #7986cb;
   font-family: Roboto,sans-serif;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
+  padding-top: 10px;
 }
 button {
-  background-color: #EEEEEE;
-  color: #3268dc;
-  border: none;
+  border-style: hidden;
   border-radius: 3px;
-  margin: 3px;
+  border-width: 1px;
+  background-color: #EEEEEE;
 }
-
+button:hover {
+  cursor: pointer;
+  background-color: #49599a;
+  color: white;
+}
+button:active {
+    color: black;
+}
 .mk-header {
   grid-area: header;
+  background-color: #7986cb;
 }
 .mk-header h1 {
   margin: 0;
   padding-left: 1rem;
   color: white;
-  background-color:  #3268dc;
   font-family: Roboto,sans-serif;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
 }
-
 
 .blocklySvg {
   background-color: #EEEEEE;
@@ -102,7 +105,6 @@ button {
   display: block;
 }
 .mk-cat-button:hover {
-  /*background-color: white;*/
   color: #0366d6;
   cursor: pointer;
 }

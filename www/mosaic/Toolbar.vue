@@ -4,7 +4,7 @@
   ><button 
     :disabled="!saveEnabled"
     @click="$emit('save')">Save</button
-  ><button 
+  >&nbsp;<button
     :disabled="!playEnabled"
     @click="$emit('play')">Play</button
   ></div
