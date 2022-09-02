@@ -29,7 +29,11 @@ func writeNumField(w *ShapeWriter, out *js.Builder, term spec.TermSpec, typeSpec
 func writeStrField(w *ShapeWriter, out *js.Builder, term spec.TermSpec, typeSpec *spec.TypeSpec) {
 	// other options possible: spellcheck: true/false; text: the default value.
 	if str := typeSpec.Spec.Value.(*spec.StrSpec); len(str.Uses) == 0 {
-		out.Kv("type", bconst.MosaicTextField)
+		fieldType := bconst.MosaicTextField
+		if typeSpec.Name == "lines" {
+			fieldType = bconst.MosaicMultilineField
+		}
+		out.Kv("type", fieldType)
 		var placeholder string
 		if !term.IsAnonymous() {
 			placeholder = term.Label

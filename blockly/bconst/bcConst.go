@@ -30,4 +30,6 @@ const (
 	MosaicStrField = "mosaic_str_field"
 	// alternative class for text fields so all text can have placeholder text.
 	MosaicTextField = "mosaic_text_field"
+	// multiline variant of the text field
+	MosaicMultilineField = "mosaic_multiline_field"
 )

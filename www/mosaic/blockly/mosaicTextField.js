@@ -12,7 +12,9 @@ export default class MosaicTextField extends Blockly.FieldTextInput {
     this._defaultValue = opt_value;
     this.configure_(opt_config);
     this.setValue(''); // default value
+    if (opt_validator) this.setValidator(opt_validator);
   }
+
   getDisplayText_() {
     return this.useDefaultDisplay() ? this._defaultValue : super.getDisplayText_();
   }

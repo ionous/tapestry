@@ -9,6 +9,7 @@ import WorkspaceOptions from "./workspaceOptions.js";
 
 import MosaicStrField from "./mosaicStrField.js";
 import MosaicTextField from "./mosaicTextField.js";
+import MosaicMultilineField from "./mosaicMultilineField.js";
 import tapestryMutator from "./tapestryMutator.js";
 import tapestryExtensions from "./tapestryExtensions.js";
 import tapestryHelpers from "./tapestryHelpers.js";
@@ -149,6 +150,7 @@ function registerExtension(name, obj) {
   }
   registry.register(name, obj);
 }
+
 function registerFieldType(name, obj) {
   // Blockly.fieldRegistry doesn't directly expose isRegistered :/
   // so use this uses layer underneath it.
@@ -162,6 +164,7 @@ function registerFieldType(name, obj) {
 
 registerFieldType("mosaic_str_field", MosaicStrField);
 registerFieldType("mosaic_text_field", MosaicTextField);
+registerFieldType("mosaic_multiline_field", MosaicMultilineField);
 registerExtension("tapestry_generic_mutation", tapestryMutator);
 registerExtension(
   "tapestry_generic_extension",

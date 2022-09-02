@@ -17,6 +17,9 @@ export default defineConfig(({ command /*, mode, ssrBuild*/ }) => {
         mosaic: build ? "http://wails.localhost" : "http://localhost:8080",
       }),
     },
+    server: {
+      port: 3000, //  fix: default is now 5173
+    },
     build: {
       chunkSizeWarningLimit: 825, // in kb; see notes on blockly below.
       rollupOptions: {
