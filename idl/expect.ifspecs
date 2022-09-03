@@ -1,0 +1,71 @@
+{
+  "--": "testing statements ",
+  "Spec:with group:": [
+    "test",
+    {
+      "Group contains:": [
+        {
+          "Spec:slots:with flow:": [
+            "expect_string",
+            "execute",
+            {
+              "Flow:uses:": [
+                "expect",
+                [
+                  {
+                    "Term:type:": [
+                      "string",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "kind",
+                      "text",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "expect_lines",
+            "execute",
+            {
+              "Flow:uses:": [
+                "expect",
+                [
+                  {
+                    "Term:": "lines"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "expect_text",
+            "execute",
+            {
+              "Flow:uses:": [
+                "text",
+                [
+                  {
+                    "Term:type:": [
+                      "text",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
