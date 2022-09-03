@@ -3,6 +3,7 @@ package block
 import (
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/web/js"
 )
 
@@ -109,11 +110,8 @@ func (b *blockData) writeTo(out *js.Builder) {
 }
 
 func comment(markup map[string]any) (ret string) {
-	switch cmt := markup["comment"].(type) {
-	case string:
-		ret = cmt
-	case []string:
-		ret = strings.Join(cmt, "\n")
+	if lines := composer.UserComment(markup); len(lines) > 0 {
+		ret = strings.Join(lines, "\n")
 	}
 	return
 }

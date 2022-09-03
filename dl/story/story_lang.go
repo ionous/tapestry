@@ -7991,7 +7991,7 @@ func StoryBreak_Marshal(m jsn.Marshaler, val *StoryBreak) (err error) {
 	return
 }
 
-// StoryFile top level node, currently just for blockly  might eventually contain story metadata  ex. author, description...
+// StoryFile top level node, currently just for blockly might eventually contain story metadata  ex. author, description...
 type StoryFile struct {
 	StoryLines []StoryStatement `if:"label=_"`
 	Markup     map[string]any

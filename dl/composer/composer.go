@@ -8,14 +8,6 @@ const (
 	Type_Num  = "num"
 )
 
-// Slot definition for display in the composer.
-type Slot struct {
-	Name  string
-	Type  interface{} // nil instance, ex. (*core.Comparator)(nil)
-	Desc  string
-	Group string // display group(s)
-}
-
 type Composer interface {
 	Compose() Spec
 }

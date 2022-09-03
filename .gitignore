@@ -12,6 +12,7 @@ cmd/check/check
 cmd/compact/compact
 cmd/compose/compose
 cmd/gomake/gomake
+cmd/gomake/_temp
 cmd/idl/idl
 cmd/import/import
 cmd/mosaic/_sampledata

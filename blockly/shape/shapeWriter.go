@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/blockly/bconst"
+	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
 	"git.sr.ht/~ionous/tapestry/web/js"
@@ -116,11 +117,8 @@ func (w *ShapeWriter) _writeShape(block *js.Builder, name string, blockType *spe
 }
 
 func comment(markup map[string]any) (ret string) {
-	switch cmt := markup["comment"].(type) {
-	case string:
-		ret = cmt
-	case []string:
-		ret = strings.Join(cmt, "\n")
+	if lines := composer.UserComment(markup); len(lines) > 0 {
+		ret = strings.Join(lines, "\n")
 	}
 	return
 }

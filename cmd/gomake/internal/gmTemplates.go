@@ -5,6 +5,7 @@ import (
 	"strings"
 	"text/template"
 
+	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 )
 
@@ -12,6 +13,9 @@ import (
 var tempFS embed.FS
 
 func newTemplates(ctx *Context) (*template.Template, error) {
+	var blockComment []string
+	var commentBlock *spec.TypeSpec
+
 	//
 	funcMap := template.FuncMap{
 		"Lines": func(s string) []string {
@@ -31,13 +35,11 @@ func newTemplates(ctx *Context) (*template.Template, error) {
 			return ctx.TermsOf(block)
 		},
 		"UserComment": func(block *spec.TypeSpec) (ret []string) {
-			switch cmt := block.Markup["comment"].(type) {
-			case string:
-				ret = []string{cmt}
-			case []string:
-				ret = cmt
+			if commentBlock != block {
+				blockComment = composer.UserComment(block.Markup)
+				commentBlock = block
 			}
-			return
+			return blockComment
 		},
 		"Uses": func(block *spec.TypeSpec) string {
 			return specShortName(block)

@@ -28,6 +28,7 @@ func main() {
 	} else {
 		dlLike := strings.HasSuffix(path, string(filepath.Separator)+"dl")
 		if e := gomake.WriteSpecs(idl.Specs, func(groupName string, b []byte) (err error) {
+			// fix: an option to do everything in memory and write to stdout?
 			path := path
 			if groupName == "rt" && dlLike {
 				path = path[:len(path)-2]
