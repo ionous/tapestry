@@ -17,13 +17,6 @@
                       "string",
                       "text"
                     ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "kind",
-                      "text",
-                      true
-                    ]
                   }
                 ]
               ]

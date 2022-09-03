@@ -1,5 +1,7 @@
 package prim
 
+import "strings"
+
 func (op *Text_Unboxed_Slice) GetCompactValue() (ret interface{}) {
 	strs := []string(*op)
 	if len(strs) == 1 {
@@ -9,3 +11,9 @@ func (op *Text_Unboxed_Slice) GetCompactValue() (ret interface{}) {
 	}
 	return
 }
+
+func (op *Lines) GetLines() []string {
+	return strings.FieldsFunc(op.Str, func(r rune) bool { return r == Newline })
+}
+
+const Newline = '\n'
