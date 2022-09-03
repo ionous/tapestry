@@ -21,6 +21,9 @@ func FromSpecs(files fs.FS) (ret string, err error) {
 				Q("contents").R(js.Colon).Brace(js.Array, func(box *js.Builder) {
 				// range over groups
 				for i, t := range ts.Groups {
+					if t.Name == "testdl" {
+						continue // fix? maybe label the group as "internal"/
+					}
 					if group, ok := t.Spec.Value.(*spec.GroupSpec); ok {
 						groupName := t.FriendlyName()
 						if i > 0 {
