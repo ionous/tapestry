@@ -45,7 +45,7 @@
             "execute",
             {
               "Flow:uses:": [
-                "text",
+                "expect",
                 [
                   {
                     "Term:type:": [

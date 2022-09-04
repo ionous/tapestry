@@ -8,8 +8,8 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// pass w, the plain text output stream.
-// return a writer that accepts html-like text.
+// listen for html-like markup written to the returned stream and write its plain text equivalent into the passed stream.
+// ex. writing <b>bold</b> will output **bold** to w.
 func ToText(w io.Writer) io.Writer {
 	return &fsm{converter{out: w, line: 2}, readingText}
 }

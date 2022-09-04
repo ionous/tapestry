@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/web/markup"
 	"github.com/ionous/errutil"
 )
 
@@ -21,11 +22,12 @@ type CheckOutput struct {
 func (t *CheckOutput) RunTest(run rt.Runtime) (err error) {
 	log.Println("-- Checking:", t.Name, t.Domain)
 	var buf bytes.Buffer
-	prev := run.SetWriter(print.NewAutoWriter(&buf))
-	if prev, e := run.ActivateDomain(t.Domain); e != nil {
+	prevWriter := run.SetWriter(print.NewLineSentences(markup.ToText(&buf)))
+	//
+	if prevDomain, e := run.ActivateDomain(t.Domain); e != nil {
 		err = e
 	} else {
-		if e := safe.RunAll(run, t.Test); e != nil {
+		if e := safe.RunAll(&checker{run, &buf, 0}, t.Test); e != nil {
 			err = errutil.Fmt("ng! %s test encountered error: %s", t.Name, e)
 		} else if res := buf.String(); res != t.Expect {
 			if eol := '\n'; strings.ContainsRune(res, eol) || strings.ContainsRune(t.Expect, eol) {
@@ -36,12 +38,28 @@ func (t *CheckOutput) RunTest(run rt.Runtime) (err error) {
 		} else {
 			log.Printf("ok. test %s got %q", t.Name, res)
 		}
-
-		if _, e := run.ActivateDomain(prev); e != nil {
+		// restore even on a test mismatch
+		if _, e := run.ActivateDomain(prevDomain); e != nil {
 			err = errutil.Append(err, errutil.New("couldnt restore domain", e))
 		}
-
 	}
-	run.SetWriter(prev)
+	run.SetWriter(prevWriter)
 	return
 }
+
+type checker struct {
+	rt.Runtime
+	buf     *bytes.Buffer
+	lastOut int
+}
+
+func (c *checker) GetAccumulatedOutput() (ret []string) {
+	b := c.buf.Bytes()
+	if cnt := len(b); cnt > c.lastOut {
+		ret = strings.FieldsFunc(string(b[c.lastOut:]), func(r rune) bool { return r == Newline })
+		c.lastOut = cnt
+	}
+	return
+}
+
+const Newline = '\n'

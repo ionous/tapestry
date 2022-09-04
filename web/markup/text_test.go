@@ -6,6 +6,8 @@ import (
 	"testing"
 )
 
+// tests converting html like markup to plain text
+// ex. <b>bold</b> to **bold**
 func TestMarkup(t *testing.T) {
 	var tests = []string{
 		// 1. nothing special

@@ -11,6 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/rt/writer"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
+	"git.sr.ht/~ionous/tapestry/web/markup"
 )
 
 func TestCheck(t *testing.T) {
@@ -36,7 +37,7 @@ func TestCheck(t *testing.T) {
 
 func runTest(prog *qna.CheckOutput) (err error) {
 	var run checkTester
-	run.SetWriter(print.NewAutoWriter(os.Stdout))
+	run.SetWriter(print.NewLineSentences(markup.ToText(os.Stdout)))
 	return prog.RunTest(&run)
 }
 

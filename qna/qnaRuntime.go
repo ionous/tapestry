@@ -15,6 +15,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"git.sr.ht/~ionous/tapestry/rt/writer"
+	"git.sr.ht/~ionous/tapestry/web/markup"
 	"github.com/ionous/errutil"
 )
 
@@ -24,7 +25,7 @@ func NewRuntime(db *sql.DB, signatures cin.Signatures) *Runner {
 	if e != nil {
 		panic(e)
 	}
-	w := print.NewAutoWriter(os.Stdout)
+	w := print.NewLineSentences(markup.ToText(os.Stdout))
 	return NewRuntimeOptions(w, qdb, opt, signatures)
 }
 

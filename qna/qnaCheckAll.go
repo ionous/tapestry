@@ -12,6 +12,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
+	"git.sr.ht/~ionous/tapestry/web/markup"
 )
 
 // CheckAll tests stored in the passed db.
@@ -34,7 +35,7 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options Options, signature
 				e := errutil.New("can only handle text values right now")
 				err = errutil.Append(err, e)
 			} else {
-				w := print.NewAutoWriter(os.Stdout)
+				w := print.NewLineSentences(markup.ToText(os.Stdout))
 				run := NewRuntimeOptions(w, qdb, options, tapestry.AllSignatures)
 				t := CheckOutput{
 					Name:   el.Name,
