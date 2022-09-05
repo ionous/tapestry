@@ -122,7 +122,8 @@ func main() {
 // not expected to return
 func startBackend(listenTo int, mux http.Handler) {
 	// start the thing that listens to browser requests
-	if e := http.ListenAndServe(":"+strconv.Itoa(listenTo), mux); e != nil {
+	// explicitly specifying localhost quiets the windows firewall.
+	if e := http.ListenAndServe("localhost:"+strconv.Itoa(listenTo), mux); e != nil {
 		log.Fatal(e)
 	}
 }
