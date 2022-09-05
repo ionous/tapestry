@@ -26,14 +26,10 @@ export default class MosaicMultilineField extends Blockly.FieldMultilineInput {
     return !this.isBeingEdited_ && this.value_ === "";
   }
 
-  // from field.js -> initView() { createBorderRect_, createTextElement )
-  createTextElement_() {
-    // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text
-    super.createTextElement_();
-    if (this.useDefaultDisplay()) {
-      // index.css has .blocklyEditableText > text.blocklyText.placeholderText
-      this.textElement_.classList.add("placeholderText");
-    }
+  render_() {
+    super.render_();
+    // index.css has .blocklyEditableText > text.blocklyText.placeholderText
+    this.textGroup_.classList.toggle('placeholderText', this.useDefaultDisplay());
   }
   /**
    * Updates the size of the field based on the text.

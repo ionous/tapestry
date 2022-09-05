@@ -165,11 +165,17 @@ and this positions that text overlapping it. */
   to { opacity: 0; }
 }
 
-/* an attempt to get the specificity up */
-.blocklyEditableText > text.blocklyText.placeholderText  {
+/* an attempt to get the specificity up for mosaicTextField */
+.blocklyEditableText.placeholderText > text.blocklyText {
   fill: dimgrey;
   font-weight: bolder;
   font-size: smaller;
+}
+
+/* try to match the sizing and alignment of the unedited text control */
+.blocklyHtmlInput {
+  padding: 1.2px 4px;
+  text-align: left;
 }
 
 .blocklyToolboxDiv {

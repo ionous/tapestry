@@ -22,15 +22,11 @@ export default class MosaicTextField extends Blockly.FieldTextInput {
   useDefaultDisplay() {
     return !this.isBeingEdited_ && this.value_ === '';
   }
-
-  // from field.js
-  createTextElement_() {
-    // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text
-    super.createTextElement_();
-    if (this.useDefaultDisplay()) {
-      // index.css has .blocklyEditableText > text.blocklyText.placeholderText
-      this.textElement_.classList.add('placeholderText');
-    }
+  render_() {
+    super.render_();
+    // index.css has .blocklyEditableText > text.blocklyText.placeholderText
+    // uses "fieldGroup_" instead of "textElement_" to try to match the hierarchy of the multiline text field.
+    this.fieldGroup_.classList.toggle('placeholderText', this.useDefaultDisplay());
   }
 }
 
