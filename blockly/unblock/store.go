@@ -48,11 +48,20 @@ func NewBlock(m *chart.Machine, reg TypeCreator, bff *BlockInfo) *chart.StateMix
 func newInnerBlock(m *chart.Machine, reg TypeCreator, flow jsn.FlowBlock, bff *BlockInfo) *chart.StateMix {
 	var termName string // pulled from the golang key
 	if ptr := m.Markout; ptr != nil {
-		if c := bff.Icons.Comment; c != nil && len(c.Text) > 0 {
+		if c := bff.Icons.Comment; c != nil {
 			if *ptr == nil {
 				*ptr = make(map[string]any)
 			}
-			(*ptr)["comment"] = c.Text
+			const newline = '\n'
+			lines := strings.FieldsFunc(c.Text, func(r rune) bool { return r == newline })
+			switch len(lines) {
+			case 0:
+				(*ptr)["comment"] = ""
+			case 1:
+				(*ptr)["comment"] = lines[0]
+			default:
+				(*ptr)["comment"] = lines
+			}
 		}
 	}
 	return &chart.StateMix{

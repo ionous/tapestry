@@ -52,10 +52,10 @@ type checker struct {
 func (c *checker) GetAccumulatedOutput() (ret []string) {
 	b := c.buf.Bytes()
 	if cnt := len(b); cnt > c.lastOut {
-		ret = strings.FieldsFunc(string(b[c.lastOut:]), func(r rune) bool { return r == Newline })
+		ret = strings.FieldsFunc(string(b[c.lastOut:]), func(r rune) bool { return r == newline })
 		c.lastOut = cnt
 	}
 	return
 }
 
-const Newline = '\n'
+const newline = '\n'

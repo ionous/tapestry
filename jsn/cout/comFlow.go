@@ -24,34 +24,42 @@ func (cf *comFlow) addMsgPair(label, choice string, value any) {
 }
 
 // build a map that we get serialized to json
-func (cf *comFlow) finalize() map[string]any {
-	m := make(map[string]any)
-	if sig := cf.sig.String(); len(sig) > 0 && sig != markupMarker {
-		switch vals := cf.params; len(vals) {
-		// zero parameters { "sig": true }
-		case 0:
-			// note: originally i collapsed calls with zero args down to just a string
-			// but in cases where commands get used to generate text
-			// there's no way to differentiate b/t a command of zero params and plain text.
-			m[sig] = true
-		// one parameter { "sig": value }
-		case 1:
-			m[sig] = vals[0]
-		// multiple parameters { "sig": [comma,separated,values] }
-		default:
-			m[sig] = vals
-		}
-	}
-	for k, v := range cf.markup {
-		if k == "comment" {
-			// { "--": "here's a story of a lovely comment, which was writing up some very lovely words." }
-			m[markupMarker] = v
+func (cf *comFlow) finalize() (ret map[string]any) {
+	if sig := cf.sig.String(); len(sig) > 0 {
+		m := make(map[string]any)
+		if sig == markupMarker {
+			// this will most likely get overwritten by the markup loop
+			// however we want to avoid generating an empty {}
+			// and i just think it looks better as { "--": "" } than { "--": true }
+			m[markupMarker] = ""
 		} else {
-			// { "--color": 5 }
-			m[markupMarker+k] = v
+			switch vals := cf.params; len(vals) {
+			// zero parameters { "sig": true }
+			case 0:
+				// note: originally i collapsed calls with zero args down to just a string
+				// but in cases where commands get used to generate text
+				// there's no way to differentiate b/t a command of zero params and plain text.
+				m[sig] = true
+			// one parameter { "sig": value }
+			case 1:
+				m[sig] = vals[0]
+			// multiple parameters { "sig": [comma,separated,values] }
+			default:
+				m[sig] = vals
+			}
 		}
+		for k, v := range cf.markup {
+			if k == "comment" {
+				// { "--": "here's a story of a lovely comment, which was writing up some very lovely words." }
+				m[markupMarker] = v
+			} else {
+				// { "--color": 5 }
+				m[markupMarker+k] = v
+			}
+		}
+		ret = m
 	}
-	return m
+	return
 }
 
 const markupMarker = "--"

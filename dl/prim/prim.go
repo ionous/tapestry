@@ -13,7 +13,7 @@ func (op *Text_Unboxed_Slice) GetCompactValue() (ret interface{}) {
 }
 
 func (op *Lines) GetLines() []string {
-	return strings.FieldsFunc(op.Str, func(r rune) bool { return r == Newline })
+	return strings.FieldsFunc(op.Str, func(r rune) bool { return r == newline })
 }
 
-const Newline = '\n'
+const newline = '\n'
