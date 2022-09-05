@@ -44,7 +44,7 @@ func compareAtLast(match, input []string) (err error) {
 		input = input[have-want:]
 		for i, w := range match {
 			if h := input[i]; w != h {
-				err = errutil.Fmt("line %v mismatched. wanted '%s' have '%s'", i, w, "have", h)
+				err = errutil.Fmt("line %v mismatched. wanted '%s' have '%s'", i, w, h)
 				break
 			}
 		}
