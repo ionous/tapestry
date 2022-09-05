@@ -87,6 +87,7 @@ func writeOut(outPath string, data interface{}) (err error) {
 		js.SetIndent("", "  ")
 		js.SetEscapeHTML(false)
 		err = js.Encode(data)
+		fp.Close()
 	}
 	return
 }
