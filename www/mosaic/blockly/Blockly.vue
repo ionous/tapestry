@@ -39,6 +39,16 @@ export default {
       const w = WorkspaceOptions;
       w.toolbox = this.toolboxData; // overwrite placeholder toolbox with the one from the server.
       workspace = Blockly.inject("blockly-div", w);
+      // hack to override the order of icons so that clicking on a comment icon doesnt cause the mutator to pop in and
+      const oldBlock = workspace.newBlock;
+      workspace.newBlock = function(p, id) {
+        const b = oldBlock.call(workspace, p, id);
+        const oldIcons = b.getIcons;
+        b.getIcons = function() {
+          return oldIcons.call(b).reverse();
+        };
+        return b;
+      };
       blocklyArea = document.getElementById("blockly-area");
       if (!blocklyArea) {
         throw new Error("couldnt find blockly area");
