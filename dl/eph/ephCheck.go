@@ -10,18 +10,14 @@ import (
 type asmChecks map[string]*asmCheck
 
 type asmCheck struct {
+	// sometimes test are disabled in the script by renaming bits of them
+	// we dont consider than error -- though possible we should warn about it.
 	name      string
 	domain    *Domain
 	expectVal interface{}
 	expectAff affine.Affinity
 	prog      string
 	at        string
-}
-
-// sometimes test are disabled in the script by renaming bits of them
-// we dont consider than error -- though possible we should warn about it.
-func (c *asmCheck) isValidCheck() bool {
-	return len(c.expectAff) > 0 && len(c.prog) > 0
 }
 
 func (c *asmCheck) setExpectation(v literal.LiteralValue) (err error) {

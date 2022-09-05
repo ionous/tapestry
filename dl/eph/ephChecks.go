@@ -4,7 +4,6 @@ import (
 	"sort"
 
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
-	"github.com/ionous/errutil"
 )
 
 func (c *Catalog) WriteChecks(w Writer) (err error) {
@@ -14,13 +13,15 @@ func (c *Catalog) WriteChecks(w Writer) (err error) {
 		for _, deps := range ds { // list of dependencies
 			d := deps.Leaf().(*Domain) // panics if it fails
 			names := make([]string, 0, len(d.checks))
-			for k, t := range d.checks {
-				if !t.isValidCheck() {
-					s := errutil.Sprintf("check %q at %s is missing an expectation or program", t.name, t.at)
-					LogWarning(errutil.Error(s)) // sprint the error to avoid triggering errutil.Panic
-				} else {
-					names = append(names, k)
-				}
+			for k, _ := range d.checks {
+				// re: "expectation" changes, no longer requiring a test statement/ test output for the check to be valid.
+				// maybe at runtime we can say "this didn't have any expectations", or "didn't have any program data".
+				// if isValid := len(t.expectAff) > 0 && len(t.prog) > 0; isValid {
+				// 	s := errutil.Sprintf("check %q at %s is missing an expectation or program", t.name, t.at)
+				// 	LogWarning(errutil.Error(s)) // sprint the error to avoid triggering errutil.Panic
+				// } else {
+				names = append(names, k)
+				// }
 			}
 			sort.Strings(names)
 			for _, n := range names {

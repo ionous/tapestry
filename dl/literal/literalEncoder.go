@@ -78,6 +78,9 @@ func readLiteral(typeName, kind string, msg json.RawMessage) (ret LiteralValue, 
 	// so we have to switch on the typename not the value in the slot.
 	switch typeName {
 	default:
+		// note: trying to read a record literal directly into a record eval slot wouldnt work well
+		// for one, it would have to know what type the record is.
+		// RecordValue ( "record:fields:<kind>, <field values>" ) is the thing for now.
 		err = chart.Unhandled("CustomSlot")
 
 	case rt.BoolEval_Type:
@@ -119,12 +122,6 @@ func readLiteral(typeName, kind string, msg json.RawMessage) (ret LiteralValue, 
 		} else {
 			ret = &TextValues{Values: val, Kind: kind}
 		}
-		// note: trying to read a record literal into a record eval slot wouldnt work well
-		// it could differentiate b/t a record and command --
-		// and it would have to know what type the record is.
-		// could potentially think of it as a constructor
-		// "<recordName>:args:" -- might take some work to get there
-		// MakeRecord is the thing for now...
 	}
 	return
 }

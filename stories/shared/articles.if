@@ -114,14 +114,6 @@
         ]
       ]
     },
-    {
-      "TestStatement:test:": [
-        "articles",
-        {
-          "TestOutput:": ""
-        }
-      ]
-    },
     {  "--": "" },
     {
       "Pattern:requires:": [
