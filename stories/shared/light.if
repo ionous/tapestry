@@ -346,9 +346,7 @@
                         {
                           "Len:": "@queue"
                         },
-                        {
-                          "GreaterThan": true
-                        },
+                        "greater_than",
                         0
                       ]
                     },
@@ -391,9 +389,7 @@
                                         {
                                           "Cmp:is:txt:": [
                                             "@it",
-                                            {
-                                              "Equals": true
-                                            },
+                                            "equal_to",
                                             "@ceiling"
                                           ]
                                         },

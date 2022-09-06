@@ -11,7 +11,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/rel"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/dl/test"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
@@ -25,7 +24,6 @@ var AllSlats = [][]composer.Composer{
 	rel.Slats,
 	render.Slats,
 	story.Slats,
-	test.Slats,
 }
 
 var AllSignatures = []map[uint64]interface{}{
@@ -39,7 +37,6 @@ var AllSignatures = []map[uint64]interface{}{
 	render.Signatures,
 	rt.Signatures,
 	story.Signatures,
-	test.Signatures,
 }
 
 var reg composer.TypeRegistry

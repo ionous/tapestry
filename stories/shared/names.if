@@ -173,9 +173,7 @@
                       }
                     ]
                   },
-                  {
-                    "OtherThan": true
-                  },
+                  "other_than",
                   ""
                 ]
               },

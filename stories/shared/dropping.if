@@ -270,9 +270,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "dropping"
                     ]
                   },
@@ -281,9 +279,7 @@
                       {
                         "ParentOf obj:": "@actor"
                       },
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       {
                         "LocationOf obj:": "@noun"
                       }
@@ -320,18 +316,14 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "dropping"
                     ]
                   },
                   {
                     "Cmp:is:txt:": [
                       "@actor",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "@noun"
                     ]
                   }

@@ -332,9 +332,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "traveling"
                     ]
                   },
@@ -374,9 +372,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "traveling"
                     ]
                   },
@@ -414,9 +410,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "traveling"
                     ]
                   },

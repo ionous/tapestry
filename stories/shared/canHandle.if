@@ -46,9 +46,7 @@
                   {
                     "ParentOf obj:": "@noun"
                   },
-                  {
-                    "OtherThan": true
-                  },
+                  "other_than",
                   "@actor"
                 ]
               },

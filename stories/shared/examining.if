@@ -270,9 +270,7 @@
                             {
                               "Cmp:is:txt:": [
                                 "@obj",
-                                {
-                                  "OtherThan": true
-                                },
+                                "other_than",
                                 {
                                   "ContainerOf obj:": {
                                     "FromTxt:": "player"

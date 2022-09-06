@@ -418,192 +418,6 @@ func Assign_Marshal(m jsn.Marshaler, val *Assign) (err error) {
 	return
 }
 
-// AtLeast The first value is greater than or equal to the second value.
-type AtLeast struct {
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ Comparator = (*AtLeast)(nil)
-
-func (*AtLeast) Compose() composer.Spec {
-	return composer.Spec{
-		Name: AtLeast_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const AtLeast_Type = "at_least"
-
-func (op *AtLeast) Marshal(m jsn.Marshaler) error {
-	return AtLeast_Marshal(m, op)
-}
-
-type AtLeast_Slice []AtLeast
-
-func (op *AtLeast_Slice) GetType() string { return AtLeast_Type }
-
-func (op *AtLeast_Slice) Marshal(m jsn.Marshaler) error {
-	return AtLeast_Repeats_Marshal(m, (*[]AtLeast)(op))
-}
-
-func (op *AtLeast_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *AtLeast_Slice) SetSize(cnt int) {
-	var els []AtLeast
-	if cnt >= 0 {
-		els = make(AtLeast_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *AtLeast_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return AtLeast_Marshal(m, &(*op)[i])
-}
-
-func AtLeast_Repeats_Marshal(m jsn.Marshaler, vals *[]AtLeast) error {
-	return jsn.RepeatBlock(m, (*AtLeast_Slice)(vals))
-}
-
-func AtLeast_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AtLeast) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = AtLeast_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type AtLeast_Flow struct{ ptr *AtLeast }
-
-func (n AtLeast_Flow) GetType() string      { return AtLeast_Type }
-func (n AtLeast_Flow) GetLede() string      { return AtLeast_Type }
-func (n AtLeast_Flow) GetFlow() interface{} { return n.ptr }
-func (n AtLeast_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*AtLeast); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func AtLeast_Optional_Marshal(m jsn.Marshaler, pv **AtLeast) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = AtLeast_Marshal(m, *pv)
-	} else if !enc {
-		var v AtLeast
-		if err = AtLeast_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func AtLeast_Marshal(m jsn.Marshaler, val *AtLeast) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(AtLeast_Flow{val}); err == nil {
-		m.EndBlock()
-	}
-	return
-}
-
-// AtMost The first value is less than or equal to the second value.
-type AtMost struct {
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ Comparator = (*AtMost)(nil)
-
-func (*AtMost) Compose() composer.Spec {
-	return composer.Spec{
-		Name: AtMost_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const AtMost_Type = "at_most"
-
-func (op *AtMost) Marshal(m jsn.Marshaler) error {
-	return AtMost_Marshal(m, op)
-}
-
-type AtMost_Slice []AtMost
-
-func (op *AtMost_Slice) GetType() string { return AtMost_Type }
-
-func (op *AtMost_Slice) Marshal(m jsn.Marshaler) error {
-	return AtMost_Repeats_Marshal(m, (*[]AtMost)(op))
-}
-
-func (op *AtMost_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *AtMost_Slice) SetSize(cnt int) {
-	var els []AtMost
-	if cnt >= 0 {
-		els = make(AtMost_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *AtMost_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return AtMost_Marshal(m, &(*op)[i])
-}
-
-func AtMost_Repeats_Marshal(m jsn.Marshaler, vals *[]AtMost) error {
-	return jsn.RepeatBlock(m, (*AtMost_Slice)(vals))
-}
-
-func AtMost_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AtMost) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = AtMost_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type AtMost_Flow struct{ ptr *AtMost }
-
-func (n AtMost_Flow) GetType() string      { return AtMost_Type }
-func (n AtMost_Flow) GetLede() string      { return AtMost_Type }
-func (n AtMost_Flow) GetFlow() interface{} { return n.ptr }
-func (n AtMost_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*AtMost); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func AtMost_Optional_Marshal(m jsn.Marshaler, pv **AtMost) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = AtMost_Marshal(m, *pv)
-	} else if !enc {
-		var v AtMost
-		if err = AtMost_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func AtMost_Marshal(m jsn.Marshaler, val *AtMost) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(AtMost_Flow{val}); err == nil {
-		m.EndBlock()
-	}
-	return
-}
-
 // Blankline Add a single blank line following some text.
 type Blankline struct {
 	Markup map[string]any
@@ -2830,81 +2644,13 @@ func CommaText_Marshal(m jsn.Marshaler, val *CommaText) (err error) {
 	return
 }
 
-const Comparator_Type = "comparator"
-
-var Comparator_Optional_Marshal = Comparator_Marshal
-
-type Comparator_Slot struct{ Value *Comparator }
-
-func (at Comparator_Slot) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(at); err == nil {
-		if a, ok := at.GetSlot(); ok {
-			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-func (at Comparator_Slot) GetType() string              { return Comparator_Type }
-func (at Comparator_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at Comparator_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(Comparator)
-	return
-}
-
-func Comparator_Marshal(m jsn.Marshaler, ptr *Comparator) (err error) {
-	slot := Comparator_Slot{ptr}
-	return slot.Marshal(m)
-}
-
-type Comparator_Slice []Comparator
-
-func (op *Comparator_Slice) GetType() string { return Comparator_Type }
-
-func (op *Comparator_Slice) Marshal(m jsn.Marshaler) error {
-	return Comparator_Repeats_Marshal(m, (*[]Comparator)(op))
-}
-
-func (op *Comparator_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Comparator_Slice) SetSize(cnt int) {
-	var els []Comparator
-	if cnt >= 0 {
-		els = make(Comparator_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Comparator_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Comparator_Marshal(m, &(*op)[i])
-}
-
-func Comparator_Repeats_Marshal(m jsn.Marshaler, vals *[]Comparator) error {
-	return jsn.RepeatBlock(m, (*Comparator_Slice)(vals))
-}
-
-func Comparator_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Comparator) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Comparator_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
 // CompareNum True if eq,ne,gt,lt,ge,le two numbers.
 type CompareNum struct {
-	A      rt.NumberEval `if:"label=_"`
-	Is     Comparator    `if:"label=is"`
-	B      rt.NumberEval `if:"label=num"`
-	Markup map[string]any
+	A         rt.NumberEval `if:"label=_"`
+	Is        Comparison    `if:"label=is"`
+	B         rt.NumberEval `if:"label=num"`
+	Tolerance float64       `if:"label=within,optional,type=number"`
+	Markup    map[string]any
 }
 
 // User implemented slots:
@@ -2922,6 +2668,7 @@ const CompareNum_Type = "compare_num"
 const CompareNum_Field_A = "$A"
 const CompareNum_Field_Is = "$IS"
 const CompareNum_Field_B = "$B"
+const CompareNum_Field_Tolerance = "$TOLERANCE"
 
 func (op *CompareNum) Marshal(m jsn.Marshaler) error {
 	return CompareNum_Marshal(m, op)
@@ -3003,7 +2750,7 @@ func CompareNum_Marshal(m jsn.Marshaler, val *CompareNum) (err error) {
 		}
 		e1 := m.MarshalKey("is", CompareNum_Field_Is)
 		if e1 == nil {
-			e1 = Comparator_Marshal(m, &val.Is)
+			e1 = Comparison_Marshal(m, &val.Is)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", CompareNum_Field_Is))
@@ -3015,6 +2762,13 @@ func CompareNum_Marshal(m jsn.Marshaler, val *CompareNum) (err error) {
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", CompareNum_Field_B))
 		}
+		e3 := m.MarshalKey("within", CompareNum_Field_Tolerance)
+		if e3 == nil {
+			e3 = prim.Number_Unboxed_Optional_Marshal(m, &val.Tolerance)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", CompareNum_Field_Tolerance))
+		}
 		m.EndBlock()
 	}
 	return
@@ -3023,7 +2777,7 @@ func CompareNum_Marshal(m jsn.Marshaler, val *CompareNum) (err error) {
 // CompareText True if eq,ne,gt,lt,ge,le two strings ( lexical. ).
 type CompareText struct {
 	A      rt.TextEval `if:"label=_"`
-	Is     Comparator  `if:"label=is"`
+	Is     Comparison  `if:"label=is"`
 	B      rt.TextEval `if:"label=txt"`
 	Markup map[string]any
 }
@@ -3124,7 +2878,7 @@ func CompareText_Marshal(m jsn.Marshaler, val *CompareText) (err error) {
 		}
 		e1 := m.MarshalKey("is", CompareText_Field_Is)
 		if e1 == nil {
-			e1 = Comparator_Marshal(m, &val.Is)
+			e1 = Comparison_Marshal(m, &val.Is)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", CompareText_Field_Is))
@@ -3137,6 +2891,93 @@ func CompareText_Marshal(m jsn.Marshaler, val *CompareText) (err error) {
 			m.Error(errutil.New(e2, "in flow at", CompareText_Field_B))
 		}
 		m.EndBlock()
+	}
+	return
+}
+
+// Comparison requires a predefined string.
+type Comparison struct {
+	Str string
+}
+
+func (op *Comparison) String() string {
+	return op.Str
+}
+
+const Comparison_EqualTo = "$EQUAL_TO"
+const Comparison_OtherThan = "$OTHER_THAN"
+const Comparison_GreaterThan = "$GREATER_THAN"
+const Comparison_LessThan = "$LESS_THAN"
+const Comparison_AtLeast = "$AT_LEAST"
+const Comparison_AtMost = "$AT_MOST"
+
+func (*Comparison) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Comparison_Type,
+		Uses: composer.Type_Str,
+		Choices: []string{
+			Comparison_EqualTo, Comparison_OtherThan, Comparison_GreaterThan, Comparison_LessThan, Comparison_AtLeast, Comparison_AtMost,
+		},
+		Strings: []string{
+			"equal_to", "other_than", "greater_than", "less_than", "at_least", "at_most",
+		},
+	}
+}
+
+const Comparison_Type = "comparison"
+
+func (op *Comparison) Marshal(m jsn.Marshaler) error {
+	return Comparison_Marshal(m, op)
+}
+
+func Comparison_Optional_Marshal(m jsn.Marshaler, val *Comparison) (err error) {
+	var zero Comparison
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = Comparison_Marshal(m, val)
+	}
+	return
+}
+
+func Comparison_Marshal(m jsn.Marshaler, val *Comparison) (err error) {
+	return m.MarshalValue(Comparison_Type, jsn.MakeEnum(val, &val.Str))
+}
+
+type Comparison_Slice []Comparison
+
+func (op *Comparison_Slice) GetType() string { return Comparison_Type }
+
+func (op *Comparison_Slice) Marshal(m jsn.Marshaler) error {
+	return Comparison_Repeats_Marshal(m, (*[]Comparison)(op))
+}
+
+func (op *Comparison_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Comparison_Slice) SetSize(cnt int) {
+	var els []Comparison
+	if cnt >= 0 {
+		els = make(Comparison_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Comparison_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Comparison_Marshal(m, &(*op)[i])
+}
+
+func Comparison_Repeats_Marshal(m jsn.Marshaler, vals *[]Comparison) error {
+	return jsn.RepeatBlock(m, (*Comparison_Slice)(vals))
+}
+
+func Comparison_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Comparison) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = Comparison_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -3351,100 +3192,6 @@ func During_Marshal(m jsn.Marshaler, val *During) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", During_Field_Pattern))
 		}
-		m.EndBlock()
-	}
-	return
-}
-
-// Equal Two values exactly match.
-type Equal struct {
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ Comparator = (*Equal)(nil)
-
-func (*Equal) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Equal_Type,
-		Uses: composer.Type_Flow,
-		Lede: "equals",
-	}
-}
-
-const Equal_Type = "equal"
-
-func (op *Equal) Marshal(m jsn.Marshaler) error {
-	return Equal_Marshal(m, op)
-}
-
-type Equal_Slice []Equal
-
-func (op *Equal_Slice) GetType() string { return Equal_Type }
-
-func (op *Equal_Slice) Marshal(m jsn.Marshaler) error {
-	return Equal_Repeats_Marshal(m, (*[]Equal)(op))
-}
-
-func (op *Equal_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Equal_Slice) SetSize(cnt int) {
-	var els []Equal
-	if cnt >= 0 {
-		els = make(Equal_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Equal_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Equal_Marshal(m, &(*op)[i])
-}
-
-func Equal_Repeats_Marshal(m jsn.Marshaler, vals *[]Equal) error {
-	return jsn.RepeatBlock(m, (*Equal_Slice)(vals))
-}
-
-func Equal_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Equal) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Equal_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Equal_Flow struct{ ptr *Equal }
-
-func (n Equal_Flow) GetType() string      { return Equal_Type }
-func (n Equal_Flow) GetLede() string      { return "equals" }
-func (n Equal_Flow) GetFlow() interface{} { return n.ptr }
-func (n Equal_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Equal); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Equal_Optional_Marshal(m jsn.Marshaler, pv **Equal) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Equal_Marshal(m, *pv)
-	} else if !enc {
-		var v Equal
-		if err = Equal_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Equal_Marshal(m jsn.Marshaler, val *Equal) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(Equal_Flow{val}); err == nil {
 		m.EndBlock()
 	}
 	return
@@ -4771,99 +4518,6 @@ func GetVar_Marshal(m jsn.Marshaler, val *GetVar) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", GetVar_Field_Name))
 		}
-		m.EndBlock()
-	}
-	return
-}
-
-// GreaterThan The first value is larger than the second value.
-type GreaterThan struct {
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ Comparator = (*GreaterThan)(nil)
-
-func (*GreaterThan) Compose() composer.Spec {
-	return composer.Spec{
-		Name: GreaterThan_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const GreaterThan_Type = "greater_than"
-
-func (op *GreaterThan) Marshal(m jsn.Marshaler) error {
-	return GreaterThan_Marshal(m, op)
-}
-
-type GreaterThan_Slice []GreaterThan
-
-func (op *GreaterThan_Slice) GetType() string { return GreaterThan_Type }
-
-func (op *GreaterThan_Slice) Marshal(m jsn.Marshaler) error {
-	return GreaterThan_Repeats_Marshal(m, (*[]GreaterThan)(op))
-}
-
-func (op *GreaterThan_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *GreaterThan_Slice) SetSize(cnt int) {
-	var els []GreaterThan
-	if cnt >= 0 {
-		els = make(GreaterThan_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *GreaterThan_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return GreaterThan_Marshal(m, &(*op)[i])
-}
-
-func GreaterThan_Repeats_Marshal(m jsn.Marshaler, vals *[]GreaterThan) error {
-	return jsn.RepeatBlock(m, (*GreaterThan_Slice)(vals))
-}
-
-func GreaterThan_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]GreaterThan) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = GreaterThan_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type GreaterThan_Flow struct{ ptr *GreaterThan }
-
-func (n GreaterThan_Flow) GetType() string      { return GreaterThan_Type }
-func (n GreaterThan_Flow) GetLede() string      { return GreaterThan_Type }
-func (n GreaterThan_Flow) GetFlow() interface{} { return n.ptr }
-func (n GreaterThan_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*GreaterThan); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func GreaterThan_Optional_Marshal(m jsn.Marshaler, pv **GreaterThan) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = GreaterThan_Marshal(m, *pv)
-	} else if !enc {
-		var v GreaterThan
-		if err = GreaterThan_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func GreaterThan_Marshal(m jsn.Marshaler, val *GreaterThan) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(GreaterThan_Flow{val}); err == nil {
 		m.EndBlock()
 	}
 	return
@@ -6209,99 +5863,6 @@ func KindsOf_Marshal(m jsn.Marshaler, val *KindsOf) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", KindsOf_Field_Kind))
 		}
-		m.EndBlock()
-	}
-	return
-}
-
-// LessThan The first value is less than the second value.
-type LessThan struct {
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ Comparator = (*LessThan)(nil)
-
-func (*LessThan) Compose() composer.Spec {
-	return composer.Spec{
-		Name: LessThan_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const LessThan_Type = "less_than"
-
-func (op *LessThan) Marshal(m jsn.Marshaler) error {
-	return LessThan_Marshal(m, op)
-}
-
-type LessThan_Slice []LessThan
-
-func (op *LessThan_Slice) GetType() string { return LessThan_Type }
-
-func (op *LessThan_Slice) Marshal(m jsn.Marshaler) error {
-	return LessThan_Repeats_Marshal(m, (*[]LessThan)(op))
-}
-
-func (op *LessThan_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *LessThan_Slice) SetSize(cnt int) {
-	var els []LessThan
-	if cnt >= 0 {
-		els = make(LessThan_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *LessThan_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return LessThan_Marshal(m, &(*op)[i])
-}
-
-func LessThan_Repeats_Marshal(m jsn.Marshaler, vals *[]LessThan) error {
-	return jsn.RepeatBlock(m, (*LessThan_Slice)(vals))
-}
-
-func LessThan_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]LessThan) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = LessThan_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type LessThan_Flow struct{ ptr *LessThan }
-
-func (n LessThan_Flow) GetType() string      { return LessThan_Type }
-func (n LessThan_Flow) GetLede() string      { return LessThan_Type }
-func (n LessThan_Flow) GetFlow() interface{} { return n.ptr }
-func (n LessThan_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*LessThan); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func LessThan_Optional_Marshal(m jsn.Marshaler, pv **LessThan) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = LessThan_Marshal(m, *pv)
-	} else if !enc {
-		var v LessThan
-		if err = LessThan_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func LessThan_Marshal(m jsn.Marshaler, val *LessThan) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(LessThan_Flow{val}); err == nil {
 		m.EndBlock()
 	}
 	return
@@ -9758,100 +9319,6 @@ func TriggerSwitch_Marshal(m jsn.Marshaler, val *TriggerSwitch) (err error) {
 	return
 }
 
-// Unequal The first value doesn't equal the second value.
-type Unequal struct {
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ Comparator = (*Unequal)(nil)
-
-func (*Unequal) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Unequal_Type,
-		Uses: composer.Type_Flow,
-		Lede: "other_than",
-	}
-}
-
-const Unequal_Type = "unequal"
-
-func (op *Unequal) Marshal(m jsn.Marshaler) error {
-	return Unequal_Marshal(m, op)
-}
-
-type Unequal_Slice []Unequal
-
-func (op *Unequal_Slice) GetType() string { return Unequal_Type }
-
-func (op *Unequal_Slice) Marshal(m jsn.Marshaler) error {
-	return Unequal_Repeats_Marshal(m, (*[]Unequal)(op))
-}
-
-func (op *Unequal_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Unequal_Slice) SetSize(cnt int) {
-	var els []Unequal
-	if cnt >= 0 {
-		els = make(Unequal_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Unequal_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Unequal_Marshal(m, &(*op)[i])
-}
-
-func Unequal_Repeats_Marshal(m jsn.Marshaler, vals *[]Unequal) error {
-	return jsn.RepeatBlock(m, (*Unequal_Slice)(vals))
-}
-
-func Unequal_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Unequal) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Unequal_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Unequal_Flow struct{ ptr *Unequal }
-
-func (n Unequal_Flow) GetType() string      { return Unequal_Type }
-func (n Unequal_Flow) GetLede() string      { return "other_than" }
-func (n Unequal_Flow) GetFlow() interface{} { return n.ptr }
-func (n Unequal_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Unequal); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Unequal_Optional_Marshal(m jsn.Marshaler, pv **Unequal) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Unequal_Marshal(m, *pv)
-	} else if !enc {
-		var v Unequal
-		if err = Unequal_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Unequal_Marshal(m jsn.Marshaler, val *Unequal) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(Unequal_Flow{val}); err == nil {
-		m.EndBlock()
-	}
-	return
-}
-
 // VariableName requires a user-specified string.
 type VariableName struct {
 	Str string
@@ -10041,7 +9508,6 @@ func While_Marshal(m jsn.Marshaler, val *While) (err error) {
 
 var Slots = []interface{}{
 	(*Brancher)(nil),
-	(*Comparator)(nil),
 	(*FromSourceFields)(nil),
 	(*IntoTargetFields)(nil),
 	(*Trigger)(nil),
@@ -10052,8 +9518,6 @@ var Slats = []composer.Composer{
 	(*Always)(nil),
 	(*AnyTrue)(nil),
 	(*Assign)(nil),
-	(*AtLeast)(nil),
-	(*AtMost)(nil),
 	(*Blankline)(nil),
 	(*BracketText)(nil),
 	(*Break)(nil),
@@ -10075,9 +9539,9 @@ var Slats = []composer.Composer{
 	(*CommaText)(nil),
 	(*CompareNum)(nil),
 	(*CompareText)(nil),
+	(*Comparison)(nil),
 	(*DiffOf)(nil),
 	(*During)(nil),
-	(*Equal)(nil),
 	(*FromBool)(nil),
 	(*FromNum)(nil),
 	(*FromNumbers)(nil),
@@ -10090,7 +9554,6 @@ var Slats = []composer.Composer{
 	(*FromVar)(nil),
 	(*GetAtField)(nil),
 	(*GetVar)(nil),
-	(*GreaterThan)(nil),
 	(*HasDominion)(nil),
 	(*HasTrait)(nil),
 	(*IdOf)(nil),
@@ -10103,7 +9566,6 @@ var Slats = []composer.Composer{
 	(*Join)(nil),
 	(*KindOf)(nil),
 	(*KindsOf)(nil),
-	(*LessThan)(nil),
 	(*MakeLowercase)(nil),
 	(*MakeReversed)(nil),
 	(*MakeSentenceCase)(nil),
@@ -10137,12 +9599,12 @@ var Slats = []composer.Composer{
 	(*TriggerCycle)(nil),
 	(*TriggerOnce)(nil),
 	(*TriggerSwitch)(nil),
-	(*Unequal)(nil),
 	(*VariableName)(nil),
 	(*While)(nil),
 }
 
 var Signatures = map[uint64]interface{}{
+	15485098871275255450: (*Comparison)(nil),        /* Comparison: */
 	10347746873548257800: (*PatternName)(nil),       /* PatternName: */
 	10059194828506805844: (*VariableName)(nil),      /* VariableName: */
 	9392469773844077696:  (*TriggerSwitch)(nil),     /* trigger=After */
@@ -10150,14 +9612,13 @@ var Signatures = map[uint64]interface{}{
 	1979437068831463006:  (*Always)(nil),            /* bool_eval=Always */
 	1963945852392897915:  (*AnyTrue)(nil),           /* bool_eval=AnyTrue: */
 	2233111806717201007:  (*TriggerOnce)(nil),       /* trigger=At */
-	1081861811875118490:  (*AtLeast)(nil),           /* comparator=AtLeast */
-	5857986266124797182:  (*AtMost)(nil),            /* comparator=AtMost */
 	15800853823523633295: (*Newline)(nil),           /* execute=Br */
 	18222385133081373684: (*BracketText)(nil),       /* text_eval=Brackets does: */
 	9570569845423374482:  (*Break)(nil),             /* execute=Break */
 	11793928305886057198: (*BufferText)(nil),        /* text_eval=Buffers does: */
 	8695677004499439692:  (*Capitalize)(nil),        /* text_eval=Capitalize: */
 	5770232330560742655:  (*CompareNum)(nil),        /* bool_eval=Cmp:is:num: */
+	3133023233294705026:  (*CompareNum)(nil),        /* bool_eval=Cmp:is:num:within: */
 	3980368314252876379:  (*CompareText)(nil),       /* bool_eval=Cmp:is:txt: */
 	16246548377343461249: (*CommaText)(nil),         /* text_eval=Commas does: */
 	3601423820955950769:  (*Includes)(nil),          /* bool_eval=Contains:part: */
@@ -10180,7 +9641,6 @@ var Signatures = map[uint64]interface{}{
 	10172152994557366141: (*ChooseMore)(nil),        /* brancher=ElseIf:does:else: */
 	12734322650065726395: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from:and:does: */
 	16834345759272094552: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from:and:does:else: */
-	8608508076093645477:  (*Equal)(nil),             /* comparator=Equals */
 	1457631626735043065:  (*TriggerCycle)(nil),      /* trigger=Every */
 	16065241269206568079: (*FromBool)(nil),          /* assignment=FromBool: */
 	13937541344191718121: (*FromNum)(nil),           /* assignment=FromNum: */
@@ -10198,7 +9658,6 @@ var Signatures = map[uint64]interface{}{
 	14595426329886937081: (*GetAtField)(nil),        /* record_list_eval=Get:from: */
 	4519648908930386096:  (*GetAtField)(nil),        /* text_eval=Get:from: */
 	9011366933800504835:  (*GetAtField)(nil),        /* text_list_eval=Get:from: */
-	12593405399769354977: (*GreaterThan)(nil),       /* comparator=GreaterThan */
 	7667478703662631060:  (*HasDominion)(nil),       /* bool_eval=HasDominion: */
 	9805093500361992370:  (*IdOf)(nil),              /* text_eval=IdOf: */
 	7148628340285471837:  (*ChooseAction)(nil),      /* brancher=If:does: */
@@ -10219,7 +9678,6 @@ var Signatures = map[uint64]interface{}{
 	16744881049704292640: (*IsKindOf)(nil),          /* bool_eval=KindOf:is: */
 	7296079450764183372:  (*IsExactKindOf)(nil),     /* bool_eval=KindOf:isExactly: */
 	6869420318733086481:  (*KindsOf)(nil),           /* text_list_eval=KindsOf: */
-	348102922704077850:   (*LessThan)(nil),          /* comparator=LessThan */
 	4237971283445935803:  (*Assign)(nil),            /* execute=Let:be: */
 	11334467785012784241: (*MakeLowercase)(nil),     /* text_eval=Lower: */
 	7007374677444567783:  (*Matches)(nil),           /* bool_eval=Matches:to: */
@@ -10235,7 +9693,6 @@ var Signatures = map[uint64]interface{}{
 	5709077775967698380:  (*PrintNum)(nil),          /* text_eval=Numeral: */
 	5949100785050943673:  (*IntoObj)(nil),           /* into_target_fields=ObjField: */
 	17942335194848080718: (*FromObj)(nil),           /* from_source_fields=ObjFields: */
-	11091220478069522341: (*Unequal)(nil),           /* comparator=OtherThan */
 	7215745238754840573:  (*Blankline)(nil),         /* execute=P */
 	11420921600352749983: (*Pluralize)(nil),         /* text_eval=Plural of: */
 	17891341080348439999: (*SetTrait)(nil),          /* execute=Put obj:trait: */

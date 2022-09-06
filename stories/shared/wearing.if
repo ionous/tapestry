@@ -206,18 +206,14 @@
                   {
                     "Cmp:is:txt:": [
                       "@trait",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "not worn"
                     ]
                   },
                   {
                     "Cmp:is:txt:": [
                       "@actor",
-                      {
-                        "OtherThan": true
-                      },
+                      "other_than",
                       {
                         "WearerOf obj:": "@noun"
                       }

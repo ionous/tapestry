@@ -67,7 +67,7 @@ var collateGroups = testpat.Pattern{
 			&core.ChooseAction{
 				If: &core.CompareNum{
 					A:  V("idx"),
-					Is: &core.Equal{},
+					Is: core.Equal,
 					B:  F(0),
 				},
 				// havent found a matching group?

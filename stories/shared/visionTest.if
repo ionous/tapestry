@@ -32,18 +32,23 @@
         "vision testing",
         [
           {
-            "Comment:": "the player's in darkness setting defaults to false."
+            "Comment:": "Verify that we start not in darkness."
           },
           {
-            "Say:": {
-              "RenderTemplate:": "{if .self.is_in_darkness}ng: started in darkness{else}ok: started in light{end}."
+            "Expect:": {
+              "Not:": {
+                "Get obj:trait:": [
+                  "self",
+                  "is in darkness"
+                ]
+              }
             }
           },
           {
-            "Expect string:": "ok: started in light."
-          },
-          {
-            "Comment:": "we expect to see darkness fall"
+            "Comment:": [
+              "First change the kitchen lighting, and then evaluate the light.",
+              "Verify the game prints the arrival of darkness."
+            ]
           },
           {
             "Put:from:at:": [
@@ -57,21 +62,21 @@
             ]
           },
           {
-            "Expect string:": "It is now pitch dark in here!"
-          },
-          {
             "AdjustLight": true
           },
           {
-            "Say:": {
-              "RenderTemplate:": "{if .self.is_in_darkness}ok: left in the dark{else}ng: expected darkness{end}."
+            "Expect string:": "It is now pitch dark in here!"
+          },
+          {
+            "Expect:": {
+              "Get obj:trait:": [
+                "self",
+                "is in darkness"
+              ]
             }
           },
           {
-            "Expect string:": "ok: left in the dark."
-          },
-          {
-            "Comment:": "we expect to see light break forth in a glorious wonder"
+            "Comment:": "Verify that light breaks forth in a glorious wonder."
           },
           {
             "Put:from:at:": [
@@ -85,18 +90,20 @@
             ]
           },
           {
-            "Expect string:": "The light, it burns."
-          },
-          {
             "AdjustLight": true
           },
           {
-            "Say:": {
-              "RenderTemplate:": "{if .self.is_in_darkness}ng: left in the dark{else}ok: expected darkness{end}."
-            }
+            "Expect string:": "The light, it burns."
           },
           {
-            "Expect string:": "ok: expected darkness."
+            "Expect:": {
+              "Not:": {
+                "Get obj:trait:": [
+                  "self",
+                  "is in darkness"
+                ]
+              }
+            }
           }
         ]
       ]

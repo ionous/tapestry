@@ -332,9 +332,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "storing into"
                     ]
                   },
@@ -375,9 +373,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "storing into"
                     ]
                   },
@@ -386,9 +382,7 @@
                       {
                         "WearerOf obj:": "@noun"
                       },
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "@actor"
                     ]
                   }
@@ -431,18 +425,14 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "storing into"
                     ]
                   },
                   {
                     "Cmp:is:txt:": [
                       "@intoObj",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "@noun"
                     ]
                   },
@@ -479,18 +469,14 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "storing into"
                     ]
                   },
                   {
                     "Cmp:is:txt:": [
                       "@intoObj",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "@noun"
                     ]
                   },
@@ -530,9 +516,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "storing into"
                     ]
                   },

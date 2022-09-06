@@ -173,9 +173,7 @@
                                 {
                                   "Cmp:is:txt:": [
                                     "@it",
-                                    {
-                                      "Equals": true
-                                    },
+                                    "equal_to",
                                     {
                                       "Get:from:": [
                                         "pawn",

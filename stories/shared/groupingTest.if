@@ -345,9 +345,7 @@
                         {
                           "Cmp:is:num:": [
                             "@group size",
-                            {
-                              "GreaterThan": true
-                            },
+                            "greater_than",
                             1
                           ]
                         }
@@ -609,9 +607,7 @@
                             }
                           ]
                         },
-                        {
-                          "Equals": true
-                        },
+                        "equal_to",
                         "the tiles"
                       ]
                     },

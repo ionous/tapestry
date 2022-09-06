@@ -111,9 +111,7 @@
                                 {
                                   "Cmp:is:txt:": [
                                     "@dest",
-                                    {
-                                      "OtherThan": true
-                                    },
+                                    "other_than",
                                     {
                                       "ParentOf obj:": "@obj"
                                     }
@@ -262,9 +260,7 @@
                           {
                             "HolderOf obj:": "@obj"
                           },
-                          {
-                            "Equals": true
-                          },
+                          "equal_to",
                           "@actor"
                         ]
                       }
@@ -286,9 +282,7 @@
                         {
                           "HolderOf obj:": "@obj"
                         },
-                        {
-                          "Equals": true
-                        },
+                        "equal_to",
                         "@actor"
                       ]
                     },

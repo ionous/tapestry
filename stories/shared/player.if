@@ -172,9 +172,7 @@
                       "FromBool:": {
                         "Cmp:is:txt:": [
                           "@obj",
-                          {
-                            "Equals": true
-                          },
+                          "equal_to",
                           {
                             "Get:from:": [
                               "pawn",
@@ -207,9 +205,7 @@
                       "FromBool:": {
                         "Cmp:is:txt:": [
                           "@obj",
-                          {
-                            "Equals": true
-                          },
+                          "equal_to",
                           {
                             "IdOf:": "player"
                           }

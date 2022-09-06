@@ -79,8 +79,10 @@ func sigParts(flow *spec.FlowSpec, commandName string, types rs.TypeSpecs) [][]s
 		if !term.IsAnonymous() {
 			sel = camelize(term.Label)
 		}
-		pt := types.Types[term.TypeName()]
-		if simpleSwap := !term.Repeats && pt.Spec.Choice == spec.UsesSpec_Swap_Opt; !simpleSwap {
+		typeName:= term.TypeName()
+		if pt := types.Types[typeName ]; pt == nil { 
+			panic("unknown type " + typeName)
+		} else if simpleSwap := !term.Repeats && pt.Spec.Choice == spec.UsesSpec_Swap_Opt; !simpleSwap {
 			var rest [][]string
 			for _, a := range sets {
 				// without copy, the reserve gets re-used, causes a sharing of memory between slices

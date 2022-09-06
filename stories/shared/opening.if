@@ -264,9 +264,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@trait",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "open"
                     ]
                   },
@@ -331,9 +329,7 @@
                         {
                           "Cmp:is:txt:": [
                             "@trait",
-                            {
-                              "Equals": true
-                            },
+                            "equal_to",
                             "open"
                           ]
                         },
@@ -384,9 +380,7 @@
                               {
                                 "Len:": "@concealed items"
                               },
-                              {
-                                "GreaterThan": true
-                              },
+                              "greater_than",
                               0
                             ]
                           },

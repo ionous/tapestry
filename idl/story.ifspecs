@@ -366,33 +366,6 @@
           ]
         },
         {
-          "--": [
-            "Add a note.",
-            "Information about the story for you and other authors."
-          ],
-          "Spec:slots:groups:with flow:": [
-            "comment",
-            [
-              "story_statement",
-              "execute"
-            ],
-            "language",
-            {
-              "Flow phrase:uses:": [
-                "Note: {comment$lines}",
-                [
-                  {
-                    "Term:name:": [
-                      "_",
-                      "lines"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
           "Spec:groups:with flow:": [
             "common_action",
             "events",

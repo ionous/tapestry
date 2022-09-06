@@ -212,9 +212,7 @@
                           {
                             "Cmp:is:num:": [
                               "@lca",
-                              {
-                                "GreaterThan": true
-                              },
+                              "greater_than",
                               0
                             ]
                           },
@@ -290,9 +288,7 @@
                     {
                       "Cmp:is:num:": [
                         "@lca",
-                        {
-                          "Equals": true
-                        },
+                        "equal_to",
                         0
                       ]
                     },
@@ -321,9 +317,7 @@
                         {
                           "Cmp:is:num:": [
                             "@reach error",
-                            {
-                              "LessThan": true
-                            },
+                            "less_than",
                             "@lca"
                           ]
                         },
@@ -601,9 +595,7 @@
                     "Not:": {
                       "Cmp:is:txt:": [
                         "@intoObj",
-                        {
-                          "Equals": true
-                        },
+                        "equal_to",
                         "@noun"
                       ]
                     }

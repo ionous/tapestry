@@ -43,11 +43,6 @@ func (op *Certainties) ImportPhrase(k *Importer) (err error) {
 
 var certaintiesNotImplemented eph.PrintOnce = "certainties not implemented"
 
-func (op *Comment) ImportPhrase(k *Importer) (err error) {
-	// do nothing for now.
-	return
-}
-
 func (op *GrammarDecl) ImportPhrase(k *Importer) (err error) {
 	switch el := op.Grammar.(type) {
 	case *grammar.Alias:

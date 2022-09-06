@@ -325,9 +325,7 @@
                           {
                             "Cmp:is:txt:": [
                               "@search",
-                              {
-                                "Equals": true
-                              },
+                              "equal_to",
                               "@obj"
                             ]
                           },
@@ -434,9 +432,7 @@
                                 {
                                   "Cmp:is:txt:": [
                                     "@o1",
-                                    {
-                                      "Equals": true
-                                    },
+                                    "equal_to",
                                     "@o2"
                                   ]
                                 },
@@ -469,9 +465,7 @@
                                 {
                                   "Cmp:is:txt:": [
                                     "@o2",
-                                    {
-                                      "Equals": true
-                                    },
+                                    "equal_to",
                                     "@other object"
                                   ]
                                 },
@@ -485,9 +479,7 @@
                                     {
                                       "Cmp:is:txt:": [
                                         "@o2",
-                                        {
-                                          "Equals": true
-                                        },
+                                        "equal_to",
                                         ""
                                       ]
                                     },
@@ -518,9 +510,7 @@
                           {
                             "Cmp:is:txt:": [
                               "@o1",
-                              {
-                                "Equals": true
-                              },
+                              "equal_to",
                               "@object"
                             ]
                           },
@@ -535,9 +525,7 @@
                               {
                                 "Cmp:is:txt:": [
                                   "@o1",
-                                  {
-                                    "Equals": true
-                                  },
+                                  "equal_to",
                                   ""
                                 ]
                               },
@@ -635,9 +623,7 @@
                           {
                             "Cmp:is:txt:": [
                               "@up",
-                              {
-                                "Equals": true
-                              },
+                              "equal_to",
                               "@obj"
                             ]
                           },
@@ -652,9 +638,7 @@
                               {
                                 "Cmp:is:txt:": [
                                   "@up",
-                                  {
-                                    "Equals": true
-                                  },
+                                  "equal_to",
                                   ""
                                 ]
                               },
@@ -673,9 +657,7 @@
                           {
                             "Cmp:is:txt:": [
                               "@up",
-                              {
-                                "Equals": true
-                              },
+                              "equal_to",
                               "@root"
                             ]
                           },

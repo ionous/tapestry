@@ -102,7 +102,7 @@ var FactorialUseOne = []rt.Execute{
 var FactorialIsZero = &core.CompareNum{
 	Markup: UserComment("so, when we've reached 0..."),
 	A:      &core.GetVar{Name: numVar},
-	Is:     &core.Equal{},
+	Is:     core.Equal,
 	B:      F(0)}
 
 var factorialName = core.PatternName{Str: "factorial"}

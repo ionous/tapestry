@@ -117,9 +117,7 @@
                       }
                     }
                   },
-                  {
-                    "OtherThan": true
-                  },
+                  "other_than",
                   1
                 ]
               },
@@ -154,9 +152,7 @@
                       }
                     }
                   },
-                  {
-                    "GreaterThan": true
-                  },
+                  "greater_than",
                   1
                 ]
               },

@@ -8,7 +8,7 @@ func (op *OptionSpec) FriendlyName() (ret string) {
 	} else {
 		ret = op.Name
 	}
-	return
+	return strings.Replace(ret, "_", " ", -1)
 }
 
 func (op *OptionSpec) Value() (ret string) {

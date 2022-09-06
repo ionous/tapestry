@@ -59,9 +59,7 @@
                         {
                           "Len:": "@queue"
                         },
-                        {
-                          "GreaterThan": true
-                        },
+                        "greater_than",
                         0
                       ]
                     },

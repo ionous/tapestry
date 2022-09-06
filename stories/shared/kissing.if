@@ -150,9 +150,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "kissing"
                     ]
                   },
@@ -187,18 +185,14 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "kissing"
                     ]
                   },
                   {
                     "Cmp:is:txt:": [
                       "@actor",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "@noun"
                     ]
                   },

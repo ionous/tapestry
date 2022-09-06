@@ -477,9 +477,7 @@
                     {
                       "Cmp:is:txt:": [
                         "@room",
-                        {
-                          "Equals": true
-                        },
+                        "equal_to",
                         "@ceiling"
                       ]
                     },
@@ -558,9 +556,7 @@
                           {
                             "Cmp:is:txt:": [
                               "@it",
-                              {
-                                "Equals": true
-                              },
+                              "equal_to",
                               "@ceiling"
                             ]
                           },
@@ -654,9 +650,7 @@
                     {
                       "Cmp:is:txt:": [
                         "@where",
-                        {
-                          "Equals": true
-                        },
+                        "equal_to",
                         "@room"
                       ]
                     },
@@ -698,9 +692,7 @@
                                 {
                                   "Cmp:is:txt:": [
                                     "@it",
-                                    {
-                                      "Equals": true
-                                    },
+                                    "equal_to",
                                     "@viewpoint"
                                   ]
                                 },
@@ -763,9 +755,7 @@
                       "FromBool:": {
                         "Cmp:is:txt:": [
                           "@where",
-                          {
-                            "Equals": true
-                          },
+                          "equal_to",
                           "@room"
                         ]
                       }
@@ -777,9 +767,7 @@
                       "FromBool:": {
                         "Cmp:is:num:": [
                           "@previousMentions",
-                          {
-                            "Equals": true
-                          },
+                          "equal_to",
                           {
                             "Get:from:": [
                               "mentions",
@@ -1056,9 +1044,7 @@
                       {
                         "ParentOf obj:": "@obj"
                       },
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "@locale"
                     ]
                   }

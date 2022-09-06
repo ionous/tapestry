@@ -1457,110 +1457,6 @@ func Certainty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Certainty) (err e
 	return
 }
 
-// Comment Add a note.
-// Information about the story for you and other authors.
-type Comment struct {
-	Lines  prim.Lines `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*Comment)(nil)
-var _ rt.Execute = (*Comment)(nil)
-
-func (*Comment) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Comment_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Comment_Type = "comment"
-const Comment_Field_Lines = "$LINES"
-
-func (op *Comment) Marshal(m jsn.Marshaler) error {
-	return Comment_Marshal(m, op)
-}
-
-type Comment_Slice []Comment
-
-func (op *Comment_Slice) GetType() string { return Comment_Type }
-
-func (op *Comment_Slice) Marshal(m jsn.Marshaler) error {
-	return Comment_Repeats_Marshal(m, (*[]Comment)(op))
-}
-
-func (op *Comment_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Comment_Slice) SetSize(cnt int) {
-	var els []Comment
-	if cnt >= 0 {
-		els = make(Comment_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Comment_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Comment_Marshal(m, &(*op)[i])
-}
-
-func Comment_Repeats_Marshal(m jsn.Marshaler, vals *[]Comment) error {
-	return jsn.RepeatBlock(m, (*Comment_Slice)(vals))
-}
-
-func Comment_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Comment) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Comment_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Comment_Flow struct{ ptr *Comment }
-
-func (n Comment_Flow) GetType() string      { return Comment_Type }
-func (n Comment_Flow) GetLede() string      { return Comment_Type }
-func (n Comment_Flow) GetFlow() interface{} { return n.ptr }
-func (n Comment_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Comment); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Comment_Optional_Marshal(m jsn.Marshaler, pv **Comment) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Comment_Marshal(m, *pv)
-	} else if !enc {
-		var v Comment
-		if err = Comment_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Comment_Marshal(m jsn.Marshaler, val *Comment) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(Comment_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Comment_Field_Lines)
-		if e0 == nil {
-			e0 = prim.Lines_Marshal(m, &val.Lines)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Comment_Field_Lines))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // CommonAction
 type CommonAction struct {
 	Kind          SingularKind   `if:"label=_"`
@@ -9206,7 +9102,6 @@ var Slats = []composer.Composer{
 	(*BoolField)(nil),
 	(*Certainties)(nil),
 	(*Certainty)(nil),
-	(*Comment)(nil),
 	(*CommonAction)(nil),
 	(*CommonNoun)(nil),
 	(*CountOf)(nil),
@@ -9336,8 +9231,6 @@ var Signatures = map[uint64]interface{}{
 	12371124790835217408: (*BoolField)(nil),             /* field=Bool:kind: */
 	3110376293195187131:  (*BoolField)(nil),             /* field=Bool:kind:initially: */
 	6843411504396242728:  (*Certainties)(nil),           /* story_statement=Certainties:areBeing:certainty:trait: */
-	3991849378064754806:  (*Comment)(nil),               /* execute=Comment: */
-	16586092333187989882: (*Comment)(nil),               /* story_statement=Comment: */
 	10143132576483224253: (*CountOf)(nil),               /* bool_eval=CountOf:num: */
 	231398832069830353:   (*CycleText)(nil),             /* text_eval=CycleText: */
 	12862689211056047959: (*MapDeparting)(nil),          /* story_statement=Departing from:via:and:otherRoom: */

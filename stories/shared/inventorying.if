@@ -143,9 +143,7 @@
                   {
                     "Len:": "@kids"
                   },
-                  {
-                    "GreaterThan": true
-                  },
+                  "greater_than",
                   0
                 ]
               },

@@ -11,12 +11,6 @@ type StubImporter interface {
 	ImportStub(k *Importer) (interface{}, error)
 }
 
-var _ StubImporter = (*Comment)(nil)
-
-func (*Comment) Execute(rt.Runtime) error {
-	panic("unexpected use of story method")
-}
-
 var _ StubImporter = (*CountOf)(nil)
 
 func (*CountOf) GetBool(rt.Runtime) (g.Value, error) {

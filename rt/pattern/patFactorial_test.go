@@ -51,7 +51,7 @@ func TestFactorial(t *testing.T) {
 				}, {
 					Filter: &core.CompareNum{
 						A:  V("num"),
-						Is: &core.Equal{},
+						Is: core.Equal,
 						B:  I(0),
 					},
 					Execute: core.MakeActivity(

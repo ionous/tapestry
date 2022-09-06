@@ -85,28 +85,6 @@
           ]
         },
         {
-          "--": "The first value is greater than or equal to the second value.",
-          "Spec:slots:groups:with flow:": [
-            "at_least",
-            "comparator",
-            "comparison",
-            {
-              "Flow uses:": []
-            }
-          ]
-        },
-        {
-          "--": "The first value is less than or equal to the second value.",
-          "Spec:slots:groups:with flow:": [
-            "at_most",
-            "comparator",
-            "comparison",
-            {
-              "Flow uses:": []
-            }
-          ]
-        },
-        {
           "--": "Add a single blank line following some text.",
           "Spec:slots:groups:with flow:": [
             "blankline",
@@ -695,15 +673,6 @@
           ]
         },
         {
-          "--": "Helper for comparing values.",
-          "Spec:with slot:": [
-            "comparator",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
           "--": "True if eq,ne,gt,lt,ge,le two numbers.",
           "Spec:slots:groups:with flow:": [
             "compare_num",
@@ -723,7 +692,7 @@
                   {
                     "Term:type:": [
                       "is",
-                      "comparator"
+                      "comparison"
                     ]
                   },
                   {
@@ -731,6 +700,15 @@
                       "num",
                       "b",
                       "number_eval"
+                    ]
+                  },
+                  {
+                    "--": "a positive value that indicates how close the two numbers should be",
+                    "Term:name:type:optional:": [
+                      "within",
+                      "tolerance",
+                      "number",
+                      true
                     ]
                   }
                 ]
@@ -758,7 +736,7 @@
                   {
                     "Term:type:": [
                       "is",
-                      "comparator"
+                      "comparison"
                     ]
                   },
                   {
@@ -821,20 +799,6 @@
                     "pattern_name"
                   ]
                 }
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Two values exactly match.",
-          "Spec:slots:groups:with flow:": [
-            "equal",
-            "comparator",
-            "comparison",
-            {
-              "Flow:uses:": [
-                "equals",
-                []
               ]
             }
           ]
@@ -1131,13 +1095,32 @@
           ]
         },
         {
-          "--": "The first value is larger than the second value.",
-          "Spec:slots:groups:with flow:": [
-            "greater_than",
-            "comparator",
+          "Spec:with str:": [
             "comparison",
             {
-              "Flow uses:": []
+              "Str exclusively:uses:": [
+                true,
+                [
+                  {
+                    "Option:": "equal_to"
+                  },
+                  {
+                    "Option:": "other_than"
+                  },
+                  {
+                    "Option:": "greater_than"
+                  },
+                  {
+                    "Option:": "less_than"
+                  },
+                  {
+                    "Option:": "at_least"
+                  },
+                  {
+                    "Option:": "at_most"
+                  }
+                ]
+              ]
             }
           ]
         },
@@ -1429,17 +1412,6 @@
                   ]
                 }
               ]
-            }
-          ]
-        },
-        {
-          "--": "The first value is less than the second value.",
-          "Spec:slots:groups:with flow:": [
-            "less_than",
-            "comparator",
-            "comparison",
-            {
-              "Flow uses:": []
             }
           ]
         },
@@ -2144,20 +2116,6 @@
             {
               "Flow:uses:": [
                 "after",
-                []
-              ]
-            }
-          ]
-        },
-        {
-          "--": "The first value doesn't equal the second value.",
-          "Spec:slots:groups:with flow:": [
-            "unequal",
-            "comparator",
-            "comparison",
-            {
-              "Flow:uses:": [
-                "other_than",
                 []
               ]
             }

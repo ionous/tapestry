@@ -259,9 +259,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "taking"
                     ]
                   },
@@ -299,18 +297,14 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "taking"
                     ]
                   },
                   {
                     "Cmp:is:txt:": [
                       "@actor",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "@noun"
                     ]
                   }
@@ -342,9 +336,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "taking"
                     ]
                   },
@@ -382,9 +374,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "taking"
                     ]
                   },
@@ -422,9 +412,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "taking"
                     ]
                   },
@@ -474,18 +462,14 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "taking"
                     ]
                   },
                   {
                     "Cmp:is:txt:": [
                       "@intoObj",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "@noun"
                     ]
                   }
@@ -530,9 +514,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "taking"
                     ]
                   },
@@ -574,27 +556,21 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "taking"
                     ]
                   },
                   {
                     "Cmp:is:txt:": [
                       "@fromObj",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "@actor"
                     ]
                   },
                   {
                     "Cmp:is:txt:": [
                       "@intoObj",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "@noun"
                     ]
                   }

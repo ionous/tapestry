@@ -200,9 +200,7 @@
                         {
                           "Len:": "@items"
                         },
-                        {
-                          "Equals": true
-                        },
+                        "equal_to",
                         0
                       ]
                     },
@@ -284,9 +282,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "searching"
                     ]
                   },
@@ -321,9 +317,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "searching"
                     ]
                   },

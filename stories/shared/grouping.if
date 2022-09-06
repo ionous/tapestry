@@ -282,9 +282,7 @@
                           }
                         ]
                       },
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       {
                         "Get:from:": [
                           "label",
@@ -305,9 +303,7 @@
                           }
                         ]
                       },
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       {
                         "Get:from:": [
                           "hide label",
@@ -328,9 +324,7 @@
                           }
                         ]
                       },
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       {
                         "Get:from:": [
                           "hide size",
@@ -351,9 +345,7 @@
                           }
                         ]
                       },
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       {
                         "Get:from:": [
                           "hide objects",
@@ -523,9 +515,7 @@
                     {
                       "Cmp:is:num:": [
                         "@idx",
-                        {
-                          "Equals": true
-                        },
+                        "equal_to",
                         0
                       ]
                     },

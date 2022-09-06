@@ -243,9 +243,7 @@
                             {
                               "Len:": "@names"
                             },
-                            {
-                              "GreaterThan": true
-                            },
+                            "greater_than",
                             1
                           ]
                         },

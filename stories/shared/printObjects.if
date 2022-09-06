@@ -189,18 +189,14 @@
                   {
                     "Cmp:is:num:": [
                       "@inline depth",
-                      {
-                        "GreaterThan": true
-                      },
+                      "greater_than",
                       0
                     ]
                   },
                   {
                     "Cmp:is:num:": [
                       "@inline depth",
-                      {
-                        "GreaterThan": true
-                      },
+                      "greater_than",
                       "@block depth"
                     ]
                   }
@@ -235,18 +231,14 @@
                   {
                     "Cmp:is:num:": [
                       "@block depth",
-                      {
-                        "GreaterThan": true
-                      },
+                      "greater_than",
                       0
                     ]
                   },
                   {
                     "Cmp:is:num:": [
                       "@block depth",
-                      {
-                        "GreaterThan": true
-                      },
+                      "greater_than",
                       "@inline depth"
                     ]
                   }
@@ -298,9 +290,7 @@
                   {
                     "Len:": "@kids"
                   },
-                  {
-                    "GreaterThan": true
-                  },
+                  "greater_than",
                   0
                 ]
               }
@@ -391,9 +381,7 @@
                   {
                     "Len:": "@kids"
                   },
-                  {
-                    "GreaterThan": true
-                  },
+                  "greater_than",
                   0
                 ]
               },
@@ -520,9 +508,7 @@
                       {
                         "Len:": "@kids"
                       },
-                      {
-                        "GreaterThan": true
-                      },
+                      "greater_than",
                       0
                     ]
                   }

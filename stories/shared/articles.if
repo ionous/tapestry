@@ -278,9 +278,7 @@
                       }
                     ]
                   },
-                  {
-                    "OtherThan": true
-                  },
+                  "other_than",
                   ""
                 ]
               },
@@ -298,9 +296,7 @@
               {
                 "Cmp:is:txt:": [
                   "@article",
-                  {
-                    "OtherThan": true
-                  },
+                  "other_than",
                   ""
                 ]
               },

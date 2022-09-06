@@ -146,9 +146,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "retrieving from"
                     ]
                   }
@@ -193,9 +191,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "retrieving from"
                     ]
                   }
@@ -230,9 +226,7 @@
                   {
                     "Cmp:is:txt:": [
                       "@action",
-                      {
-                        "Equals": true
-                      },
+                      "equal_to",
                       "retrieving from"
                     ]
                   },
@@ -241,9 +235,7 @@
                       {
                         "ParentOf obj:": "@noun"
                       },
-                      {
-                        "OtherThan": true
-                      },
+                      "other_than",
                       "@other noun"
                     ]
                   }

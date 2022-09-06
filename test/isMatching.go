@@ -35,7 +35,7 @@ var matchGroups = testpat.Pattern{
 				From:  &core.FromVar{Var: N("a")},
 				Field: W("label"),
 			},
-			Is: &core.Unequal{},
+			Is: core.Unequal,
 			B: &core.GetAtField{
 				From:  &core.FromVar{Var: N("b")},
 				Field: W("label"),
@@ -48,7 +48,7 @@ var matchGroups = testpat.Pattern{
 				From:  &core.FromVar{Var: N("a")},
 				Field: W("innumerable"),
 			},
-			Is: &core.Unequal{},
+			Is: core.Unequal,
 			B: &core.GetAtField{
 				From:  &core.FromVar{Var: N("b")},
 				Field: W("innumerable"),
@@ -61,7 +61,7 @@ var matchGroups = testpat.Pattern{
 				From:  &core.FromVar{Var: N("a")},
 				Field: W("group_options"),
 			},
-			Is: &core.Unequal{},
+			Is: core.Unequal,
 			B: &core.GetAtField{
 				From:  &core.FromVar{Var: N("b")},
 				Field: W("group_options"),

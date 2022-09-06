@@ -1,9 +1,152 @@
 {
-  "--": "debug",
+  "--": "debug and testing statements ",
   "Spec:with group:": [
     "debug",
     {
       "Group contains:": [
+        {
+          "--": [
+            "Add a note.",
+            "Information about the story for you and other authors."
+          ],
+          "Spec:slots:groups:with flow:": [
+            "comment",
+            [
+              "story_statement",
+              "execute"
+            ],
+            "language",
+            {
+              "Flow phrase:uses:": [
+                "Note: {comment$lines}",
+                [
+                  {
+                    "Term:name:": [
+                      "_",
+                      "lines"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "expect_string",
+            "execute",
+            {
+              "Flow:uses:": [
+                "expect",
+                [
+                  {
+                    "Term:type:": [
+                      "string",
+                      "text"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "expect_lines",
+            "execute",
+            {
+              "Flow:uses:": [
+                "expect",
+                [
+                  {
+                    "Term:": "lines"
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "expect_text",
+            "execute",
+            {
+              "Flow:uses:": [
+                "expect",
+                [
+                  {
+                    "Term:type:": [
+                      "text",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "expect_bool",
+            "execute",
+            {
+              "Flow:uses:": [
+                "expect",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "value",
+                      "bool_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "expect_num",
+            "execute",
+            {
+              "Flow:uses:": [
+                "expect",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "result",
+                      "number"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "is",
+                      "comparison"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "num",
+                      "value",
+                      "number_eval"
+                    ]
+                  },
+                  {
+                    "--": "a positive value that indicates how close the two numbers should be",
+                    "Term:name:type:optional:": [
+                      "within",
+                      "tolerance",
+                      "number",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
         {
           "--": "Debug log.",
           "Spec:slots:with flow:": [

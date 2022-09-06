@@ -1,31 +1,7 @@
 package core
 
+// Flags used compare values
 type CompareType int
-
-// Comparator generates comparison flags.
-// FIX: a combo-box of enumeration options should be possible.
-type Comparator interface {
-	Compare() CompareType
-}
-
-func (*Equal) Compare() CompareType {
-	return Compare_EqualTo
-}
-func (*Unequal) Compare() CompareType {
-	return Compare_GreaterThan | Compare_LessThan
-}
-func (*GreaterThan) Compare() CompareType {
-	return Compare_GreaterThan
-}
-func (*LessThan) Compare() CompareType {
-	return Compare_LessThan
-}
-func (*AtLeast) Compare() CompareType {
-	return Compare_GreaterThan | Compare_EqualTo
-}
-func (*AtMost) Compare() CompareType {
-	return Compare_LessThan | Compare_EqualTo
-}
 
 //go:generate stringer -type=CompareType
 const (
@@ -33,3 +9,29 @@ const (
 	Compare_GreaterThan
 	Compare_LessThan
 )
+
+// compare the passed float to zero, within some small tolerance
+func (cmp CompareType) CompareFloat(d, epsilon float64) (ret bool) {
+	switch {
+	case d < -epsilon:
+		ret = (cmp & Compare_LessThan) != 0
+	case d > epsilon:
+		ret = (cmp & Compare_GreaterThan) != 0
+	default:
+		ret = (cmp & Compare_EqualTo) != 0
+	}
+	return
+}
+
+// compare the passed integer to zero
+func (cmp CompareType) CompareInt(d int) (ret bool) {
+	switch {
+	case d < 0:
+		ret = (cmp & Compare_LessThan) != 0
+	case d > 0:
+		ret = (cmp & Compare_GreaterThan) != 0
+	default:
+		ret = (cmp & Compare_EqualTo) != 0
+	}
+	return
+}
