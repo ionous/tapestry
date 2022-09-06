@@ -1,6 +1,12 @@
 {
   "Tapestry:": [
     {
+      "Comment:": [
+        "Determine if text starts with a vowel or vowel sound. ",
+        "( This method is from mudconnect.com )"
+      ]
+    },
+    {
       "Pattern:requires:returns:": [
         "starts with vowel",
         [
@@ -14,12 +20,6 @@
           }
         }
       ]
-    },
-    {
-      "Comment:": "Determine if text starts with a vowel or vowel sound. This method is from mudconnect.com"
-    },
-    {
-      "--": ""
     },
     {
       "Pattern:rules:": [
@@ -89,20 +89,6 @@
       ]
     },
     {
-      "--": ""
-    },
-    {
-      "TestStatement:test:": [
-        "vowels",
-        {
-          "TestOutput:": "ok"
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
       "TestRule:does:": [
         "vowels",
         [
@@ -114,10 +100,13 @@
                     "FromTxt:": "house"
                   }
                 },
-                "error: house doesn't start with a vowel",
-                ""
+                "error: house doesn't start with a vowel.",
+                "ok."
               ]
             }
+          },
+          {
+            "Expect string:": "ok."
           },
           {
             "Say:": {
@@ -127,10 +116,13 @@
                     "FromTxt:": "hour"
                   }
                 },
-                "",
-                "error: hour starts with a vowel sound"
+                "ok.",
+                "error: hour starts with a vowel sound."
               ]
             }
+          },
+          {
+            "Expect string:": "ok."
           },
           {
             "Say:": {
@@ -140,10 +132,13 @@
                     "FromTxt:": "beta"
                   }
                 },
-                "error: beta doesn't start with a vowel",
-                ""
+                "error: beta doesn't start with a vowel.",
+                "ok."
               ]
             }
+          },
+          {
+            "Expect string:": "ok."
           },
           {
             "Say:": {
@@ -153,13 +148,13 @@
                     "FromTxt:": "alpha"
                   }
                 },
-                "",
-                "alpha starts with a vowel"
+                "ok.",
+                "alpha starts with a vowel."
               ]
             }
           },
           {
-            "Say:": "ok"
+            "Expect string:": "ok."
           }
         ]
       ]

@@ -286,44 +286,6 @@
       ]
     },
     {
-      "--": ""
-    },
-    {
-      "TestStatement:test:": [
-        "whereabouts",
-        {
-          "TestOutput:": [
-            "Mildred's parent is the lab.",
-            "The basket's parent is the table.",
-            "Mildred is in the lab.",
-            "The scalpel is in the lab.",
-            "The table encloses the basket.",
-            "The basket encloses the apple.",
-            "The basket contains the apple.",
-            "The  contains the basket.",
-            "The  supports the apple.",
-            "The table supports the basket.",
-            "The basket's parent: table.",
-            "The scalpel's parent: Mildred.",
-            "Mildred owns the pen.",
-            "The  carries the pen.",
-            "Mildred carries the scalpel.",
-            "The pen is in Mildred's pocket.",
-            "The scalpel is worn by: .",
-            "The common ancestor of the pen and itself: pen.",
-            "The common ancestor of the pen and a sibling: Mildred.",
-            "The common ancestor of the sibling and a pen: Mildred.",
-            "The common ancestor of the pen and its owner: Mildred.",
-            "The common ancestor of the pen's owner and the pen: Mildred.",
-            ""
-          ]
-        }
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
       "TestRule:does:": [
         "whereabouts",
         [
@@ -375,6 +337,32 @@
             "Say:": {
               "RenderTemplate:": "The common ancestor of the pen's owner and the pen: {name_of: {common_ancestor: .pen .Mildred}}."
             }
+          },
+          {
+            "Expect lines:": [
+              "Mildred's parent is the lab.",
+              "The basket's parent is the table.",
+              "Mildred is in the lab.",
+              "The scalpel is in the lab.",
+              "The table encloses the basket.",
+              "The basket encloses the apple.",
+              "The basket contains the apple.",
+              "The  contains the basket.",
+              "The  supports the apple.",
+              "The table supports the basket.",
+              "The basket's parent: table.",
+              "The scalpel's parent: Mildred.",
+              "Mildred owns the pen.",
+              "The  carries the pen.",
+              "Mildred carries the scalpel.",
+              "The pen is in Mildred's pocket.",
+              "The scalpel is worn by: .",
+              "The common ancestor of the pen and itself: pen.",
+              "The common ancestor of the pen and a sibling: Mildred.",
+              "The common ancestor of the sibling and a pen: Mildred.",
+              "The common ancestor of the pen and its owner: Mildred.",
+              "The common ancestor of the pen's owner and the pen: Mildred."
+            ]
           }
         ]
       ]

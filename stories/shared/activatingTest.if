@@ -4,92 +4,6 @@
       "TestScene:requires:story:": [
         "activating test",
         "Kitchenette",
-        []
-      ]
-    },
-    {
-      "TestStatement:test:": [
-        "activating test",
-        {
-          "TestOutput:": [
-            "The control status: deactivated.",
-            "You switch on the espresso controls.",
-            "The control status: activated.",
-            "You switch off the espresso controls.",
-            "The control status: deactivated.",
-            "Try to activate a regular object.",
-            "It isn't something you can switch on.",
-            ""
-          ]
-        }
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "activating test",
-        [
-          {
-            "Say:": {
-              "RenderTemplate:": "The control status: {.controls.activation}."
-            }
-          },
-          {
-            "Activating agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "controls"
-              }
-            ]
-          },
-          {
-            "Say:": {
-              "RenderTemplate:": "The control status: {.controls.activation}."
-            }
-          },
-          {
-            "Deactivating agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "controls"
-              }
-            ]
-          },
-          {
-            "Say:": {
-              "RenderTemplate:": "The control status: {.controls.activation}."
-            }
-          },
-          {
-            "Say:": {
-              "RenderTemplate:": "Try to activate a regular object."
-            }
-          },
-          {
-            "Activating agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "knife"
-              }
-            ]
-          },
-          {
-            "Comment:": "we don't need to test the whole state changing algorithm; that's shared and tested elsewhere. We just need to test that the engine knows about activation and deactivation."
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:story:": [
-        "activating test",
         [
           {
             "RelativeToNoun:nouns:areBeing:otherNouns:": [
@@ -151,6 +65,85 @@
                 }
               ]
             ]
+          }
+        ]
+      ]
+    },
+    {
+      "TestRule:does:": [
+        "activating test",
+        [
+          {
+            "Comment:": [
+              "This tests that the standard library has properly described activation and deactivation states.",
+              "The state changing algorithm used by all states happens at the engine level and gets tested there."
+            ]
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The controls are {.controls.activation}."
+            }
+          },
+          {
+            "Expect string:": "The controls are deactivated."
+          },
+          {
+            "Activating agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "controls"
+              }
+            ]
+          },
+          {
+            "Expect string:": "You switch on the espresso controls."
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The controls are {.controls.activation}."
+            }
+          },
+          {
+            "Expect string:": "The controls are activated."
+          },
+          {
+            "Deactivating agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "controls"
+              }
+            ]
+          },
+          {
+            "Expect string:": "You switch off the espresso controls."
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The controls are {.controls.activation}."
+            }
+          },
+          {
+            "Expect string:": "The controls are deactivated."
+          },
+          {
+            "Comment:": "Try to activate a regular object."
+          },
+          {
+            "Activating agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "knife"
+              }
+            ]
+          },
+          {
+            "Expect string:": "It isn't something you can switch on."
           }
         ]
       ]

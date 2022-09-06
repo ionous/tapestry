@@ -1,180 +1,6 @@
 {
   "Tapestry:": [
     {
-      "TestStatement:test:": [
-        "wearing test",
-        {
-          "TestOutput:": [
-            "The flower's ogp: you, worn.",
-            "Fail to re-wear the flower:It is already worn.",
-            "Take off the flower:You take off the flower.",
-            "The flower's newg: you, not_worn.",
-            "Fail to re-remove the flower:You aren't wearing that!",
-            "Wear the flower again:You put on the flower.",
-            "The flower's newg: you, worn.",
-            "The knife's parent: you, not_worn.",
-            "Fail to wear an unwearable:It isn't something you can put on.",
-            "The knife's parent: you, not_worn.",
-            "The purse's parent: the Kitchen, not_worn.",
-            "Fail to wear something not held:You haven't got that!",
-            "Fail to remove something not held:You haven't got that!",
-            "Fail to put on something not reachable:You haven't got that!",
-            "The purse's parent: the Kitchen, not_worn.",
-            ""
-          ]
-        }
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "wearing test",
-        [
-          {
-            "Say:": {
-              "RenderTemplate:": "The flower's ogp: {the: {parentOf: .flower}}, {.flower.possessiveness}."
-            }
-          },
-          {
-            "Say:": "Fail to re-wear the flower:"
-          },
-          {
-            "Wearing agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "flower"
-              }
-            ]
-          },
-          {
-            "Say:": "Take off the flower:"
-          },
-          {
-            "Removing agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "flower"
-              }
-            ]
-          },
-          {
-            "Say:": {
-              "RenderTemplate:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
-            }
-          },
-          {
-            "Say:": "Fail to re-remove the flower:"
-          },
-          {
-            "Removing agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "flower"
-              }
-            ]
-          },
-          {
-            "Say:": "Wear the flower again:"
-          },
-          {
-            "Wearing agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "flower"
-              }
-            ]
-          },
-          {
-            "Say:": {
-              "RenderTemplate:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
-            }
-          },
-          {
-            "Say:": {
-              "RenderTemplate:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
-            }
-          },
-          {
-            "Say:": "Fail to wear an unwearable:"
-          },
-          {
-            "Wearing agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "knife"
-              }
-            ]
-          },
-          {
-            "Say:": {
-              "RenderTemplate:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
-            }
-          },
-          {
-            "Say:": {
-              "RenderTemplate:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
-            }
-          },
-          {
-            "Say:": "Fail to wear something not held:"
-          },
-          {
-            "Wearing agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "purse"
-              }
-            ]
-          },
-          {
-            "Say:": "Fail to remove something not held:"
-          },
-          {
-            "Removing agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "purse"
-              }
-            ]
-          },
-          {
-            "Say:": "Fail to put on something not reachable:"
-          },
-          {
-            "Wearing agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "purse"
-              }
-            ]
-          },
-          {
-            "Say:": {
-              "RenderTemplate:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
-            }
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
       "TestScene:requires:story:": [
         "wearing test",
         "Kitchenette",
@@ -236,6 +62,197 @@
                 }
               ]
             ]
+          }
+        ]
+      ]
+    },
+    {
+      "TestRule:does:": [
+        "wearing test",
+        [
+          {
+            "Say:": {
+              "RenderTemplate:": "The flower's ogp: {the: {parentOf: .flower}}, {.flower.possessiveness}."
+            }
+          },
+          {
+            "Expect string:": "The flower's ogp: you, worn."
+          },
+          {
+            "Comment:": "Fail to re-wear the flower:"
+          },
+          {
+            "Wearing agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "flower"
+              }
+            ]
+          },
+          {
+            "Expect string:": "It is already worn."
+          },
+          {
+            "Comment:": "Take off the flower:"
+          },
+          {
+            "Removing agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "flower"
+              }
+            ]
+          },
+          {
+            "Expect string:": "You take off the flower."
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
+            }
+          },
+          {
+            "Expect string:": "The flower's newg: you, not_worn."
+          },
+          {
+            "Comment:": "Fail to re-remove the flower:"
+          },
+          {
+            "Removing agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "flower"
+              }
+            ]
+          },
+          {
+            "Expect string:": "You aren't wearing that!"
+          },
+          {
+            "Comment:": "Wear the flower again:"
+          },
+          {
+            "Wearing agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "flower"
+              }
+            ]
+          },
+          {
+            "Expect string:": "You put on the flower."
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
+            }
+          },
+          {
+            "Expect string:": "The flower's newg: you, worn."
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
+            }
+          },
+          {
+            "Expect string:": "The knife's parent: you, not_worn."
+          },
+          {
+            "Comment:": "Fail to wear an unwearable:"
+          },
+          {
+            "Wearing agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "knife"
+              }
+            ]
+          },
+          {
+            "Expect string:": "It isn't something you can put on."
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
+            }
+          },
+          {
+            "Expect string:": "The knife's parent: you, not_worn."
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
+            }
+          },
+          {
+            "Expect string:": "The purse's parent: the Kitchen, not_worn."
+          },
+          {
+            "Comment:": "Fail to wear something not held:"
+          },
+          {
+            "Wearing agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "purse"
+              }
+            ]
+          },
+          {
+            "Expect string:": "You haven't got that!"
+          },
+          {
+            "Comment:": "Fail to remove something not held:"
+          },
+          {
+            "Removing agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "purse"
+              }
+            ]
+          },
+          {
+            "Expect string:": "You haven't got that!"
+          },
+          {
+            "Comment:": "Fail to put on something not reachable:"
+          },
+          {
+            "Wearing agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "purse"
+              }
+            ]
+          },
+          {
+            "Expect string:": "You haven't got that!"
+          },
+          {
+            "Say:": {
+              "RenderTemplate:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
+            }
+          },
+          {
+            "Expect string:": "The purse's parent: the Kitchen, not_worn."
           }
         ]
       ]
