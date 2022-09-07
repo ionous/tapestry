@@ -39,6 +39,8 @@ export default {
       const w = WorkspaceOptions;
       w.toolbox = this.toolboxData; // overwrite placeholder toolbox with the one from the server.
       workspace = Blockly.inject("blockly-div", w);
+      workspace.toolbox_.flyout_.autoClose = false;
+
       // hack to override the order of icons so that clicking on a comment icon doesnt cause the mutator to pop in and
       const oldBlock = workspace.newBlock;
       workspace.newBlock = function(p, id) {

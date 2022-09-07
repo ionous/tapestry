@@ -1876,7 +1876,10 @@
           ]
         },
         {
-          "--": "A single line as part of a group of lines.",
+          "--": [
+            "Group text into a single line <li> as part of a list of lines.",
+            "See also: 'rows'."
+          ],
           "Spec:slots:groups:with flow:": [
             "row",
             "text_eval",
@@ -1895,7 +1898,9 @@
           ]
         },
         {
-          "--": "Group text into successive lines.",
+          "--": [
+            "Group text into an unordered list <ul>."
+          ],
           "Spec:slots:groups:with flow:": [
             "rows",
             "text_eval",

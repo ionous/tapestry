@@ -8034,7 +8034,8 @@ func Response_Marshal(m jsn.Marshaler, val *Response) (err error) {
 	return
 }
 
-// Row A single line as part of a group of lines.
+// Row Group text into a single line <li> as part of a list of lines.
+// See also: 'rows'.
 type Row struct {
 	Does   []rt.Execute `if:"label=does"`
 	Markup map[string]any
@@ -8136,7 +8137,7 @@ func Row_Marshal(m jsn.Marshaler, val *Row) (err error) {
 	return
 }
 
-// Rows Group text into successive lines.
+// Rows Group text into an unordered list <ul>.
 type Rows struct {
 	Does   []rt.Execute `if:"label=does"`
 	Markup map[string]any
