@@ -20,11 +20,6 @@ func TestFactorialImport(t *testing.T) {
 		// the hierarchical story as a flat list of commands used by the assembler
 		// fix, future: "get var" and "assign" in the scope of a pattern should be generating parameter refs
 		expect := []eph.Ephemera{
-			// one test expectation
-			&eph.EphChecks{
-				Name:   "factorial",
-				Expect: T("6"),
-			},
 			// referencing a call to the factorial pattern
 			&eph.EphRefs{Refs: []eph.Ephemera{
 				&eph.EphKinds{

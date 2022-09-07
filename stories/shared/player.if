@@ -228,28 +228,13 @@
         "player tests",
         [
           {
-            "If:does:": [
-              {
-                "IsPlayer obj:": {
-                  "FromTxt:": "self"
-                }
-              },
-              [
-                {
-                  "Say:": "yes"
-                }
-              ]
-            ]
+            "Expect:": {
+              "IsPlayer obj:": {
+                "FromTxt:": "self"
+              }
+            }
           }
         ]
-      ]
-    },
-    {
-      "TestStatement:test:": [
-        "player tests",
-        {
-          "TestOutput:": "yes"
-        }
       ]
     },
     {

@@ -1,23 +1,6 @@
 {
   "Tapestry:": [
     {
-      "TestStatement:test:": [
-        "traversal",
-        {
-          "TestOutput:": [
-            "Lobby.",
-            "You can see some double doors and a faux door.",
-            "It doesn't lead anywhere.",
-            "They seem to be closed.",
-            "You open the double doors.",
-            "Foyer.",
-            "You can see a curtain.",
-            ""
-          ]
-        }
-      ]
-    },
-    {
       "--": [
         "fix: running commands on invalid nouns causes an error",
         "what we want therefore is to execute input from the player instead",
@@ -34,6 +17,12 @@
             }
           },
           {
+            "Expect lines:": [
+              "Lobby.",
+              "You can see some double doors and a faux door."
+            ]
+          },
+          {
             "Traveling agent:noun:": [
               {
                 "FromTxt:": "player"
@@ -44,6 +33,9 @@
             ]
           },
           {
+            "Expect string:": "It doesn't lead anywhere."
+          },
+          {
             "Traveling agent:noun:": [
               {
                 "FromTxt:": "player"
@@ -52,6 +44,9 @@
                 "FromTxt:": "double doors"
               }
             ]
+          },
+          {
+            "Expect string:": "They seem to be closed."
           },
           {
             "Opening agent:noun:": [
@@ -64,6 +59,9 @@
             ]
           },
           {
+            "Expect string:": "You open the double doors."
+          },
+          {
             "Traveling agent:noun:": [
               {
                 "FromTxt:": "player"
@@ -71,6 +69,12 @@
               {
                 "FromTxt:": "double doors"
               }
+            ]
+          },
+          {
+            "Expect lines:": [
+              "Foyer.",
+              "You can see a curtain."
             ]
           }
         ]

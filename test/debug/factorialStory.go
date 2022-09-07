@@ -2,7 +2,7 @@ package debug
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/dl/prim"
+	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
@@ -15,15 +15,6 @@ func UserComment(s string) map[string]any {
 var FactorialStory = &story.Story{
 	Paragraph: []story.Paragraph{{
 		StoryStatement: []story.StoryStatement{
-			&story.TestStatement{
-				TestName: story.TestName{
-					Str: "factorial",
-				},
-				Test: &story.TestOutput{
-					Markup: UserComment("3! should equal 6"),
-					Lines: prim.Lines{
-						Str: "6",
-					}}},
 			&story.TestRule{
 				TestName: story.TestName{
 					Str: "factorial",
@@ -61,18 +52,19 @@ var FactorialStory = &story.Story{
 
 // run 3! factorial
 var FactorialCheck = []rt.Execute{
-	&core.SayText{
-		Text: &core.PrintNum{
-			Num: &core.CallPattern{
-				Pattern: factorialName,
-				Arguments: []rt.Arg{rt.Arg{
-					Name: "num",
-					From: &core.FromNum{
-						Markup: UserComment("start the factorial with '3'"),
-						Val:    F(3),
-					},
-				}}},
-		}},
+	&debug.ExpectNum{
+		Result: 6,
+		Is:     core.Equal,
+		Value: &core.CallPattern{
+			Pattern: factorialName,
+			Arguments: []rt.Arg{rt.Arg{
+				Name: "num",
+				From: &core.FromNum{
+					Markup: UserComment("start the factorial with '3'"),
+					Val:    F(3),
+				},
+			}}},
+	},
 }
 
 // subtracts 1 from the num and multiples by one

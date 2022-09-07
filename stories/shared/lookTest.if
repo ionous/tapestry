@@ -4,28 +4,16 @@
       "TestScene:requires:story:": [
         "baseVis",
         "Kitchenette",
-        []
-      ]
-    },
-    {
-      "TestStatement:test:": [
-        "baseVis",
-        {
-          "TestOutput:": [
-            "cabinet and Kitchen.",
-            "Kitchen.",
-            "shelf and Kitchen.",
-            "cabinet.",
-            "okay. cabinet is open again.",
-            ""
-          ]
-        }
+        null
       ]
     },
     {
       "TestRule:does:": [
         "baseVis",
         [
+          {
+            "Comment:": "Say the list of visible objects from one of several vantage points."
+          },
           {
             "Repeating across:as:does:": [
               {
@@ -73,6 +61,16 @@
             ]
           },
           {
+            "Expect lines:": [
+              "cabinet and Kitchen.",
+              "Kitchen.",
+              "shelf and Kitchen."
+            ]
+          },
+          {
+            "Comment:": "Close the cabinet door, and its list of visible objects should change."
+          },
+          {
             "Put:from:at:": [
               {
                 "ObjField:": "cabinet"
@@ -105,28 +103,28 @@
             ]
           },
           {
-            "If:does:": [
+            "Expect lines:": "cabinet."
+          },
+          {
+            "Comment:": "( Validate the number of items in the list directly. )"
+          },
+          {
+            "Expect:is:num:": [
+              1,
+              "equal_to",
               {
-                "Cmp:is:num:": [
-                  {
-                    "Len:": {
-                      "FromTxts:": {
-                        "TransparentList obj:": {
-                          "FromTxt:": "cabinet"
-                        }
-                      }
+                "Len:": {
+                  "FromTxts:": {
+                    "TransparentList obj:": {
+                      "FromTxt:": "cabinet"
                     }
-                  },
-                  "other_than",
-                  1
-                ]
-              },
-              [
-                {
-                  "Say:": "there should be limited visibility in a closed cabinet."
+                  }
                 }
-              ]
+              }
             ]
+          },
+          {
+            "Comment:": "Open the cabinet again, and validate the number of visible objects again."
           },
           {
             "Put:from:at:": [
@@ -140,28 +138,21 @@
             ]
           },
           {
-            "If:does:": [
-              {
-                "Cmp:is:num:": [
-                  {
-                    "Len:": {
-                      "FromTxts:": {
-                        "TransparentList obj:": {
-                          "FromTxt:": "cabinet"
-                        }
+            "Expect:": {
+              "Cmp:is:num:": [
+                {
+                  "Len:": {
+                    "FromTxts:": {
+                      "TransparentList obj:": {
+                        "FromTxt:": "cabinet"
                       }
                     }
-                  },
-                  "greater_than",
-                  1
-                ]
-              },
-              [
-                {
-                  "Say:": "okay. cabinet is open again."
-                }
+                  }
+                },
+                "greater_than",
+                1
               ]
-            ]
+            }
           }
         ]
       ]
@@ -173,20 +164,7 @@
       "TestScene:requires:story:": [
         "lookObjectDescription",
         "Kitchenette",
-        []
-      ]
-    },
-    {
-      "TestStatement:test:": [
-        "lookObjectDescription",
-        {
-          "TestOutput:": [
-            "A pointed black hat lies discarded on the floor under a dusty shelf.",
-            "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.",
-            "Steam leaks from the top of a recently used espresso machine.",
-            ""
-          ]
-        }
+        null
       ]
     },
     {
@@ -204,6 +182,9 @@
             ]
           },
           {
+            "Expect lines:": "A pointed black hat lies discarded on the floor under a dusty shelf."
+          },
+          {
             "PrintObjectDescription obj:locale:": [
               {
                 "FromTxt:": "shelf"
@@ -214,6 +195,9 @@
             ]
           },
           {
+            "Expect lines:": "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder."
+          },
+          {
             "PrintObjectDescription obj:locale:": [
               {
                 "FromTxt:": "machine"
@@ -222,6 +206,9 @@
                 "FromTxt:": "kitchen"
               }
             ]
+          },
+          {
+            "Expect lines:": "Steam leaks from the top of a recently used espresso machine."
           }
         ]
       ]
@@ -233,34 +220,7 @@
       "TestScene:requires:story:": [
         "printing vantages",
         "Kitchenette",
-        []
-      ]
-    },
-    {
-      "TestStatement:test:": [
-        "printing vantages",
-        {
-          "TestOutput:": [
-            "Darkness.",
-            "It is pitch dark, and you can't see a thing.",
-            ".....",
-            "Kitchen (in the cabinet).",
-            "Your Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake.",
-            "A pointed black hat lies discarded on the floor under a dusty shelf.",
-            "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.",
-            "You can also see a broom, two cats, and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle)).",
-            "Beneath your feet is a bright and shiny hook.",
-            "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife.",
-            ".....",
-            "The cabinet.",
-            "Beneath your feet is a bright and shiny hook.",
-            "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife.",
-            ".....",
-            "The cabinet.",
-            "In the cabinet you can see a book of matches, a bottle of descaling solution, and a rusty knife.",
-            ""
-          ]
-        }
+        null
       ]
     },
     {
@@ -278,7 +238,10 @@
             ]
           },
           {
-            "Say:": "....."
+            "Expect lines:": [
+              "Darkness.",
+              "It is pitch dark, and you can't see a thing."
+            ]
           },
           {
             "PrintVantage where:": {
@@ -286,7 +249,15 @@
             }
           },
           {
-            "Say:": "....."
+            "Expect lines:": [
+              "Kitchen (in the cabinet).",
+              "Your Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake.",
+              "A pointed black hat lies discarded on the floor under a dusty shelf.",
+              "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.",
+              "You can also see a broom, two cats, and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle)).",
+              "Beneath your feet is a bright and shiny hook.",
+              "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife."
+            ]
           },
           {
             "Put:from:at:": [
@@ -305,7 +276,11 @@
             }
           },
           {
-            "Say:": "....."
+            "Expect lines:": [
+              "The cabinet.",
+              "Beneath your feet is a bright and shiny hook.",
+              "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife."
+            ]
           },
           {
             "Comment:": "remove the hook from the cabinet"
@@ -321,6 +296,12 @@
             "PrintVantage where:": {
               "FromTxt:": "cabinet"
             }
+          },
+          {
+            "Expect lines:": [
+              "The cabinet.",
+              "In the cabinet you can see a book of matches, a bottle of descaling solution, and a rusty knife."
+            ]
           }
         ]
       ]
@@ -332,15 +313,7 @@
       "TestScene:requires:story:": [
         "printing inline objects",
         "Kitchenette",
-        []
-      ]
-    },
-    {
-      "TestStatement:test:": [
-        "printing inline objects",
-        {
-          "TestOutput:": "a mortar (in which is a pestle), a blender (empty), and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle))"
-        }
+        null
       ]
     },
     {
@@ -355,6 +328,9 @@
                 "counter"
               ]
             }
+          },
+          {
+            "Expect lines:": "a mortar (in which is a pestle), a blender (empty), and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle))"
           }
         ]
       ]

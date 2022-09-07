@@ -143,21 +143,16 @@
       "--": ""
     },
     {
-      "TestStatement:test:": [
-        "plural name printing",
-        {
-          "TestOutput:": "broken flower pots, dishes, spoons"
-        }
-      ]
-    },
-    {
       "TestRule:does:": [
         "current_test",
         [
           {
             "Say:": {
-              "RenderTemplate:": "{print_plural_name: .flowerpot}, {print_plural_name: .dishes}, {print_plural_name: .spoon}"
+              "RenderTemplate:": "{print_plural_name: .flowerpot}, {print_plural_name: .dishes}, {print_plural_name: .spoon}."
             }
+          },
+          {
+            "Expect lines:": "broken flower pots, dishes, spoons."
           }
         ]
       ]

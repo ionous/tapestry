@@ -1,34 +1,6 @@
 {
   "Tapestry:": [
     {
-      "TestStatement:test:": [
-        "taking test",
-        {
-          "TestOutput:": [
-            "  - Fail to take from something closed:",
-            "  The espresso machine isn't open.",
-            "  - The apple's parent: Mildred. Fail to steal:",
-            "  That seems to belong to Mildred.",
-            "  - Fail to take possessions:",
-            "  You already have that.",
-            "  - Fail to take your container:",
-            "  You would have to get out first.",
-            "  - The knife's parent was: the cabinet. Okay, take something:",
-            "  Taken.The knife's parent is: you.",
-            "  - Fail to take your self:",
-            "  You are always self-possessed.",
-            "  - Fail to take someone else:",
-            "  I don't suppose Mildred would care for that.",
-            "  - Fail to take scenery:",
-            "  It is hardly portable.",
-            "  - Fail to take something fixed in place:",
-            "  It is fixed in place.",
-            ""
-          ]
-        }
-      ]
-    },
-    {
       "TestRule:does:": [
         "taking test",
         [
@@ -223,6 +195,28 @@
                 }
               ]
             }
+          },
+          {
+            "Expect lines:": [
+              "  - Fail to take from something closed:",
+              "  The espresso machine isn't open.",
+              "  - The apple's parent: Mildred. Fail to steal:",
+              "  That seems to belong to Mildred.",
+              "  - Fail to take possessions:",
+              "  You already have that.",
+              "  - Fail to take your container:",
+              "  You would have to get out first.",
+              "  - The knife's parent was: the cabinet. Okay, take something:",
+              "  Taken.The knife's parent is: you.",
+              "  - Fail to take your self:",
+              "  You are always self-possessed.",
+              "  - Fail to take someone else:",
+              "  I don't suppose Mildred would care for that.",
+              "  - Fail to take scenery:",
+              "  It is hardly portable.",
+              "  - Fail to take something fixed in place:",
+              "  It is fixed in place."
+            ]
           }
         ]
       ]

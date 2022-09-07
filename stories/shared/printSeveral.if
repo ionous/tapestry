@@ -20,7 +20,11 @@
       ]
     },
     {
-      "Comment:": "Provides a way to describe a generic group of objects. By default, it prints the group size in words, then prints the plural name of the target. It's similar to Inform's \"Printing a number of something.\""
+      "Comment:": [
+        "Provides a way to describe a generic group of objects. ",
+        "By default, it prints the group size in words, then prints the plural name of the target. ",
+        "( It's similar to Inform's \"Printing a number of something.\" )"
+      ]
     },
     {
       "Pattern:rules:": [
@@ -116,22 +120,14 @@
                 "{print_several: .books 5}"
               ]
             }
+          },
+          {
+            "Expect lines:": [
+              "zero books",
+              "five books"
+            ]
           }
         ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestStatement:test:": [
-        "print several",
-        {
-          "TestOutput:": [
-            "zero books",
-            "five books"
-          ]
-        }
       ]
     }
   ]

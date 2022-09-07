@@ -1,26 +1,6 @@
 {
   "Tapestry:": [
     {
-      "TestStatement:test:": [
-        "retrieving test",
-        {
-          "TestOutput:": [
-            "  - Fail to retrieve from something closed:",
-            "  The espresso machine isn't open.",
-            "  - The soup's parent was: the shelf. Okay, retrieve from supporter:",
-            "  Taken.The soup's parent is: you.",
-            "  - The hook's parent was: the cabinet. Okay, retrieve from container:",
-            "  Taken.The hook's parent is: you.",
-            "  - Fail to retrieve incorrectly:",
-            "  But it isn't there now.",
-            "  - Fail to steal:",
-            "  That seems to belong to Mildred.",
-            ""
-          ]
-        }
-      ]
-    },
-    {
       "TestRule:does:": [
         "retrieving test",
         [
@@ -159,6 +139,20 @@
                 }
               ]
             }
+          },
+          {
+            "Expect lines:": [
+              "  - Fail to retrieve from something closed:",
+              "  The espresso machine isn't open.",
+              "  - The soup's parent was: the shelf. Okay, retrieve from supporter:",
+              "  Taken.The soup's parent is: you.",
+              "  - The hook's parent was: the cabinet. Okay, retrieve from container:",
+              "  Taken.The hook's parent is: you.",
+              "  - Fail to retrieve incorrectly:",
+              "  But it isn't there now.",
+              "  - Fail to steal:",
+              "  That seems to belong to Mildred."
+            ]
           }
         ]
       ]

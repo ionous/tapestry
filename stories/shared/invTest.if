@@ -4,25 +4,7 @@
       "TestScene:requires:story:": [
         "status printing test",
         "thingaverse",
-        []
-      ]
-    },
-    {
-      "TestStatement:test:": [
-        "status printing test",
-        {
-          "TestOutput:": [
-            "the flower: (being worn).",
-            "the headlamp: (providing light and being worn).",
-            "the book of secrets: (closed and locked).",
-            "the book of wisdom: (open but empty).",
-            "the clutch: (open).",
-            "the purse: (open).",
-            "the flashlight: (providing light).",
-            "the coin: .",
-            ""
-          ]
-        }
+        null
       ]
     },
     {
@@ -35,9 +17,15 @@
             }
           },
           {
+            "Expect lines:": "the flower: (being worn)."
+          },
+          {
             "Say:": {
               "RenderTemplate:": "{the: .headlamp}: {print_status:.headlamp}."
             }
+          },
+          {
+            "Expect lines:": "the headlamp: (providing light and being worn)."
           },
           {
             "Say:": {
@@ -45,9 +33,15 @@
             }
           },
           {
+            "Expect lines:": "the book of secrets: (closed and locked)."
+          },
+          {
             "Say:": {
               "RenderTemplate:": "{the: .wisdom}: {print_status:.wisdom true}."
             }
+          },
+          {
+            "Expect lines:": "the book of wisdom: (open but empty)."
           },
           {
             "Say:": {
@@ -55,9 +49,15 @@
             }
           },
           {
+            "Expect lines:": "the clutch: (open)."
+          },
+          {
             "Say:": {
               "RenderTemplate:": "{the: .purse}: {print_status:.purse}."
             }
+          },
+          {
+            "Expect lines:": "the purse: (open)."
           },
           {
             "Say:": {
@@ -65,9 +65,15 @@
             }
           },
           {
+            "Expect lines:": "the flashlight: (providing light)."
+          },
+          {
             "Say:": {
               "RenderTemplate:": "{the: .coin}: {print_status:.coin}."
             }
+          },
+          {
+            "Expect lines:": "the coin: ."
           }
         ]
       ]
@@ -79,26 +85,7 @@
       "TestScene:requires:story:": [
         "default inventory",
         "Kitchenette",
-        []
-      ]
-    },
-    {
-      "--": "Print inventory as a list.",
-      "TestStatement:test:": [
-        "default inventory",
-        {
-          "TestOutput:": [
-            "You are carrying:",
-            "  - a book of secrets (closed and locked)",
-            "  - a book of wisdom (open but empty)",
-            "  - a clutch (open) ",
-            "    - a purse (open) ",
-            "      - a coin",
-            "  - a flower (being worn)",
-            "  - a headlamp (providing light and being worn)",
-            ""
-          ]
-        }
+        null
       ]
     },
     {
@@ -111,6 +98,18 @@
                 "IdOf:": "Mildred"
               }
             }
+          },
+          {
+            "Expect lines:": [
+              "You are carrying:",
+              "  - a book of secrets (closed and locked)",
+              "  - a book of wisdom (open but empty)",
+              "  - a clutch (open) ",
+              "    - a purse (open) ",
+              "      - a coin",
+              "  - a flower (being worn)",
+              "  - a headlamp (providing light and being worn)"
+            ]
           }
         ]
       ]

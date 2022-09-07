@@ -1,21 +1,6 @@
 {
   "Tapestry:": [
     {
-      "TestStatement:test:": [
-        "reach test",
-        {
-          "TestOutput:": [
-            "okay: The espresso machine isn't open.",
-            "okay: reached outside the open cabinet.",
-            "okay: reached inside the open espresso machine.",
-            "okay: The cabinet isn't open.",
-            "okay: It isn't available.",
-            ""
-          ]
-        }
-      ]
-    },
-    {
       "TestRule:does:": [
         "reach test",
         [
@@ -56,6 +41,9 @@
             ]
           },
           {
+            "Expect lines:": "okay: The espresso machine isn't open."
+          },
+          {
             "If:from:and:does:else:": [
               "resp",
               {
@@ -90,6 +78,9 @@
                 ]
               }
             ]
+          },
+          {
+            "Expect lines:": "okay: reached outside the open cabinet."
           },
           {
             "Put:from:at:": [
@@ -139,6 +130,9 @@
             ]
           },
           {
+            "Expect lines:": "okay: reached inside the open espresso machine."
+          },
+          {
             "Put:from:at:": [
               {
                 "ObjField:": "cabinet"
@@ -186,6 +180,9 @@
             ]
           },
           {
+            "Expect lines:": "okay: The cabinet isn't open."
+          },
+          {
             "If:from:and:does:else:": [
               "resp",
               {
@@ -220,6 +217,9 @@
                 ]
               }
             ]
+          },
+          {
+            "Expect lines:": "okay: It isn't available."
           }
         ]
       ]

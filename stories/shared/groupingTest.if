@@ -149,18 +149,6 @@
       "--": ""
     },
     {
-      "--": [
-        "Stops even default grouping from happening.",
-        "All objects are printed individually."
-      ],
-      "TestStatement:test:": [
-        "no grouping",
-        {
-          "TestOutput:": "Clarence, an empire apple, a pen, a triangle, a triangle, a cat, and a cat"
-        }
-      ]
-    },
-    {
       "TestScene:requires:story:": [
         "No grouping",
         "Grouping tests",
@@ -210,6 +198,9 @@
                 "cats_2"
               ]
             }
+          },
+          {
+            "Expect lines:": "Clarence, an empire apple, a pen, a triangle, a triangle, a cat, and a cat"
           }
         ]
       ]
@@ -218,22 +209,10 @@
       "--": ""
     },
     {
-      "--": [
-        "Default grouping prints each set of counted nouns as a unit.",
-        "ex. two triangles, or seventeen cats. "
-      ],
-      "TestStatement:test:": [
-        "default grouping",
-        {
-          "TestOutput:": "Clarence, an empire apple, a pen, two triangles, and two cats"
-        }
-      ]
-    },
-    {
       "TestScene:requires:story:": [
         "Default grouping",
         "Grouping tests",
-        []
+        null
       ]
     },
     {
@@ -252,21 +231,15 @@
                 "cats_2"
               ]
             }
+          },
+          {
+            "Expect lines:": "Clarence, an empire apple, a pen, two triangles, and two cats"
           }
         ]
       ]
     },
     {
       "--": ""
-    },
-    {
-      "--": "Groups the props together in their own phrase, and prints some custom text for multiple triangles.",
-      "TestStatement:test:": [
-        "custom few",
-        {
-          "TestOutput:": "Clarence, an empire apple and a pen, and a few shapely trigons; Clarence, an empire apple and a pen, and one triangle"
-        }
-      ]
     },
     {
       "TestScene:requires:story:": [
@@ -397,21 +370,15 @@
                 }
               ]
             }
+          },
+          {
+            "Expect lines:": "Clarence, an empire apple and a pen, and a few shapely trigons; Clarence, an empire apple and a pen, and one triangle"
           }
         ]
       ]
     },
     {
       "--": ""
-    },
-    {
-      "--": "Collapse an entire set of objects into a single phrase",
-      "TestStatement:test:": [
-        "custom replacement",
-        {
-          "TestOutput:": "Clarence and some things; Clarence and an empire apple"
-        }
-      ]
     },
     {
       "TestScene:requires:story:": [
@@ -485,7 +452,7 @@
       "TestScene:requires:story:": [
         "custom replacement",
         "Grouping tests",
-        []
+        null
       ]
     },
     {
@@ -519,21 +486,15 @@
                 }
               ]
             }
+          },
+          {
+            "Expect lines:": "Clarence and some things; Clarence and an empire apple"
           }
         ]
       ]
     },
     {
       "--": ""
-    },
-    {
-      "--": "Add extra text to a group of objects without replacing them entirely.",
-      "TestStatement:test:": [
-        "custom fancy phrase",
-        {
-          "TestOutput:": "the tiles X, W, F, Y, and Z from a Scrabble set; Clarence and the tiles X, W, F, Y, and Z from a Scrabble set"
-        }
-      ]
     },
     {
       "TestScene:requires:story:": [
@@ -687,21 +648,15 @@
                 }
               ]
             }
+          },
+          {
+            "Expect lines:": "the tiles X, W, F, Y, and Z from a Scrabble set; Clarence and the tiles X, W, F, Y, and Z from a Scrabble set"
           }
         ]
       ]
     },
     {
       "--": ""
-    },
-    {
-      "--": "Put all grouped objects into parentheses along with a label describing them collectively.",
-      "TestStatement:test:": [
-        "custom parenthetical",
-        {
-          "TestOutput:": "Clarence and five scrabble tiles (X, W, F, Y, and Z)"
-        }
-      ]
     },
     {
       "TestScene:requires:story:": [
@@ -783,21 +738,15 @@
                 "z"
               ]
             }
+          },
+          {
+            "Expect lines:": "Clarence and five scrabble tiles (X, W, F, Y, and Z)"
           }
         ]
       ]
     },
     {
       "--": ""
-    },
-    {
-      "--": "Put all grouped objects into parentheses using appropriate articles along with a label describing them collectively.",
-      "TestStatement:test:": [
-        "custom parenthetical articles",
-        {
-          "TestOutput:": "Clarence and five scrabble tiles (a X, a W, a F, a Y, and a Z)"
-        }
-      ]
     },
     {
       "TestScene:requires:story:": [
@@ -852,25 +801,15 @@
                 "z"
               ]
             }
+          },
+          {
+            "Expect lines:": "Clarence and five scrabble tiles (a X, a W, a F, a Y, and a Z)"
           }
         ]
       ]
     },
     {
       "--": ""
-    },
-    {
-      "--": [
-        "deactivated",
-        "uncounted objects are their own groups now; so the triangles don't group with generic props.",
-        "tbd: how to fix this style of group printing."
-      ],
-      "TestStatement:test:": [
-        "custom unnamed parenthetical",
-        {
-          "TestOutput:": "Clarence and three things (an empire apple, a pen, and one triangle); Clarence and four things (an empire apple, a pen, and two triangles)"
-        }
-      ]
     },
     {
       "TestScene:requires:story:": [
@@ -943,6 +882,9 @@
                 }
               ]
             }
+          },
+          {
+            "Expect lines:": "Clarence and three things (an empire apple, a pen, and one triangle); Clarence and four things (an empire apple, a pen, and two triangles)"
           }
         ]
       ]

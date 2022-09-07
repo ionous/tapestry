@@ -80,24 +80,22 @@
       "--": ""
     },
     {
-      "TestStatement:test:": [
-        "name of a kind",
-        {
-          "TestOutput:": "named object, thing"
-        }
-      ]
-    },
-    {
-      "Comment:": "The story engine automagically calls \"print name\" when the name of an object is used in a template.  ex. { .someObject }"
-    },
-    {
       "TestRule:does:": [
         "name of a kind",
         [
           {
+            "Comment:": [
+              "The story engine automagically calls \"print name\" when the name of an object is used in a template.  ",
+              "ex. { .someObject }"
+            ]
+          },
+          {
             "Say:": {
-              "RenderTemplate:": "{.named}, {.unnamed}"
+              "RenderTemplate:": "{.named}, {.unnamed}."
             }
+          },
+          {
+            "Expect lines:": "named object, thing."
           }
         ]
       ]

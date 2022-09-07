@@ -4,21 +4,7 @@
       "TestScene:requires:story:": [
         "dropping test",
         "Kitchenette",
-        []
-      ]
-    },
-    {
-      "TestStatement:test:": [
-        "dropping test",
-        {
-          "TestOutput:": [
-            "The knife's ogp: you.",
-            "Dropped.",
-            "The knife's newg: the Kitchen.",
-            "You haven't got that!",
-            ""
-          ]
-        }
+        null
       ]
     },
     {
@@ -31,6 +17,9 @@
             }
           },
           {
+            "Expect lines:": "The knife's ogp: you."
+          },
+          {
             "Dropping agent:noun:": [
               {
                 "FromTxt:": "player"
@@ -39,6 +28,9 @@
                 "FromTxt:": "knife"
               }
             ]
+          },
+          {
+            "Expect lines:": "Dropped."
           },
           {
             "Say:": {
@@ -46,6 +38,9 @@
             }
           },
           {
+            "Expect lines:": "The knife's newg: the Kitchen."
+          },
+          {
             "Dropping agent:noun:": [
               {
                 "FromTxt:": "player"
@@ -54,6 +49,9 @@
                 "FromTxt:": "knife"
               }
             ]
+          },
+          {
+            "Expect lines:": "You haven't got that!"
           }
         ]
       ]

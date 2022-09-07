@@ -1,20 +1,6 @@
 {
   "Tapestry:": [
     {
-      "TestStatement:test:": [
-        "searching test",
-        {
-          "TestOutput:": [
-            "You find nothing of interest.",
-            "You can't see inside, it is closed.",
-            "On the counter are the blender, the espresso machine, and the mortar.",
-            "In the purse is the coin.",
-            ""
-          ]
-        }
-      ]
-    },
-    {
       "TestRule:does:": [
         "searching test",
         [
@@ -29,6 +15,9 @@
             ]
           },
           {
+            "Expect lines:": "You find nothing of interest."
+          },
+          {
             "Searching agent:noun:": [
               {
                 "FromTxt:": "player"
@@ -37,6 +26,9 @@
                 "FromTxt:": "machine"
               }
             ]
+          },
+          {
+            "Expect lines:": "You can't see inside, it is closed."
           },
           {
             "Searching agent:noun:": [
@@ -49,6 +41,9 @@
             ]
           },
           {
+            "Expect lines:": "On the counter are the blender, the espresso machine, and the mortar."
+          },
+          {
             "Searching agent:noun:": [
               {
                 "FromTxt:": "player"
@@ -57,6 +52,9 @@
                 "FromTxt:": "purse"
               }
             ]
+          },
+          {
+            "Expect lines:": "In the purse is the coin."
           }
         ]
       ]

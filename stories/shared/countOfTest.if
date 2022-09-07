@@ -20,19 +20,11 @@
                 }
               ]
             ]
+          },
+          {
+            "Expect lines:": "o*-*x*x"
           }
         ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestStatement:test:": [
-        "countOf",
-        {
-          "TestOutput:": "o*-*x*x"
-        }
       ]
     },
     {

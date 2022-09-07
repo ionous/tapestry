@@ -346,24 +346,7 @@
       "TestScene:requires:story:": [
         "examining test",
         "Kitchenette",
-        []
-      ]
-    },
-    {
-      "TestStatement:test:": [
-        "examining test",
-        {
-          "TestOutput:": [
-            "The blender is empty.",
-            "Your aunt's very own witches hat, a Halloween favorite.",
-            "In the mortar is a pestle.",
-            "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.",
-            "An ancient teak wardrobe repurposed as a kitchen cupboard.",
-            "In the cabinet are a book of matches, a bottle of descaling solution, a fish hook, and a rusty knife.",
-            "You see nothing special about the blender.",
-            ""
-          ]
-        }
+        null
       ]
     },
     {
@@ -376,9 +359,15 @@
             }
           },
           {
+            "Expect lines:": "The blender is empty."
+          },
+          {
             "PrintDescription obj:": {
               "FromTxt:": "hat"
             }
+          },
+          {
+            "Expect lines:": "Your aunt's very own witches hat, a Halloween favorite."
           },
           {
             "PrintDescription obj:": {
@@ -386,14 +375,26 @@
             }
           },
           {
+            "Expect lines:": "In the mortar is a pestle."
+          },
+          {
             "PrintDescription obj:": {
               "FromTxt:": "shelf"
             }
           },
           {
+            "Expect lines:": "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder."
+          },
+          {
             "PrintDescription obj:": {
               "FromTxt:": "cabinet"
             }
+          },
+          {
+            "Expect lines:": [
+              "An ancient teak wardrobe repurposed as a kitchen cupboard.",
+              "In the cabinet are a book of matches, a bottle of descaling solution, a fish hook, and a rusty knife."
+            ]
           },
           {
             "Relate:to:via:": [
@@ -406,6 +407,9 @@
             "PrintDescription obj:": {
               "FromTxt:": "blender"
             }
+          },
+          {
+            "Expect lines:": "You see nothing special about the blender."
           }
         ]
       ]
