@@ -2042,27 +2042,6 @@
           ]
         },
         {
-          "--": "Expect that a test uses 'Say' to print some specific text.",
-          "Spec:slots:groups:with flow:": [
-            "test_output",
-            "testing",
-            "tests",
-            {
-              "Flow phrase:uses:": [
-                "output {$lines}.",
-                [
-                  {
-                    "Term:name:": [
-                      "_",
-                      "lines"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
           "--": "Add actions to a test",
           "Spec:slots:groups:with flow:": [
             "test_rule",
@@ -2122,43 +2101,6 @@
                   }
                 ]
               ]
-            }
-          ]
-        },
-        {
-          "--": "Describe test results",
-          "Spec:slots:groups:with flow:": [
-            "test_statement",
-            "story_statement",
-            "tests",
-            {
-              "Flow phrase:uses:": [
-                "Expect {$test_name} to {expectation$test}",
-                [
-                  {
-                    "Term:name:": [
-                      "_",
-                      "test_name"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "test",
-                      "testing"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Run a series of tests.",
-          "Spec:groups:with slot:": [
-            "testing",
-            "tests",
-            {
-              "Slot": true
             }
           ]
         },

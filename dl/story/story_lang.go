@@ -8139,108 +8139,6 @@ func TestName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestName) (err err
 	return
 }
 
-// TestOutput Expect that a test uses 'Say' to print some specific text.
-type TestOutput struct {
-	Lines  prim.Lines `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ Testing = (*TestOutput)(nil)
-
-func (*TestOutput) Compose() composer.Spec {
-	return composer.Spec{
-		Name: TestOutput_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const TestOutput_Type = "test_output"
-const TestOutput_Field_Lines = "$LINES"
-
-func (op *TestOutput) Marshal(m jsn.Marshaler) error {
-	return TestOutput_Marshal(m, op)
-}
-
-type TestOutput_Slice []TestOutput
-
-func (op *TestOutput_Slice) GetType() string { return TestOutput_Type }
-
-func (op *TestOutput_Slice) Marshal(m jsn.Marshaler) error {
-	return TestOutput_Repeats_Marshal(m, (*[]TestOutput)(op))
-}
-
-func (op *TestOutput_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *TestOutput_Slice) SetSize(cnt int) {
-	var els []TestOutput
-	if cnt >= 0 {
-		els = make(TestOutput_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *TestOutput_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return TestOutput_Marshal(m, &(*op)[i])
-}
-
-func TestOutput_Repeats_Marshal(m jsn.Marshaler, vals *[]TestOutput) error {
-	return jsn.RepeatBlock(m, (*TestOutput_Slice)(vals))
-}
-
-func TestOutput_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestOutput) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = TestOutput_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type TestOutput_Flow struct{ ptr *TestOutput }
-
-func (n TestOutput_Flow) GetType() string      { return TestOutput_Type }
-func (n TestOutput_Flow) GetLede() string      { return TestOutput_Type }
-func (n TestOutput_Flow) GetFlow() interface{} { return n.ptr }
-func (n TestOutput_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*TestOutput); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func TestOutput_Optional_Marshal(m jsn.Marshaler, pv **TestOutput) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = TestOutput_Marshal(m, *pv)
-	} else if !enc {
-		var v TestOutput
-		if err = TestOutput_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func TestOutput_Marshal(m jsn.Marshaler, val *TestOutput) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(TestOutput_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", TestOutput_Field_Lines)
-		if e0 == nil {
-			e0 = prim.Lines_Marshal(m, &val.Lines)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", TestOutput_Field_Lines))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // TestRule Add actions to a test
 type TestRule struct {
 	TestName TestName     `if:"label=_"`
@@ -8468,186 +8366,6 @@ func TestScene_Marshal(m jsn.Marshaler, val *TestScene) (err error) {
 			m.Error(errutil.New(e2, "in flow at", TestScene_Field_Story))
 		}
 		m.EndBlock()
-	}
-	return
-}
-
-// TestStatement Describe test results
-type TestStatement struct {
-	TestName TestName `if:"label=_"`
-	Test     Testing  `if:"label=test"`
-	Markup   map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*TestStatement)(nil)
-
-func (*TestStatement) Compose() composer.Spec {
-	return composer.Spec{
-		Name: TestStatement_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const TestStatement_Type = "test_statement"
-const TestStatement_Field_TestName = "$TEST_NAME"
-const TestStatement_Field_Test = "$TEST"
-
-func (op *TestStatement) Marshal(m jsn.Marshaler) error {
-	return TestStatement_Marshal(m, op)
-}
-
-type TestStatement_Slice []TestStatement
-
-func (op *TestStatement_Slice) GetType() string { return TestStatement_Type }
-
-func (op *TestStatement_Slice) Marshal(m jsn.Marshaler) error {
-	return TestStatement_Repeats_Marshal(m, (*[]TestStatement)(op))
-}
-
-func (op *TestStatement_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *TestStatement_Slice) SetSize(cnt int) {
-	var els []TestStatement
-	if cnt >= 0 {
-		els = make(TestStatement_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *TestStatement_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return TestStatement_Marshal(m, &(*op)[i])
-}
-
-func TestStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]TestStatement) error {
-	return jsn.RepeatBlock(m, (*TestStatement_Slice)(vals))
-}
-
-func TestStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestStatement) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = TestStatement_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type TestStatement_Flow struct{ ptr *TestStatement }
-
-func (n TestStatement_Flow) GetType() string      { return TestStatement_Type }
-func (n TestStatement_Flow) GetLede() string      { return TestStatement_Type }
-func (n TestStatement_Flow) GetFlow() interface{} { return n.ptr }
-func (n TestStatement_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*TestStatement); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func TestStatement_Optional_Marshal(m jsn.Marshaler, pv **TestStatement) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = TestStatement_Marshal(m, *pv)
-	} else if !enc {
-		var v TestStatement
-		if err = TestStatement_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func TestStatement_Marshal(m jsn.Marshaler, val *TestStatement) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(TestStatement_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", TestStatement_Field_TestName)
-		if e0 == nil {
-			e0 = TestName_Marshal(m, &val.TestName)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", TestStatement_Field_TestName))
-		}
-		e1 := m.MarshalKey("test", TestStatement_Field_Test)
-		if e1 == nil {
-			e1 = Testing_Marshal(m, &val.Test)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", TestStatement_Field_Test))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-const Testing_Type = "testing"
-
-var Testing_Optional_Marshal = Testing_Marshal
-
-type Testing_Slot struct{ Value *Testing }
-
-func (at Testing_Slot) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(at); err == nil {
-		if a, ok := at.GetSlot(); ok {
-			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-func (at Testing_Slot) GetType() string              { return Testing_Type }
-func (at Testing_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at Testing_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(Testing)
-	return
-}
-
-func Testing_Marshal(m jsn.Marshaler, ptr *Testing) (err error) {
-	slot := Testing_Slot{ptr}
-	return slot.Marshal(m)
-}
-
-type Testing_Slice []Testing
-
-func (op *Testing_Slice) GetType() string { return Testing_Type }
-
-func (op *Testing_Slice) Marshal(m jsn.Marshaler) error {
-	return Testing_Repeats_Marshal(m, (*[]Testing)(op))
-}
-
-func (op *Testing_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Testing_Slice) SetSize(cnt int) {
-	var els []Testing
-	if cnt >= 0 {
-		els = make(Testing_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Testing_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Testing_Marshal(m, &(*op)[i])
-}
-
-func Testing_Repeats_Marshal(m jsn.Marshaler, vals *[]Testing) error {
-	return jsn.RepeatBlock(m, (*Testing_Slice)(vals))
-}
-
-func Testing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Testing) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Testing_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -9083,7 +8801,6 @@ var Slots = []interface{}{
 	(*NounContinuation)(nil),
 	(*SingularNoun)(nil),
 	(*StoryStatement)(nil),
-	(*Testing)(nil),
 }
 
 var Slats = []composer.Composer{
@@ -9162,10 +8879,8 @@ var Slats = []composer.Composer{
 	(*StoryBreak)(nil),
 	(*StoryFile)(nil),
 	(*TestName)(nil),
-	(*TestOutput)(nil),
 	(*TestRule)(nil),
 	(*TestScene)(nil),
-	(*TestStatement)(nil),
 	(*TextField)(nil),
 	(*TextListField)(nil),
 	(*Trait)(nil),
@@ -9293,11 +9008,9 @@ var Signatures = map[uint64]interface{}{
 	1267533044749019804:  (*RenderTemplate)(nil),        /* text_eval=RenderTemplate: */
 	9910951906340888308:  (*ShuffleText)(nil),           /* text_eval=ShuffleText: */
 	13921723804355948971: (*StoppingText)(nil),          /* text_eval=StoppingText: */
-	5878559273693811275:  (*TestOutput)(nil),            /* testing=TestOutput: */
 	3468427082953723426:  (*TestRule)(nil),              /* story_statement=TestRule:does: */
 	6067507595098270936:  (*TestScene)(nil),             /* story_statement=TestScene:requires:story: */
 	16926625243474179200: (*TestScene)(nil),             /* story_statement=TestScene:story: */
-	18392173108575885320: (*TestStatement)(nil),         /* story_statement=TestStatement:test: */
 	8130344761444222709:  (*TextField)(nil),             /* field=Text: */
 	6524581251606795538:  (*TextField)(nil),             /* field=Text:initially: */
 	17964742375211875755: (*TextField)(nil),             /* field=Text:kind: */
