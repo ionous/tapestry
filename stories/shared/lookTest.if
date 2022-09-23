@@ -103,19 +103,21 @@
             "Comment:": "( Validate the number of items in the list directly. )"
           },
           {
-            "Expect:is:num:": [
-              1,
-              "equal_to",
-              {
-                "Len:": {
-                  "FromTxts:": {
-                    "TransparentList obj:": {
-                      "FromTxt:": "cabinet"
+            "Expect:": {
+              "Cmp:is:num:": [
+                {
+                  "Len:": {
+                    "FromTxts:": {
+                      "TransparentList obj:": {
+                        "FromTxt:": "cabinet"
+                      }
                     }
                   }
-                }
-              }
-            ]
+                },
+                "equal_to",
+                1
+              ]
+            }
           },
           {
             "Comment:": "Open the cabinet again, and validate the number of visible objects again."

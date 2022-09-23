@@ -52,18 +52,18 @@ var FactorialStory = &story.Story{
 
 // run 3! factorial
 var FactorialCheck = []rt.Execute{
-	&debug.ExpectNum{
-		Result: 6,
-		Is:     core.Equal,
-		Value: &core.CallPattern{
-			Pattern: factorialName,
-			Arguments: []rt.Arg{rt.Arg{
-				Name: "num",
-				From: &core.FromNum{
-					Markup: UserComment("start the factorial with '3'"),
-					Val:    F(3),
-				},
-			}}},
+	&debug.Expect{
+		Value: &core.CompareNum{
+			A: F(6), Is: core.Equal, B: &core.CallPattern{
+				Pattern: factorialName,
+				Arguments: []rt.Arg{rt.Arg{
+					Name: "num",
+					From: &core.FromNum{
+						Markup: UserComment("start the factorial with '3'"),
+						Val:    F(3),
+					},
+				}}},
+		},
 	},
 }
 

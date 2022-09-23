@@ -3,7 +3,6 @@ package debug
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn"
@@ -329,39 +328,39 @@ func DoNothing_Marshal(m jsn.Marshaler, val *DoNothing) (err error) {
 	return
 }
 
-// ExpectBool
-type ExpectBool struct {
+// Expect
+type Expect struct {
 	Value  rt.BoolEval `if:"label=_"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ rt.Execute = (*ExpectBool)(nil)
+var _ rt.Execute = (*Expect)(nil)
 
-func (*ExpectBool) Compose() composer.Spec {
+func (*Expect) Compose() composer.Spec {
 	return composer.Spec{
-		Name: ExpectBool_Type,
+		Name: Expect_Type,
 		Uses: composer.Type_Flow,
 		Lede: "expect",
 	}
 }
 
-const ExpectBool_Type = "expect_bool"
-const ExpectBool_Field_Value = "$VALUE"
+const Expect_Type = "expect"
+const Expect_Field_Value = "$VALUE"
 
-func (op *ExpectBool) Marshal(m jsn.Marshaler) error {
-	return ExpectBool_Marshal(m, op)
+func (op *Expect) Marshal(m jsn.Marshaler) error {
+	return Expect_Marshal(m, op)
 }
 
-type ExpectBool_Slice []ExpectBool
+type Expect_Slice []Expect
 
-func (op *ExpectBool_Slice) GetType() string { return ExpectBool_Type }
+func (op *Expect_Slice) GetType() string { return Expect_Type }
 
-func (op *ExpectBool_Slice) Marshal(m jsn.Marshaler) error {
-	return ExpectBool_Repeats_Marshal(m, (*[]ExpectBool)(op))
+func (op *Expect_Slice) Marshal(m jsn.Marshaler) error {
+	return Expect_Repeats_Marshal(m, (*[]Expect)(op))
 }
 
-func (op *ExpectBool_Slice) GetSize() (ret int) {
+func (op *Expect_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -370,192 +369,62 @@ func (op *ExpectBool_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *ExpectBool_Slice) SetSize(cnt int) {
-	var els []ExpectBool
+func (op *Expect_Slice) SetSize(cnt int) {
+	var els []Expect
 	if cnt >= 0 {
-		els = make(ExpectBool_Slice, cnt)
+		els = make(Expect_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *ExpectBool_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ExpectBool_Marshal(m, &(*op)[i])
+func (op *Expect_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Expect_Marshal(m, &(*op)[i])
 }
 
-func ExpectBool_Repeats_Marshal(m jsn.Marshaler, vals *[]ExpectBool) error {
-	return jsn.RepeatBlock(m, (*ExpectBool_Slice)(vals))
+func Expect_Repeats_Marshal(m jsn.Marshaler, vals *[]Expect) error {
+	return jsn.RepeatBlock(m, (*Expect_Slice)(vals))
 }
 
-func ExpectBool_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ExpectBool) (err error) {
+func Expect_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Expect) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ExpectBool_Repeats_Marshal(m, pv)
+		err = Expect_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type ExpectBool_Flow struct{ ptr *ExpectBool }
+type Expect_Flow struct{ ptr *Expect }
 
-func (n ExpectBool_Flow) GetType() string      { return ExpectBool_Type }
-func (n ExpectBool_Flow) GetLede() string      { return "expect" }
-func (n ExpectBool_Flow) GetFlow() interface{} { return n.ptr }
-func (n ExpectBool_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ExpectBool); ok {
+func (n Expect_Flow) GetType() string      { return Expect_Type }
+func (n Expect_Flow) GetLede() string      { return "expect" }
+func (n Expect_Flow) GetFlow() interface{} { return n.ptr }
+func (n Expect_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Expect); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func ExpectBool_Optional_Marshal(m jsn.Marshaler, pv **ExpectBool) (err error) {
+func Expect_Optional_Marshal(m jsn.Marshaler, pv **Expect) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ExpectBool_Marshal(m, *pv)
+		err = Expect_Marshal(m, *pv)
 	} else if !enc {
-		var v ExpectBool
-		if err = ExpectBool_Marshal(m, &v); err == nil {
+		var v Expect
+		if err = Expect_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func ExpectBool_Marshal(m jsn.Marshaler, val *ExpectBool) (err error) {
+func Expect_Marshal(m jsn.Marshaler, val *Expect) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ExpectBool_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ExpectBool_Field_Value)
+	if err = m.MarshalBlock(Expect_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", Expect_Field_Value)
 		if e0 == nil {
 			e0 = rt.BoolEval_Marshal(m, &val.Value)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ExpectBool_Field_Value))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// ExpectNum
-type ExpectNum struct {
-	Result    float64         `if:"label=_,type=number"`
-	Is        core.Comparison `if:"label=is"`
-	Value     rt.NumberEval   `if:"label=num"`
-	Tolerance float64         `if:"label=within,optional,type=number"`
-	Markup    map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*ExpectNum)(nil)
-
-func (*ExpectNum) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ExpectNum_Type,
-		Uses: composer.Type_Flow,
-		Lede: "expect",
-	}
-}
-
-const ExpectNum_Type = "expect_num"
-const ExpectNum_Field_Result = "$RESULT"
-const ExpectNum_Field_Is = "$IS"
-const ExpectNum_Field_Value = "$VALUE"
-const ExpectNum_Field_Tolerance = "$TOLERANCE"
-
-func (op *ExpectNum) Marshal(m jsn.Marshaler) error {
-	return ExpectNum_Marshal(m, op)
-}
-
-type ExpectNum_Slice []ExpectNum
-
-func (op *ExpectNum_Slice) GetType() string { return ExpectNum_Type }
-
-func (op *ExpectNum_Slice) Marshal(m jsn.Marshaler) error {
-	return ExpectNum_Repeats_Marshal(m, (*[]ExpectNum)(op))
-}
-
-func (op *ExpectNum_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ExpectNum_Slice) SetSize(cnt int) {
-	var els []ExpectNum
-	if cnt >= 0 {
-		els = make(ExpectNum_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ExpectNum_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ExpectNum_Marshal(m, &(*op)[i])
-}
-
-func ExpectNum_Repeats_Marshal(m jsn.Marshaler, vals *[]ExpectNum) error {
-	return jsn.RepeatBlock(m, (*ExpectNum_Slice)(vals))
-}
-
-func ExpectNum_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ExpectNum) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ExpectNum_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ExpectNum_Flow struct{ ptr *ExpectNum }
-
-func (n ExpectNum_Flow) GetType() string      { return ExpectNum_Type }
-func (n ExpectNum_Flow) GetLede() string      { return "expect" }
-func (n ExpectNum_Flow) GetFlow() interface{} { return n.ptr }
-func (n ExpectNum_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ExpectNum); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ExpectNum_Optional_Marshal(m jsn.Marshaler, pv **ExpectNum) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ExpectNum_Marshal(m, *pv)
-	} else if !enc {
-		var v ExpectNum
-		if err = ExpectNum_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ExpectNum_Marshal(m jsn.Marshaler, val *ExpectNum) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ExpectNum_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ExpectNum_Field_Result)
-		if e0 == nil {
-			e0 = prim.Number_Unboxed_Marshal(m, &val.Result)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ExpectNum_Field_Result))
-		}
-		e1 := m.MarshalKey("is", ExpectNum_Field_Is)
-		if e1 == nil {
-			e1 = core.Comparison_Marshal(m, &val.Is)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ExpectNum_Field_Is))
-		}
-		e2 := m.MarshalKey("num", ExpectNum_Field_Value)
-		if e2 == nil {
-			e2 = rt.NumberEval_Marshal(m, &val.Value)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", ExpectNum_Field_Value))
-		}
-		e3 := m.MarshalKey("within", ExpectNum_Field_Tolerance)
-		if e3 == nil {
-			e3 = prim.Number_Unboxed_Optional_Marshal(m, &val.Tolerance)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", ExpectNum_Field_Tolerance))
+			m.Error(errutil.New(e0, "in flow at", Expect_Field_Value))
 		}
 		m.EndBlock()
 	}
@@ -1071,8 +940,7 @@ var Slats = []composer.Composer{
 	(*Comment)(nil),
 	(*DebugLog)(nil),
 	(*DoNothing)(nil),
-	(*ExpectBool)(nil),
-	(*ExpectNum)(nil),
+	(*Expect)(nil),
 	(*ExpectOutput)(nil),
 	(*ExpectText)(nil),
 	(*LoggingLevel)(nil),
@@ -1089,9 +957,7 @@ var Signatures = map[uint64]interface{}{
 	12243119421914882789: (*DoNothing)(nil),    /* execute=DoNothing why: */
 	13157581199995609923: (*ExpectOutput)(nil), /* execute=Expect output: */
 	16489874106085927697: (*ExpectText)(nil),   /* execute=Expect text: */
-	11108202414968227788: (*ExpectBool)(nil),   /* execute=Expect: */
-	9770230868586544920:  (*ExpectNum)(nil),    /* execute=Expect:is:num: */
-	8339796867902453679:  (*ExpectNum)(nil),    /* execute=Expect:is:num:within: */
+	11108202414968227788: (*Expect)(nil),       /* execute=Expect: */
 	17230987244745403983: (*DebugLog)(nil),     /* execute=Log: */
 	9146550673186999987:  (*DebugLog)(nil),     /* execute=Log:as: */
 	9865864948070946448:  (*Test)(nil),         /* story_statement=Test:dependsOn:do: */

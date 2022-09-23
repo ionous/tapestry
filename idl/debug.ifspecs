@@ -71,7 +71,7 @@
         },
         {
           "Spec:slots:with flow:": [
-            "expect_bool",
+            "expect",
             "execute",
             {
               "Flow:uses:": [
@@ -82,48 +82,6 @@
                       "_",
                       "value",
                       "bool_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:slots:with flow:": [
-            "expect_num",
-            "execute",
-            {
-              "Flow:uses:": [
-                "expect",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "result",
-                      "number"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "is",
-                      "comparison"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "num",
-                      "value",
-                      "number_eval"
-                    ]
-                  },
-                  {
-                    "--": "a positive value that indicates how close the two numbers should be",
-                    "Term:name:type:optional:": [
-                      "within",
-                      "tolerance",
-                      "number",
-                      true
                     ]
                   }
                 ]
