@@ -91,7 +91,7 @@
             ]
           },
           {
-            "Expect lines:": "okay: The espresso machine isn't open."
+            "Expect output:": "okay: The espresso machine isn't open."
           },
           {
             "If:from:and:does:else:": [
@@ -130,7 +130,7 @@
             ]
           },
           {
-            "Expect lines:": "okay: reached outside the open cabinet."
+            "Expect output:": "okay: reached outside the open cabinet."
           },
           {
             "Put:from:at:": [
@@ -180,7 +180,7 @@
             ]
           },
           {
-            "Expect lines:": "okay: reached inside the open espresso machine."
+            "Expect output:": "okay: reached inside the open espresso machine."
           },
           {
             "Put:from:at:": [
@@ -230,7 +230,7 @@
             ]
           },
           {
-            "Expect lines:": "okay: The cabinet isn't open."
+            "Expect output:": "okay: The cabinet isn't open."
           },
           {
             "If:from:and:does:else:": [
@@ -269,7 +269,7 @@
             ]
           },
           {
-            "Expect lines:": "okay: It isn't available."
+            "Expect output:": "okay: It isn't available."
           }
         ]
       ]

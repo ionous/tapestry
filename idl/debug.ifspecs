@@ -33,7 +33,7 @@
         },
         {
           "Spec:slots:with flow:": [
-            "expect_string",
+            "expect_output",
             "execute",
             {
               "Flow:uses:": [
@@ -41,25 +41,9 @@
                 [
                   {
                     "Term:type:": [
-                      "string",
-                      "text"
+                      "output",
+                      "lines"
                     ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:slots:with flow:": [
-            "expect_lines",
-            "execute",
-            {
-              "Flow:uses:": [
-                "expect",
-                [
-                  {
-                    "Term:": "lines"
                   }
                 ]
               ]
@@ -260,7 +244,6 @@
                     true
                   ]
                 }
-
               ]
             }
           ]

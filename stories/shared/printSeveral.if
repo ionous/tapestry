@@ -114,7 +114,7 @@
             }
           },
           {
-            "Expect lines:": [
+            "Expect output:": [
               "zero books",
               "five books"
             ]

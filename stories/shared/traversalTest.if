@@ -334,7 +334,7 @@
             }
           },
           {
-            "Expect lines:": [
+            "Expect output:": [
               "Lobby.",
               "You can see some double doors and a faux door."
             ]
@@ -350,7 +350,7 @@
             ]
           },
           {
-            "Expect string:": "It doesn't lead anywhere."
+            "Expect output:": "It doesn't lead anywhere."
           },
           {
             "Traveling agent:noun:": [
@@ -363,7 +363,7 @@
             ]
           },
           {
-            "Expect string:": "They seem to be closed."
+            "Expect output:": "They seem to be closed."
           },
           {
             "Opening agent:noun:": [
@@ -376,7 +376,7 @@
             ]
           },
           {
-            "Expect string:": "You open the double doors."
+            "Expect output:": "You open the double doors."
           },
           {
             "Traveling agent:noun:": [
@@ -389,7 +389,7 @@
             ]
           },
           {
-            "Expect lines:": [
+            "Expect output:": [
               "Foyer.",
               "You can see a curtain."
             ]

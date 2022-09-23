@@ -91,7 +91,7 @@
             }
           },
           {
-            "Expect lines:": [
+            "Expect output:": [
               "You can only just make out a lamp-post.",
               "You can only just make out Trevor.",
               "You can only just make out some soldiers.",

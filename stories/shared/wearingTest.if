@@ -71,7 +71,7 @@
             }
           },
           {
-            "Expect string:": "The flower's ogp: you, worn."
+            "Expect output:": "The flower's ogp: you, worn."
           },
           {
             "Comment:": "Fail to re-wear the flower:"
@@ -87,7 +87,7 @@
             ]
           },
           {
-            "Expect string:": "It is already worn."
+            "Expect output:": "It is already worn."
           },
           {
             "Comment:": "Take off the flower:"
@@ -103,7 +103,7 @@
             ]
           },
           {
-            "Expect string:": "You take off the flower."
+            "Expect output:": "You take off the flower."
           },
           {
             "Say:": {
@@ -111,7 +111,7 @@
             }
           },
           {
-            "Expect string:": "The flower's newg: you, not_worn."
+            "Expect output:": "The flower's newg: you, not_worn."
           },
           {
             "Comment:": "Fail to re-remove the flower:"
@@ -127,7 +127,7 @@
             ]
           },
           {
-            "Expect string:": "You aren't wearing that!"
+            "Expect output:": "You aren't wearing that!"
           },
           {
             "Comment:": "Wear the flower again:"
@@ -143,7 +143,7 @@
             ]
           },
           {
-            "Expect string:": "You put on the flower."
+            "Expect output:": "You put on the flower."
           },
           {
             "Say:": {
@@ -151,7 +151,7 @@
             }
           },
           {
-            "Expect string:": "The flower's newg: you, worn."
+            "Expect output:": "The flower's newg: you, worn."
           },
           {
             "Say:": {
@@ -159,7 +159,7 @@
             }
           },
           {
-            "Expect string:": "The knife's parent: you, not_worn."
+            "Expect output:": "The knife's parent: you, not_worn."
           },
           {
             "Comment:": "Fail to wear an unwearable:"
@@ -175,7 +175,7 @@
             ]
           },
           {
-            "Expect string:": "It isn't something you can put on."
+            "Expect output:": "It isn't something you can put on."
           },
           {
             "Say:": {
@@ -183,7 +183,7 @@
             }
           },
           {
-            "Expect string:": "The knife's parent: you, not_worn."
+            "Expect output:": "The knife's parent: you, not_worn."
           },
           {
             "Say:": {
@@ -191,7 +191,7 @@
             }
           },
           {
-            "Expect string:": "The purse's parent: the Kitchen, not_worn."
+            "Expect output:": "The purse's parent: the Kitchen, not_worn."
           },
           {
             "Comment:": "Fail to wear something not held:"
@@ -207,7 +207,7 @@
             ]
           },
           {
-            "Expect string:": "You haven't got that!"
+            "Expect output:": "You haven't got that!"
           },
           {
             "Comment:": "Fail to remove something not held:"
@@ -223,7 +223,7 @@
             ]
           },
           {
-            "Expect string:": "You haven't got that!"
+            "Expect output:": "You haven't got that!"
           },
           {
             "Comment:": "Fail to put on something not reachable:"
@@ -239,7 +239,7 @@
             ]
           },
           {
-            "Expect string:": "You haven't got that!"
+            "Expect output:": "You haven't got that!"
           },
           {
             "Say:": {
@@ -247,7 +247,7 @@
             }
           },
           {
-            "Expect string:": "The purse's parent: the Kitchen, not_worn."
+            "Expect output:": "The purse's parent: the Kitchen, not_worn."
           }
         ]
       ]

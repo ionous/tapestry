@@ -55,7 +55,7 @@
             ]
           },
           {
-            "Expect lines:": [
+            "Expect output:": [
               "cabinet and Kitchen.",
               "Kitchen.",
               "shelf and Kitchen."
@@ -97,7 +97,7 @@
             ]
           },
           {
-            "Expect lines:": "cabinet."
+            "Expect output:": "cabinet."
           },
           {
             "Comment:": "( Validate the number of items in the list directly. )"
@@ -170,7 +170,7 @@
             ]
           },
           {
-            "Expect lines:": "A pointed black hat lies discarded on the floor under a dusty shelf."
+            "Expect output:": "A pointed black hat lies discarded on the floor under a dusty shelf."
           },
           {
             "PrintObjectDescription obj:locale:": [
@@ -183,7 +183,7 @@
             ]
           },
           {
-            "Expect lines:": "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder."
+            "Expect output:": "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder."
           },
           {
             "PrintObjectDescription obj:locale:": [
@@ -196,7 +196,7 @@
             ]
           },
           {
-            "Expect lines:": "Steam leaks from the top of a recently used espresso machine."
+            "Expect output:": "Steam leaks from the top of a recently used espresso machine."
           }
         ]
       ]
@@ -220,7 +220,7 @@
             ]
           },
           {
-            "Expect lines:": [
+            "Expect output:": [
               "Darkness.",
               "It is pitch dark, and you can't see a thing."
             ]
@@ -231,7 +231,7 @@
             }
           },
           {
-            "Expect lines:": [
+            "Expect output:": [
               "Kitchen (in the cabinet).",
               "Your Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake.",
               "A pointed black hat lies discarded on the floor under a dusty shelf.",
@@ -258,7 +258,7 @@
             }
           },
           {
-            "Expect lines:": [
+            "Expect output:": [
               "The cabinet.",
               "Beneath your feet is a bright and shiny hook.",
               "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife."
@@ -280,7 +280,7 @@
             }
           },
           {
-            "Expect lines:": [
+            "Expect output:": [
               "The cabinet.",
               "In the cabinet you can see a book of matches, a bottle of descaling solution, and a rusty knife."
             ]
@@ -306,7 +306,7 @@
             }
           },
           {
-            "Expect lines:": "a mortar (in which is a pestle), a blender (empty), and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle))"
+            "Expect output:": "a mortar (in which is a pestle), a blender (empty), and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle))"
           }
         ]
       ]

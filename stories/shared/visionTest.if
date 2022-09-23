@@ -60,7 +60,7 @@
             "AdjustLight": true
           },
           {
-            "Expect string:": "It is now pitch dark in here!"
+            "Expect output:": "It is now pitch dark in here!"
           },
           {
             "Expect:": {
@@ -88,7 +88,7 @@
             "AdjustLight": true
           },
           {
-            "Expect string:": "The light, it burns."
+            "Expect output:": "The light, it burns."
           },
           {
             "Expect:": {

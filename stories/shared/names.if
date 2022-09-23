@@ -87,7 +87,7 @@
             }
           },
           {
-            "Expect lines:": "named object, thing."
+            "Expect output:": "named object, thing."
           }
         ]
       ]

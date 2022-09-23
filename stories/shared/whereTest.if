@@ -328,7 +328,7 @@
             }
           },
           {
-            "Expect lines:": [
+            "Expect output:": [
               "Mildred's parent is the lab.",
               "The basket's parent is the table.",
               "Mildred is in the lab.",

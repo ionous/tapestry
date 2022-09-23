@@ -144,7 +144,7 @@
             }
           },
           {
-            "Expect lines:": "broken flower pots, dishes, spoons."
+            "Expect output:": "broken flower pots, dishes, spoons."
           }
         ]
       ]

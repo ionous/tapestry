@@ -353,7 +353,7 @@
             }
           },
           {
-            "Expect lines:": "The blender is empty."
+            "Expect output:": "The blender is empty."
           },
           {
             "PrintDescription obj:": {
@@ -361,7 +361,7 @@
             }
           },
           {
-            "Expect lines:": "Your aunt's very own witches hat, a Halloween favorite."
+            "Expect output:": "Your aunt's very own witches hat, a Halloween favorite."
           },
           {
             "PrintDescription obj:": {
@@ -369,7 +369,7 @@
             }
           },
           {
-            "Expect lines:": "In the mortar is a pestle."
+            "Expect output:": "In the mortar is a pestle."
           },
           {
             "PrintDescription obj:": {
@@ -377,7 +377,7 @@
             }
           },
           {
-            "Expect lines:": "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder."
+            "Expect output:": "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder."
           },
           {
             "PrintDescription obj:": {
@@ -385,7 +385,7 @@
             }
           },
           {
-            "Expect lines:": [
+            "Expect output:": [
               "An ancient teak wardrobe repurposed as a kitchen cupboard.",
               "In the cabinet are a book of matches, a bottle of descaling solution, a fish hook, and a rusty knife."
             ]
@@ -403,7 +403,7 @@
             }
           },
           {
-            "Expect lines:": "You see nothing special about the blender."
+            "Expect output:": "You see nothing special about the blender."
           }
         ]
       ]

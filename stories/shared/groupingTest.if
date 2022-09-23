@@ -187,7 +187,7 @@
                   }
                 },
                 {
-                  "Expect lines:": "Clarence, an empire apple, a pen, a triangle, a triangle, a cat, and a cat"
+                  "Expect output:": "Clarence, an empire apple, a pen, a triangle, a triangle, a cat, and a cat"
                 }
               ]
             ]
@@ -213,7 +213,7 @@
                   }
                 },
                 {
-                  "Expect lines:": "Clarence, an empire apple, a pen, two triangles, and two cats"
+                  "Expect output:": "Clarence, an empire apple, a pen, two triangles, and two cats"
                 }
               ]
             ]
@@ -346,7 +346,7 @@
                   }
                 },
                 {
-                  "Expect lines:": "Clarence, an empire apple and a pen, and a few shapely trigons; Clarence, an empire apple and a pen, and one triangle"
+                  "Expect output:": "Clarence, an empire apple and a pen, and a few shapely trigons; Clarence, an empire apple and a pen, and one triangle"
                 }
               ]
             ]
@@ -441,7 +441,7 @@
                   }
                 },
                 {
-                  "Expect lines:": "Clarence and some things; Clarence and an empire apple"
+                  "Expect output:": "Clarence and some things; Clarence and an empire apple"
                 }
               ]
             ]
@@ -597,7 +597,7 @@
                   }
                 },
                 {
-                  "Expect lines:": "the tiles X, W, F, Y, and Z from a Scrabble set; Clarence and the tiles X, W, F, Y, and Z from a Scrabble set"
+                  "Expect output:": "the tiles X, W, F, Y, and Z from a Scrabble set; Clarence and the tiles X, W, F, Y, and Z from a Scrabble set"
                 }
               ]
             ]
@@ -681,7 +681,7 @@
                   }
                 },
                 {
-                  "Expect lines:": "Clarence and five scrabble tiles (X, W, F, Y, and Z)"
+                  "Expect output:": "Clarence and five scrabble tiles (X, W, F, Y, and Z)"
                 }
               ]
             ]
@@ -738,7 +738,7 @@
                   }
                 },
                 {
-                  "Expect lines:": "Clarence and five scrabble tiles (a X, a W, a F, a Y, and a Z)"
+                  "Expect output:": "Clarence and five scrabble tiles (a X, a W, a F, a Y, and a Z)"
                 }
               ]
             ]
@@ -813,7 +813,7 @@
                   }
                 },
                 {
-                  "Expect lines:": "Clarence and three things (an empire apple, a pen, and one triangle); Clarence and four things (an empire apple, a pen, and two triangles)"
+                  "Expect output:": "Clarence and three things (an empire apple, a pen, and one triangle); Clarence and four things (an empire apple, a pen, and two triangles)"
                 }
               ]
             ]

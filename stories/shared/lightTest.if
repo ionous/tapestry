@@ -22,7 +22,7 @@
             }
           },
           {
-            "Expect string:": "ok: The cabinet is dark."
+            "Expect output:": "ok: The cabinet is dark."
           },
           {
             "Put:from:at:": [
@@ -41,7 +41,7 @@
             }
           },
           {
-            "Expect string:": "ok: The cabinet has light."
+            "Expect output:": "ok: The cabinet has light."
           },
           {
             "Put:from:at:": [
@@ -60,7 +60,7 @@
             }
           },
           {
-            "Expect string:": "ok: The cabinet is dark."
+            "Expect output:": "ok: The cabinet is dark."
           },
           {
             "Put:from:at:": [
@@ -79,7 +79,7 @@
             }
           },
           {
-            "Expect string:": "ok: The cabinet has light."
+            "Expect output:": "ok: The cabinet has light."
           }
         ]
       ]

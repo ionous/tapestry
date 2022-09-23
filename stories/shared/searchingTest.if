@@ -76,7 +76,7 @@
             ]
           },
           {
-            "Expect lines:": "You find nothing of interest."
+            "Expect output:": "You find nothing of interest."
           },
           {
             "Searching agent:noun:": [
@@ -89,7 +89,7 @@
             ]
           },
           {
-            "Expect lines:": "You can't see inside, it is closed."
+            "Expect output:": "You can't see inside, it is closed."
           },
           {
             "Searching agent:noun:": [
@@ -102,7 +102,7 @@
             ]
           },
           {
-            "Expect lines:": "On the counter are the blender, the espresso machine, and the mortar."
+            "Expect output:": "On the counter are the blender, the espresso machine, and the mortar."
           },
           {
             "Searching agent:noun:": [
@@ -115,7 +115,7 @@
             ]
           },
           {
-            "Expect lines:": "In the purse is the coin."
+            "Expect output:": "In the purse is the coin."
           }
         ]
       ]

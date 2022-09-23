@@ -221,7 +221,7 @@
             }
           },
           {
-            "Expect lines:": [
+            "Expect output:": [
               "  - Fail to retrieve from something closed:",
               "  The espresso machine isn't open.",
               "  - The soup's parent was: the shelf. Okay, retrieve from supporter:",

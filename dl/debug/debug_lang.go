@@ -432,109 +432,6 @@ func ExpectBool_Marshal(m jsn.Marshaler, val *ExpectBool) (err error) {
 	return
 }
 
-// ExpectLines
-type ExpectLines struct {
-	Lines  prim.Lines `if:"label=lines"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*ExpectLines)(nil)
-
-func (*ExpectLines) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ExpectLines_Type,
-		Uses: composer.Type_Flow,
-		Lede: "expect",
-	}
-}
-
-const ExpectLines_Type = "expect_lines"
-const ExpectLines_Field_Lines = "$LINES"
-
-func (op *ExpectLines) Marshal(m jsn.Marshaler) error {
-	return ExpectLines_Marshal(m, op)
-}
-
-type ExpectLines_Slice []ExpectLines
-
-func (op *ExpectLines_Slice) GetType() string { return ExpectLines_Type }
-
-func (op *ExpectLines_Slice) Marshal(m jsn.Marshaler) error {
-	return ExpectLines_Repeats_Marshal(m, (*[]ExpectLines)(op))
-}
-
-func (op *ExpectLines_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ExpectLines_Slice) SetSize(cnt int) {
-	var els []ExpectLines
-	if cnt >= 0 {
-		els = make(ExpectLines_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ExpectLines_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ExpectLines_Marshal(m, &(*op)[i])
-}
-
-func ExpectLines_Repeats_Marshal(m jsn.Marshaler, vals *[]ExpectLines) error {
-	return jsn.RepeatBlock(m, (*ExpectLines_Slice)(vals))
-}
-
-func ExpectLines_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ExpectLines) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ExpectLines_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ExpectLines_Flow struct{ ptr *ExpectLines }
-
-func (n ExpectLines_Flow) GetType() string      { return ExpectLines_Type }
-func (n ExpectLines_Flow) GetLede() string      { return "expect" }
-func (n ExpectLines_Flow) GetFlow() interface{} { return n.ptr }
-func (n ExpectLines_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ExpectLines); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ExpectLines_Optional_Marshal(m jsn.Marshaler, pv **ExpectLines) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ExpectLines_Marshal(m, *pv)
-	} else if !enc {
-		var v ExpectLines
-		if err = ExpectLines_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ExpectLines_Marshal(m jsn.Marshaler, val *ExpectLines) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ExpectLines_Flow{val}); err == nil {
-		e0 := m.MarshalKey("lines", ExpectLines_Field_Lines)
-		if e0 == nil {
-			e0 = prim.Lines_Marshal(m, &val.Lines)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ExpectLines_Field_Lines))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // ExpectNum
 type ExpectNum struct {
 	Result    float64         `if:"label=_,type=number"`
@@ -665,39 +562,39 @@ func ExpectNum_Marshal(m jsn.Marshaler, val *ExpectNum) (err error) {
 	return
 }
 
-// ExpectString
-type ExpectString struct {
-	String string `if:"label=string,type=text"`
+// ExpectOutput
+type ExpectOutput struct {
+	Output prim.Lines `if:"label=output"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ rt.Execute = (*ExpectString)(nil)
+var _ rt.Execute = (*ExpectOutput)(nil)
 
-func (*ExpectString) Compose() composer.Spec {
+func (*ExpectOutput) Compose() composer.Spec {
 	return composer.Spec{
-		Name: ExpectString_Type,
+		Name: ExpectOutput_Type,
 		Uses: composer.Type_Flow,
 		Lede: "expect",
 	}
 }
 
-const ExpectString_Type = "expect_string"
-const ExpectString_Field_String = "$STRING"
+const ExpectOutput_Type = "expect_output"
+const ExpectOutput_Field_Output = "$OUTPUT"
 
-func (op *ExpectString) Marshal(m jsn.Marshaler) error {
-	return ExpectString_Marshal(m, op)
+func (op *ExpectOutput) Marshal(m jsn.Marshaler) error {
+	return ExpectOutput_Marshal(m, op)
 }
 
-type ExpectString_Slice []ExpectString
+type ExpectOutput_Slice []ExpectOutput
 
-func (op *ExpectString_Slice) GetType() string { return ExpectString_Type }
+func (op *ExpectOutput_Slice) GetType() string { return ExpectOutput_Type }
 
-func (op *ExpectString_Slice) Marshal(m jsn.Marshaler) error {
-	return ExpectString_Repeats_Marshal(m, (*[]ExpectString)(op))
+func (op *ExpectOutput_Slice) Marshal(m jsn.Marshaler) error {
+	return ExpectOutput_Repeats_Marshal(m, (*[]ExpectOutput)(op))
 }
 
-func (op *ExpectString_Slice) GetSize() (ret int) {
+func (op *ExpectOutput_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -706,62 +603,62 @@ func (op *ExpectString_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *ExpectString_Slice) SetSize(cnt int) {
-	var els []ExpectString
+func (op *ExpectOutput_Slice) SetSize(cnt int) {
+	var els []ExpectOutput
 	if cnt >= 0 {
-		els = make(ExpectString_Slice, cnt)
+		els = make(ExpectOutput_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *ExpectString_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ExpectString_Marshal(m, &(*op)[i])
+func (op *ExpectOutput_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ExpectOutput_Marshal(m, &(*op)[i])
 }
 
-func ExpectString_Repeats_Marshal(m jsn.Marshaler, vals *[]ExpectString) error {
-	return jsn.RepeatBlock(m, (*ExpectString_Slice)(vals))
+func ExpectOutput_Repeats_Marshal(m jsn.Marshaler, vals *[]ExpectOutput) error {
+	return jsn.RepeatBlock(m, (*ExpectOutput_Slice)(vals))
 }
 
-func ExpectString_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ExpectString) (err error) {
+func ExpectOutput_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ExpectOutput) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ExpectString_Repeats_Marshal(m, pv)
+		err = ExpectOutput_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type ExpectString_Flow struct{ ptr *ExpectString }
+type ExpectOutput_Flow struct{ ptr *ExpectOutput }
 
-func (n ExpectString_Flow) GetType() string      { return ExpectString_Type }
-func (n ExpectString_Flow) GetLede() string      { return "expect" }
-func (n ExpectString_Flow) GetFlow() interface{} { return n.ptr }
-func (n ExpectString_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ExpectString); ok {
+func (n ExpectOutput_Flow) GetType() string      { return ExpectOutput_Type }
+func (n ExpectOutput_Flow) GetLede() string      { return "expect" }
+func (n ExpectOutput_Flow) GetFlow() interface{} { return n.ptr }
+func (n ExpectOutput_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ExpectOutput); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func ExpectString_Optional_Marshal(m jsn.Marshaler, pv **ExpectString) (err error) {
+func ExpectOutput_Optional_Marshal(m jsn.Marshaler, pv **ExpectOutput) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ExpectString_Marshal(m, *pv)
+		err = ExpectOutput_Marshal(m, *pv)
 	} else if !enc {
-		var v ExpectString
-		if err = ExpectString_Marshal(m, &v); err == nil {
+		var v ExpectOutput
+		if err = ExpectOutput_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func ExpectString_Marshal(m jsn.Marshaler, val *ExpectString) (err error) {
+func ExpectOutput_Marshal(m jsn.Marshaler, val *ExpectOutput) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ExpectString_Flow{val}); err == nil {
-		e0 := m.MarshalKey("string", ExpectString_Field_String)
+	if err = m.MarshalBlock(ExpectOutput_Flow{val}); err == nil {
+		e0 := m.MarshalKey("output", ExpectOutput_Field_Output)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.String)
+			e0 = prim.Lines_Marshal(m, &val.Output)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ExpectString_Field_String))
+			m.Error(errutil.New(e0, "in flow at", ExpectOutput_Field_Output))
 		}
 		m.EndBlock()
 	}
@@ -1175,9 +1072,8 @@ var Slats = []composer.Composer{
 	(*DebugLog)(nil),
 	(*DoNothing)(nil),
 	(*ExpectBool)(nil),
-	(*ExpectLines)(nil),
 	(*ExpectNum)(nil),
-	(*ExpectString)(nil),
+	(*ExpectOutput)(nil),
 	(*ExpectText)(nil),
 	(*LoggingLevel)(nil),
 	(*Test)(nil),
@@ -1191,8 +1087,7 @@ var Signatures = map[uint64]interface{}{
 	16586092333187989882: (*Comment)(nil),      /* story_statement=Comment: */
 	14645287343365598707: (*DoNothing)(nil),    /* execute=DoNothing */
 	12243119421914882789: (*DoNothing)(nil),    /* execute=DoNothing why: */
-	469594313115947985:   (*ExpectLines)(nil),  /* execute=Expect lines: */
-	5505041336569015051:  (*ExpectString)(nil), /* execute=Expect string: */
+	13157581199995609923: (*ExpectOutput)(nil), /* execute=Expect output: */
 	16489874106085927697: (*ExpectText)(nil),   /* execute=Expect text: */
 	11108202414968227788: (*ExpectBool)(nil),   /* execute=Expect: */
 	9770230868586544920:  (*ExpectNum)(nil),    /* execute=Expect:is:num: */

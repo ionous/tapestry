@@ -97,7 +97,7 @@
             ]
           },
           {
-            "Expect lines:": "o*-*x*x"
+            "Expect output:": "o*-*x*x"
           }
         ]
       ]

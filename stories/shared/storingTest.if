@@ -331,7 +331,7 @@
             }
           },
           {
-            "Expect lines:": [
+            "Expect output:": [
               "  - Fail to store something into an actor:",
               "  That seems to belong to Mildred.clutch parent: clutch.",
               "  - Fail to store something into a closed container:",

@@ -330,7 +330,7 @@
             }
           },
           {
-            "Expect lines:": [
+            "Expect output:": [
               "  - Fail to take from something closed:",
               "  The espresso machine isn't open.",
               "  - The apple's parent: Mildred. Fail to steal:",

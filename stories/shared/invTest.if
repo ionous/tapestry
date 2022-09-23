@@ -11,7 +11,7 @@
             }
           },
           {
-            "Expect lines:": "the flower: (being worn)."
+            "Expect output:": "the flower: (being worn)."
           },
           {
             "Say:": {
@@ -19,7 +19,7 @@
             }
           },
           {
-            "Expect lines:": "the headlamp: (providing light and being worn)."
+            "Expect output:": "the headlamp: (providing light and being worn)."
           },
           {
             "Say:": {
@@ -27,7 +27,7 @@
             }
           },
           {
-            "Expect lines:": "the book of secrets: (closed and locked)."
+            "Expect output:": "the book of secrets: (closed and locked)."
           },
           {
             "Say:": {
@@ -35,7 +35,7 @@
             }
           },
           {
-            "Expect lines:": "the book of wisdom: (open but empty)."
+            "Expect output:": "the book of wisdom: (open but empty)."
           },
           {
             "Say:": {
@@ -43,7 +43,7 @@
             }
           },
           {
-            "Expect lines:": "the clutch: (open)."
+            "Expect output:": "the clutch: (open)."
           },
           {
             "Say:": {
@@ -51,7 +51,7 @@
             }
           },
           {
-            "Expect lines:": "the purse: (open)."
+            "Expect output:": "the purse: (open)."
           },
           {
             "Say:": {
@@ -59,7 +59,7 @@
             }
           },
           {
-            "Expect lines:": "the flashlight: (providing light)."
+            "Expect output:": "the flashlight: (providing light)."
           },
           {
             "Say:": {
@@ -67,7 +67,7 @@
             }
           },
           {
-            "Expect lines:": "the coin: ."
+            "Expect output:": "the coin: ."
           }
         ]
       ]
@@ -88,7 +88,7 @@
             }
           },
           {
-            "Expect lines:": [
+            "Expect output:": [
               "You are carrying:",
               "  - a book of secrets (closed and locked)",
               "  - a book of wisdom (open but empty)",

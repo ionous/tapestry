@@ -12,12 +12,8 @@ type GreatExpectations interface {
 	GetAccumulatedOutput() []string
 }
 
-func (op *ExpectLines) Execute(run rt.Runtime) (err error) {
-	return compareLast(run, op.Lines.GetLines())
-}
-
-func (op *ExpectString) Execute(run rt.Runtime) (err error) {
-	return compareLast(run, []string{op.String})
+func (op *ExpectOutput) Execute(run rt.Runtime) (err error) {
+	return compareLast(run, op.Output.GetLines())
 }
 
 func (op *ExpectText) Execute(run rt.Runtime) (err error) {

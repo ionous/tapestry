@@ -34,7 +34,7 @@
             }
           },
           {
-            "Expect lines:": "The knife's ogp: you."
+            "Expect output:": "The knife's ogp: you."
           },
           {
             "Dropping agent:noun:": [
@@ -47,7 +47,7 @@
             ]
           },
           {
-            "Expect lines:": "Dropped."
+            "Expect output:": "Dropped."
           },
           {
             "Say:": {
@@ -55,7 +55,7 @@
             }
           },
           {
-            "Expect lines:": "The knife's newg: the Kitchen."
+            "Expect output:": "The knife's newg: the Kitchen."
           },
           {
             "Dropping agent:noun:": [
@@ -68,7 +68,7 @@
             ]
           },
           {
-            "Expect lines:": "You haven't got that!"
+            "Expect output:": "You haven't got that!"
           }
         ]
       ]
