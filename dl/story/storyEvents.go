@@ -2,17 +2,18 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/imp"
 	"github.com/ionous/errutil"
 )
 
-func (op *PluralKinds) GetName(k *Importer) (ret string, err error) {
+func (op *PluralKinds) GetName(k *imp.Importer) (ret string, err error) {
 	ret = op.String()
 	return
 }
 
-func (op *EventBlock) ImportPhrase(k *Importer) (err error) {
+func (op *EventBlock) PostImport(k *imp.Importer) (err error) {
 	if opt, ok := op.Target.Value.(interface {
-		GetName(*Importer) (string, error)
+		GetName(*imp.Importer) (string, error)
 	}); !ok {
 		// fix: not yet implemented for "NamedNoun" and should be.
 		err = errutil.Fmt("unknown event block target %T", opt)
@@ -35,7 +36,7 @@ func (op *EventBlock) ImportPhrase(k *Importer) (err error) {
 	return
 }
 
-func (op *EventPhase) ReadFlags(k *Importer) (ret eph.EphTiming, err error) {
+func (op *EventPhase) ReadFlags(k *imp.Importer) (ret eph.EphTiming, err error) {
 	switch str := op.Str; str {
 	case EventPhase_Before:
 		ret = eph.EphTiming{eph.EphTiming_Before}

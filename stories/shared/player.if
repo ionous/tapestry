@@ -224,7 +224,7 @@
       "--": ""
     },
     {
-      "TestRule:does:": [
+      "Test:do:": [
         "player tests",
         [
           {

@@ -224,6 +224,61 @@
               ]
             }
           ]
+        },
+        {
+          "--": "Create a scene",
+          "Spec:slots:with flow:": [
+            "test",
+            "story_statement",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:": [
+                    "_",
+                    "test_name"
+                  ]
+                },
+                {
+                  "Term:type:optional:": [
+                    "depends_on",
+                    "test_name",
+                    true
+                  ]
+                },
+                {
+                  "Term:type:optional:repeats:": [
+                    "with_scene",
+                    "story_statement",
+                    true,
+                    true
+                  ]
+                },
+                {
+                  "Term:type:repeats:": [
+                    "do",
+                    "execute",
+                    true
+                  ]
+                }
+
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:with str:": [
+            "test_name",
+            {
+              "Str uses:": [
+                {
+                  "Option:label:": [
+                    "current_test",
+                    "the test"
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     }

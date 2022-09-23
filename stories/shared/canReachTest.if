@@ -1,8 +1,58 @@
 {
   "Tapestry:": [
     {
-      "TestRule:does:": [
+      "Test:dependsOn:withScene:do:": [
         "reach test",
+        "Kitchenette",
+        [
+          {
+            "Nouns:depict:": [
+              [
+                {
+                  "Noun:named:": [
+                    "an",
+                    {
+                      "Noun:": "other worldly cloak"
+                    }
+                  ]
+                }
+              ],
+              {
+                "Kind:named:": [
+                  "isa",
+                  "thing"
+                ]
+              }
+            ]
+          },
+          {
+            "Comment:": "it is nowhere."
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:": "self"
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "cabinet"
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ],
         [
           {
             "If:from:and:does:else:": [
@@ -220,64 +270,6 @@
           },
           {
             "Expect lines:": "okay: It isn't available."
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:requires:story:": [
-        "reach test",
-        "Kitchenette",
-        [
-          {
-            "Nouns:depict:": [
-              [
-                {
-                  "Noun:named:": [
-                    "an",
-                    {
-                      "Noun:": "other worldly cloak"
-                    }
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "isa",
-                  "thing"
-                ]
-              }
-            ]
-          },
-          {
-            "Comment:": "it is nowhere."
-          },
-          {
-            "--": ""
-          },
-          {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
-              "whereabouts",
-              [
-                {
-                  "Noun:": "self"
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "cabinet"
-                    }
-                  ]
-                }
-              ]
-            ]
           }
         ]
       ]

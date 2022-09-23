@@ -1,4 +1,4 @@
-package story
+package imp
 
 type Nouns struct {
 	Subjects, Objects []string

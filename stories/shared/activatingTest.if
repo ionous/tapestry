@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "TestScene:requires:story:": [
+      "Test:dependsOn:withScene:do:": [
         "activating test",
         "Kitchenette",
         [
@@ -66,12 +66,7 @@
               ]
             ]
           }
-        ]
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "activating test",
+        ],
         [
           {
             "Comment:": [

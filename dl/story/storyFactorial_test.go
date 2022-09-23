@@ -3,9 +3,10 @@ package story_test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/asm"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
-	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/test/debug"
 	"github.com/kr/pretty"
 )
@@ -13,24 +14,28 @@ import (
 // read the factorial story
 func TestFactorialImport(t *testing.T) {
 	var els []eph.Ephemera
-	k := story.NewImporter(collectEphemera(&els), storyMarshaller)
-	if e := k.ImportStory(t.Name(), debug.FactorialStory); e != nil {
+	k := imp.NewImporter(collectEphemera(&els), storyMarshaller)
+	if e := asm.ImportStory(k, t.Name(), debug.FactorialStory); e != nil {
 		t.Fatal(e)
 	} else {
 		// the hierarchical story as a flat list of commands used by the assembler
 		// fix, future: "get var" and "assign" in the scope of a pattern should be generating parameter refs
 		expect := []eph.Ephemera{
+			&eph.EphBeginDomain{
+				Name: "factorial",
+			},
 			// referencing a call to the factorial pattern
 			&eph.EphRefs{Refs: []eph.Ephemera{
 				&eph.EphKinds{
 					Kinds: "factorial",
-					// From:  kindsOf.Pattern.String() -- see note in importCall
+					// From:  kindsOf.Pattern.String() -- see note in ImportCall
 					Contain: []eph.EphParams{{
 						Affinity: eph.Affinity{eph.Affinity_Number},
 						Name:     "num",
 					}},
 				},
 			}},
+			&eph.EphEndDomain{},
 			// one test rule
 			&eph.EphChecks{
 				Name: "factorial",

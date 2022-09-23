@@ -5,10 +5,11 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/imp"
 )
 
 // departing from the current room in a direction
-func (op *MapHeading) ImportPhrase(k *Importer) (noerr error) {
+func (op *MapHeading) PostImport(k *imp.Importer) (noerr error) {
 	// exit this room moving through the (optional) door
 	_ = mapDirect((*storyAdapter)(k), op.Room, op.OtherRoom, op.Door, op.Dir)
 
@@ -81,7 +82,7 @@ func addDirection(d *eph.Domain, fromRoom, inDir, toRoom, at string) error {
 }
 
 // departing from the current room via a door
-func (op *MapDeparting) ImportPhrase(k *Importer) (err error) {
+func (op *MapDeparting) PostImport(k *imp.Importer) (err error) {
 	if exitName, e := op.Door.UniformString(); e != nil {
 		err = e // ^ manually transform the names since we are using them as values
 	} else {
@@ -106,10 +107,10 @@ func (da domainAdapter) WriteEphemera(op eph.Ephemera) error {
 	return da.d.AddEphemera(da.at, op)
 }
 
-type storyAdapter Importer
+type storyAdapter imp.Importer
 
 func (sa *storyAdapter) WriteEphemera(op eph.Ephemera) (noerr error) {
-	k := (*Importer)(sa)
+	k := (*imp.Importer)(sa)
 	k.WriteEphemera(op)
 	return
 }

@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/kr/pretty"
@@ -19,8 +20,8 @@ func TestPatternImport(t *testing.T) {
 		Name: P("corral"),
 	}
 	var els []eph.Ephemera
-	k := story.NewImporter(collectEphemera(&els), storyMarshaller)
-	if e := patternDecl.ImportPhrase(k); e != nil {
+	k := imp.NewImporter(collectEphemera(&els), storyMarshaller)
+	if e := patternDecl.PostImport(k); e != nil {
 		t.Fatal(e)
 	} else {
 		expect := []eph.Ephemera{
@@ -45,8 +46,8 @@ func TestPatternParameterImport(t *testing.T) {
 		}},
 	}
 	var els []eph.Ephemera
-	k := story.NewImporter(collectEphemera(&els), storyMarshaller)
-	if e := patternVariables.ImportPhrase(k); e != nil {
+	k := imp.NewImporter(collectEphemera(&els), storyMarshaller)
+	if e := patternVariables.PostImport(k); e != nil {
 		t.Log(e)
 	} else {
 		expect := []eph.Ephemera{
@@ -70,14 +71,14 @@ func TestPatternParameterImport(t *testing.T) {
 // see also: TestFactorialImport which is more extensive
 func TestPatternRuleImport(t *testing.T) {
 	var els []eph.Ephemera
-	k := story.NewImporter(collectEphemera(&els), storyMarshaller)
+	k := imp.NewImporter(collectEphemera(&els), storyMarshaller)
 
 	var prog story.PatternActions
 	if b, e := json.Marshal(_pattern_actions); e != nil {
 		t.Fatal(e)
 	} else if e := din.Decode(&prog, tapestry.Registry(), b); e != nil {
 		t.Fatal(e)
-	} else if e := prog.ImportPhrase(k); e != nil {
+	} else if e := prog.PostImport(k); e != nil {
 		t.Fatal(e)
 	} else {
 		expect := []eph.Ephemera{

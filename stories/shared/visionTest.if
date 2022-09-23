@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "TestScene:requires:story:": [
+      "Test:dependsOn:withScene:do:": [
         "vision testing",
         "Kitchenette",
         [
@@ -24,12 +24,7 @@
               ]
             ]
           }
-        ]
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "vision testing",
+        ],
         [
           {
             "Comment:": "Verify that we start not in darkness."

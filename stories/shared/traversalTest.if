@@ -1,87 +1,7 @@
 {
   "Tapestry:": [
     {
-      "--": [
-        "fix: running commands on invalid nouns causes an error",
-        "what we want therefore is to execute input from the player instead",
-        "so that we can get a 'im sorry dave'",
-        "maybe a separate kind of test that (intersperses?) commands and expected output",
-        "{ 'Traveling agent:noun:': [{'FromTxt:': 'player'},{'FromTxt:': 'red door'} ]}"
-      ],
-      "TestRule:does:": [
-        "traversal",
-        [
-          {
-            "Looking agent:": {
-              "FromTxt:": "player"
-            }
-          },
-          {
-            "Expect lines:": [
-              "Lobby.",
-              "You can see some double doors and a faux door."
-            ]
-          },
-          {
-            "Traveling agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "faux door"
-              }
-            ]
-          },
-          {
-            "Expect string:": "It doesn't lead anywhere."
-          },
-          {
-            "Traveling agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "double doors"
-              }
-            ]
-          },
-          {
-            "Expect string:": "They seem to be closed."
-          },
-          {
-            "Opening agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "double doors"
-              }
-            ]
-          },
-          {
-            "Expect string:": "You open the double doors."
-          },
-          {
-            "Traveling agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "double doors"
-              }
-            ]
-          },
-          {
-            "Expect lines:": [
-              "Foyer.",
-              "You can see a curtain."
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "TestScene:story:": [
+      "Test:withScene:do:": [
         "traversal",
         [
           {
@@ -406,14 +326,75 @@
               }
             ]
           }
+        ],
+        [
+          {
+            "Looking agent:": {
+              "FromTxt:": "player"
+            }
+          },
+          {
+            "Expect lines:": [
+              "Lobby.",
+              "You can see some double doors and a faux door."
+            ]
+          },
+          {
+            "Traveling agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "faux door"
+              }
+            ]
+          },
+          {
+            "Expect string:": "It doesn't lead anywhere."
+          },
+          {
+            "Traveling agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "double doors"
+              }
+            ]
+          },
+          {
+            "Expect string:": "They seem to be closed."
+          },
+          {
+            "Opening agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "double doors"
+              }
+            ]
+          },
+          {
+            "Expect string:": "You open the double doors."
+          },
+          {
+            "Traveling agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "double doors"
+              }
+            ]
+          },
+          {
+            "Expect lines:": [
+              "Foyer.",
+              "You can see a curtain."
+            ]
+          }
         ]
-      ]
-    },
-    {
-      "--": [
-        "fix: currently values are not scoped, so we can't easily test a locked/closed door yet",
-        "once either that is done, or commencement or scene activation events, we could hook that to lock the door.",
-        "we could also test unlocking the door via a player command once the lock/unlocking actions exist."
       ]
     }
   ]

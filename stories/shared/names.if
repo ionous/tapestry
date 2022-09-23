@@ -20,7 +20,7 @@
       "--": ""
     },
     {
-      "TestScene:story:": [
+      "Test:withScene:do:": [
         "name of a kind",
         [
           {
@@ -73,15 +73,7 @@
               }
             ]
           }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestRule:does:": [
-        "name of a kind",
+        ],
         [
           {
             "Comment:": [

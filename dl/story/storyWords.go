@@ -1,8 +1,11 @@
 package story
 
-import "git.sr.ht/~ionous/tapestry/dl/eph"
+import (
+	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/imp"
+)
 
-func (op *MakePlural) ImportPhrase(k *Importer) (noerr error) {
+func (op *MakePlural) PostImport(k *imp.Importer) (noerr error) {
 	k.WriteEphemera(&eph.EphPlurals{
 		Singular: op.Singular,
 		Plural:   op.Plural,
@@ -10,7 +13,7 @@ func (op *MakePlural) ImportPhrase(k *Importer) (noerr error) {
 	return
 }
 
-func (op *MakeOpposite) ImportPhrase(k *Importer) (noerr error) {
+func (op *MakeOpposite) PostImport(k *imp.Importer) (noerr error) {
 	k.WriteEphemera(&eph.EphOpposites{
 		Opposite: op.Opposite,
 		Word:     op.Word,

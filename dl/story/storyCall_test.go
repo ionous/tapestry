@@ -33,7 +33,7 @@ func TestDetermineNum(t *testing.T) {
 				Refs: []eph.Ephemera{
 					&eph.EphKinds{
 						Kinds: "factorial",
-						// From:  kindsOf.Pattern.String() -- see note in importCall
+						// From:  kindsOf.Pattern.String() -- see note in ImportCall
 						Contain: []eph.EphParams{{
 							Affinity: eph.Affinity{eph.Affinity_Number},
 							Name:     "num",

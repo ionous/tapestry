@@ -2,11 +2,12 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"github.com/ionous/errutil"
 )
 
-func (op *PatternActions) ImportPhrase(k *Importer) (err error) {
+func (op *PatternActions) PostImport(k *imp.Importer) (err error) {
 	patternName := op.Name.String()
 	if locals := ImportLocals(k, patternName, op.Locals); len(locals) > 0 {
 		k.WriteEphemera(&eph.EphPatterns{Name: patternName, Locals: locals})
@@ -16,7 +17,7 @@ func (op *PatternActions) ImportPhrase(k *Importer) (err error) {
 }
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
-func (op *PatternDecl) ImportPhrase(k *Importer) (err error) {
+func (op *PatternDecl) PostImport(k *imp.Importer) (err error) {
 	patternName := op.Name.String()
 	ps := op.reduceProps()
 	res := convertRes(op.PatternReturn)
@@ -29,7 +30,7 @@ func (op *PatternDecl) reduceProps() []eph.EphParams {
 }
 
 // note:  statements can set flags for a bunch of rules at once or within each rule separately, but not both.
-func ImportRules(k *Importer, pattern, target string, els []PatternRule, flags eph.EphTiming) (err error) {
+func ImportRules(k *imp.Importer, pattern, target string, els []PatternRule, flags eph.EphTiming) (err error) {
 	for _, el := range els {
 		if e := el.importRule(k, pattern, target, flags); e != nil {
 			err = errutil.Append(err, e)
@@ -38,7 +39,7 @@ func ImportRules(k *Importer, pattern, target string, els []PatternRule, flags e
 	return
 }
 
-func (op *PatternRule) importRule(k *Importer, pattern, target string, tgtFlags eph.EphTiming) (err error) {
+func (op *PatternRule) importRule(k *imp.Importer, pattern, target string, tgtFlags eph.EphTiming) (err error) {
 	act := op.Does
 	if flags, e := op.Flags.ReadFlags(); e != nil {
 		err = e
@@ -100,7 +101,7 @@ func (op *PatternFlags) ReadFlags() (ret eph.EphTiming, err error) {
 	return
 }
 
-func ImportLocals(k *Importer, patternName string, locals []Field) (ret []eph.EphParams) {
+func ImportLocals(k *imp.Importer, patternName string, locals []Field) (ret []eph.EphParams) {
 	for _, el := range locals {
 		ret = append(ret, el.GetParam())
 	}

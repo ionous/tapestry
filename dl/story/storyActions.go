@@ -2,11 +2,12 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
-// ImportPhrase - action generates pattern ephemera for now.
-func (op *ActionDecl) ImportPhrase(k *Importer) (err error) {
+// PostImport - action generates pattern ephemera for now.
+func (op *ActionDecl) PostImport(k *imp.Importer) (err error) {
 	extra := op.ActionParams.Value.(actionImporter).GetExtraParams()
 	// the extra "pattern kind" is informational only; the different pattern types dont/shouldnt affect anything.
 	op.makePattern(k, op.Action.Str, "agent", kindsOf.Action, extra, nil)
@@ -17,7 +18,7 @@ func (op *ActionDecl) ImportPhrase(k *Importer) (err error) {
 	return
 }
 
-func (op *ActionDecl) makePattern(k *Importer, name, tgt string, sub kindsOf.Kinds, extra []eph.EphParams, res *eph.EphParams) {
+func (op *ActionDecl) makePattern(k *imp.Importer, name, tgt string, sub kindsOf.Kinds, extra []eph.EphParams, res *eph.EphParams) {
 	// pattern subtype -- maybe if we really need this an optional parameter of patterns?
 	k.WriteEphemera(&eph.EphKinds{
 		Kinds: name,

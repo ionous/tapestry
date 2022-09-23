@@ -1,8 +1,141 @@
 {
   "Tapestry:": [
     {
-      "TestRule:does:": [
+      "Test:dependsOn:withScene:do:": [
         "taking test",
+        "Kitchenette",
+        [
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:": "self"
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "purse"
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:": "Mildred"
+                },
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "purse"
+                    }
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "kitchen"
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "coin"
+                    }
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:": "self"
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "empire apple"
+                    }
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:": "Mildred"
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "coffee"
+                    }
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "machine"
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ],
         [
           {
             "Say:": {
@@ -216,147 +349,6 @@
               "  It is hardly portable.",
               "  - Fail to take something fixed in place:",
               "  It is fixed in place."
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:requires:story:": [
-        "taking test",
-        "Kitchenette",
-        [
-          {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
-              "whereabouts",
-              [
-                {
-                  "Noun:": "self"
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "purse"
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "--": ""
-          },
-          {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
-              "whereabouts",
-              [
-                {
-                  "Noun:": "Mildred"
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "purse"
-                    }
-                  ]
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "kitchen"
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "--": ""
-          },
-          {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
-              "whereabouts",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "coin"
-                    }
-                  ]
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:": "self"
-                }
-              ]
-            ]
-          },
-          {
-            "--": ""
-          },
-          {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
-              "whereabouts",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "empire apple"
-                    }
-                  ]
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:": "Mildred"
-                }
-              ]
-            ]
-          },
-          {
-            "--": ""
-          },
-          {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
-              "whereabouts",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "coffee"
-                    }
-                  ]
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "machine"
-                    }
-                  ]
-                }
-              ]
             ]
           }
         ]

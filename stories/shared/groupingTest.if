@@ -1,9 +1,8 @@
 {
   "Tapestry:": [
     {
-      "--": "A set of objects common to all the grouping tests.",
-      "TestScene:story:": [
-        "Grouping tests",
+      "Test:withScene:do:": [
+        "grouping tests",
         [
           {
             "Nouns:depict:": [
@@ -141,159 +140,54 @@
                 ]
               }
             ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:requires:story:": [
-        "No grouping",
-        "Grouping tests",
-        [
+          },
           {
-            "Pattern:rules:": [
-              "assign grouping",
+            "Test:withScene:do:": [
+              "no grouping",
               [
                 {
-                  "PatternRule:does:": [
-                    {
-                      "Always": true
-                    },
+                  "Pattern:rules:": [
+                    "assign grouping",
                     [
                       {
-                        "--": [
-                          "For patterns which return a value, assigning a return value ends the pattern matching.",
-                          "So end this pattern and block out the default handler."
-                        ],
-                        "Let:be:": [
-                          "grouping",
-                          "@grouping"
+                        "PatternRule:does:": [
+                          {
+                            "Always": true
+                          },
+                          [
+                            {
+                              "--": [
+                                "For patterns which return a value, assigning a return value ends the pattern matching.",
+                                "So end this pattern and block out the default handler."
+                              ],
+                              "Let:be:": [
+                                "grouping",
+                                "@grouping"
+                              ]
+                            }
+                          ]
                         ]
                       }
                     ]
                   ]
                 }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "no grouping",
-        [
-          {
-            "PrintInlineObjects objs:": {
-              "FromTxts:": [
-                "Clarence",
-                "apple",
-                "pen",
-                "triangles_1",
-                "triangles_2",
-                "cats_1",
-                "cats_2"
-              ]
-            }
-          },
-          {
-            "Expect lines:": "Clarence, an empire apple, a pen, a triangle, a triangle, a cat, and a cat"
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:requires:story:": [
-        "Default grouping",
-        "Grouping tests",
-        null
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "default grouping",
-        [
-          {
-            "PrintInlineObjects objs:": {
-              "FromTxts:": [
-                "Clarence",
-                "apple",
-                "pen",
-                "triangles_1",
-                "triangles_2",
-                "cats_1",
-                "cats_2"
-              ]
-            }
-          },
-          {
-            "Expect lines:": "Clarence, an empire apple, a pen, two triangles, and two cats"
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:requires:story:": [
-        "custom few",
-        "Grouping tests",
-        [
-          {
-            "Pattern:rules:": [
-              "assign grouping",
+              ],
               [
                 {
-                  "PatternRule:does:": [
-                    {
-                      "KindOf:isExactly:": [
-                        "@obj",
-                        "props"
-                      ]
-                    },
-                    [
-                      {
-                        "Put:from:at:": [
-                          {
-                            "VarField:": "grouping"
-                          },
-                          {
-                            "FromTxt:": "props"
-                          },
-                          "label"
-                        ]
-                      },
-                      {
-                        "Put:from:at:": [
-                          {
-                            "VarField:": "grouping"
-                          },
-                          {
-                            "FromBool:": true
-                          },
-                          "is hide label"
-                        ]
-                      },
-                      {
-                        "Put:from:at:": [
-                          {
-                            "VarField:": "grouping"
-                          },
-                          {
-                            "FromBool:": true
-                          },
-                          "is hide size"
-                        ]
-                      }
+                  "PrintInlineObjects objs:": {
+                    "FromTxts:": [
+                      "Clarence",
+                      "apple",
+                      "pen",
+                      "triangles_1",
+                      "triangles_2",
+                      "cats_1",
+                      "cats_2"
                     ]
-                  ]
+                  }
+                },
+                {
+                  "Expect lines:": "Clarence, an empire apple, a pen, a triangle, a triangle, a cat, and a cat"
                 }
               ]
             ]
@@ -302,242 +196,157 @@
             "--": ""
           },
           {
-            "Pattern:rules:": [
-              "print several",
+            "Test:do:": [
+              "default grouping",
               [
                 {
-                  "PatternRule:does:": [
-                    {
-                      "AllTrue:": [
-                        {
-                          "KindOf:is:": [
-                            "@obj",
-                            "triangles"
+                  "PrintInlineObjects objs:": {
+                    "FromTxts:": [
+                      "Clarence",
+                      "apple",
+                      "pen",
+                      "triangles_1",
+                      "triangles_2",
+                      "cats_1",
+                      "cats_2"
+                    ]
+                  }
+                },
+                {
+                  "Expect lines:": "Clarence, an empire apple, a pen, two triangles, and two cats"
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "Test:withScene:do:": [
+              "custom few",
+              [
+                {
+                  "Pattern:rules:": [
+                    "assign grouping",
+                    [
+                      {
+                        "PatternRule:does:": [
+                          {
+                            "KindOf:isExactly:": [
+                              "@obj",
+                              "props"
+                            ]
+                          },
+                          [
+                            {
+                              "Put:from:at:": [
+                                {
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromTxt:": "props"
+                                },
+                                "label"
+                              ]
+                            },
+                            {
+                              "Put:from:at:": [
+                                {
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromBool:": true
+                                },
+                                "is hide label"
+                              ]
+                            },
+                            {
+                              "Put:from:at:": [
+                                {
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromBool:": true
+                                },
+                                "is hide size"
+                              ]
+                            }
                           ]
-                        },
-                        {
-                          "Cmp:is:num:": [
-                            "@group size",
-                            "greater_than",
-                            1
+                        ]
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "--": ""
+                },
+                {
+                  "Pattern:rules:": [
+                    "print several",
+                    [
+                      {
+                        "PatternRule:does:": [
+                          {
+                            "AllTrue:": [
+                              {
+                                "KindOf:is:": [
+                                  "@obj",
+                                  "triangles"
+                                ]
+                              },
+                              {
+                                "Cmp:is:num:": [
+                                  "@group size",
+                                  "greater_than",
+                                  1
+                                ]
+                              }
+                            ]
+                          },
+                          [
+                            {
+                              "Say:": "a few shapely trigons"
+                            }
+                          ]
+                        ]
+                      }
+                    ]
+                  ]
+                }
+              ],
+              [
+                {
+                  "Say:": {
+                    "Spaces does:": [
+                      {
+                        "PrintInlineObjects objs:": {
+                          "FromTxts:": [
+                            "Clarence",
+                            "apple",
+                            "pen",
+                            "triangles_1",
+                            "triangles_2"
                           ]
                         }
-                      ]
-                    },
-                    [
-                      {
-                        "Say:": "a few shapely trigons"
-                      }
-                    ]
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "custom few",
-        [
-          {
-            "Say:": {
-              "Spaces does:": [
-                {
-                  "PrintInlineObjects objs:": {
-                    "FromTxts:": [
-                      "Clarence",
-                      "apple",
-                      "pen",
-                      "triangles_1",
-                      "triangles_2"
-                    ]
-                  }
-                },
-                {
-                  "Say:": ";"
-                },
-                {
-                  "PrintInlineObjects objs:": {
-                    "FromTxts:": [
-                      "Clarence",
-                      "apple",
-                      "pen",
-                      "triangles_1"
-                    ]
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Expect lines:": "Clarence, an empire apple and a pen, and a few shapely trigons; Clarence, an empire apple and a pen, and one triangle"
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:requires:story:": [
-        "custom replacement",
-        "Grouping tests",
-        [
-          {
-            "Pattern:rules:": [
-              "assign grouping",
-              [
-                {
-                  "PatternRule:does:": [
-                    {
-                      "KindOf:is:": [
-                        "@obj",
-                        "props"
-                      ]
-                    },
-                    [
-                      {
-                        "Put:from:at:": [
-                          {
-                            "VarField:": "grouping"
-                          },
-                          {
-                            "FromTxt:": "some things"
-                          },
-                          "label"
-                        ]
                       },
                       {
-                        "Put:from:at:": [
-                          {
-                            "VarField:": "grouping"
-                          },
-                          {
-                            "FromBool:": true
-                          },
-                          "is hide size"
-                        ]
+                        "Say:": ";"
                       },
                       {
-                        "Put:from:at:": [
-                          {
-                            "VarField:": "grouping"
-                          },
-                          {
-                            "FromBool:": true
-                          },
-                          "is hide objects"
-                        ]
+                        "PrintInlineObjects objs:": {
+                          "FromTxts:": [
+                            "Clarence",
+                            "apple",
+                            "pen",
+                            "triangles_1"
+                          ]
+                        }
                       }
-                    ]
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "--": [
-        "Deactivated",
-        "uncounted objects are their own groups now; so the triangles don't group with generic props.",
-        "tbd: how to fix this style of group printing."
-      ],
-      "TestScene:requires:story:": [
-        "custom replacement",
-        "Grouping tests",
-        null
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "x custom replacement",
-        [
-          {
-            "Say:": {
-              "Spaces does:": [
-                {
-                  "PrintInlineObjects objs:": {
-                    "FromTxts:": [
-                      "Clarence",
-                      "apple",
-                      "pen",
-                      "triangles_1",
-                      "triangles_2"
                     ]
                   }
                 },
                 {
-                  "Say:": ";"
-                },
-                {
-                  "PrintInlineObjects objs:": {
-                    "FromTxts:": [
-                      "Clarence",
-                      "apple"
-                    ]
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "Expect lines:": "Clarence and some things; Clarence and an empire apple"
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:requires:story:": [
-        "custom fancy phrase",
-        "Grouping tests",
-        [
-          {
-            "Pattern:rules:": [
-              "assign grouping",
-              [
-                {
-                  "PatternRule:does:": [
-                    {
-                      "KindOf:is:": [
-                        "@obj",
-                        "props"
-                      ]
-                    },
-                    [
-                      {
-                        "Put:from:at:": [
-                          {
-                            "VarField:": "grouping"
-                          },
-                          {
-                            "FromTxt:": "the tiles"
-                          },
-                          "label"
-                        ]
-                      },
-                      {
-                        "Put:from:at:": [
-                          {
-                            "VarField:": "grouping"
-                          },
-                          {
-                            "FromBool:": true
-                          },
-                          "is hide size"
-                        ]
-                      }
-                    ]
-                  ]
+                  "Expect lines:": "Clarence, an empire apple and a pen, and a few shapely trigons; Clarence, an empire apple and a pen, and one triangle"
                 }
               ]
             ]
@@ -546,39 +355,249 @@
             "--": ""
           },
           {
-            "Pattern:rules:": [
-              "print group",
+            "Test:withScene:do:": [
+              "x custom replacement",
               [
                 {
-                  "PatternRule:flags:does:": [
-                    {
-                      "Cmp:is:txt:": [
-                        {
-                          "Get:from:": [
-                            "label",
+                  "Pattern:rules:": [
+                    "assign grouping",
+                    [
+                      {
+                        "PatternRule:does:": [
+                          {
+                            "KindOf:is:": [
+                              "@obj",
+                              "props"
+                            ]
+                          },
+                          [
                             {
-                              "RecFields:": {
+                              "Put:from:at:": [
+                                {
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromTxt:": "some things"
+                                },
+                                "label"
+                              ]
+                            },
+                            {
+                              "Put:from:at:": [
+                                {
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromBool:": true
+                                },
+                                "is hide size"
+                              ]
+                            },
+                            {
+                              "Put:from:at:": [
+                                {
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromBool:": true
+                                },
+                                "is hide objects"
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    ]
+                  ]
+                }
+              ],
+              [
+                {
+                  "Say:": {
+                    "Spaces does:": [
+                      {
+                        "PrintInlineObjects objs:": {
+                          "FromTxts:": [
+                            "Clarence",
+                            "apple",
+                            "pen",
+                            "triangles_1",
+                            "triangles_2"
+                          ]
+                        }
+                      },
+                      {
+                        "Say:": ";"
+                      },
+                      {
+                        "PrintInlineObjects objs:": {
+                          "FromTxts:": [
+                            "Clarence",
+                            "apple"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Expect lines:": "Clarence and some things; Clarence and an empire apple"
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "Test:withScene:do:": [
+              "custom fancy phrase",
+              [
+                {
+                  "Pattern:rules:": [
+                    "assign grouping",
+                    [
+                      {
+                        "PatternRule:does:": [
+                          {
+                            "KindOf:is:": [
+                              "@obj",
+                              "props"
+                            ]
+                          },
+                          [
+                            {
+                              "Put:from:at:": [
+                                {
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromTxt:": "the tiles"
+                                },
+                                "label"
+                              ]
+                            },
+                            {
+                              "Put:from:at:": [
+                                {
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromBool:": true
+                                },
+                                "is hide size"
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "--": ""
+                },
+                {
+                  "Pattern:rules:": [
+                    "print group",
+                    [
+                      {
+                        "PatternRule:flags:does:": [
+                          {
+                            "Cmp:is:txt:": [
+                              {
                                 "Get:from:": [
-                                  "grouping",
+                                  "label",
                                   {
-                                    "VarFields:": "group"
+                                    "RecFields:": {
+                                      "Get:from:": [
+                                        "grouping",
+                                        {
+                                          "VarFields:": "group"
+                                        }
+                                      ]
+                                    }
                                   }
                                 ]
+                              },
+                              "equal_to",
+                              "the tiles"
+                            ]
+                          },
+                          "before",
+                          [
+                            {
+                              "Say:": "from a Scrabble set"
+                            }
+                          ]
+                        ]
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "--": ""
+                },
+                {
+                  "Pattern:rules:": [
+                    "print grouped object",
+                    [
+                      {
+                        "PatternRule:does:": [
+                          {
+                            "KindOf:is:": [
+                              "@obj",
+                              "scrabble tiles"
+                            ]
+                          },
+                          [
+                            {
+                              "Say:": {
+                                "RenderTemplate:": "{.obj}"
                               }
                             }
                           ]
-                        },
-                        "equal_to",
-                        "the tiles"
-                      ]
-                    },
-                    "before",
-                    [
-                      {
-                        "Say:": "from a Scrabble set"
+                        ]
                       }
                     ]
                   ]
+                }
+              ],
+              [
+                {
+                  "Say:": {
+                    "Spaces does:": [
+                      {
+                        "PrintInlineObjects objs:": {
+                          "FromTxts:": [
+                            "x",
+                            "w",
+                            "f",
+                            "y",
+                            "z"
+                          ]
+                        }
+                      },
+                      {
+                        "Say:": ";"
+                      },
+                      {
+                        "PrintInlineObjects objs:": {
+                          "FromTxts:": [
+                            "Clarence",
+                            "x",
+                            "w",
+                            "f",
+                            "y",
+                            "z"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "Expect lines:": "the tiles X, W, F, Y, and Z from a Scrabble set; Clarence and the tiles X, W, F, Y, and Z from a Scrabble set"
                 }
               ]
             ]
@@ -587,42 +606,72 @@
             "--": ""
           },
           {
-            "Pattern:rules:": [
-              "print grouped object",
+            "Test:withScene:do:": [
+              "custom parenthetical",
               [
                 {
-                  "PatternRule:does:": [
-                    {
-                      "KindOf:is:": [
-                        "@obj",
-                        "scrabble tiles"
-                      ]
-                    },
+                  "Pattern:rules:": [
+                    "assign grouping",
                     [
                       {
-                        "Say:": {
-                          "RenderTemplate:": "{.obj}"
-                        }
+                        "PatternRule:does:": [
+                          {
+                            "KindOf:is:": [
+                              "@obj",
+                              "scrabble tiles"
+                            ]
+                          },
+                          [
+                            {
+                              "Put:from:at:": [
+                                {
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromTxt:": "scrabble tiles"
+                                },
+                                "label"
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "--": ""
+                },
+                {
+                  "Pattern:rules:": [
+                    "print grouped object",
+                    [
+                      {
+                        "PatternRule:does:": [
+                          {
+                            "KindOf:is:": [
+                              "@obj",
+                              "scrabble tiles"
+                            ]
+                          },
+                          [
+                            {
+                              "Say:": {
+                                "RenderTemplate:": "{.obj}"
+                              }
+                            }
+                          ]
+                        ]
                       }
                     ]
                   ]
                 }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "custom fancy phrase",
-        [
-          {
-            "Say:": {
-              "Spaces does:": [
+              ],
+              [
                 {
                   "PrintInlineObjects objs:": {
                     "FromTxts:": [
+                      "Clarence",
                       "x",
                       "w",
                       "f",
@@ -632,8 +681,50 @@
                   }
                 },
                 {
-                  "Say:": ";"
-                },
+                  "Expect lines:": "Clarence and five scrabble tiles (X, W, F, Y, and Z)"
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "Test:withScene:do:": [
+              "custom parenthetical articles",
+              [
+                {
+                  "Pattern:rules:": [
+                    "assign grouping",
+                    [
+                      {
+                        "PatternRule:does:": [
+                          {
+                            "KindOf:is:": [
+                              "@obj",
+                              "scrabble tiles"
+                            ]
+                          },
+                          [
+                            {
+                              "Put:from:at:": [
+                                {
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromTxt:": "scrabble tiles"
+                                },
+                                "label"
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    ]
+                  ]
+                }
+              ],
+              [
                 {
                   "PrintInlineObjects objs:": {
                     "FromTxts:": [
@@ -645,50 +736,9 @@
                       "z"
                     ]
                   }
-                }
-              ]
-            }
-          },
-          {
-            "Expect lines:": "the tiles X, W, F, Y, and Z from a Scrabble set; Clarence and the tiles X, W, F, Y, and Z from a Scrabble set"
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:requires:story:": [
-        "custom parenthetical",
-        "Grouping tests",
-        [
-          {
-            "Pattern:rules:": [
-              "assign grouping",
-              [
+                },
                 {
-                  "PatternRule:does:": [
-                    {
-                      "KindOf:is:": [
-                        "@obj",
-                        "scrabble tiles"
-                      ]
-                    },
-                    [
-                      {
-                        "Put:from:at:": [
-                          {
-                            "VarField:": "grouping"
-                          },
-                          {
-                            "FromTxt:": "scrabble tiles"
-                          },
-                          "label"
-                        ]
-                      }
-                    ]
-                  ]
+                  "Expect lines:": "Clarence and five scrabble tiles (a X, a W, a F, a Y, and a Z)"
                 }
               ]
             ]
@@ -697,194 +747,81 @@
             "--": ""
           },
           {
-            "Pattern:rules:": [
-              "print grouped object",
+            "Test:withScene:do:": [
+              "custom unnamed parenthetical",
               [
                 {
-                  "PatternRule:does:": [
-                    {
-                      "KindOf:is:": [
-                        "@obj",
-                        "scrabble tiles"
-                      ]
-                    },
+                  "Pattern:rules:": [
+                    "assign grouping",
                     [
                       {
-                        "Say:": {
-                          "RenderTemplate:": "{.obj}"
+                        "PatternRule:does:": [
+                          {
+                            "KindOf:is:": [
+                              "@obj",
+                              "props"
+                            ]
+                          },
+                          [
+                            {
+                              "Put:from:at:": [
+                                {
+                                  "VarField:": "grouping"
+                                },
+                                {
+                                  "FromTxt:": "things"
+                                },
+                                "label"
+                              ]
+                            }
+                          ]
+                        ]
+                      }
+                    ]
+                  ]
+                }
+              ],
+              [
+                {
+                  "Say:": {
+                    "Spaces does:": [
+                      {
+                        "PrintInlineObjects objs:": {
+                          "FromTxts:": [
+                            "Clarence",
+                            "apple",
+                            "pen",
+                            "triangles_1"
+                          ]
+                        }
+                      },
+                      {
+                        "Say:": ";"
+                      },
+                      {
+                        "PrintInlineObjects objs:": {
+                          "FromTxts:": [
+                            "Clarence",
+                            "apple",
+                            "pen",
+                            "triangles_1",
+                            "triangles_2"
+                          ]
                         }
                       }
                     ]
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "custom parenthetical",
-        [
-          {
-            "PrintInlineObjects objs:": {
-              "FromTxts:": [
-                "Clarence",
-                "x",
-                "w",
-                "f",
-                "y",
-                "z"
-              ]
-            }
-          },
-          {
-            "Expect lines:": "Clarence and five scrabble tiles (X, W, F, Y, and Z)"
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:requires:story:": [
-        "custom parenthetical articles",
-        "Grouping tests",
-        [
-          {
-            "Pattern:rules:": [
-              "assign grouping",
-              [
-                {
-                  "PatternRule:does:": [
-                    {
-                      "KindOf:is:": [
-                        "@obj",
-                        "scrabble tiles"
-                      ]
-                    },
-                    [
-                      {
-                        "Put:from:at:": [
-                          {
-                            "VarField:": "grouping"
-                          },
-                          {
-                            "FromTxt:": "scrabble tiles"
-                          },
-                          "label"
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "custom parenthetical articles",
-        [
-          {
-            "PrintInlineObjects objs:": {
-              "FromTxts:": [
-                "Clarence",
-                "x",
-                "w",
-                "f",
-                "y",
-                "z"
-              ]
-            }
-          },
-          {
-            "Expect lines:": "Clarence and five scrabble tiles (a X, a W, a F, a Y, and a Z)"
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:requires:story:": [
-        "custom unnamed parenthetical",
-        "Grouping tests",
-        [
-          {
-            "Pattern:rules:": [
-              "assign grouping",
-              [
-                {
-                  "PatternRule:does:": [
-                    {
-                      "KindOf:is:": [
-                        "@obj",
-                        "props"
-                      ]
-                    },
-                    [
-                      {
-                        "Put:from:at:": [
-                          {
-                            "VarField:": "grouping"
-                          },
-                          {
-                            "FromTxt:": "things"
-                          },
-                          "label"
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "x custom unnamed parenthetical",
-        [
-          {
-            "Say:": {
-              "Spaces does:": [
-                {
-                  "PrintInlineObjects objs:": {
-                    "FromTxts:": [
-                      "Clarence",
-                      "apple",
-                      "pen",
-                      "triangles_1"
-                    ]
                   }
                 },
                 {
-                  "Say:": ";"
-                },
-                {
-                  "PrintInlineObjects objs:": {
-                    "FromTxts:": [
-                      "Clarence",
-                      "apple",
-                      "pen",
-                      "triangles_1",
-                      "triangles_2"
-                    ]
-                  }
+                  "Expect lines:": "Clarence and three things (an empire apple, a pen, and one triangle); Clarence and four things (an empire apple, a pen, and two triangles)"
                 }
               ]
-            }
-          },
+            ]
+          }
+        ],
+        [
           {
-            "Expect lines:": "Clarence and three things (an empire apple, a pen, and one triangle); Clarence and four things (an empire apple, a pen, and two triangles)"
+            "DoNothing": true
           }
         ]
       ]

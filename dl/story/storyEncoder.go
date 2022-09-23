@@ -4,6 +4,7 @@ import (
 	"unicode"
 
 	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"git.sr.ht/~ionous/tapestry/lang"
@@ -111,4 +112,4 @@ func ReformatStory(lines []StoryStatement) (out Story) {
 }
 
 // story break is an empty do nothing statement, used as a paragraph marker.
-func (op *StoryBreak) ImportPhrase(k *Importer) error { return nil }
+func (op *StoryBreak) PostImport(k *imp.Importer) error { return nil }

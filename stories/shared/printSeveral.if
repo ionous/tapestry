@@ -80,7 +80,7 @@
       "--": ""
     },
     {
-      "TestScene:story:": [
+      "Test:withScene:do:": [
         "print several",
         [
           {
@@ -103,15 +103,7 @@
               }
             ]
           }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestRule:does:": [
-        "print several",
+        ],
         [
           {
             "Say:": {

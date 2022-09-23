@@ -35,7 +35,7 @@
       "--": ""
     },
     {
-      "TestScene:story:": [
+      "Test:withScene:do:": [
         "articles",
         [
           {
@@ -69,15 +69,7 @@
               }
             ]
           }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestRule:does:": [
-        "articles",
+        ],
         [
           {
             "Say:": {

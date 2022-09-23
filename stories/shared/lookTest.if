@@ -1,15 +1,9 @@
 {
   "Tapestry:": [
     {
-      "TestScene:requires:story:": [
-        "baseVis",
+      "Test:dependsOn:do:": [
+        "base vis",
         "Kitchenette",
-        null
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "baseVis",
         [
           {
             "Comment:": "Say the list of visible objects from one of several vantage points."
@@ -161,15 +155,9 @@
       "--": ""
     },
     {
-      "TestScene:requires:story:": [
-        "lookObjectDescription",
-        "Kitchenette",
-        null
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "lookObjectDescription",
+      "Test:dependsOn:do:": [
+        "look object description",
+        "kitchenette",
         [
           {
             "PrintObjectDescription obj:locale:": [
@@ -217,15 +205,9 @@
       "--": ""
     },
     {
-      "TestScene:requires:story:": [
+      "Test:dependsOn:do:": [
         "printing vantages",
         "Kitchenette",
-        null
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "printing vantages",
         [
           {
             "PrintVantage where:inDarkness:": [
@@ -310,15 +292,9 @@
       "--": ""
     },
     {
-      "TestScene:requires:story:": [
+      "Test:dependsOn:do:": [
         "printing inline objects",
         "Kitchenette",
-        null
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "printing inline objects",
         [
           {
             "PrintInlineObjects objs:": {

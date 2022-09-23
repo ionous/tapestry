@@ -2,10 +2,11 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/imp"
 	"github.com/ionous/errutil"
 )
 
-func (op *KindOfRelation) ImportPhrase(k *Importer) (err error) {
+func (op *KindOfRelation) PostImport(k *imp.Importer) (err error) {
 	if card, e := op.Cardinality.GetCardinality(); e != nil {
 		err = e
 	} else {

@@ -1,37 +1,7 @@
 {
   "Tapestry:": [
     {
-      "TestRule:does:": [
-        "countOf",
-        [
-          {
-            "Repeating across:as:does:": [
-              {
-                "FromNums:": {
-                  "Range:": 6
-                }
-              },
-              {
-                "AsNum:": "i"
-              },
-              [
-                {
-                  "MagicSymbols": true
-                }
-              ]
-            ]
-          },
-          {
-            "Expect lines:": "o*-*x*x"
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:story:": [
+      "Test:withScene:do:": [
         "countOf",
         [
           {
@@ -106,6 +76,28 @@
                 }
               ]
             ]
+          }
+        ],
+        [
+          {
+            "Repeating across:as:does:": [
+              {
+                "FromNums:": {
+                  "Range:": 6
+                }
+              },
+              {
+                "AsNum:": "i"
+              },
+              [
+                {
+                  "MagicSymbols": true
+                }
+              ]
+            ]
+          },
+          {
+            "Expect lines:": "o*-*x*x"
           }
         ]
       ]

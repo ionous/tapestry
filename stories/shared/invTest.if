@@ -1,15 +1,9 @@
 {
   "Tapestry:": [
     {
-      "TestScene:requires:story:": [
+      "Test:dependsOn:do:": [
         "status printing test",
         "thingaverse",
-        null
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "status printing test",
         [
           {
             "Say:": {
@@ -82,15 +76,9 @@
       "--": ""
     },
     {
-      "TestScene:requires:story:": [
+      "Test:dependsOn:do:": [
         "default inventory",
         "Kitchenette",
-        null
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "default inventory",
         [
           {
             "PrintInventory actor:": {

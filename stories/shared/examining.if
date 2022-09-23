@@ -343,15 +343,9 @@
       "--": ""
     },
     {
-      "TestScene:requires:story:": [
+      "Test:dependsOn:do:": [
         "examining test",
         "Kitchenette",
-        null
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "examining test",
         [
           {
             "PrintDescription obj:": {

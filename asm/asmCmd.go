@@ -11,6 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"git.sr.ht/~ionous/tapestry/jsn/din"
@@ -29,7 +30,7 @@ const (
 func AssembleFolder(srcPath, outFile string) (err error) {
 	var cat eph.Catalog // fix: capture "Dilemmas" and LogWarning?
 	var writeErr error  // fix: this seems less than ideal; maybe writer should return err.
-	k := story.NewImporter(collectEphemera(&cat, &writeErr), storyMarshaller)
+	k := imp.NewImporter(collectEphemera(&cat, &writeErr), storyMarshaller)
 	if e := importStoryFiles(k, srcPath); e != nil {
 		err = e
 	} else if writeErr != nil {
@@ -65,7 +66,7 @@ func storyMarshaller(m jsn.Marshalee) (string, error) {
 	return cout.Marshal(m, story.CompactEncoder)
 }
 
-func collectEphemera(cat *eph.Catalog, out *error) story.WriterFun {
+func collectEphemera(cat *eph.Catalog, out *error) imp.WriterFun {
 	// fix: needs to be more clever eventually...
 	if e := cat.AddEphemera(
 		"asm",
@@ -91,7 +92,7 @@ func collectEphemera(cat *eph.Catalog, out *error) story.WriterFun {
 }
 
 // read a comma-separated list of files and directories
-func importStoryFiles(k *story.Importer, srcPath string) (err error) {
+func importStoryFiles(k *imp.Importer, srcPath string) (err error) {
 	if e := files.ReadPaths(srcPath,
 		[]string{CompactExt, DetailedExt}, func(p string) error {
 			return readOne(k, p)
@@ -103,13 +104,13 @@ func importStoryFiles(k *story.Importer, srcPath string) (err error) {
 	return
 }
 
-func readOne(k *story.Importer, path string) (err error) {
+func readOne(k *imp.Importer, path string) (err error) {
 	log.Println("reading", path)
 	if b, e := files.ReadFile(path); e != nil {
 		err = e
 	} else if script, e := decodeStory(path, b); e != nil {
 		err = errutil.New("couldn't decode", path, "b/c", e)
-	} else if e := k.ImportStory(path, script); e != nil {
+	} else if e := ImportStory(k, path, script); e != nil {
 		err = errutil.New("couldn't import", path, "b/c", e)
 	}
 	return

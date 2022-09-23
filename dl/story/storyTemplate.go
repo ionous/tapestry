@@ -4,13 +4,14 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/express"
+	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/template"
 	"git.sr.ht/~ionous/tapestry/template/types"
 	"github.com/ionous/errutil"
 )
 
-func (op *RenderTemplate) ImportStub(k *Importer) (ret interface{}, err error) {
+func (op *RenderTemplate) PreImport(k *imp.Importer) (ret interface{}, err error) {
 	if xs, e := template.Parse(op.Template.Str); e != nil {
 		err = e
 	} else if got, e := express.Convert(xs); e != nil {
@@ -25,7 +26,7 @@ func (op *RenderTemplate) ImportStub(k *Importer) (ret interface{}, err error) {
 }
 
 // returns a string or a FromText assignment as a slice of bytes
-func ConvertText(k *Importer, str string) (ret string, err error) {
+func ConvertText(k *imp.Importer, str string) (ret string, err error) {
 	if xs, e := template.Parse(str); e != nil {
 		err = e
 	} else if str, ok := getSimpleString(xs); ok {

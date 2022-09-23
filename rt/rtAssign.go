@@ -7,7 +7,7 @@ import (
 
 //  Assignment - limits variable and parameter assignment to particular contexts.
 type Assignment interface {
-	// fix? used by assembly decodeProg and story importer importAgs
+	// fix? used by assembly decodeProg and imp.Importer importAgs
 	// to verify the affinity of local initializers and arguments.
 	Affinity() affine.Affinity
 	// write the results of evaluating this into that.

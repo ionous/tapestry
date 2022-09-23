@@ -7,13 +7,14 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"github.com/ionous/errutil"
 )
 
 type NamedNoun interface {
-	ImportNoun(*Importer) error
+	ImportNoun(*imp.Importer) error
 }
 
 type SingularNoun interface {
@@ -22,19 +23,19 @@ type SingularNoun interface {
 	UniformString() (string, error)
 }
 
-func CollectSubjectNouns(k *Importer, els []NamedNoun) error {
+func CollectSubjectNouns(k *imp.Importer, els []NamedNoun) error {
 	return k.Env().Recent.Nouns.CollectSubjects(func() error {
 		return ImportNamedNouns(k, els)
 	})
 }
 
-func CollectObjectNouns(k *Importer, els []NamedNoun) error {
+func CollectObjectNouns(k *imp.Importer, els []NamedNoun) error {
 	return k.Env().Recent.Nouns.CollectObjects(func() error {
 		return ImportNamedNouns(k, els)
 	})
 }
 
-func ImportNamedNouns(k *Importer, els []NamedNoun) (err error) {
+func ImportNamedNouns(k *imp.Importer, els []NamedNoun) (err error) {
 	for _, el := range els {
 		if e := el.ImportNoun(k); e != nil {
 			err = errutil.Append(err, e)
@@ -44,7 +45,7 @@ func ImportNamedNouns(k *Importer, els []NamedNoun) (err error) {
 }
 
 // declare a noun class that has several default fields
-func declareNounClass(k *Importer) {
+func declareNounClass(k *imp.Importer) {
 	if once := "noun"; k.Once(once) {
 		k.WriteOnce(&eph.EphKinds{Kinds: "objects", From: kindsOf.Kind.String()})
 		// common or proper nouns ( rabbit, vs. Roger )
@@ -57,7 +58,7 @@ func declareNounClass(k *Importer) {
 // ex. "two triangles" -> triangle is a kind of thing
 // fix? consider a specific counted noun phrase; the noun phrase needs more work.
 // also, we probably want noun stacks not individually duplicated names
-func (op *CountedNouns) ImportNoun(k *Importer) (err error) {
+func (op *CountedNouns) ImportNoun(k *imp.Importer) (err error) {
 	if once := "printed_name"; k.Once(once) {
 		k.WriteOnce(&eph.EphKinds{Kinds: "objects", Contain: []eph.EphParams{{Name: "printed_name", Affinity: eph.Affinity{eph.Affinity_Text}}}})
 	}
@@ -71,7 +72,7 @@ func (op *CountedNouns) ImportNoun(k *Importer) (err error) {
 		kindOrKinds := op.Kinds.String()
 		names := make([]string, cnt)
 		for i := 0; i < cnt; i++ {
-			noun := k.newCounter(kindOrKinds, nil)
+			noun := k.NewCounter(kindOrKinds, nil)
 			k.Env().Recent.Nouns.Add(noun) // for relations, etc.
 			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: "counted", Value: B(true)})
 			names[i] = noun
@@ -126,7 +127,7 @@ func (op *CommonNoun) UniformString() (string, error) {
 	return op.Noun.UniformString()
 }
 
-func (op *CommonNoun) ImportNoun(k *Importer) (err error) {
+func (op *CommonNoun) ImportNoun(k *imp.Importer) (err error) {
 	declareNounClass(k)
 	detStr, detFound := composer.FindChoice(&op.Determiner, op.Determiner.Str)
 	// setup the indefinite article
@@ -150,7 +151,7 @@ func (op *NounNamed) UniformString() (string, error) {
 	return op.Name.UniformString()
 }
 
-func (op *NounNamed) ImportNoun(k *Importer) (err error) {
+func (op *NounNamed) ImportNoun(k *imp.Importer) (err error) {
 	declareNounClass(k)
 	op.addNoun(k, "our")
 	return
@@ -169,7 +170,7 @@ func (op *NounName) UniformString() (ret string, err error) {
 	return
 }
 
-func (op *NounNamed) addNoun(k *Importer, detStr string) {
+func (op *NounNamed) addNoun(k *imp.Importer, detStr string) {
 	// strip extraneous spaces that exist for obscure mainline reasons;
 	// testing ToUpper against space ( below ) for capitals was making nouns starting with spaces proper named.
 	noun := op.NounName()
@@ -185,7 +186,7 @@ func (op *NounNamed) addNoun(k *Importer, detStr string) {
 }
 
 // ex. "[the box] (is a) (closed) (container) ((on) (the beach))"
-func (op *KindOfNoun) importNounPhrase(k *Importer) (err error) {
+func (op *KindOfNoun) importNounPhrase(k *imp.Importer) (err error) {
 	// we collected the nouns and delayed processing them till now.
 	kind := op.Kind.String()
 	for _, noun := range k.Env().Recent.Nouns.Subjects {
@@ -196,7 +197,7 @@ func (op *KindOfNoun) importNounPhrase(k *Importer) (err error) {
 
 // ex. [the cat and the hat] (are) (in) (the book)
 // ex. [Hector and Maria] (are) (suspicious of) (Santa and Santana).
-func (op *NounRelation) importNounPhrase(k *Importer) (err error) {
+func (op *NounRelation) importNounPhrase(k *imp.Importer) (err error) {
 	if e := CollectObjectNouns(k, op.OtherNouns); e != nil {
 		err = e
 	} else {
@@ -211,7 +212,7 @@ func (op *NounRelation) importNounPhrase(k *Importer) (err error) {
 }
 
 //
-func (op *NounTraits) importNounPhrase(k *Importer) (err error) {
+func (op *NounTraits) importNounPhrase(k *imp.Importer) (err error) {
 	for _, trait := range op.Trait {
 		for _, noun := range k.Env().Recent.Nouns.Subjects {
 			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: trait.String(), Value: B(true)})

@@ -1,69 +1,7 @@
 {
   "Tapestry:": [
     {
-      "TestRule:does:": [
-        "searching test",
-        [
-          {
-            "Searching agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "knife"
-              }
-            ]
-          },
-          {
-            "Expect lines:": "You find nothing of interest."
-          },
-          {
-            "Searching agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "machine"
-              }
-            ]
-          },
-          {
-            "Expect lines:": "You can't see inside, it is closed."
-          },
-          {
-            "Searching agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "counter"
-              }
-            ]
-          },
-          {
-            "Expect lines:": "On the counter are the blender, the espresso machine, and the mortar."
-          },
-          {
-            "Searching agent:noun:": [
-              {
-                "FromTxt:": "player"
-              },
-              {
-                "FromTxt:": "purse"
-              }
-            ]
-          },
-          {
-            "Expect lines:": "In the purse is the coin."
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:requires:story:": [
+      "Test:dependsOn:withScene:do:": [
         "searching test",
         "Kitchenette",
         [
@@ -124,6 +62,60 @@
                 }
               ]
             ]
+          }
+        ],
+        [
+          {
+            "Searching agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "knife"
+              }
+            ]
+          },
+          {
+            "Expect lines:": "You find nothing of interest."
+          },
+          {
+            "Searching agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "machine"
+              }
+            ]
+          },
+          {
+            "Expect lines:": "You can't see inside, it is closed."
+          },
+          {
+            "Searching agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "counter"
+              }
+            ]
+          },
+          {
+            "Expect lines:": "On the counter are the blender, the espresso machine, and the mortar."
+          },
+          {
+            "Searching agent:noun:": [
+              {
+                "FromTxt:": "player"
+              },
+              {
+                "FromTxt:": "purse"
+              }
+            ]
+          },
+          {
+            "Expect lines:": "In the purse is the coin."
           }
         ]
       ]

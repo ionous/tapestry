@@ -1,8 +1,85 @@
 {
   "Tapestry:": [
     {
-      "TestRule:does:": [
+      "Test:dependsOn:withScene:do:": [
         "storing test",
+        "Kitchenette",
+        [
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "coffee"
+                    }
+                  ]
+                },
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "coin"
+                    }
+                  ]
+                },
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "clutch"
+                    }
+                  ]
+                },
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "knife"
+                    }
+                  ]
+                },
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "flower"
+                    }
+                  ]
+                }
+              ],
+              "are",
+              [
+                {
+                  "Noun:": "self"
+                }
+              ]
+            ]
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:": "Mildred"
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "kitchen"
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ],
         [
           {
             "Say:": {
@@ -274,88 +351,6 @@
               "  - Fail to store something to somewhere unreachable:",
               "  You haven't got that!purse parent: clutch.",
               ""
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "TestScene:requires:story:": [
-        "storing test",
-        "Kitchenette",
-        [
-          {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
-              "whereabouts",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "coffee"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "coin"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "clutch"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "knife"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "flower"
-                    }
-                  ]
-                }
-              ],
-              "are",
-              [
-                {
-                  "Noun:": "self"
-                }
-              ]
-            ]
-          },
-          {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
-              "whereabouts",
-              [
-                {
-                  "Noun:": "Mildred"
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "kitchen"
-                    }
-                  ]
-                }
-              ]
             ]
           }
         ]

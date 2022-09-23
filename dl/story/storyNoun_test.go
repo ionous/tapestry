@@ -6,6 +6,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"github.com/kr/pretty"
 )
@@ -14,7 +15,7 @@ import (
 // note: we cant really test counted nouns without running the assembler
 func TestImportNamedNouns(t *testing.T) {
 	var els []eph.Ephemera
-	k := story.NewImporter(collectEphemera(&els), storyMarshaller)
+	k := imp.NewImporter(collectEphemera(&els), storyMarshaller)
 	//
 	for i, nouns := 0, []string{
 		"our", "Trevor",

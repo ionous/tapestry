@@ -1,8 +1,88 @@
 {
   "Tapestry:": [
     {
-      "TestRule:does:": [
+      "Test:dependsOn:withScene:do:": [
         "retrieving test",
+        "Kitchenette",
+        [
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:": "self"
+                },
+                {
+                  "Noun:": "Mildred"
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "kitchen"
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "coffee"
+                    }
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "machine"
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "--": ""
+          },
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "empire apple"
+                    }
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:": "Mildred"
+                }
+              ]
+            ]
+          }
+        ],
         [
           {
             "Say:": {
@@ -152,94 +232,6 @@
               "  But it isn't there now.",
               "  - Fail to steal:",
               "  That seems to belong to Mildred."
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:requires:story:": [
-        "retrieving test",
-        "Kitchenette",
-        [
-          {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
-              "whereabouts",
-              [
-                {
-                  "Noun:": "self"
-                },
-                {
-                  "Noun:": "Mildred"
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "kitchen"
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "--": ""
-          },
-          {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
-              "whereabouts",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "coffee"
-                    }
-                  ]
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "machine"
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "--": ""
-          },
-          {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
-              "whereabouts",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "empire apple"
-                    }
-                  ]
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:": "Mildred"
-                }
-              ]
             ]
           }
         ]

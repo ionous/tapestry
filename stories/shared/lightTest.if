@@ -1,18 +1,9 @@
 {
   "Tapestry:": [
     {
-      "TestScene:requires:story:": [
+      "Test:dependsOn:do:": [
         "vision test",
         "Kitchenette",
-        null
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestRule:does:": [
-        "vision test",
         [
           {
             "Put:from:at:": [

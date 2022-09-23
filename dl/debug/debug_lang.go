@@ -958,6 +958,218 @@ func LoggingLevel_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]LoggingLevel) 
 	return
 }
 
+// Test Create a scene
+type Test struct {
+	TestName  TestName               `if:"label=_"`
+	DependsOn TestName               `if:"label=depends_on,optional"`
+	WithScene []story.StoryStatement `if:"label=with_scene,optional"`
+	Do        []rt.Execute           `if:"label=do"`
+	Markup    map[string]any
+}
+
+// User implemented slots:
+var _ story.StoryStatement = (*Test)(nil)
+
+func (*Test) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Test_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const Test_Type = "test"
+const Test_Field_TestName = "$TEST_NAME"
+const Test_Field_DependsOn = "$DEPENDS_ON"
+const Test_Field_WithScene = "$WITH_SCENE"
+const Test_Field_Do = "$DO"
+
+func (op *Test) Marshal(m jsn.Marshaler) error {
+	return Test_Marshal(m, op)
+}
+
+type Test_Slice []Test
+
+func (op *Test_Slice) GetType() string { return Test_Type }
+
+func (op *Test_Slice) Marshal(m jsn.Marshaler) error {
+	return Test_Repeats_Marshal(m, (*[]Test)(op))
+}
+
+func (op *Test_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Test_Slice) SetSize(cnt int) {
+	var els []Test
+	if cnt >= 0 {
+		els = make(Test_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Test_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Test_Marshal(m, &(*op)[i])
+}
+
+func Test_Repeats_Marshal(m jsn.Marshaler, vals *[]Test) error {
+	return jsn.RepeatBlock(m, (*Test_Slice)(vals))
+}
+
+func Test_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Test) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = Test_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type Test_Flow struct{ ptr *Test }
+
+func (n Test_Flow) GetType() string      { return Test_Type }
+func (n Test_Flow) GetLede() string      { return Test_Type }
+func (n Test_Flow) GetFlow() interface{} { return n.ptr }
+func (n Test_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Test); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func Test_Optional_Marshal(m jsn.Marshaler, pv **Test) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = Test_Marshal(m, *pv)
+	} else if !enc {
+		var v Test
+		if err = Test_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func Test_Marshal(m jsn.Marshaler, val *Test) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(Test_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", Test_Field_TestName)
+		if e0 == nil {
+			e0 = TestName_Marshal(m, &val.TestName)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", Test_Field_TestName))
+		}
+		e1 := m.MarshalKey("depends_on", Test_Field_DependsOn)
+		if e1 == nil {
+			e1 = TestName_Optional_Marshal(m, &val.DependsOn)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", Test_Field_DependsOn))
+		}
+		e2 := m.MarshalKey("with_scene", Test_Field_WithScene)
+		if e2 == nil {
+			e2 = story.StoryStatement_Optional_Repeats_Marshal(m, &val.WithScene)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", Test_Field_WithScene))
+		}
+		e3 := m.MarshalKey("do", Test_Field_Do)
+		if e3 == nil {
+			e3 = rt.Execute_Repeats_Marshal(m, &val.Do)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", Test_Field_Do))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// TestName requires a predefined or user-specified string.
+type TestName struct {
+	Str string
+}
+
+func (op *TestName) String() string {
+	return op.Str
+}
+
+const TestName_CurrentTest = "$CURRENT_TEST"
+
+func (*TestName) Compose() composer.Spec {
+	return composer.Spec{
+		Name:        TestName_Type,
+		Uses:        composer.Type_Str,
+		OpenStrings: true,
+		Choices: []string{
+			TestName_CurrentTest,
+		},
+		Strings: []string{
+			"current_test",
+		},
+	}
+}
+
+const TestName_Type = "test_name"
+
+func (op *TestName) Marshal(m jsn.Marshaler) error {
+	return TestName_Marshal(m, op)
+}
+
+func TestName_Optional_Marshal(m jsn.Marshaler, val *TestName) (err error) {
+	var zero TestName
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = TestName_Marshal(m, val)
+	}
+	return
+}
+
+func TestName_Marshal(m jsn.Marshaler, val *TestName) (err error) {
+	return m.MarshalValue(TestName_Type, jsn.MakeEnum(val, &val.Str))
+}
+
+type TestName_Slice []TestName
+
+func (op *TestName_Slice) GetType() string { return TestName_Type }
+
+func (op *TestName_Slice) Marshal(m jsn.Marshaler) error {
+	return TestName_Repeats_Marshal(m, (*[]TestName)(op))
+}
+
+func (op *TestName_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *TestName_Slice) SetSize(cnt int) {
+	var els []TestName
+	if cnt >= 0 {
+		els = make(TestName_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *TestName_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return TestName_Marshal(m, &(*op)[i])
+}
+
+func TestName_Repeats_Marshal(m jsn.Marshaler, vals *[]TestName) error {
+	return jsn.RepeatBlock(m, (*TestName_Slice)(vals))
+}
+
+func TestName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestName) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = TestName_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
 var Slats = []composer.Composer{
 	(*Comment)(nil),
 	(*DebugLog)(nil),
@@ -968,10 +1180,13 @@ var Slats = []composer.Composer{
 	(*ExpectString)(nil),
 	(*ExpectText)(nil),
 	(*LoggingLevel)(nil),
+	(*Test)(nil),
+	(*TestName)(nil),
 }
 
 var Signatures = map[uint64]interface{}{
 	15823738440204397330: (*LoggingLevel)(nil), /* LoggingLevel: */
+	11670818074991137908: (*TestName)(nil),     /* TestName: */
 	3991849378064754806:  (*Comment)(nil),      /* execute=Comment: */
 	16586092333187989882: (*Comment)(nil),      /* story_statement=Comment: */
 	14645287343365598707: (*DoNothing)(nil),    /* execute=DoNothing */
@@ -984,4 +1199,8 @@ var Signatures = map[uint64]interface{}{
 	8339796867902453679:  (*ExpectNum)(nil),    /* execute=Expect:is:num:within: */
 	17230987244745403983: (*DebugLog)(nil),     /* execute=Log: */
 	9146550673186999987:  (*DebugLog)(nil),     /* execute=Log:as: */
+	9865864948070946448:  (*Test)(nil),         /* story_statement=Test:dependsOn:do: */
+	12698818979331053506: (*Test)(nil),         /* story_statement=Test:dependsOn:withScene:do: */
+	9283516926116088792:  (*Test)(nil),         /* story_statement=Test:do: */
+	500333266696321514:   (*Test)(nil),         /* story_statement=Test:withScene:do: */
 }

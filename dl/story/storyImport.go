@@ -5,19 +5,20 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
+	"git.sr.ht/~ionous/tapestry/imp"
 )
 
 // top level imports
 type StoryStatement interface {
-	ImportPhrase(*Importer) error
+	PostImport(*imp.Importer) error
 }
 
 type nounImporter interface {
-	importNouns(*Importer) error
+	importNouns(*imp.Importer) error
 }
 
 // (the) colors are red, blue, or green.
-func (op *AspectTraits) ImportPhrase(k *Importer) (err error) {
+func (op *AspectTraits) PostImport(k *imp.Importer) (err error) {
 	var ts []string
 	for _, t := range op.TraitPhrase.Trait {
 		ts = append(ts, t.String())
@@ -27,7 +28,7 @@ func (op *AspectTraits) ImportPhrase(k *Importer) (err error) {
 }
 
 // horses are usually fast.
-func (op *Certainties) ImportPhrase(k *Importer) (err error) {
+func (op *Certainties) PostImport(k *imp.Importer) (err error) {
 	certaintiesNotImplemented.PrintOnce()
 	// if certainty, e := op.Certainty.ImportString(k); e != nil {
 	// 	err = e
@@ -43,7 +44,7 @@ func (op *Certainties) ImportPhrase(k *Importer) (err error) {
 
 var certaintiesNotImplemented eph.PrintOnce = "certainties not implemented"
 
-func (op *GrammarDecl) ImportPhrase(k *Importer) (err error) {
+func (op *GrammarDecl) PostImport(k *imp.Importer) (err error) {
 	switch el := op.Grammar.(type) {
 	case *grammar.Alias:
 		k.WriteEphemera(&eph.EphAliases{ShortName: el.AsNoun, Aliases: el.Names})
@@ -55,10 +56,10 @@ func (op *GrammarDecl) ImportPhrase(k *Importer) (err error) {
 }
 
 type NounContinuation interface {
-	importNounPhrase(*Importer) error
+	importNounPhrase(*imp.Importer) error
 }
 
-func (op *NounKindStatement) ImportPhrase(k *Importer) error {
+func (op *NounKindStatement) PostImport(k *imp.Importer) error {
 	var yuck []NamedNoun // cast the elements to their less specific type
 	for _, n := range op.Nouns {
 		yuck = append(yuck, n)
@@ -66,15 +67,15 @@ func (op *NounKindStatement) ImportPhrase(k *Importer) error {
 	return importNounPhrase(k, yuck, &op.KindOfNoun, op.More)
 }
 
-func (op *NounTraitStatement) ImportPhrase(k *Importer) error {
+func (op *NounTraitStatement) PostImport(k *imp.Importer) error {
 	return importNounPhrase(k, op.Nouns, &op.NounTraits, op.More)
 }
 
-func (op *NounRelationStatement) ImportPhrase(k *Importer) error {
+func (op *NounRelationStatement) PostImport(k *imp.Importer) error {
 	return importNounPhrase(k, op.Nouns, &op.NounRelation, op.More)
 }
 
-func importNounPhrase(k *Importer, nouns []NamedNoun, first NounContinuation, rest []NounContinuation) (err error) {
+func importNounPhrase(k *imp.Importer, nouns []NamedNoun, first NounContinuation, rest []NounContinuation) (err error) {
 	if e := CollectSubjectNouns(k, nouns); e != nil {
 		err = e
 	} else if e := first.importNounPhrase(k); e != nil {
@@ -91,7 +92,7 @@ func importNounPhrase(k *Importer, nouns []NamedNoun, first NounContinuation, re
 }
 
 // ex. The description of the nets is xxx
-func (op *NounAssignment) ImportPhrase(k *Importer) (err error) {
+func (op *NounAssignment) PostImport(k *imp.Importer) (err error) {
 	if text, e := ConvertText(k, op.Lines.String()); e != nil {
 		err = e
 	} else if e := CollectSubjectNouns(k, op.Nouns); e != nil {
@@ -106,7 +107,7 @@ func (op *NounAssignment) ImportPhrase(k *Importer) (err error) {
 }
 
 // ex. On the beach are shells.
-func (op *RelativeToNoun) ImportPhrase(k *Importer) (err error) {
+func (op *RelativeToNoun) PostImport(k *imp.Importer) (err error) {
 	if e := CollectObjectNouns(k, op.Nouns); e != nil {
 		err = e
 	} else if e := CollectSubjectNouns(k, op.OtherNouns); e != nil {

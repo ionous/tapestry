@@ -15,11 +15,11 @@ func UserComment(s string) map[string]any {
 var FactorialStory = &story.Story{
 	Paragraph: []story.Paragraph{{
 		StoryStatement: []story.StoryStatement{
-			&story.TestRule{
-				TestName: story.TestName{
+			&debug.Test{
+				TestName: debug.TestName{
 					Str: "factorial",
 				},
-				Does: FactorialCheck,
+				Do: FactorialCheck,
 			},
 			&story.PatternDecl{
 				Name: factorialName,

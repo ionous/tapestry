@@ -8,7 +8,11 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
-func importCall(op *core.CallPattern) *eph.EphRefs {
+func Refs(refs ...eph.Ephemera) *eph.EphRefs {
+	return &eph.EphRefs{Refs: refs}
+}
+
+func ImportCall(op *core.CallPattern) *eph.EphRefs {
 	return refArgs(op.Pattern.String(), kindsOf.Pattern, op.Arguments)
 }
 

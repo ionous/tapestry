@@ -1,8 +1,7 @@
 {
   "Tapestry:": [
     {
-      "--": "A common set of objects for various tests.",
-      "TestScene:requires:story:": [
+      "Test:dependsOn:withScene:do:": [
         "Kitchenette",
         "Thingaverse",
         [
@@ -727,6 +726,11 @@
               ],
               "Steam leaks from the top of a recently used espresso machine."
             ]
+          }
+        ],
+        [
+          {
+            "DoNothing": true
           }
         ]
       ]

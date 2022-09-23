@@ -1,15 +1,32 @@
 {
   "Tapestry:": [
     {
-      "TestScene:requires:story:": [
+      "Test:dependsOn:withScene:do:": [
         "dropping test",
         "Kitchenette",
-        null
-      ]
-    },
-    {
-      "TestRule:does:": [
-        "dropping test",
+        [
+          {
+            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+              "whereabouts",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "knife"
+                    }
+                  ]
+                }
+              ],
+              "is",
+              [
+                {
+                  "Noun:": "self"
+                }
+              ]
+            ]
+          }
+        ],
         [
           {
             "Say:": {
@@ -52,37 +69,6 @@
           },
           {
             "Expect lines:": "You haven't got that!"
-          }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestScene:story:": [
-        "dropping test",
-        [
-          {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
-              "whereabouts",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "knife"
-                    }
-                  ]
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:": "self"
-                }
-              ]
-            ]
           }
         ]
       ]

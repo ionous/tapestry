@@ -81,7 +81,7 @@
       "--": ""
     },
     {
-      "TestScene:story:": [
+      "Test:withScene:do:": [
         "plural name printing",
         [
           {
@@ -136,15 +136,7 @@
               "broken flower pots"
             ]
           }
-        ]
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "TestRule:does:": [
-        "current_test",
+        ],
         [
           {
             "Say:": {

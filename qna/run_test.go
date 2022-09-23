@@ -13,8 +13,8 @@ package qna
 // 	if e := tables.CreateAll(db); e != nil {
 // 		t.Fatal("couldn't create tables", e)
 // 	} else {
-// 		k := story.NewImporter(dbwriter(db), storyMarshaller)
-// 		if e := k.ImportStory(t.Name(), debug.FactorialStory); e != nil {
+// 		k := imp.NewImporter(dbwriter(db), storyMarshaller)
+// 		if e := asm.ImportStory(k, t.Name(), debug.FactorialStory); e != nil {
 // 			t.Fatal("couldn't import story", e)
 // 		} else if e := asm.AssembleStory(db, "kinds", ds.Add); e != nil {
 // 			t.Fatal("couldnt assemble story", e, ds.Err())

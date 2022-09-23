@@ -5,9 +5,11 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/asm"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/imp"
 
 	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -17,7 +19,7 @@ import (
 // test that importing cycling text transforms to the proper runtime command
 func TestImportSequence(t *testing.T) {
 	var els []eph.Ephemera
-	k := story.NewImporter(collectEphemera(&els), storyMarshaller)
+	k := imp.NewImporter(collectEphemera(&els), storyMarshaller)
 
 	var cmd story.CycleText
 	if b, e := json.Marshal(_cycle_text); e != nil {
@@ -25,8 +27,8 @@ func TestImportSequence(t *testing.T) {
 	} else if e := din.Decode(&cmd, tapestry.Registry(), b); e != nil {
 		t.Fatal(e)
 	} else {
-		p := core.FromText{Val: &cmd} // wrap the cycle text in a slot since that's the level ImportStub operates on
-		if k.ImportStory(t.Name(), &p); e != nil {
+		p := core.FromText{Val: &cmd} // wrap the cycle text in a slot since that's the level PreImport operates on
+		if asm.ImportStory(k, t.Name(), &p); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(p.Val, &_import_target); len(diff) > 0 {
 			t.Fatal(pretty.Print("want:", _import_target, "have:", p.Val))

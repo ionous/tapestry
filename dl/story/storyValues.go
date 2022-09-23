@@ -3,6 +3,7 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/imp"
 	"github.com/ionous/errutil"
 )
 
@@ -12,7 +13,7 @@ func F(n float64) *literal.NumValue     { return &literal.NumValue{Value: n} }
 func T(s string) *literal.TextValue     { return &literal.TextValue{Value: s} }
 func Tx(s, t string) *literal.TextValue { return &literal.TextValue{Value: s, Kind: t} }
 
-func (op *Certainty) ImportString(k *Importer) (ret string, err error) {
+func (op *Certainty) ImportString(k *imp.Importer) (ret string, err error) {
 	if str, ok := composer.FindChoice(op, op.Str); !ok {
 		err = ImportError(op, errutil.Fmt("%w %q", InvalidValue, op.Str))
 	} else {

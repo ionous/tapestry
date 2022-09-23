@@ -2,24 +2,25 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/imp"
 )
 
 // ex. colors are a kind of value
-func (op *KindsOfAspect) ImportPhrase(k *Importer) (err error) {
+func (op *KindsOfAspect) PostImport(k *imp.Importer) (err error) {
 	// fix: is this even useful? see EphAspects.Assemble which has to work around the empty traits list.
 	k.WriteEphemera(&eph.EphAspects{Aspects: op.Aspect.Str})
 	return
 }
 
 // ex. "cats are a kind of animal"
-func (op *KindsOfKind) ImportPhrase(k *Importer) (err error) {
+func (op *KindsOfKind) PostImport(k *imp.Importer) (err error) {
 	k.WriteEphemera(&eph.EphKinds{Kinds: op.PluralKinds.Str, From: op.SingularKind.Str})
 	return
 }
 
 // ex. cats have some text called breed.
 // ex. horses have an aspect called speed.
-func (op *KindsHaveProperties) ImportPhrase(k *Importer) (err error) {
+func (op *KindsHaveProperties) PostImport(k *imp.Importer) (err error) {
 	if len(op.Props) > 0 {
 		var ps []eph.EphParams
 		for _, el := range op.Props {
