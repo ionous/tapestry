@@ -1,5 +1,5 @@
 /**
- * tables describing the the world and its rules.
+ * tables describing the world and its rules.
  */
 
 /* initialization for fields of kinds.

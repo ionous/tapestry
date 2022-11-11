@@ -32,6 +32,17 @@ func CreateRun(db *sql.DB) (err error) {
 //go:embed run.sql
 var runSql string
 
+// CreateRun creates the tables listed in idl.sql
+func CreateIdl(db *sql.DB) (err error) {
+	if _, e := db.Exec(idlSql); e != nil {
+		err = errutil.New("Couldn't create idl tables", e)
+	}
+	return
+}
+
+//go:embed idl.sql
+var idlSql string
+
 // CreateAll tables listed in the various .sql files.
 func CreateAll(db *sql.DB) (err error) {
 	if e := CreateModel(db); e != nil {
