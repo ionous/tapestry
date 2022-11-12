@@ -29,6 +29,9 @@ create table idl_term( op int not null, term text, label text, type int,
     private bool optional bool, repeats bool,
     primary key( op, term ) );
 
+/** markup from the serialized data; especially comments */
+create table idl_markup( op int not null, term text, markup text, value blob,
+    primary key( op, term, markup ) );
 
 
 

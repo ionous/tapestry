@@ -6,8 +6,8 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
-	"fmt"
 	"log"
 	"os"
 
@@ -15,55 +15,87 @@ import (
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cfg"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/help"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/idlcmd"
+	"github.com/ionous/errutil"
 )
 
 func main() {
-	flag.Usage = exitBadUsage
-	flag.Parse()
-	log.SetFlags(0) // https://pkg.go.dev/log#pkg-constants - by default it logs date and time.
-	args := flag.Args()
-	if len(args) < 1 {
-		exitBadUsage()
-	}
-
-	// TODO: env for tap home?
-
-	// this is a recurisve drill down into command lists expanded as a loop:
-	// it starts with the commands assembled from the sub-packages ( in init() below )
-	for topCmds := base.Go.Commands; ; {
-		var name string
-		name, args = args[0], args[1:]
-		if name == "help" {
-			// Accept 'go mod help' and 'go mod help foo' for 'go help mod' and 'go help mod foo'.
-			// ( ie. this cuts "help" out of the inputed commands )
-			help.Help(os.Stdout, append(cfg.CmdNames, args...))
-			return // st: why not base.Exit()? its not clear.
-
-		} else if cmd := findCommand(name, topCmds); cmd == nil {
-			exitUnknownCommand()
-
-		} else if len(cmd.Commands) == 0 {
-			// originally this would move to the next entry in the list of subcommands...
-			// but unless there were two commands with the same name, one runnable and one not:
-			// it would eventually wind up as not found; so shortcut the confusion here.
-			if !cmd.Runnable() {
-				exitUnknownCommand()
+	defer base.Exit()
+	cmdLine := flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+	if e := cmdLine.Parse(os.Args[1:]); e != nil {
+		help.PrintUsage(os.Stderr, base.Go)
+		base.SetExitStatus(2)
+	} else {
+		log.SetFlags(0) // https://pkg.go.dev/log#pkg-constants - by default it logs date and time.
+		if e := handleMain(cmdLine.Args()); e != nil {
+			if e == UnknownCommand {
+				var helpArg string
+				if last := len(cfg.CmdNames) - 1; last > 0 {
+					helpArg = " " + cfg.CmdNames[last]
+				}
+				// for reasons i don't understand this path in go doesn't print the status number
+				// yet, here it does...
+				log.Printf("%s %s: unknown command\nRun 'tap help%s' for usage.\n", base.Exe, cfg.CmdNames, helpArg)
+				base.SetExitStatus(2)
 			} else {
-				invokeAndExit(cmd, args)
+				if cause := e.Error(); len(cause) > 0 {
+					log.Println(cause)
+					base.SetExitStatus(2)
+				}
+				var u base.UsageError
+				if errors.As(e, &u) {
+					help.PrintUsage(os.Stderr, u.Cmd)
+				}
 			}
-		} else if len(args) == 0 {
-			// we have sub commands, but no args to process select one of those commands:
-			help.PrintUsage(os.Stderr, cmd)
-			base.ExitWithStatus(2)
-
-		} else {
-			// drill down into the commands:
-			topCmds = cmd.Commands
-			// remembering the path we took to get there:
-			cfg.CmdNames = append(cfg.CmdNames, name)
-			// NOTE: this is the only path that continues the outer for loop
 		}
 	}
+}
+
+func handleMain(args []string) (err error) {
+	if len(args) < 1 {
+		err = base.UsageError{Cmd: base.Go}
+	} else {
+		// TODO: env for tap home?
+
+		// this is a recurisve drill down into command lists expanded as a loop:
+		// it starts with the commands assembled from the sub-packages ( in init() below )
+		for topCmds := base.Go.Commands; ; {
+			var name string
+			name, args = args[0], args[1:]
+			if name == "help" {
+				// Accept 'go mod help' and 'go mod help foo' for 'go help mod' and 'go help mod foo'.
+				// ( ie. this cuts "help" out of the inputed commands )
+				help.Help(os.Stdout, append(cfg.CmdNames, args...))
+				break // note: asking for help is not an error
+
+			} else {
+				cfg.CmdNames = append(cfg.CmdNames, name)
+				if cmd := findCommand(name, topCmds); cmd == nil {
+					err = UnknownCommand
+					break
+
+				} else if len(cmd.Commands) == 0 {
+					// originally this would move to the next entry in the list of subcommands...
+					// but unless there were two commands with the same name, one runnable and one not:
+					// it would eventually wind up as not found; so shortcut the confusion here.
+					if !cmd.Runnable() {
+						err = UnknownCommand
+						break
+					} else {
+						err = invoke(cmd, args)
+						break
+					}
+				} else if len(args) == 0 {
+					err = base.UsageError{Cmd: cmd}
+					break
+
+				} else {
+					topCmds = cmd.Commands
+					// NOTE: this is the only path that continues the outer for loop
+				}
+			}
+		}
+	}
+	return
 }
 
 // returns the matching command if it needs to be expanded into a sub command
@@ -75,10 +107,10 @@ func findCommand(name string, cmds []*base.Command) (ret *base.Command) {
 			break
 		}
 	}
-	return //
+	return
 }
 
-func invokeAndExit(cmd *base.Command, args []string) {
+func invoke(cmd *base.Command, args []string) (err error) {
 	// 'go env' handles checking the build config
 	// if cmd != envcmd.CmdEnv {
 	// 	buildcfg.Check()
@@ -109,24 +141,11 @@ func invokeAndExit(cmd *base.Command, args []string) {
 	ctx := context.Background()
 	// ctx = maybeStartTrace(ctx)
 	// ctx, span := trace.StartSpan(ctx, fmt.Sprint("Running ", cmd.Name(), " command"))
-	cmd.Run(ctx, cmd, args)
+	return cmd.Run(ctx, cmd, args)
 	// span.Done()
-	base.Exit()
 }
 
-func exitUnknownCommand() {
-	var helpArg string
-	if last := len(cfg.CmdNames) - 1; last > 0 {
-		helpArg = " " + cfg.CmdNames[last]
-	}
-	fmt.Fprintf(os.Stderr, "tap %s: unknown command\nRun 'tap help%s' for usage.\n", cfg.CmdNames, helpArg)
-	base.ExitWithStatus(2)
-}
-
-func exitBadUsage() {
-	help.PrintUsage(os.Stderr, base.Go)
-	os.Exit(2) // st: why not base.Exit()? its all very confusing
-}
+const UnknownCommand errutil.Error = "unknown command"
 
 func init() {
 	// rewrites the main tap command to simplify exitBadUsage
