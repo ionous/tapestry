@@ -25,3 +25,4 @@ cmd/stem/stem
 www/dist
 *.zip
 *.go_
+cmd/tap/tap.db

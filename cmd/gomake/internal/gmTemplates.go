@@ -7,6 +7,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
+	"git.sr.ht/~ionous/tapestry/support/distill"
 )
 
 //go:embed templates/*
@@ -21,7 +22,7 @@ func newTemplates(ctx *Context) (*template.Template, error) {
 		"Lines": func(s string) []string {
 			return strings.Split(s, "\n")
 		},
-		"Pascal": pascal,
+		"Pascal": distill.Pascal,
 		//
 		// more specific things:
 		//
@@ -47,7 +48,7 @@ func newTemplates(ctx *Context) (*template.Template, error) {
 		"RepeatData": func(name string, unboxed bool) any {
 			// {{>repeat name=(Pascal name) mod="_Unboxed" el=(Unboxed name)}}
 			var mod, el string
-			pas := pascal(name)
+			pas := distill.Pascal(name)
 			if !unboxed {
 				el = pas
 			} else {

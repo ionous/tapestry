@@ -3,10 +3,10 @@ package story_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/asm"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/support/asm"
 	"git.sr.ht/~ionous/tapestry/test/debug"
 	"github.com/kr/pretty"
 )

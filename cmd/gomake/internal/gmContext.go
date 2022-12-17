@@ -3,6 +3,7 @@ package gomake
 import (
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
+	"git.sr.ht/~ionous/tapestry/support/distill"
 )
 
 // gobal information needed while running templates
@@ -56,7 +57,7 @@ func (ctx *Context) scopedName(typeName string, ignoreUnboxing bool) (ret string
 	if unboxType, ok := ctx.unbox[typeName]; ok && !ignoreUnboxing {
 		ret = unboxType
 	} else {
-		ret = ctx.scopeOf(typeName) + pascal(typeName)
+		ret = ctx.scopeOf(typeName) + distill.Pascal(typeName)
 	}
 	return
 }

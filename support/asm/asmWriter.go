@@ -9,19 +9,20 @@ import (
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 )
 
-type ModelWriterFun func(q string, args ...interface{}) error
-
 // return an object implementing the eph catalog writer
-// basically a helper for testing....
-func NewModelWriter(fn ModelWriterFun) eph.Writer {
+// remapping the simple table definitions from mdl.go ( package tables/mdl )
+// to ones that can look up and store ids.
+// ex. so a caller can Write(mdl.Check, raw args) and have the args remapped to ids.
+func NewModelWriter(fn writerFn) eph.Writer {
 	return modelWriter{fn}
 }
 
-type modelWriter struct{ fn ModelWriterFun }
+type writerFn func(q string, args ...interface{}) error
+type modelWriter struct{ fn writerFn }
 
 func (m modelWriter) Write(q string, args ...interface{}) (err error) {
 	var out string
-	if sel, ok := idswriter[q]; ok {
+	if sel, ok := idWriter[q]; ok {
 		out = sel
 	} else {
 		out = q
@@ -126,7 +127,9 @@ const unchanged = ""
 func arg(i int) string { return "?" + strconv.Itoa(i) }
 
 // rewrite some tables to use ids
-var idswriter = map[string]string{
+// the key of the table is the original, simplified insert statement
+// the value is a more complex statement usually involving selects
+var idWriter = map[string]string{
 	// turn domain name into an id
 	mdl.Check: insert("mdl_check",
 		"domain", idOf("domain", 1),

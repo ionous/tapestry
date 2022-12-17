@@ -1,30 +1,34 @@
-package gomake
+package distill
 
 import (
-	"io"
 	"sort"
 	"strings"
-	"text/template"
 
 	"git.sr.ht/~ionous/tapestry/dl/spec"
-	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
-	"github.com/ionous/errutil"
 )
 
-type RegistrationLists struct {
-	slots, slats []string
-	sigs         []Sig
-	types        rs.TypeSpecs
+// Accumulates types to build signatures and lists of slots and slats
+// Doesnt currently support multiple groups
+type Registry struct {
+	Types        []string
+	Slots, Slats []string
+	Sigs         []Sig
+	types        map[string]*spec.TypeSpec
 }
 
-func (reg *RegistrationLists) AddType(t *spec.TypeSpec) {
+func MakeRegistry(types map[string]*spec.TypeSpec) Registry {
+	return Registry{types: types}
+}
+
+func (reg *Registry) AddType(t *spec.TypeSpec) {
+	reg.Types = append(reg.Types, t.Name)
 	switch t.Spec.Choice {
 	case spec.UsesSpec_Group_Opt:
 		// skip
 	case spec.UsesSpec_Slot_Opt:
-		reg.slots = append(reg.slots, t.Name)
+		reg.Slots = append(reg.Slots, t.Name)
 	default:
-		reg.slats = append(reg.slats, t.Name)
+		reg.Slats = append(reg.Slats, t.Name)
 
 		// add signatures:
 		switch v := t.Spec.Value.(type) {
@@ -43,32 +47,32 @@ func (reg *RegistrationLists) AddType(t *spec.TypeSpec) {
 	}
 }
 
-func (reg *RegistrationLists) addPrim(t *spec.TypeSpec, lede string) {
+func (reg *Registry) addPrim(t *spec.TypeSpec, lede string) {
 	if len(lede) == 0 {
 		lede = t.Name
 	}
-	commandName := pascal(lede)
-	reg.sigs = append(reg.sigs, makeSig(t, commandName+":")...)
+	commandName := Pascal(lede)
+	reg.Sigs = append(reg.Sigs, makeSig(t, commandName+":")...)
 }
 
-func (reg *RegistrationLists) addSwap(t *spec.TypeSpec, swap *spec.SwapSpec) {
+func (reg *Registry) addSwap(t *spec.TypeSpec, swap *spec.SwapSpec) {
 	lede := swap.Name
 	if len(lede) == 0 {
 		lede = t.Name
 	}
-	commandName := pascal(t.Name)
+	commandName := Pascal(t.Name)
 	for _, pick := range swap.Between {
-		sel := camelize(pick.Name)
-		reg.sigs = append(reg.sigs, makeSig(t, commandName+" "+sel+":")...)
+		sel := Camelize(pick.Name)
+		reg.Sigs = append(reg.Sigs, makeSig(t, commandName+" "+sel+":")...)
 	}
 }
 
-func (reg *RegistrationLists) addFlow(t *spec.TypeSpec, flow *spec.FlowSpec) {
+func (reg *Registry) addFlow(t *spec.TypeSpec, flow *spec.FlowSpec) {
 	lede := flow.Name
 	if len(lede) == 0 {
 		lede = t.Name
 	}
-	sets := sigParts(flow, pascal(lede), reg.types)
+	sets := sigParts(flow, Pascal(lede), reg.types)
 	for _, set := range sets {
 		sig, params := set[0], set[1:] // index 0 is the command name itself
 		if len(params) > 0 {
@@ -82,34 +86,16 @@ func (reg *RegistrationLists) addFlow(t *spec.TypeSpec, flow *spec.FlowSpec) {
 				sig += strings.Join(rest, ":") + ":"
 			}
 		}
-		reg.sigs = append(reg.sigs, makeSig(t, sig)...)
+		reg.Sigs = append(reg.Sigs, makeSig(t, sig)...)
 	}
 }
 
-func (reg *RegistrationLists) Write(w io.Writer, tps *template.Template) (err error) {
-	// sort registration lists ( in place )
-	sort.Strings(reg.slots)
-	sort.Strings(reg.slats)
-	sort.Slice(reg.sigs, func(i, j int) bool {
-		a, b := reg.sigs[i], reg.sigs[j]
+func (reg *Registry) Sort() {
+	sort.Strings(reg.Types)
+	sort.Strings(reg.Slots)
+	sort.Strings(reg.Slats)
+	sort.Slice(reg.Sigs, func(i, j int) bool {
+		a, b := reg.Sigs[i], reg.Sigs[j]
 		return a.IsLessThan(b)
 	})
-
-	// write registration lists
-	if e := tps.ExecuteTemplate(w, "regList.tmpl", map[string]any{
-		"Name": "Slots",
-		"List": reg.slots,
-		"Type": "interface{}",
-	}); e != nil {
-		err = errutil.New(e, "couldnt process slots")
-	} else if e := tps.ExecuteTemplate(w, "regList.tmpl", map[string]any{
-		"Name": "Slats",
-		"List": reg.slats,
-		"Type": "composer.Composer",
-	}); e != nil {
-		err = errutil.New(e, "couldnt process slats")
-	} else if e := tps.ExecuteTemplate(w, "sigList.tmpl", reg.sigs); e != nil {
-		err = errutil.New(e, "couldnt process signatures")
-	}
-	return
 }

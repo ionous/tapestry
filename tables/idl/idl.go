@@ -7,7 +7,7 @@ import (
 // see sql table definitions and additional notes in "tapestry/tables/idl.sql"
 
 var Op = tables.Insert("idl_op", "name", "package", "uses", "closed")
-var Sig = tables.Insert("idl_sig", "op", "slot", "signature")
+var Sig = tables.Insert("idl_sig", "op", "slot", "hash", "signature")
 var Str = tables.Insert("idl_str", "op", "label", "value")
 var Enum = tables.Insert("idl_enum", "op", "label", "value")
 var Swap = tables.Insert("idl_swap", "op", "label", "type")

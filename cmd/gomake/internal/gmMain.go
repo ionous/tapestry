@@ -2,11 +2,14 @@ package gomake
 
 import (
 	"bytes"
+	"io"
 	"io/fs"
 	"sort"
+	"text/template"
 
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
+	"git.sr.ht/~ionous/tapestry/support/distill"
 	"github.com/ionous/errutil"
 )
 
@@ -43,8 +46,8 @@ func WriteSpecs(ifspecs fs.FS, onGroup func(string, []byte) error) (err error) {
 				}); e != nil {
 					err = errutil.Append(err, errutil.New(e, "in header", groupName))
 				} else {
-					// registration lists.
-					reg := RegistrationLists{types: types}
+					// registration lists per group
+					reg := distill.MakeRegistry(types.Types)
 
 					// all the types in this group:
 					for _, key := range typeNames {
@@ -58,7 +61,7 @@ func WriteSpecs(ifspecs fs.FS, onGroup func(string, []byte) error) (err error) {
 						}
 					}
 
-					if e := reg.Write(&out, tps); e != nil {
+					if e := writeLists(&out, reg, tps); e != nil {
 						err = errutil.Append(err, errutil.New(e, "couldnt write registrations"))
 					}
 
@@ -69,6 +72,29 @@ func WriteSpecs(ifspecs fs.FS, onGroup func(string, []byte) error) (err error) {
 				}
 			}
 		}
+	}
+	return
+}
+
+func writeLists(w io.Writer, reg distill.Registry, tps *template.Template) (err error) {
+	// sort registration lists ( in place )
+	reg.Sort()
+
+	// write registration lists
+	if e := tps.ExecuteTemplate(w, "regList.tmpl", map[string]any{
+		"Name": "Slots",
+		"List": reg.Slots,
+		"Type": "interface{}",
+	}); e != nil {
+		err = errutil.New(e, "couldnt process slots")
+	} else if e := tps.ExecuteTemplate(w, "regList.tmpl", map[string]any{
+		"Name": "Slats",
+		"List": reg.Slats,
+		"Type": "composer.Composer",
+	}); e != nil {
+		err = errutil.New(e, "couldnt process slats")
+	} else if e := tps.ExecuteTemplate(w, "sigList.tmpl", reg.Sigs); e != nil {
+		err = errutil.New(e, "couldnt process signatures")
 	}
 	return
 }

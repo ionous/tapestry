@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"runtime/pprof"
 
-	"git.sr.ht/~ionous/tapestry/asm"
+	"git.sr.ht/~ionous/tapestry/support/asm"
 	"github.com/ionous/errutil"
 )
 

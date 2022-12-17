@@ -1,4 +1,4 @@
-package gomake
+package distill
 
 import (
 	"strings"
@@ -6,7 +6,7 @@ import (
 )
 
 // underscore_name to PascalCase
-func pascal(s string) string {
+func Pascal(s string) string {
 	var out strings.Builder
 	for _, p := range strings.Split(strings.ToLower(s), "_") {
 		for i, q := range p {
@@ -19,7 +19,7 @@ func pascal(s string) string {
 }
 
 // underscore_name to camelCase
-func camelize(s string) string {
+func Camelize(s string) string {
 	var out strings.Builder
 	for _, p := range strings.Split(strings.ToLower(s), "_") {
 		for i, q := range p {
@@ -35,7 +35,7 @@ func camelize(s string) string {
 }
 
 // does the passed string list include the passed string?
-func includes(strs []string, str string) (ret bool) {
+func Includes(strs []string, str string) (ret bool) {
 	for _, el := range strs {
 		if el == str {
 			ret = true
