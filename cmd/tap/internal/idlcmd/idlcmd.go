@@ -63,29 +63,24 @@ func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err err
 				defer db.Close()
 				if ts, e := rs.FromSpecs(specs); e != nil {
 					err = e // returns the .ifspecs as a map of spec.TypeSpec
-				} else if e := generateIdb(&queue, ts); e != nil {
-					err = e
-				} else if e := tables.CreateIdl(db); e != nil {
-					err = e
-				} else if tx, e := db.Begin(); e != nil {
-					err = errutil.New("couldnt create transaction", e)
 				} else {
-					// FIX: something in here eats panics
-					w := NewSpecWriter(func(q string, args ...interface{}) (err error) {
-						if _, e := tx.Exec(q, args...); e != nil {
-							err = e
-						}
-						return
-					})
-					for _, q := range queue {
-						if e := w.Write(q.tgt, q.args...); e != nil {
+					generateIdb(&queue, ts)
+					if e := tables.CreateIdl(db); e != nil {
+						err = e
+					} else if tx, e := db.Begin(); e != nil {
+						err = errutil.New("couldnt create transaction", e)
+					} else {
+						// FIX: something in here eats panics
+						w := NewSpecWriter(func(q string, args ...interface{}) (err error) {
+							if _, e := tx.Exec(q, args...); e != nil {
+								err = e
+							}
+							return
+						})
+						if e := queue.Flush(w); e != nil {
 							tx.Rollback()
-							err = errutil.New("couldnt write to", q.tgt, e)
-							break
-						}
-					}
-					if err == nil {
-						if e := tx.Commit(); e != nil {
+							err = errutil.New("couldnt write", e)
+						} else if e := tx.Commit(); e != nil {
 							err = errutil.New("couldnt commit", e)
 						}
 					}
@@ -96,19 +91,8 @@ func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err err
 	return
 }
 
-// a terrible way to optimize database writes
-type cachedWrite struct {
-	tgt  string
-	args []interface{}
-}
-type writeCache []cachedWrite
-
-func (q *writeCache) Write(tgt string, args ...interface{}) (err error) {
-	(*q) = append(*q, cachedWrite{tgt, args})
-	return
-}
-
-func generateIdb(w writer, ts rs.TypeSpecs) (err error) {
+// doesn't return an error; assumes writer will handle this is internally in some implementation dependent way.
+func generateIdb(w writer, ts rs.TypeSpecs) {
 	ds := distill.MakeRegistry(ts.Types)
 	// fix: it makes no sense to have to build the registry from the types
 	// and then add them as a separate step
@@ -116,7 +100,6 @@ func generateIdb(w writer, ts rs.TypeSpecs) (err error) {
 		ds.AddType(t)
 	}
 	ds.Sort() // sorted list of keys ( for some stability of row ids when regenerating )
-	// have to write all of the types first, so that we can ask for heir jeys
 	for _, key := range ds.Types {
 		var t *spec.TypeSpec = ts.Types[key]
 		name := t.Name
@@ -124,27 +107,46 @@ func generateIdb(w writer, ts rs.TypeSpecs) (err error) {
 		uses := strings.ToLower(t.Spec.Choice[1:]) // $FLOW -> flow
 		var closed bool
 		switch uses := t.Spec.Value.(type) {
+		case *spec.FlowSpec:
+			writeTerms(w, ts, t, uses)
 		case *spec.StrSpec:
-			closed = uses.Exclusively
+			if closed = uses.Exclusively; closed {
+				writeEnumStrings(w, ts, t, uses)
+			}
 		case *spec.NumSpec:
-			closed = uses.Exclusively
+			if closed = uses.Exclusively; closed {
+				writeEnumNumbers(w, ts, t, uses)
+			}
+		case *spec.SwapSpec:
+			writeChoices(w, ts, t, uses)
 		}
-		if e := w.Write(idlrow.Op, name, pack, uses, closed); e != nil {
-			err = e
-			break
-		}
+		w.Write(idlrow.Op, name, pack, uses, closed)
 	}
-	// var Str = tables.Insert("idl_str", "op", "label", "value")
-	// var Enum = tables.Insert("idl_enum", "op", "label", "value")
-	// var Swap = tables.Insert("idl_swap", "op", "label", "type")
-	// var Term = tables.Insert("idl_term", "op", "term", "label", "type", "private", "optional", "repeats")
 	for _, sig := range ds.Sigs {
-		if e := w.Write(idlrow.Sig, sig.Type, sig.Slot, strconv.FormatUint(sig.Hash, 16), sig.Sig); e != nil {
-			err = e
-			break
-		}
+		w.Write(idlrow.Sig, sig.Type, sig.Slot, strconv.FormatUint(sig.Hash, 16), sig.Sig)
 	}
 	return
+}
+
+func writeChoices(w writer, ts rs.TypeSpecs, t *spec.TypeSpec, swap *spec.SwapSpec) {
+	// FIX: wht is swap.name?
+	for _, opt := range swap.Between {
+		w.Write(idlrow.Swap, t.Name, opt.Key(), opt.Value(), opt.TypeName())
+	}
+}
+func writeEnumStrings(w writer, ts rs.TypeSpecs, t *spec.TypeSpec, str *spec.StrSpec) {
+	for _, opt := range str.Uses {
+		w.Write(idlrow.Enum, t.Name, opt.Key(), opt.Value())
+	}
+}
+func writeEnumNumbers(w writer, ts rs.TypeSpecs, t *spec.TypeSpec, uses *spec.NumSpec) {
+	panic("not implemented")
+}
+func writeTerms(w writer, ts rs.TypeSpecs, t *spec.TypeSpec, uses *spec.FlowSpec) {
+	for _, f := range uses.Terms {
+		w.Write(idlrow.Term, t.Name, f.Field(), f.QuietLabel(), f.TypeName(), f.Private, f.Optional, f.Repeats)
+		// 	Markup   map[string]any
+	}
 }
 
 // database/sql like interface

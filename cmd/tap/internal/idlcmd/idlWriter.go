@@ -44,11 +44,6 @@ var idWriter = map[string]string{
 		`, ?3` + // hash
 		`, ?4` + // signature
 		`)`,
-	idl.Str: `insert into idl_str( op, label, value ) values (` +
-		opId(1) + // op name
-		`, ?2` + // label
-		`, ?3` + // value
-		`)`,
 	idl.Enum: `insert into idl_enum( op, label, value ) values (` +
 		opId(1) + // op name
 		`, ?2` + // label
@@ -56,17 +51,18 @@ var idWriter = map[string]string{
 		`)`,
 	idl.Swap: `insert into idl_swap( op, label, type ) values (` +
 		opId(1) + // op name
-		`, ?2` + // label
+		`, ?2, ` + // label
 		opId(3) + // type int -> an op reference
 		`)`,
 	idl.Term: `insert into idl_term(
-		op, term, label, type, private, optional, repeats
+		op, field, label, type, private, optional, repeats
 	) values (` +
 		opId(1) + // op name
-		`, ?2` + // label
-		opId(3) + // type int -> an op reference
-		`, ?4` + // private bool
-		`, ?5` + // optional bool
-		`, ?6` + // repeats bool
+		`, ?2` + // field
+		`, ?3, ` + // label
+		opId(4) + // type int -> an op reference
+		`, ?5` + // private bool
+		`, ?6` + // optional bool
+		`, ?7` + // repeats bool
 		`)`,
 }

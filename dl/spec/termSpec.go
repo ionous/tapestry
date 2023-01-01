@@ -6,6 +6,14 @@ func (op *TermSpec) IsAnonymous() bool {
 	return op.Label == "_"
 }
 
+// returns the empty string if anonymous
+func (op *TermSpec) QuietLabel() (ret string) {
+	if !op.IsAnonymous() {
+		ret = op.Label
+	}
+	return
+}
+
 // return the explicit parameter name, or the label if nothing explicit was defined.
 func (op *TermSpec) Field() (ret string) {
 	if len(op.Name) > 0 {

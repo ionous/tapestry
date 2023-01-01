@@ -3,13 +3,17 @@ package spec
 import "strings"
 
 // return english human friendly text.
-func (op *ChoiceSpec) FriendlyName() (ret string) {
+func (op *ChoiceSpec) FriendlyName() string {
+	return strings.Replace(op.Key(), "_", " ", -1)
+}
+
+func (op *ChoiceSpec) Key() (ret string) {
 	if n := op.Label; len(n) > 0 {
 		ret = n
 	} else {
 		ret = op.Name
 	}
-	return strings.Replace(ret, "_", " ", -1)
+	return
 }
 
 // the value for the swap
