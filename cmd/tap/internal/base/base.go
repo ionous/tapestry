@@ -107,11 +107,9 @@ func (c *Command) Runnable() bool {
 	return c.Run != nil
 }
 
-var atExitFuncs []func()
-
-func AtExit(f func()) {
-	atExitFuncs = append(atExitFuncs, f)
-}
+// MOD-stravis: removed atExit and related functions.
+// having callers use `defer` directly seems to be the better route
+// go's command sets up a `defer base.Exit()` which eats panics
 
 func ExitWithStatus(status int) {
 	SetExitStatus(status)
@@ -119,9 +117,6 @@ func ExitWithStatus(status int) {
 }
 
 func Exit() {
-	for _, f := range atExitFuncs {
-		f()
-	}
 	os.Exit(exitStatus)
 }
 
@@ -135,25 +130,16 @@ func Errorf(format string, args ...any) {
 	SetExitStatus(1)
 }
 
-func ExitIfErrors() {
-	if exitStatus != 0 {
-		Exit()
-	}
-}
-
 var exitStatus = 0
 var exitMu sync.Mutex
 
+// larger exit status wins; zero is the default.
 func SetExitStatus(n int) {
 	exitMu.Lock()
 	if exitStatus < n {
 		exitStatus = n
 	}
 	exitMu.Unlock()
-}
-
-func GetExitStatus() int {
-	return exitStatus
 }
 
 // Run runs the command, with stdout and stderr

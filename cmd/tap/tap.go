@@ -19,7 +19,6 @@ import (
 )
 
 func main() {
-	defer base.Exit()
 	cmdLine := flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
 	if e := cmdLine.Parse(os.Args[1:]); e != nil {
 		help.PrintUsage(os.Stderr, base.Go)
@@ -48,6 +47,7 @@ func main() {
 			}
 		}
 	}
+	base.Exit() // exits with an error code.
 }
 
 func handleMain(args []string) (err error) {
