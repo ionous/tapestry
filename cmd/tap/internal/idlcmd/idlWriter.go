@@ -38,29 +38,29 @@ func opId(a int) string {
 // the value is a more complex statement usually involving selects
 var idWriter = map[string]string{
 	idl.Op: idl.Op,
-	idl.Sig: `insert into idl_sig( op, slot, hash, signature ) values (` +
+	idl.Sig: `insert into idl_sig( op, slot, hash, body ) values (` +
 		opId(1) + // op name
 		`, ` + opId(2) + // op name
 		`, ?3` + // hash
-		`, ?4` + // signature
+		`, ?4` + // body
 		`)`,
 	idl.Enum: `insert into idl_enum( op, label, value ) values (` +
 		opId(1) + // op name
 		`, ?2` + // label
 		`, ?3` + // value
 		`)`,
-	idl.Swap: `insert into idl_swap( op, label, type ) values (` +
+	idl.Swap: `insert into idl_swap( op, label, swap ) values (` +
 		opId(1) + // op name
 		`, ?2, ` + // label
-		opId(3) + // type int -> an op reference
+		opId(3) + // swap -> an op reference
 		`)`,
 	idl.Term: `insert into idl_term(
-		op, field, label, type, private, optional, repeats
+		op, label, field, term, private, optional, repeats
 	) values (` +
 		opId(1) + // op name
-		`, ?2` + // field
-		`, ?3, ` + // label
-		opId(4) + // type int -> an op reference
+		`, ?2` + // label
+		`, ?3, ` + // term
+		opId(4) + // term -> an op reference
 		`, ?5` + // private bool
 		`, ?6` + // optional bool
 		`, ?7` + // repeats bool

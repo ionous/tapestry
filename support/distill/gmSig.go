@@ -16,6 +16,14 @@ type Sig struct {
 	Optional bool
 }
 
+func (a *Sig) Body() (ret string) {
+	parts := a.parts()
+	if cnt := len(parts); cnt > 0 {
+		ret = parts[cnt-1]
+	}
+	return
+}
+
 func (a *Sig) IsLessThan(b Sig) (okay bool) {
 	as, bs := a.parts(), b.parts()
 	if ac, bc := len(as), len(bs); ac < bc {

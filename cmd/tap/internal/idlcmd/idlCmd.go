@@ -70,7 +70,6 @@ func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err err
 					} else if tx, e := db.Begin(); e != nil {
 						err = errutil.New("couldnt create transaction", e)
 					} else {
-						// FIX: something in here eats panics
 						w := NewSpecWriter(func(q string, args ...interface{}) (err error) {
 							if _, e := tx.Exec(q, args...); e != nil {
 								err = e
@@ -102,34 +101,52 @@ func generateIdb(w writer, ts rs.TypeSpecs) {
 	ds.Sort() // sorted list of keys ( for some stability of row ids when regenerating )
 	for _, key := range ds.Types {
 		var t *spec.TypeSpec = ts.Types[key]
+		var label string
 		name := t.Name
 		pack := t.Groups[0]
 		uses := strings.ToLower(t.Spec.Choice[1:]) // $FLOW -> flow
-		var closed bool
 		switch uses := t.Spec.Value.(type) {
 		case *spec.FlowSpec:
+			if len(uses.Name) > 0 {
+				label = uses.Name
+			} else {
+				label = name
+			}
+			label = distill.Pascal(label)
 			writeTerms(w, ts, t, uses)
 		case *spec.StrSpec:
-			if closed = uses.Exclusively; closed {
-				writeEnumStrings(w, ts, t, uses)
-			}
+			label = closedOrOpenLabel(uses.Exclusively)
+			writeEnumStrings(w, ts, t, uses)
 		case *spec.NumSpec:
-			if closed = uses.Exclusively; closed {
-				writeEnumNumbers(w, ts, t, uses)
-			}
+			label = closedOrOpenLabel(uses.Exclusively)
+			writeEnumNumbers(w, ts, t, uses)
 		case *spec.SwapSpec:
+			if len(uses.Name) > 0 {
+				label = uses.Name
+			} else {
+				label = name
+			}
+			label = distill.Pascal(label)
 			writeChoices(w, ts, t, uses)
 		}
-		w.Write(idlrow.Op, name, pack, uses, closed)
+		w.Write(idlrow.Op, name, pack, uses, label)
 	}
 	for _, sig := range ds.Sigs {
-		w.Write(idlrow.Sig, sig.Type, sig.Slot, strconv.FormatUint(sig.Hash, 16), sig.Sig)
+		w.Write(idlrow.Sig, sig.Type, sig.Slot, strconv.FormatUint(sig.Hash, 16), sig.Body())
+	}
+	return
+}
+
+func closedOrOpenLabel(exclusively bool) (ret string) {
+	if exclusively {
+		ret = "$CLOSED"
+	} else {
+		ret = "$OPEN"
 	}
 	return
 }
 
 func writeChoices(w writer, ts rs.TypeSpecs, t *spec.TypeSpec, swap *spec.SwapSpec) {
-	// FIX: wht is swap.name?
 	for _, opt := range swap.Between {
 		w.Write(idlrow.Swap, t.Name, opt.Key(), opt.Value(), opt.TypeName())
 	}
@@ -139,8 +156,10 @@ func writeEnumStrings(w writer, ts rs.TypeSpecs, t *spec.TypeSpec, str *spec.Str
 		w.Write(idlrow.Enum, t.Name, opt.Key(), opt.Value())
 	}
 }
-func writeEnumNumbers(w writer, ts rs.TypeSpecs, t *spec.TypeSpec, uses *spec.NumSpec) {
-	panic("not implemented")
+func writeEnumNumbers(w writer, ts rs.TypeSpecs, t *spec.TypeSpec, num *spec.NumSpec) {
+	if len(num.Uses) > 0 {
+		panic("not implemented")
+	}
 }
 func writeTerms(w writer, ts rs.TypeSpecs, t *spec.TypeSpec, uses *spec.FlowSpec) {
 	for _, f := range uses.Terms {

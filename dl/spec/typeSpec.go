@@ -47,5 +47,3 @@ func FriendlyName(n string, capAllWords bool) (ret string) {
 	}
 	return b.String()
 }
-
-//--------
