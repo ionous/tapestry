@@ -201,10 +201,11 @@ func GetRecordList(run rt.Runtime, eval rt.RecordListEval) (ret g.Value, err err
 	return
 }
 
+// ObjectFromText - given an eval producing a name, return an object value.
 // WARNING: can return nil for the nothing/empty object ""
 func ObjectFromText(run rt.Runtime, eval rt.TextEval) (ret g.Value, err error) {
 	if eval == nil {
-		err = MissingEval("object text")
+		err = MissingEval("object from text")
 	} else if t, e := GetText(run, eval); e != nil {
 		err = e
 	} else if n := t.String(); len(n) > 0 {

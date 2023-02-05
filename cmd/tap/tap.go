@@ -56,7 +56,7 @@ func handleMain(args []string) (err error) {
 	} else {
 		// TODO: env for tap home?
 
-		// this is a recurisve drill down into command lists expanded as a loop:
+		// this is a recursive drill down into command lists expanded as a loop:
 		// it starts with the commands assembled from the sub-packages ( in init() below )
 		for topCmds := base.Go.Commands; ; {
 			var name string

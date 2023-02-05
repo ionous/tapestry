@@ -16,13 +16,15 @@ func (a Affinity) String() (ret string) {
 }
 
 const (
-	Bool       Affinity = "bool"
-	Number     Affinity = "number"
+	Bool   Affinity = "bool"
+	Number Affinity = "number"
+	Text   Affinity = "text"
+	List   Affinity = "list"
+	Record Affinity = "record"
+	Object Affinity = "object"
+	//
 	NumList    Affinity = "num_list"
-	Text       Affinity = "text"
 	TextList   Affinity = "text_list"
-	Object     Affinity = "object"
-	Record     Affinity = "record"
 	RecordList Affinity = "record_list"
 )
 

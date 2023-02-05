@@ -31,41 +31,23 @@ var matchGroups = testpat.Pattern{
 		Execute: matches(true),
 	}, {
 		Filter: &core.CompareText{
-			A: &core.GetAtField{
-				From:  &core.FromVar{Var: N("a")},
-				Field: W("label"),
-			},
+			A:  core.MakeGetFromVar("a", "label"),
 			Is: core.Unequal,
-			B: &core.GetAtField{
-				From:  &core.FromVar{Var: N("b")},
-				Field: W("label"),
-			},
+			B:  core.MakeGetFromVar("b", "label"),
 		},
 		Execute: matches(false),
 	}, {
 		Filter: &core.CompareText{
-			A: &core.GetAtField{
-				From:  &core.FromVar{Var: N("a")},
-				Field: W("innumerable"),
-			},
+			A:  core.MakeGetFromVar("a", "innumerable"),
 			Is: core.Unequal,
-			B: &core.GetAtField{
-				From:  &core.FromVar{Var: N("b")},
-				Field: W("innumerable"),
-			},
+			B:  core.MakeGetFromVar("b", "innumerable"),
 		},
 		Execute: matches(false),
 	}, {
 		Filter: &core.CompareText{
-			A: &core.GetAtField{
-				From:  &core.FromVar{Var: N("a")},
-				Field: W("group_options"),
-			},
+			A:  core.MakeGetFromVar("a", "group_options"),
 			Is: core.Unequal,
-			B: &core.GetAtField{
-				From:  &core.FromVar{Var: N("b")},
-				Field: W("group_options"),
-			},
+			B:  core.MakeGetFromVar("b", "group_options"),
 		},
 		Execute: matches(false),
 	}},

@@ -323,6 +323,75 @@ func Execute_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Execute) (err error
 	return
 }
 
+const ListEval_Type = "list_eval"
+
+var ListEval_Optional_Marshal = ListEval_Marshal
+
+type ListEval_Slot struct{ Value *ListEval }
+
+func (at ListEval_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
+		}
+		m.EndBlock()
+	}
+	return
+}
+func (at ListEval_Slot) GetType() string              { return ListEval_Type }
+func (at ListEval_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at ListEval_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(ListEval)
+	return
+}
+
+func ListEval_Marshal(m jsn.Marshaler, ptr *ListEval) (err error) {
+	slot := ListEval_Slot{ptr}
+	return slot.Marshal(m)
+}
+
+type ListEval_Slice []ListEval
+
+func (op *ListEval_Slice) GetType() string { return ListEval_Type }
+
+func (op *ListEval_Slice) Marshal(m jsn.Marshaler) error {
+	return ListEval_Repeats_Marshal(m, (*[]ListEval)(op))
+}
+
+func (op *ListEval_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ListEval_Slice) SetSize(cnt int) {
+	var els []ListEval
+	if cnt >= 0 {
+		els = make(ListEval_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ListEval_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ListEval_Marshal(m, &(*op)[i])
+}
+
+func ListEval_Repeats_Marshal(m jsn.Marshaler, vals *[]ListEval) error {
+	return jsn.RepeatBlock(m, (*ListEval_Slice)(vals))
+}
+
+func ListEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListEval) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = ListEval_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
 const NumListEval_Type = "num_list_eval"
 
 var NumListEval_Optional_Marshal = NumListEval_Marshal
@@ -741,6 +810,7 @@ var Slots = []interface{}{
 	(*Assignment)(nil),
 	(*BoolEval)(nil),
 	(*Execute)(nil),
+	(*ListEval)(nil),
 	(*NumListEval)(nil),
 	(*NumberEval)(nil),
 	(*RecordEval)(nil),
