@@ -34,19 +34,19 @@ func W(v string) string       { return v }
 // MakeGetFromVar - generate a statement which extracts a variable's value.
 // path can include strings ( for reading from records ) or integers ( for reading from lists )
 func MakeGetFromVar(v string, path ...any) *GetFromVar {
-	var out []PathEval
+	var dot []Dot
 	for _, p := range path {
 		switch el := p.(type) {
 		case string:
-			out = append(out, &AtField{Field: T(el)})
+			dot = append(dot, &AtField{Field: T(el)})
 		case int:
-			out = append(out, &AtIndex{Index: I(el)})
+			dot = append(dot, &AtIndex{Index: I(el)})
 		default:
 			panic("invalid path")
 		}
 	}
 	return &GetFromVar{
 		Name: T(v),
-		Path: out,
+		Dot:  dot,
 	}
 }

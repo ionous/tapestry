@@ -12,7 +12,7 @@ import (
 // qnaObject implements the generic Value interface
 // FIX? should it ( and meta.Value, affine.Object ) go away?
 // the reason that you need it is: how else do you Set(key, value) to assign an object property?
-// you need to give the caller an object that looks like a record [ or you need a new method in Runtime specically for objects ]
+// you need to give the caller an object that looks like a record [ or you need a new method in Runtime specifically for objects ]
 //
 // currently, it feels like we have two ways to access object values
 // 		1. run.Get/SetField(object, field)
@@ -50,9 +50,9 @@ func (obj *qnaObject) Affinity() affine.Affinity {
 	// and save ( but we could keep a list of all values )
 	// OR -- .Record() and .Records() arent used much
 	// 1. debug printing [ but RecordToValue could become ValueToMap and use the field interface ]
-	// 2. copy and copyRecords (-- but it is traveliing by field already )
+	// 2. copy and copyRecords (-- but it is traveling by field already )
 	// 3. sorting record lists
-	//- -- this is a little more difficult, buy could add a Swap(i,j) to the Value interface
+	//- -- this is a little more difficult, but could add a Swap(i,j) to the Value interface
 	// BASICALLY, record and []record could back a value -- but so could object.
 	// you could make records of "animals" but the they wouldnt be named
 	// and conversion would happen through the interface that allows both.

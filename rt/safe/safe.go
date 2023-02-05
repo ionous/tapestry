@@ -108,6 +108,16 @@ func GetText(run rt.Runtime, eval rt.TextEval) (ret g.Value, err error) {
 	return
 }
 
+// GetList runs the specified eval, returning an error if the eval is nil.
+func GetList(run rt.Runtime, eval rt.ListEval) (ret g.Value, err error) {
+	if eval == nil {
+		err = MissingEval("list")
+	} else {
+		ret, err = eval.GetList(run)
+	}
+	return
+}
+
 // GetRecord runs the specified eval, returning an error if the eval is nil.
 func GetRecord(run rt.Runtime, eval rt.RecordEval) (ret g.Value, err error) {
 	if eval == nil {
