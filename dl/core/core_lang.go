@@ -4686,45 +4686,45 @@ func GetAtField_Marshal(m jsn.Marshaler, val *GetAtField) (err error) {
 	return
 }
 
-// GetByName Read a value using a name which might refer either to a variable or to an object
+// GetFromName Read a value using a name which might refer either to a variable or to an object
 // Intended for internal use.
-type GetByName struct {
+type GetFromName struct {
 	Name   rt.TextEval `if:"label=_"`
 	Dot    []Dot       `if:"label=dot,optional"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ rt.BoolEval = (*GetByName)(nil)
-var _ rt.NumberEval = (*GetByName)(nil)
-var _ rt.TextEval = (*GetByName)(nil)
-var _ rt.RecordEval = (*GetByName)(nil)
-var _ rt.ListEval = (*GetByName)(nil)
+var _ rt.BoolEval = (*GetFromName)(nil)
+var _ rt.NumberEval = (*GetFromName)(nil)
+var _ rt.TextEval = (*GetFromName)(nil)
+var _ rt.RecordEval = (*GetFromName)(nil)
+var _ rt.ListEval = (*GetFromName)(nil)
 
-func (*GetByName) Compose() composer.Spec {
+func (*GetFromName) Compose() composer.Spec {
 	return composer.Spec{
-		Name: GetByName_Type,
+		Name: GetFromName_Type,
 		Uses: composer.Type_Flow,
 	}
 }
 
-const GetByName_Type = "get_by_name"
-const GetByName_Field_Name = "$NAME"
-const GetByName_Field_Dot = "$DOT"
+const GetFromName_Type = "get_from_name"
+const GetFromName_Field_Name = "$NAME"
+const GetFromName_Field_Dot = "$DOT"
 
-func (op *GetByName) Marshal(m jsn.Marshaler) error {
-	return GetByName_Marshal(m, op)
+func (op *GetFromName) Marshal(m jsn.Marshaler) error {
+	return GetFromName_Marshal(m, op)
 }
 
-type GetByName_Slice []GetByName
+type GetFromName_Slice []GetFromName
 
-func (op *GetByName_Slice) GetType() string { return GetByName_Type }
+func (op *GetFromName_Slice) GetType() string { return GetFromName_Type }
 
-func (op *GetByName_Slice) Marshal(m jsn.Marshaler) error {
-	return GetByName_Repeats_Marshal(m, (*[]GetByName)(op))
+func (op *GetFromName_Slice) Marshal(m jsn.Marshaler) error {
+	return GetFromName_Repeats_Marshal(m, (*[]GetFromName)(op))
 }
 
-func (op *GetByName_Slice) GetSize() (ret int) {
+func (op *GetFromName_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -4733,69 +4733,69 @@ func (op *GetByName_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *GetByName_Slice) SetSize(cnt int) {
-	var els []GetByName
+func (op *GetFromName_Slice) SetSize(cnt int) {
+	var els []GetFromName
 	if cnt >= 0 {
-		els = make(GetByName_Slice, cnt)
+		els = make(GetFromName_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *GetByName_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return GetByName_Marshal(m, &(*op)[i])
+func (op *GetFromName_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return GetFromName_Marshal(m, &(*op)[i])
 }
 
-func GetByName_Repeats_Marshal(m jsn.Marshaler, vals *[]GetByName) error {
-	return jsn.RepeatBlock(m, (*GetByName_Slice)(vals))
+func GetFromName_Repeats_Marshal(m jsn.Marshaler, vals *[]GetFromName) error {
+	return jsn.RepeatBlock(m, (*GetFromName_Slice)(vals))
 }
 
-func GetByName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]GetByName) (err error) {
+func GetFromName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]GetFromName) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = GetByName_Repeats_Marshal(m, pv)
+		err = GetFromName_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type GetByName_Flow struct{ ptr *GetByName }
+type GetFromName_Flow struct{ ptr *GetFromName }
 
-func (n GetByName_Flow) GetType() string      { return GetByName_Type }
-func (n GetByName_Flow) GetLede() string      { return GetByName_Type }
-func (n GetByName_Flow) GetFlow() interface{} { return n.ptr }
-func (n GetByName_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*GetByName); ok {
+func (n GetFromName_Flow) GetType() string      { return GetFromName_Type }
+func (n GetFromName_Flow) GetLede() string      { return GetFromName_Type }
+func (n GetFromName_Flow) GetFlow() interface{} { return n.ptr }
+func (n GetFromName_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*GetFromName); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func GetByName_Optional_Marshal(m jsn.Marshaler, pv **GetByName) (err error) {
+func GetFromName_Optional_Marshal(m jsn.Marshaler, pv **GetFromName) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = GetByName_Marshal(m, *pv)
+		err = GetFromName_Marshal(m, *pv)
 	} else if !enc {
-		var v GetByName
-		if err = GetByName_Marshal(m, &v); err == nil {
+		var v GetFromName
+		if err = GetFromName_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func GetByName_Marshal(m jsn.Marshaler, val *GetByName) (err error) {
+func GetFromName_Marshal(m jsn.Marshaler, val *GetFromName) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(GetByName_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", GetByName_Field_Name)
+	if err = m.MarshalBlock(GetFromName_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", GetFromName_Field_Name)
 		if e0 == nil {
 			e0 = rt.TextEval_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", GetByName_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", GetFromName_Field_Name))
 		}
-		e1 := m.MarshalKey("dot", GetByName_Field_Dot)
+		e1 := m.MarshalKey("dot", GetFromName_Field_Dot)
 		if e1 == nil {
 			e1 = Dot_Optional_Repeats_Marshal(m, &val.Dot)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", GetByName_Field_Dot))
+			m.Error(errutil.New(e1, "in flow at", GetFromName_Field_Dot))
 		}
 		m.EndBlock()
 	}
@@ -10637,6 +10637,124 @@ func Softline_Marshal(m jsn.Marshaler, val *Softline) (err error) {
 	return
 }
 
+// SourceValue swaps between various options
+type SourceValue struct {
+	Choice string
+	Value  interface{}
+}
+
+var SourceValue_Optional_Marshal = SourceValue_Marshal
+
+const SourceValue_Bool_Opt = "$BOOL"
+const SourceValue_Number_Opt = "$NUMBER"
+const SourceValue_Text_Opt = "$TEXT"
+const SourceValue_Record_Opt = "$RECORD"
+const SourceValue_List_Opt = "$LIST"
+
+func (*SourceValue) Compose() composer.Spec {
+	return composer.Spec{
+		Name: SourceValue_Type,
+		Uses: composer.Type_Swap,
+		Choices: []string{
+			SourceValue_Bool_Opt, SourceValue_Number_Opt, SourceValue_Text_Opt, SourceValue_Record_Opt, SourceValue_List_Opt,
+		},
+		Swaps: []interface{}{
+			(*rt.BoolEval)(nil),
+			(*rt.NumberEval)(nil),
+			(*rt.TextEval)(nil),
+			(*rt.RecordEval)(nil),
+			(*rt.ListEval)(nil),
+		},
+	}
+}
+
+const SourceValue_Type = "source_value"
+
+func (op *SourceValue) GetType() string { return SourceValue_Type }
+
+func (op *SourceValue) GetSwap() (string, interface{}) {
+	return op.Choice, op.Value
+}
+
+func (op *SourceValue) SetSwap(c string) (okay bool) {
+	switch c {
+	case "":
+		op.Choice, op.Value = c, nil
+		okay = true
+	case SourceValue_Bool_Opt:
+		op.Choice, op.Value = c, new(rt.BoolEval)
+		okay = true
+	case SourceValue_Number_Opt:
+		op.Choice, op.Value = c, new(rt.NumberEval)
+		okay = true
+	case SourceValue_Text_Opt:
+		op.Choice, op.Value = c, new(rt.TextEval)
+		okay = true
+	case SourceValue_Record_Opt:
+		op.Choice, op.Value = c, new(rt.RecordEval)
+		okay = true
+	case SourceValue_List_Opt:
+		op.Choice, op.Value = c, new(rt.ListEval)
+		okay = true
+	}
+	return
+}
+
+func (op *SourceValue) Marshal(m jsn.Marshaler) error {
+	return SourceValue_Marshal(m, op)
+}
+func SourceValue_Marshal(m jsn.Marshaler, val *SourceValue) (err error) {
+	if err = m.MarshalBlock(val); err == nil {
+		if _, ptr := val.GetSwap(); ptr != nil {
+			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+type SourceValue_Slice []SourceValue
+
+func (op *SourceValue_Slice) GetType() string { return SourceValue_Type }
+
+func (op *SourceValue_Slice) Marshal(m jsn.Marshaler) error {
+	return SourceValue_Repeats_Marshal(m, (*[]SourceValue)(op))
+}
+
+func (op *SourceValue_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *SourceValue_Slice) SetSize(cnt int) {
+	var els []SourceValue
+	if cnt >= 0 {
+		els = make(SourceValue_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *SourceValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return SourceValue_Marshal(m, &(*op)[i])
+}
+
+func SourceValue_Repeats_Marshal(m jsn.Marshaler, vals *[]SourceValue) error {
+	return jsn.RepeatBlock(m, (*SourceValue_Slice)(vals))
+}
+
+func SourceValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SourceValue) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = SourceValue_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
 // SpanText Writes text with spaces between words.
 type SpanText struct {
 	Does   []rt.Execute `if:"label=does"`
@@ -11440,7 +11558,7 @@ var Slats = []composer.Composer{
 	(*FromTexts)(nil),
 	(*FromVar)(nil),
 	(*GetAtField)(nil),
-	(*GetByName)(nil),
+	(*GetFromName)(nil),
 	(*GetFromObj)(nil),
 	(*GetFromVar)(nil),
 	(*GetVar)(nil),
@@ -11494,6 +11612,7 @@ var Slats = []composer.Composer{
 	(*Singularize)(nil),
 	(*SlashText)(nil),
 	(*Softline)(nil),
+	(*SourceValue)(nil),
 	(*SpanText)(nil),
 	(*SumOf)(nil),
 	(*TriggerCycle)(nil),
@@ -11506,6 +11625,11 @@ var Slats = []composer.Composer{
 var Signatures = map[uint64]interface{}{
 	15485098871275255450: (*Comparison)(nil),        /* Comparison: */
 	10347746873548257800: (*PatternName)(nil),       /* PatternName: */
+	9837832737082696431:  (*SourceValue)(nil),       /* SourceValue bool: */
+	14705982077189807307: (*SourceValue)(nil),       /* SourceValue list: */
+	6063507141305104336:  (*SourceValue)(nil),       /* SourceValue number: */
+	16580148797628528528: (*SourceValue)(nil),       /* SourceValue record: */
+	3556189541115677906:  (*SourceValue)(nil),       /* SourceValue text: */
 	10059194828506805844: (*VariableName)(nil),      /* VariableName: */
 	9392469773844077696:  (*TriggerSwitch)(nil),     /* trigger=After */
 	8082607244820951444:  (*AllTrue)(nil),           /* bool_eval=AllTrue: */
@@ -11560,16 +11684,16 @@ var Signatures = map[uint64]interface{}{
 	14595426329886937081: (*GetAtField)(nil),        /* record_list_eval=Get:from: */
 	4519648908930386096:  (*GetAtField)(nil),        /* text_eval=Get:from: */
 	9011366933800504835:  (*GetAtField)(nil),        /* text_list_eval=Get:from: */
-	16637026275299728179: (*GetByName)(nil),         /* bool_eval=GetByName: */
-	1799763191827042175:  (*GetByName)(nil),         /* list_eval=GetByName: */
-	7149821405309194838:  (*GetByName)(nil),         /* number_eval=GetByName: */
-	9543000154205361706:  (*GetByName)(nil),         /* record_eval=GetByName: */
-	12376015037350464252: (*GetByName)(nil),         /* text_eval=GetByName: */
-	603183737492150812:   (*GetByName)(nil),         /* bool_eval=GetByName:dot: */
-	4732628236961428768:  (*GetByName)(nil),         /* list_eval=GetByName:dot: */
-	11843010685583069477: (*GetByName)(nil),         /* number_eval=GetByName:dot: */
-	12328912497319316817: (*GetByName)(nil),         /* record_eval=GetByName:dot: */
-	16652458775665125531: (*GetByName)(nil),         /* text_eval=GetByName:dot: */
+	13117948412737680448: (*GetFromName)(nil),       /* bool_eval=GetFromName: */
+	737116415984661236:   (*GetFromName)(nil),       /* list_eval=GetFromName: */
+	10055935248829087845: (*GetFromName)(nil),       /* number_eval=GetFromName: */
+	10668095072786168193: (*GetFromName)(nil),       /* record_eval=GetFromName: */
+	16458031275878183403: (*GetFromName)(nil),       /* text_eval=GetFromName: */
+	4059628836051044183:  (*GetFromName)(nil),       /* bool_eval=GetFromName:dot: */
+	5160358316327500019:  (*GetFromName)(nil),       /* list_eval=GetFromName:dot: */
+	13532138328084240238: (*GetFromName)(nil),       /* number_eval=GetFromName:dot: */
+	16357300743447894626: (*GetFromName)(nil),       /* record_eval=GetFromName:dot: */
+	11475259353203290228: (*GetFromName)(nil),       /* text_eval=GetFromName:dot: */
 	13582206311934633670: (*GetFromObj)(nil),        /* bool_eval=GetFromObj:field: */
 	4664311827378886530:  (*GetFromObj)(nil),        /* list_eval=GetFromObj:field: */
 	12645006650667455381: (*GetFromObj)(nil),        /* number_eval=GetFromObj:field: */

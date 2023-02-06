@@ -123,26 +123,26 @@ func TestAnonymousOptional(t *testing.T) {
 
 // TestVarAsBool - unit test for broken parsing case
 // @requires light double committed
-func TestVarAsBool(t *testing.T) {
-	in := `{"AllTrue:":["@requires light",{"Get:from:":["is in darkness",{"VarFields:":"actor"}]}]}`
-	want := core.AllTrue{Test: []rt.BoolEval{
-		&core.GetVar{
-			Name: core.VariableName{Str: "requires light"},
-		},
-		&core.GetAtField{
-			Field: "is in darkness",
-			From:  &core.FromVar{Var: core.VariableName{Str: "actor"}},
-		},
-	}}
-	var have core.AllTrue
-	if e := story.Decode(&have, []byte(in), tapestry.AllSignatures); e != nil {
-		pretty.Println("got:", have)
-		t.Fatal(e)
-	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
-		pretty.Println("got:", have)
-		t.Fatal(diff)
-	}
-}
+// func TestVarAsBool(t *testing.T) {
+// 	in := `{"AllTrue:":["@requires light",{"Get:from:":["is in darkness",{"VarFields:":"actor"}]}]}`
+// 	want := core.AllTrue{Test: []rt.BoolEval{
+// 		&core.GetVar{
+// 			Name: core.VariableName{Str: "requires light"},
+// 		},
+// 		&core.GetAtField{
+// 			Field: "is in darkness",
+// 			From:  &core.FromVar{Var: core.VariableName{Str: "actor"}},
+// 		},
+// 	}}
+// 	var have core.AllTrue
+// 	if e := story.Decode(&have, []byte(in), tapestry.AllSignatures); e != nil {
+// 		pretty.Println("got:", have)
+// 		t.Fatal(e)
+// 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
+// 		pretty.Println("got:", have)
+// 		t.Fatal(diff)
+// 	}
+// }
 
 func TestMissingSlot(t *testing.T) {
 	in := `{"Join parts:":["one","two","three"]}`

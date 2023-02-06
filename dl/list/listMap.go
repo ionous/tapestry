@@ -16,7 +16,7 @@ func (op *ListMap) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListMap) remap(run rt.Runtime) (err error) {
-	if fromList, e := safe.GetAssignedValue(run, op.FromList); e != nil {
+	if fromList, e := safe.GetList(run, op.FromList); e != nil {
 		err = errutil.New("from_list:", op.FromList, e)
 	} else if toList, e := safe.List(run, op.ToList); e != nil {
 		err = errutil.New("to_list:", op.ToList, e)

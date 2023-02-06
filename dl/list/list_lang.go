@@ -318,7 +318,7 @@ func AsTxt_Marshal(m jsn.Marshaler, val *AsTxt) (err error) {
 
 // EraseEdge Erase at edge: Remove one or more values from a list.
 type EraseEdge struct {
-	From   ListSource  `if:"label=_"`
+	From   rt.ListEval `if:"label=_"`
 	AtEdge rt.BoolEval `if:"label=at_front,optional"`
 	Markup map[string]any
 }
@@ -411,7 +411,7 @@ func EraseEdge_Marshal(m jsn.Marshaler, val *EraseEdge) (err error) {
 	if err = m.MarshalBlock(EraseEdge_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", EraseEdge_Field_From)
 		if e0 == nil {
-			e0 = ListSource_Marshal(m, &val.From)
+			e0 = rt.ListEval_Marshal(m, &val.From)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EraseEdge_Field_From))
@@ -431,7 +431,7 @@ func EraseEdge_Marshal(m jsn.Marshaler, val *EraseEdge) (err error) {
 // EraseIndex Erase at index: Remove one or more values from a list.
 type EraseIndex struct {
 	Count   rt.NumberEval `if:"label=_"`
-	From    ListSource    `if:"label=from"`
+	From    rt.ListEval   `if:"label=from"`
 	AtIndex rt.NumberEval `if:"label=at_index"`
 	Markup  map[string]any
 }
@@ -532,7 +532,7 @@ func EraseIndex_Marshal(m jsn.Marshaler, val *EraseIndex) (err error) {
 		}
 		e1 := m.MarshalKey("from", EraseIndex_Field_From)
 		if e1 == nil {
-			e1 = ListSource_Marshal(m, &val.From)
+			e1 = rt.ListEval_Marshal(m, &val.From)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EraseIndex_Field_From))
@@ -552,7 +552,7 @@ func EraseIndex_Marshal(m jsn.Marshaler, val *EraseIndex) (err error) {
 // Erasing Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
 type Erasing struct {
 	Count   rt.NumberEval `if:"label=_"`
-	From    ListSource    `if:"label=from"`
+	From    rt.ListEval   `if:"label=from"`
 	AtIndex rt.NumberEval `if:"label=at_index"`
 	As      string        `if:"label=as,type=text"`
 	Does    []rt.Execute  `if:"label=does"`
@@ -656,7 +656,7 @@ func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
 		}
 		e1 := m.MarshalKey("from", Erasing_Field_From)
 		if e1 == nil {
-			e1 = ListSource_Marshal(m, &val.From)
+			e1 = rt.ListEval_Marshal(m, &val.From)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", Erasing_Field_From))
@@ -689,7 +689,7 @@ func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
 
 // ErasingEdge Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
 type ErasingEdge struct {
-	From   ListSource    `if:"label=_"`
+	From   rt.ListEval   `if:"label=_"`
 	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
 	As     string        `if:"label=as,type=text"`
 	Does   []rt.Execute  `if:"label=does"`
@@ -788,7 +788,7 @@ func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 	if err = m.MarshalBlock(ErasingEdge_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ErasingEdge_Field_From)
 		if e0 == nil {
-			e0 = ListSource_Marshal(m, &val.From)
+			e0 = rt.ListEval_Marshal(m, &val.From)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ErasingEdge_Field_From))
@@ -833,7 +833,7 @@ type FromNumList struct {
 }
 
 // User implemented slots:
-var _ ListSource = (*FromNumList)(nil)
+var _ rt.ListEval = (*FromNumList)(nil)
 
 func (*FromNumList) Compose() composer.Spec {
 	return composer.Spec{
@@ -936,7 +936,7 @@ type FromRecList struct {
 }
 
 // User implemented slots:
-var _ ListSource = (*FromRecList)(nil)
+var _ rt.ListEval = (*FromRecList)(nil)
 
 func (*FromRecList) Compose() composer.Spec {
 	return composer.Spec{
@@ -1039,7 +1039,7 @@ type FromTxtList struct {
 }
 
 // User implemented slots:
-var _ ListSource = (*FromTxtList)(nil)
+var _ rt.ListEval = (*FromTxtList)(nil)
 
 func (*FromTxtList) Compose() composer.Spec {
 	return composer.Spec{
@@ -1446,7 +1446,7 @@ func IntoTxtList_Marshal(m jsn.Marshaler, val *IntoTxtList) (err error) {
 
 // ListAt Get a value from a list. The first element is is index 1.
 type ListAt struct {
-	List   rt.Assignment `if:"label=_"`
+	List   rt.ListEval   `if:"label=_"`
 	Index  rt.NumberEval `if:"label=index"`
 	Markup map[string]any
 }
@@ -1541,7 +1541,7 @@ func ListAt_Marshal(m jsn.Marshaler, val *ListAt) (err error) {
 	if err = m.MarshalBlock(ListAt_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListAt_Field_List)
 		if e0 == nil {
-			e0 = rt.Assignment_Marshal(m, &val.List)
+			e0 = rt.ListEval_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListAt_Field_List))
@@ -1560,7 +1560,7 @@ func ListAt_Marshal(m jsn.Marshaler, val *ListAt) (err error) {
 
 // ListEach Loops over the elements in the passed list, or runs the 'else' activity if empty.
 type ListEach struct {
-	List   rt.Assignment `if:"label=across"`
+	List   rt.ListEval   `if:"label=across"`
 	As     ListIterator  `if:"label=as"`
 	Does   []rt.Execute  `if:"label=does"`
 	Else   core.Brancher `if:"label=else,optional"`
@@ -1657,7 +1657,7 @@ func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
 	if err = m.MarshalBlock(ListEach_Flow{val}); err == nil {
 		e0 := m.MarshalKey("across", ListEach_Field_List)
 		if e0 == nil {
-			e0 = rt.Assignment_Marshal(m, &val.List)
+			e0 = rt.ListEval_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListEach_Field_List))
@@ -1688,42 +1688,42 @@ func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
 	return
 }
 
-// ListFind Search a list for a specific value.
-type ListFind struct {
-	Value  rt.Assignment `if:"label=_"`
-	List   rt.Assignment `if:"label=list"`
+// ListFindBool Search a list for a specific value.
+type ListFindBool struct {
+	Bool   rt.BoolEval `if:"label=bool"`
+	InList rt.ListEval `if:"label=in_list"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ rt.BoolEval = (*ListFind)(nil)
-var _ rt.NumberEval = (*ListFind)(nil)
+var _ rt.BoolEval = (*ListFindBool)(nil)
+var _ rt.NumberEval = (*ListFindBool)(nil)
 
-func (*ListFind) Compose() composer.Spec {
+func (*ListFindBool) Compose() composer.Spec {
 	return composer.Spec{
-		Name: ListFind_Type,
+		Name: ListFindBool_Type,
 		Uses: composer.Type_Flow,
 		Lede: "find",
 	}
 }
 
-const ListFind_Type = "list_find"
-const ListFind_Field_Value = "$VALUE"
-const ListFind_Field_List = "$LIST"
+const ListFindBool_Type = "list_find_bool"
+const ListFindBool_Field_Bool = "$BOOL"
+const ListFindBool_Field_InList = "$IN_LIST"
 
-func (op *ListFind) Marshal(m jsn.Marshaler) error {
-	return ListFind_Marshal(m, op)
+func (op *ListFindBool) Marshal(m jsn.Marshaler) error {
+	return ListFindBool_Marshal(m, op)
 }
 
-type ListFind_Slice []ListFind
+type ListFindBool_Slice []ListFindBool
 
-func (op *ListFind_Slice) GetType() string { return ListFind_Type }
+func (op *ListFindBool_Slice) GetType() string { return ListFindBool_Type }
 
-func (op *ListFind_Slice) Marshal(m jsn.Marshaler) error {
-	return ListFind_Repeats_Marshal(m, (*[]ListFind)(op))
+func (op *ListFindBool_Slice) Marshal(m jsn.Marshaler) error {
+	return ListFindBool_Repeats_Marshal(m, (*[]ListFindBool)(op))
 }
 
-func (op *ListFind_Slice) GetSize() (ret int) {
+func (op *ListFindBool_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -1732,79 +1732,533 @@ func (op *ListFind_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *ListFind_Slice) SetSize(cnt int) {
-	var els []ListFind
+func (op *ListFindBool_Slice) SetSize(cnt int) {
+	var els []ListFindBool
 	if cnt >= 0 {
-		els = make(ListFind_Slice, cnt)
+		els = make(ListFindBool_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *ListFind_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListFind_Marshal(m, &(*op)[i])
+func (op *ListFindBool_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ListFindBool_Marshal(m, &(*op)[i])
 }
 
-func ListFind_Repeats_Marshal(m jsn.Marshaler, vals *[]ListFind) error {
-	return jsn.RepeatBlock(m, (*ListFind_Slice)(vals))
+func ListFindBool_Repeats_Marshal(m jsn.Marshaler, vals *[]ListFindBool) error {
+	return jsn.RepeatBlock(m, (*ListFindBool_Slice)(vals))
 }
 
-func ListFind_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListFind) (err error) {
+func ListFindBool_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListFindBool) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListFind_Repeats_Marshal(m, pv)
+		err = ListFindBool_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type ListFind_Flow struct{ ptr *ListFind }
+type ListFindBool_Flow struct{ ptr *ListFindBool }
 
-func (n ListFind_Flow) GetType() string      { return ListFind_Type }
-func (n ListFind_Flow) GetLede() string      { return "find" }
-func (n ListFind_Flow) GetFlow() interface{} { return n.ptr }
-func (n ListFind_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ListFind); ok {
+func (n ListFindBool_Flow) GetType() string      { return ListFindBool_Type }
+func (n ListFindBool_Flow) GetLede() string      { return "find" }
+func (n ListFindBool_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListFindBool_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListFindBool); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func ListFind_Optional_Marshal(m jsn.Marshaler, pv **ListFind) (err error) {
+func ListFindBool_Optional_Marshal(m jsn.Marshaler, pv **ListFindBool) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ListFind_Marshal(m, *pv)
+		err = ListFindBool_Marshal(m, *pv)
 	} else if !enc {
-		var v ListFind
-		if err = ListFind_Marshal(m, &v); err == nil {
+		var v ListFindBool
+		if err = ListFindBool_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
+func ListFindBool_Marshal(m jsn.Marshaler, val *ListFindBool) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ListFind_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListFind_Field_Value)
+	if err = m.MarshalBlock(ListFindBool_Flow{val}); err == nil {
+		e0 := m.MarshalKey("bool", ListFindBool_Field_Bool)
 		if e0 == nil {
-			e0 = rt.Assignment_Marshal(m, &val.Value)
+			e0 = rt.BoolEval_Marshal(m, &val.Bool)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListFind_Field_Value))
+			m.Error(errutil.New(e0, "in flow at", ListFindBool_Field_Bool))
 		}
-		e1 := m.MarshalKey("list", ListFind_Field_List)
+		e1 := m.MarshalKey("in_list", ListFindBool_Field_InList)
 		if e1 == nil {
-			e1 = rt.Assignment_Marshal(m, &val.List)
+			e1 = rt.ListEval_Marshal(m, &val.InList)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListFind_Field_List))
+			m.Error(errutil.New(e1, "in flow at", ListFindBool_Field_InList))
 		}
 		m.EndBlock()
 	}
 	return
 }
 
-// ListGather Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather.
+// ListFindList Search a list for a specific value.
+type ListFindList struct {
+	List   rt.ListEval `if:"label=list"`
+	InList rt.ListEval `if:"label=in_list"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.BoolEval = (*ListFindList)(nil)
+var _ rt.NumberEval = (*ListFindList)(nil)
+
+func (*ListFindList) Compose() composer.Spec {
+	return composer.Spec{
+		Name: ListFindList_Type,
+		Uses: composer.Type_Flow,
+		Lede: "find",
+	}
+}
+
+const ListFindList_Type = "list_find_list"
+const ListFindList_Field_List = "$LIST"
+const ListFindList_Field_InList = "$IN_LIST"
+
+func (op *ListFindList) Marshal(m jsn.Marshaler) error {
+	return ListFindList_Marshal(m, op)
+}
+
+type ListFindList_Slice []ListFindList
+
+func (op *ListFindList_Slice) GetType() string { return ListFindList_Type }
+
+func (op *ListFindList_Slice) Marshal(m jsn.Marshaler) error {
+	return ListFindList_Repeats_Marshal(m, (*[]ListFindList)(op))
+}
+
+func (op *ListFindList_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ListFindList_Slice) SetSize(cnt int) {
+	var els []ListFindList
+	if cnt >= 0 {
+		els = make(ListFindList_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ListFindList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ListFindList_Marshal(m, &(*op)[i])
+}
+
+func ListFindList_Repeats_Marshal(m jsn.Marshaler, vals *[]ListFindList) error {
+	return jsn.RepeatBlock(m, (*ListFindList_Slice)(vals))
+}
+
+func ListFindList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListFindList) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = ListFindList_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type ListFindList_Flow struct{ ptr *ListFindList }
+
+func (n ListFindList_Flow) GetType() string      { return ListFindList_Type }
+func (n ListFindList_Flow) GetLede() string      { return "find" }
+func (n ListFindList_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListFindList_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListFindList); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func ListFindList_Optional_Marshal(m jsn.Marshaler, pv **ListFindList) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListFindList_Marshal(m, *pv)
+	} else if !enc {
+		var v ListFindList
+		if err = ListFindList_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func ListFindList_Marshal(m jsn.Marshaler, val *ListFindList) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(ListFindList_Flow{val}); err == nil {
+		e0 := m.MarshalKey("list", ListFindList_Field_List)
+		if e0 == nil {
+			e0 = rt.ListEval_Marshal(m, &val.List)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListFindList_Field_List))
+		}
+		e1 := m.MarshalKey("in_list", ListFindList_Field_InList)
+		if e1 == nil {
+			e1 = rt.ListEval_Marshal(m, &val.InList)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListFindList_Field_InList))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// ListFindNumber Search a list for a specific value.
+type ListFindNumber struct {
+	Number rt.NumberEval `if:"label=number"`
+	InList rt.ListEval   `if:"label=in_list"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.BoolEval = (*ListFindNumber)(nil)
+var _ rt.NumberEval = (*ListFindNumber)(nil)
+
+func (*ListFindNumber) Compose() composer.Spec {
+	return composer.Spec{
+		Name: ListFindNumber_Type,
+		Uses: composer.Type_Flow,
+		Lede: "find",
+	}
+}
+
+const ListFindNumber_Type = "list_find_number"
+const ListFindNumber_Field_Number = "$NUMBER"
+const ListFindNumber_Field_InList = "$IN_LIST"
+
+func (op *ListFindNumber) Marshal(m jsn.Marshaler) error {
+	return ListFindNumber_Marshal(m, op)
+}
+
+type ListFindNumber_Slice []ListFindNumber
+
+func (op *ListFindNumber_Slice) GetType() string { return ListFindNumber_Type }
+
+func (op *ListFindNumber_Slice) Marshal(m jsn.Marshaler) error {
+	return ListFindNumber_Repeats_Marshal(m, (*[]ListFindNumber)(op))
+}
+
+func (op *ListFindNumber_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ListFindNumber_Slice) SetSize(cnt int) {
+	var els []ListFindNumber
+	if cnt >= 0 {
+		els = make(ListFindNumber_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ListFindNumber_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ListFindNumber_Marshal(m, &(*op)[i])
+}
+
+func ListFindNumber_Repeats_Marshal(m jsn.Marshaler, vals *[]ListFindNumber) error {
+	return jsn.RepeatBlock(m, (*ListFindNumber_Slice)(vals))
+}
+
+func ListFindNumber_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListFindNumber) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = ListFindNumber_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type ListFindNumber_Flow struct{ ptr *ListFindNumber }
+
+func (n ListFindNumber_Flow) GetType() string      { return ListFindNumber_Type }
+func (n ListFindNumber_Flow) GetLede() string      { return "find" }
+func (n ListFindNumber_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListFindNumber_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListFindNumber); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func ListFindNumber_Optional_Marshal(m jsn.Marshaler, pv **ListFindNumber) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListFindNumber_Marshal(m, *pv)
+	} else if !enc {
+		var v ListFindNumber
+		if err = ListFindNumber_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func ListFindNumber_Marshal(m jsn.Marshaler, val *ListFindNumber) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(ListFindNumber_Flow{val}); err == nil {
+		e0 := m.MarshalKey("number", ListFindNumber_Field_Number)
+		if e0 == nil {
+			e0 = rt.NumberEval_Marshal(m, &val.Number)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListFindNumber_Field_Number))
+		}
+		e1 := m.MarshalKey("in_list", ListFindNumber_Field_InList)
+		if e1 == nil {
+			e1 = rt.ListEval_Marshal(m, &val.InList)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListFindNumber_Field_InList))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// ListFindRecord Search a list for a specific value.
+type ListFindRecord struct {
+	Record rt.RecordEval `if:"label=record"`
+	InList rt.ListEval   `if:"label=in_list"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.BoolEval = (*ListFindRecord)(nil)
+var _ rt.NumberEval = (*ListFindRecord)(nil)
+
+func (*ListFindRecord) Compose() composer.Spec {
+	return composer.Spec{
+		Name: ListFindRecord_Type,
+		Uses: composer.Type_Flow,
+		Lede: "find",
+	}
+}
+
+const ListFindRecord_Type = "list_find_record"
+const ListFindRecord_Field_Record = "$RECORD"
+const ListFindRecord_Field_InList = "$IN_LIST"
+
+func (op *ListFindRecord) Marshal(m jsn.Marshaler) error {
+	return ListFindRecord_Marshal(m, op)
+}
+
+type ListFindRecord_Slice []ListFindRecord
+
+func (op *ListFindRecord_Slice) GetType() string { return ListFindRecord_Type }
+
+func (op *ListFindRecord_Slice) Marshal(m jsn.Marshaler) error {
+	return ListFindRecord_Repeats_Marshal(m, (*[]ListFindRecord)(op))
+}
+
+func (op *ListFindRecord_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ListFindRecord_Slice) SetSize(cnt int) {
+	var els []ListFindRecord
+	if cnt >= 0 {
+		els = make(ListFindRecord_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ListFindRecord_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ListFindRecord_Marshal(m, &(*op)[i])
+}
+
+func ListFindRecord_Repeats_Marshal(m jsn.Marshaler, vals *[]ListFindRecord) error {
+	return jsn.RepeatBlock(m, (*ListFindRecord_Slice)(vals))
+}
+
+func ListFindRecord_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListFindRecord) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = ListFindRecord_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type ListFindRecord_Flow struct{ ptr *ListFindRecord }
+
+func (n ListFindRecord_Flow) GetType() string      { return ListFindRecord_Type }
+func (n ListFindRecord_Flow) GetLede() string      { return "find" }
+func (n ListFindRecord_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListFindRecord_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListFindRecord); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func ListFindRecord_Optional_Marshal(m jsn.Marshaler, pv **ListFindRecord) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListFindRecord_Marshal(m, *pv)
+	} else if !enc {
+		var v ListFindRecord
+		if err = ListFindRecord_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func ListFindRecord_Marshal(m jsn.Marshaler, val *ListFindRecord) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(ListFindRecord_Flow{val}); err == nil {
+		e0 := m.MarshalKey("record", ListFindRecord_Field_Record)
+		if e0 == nil {
+			e0 = rt.RecordEval_Marshal(m, &val.Record)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListFindRecord_Field_Record))
+		}
+		e1 := m.MarshalKey("in_list", ListFindRecord_Field_InList)
+		if e1 == nil {
+			e1 = rt.ListEval_Marshal(m, &val.InList)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListFindRecord_Field_InList))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// ListFindText Search a list for a specific value.
+type ListFindText struct {
+	Text   rt.TextEval `if:"label=text"`
+	InList rt.ListEval `if:"label=in_list"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.BoolEval = (*ListFindText)(nil)
+var _ rt.NumberEval = (*ListFindText)(nil)
+
+func (*ListFindText) Compose() composer.Spec {
+	return composer.Spec{
+		Name: ListFindText_Type,
+		Uses: composer.Type_Flow,
+		Lede: "find",
+	}
+}
+
+const ListFindText_Type = "list_find_text"
+const ListFindText_Field_Text = "$TEXT"
+const ListFindText_Field_InList = "$IN_LIST"
+
+func (op *ListFindText) Marshal(m jsn.Marshaler) error {
+	return ListFindText_Marshal(m, op)
+}
+
+type ListFindText_Slice []ListFindText
+
+func (op *ListFindText_Slice) GetType() string { return ListFindText_Type }
+
+func (op *ListFindText_Slice) Marshal(m jsn.Marshaler) error {
+	return ListFindText_Repeats_Marshal(m, (*[]ListFindText)(op))
+}
+
+func (op *ListFindText_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ListFindText_Slice) SetSize(cnt int) {
+	var els []ListFindText
+	if cnt >= 0 {
+		els = make(ListFindText_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ListFindText_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ListFindText_Marshal(m, &(*op)[i])
+}
+
+func ListFindText_Repeats_Marshal(m jsn.Marshaler, vals *[]ListFindText) error {
+	return jsn.RepeatBlock(m, (*ListFindText_Slice)(vals))
+}
+
+func ListFindText_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListFindText) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = ListFindText_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type ListFindText_Flow struct{ ptr *ListFindText }
+
+func (n ListFindText_Flow) GetType() string      { return ListFindText_Type }
+func (n ListFindText_Flow) GetLede() string      { return "find" }
+func (n ListFindText_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListFindText_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListFindText); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func ListFindText_Optional_Marshal(m jsn.Marshaler, pv **ListFindText) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListFindText_Marshal(m, *pv)
+	} else if !enc {
+		var v ListFindText
+		if err = ListFindText_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func ListFindText_Marshal(m jsn.Marshaler, val *ListFindText) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(ListFindText_Flow{val}); err == nil {
+		e0 := m.MarshalKey("text", ListFindText_Field_Text)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Text)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListFindText_Field_Text))
+		}
+		e1 := m.MarshalKey("in_list", ListFindText_Field_InList)
+		if e1 == nil {
+			e1 = rt.ListEval_Marshal(m, &val.InList)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListFindText_Field_InList))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// ListGather Transform the values from a list.
+// The named pattern gets called once for each value in the list.
+// It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather.
 type ListGather struct {
 	Var    core.VariableName `if:"label=_"`
-	From   ListSource        `if:"label=from"`
+	From   rt.ListEval       `if:"label=from"`
 	Using  string            `if:"label=using,type=text"`
 	Markup map[string]any
 }
@@ -1902,7 +2356,7 @@ func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
 		}
 		e1 := m.MarshalKey("from", ListGather_Field_From)
 		if e1 == nil {
-			e1 = ListSource_Marshal(m, &val.From)
+			e1 = rt.ListEval_Marshal(m, &val.From)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListGather_Field_From))
@@ -1990,7 +2444,7 @@ func ListIterator_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListIterator) 
 
 // ListLen Determines the number of values in a list.
 type ListLen struct {
-	List   rt.Assignment `if:"label=_"`
+	List   rt.ListEval `if:"label=_"`
 	Markup map[string]any
 }
 
@@ -2081,7 +2535,7 @@ func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
 	if err = m.MarshalBlock(ListLen_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListLen_Field_List)
 		if e0 == nil {
-			e0 = rt.Assignment_Marshal(m, &val.List)
+			e0 = rt.ListEval_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListLen_Field_List))
@@ -2091,11 +2545,12 @@ func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
 	return
 }
 
-// ListMap Transform the values from one list and place the results in another list. The designated pattern is called with each value from the 'from list', one value at a time.
+// ListMap Transform the values from one list and place the results in another list.
+// The designated pattern is called with each value from the 'from list', one value at a time.
 type ListMap struct {
-	ToList       string        `if:"label=_,type=text"`
-	FromList     rt.Assignment `if:"label=from_list"`
-	UsingPattern string        `if:"label=using,type=text"`
+	ToList       string      `if:"label=_,type=text"`
+	FromList     rt.ListEval `if:"label=from_list"`
+	UsingPattern string      `if:"label=using,type=text"`
 	Markup       map[string]any
 }
 
@@ -2195,7 +2650,7 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 		}
 		e1 := m.MarshalKey("from_list", ListMap_Field_FromList)
 		if e1 == nil {
-			e1 = rt.Assignment_Marshal(m, &val.FromList)
+			e1 = rt.ListEval_Marshal(m, &val.FromList)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListMap_Field_FromList))
@@ -2212,11 +2667,133 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 	return
 }
 
-// ListReduce Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record ).
+// ListPush Add a value to a list.
+type ListPush struct {
+	From   rt.Assignment `if:"label=_"`
+	Into   ListTarget    `if:"label=into"`
+	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*ListPush)(nil)
+
+func (*ListPush) Compose() composer.Spec {
+	return composer.Spec{
+		Name: ListPush_Type,
+		Uses: composer.Type_Flow,
+		Lede: "push",
+	}
+}
+
+const ListPush_Type = "list_push"
+const ListPush_Field_From = "$FROM"
+const ListPush_Field_Into = "$INTO"
+const ListPush_Field_AtEdge = "$AT_EDGE"
+
+func (op *ListPush) Marshal(m jsn.Marshaler) error {
+	return ListPush_Marshal(m, op)
+}
+
+type ListPush_Slice []ListPush
+
+func (op *ListPush_Slice) GetType() string { return ListPush_Type }
+
+func (op *ListPush_Slice) Marshal(m jsn.Marshaler) error {
+	return ListPush_Repeats_Marshal(m, (*[]ListPush)(op))
+}
+
+func (op *ListPush_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ListPush_Slice) SetSize(cnt int) {
+	var els []ListPush
+	if cnt >= 0 {
+		els = make(ListPush_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ListPush_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ListPush_Marshal(m, &(*op)[i])
+}
+
+func ListPush_Repeats_Marshal(m jsn.Marshaler, vals *[]ListPush) error {
+	return jsn.RepeatBlock(m, (*ListPush_Slice)(vals))
+}
+
+func ListPush_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListPush) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = ListPush_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type ListPush_Flow struct{ ptr *ListPush }
+
+func (n ListPush_Flow) GetType() string      { return ListPush_Type }
+func (n ListPush_Flow) GetLede() string      { return "push" }
+func (n ListPush_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListPush_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListPush); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func ListPush_Optional_Marshal(m jsn.Marshaler, pv **ListPush) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListPush_Marshal(m, *pv)
+	} else if !enc {
+		var v ListPush
+		if err = ListPush_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func ListPush_Marshal(m jsn.Marshaler, val *ListPush) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(ListPush_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", ListPush_Field_From)
+		if e0 == nil {
+			e0 = rt.Assignment_Marshal(m, &val.From)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListPush_Field_From))
+		}
+		e1 := m.MarshalKey("into", ListPush_Field_Into)
+		if e1 == nil {
+			e1 = ListTarget_Marshal(m, &val.Into)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListPush_Field_Into))
+		}
+		e2 := m.MarshalKey("at_front", ListPush_Field_AtEdge)
+		if e2 == nil {
+			e2 = rt.BoolEval_Optional_Marshal(m, &val.AtEdge)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", ListPush_Field_AtEdge))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// ListReduce Combine all of the values in a list, and store the result in a variable.
+// The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record ).
 type ListReduce struct {
-	IntoValue    string        `if:"label=into,type=text"`
-	FromList     rt.Assignment `if:"label=from_list"`
-	UsingPattern string        `if:"label=using,type=text"`
+	IntoValue    string      `if:"label=into,type=text"`
+	FromList     rt.ListEval `if:"label=from_list"`
+	UsingPattern string      `if:"label=using,type=text"`
 	Markup       map[string]any
 }
 
@@ -2316,7 +2893,7 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 		}
 		e1 := m.MarshalKey("from_list", ListReduce_Field_FromList)
 		if e1 == nil {
-			e1 = rt.Assignment_Marshal(m, &val.FromList)
+			e1 = rt.ListEval_Marshal(m, &val.FromList)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListReduce_Field_FromList))
@@ -2335,7 +2912,7 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 
 // ListReverse Reverse a list.
 type ListReverse struct {
-	List   ListSource `if:"label=list"`
+	List   rt.ListEval `if:"label=list"`
 	Markup map[string]any
 }
 
@@ -2426,7 +3003,7 @@ func ListReverse_Marshal(m jsn.Marshaler, val *ListReverse) (err error) {
 	if err = m.MarshalBlock(ListReverse_Flow{val}); err == nil {
 		e0 := m.MarshalKey("list", ListReverse_Field_List)
 		if e0 == nil {
-			e0 = ListSource_Marshal(m, &val.List)
+			e0 = rt.ListEval_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListReverse_Field_List))
@@ -2565,7 +3142,7 @@ func ListSet_Marshal(m jsn.Marshaler, val *ListSet) (err error) {
 // When end is omitted, copy up to and including the last element;
 // and do the same if the end is greater than the length
 type ListSlice struct {
-	List   rt.Assignment `if:"label=_"`
+	List   rt.ListEval   `if:"label=_"`
 	Start  rt.NumberEval `if:"label=start,optional"`
 	End    rt.NumberEval `if:"label=end,optional"`
 	Markup map[string]any
@@ -2662,7 +3239,7 @@ func ListSlice_Marshal(m jsn.Marshaler, val *ListSlice) (err error) {
 	if err = m.MarshalBlock(ListSlice_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSlice_Field_List)
 		if e0 == nil {
-			e0 = rt.Assignment_Marshal(m, &val.List)
+			e0 = rt.ListEval_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSlice_Field_List))
@@ -3049,76 +3626,13 @@ func ListSortUsing_Marshal(m jsn.Marshaler, val *ListSortUsing) (err error) {
 	return
 }
 
-const ListSource_Type = "list_source"
-
-var ListSource_Optional_Marshal = ListSource_Marshal
-
-type ListSource_Slot struct{ Value *ListSource }
-
-func (at ListSource_Slot) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(at); err == nil {
-		if a, ok := at.GetSlot(); ok {
-			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-func (at ListSource_Slot) GetType() string              { return ListSource_Type }
-func (at ListSource_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at ListSource_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(ListSource)
-	return
-}
-
-func ListSource_Marshal(m jsn.Marshaler, ptr *ListSource) (err error) {
-	slot := ListSource_Slot{ptr}
-	return slot.Marshal(m)
-}
-
-type ListSource_Slice []ListSource
-
-func (op *ListSource_Slice) GetType() string { return ListSource_Type }
-
-func (op *ListSource_Slice) Marshal(m jsn.Marshaler) error {
-	return ListSource_Repeats_Marshal(m, (*[]ListSource)(op))
-}
-
-func (op *ListSource_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ListSource_Slice) SetSize(cnt int) {
-	var els []ListSource
-	if cnt >= 0 {
-		els = make(ListSource_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ListSource_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListSource_Marshal(m, &(*op)[i])
-}
-
-func ListSource_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSource) error {
-	return jsn.RepeatBlock(m, (*ListSource_Slice)(vals))
-}
-
-func ListSource_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSource) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListSource_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// ListSplice Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list's length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.
+// ListSplice Modify a list by adding and removing elements.
+// The type of the elements being added must match the type of the list.
+// Text cant be added to a list of numbers, numbers cant be added to a list of text.
+// If the starting index is negative, this begins that many elements from the end of the array;
+// if list's length plus the start is less than zero, this begins from index zero.
+// If the remove count is missing, this removes all elements from the start to the end;
+// if the remove count is zero or negative, no elements are removed.
 type ListSplice struct {
 	List   string        `if:"label=_,type=text"`
 	Start  rt.NumberEval `if:"label=start"`
@@ -3320,248 +3834,6 @@ func ListTarget_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListTarget) (err
 	return
 }
 
-// PutEdge Add a value to a list.
-type PutEdge struct {
-	From   rt.Assignment `if:"label=_"`
-	Into   ListTarget    `if:"label=into"`
-	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*PutEdge)(nil)
-
-func (*PutEdge) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PutEdge_Type,
-		Uses: composer.Type_Flow,
-		Lede: "put",
-	}
-}
-
-const PutEdge_Type = "put_edge"
-const PutEdge_Field_From = "$FROM"
-const PutEdge_Field_Into = "$INTO"
-const PutEdge_Field_AtEdge = "$AT_EDGE"
-
-func (op *PutEdge) Marshal(m jsn.Marshaler) error {
-	return PutEdge_Marshal(m, op)
-}
-
-type PutEdge_Slice []PutEdge
-
-func (op *PutEdge_Slice) GetType() string { return PutEdge_Type }
-
-func (op *PutEdge_Slice) Marshal(m jsn.Marshaler) error {
-	return PutEdge_Repeats_Marshal(m, (*[]PutEdge)(op))
-}
-
-func (op *PutEdge_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PutEdge_Slice) SetSize(cnt int) {
-	var els []PutEdge
-	if cnt >= 0 {
-		els = make(PutEdge_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PutEdge_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PutEdge_Marshal(m, &(*op)[i])
-}
-
-func PutEdge_Repeats_Marshal(m jsn.Marshaler, vals *[]PutEdge) error {
-	return jsn.RepeatBlock(m, (*PutEdge_Slice)(vals))
-}
-
-func PutEdge_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PutEdge) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PutEdge_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type PutEdge_Flow struct{ ptr *PutEdge }
-
-func (n PutEdge_Flow) GetType() string      { return PutEdge_Type }
-func (n PutEdge_Flow) GetLede() string      { return "put" }
-func (n PutEdge_Flow) GetFlow() interface{} { return n.ptr }
-func (n PutEdge_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*PutEdge); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func PutEdge_Optional_Marshal(m jsn.Marshaler, pv **PutEdge) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = PutEdge_Marshal(m, *pv)
-	} else if !enc {
-		var v PutEdge
-		if err = PutEdge_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func PutEdge_Marshal(m jsn.Marshaler, val *PutEdge) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(PutEdge_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PutEdge_Field_From)
-		if e0 == nil {
-			e0 = rt.Assignment_Marshal(m, &val.From)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PutEdge_Field_From))
-		}
-		e1 := m.MarshalKey("into", PutEdge_Field_Into)
-		if e1 == nil {
-			e1 = ListTarget_Marshal(m, &val.Into)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", PutEdge_Field_Into))
-		}
-		e2 := m.MarshalKey("at_front", PutEdge_Field_AtEdge)
-		if e2 == nil {
-			e2 = rt.BoolEval_Optional_Marshal(m, &val.AtEdge)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", PutEdge_Field_AtEdge))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// PutIndex Replace one value in a list with another.
-type PutIndex struct {
-	From    rt.Assignment `if:"label=_"`
-	Into    ListTarget    `if:"label=into"`
-	AtIndex rt.NumberEval `if:"label=at_index"`
-	Markup  map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*PutIndex)(nil)
-
-func (*PutIndex) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PutIndex_Type,
-		Uses: composer.Type_Flow,
-		Lede: "put",
-	}
-}
-
-const PutIndex_Type = "put_index"
-const PutIndex_Field_From = "$FROM"
-const PutIndex_Field_Into = "$INTO"
-const PutIndex_Field_AtIndex = "$AT_INDEX"
-
-func (op *PutIndex) Marshal(m jsn.Marshaler) error {
-	return PutIndex_Marshal(m, op)
-}
-
-type PutIndex_Slice []PutIndex
-
-func (op *PutIndex_Slice) GetType() string { return PutIndex_Type }
-
-func (op *PutIndex_Slice) Marshal(m jsn.Marshaler) error {
-	return PutIndex_Repeats_Marshal(m, (*[]PutIndex)(op))
-}
-
-func (op *PutIndex_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PutIndex_Slice) SetSize(cnt int) {
-	var els []PutIndex
-	if cnt >= 0 {
-		els = make(PutIndex_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PutIndex_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PutIndex_Marshal(m, &(*op)[i])
-}
-
-func PutIndex_Repeats_Marshal(m jsn.Marshaler, vals *[]PutIndex) error {
-	return jsn.RepeatBlock(m, (*PutIndex_Slice)(vals))
-}
-
-func PutIndex_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PutIndex) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PutIndex_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type PutIndex_Flow struct{ ptr *PutIndex }
-
-func (n PutIndex_Flow) GetType() string      { return PutIndex_Type }
-func (n PutIndex_Flow) GetLede() string      { return "put" }
-func (n PutIndex_Flow) GetFlow() interface{} { return n.ptr }
-func (n PutIndex_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*PutIndex); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func PutIndex_Optional_Marshal(m jsn.Marshaler, pv **PutIndex) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = PutIndex_Marshal(m, *pv)
-	} else if !enc {
-		var v PutIndex
-		if err = PutIndex_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func PutIndex_Marshal(m jsn.Marshaler, val *PutIndex) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(PutIndex_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PutIndex_Field_From)
-		if e0 == nil {
-			e0 = rt.Assignment_Marshal(m, &val.From)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PutIndex_Field_From))
-		}
-		e1 := m.MarshalKey("into", PutIndex_Field_Into)
-		if e1 == nil {
-			e1 = ListTarget_Marshal(m, &val.Into)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", PutIndex_Field_Into))
-		}
-		e2 := m.MarshalKey("at_index", PutIndex_Field_AtIndex)
-		if e2 == nil {
-			e2 = rt.NumberEval_Marshal(m, &val.AtIndex)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", PutIndex_Field_AtIndex))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // Range Generates a series of numbers r[i] = (start + step*i) where i>=0.
 // Start and step default to 1, stop defaults to start;
 // the inputs are truncated to produce whole numbers;
@@ -3689,7 +3961,6 @@ func Range_Marshal(m jsn.Marshaler, val *Range) (err error) {
 
 var Slots = []interface{}{
 	(*ListIterator)(nil),
-	(*ListSource)(nil),
 	(*ListTarget)(nil),
 }
 
@@ -3709,10 +3980,15 @@ var Slats = []composer.Composer{
 	(*IntoTxtList)(nil),
 	(*ListAt)(nil),
 	(*ListEach)(nil),
-	(*ListFind)(nil),
+	(*ListFindBool)(nil),
+	(*ListFindList)(nil),
+	(*ListFindNumber)(nil),
+	(*ListFindRecord)(nil),
+	(*ListFindText)(nil),
 	(*ListGather)(nil),
 	(*ListLen)(nil),
 	(*ListMap)(nil),
+	(*ListPush)(nil),
 	(*ListReduce)(nil),
 	(*ListReverse)(nil),
 	(*ListSet)(nil),
@@ -3721,8 +3997,6 @@ var Slats = []composer.Composer{
 	(*ListSortText)(nil),
 	(*ListSortUsing)(nil),
 	(*ListSplice)(nil),
-	(*PutEdge)(nil),
-	(*PutIndex)(nil),
 	(*Range)(nil),
 }
 
@@ -3739,8 +4013,16 @@ var Signatures = map[uint64]interface{}{
 	12709950044197813063: (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:does: */
 	307909849155983812:   (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:does:else: */
 	1558163885147286548:  (*Erasing)(nil),         /* execute=Erasing:from:atIndex:as:does: */
-	18376577513349667220: (*ListFind)(nil),        /* bool_eval=Find:list: */
-	7284088252284022973:  (*ListFind)(nil),        /* number_eval=Find:list: */
+	9348234569197795361:  (*ListFindBool)(nil),    /* bool_eval=Find bool:inList: */
+	9472366438635241650:  (*ListFindBool)(nil),    /* number_eval=Find bool:inList: */
+	16884621558083069345: (*ListFindList)(nil),    /* bool_eval=Find list:inList: */
+	10538020407467602126: (*ListFindList)(nil),    /* number_eval=Find list:inList: */
+	15503953861458579584: (*ListFindNumber)(nil),  /* bool_eval=Find number:inList: */
+	12149184653109026231: (*ListFindNumber)(nil),  /* number_eval=Find number:inList: */
+	14476013798329214116: (*ListFindRecord)(nil),  /* bool_eval=Find record:inList: */
+	15040017068275408375: (*ListFindRecord)(nil),  /* number_eval=Find record:inList: */
+	17001742413226094070: (*ListFindText)(nil),    /* bool_eval=Find text:inList: */
+	16757669338039889689: (*ListFindText)(nil),    /* number_eval=Find text:inList: */
 	17398975598795870578: (*ListAt)(nil),          /* number_eval=Get:index: */
 	787317922352878550:   (*ListAt)(nil),          /* record_eval=Get:index: */
 	7596656253168052952:  (*ListAt)(nil),          /* text_eval=Get:index: */
@@ -3749,9 +4031,8 @@ var Signatures = map[uint64]interface{}{
 	3948826211612626645:  (*IntoTxtList)(nil),     /* list_target=IntoTxts: */
 	3478260273963207965:  (*ListLen)(nil),         /* number_eval=Len: */
 	8449127989109999373:  (*ListMap)(nil),         /* execute=Map:fromList:using: */
-	15271403541048273402: (*PutEdge)(nil),         /* execute=Put:into: */
-	6274609263035146740:  (*PutEdge)(nil),         /* execute=Put:into:atFront: */
-	7979316796785967069:  (*PutIndex)(nil),        /* execute=Put:into:atIndex: */
+	14590825769568398889: (*ListPush)(nil),        /* execute=Push:into: */
+	17497959320325918107: (*ListPush)(nil),        /* execute=Push:into:atFront: */
 	120416590109430143:   (*Range)(nil),           /* num_list_eval=Range: */
 	15503705420922978310: (*Range)(nil),           /* num_list_eval=Range:byStep: */
 	16618866959380663563: (*Range)(nil),           /* num_list_eval=Range:from: */
@@ -3784,7 +4065,7 @@ var Signatures = map[uint64]interface{}{
 	6201472222981604265:  (*ListSplice)(nil),      /* num_list_eval=Splice:start:remove:insert: */
 	15778591428898251294: (*ListSplice)(nil),      /* record_list_eval=Splice:start:remove:insert: */
 	11160578659475180120: (*ListSplice)(nil),      /* text_list_eval=Splice:start:remove:insert: */
-	8822543248886909391:  (*FromNumList)(nil),     /* list_source=VarOfNums: */
-	15957126709573357801: (*FromRecList)(nil),     /* list_source=VarOfRecs: */
-	4755017405222224827:  (*FromTxtList)(nil),     /* list_source=VarOfTxts: */
+	17540955258181747066: (*FromNumList)(nil),     /* list_eval=VarOfNums: */
+	10887272926454556312: (*FromRecList)(nil),     /* list_eval=VarOfRecs: */
+	8452904206638198942:  (*FromTxtList)(nil),     /* list_eval=VarOfTxts: */
 }

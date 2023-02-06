@@ -13,15 +13,23 @@ import (
 
 func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 	typeName := flow.GetType()
-	switch ptr := flow.GetFlow().(type) {
-	case *GetVar:
+	switch op := flow.GetFlow().(type) {
+	case *GetFromVar:
 		// write variables as a string prepended by @
-		err = m.MarshalValue(typeName, "@"+ptr.Name.Str)
+		// fix: it'd be nice if all parts were literals to write dot/bracket syntax a.b[5]
+		// fix: it'd be nicest if this could use package express to handle the parsing.
+		if len(op.Dot) > 0 {
+			err = chart.Unhandled(typeName)
+		} else if name, ok := op.Name.(*literal.TextValue); !ok {
+			err = chart.Unhandled(typeName)
+		} else {
+			err = m.MarshalValue(typeName, "@"+name.Value)
+		}
 
 	case *literal.TextValue:
 		// if the text starts with an @, skip it:
 		// ( ie. dont confuse the rare text literal starting with an ampersand, with GetVar )
-		if str := ptr.Value; len(str) > 0 && str[0] == '@' {
+		if str := op.Value; len(str) > 0 && str[0] == '@' {
 			err = chart.Unhandled(typeName)
 		} else {
 			err = literal.CompactEncoder(m, flow)

@@ -3,7 +3,6 @@ package block_test
 import (
   "testing"
 
-  "git.sr.ht/~ionous/tapestry/dl/core"
   "git.sr.ht/~ionous/tapestry/dl/list"
   "git.sr.ht/~ionous/tapestry/dl/literal"
   "git.sr.ht/~ionous/tapestry/dl/story"
@@ -97,33 +96,33 @@ func TestSkippedSlot(t *testing.T) {
 
 // empty slots shouldn't get extra closes
 // previously this was getting 4 extra closes
-func TestEndSlot(t *testing.T) {
-  if e := testBlocks(&list.PutEdge{
-    From: &core.GetVar{},
-  }, `{
-  "type": "put_edge",
-  "id": "test-1",
-  "extraState": {
-    "FROM": 1
-  },
-  "inputs": {
-    "FROM": {
-      "block": {
-        "type": "get_var",
-        "id": "test-2",
-        "extraState": {
-          "NAME": 1
-        },
-        "fields": {
-          "NAME": ""
-        }
-      }
-    }
-  }
-}`); e != nil {
-    t.Fatal(e)
-  }
-}
+// func TestEndSlot(t *testing.T) {
+//   if e := testBlocks(&list.PutEdge{
+//     From: &core.GetVar{},
+//   }, `{
+//   "type": "put_edge",
+//   "id": "test-1",
+//   "extraState": {
+//     "FROM": 1
+//   },
+//   "inputs": {
+//     "FROM": {
+//       "block": {
+//         "type": "get_var",
+//         "id": "test-2",
+//         "extraState": {
+//           "NAME": 1
+//         },
+//         "fields": {
+//           "NAME": ""
+//         }
+//       }
+//     }
+//   }
+// }`); e != nil {
+//     t.Fatal(e)
+//   }
+// }
 
 // blocks without mutations shouldnt get extra data
 // ( or blockly exceptions and gets very unhappy )

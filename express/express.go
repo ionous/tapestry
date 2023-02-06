@@ -281,24 +281,13 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 				// - etc.
 				c.buildOne(dotName(firstField))
 			} else {
-				// a chaing of dots indicates one or more fields of a record
+				// a chain of dots indicates one or more fields of a record
 				// ex.  .object.fieldContainingAnRecord.otherField
-				var fieldSet core.FromSourceFields = &render.RenderField{Name: T(firstField)}
-
-				var getField *core.GetAtField
-				// .a.b: from the named object a, we want its field b
-				// .a.b.c: after getting the object name in field b, get that object's field c
-				for _, field := range fields[1:] {
-					// the nth time through?
-					if getField != nil {
-						fieldSet = &core.FromRec{Rec: getField}
-					}
-					getField = &core.GetAtField{
-						Field: W(field),
-						From:  fieldSet,
-					}
+				dot := make([]core.Dot, len(fields)-1)
+				for i, field := range fields[1:] {
+					dot[i] = &core.AtField{Field: T(field)}
 				}
-				c.buildOne(getField)
+				c.buildOne(&core.GetFromName{Name: T(firstField), Dot: dot})
 			}
 		}
 

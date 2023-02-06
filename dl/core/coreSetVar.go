@@ -12,7 +12,7 @@ func (op *SetVarFromBool) Execute(run rt.Runtime) (err error) {
 		err = cmdError(op, e)
 	} else if name, e := safe.GetText(run, op.Name); e != nil {
 		err = cmdError(op, e)
-	} else if e := SetFromVariable(run, name.String(), op.Dot, newValue); e != nil {
+	} else if e := SetVariable(run, name.String(), op.Dot, newValue); e != nil {
 		err = cmdError(op, e)
 	}
 	return
@@ -22,7 +22,7 @@ func (op *SetVarFromNumber) Execute(run rt.Runtime) (err error) {
 		err = cmdError(op, e)
 	} else if name, e := safe.GetText(run, op.Name); e != nil {
 		err = cmdError(op, e)
-	} else if e := SetFromVariable(run, name.String(), op.Dot, newValue); e != nil {
+	} else if e := SetVariable(run, name.String(), op.Dot, newValue); e != nil {
 		err = cmdError(op, e)
 	}
 	return
@@ -32,7 +32,7 @@ func (op *SetVarFromText) Execute(run rt.Runtime) (err error) {
 		err = cmdError(op, e)
 	} else if name, e := safe.GetText(run, op.Name); e != nil {
 		err = cmdError(op, e)
-	} else if e := SetFromVariable(run, name.String(), op.Dot, newValue); e != nil {
+	} else if e := SetVariable(run, name.String(), op.Dot, newValue); e != nil {
 		err = cmdError(op, e)
 	}
 	return
@@ -42,7 +42,7 @@ func (op *SetVarFromList) Execute(run rt.Runtime) (err error) {
 		err = cmdError(op, e)
 	} else if name, e := safe.GetText(run, op.Name); e != nil {
 		err = cmdError(op, e)
-	} else if e := SetFromVariable(run, name.String(), op.Dot, newValue); e != nil {
+	} else if e := SetVariable(run, name.String(), op.Dot, newValue); e != nil {
 		err = cmdError(op, e)
 	}
 	return
@@ -52,13 +52,13 @@ func (op *SetVarFromRecord) Execute(run rt.Runtime) (err error) {
 		err = cmdError(op, e)
 	} else if name, e := safe.GetText(run, op.Name); e != nil {
 		err = cmdError(op, e)
-	} else if e := SetFromVariable(run, name.String(), op.Dot, newValue); e != nil {
+	} else if e := SetVariable(run, name.String(), op.Dot, newValue); e != nil {
 		err = cmdError(op, e)
 	}
 	return
 }
 
-func SetFromVariable(run rt.Runtime, name string, dots []Dot, newValue g.Value) (err error) {
+func SetVariable(run rt.Runtime, name string, dots []Dot, newValue g.Value) (err error) {
 	// unpack the dotted path; fix: using pointers would be better.
 	if cnt := len(dots); cnt > 0 {
 		// record up to the penultimate value.

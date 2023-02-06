@@ -34,20 +34,18 @@ func TestFactorial(t *testing.T) {
 				},
 				Rules: []rt.Rule{{
 					Execute: core.MakeActivity(
-						&core.Assign{Var: N("num"),
-							From: &core.FromNum{
-								Val: &core.ProductOf{
-									A: V("num"),
-									B: &core.CallPattern{
-										Pattern: P("factorial"),
-										Arguments: core.NamedArgs(
-											"num", &core.FromNum{
-												Val: &core.DiffOf{
-													A: V("num"),
-													B: I(1),
-												},
-											},
-										)}}}}),
+						SetVar("num", &core.ProductOf{
+							A: V("num"),
+							B: &core.CallPattern{
+								Pattern: P("factorial"),
+								Arguments: core.NamedArgs(
+									"num", &core.FromNum{
+										Val: &core.DiffOf{
+											A: V("num"),
+											B: I(1),
+										},
+									},
+								)}})),
 				}, {
 					Filter: &core.CompareNum{
 						A:  V("num"),
@@ -55,10 +53,7 @@ func TestFactorial(t *testing.T) {
 						B:  I(0),
 					},
 					Execute: core.MakeActivity(
-						&core.Assign{Var: N("num"),
-							From: &core.FromNum{
-								Val: I(1),
-							}},
+						SetVar("num", I(1)),
 					),
 				}}},
 		}}

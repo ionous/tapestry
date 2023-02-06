@@ -51,6 +51,32 @@
         },
 
         {
+          "Spec:with swap:": [
+            "source_value",
+            {
+              "Swap between:": [
+                {
+                  "Pick:type:": ["bool", "bool_eval"]
+                },
+                {
+                  "Pick:type:": ["number", "number_eval"]
+                },
+                {
+                  "Pick:type:": ["text", "text_eval"]
+                },
+                {
+                  "Pick:type:": ["record", "record_eval"]
+                },
+                {
+                  "Pick:type:": ["list", "list_eval"]
+                }
+              ]
+            }
+          ]
+        },
+
+
+        {
           "--": "Read a value from a local variable ( or pattern parameter. )",
           "Spec:slots:with flow:": [
             "get_from_var",
@@ -124,7 +150,7 @@
           "Intended for internal use."
         ],
           "Spec:slots:with flow:": [
-            "get_by_name",
+            "get_from_name",
             [
                 "bool_eval",
                 "number_eval",

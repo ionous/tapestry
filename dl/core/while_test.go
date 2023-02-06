@@ -14,15 +14,14 @@ func TestLoopBreak(t *testing.T) {
 	if e := safe.Run(&run,
 		&While{
 			True: B(true), Does: MakeActivity(
-				&Assign{Var: N("i"), From: &FromNum{Val: &SumOf{A: V("i"), B: I(1)}}},
+				SetVar("i", &SumOf{A: V("i"), B: I(1)}),
 				&ChooseAction{
 					If: &CompareNum{A: V("i"), Is: AtLeast, B: I(4)},
 					Does: MakeActivity(
 						&Break{},
 					),
 				},
-				// &Next{},
-				&Assign{Var: N("j"), From: &FromNum{Val: &SumOf{A: V("j"), B: I(1)}}},
+				SetVar("j", &SumOf{A: V("j"), B: I(1)}),
 			)},
 	); e != nil {
 		t.Fatal(e)
@@ -36,7 +35,7 @@ func TestLoopNext(t *testing.T) {
 	if e := safe.Run(&run,
 		&While{
 			True: B(true), Does: MakeActivity(
-				&Assign{Var: N("i"), From: &FromNum{Val: &SumOf{A: V("i"), B: I(1)}}},
+				SetVar("i", &SumOf{A: V("i"), B: I(1)}),
 				&ChooseAction{
 					If: &CompareNum{A: V("i"), Is: AtLeast, B: I(4)},
 					Does: MakeActivity(
@@ -44,7 +43,7 @@ func TestLoopNext(t *testing.T) {
 					),
 				},
 				&Next{},
-				&Assign{Var: N("j"), From: &FromNum{Val: &SumOf{A: V("j"), B: I(1)}}},
+				SetVar("j", &SumOf{A: V("j"), B: I(1)}),
 			)},
 	); e != nil {
 		t.Fatal(e)
@@ -59,7 +58,7 @@ func TestLoopInfinite(t *testing.T) {
 	if e := safe.Run(&run,
 		&While{
 			True: B(true), Does: MakeActivity(
-				&Assign{Var: N("i"), From: &FromNum{Val: &SumOf{A: V("i"), B: I(1)}}},
+				SetVar("i", &SumOf{A: V("i"), B: I(1)}),
 			)},
 	); !errors.Is(e, MaxLoopIterations) {
 		t.Fatal(e)

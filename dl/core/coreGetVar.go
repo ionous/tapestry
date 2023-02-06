@@ -9,9 +9,7 @@ import (
 )
 
 func (op *GetFromVar) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	if name, e := safe.GetText(run, op.Name); e != nil {
-		err = cmdError(op, e)
-	} else if v, e := GetFromVariable(run, name.String(), affine.Bool, op.Dot); e != nil {
+	if v, e := getFromVar(run, op.Name, affine.Bool, op.Dot); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -20,9 +18,7 @@ func (op *GetFromVar) GetBool(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *GetFromVar) GetNumber(run rt.Runtime) (ret g.Value, err error) {
-	if name, e := safe.GetText(run, op.Name); e != nil {
-		err = cmdError(op, e)
-	} else if v, e := GetFromVariable(run, name.String(), affine.Number, op.Dot); e != nil {
+	if v, e := getFromVar(run, op.Name, affine.Number, op.Dot); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -31,9 +27,7 @@ func (op *GetFromVar) GetNumber(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *GetFromVar) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if name, e := safe.GetText(run, op.Name); e != nil {
-		err = cmdError(op, e)
-	} else if v, e := GetFromVariable(run, name.String(), affine.Text, op.Dot); e != nil {
+	if v, e := getFromVar(run, op.Name, affine.Text, op.Dot); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -42,9 +36,7 @@ func (op *GetFromVar) GetText(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *GetFromVar) GetList(run rt.Runtime) (ret g.Value, err error) {
-	if name, e := safe.GetText(run, op.Name); e != nil {
-		err = cmdError(op, e)
-	} else if v, e := GetFromVariable(run, name.String(), affine.List, op.Dot); e != nil {
+	if v, e := getFromVar(run, op.Name, affine.List, op.Dot); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -53,9 +45,7 @@ func (op *GetFromVar) GetList(run rt.Runtime) (ret g.Value, err error) {
 }
 
 func (op *GetFromVar) GetRecord(run rt.Runtime) (ret g.Value, err error) {
-	if name, e := safe.GetText(run, op.Name); e != nil {
-		err = cmdError(op, e)
-	} else if v, e := GetFromVariable(run, name.String(), affine.Record, op.Dot); e != nil {
+	if v, e := getFromVar(run, op.Name, affine.Record, op.Dot); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ret = v
@@ -63,9 +53,11 @@ func (op *GetFromVar) GetRecord(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-// FIX: instead of check, convert
-func GetFromVariable(run rt.Runtime, name string, aff affine.Affinity, path []Dot) (ret g.Value, err error) {
-	if val, e := run.GetField(meta.Variables, name); e != nil {
+// FIX: convert and warn instead of error on field affinity checks
+func getFromVar(run rt.Runtime, name rt.TextEval, aff affine.Affinity, path []Dot) (ret g.Value, err error) {
+	if name, e := safe.GetText(run, name); e != nil {
+		err = e
+	} else if val, e := run.GetField(meta.Variables, name.String()); e != nil {
 		err = e
 	} else if val, e := Peek(run, val, path); e != nil {
 		err = e

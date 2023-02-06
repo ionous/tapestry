@@ -25,12 +25,12 @@ var FactorialStory = &story.Story{
 				Name: factorialName,
 				PatternReturn: &story.PatternReturn{Result: &story.NumberField{
 					Markup: UserComment("the result uses the same variable as the pattern input does"),
-					Name:   numVar.Str,
+					Name:   "num",
 				}},
 				Params: []story.Field{
 					&story.NumberField{
 						Markup: UserComment("just one argument, a number called 'num'"),
-						Name:   numVar.Str,
+						Name:   "num",
 					}},
 			},
 			&story.PatternActions{
@@ -69,33 +69,24 @@ var FactorialCheck = []rt.Execute{
 
 // subtracts 1 from the num and multiples by one
 var FactorialMulMinusOne = []rt.Execute{
-	&core.Assign{
-		Var: numVar,
-		From: &core.FromNum{Val: &core.ProductOf{
-			A: &core.GetVar{Name: numVar},
-			B: &core.DiffOf{
-				A: &core.GetVar{Name: numVar},
-				B: F(1)},
-		}},
-	},
+	SetVar("num", &core.ProductOf{
+		A: V("num"),
+		B: &core.DiffOf{
+			A: V("num"),
+			B: I(1),
+		},
+	}),
 }
 
 // at 0, use the number 1
 var FactorialUseOne = []rt.Execute{
-	&core.Assign{
-		Var: numVar,
-		From: &core.FromNum{
-			Val:    F(1),
-			Markup: UserComment("...return 1."),
-		},
-	},
+	SetVar("num", I(1)),
 }
 
 var FactorialIsZero = &core.CompareNum{
 	Markup: UserComment("so, when we've reached 0..."),
-	A:      &core.GetVar{Name: numVar},
+	A:      V("num"),
 	Is:     core.Equal,
 	B:      F(0)}
 
 var factorialName = core.PatternName{Str: "factorial"}
-var numVar = core.VariableName{Str: "num"}

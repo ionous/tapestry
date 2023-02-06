@@ -20,7 +20,7 @@ func (op *ListAt) GetRecord(run rt.Runtime) (g.Value, error) {
 }
 
 func (op *ListAt) getAt(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	if vs, e := safe.GetAssignedValue(run, op.List); e != nil {
+	if vs, e := safe.GetList(run, op.List); e != nil {
 		err = cmdError(op, e)
 	} else if e := safe.Check(vs, aff); e != nil {
 		err = cmdError(op, e)

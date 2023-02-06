@@ -130,18 +130,10 @@ var reverseRecords = testpat.Pattern{
 	Labels: []string{"in"},
 	Return: "out",
 	Rules: []rt.Rule{{
-		Execute: core.MakeActivity(&core.PutAtField{
-			Into:    &core.IntoVar{Var: N("out")},
-			AtField: W("name"),
-			From: &core.FromText{
-				Val: &core.MakeReversed{
-					Text: &core.GetAtField{
-						Field: W("name"),
-						From:  &core.FromVar{Var: N("in")},
-					},
-				},
-			},
-		}),
+		Execute: core.MakeActivity(
+			SetVar("out", "name",
+				&core.MakeReversed{Text: V("in", "name")}),
+		),
 	}},
 }
 
@@ -150,11 +142,8 @@ var reverseStrings = testpat.Pattern{
 	Labels: []string{"in"},
 	Return: "out",
 	Rules: []rt.Rule{{
-		Execute: core.MakeActivity(&core.Assign{
-			Var: N("out"),
-			From: &core.FromText{
-				Val: &core.MakeReversed{Text: V("in")},
-			},
-		}),
+		Execute: core.MakeActivity(
+			SetVar("out", &core.MakeReversed{Text: V("in")}),
+		),
 	}},
 }

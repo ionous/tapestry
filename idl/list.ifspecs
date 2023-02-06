@@ -71,7 +71,7 @@
                     "Term:name:type:": [
                       "_",
                       "from",
-                      "list_source"
+                      "list_eval"
                     ]
                   },
                   {
@@ -106,7 +106,7 @@
                   {
                     "Term:type:": [
                       "from",
-                      "list_source"
+                      "list_eval"
                     ]
                   },
                   {
@@ -137,7 +137,7 @@
                 {
                   "Term:type:": [
                     "from",
-                    "list_source"
+                    "list_eval"
                   ]
                 },
                 {
@@ -176,7 +176,7 @@
                     "Term:name:type:": [
                       "_",
                       "from",
-                      "list_source"
+                      "list_eval"
                     ]
                   },
                   {
@@ -216,7 +216,7 @@
           "--": "Uses a list of numbers.",
           "Spec:slots:with flow:": [
             "from_num_list",
-            "list_source",
+            "list_eval",
             {
               "Flow:uses:": [
                 "var_of_nums",
@@ -237,7 +237,7 @@
           "--": "Uses a list of records.",
           "Spec:slots:with flow:": [
             "from_rec_list",
-            "list_source",
+            "list_eval",
             {
               "Flow:uses:": [
                 "var_of_recs",
@@ -258,7 +258,7 @@
           "--": "Uses a list of text.",
           "Spec:slots:with flow:": [
             "from_txt_list",
-            "list_source",
+            "list_eval",
             {
               "Flow:uses:": [
                 "var_of_txts",
@@ -355,7 +355,7 @@
                     "Term:name:type:": [
                       "_",
                       "list",
-                      "assignment"
+                      "list_eval"
                     ]
                   },
                   {
@@ -382,7 +382,7 @@
                     "Term:name:type:": [
                       "across",
                       "list",
-                      "assignment"
+                      "list_eval"
                     ]
                   },
                   {
@@ -413,7 +413,7 @@
         {
           "--": "Search a list for a specific value.",
           "Spec:slots:with flow:": [
-            "list_find",
+            "list_find_bool",
             [
               "bool_eval",
               "number_eval"
@@ -423,16 +423,15 @@
                 "find",
                 [
                   {
-                    "Term:name:type:": [
-                      "_",
-                      "value",
-                      "assignment"
+                    "Term:type:": [
+                      "bool",
+                      "bool_eval"
                     ]
                   },
                   {
                     "Term:type:": [
-                      "list",
-                      "assignment"
+                      "in_list",
+                      "list_eval"
                     ]
                   }
                 ]
@@ -441,7 +440,129 @@
           ]
         },
         {
-          "--": "Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather.",
+          "--": "Search a list for a specific value.",
+          "Spec:slots:with flow:": [
+            "list_find_number",
+            [
+              "bool_eval",
+              "number_eval"
+            ],
+            {
+              "Flow:uses:": [
+                "find",
+                [
+                  {
+                    "Term:type:": [
+                      "number",
+                      "number_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "in_list",
+                      "list_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Search a list for a specific value.",
+          "Spec:slots:with flow:": [
+            "list_find_text",
+            [
+              "bool_eval",
+              "number_eval"
+            ],
+            {
+              "Flow:uses:": [
+                "find",
+                [
+                  {
+                    "Term:type:": [
+                      "text",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "in_list",
+                      "list_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Search a list for a specific value.",
+          "Spec:slots:with flow:": [
+            "list_find_record",
+            [
+              "bool_eval",
+              "number_eval"
+            ],
+            {
+              "Flow:uses:": [
+                "find",
+                [
+                  {
+                    "Term:type:": [
+                      "record",
+                      "record_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "in_list",
+                      "list_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Search a list for a specific value.",
+          "Spec:slots:with flow:": [
+            "list_find_list",
+            [
+              "bool_eval",
+              "number_eval"
+            ],
+            {
+              "Flow:uses:": [
+                "find",
+                [
+                  {
+                    "Term:type:": [
+                      "list",
+                      "list_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "in_list",
+                      "list_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+
+
+        {
+          "--": [ 
+            "Transform the values from a list.", 
+            "The named pattern gets called once for each value in the list.",
+            "It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather."
+          ],
           "Spec:with flow:": [
             "list_gather",
             {
@@ -458,7 +579,7 @@
                   {
                     "Term:type:": [
                       "from",
-                      "list_source"
+                      "list_eval"
                     ]
                   },
                   {
@@ -494,7 +615,7 @@
                     "Term:name:type:": [
                       "_",
                       "list",
-                      "assignment"
+                      "list_eval"
                     ]
                   }
                 ]
@@ -503,7 +624,9 @@
           ]
         },
         {
-          "--": "Transform the values from one list and place the results in another list. The designated pattern is called with each value from the 'from list', one value at a time.",
+          "--": ["Transform the values from one list and place the results in another list.",
+           "The designated pattern is called with each value from the 'from list', one value at a time."
+         ],
           "Spec:slots:with flow:": [
             "list_map",
             "execute",
@@ -521,7 +644,7 @@
                   {
                     "Term:type:": [
                       "from_list",
-                      "assignment"
+                      "list_eval"
                     ]
                   },
                   {
@@ -537,7 +660,10 @@
           ]
         },
         {
-          "--": "Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record ).",
+          "--": [
+            "Combine all of the values in a list, and store the result in a variable.",
+            "The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record )."
+          ],
           "Spec:slots:with flow:": [
             "list_reduce",
             "execute",
@@ -555,7 +681,7 @@
                   {
                     "Term:type:": [
                       "from_list",
-                      "assignment"
+                      "list_eval"
                     ]
                   },
                   {
@@ -582,7 +708,7 @@
                   {
                     "Term:type:": [
                       "list",
-                      "list_source"
+                      "list_eval"
                     ]
                   }
                 ]
@@ -648,7 +774,7 @@
                     "Term:name:type:": [
                       "_",
                       "list",
-                      "assignment"
+                      "list_eval"
                     ]
                   },
                   {
@@ -771,17 +897,17 @@
             }
           ]
         },
+      
         {
-          "--": "Helper for accessing lists.",
-          "Spec:with slot:": [
-            "list_source",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
-          "--": "Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list's length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.",
+          "--": [
+            "Modify a list by adding and removing elements.",
+            "The type of the elements being added must match the type of the list.",
+            "Text cant be added to a list of numbers, numbers cant be added to a list of text.",
+            "If the starting index is negative, this begins that many elements from the end of the array;" ,
+            "if list's length plus the start is less than zero, this begins from index zero.",
+            "If the remove count is missing, this removes all elements from the start to the end;",
+            "if the remove count is zero or negative, no elements are removed."
+          ],
           "Spec:slots:with flow:": [
             "list_splice",
             [
@@ -836,11 +962,11 @@
         {
           "--": "Add a value to a list.",
           "Spec:slots:with flow:": [
-            "put_edge",
+            "list_push",
             "execute",
             {
               "Flow:uses:": [
-                "put",
+                "push",
                 [
                   {
                     "Term:name:type:": [
@@ -861,39 +987,6 @@
                       "at_edge",
                       "bool_eval",
                       true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Replace one value in a list with another.",
-          "Spec:slots:with flow:": [
-            "put_index",
-            "execute",
-            {
-              "Flow:uses:": [
-                "put",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "from",
-                      "assignment"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "into",
-                      "list_target"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "at_index",
-                      "number_eval"
                     ]
                   }
                 ]

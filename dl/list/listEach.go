@@ -19,7 +19,7 @@ func (op *ListEach) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListEach) forEach(run rt.Runtime) (err error) {
-	if vs, e := safe.GetAssignedValue(run, op.List); e != nil {
+	if vs, e := safe.GetList(run, op.List); e != nil {
 		err = e
 	} else if cnt, otherwise := vs.Len(), op.Else; otherwise != nil && cnt == 0 {
 		err = otherwise.Branch(run)

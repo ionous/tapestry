@@ -39,9 +39,8 @@ var collateGroups = testpat.Pattern{
 		Execute: core.MakeActivity(
 			// walk collation.Groups for matching settings
 			&core.Assign{
-				Var: N("groups"),
-				// &core.Unpack{V("collation"), "Groups"},
-				From: &core.GetAtField{From: &core.FromVar{Var: N("collation")}, Field: W("groups")},
+				Var:  N("groups"),
+				From: V("collation", "groups"),
 			},
 			&list.ListEach{
 				List: V("groups"),
@@ -52,8 +51,8 @@ var collateGroups = testpat.Pattern{
 							Pattern: P("match_groups"),
 							Arguments: core.Args(
 								V("settings"),
-								&core.GetAtField{From: &core.FromVar{Var: N("el")}, Field: W("settings")}),
-							// &core.Unpack{V("el"), "Settings"}),
+								V("el", "settings"),
+							),
 						},
 						Does: core.MakeActivity(
 							&core.Assign{
@@ -76,39 +75,26 @@ var collateGroups = testpat.Pattern{
 				Does: core.MakeActivity(
 					&list.PutEdge{
 						Into: &list.IntoTxtList{Var: N("names")},
-						// From: &core.Unpack{V("settings"), "name"},
-						From: &core.GetAtField{From: &core.FromVar{Var: N("settings")}, Field: W("name")},
+						From: V("setting", "name"),
 					},
-					Put("group", "objects", V("names")),
-					Put("group", "settings", V("settings")),
+					SetVar("group", "objects", V("names")),
+					SetVar("group", "settings", V("settings")),
 					&list.PutEdge{Into: &list.IntoRecList{Var: N("groups")}, From: V("group")},
 				), // end true
 				// found a matching group?
 				// unpack it, add the object to it, then pack it up again.
 				Else: &core.ChooseNothingElse{Does: core.MakeActivity(
-					&core.Assign{
-						Var:  N("group"),
-						From: &core.FromRecord{Val: &list.ListAt{List: V("groups"), Index: V("idx")}}},
-					&core.Assign{
-						Var: N("names"),
-						// &core.Unpack{V("group"), "Objects"},
-						From: &core.GetAtField{From: &core.FromVar{Var: N("group")}, Field: W("objects")},
-					},
+					SetVar("group", &list.ListAt{List: V("groups"), Index: V("idx")}),
+					SetVar("names", V("group", "objects")),
 					&list.PutEdge{
 						Into: &list.IntoTxtList{Var: N("names")},
-						// From: &core.Unpack{V("settings"), "name"},
-						From: &core.GetAtField{From: &core.FromVar{Var: N("settings")}, Field: W("name")},
+						V("settings", "name"),
 					},
-					Put("group", "objects", V("names")),
+					SetVar("group", "objects", V("names")),
 					&list.ListSet{List: W("groups"), Index: V("idx"), From: V("group")},
-				), // end false
-				},
+				)}, // end false
 			},
-			Put("collation", "groups", V("groups")),
+			SetVar("collation", "groups", V("groups")),
 		)},
 	},
-}
-
-func Put(rec, field string, from rt.Assignment) rt.Execute {
-	return &core.PutAtField{Into: &core.IntoVar{Var: N(rec)}, AtField: W(field), From: from}
 }

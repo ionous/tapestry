@@ -20,7 +20,7 @@ func (op *ListReduce) Execute(run rt.Runtime) (err error) {
 func (op *ListReduce) reduce(run rt.Runtime) (err error) {
 
 	intoValue := core.VariableName{Str: op.IntoValue} // fix
-	if fromList, e := safe.GetAssignedValue(run, op.FromList); e != nil {
+	if fromList, e := safe.GetList(run, op.FromList); e != nil {
 		err = e
 	} else if outVal, e := safe.CheckVariable(run, intoValue.String(), ""); e != nil {
 		err = e
