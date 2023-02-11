@@ -29,10 +29,10 @@ func (op *FromBool) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-func (op *FromNum) Affinity() affine.Affinity {
+func (op *FromNumber) Affinity() affine.Affinity {
 	return affine.Number
 }
-func (op *FromNum) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
+func (op *FromNumber) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	if val, e := safe.GetNumber(run, op.Val); e != nil {
 		err = cmdError(op, e)
 	} else {
@@ -53,6 +53,28 @@ func (op *FromText) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
+func (op *FromList) Affinity() affine.Affinity {
+	return affine.List
+}
+
+func (op *FromList) GetList(run rt.Runtime) (ret g.Value, err error) {
+	if vals, e := safe.GetList(run, op.Val); e != nil {
+		err = cmdError(op, e)
+	} else {
+		ret = vals
+	}
+	return
+}
+
+func (op *FromList) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
+	if vals, e := safe.GetList(run, op.Val); e != nil {
+		err = cmdError(op, e)
+	} else {
+		ret = vals
+	}
+	return
+}
+
 func (op *FromRecord) Affinity() affine.Affinity {
 	return affine.Record
 }
@@ -64,6 +86,8 @@ func (op *FromRecord) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) 
 	}
 	return
 }
+
+// -------------
 
 func (op *FromNumbers) Affinity() affine.Affinity {
 	return affine.NumList

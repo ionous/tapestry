@@ -56,20 +56,57 @@
             {
               "Swap between:": [
                 {
-                  "Pick:type:": ["bool", "bool_eval"]
+                  "Pick:type:": ["bool", "from_bool"]
                 },
                 {
-                  "Pick:type:": ["number", "number_eval"]
+                  "Pick:type:": ["number", "from_number"]
                 },
                 {
-                  "Pick:type:": ["text", "text_eval"]
+                  "Pick:type:": ["text", "from_text"]
                 },
                 {
-                  "Pick:type:": ["record", "record_eval"]
+                  "Pick:type:": ["list", "from_list"]
                 },
                 {
-                  "Pick:type:": ["list", "list_eval"]
+                  "Pick:type:": ["record", "from_record"]
                 }
+               
+              ]
+            }
+          ]
+        },
+
+
+        {
+          "--": "Store a value into a local variable ( or pattern argument. )",
+          "Spec:slots:with flow:": [
+            "set_var_from_value",
+            "execute",
+            {
+              "Flow:uses:": [ 
+                "set_var", [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "name",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:optional:repeats:": [
+                      "dot",
+                      true, 
+                      true 
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "from",
+                      "value",
+                      "source_value"
+                    ]
+                  }
+                ]
               ]
             }
           ]
@@ -178,178 +215,11 @@
             }
           ]
         },
+  
         {
-          "--": "Store a true/false value into a local variable ( or pattern argument. )",
-          "Spec:slots:with flow:": [
-            "set_var_from_bool",
-            "execute",
-            {
-              "Flow:uses:": [ 
-                "set_var", [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "name",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:optional:repeats:": [
-                      "dot",
-                      true, 
-                      true 
-                    ]
-                  },
-                  {
-                     "Term:name:type:": [
-                      "from_bool",
-                      "bool",
-                      "bool_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Store a number into a local variable ( or pattern argument. )",
-          "Spec:slots:with flow:": [
-            "set_var_from_number",
-            "execute",
-            {
-              "Flow:uses:": [ 
-                "set_var", [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "name",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:optional:repeats:": [
-                      "dot",
-                      true, 
-                      true 
-                    ]
-                  },
-                  {
-                     "Term:name:type:": [
-                      "from_number",
-                      "number",
-                      "number_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },{
-          "--": "Store text into a local variable ( or pattern argument. )",
-          "Spec:slots:with flow:": [
-            "set_var_from_text",
-            "execute",
-            {
-              "Flow:uses:": [ 
-                "set_var", [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "name",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:optional:repeats:": [
-                      "dot",
-                      true, 
-                      true 
-                    ]
-                  },
-                  {
-                     "Term:name:type:": [
-                      "from_text",
-                      "text",
-                      "text_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },{
-          "--": "Store a list into a local variable ( or pattern argument. )",
-          "Spec:slots:with flow:": [
-            "set_var_from_list",
-            "execute",
-            {
-              "Flow:uses:": [ 
-                "set_var", [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "name",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:optional:repeats:": [
-                      "dot",
-                      true, 
-                      true 
-                    ]
-                  },
-                  {
-                     "Term:name:type:": [
-                      "from_list",
-                      "list",
-                      "list_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },{
-          "--": "Store a record into a local variable ( or pattern argument. )",
-          "Spec:slots:with flow:": [
-            "set_var_from_record",
-            "execute",
-            {
-              "Flow:uses:": [ 
-                "set_var", [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "name",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:optional:repeats:": [
-                      "dot",
-                      true, 
-                      true 
-                    ]
-                  },
-                  {
-                     "Term:name:type:": [
-                      "from_record",
-                      "record",
-                      "record_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-
-  {
           "--": "Store a true/false value into an object.",
           "Spec:slots:with flow:": [
-            "set_obj_from_bool",
+            "set_obj_from_value",
             "execute",
             {
               "Flow:uses:": [ 
@@ -376,9 +246,9 @@
                   },
                   {
                      "Term:name:type:": [
-                      "from_bool",
-                      "bool",
-                      "bool_eval"
+                      "from",
+                      "value",
+                      "source_value"
                     ]
                   }
                 ]
@@ -386,162 +256,7 @@
             }
           ]
         },
-        {
-          "--": "Store a number into an object.",
-          "Spec:slots:with flow:": [
-            "set_obj_from_number",
-            "execute",
-            {
-              "Flow:uses:": [ 
-                "set_obj", [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "name",
-                      "text_eval"
-                    ]
-                  },{
-                    "Term:type:": [
-                      "field",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:optional:repeats:": [
-                      "dot",
-                      true, 
-                      true 
-                    ]
-                  },
-                  {
-                     "Term:name:type:": [
-                      "from_number",
-                      "number",
-                      "number_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },{
-          "--": "Store text into an object.",
-          "Spec:slots:with flow:": [
-            "set_obj_from_text",
-            "execute",
-            {
-              "Flow:uses:": [ 
-                "set_obj", [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "name",
-                      "text_eval"
-                    ]
-                  },{
-                    "Term:type:": [
-                      "field",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:optional:repeats:": [
-                      "dot",
-                      true, 
-                      true 
-                    ]
-                  },
-                  {
-                     "Term:name:type:": [
-                      "from_text",
-                      "text",
-                      "text_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },{
-          "--": "Store a list into an object.",
-          "Spec:slots:with flow:": [
-            "set_obj_from_list",
-            "execute",
-            {
-              "Flow:uses:": [ 
-                "set_obj", [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "name",
-                      "text_eval"
-                    ]
-                  },{
-                    "Term:type:": [
-                      "field",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:optional:repeats:": [
-                      "dot",
-                      true, 
-                      true 
-                    ]
-                  },
-                  {
-                     "Term:name:type:": [
-                      "from_list",
-                      "list",
-                      "list_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },{
-          "--": "Store a record into an object.",
-          "Spec:slots:with flow:": [
-            "set_obj_from_record",
-            "execute",
-            {
-              "Flow:uses:": [ 
-                "set_obj", [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "name",
-                      "text_eval"
-                    ]
-                  },{
-                    "Term:type:": [
-                      "field",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:optional:repeats:": [
-                      "dot",
-                      true, 
-                      true 
-                    ]
-                  },
-                  {
-                     "Term:name:type:": [
-                      "from_record",
-                      "record",
-                      "record_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-
-
-
+       
 
 
         {
@@ -1365,7 +1080,7 @@
         {
           "--": "Assigns the calculated number.",
           "Spec:slots:groups:with flow:": [
-            "from_num",
+            "from_number",
             "assignment",
             "variables",
             {
@@ -1462,6 +1177,29 @@
                       "_",
                       "val",
                       "record_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+
+         {
+          "--": "Assigns the calculated record.",
+          "Spec:slots:groups:with flow:": [
+            "from_list",
+            "list_eval",
+            "variables",
+            {
+              "Flow:uses:": [
+                "from_list",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "val",
+                      "list_eval"
                     ]
                   }
                 ]

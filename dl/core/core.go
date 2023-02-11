@@ -53,21 +53,22 @@ func SetVar(name string, patheval ...any) (ret rt.Execute) {
 	cnt := len(patheval)
 	eval := patheval[cnt-1]
 	dots := MakeDot(patheval[:cnt-1]...)
+	var val SourceValue
 	switch eval := eval.(type) {
 	case rt.BoolEval:
-		ret = &SetVarFromBool{Name: n, Bool: eval, Dot: dots}
+		val = MakeFromBool(eval)
 	case rt.NumberEval:
-		ret = &SetVarFromNumber{Name: n, Number: eval, Dot: dots}
+		val = MakeFromNumber(eval)
 	case rt.TextEval:
-		ret = &SetVarFromText{Name: n, Text: eval, Dot: dots}
+		val = MakeFromText(eval)
 	case rt.ListEval:
-		ret = &SetVarFromList{Name: n, List: eval, Dot: dots}
+		val = MakeFromList(eval)
 	case rt.RecordEval:
-		ret = &SetVarFromRecord{Name: n, Record: eval, Dot: dots}
+		val = MakeFromRecord(eval)
 	default:
 		panic("unknown eval type")
 	}
-	return
+	return &SetVarFromValue{Name: n, Value: val, Dot: dots}
 }
 
 func MakeDot(path ...any) []Dot {
@@ -83,4 +84,35 @@ func MakeDot(path ...any) []Dot {
 		}
 	}
 	return out
+}
+
+func MakeFromBool(eval rt.BoolEval) SourceValue {
+	return SourceValue{
+		Choice: SourceValue_Bool_Opt,
+		Value:  &FromBool{Val: eval},
+	}
+}
+func MakeFromNumber(eval rt.NumberEval) SourceValue {
+	return SourceValue{
+		Choice: SourceValue_Number_Opt,
+		Value:  &FromNumber{Val: eval},
+	}
+}
+func MakeFromText(eval rt.TextEval) SourceValue {
+	return SourceValue{
+		Choice: SourceValue_Text_Opt,
+		Value:  &FromText{Val: eval},
+	}
+}
+func MakeFromList(eval rt.ListEval) SourceValue {
+	return SourceValue{
+		Choice: SourceValue_List_Opt,
+		Value:  &FromList{Val: eval},
+	}
+}
+func MakeFromRecord(eval rt.RecordEval) SourceValue {
+	return SourceValue{
+		Choice: SourceValue_Record_Opt,
+		Value:  &FromRecord{Val: eval},
+	}
 }
