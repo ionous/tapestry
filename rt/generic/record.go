@@ -101,11 +101,6 @@ func (d *Record) SetIndexedField(i int, val Value) (err error) {
 	case affine.Record, affine.RecordList:
 		okay = aff == ft.Affinity && cls == ft.Type
 
-	case affine.Object:
-		if ft.Affinity == affine.Text {
-			val = StringFrom(val.String(), val.Type())
-			okay = true
-		}
 	}
 	if !okay {
 		err = errutil.Fmt("couldnt set field %s ( %s of type %q ) with val %s of type %q", ft.Name, ft.Affinity, ft.Type, aff, cls)

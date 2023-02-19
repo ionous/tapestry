@@ -168,6 +168,15 @@ func (n *NounInfo) IsValid() bool {
 	return len(n.Id) != 0
 }
 
+func (n *NounInfo) String() (ret string) {
+	if !n.IsValid() {
+		ret = "<unknown object>"
+	} else {
+		ret = strings.Join([]string{n.Domain, n.Id}, "::")
+	}
+	return
+}
+
 func (q *Query) NounIsNamed(id, name string) (ret bool, err error) {
 	return scanOne(q.nounIsNamed, id, name)
 }
@@ -198,17 +207,13 @@ func (q *Query) PluralFromSingular(singular string) (ret string, err error) {
 	return scanString(q.pluralFromSingular, singular)
 }
 
-type PatternLabels struct {
-	Result string
-	Labels []string
-}
-
-func (q *Query) PatternLabels(pat string) (ret PatternLabels, err error) {
+// the last value is always the result, blank for execute statements
+func (q *Query) PatternLabels(pat string) (ret []string, err error) {
 	var labels, result string
 	if e := q.patternOf.QueryRow(pat).Scan(&labels, &result); e != nil && e != sql.ErrNoRows {
 		err = e
 	} else {
-		ret = PatternLabels{result, strings.Split(labels, ",")}
+		ret = append(strings.Split(labels, ","), result)
 	}
 	return
 }

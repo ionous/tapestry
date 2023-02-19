@@ -88,21 +88,21 @@ func TestExpressions(t *testing.T) {
 	t.Run("big dot", func(t *testing.T) {
 		// get 'num' out of 'A' ( which is in this case an object )
 		if e := testExpression(".A.num",
-			core.GetName("A", "num")); e != nil {
+			renderRef("A", "num")); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("little dot", func(t *testing.T) {
 		if e := testExpression(".a.b.c",
-			core.GetName("a", "b", "c")); e != nil {
+			renderRef("a", "b", "c")); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("binary", func(t *testing.T) {
 		if e := testExpression(".A.num * .b.num",
 			&core.ProductOf{
-				A: core.GetName("A", "num"),
-				B: core.GetName("b", "num"),
+				A: renderRef("A", "num"),
+				B: renderRef("b", "num"),
 			}); e != nil {
 			t.Fatal(e)
 		}
@@ -126,8 +126,7 @@ func TestTemplates(t *testing.T) {
 		if e := testTemplate("{print_num_word: .group_size}",
 			&core.PrintNumWord{
 				Num: &render.RenderRef{
-					Name:  N("group_size"),
-					Flags: render.RenderFlags{Str: render.RenderFlags_RenderAsAny},
+					Name: T("group_size"),
 				},
 			}); e != nil {
 			t.Fatal(e)
@@ -222,10 +221,9 @@ func TestTemplates(t *testing.T) {
 	t.Run("indexed", func(t *testing.T) {
 		if e := testTemplate("{'world'|hello!}",
 			&render.RenderPattern{
-				Call: core.CallPattern{
-					Pattern: P("hello"), Arguments: core.Args(
-						&core.FromText{Val: T("world")},
-					)}}); e != nil {
+				Pattern: W("hello"), Render: []render.RenderEval{
+					&render.RenderValue{Value: core.AssignFromText(T("world"))},
+				}}); e != nil {
 			t.Fatal(e)
 		}
 	})
@@ -245,12 +243,23 @@ func TestTemplates(t *testing.T) {
 	// note: this does the case check at runtime now, so there's no difference in the resulting commands b/t .Object and .object
 	t.Run("global prop", func(t *testing.T) {
 		if e := testTemplate("{.Object.prop}",
-			core.GetName("Object", "prop"),
+			renderRef("Object", "prop"),
 		); e != nil {
 			t.Fatal(e)
 		}
 	})
 }
+
+// yuck: the assignment swap is concrete when its a field
+// when used as
+func assignToEval(a core.Assignment) *core.Assignment {
+	return &a
+}
+
+func renderRef(v string, path ...any) *render.RenderRef {
+	return &render.RenderRef{Name: T(v), Dot: core.MakeDot(path...)}
+}
+
 func testTemplate(str string, want interface{}) (err error) {
 	if xs, e := template.Parse(str); e != nil {
 		err = e

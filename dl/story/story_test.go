@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/imp"
@@ -29,18 +28,6 @@ func TestImportStory(t *testing.T) {
 		}
 	}
 }
-
-var B = core.B
-var F = core.F
-var I = core.I
-var N = core.N
-var P = core.P
-var T = core.T
-var V = core.V
-var W = core.W
-
-var SetVar = core.SetVar
-
 func storyMarshaller(m jsn.Marshalee) (string, error) {
 	return cout.Marshal(m, story.CompactEncoder)
 }

@@ -14,17 +14,21 @@ func TestLoopBreak(t *testing.T) {
 	if e := safe.Run(&run,
 		&While{
 			True: B(true), Does: MakeActivity(
-				SetVar("i", &SumOf{A: V("i"), B: I(1)}),
+				&SetValue{
+					Target: Variable("i"),
+					Value:  AssignFromNumber(&SumOf{A: GetVariable("i"), B: I(1)})},
 				&ChooseAction{
-					If: &CompareNum{A: V("i"), Is: AtLeast, B: I(4)},
+					If: &CompareNum{A: GetVariable("i"), Is: AtLeast, B: I(4)},
 					Does: MakeActivity(
 						&Break{},
 					),
 				},
-				SetVar("j", &SumOf{A: V("j"), B: I(1)}),
+				&SetValue{
+					Target: Variable("j"),
+					Value:  AssignFromNumber(&SumOf{A: GetVariable("j"), B: I(1)})},
 			)},
 	); e != nil {
-		t.Fatal(e)
+		t.Fatal("failed to run:", e)
 	} else if run.i != 4 && run.j != 3 {
 		t.Fatal("bad counters", run.i, run.j)
 	}
@@ -35,15 +39,19 @@ func TestLoopNext(t *testing.T) {
 	if e := safe.Run(&run,
 		&While{
 			True: B(true), Does: MakeActivity(
-				SetVar("i", &SumOf{A: V("i"), B: I(1)}),
+				&SetValue{
+					Target: Variable("i"),
+					Value:  AssignFromNumber(&SumOf{A: GetVariable("i"), B: I(1)})},
 				&ChooseAction{
-					If: &CompareNum{A: V("i"), Is: AtLeast, B: I(4)},
+					If: &CompareNum{A: GetVariable("i"), Is: AtLeast, B: I(4)},
 					Does: MakeActivity(
 						&Break{},
 					),
 				},
 				&Next{},
-				SetVar("j", &SumOf{A: V("j"), B: I(1)}),
+				&SetValue{
+					Target: Variable("j"),
+					Value:  AssignFromNumber(&SumOf{A: GetVariable("j"), B: I(1)})},
 			)},
 	); e != nil {
 		t.Fatal(e)
@@ -58,7 +66,9 @@ func TestLoopInfinite(t *testing.T) {
 	if e := safe.Run(&run,
 		&While{
 			True: B(true), Does: MakeActivity(
-				SetVar("i", &SumOf{A: V("i"), B: I(1)}),
+				&SetValue{
+					Target: Variable("i"),
+					Value:  AssignFromNumber(&SumOf{A: GetVariable("i"), B: I(1)})},
 			)},
 	); !errors.Is(e, MaxLoopIterations) {
 		t.Fatal(e)

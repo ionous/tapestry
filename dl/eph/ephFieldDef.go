@@ -1,7 +1,7 @@
 package eph
 
 import (
-	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
@@ -15,7 +15,7 @@ type FieldDefinition interface {
 
 type fieldDef struct {
 	name, affinity, class, at string
-	initially                 rt.Assignment
+	initially                 core.Assignment
 }
 
 func (fd *fieldDef) Write(w Writer) error {

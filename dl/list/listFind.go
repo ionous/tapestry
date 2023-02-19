@@ -4,34 +4,25 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 
-func (op *ListFindBool) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	panic("not implemented")
-}
-
-// returns 1 based index
-func (op *ListFindBool) GetNumber(run rt.Runtime) (ret g.Value, err error) {
-	panic("not implemented")
-}
-
-// fix: with autoconversion of int to bool and one-based indices -
-// only the GetNumber variant would be needed.
-func (op *ListFindNumber) GetBool(run rt.Runtime) (ret g.Value, err error) {
+// return true if the value exists in the list
+func (op *ListFind) GetBool(run rt.Runtime) (ret g.Value, err error) {
+	// fix: with autoconversion of int to bool and one-based indices -
+	// only the GetNumber variant would be needed.
 	if i, e := op.getIndex(run); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	} else {
 		ret = g.BoolOf(i >= 0)
 	}
 	return
 }
 
-// returns 1 based index
-func (op *ListFindNumber) GetNumber(run rt.Runtime) (ret g.Value, err error) {
+// returns 1 based index of the value in the list
+func (op *ListFind) GetNumber(run rt.Runtime) (ret g.Value, err error) {
 	if i, e := op.getIndex(run); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	} else {
 		ret = g.IntOf(i + 1)
 	}
@@ -39,81 +30,29 @@ func (op *ListFindNumber) GetNumber(run rt.Runtime) (ret g.Value, err error) {
 }
 
 // zero-based
-func (op *ListFindNumber) getIndex(run rt.Runtime) (ret int, err error) {
-	if val, e := safe.GetNumber(run, op.Number); e != nil {
+func (op *ListFind) getIndex(run rt.Runtime) (ret int, err error) {
+	if val, e := op.Value.GetValue(run); e != nil {
 		err = e
-	} else if vs, e := getList(run, op.InList, affine.Number); e != nil {
+	} else if els, e := op.List.GetList(run); e != nil {
 		err = e
+	} else if listAff, aff := els.Affinity(), val.Affinity(); aff != affine.Element(listAff) {
+		err = errutil.New(listAff, "can't contain", aff)
 	} else {
-		ret = findFloat(vs, val.Float())
+		switch aff {
+		case affine.Number:
+			ret = findFloat(els, val.Float())
+		case affine.Text:
+			ret = findString(els, val.String())
+		default:
+			err = errutil.New(aff, "not implemented")
+		}
 	}
 	return
 }
 
-func (op *ListFindText) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	if i, e := op.getIndex(run); e != nil {
-		err = cmdError(op, e)
-	} else {
-		ret = g.BoolOf(i >= 0)
-	}
-	return
-}
-
-// returns 1 based index
-func (op *ListFindText) GetNumber(run rt.Runtime) (ret g.Value, err error) {
-	if i, e := op.getIndex(run); e != nil {
-		err = cmdError(op, e)
-	} else {
-		ret = g.IntOf(i + 1)
-	}
-	return
-}
-
-func (op *ListFindText) getIndex(run rt.Runtime) (ret int, err error) {
-	if val, e := safe.GetText(run, op.Text); e != nil {
-		err = cmdError(op, e)
-	} else if vs, e := getList(run, op.InList, affine.Text); e != nil {
-		err = cmdError(op, e)
-	} else {
-		ret = findString(vs, val.String())
-	}
-	return
-}
-
-func (op *ListFindList) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	panic("not implemented")
-}
-
-// returns 1 based index
-func (op *ListFindList) GetNumber(run rt.Runtime) (ret g.Value, err error) {
-	panic("not implemented")
-}
-
-func (op *ListFindRecord) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	panic("not implemented")
-}
-
-// returns 1 based index
-func (op *ListFindRecord) GetNumber(run rt.Runtime) (ret g.Value, err error) {
-	panic("not implemented")
-}
-
-func getList(run rt.Runtime, eval rt.ListEval, aff affine.Affinity) (ret g.Value, err error) {
-	if vs, e := safe.GetList(run, eval); e != nil {
-		err = e
-	} else if el := affine.Element(vs.Affinity()); len(el) == 0 {
-		err = errutil.New("not a list")
-	} else if aff != el {
-		err = errutil.New("expected", el, "have", aff)
-	} else {
-		ret = vs
-	}
-	return
-}
-
-func findFloat(vs g.Value, match float64) (ret int) {
+func findFloat(els g.Value, match float64) (ret int) {
 	ret = -1
-	for i, n := range vs.Floats() {
+	for i, n := range els.Floats() {
 		if n == match { //epsilon?
 			ret = i
 			break
@@ -122,9 +61,9 @@ func findFloat(vs g.Value, match float64) (ret int) {
 	return
 }
 
-func findString(vs g.Value, match string) (ret int) {
+func findString(els g.Value, match string) (ret int) {
 	ret = -1
-	for i, n := range vs.Strings() {
+	for i, n := range els.Strings() {
 		if n == match {
 			ret = i
 			break

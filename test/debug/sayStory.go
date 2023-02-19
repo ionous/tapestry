@@ -3,10 +3,10 @@ package debug
 import (
   "git.sr.ht/~ionous/tapestry/affine"
   "git.sr.ht/~ionous/tapestry/dl/core"
-  "git.sr.ht/~ionous/tapestry/dl/literal"
   "git.sr.ht/~ionous/tapestry/jsn"
   "git.sr.ht/~ionous/tapestry/rt"
   g "git.sr.ht/~ionous/tapestry/rt/generic"
+  "git.sr.ht/~ionous/tapestry/rt/meta"
   "git.sr.ht/~ionous/tapestry/rt/safe"
   "git.sr.ht/~ionous/tapestry/test/testpat"
 )
@@ -34,11 +34,12 @@ func (op *MatchNumber) Marshal(m jsn.Marshaler) (err error) {
 }
 
 func (op *MatchNumber) GetBool(run rt.Runtime) (ret g.Value, err error) {
-  if a, e := safe.CheckVariable(run, numVar.String(), affine.Number); e != nil {
+  if v, e := run.GetField(meta.Variables, "num"); e != nil {
+    err = nil
+  } else if safe.Check(v, affine.Number); e != nil {
     err = e
   } else {
-    n := a.Int()
-    ret = g.BoolOf(n == op.Val)
+    ret = g.BoolOf(v.Int() == op.Val)
   }
   return
 }
@@ -46,8 +47,10 @@ func (op *MatchNumber) GetBool(run rt.Runtime) (ret g.Value, err error) {
 func DetermineSay(i int) *core.CallPattern {
   return &core.CallPattern{
     Pattern: core.PatternName{Str: "say_me"},
-    Arguments: core.NamedArgs(
-      "num", &core.FromNum{Val: I(i)}),
+    Arguments: []core.Arg{{
+      Name:  "num",
+      Value: core.AssignFromNumber(I(i)),
+    }},
   }
 }
 
@@ -83,11 +86,6 @@ var SayPattern = testpat.Pattern{
     {Name: "1", Filter: &MatchNumber{1}, Execute: SayIt("One!")},
   },
 }
-
-func B(b bool) *literal.BoolValue   { return &literal.BoolValue{Value: b} }
-func I(n int) *literal.NumValue     { return &literal.NumValue{Value: float64(n)} }
-func F(n float64) *literal.NumValue { return &literal.NumValue{Value: n} }
-func T(s string) *literal.TextValue { return &literal.TextValue{Value: s} }
 
 var SayHelloGoodbye = core.MakeActivity(
   &core.ChooseAction{

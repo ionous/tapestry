@@ -3,36 +3,11 @@ package safe
 import (
 	"io"
 
-	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"github.com/ionous/errutil"
 )
-
-// resolve a requested variable name into any list type.
-func List(run rt.Runtime, n string) (ret g.Value, err error) {
-	if vs, e := run.GetField(meta.Variables, n); e != nil {
-		err = e
-	} else if a := vs.Affinity(); !affine.IsList(a) {
-		err = errutil.Fmt("%s of %q is not a list", n, a)
-	} else {
-		ret = vs
-	}
-	return
-}
-
-// resolve a requested variable name into any non-list type
-func Scalar(run rt.Runtime, n string) (ret g.Value, err error) {
-	if vs, e := run.GetField(meta.Variables, n); e != nil {
-		err = e
-	} else if a := vs.Affinity(); !affine.IsList(a) {
-		err = errutil.Fmt("%s of %q is not a scalar", n, a)
-	} else {
-		ret = vs
-	}
-	return
-}
 
 // MissingEval error type for unknown variables while processing loops.
 type MissingEval string
@@ -43,10 +18,10 @@ func (e MissingEval) Error() string { return "missing " + string(e) }
 // Run executes the passed statement using the passed runtime;
 // does *not* error if the passed exec is nil.
 func RunAll(run rt.Runtime, exes []rt.Execute) (err error) {
-	for _, exe := range exes {
+	for i, exe := range exes {
 		if exe != nil {
 			if e := exe.Execute(run); e != nil {
-				err = e
+				err = errutil.New("failed statement", i, e)
 				break
 			}
 		}
@@ -104,16 +79,6 @@ func GetText(run rt.Runtime, eval rt.TextEval) (ret g.Value, err error) {
 		err = MissingEval("text")
 	} else {
 		ret, err = eval.GetText(run)
-	}
-	return
-}
-
-// GetList runs the specified eval, returning an error if the eval is nil.
-func GetList(run rt.Runtime, eval rt.ListEval) (ret g.Value, err error) {
-	if eval == nil {
-		err = MissingEval("list")
-	} else {
-		ret, err = eval.GetList(run)
 	}
 	return
 }
@@ -211,30 +176,8 @@ func GetRecordList(run rt.Runtime, eval rt.RecordListEval) (ret g.Value, err err
 	return
 }
 
-// ObjectFromText - given an eval producing a name, return an object value.
-// WARNING: can return nil for the nothing/empty object ""
-func ObjectFromText(run rt.Runtime, eval rt.TextEval) (ret g.Value, err error) {
-	if eval == nil {
-		err = MissingEval("object from text")
-	} else if t, e := GetText(run, eval); e != nil {
-		err = e
-	} else if n := t.String(); len(n) > 0 {
-		ret, err = ObjectFromString(run, n)
-	}
-	return
-}
-
-// find an object with the passed partial name
-func ObjectFromString(run rt.Runtime, n string) (ret g.Value, err error) {
-	if len(n) == 0 {
-		err = g.NothingObject
-	} else {
-		ret, err = run.GetField(meta.ObjectValue, n)
-	}
-	return
-}
-
 // ObjectText - given an eval producing a name, return a string value of the object's id.
+// can return a valid "empty" value for empty strings
 func ObjectText(run rt.Runtime, eval rt.TextEval) (ret g.Value, err error) {
 	if eval == nil {
 		err = MissingEval("object text")

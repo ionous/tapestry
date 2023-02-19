@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
@@ -19,15 +20,30 @@ type Results struct {
 	currFlags   rt.Flags        // which phases have run, still have to run?
 }
 
-// fix. itd be nice at least to cleanout expectedAff if possible.
-func NewResults(run rt.Runtime, name string, res string, aff affine.Affinity, parts []string, args []rt.Arg) (ret *Results, err error) {
-	if rec, e := newPattern(run, name, parts, args); e != nil {
-		err = e
+// fix. itd be nice to remove expectedAff if possible. ( need to fx HackTillTemplatesCanEvaluatePatternTypes i think )
+func NewResults(run rt.Runtime, rec *g.Record, aff affine.Affinity) (ret *Results, err error) {
+	// tbd: is the result field really last?
+	// fix: if every pattern returned a result (ex. if execute returned a hidden bool or c-like int )
+	// then we could avoid the label look up, and always use the last indexed field
+	// currently, there might be a blank label "" for the return, which means no indexed field
+	// we also cant use "aff" because the calling context might not be right ( re Hack, and hints )
+	if rec == nil {
+		err = errutil.New("internal error: nil pattern passed to pattern results")
 	} else {
-		ret = &Results{
-			rec:         rec,
-			resultField: res,
-			expectedAff: aff,
+		name := rec.Kind().Name()
+		if labels, e := run.GetField(meta.PatternLabels, name); e != nil {
+			err = e
+		} else {
+			labels := labels.Strings()
+			if last := len(labels) - 1; last < 0 {
+				err = errutil.New("pattern has unexpectedly few labels", name)
+			} else {
+				ret = &Results{
+					rec:         rec,
+					resultField: labels[last],
+					expectedAff: aff,
+				}
+			}
 		}
 	}
 	return

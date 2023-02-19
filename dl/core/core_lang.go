@@ -9,6 +9,109 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// Address swaps between various options
+type Address struct {
+	Choice string
+	Value  interface{}
+}
+
+var Address_Optional_Marshal = Address_Marshal
+
+const Address_Object_Opt = "$OBJECT"
+const Address_Variable_Opt = "$VARIABLE"
+
+func (*Address) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Address_Type,
+		Uses: composer.Type_Swap,
+		Choices: []string{
+			Address_Object_Opt, Address_Variable_Opt,
+		},
+		Swaps: []interface{}{
+			(*ObjectRef)(nil),
+			(*VariableRef)(nil),
+		},
+	}
+}
+
+const Address_Type = "address"
+
+func (op *Address) GetType() string { return Address_Type }
+
+func (op *Address) GetSwap() (string, interface{}) {
+	return op.Choice, op.Value
+}
+
+func (op *Address) SetSwap(c string) (okay bool) {
+	switch c {
+	case "":
+		op.Choice, op.Value = c, nil
+		okay = true
+	case Address_Object_Opt:
+		op.Choice, op.Value = c, new(ObjectRef)
+		okay = true
+	case Address_Variable_Opt:
+		op.Choice, op.Value = c, new(VariableRef)
+		okay = true
+	}
+	return
+}
+
+func (op *Address) Marshal(m jsn.Marshaler) error {
+	return Address_Marshal(m, op)
+}
+func Address_Marshal(m jsn.Marshaler, val *Address) (err error) {
+	if err = m.MarshalBlock(val); err == nil {
+		if _, ptr := val.GetSwap(); ptr != nil {
+			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+type Address_Slice []Address
+
+func (op *Address_Slice) GetType() string { return Address_Type }
+
+func (op *Address_Slice) Marshal(m jsn.Marshaler) error {
+	return Address_Repeats_Marshal(m, (*[]Address)(op))
+}
+
+func (op *Address_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Address_Slice) SetSize(cnt int) {
+	var els []Address
+	if cnt >= 0 {
+		els = make(Address_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Address_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Address_Marshal(m, &(*op)[i])
+}
+
+func Address_Repeats_Marshal(m jsn.Marshaler, vals *[]Address) error {
+	return jsn.RepeatBlock(m, (*Address_Slice)(vals))
+}
+
+func Address_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Address) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = Address_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
 // AllTrue Returns true if all of the evaluations are true.
 type AllTrue struct {
 	Test   []rt.BoolEval `if:"label=_"`
@@ -306,41 +409,37 @@ func AnyTrue_Marshal(m jsn.Marshaler, val *AnyTrue) (err error) {
 	return
 }
 
-// Assign Assigns a variable to a value.
-type Assign struct {
-	Var    VariableName  `if:"label=_"`
-	From   rt.Assignment `if:"label=be"`
+// Arg Runtime version of argument.
+type Arg struct {
+	Name   string     `if:"label=_,type=text"`
+	Value  Assignment `if:"label=from"`
 	Markup map[string]any
 }
 
-// User implemented slots:
-var _ rt.Execute = (*Assign)(nil)
-
-func (*Assign) Compose() composer.Spec {
+func (*Arg) Compose() composer.Spec {
 	return composer.Spec{
-		Name: Assign_Type,
+		Name: Arg_Type,
 		Uses: composer.Type_Flow,
-		Lede: "let",
 	}
 }
 
-const Assign_Type = "assign"
-const Assign_Field_Var = "$VAR"
-const Assign_Field_From = "$FROM"
+const Arg_Type = "arg"
+const Arg_Field_Name = "$NAME"
+const Arg_Field_Value = "$VALUE"
 
-func (op *Assign) Marshal(m jsn.Marshaler) error {
-	return Assign_Marshal(m, op)
+func (op *Arg) Marshal(m jsn.Marshaler) error {
+	return Arg_Marshal(m, op)
 }
 
-type Assign_Slice []Assign
+type Arg_Slice []Arg
 
-func (op *Assign_Slice) GetType() string { return Assign_Type }
+func (op *Arg_Slice) GetType() string { return Arg_Type }
 
-func (op *Assign_Slice) Marshal(m jsn.Marshaler) error {
-	return Assign_Repeats_Marshal(m, (*[]Assign)(op))
+func (op *Arg_Slice) Marshal(m jsn.Marshaler) error {
+	return Arg_Repeats_Marshal(m, (*[]Arg)(op))
 }
 
-func (op *Assign_Slice) GetSize() (ret int) {
+func (op *Arg_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -349,71 +448,199 @@ func (op *Assign_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *Assign_Slice) SetSize(cnt int) {
-	var els []Assign
+func (op *Arg_Slice) SetSize(cnt int) {
+	var els []Arg
 	if cnt >= 0 {
-		els = make(Assign_Slice, cnt)
+		els = make(Arg_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *Assign_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Assign_Marshal(m, &(*op)[i])
+func (op *Arg_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Arg_Marshal(m, &(*op)[i])
 }
 
-func Assign_Repeats_Marshal(m jsn.Marshaler, vals *[]Assign) error {
-	return jsn.RepeatBlock(m, (*Assign_Slice)(vals))
+func Arg_Repeats_Marshal(m jsn.Marshaler, vals *[]Arg) error {
+	return jsn.RepeatBlock(m, (*Arg_Slice)(vals))
 }
 
-func Assign_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Assign) (err error) {
+func Arg_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Arg) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Assign_Repeats_Marshal(m, pv)
+		err = Arg_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type Assign_Flow struct{ ptr *Assign }
+type Arg_Flow struct{ ptr *Arg }
 
-func (n Assign_Flow) GetType() string      { return Assign_Type }
-func (n Assign_Flow) GetLede() string      { return "let" }
-func (n Assign_Flow) GetFlow() interface{} { return n.ptr }
-func (n Assign_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Assign); ok {
+func (n Arg_Flow) GetType() string      { return Arg_Type }
+func (n Arg_Flow) GetLede() string      { return Arg_Type }
+func (n Arg_Flow) GetFlow() interface{} { return n.ptr }
+func (n Arg_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Arg); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func Assign_Optional_Marshal(m jsn.Marshaler, pv **Assign) (err error) {
+func Arg_Optional_Marshal(m jsn.Marshaler, pv **Arg) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Assign_Marshal(m, *pv)
+		err = Arg_Marshal(m, *pv)
 	} else if !enc {
-		var v Assign
-		if err = Assign_Marshal(m, &v); err == nil {
+		var v Arg
+		if err = Arg_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func Assign_Marshal(m jsn.Marshaler, val *Assign) (err error) {
+func Arg_Marshal(m jsn.Marshaler, val *Arg) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(Assign_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Assign_Field_Var)
+	if err = m.MarshalBlock(Arg_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", Arg_Field_Name)
 		if e0 == nil {
-			e0 = VariableName_Marshal(m, &val.Var)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Assign_Field_Var))
+			m.Error(errutil.New(e0, "in flow at", Arg_Field_Name))
 		}
-		e1 := m.MarshalKey("be", Assign_Field_From)
+		e1 := m.MarshalKey("from", Arg_Field_Value)
 		if e1 == nil {
-			e1 = rt.Assignment_Marshal(m, &val.From)
+			e1 = Assignment_Marshal(m, &val.Value)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Assign_Field_From))
+			m.Error(errutil.New(e1, "in flow at", Arg_Field_Value))
 		}
 		m.EndBlock()
+	}
+	return
+}
+
+// Assignment swaps between various options
+type Assignment struct {
+	Choice string
+	Value  interface{}
+}
+
+var Assignment_Optional_Marshal = Assignment_Marshal
+
+const Assignment_Bool_Opt = "$BOOL"
+const Assignment_Number_Opt = "$NUMBER"
+const Assignment_Text_Opt = "$TEXT"
+const Assignment_Record_Opt = "$RECORD"
+const Assignment_NumList_Opt = "$NUM_LIST"
+const Assignment_TextList_Opt = "$TEXT_LIST"
+const Assignment_RecordList_Opt = "$RECORD_LIST"
+
+func (*Assignment) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Assignment_Type,
+		Uses: composer.Type_Swap,
+		Choices: []string{
+			Assignment_Bool_Opt, Assignment_Number_Opt, Assignment_Text_Opt, Assignment_Record_Opt, Assignment_NumList_Opt, Assignment_TextList_Opt, Assignment_RecordList_Opt,
+		},
+		Swaps: []interface{}{
+			(*FromBool)(nil),
+			(*FromNumber)(nil),
+			(*FromText)(nil),
+			(*FromRecord)(nil),
+			(*FromNumList)(nil),
+			(*FromTextList)(nil),
+			(*FromRecordList)(nil),
+		},
+	}
+}
+
+const Assignment_Type = "assignment"
+
+func (op *Assignment) GetType() string { return Assignment_Type }
+
+func (op *Assignment) GetSwap() (string, interface{}) {
+	return op.Choice, op.Value
+}
+
+func (op *Assignment) SetSwap(c string) (okay bool) {
+	switch c {
+	case "":
+		op.Choice, op.Value = c, nil
+		okay = true
+	case Assignment_Bool_Opt:
+		op.Choice, op.Value = c, new(FromBool)
+		okay = true
+	case Assignment_Number_Opt:
+		op.Choice, op.Value = c, new(FromNumber)
+		okay = true
+	case Assignment_Text_Opt:
+		op.Choice, op.Value = c, new(FromText)
+		okay = true
+	case Assignment_Record_Opt:
+		op.Choice, op.Value = c, new(FromRecord)
+		okay = true
+	case Assignment_NumList_Opt:
+		op.Choice, op.Value = c, new(FromNumList)
+		okay = true
+	case Assignment_TextList_Opt:
+		op.Choice, op.Value = c, new(FromTextList)
+		okay = true
+	case Assignment_RecordList_Opt:
+		op.Choice, op.Value = c, new(FromRecordList)
+		okay = true
+	}
+	return
+}
+
+func (op *Assignment) Marshal(m jsn.Marshaler) error {
+	return Assignment_Marshal(m, op)
+}
+func Assignment_Marshal(m jsn.Marshaler, val *Assignment) (err error) {
+	if err = m.MarshalBlock(val); err == nil {
+		if _, ptr := val.GetSwap(); ptr != nil {
+			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+type Assignment_Slice []Assignment
+
+func (op *Assignment_Slice) GetType() string { return Assignment_Type }
+
+func (op *Assignment_Slice) Marshal(m jsn.Marshaler) error {
+	return Assignment_Repeats_Marshal(m, (*[]Assignment)(op))
+}
+
+func (op *Assignment_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Assignment_Slice) SetSize(cnt int) {
+	var els []Assignment
+	if cnt >= 0 {
+		els = make(Assignment_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Assignment_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Assignment_Marshal(m, &(*op)[i])
+}
+
+func Assignment_Repeats_Marshal(m jsn.Marshaler, vals *[]Assignment) error {
+	return jsn.RepeatBlock(m, (*Assignment_Slice)(vals))
+}
+
+func Assignment_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Assignment) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = Assignment_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -1199,7 +1426,7 @@ func CallCycle_Marshal(m jsn.Marshaler, val *CallCycle) (err error) {
 // CallPattern Executes a pattern, and potentially returns a value.
 type CallPattern struct {
 	Pattern   PatternName `if:"label=_"`
-	Arguments []rt.Arg    `if:"label=args"`
+	Arguments []Arg       `if:"label=args"`
 	Markup    map[string]any
 }
 
@@ -1305,7 +1532,7 @@ func CallPattern_Marshal(m jsn.Marshaler, val *CallPattern) (err error) {
 		}
 		e1 := m.MarshalKey("args", CallPattern_Field_Arguments)
 		if e1 == nil {
-			e1 = rt.Arg_Repeats_Marshal(m, &val.Arguments)
+			e1 = Arg_Repeats_Marshal(m, &val.Arguments)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", CallPattern_Field_Arguments))
@@ -2123,11 +2350,11 @@ func ChooseMore_Marshal(m jsn.Marshaler, val *ChooseMore) (err error) {
 
 // ChooseMoreValue
 type ChooseMoreValue struct {
-	Assign string        `if:"label=_,type=text"`
-	From   rt.Assignment `if:"label=from"`
-	Filter rt.BoolEval   `if:"label=and"`
-	Does   []rt.Execute  `if:"label=does"`
-	Else   Brancher      `if:"label=else,optional"`
+	Assign string       `if:"label=_,type=text"`
+	From   Assignment   `if:"label=from"`
+	Filter rt.BoolEval  `if:"label=and"`
+	Does   []rt.Execute `if:"label=does"`
+	Else   Brancher     `if:"label=else,optional"`
 	Markup map[string]any
 }
 
@@ -2229,7 +2456,7 @@ func ChooseMoreValue_Marshal(m jsn.Marshaler, val *ChooseMoreValue) (err error) 
 		}
 		e1 := m.MarshalKey("from", ChooseMoreValue_Field_From)
 		if e1 == nil {
-			e1 = rt.Assignment_Marshal(m, &val.From)
+			e1 = Assignment_Marshal(m, &val.From)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ChooseMoreValue_Field_From))
@@ -2607,11 +2834,11 @@ func ChooseText_Marshal(m jsn.Marshaler, val *ChooseText) (err error) {
 
 // ChooseValue An if statement with local assignment.
 type ChooseValue struct {
-	Assign string        `if:"label=_,type=text"`
-	From   rt.Assignment `if:"label=from"`
-	Filter rt.BoolEval   `if:"label=and"`
-	Does   []rt.Execute  `if:"label=does"`
-	Else   Brancher      `if:"label=else,optional"`
+	Assign string       `if:"label=_,type=text"`
+	From   Assignment   `if:"label=from"`
+	Filter rt.BoolEval  `if:"label=and"`
+	Does   []rt.Execute `if:"label=does"`
+	Else   Brancher     `if:"label=else,optional"`
 	Markup map[string]any
 }
 
@@ -2714,7 +2941,7 @@ func ChooseValue_Marshal(m jsn.Marshaler, val *ChooseValue) (err error) {
 		}
 		e1 := m.MarshalKey("from", ChooseValue_Field_From)
 		if e1 == nil {
-			e1 = rt.Assignment_Marshal(m, &val.From)
+			e1 = Assignment_Marshal(m, &val.From)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ChooseValue_Field_From))
@@ -3476,9 +3703,6 @@ type FromBool struct {
 	Markup map[string]any
 }
 
-// User implemented slots:
-var _ rt.Assignment = (*FromBool)(nil)
-
 func (*FromBool) Compose() composer.Spec {
 	return composer.Spec{
 		Name: FromBool_Type,
@@ -3572,39 +3796,35 @@ func FromBool_Marshal(m jsn.Marshaler, val *FromBool) (err error) {
 	return
 }
 
-// FromList Assigns the calculated record.
-type FromList struct {
-	Val    rt.ListEval `if:"label=_"`
+// FromNumList Assigns the calculated numbers.
+type FromNumList struct {
+	Val    rt.NumListEval `if:"label=_"`
 	Markup map[string]any
 }
 
-// User implemented slots:
-var _ rt.ListEval = (*FromList)(nil)
-
-func (*FromList) Compose() composer.Spec {
+func (*FromNumList) Compose() composer.Spec {
 	return composer.Spec{
-		Name: FromList_Type,
+		Name: FromNumList_Type,
 		Uses: composer.Type_Flow,
-		Lede: "from_list",
 	}
 }
 
-const FromList_Type = "from_list"
-const FromList_Field_Val = "$VAL"
+const FromNumList_Type = "from_num_list"
+const FromNumList_Field_Val = "$VAL"
 
-func (op *FromList) Marshal(m jsn.Marshaler) error {
-	return FromList_Marshal(m, op)
+func (op *FromNumList) Marshal(m jsn.Marshaler) error {
+	return FromNumList_Marshal(m, op)
 }
 
-type FromList_Slice []FromList
+type FromNumList_Slice []FromNumList
 
-func (op *FromList_Slice) GetType() string { return FromList_Type }
+func (op *FromNumList_Slice) GetType() string { return FromNumList_Type }
 
-func (op *FromList_Slice) Marshal(m jsn.Marshaler) error {
-	return FromList_Repeats_Marshal(m, (*[]FromList)(op))
+func (op *FromNumList_Slice) Marshal(m jsn.Marshaler) error {
+	return FromNumList_Repeats_Marshal(m, (*[]FromNumList)(op))
 }
 
-func (op *FromList_Slice) GetSize() (ret int) {
+func (op *FromNumList_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -3613,62 +3833,62 @@ func (op *FromList_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *FromList_Slice) SetSize(cnt int) {
-	var els []FromList
+func (op *FromNumList_Slice) SetSize(cnt int) {
+	var els []FromNumList
 	if cnt >= 0 {
-		els = make(FromList_Slice, cnt)
+		els = make(FromNumList_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *FromList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromList_Marshal(m, &(*op)[i])
+func (op *FromNumList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return FromNumList_Marshal(m, &(*op)[i])
 }
 
-func FromList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromList) error {
-	return jsn.RepeatBlock(m, (*FromList_Slice)(vals))
+func FromNumList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromNumList) error {
+	return jsn.RepeatBlock(m, (*FromNumList_Slice)(vals))
 }
 
-func FromList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromList) (err error) {
+func FromNumList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromNumList) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromList_Repeats_Marshal(m, pv)
+		err = FromNumList_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type FromList_Flow struct{ ptr *FromList }
+type FromNumList_Flow struct{ ptr *FromNumList }
 
-func (n FromList_Flow) GetType() string      { return FromList_Type }
-func (n FromList_Flow) GetLede() string      { return "from_list" }
-func (n FromList_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromList); ok {
+func (n FromNumList_Flow) GetType() string      { return FromNumList_Type }
+func (n FromNumList_Flow) GetLede() string      { return FromNumList_Type }
+func (n FromNumList_Flow) GetFlow() interface{} { return n.ptr }
+func (n FromNumList_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*FromNumList); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func FromList_Optional_Marshal(m jsn.Marshaler, pv **FromList) (err error) {
+func FromNumList_Optional_Marshal(m jsn.Marshaler, pv **FromNumList) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromList_Marshal(m, *pv)
+		err = FromNumList_Marshal(m, *pv)
 	} else if !enc {
-		var v FromList
-		if err = FromList_Marshal(m, &v); err == nil {
+		var v FromNumList
+		if err = FromNumList_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func FromList_Marshal(m jsn.Marshaler, val *FromList) (err error) {
+func FromNumList_Marshal(m jsn.Marshaler, val *FromNumList) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromList_Field_Val)
+	if err = m.MarshalBlock(FromNumList_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", FromNumList_Field_Val)
 		if e0 == nil {
-			e0 = rt.ListEval_Marshal(m, &val.Val)
+			e0 = rt.NumListEval_Marshal(m, &val.Val)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromList_Field_Val))
+			m.Error(errutil.New(e0, "in flow at", FromNumList_Field_Val))
 		}
 		m.EndBlock()
 	}
@@ -3680,9 +3900,6 @@ type FromNumber struct {
 	Val    rt.NumberEval `if:"label=_"`
 	Markup map[string]any
 }
-
-// User implemented slots:
-var _ rt.Assignment = (*FromNumber)(nil)
 
 func (*FromNumber) Compose() composer.Spec {
 	return composer.Spec{
@@ -3777,329 +3994,16 @@ func FromNumber_Marshal(m jsn.Marshaler, val *FromNumber) (err error) {
 	return
 }
 
-// FromNumbers Assigns the calculated numbers.
-type FromNumbers struct {
-	Vals   rt.NumListEval `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Assignment = (*FromNumbers)(nil)
-
-func (*FromNumbers) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FromNumbers_Type,
-		Uses: composer.Type_Flow,
-		Lede: "from_nums",
-	}
-}
-
-const FromNumbers_Type = "from_numbers"
-const FromNumbers_Field_Vals = "$VALS"
-
-func (op *FromNumbers) Marshal(m jsn.Marshaler) error {
-	return FromNumbers_Marshal(m, op)
-}
-
-type FromNumbers_Slice []FromNumbers
-
-func (op *FromNumbers_Slice) GetType() string { return FromNumbers_Type }
-
-func (op *FromNumbers_Slice) Marshal(m jsn.Marshaler) error {
-	return FromNumbers_Repeats_Marshal(m, (*[]FromNumbers)(op))
-}
-
-func (op *FromNumbers_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromNumbers_Slice) SetSize(cnt int) {
-	var els []FromNumbers
-	if cnt >= 0 {
-		els = make(FromNumbers_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromNumbers_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromNumbers_Marshal(m, &(*op)[i])
-}
-
-func FromNumbers_Repeats_Marshal(m jsn.Marshaler, vals *[]FromNumbers) error {
-	return jsn.RepeatBlock(m, (*FromNumbers_Slice)(vals))
-}
-
-func FromNumbers_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromNumbers) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromNumbers_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromNumbers_Flow struct{ ptr *FromNumbers }
-
-func (n FromNumbers_Flow) GetType() string      { return FromNumbers_Type }
-func (n FromNumbers_Flow) GetLede() string      { return "from_nums" }
-func (n FromNumbers_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromNumbers_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromNumbers); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromNumbers_Optional_Marshal(m jsn.Marshaler, pv **FromNumbers) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromNumbers_Marshal(m, *pv)
-	} else if !enc {
-		var v FromNumbers
-		if err = FromNumbers_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromNumbers_Marshal(m jsn.Marshaler, val *FromNumbers) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromNumbers_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromNumbers_Field_Vals)
-		if e0 == nil {
-			e0 = rt.NumListEval_Marshal(m, &val.Vals)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromNumbers_Field_Vals))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// FromObj Targets an object with a computed name.
-type FromObj struct {
-	Object rt.TextEval `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ FromSourceFields = (*FromObj)(nil)
-
-func (*FromObj) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FromObj_Type,
-		Uses: composer.Type_Flow,
-		Lede: "obj_fields",
-	}
-}
-
-const FromObj_Type = "from_obj"
-const FromObj_Field_Object = "$OBJECT"
-
-func (op *FromObj) Marshal(m jsn.Marshaler) error {
-	return FromObj_Marshal(m, op)
-}
-
-type FromObj_Slice []FromObj
-
-func (op *FromObj_Slice) GetType() string { return FromObj_Type }
-
-func (op *FromObj_Slice) Marshal(m jsn.Marshaler) error {
-	return FromObj_Repeats_Marshal(m, (*[]FromObj)(op))
-}
-
-func (op *FromObj_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromObj_Slice) SetSize(cnt int) {
-	var els []FromObj
-	if cnt >= 0 {
-		els = make(FromObj_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromObj_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromObj_Marshal(m, &(*op)[i])
-}
-
-func FromObj_Repeats_Marshal(m jsn.Marshaler, vals *[]FromObj) error {
-	return jsn.RepeatBlock(m, (*FromObj_Slice)(vals))
-}
-
-func FromObj_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromObj) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromObj_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromObj_Flow struct{ ptr *FromObj }
-
-func (n FromObj_Flow) GetType() string      { return FromObj_Type }
-func (n FromObj_Flow) GetLede() string      { return "obj_fields" }
-func (n FromObj_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromObj_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromObj); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromObj_Optional_Marshal(m jsn.Marshaler, pv **FromObj) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromObj_Marshal(m, *pv)
-	} else if !enc {
-		var v FromObj
-		if err = FromObj_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromObj_Marshal(m jsn.Marshaler, val *FromObj) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromObj_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromObj_Field_Object)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Object)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromObj_Field_Object))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// FromRec Targets a record stored in a record.
-type FromRec struct {
-	Rec    rt.RecordEval `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ FromSourceFields = (*FromRec)(nil)
-
-func (*FromRec) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FromRec_Type,
-		Uses: composer.Type_Flow,
-		Lede: "rec_fields",
-	}
-}
-
-const FromRec_Type = "from_rec"
-const FromRec_Field_Rec = "$REC"
-
-func (op *FromRec) Marshal(m jsn.Marshaler) error {
-	return FromRec_Marshal(m, op)
-}
-
-type FromRec_Slice []FromRec
-
-func (op *FromRec_Slice) GetType() string { return FromRec_Type }
-
-func (op *FromRec_Slice) Marshal(m jsn.Marshaler) error {
-	return FromRec_Repeats_Marshal(m, (*[]FromRec)(op))
-}
-
-func (op *FromRec_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromRec_Slice) SetSize(cnt int) {
-	var els []FromRec
-	if cnt >= 0 {
-		els = make(FromRec_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromRec_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromRec_Marshal(m, &(*op)[i])
-}
-
-func FromRec_Repeats_Marshal(m jsn.Marshaler, vals *[]FromRec) error {
-	return jsn.RepeatBlock(m, (*FromRec_Slice)(vals))
-}
-
-func FromRec_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromRec) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromRec_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromRec_Flow struct{ ptr *FromRec }
-
-func (n FromRec_Flow) GetType() string      { return FromRec_Type }
-func (n FromRec_Flow) GetLede() string      { return "rec_fields" }
-func (n FromRec_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromRec_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromRec); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromRec_Optional_Marshal(m jsn.Marshaler, pv **FromRec) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromRec_Marshal(m, *pv)
-	} else if !enc {
-		var v FromRec
-		if err = FromRec_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromRec_Marshal(m jsn.Marshaler, val *FromRec) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromRec_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromRec_Field_Rec)
-		if e0 == nil {
-			e0 = rt.RecordEval_Marshal(m, &val.Rec)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromRec_Field_Rec))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // FromRecord Assigns the calculated record.
 type FromRecord struct {
 	Val    rt.RecordEval `if:"label=_"`
 	Markup map[string]any
 }
 
-// User implemented slots:
-var _ rt.Assignment = (*FromRecord)(nil)
-
 func (*FromRecord) Compose() composer.Spec {
 	return composer.Spec{
 		Name: FromRecord_Type,
 		Uses: composer.Type_Flow,
-		Lede: "from_rec",
 	}
 }
 
@@ -4153,7 +4057,7 @@ func FromRecord_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromRecord) (err
 type FromRecord_Flow struct{ ptr *FromRecord }
 
 func (n FromRecord_Flow) GetType() string      { return FromRecord_Type }
-func (n FromRecord_Flow) GetLede() string      { return "from_rec" }
+func (n FromRecord_Flow) GetLede() string      { return FromRecord_Type }
 func (n FromRecord_Flow) GetFlow() interface{} { return n.ptr }
 func (n FromRecord_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*FromRecord); ok {
@@ -4189,39 +4093,35 @@ func FromRecord_Marshal(m jsn.Marshaler, val *FromRecord) (err error) {
 	return
 }
 
-// FromRecords Assigns the calculated records.
-type FromRecords struct {
-	Vals   rt.RecordListEval `if:"label=_"`
+// FromRecordList Assigns the calculated records.
+type FromRecordList struct {
+	Val    rt.RecordListEval `if:"label=_"`
 	Markup map[string]any
 }
 
-// User implemented slots:
-var _ rt.Assignment = (*FromRecords)(nil)
-
-func (*FromRecords) Compose() composer.Spec {
+func (*FromRecordList) Compose() composer.Spec {
 	return composer.Spec{
-		Name: FromRecords_Type,
+		Name: FromRecordList_Type,
 		Uses: composer.Type_Flow,
-		Lede: "from_recs",
 	}
 }
 
-const FromRecords_Type = "from_records"
-const FromRecords_Field_Vals = "$VALS"
+const FromRecordList_Type = "from_record_list"
+const FromRecordList_Field_Val = "$VAL"
 
-func (op *FromRecords) Marshal(m jsn.Marshaler) error {
-	return FromRecords_Marshal(m, op)
+func (op *FromRecordList) Marshal(m jsn.Marshaler) error {
+	return FromRecordList_Marshal(m, op)
 }
 
-type FromRecords_Slice []FromRecords
+type FromRecordList_Slice []FromRecordList
 
-func (op *FromRecords_Slice) GetType() string { return FromRecords_Type }
+func (op *FromRecordList_Slice) GetType() string { return FromRecordList_Type }
 
-func (op *FromRecords_Slice) Marshal(m jsn.Marshaler) error {
-	return FromRecords_Repeats_Marshal(m, (*[]FromRecords)(op))
+func (op *FromRecordList_Slice) Marshal(m jsn.Marshaler) error {
+	return FromRecordList_Repeats_Marshal(m, (*[]FromRecordList)(op))
 }
 
-func (op *FromRecords_Slice) GetSize() (ret int) {
+func (op *FromRecordList_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -4230,133 +4130,64 @@ func (op *FromRecords_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *FromRecords_Slice) SetSize(cnt int) {
-	var els []FromRecords
+func (op *FromRecordList_Slice) SetSize(cnt int) {
+	var els []FromRecordList
 	if cnt >= 0 {
-		els = make(FromRecords_Slice, cnt)
+		els = make(FromRecordList_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *FromRecords_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromRecords_Marshal(m, &(*op)[i])
+func (op *FromRecordList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return FromRecordList_Marshal(m, &(*op)[i])
 }
 
-func FromRecords_Repeats_Marshal(m jsn.Marshaler, vals *[]FromRecords) error {
-	return jsn.RepeatBlock(m, (*FromRecords_Slice)(vals))
+func FromRecordList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromRecordList) error {
+	return jsn.RepeatBlock(m, (*FromRecordList_Slice)(vals))
 }
 
-func FromRecords_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromRecords) (err error) {
+func FromRecordList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromRecordList) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromRecords_Repeats_Marshal(m, pv)
+		err = FromRecordList_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type FromRecords_Flow struct{ ptr *FromRecords }
+type FromRecordList_Flow struct{ ptr *FromRecordList }
 
-func (n FromRecords_Flow) GetType() string      { return FromRecords_Type }
-func (n FromRecords_Flow) GetLede() string      { return "from_recs" }
-func (n FromRecords_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromRecords_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromRecords); ok {
+func (n FromRecordList_Flow) GetType() string      { return FromRecordList_Type }
+func (n FromRecordList_Flow) GetLede() string      { return FromRecordList_Type }
+func (n FromRecordList_Flow) GetFlow() interface{} { return n.ptr }
+func (n FromRecordList_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*FromRecordList); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func FromRecords_Optional_Marshal(m jsn.Marshaler, pv **FromRecords) (err error) {
+func FromRecordList_Optional_Marshal(m jsn.Marshaler, pv **FromRecordList) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromRecords_Marshal(m, *pv)
+		err = FromRecordList_Marshal(m, *pv)
 	} else if !enc {
-		var v FromRecords
-		if err = FromRecords_Marshal(m, &v); err == nil {
+		var v FromRecordList
+		if err = FromRecordList_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func FromRecords_Marshal(m jsn.Marshaler, val *FromRecords) (err error) {
+func FromRecordList_Marshal(m jsn.Marshaler, val *FromRecordList) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromRecords_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromRecords_Field_Vals)
+	if err = m.MarshalBlock(FromRecordList_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", FromRecordList_Field_Val)
 		if e0 == nil {
-			e0 = rt.RecordListEval_Marshal(m, &val.Vals)
+			e0 = rt.RecordListEval_Marshal(m, &val.Val)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromRecords_Field_Vals))
+			m.Error(errutil.New(e0, "in flow at", FromRecordList_Field_Val))
 		}
 		m.EndBlock()
-	}
-	return
-}
-
-const FromSourceFields_Type = "from_source_fields"
-
-var FromSourceFields_Optional_Marshal = FromSourceFields_Marshal
-
-type FromSourceFields_Slot struct{ Value *FromSourceFields }
-
-func (at FromSourceFields_Slot) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(at); err == nil {
-		if a, ok := at.GetSlot(); ok {
-			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-func (at FromSourceFields_Slot) GetType() string              { return FromSourceFields_Type }
-func (at FromSourceFields_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at FromSourceFields_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(FromSourceFields)
-	return
-}
-
-func FromSourceFields_Marshal(m jsn.Marshaler, ptr *FromSourceFields) (err error) {
-	slot := FromSourceFields_Slot{ptr}
-	return slot.Marshal(m)
-}
-
-type FromSourceFields_Slice []FromSourceFields
-
-func (op *FromSourceFields_Slice) GetType() string { return FromSourceFields_Type }
-
-func (op *FromSourceFields_Slice) Marshal(m jsn.Marshaler) error {
-	return FromSourceFields_Repeats_Marshal(m, (*[]FromSourceFields)(op))
-}
-
-func (op *FromSourceFields_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromSourceFields_Slice) SetSize(cnt int) {
-	var els []FromSourceFields
-	if cnt >= 0 {
-		els = make(FromSourceFields_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromSourceFields_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromSourceFields_Marshal(m, &(*op)[i])
-}
-
-func FromSourceFields_Repeats_Marshal(m jsn.Marshaler, vals *[]FromSourceFields) error {
-	return jsn.RepeatBlock(m, (*FromSourceFields_Slice)(vals))
-}
-
-func FromSourceFields_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromSourceFields) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromSourceFields_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -4367,14 +4198,10 @@ type FromText struct {
 	Markup map[string]any
 }
 
-// User implemented slots:
-var _ rt.Assignment = (*FromText)(nil)
-
 func (*FromText) Compose() composer.Spec {
 	return composer.Spec{
 		Name: FromText_Type,
 		Uses: composer.Type_Flow,
-		Lede: "from_txt",
 	}
 }
 
@@ -4428,7 +4255,7 @@ func FromText_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromText) (err err
 type FromText_Flow struct{ ptr *FromText }
 
 func (n FromText_Flow) GetType() string      { return FromText_Type }
-func (n FromText_Flow) GetLede() string      { return "from_txt" }
+func (n FromText_Flow) GetLede() string      { return FromText_Type }
 func (n FromText_Flow) GetFlow() interface{} { return n.ptr }
 func (n FromText_Flow) SetFlow(i interface{}) (okay bool) {
 	if ptr, ok := i.(*FromText); ok {
@@ -4464,39 +4291,35 @@ func FromText_Marshal(m jsn.Marshaler, val *FromText) (err error) {
 	return
 }
 
-// FromTexts Assigns the calculated texts.
-type FromTexts struct {
-	Vals   rt.TextListEval `if:"label=_"`
+// FromTextList Assigns the calculated pieces of text.
+type FromTextList struct {
+	Val    rt.TextListEval `if:"label=_"`
 	Markup map[string]any
 }
 
-// User implemented slots:
-var _ rt.Assignment = (*FromTexts)(nil)
-
-func (*FromTexts) Compose() composer.Spec {
+func (*FromTextList) Compose() composer.Spec {
 	return composer.Spec{
-		Name: FromTexts_Type,
+		Name: FromTextList_Type,
 		Uses: composer.Type_Flow,
-		Lede: "from_txts",
 	}
 }
 
-const FromTexts_Type = "from_texts"
-const FromTexts_Field_Vals = "$VALS"
+const FromTextList_Type = "from_text_list"
+const FromTextList_Field_Val = "$VAL"
 
-func (op *FromTexts) Marshal(m jsn.Marshaler) error {
-	return FromTexts_Marshal(m, op)
+func (op *FromTextList) Marshal(m jsn.Marshaler) error {
+	return FromTextList_Marshal(m, op)
 }
 
-type FromTexts_Slice []FromTexts
+type FromTextList_Slice []FromTextList
 
-func (op *FromTexts_Slice) GetType() string { return FromTexts_Type }
+func (op *FromTextList_Slice) GetType() string { return FromTextList_Type }
 
-func (op *FromTexts_Slice) Marshal(m jsn.Marshaler) error {
-	return FromTexts_Repeats_Marshal(m, (*[]FromTexts)(op))
+func (op *FromTextList_Slice) Marshal(m jsn.Marshaler) error {
+	return FromTextList_Repeats_Marshal(m, (*[]FromTextList)(op))
 }
 
-func (op *FromTexts_Slice) GetSize() (ret int) {
+func (op *FromTextList_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -4505,213 +4328,107 @@ func (op *FromTexts_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *FromTexts_Slice) SetSize(cnt int) {
-	var els []FromTexts
+func (op *FromTextList_Slice) SetSize(cnt int) {
+	var els []FromTextList
 	if cnt >= 0 {
-		els = make(FromTexts_Slice, cnt)
+		els = make(FromTextList_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *FromTexts_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromTexts_Marshal(m, &(*op)[i])
+func (op *FromTextList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return FromTextList_Marshal(m, &(*op)[i])
 }
 
-func FromTexts_Repeats_Marshal(m jsn.Marshaler, vals *[]FromTexts) error {
-	return jsn.RepeatBlock(m, (*FromTexts_Slice)(vals))
+func FromTextList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromTextList) error {
+	return jsn.RepeatBlock(m, (*FromTextList_Slice)(vals))
 }
 
-func FromTexts_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromTexts) (err error) {
+func FromTextList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromTextList) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromTexts_Repeats_Marshal(m, pv)
+		err = FromTextList_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type FromTexts_Flow struct{ ptr *FromTexts }
+type FromTextList_Flow struct{ ptr *FromTextList }
 
-func (n FromTexts_Flow) GetType() string      { return FromTexts_Type }
-func (n FromTexts_Flow) GetLede() string      { return "from_txts" }
-func (n FromTexts_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromTexts_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromTexts); ok {
+func (n FromTextList_Flow) GetType() string      { return FromTextList_Type }
+func (n FromTextList_Flow) GetLede() string      { return FromTextList_Type }
+func (n FromTextList_Flow) GetFlow() interface{} { return n.ptr }
+func (n FromTextList_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*FromTextList); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func FromTexts_Optional_Marshal(m jsn.Marshaler, pv **FromTexts) (err error) {
+func FromTextList_Optional_Marshal(m jsn.Marshaler, pv **FromTextList) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromTexts_Marshal(m, *pv)
+		err = FromTextList_Marshal(m, *pv)
 	} else if !enc {
-		var v FromTexts
-		if err = FromTexts_Marshal(m, &v); err == nil {
+		var v FromTextList
+		if err = FromTextList_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func FromTexts_Marshal(m jsn.Marshaler, val *FromTexts) (err error) {
+func FromTextList_Marshal(m jsn.Marshaler, val *FromTextList) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromTexts_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromTexts_Field_Vals)
+	if err = m.MarshalBlock(FromTextList_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", FromTextList_Field_Val)
 		if e0 == nil {
-			e0 = rt.TextListEval_Marshal(m, &val.Vals)
+			e0 = rt.TextListEval_Marshal(m, &val.Val)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromTexts_Field_Vals))
+			m.Error(errutil.New(e0, "in flow at", FromTextList_Field_Val))
 		}
 		m.EndBlock()
 	}
 	return
 }
 
-// FromVar Targets a record stored in a variable.
-type FromVar struct {
-	Var    VariableName `if:"label=_"`
+// GetValue Read a value from a local variable ( or pattern parameter. )
+type GetValue struct {
+	Source Address `if:"label=_"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ FromSourceFields = (*FromVar)(nil)
+var _ rt.BoolEval = (*GetValue)(nil)
+var _ rt.NumberEval = (*GetValue)(nil)
+var _ rt.TextEval = (*GetValue)(nil)
+var _ rt.RecordEval = (*GetValue)(nil)
+var _ rt.NumListEval = (*GetValue)(nil)
+var _ rt.TextListEval = (*GetValue)(nil)
+var _ rt.RecordListEval = (*GetValue)(nil)
 
-func (*FromVar) Compose() composer.Spec {
+func (*GetValue) Compose() composer.Spec {
 	return composer.Spec{
-		Name: FromVar_Type,
-		Uses: composer.Type_Flow,
-		Lede: "var_fields",
-	}
-}
-
-const FromVar_Type = "from_var"
-const FromVar_Field_Var = "$VAR"
-
-func (op *FromVar) Marshal(m jsn.Marshaler) error {
-	return FromVar_Marshal(m, op)
-}
-
-type FromVar_Slice []FromVar
-
-func (op *FromVar_Slice) GetType() string { return FromVar_Type }
-
-func (op *FromVar_Slice) Marshal(m jsn.Marshaler) error {
-	return FromVar_Repeats_Marshal(m, (*[]FromVar)(op))
-}
-
-func (op *FromVar_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromVar_Slice) SetSize(cnt int) {
-	var els []FromVar
-	if cnt >= 0 {
-		els = make(FromVar_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromVar_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromVar_Marshal(m, &(*op)[i])
-}
-
-func FromVar_Repeats_Marshal(m jsn.Marshaler, vals *[]FromVar) error {
-	return jsn.RepeatBlock(m, (*FromVar_Slice)(vals))
-}
-
-func FromVar_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromVar) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromVar_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromVar_Flow struct{ ptr *FromVar }
-
-func (n FromVar_Flow) GetType() string      { return FromVar_Type }
-func (n FromVar_Flow) GetLede() string      { return "var_fields" }
-func (n FromVar_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromVar_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromVar); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromVar_Optional_Marshal(m jsn.Marshaler, pv **FromVar) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromVar_Marshal(m, *pv)
-	} else if !enc {
-		var v FromVar
-		if err = FromVar_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromVar_Marshal(m jsn.Marshaler, val *FromVar) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromVar_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromVar_Field_Var)
-		if e0 == nil {
-			e0 = VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromVar_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// GetAtField Get a value from a record.
-type GetAtField struct {
-	Field  string           `if:"label=_,type=text"`
-	From   FromSourceFields `if:"label=from"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Assignment = (*GetAtField)(nil)
-var _ rt.BoolEval = (*GetAtField)(nil)
-var _ rt.NumberEval = (*GetAtField)(nil)
-var _ rt.TextEval = (*GetAtField)(nil)
-var _ rt.RecordEval = (*GetAtField)(nil)
-var _ rt.NumListEval = (*GetAtField)(nil)
-var _ rt.TextListEval = (*GetAtField)(nil)
-var _ rt.RecordListEval = (*GetAtField)(nil)
-
-func (*GetAtField) Compose() composer.Spec {
-	return composer.Spec{
-		Name: GetAtField_Type,
+		Name: GetValue_Type,
 		Uses: composer.Type_Flow,
 		Lede: "get",
 	}
 }
 
-const GetAtField_Type = "get_at_field"
-const GetAtField_Field_Field = "$FIELD"
-const GetAtField_Field_From = "$FROM"
+const GetValue_Type = "get_value"
+const GetValue_Field_Source = "$SOURCE"
 
-func (op *GetAtField) Marshal(m jsn.Marshaler) error {
-	return GetAtField_Marshal(m, op)
+func (op *GetValue) Marshal(m jsn.Marshaler) error {
+	return GetValue_Marshal(m, op)
 }
 
-type GetAtField_Slice []GetAtField
+type GetValue_Slice []GetValue
 
-func (op *GetAtField_Slice) GetType() string { return GetAtField_Type }
+func (op *GetValue_Slice) GetType() string { return GetValue_Type }
 
-func (op *GetAtField_Slice) Marshal(m jsn.Marshaler) error {
-	return GetAtField_Repeats_Marshal(m, (*[]GetAtField)(op))
+func (op *GetValue_Slice) Marshal(m jsn.Marshaler) error {
+	return GetValue_Repeats_Marshal(m, (*[]GetValue)(op))
 }
 
-func (op *GetAtField_Slice) GetSize() (ret int) {
+func (op *GetValue_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -4720,534 +4437,62 @@ func (op *GetAtField_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *GetAtField_Slice) SetSize(cnt int) {
-	var els []GetAtField
+func (op *GetValue_Slice) SetSize(cnt int) {
+	var els []GetValue
 	if cnt >= 0 {
-		els = make(GetAtField_Slice, cnt)
+		els = make(GetValue_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *GetAtField_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return GetAtField_Marshal(m, &(*op)[i])
+func (op *GetValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return GetValue_Marshal(m, &(*op)[i])
 }
 
-func GetAtField_Repeats_Marshal(m jsn.Marshaler, vals *[]GetAtField) error {
-	return jsn.RepeatBlock(m, (*GetAtField_Slice)(vals))
+func GetValue_Repeats_Marshal(m jsn.Marshaler, vals *[]GetValue) error {
+	return jsn.RepeatBlock(m, (*GetValue_Slice)(vals))
 }
 
-func GetAtField_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]GetAtField) (err error) {
+func GetValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]GetValue) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = GetAtField_Repeats_Marshal(m, pv)
+		err = GetValue_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type GetAtField_Flow struct{ ptr *GetAtField }
+type GetValue_Flow struct{ ptr *GetValue }
 
-func (n GetAtField_Flow) GetType() string      { return GetAtField_Type }
-func (n GetAtField_Flow) GetLede() string      { return "get" }
-func (n GetAtField_Flow) GetFlow() interface{} { return n.ptr }
-func (n GetAtField_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*GetAtField); ok {
+func (n GetValue_Flow) GetType() string      { return GetValue_Type }
+func (n GetValue_Flow) GetLede() string      { return "get" }
+func (n GetValue_Flow) GetFlow() interface{} { return n.ptr }
+func (n GetValue_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*GetValue); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func GetAtField_Optional_Marshal(m jsn.Marshaler, pv **GetAtField) (err error) {
+func GetValue_Optional_Marshal(m jsn.Marshaler, pv **GetValue) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = GetAtField_Marshal(m, *pv)
+		err = GetValue_Marshal(m, *pv)
 	} else if !enc {
-		var v GetAtField
-		if err = GetAtField_Marshal(m, &v); err == nil {
+		var v GetValue
+		if err = GetValue_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func GetAtField_Marshal(m jsn.Marshaler, val *GetAtField) (err error) {
+func GetValue_Marshal(m jsn.Marshaler, val *GetValue) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(GetAtField_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", GetAtField_Field_Field)
+	if err = m.MarshalBlock(GetValue_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", GetValue_Field_Source)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Field)
+			e0 = Address_Marshal(m, &val.Source)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", GetAtField_Field_Field))
-		}
-		e1 := m.MarshalKey("from", GetAtField_Field_From)
-		if e1 == nil {
-			e1 = FromSourceFields_Marshal(m, &val.From)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", GetAtField_Field_From))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// GetFromName Read a value using a name which might refer either to a variable or to an object
-// Intended for internal use.
-type GetFromName struct {
-	Name   rt.TextEval `if:"label=_"`
-	Dot    []Dot       `if:"label=dot,optional"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.BoolEval = (*GetFromName)(nil)
-var _ rt.NumberEval = (*GetFromName)(nil)
-var _ rt.TextEval = (*GetFromName)(nil)
-var _ rt.RecordEval = (*GetFromName)(nil)
-var _ rt.ListEval = (*GetFromName)(nil)
-
-func (*GetFromName) Compose() composer.Spec {
-	return composer.Spec{
-		Name: GetFromName_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const GetFromName_Type = "get_from_name"
-const GetFromName_Field_Name = "$NAME"
-const GetFromName_Field_Dot = "$DOT"
-
-func (op *GetFromName) Marshal(m jsn.Marshaler) error {
-	return GetFromName_Marshal(m, op)
-}
-
-type GetFromName_Slice []GetFromName
-
-func (op *GetFromName_Slice) GetType() string { return GetFromName_Type }
-
-func (op *GetFromName_Slice) Marshal(m jsn.Marshaler) error {
-	return GetFromName_Repeats_Marshal(m, (*[]GetFromName)(op))
-}
-
-func (op *GetFromName_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *GetFromName_Slice) SetSize(cnt int) {
-	var els []GetFromName
-	if cnt >= 0 {
-		els = make(GetFromName_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *GetFromName_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return GetFromName_Marshal(m, &(*op)[i])
-}
-
-func GetFromName_Repeats_Marshal(m jsn.Marshaler, vals *[]GetFromName) error {
-	return jsn.RepeatBlock(m, (*GetFromName_Slice)(vals))
-}
-
-func GetFromName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]GetFromName) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = GetFromName_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type GetFromName_Flow struct{ ptr *GetFromName }
-
-func (n GetFromName_Flow) GetType() string      { return GetFromName_Type }
-func (n GetFromName_Flow) GetLede() string      { return GetFromName_Type }
-func (n GetFromName_Flow) GetFlow() interface{} { return n.ptr }
-func (n GetFromName_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*GetFromName); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func GetFromName_Optional_Marshal(m jsn.Marshaler, pv **GetFromName) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = GetFromName_Marshal(m, *pv)
-	} else if !enc {
-		var v GetFromName
-		if err = GetFromName_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func GetFromName_Marshal(m jsn.Marshaler, val *GetFromName) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(GetFromName_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", GetFromName_Field_Name)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", GetFromName_Field_Name))
-		}
-		e1 := m.MarshalKey("dot", GetFromName_Field_Dot)
-		if e1 == nil {
-			e1 = Dot_Optional_Repeats_Marshal(m, &val.Dot)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", GetFromName_Field_Dot))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// GetFromObj Read a value from an object..
-type GetFromObj struct {
-	Name   rt.TextEval `if:"label=_"`
-	Field  rt.TextEval `if:"label=field"`
-	Dot    []Dot       `if:"label=dot,optional"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.BoolEval = (*GetFromObj)(nil)
-var _ rt.NumberEval = (*GetFromObj)(nil)
-var _ rt.TextEval = (*GetFromObj)(nil)
-var _ rt.RecordEval = (*GetFromObj)(nil)
-var _ rt.ListEval = (*GetFromObj)(nil)
-
-func (*GetFromObj) Compose() composer.Spec {
-	return composer.Spec{
-		Name: GetFromObj_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const GetFromObj_Type = "get_from_obj"
-const GetFromObj_Field_Name = "$NAME"
-const GetFromObj_Field_Field = "$FIELD"
-const GetFromObj_Field_Dot = "$DOT"
-
-func (op *GetFromObj) Marshal(m jsn.Marshaler) error {
-	return GetFromObj_Marshal(m, op)
-}
-
-type GetFromObj_Slice []GetFromObj
-
-func (op *GetFromObj_Slice) GetType() string { return GetFromObj_Type }
-
-func (op *GetFromObj_Slice) Marshal(m jsn.Marshaler) error {
-	return GetFromObj_Repeats_Marshal(m, (*[]GetFromObj)(op))
-}
-
-func (op *GetFromObj_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *GetFromObj_Slice) SetSize(cnt int) {
-	var els []GetFromObj
-	if cnt >= 0 {
-		els = make(GetFromObj_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *GetFromObj_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return GetFromObj_Marshal(m, &(*op)[i])
-}
-
-func GetFromObj_Repeats_Marshal(m jsn.Marshaler, vals *[]GetFromObj) error {
-	return jsn.RepeatBlock(m, (*GetFromObj_Slice)(vals))
-}
-
-func GetFromObj_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]GetFromObj) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = GetFromObj_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type GetFromObj_Flow struct{ ptr *GetFromObj }
-
-func (n GetFromObj_Flow) GetType() string      { return GetFromObj_Type }
-func (n GetFromObj_Flow) GetLede() string      { return GetFromObj_Type }
-func (n GetFromObj_Flow) GetFlow() interface{} { return n.ptr }
-func (n GetFromObj_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*GetFromObj); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func GetFromObj_Optional_Marshal(m jsn.Marshaler, pv **GetFromObj) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = GetFromObj_Marshal(m, *pv)
-	} else if !enc {
-		var v GetFromObj
-		if err = GetFromObj_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func GetFromObj_Marshal(m jsn.Marshaler, val *GetFromObj) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(GetFromObj_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", GetFromObj_Field_Name)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", GetFromObj_Field_Name))
-		}
-		e1 := m.MarshalKey("field", GetFromObj_Field_Field)
-		if e1 == nil {
-			e1 = rt.TextEval_Marshal(m, &val.Field)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", GetFromObj_Field_Field))
-		}
-		e2 := m.MarshalKey("dot", GetFromObj_Field_Dot)
-		if e2 == nil {
-			e2 = Dot_Optional_Repeats_Marshal(m, &val.Dot)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", GetFromObj_Field_Dot))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// GetFromVar Read a value from a local variable ( or pattern parameter. )
-type GetFromVar struct {
-	Name   rt.TextEval `if:"label=_"`
-	Dot    []Dot       `if:"label=dot,optional"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.BoolEval = (*GetFromVar)(nil)
-var _ rt.NumberEval = (*GetFromVar)(nil)
-var _ rt.TextEval = (*GetFromVar)(nil)
-var _ rt.RecordEval = (*GetFromVar)(nil)
-var _ rt.ListEval = (*GetFromVar)(nil)
-
-func (*GetFromVar) Compose() composer.Spec {
-	return composer.Spec{
-		Name: GetFromVar_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const GetFromVar_Type = "get_from_var"
-const GetFromVar_Field_Name = "$NAME"
-const GetFromVar_Field_Dot = "$DOT"
-
-func (op *GetFromVar) Marshal(m jsn.Marshaler) error {
-	return GetFromVar_Marshal(m, op)
-}
-
-type GetFromVar_Slice []GetFromVar
-
-func (op *GetFromVar_Slice) GetType() string { return GetFromVar_Type }
-
-func (op *GetFromVar_Slice) Marshal(m jsn.Marshaler) error {
-	return GetFromVar_Repeats_Marshal(m, (*[]GetFromVar)(op))
-}
-
-func (op *GetFromVar_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *GetFromVar_Slice) SetSize(cnt int) {
-	var els []GetFromVar
-	if cnt >= 0 {
-		els = make(GetFromVar_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *GetFromVar_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return GetFromVar_Marshal(m, &(*op)[i])
-}
-
-func GetFromVar_Repeats_Marshal(m jsn.Marshaler, vals *[]GetFromVar) error {
-	return jsn.RepeatBlock(m, (*GetFromVar_Slice)(vals))
-}
-
-func GetFromVar_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]GetFromVar) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = GetFromVar_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type GetFromVar_Flow struct{ ptr *GetFromVar }
-
-func (n GetFromVar_Flow) GetType() string      { return GetFromVar_Type }
-func (n GetFromVar_Flow) GetLede() string      { return GetFromVar_Type }
-func (n GetFromVar_Flow) GetFlow() interface{} { return n.ptr }
-func (n GetFromVar_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*GetFromVar); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func GetFromVar_Optional_Marshal(m jsn.Marshaler, pv **GetFromVar) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = GetFromVar_Marshal(m, *pv)
-	} else if !enc {
-		var v GetFromVar
-		if err = GetFromVar_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func GetFromVar_Marshal(m jsn.Marshaler, val *GetFromVar) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(GetFromVar_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", GetFromVar_Field_Name)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", GetFromVar_Field_Name))
-		}
-		e1 := m.MarshalKey("dot", GetFromVar_Field_Dot)
-		if e1 == nil {
-			e1 = Dot_Optional_Repeats_Marshal(m, &val.Dot)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", GetFromVar_Field_Dot))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// GetVar Get Variable: Return the value of the named variable.
-type GetVar struct {
-	Name   VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Assignment = (*GetVar)(nil)
-var _ rt.BoolEval = (*GetVar)(nil)
-var _ rt.NumberEval = (*GetVar)(nil)
-var _ rt.TextEval = (*GetVar)(nil)
-var _ rt.RecordEval = (*GetVar)(nil)
-var _ rt.NumListEval = (*GetVar)(nil)
-var _ rt.TextListEval = (*GetVar)(nil)
-var _ rt.RecordListEval = (*GetVar)(nil)
-
-func (*GetVar) Compose() composer.Spec {
-	return composer.Spec{
-		Name: GetVar_Type,
-		Uses: composer.Type_Flow,
-		Lede: "var",
-	}
-}
-
-const GetVar_Type = "get_var"
-const GetVar_Field_Name = "$NAME"
-
-func (op *GetVar) Marshal(m jsn.Marshaler) error {
-	return GetVar_Marshal(m, op)
-}
-
-type GetVar_Slice []GetVar
-
-func (op *GetVar_Slice) GetType() string { return GetVar_Type }
-
-func (op *GetVar_Slice) Marshal(m jsn.Marshaler) error {
-	return GetVar_Repeats_Marshal(m, (*[]GetVar)(op))
-}
-
-func (op *GetVar_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *GetVar_Slice) SetSize(cnt int) {
-	var els []GetVar
-	if cnt >= 0 {
-		els = make(GetVar_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *GetVar_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return GetVar_Marshal(m, &(*op)[i])
-}
-
-func GetVar_Repeats_Marshal(m jsn.Marshaler, vals *[]GetVar) error {
-	return jsn.RepeatBlock(m, (*GetVar_Slice)(vals))
-}
-
-func GetVar_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]GetVar) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = GetVar_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type GetVar_Flow struct{ ptr *GetVar }
-
-func (n GetVar_Flow) GetType() string      { return GetVar_Type }
-func (n GetVar_Flow) GetLede() string      { return "var" }
-func (n GetVar_Flow) GetFlow() interface{} { return n.ptr }
-func (n GetVar_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*GetVar); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func GetVar_Optional_Marshal(m jsn.Marshaler, pv **GetVar) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = GetVar_Marshal(m, *pv)
-	} else if !enc {
-		var v GetVar
-		if err = GetVar_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func GetVar_Marshal(m jsn.Marshaler, val *GetVar) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(GetVar_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", GetVar_Field_Name)
-		if e0 == nil {
-			e0 = VariableName_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", GetVar_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", GetValue_Field_Source))
 		}
 		m.EndBlock()
 	}
@@ -5350,118 +4595,6 @@ func HasDominion_Marshal(m jsn.Marshaler, val *HasDominion) (err error) {
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", HasDominion_Field_Name))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// HasTrait Return true if the object is currently in the requested state.
-type HasTrait struct {
-	Object rt.TextEval `if:"label=obj"`
-	Trait  rt.TextEval `if:"label=trait"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.BoolEval = (*HasTrait)(nil)
-
-func (*HasTrait) Compose() composer.Spec {
-	return composer.Spec{
-		Name: HasTrait_Type,
-		Uses: composer.Type_Flow,
-		Lede: "get",
-	}
-}
-
-const HasTrait_Type = "has_trait"
-const HasTrait_Field_Object = "$OBJECT"
-const HasTrait_Field_Trait = "$TRAIT"
-
-func (op *HasTrait) Marshal(m jsn.Marshaler) error {
-	return HasTrait_Marshal(m, op)
-}
-
-type HasTrait_Slice []HasTrait
-
-func (op *HasTrait_Slice) GetType() string { return HasTrait_Type }
-
-func (op *HasTrait_Slice) Marshal(m jsn.Marshaler) error {
-	return HasTrait_Repeats_Marshal(m, (*[]HasTrait)(op))
-}
-
-func (op *HasTrait_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *HasTrait_Slice) SetSize(cnt int) {
-	var els []HasTrait
-	if cnt >= 0 {
-		els = make(HasTrait_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *HasTrait_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return HasTrait_Marshal(m, &(*op)[i])
-}
-
-func HasTrait_Repeats_Marshal(m jsn.Marshaler, vals *[]HasTrait) error {
-	return jsn.RepeatBlock(m, (*HasTrait_Slice)(vals))
-}
-
-func HasTrait_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]HasTrait) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = HasTrait_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type HasTrait_Flow struct{ ptr *HasTrait }
-
-func (n HasTrait_Flow) GetType() string      { return HasTrait_Type }
-func (n HasTrait_Flow) GetLede() string      { return "get" }
-func (n HasTrait_Flow) GetFlow() interface{} { return n.ptr }
-func (n HasTrait_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*HasTrait); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func HasTrait_Optional_Marshal(m jsn.Marshaler, pv **HasTrait) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = HasTrait_Marshal(m, *pv)
-	} else if !enc {
-		var v HasTrait
-		if err = HasTrait_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func HasTrait_Marshal(m jsn.Marshaler, val *HasTrait) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(HasTrait_Flow{val}); err == nil {
-		e0 := m.MarshalKey("obj", HasTrait_Field_Object)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Object)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", HasTrait_Field_Object))
-		}
-		e1 := m.MarshalKey("trait", HasTrait_Field_Trait)
-		if e1 == nil {
-			e1 = rt.TextEval_Marshal(m, &val.Trait)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", HasTrait_Field_Trait))
 		}
 		m.EndBlock()
 	}
@@ -5676,281 +4809,6 @@ func Includes_Marshal(m jsn.Marshaler, val *Includes) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", Includes_Field_Part))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// IntoObj Targets an object with a computed name.
-type IntoObj struct {
-	Object rt.TextEval `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ IntoTargetFields = (*IntoObj)(nil)
-
-func (*IntoObj) Compose() composer.Spec {
-	return composer.Spec{
-		Name: IntoObj_Type,
-		Uses: composer.Type_Flow,
-		Lede: "obj_field",
-	}
-}
-
-const IntoObj_Type = "into_obj"
-const IntoObj_Field_Object = "$OBJECT"
-
-func (op *IntoObj) Marshal(m jsn.Marshaler) error {
-	return IntoObj_Marshal(m, op)
-}
-
-type IntoObj_Slice []IntoObj
-
-func (op *IntoObj_Slice) GetType() string { return IntoObj_Type }
-
-func (op *IntoObj_Slice) Marshal(m jsn.Marshaler) error {
-	return IntoObj_Repeats_Marshal(m, (*[]IntoObj)(op))
-}
-
-func (op *IntoObj_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *IntoObj_Slice) SetSize(cnt int) {
-	var els []IntoObj
-	if cnt >= 0 {
-		els = make(IntoObj_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *IntoObj_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return IntoObj_Marshal(m, &(*op)[i])
-}
-
-func IntoObj_Repeats_Marshal(m jsn.Marshaler, vals *[]IntoObj) error {
-	return jsn.RepeatBlock(m, (*IntoObj_Slice)(vals))
-}
-
-func IntoObj_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoObj) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = IntoObj_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type IntoObj_Flow struct{ ptr *IntoObj }
-
-func (n IntoObj_Flow) GetType() string      { return IntoObj_Type }
-func (n IntoObj_Flow) GetLede() string      { return "obj_field" }
-func (n IntoObj_Flow) GetFlow() interface{} { return n.ptr }
-func (n IntoObj_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*IntoObj); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func IntoObj_Optional_Marshal(m jsn.Marshaler, pv **IntoObj) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = IntoObj_Marshal(m, *pv)
-	} else if !enc {
-		var v IntoObj
-		if err = IntoObj_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func IntoObj_Marshal(m jsn.Marshaler, val *IntoObj) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(IntoObj_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", IntoObj_Field_Object)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Object)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", IntoObj_Field_Object))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-const IntoTargetFields_Type = "into_target_fields"
-
-var IntoTargetFields_Optional_Marshal = IntoTargetFields_Marshal
-
-type IntoTargetFields_Slot struct{ Value *IntoTargetFields }
-
-func (at IntoTargetFields_Slot) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(at); err == nil {
-		if a, ok := at.GetSlot(); ok {
-			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-func (at IntoTargetFields_Slot) GetType() string              { return IntoTargetFields_Type }
-func (at IntoTargetFields_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at IntoTargetFields_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(IntoTargetFields)
-	return
-}
-
-func IntoTargetFields_Marshal(m jsn.Marshaler, ptr *IntoTargetFields) (err error) {
-	slot := IntoTargetFields_Slot{ptr}
-	return slot.Marshal(m)
-}
-
-type IntoTargetFields_Slice []IntoTargetFields
-
-func (op *IntoTargetFields_Slice) GetType() string { return IntoTargetFields_Type }
-
-func (op *IntoTargetFields_Slice) Marshal(m jsn.Marshaler) error {
-	return IntoTargetFields_Repeats_Marshal(m, (*[]IntoTargetFields)(op))
-}
-
-func (op *IntoTargetFields_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *IntoTargetFields_Slice) SetSize(cnt int) {
-	var els []IntoTargetFields
-	if cnt >= 0 {
-		els = make(IntoTargetFields_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *IntoTargetFields_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return IntoTargetFields_Marshal(m, &(*op)[i])
-}
-
-func IntoTargetFields_Repeats_Marshal(m jsn.Marshaler, vals *[]IntoTargetFields) error {
-	return jsn.RepeatBlock(m, (*IntoTargetFields_Slice)(vals))
-}
-
-func IntoTargetFields_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoTargetFields) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = IntoTargetFields_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// IntoVar Targets an object or record stored in a variable.
-type IntoVar struct {
-	Var    VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ IntoTargetFields = (*IntoVar)(nil)
-
-func (*IntoVar) Compose() composer.Spec {
-	return composer.Spec{
-		Name: IntoVar_Type,
-		Uses: composer.Type_Flow,
-		Lede: "var_field",
-	}
-}
-
-const IntoVar_Type = "into_var"
-const IntoVar_Field_Var = "$VAR"
-
-func (op *IntoVar) Marshal(m jsn.Marshaler) error {
-	return IntoVar_Marshal(m, op)
-}
-
-type IntoVar_Slice []IntoVar
-
-func (op *IntoVar_Slice) GetType() string { return IntoVar_Type }
-
-func (op *IntoVar_Slice) Marshal(m jsn.Marshaler) error {
-	return IntoVar_Repeats_Marshal(m, (*[]IntoVar)(op))
-}
-
-func (op *IntoVar_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *IntoVar_Slice) SetSize(cnt int) {
-	var els []IntoVar
-	if cnt >= 0 {
-		els = make(IntoVar_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *IntoVar_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return IntoVar_Marshal(m, &(*op)[i])
-}
-
-func IntoVar_Repeats_Marshal(m jsn.Marshaler, vals *[]IntoVar) error {
-	return jsn.RepeatBlock(m, (*IntoVar_Slice)(vals))
-}
-
-func IntoVar_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoVar) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = IntoVar_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type IntoVar_Flow struct{ ptr *IntoVar }
-
-func (n IntoVar_Flow) GetType() string      { return IntoVar_Type }
-func (n IntoVar_Flow) GetLede() string      { return "var_field" }
-func (n IntoVar_Flow) GetFlow() interface{} { return n.ptr }
-func (n IntoVar_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*IntoVar); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func IntoVar_Optional_Marshal(m jsn.Marshaler, pv **IntoVar) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = IntoVar_Marshal(m, *pv)
-	} else if !enc {
-		var v IntoVar
-		if err = IntoVar_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func IntoVar_Marshal(m jsn.Marshaler, val *IntoVar) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(IntoVar_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", IntoVar_Field_Var)
-		if e0 == nil {
-			e0 = VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", IntoVar_Field_Var))
 		}
 		m.EndBlock()
 	}
@@ -7813,6 +6671,124 @@ func ObjectExists_Marshal(m jsn.Marshaler, val *ObjectExists) (err error) {
 	return
 }
 
+// ObjectRef
+type ObjectRef struct {
+	Name   rt.TextEval `if:"label=_"`
+	Field  rt.TextEval `if:"label=field"`
+	Dot    []Dot       `if:"label=dot,optional"`
+	Markup map[string]any
+}
+
+func (*ObjectRef) Compose() composer.Spec {
+	return composer.Spec{
+		Name: ObjectRef_Type,
+		Uses: composer.Type_Flow,
+		Lede: "object",
+	}
+}
+
+const ObjectRef_Type = "object_ref"
+const ObjectRef_Field_Name = "$NAME"
+const ObjectRef_Field_Field = "$FIELD"
+const ObjectRef_Field_Dot = "$DOT"
+
+func (op *ObjectRef) Marshal(m jsn.Marshaler) error {
+	return ObjectRef_Marshal(m, op)
+}
+
+type ObjectRef_Slice []ObjectRef
+
+func (op *ObjectRef_Slice) GetType() string { return ObjectRef_Type }
+
+func (op *ObjectRef_Slice) Marshal(m jsn.Marshaler) error {
+	return ObjectRef_Repeats_Marshal(m, (*[]ObjectRef)(op))
+}
+
+func (op *ObjectRef_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ObjectRef_Slice) SetSize(cnt int) {
+	var els []ObjectRef
+	if cnt >= 0 {
+		els = make(ObjectRef_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ObjectRef_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ObjectRef_Marshal(m, &(*op)[i])
+}
+
+func ObjectRef_Repeats_Marshal(m jsn.Marshaler, vals *[]ObjectRef) error {
+	return jsn.RepeatBlock(m, (*ObjectRef_Slice)(vals))
+}
+
+func ObjectRef_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ObjectRef) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = ObjectRef_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type ObjectRef_Flow struct{ ptr *ObjectRef }
+
+func (n ObjectRef_Flow) GetType() string      { return ObjectRef_Type }
+func (n ObjectRef_Flow) GetLede() string      { return "object" }
+func (n ObjectRef_Flow) GetFlow() interface{} { return n.ptr }
+func (n ObjectRef_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ObjectRef); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func ObjectRef_Optional_Marshal(m jsn.Marshaler, pv **ObjectRef) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ObjectRef_Marshal(m, *pv)
+	} else if !enc {
+		var v ObjectRef
+		if err = ObjectRef_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func ObjectRef_Marshal(m jsn.Marshaler, val *ObjectRef) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(ObjectRef_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", ObjectRef_Field_Name)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ObjectRef_Field_Name))
+		}
+		e1 := m.MarshalKey("field", ObjectRef_Field_Field)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.Field)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ObjectRef_Field_Field))
+		}
+		e2 := m.MarshalKey("dot", ObjectRef_Field_Dot)
+		if e2 == nil {
+			e2 = Dot_Optional_Repeats_Marshal(m, &val.Dot)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", ObjectRef_Field_Dot))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // PatternName requires a user-specified string.
 type PatternName struct {
 	Str string
@@ -8303,127 +7279,6 @@ func ProductOf_Marshal(m jsn.Marshaler, val *ProductOf) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ProductOf_Field_B))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// PutAtField Put a value into the field of an record or object.
-type PutAtField struct {
-	Into    IntoTargetFields `if:"label=_"`
-	From    rt.Assignment    `if:"label=from"`
-	AtField string           `if:"label=at,type=text"`
-	Markup  map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*PutAtField)(nil)
-
-func (*PutAtField) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PutAtField_Type,
-		Uses: composer.Type_Flow,
-		Lede: "put",
-	}
-}
-
-const PutAtField_Type = "put_at_field"
-const PutAtField_Field_Into = "$INTO"
-const PutAtField_Field_From = "$FROM"
-const PutAtField_Field_AtField = "$AT_FIELD"
-
-func (op *PutAtField) Marshal(m jsn.Marshaler) error {
-	return PutAtField_Marshal(m, op)
-}
-
-type PutAtField_Slice []PutAtField
-
-func (op *PutAtField_Slice) GetType() string { return PutAtField_Type }
-
-func (op *PutAtField_Slice) Marshal(m jsn.Marshaler) error {
-	return PutAtField_Repeats_Marshal(m, (*[]PutAtField)(op))
-}
-
-func (op *PutAtField_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PutAtField_Slice) SetSize(cnt int) {
-	var els []PutAtField
-	if cnt >= 0 {
-		els = make(PutAtField_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PutAtField_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PutAtField_Marshal(m, &(*op)[i])
-}
-
-func PutAtField_Repeats_Marshal(m jsn.Marshaler, vals *[]PutAtField) error {
-	return jsn.RepeatBlock(m, (*PutAtField_Slice)(vals))
-}
-
-func PutAtField_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PutAtField) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PutAtField_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type PutAtField_Flow struct{ ptr *PutAtField }
-
-func (n PutAtField_Flow) GetType() string      { return PutAtField_Type }
-func (n PutAtField_Flow) GetLede() string      { return "put" }
-func (n PutAtField_Flow) GetFlow() interface{} { return n.ptr }
-func (n PutAtField_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*PutAtField); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func PutAtField_Optional_Marshal(m jsn.Marshaler, pv **PutAtField) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = PutAtField_Marshal(m, *pv)
-	} else if !enc {
-		var v PutAtField
-		if err = PutAtField_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func PutAtField_Marshal(m jsn.Marshaler, val *PutAtField) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(PutAtField_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PutAtField_Field_Into)
-		if e0 == nil {
-			e0 = IntoTargetFields_Marshal(m, &val.Into)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PutAtField_Field_Into))
-		}
-		e1 := m.MarshalKey("from", PutAtField_Field_From)
-		if e1 == nil {
-			e1 = rt.Assignment_Marshal(m, &val.From)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", PutAtField_Field_From))
-		}
-		e2 := m.MarshalKey("at", PutAtField_Field_AtField)
-		if e2 == nil {
-			e2 = prim.Text_Unboxed_Marshal(m, &val.AtField)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", PutAtField_Field_AtField))
 		}
 		m.EndBlock()
 	}
@@ -9073,45 +7928,41 @@ func SayText_Marshal(m jsn.Marshaler, val *SayText) (err error) {
 	return
 }
 
-// SetObjFromValue Store a true/false value into an object.
-type SetObjFromValue struct {
-	Name   rt.TextEval `if:"label=_"`
-	Field  rt.TextEval `if:"label=field"`
-	Dot    []Dot       `if:"label=dot,optional"`
-	Value  SourceValue `if:"label=from"`
+// SetValue Store a value into a local variable ( or pattern argument. )
+type SetValue struct {
+	Target Address    `if:"label=_"`
+	Value  Assignment `if:"label=from"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ rt.Execute = (*SetObjFromValue)(nil)
+var _ rt.Execute = (*SetValue)(nil)
 
-func (*SetObjFromValue) Compose() composer.Spec {
+func (*SetValue) Compose() composer.Spec {
 	return composer.Spec{
-		Name: SetObjFromValue_Type,
+		Name: SetValue_Type,
 		Uses: composer.Type_Flow,
-		Lede: "set_obj",
+		Lede: "set",
 	}
 }
 
-const SetObjFromValue_Type = "set_obj_from_value"
-const SetObjFromValue_Field_Name = "$NAME"
-const SetObjFromValue_Field_Field = "$FIELD"
-const SetObjFromValue_Field_Dot = "$DOT"
-const SetObjFromValue_Field_Value = "$VALUE"
+const SetValue_Type = "set_value"
+const SetValue_Field_Target = "$TARGET"
+const SetValue_Field_Value = "$VALUE"
 
-func (op *SetObjFromValue) Marshal(m jsn.Marshaler) error {
-	return SetObjFromValue_Marshal(m, op)
+func (op *SetValue) Marshal(m jsn.Marshaler) error {
+	return SetValue_Marshal(m, op)
 }
 
-type SetObjFromValue_Slice []SetObjFromValue
+type SetValue_Slice []SetValue
 
-func (op *SetObjFromValue_Slice) GetType() string { return SetObjFromValue_Type }
+func (op *SetValue_Slice) GetType() string { return SetValue_Type }
 
-func (op *SetObjFromValue_Slice) Marshal(m jsn.Marshaler) error {
-	return SetObjFromValue_Repeats_Marshal(m, (*[]SetObjFromValue)(op))
+func (op *SetValue_Slice) Marshal(m jsn.Marshaler) error {
+	return SetValue_Repeats_Marshal(m, (*[]SetValue)(op))
 }
 
-func (op *SetObjFromValue_Slice) GetSize() (ret int) {
+func (op *SetValue_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -9120,316 +7971,69 @@ func (op *SetObjFromValue_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *SetObjFromValue_Slice) SetSize(cnt int) {
-	var els []SetObjFromValue
+func (op *SetValue_Slice) SetSize(cnt int) {
+	var els []SetValue
 	if cnt >= 0 {
-		els = make(SetObjFromValue_Slice, cnt)
+		els = make(SetValue_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *SetObjFromValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return SetObjFromValue_Marshal(m, &(*op)[i])
+func (op *SetValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return SetValue_Marshal(m, &(*op)[i])
 }
 
-func SetObjFromValue_Repeats_Marshal(m jsn.Marshaler, vals *[]SetObjFromValue) error {
-	return jsn.RepeatBlock(m, (*SetObjFromValue_Slice)(vals))
+func SetValue_Repeats_Marshal(m jsn.Marshaler, vals *[]SetValue) error {
+	return jsn.RepeatBlock(m, (*SetValue_Slice)(vals))
 }
 
-func SetObjFromValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SetObjFromValue) (err error) {
+func SetValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SetValue) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = SetObjFromValue_Repeats_Marshal(m, pv)
+		err = SetValue_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type SetObjFromValue_Flow struct{ ptr *SetObjFromValue }
+type SetValue_Flow struct{ ptr *SetValue }
 
-func (n SetObjFromValue_Flow) GetType() string      { return SetObjFromValue_Type }
-func (n SetObjFromValue_Flow) GetLede() string      { return "set_obj" }
-func (n SetObjFromValue_Flow) GetFlow() interface{} { return n.ptr }
-func (n SetObjFromValue_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*SetObjFromValue); ok {
+func (n SetValue_Flow) GetType() string      { return SetValue_Type }
+func (n SetValue_Flow) GetLede() string      { return "set" }
+func (n SetValue_Flow) GetFlow() interface{} { return n.ptr }
+func (n SetValue_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*SetValue); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func SetObjFromValue_Optional_Marshal(m jsn.Marshaler, pv **SetObjFromValue) (err error) {
+func SetValue_Optional_Marshal(m jsn.Marshaler, pv **SetValue) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = SetObjFromValue_Marshal(m, *pv)
+		err = SetValue_Marshal(m, *pv)
 	} else if !enc {
-		var v SetObjFromValue
-		if err = SetObjFromValue_Marshal(m, &v); err == nil {
+		var v SetValue
+		if err = SetValue_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func SetObjFromValue_Marshal(m jsn.Marshaler, val *SetObjFromValue) (err error) {
+func SetValue_Marshal(m jsn.Marshaler, val *SetValue) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(SetObjFromValue_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", SetObjFromValue_Field_Name)
+	if err = m.MarshalBlock(SetValue_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", SetValue_Field_Target)
 		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Name)
+			e0 = Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", SetObjFromValue_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", SetValue_Field_Target))
 		}
-		e1 := m.MarshalKey("field", SetObjFromValue_Field_Field)
+		e1 := m.MarshalKey("from", SetValue_Field_Value)
 		if e1 == nil {
-			e1 = rt.TextEval_Marshal(m, &val.Field)
+			e1 = Assignment_Marshal(m, &val.Value)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", SetObjFromValue_Field_Field))
-		}
-		e2 := m.MarshalKey("dot", SetObjFromValue_Field_Dot)
-		if e2 == nil {
-			e2 = Dot_Optional_Repeats_Marshal(m, &val.Dot)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", SetObjFromValue_Field_Dot))
-		}
-		e3 := m.MarshalKey("from", SetObjFromValue_Field_Value)
-		if e3 == nil {
-			e3 = SourceValue_Marshal(m, &val.Value)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", SetObjFromValue_Field_Value))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// SetTrait Put an object into a particular state.
-type SetTrait struct {
-	Object rt.TextEval `if:"label=obj"`
-	Trait  rt.TextEval `if:"label=trait"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*SetTrait)(nil)
-
-func (*SetTrait) Compose() composer.Spec {
-	return composer.Spec{
-		Name: SetTrait_Type,
-		Uses: composer.Type_Flow,
-		Lede: "put",
-	}
-}
-
-const SetTrait_Type = "set_trait"
-const SetTrait_Field_Object = "$OBJECT"
-const SetTrait_Field_Trait = "$TRAIT"
-
-func (op *SetTrait) Marshal(m jsn.Marshaler) error {
-	return SetTrait_Marshal(m, op)
-}
-
-type SetTrait_Slice []SetTrait
-
-func (op *SetTrait_Slice) GetType() string { return SetTrait_Type }
-
-func (op *SetTrait_Slice) Marshal(m jsn.Marshaler) error {
-	return SetTrait_Repeats_Marshal(m, (*[]SetTrait)(op))
-}
-
-func (op *SetTrait_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *SetTrait_Slice) SetSize(cnt int) {
-	var els []SetTrait
-	if cnt >= 0 {
-		els = make(SetTrait_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *SetTrait_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return SetTrait_Marshal(m, &(*op)[i])
-}
-
-func SetTrait_Repeats_Marshal(m jsn.Marshaler, vals *[]SetTrait) error {
-	return jsn.RepeatBlock(m, (*SetTrait_Slice)(vals))
-}
-
-func SetTrait_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SetTrait) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = SetTrait_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type SetTrait_Flow struct{ ptr *SetTrait }
-
-func (n SetTrait_Flow) GetType() string      { return SetTrait_Type }
-func (n SetTrait_Flow) GetLede() string      { return "put" }
-func (n SetTrait_Flow) GetFlow() interface{} { return n.ptr }
-func (n SetTrait_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*SetTrait); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func SetTrait_Optional_Marshal(m jsn.Marshaler, pv **SetTrait) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = SetTrait_Marshal(m, *pv)
-	} else if !enc {
-		var v SetTrait
-		if err = SetTrait_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func SetTrait_Marshal(m jsn.Marshaler, val *SetTrait) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(SetTrait_Flow{val}); err == nil {
-		e0 := m.MarshalKey("obj", SetTrait_Field_Object)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Object)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", SetTrait_Field_Object))
-		}
-		e1 := m.MarshalKey("trait", SetTrait_Field_Trait)
-		if e1 == nil {
-			e1 = rt.TextEval_Marshal(m, &val.Trait)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", SetTrait_Field_Trait))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// SetVarFromValue Store a value into a local variable ( or pattern argument. )
-type SetVarFromValue struct {
-	Name   rt.TextEval `if:"label=_"`
-	Dot    []Dot       `if:"label=dot,optional"`
-	Value  SourceValue `if:"label=from"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*SetVarFromValue)(nil)
-
-func (*SetVarFromValue) Compose() composer.Spec {
-	return composer.Spec{
-		Name: SetVarFromValue_Type,
-		Uses: composer.Type_Flow,
-		Lede: "set_var",
-	}
-}
-
-const SetVarFromValue_Type = "set_var_from_value"
-const SetVarFromValue_Field_Name = "$NAME"
-const SetVarFromValue_Field_Dot = "$DOT"
-const SetVarFromValue_Field_Value = "$VALUE"
-
-func (op *SetVarFromValue) Marshal(m jsn.Marshaler) error {
-	return SetVarFromValue_Marshal(m, op)
-}
-
-type SetVarFromValue_Slice []SetVarFromValue
-
-func (op *SetVarFromValue_Slice) GetType() string { return SetVarFromValue_Type }
-
-func (op *SetVarFromValue_Slice) Marshal(m jsn.Marshaler) error {
-	return SetVarFromValue_Repeats_Marshal(m, (*[]SetVarFromValue)(op))
-}
-
-func (op *SetVarFromValue_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *SetVarFromValue_Slice) SetSize(cnt int) {
-	var els []SetVarFromValue
-	if cnt >= 0 {
-		els = make(SetVarFromValue_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *SetVarFromValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return SetVarFromValue_Marshal(m, &(*op)[i])
-}
-
-func SetVarFromValue_Repeats_Marshal(m jsn.Marshaler, vals *[]SetVarFromValue) error {
-	return jsn.RepeatBlock(m, (*SetVarFromValue_Slice)(vals))
-}
-
-func SetVarFromValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SetVarFromValue) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = SetVarFromValue_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type SetVarFromValue_Flow struct{ ptr *SetVarFromValue }
-
-func (n SetVarFromValue_Flow) GetType() string      { return SetVarFromValue_Type }
-func (n SetVarFromValue_Flow) GetLede() string      { return "set_var" }
-func (n SetVarFromValue_Flow) GetFlow() interface{} { return n.ptr }
-func (n SetVarFromValue_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*SetVarFromValue); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func SetVarFromValue_Optional_Marshal(m jsn.Marshaler, pv **SetVarFromValue) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = SetVarFromValue_Marshal(m, *pv)
-	} else if !enc {
-		var v SetVarFromValue
-		if err = SetVarFromValue_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func SetVarFromValue_Marshal(m jsn.Marshaler, val *SetVarFromValue) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(SetVarFromValue_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", SetVarFromValue_Field_Name)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", SetVarFromValue_Field_Name))
-		}
-		e1 := m.MarshalKey("dot", SetVarFromValue_Field_Dot)
-		if e1 == nil {
-			e1 = Dot_Optional_Repeats_Marshal(m, &val.Dot)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", SetVarFromValue_Field_Dot))
-		}
-		e2 := m.MarshalKey("from", SetVarFromValue_Field_Value)
-		if e2 == nil {
-			e2 = SourceValue_Marshal(m, &val.Value)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", SetVarFromValue_Field_Value))
+			m.Error(errutil.New(e1, "in flow at", SetValue_Field_Value))
 		}
 		m.EndBlock()
 	}
@@ -9732,124 +8336,6 @@ func Softline_Marshal(m jsn.Marshaler, val *Softline) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(Softline_Flow{val}); err == nil {
 		m.EndBlock()
-	}
-	return
-}
-
-// SourceValue swaps between various options
-type SourceValue struct {
-	Choice string
-	Value  interface{}
-}
-
-var SourceValue_Optional_Marshal = SourceValue_Marshal
-
-const SourceValue_Bool_Opt = "$BOOL"
-const SourceValue_Number_Opt = "$NUMBER"
-const SourceValue_Text_Opt = "$TEXT"
-const SourceValue_List_Opt = "$LIST"
-const SourceValue_Record_Opt = "$RECORD"
-
-func (*SourceValue) Compose() composer.Spec {
-	return composer.Spec{
-		Name: SourceValue_Type,
-		Uses: composer.Type_Swap,
-		Choices: []string{
-			SourceValue_Bool_Opt, SourceValue_Number_Opt, SourceValue_Text_Opt, SourceValue_List_Opt, SourceValue_Record_Opt,
-		},
-		Swaps: []interface{}{
-			(*FromBool)(nil),
-			(*FromNumber)(nil),
-			(*FromText)(nil),
-			(*FromList)(nil),
-			(*FromRecord)(nil),
-		},
-	}
-}
-
-const SourceValue_Type = "source_value"
-
-func (op *SourceValue) GetType() string { return SourceValue_Type }
-
-func (op *SourceValue) GetSwap() (string, interface{}) {
-	return op.Choice, op.Value
-}
-
-func (op *SourceValue) SetSwap(c string) (okay bool) {
-	switch c {
-	case "":
-		op.Choice, op.Value = c, nil
-		okay = true
-	case SourceValue_Bool_Opt:
-		op.Choice, op.Value = c, new(FromBool)
-		okay = true
-	case SourceValue_Number_Opt:
-		op.Choice, op.Value = c, new(FromNumber)
-		okay = true
-	case SourceValue_Text_Opt:
-		op.Choice, op.Value = c, new(FromText)
-		okay = true
-	case SourceValue_List_Opt:
-		op.Choice, op.Value = c, new(FromList)
-		okay = true
-	case SourceValue_Record_Opt:
-		op.Choice, op.Value = c, new(FromRecord)
-		okay = true
-	}
-	return
-}
-
-func (op *SourceValue) Marshal(m jsn.Marshaler) error {
-	return SourceValue_Marshal(m, op)
-}
-func SourceValue_Marshal(m jsn.Marshaler, val *SourceValue) (err error) {
-	if err = m.MarshalBlock(val); err == nil {
-		if _, ptr := val.GetSwap(); ptr != nil {
-			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-type SourceValue_Slice []SourceValue
-
-func (op *SourceValue_Slice) GetType() string { return SourceValue_Type }
-
-func (op *SourceValue_Slice) Marshal(m jsn.Marshaler) error {
-	return SourceValue_Repeats_Marshal(m, (*[]SourceValue)(op))
-}
-
-func (op *SourceValue_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *SourceValue_Slice) SetSize(cnt int) {
-	var els []SourceValue
-	if cnt >= 0 {
-		els = make(SourceValue_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *SourceValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return SourceValue_Marshal(m, &(*op)[i])
-}
-
-func SourceValue_Repeats_Marshal(m jsn.Marshaler, vals *[]SourceValue) error {
-	return jsn.RepeatBlock(m, (*SourceValue_Slice)(vals))
-}
-
-func SourceValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SourceValue) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = SourceValue_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -10495,6 +8981,115 @@ func VariableName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]VariableName) 
 	return
 }
 
+// VariableRef
+type VariableRef struct {
+	Name   rt.TextEval `if:"label=_"`
+	Dot    []Dot       `if:"label=dot,optional"`
+	Markup map[string]any
+}
+
+func (*VariableRef) Compose() composer.Spec {
+	return composer.Spec{
+		Name: VariableRef_Type,
+		Uses: composer.Type_Flow,
+		Lede: "variable",
+	}
+}
+
+const VariableRef_Type = "variable_ref"
+const VariableRef_Field_Name = "$NAME"
+const VariableRef_Field_Dot = "$DOT"
+
+func (op *VariableRef) Marshal(m jsn.Marshaler) error {
+	return VariableRef_Marshal(m, op)
+}
+
+type VariableRef_Slice []VariableRef
+
+func (op *VariableRef_Slice) GetType() string { return VariableRef_Type }
+
+func (op *VariableRef_Slice) Marshal(m jsn.Marshaler) error {
+	return VariableRef_Repeats_Marshal(m, (*[]VariableRef)(op))
+}
+
+func (op *VariableRef_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *VariableRef_Slice) SetSize(cnt int) {
+	var els []VariableRef
+	if cnt >= 0 {
+		els = make(VariableRef_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *VariableRef_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return VariableRef_Marshal(m, &(*op)[i])
+}
+
+func VariableRef_Repeats_Marshal(m jsn.Marshaler, vals *[]VariableRef) error {
+	return jsn.RepeatBlock(m, (*VariableRef_Slice)(vals))
+}
+
+func VariableRef_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]VariableRef) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = VariableRef_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type VariableRef_Flow struct{ ptr *VariableRef }
+
+func (n VariableRef_Flow) GetType() string      { return VariableRef_Type }
+func (n VariableRef_Flow) GetLede() string      { return "variable" }
+func (n VariableRef_Flow) GetFlow() interface{} { return n.ptr }
+func (n VariableRef_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*VariableRef); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func VariableRef_Optional_Marshal(m jsn.Marshaler, pv **VariableRef) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = VariableRef_Marshal(m, *pv)
+	} else if !enc {
+		var v VariableRef
+		if err = VariableRef_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func VariableRef_Marshal(m jsn.Marshaler, val *VariableRef) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(VariableRef_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", VariableRef_Field_Name)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", VariableRef_Field_Name))
+		}
+		e1 := m.MarshalKey("dot", VariableRef_Field_Dot)
+		if e1 == nil {
+			e1 = Dot_Optional_Repeats_Marshal(m, &val.Dot)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", VariableRef_Field_Dot))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // While Keep running a series of actions while a condition is true.
 type While struct {
 	True   rt.BoolEval  `if:"label=_"`
@@ -10610,16 +9205,16 @@ func While_Marshal(m jsn.Marshaler, val *While) (err error) {
 var Slots = []interface{}{
 	(*Brancher)(nil),
 	(*Dot)(nil),
-	(*FromSourceFields)(nil),
-	(*IntoTargetFields)(nil),
 	(*Trigger)(nil),
 }
 
 var Slats = []composer.Composer{
+	(*Address)(nil),
 	(*AllTrue)(nil),
 	(*Always)(nil),
 	(*AnyTrue)(nil),
-	(*Assign)(nil),
+	(*Arg)(nil),
+	(*Assignment)(nil),
 	(*AtField)(nil),
 	(*AtIndex)(nil),
 	(*Blankline)(nil),
@@ -10647,27 +9242,16 @@ var Slats = []composer.Composer{
 	(*DiffOf)(nil),
 	(*During)(nil),
 	(*FromBool)(nil),
-	(*FromList)(nil),
+	(*FromNumList)(nil),
 	(*FromNumber)(nil),
-	(*FromNumbers)(nil),
-	(*FromObj)(nil),
-	(*FromRec)(nil),
 	(*FromRecord)(nil),
-	(*FromRecords)(nil),
+	(*FromRecordList)(nil),
 	(*FromText)(nil),
-	(*FromTexts)(nil),
-	(*FromVar)(nil),
-	(*GetAtField)(nil),
-	(*GetFromName)(nil),
-	(*GetFromObj)(nil),
-	(*GetFromVar)(nil),
-	(*GetVar)(nil),
+	(*FromTextList)(nil),
+	(*GetValue)(nil),
 	(*HasDominion)(nil),
-	(*HasTrait)(nil),
 	(*IdOf)(nil),
 	(*Includes)(nil),
-	(*IntoObj)(nil),
-	(*IntoVar)(nil),
 	(*IsEmpty)(nil),
 	(*IsExactKindOf)(nil),
 	(*IsKindOf)(nil),
@@ -10686,42 +9270,62 @@ var Slats = []composer.Composer{
 	(*Next)(nil),
 	(*Not)(nil),
 	(*ObjectExists)(nil),
+	(*ObjectRef)(nil),
 	(*PatternName)(nil),
 	(*Pluralize)(nil),
 	(*PrintNum)(nil),
 	(*PrintNumWord)(nil),
 	(*ProductOf)(nil),
-	(*PutAtField)(nil),
 	(*QuotientOf)(nil),
 	(*RemainderOf)(nil),
 	(*Response)(nil),
 	(*Row)(nil),
 	(*Rows)(nil),
 	(*SayText)(nil),
-	(*SetObjFromValue)(nil),
-	(*SetTrait)(nil),
-	(*SetVarFromValue)(nil),
+	(*SetValue)(nil),
 	(*Singularize)(nil),
 	(*SlashText)(nil),
 	(*Softline)(nil),
-	(*SourceValue)(nil),
 	(*SpanText)(nil),
 	(*SumOf)(nil),
 	(*TriggerCycle)(nil),
 	(*TriggerOnce)(nil),
 	(*TriggerSwitch)(nil),
 	(*VariableName)(nil),
+	(*VariableRef)(nil),
 	(*While)(nil),
 }
 
 var Signatures = map[uint64]interface{}{
+	14830662449006440500: (*Address)(nil),           /* Address object: */
+	15275535284729771537: (*Address)(nil),           /* Address variable: */
+	2643197561265932993:  (*Arg)(nil),               /* Arg:from bool: */
+	3912837313358859159:  (*Arg)(nil),               /* Arg:from numList: */
+	2284773389402102018:  (*Arg)(nil),               /* Arg:from number: */
+	14392737426111657934: (*Arg)(nil),               /* Arg:from record: */
+	12978349289911234358: (*Arg)(nil),               /* Arg:from recordList: */
+	1372780250379707384:  (*Arg)(nil),               /* Arg:from text: */
+	4278237221364827484:  (*Arg)(nil),               /* Arg:from textList: */
+	16242544916532759166: (*Assignment)(nil),        /* Assignment bool: */
+	15699533039608894982: (*Assignment)(nil),        /* Assignment numList: */
+	10616828856023779905: (*Assignment)(nil),        /* Assignment number: */
+	3660245813868397981:  (*Assignment)(nil),        /* Assignment record: */
+	15091606963976607825: (*Assignment)(nil),        /* Assignment recordList: */
+	7982134690380973031:  (*Assignment)(nil),        /* Assignment text: */
+	2522625035940055503:  (*Assignment)(nil),        /* Assignment textList: */
 	15485098871275255450: (*Comparison)(nil),        /* Comparison: */
+	12958508767616079733: (*FromBool)(nil),          /* FromBool: */
+	18053230474023831203: (*FromNumList)(nil),       /* FromNumList: */
+	1452195140371313150:  (*FromNumber)(nil),        /* FromNumber: */
+	4970952219519099442:  (*FromRecord)(nil),        /* FromRecord: */
+	12895254073041262266: (*FromRecordList)(nil),    /* FromRecordList: */
+	2335611467037801148:  (*FromText)(nil),          /* FromText: */
+	704696786365734016:   (*FromTextList)(nil),      /* FromTextList: */
+	3451751676496979714:  (*ObjectRef)(nil),         /* Object:field: */
+	9963017218628298537:  (*ObjectRef)(nil),         /* Object:field:dot: */
 	10347746873548257800: (*PatternName)(nil),       /* PatternName: */
-	9837832737082696431:  (*SourceValue)(nil),       /* SourceValue bool: */
-	14705982077189807307: (*SourceValue)(nil),       /* SourceValue list: */
-	6063507141305104336:  (*SourceValue)(nil),       /* SourceValue number: */
-	16580148797628528528: (*SourceValue)(nil),       /* SourceValue record: */
-	3556189541115677906:  (*SourceValue)(nil),       /* SourceValue text: */
+	12941385537088852909: (*VariableRef)(nil),       /* Variable: */
+	4135812736705894454:  (*VariableRef)(nil),       /* Variable:dot: */
 	10059194828506805844: (*VariableName)(nil),      /* VariableName: */
 	9392469773844077696:  (*TriggerSwitch)(nil),     /* trigger=After */
 	8082607244820951444:  (*AllTrue)(nil),           /* bool_eval=AllTrue: */
@@ -10757,66 +9361,69 @@ var Signatures = map[uint64]interface{}{
 	11253707510276332344: (*ChooseNothingElse)(nil), /* brancher=ElseDo does: */
 	12123664166410465852: (*ChooseMore)(nil),        /* brancher=ElseIf:does: */
 	10172152994557366141: (*ChooseMore)(nil),        /* brancher=ElseIf:does:else: */
-	12734322650065726395: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from:and:does: */
-	16834345759272094552: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from:and:does:else: */
+	17293632830864708497: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from bool:and:does: */
+	10015039162719682858: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from bool:and:does:else: */
+	1263939422214672535:  (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from numList:and:does: */
+	17344025009387239604: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from numList:and:does:else: */
+	4532307208258130872:  (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from number:and:does: */
+	5555096878134439257:  (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from number:and:does:else: */
+	3594951751884693612:  (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from record:and:does: */
+	10314023593706445389: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from record:and:does:else: */
+	11847168890048694820: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from recordList:and:does: */
+	16079960067179687893: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from recordList:and:does:else: */
+	1721309710566118702:  (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from text:and:does: */
+	6221455089989795667:  (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from text:and:does:else: */
+	15888640652150297826: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from textList:and:does: */
+	270276177115702711:   (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from textList:and:does:else: */
 	1457631626735043065:  (*TriggerCycle)(nil),      /* trigger=Every */
-	16065241269206568079: (*FromBool)(nil),          /* assignment=FromBool: */
-	5608634500363506271:  (*FromList)(nil),          /* list_eval=FromList: */
-	10386192108847008240: (*FromNumber)(nil),        /* assignment=FromNumber: */
-	9803813684602011228:  (*FromNumbers)(nil),       /* assignment=FromNums: */
-	1226853393665684467:  (*FromRecord)(nil),        /* assignment=FromRec: */
-	15745392114097062598: (*FromRecords)(nil),       /* assignment=FromRecs: */
-	5845665572739387297:  (*FromText)(nil),          /* assignment=FromTxt: */
-	13037134806863146308: (*FromTexts)(nil),         /* assignment=FromTxts: */
-	11262896133652907512: (*HasTrait)(nil),          /* bool_eval=Get obj:trait: */
-	6175850536640864409:  (*GetAtField)(nil),        /* assignment=Get:from: */
-	737101210327901409:   (*GetAtField)(nil),        /* bool_eval=Get:from: */
-	12723312729731032490: (*GetAtField)(nil),        /* num_list_eval=Get:from: */
-	3181620354893213470:  (*GetAtField)(nil),        /* number_eval=Get:from: */
-	506895955655727850:   (*GetAtField)(nil),        /* record_eval=Get:from: */
-	14595426329886937081: (*GetAtField)(nil),        /* record_list_eval=Get:from: */
-	4519648908930386096:  (*GetAtField)(nil),        /* text_eval=Get:from: */
-	9011366933800504835:  (*GetAtField)(nil),        /* text_list_eval=Get:from: */
-	13117948412737680448: (*GetFromName)(nil),       /* bool_eval=GetFromName: */
-	737116415984661236:   (*GetFromName)(nil),       /* list_eval=GetFromName: */
-	10055935248829087845: (*GetFromName)(nil),       /* number_eval=GetFromName: */
-	10668095072786168193: (*GetFromName)(nil),       /* record_eval=GetFromName: */
-	16458031275878183403: (*GetFromName)(nil),       /* text_eval=GetFromName: */
-	4059628836051044183:  (*GetFromName)(nil),       /* bool_eval=GetFromName:dot: */
-	5160358316327500019:  (*GetFromName)(nil),       /* list_eval=GetFromName:dot: */
-	13532138328084240238: (*GetFromName)(nil),       /* number_eval=GetFromName:dot: */
-	16357300743447894626: (*GetFromName)(nil),       /* record_eval=GetFromName:dot: */
-	11475259353203290228: (*GetFromName)(nil),       /* text_eval=GetFromName:dot: */
-	13582206311934633670: (*GetFromObj)(nil),        /* bool_eval=GetFromObj:field: */
-	4664311827378886530:  (*GetFromObj)(nil),        /* list_eval=GetFromObj:field: */
-	12645006650667455381: (*GetFromObj)(nil),        /* number_eval=GetFromObj:field: */
-	17686021879270628345: (*GetFromObj)(nil),        /* record_eval=GetFromObj:field: */
-	4123088690129308847:  (*GetFromObj)(nil),        /* text_eval=GetFromObj:field: */
-	9865859808868138837:  (*GetFromObj)(nil),        /* bool_eval=GetFromObj:field:dot: */
-	1372050045960331177:  (*GetFromObj)(nil),        /* list_eval=GetFromObj:field:dot: */
-	6067512310377020702:  (*GetFromObj)(nil),        /* number_eval=GetFromObj:field:dot: */
-	14496242921365469626: (*GetFromObj)(nil),        /* record_eval=GetFromObj:field:dot: */
-	11406691170567498960: (*GetFromObj)(nil),        /* text_eval=GetFromObj:field:dot: */
-	3668670036235966288:  (*GetFromVar)(nil),        /* bool_eval=GetFromVar: */
-	15506156899494506828: (*GetFromVar)(nil),        /* list_eval=GetFromVar: */
-	10899022294375485507: (*GetFromVar)(nil),        /* number_eval=GetFromVar: */
-	454840117775123831:   (*GetFromVar)(nil),        /* record_eval=GetFromVar: */
-	9893566585350243169:  (*GetFromVar)(nil),        /* text_eval=GetFromVar: */
-	831772526132382503:   (*GetFromVar)(nil),        /* bool_eval=GetFromVar:dot: */
-	15258658192272445035: (*GetFromVar)(nil),        /* list_eval=GetFromVar:dot: */
-	5262755007406478316:  (*GetFromVar)(nil),        /* number_eval=GetFromVar:dot: */
-	9429203434972639544:  (*GetFromVar)(nil),        /* record_eval=GetFromVar:dot: */
-	15647559297189723202: (*GetFromVar)(nil),        /* text_eval=GetFromVar:dot: */
+	3787151486442609582:  (*GetValue)(nil),          /* bool_eval=Get object: */
+	26868710420597201:    (*GetValue)(nil),          /* num_list_eval=Get object: */
+	16455545370882345685: (*GetValue)(nil),          /* number_eval=Get object: */
+	14570531964934484241: (*GetValue)(nil),          /* record_eval=Get object: */
+	14048948711673899670: (*GetValue)(nil),          /* record_list_eval=Get object: */
+	1528671032800848535:  (*GetValue)(nil),          /* text_eval=Get object: */
+	503448901093551216:   (*GetValue)(nil),          /* text_list_eval=Get object: */
+	14007997708357264695: (*GetValue)(nil),          /* bool_eval=Get variable: */
+	8532050021068447980:  (*GetValue)(nil),          /* num_list_eval=Get variable: */
+	8990883066418724800:  (*GetValue)(nil),          /* number_eval=Get variable: */
+	14520048606590145068: (*GetValue)(nil),          /* record_eval=Get variable: */
+	10684035817672719039: (*GetValue)(nil),          /* record_list_eval=Get variable: */
+	1008087674907657262:  (*GetValue)(nil),          /* text_eval=Get variable: */
+	7245136898346744605:  (*GetValue)(nil),          /* text_list_eval=Get variable: */
 	7667478703662631060:  (*HasDominion)(nil),       /* bool_eval=HasDominion: */
 	9805093500361992370:  (*IdOf)(nil),              /* text_eval=IdOf: */
 	7148628340285471837:  (*ChooseAction)(nil),      /* brancher=If:does: */
 	14393611566046450287: (*ChooseAction)(nil),      /* execute=If:does: */
 	6302964726971699110:  (*ChooseAction)(nil),      /* brancher=If:does:else: */
 	14501220926082590620: (*ChooseAction)(nil),      /* execute=If:does:else: */
-	16406941430984447480: (*ChooseValue)(nil),       /* brancher=If:from:and:does: */
-	12357574444125496774: (*ChooseValue)(nil),       /* execute=If:from:and:does: */
-	100567086370651161:   (*ChooseValue)(nil),       /* brancher=If:from:and:does:else: */
-	1836790182809498779:  (*ChooseValue)(nil),       /* execute=If:from:and:does:else: */
+	17422956557743702456: (*ChooseValue)(nil),       /* brancher=If:from bool:and:does: */
+	15017254134758620782: (*ChooseValue)(nil),       /* execute=If:from bool:and:does: */
+	1270781443612768089:  (*ChooseValue)(nil),       /* brancher=If:from bool:and:does:else: */
+	9128016781271004179:  (*ChooseValue)(nil),       /* execute=If:from bool:and:does:else: */
+	4239861794794232528:  (*ChooseValue)(nil),       /* brancher=If:from numList:and:does: */
+	8840439650252490294:  (*ChooseValue)(nil),       /* execute=If:from numList:and:does: */
+	5393227972194533473:  (*ChooseValue)(nil),       /* brancher=If:from numList:and:does:else: */
+	1272278488687958251:  (*ChooseValue)(nil),       /* execute=If:from numList:and:does:else: */
+	8956797246285213677:  (*ChooseValue)(nil),       /* brancher=If:from number:and:does: */
+	16074758462198199363: (*ChooseValue)(nil),       /* execute=If:from number:and:does: */
+	11241310528320233814: (*ChooseValue)(nil),       /* brancher=If:from number:and:does:else: */
+	2025490709402994000:  (*ChooseValue)(nil),       /* execute=If:from number:and:does:else: */
+	14630675154245371657: (*ChooseValue)(nil),       /* brancher=If:from record:and:does: */
+	4839577635082465035:  (*ChooseValue)(nil),       /* execute=If:from record:and:does: */
+	9961369399137109106:  (*ChooseValue)(nil),       /* brancher=If:from record:and:does:else: */
+	909397421382488072:   (*ChooseValue)(nil),       /* execute=If:from record:and:does:else: */
+	11402537131020082237: (*ChooseValue)(nil),       /* brancher=If:from recordList:and:does: */
+	12430588408770992611: (*ChooseValue)(nil),       /* execute=If:from recordList:and:does: */
+	10775883632195360518: (*ChooseValue)(nil),       /* brancher=If:from recordList:and:does:else: */
+	4571023260385107056:  (*ChooseValue)(nil),       /* execute=If:from recordList:and:does:else: */
+	15877245316294031595: (*ChooseValue)(nil),       /* brancher=If:from text:and:does: */
+	4881940430906735205:  (*ChooseValue)(nil),       /* execute=If:from text:and:does: */
+	2882126629424455016:  (*ChooseValue)(nil),       /* brancher=If:from text:and:does:else: */
+	8368907915607348926:  (*ChooseValue)(nil),       /* execute=If:from text:and:does:else: */
+	17858312151022311939: (*ChooseValue)(nil),       /* brancher=If:from textList:and:does: */
+	13196879225624420393: (*ChooseValue)(nil),       /* execute=If:from textList:and:does: */
+	10973082176696567440: (*ChooseValue)(nil),       /* brancher=If:from textList:and:does:else: */
+	13447163397853831058: (*ChooseValue)(nil),       /* execute=If:from textList:and:does:else: */
 	11335666314438122404: (*SumOf)(nil),             /* number_eval=Inc: */
 	425597877445155633:   (*SumOf)(nil),             /* number_eval=Inc:by: */
 	10867951538760575464: (*IsEmpty)(nil),           /* bool_eval=Is empty: */
@@ -10827,7 +9434,6 @@ var Signatures = map[uint64]interface{}{
 	16744881049704292640: (*IsKindOf)(nil),          /* bool_eval=KindOf:is: */
 	7296079450764183372:  (*IsExactKindOf)(nil),     /* bool_eval=KindOf:isExactly: */
 	6869420318733086481:  (*KindsOf)(nil),           /* text_list_eval=KindsOf: */
-	4237971283445935803:  (*Assign)(nil),            /* execute=Let:be: */
 	11334467785012784241: (*MakeLowercase)(nil),     /* text_eval=Lower: */
 	7007374677444567783:  (*Matches)(nil),           /* bool_eval=Matches:to: */
 	3739424143354382333:  (*RemainderOf)(nil),       /* number_eval=Mod:by: */
@@ -10840,13 +9446,8 @@ var Signatures = map[uint64]interface{}{
 	1916074756917320013:  (*ChooseNum)(nil),         /* number_eval=Num if:then:else: */
 	18009133328614046007: (*PrintNumWord)(nil),      /* text_eval=Numeral words: */
 	5709077775967698380:  (*PrintNum)(nil),          /* text_eval=Numeral: */
-	5949100785050943673:  (*IntoObj)(nil),           /* into_target_fields=ObjField: */
-	17942335194848080718: (*FromObj)(nil),           /* from_source_fields=ObjFields: */
 	7215745238754840573:  (*Blankline)(nil),         /* execute=P */
 	11420921600352749983: (*Pluralize)(nil),         /* text_eval=Plural of: */
-	17891341080348439999: (*SetTrait)(nil),          /* execute=Put obj:trait: */
-	6397511456794730585:  (*PutAtField)(nil),        /* execute=Put:from:at: */
-	5250128520624921023:  (*FromRec)(nil),           /* from_source_fields=RecFields: */
 	2842299911742259355:  (*While)(nil),             /* execute=Repeating:does: */
 	10473004701492618907: (*Response)(nil),          /* text_eval=Response: */
 	7255385262037338050:  (*Response)(nil),          /* text_eval=Response:text: */
@@ -10857,26 +9458,20 @@ var Signatures = map[uint64]interface{}{
 	10829518726009615643: (*CallSend)(nil),          /* bool_eval=Send:event: */
 	5953636708531320523:  (*CallSend)(nil),          /* execute=Send:event: */
 	10747671703915852065: (*MakeSentenceCase)(nil),  /* text_eval=Sentence: */
-	4372114517737994599:  (*SetObjFromValue)(nil),   /* execute=SetObj:field:dot:from bool: */
-	17394734157125816979: (*SetObjFromValue)(nil),   /* execute=SetObj:field:dot:from list: */
-	17825588703529067800: (*SetObjFromValue)(nil),   /* execute=SetObj:field:dot:from number: */
-	4086480705568145960:  (*SetObjFromValue)(nil),   /* execute=SetObj:field:dot:from record: */
-	7553405046646390378:  (*SetObjFromValue)(nil),   /* execute=SetObj:field:dot:from text: */
-	9316084810425446444:  (*SetObjFromValue)(nil),   /* execute=SetObj:field:from bool: */
-	16380662262906030268: (*SetObjFromValue)(nil),   /* execute=SetObj:field:from list: */
-	12381530580620016447: (*SetObjFromValue)(nil),   /* execute=SetObj:field:from number: */
-	8925418028710442679:  (*SetObjFromValue)(nil),   /* execute=SetObj:field:from record: */
-	6717170275853661337:  (*SetObjFromValue)(nil),   /* execute=SetObj:field:from text: */
-	8562319542190597:     (*SetVarFromValue)(nil),   /* execute=SetVar:dot:from bool: */
-	8394832137530395425:  (*SetVarFromValue)(nil),   /* execute=SetVar:dot:from list: */
-	15368123281916650254: (*SetVarFromValue)(nil),   /* execute=SetVar:dot:from number: */
-	1207955572237996674:  (*SetVarFromValue)(nil),   /* execute=SetVar:dot:from record: */
-	13857881705388386348: (*SetVarFromValue)(nil),   /* execute=SetVar:dot:from text: */
-	1176315442315751674:  (*SetVarFromValue)(nil),   /* execute=SetVar:from bool: */
-	17930695946834473338: (*SetVarFromValue)(nil),   /* execute=SetVar:from list: */
-	408293788596550005:   (*SetVarFromValue)(nil),   /* execute=SetVar:from number: */
-	8796900243234718809:  (*SetVarFromValue)(nil),   /* execute=SetVar:from record: */
-	4060300998536715027:  (*SetVarFromValue)(nil),   /* execute=SetVar:from text: */
+	4965185253517693468:  (*SetValue)(nil),          /* execute=Set object:from bool: */
+	7556745598404233428:  (*SetValue)(nil),          /* execute=Set object:from numList: */
+	8735907795435309039:  (*SetValue)(nil),          /* execute=Set object:from number: */
+	10709952200914288807: (*SetValue)(nil),          /* execute=Set object:from record: */
+	5786508692994240911:  (*SetValue)(nil),          /* execute=Set object:from recordList: */
+	8330522524214153001:  (*SetValue)(nil),          /* execute=Set object:from text: */
+	8872658560125235229:  (*SetValue)(nil),          /* execute=Set object:from textList: */
+	12346400342841196709: (*SetValue)(nil),          /* execute=Set variable:from bool: */
+	12135759660878681043: (*SetValue)(nil),          /* execute=Set variable:from numList: */
+	18353419269292744622: (*SetValue)(nil),          /* execute=Set variable:from number: */
+	2428131260514854178:  (*SetValue)(nil),          /* execute=Set variable:from record: */
+	10938150425622553578: (*SetValue)(nil),          /* execute=Set variable:from recordList: */
+	7748975654977840844:  (*SetValue)(nil),          /* execute=Set variable:from text: */
+	10840237758761273296: (*SetValue)(nil),          /* execute=Set variable:from textList: */
 	3632089819497852687:  (*CallShuffle)(nil),       /* text_eval=Shuffle:over: */
 	2397382738676796596:  (*Singularize)(nil),       /* text_eval=Singular of: */
 	1629446371562398452:  (*SlashText)(nil),         /* text_eval=Slashes does: */
@@ -10887,15 +9482,5 @@ var Signatures = map[uint64]interface{}{
 	9953804072544503126:  (*ChooseText)(nil),        /* text_eval=Txt if:then: */
 	5534583393866490763:  (*ChooseText)(nil),        /* text_eval=Txt if:then:else: */
 	5481656653805454214:  (*MakeUppercase)(nil),     /* text_eval=Upper: */
-	5895491406066728418:  (*GetVar)(nil),            /* assignment=Var: */
-	3494848709327551242:  (*GetVar)(nil),            /* bool_eval=Var: */
-	16995765449508782623: (*GetVar)(nil),            /* num_list_eval=Var: */
-	10571782303042929235: (*GetVar)(nil),            /* number_eval=Var: */
-	10933500154085821919: (*GetVar)(nil),            /* record_eval=Var: */
-	2110385645081837506:  (*GetVar)(nil),            /* record_list_eval=Var: */
-	15132162883797643149: (*GetVar)(nil),            /* text_eval=Var: */
-	17575511392150445036: (*GetVar)(nil),            /* text_list_eval=Var: */
-	9626361668200909641:  (*IntoVar)(nil),           /* into_target_fields=VarField: */
-	15468927798327648914: (*FromVar)(nil),           /* from_source_fields=VarFields: */
 	16612725309683107572: (*Softline)(nil),          /* execute=Wbr */
 }

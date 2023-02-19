@@ -16,13 +16,11 @@ func (a Affinity) String() (ret string) {
 }
 
 const (
-	Bool   Affinity = "bool"
-	Number Affinity = "number"
-	Text   Affinity = "text"
-	List   Affinity = "list"
-	Record Affinity = "record"
-	Object Affinity = "object"
-	//
+	None       Affinity = ""
+	Bool       Affinity = "bool"
+	Number     Affinity = "number"
+	Text       Affinity = "text"
+	Record     Affinity = "record"
 	NumList    Affinity = "num_list"
 	TextList   Affinity = "text_list"
 	RecordList Affinity = "record_list"
@@ -49,5 +47,5 @@ func Element(list Affinity) (ret Affinity) {
 
 // true if a structured type.
 func HasFields(a Affinity) bool {
-	return a == Record || a == Object
+	return a == Record
 }

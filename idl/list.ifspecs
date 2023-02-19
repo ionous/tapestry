@@ -5,60 +5,6 @@
     {
       "Group contains:": [
         {
-          "--": "Define the name of a number variable.",
-          "Spec:slots:with flow:": [
-            "as_num",
-            "list_iterator",
-            {
-              "Flow uses:": [
-                {
-                  "Term:name:type:": [
-                    "_",
-                    "var",
-                    "variable_name"
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Define the name of a record variable.",
-          "Spec:slots:with flow:": [
-            "as_rec",
-            "list_iterator",
-            {
-              "Flow uses:": [
-                {
-                  "Term:name:type:": [
-                    "_",
-                    "var",
-                    "variable_name"
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Define the name of a text variable.",
-          "Spec:slots:with flow:": [
-            "as_txt",
-            "list_iterator",
-            {
-              "Flow uses:": [
-                {
-                  "Term:name:type:": [
-                    "_",
-                    "var",
-                    "variable_name"
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
           "--": "Erase at edge: Remove one or more values from a list.",
           "Spec:slots:with flow:": [
             "erase_edge",
@@ -70,8 +16,8 @@
                   {
                     "Term:name:type:": [
                       "_",
-                      "from",
-                      "list_eval"
+                      "target",
+                      "address"
                     ]
                   },
                   {
@@ -104,9 +50,10 @@
                     ]
                   },
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
                       "from",
-                      "list_eval"
+                      "target",
+                      "address"
                     ]
                   },
                   {
@@ -121,7 +68,11 @@
           ]
         },
         {
-          "--": "Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.",
+          "--": [
+            "Erase elements from the front or back of a list.",
+            "Runs a pattern with a list containing the erased values.",
+            "If nothing was erased, the pattern will be called with an empty list."
+          ],
           "Spec:slots:with flow:": [
             "erasing",
             "execute",
@@ -135,9 +86,10 @@
                   ]
                 },
                 {
-                  "Term:type:": [
+                  "Term:name:type:": [
                     "from",
-                    "list_eval"
+                    "target",
+                    "address"
                   ]
                 },
                 {
@@ -175,8 +127,8 @@
                   {
                     "Term:name:type:": [
                       "_",
-                      "from",
-                      "list_eval"
+                      "target",
+                      "address"
                     ]
                   },
                   {
@@ -213,163 +165,6 @@
           ]
         },
         {
-          "--": "Uses a list of numbers.",
-          "Spec:slots:with flow:": [
-            "from_num_list",
-            "list_eval",
-            {
-              "Flow:uses:": [
-                "var_of_nums",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "var",
-                      "variable_name"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Uses a list of records.",
-          "Spec:slots:with flow:": [
-            "from_rec_list",
-            "list_eval",
-            {
-              "Flow:uses:": [
-                "var_of_recs",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "var",
-                      "variable_name"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Uses a list of text.",
-          "Spec:slots:with flow:": [
-            "from_txt_list",
-            "list_eval",
-            {
-              "Flow:uses:": [
-                "var_of_txts",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "var",
-                      "variable_name"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Targets a list of numbers.",
-          "Spec:slots:with flow:": [
-            "into_num_list",
-            "list_target",
-            {
-              "Flow:uses:": [
-                "into_nums",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "var",
-                      "variable_name"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Targets a list of records.",
-          "Spec:slots:with flow:": [
-            "into_rec_list",
-            "list_target",
-            {
-              "Flow:uses:": [
-                "into_recs",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "var",
-                      "variable_name"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Targets a list of text.",
-          "Spec:slots:with flow:": [
-            "into_txt_list",
-            "list_target",
-            {
-              "Flow:uses:": [
-                "into_txts",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "var",
-                      "variable_name"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Get a value from a list. The first element is is index 1.",
-          "Spec:slots:with flow:": [
-            "list_at",
-            [
-              "number_eval",
-              "text_eval",
-              "record_eval"
-            ],
-            {
-              "Flow:uses:": [
-                "get",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "list",
-                      "list_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "index",
-                      "number_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
           "--": "Loops over the elements in the passed list, or runs the 'else' activity if empty.",
           "Spec:slots:with flow:": [
             "list_each",
@@ -382,13 +177,13 @@
                     "Term:name:type:": [
                       "across",
                       "list",
-                      "list_eval"
+                      "assignment"
                     ]
                   },
                   {
                     "Term:type:": [
                       "as",
-                      "list_iterator"
+                      "text"
                     ]
                   },
                   {
@@ -413,7 +208,7 @@
         {
           "--": "Search a list for a specific value.",
           "Spec:slots:with flow:": [
-            "list_find_bool",
+            "list_find",
             [
               "bool_eval",
               "number_eval"
@@ -423,131 +218,17 @@
                 "find",
                 [
                   {
-                    "Term:type:": [
-                      "bool",
-                      "bool_eval"
+                    "Term:name:type:": [
+                      "_",
+                      "value",
+                      "assignment"
                     ]
                   },
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
                       "in_list",
-                      "list_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Search a list for a specific value.",
-          "Spec:slots:with flow:": [
-            "list_find_number",
-            [
-              "bool_eval",
-              "number_eval"
-            ],
-            {
-              "Flow:uses:": [
-                "find",
-                [
-                  {
-                    "Term:type:": [
-                      "number",
-                      "number_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "in_list",
-                      "list_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Search a list for a specific value.",
-          "Spec:slots:with flow:": [
-            "list_find_text",
-            [
-              "bool_eval",
-              "number_eval"
-            ],
-            {
-              "Flow:uses:": [
-                "find",
-                [
-                  {
-                    "Term:type:": [
-                      "text",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "in_list",
-                      "list_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Search a list for a specific value.",
-          "Spec:slots:with flow:": [
-            "list_find_record",
-            [
-              "bool_eval",
-              "number_eval"
-            ],
-            {
-              "Flow:uses:": [
-                "find",
-                [
-                  {
-                    "Term:type:": [
-                      "record",
-                      "record_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "in_list",
-                      "list_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Search a list for a specific value.",
-          "Spec:slots:with flow:": [
-            "list_find_list",
-            [
-              "bool_eval",
-              "number_eval"
-            ],
-            {
-              "Flow:uses:": [
-                "find",
-                [
-                  {
-                    "Term:type:": [
                       "list",
-                      "list_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "in_list",
-                      "list_eval"
+                      "assignment"
                     ]
                   }
                 ]
@@ -555,13 +236,11 @@
             }
           ]
         },
-
-
         {
-          "--": [ 
-            "Transform the values from a list.", 
-            "The named pattern gets called once for each value in the list.",
-            "It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather."
+          "--": [
+            "Transform the values from a list.",
+            "The named pattern gets with with two parameters for each value in the list:",
+            "'in' as each value from the list, and 'out' as the var passed to the gather."
           ],
           "Spec:with flow:": [
             "list_gather",
@@ -572,14 +251,14 @@
                   {
                     "Term:name:type:": [
                       "_",
-                      "var",
-                      "variable_name"
+                      "target",
+                      "address"
                     ]
                   },
                   {
                     "Term:type:": [
                       "from",
-                      "list_eval"
+                      "assignment"
                     ]
                   },
                   {
@@ -590,15 +269,6 @@
                   }
                 ]
               ]
-            }
-          ]
-        },
-        {
-          "--": "Helper for accessing lists.",
-          "Spec:with slot:": [
-            "list_iterator",
-            {
-              "Slot": true
             }
           ]
         },
@@ -615,7 +285,7 @@
                     "Term:name:type:": [
                       "_",
                       "list",
-                      "list_eval"
+                      "assignment"
                     ]
                   }
                 ]
@@ -624,9 +294,10 @@
           ]
         },
         {
-          "--": ["Transform the values from one list and place the results in another list.",
-           "The designated pattern is called with each value from the 'from list', one value at a time."
-         ],
+          "--": [
+            "Transform the values from one list and place the results in another list.",
+            "The designated pattern is called with each value from the 'from list', one value at a time."
+          ],
           "Spec:slots:with flow:": [
             "list_map",
             "execute",
@@ -637,14 +308,15 @@
                   {
                     "Term:name:type:": [
                       "_",
-                      "to_list",
-                      "text"
+                      "target",
+                      "address"
                     ]
                   },
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
                       "from_list",
-                      "list_eval"
+                      "list",
+                      "assignment"
                     ]
                   },
                   {
@@ -661,8 +333,9 @@
         },
         {
           "--": [
-            "Combine all of the values in a list, and store the result in a variable.",
-            "The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record )."
+            "Combine all of the values in a list into the targeted value.",
+            "The designated pattern is called with two parameters:",
+            "'in' ( each element of the list ) and 'out' ( ex. a record )."
           ],
           "Spec:slots:with flow:": [
             "list_reduce",
@@ -674,14 +347,15 @@
                   {
                     "Term:name:type:": [
                       "into",
-                      "into_value",
-                      "text"
+                      "target",
+                      "address"
                     ]
                   },
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
                       "from_list",
-                      "list_eval"
+                      "list",
+                      "assignment"
                     ]
                   },
                   {
@@ -706,42 +380,10 @@
                 "reverse",
                 [
                   {
-                    "Term:type:": [
-                      "list",
-                      "list_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Overwrite an existing value in a list.",
-          "Spec:slots:with flow:": [
-            "list_set",
-            "execute",
-            {
-              "Flow:uses:": [
-                "set",
-                [
-                  {
                     "Term:name:type:": [
-                      "_",
                       "list",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "index",
-                      "number_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "from",
-                      "assignment"
+                      "target",
+                      "address"
                     ]
                   }
                 ]
@@ -774,7 +416,7 @@
                     "Term:name:type:": [
                       "_",
                       "list",
-                      "list_eval"
+                      "assignment"
                     ]
                   },
                   {
@@ -807,8 +449,8 @@
                   {
                     "Term:name:type:": [
                       "_",
-                      "var",
-                      "variable_name"
+                      "target",
+                      "address"
                     ]
                   },
                   {
@@ -841,8 +483,8 @@
                   {
                     "Term:name:type:": [
                       "_",
-                      "var",
-                      "variable_name"
+                      "target",
+                      "address"
                     ]
                   },
                   {
@@ -871,39 +513,11 @@
           ]
         },
         {
-          "--": "Rearrange the elements in the named list by using the designated pattern to test pairs of elements.",
-          "Spec:slots:with flow:": [
-            "list_sort_using",
-            "execute",
-            {
-              "Flow:uses:": [
-                "sort",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "var",
-                      "variable_name"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "using",
-                      "text"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-      
-        {
           "--": [
             "Modify a list by adding and removing elements.",
             "The type of the elements being added must match the type of the list.",
             "Text cant be added to a list of numbers, numbers cant be added to a list of text.",
-            "If the starting index is negative, this begins that many elements from the end of the array;" ,
+            "If the starting index is negative, this begins that many elements from the end of the array;",
             "if list's length plus the start is less than zero, this begins from index zero.",
             "If the remove count is missing, this removes all elements from the start to the end;",
             "if the remove count is zero or negative, no elements are removed."
@@ -923,8 +537,8 @@
                   {
                     "Term:name:type:": [
                       "_",
-                      "list",
-                      "text"
+                      "target",
+                      "address"
                     ]
                   },
                   {
@@ -951,15 +565,6 @@
           ]
         },
         {
-          "--": "Helper for accessing lists.",
-          "Spec:with slot:": [
-            "list_target",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
           "--": "Add a value to a list.",
           "Spec:slots:with flow:": [
             "list_push",
@@ -971,14 +576,15 @@
                   {
                     "Term:name:type:": [
                       "_",
-                      "from",
+                      "value",
                       "assignment"
                     ]
                   },
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
                       "into",
-                      "list_target"
+                      "target",
+                      "address"
                     ]
                   },
                   {

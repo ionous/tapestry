@@ -13,8 +13,8 @@ import (
 // fix? mdl_assign technically has redundant info --
 // because it implicitly stores the assignment type ( FromBool, etc. ) even though the field wont allow anything else
 // storing the evals ( re: readEval below ) would eliminate that.
-func decodeAssignment(a affine.Affinity, prog []byte, signatures cin.Signatures) (ret rt.Assignment, err error) {
-	if e := core.Decode(rt.Assignment_Slot{&ret}, prog, signatures); e != nil {
+func decodeAssignment(a affine.Affinity, prog []byte, signatures cin.Signatures) (ret core.Assignment, err error) {
+	if e := core.Decode(&ret, prog, signatures); e != nil {
 		err = e
 	}
 	return
@@ -22,7 +22,7 @@ func decodeAssignment(a affine.Affinity, prog []byte, signatures cin.Signatures)
 
 // the expected value depends on the affinity (a) of the destination field.
 // fix? if literals implemented GetAssignedValue, then we could use the literal decoder directly
-func readLiteralValue(a affine.Affinity, t string, msg []byte) (ret g.Value, err error) {
+func parseLiteral(a affine.Affinity, t string, msg []byte) (ret g.Value, err error) {
 	// fix? for text, technically this might be an @variable
 	// but perhaps we could patch that to a full eval write in the assembler.
 	if x, e := literal.ReadLiteral(a, t, msg); e != nil {
@@ -34,57 +34,57 @@ func readLiteralValue(a affine.Affinity, t string, msg []byte) (ret g.Value, err
 }
 
 // the expected eval depends on the affinity (a) of the destination field.
-// fix? merge somehow with express.newAssignment?
-func readEvalValue(a affine.Affinity, rawValue []byte, signatures cin.Signatures) (ret rt.Assignment, err error) {
+// fix? merge somehow with express.newAssignment? with compact decoding.
+func parseEval(a affine.Affinity, rawValue []byte, signatures cin.Signatures) (ret core.Assignment, err error) {
 	switch a {
 	case affine.Bool:
 		var v rt.BoolEval
 		if e := core.Decode(rt.BoolEval_Slot{&v}, rawValue, signatures); e != nil {
 			err = e
 		} else {
-			ret = &core.FromBool{Val: v}
+			ret = core.AssignFromBool(v)
 		}
 	case affine.Number:
 		var v rt.NumberEval
 		if e := core.Decode(rt.NumberEval_Slot{&v}, rawValue, signatures); e != nil {
 			err = e
 		} else {
-			ret = &core.FromNum{Val: v}
+			ret = core.AssignFromNumber(v)
 		}
 	case affine.Text:
 		var v rt.TextEval
 		if e := core.Decode(rt.TextEval_Slot{&v}, rawValue, signatures); e != nil {
 			err = e
 		} else {
-			ret = &core.FromText{Val: v}
+			ret = core.AssignFromText(v)
 		}
 	case affine.NumList:
 		var v rt.NumListEval
 		if e := core.Decode(rt.NumListEval_Slot{&v}, rawValue, signatures); e != nil {
 			err = e
 		} else {
-			ret = &core.FromNumbers{Vals: v}
+			ret = core.AssignFromNumList(v)
 		}
 	case affine.TextList:
 		var v rt.TextListEval
 		if e := core.Decode(rt.TextListEval_Slot{&v}, rawValue, signatures); e != nil {
 			err = e
 		} else {
-			ret = &core.FromTexts{Vals: v}
+			ret = core.AssignFromTextList(v)
 		}
 	case affine.Record:
 		var v rt.RecordEval
 		if e := core.Decode(rt.RecordEval_Slot{&v}, rawValue, signatures); e != nil {
 			err = e
 		} else {
-			ret = &core.FromRecord{Val: v}
+			ret = core.AssignFromRecord(v)
 		}
 	case affine.RecordList:
 		var v rt.RecordListEval
 		if e := core.Decode(rt.RecordListEval_Slot{&v}, rawValue, signatures); e != nil {
 			err = e
 		} else {
-			ret = &core.FromRecords{Vals: v}
+			ret = core.AssignFromRecordList(v)
 		}
 	default:
 		err = errutil.New("unhandled affinity", a.String())

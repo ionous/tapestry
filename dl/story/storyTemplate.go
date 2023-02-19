@@ -2,7 +2,6 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/express"
 	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -19,7 +18,7 @@ func (op *RenderTemplate) PreImport(k *imp.Importer) (ret interface{}, err error
 	} else if eval, ok := got.(rt.TextEval); !ok {
 		err = errutil.Fmt("render template has unknown expression %T", got)
 	} else {
-		ret = &render.RenderExp{Expression: eval}
+		ret = eval
 		// pretty.Println(eval)
 	}
 	return

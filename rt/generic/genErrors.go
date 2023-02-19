@@ -1,12 +1,8 @@
 package generic
 
 import (
-	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"github.com/ionous/errutil"
 )
-
-// error constant for iterators
-const NothingObject errutil.Error = "object is nothing"
 
 type Overflow struct {
 	Index, Bounds int
@@ -32,8 +28,8 @@ func (e Overflow) Error() string {
 func (e Unknown) Error() (ret string) {
 	if len(e.Target) == 0 {
 		ret = errutil.Sprintf("unknown variable %q", e.Field)
-	} else if e.Target == meta.ObjectValue {
-		ret = errutil.Sprintf("unknown object %q", e.Field)
+	} else if len(e.Field) == 0 {
+		ret = errutil.Sprintf("unknown object %q", e.Target)
 	} else {
 		ret = errutil.Sprintf(`unknown field "%s.%s"`, e.Target, e.Field)
 	}
@@ -45,7 +41,7 @@ func UnknownVariable(v string) error {
 }
 
 func UnknownObject(o string) error {
-	return Unknown{Target: meta.ObjectValue, Field: o}
+	return Unknown{Target: o}
 }
 
 func UnknownField(target, field string) error {

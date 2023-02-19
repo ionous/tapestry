@@ -2,7 +2,6 @@ package qna
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/evt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -15,13 +14,10 @@ import (
 // and the return for the event pattern is always a bool.
 // optionally, likely, the locals include a "cancel" bool.
 // returns whether true if the event handling didnt return false
-func (run *Runner) Send(pat string, up []string, args []rt.Arg) (ret g.Value, err error) {
-	okay := true                 // provisionally
-	name := lang.Underscore(pat) // FIX: why are people calling this with untransformed names
-	// we always expect a "bool" result.
-	if pl, e := run.qdb.PatternLabels(name); e != nil {
-		err = e
-	} else if res, e := pattern.NewResults(run, name, pl.Result, affine.Bool, pl.Labels, args); e != nil {
+func (run *Runner) Send(pat *g.Record, up []string) (ret g.Value, err error) {
+	okay := true // provisionally
+	name := pat.Kind().Name()
+	if res, e := pattern.NewResults(run, pat, affine.Bool); e != nil {
 		err = e
 	} else if oldScope, e := run.ReplaceScope(res, true); e != nil {
 		err = e

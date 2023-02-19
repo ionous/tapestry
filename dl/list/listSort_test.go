@@ -3,6 +3,7 @@ package list_test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -16,19 +17,19 @@ func TestSort(t *testing.T) {
 	var kinds testutil.Kinds
 	var objs testutil.Objects
 
-	kinds.AddKinds((*Things)(nil), (*Values)(nil))
+	kinds.AddKinds((*Things)(nil), (*Locals)(nil))
 	objectNames := sliceOf.String("mildred", "apple", "pen", "eve", "Pan")
 	objs.AddObjects(kinds.Kind("things"), objectNames...)
 
-	values := kinds.NewRecord("values", "objects", objectNames)
+	locals := kinds.NewRecord("locals", "objects", objectNames)
 	lt := testutil.Runtime{
 		Kinds:     &kinds,
 		ObjectMap: objs,
 		Stack: []rt.Scope{
-			g.RecordOf(values),
+			g.RecordOf(locals),
 		},
 	}
-	// create a new value of type "values" containing "Objects:objectNames"
+	// create a new value of type "locals" containing "Objects:objectNames"
 	for key, obj := range objs {
 		if e := obj.SetNamedField("key", g.StringOf(key)); e != nil {
 			t.Fatal(e)
@@ -36,7 +37,7 @@ func TestSort(t *testing.T) {
 	}
 	// sorts in place
 	sorter := &list.ListSortText{
-		Var:     N("objects"),
+		Target:  core.Variable("objects"),
 		ByField: "key",
 	}
 	if e := safe.Run(&lt, sorter); e != nil {
@@ -67,4 +68,4 @@ func TestSort(t *testing.T) {
 type Things struct{ Key string }
 
 // global variables for grouping tests
-type Values struct{ Objects []string }
+type Locals struct{ Objects []string }

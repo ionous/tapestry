@@ -10,7 +10,7 @@ import (
 
 func (op *Range) GetNumList(run rt.Runtime) (ret g.Value, err error) {
 	if vs, e := op.getNumList(run); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	} else {
 		ret = vs
 	}

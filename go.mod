@@ -23,3 +23,5 @@ require (
 
 // for local debugging:
 // replace github.com/wailsapp/wails/v2 v2.0.0-beta.42 => C:\Dev\Go\pkg\mod\github.com\wailsapp\wails\v2@v2.0.0-beta.42
+
+replace github.com/ionous/errutil => /Users/ionous/Dev/go/src/github.com/ionous/errutil

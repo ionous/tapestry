@@ -20,4 +20,6 @@ so there are no options for this command except the output filename.
 
 // FIX: where do keyword specs come from?
 func runCodeGen(ctx context.Context, cmd *base.Command, args []string) (err error) {
+	panic("not implemented")
+	return
 }

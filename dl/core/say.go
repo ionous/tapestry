@@ -3,7 +3,6 @@ package core
 import (
 	"bytes"
 
-	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/print"
@@ -20,29 +19,54 @@ func (op *Say) Execute(run rt.Runtime) (err error) {
 	return
 }
 
-func (op *BufferText) GetText(run rt.Runtime) (g.Value, error) {
+func (op *BufferText) GetText(run rt.Runtime) (ret g.Value, err error) {
 	var buf bytes.Buffer
-	return writeSpan(run, &buf, op, op.Does, &buf)
+	if v, e := writeSpan(run, &buf, op.Does, &buf); e != nil {
+		err = cmdError(op, e)
+	} else {
+		ret = v
+	}
+	return
 }
 
-func (op *SpanText) GetText(run rt.Runtime) (g.Value, error) {
+func (op *SpanText) GetText(run rt.Runtime) (ret g.Value, err error) {
 	span := print.NewSpanner() // separate writes with spaces
-	return writeSpan(run, span, op, op.Does, span.ChunkOutput())
+	if v, e := writeSpan(run, span, op.Does, span.ChunkOutput()); e != nil {
+		err = cmdError(op, e)
+	} else {
+		ret = v
+	}
+	return
 }
 
-func (op *BracketText) GetText(run rt.Runtime) (g.Value, error) {
+func (op *BracketText) GetText(run rt.Runtime) (ret g.Value, err error) {
 	span := print.Parens()
-	return writeSpan(run, span, op, op.Does, span.ChunkOutput())
+	if v, e := writeSpan(run, span, op.Does, span.ChunkOutput()); e != nil {
+		err = cmdError(op, e)
+	} else {
+		ret = v
+	}
+	return
 }
 
-func (op *SlashText) GetText(run rt.Runtime) (g.Value, error) {
+func (op *SlashText) GetText(run rt.Runtime) (ret g.Value, err error) {
 	span := print.NewSpanner() // separate punctuation with spaces
-	return writeSpan(run, span, op, op.Does, print.Slash(span.ChunkOutput()))
+	if v, e := writeSpan(run, span, op.Does, print.Slash(span.ChunkOutput())); e != nil {
+		err = cmdError(op, e)
+	} else {
+		ret = v
+	}
+	return
 }
 
-func (op *CommaText) GetText(run rt.Runtime) (g.Value, error) {
+func (op *CommaText) GetText(run rt.Runtime) (ret g.Value, err error) {
 	span := print.NewSpanner() // separate punctuation with spaces
-	return writeSpan(run, span, op, op.Does, print.AndSeparator(span.ChunkOutput()))
+	if v, e := writeSpan(run, span, op.Does, print.AndSeparator(span.ChunkOutput())); e != nil {
+		err = cmdError(op, e)
+	} else {
+		ret = v
+	}
+	return
 }
 
 type stringer interface{ String() string }
@@ -52,24 +76,37 @@ type stringer interface{ String() string }
 // act - activity that presumably generates some output
 // w - output target with any needed filters, etc.
 // returns the output of "s" as a value
-func writeSpan(run rt.Runtime, s stringer, op composer.Composer, act []rt.Execute, w writer.Output) (ret g.Value, err error) {
+func writeSpan(run rt.Runtime, s stringer, act []rt.Execute, w writer.Output) (ret g.Value, err error) {
 	if len(act) == 0 {
 		ret = g.Empty
 	} else {
-		was := run.SetWriter(w)
-		ex := safe.RunAll(run, act)
-		run.SetWriter(was)
-		if e := errutil.Append(ex, writer.Close(w)); e != nil {
-			err = cmdError(op, e)
+		ret, err = WriteSpan(run, w, s, func() error {
+			return safe.RunAll(run, act)
+		})
+	}
+	return
+}
+
+func WriteSpan(run rt.Runtime, w writer.Output, s stringer, cb func() error) (ret g.Value, err error) {
+	was := run.SetWriter(w)
+	ex := cb()
+	run.SetWriter(was)
+	if e := errutil.Append(ex, writer.Close(w)); e != nil {
+		err = e
+	} else {
+		if res := s.String(); len(res) > 0 {
+			ret = g.StringOf(res)
+		} else if hack := safe.HackTillTemplatesCanEvaluatePatternTypes; hack != nil {
+			// we didn't accumulate any text during execution
+			// but perhaps we ran a pattern that returned text.
+			// to get rid of this, we'd examine (at runtime or compile time) the futures calls
+			// and switch on execute patterns vs text patterns
+			// an example is { .Lantern } which says the name
+			// vs. { pluralize: .Lantern } which returns the pluralized name.
+			ret = hack
+			safe.HackTillTemplatesCanEvaluatePatternTypes = nil
 		} else {
-			if res := s.String(); len(res) > 0 {
-				ret = g.StringOf(res)
-			} else if hack := safe.HackTillTemplatesCanEvaluatePatternTypes; hack != nil {
-				ret = hack
-				safe.HackTillTemplatesCanEvaluatePatternTypes = nil
-			} else {
-				ret = g.Empty // if the res was empty, it might have intentionally been empty
-			}
+			ret = g.Empty // if the res was empty, it might have intentionally been empty
 		}
 	}
 	return

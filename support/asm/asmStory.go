@@ -55,7 +55,7 @@ func importStory(k *imp.Importer, tgt jsn.Marshalee) error {
 						Contain: []eph.EphParams{{
 							Affinity:  eph.Affinity{eph.Affinity_Text},
 							Name:      resp.Name,
-							Initially: &core.FromText{Val: resp.Text},
+							Initially: core.AssignFromText(resp.Text),
 						}},
 					})
 				}

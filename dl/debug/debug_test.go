@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
 )
 
 func TestLog(t *testing.T) {
@@ -17,7 +16,8 @@ func TestLog(t *testing.T) {
 	//
 	lo := DebugLog{
 		LogLevel: LoggingLevel{Str: LoggingLevel_Error},
-		Value:    &core.FromText{Val: &literal.TextValue{Value: "hello"}}}
+		Value:    core.AssignFromText(T("hello")),
+	}
 	if e := lo.Execute(nil); e != nil {
 		t.Fatal(e)
 	} else if got := b.String(); !strings.HasSuffix(got, " ###### error hello\n") {

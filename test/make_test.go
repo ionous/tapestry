@@ -22,8 +22,11 @@ func xTestMake(t *testing.T) {
 		},
 	}
 	op := &core.CallPattern{
-		Pattern:   core.PatternName{Str: W("group_settings")},
-		Arguments: core.NamedArgs("objects_with_articles", &core.FromBool{Val: B(true)}),
+		Pattern: core.PatternName{Str: W("group_settings")},
+		Arguments: []core.Arg{{
+			Name:  "objects_with_articles",
+			Value: core.AssignFromBool(B(true)),
+		}},
 	}
 	if obj, e := op.GetRecord(&run); e != nil {
 		t.Fatal(e)

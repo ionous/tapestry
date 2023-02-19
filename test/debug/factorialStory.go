@@ -56,12 +56,11 @@ var FactorialCheck = []rt.Execute{
 		Value: &core.CompareNum{
 			A: F(6), Is: core.Equal, B: &core.CallPattern{
 				Pattern: factorialName,
-				Arguments: []rt.Arg{rt.Arg{
-					Name: "num",
-					From: &core.FromNum{
-						Markup: UserComment("start the factorial with '3'"),
-						Val:    F(3),
-					},
+				Arguments: []core.Arg{core.Arg{
+					Name:  "num",
+					Value: core.AssignFromNumber(F(3)),
+					// fix: for some reason, the comment isn't appearing in the output.
+					Markup: UserComment("start the factorial with '3'"),
 				}}},
 		},
 	},
@@ -69,23 +68,28 @@ var FactorialCheck = []rt.Execute{
 
 // subtracts 1 from the num and multiples by one
 var FactorialMulMinusOne = []rt.Execute{
-	SetVar("num", &core.ProductOf{
-		A: V("num"),
-		B: &core.DiffOf{
-			A: V("num"),
-			B: I(1),
-		},
-	}),
+	&core.SetValue{
+		Target: core.Variable("num"),
+		Value: core.AssignFromNumber(&core.ProductOf{
+			A: GetVariable("num"),
+			B: &core.DiffOf{
+				A: GetVariable("num"),
+				B: I(1),
+			},
+		})},
 }
 
 // at 0, use the number 1
 var FactorialUseOne = []rt.Execute{
-	SetVar("num", I(1)),
+	&core.SetValue{
+		Target: core.Variable("num"),
+		Value:  core.AssignFromNumber(I(1)),
+	},
 }
 
 var FactorialIsZero = &core.CompareNum{
 	Markup: UserComment("so, when we've reached 0..."),
-	A:      V("num"),
+	A:      GetVariable("num"),
 	Is:     core.Equal,
 	B:      F(0)}
 

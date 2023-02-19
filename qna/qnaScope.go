@@ -38,9 +38,9 @@ func (run *Runner) initializeLocals(rec *g.Record) (err error) {
 		err = e
 	} else {
 		for fieldIndex, init := range cached.init {
-			if init != nil { // not every field necessarily has an initializer
+			if init.IsValid() { // not every field necessarily has an initializer
 				ft := k.Field(fieldIndex)
-				if src, e := init.GetAssignedValue(run); e != nil {
+				if src, e := init.GetValue(run); e != nil {
 					err = errutil.New("error determining local", k.Name(), ft.Name, e)
 					break
 				} else if val, e := safe.AutoConvert(run, ft, src); e != nil {

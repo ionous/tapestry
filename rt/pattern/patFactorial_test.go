@@ -34,36 +34,38 @@ func TestFactorial(t *testing.T) {
 				},
 				Rules: []rt.Rule{{
 					Execute: core.MakeActivity(
-						SetVar("num", &core.ProductOf{
-							A: V("num"),
-							B: &core.CallPattern{
-								Pattern: P("factorial"),
-								Arguments: core.NamedArgs(
-									"num", &core.FromNum{
-										Val: &core.DiffOf{
-											A: V("num"),
+						&core.SetValue{
+							Target: core.Variable("num"),
+							Value: core.AssignFromNumber(&core.ProductOf{
+								A: GetVariable("num"),
+								B: &core.CallPattern{
+									Pattern: P("factorial"),
+									Arguments: []core.Arg{{
+										Name: "num",
+										Value: core.AssignFromNumber(&core.DiffOf{
+											A: GetVariable("num"),
 											B: I(1),
-										},
-									},
-								)}})),
+										})}}}})}),
 				}, {
 					Filter: &core.CompareNum{
-						A:  V("num"),
+						A:  GetVariable("num"),
 						Is: core.Equal,
 						B:  I(0),
 					},
 					Execute: core.MakeActivity(
-						SetVar("num", I(1)),
+						&core.SetValue{
+							Target: core.Variable("num"),
+							Value:  core.AssignFromNumber(I(1))},
 					),
 				}}},
 		}}
 	// determine the factorial of the number 3
 	det := core.CallPattern{
 		Pattern: P("factorial"),
-		Arguments: core.NamedArgs(
-			"num", &core.FromNum{
-				Val: I(3),
-			}),
+		Arguments: []core.Arg{{
+			Name:  "num",
+			Value: core.AssignFromNumber(I(3)),
+		}},
 	}
 	if v, e := safe.GetNumber(&run, &det); e != nil {
 		t.Fatal(e)

@@ -16,7 +16,7 @@ func TestReduce(t *testing.T) {
 	type Fruit struct {
 		Name string
 	}
-	type Values struct {
+	type Locals struct {
 		Fruits  []Fruit
 		Results string
 	}
@@ -25,8 +25,8 @@ func TestReduce(t *testing.T) {
 		Out string
 	}
 	var kinds testutil.Kinds
-	kinds.AddKinds((*Fruit)(nil), (*Values)(nil), (*Reduce)(nil))
-	values := kinds.NewRecord("values")
+	kinds.AddKinds((*Fruit)(nil), (*Locals)(nil), (*Reduce)(nil))
+	locals := kinds.NewRecord("locals")
 	if k, e := kinds.GetKindByName("fruit"); e != nil {
 		t.Fatal(e)
 	} else {
@@ -38,7 +38,7 @@ func TestReduce(t *testing.T) {
 			}
 			fruits = append(fruits, one)
 		}
-		if e := values.SetNamedField("fruits", g.RecordsFrom(fruits, k.Name())); e != nil {
+		if e := locals.SetNamedField("fruits", g.RecordsFrom(fruits, k.Name())); e != nil {
 			t.Fatal(e)
 		}
 	}
@@ -50,13 +50,13 @@ func TestReduce(t *testing.T) {
 		testutil.Runtime{
 			Kinds: &kinds,
 			Stack: []rt.Scope{
-				g.RecordOf(values),
+				g.RecordOf(locals),
 			},
 		},
 	}
 	if e := reduce.Execute(&lt); e != nil {
 		t.Fatal(e)
-	} else if res, e := values.GetNamedField("results"); e != nil {
+	} else if res, e := locals.GetNamedField("results"); e != nil {
 		t.Fatal(e)
 	} else {
 		out := res.String()
@@ -70,8 +70,8 @@ func TestReduce(t *testing.T) {
 }
 
 var reduce = list.ListReduce{
-	FromList:     V("fruits"),
-	IntoValue:    W("results"),
+	Target:       core.Variable("results"),
+	List:         core.AssignFromRecordList(core.GetVariable("fruits")),
 	UsingPattern: W("reduce"),
 }
 
@@ -82,13 +82,14 @@ var reduceRecords = testpat.Pattern{
 	Labels: []string{"in", "out"},
 	Rules: []rt.Rule{{
 		Execute: core.MakeActivity(
-			SetVar("out",
-				&core.Join{
+			&core.SetValue{
+				Target: core.Variable("out"),
+				Value: core.AssignFromText(&core.Join{
 					Sep: T(", "),
 					Parts: []rt.TextEval{
-						V("out"),
-						V("in", "name"),
-					}}),
+						GetVariable("out"),
+						GetVariable("in", "name"),
+					}})},
 		),
 	}},
 }

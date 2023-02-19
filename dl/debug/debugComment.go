@@ -17,9 +17,7 @@ func (op *Comment) PreImport(k *imp.Importer) (ret interface{}, err error) {
 		ret = op
 	} else {
 		ret = &DebugLog{
-			Value: &core.FromText{
-				Val: core.T(op.Lines.String()),
-			},
+			Value: core.AssignFromText(core.T(op.Lines.String())),
 			LogLevel: LoggingLevel{
 				Str: LoggingLevel_Note,
 			},

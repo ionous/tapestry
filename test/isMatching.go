@@ -31,28 +31,32 @@ var matchGroups = testpat.Pattern{
 		Execute: matches(true),
 	}, {
 		Filter: &core.CompareText{
-			A:  core.MakeGetFromVar("a", "label"),
+			A:  core.GetVariable("a", "label"),
 			Is: core.Unequal,
-			B:  core.MakeGetFromVar("b", "label"),
+			B:  core.GetVariable("b", "label"),
 		},
 		Execute: matches(false),
 	}, {
 		Filter: &core.CompareText{
-			A:  core.MakeGetFromVar("a", "innumerable"),
+			A:  core.GetVariable("a", "innumerable"),
 			Is: core.Unequal,
-			B:  core.MakeGetFromVar("b", "innumerable"),
+			B:  core.GetVariable("b", "innumerable"),
 		},
 		Execute: matches(false),
 	}, {
 		Filter: &core.CompareText{
-			A:  core.MakeGetFromVar("a", "group_options"),
+			A:  core.GetVariable("a", "group_options"),
 			Is: core.Unequal,
-			B:  core.MakeGetFromVar("b", "group_options"),
+			B:  core.GetVariable("b", "group_options"),
 		},
 		Execute: matches(false),
 	}},
 }
 
 func matches(b bool) []rt.Execute {
-	return []rt.Execute{&core.Assign{Var: N("matches"), From: &core.FromBool{Val: B(b)}}}
+	return []rt.Execute{
+		&core.SetValue{
+			Target: core.Variable("matches"),
+			Value:  core.AssignFromBool(B(b))},
+	}
 }

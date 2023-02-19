@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/parser/ident"
-	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
@@ -46,9 +45,7 @@ func (n *Noun) HasClass(s string) (ret bool) {
 
 // does the noun have the passed trait?
 func (n *Noun) HasAttribute(s string) (ret bool) {
-	if obj, e := n.run.GetField(meta.ObjectValue, n.String()); e != nil {
-		log.Println("parser error", e)
-	} else if p, e := obj.FieldByName(s); e != nil {
+	if p, e := n.run.GetField(n.String(), s); e != nil {
 		log.Println("parser error", e)
 	} else {
 		ret = p.Bool()

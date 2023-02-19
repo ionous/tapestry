@@ -10,316 +10,10 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// AsNum Define the name of a number variable.
-type AsNum struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ ListIterator = (*AsNum)(nil)
-
-func (*AsNum) Compose() composer.Spec {
-	return composer.Spec{
-		Name: AsNum_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const AsNum_Type = "as_num"
-const AsNum_Field_Var = "$VAR"
-
-func (op *AsNum) Marshal(m jsn.Marshaler) error {
-	return AsNum_Marshal(m, op)
-}
-
-type AsNum_Slice []AsNum
-
-func (op *AsNum_Slice) GetType() string { return AsNum_Type }
-
-func (op *AsNum_Slice) Marshal(m jsn.Marshaler) error {
-	return AsNum_Repeats_Marshal(m, (*[]AsNum)(op))
-}
-
-func (op *AsNum_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *AsNum_Slice) SetSize(cnt int) {
-	var els []AsNum
-	if cnt >= 0 {
-		els = make(AsNum_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *AsNum_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return AsNum_Marshal(m, &(*op)[i])
-}
-
-func AsNum_Repeats_Marshal(m jsn.Marshaler, vals *[]AsNum) error {
-	return jsn.RepeatBlock(m, (*AsNum_Slice)(vals))
-}
-
-func AsNum_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AsNum) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = AsNum_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type AsNum_Flow struct{ ptr *AsNum }
-
-func (n AsNum_Flow) GetType() string      { return AsNum_Type }
-func (n AsNum_Flow) GetLede() string      { return AsNum_Type }
-func (n AsNum_Flow) GetFlow() interface{} { return n.ptr }
-func (n AsNum_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*AsNum); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func AsNum_Optional_Marshal(m jsn.Marshaler, pv **AsNum) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = AsNum_Marshal(m, *pv)
-	} else if !enc {
-		var v AsNum
-		if err = AsNum_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func AsNum_Marshal(m jsn.Marshaler, val *AsNum) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(AsNum_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", AsNum_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", AsNum_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// AsRec Define the name of a record variable.
-type AsRec struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ ListIterator = (*AsRec)(nil)
-
-func (*AsRec) Compose() composer.Spec {
-	return composer.Spec{
-		Name: AsRec_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const AsRec_Type = "as_rec"
-const AsRec_Field_Var = "$VAR"
-
-func (op *AsRec) Marshal(m jsn.Marshaler) error {
-	return AsRec_Marshal(m, op)
-}
-
-type AsRec_Slice []AsRec
-
-func (op *AsRec_Slice) GetType() string { return AsRec_Type }
-
-func (op *AsRec_Slice) Marshal(m jsn.Marshaler) error {
-	return AsRec_Repeats_Marshal(m, (*[]AsRec)(op))
-}
-
-func (op *AsRec_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *AsRec_Slice) SetSize(cnt int) {
-	var els []AsRec
-	if cnt >= 0 {
-		els = make(AsRec_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *AsRec_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return AsRec_Marshal(m, &(*op)[i])
-}
-
-func AsRec_Repeats_Marshal(m jsn.Marshaler, vals *[]AsRec) error {
-	return jsn.RepeatBlock(m, (*AsRec_Slice)(vals))
-}
-
-func AsRec_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AsRec) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = AsRec_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type AsRec_Flow struct{ ptr *AsRec }
-
-func (n AsRec_Flow) GetType() string      { return AsRec_Type }
-func (n AsRec_Flow) GetLede() string      { return AsRec_Type }
-func (n AsRec_Flow) GetFlow() interface{} { return n.ptr }
-func (n AsRec_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*AsRec); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func AsRec_Optional_Marshal(m jsn.Marshaler, pv **AsRec) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = AsRec_Marshal(m, *pv)
-	} else if !enc {
-		var v AsRec
-		if err = AsRec_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func AsRec_Marshal(m jsn.Marshaler, val *AsRec) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(AsRec_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", AsRec_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", AsRec_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// AsTxt Define the name of a text variable.
-type AsTxt struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ ListIterator = (*AsTxt)(nil)
-
-func (*AsTxt) Compose() composer.Spec {
-	return composer.Spec{
-		Name: AsTxt_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const AsTxt_Type = "as_txt"
-const AsTxt_Field_Var = "$VAR"
-
-func (op *AsTxt) Marshal(m jsn.Marshaler) error {
-	return AsTxt_Marshal(m, op)
-}
-
-type AsTxt_Slice []AsTxt
-
-func (op *AsTxt_Slice) GetType() string { return AsTxt_Type }
-
-func (op *AsTxt_Slice) Marshal(m jsn.Marshaler) error {
-	return AsTxt_Repeats_Marshal(m, (*[]AsTxt)(op))
-}
-
-func (op *AsTxt_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *AsTxt_Slice) SetSize(cnt int) {
-	var els []AsTxt
-	if cnt >= 0 {
-		els = make(AsTxt_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *AsTxt_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return AsTxt_Marshal(m, &(*op)[i])
-}
-
-func AsTxt_Repeats_Marshal(m jsn.Marshaler, vals *[]AsTxt) error {
-	return jsn.RepeatBlock(m, (*AsTxt_Slice)(vals))
-}
-
-func AsTxt_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AsTxt) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = AsTxt_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type AsTxt_Flow struct{ ptr *AsTxt }
-
-func (n AsTxt_Flow) GetType() string      { return AsTxt_Type }
-func (n AsTxt_Flow) GetLede() string      { return AsTxt_Type }
-func (n AsTxt_Flow) GetFlow() interface{} { return n.ptr }
-func (n AsTxt_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*AsTxt); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func AsTxt_Optional_Marshal(m jsn.Marshaler, pv **AsTxt) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = AsTxt_Marshal(m, *pv)
-	} else if !enc {
-		var v AsTxt
-		if err = AsTxt_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func AsTxt_Marshal(m jsn.Marshaler, val *AsTxt) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(AsTxt_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", AsTxt_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", AsTxt_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // EraseEdge Erase at edge: Remove one or more values from a list.
 type EraseEdge struct {
-	From   rt.ListEval `if:"label=_"`
-	AtEdge rt.BoolEval `if:"label=at_front,optional"`
+	Target core.Address `if:"label=_"`
+	AtEdge rt.BoolEval  `if:"label=at_front,optional"`
 	Markup map[string]any
 }
 
@@ -335,7 +29,7 @@ func (*EraseEdge) Compose() composer.Spec {
 }
 
 const EraseEdge_Type = "erase_edge"
-const EraseEdge_Field_From = "$FROM"
+const EraseEdge_Field_Target = "$TARGET"
 const EraseEdge_Field_AtEdge = "$AT_EDGE"
 
 func (op *EraseEdge) Marshal(m jsn.Marshaler) error {
@@ -409,12 +103,12 @@ func EraseEdge_Optional_Marshal(m jsn.Marshaler, pv **EraseEdge) (err error) {
 func EraseEdge_Marshal(m jsn.Marshaler, val *EraseEdge) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(EraseEdge_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", EraseEdge_Field_From)
+		e0 := m.MarshalKey("", EraseEdge_Field_Target)
 		if e0 == nil {
-			e0 = rt.ListEval_Marshal(m, &val.From)
+			e0 = core.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EraseEdge_Field_From))
+			m.Error(errutil.New(e0, "in flow at", EraseEdge_Field_Target))
 		}
 		e1 := m.MarshalKey("at_front", EraseEdge_Field_AtEdge)
 		if e1 == nil {
@@ -431,7 +125,7 @@ func EraseEdge_Marshal(m jsn.Marshaler, val *EraseEdge) (err error) {
 // EraseIndex Erase at index: Remove one or more values from a list.
 type EraseIndex struct {
 	Count   rt.NumberEval `if:"label=_"`
-	From    rt.ListEval   `if:"label=from"`
+	Target  core.Address  `if:"label=from"`
 	AtIndex rt.NumberEval `if:"label=at_index"`
 	Markup  map[string]any
 }
@@ -449,7 +143,7 @@ func (*EraseIndex) Compose() composer.Spec {
 
 const EraseIndex_Type = "erase_index"
 const EraseIndex_Field_Count = "$COUNT"
-const EraseIndex_Field_From = "$FROM"
+const EraseIndex_Field_Target = "$TARGET"
 const EraseIndex_Field_AtIndex = "$AT_INDEX"
 
 func (op *EraseIndex) Marshal(m jsn.Marshaler) error {
@@ -530,12 +224,12 @@ func EraseIndex_Marshal(m jsn.Marshaler, val *EraseIndex) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EraseIndex_Field_Count))
 		}
-		e1 := m.MarshalKey("from", EraseIndex_Field_From)
+		e1 := m.MarshalKey("from", EraseIndex_Field_Target)
 		if e1 == nil {
-			e1 = rt.ListEval_Marshal(m, &val.From)
+			e1 = core.Address_Marshal(m, &val.Target)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", EraseIndex_Field_From))
+			m.Error(errutil.New(e1, "in flow at", EraseIndex_Field_Target))
 		}
 		e2 := m.MarshalKey("at_index", EraseIndex_Field_AtIndex)
 		if e2 == nil {
@@ -549,10 +243,12 @@ func EraseIndex_Marshal(m jsn.Marshaler, val *EraseIndex) (err error) {
 	return
 }
 
-// Erasing Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
+// Erasing Erase elements from the front or back of a list.
+// Runs a pattern with a list containing the erased values.
+// If nothing was erased, the pattern will be called with an empty list.
 type Erasing struct {
 	Count   rt.NumberEval `if:"label=_"`
-	From    rt.ListEval   `if:"label=from"`
+	Target  core.Address  `if:"label=from"`
 	AtIndex rt.NumberEval `if:"label=at_index"`
 	As      string        `if:"label=as,type=text"`
 	Does    []rt.Execute  `if:"label=does"`
@@ -571,7 +267,7 @@ func (*Erasing) Compose() composer.Spec {
 
 const Erasing_Type = "erasing"
 const Erasing_Field_Count = "$COUNT"
-const Erasing_Field_From = "$FROM"
+const Erasing_Field_Target = "$TARGET"
 const Erasing_Field_AtIndex = "$AT_INDEX"
 const Erasing_Field_As = "$AS"
 const Erasing_Field_Does = "$DOES"
@@ -654,12 +350,12 @@ func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Erasing_Field_Count))
 		}
-		e1 := m.MarshalKey("from", Erasing_Field_From)
+		e1 := m.MarshalKey("from", Erasing_Field_Target)
 		if e1 == nil {
-			e1 = rt.ListEval_Marshal(m, &val.From)
+			e1 = core.Address_Marshal(m, &val.Target)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Erasing_Field_From))
+			m.Error(errutil.New(e1, "in flow at", Erasing_Field_Target))
 		}
 		e2 := m.MarshalKey("at_index", Erasing_Field_AtIndex)
 		if e2 == nil {
@@ -689,7 +385,7 @@ func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
 
 // ErasingEdge Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
 type ErasingEdge struct {
-	From   rt.ListEval   `if:"label=_"`
+	Target core.Address  `if:"label=_"`
 	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
 	As     string        `if:"label=as,type=text"`
 	Does   []rt.Execute  `if:"label=does"`
@@ -709,7 +405,7 @@ func (*ErasingEdge) Compose() composer.Spec {
 }
 
 const ErasingEdge_Type = "erasing_edge"
-const ErasingEdge_Field_From = "$FROM"
+const ErasingEdge_Field_Target = "$TARGET"
 const ErasingEdge_Field_AtEdge = "$AT_EDGE"
 const ErasingEdge_Field_As = "$AS"
 const ErasingEdge_Field_Does = "$DOES"
@@ -786,12 +482,12 @@ func ErasingEdge_Optional_Marshal(m jsn.Marshaler, pv **ErasingEdge) (err error)
 func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ErasingEdge_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ErasingEdge_Field_From)
+		e0 := m.MarshalKey("", ErasingEdge_Field_Target)
 		if e0 == nil {
-			e0 = rt.ListEval_Marshal(m, &val.From)
+			e0 = core.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ErasingEdge_Field_From))
+			m.Error(errutil.New(e0, "in flow at", ErasingEdge_Field_Target))
 		}
 		e1 := m.MarshalKey("at_front", ErasingEdge_Field_AtEdge)
 		if e1 == nil {
@@ -826,744 +522,12 @@ func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 	return
 }
 
-// FromNumList Uses a list of numbers.
-type FromNumList struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.ListEval = (*FromNumList)(nil)
-
-func (*FromNumList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FromNumList_Type,
-		Uses: composer.Type_Flow,
-		Lede: "var_of_nums",
-	}
-}
-
-const FromNumList_Type = "from_num_list"
-const FromNumList_Field_Var = "$VAR"
-
-func (op *FromNumList) Marshal(m jsn.Marshaler) error {
-	return FromNumList_Marshal(m, op)
-}
-
-type FromNumList_Slice []FromNumList
-
-func (op *FromNumList_Slice) GetType() string { return FromNumList_Type }
-
-func (op *FromNumList_Slice) Marshal(m jsn.Marshaler) error {
-	return FromNumList_Repeats_Marshal(m, (*[]FromNumList)(op))
-}
-
-func (op *FromNumList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromNumList_Slice) SetSize(cnt int) {
-	var els []FromNumList
-	if cnt >= 0 {
-		els = make(FromNumList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromNumList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromNumList_Marshal(m, &(*op)[i])
-}
-
-func FromNumList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromNumList) error {
-	return jsn.RepeatBlock(m, (*FromNumList_Slice)(vals))
-}
-
-func FromNumList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromNumList) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromNumList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromNumList_Flow struct{ ptr *FromNumList }
-
-func (n FromNumList_Flow) GetType() string      { return FromNumList_Type }
-func (n FromNumList_Flow) GetLede() string      { return "var_of_nums" }
-func (n FromNumList_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromNumList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromNumList); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromNumList_Optional_Marshal(m jsn.Marshaler, pv **FromNumList) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromNumList_Marshal(m, *pv)
-	} else if !enc {
-		var v FromNumList
-		if err = FromNumList_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromNumList_Marshal(m jsn.Marshaler, val *FromNumList) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromNumList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromNumList_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromNumList_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// FromRecList Uses a list of records.
-type FromRecList struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.ListEval = (*FromRecList)(nil)
-
-func (*FromRecList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FromRecList_Type,
-		Uses: composer.Type_Flow,
-		Lede: "var_of_recs",
-	}
-}
-
-const FromRecList_Type = "from_rec_list"
-const FromRecList_Field_Var = "$VAR"
-
-func (op *FromRecList) Marshal(m jsn.Marshaler) error {
-	return FromRecList_Marshal(m, op)
-}
-
-type FromRecList_Slice []FromRecList
-
-func (op *FromRecList_Slice) GetType() string { return FromRecList_Type }
-
-func (op *FromRecList_Slice) Marshal(m jsn.Marshaler) error {
-	return FromRecList_Repeats_Marshal(m, (*[]FromRecList)(op))
-}
-
-func (op *FromRecList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromRecList_Slice) SetSize(cnt int) {
-	var els []FromRecList
-	if cnt >= 0 {
-		els = make(FromRecList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromRecList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromRecList_Marshal(m, &(*op)[i])
-}
-
-func FromRecList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromRecList) error {
-	return jsn.RepeatBlock(m, (*FromRecList_Slice)(vals))
-}
-
-func FromRecList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromRecList) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromRecList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromRecList_Flow struct{ ptr *FromRecList }
-
-func (n FromRecList_Flow) GetType() string      { return FromRecList_Type }
-func (n FromRecList_Flow) GetLede() string      { return "var_of_recs" }
-func (n FromRecList_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromRecList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromRecList); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromRecList_Optional_Marshal(m jsn.Marshaler, pv **FromRecList) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromRecList_Marshal(m, *pv)
-	} else if !enc {
-		var v FromRecList
-		if err = FromRecList_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromRecList_Marshal(m jsn.Marshaler, val *FromRecList) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromRecList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromRecList_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromRecList_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// FromTxtList Uses a list of text.
-type FromTxtList struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.ListEval = (*FromTxtList)(nil)
-
-func (*FromTxtList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FromTxtList_Type,
-		Uses: composer.Type_Flow,
-		Lede: "var_of_txts",
-	}
-}
-
-const FromTxtList_Type = "from_txt_list"
-const FromTxtList_Field_Var = "$VAR"
-
-func (op *FromTxtList) Marshal(m jsn.Marshaler) error {
-	return FromTxtList_Marshal(m, op)
-}
-
-type FromTxtList_Slice []FromTxtList
-
-func (op *FromTxtList_Slice) GetType() string { return FromTxtList_Type }
-
-func (op *FromTxtList_Slice) Marshal(m jsn.Marshaler) error {
-	return FromTxtList_Repeats_Marshal(m, (*[]FromTxtList)(op))
-}
-
-func (op *FromTxtList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromTxtList_Slice) SetSize(cnt int) {
-	var els []FromTxtList
-	if cnt >= 0 {
-		els = make(FromTxtList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromTxtList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromTxtList_Marshal(m, &(*op)[i])
-}
-
-func FromTxtList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromTxtList) error {
-	return jsn.RepeatBlock(m, (*FromTxtList_Slice)(vals))
-}
-
-func FromTxtList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromTxtList) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromTxtList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromTxtList_Flow struct{ ptr *FromTxtList }
-
-func (n FromTxtList_Flow) GetType() string      { return FromTxtList_Type }
-func (n FromTxtList_Flow) GetLede() string      { return "var_of_txts" }
-func (n FromTxtList_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromTxtList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromTxtList); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromTxtList_Optional_Marshal(m jsn.Marshaler, pv **FromTxtList) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromTxtList_Marshal(m, *pv)
-	} else if !enc {
-		var v FromTxtList
-		if err = FromTxtList_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromTxtList_Marshal(m jsn.Marshaler, val *FromTxtList) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromTxtList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromTxtList_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromTxtList_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// IntoNumList Targets a list of numbers.
-type IntoNumList struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ ListTarget = (*IntoNumList)(nil)
-
-func (*IntoNumList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: IntoNumList_Type,
-		Uses: composer.Type_Flow,
-		Lede: "into_nums",
-	}
-}
-
-const IntoNumList_Type = "into_num_list"
-const IntoNumList_Field_Var = "$VAR"
-
-func (op *IntoNumList) Marshal(m jsn.Marshaler) error {
-	return IntoNumList_Marshal(m, op)
-}
-
-type IntoNumList_Slice []IntoNumList
-
-func (op *IntoNumList_Slice) GetType() string { return IntoNumList_Type }
-
-func (op *IntoNumList_Slice) Marshal(m jsn.Marshaler) error {
-	return IntoNumList_Repeats_Marshal(m, (*[]IntoNumList)(op))
-}
-
-func (op *IntoNumList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *IntoNumList_Slice) SetSize(cnt int) {
-	var els []IntoNumList
-	if cnt >= 0 {
-		els = make(IntoNumList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *IntoNumList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return IntoNumList_Marshal(m, &(*op)[i])
-}
-
-func IntoNumList_Repeats_Marshal(m jsn.Marshaler, vals *[]IntoNumList) error {
-	return jsn.RepeatBlock(m, (*IntoNumList_Slice)(vals))
-}
-
-func IntoNumList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoNumList) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = IntoNumList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type IntoNumList_Flow struct{ ptr *IntoNumList }
-
-func (n IntoNumList_Flow) GetType() string      { return IntoNumList_Type }
-func (n IntoNumList_Flow) GetLede() string      { return "into_nums" }
-func (n IntoNumList_Flow) GetFlow() interface{} { return n.ptr }
-func (n IntoNumList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*IntoNumList); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func IntoNumList_Optional_Marshal(m jsn.Marshaler, pv **IntoNumList) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = IntoNumList_Marshal(m, *pv)
-	} else if !enc {
-		var v IntoNumList
-		if err = IntoNumList_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func IntoNumList_Marshal(m jsn.Marshaler, val *IntoNumList) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(IntoNumList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", IntoNumList_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", IntoNumList_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// IntoRecList Targets a list of records.
-type IntoRecList struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ ListTarget = (*IntoRecList)(nil)
-
-func (*IntoRecList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: IntoRecList_Type,
-		Uses: composer.Type_Flow,
-		Lede: "into_recs",
-	}
-}
-
-const IntoRecList_Type = "into_rec_list"
-const IntoRecList_Field_Var = "$VAR"
-
-func (op *IntoRecList) Marshal(m jsn.Marshaler) error {
-	return IntoRecList_Marshal(m, op)
-}
-
-type IntoRecList_Slice []IntoRecList
-
-func (op *IntoRecList_Slice) GetType() string { return IntoRecList_Type }
-
-func (op *IntoRecList_Slice) Marshal(m jsn.Marshaler) error {
-	return IntoRecList_Repeats_Marshal(m, (*[]IntoRecList)(op))
-}
-
-func (op *IntoRecList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *IntoRecList_Slice) SetSize(cnt int) {
-	var els []IntoRecList
-	if cnt >= 0 {
-		els = make(IntoRecList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *IntoRecList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return IntoRecList_Marshal(m, &(*op)[i])
-}
-
-func IntoRecList_Repeats_Marshal(m jsn.Marshaler, vals *[]IntoRecList) error {
-	return jsn.RepeatBlock(m, (*IntoRecList_Slice)(vals))
-}
-
-func IntoRecList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoRecList) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = IntoRecList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type IntoRecList_Flow struct{ ptr *IntoRecList }
-
-func (n IntoRecList_Flow) GetType() string      { return IntoRecList_Type }
-func (n IntoRecList_Flow) GetLede() string      { return "into_recs" }
-func (n IntoRecList_Flow) GetFlow() interface{} { return n.ptr }
-func (n IntoRecList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*IntoRecList); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func IntoRecList_Optional_Marshal(m jsn.Marshaler, pv **IntoRecList) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = IntoRecList_Marshal(m, *pv)
-	} else if !enc {
-		var v IntoRecList
-		if err = IntoRecList_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func IntoRecList_Marshal(m jsn.Marshaler, val *IntoRecList) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(IntoRecList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", IntoRecList_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", IntoRecList_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// IntoTxtList Targets a list of text.
-type IntoTxtList struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ ListTarget = (*IntoTxtList)(nil)
-
-func (*IntoTxtList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: IntoTxtList_Type,
-		Uses: composer.Type_Flow,
-		Lede: "into_txts",
-	}
-}
-
-const IntoTxtList_Type = "into_txt_list"
-const IntoTxtList_Field_Var = "$VAR"
-
-func (op *IntoTxtList) Marshal(m jsn.Marshaler) error {
-	return IntoTxtList_Marshal(m, op)
-}
-
-type IntoTxtList_Slice []IntoTxtList
-
-func (op *IntoTxtList_Slice) GetType() string { return IntoTxtList_Type }
-
-func (op *IntoTxtList_Slice) Marshal(m jsn.Marshaler) error {
-	return IntoTxtList_Repeats_Marshal(m, (*[]IntoTxtList)(op))
-}
-
-func (op *IntoTxtList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *IntoTxtList_Slice) SetSize(cnt int) {
-	var els []IntoTxtList
-	if cnt >= 0 {
-		els = make(IntoTxtList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *IntoTxtList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return IntoTxtList_Marshal(m, &(*op)[i])
-}
-
-func IntoTxtList_Repeats_Marshal(m jsn.Marshaler, vals *[]IntoTxtList) error {
-	return jsn.RepeatBlock(m, (*IntoTxtList_Slice)(vals))
-}
-
-func IntoTxtList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoTxtList) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = IntoTxtList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type IntoTxtList_Flow struct{ ptr *IntoTxtList }
-
-func (n IntoTxtList_Flow) GetType() string      { return IntoTxtList_Type }
-func (n IntoTxtList_Flow) GetLede() string      { return "into_txts" }
-func (n IntoTxtList_Flow) GetFlow() interface{} { return n.ptr }
-func (n IntoTxtList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*IntoTxtList); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func IntoTxtList_Optional_Marshal(m jsn.Marshaler, pv **IntoTxtList) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = IntoTxtList_Marshal(m, *pv)
-	} else if !enc {
-		var v IntoTxtList
-		if err = IntoTxtList_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func IntoTxtList_Marshal(m jsn.Marshaler, val *IntoTxtList) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(IntoTxtList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", IntoTxtList_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", IntoTxtList_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// ListAt Get a value from a list. The first element is is index 1.
-type ListAt struct {
-	List   rt.ListEval   `if:"label=_"`
-	Index  rt.NumberEval `if:"label=index"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.NumberEval = (*ListAt)(nil)
-var _ rt.TextEval = (*ListAt)(nil)
-var _ rt.RecordEval = (*ListAt)(nil)
-
-func (*ListAt) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ListAt_Type,
-		Uses: composer.Type_Flow,
-		Lede: "get",
-	}
-}
-
-const ListAt_Type = "list_at"
-const ListAt_Field_List = "$LIST"
-const ListAt_Field_Index = "$INDEX"
-
-func (op *ListAt) Marshal(m jsn.Marshaler) error {
-	return ListAt_Marshal(m, op)
-}
-
-type ListAt_Slice []ListAt
-
-func (op *ListAt_Slice) GetType() string { return ListAt_Type }
-
-func (op *ListAt_Slice) Marshal(m jsn.Marshaler) error {
-	return ListAt_Repeats_Marshal(m, (*[]ListAt)(op))
-}
-
-func (op *ListAt_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ListAt_Slice) SetSize(cnt int) {
-	var els []ListAt
-	if cnt >= 0 {
-		els = make(ListAt_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ListAt_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListAt_Marshal(m, &(*op)[i])
-}
-
-func ListAt_Repeats_Marshal(m jsn.Marshaler, vals *[]ListAt) error {
-	return jsn.RepeatBlock(m, (*ListAt_Slice)(vals))
-}
-
-func ListAt_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListAt) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListAt_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ListAt_Flow struct{ ptr *ListAt }
-
-func (n ListAt_Flow) GetType() string      { return ListAt_Type }
-func (n ListAt_Flow) GetLede() string      { return "get" }
-func (n ListAt_Flow) GetFlow() interface{} { return n.ptr }
-func (n ListAt_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ListAt); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ListAt_Optional_Marshal(m jsn.Marshaler, pv **ListAt) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ListAt_Marshal(m, *pv)
-	} else if !enc {
-		var v ListAt
-		if err = ListAt_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ListAt_Marshal(m jsn.Marshaler, val *ListAt) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ListAt_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListAt_Field_List)
-		if e0 == nil {
-			e0 = rt.ListEval_Marshal(m, &val.List)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListAt_Field_List))
-		}
-		e1 := m.MarshalKey("index", ListAt_Field_Index)
-		if e1 == nil {
-			e1 = rt.NumberEval_Marshal(m, &val.Index)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListAt_Field_Index))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // ListEach Loops over the elements in the passed list, or runs the 'else' activity if empty.
 type ListEach struct {
-	List   rt.ListEval   `if:"label=across"`
-	As     ListIterator  `if:"label=as"`
-	Does   []rt.Execute  `if:"label=does"`
-	Else   core.Brancher `if:"label=else,optional"`
+	List   core.Assignment `if:"label=across"`
+	As     string          `if:"label=as,type=text"`
+	Does   []rt.Execute    `if:"label=does"`
+	Else   core.Brancher   `if:"label=else,optional"`
 	Markup map[string]any
 }
 
@@ -1657,14 +621,14 @@ func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
 	if err = m.MarshalBlock(ListEach_Flow{val}); err == nil {
 		e0 := m.MarshalKey("across", ListEach_Field_List)
 		if e0 == nil {
-			e0 = rt.ListEval_Marshal(m, &val.List)
+			e0 = core.Assignment_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListEach_Field_List))
 		}
 		e1 := m.MarshalKey("as", ListEach_Field_As)
 		if e1 == nil {
-			e1 = ListIterator_Marshal(m, &val.As)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.As)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListEach_Field_As))
@@ -1688,42 +652,42 @@ func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
 	return
 }
 
-// ListFindBool Search a list for a specific value.
-type ListFindBool struct {
-	Bool   rt.BoolEval `if:"label=bool"`
-	InList rt.ListEval `if:"label=in_list"`
+// ListFind Search a list for a specific value.
+type ListFind struct {
+	Value  core.Assignment `if:"label=_"`
+	List   core.Assignment `if:"label=in_list"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ rt.BoolEval = (*ListFindBool)(nil)
-var _ rt.NumberEval = (*ListFindBool)(nil)
+var _ rt.BoolEval = (*ListFind)(nil)
+var _ rt.NumberEval = (*ListFind)(nil)
 
-func (*ListFindBool) Compose() composer.Spec {
+func (*ListFind) Compose() composer.Spec {
 	return composer.Spec{
-		Name: ListFindBool_Type,
+		Name: ListFind_Type,
 		Uses: composer.Type_Flow,
 		Lede: "find",
 	}
 }
 
-const ListFindBool_Type = "list_find_bool"
-const ListFindBool_Field_Bool = "$BOOL"
-const ListFindBool_Field_InList = "$IN_LIST"
+const ListFind_Type = "list_find"
+const ListFind_Field_Value = "$VALUE"
+const ListFind_Field_List = "$LIST"
 
-func (op *ListFindBool) Marshal(m jsn.Marshaler) error {
-	return ListFindBool_Marshal(m, op)
+func (op *ListFind) Marshal(m jsn.Marshaler) error {
+	return ListFind_Marshal(m, op)
 }
 
-type ListFindBool_Slice []ListFindBool
+type ListFind_Slice []ListFind
 
-func (op *ListFindBool_Slice) GetType() string { return ListFindBool_Type }
+func (op *ListFind_Slice) GetType() string { return ListFind_Type }
 
-func (op *ListFindBool_Slice) Marshal(m jsn.Marshaler) error {
-	return ListFindBool_Repeats_Marshal(m, (*[]ListFindBool)(op))
+func (op *ListFind_Slice) Marshal(m jsn.Marshaler) error {
+	return ListFind_Repeats_Marshal(m, (*[]ListFind)(op))
 }
 
-func (op *ListFindBool_Slice) GetSize() (ret int) {
+func (op *ListFind_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -1732,521 +696,69 @@ func (op *ListFindBool_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *ListFindBool_Slice) SetSize(cnt int) {
-	var els []ListFindBool
+func (op *ListFind_Slice) SetSize(cnt int) {
+	var els []ListFind
 	if cnt >= 0 {
-		els = make(ListFindBool_Slice, cnt)
+		els = make(ListFind_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *ListFindBool_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListFindBool_Marshal(m, &(*op)[i])
+func (op *ListFind_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ListFind_Marshal(m, &(*op)[i])
 }
 
-func ListFindBool_Repeats_Marshal(m jsn.Marshaler, vals *[]ListFindBool) error {
-	return jsn.RepeatBlock(m, (*ListFindBool_Slice)(vals))
+func ListFind_Repeats_Marshal(m jsn.Marshaler, vals *[]ListFind) error {
+	return jsn.RepeatBlock(m, (*ListFind_Slice)(vals))
 }
 
-func ListFindBool_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListFindBool) (err error) {
+func ListFind_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListFind) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListFindBool_Repeats_Marshal(m, pv)
+		err = ListFind_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type ListFindBool_Flow struct{ ptr *ListFindBool }
+type ListFind_Flow struct{ ptr *ListFind }
 
-func (n ListFindBool_Flow) GetType() string      { return ListFindBool_Type }
-func (n ListFindBool_Flow) GetLede() string      { return "find" }
-func (n ListFindBool_Flow) GetFlow() interface{} { return n.ptr }
-func (n ListFindBool_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ListFindBool); ok {
+func (n ListFind_Flow) GetType() string      { return ListFind_Type }
+func (n ListFind_Flow) GetLede() string      { return "find" }
+func (n ListFind_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListFind_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListFind); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func ListFindBool_Optional_Marshal(m jsn.Marshaler, pv **ListFindBool) (err error) {
+func ListFind_Optional_Marshal(m jsn.Marshaler, pv **ListFind) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ListFindBool_Marshal(m, *pv)
+		err = ListFind_Marshal(m, *pv)
 	} else if !enc {
-		var v ListFindBool
-		if err = ListFindBool_Marshal(m, &v); err == nil {
+		var v ListFind
+		if err = ListFind_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func ListFindBool_Marshal(m jsn.Marshaler, val *ListFindBool) (err error) {
+func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ListFindBool_Flow{val}); err == nil {
-		e0 := m.MarshalKey("bool", ListFindBool_Field_Bool)
+	if err = m.MarshalBlock(ListFind_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", ListFind_Field_Value)
 		if e0 == nil {
-			e0 = rt.BoolEval_Marshal(m, &val.Bool)
+			e0 = core.Assignment_Marshal(m, &val.Value)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListFindBool_Field_Bool))
+			m.Error(errutil.New(e0, "in flow at", ListFind_Field_Value))
 		}
-		e1 := m.MarshalKey("in_list", ListFindBool_Field_InList)
+		e1 := m.MarshalKey("in_list", ListFind_Field_List)
 		if e1 == nil {
-			e1 = rt.ListEval_Marshal(m, &val.InList)
+			e1 = core.Assignment_Marshal(m, &val.List)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListFindBool_Field_InList))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// ListFindList Search a list for a specific value.
-type ListFindList struct {
-	List   rt.ListEval `if:"label=list"`
-	InList rt.ListEval `if:"label=in_list"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.BoolEval = (*ListFindList)(nil)
-var _ rt.NumberEval = (*ListFindList)(nil)
-
-func (*ListFindList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ListFindList_Type,
-		Uses: composer.Type_Flow,
-		Lede: "find",
-	}
-}
-
-const ListFindList_Type = "list_find_list"
-const ListFindList_Field_List = "$LIST"
-const ListFindList_Field_InList = "$IN_LIST"
-
-func (op *ListFindList) Marshal(m jsn.Marshaler) error {
-	return ListFindList_Marshal(m, op)
-}
-
-type ListFindList_Slice []ListFindList
-
-func (op *ListFindList_Slice) GetType() string { return ListFindList_Type }
-
-func (op *ListFindList_Slice) Marshal(m jsn.Marshaler) error {
-	return ListFindList_Repeats_Marshal(m, (*[]ListFindList)(op))
-}
-
-func (op *ListFindList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ListFindList_Slice) SetSize(cnt int) {
-	var els []ListFindList
-	if cnt >= 0 {
-		els = make(ListFindList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ListFindList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListFindList_Marshal(m, &(*op)[i])
-}
-
-func ListFindList_Repeats_Marshal(m jsn.Marshaler, vals *[]ListFindList) error {
-	return jsn.RepeatBlock(m, (*ListFindList_Slice)(vals))
-}
-
-func ListFindList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListFindList) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListFindList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ListFindList_Flow struct{ ptr *ListFindList }
-
-func (n ListFindList_Flow) GetType() string      { return ListFindList_Type }
-func (n ListFindList_Flow) GetLede() string      { return "find" }
-func (n ListFindList_Flow) GetFlow() interface{} { return n.ptr }
-func (n ListFindList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ListFindList); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ListFindList_Optional_Marshal(m jsn.Marshaler, pv **ListFindList) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ListFindList_Marshal(m, *pv)
-	} else if !enc {
-		var v ListFindList
-		if err = ListFindList_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ListFindList_Marshal(m jsn.Marshaler, val *ListFindList) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ListFindList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("list", ListFindList_Field_List)
-		if e0 == nil {
-			e0 = rt.ListEval_Marshal(m, &val.List)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListFindList_Field_List))
-		}
-		e1 := m.MarshalKey("in_list", ListFindList_Field_InList)
-		if e1 == nil {
-			e1 = rt.ListEval_Marshal(m, &val.InList)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListFindList_Field_InList))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// ListFindNumber Search a list for a specific value.
-type ListFindNumber struct {
-	Number rt.NumberEval `if:"label=number"`
-	InList rt.ListEval   `if:"label=in_list"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.BoolEval = (*ListFindNumber)(nil)
-var _ rt.NumberEval = (*ListFindNumber)(nil)
-
-func (*ListFindNumber) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ListFindNumber_Type,
-		Uses: composer.Type_Flow,
-		Lede: "find",
-	}
-}
-
-const ListFindNumber_Type = "list_find_number"
-const ListFindNumber_Field_Number = "$NUMBER"
-const ListFindNumber_Field_InList = "$IN_LIST"
-
-func (op *ListFindNumber) Marshal(m jsn.Marshaler) error {
-	return ListFindNumber_Marshal(m, op)
-}
-
-type ListFindNumber_Slice []ListFindNumber
-
-func (op *ListFindNumber_Slice) GetType() string { return ListFindNumber_Type }
-
-func (op *ListFindNumber_Slice) Marshal(m jsn.Marshaler) error {
-	return ListFindNumber_Repeats_Marshal(m, (*[]ListFindNumber)(op))
-}
-
-func (op *ListFindNumber_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ListFindNumber_Slice) SetSize(cnt int) {
-	var els []ListFindNumber
-	if cnt >= 0 {
-		els = make(ListFindNumber_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ListFindNumber_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListFindNumber_Marshal(m, &(*op)[i])
-}
-
-func ListFindNumber_Repeats_Marshal(m jsn.Marshaler, vals *[]ListFindNumber) error {
-	return jsn.RepeatBlock(m, (*ListFindNumber_Slice)(vals))
-}
-
-func ListFindNumber_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListFindNumber) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListFindNumber_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ListFindNumber_Flow struct{ ptr *ListFindNumber }
-
-func (n ListFindNumber_Flow) GetType() string      { return ListFindNumber_Type }
-func (n ListFindNumber_Flow) GetLede() string      { return "find" }
-func (n ListFindNumber_Flow) GetFlow() interface{} { return n.ptr }
-func (n ListFindNumber_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ListFindNumber); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ListFindNumber_Optional_Marshal(m jsn.Marshaler, pv **ListFindNumber) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ListFindNumber_Marshal(m, *pv)
-	} else if !enc {
-		var v ListFindNumber
-		if err = ListFindNumber_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ListFindNumber_Marshal(m jsn.Marshaler, val *ListFindNumber) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ListFindNumber_Flow{val}); err == nil {
-		e0 := m.MarshalKey("number", ListFindNumber_Field_Number)
-		if e0 == nil {
-			e0 = rt.NumberEval_Marshal(m, &val.Number)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListFindNumber_Field_Number))
-		}
-		e1 := m.MarshalKey("in_list", ListFindNumber_Field_InList)
-		if e1 == nil {
-			e1 = rt.ListEval_Marshal(m, &val.InList)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListFindNumber_Field_InList))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// ListFindRecord Search a list for a specific value.
-type ListFindRecord struct {
-	Record rt.RecordEval `if:"label=record"`
-	InList rt.ListEval   `if:"label=in_list"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.BoolEval = (*ListFindRecord)(nil)
-var _ rt.NumberEval = (*ListFindRecord)(nil)
-
-func (*ListFindRecord) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ListFindRecord_Type,
-		Uses: composer.Type_Flow,
-		Lede: "find",
-	}
-}
-
-const ListFindRecord_Type = "list_find_record"
-const ListFindRecord_Field_Record = "$RECORD"
-const ListFindRecord_Field_InList = "$IN_LIST"
-
-func (op *ListFindRecord) Marshal(m jsn.Marshaler) error {
-	return ListFindRecord_Marshal(m, op)
-}
-
-type ListFindRecord_Slice []ListFindRecord
-
-func (op *ListFindRecord_Slice) GetType() string { return ListFindRecord_Type }
-
-func (op *ListFindRecord_Slice) Marshal(m jsn.Marshaler) error {
-	return ListFindRecord_Repeats_Marshal(m, (*[]ListFindRecord)(op))
-}
-
-func (op *ListFindRecord_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ListFindRecord_Slice) SetSize(cnt int) {
-	var els []ListFindRecord
-	if cnt >= 0 {
-		els = make(ListFindRecord_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ListFindRecord_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListFindRecord_Marshal(m, &(*op)[i])
-}
-
-func ListFindRecord_Repeats_Marshal(m jsn.Marshaler, vals *[]ListFindRecord) error {
-	return jsn.RepeatBlock(m, (*ListFindRecord_Slice)(vals))
-}
-
-func ListFindRecord_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListFindRecord) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListFindRecord_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ListFindRecord_Flow struct{ ptr *ListFindRecord }
-
-func (n ListFindRecord_Flow) GetType() string      { return ListFindRecord_Type }
-func (n ListFindRecord_Flow) GetLede() string      { return "find" }
-func (n ListFindRecord_Flow) GetFlow() interface{} { return n.ptr }
-func (n ListFindRecord_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ListFindRecord); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ListFindRecord_Optional_Marshal(m jsn.Marshaler, pv **ListFindRecord) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ListFindRecord_Marshal(m, *pv)
-	} else if !enc {
-		var v ListFindRecord
-		if err = ListFindRecord_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ListFindRecord_Marshal(m jsn.Marshaler, val *ListFindRecord) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ListFindRecord_Flow{val}); err == nil {
-		e0 := m.MarshalKey("record", ListFindRecord_Field_Record)
-		if e0 == nil {
-			e0 = rt.RecordEval_Marshal(m, &val.Record)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListFindRecord_Field_Record))
-		}
-		e1 := m.MarshalKey("in_list", ListFindRecord_Field_InList)
-		if e1 == nil {
-			e1 = rt.ListEval_Marshal(m, &val.InList)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListFindRecord_Field_InList))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// ListFindText Search a list for a specific value.
-type ListFindText struct {
-	Text   rt.TextEval `if:"label=text"`
-	InList rt.ListEval `if:"label=in_list"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.BoolEval = (*ListFindText)(nil)
-var _ rt.NumberEval = (*ListFindText)(nil)
-
-func (*ListFindText) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ListFindText_Type,
-		Uses: composer.Type_Flow,
-		Lede: "find",
-	}
-}
-
-const ListFindText_Type = "list_find_text"
-const ListFindText_Field_Text = "$TEXT"
-const ListFindText_Field_InList = "$IN_LIST"
-
-func (op *ListFindText) Marshal(m jsn.Marshaler) error {
-	return ListFindText_Marshal(m, op)
-}
-
-type ListFindText_Slice []ListFindText
-
-func (op *ListFindText_Slice) GetType() string { return ListFindText_Type }
-
-func (op *ListFindText_Slice) Marshal(m jsn.Marshaler) error {
-	return ListFindText_Repeats_Marshal(m, (*[]ListFindText)(op))
-}
-
-func (op *ListFindText_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ListFindText_Slice) SetSize(cnt int) {
-	var els []ListFindText
-	if cnt >= 0 {
-		els = make(ListFindText_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ListFindText_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListFindText_Marshal(m, &(*op)[i])
-}
-
-func ListFindText_Repeats_Marshal(m jsn.Marshaler, vals *[]ListFindText) error {
-	return jsn.RepeatBlock(m, (*ListFindText_Slice)(vals))
-}
-
-func ListFindText_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListFindText) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListFindText_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ListFindText_Flow struct{ ptr *ListFindText }
-
-func (n ListFindText_Flow) GetType() string      { return ListFindText_Type }
-func (n ListFindText_Flow) GetLede() string      { return "find" }
-func (n ListFindText_Flow) GetFlow() interface{} { return n.ptr }
-func (n ListFindText_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ListFindText); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ListFindText_Optional_Marshal(m jsn.Marshaler, pv **ListFindText) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ListFindText_Marshal(m, *pv)
-	} else if !enc {
-		var v ListFindText
-		if err = ListFindText_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ListFindText_Marshal(m jsn.Marshaler, val *ListFindText) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ListFindText_Flow{val}); err == nil {
-		e0 := m.MarshalKey("text", ListFindText_Field_Text)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Text)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListFindText_Field_Text))
-		}
-		e1 := m.MarshalKey("in_list", ListFindText_Field_InList)
-		if e1 == nil {
-			e1 = rt.ListEval_Marshal(m, &val.InList)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListFindText_Field_InList))
+			m.Error(errutil.New(e1, "in flow at", ListFind_Field_List))
 		}
 		m.EndBlock()
 	}
@@ -2254,12 +766,12 @@ func ListFindText_Marshal(m jsn.Marshaler, val *ListFindText) (err error) {
 }
 
 // ListGather Transform the values from a list.
-// The named pattern gets called once for each value in the list.
-// It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather.
+// The named pattern gets with with two parameters for each value in the list:
+// 'in' as each value from the list, and 'out' as the var passed to the gather.
 type ListGather struct {
-	Var    core.VariableName `if:"label=_"`
-	From   rt.ListEval       `if:"label=from"`
-	Using  string            `if:"label=using,type=text"`
+	Target core.Address    `if:"label=_"`
+	From   core.Assignment `if:"label=from"`
+	Using  string          `if:"label=using,type=text"`
 	Markup map[string]any
 }
 
@@ -2272,7 +784,7 @@ func (*ListGather) Compose() composer.Spec {
 }
 
 const ListGather_Type = "list_gather"
-const ListGather_Field_Var = "$VAR"
+const ListGather_Field_Target = "$TARGET"
 const ListGather_Field_From = "$FROM"
 const ListGather_Field_Using = "$USING"
 
@@ -2347,16 +859,16 @@ func ListGather_Optional_Marshal(m jsn.Marshaler, pv **ListGather) (err error) {
 func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListGather_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListGather_Field_Var)
+		e0 := m.MarshalKey("", ListGather_Field_Target)
 		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
+			e0 = core.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListGather_Field_Var))
+			m.Error(errutil.New(e0, "in flow at", ListGather_Field_Target))
 		}
 		e1 := m.MarshalKey("from", ListGather_Field_From)
 		if e1 == nil {
-			e1 = rt.ListEval_Marshal(m, &val.From)
+			e1 = core.Assignment_Marshal(m, &val.From)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListGather_Field_From))
@@ -2373,78 +885,9 @@ func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
 	return
 }
 
-const ListIterator_Type = "list_iterator"
-
-var ListIterator_Optional_Marshal = ListIterator_Marshal
-
-type ListIterator_Slot struct{ Value *ListIterator }
-
-func (at ListIterator_Slot) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(at); err == nil {
-		if a, ok := at.GetSlot(); ok {
-			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-func (at ListIterator_Slot) GetType() string              { return ListIterator_Type }
-func (at ListIterator_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at ListIterator_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(ListIterator)
-	return
-}
-
-func ListIterator_Marshal(m jsn.Marshaler, ptr *ListIterator) (err error) {
-	slot := ListIterator_Slot{ptr}
-	return slot.Marshal(m)
-}
-
-type ListIterator_Slice []ListIterator
-
-func (op *ListIterator_Slice) GetType() string { return ListIterator_Type }
-
-func (op *ListIterator_Slice) Marshal(m jsn.Marshaler) error {
-	return ListIterator_Repeats_Marshal(m, (*[]ListIterator)(op))
-}
-
-func (op *ListIterator_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ListIterator_Slice) SetSize(cnt int) {
-	var els []ListIterator
-	if cnt >= 0 {
-		els = make(ListIterator_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ListIterator_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListIterator_Marshal(m, &(*op)[i])
-}
-
-func ListIterator_Repeats_Marshal(m jsn.Marshaler, vals *[]ListIterator) error {
-	return jsn.RepeatBlock(m, (*ListIterator_Slice)(vals))
-}
-
-func ListIterator_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListIterator) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListIterator_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
 // ListLen Determines the number of values in a list.
 type ListLen struct {
-	List   rt.ListEval `if:"label=_"`
+	List   core.Assignment `if:"label=_"`
 	Markup map[string]any
 }
 
@@ -2535,7 +978,7 @@ func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
 	if err = m.MarshalBlock(ListLen_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListLen_Field_List)
 		if e0 == nil {
-			e0 = rt.ListEval_Marshal(m, &val.List)
+			e0 = core.Assignment_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListLen_Field_List))
@@ -2548,9 +991,9 @@ func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
 // ListMap Transform the values from one list and place the results in another list.
 // The designated pattern is called with each value from the 'from list', one value at a time.
 type ListMap struct {
-	ToList       string      `if:"label=_,type=text"`
-	FromList     rt.ListEval `if:"label=from_list"`
-	UsingPattern string      `if:"label=using,type=text"`
+	Target       core.Address    `if:"label=_"`
+	List         core.Assignment `if:"label=from_list"`
+	UsingPattern string          `if:"label=using,type=text"`
 	Markup       map[string]any
 }
 
@@ -2566,8 +1009,8 @@ func (*ListMap) Compose() composer.Spec {
 }
 
 const ListMap_Type = "list_map"
-const ListMap_Field_ToList = "$TO_LIST"
-const ListMap_Field_FromList = "$FROM_LIST"
+const ListMap_Field_Target = "$TARGET"
+const ListMap_Field_List = "$LIST"
 const ListMap_Field_UsingPattern = "$USING_PATTERN"
 
 func (op *ListMap) Marshal(m jsn.Marshaler) error {
@@ -2641,19 +1084,19 @@ func ListMap_Optional_Marshal(m jsn.Marshaler, pv **ListMap) (err error) {
 func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListMap_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListMap_Field_ToList)
+		e0 := m.MarshalKey("", ListMap_Field_Target)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.ToList)
+			e0 = core.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListMap_Field_ToList))
+			m.Error(errutil.New(e0, "in flow at", ListMap_Field_Target))
 		}
-		e1 := m.MarshalKey("from_list", ListMap_Field_FromList)
+		e1 := m.MarshalKey("from_list", ListMap_Field_List)
 		if e1 == nil {
-			e1 = rt.ListEval_Marshal(m, &val.FromList)
+			e1 = core.Assignment_Marshal(m, &val.List)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListMap_Field_FromList))
+			m.Error(errutil.New(e1, "in flow at", ListMap_Field_List))
 		}
 		e2 := m.MarshalKey("using", ListMap_Field_UsingPattern)
 		if e2 == nil {
@@ -2669,9 +1112,9 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 
 // ListPush Add a value to a list.
 type ListPush struct {
-	From   rt.Assignment `if:"label=_"`
-	Into   ListTarget    `if:"label=into"`
-	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
+	Value  core.Assignment `if:"label=_"`
+	Target core.Address    `if:"label=into"`
+	AtEdge rt.BoolEval     `if:"label=at_front,optional"`
 	Markup map[string]any
 }
 
@@ -2687,8 +1130,8 @@ func (*ListPush) Compose() composer.Spec {
 }
 
 const ListPush_Type = "list_push"
-const ListPush_Field_From = "$FROM"
-const ListPush_Field_Into = "$INTO"
+const ListPush_Field_Value = "$VALUE"
+const ListPush_Field_Target = "$TARGET"
 const ListPush_Field_AtEdge = "$AT_EDGE"
 
 func (op *ListPush) Marshal(m jsn.Marshaler) error {
@@ -2762,19 +1205,19 @@ func ListPush_Optional_Marshal(m jsn.Marshaler, pv **ListPush) (err error) {
 func ListPush_Marshal(m jsn.Marshaler, val *ListPush) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListPush_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListPush_Field_From)
+		e0 := m.MarshalKey("", ListPush_Field_Value)
 		if e0 == nil {
-			e0 = rt.Assignment_Marshal(m, &val.From)
+			e0 = core.Assignment_Marshal(m, &val.Value)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListPush_Field_From))
+			m.Error(errutil.New(e0, "in flow at", ListPush_Field_Value))
 		}
-		e1 := m.MarshalKey("into", ListPush_Field_Into)
+		e1 := m.MarshalKey("into", ListPush_Field_Target)
 		if e1 == nil {
-			e1 = ListTarget_Marshal(m, &val.Into)
+			e1 = core.Address_Marshal(m, &val.Target)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListPush_Field_Into))
+			m.Error(errutil.New(e1, "in flow at", ListPush_Field_Target))
 		}
 		e2 := m.MarshalKey("at_front", ListPush_Field_AtEdge)
 		if e2 == nil {
@@ -2788,12 +1231,13 @@ func ListPush_Marshal(m jsn.Marshaler, val *ListPush) (err error) {
 	return
 }
 
-// ListReduce Combine all of the values in a list, and store the result in a variable.
-// The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record ).
+// ListReduce Combine all of the values in a list with the targeted value.
+// The designated pattern is called with two parameters:
+// 'in' ( each element of the list ) and 'out' ( the target ).
 type ListReduce struct {
-	IntoValue    string      `if:"label=into,type=text"`
-	FromList     rt.ListEval `if:"label=from_list"`
-	UsingPattern string      `if:"label=using,type=text"`
+	Target       core.Address    `if:"label=into"`
+	List         core.Assignment `if:"label=from_list"`
+	UsingPattern string          `if:"label=using,type=text"`
 	Markup       map[string]any
 }
 
@@ -2809,8 +1253,8 @@ func (*ListReduce) Compose() composer.Spec {
 }
 
 const ListReduce_Type = "list_reduce"
-const ListReduce_Field_IntoValue = "$INTO_VALUE"
-const ListReduce_Field_FromList = "$FROM_LIST"
+const ListReduce_Field_Target = "$TARGET"
+const ListReduce_Field_List = "$LIST"
 const ListReduce_Field_UsingPattern = "$USING_PATTERN"
 
 func (op *ListReduce) Marshal(m jsn.Marshaler) error {
@@ -2884,19 +1328,19 @@ func ListReduce_Optional_Marshal(m jsn.Marshaler, pv **ListReduce) (err error) {
 func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListReduce_Flow{val}); err == nil {
-		e0 := m.MarshalKey("into", ListReduce_Field_IntoValue)
+		e0 := m.MarshalKey("into", ListReduce_Field_Target)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.IntoValue)
+			e0 = core.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListReduce_Field_IntoValue))
+			m.Error(errutil.New(e0, "in flow at", ListReduce_Field_Target))
 		}
-		e1 := m.MarshalKey("from_list", ListReduce_Field_FromList)
+		e1 := m.MarshalKey("from_list", ListReduce_Field_List)
 		if e1 == nil {
-			e1 = rt.ListEval_Marshal(m, &val.FromList)
+			e1 = core.Assignment_Marshal(m, &val.List)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListReduce_Field_FromList))
+			m.Error(errutil.New(e1, "in flow at", ListReduce_Field_List))
 		}
 		e2 := m.MarshalKey("using", ListReduce_Field_UsingPattern)
 		if e2 == nil {
@@ -2912,7 +1356,7 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 
 // ListReverse Reverse a list.
 type ListReverse struct {
-	List   rt.ListEval `if:"label=list"`
+	Target core.Address `if:"label=list"`
 	Markup map[string]any
 }
 
@@ -2928,7 +1372,7 @@ func (*ListReverse) Compose() composer.Spec {
 }
 
 const ListReverse_Type = "list_reverse"
-const ListReverse_Field_List = "$LIST"
+const ListReverse_Field_Target = "$TARGET"
 
 func (op *ListReverse) Marshal(m jsn.Marshaler) error {
 	return ListReverse_Marshal(m, op)
@@ -3001,133 +1445,12 @@ func ListReverse_Optional_Marshal(m jsn.Marshaler, pv **ListReverse) (err error)
 func ListReverse_Marshal(m jsn.Marshaler, val *ListReverse) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListReverse_Flow{val}); err == nil {
-		e0 := m.MarshalKey("list", ListReverse_Field_List)
+		e0 := m.MarshalKey("list", ListReverse_Field_Target)
 		if e0 == nil {
-			e0 = rt.ListEval_Marshal(m, &val.List)
+			e0 = core.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListReverse_Field_List))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// ListSet Overwrite an existing value in a list.
-type ListSet struct {
-	List   string        `if:"label=_,type=text"`
-	Index  rt.NumberEval `if:"label=index"`
-	From   rt.Assignment `if:"label=from"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*ListSet)(nil)
-
-func (*ListSet) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ListSet_Type,
-		Uses: composer.Type_Flow,
-		Lede: "set",
-	}
-}
-
-const ListSet_Type = "list_set"
-const ListSet_Field_List = "$LIST"
-const ListSet_Field_Index = "$INDEX"
-const ListSet_Field_From = "$FROM"
-
-func (op *ListSet) Marshal(m jsn.Marshaler) error {
-	return ListSet_Marshal(m, op)
-}
-
-type ListSet_Slice []ListSet
-
-func (op *ListSet_Slice) GetType() string { return ListSet_Type }
-
-func (op *ListSet_Slice) Marshal(m jsn.Marshaler) error {
-	return ListSet_Repeats_Marshal(m, (*[]ListSet)(op))
-}
-
-func (op *ListSet_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ListSet_Slice) SetSize(cnt int) {
-	var els []ListSet
-	if cnt >= 0 {
-		els = make(ListSet_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ListSet_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListSet_Marshal(m, &(*op)[i])
-}
-
-func ListSet_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSet) error {
-	return jsn.RepeatBlock(m, (*ListSet_Slice)(vals))
-}
-
-func ListSet_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSet) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListSet_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ListSet_Flow struct{ ptr *ListSet }
-
-func (n ListSet_Flow) GetType() string      { return ListSet_Type }
-func (n ListSet_Flow) GetLede() string      { return "set" }
-func (n ListSet_Flow) GetFlow() interface{} { return n.ptr }
-func (n ListSet_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ListSet); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ListSet_Optional_Marshal(m jsn.Marshaler, pv **ListSet) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ListSet_Marshal(m, *pv)
-	} else if !enc {
-		var v ListSet
-		if err = ListSet_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ListSet_Marshal(m jsn.Marshaler, val *ListSet) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ListSet_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListSet_Field_List)
-		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.List)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListSet_Field_List))
-		}
-		e1 := m.MarshalKey("index", ListSet_Field_Index)
-		if e1 == nil {
-			e1 = rt.NumberEval_Marshal(m, &val.Index)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListSet_Field_Index))
-		}
-		e2 := m.MarshalKey("from", ListSet_Field_From)
-		if e2 == nil {
-			e2 = rt.Assignment_Marshal(m, &val.From)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", ListSet_Field_From))
+			m.Error(errutil.New(e0, "in flow at", ListReverse_Field_Target))
 		}
 		m.EndBlock()
 	}
@@ -3142,9 +1465,9 @@ func ListSet_Marshal(m jsn.Marshaler, val *ListSet) (err error) {
 // When end is omitted, copy up to and including the last element;
 // and do the same if the end is greater than the length
 type ListSlice struct {
-	List   rt.ListEval   `if:"label=_"`
-	Start  rt.NumberEval `if:"label=start,optional"`
-	End    rt.NumberEval `if:"label=end,optional"`
+	List   core.Assignment `if:"label=_"`
+	Start  rt.NumberEval   `if:"label=start,optional"`
+	End    rt.NumberEval   `if:"label=end,optional"`
 	Markup map[string]any
 }
 
@@ -3239,7 +1562,7 @@ func ListSlice_Marshal(m jsn.Marshaler, val *ListSlice) (err error) {
 	if err = m.MarshalBlock(ListSlice_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSlice_Field_List)
 		if e0 == nil {
-			e0 = rt.ListEval_Marshal(m, &val.List)
+			e0 = core.Assignment_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSlice_Field_List))
@@ -3265,9 +1588,9 @@ func ListSlice_Marshal(m jsn.Marshaler, val *ListSlice) (err error) {
 
 // ListSortNumbers
 type ListSortNumbers struct {
-	Var        core.VariableName `if:"label=_"`
-	ByField    string            `if:"label=by_field,type=text"`
-	Descending rt.BoolEval       `if:"label=descending,optional"`
+	Target     core.Address `if:"label=_"`
+	ByField    string       `if:"label=by_field,type=text"`
+	Descending rt.BoolEval  `if:"label=descending,optional"`
 	Markup     map[string]any
 }
 
@@ -3283,7 +1606,7 @@ func (*ListSortNumbers) Compose() composer.Spec {
 }
 
 const ListSortNumbers_Type = "list_sort_numbers"
-const ListSortNumbers_Field_Var = "$VAR"
+const ListSortNumbers_Field_Target = "$TARGET"
 const ListSortNumbers_Field_ByField = "$BY_FIELD"
 const ListSortNumbers_Field_Descending = "$DESCENDING"
 
@@ -3358,12 +1681,12 @@ func ListSortNumbers_Optional_Marshal(m jsn.Marshaler, pv **ListSortNumbers) (er
 func ListSortNumbers_Marshal(m jsn.Marshaler, val *ListSortNumbers) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListSortNumbers_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListSortNumbers_Field_Var)
+		e0 := m.MarshalKey("", ListSortNumbers_Field_Target)
 		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
+			e0 = core.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListSortNumbers_Field_Var))
+			m.Error(errutil.New(e0, "in flow at", ListSortNumbers_Field_Target))
 		}
 		e1 := m.MarshalKey("by_field", ListSortNumbers_Field_ByField)
 		if e1 == nil {
@@ -3386,10 +1709,10 @@ func ListSortNumbers_Marshal(m jsn.Marshaler, val *ListSortNumbers) (err error) 
 
 // ListSortText Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 type ListSortText struct {
-	Var        core.VariableName `if:"label=_"`
-	ByField    string            `if:"label=by_field,type=text"`
-	Descending rt.BoolEval       `if:"label=descending,optional"`
-	UsingCase  rt.BoolEval       `if:"label=using_case,optional"`
+	Target     core.Address `if:"label=_"`
+	ByField    string       `if:"label=by_field,type=text"`
+	Descending rt.BoolEval  `if:"label=descending,optional"`
+	UsingCase  rt.BoolEval  `if:"label=using_case,optional"`
 	Markup     map[string]any
 }
 
@@ -3405,7 +1728,7 @@ func (*ListSortText) Compose() composer.Spec {
 }
 
 const ListSortText_Type = "list_sort_text"
-const ListSortText_Field_Var = "$VAR"
+const ListSortText_Field_Target = "$TARGET"
 const ListSortText_Field_ByField = "$BY_FIELD"
 const ListSortText_Field_Descending = "$DESCENDING"
 const ListSortText_Field_UsingCase = "$USING_CASE"
@@ -3481,12 +1804,12 @@ func ListSortText_Optional_Marshal(m jsn.Marshaler, pv **ListSortText) (err erro
 func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListSortText_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListSortText_Field_Var)
+		e0 := m.MarshalKey("", ListSortText_Field_Target)
 		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
+			e0 = core.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListSortText_Field_Var))
+			m.Error(errutil.New(e0, "in flow at", ListSortText_Field_Target))
 		}
 		e1 := m.MarshalKey("by_field", ListSortText_Field_ByField)
 		if e1 == nil {
@@ -3514,118 +1837,6 @@ func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
 	return
 }
 
-// ListSortUsing Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
-type ListSortUsing struct {
-	Var    core.VariableName `if:"label=_"`
-	Using  string            `if:"label=using,type=text"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*ListSortUsing)(nil)
-
-func (*ListSortUsing) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ListSortUsing_Type,
-		Uses: composer.Type_Flow,
-		Lede: "sort",
-	}
-}
-
-const ListSortUsing_Type = "list_sort_using"
-const ListSortUsing_Field_Var = "$VAR"
-const ListSortUsing_Field_Using = "$USING"
-
-func (op *ListSortUsing) Marshal(m jsn.Marshaler) error {
-	return ListSortUsing_Marshal(m, op)
-}
-
-type ListSortUsing_Slice []ListSortUsing
-
-func (op *ListSortUsing_Slice) GetType() string { return ListSortUsing_Type }
-
-func (op *ListSortUsing_Slice) Marshal(m jsn.Marshaler) error {
-	return ListSortUsing_Repeats_Marshal(m, (*[]ListSortUsing)(op))
-}
-
-func (op *ListSortUsing_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ListSortUsing_Slice) SetSize(cnt int) {
-	var els []ListSortUsing
-	if cnt >= 0 {
-		els = make(ListSortUsing_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ListSortUsing_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListSortUsing_Marshal(m, &(*op)[i])
-}
-
-func ListSortUsing_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSortUsing) error {
-	return jsn.RepeatBlock(m, (*ListSortUsing_Slice)(vals))
-}
-
-func ListSortUsing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSortUsing) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListSortUsing_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ListSortUsing_Flow struct{ ptr *ListSortUsing }
-
-func (n ListSortUsing_Flow) GetType() string      { return ListSortUsing_Type }
-func (n ListSortUsing_Flow) GetLede() string      { return "sort" }
-func (n ListSortUsing_Flow) GetFlow() interface{} { return n.ptr }
-func (n ListSortUsing_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ListSortUsing); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ListSortUsing_Optional_Marshal(m jsn.Marshaler, pv **ListSortUsing) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ListSortUsing_Marshal(m, *pv)
-	} else if !enc {
-		var v ListSortUsing
-		if err = ListSortUsing_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ListSortUsing_Marshal(m jsn.Marshaler, val *ListSortUsing) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ListSortUsing_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListSortUsing_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListSortUsing_Field_Var))
-		}
-		e1 := m.MarshalKey("using", ListSortUsing_Field_Using)
-		if e1 == nil {
-			e1 = prim.Text_Unboxed_Marshal(m, &val.Using)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListSortUsing_Field_Using))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // ListSplice Modify a list by adding and removing elements.
 // The type of the elements being added must match the type of the list.
 // Text cant be added to a list of numbers, numbers cant be added to a list of text.
@@ -3634,10 +1845,10 @@ func ListSortUsing_Marshal(m jsn.Marshaler, val *ListSortUsing) (err error) {
 // If the remove count is missing, this removes all elements from the start to the end;
 // if the remove count is zero or negative, no elements are removed.
 type ListSplice struct {
-	List   string        `if:"label=_,type=text"`
-	Start  rt.NumberEval `if:"label=start"`
-	Remove rt.NumberEval `if:"label=remove"`
-	Insert rt.Assignment `if:"label=insert"`
+	Target core.Address    `if:"label=_"`
+	Start  rt.NumberEval   `if:"label=start"`
+	Remove rt.NumberEval   `if:"label=remove"`
+	Insert core.Assignment `if:"label=insert"`
 	Markup map[string]any
 }
 
@@ -3656,7 +1867,7 @@ func (*ListSplice) Compose() composer.Spec {
 }
 
 const ListSplice_Type = "list_splice"
-const ListSplice_Field_List = "$LIST"
+const ListSplice_Field_Target = "$TARGET"
 const ListSplice_Field_Start = "$START"
 const ListSplice_Field_Remove = "$REMOVE"
 const ListSplice_Field_Insert = "$INSERT"
@@ -3732,12 +1943,12 @@ func ListSplice_Optional_Marshal(m jsn.Marshaler, pv **ListSplice) (err error) {
 func ListSplice_Marshal(m jsn.Marshaler, val *ListSplice) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListSplice_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListSplice_Field_List)
+		e0 := m.MarshalKey("", ListSplice_Field_Target)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.List)
+			e0 = core.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListSplice_Field_List))
+			m.Error(errutil.New(e0, "in flow at", ListSplice_Field_Target))
 		}
 		e1 := m.MarshalKey("start", ListSplice_Field_Start)
 		if e1 == nil {
@@ -3755,81 +1966,12 @@ func ListSplice_Marshal(m jsn.Marshaler, val *ListSplice) (err error) {
 		}
 		e3 := m.MarshalKey("insert", ListSplice_Field_Insert)
 		if e3 == nil {
-			e3 = rt.Assignment_Marshal(m, &val.Insert)
+			e3 = core.Assignment_Marshal(m, &val.Insert)
 		}
 		if e3 != nil && e3 != jsn.Missing {
 			m.Error(errutil.New(e3, "in flow at", ListSplice_Field_Insert))
 		}
 		m.EndBlock()
-	}
-	return
-}
-
-const ListTarget_Type = "list_target"
-
-var ListTarget_Optional_Marshal = ListTarget_Marshal
-
-type ListTarget_Slot struct{ Value *ListTarget }
-
-func (at ListTarget_Slot) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(at); err == nil {
-		if a, ok := at.GetSlot(); ok {
-			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-func (at ListTarget_Slot) GetType() string              { return ListTarget_Type }
-func (at ListTarget_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at ListTarget_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(ListTarget)
-	return
-}
-
-func ListTarget_Marshal(m jsn.Marshaler, ptr *ListTarget) (err error) {
-	slot := ListTarget_Slot{ptr}
-	return slot.Marshal(m)
-}
-
-type ListTarget_Slice []ListTarget
-
-func (op *ListTarget_Slice) GetType() string { return ListTarget_Type }
-
-func (op *ListTarget_Slice) Marshal(m jsn.Marshaler) error {
-	return ListTarget_Repeats_Marshal(m, (*[]ListTarget)(op))
-}
-
-func (op *ListTarget_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ListTarget_Slice) SetSize(cnt int) {
-	var els []ListTarget
-	if cnt >= 0 {
-		els = make(ListTarget_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ListTarget_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListTarget_Marshal(m, &(*op)[i])
-}
-
-func ListTarget_Repeats_Marshal(m jsn.Marshaler, vals *[]ListTarget) error {
-	return jsn.RepeatBlock(m, (*ListTarget_Slice)(vals))
-}
-
-func ListTarget_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListTarget) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListTarget_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -3959,113 +2101,388 @@ func Range_Marshal(m jsn.Marshaler, val *Range) (err error) {
 	return
 }
 
-var Slots = []interface{}{
-	(*ListIterator)(nil),
-	(*ListTarget)(nil),
-}
-
 var Slats = []composer.Composer{
-	(*AsNum)(nil),
-	(*AsRec)(nil),
-	(*AsTxt)(nil),
 	(*EraseEdge)(nil),
 	(*EraseIndex)(nil),
 	(*Erasing)(nil),
 	(*ErasingEdge)(nil),
-	(*FromNumList)(nil),
-	(*FromRecList)(nil),
-	(*FromTxtList)(nil),
-	(*IntoNumList)(nil),
-	(*IntoRecList)(nil),
-	(*IntoTxtList)(nil),
-	(*ListAt)(nil),
 	(*ListEach)(nil),
-	(*ListFindBool)(nil),
-	(*ListFindList)(nil),
-	(*ListFindNumber)(nil),
-	(*ListFindRecord)(nil),
-	(*ListFindText)(nil),
+	(*ListFind)(nil),
 	(*ListGather)(nil),
 	(*ListLen)(nil),
 	(*ListMap)(nil),
 	(*ListPush)(nil),
 	(*ListReduce)(nil),
 	(*ListReverse)(nil),
-	(*ListSet)(nil),
 	(*ListSlice)(nil),
 	(*ListSortNumbers)(nil),
 	(*ListSortText)(nil),
-	(*ListSortUsing)(nil),
 	(*ListSplice)(nil),
 	(*Range)(nil),
 }
 
 var Signatures = map[uint64]interface{}{
-	6334415563934548256:  (*ListGather)(nil),      /* Gather:from:using: */
-	17577768627337399713: (*AsNum)(nil),           /* list_iterator=AsNum: */
-	6572817319640344459:  (*AsRec)(nil),           /* list_iterator=AsRec: */
-	8904662885358797385:  (*AsTxt)(nil),           /* list_iterator=AsTxt: */
-	17857642077015906043: (*EraseEdge)(nil),       /* execute=Erase: */
-	4911242881414594201:  (*EraseEdge)(nil),       /* execute=Erase:atFront: */
-	13326390992756169124: (*EraseIndex)(nil),      /* execute=Erase:from:atIndex: */
-	16587893764566352449: (*ErasingEdge)(nil),     /* execute=Erasing:as:does: */
-	1771685988622306554:  (*ErasingEdge)(nil),     /* execute=Erasing:as:does:else: */
-	12709950044197813063: (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:does: */
-	307909849155983812:   (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:does:else: */
-	1558163885147286548:  (*Erasing)(nil),         /* execute=Erasing:from:atIndex:as:does: */
-	9348234569197795361:  (*ListFindBool)(nil),    /* bool_eval=Find bool:inList: */
-	9472366438635241650:  (*ListFindBool)(nil),    /* number_eval=Find bool:inList: */
-	16884621558083069345: (*ListFindList)(nil),    /* bool_eval=Find list:inList: */
-	10538020407467602126: (*ListFindList)(nil),    /* number_eval=Find list:inList: */
-	15503953861458579584: (*ListFindNumber)(nil),  /* bool_eval=Find number:inList: */
-	12149184653109026231: (*ListFindNumber)(nil),  /* number_eval=Find number:inList: */
-	14476013798329214116: (*ListFindRecord)(nil),  /* bool_eval=Find record:inList: */
-	15040017068275408375: (*ListFindRecord)(nil),  /* number_eval=Find record:inList: */
-	17001742413226094070: (*ListFindText)(nil),    /* bool_eval=Find text:inList: */
-	16757669338039889689: (*ListFindText)(nil),    /* number_eval=Find text:inList: */
-	17398975598795870578: (*ListAt)(nil),          /* number_eval=Get:index: */
-	787317922352878550:   (*ListAt)(nil),          /* record_eval=Get:index: */
-	7596656253168052952:  (*ListAt)(nil),          /* text_eval=Get:index: */
-	15036602113576414357: (*IntoNumList)(nil),     /* list_target=IntoNums: */
-	16834697660106297299: (*IntoRecList)(nil),     /* list_target=IntoRecs: */
-	3948826211612626645:  (*IntoTxtList)(nil),     /* list_target=IntoTxts: */
-	3478260273963207965:  (*ListLen)(nil),         /* number_eval=Len: */
-	8449127989109999373:  (*ListMap)(nil),         /* execute=Map:fromList:using: */
-	14590825769568398889: (*ListPush)(nil),        /* execute=Push:into: */
-	17497959320325918107: (*ListPush)(nil),        /* execute=Push:into:atFront: */
+	4834855566453385149:  (*ListGather)(nil),      /* Gather object:from bool:using: */
+	15211428265749514771: (*ListGather)(nil),      /* Gather object:from numList:using: */
+	1041128765096947214:  (*ListGather)(nil),      /* Gather object:from number:using: */
+	15181035077484080630: (*ListGather)(nil),      /* Gather object:from record:using: */
+	6527107026845627330:  (*ListGather)(nil),      /* Gather object:from recordList:using: */
+	18368601393953066792: (*ListGather)(nil),      /* Gather object:from text:using: */
+	2698192178382880800:  (*ListGather)(nil),      /* Gather object:from textList:using: */
+	15935288953360013024: (*ListGather)(nil),      /* Gather variable:from bool:using: */
+	18258259361055151864: (*ListGather)(nil),      /* Gather variable:from numList:using: */
+	7768636804631335339:  (*ListGather)(nil),      /* Gather variable:from number:using: */
+	8390079513383739007:  (*ListGather)(nil),      /* Gather variable:from record:using: */
+	11612120723995890267: (*ListGather)(nil),      /* Gather variable:from recordList:using: */
+	5201624097684423657:  (*ListGather)(nil),      /* Gather variable:from text:using: */
+	11735105521502822593: (*ListGather)(nil),      /* Gather variable:from textList:using: */
+	14478606265438922628: (*EraseEdge)(nil),       /* execute=Erase object: */
+	9282735962373956066:  (*EraseEdge)(nil),       /* execute=Erase object:atFront: */
+	12482240611163626049: (*EraseEdge)(nil),       /* execute=Erase variable: */
+	4367519203676111939:  (*EraseEdge)(nil),       /* execute=Erase variable:atFront: */
+	2783457209873625683:  (*EraseIndex)(nil),      /* execute=Erase:from object:atIndex: */
+	7431187839812372978:  (*EraseIndex)(nil),      /* execute=Erase:from variable:atIndex: */
+	6467041291453091024:  (*ErasingEdge)(nil),     /* execute=Erasing object:as:does: */
+	6340310696015763041:  (*ErasingEdge)(nil),     /* execute=Erasing object:as:does:else: */
+	18171821493907737090: (*ErasingEdge)(nil),     /* execute=Erasing object:atFront:as:does: */
+	4857564834398783063:  (*ErasingEdge)(nil),     /* execute=Erasing object:atFront:as:does:else: */
+	10291819134056353121: (*ErasingEdge)(nil),     /* execute=Erasing variable:as:does: */
+	6288078742401258778:  (*ErasingEdge)(nil),     /* execute=Erasing variable:as:does:else: */
+	11123972830297154727: (*ErasingEdge)(nil),     /* execute=Erasing variable:atFront:as:does: */
+	8304679251198058276:  (*ErasingEdge)(nil),     /* execute=Erasing variable:atFront:as:does:else: */
+	10143128393744540981: (*Erasing)(nil),         /* execute=Erasing:from object:atIndex:as:does: */
+	12913506357911229396: (*Erasing)(nil),         /* execute=Erasing:from variable:atIndex:as:does: */
+	4798629662167190311:  (*ListFind)(nil),        /* bool_eval=Find bool:inList bool: */
+	15496679535846055330: (*ListFind)(nil),        /* number_eval=Find bool:inList bool: */
+	9825556450444029045:  (*ListFind)(nil),        /* bool_eval=Find bool:inList numList: */
+	16528474899807055458: (*ListFind)(nil),        /* number_eval=Find bool:inList numList: */
+	12044053119929816536: (*ListFind)(nil),        /* bool_eval=Find bool:inList number: */
+	11913939542662143277: (*ListFind)(nil),        /* number_eval=Find bool:inList number: */
+	3052123319382255080:  (*ListFind)(nil),        /* bool_eval=Find bool:inList record: */
+	9694868371866035137:  (*ListFind)(nil),        /* number_eval=Find bool:inList record: */
+	9023601832477479948:  (*ListFind)(nil),        /* bool_eval=Find bool:inList recordList: */
+	17981633245748776277: (*ListFind)(nil),        /* number_eval=Find bool:inList recordList: */
+	1500647723196650026:  (*ListFind)(nil),        /* bool_eval=Find bool:inList text: */
+	2903868483097085819:  (*ListFind)(nil),        /* number_eval=Find bool:inList text: */
+	4756245556509023346:  (*ListFind)(nil),        /* bool_eval=Find bool:inList textList: */
+	7483576431261612195:  (*ListFind)(nil),        /* number_eval=Find bool:inList textList: */
+	4883391365216342407:  (*ListFind)(nil),        /* bool_eval=Find numList:inList bool: */
+	7840770186716954640:  (*ListFind)(nil),        /* number_eval=Find numList:inList bool: */
+	13572012353775251477: (*ListFind)(nil),        /* bool_eval=Find numList:inList numList: */
+	11728511162266892096: (*ListFind)(nil),        /* number_eval=Find numList:inList numList: */
+	7690016808528207032:  (*ListFind)(nil),        /* bool_eval=Find numList:inList number: */
+	5830452114605157963:  (*ListFind)(nil),        /* number_eval=Find numList:inList number: */
+	17144690344201786184: (*ListFind)(nil),        /* bool_eval=Find numList:inList record: */
+	2826678904067205755:  (*ListFind)(nil),        /* number_eval=Find numList:inList record: */
+	17268211705068730668: (*ListFind)(nil),        /* bool_eval=Find numList:inList recordList: */
+	6623021979824360355:  (*ListFind)(nil),        /* number_eval=Find numList:inList recordList: */
+	7819798664338025866:  (*ListFind)(nil),        /* bool_eval=Find numList:inList text: */
+	4633606205628459677:  (*ListFind)(nil),        /* number_eval=Find numList:inList text: */
+	6124897371284439442:  (*ListFind)(nil),        /* bool_eval=Find numList:inList textList: */
+	14391486515486068049: (*ListFind)(nil),        /* number_eval=Find numList:inList textList: */
+	8751824420486616712:  (*ListFind)(nil),        /* bool_eval=Find number:inList bool: */
+	17900038923979954549: (*ListFind)(nil),        /* number_eval=Find number:inList bool: */
+	1770194941104087992:  (*ListFind)(nil),        /* bool_eval=Find number:inList numList: */
+	18185554683488165027: (*ListFind)(nil),        /* number_eval=Find number:inList numList: */
+	792062938938704979:   (*ListFind)(nil),        /* bool_eval=Find number:inList number: */
+	12660797964853363710: (*ListFind)(nil),        /* number_eval=Find number:inList number: */
+	6670555753527766259:  (*ListFind)(nil),        /* bool_eval=Find number:inList record: */
+	16179555044001150002: (*ListFind)(nil),        /* number_eval=Find number:inList record: */
+	13284160881060722139: (*ListFind)(nil),        /* bool_eval=Find number:inList recordList: */
+	15878707675118176442: (*ListFind)(nil),        /* number_eval=Find number:inList recordList: */
+	10347326664567502389: (*ListFind)(nil),        /* bool_eval=Find number:inList text: */
+	7277141623401675964:  (*ListFind)(nil),        /* number_eval=Find number:inList text: */
+	14877787943524816841: (*ListFind)(nil),        /* bool_eval=Find number:inList textList: */
+	8570194865177788032:  (*ListFind)(nil),        /* number_eval=Find number:inList textList: */
+	6549273478988393980:  (*ListFind)(nil),        /* bool_eval=Find record:inList bool: */
+	1582006419269568565:  (*ListFind)(nil),        /* number_eval=Find record:inList bool: */
+	4983517830338515572:  (*ListFind)(nil),        /* bool_eval=Find record:inList numList: */
+	14956017093881013859: (*ListFind)(nil),        /* number_eval=Find record:inList numList: */
+	7642277694920408143:  (*ListFind)(nil),        /* bool_eval=Find record:inList number: */
+	9617759477496160446:  (*ListFind)(nil),        /* number_eval=Find record:inList number: */
+	5013728000098006919:  (*ListFind)(nil),        /* bool_eval=Find record:inList record: */
+	6662929451280538610:  (*ListFind)(nil),        /* number_eval=Find record:inList record: */
+	6154699522158868655:  (*ListFind)(nil),        /* bool_eval=Find record:inList recordList: */
+	9513159735218572666:  (*ListFind)(nil),        /* number_eval=Find record:inList recordList: */
+	10159493979471565833: (*ListFind)(nil),        /* bool_eval=Find record:inList text: */
+	2926580724521905532:  (*ListFind)(nil),        /* number_eval=Find record:inList text: */
+	7004533036077749309:  (*ListFind)(nil),        /* bool_eval=Find record:inList textList: */
+	11466514096698381888: (*ListFind)(nil),        /* number_eval=Find record:inList textList: */
+	5219655416923856736:  (*ListFind)(nil),        /* bool_eval=Find recordList:inList bool: */
+	16011403491957795353: (*ListFind)(nil),        /* number_eval=Find recordList:inList bool: */
+	7464860859085804624:  (*ListFind)(nil),        /* bool_eval=Find recordList:inList numList: */
+	7039752474390898287:  (*ListFind)(nil),        /* number_eval=Find recordList:inList numList: */
+	7398363037665457947:  (*ListFind)(nil),        /* bool_eval=Find recordList:inList number: */
+	2627971465223708458:  (*ListFind)(nil),        /* number_eval=Find recordList:inList number: */
+	1772582454242836555:  (*ListFind)(nil),        /* bool_eval=Find recordList:inList record: */
+	2020284005342045254:  (*ListFind)(nil),        /* number_eval=Find recordList:inList record: */
+	4782409525887952115:  (*ListFind)(nil),        /* bool_eval=Find recordList:inList recordList: */
+	466116651387500974:   (*ListFind)(nil),        /* number_eval=Find recordList:inList recordList: */
+	13895308172737804621: (*ListFind)(nil),        /* bool_eval=Find recordList:inList text: */
+	5943863057000524496:  (*ListFind)(nil),        /* number_eval=Find recordList:inList text: */
+	15964379503982170689: (*ListFind)(nil),        /* bool_eval=Find recordList:inList textList: */
+	4857120857680337972:  (*ListFind)(nil),        /* number_eval=Find recordList:inList textList: */
+	16548788711483530454: (*ListFind)(nil),        /* bool_eval=Find text:inList bool: */
+	4297686639920227743:  (*ListFind)(nil),        /* number_eval=Find text:inList bool: */
+	16383538306170244670: (*ListFind)(nil),        /* bool_eval=Find text:inList numList: */
+	10290406350836964845: (*ListFind)(nil),        /* number_eval=Find text:inList numList: */
+	5259625134272047465:  (*ListFind)(nil),        /* bool_eval=Find text:inList number: */
+	13307805073849880256: (*ListFind)(nil),        /* number_eval=Find text:inList number: */
+	2072534090034643317:  (*ListFind)(nil),        /* bool_eval=Find text:inList record: */
+	12077988993210590272: (*ListFind)(nil),        /* number_eval=Find text:inList record: */
+	13264851135264311817: (*ListFind)(nil),        /* bool_eval=Find text:inList recordList: */
+	16159500457161101668: (*ListFind)(nil),        /* number_eval=Find text:inList recordList: */
+	3838954189566393919:  (*ListFind)(nil),        /* bool_eval=Find text:inList text: */
+	13545854215908644514: (*ListFind)(nil),        /* number_eval=Find text:inList text: */
+	215654777309859111:   (*ListFind)(nil),        /* bool_eval=Find text:inList textList: */
+	3822119946373754218:  (*ListFind)(nil),        /* number_eval=Find text:inList textList: */
+	10808826658776084734: (*ListFind)(nil),        /* bool_eval=Find textList:inList bool: */
+	14947005753086002727: (*ListFind)(nil),        /* number_eval=Find textList:inList bool: */
+	17906549100233067910: (*ListFind)(nil),        /* bool_eval=Find textList:inList numList: */
+	14744001795738555765: (*ListFind)(nil),        /* number_eval=Find textList:inList numList: */
+	5761838712338347201:  (*ListFind)(nil),        /* bool_eval=Find textList:inList number: */
+	1467581581530417368:  (*ListFind)(nil),        /* number_eval=Find textList:inList number: */
+	17251999743892516893: (*ListFind)(nil),        /* bool_eval=Find textList:inList record: */
+	10922395854692407528: (*ListFind)(nil),        /* number_eval=Find textList:inList record: */
+	9680969228619901649:  (*ListFind)(nil),        /* bool_eval=Find textList:inList recordList: */
+	8954468803612751628:  (*ListFind)(nil),        /* number_eval=Find textList:inList recordList: */
+	2548416432624298599:  (*ListFind)(nil),        /* bool_eval=Find textList:inList text: */
+	11649023814115462442: (*ListFind)(nil),        /* number_eval=Find textList:inList text: */
+	4926794106090969167:  (*ListFind)(nil),        /* bool_eval=Find textList:inList textList: */
+	12827879591764936562: (*ListFind)(nil),        /* number_eval=Find textList:inList textList: */
+	15771146728493073891: (*ListLen)(nil),         /* number_eval=Len bool: */
+	13148152504949517065: (*ListLen)(nil),         /* number_eval=Len numList: */
+	17629935431866945020: (*ListLen)(nil),         /* number_eval=Len number: */
+	6288535260840067156:  (*ListLen)(nil),         /* number_eval=Len record: */
+	5879602511151983064:  (*ListLen)(nil),         /* number_eval=Len recordList: */
+	4894088838788583174:  (*ListLen)(nil),         /* number_eval=Len text: */
+	15268125286018430830: (*ListLen)(nil),         /* number_eval=Len textList: */
+	6300693019956665056:  (*ListMap)(nil),         /* execute=Map object:fromList bool:using: */
+	12370769425037869816: (*ListMap)(nil),         /* execute=Map object:fromList numList:using: */
+	15666754401429763499: (*ListMap)(nil),         /* execute=Map object:fromList number:using: */
+	16288197110182167167: (*ListMap)(nil),         /* execute=Map object:fromList record:using: */
+	7382518741870114395:  (*ListMap)(nil),         /* execute=Map object:fromList recordList:using: */
+	14013772237990627305: (*ListMap)(nil),         /* execute=Map object:fromList text:using: */
+	14822823295607039169: (*ListMap)(nil),         /* execute=Map object:fromList textList:using: */
+	16742008827802526201: (*ListMap)(nil),         /* execute=Map variable:fromList bool:using: */
+	14095417218301489111: (*ListMap)(nil),         /* execute=Map variable:fromList numList:using: */
+	12197544336897376514: (*ListMap)(nil),         /* execute=Map variable:fromList number:using: */
+	2501706441326043762:  (*ListMap)(nil),         /* execute=Map variable:fromList record:using: */
+	12867728403674492990: (*ListMap)(nil),         /* execute=Map variable:fromList recordList:using: */
+	2018364426527770836:  (*ListMap)(nil),         /* execute=Map variable:fromList text:using: */
+	4552143749892410604:  (*ListMap)(nil),         /* execute=Map variable:fromList textList:using: */
+	17460700385371836464: (*ListPush)(nil),        /* execute=Push bool:into object: */
+	6056110790853933910:  (*ListPush)(nil),        /* execute=Push bool:into object:atFront: */
+	2535261440951144669:  (*ListPush)(nil),        /* execute=Push bool:into variable: */
+	18152773814529573991: (*ListPush)(nil),        /* execute=Push bool:into variable:atFront: */
+	11320513384328480706: (*ListPush)(nil),        /* execute=Push numList:into object: */
+	15533273064073310284: (*ListPush)(nil),        /* execute=Push numList:into object:atFront: */
+	457344833627593787:   (*ListPush)(nil),        /* execute=Push numList:into variable: */
+	4050524748381726297:  (*ListPush)(nil),        /* execute=Push numList:into variable:atFront: */
+	12687913441322660603: (*ListPush)(nil),        /* execute=Push number:into object: */
+	3535200343819049625:  (*ListPush)(nil),        /* execute=Push number:into object:atFront: */
+	2012631263590879202:  (*ListPush)(nil),        /* execute=Push number:into variable: */
+	17098403402451646252: (*ListPush)(nil),        /* execute=Push number:into variable:atFront: */
+	9393284254281218439:  (*ListPush)(nil),        /* execute=Push record:into object: */
+	6709774368926077693:  (*ListPush)(nil),        /* execute=Push record:into object:atFront: */
+	5177050190408275070:  (*ListPush)(nil),        /* execute=Push record:into variable: */
+	2015085615115694592:  (*ListPush)(nil),        /* execute=Push record:into variable:atFront: */
+	11873326717073588367: (*ListPush)(nil),        /* execute=Push recordList:into object: */
+	15712815456746515861: (*ListPush)(nil),        /* execute=Push recordList:into object:atFront: */
+	13592019764413832454: (*ListPush)(nil),        /* execute=Push recordList:into variable: */
+	16403912930406815384: (*ListPush)(nil),        /* execute=Push recordList:into variable:atFront: */
+	3369987343011440621:  (*ListPush)(nil),        /* execute=Push text:into object: */
+	3441000633086539703:  (*ListPush)(nil),        /* execute=Push text:into object:atFront: */
+	16318378693412220248: (*ListPush)(nil),        /* execute=Push text:into variable: */
+	3810526518917234510:  (*ListPush)(nil),        /* execute=Push text:into variable:atFront: */
+	5255956843392128465:  (*ListPush)(nil),        /* execute=Push textList:into object: */
+	2686881294722992083:  (*ListPush)(nil),        /* execute=Push textList:into object:atFront: */
+	8013046464578751724:  (*ListPush)(nil),        /* execute=Push textList:into variable: */
+	4562243350258231802:  (*ListPush)(nil),        /* execute=Push textList:into variable:atFront: */
 	120416590109430143:   (*Range)(nil),           /* num_list_eval=Range: */
 	15503705420922978310: (*Range)(nil),           /* num_list_eval=Range:byStep: */
 	16618866959380663563: (*Range)(nil),           /* num_list_eval=Range:from: */
 	14227857065891717050: (*Range)(nil),           /* num_list_eval=Range:from:byStep: */
-	18245549119758376391: (*ListReduce)(nil),      /* execute=Reduce into:fromList:using: */
-	8451005089688158034:  (*ListEach)(nil),        /* execute=Repeating across:as:does: */
-	7170937308629588871:  (*ListEach)(nil),        /* execute=Repeating across:as:does:else: */
-	177314099445105829:   (*ListReverse)(nil),     /* execute=Reverse list: */
-	6510320425987392359:  (*ListSet)(nil),         /* execute=Set:index:from: */
-	4235921801420235638:  (*ListSlice)(nil),       /* num_list_eval=Slice: */
-	13273073049578089927: (*ListSlice)(nil),       /* record_list_eval=Slice: */
-	18323981472330239313: (*ListSlice)(nil),       /* text_list_eval=Slice: */
-	3713929053224137387:  (*ListSlice)(nil),       /* num_list_eval=Slice:end: */
-	326673439235441194:   (*ListSlice)(nil),       /* record_list_eval=Slice:end: */
-	8469880138850798532:  (*ListSlice)(nil),       /* text_list_eval=Slice:end: */
-	6763121597476813124:  (*ListSlice)(nil),       /* num_list_eval=Slice:start: */
-	10126987075066562677: (*ListSlice)(nil),       /* record_list_eval=Slice:start: */
-	2045310658543284955:  (*ListSlice)(nil),       /* text_list_eval=Slice:start: */
-	14495675636779114361: (*ListSlice)(nil),       /* num_list_eval=Slice:start:end: */
-	3241896595896148736:  (*ListSlice)(nil),       /* record_list_eval=Slice:start:end: */
-	8901512565003460886:  (*ListSlice)(nil),       /* text_list_eval=Slice:start:end: */
-	7368886897948327017:  (*ListSortUsing)(nil),   /* execute=Sort:using: */
-	2873147130324862012:  (*ListSortNumbers)(nil), /* execute=SortNumbers:byField: */
-	16697045456605499852: (*ListSortNumbers)(nil), /* execute=SortNumbers:byField:descending: */
-	16004888373963195994: (*ListSortText)(nil),    /* execute=SortTexts:byField: */
-	10015011362106184366: (*ListSortText)(nil),    /* execute=SortTexts:byField:descending: */
-	10595238214248400404: (*ListSortText)(nil),    /* execute=SortTexts:byField:descending:usingCase: */
-	10680774202307610784: (*ListSortText)(nil),    /* execute=SortTexts:byField:usingCase: */
-	13203130291219794646: (*ListSplice)(nil),      /* execute=Splice:start:remove:insert: */
-	6201472222981604265:  (*ListSplice)(nil),      /* num_list_eval=Splice:start:remove:insert: */
-	15778591428898251294: (*ListSplice)(nil),      /* record_list_eval=Splice:start:remove:insert: */
-	11160578659475180120: (*ListSplice)(nil),      /* text_list_eval=Splice:start:remove:insert: */
-	17540955258181747066: (*FromNumList)(nil),     /* list_eval=VarOfNums: */
-	10887272926454556312: (*FromRecList)(nil),     /* list_eval=VarOfRecs: */
-	8452904206638198942:  (*FromTxtList)(nil),     /* list_eval=VarOfTxts: */
+	17109467529831837198: (*ListReduce)(nil),      /* execute=Reduce into object:fromList bool:using: */
+	17000490356777766358: (*ListReduce)(nil),      /* execute=Reduce into object:fromList numList:using: */
+	9366847048501616273:  (*ListReduce)(nil),      /* execute=Reduce into object:fromList number:using: */
+	4440221666091188953:  (*ListReduce)(nil),      /* execute=Reduce into object:fromList record:using: */
+	11763309932171020849: (*ListReduce)(nil),      /* execute=Reduce into object:fromList recordList:using: */
+	7251766363632235731:  (*ListReduce)(nil),      /* execute=Reduce into object:fromList text:using: */
+	12719000401652018127: (*ListReduce)(nil),      /* execute=Reduce into object:fromList textList:using: */
+	15039942697949797459: (*ListReduce)(nil),      /* execute=Reduce into variable:fromList bool:using: */
+	5358748091708601985:  (*ListReduce)(nil),      /* execute=Reduce into variable:fromList numList:using: */
+	120736126498984868:   (*ListReduce)(nil),      /* execute=Reduce into variable:fromList number:using: */
+	9871203455417191928:  (*ListReduce)(nil),      /* execute=Reduce into variable:fromList record:using: */
+	8792716967726355184:  (*ListReduce)(nil),      /* execute=Reduce into variable:fromList recordList:using: */
+	6088665226617120570:  (*ListReduce)(nil),      /* execute=Reduce into variable:fromList text:using: */
+	18044924664543056838: (*ListReduce)(nil),      /* execute=Reduce into variable:fromList textList:using: */
+	11373769717792348940: (*ListEach)(nil),        /* execute=Repeating across bool:as:does: */
+	6772049628026210925:  (*ListEach)(nil),        /* execute=Repeating across bool:as:does:else: */
+	14905805402665229262: (*ListEach)(nil),        /* execute=Repeating across numList:as:does: */
+	7401547180676923763:  (*ListEach)(nil),        /* execute=Repeating across numList:as:does:else: */
+	9441770216901454627:  (*ListEach)(nil),        /* execute=Repeating across number:as:does: */
+	10613366508938233648: (*ListEach)(nil),        /* execute=Repeating across number:as:does:else: */
+	8482560869331470195:  (*ListEach)(nil),        /* execute=Repeating across record:as:does: */
+	11704780684564553504: (*ListEach)(nil),        /* execute=Repeating across record:as:does:else: */
+	2878151878592905567:  (*ListEach)(nil),        /* execute=Repeating across recordList:as:does: */
+	11591562832854171244: (*ListEach)(nil),        /* execute=Repeating across recordList:as:does:else: */
+	9866670752584273857:  (*ListEach)(nil),        /* execute=Repeating across text:as:does: */
+	13122655079684130170: (*ListEach)(nil),        /* execute=Repeating across text:as:does:else: */
+	2999023839284626713:  (*ListEach)(nil),        /* execute=Repeating across textList:as:does: */
+	5936926416578155938:  (*ListEach)(nil),        /* execute=Repeating across textList:as:does:else: */
+	11445472112426895002: (*ListReverse)(nil),     /* execute=Reverse list object: */
+	9028179729453633619:  (*ListReverse)(nil),     /* execute=Reverse list variable: */
+	687740249528241494:   (*ListSlice)(nil),       /* num_list_eval=Slice bool: */
+	7477623252005102885:  (*ListSlice)(nil),       /* record_list_eval=Slice bool: */
+	10583133103161952119: (*ListSlice)(nil),       /* text_list_eval=Slice bool: */
+	9830270355687528203:  (*ListSlice)(nil),       /* num_list_eval=Slice bool:end: */
+	14700213591516078992: (*ListSlice)(nil),       /* record_list_eval=Slice bool:end: */
+	7620261441166002618:  (*ListSlice)(nil),       /* text_list_eval=Slice bool:end: */
+	10091706125993025444: (*ListSlice)(nil),       /* num_list_eval=Slice bool:start: */
+	3618370589102673887:  (*ListSlice)(nil),       /* record_list_eval=Slice bool:start: */
+	2413289201032818373:  (*ListSlice)(nil),       /* text_list_eval=Slice bool:start: */
+	11071611209237880153: (*ListSlice)(nil),       /* num_list_eval=Slice bool:start:end: */
+	16381407642661604418: (*ListSlice)(nil),       /* record_list_eval=Slice bool:start:end: */
+	17697142756383396144: (*ListSlice)(nil),       /* text_list_eval=Slice bool:start:end: */
+	6174045901093974974:  (*ListSlice)(nil),       /* num_list_eval=Slice numList: */
+	6737230864618501459:  (*ListSlice)(nil),       /* record_list_eval=Slice numList: */
+	1777591537678528965:  (*ListSlice)(nil),       /* text_list_eval=Slice numList: */
+	10686284793975073715: (*ListSlice)(nil),       /* num_list_eval=Slice numList:end: */
+	4257341276502486254:  (*ListSlice)(nil),       /* record_list_eval=Slice numList:end: */
+	9758816093257237552:  (*ListSlice)(nil),       /* text_list_eval=Slice numList:end: */
+	9194046234818555932:  (*ListSlice)(nil),       /* num_list_eval=Slice numList:start: */
+	4478864869180331201:  (*ListSlice)(nil),       /* record_list_eval=Slice numList:start: */
+	9500656902410367615:  (*ListSlice)(nil),       /* text_list_eval=Slice numList:start: */
+	10700451860932825873: (*ListSlice)(nil),       /* num_list_eval=Slice numList:start:end: */
+	13060933077919140628: (*ListSlice)(nil),       /* record_list_eval=Slice numList:start:end: */
+	14305657401602515682: (*ListSlice)(nil),       /* text_list_eval=Slice numList:start:end: */
+	7319486253292826089:  (*ListSlice)(nil),       /* num_list_eval=Slice number: */
+	4634686133626189870:  (*ListSlice)(nil),       /* record_list_eval=Slice number: */
+	5676791116388392808:  (*ListSlice)(nil),       /* text_list_eval=Slice number: */
+	13030066371456642044: (*ListSlice)(nil),       /* num_list_eval=Slice number:end: */
+	17985713863645920451: (*ListSlice)(nil),       /* record_list_eval=Slice number:end: */
+	9652603043351421749:  (*ListSlice)(nil),       /* text_list_eval=Slice number:end: */
+	13056061230635284227: (*ListSlice)(nil),       /* num_list_eval=Slice number:start: */
+	5154187822401091244:  (*ListSlice)(nil),       /* record_list_eval=Slice number:start: */
+	435651182264678570:   (*ListSlice)(nil),       /* text_list_eval=Slice number:start: */
+	7381586987032717694:  (*ListSlice)(nil),       /* num_list_eval=Slice number:start:end: */
+	12950392980078948673: (*ListSlice)(nil),       /* record_list_eval=Slice number:start:end: */
+	18312698166011807895: (*ListSlice)(nil),       /* text_list_eval=Slice number:start:end: */
+	4132395209055421941:  (*ListSlice)(nil),       /* num_list_eval=Slice record: */
+	7156142198557851042:  (*ListSlice)(nil),       /* record_list_eval=Slice record: */
+	11544551921255140600: (*ListSlice)(nil),       /* text_list_eval=Slice record: */
+	11928116709124896896: (*ListSlice)(nil),       /* num_list_eval=Slice record:end: */
+	16024736234595360815: (*ListSlice)(nil),       /* record_list_eval=Slice record:end: */
+	11403018960783699685: (*ListSlice)(nil),       /* text_list_eval=Slice record:end: */
+	5985953244105548303:  (*ListSlice)(nil),       /* num_list_eval=Slice record:start: */
+	11915160734447285760: (*ListSlice)(nil),       /* record_list_eval=Slice record:start: */
+	5691947242970543898:  (*ListSlice)(nil),       /* text_list_eval=Slice record:start: */
+	5491171661651386706:  (*ListSlice)(nil),       /* num_list_eval=Slice record:start:end: */
+	15196312810342329485: (*ListSlice)(nil),       /* record_list_eval=Slice record:start:end: */
+	11502927729046873063: (*ListSlice)(nil),       /* text_list_eval=Slice record:start:end: */
+	12519002010128848521: (*ListSlice)(nil),       /* num_list_eval=Slice recordList: */
+	14429883617907033194: (*ListSlice)(nil),       /* record_list_eval=Slice recordList: */
+	11432186531375119964: (*ListSlice)(nil),       /* text_list_eval=Slice recordList: */
+	16536235310257874716: (*ListSlice)(nil),       /* num_list_eval=Slice recordList:end: */
+	12083011931257404887: (*ListSlice)(nil),       /* record_list_eval=Slice recordList:end: */
+	6677257335508720593:  (*ListSlice)(nil),       /* text_list_eval=Slice recordList:end: */
+	15794963570383188899: (*ListSlice)(nil),       /* num_list_eval=Slice recordList:start: */
+	13348208109320820728: (*ListSlice)(nil),       /* record_list_eval=Slice recordList:start: */
+	9740494822366536638:  (*ListSlice)(nil),       /* text_list_eval=Slice recordList:start: */
+	6248542592474266782:  (*ListSlice)(nil),       /* num_list_eval=Slice recordList:start:end: */
+	17273095392328657381: (*ListSlice)(nil),       /* record_list_eval=Slice recordList:start:end: */
+	12201780319389785011: (*ListSlice)(nil),       /* text_list_eval=Slice recordList:start:end: */
+	6424649801320656575:  (*ListSlice)(nil),       /* num_list_eval=Slice text: */
+	2880198564141747020:  (*ListSlice)(nil),       /* record_list_eval=Slice text: */
+	7577541409167942746:  (*ListSlice)(nil),       /* text_list_eval=Slice text: */
+	13833115380441811618: (*ListSlice)(nil),       /* num_list_eval=Slice text:end: */
+	1731565053043038689:  (*ListSlice)(nil),       /* record_list_eval=Slice text:end: */
+	17693088135176660647: (*ListSlice)(nil),       /* text_list_eval=Slice text:end: */
+	13758137233374768093: (*ListSlice)(nil),       /* num_list_eval=Slice text:start: */
+	1123287878359048846:  (*ListSlice)(nil),       /* record_list_eval=Slice text:start: */
+	7399917200046510856:  (*ListSlice)(nil),       /* text_list_eval=Slice text:start: */
+	12296457659283851144: (*ListSlice)(nil),       /* num_list_eval=Slice text:start:end: */
+	12185380936141810083: (*ListSlice)(nil),       /* record_list_eval=Slice text:start:end: */
+	170920642466474965:   (*ListSlice)(nil),       /* text_list_eval=Slice text:start:end: */
+	11769936664949622183: (*ListSlice)(nil),       /* num_list_eval=Slice textList: */
+	8811003461802931280:  (*ListSlice)(nil),       /* record_list_eval=Slice textList: */
+	7475599544229173794:  (*ListSlice)(nil),       /* text_list_eval=Slice textList: */
+	620597108004713610:   (*ListSlice)(nil),       /* num_list_eval=Slice textList:end: */
+	14361736680466806717: (*ListSlice)(nil),       /* record_list_eval=Slice textList:end: */
+	10243148548097836207: (*ListSlice)(nil),       /* text_list_eval=Slice textList:end: */
+	11352720954416934101: (*ListSlice)(nil),       /* num_list_eval=Slice textList:start: */
+	4417532206553105122:  (*ListSlice)(nil),       /* record_list_eval=Slice textList:start: */
+	12363318130645520000: (*ListSlice)(nil),       /* text_list_eval=Slice textList:start: */
+	13255799277286474592: (*ListSlice)(nil),       /* num_list_eval=Slice textList:start:end: */
+	17538828973473648623: (*ListSlice)(nil),       /* record_list_eval=Slice textList:start:end: */
+	2769197376988253453:  (*ListSlice)(nil),       /* text_list_eval=Slice textList:start:end: */
+	421498711850031655:   (*ListSortNumbers)(nil), /* execute=SortNumbers object:byField: */
+	16497684129300035417: (*ListSortNumbers)(nil), /* execute=SortNumbers object:byField:descending: */
+	5849496999430306662:  (*ListSortNumbers)(nil), /* execute=SortNumbers variable:byField: */
+	5424404571725863098:  (*ListSortNumbers)(nil), /* execute=SortNumbers variable:byField:descending: */
+	14456995616405811689: (*ListSortText)(nil),    /* execute=SortTexts object:byField: */
+	6503987754421782359:  (*ListSortText)(nil),    /* execute=SortTexts object:byField:descending: */
+	600977390647603797:   (*ListSortText)(nil),    /* execute=SortTexts object:byField:descending:usingCase: */
+	3621745037740421335:  (*ListSortText)(nil),    /* execute=SortTexts object:byField:usingCase: */
+	14942187006010075588: (*ListSortText)(nil),    /* execute=SortTexts variable:byField: */
+	11003982858264652004: (*ListSortText)(nil),    /* execute=SortTexts variable:byField:descending: */
+	16749751527264114426: (*ListSortText)(nil),    /* execute=SortTexts variable:byField:descending:usingCase: */
+	7681352795670764826:  (*ListSortText)(nil),    /* execute=SortTexts variable:byField:usingCase: */
+	254505568650062711:   (*ListSplice)(nil),      /* execute=Splice object:start:remove:insert bool: */
+	14473465088241368288: (*ListSplice)(nil),      /* num_list_eval=Splice object:start:remove:insert bool: */
+	10907694060219474095: (*ListSplice)(nil),      /* record_list_eval=Splice object:start:remove:insert bool: */
+	9588020195550516101:  (*ListSplice)(nil),      /* text_list_eval=Splice object:start:remove:insert bool: */
+	4953874312339275205:  (*ListSplice)(nil),      /* execute=Splice object:start:remove:insert numList: */
+	10036210830066206928: (*ListSplice)(nil),      /* num_list_eval=Splice object:start:remove:insert numList: */
+	11877450138547579581: (*ListSplice)(nil),      /* record_list_eval=Splice object:start:remove:insert numList: */
+	17320190953942263027: (*ListSplice)(nil),      /* text_list_eval=Splice object:start:remove:insert numList: */
+	6212968220386894696:  (*ListSplice)(nil),      /* execute=Splice object:start:remove:insert number: */
+	10837284387544461467: (*ListSplice)(nil),      /* num_list_eval=Splice object:start:remove:insert number: */
+	16548514040101249424: (*ListSplice)(nil),      /* record_list_eval=Splice object:start:remove:insert number: */
+	18327819217042272398: (*ListSplice)(nil),      /* text_list_eval=Splice object:start:remove:insert number: */
+	12080729025253642488: (*ListSplice)(nil),      /* execute=Splice object:start:remove:insert record: */
+	5211503804121840075:  (*ListSplice)(nil),      /* num_list_eval=Splice object:start:remove:insert record: */
+	7989605691056834896:  (*ListSplice)(nil),      /* record_list_eval=Splice object:start:remove:insert record: */
+	4167651507363618818:  (*ListSplice)(nil),      /* text_list_eval=Splice object:start:remove:insert record: */
+	18191097171320504924: (*ListSplice)(nil),      /* execute=Splice object:start:remove:insert recordList: */
+	4841682711032149619:  (*ListSplice)(nil),      /* num_list_eval=Splice object:start:remove:insert recordList: */
+	16734101867085488820: (*ListSplice)(nil),      /* record_list_eval=Splice object:start:remove:insert recordList: */
+	13611854116028542730: (*ListSplice)(nil),      /* text_list_eval=Splice object:start:remove:insert recordList: */
+	15695657948365604954: (*ListSplice)(nil),      /* execute=Splice object:start:remove:insert text: */
+	4702373770345764557:  (*ListSplice)(nil),      /* num_list_eval=Splice object:start:remove:insert text: */
+	4870934094039167890:  (*ListSplice)(nil),      /* record_list_eval=Splice object:start:remove:insert text: */
+	4990595507687160236:  (*ListSplice)(nil),      /* text_list_eval=Splice object:start:remove:insert text: */
+	2809903728659791394:  (*ListSplice)(nil),      /* execute=Splice object:start:remove:insert textList: */
+	18434334661778163649: (*ListSplice)(nil),      /* num_list_eval=Splice object:start:remove:insert textList: */
+	17848994770818519514: (*ListSplice)(nil),      /* record_list_eval=Splice object:start:remove:insert textList: */
+	6255332626240908784:  (*ListSplice)(nil),      /* text_list_eval=Splice object:start:remove:insert textList: */
+	94692154838844448:    (*ListSplice)(nil),      /* execute=Splice variable:start:remove:insert bool: */
+	834002895175246815:   (*ListSplice)(nil),      /* num_list_eval=Splice variable:start:remove:insert bool: */
+	3091564847518459832:  (*ListSplice)(nil),      /* record_list_eval=Splice variable:start:remove:insert bool: */
+	2290242410755864938:  (*ListSplice)(nil),      /* text_list_eval=Splice variable:start:remove:insert bool: */
+	15946286690290403600: (*ListSplice)(nil),      /* execute=Splice variable:start:remove:insert numList: */
+	17078132711325563949: (*ListSplice)(nil),      /* num_list_eval=Splice variable:start:remove:insert numList: */
+	5885731321866503976:  (*ListSplice)(nil),      /* record_list_eval=Splice variable:start:remove:insert numList: */
+	15234187832380791946: (*ListSplice)(nil),      /* text_list_eval=Splice variable:start:remove:insert numList: */
+	16504995663933432027: (*ListSplice)(nil),      /* execute=Splice variable:start:remove:insert number: */
+	15428307853647068160: (*ListSplice)(nil),      /* num_list_eval=Splice variable:start:remove:insert number: */
+	6377975723711103747:  (*ListSplice)(nil),      /* record_list_eval=Splice variable:start:remove:insert number: */
+	2374993890198756581:  (*ListSplice)(nil),      /* text_list_eval=Splice variable:start:remove:insert number: */
+	10495292378639235851: (*ListSplice)(nil),      /* execute=Splice variable:start:remove:insert record: */
+	6198982235816317568:  (*ListSplice)(nil),      /* num_list_eval=Splice variable:start:remove:insert record: */
+	8114195147842030883:  (*ListSplice)(nil),      /* record_list_eval=Splice variable:start:remove:insert record: */
+	2303881887029688521:  (*ListSplice)(nil),      /* text_list_eval=Splice variable:start:remove:insert record: */
+	9158900994911257011:  (*ListSplice)(nil),      /* execute=Splice variable:start:remove:insert recordList: */
+	6164668362673214372:  (*ListSplice)(nil),      /* num_list_eval=Splice variable:start:remove:insert recordList: */
+	6305393212333269451:  (*ListSplice)(nil),      /* record_list_eval=Splice variable:start:remove:insert recordList: */
+	16939933291233560829: (*ListSplice)(nil),      /* text_list_eval=Splice variable:start:remove:insert recordList: */
+	15249617378531728397: (*ListSplice)(nil),      /* execute=Splice variable:start:remove:insert text: */
+	9837287241376951266:  (*ListSplice)(nil),      /* num_list_eval=Splice variable:start:remove:insert text: */
+	10306364190290141637: (*ListSplice)(nil),      /* record_list_eval=Splice variable:start:remove:insert text: */
+	11138339034756661923: (*ListSplice)(nil),      /* text_list_eval=Splice variable:start:remove:insert text: */
+	16704899702181821441: (*ListSplice)(nil),      /* execute=Splice variable:start:remove:insert textList: */
+	12938904036510151082: (*ListSplice)(nil),      /* num_list_eval=Splice variable:start:remove:insert textList: */
+	14769204272593250009: (*ListSplice)(nil),      /* record_list_eval=Splice variable:start:remove:insert textList: */
+	11691226362631679819: (*ListSplice)(nil),      /* text_list_eval=Splice variable:start:remove:insert textList: */
 }

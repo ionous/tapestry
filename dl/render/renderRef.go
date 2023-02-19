@@ -6,60 +6,26 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
-	"github.com/ionous/errutil"
 )
 
-func (op *RenderRef) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := op.getAssignedValue(run); e != nil {
-		err = cmdError(op, e)
-	} else {
-		ret = v
-	}
-	return
-}
+// RenderRef reads a value using a name which might refer to a variable or an object.
+// If its an object, the dot will reference some particular field, otherwise turns the object into an id.
+// Intended for internal use.
 
-func (op *RenderRef) Affinity() (ret affine.Affinity) { return }
-
-// GetText handles unpacking a text variable,
 func (op *RenderRef) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := op.getBool(run); e != nil {
-		err = cmdError(op, e)
+	if v, e := op.renderRef(run, affine.Bool); e != nil {
+		err = CmdError(op, e)
 	} else {
 		ret = v
 	}
 	return
 }
 
-func (op *RenderRef) getBool(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := op.getAssignedValue(run); e != nil {
-		err = e
-	} else if aff := v.Affinity(); aff == affine.Bool {
-		ret = v
-	} else {
-		err = errutil.Fmt("unexpected %q", aff)
-	}
-	return
-}
-
-// GetText handles unpacking a text variable,
-// turning an object variable into an id, or
-// looking for an object of the passed name ( if no variable of the name exists. )
 func (op *RenderRef) GetNumber(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := op.getNum(run); e != nil {
-		err = cmdError(op, e)
+	if v, e := op.renderRef(run, affine.Number); e != nil {
+		err = CmdError(op, e)
 	} else {
 		ret = v
-	}
-	return
-}
-
-func (op *RenderRef) getNum(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := op.getAssignedValue(run); e != nil {
-		err = e
-	} else if aff := v.Affinity(); aff == affine.Number {
-		ret = v
-	} else {
-		err = errutil.Fmt("unexpected %q", aff)
 	}
 	return
 }
@@ -68,50 +34,68 @@ func (op *RenderRef) getNum(run rt.Runtime) (ret g.Value, err error) {
 // turning an object variable into an id, or
 // looking for an object of the passed name ( if no variable of the name exists. )
 func (op *RenderRef) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := op.getText(run); e != nil {
-		err = cmdError(op, e)
+	if v, e := op.renderRef(run, affine.Text); e != nil {
+		err = CmdError(op, e)
 	} else {
 		ret = v
 	}
 	return
 }
 
-func (op *RenderRef) getText(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := op.getAssignedValue(run); e != nil {
-		err = e
-	} else if aff := v.Affinity(); aff == affine.Text {
+func (op *RenderRef) GetRecord(run rt.Runtime) (ret g.Value, err error) {
+	if v, e := op.renderRef(run, affine.Record); e != nil {
+		err = CmdError(op, e)
+	} else {
 		ret = v
-	} else if aff == affine.Object {
-		ret = g.ObjectAsText(v)
-	} else {
-		err = errutil.Fmt("unexpected %q", aff)
 	}
 	return
 }
 
-func (op *RenderRef) getAssignedValue(run rt.Runtime) (ret g.Value, err error) {
-	flags := op.Flags.ToFlags()
-	if val, e := getVariable(run, op.Name, flags); e != nil {
-		err = e
-	} else if val != nil {
-		ret = val
-	} else if !flags.tryObject() {
-		err = g.UnknownVariable(op.Name.String())
-	} else if obj, e := safe.ObjectFromString(run, op.Name.String()); e != nil {
-		err = e
+func (op *RenderRef) GetNumList(run rt.Runtime) (ret g.Value, err error) {
+	if v, e := op.renderRef(run, affine.NumList); e != nil {
+		err = CmdError(op, e)
 	} else {
-		ret = obj
+		ret = v
 	}
 	return
 }
 
-// returns nil if the named variable doesnt exist; errors only on critical errors.
-func getVariable(run rt.Runtime, n core.VariableName, flags TryAsNoun) (ret g.Value, err error) {
-	if flags.tryVariable() {
-		ret, err = safe.CheckVariable(run, n.String(), "")
-		if _, isUnknown := err.(g.Unknown); isUnknown {
-			err = nil // simplify caller check.
-		}
+func (op *RenderRef) GetTextList(run rt.Runtime) (ret g.Value, err error) {
+	if v, e := op.renderRef(run, affine.TextList); e != nil {
+		err = CmdError(op, e)
+	} else {
+		ret = v
+	}
+	return
+}
+
+func (op *RenderRef) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
+	if v, e := op.renderRef(run, affine.RecordList); e != nil {
+		err = CmdError(op, e)
+	} else {
+		ret = v
+	}
+	return
+}
+
+func (op *RenderRef) RenderEval(run rt.Runtime, hint affine.Affinity) (ret g.Value, err error) {
+	if v, e := op.renderRef(run, hint); e != nil {
+		err = CmdError(op, e)
+	} else {
+		ret = v
+	}
+	return
+}
+
+func (op *RenderRef) renderRef(run rt.Runtime, hint affine.Affinity) (ret g.Value, err error) {
+	if name, e := safe.GetText(run, op.Name); e != nil {
+		err = e
+	} else if path, e := core.ResolvePath(run, op.Dot); e != nil {
+		err = e
+	} else if tv, e := core.ResolveName(run, name.String(), path); e != nil {
+		err = e
+	} else {
+		ret, err = tv.GetCheckedValue(run, hint)
 	}
 	return
 }

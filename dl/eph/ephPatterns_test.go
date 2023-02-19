@@ -30,7 +30,7 @@ func TestPatternSingle(t *testing.T) {
 			}, {
 				Name:      "l2",
 				Affinity:  Affinity{Affinity_Number},
-				Initially: &core.FromNum{Val: I(10)},
+				Initially: core.AssignFromNumber(I(10)),
 			}},
 			Result: &EphParams{
 				Name:     "success",
@@ -66,7 +66,9 @@ func TestPatternSeparateLocals(t *testing.T) {
 		&EphPatterns{
 			Name: "p",
 			Locals: []EphParams{{
-				Name:     "l1",
+				Name: "l1",
+				// FIX: rather than give an affinity
+				// assign an empty assignment of the right type
 				Affinity: Affinity{Affinity_NumList},
 			}}},
 		&EphPatterns{
@@ -74,7 +76,7 @@ func TestPatternSeparateLocals(t *testing.T) {
 			Locals: []EphParams{{
 				Name:      "l2",
 				Affinity:  Affinity{Affinity_Number},
-				Initially: &core.FromNum{Val: I(10)},
+				Initially: core.AssignFromNumber(I(10)),
 			}}},
 	)
 	expectFullResults(t, dt)
@@ -115,7 +117,7 @@ func TestPatternSeparateDomains(t *testing.T) {
 			Locals: []EphParams{{
 				Name:      "l2",
 				Affinity:  Affinity{Affinity_Number},
-				Initially: &core.FromNum{Val: I(10)},
+				Initially: core.AssignFromNumber(I(10)),
 			}}},
 	)
 	expectFullResults(t, dt)
@@ -162,7 +164,7 @@ func expectFullResults(t *testing.T, dt domainTest) {
 		if e := cat.WriteLocals(&outlocals); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(outlocals[1:], testOut{
-			`a:p:l_2:{"FromNum:":10}`,
+			`a:p:l_2:{"Assignment number:":{"FromNumber:":10}}`,
 		}); len(diff) > 0 {
 			t.Log("got:", pretty.Sprint(outlocals))
 			t.Fatal(diff)
@@ -264,7 +266,7 @@ func TestPatternConflictingInit(t *testing.T) {
 			Locals: []EphParams{{
 				Name:      "n",
 				Affinity:  Affinity{Affinity_Number},
-				Initially: &core.FromText{Val: T("mismatched")},
+				Initially: core.AssignFromText(T("mismatched")),
 			}},
 		},
 	)

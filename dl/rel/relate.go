@@ -7,7 +7,7 @@ import (
 
 func (op *Relate) Execute(run rt.Runtime) (err error) {
 	if e := op.setRelation(run); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	}
 	return
 }

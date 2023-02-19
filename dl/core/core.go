@@ -7,68 +7,54 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type Say = SayText // backwards compat
+type Say = SayText            // backwards compat
+var cmdError = CmdError       // backwards compat
+var cmdErrorCtx = CmdErrorCtx // backwards compat
 
-func cmdError(op composer.Composer, err error) error {
+func CmdError(op composer.Composer, err error) error {
 	return cmdErrorCtx(op, "", err)
 }
 
-func cmdErrorCtx(op composer.Composer, ctx string, err error) error {
-	// avoid triggering errutil panics for break statements
-	if _, ok := err.(DoInterrupt); !ok {
-		e := &composer.CommandError{Cmd: op, Ctx: ctx}
-		err = errutil.Append(err, e)
-	}
-	return err
+func CmdErrorCtx(op composer.Composer, ctx string, err error) error {
+	e := &composer.CommandError{Cmd: op, Ctx: ctx}
+	return errutil.Append(e, err)
 }
 
-func B(b bool) *literal.BoolValue   { return &literal.BoolValue{Value: b} }
-func I(n int) *literal.NumValue     { return &literal.NumValue{Value: float64(n)} }
-func F(n float64) *literal.NumValue { return &literal.NumValue{Value: n} }
-func T(s string) *literal.TextValue { return &literal.TextValue{Value: s} }
+func B(b bool) *literal.BoolValue       { return &literal.BoolValue{Value: b} }
+func I(n int) *literal.NumValue         { return &literal.NumValue{Value: float64(n)} }
+func F(n float64) *literal.NumValue     { return &literal.NumValue{Value: n} }
+func T(s string) *literal.TextValue     { return &literal.TextValue{Value: s} }
+func Ts(s []string) *literal.TextValues { return &literal.TextValues{Values: s} }
 
 func P(p string) PatternName  { return PatternName{Str: p} }
 func N(v string) VariableName { return VariableName{Str: v} }
 func W(v string) string       { return v }
 
-// fix: rename to GetVar ( once GetVar{} is gone )
 // generate a statement which extracts a variable's value.
 // path can include strings ( for reading from records ) or integers ( for reading from lists )
-func V(v string, path ...any) *GetFromVar {
-	return &GetFromVar{
-		Name: T(v),
-		Dot:  MakeDot(path...),
+func GetVariable(name string, path ...any) *GetValue {
+	return &GetValue{Source: Variable(name, path...)}
+}
+
+func Object(name, field string, path ...any) Address {
+	return Address{
+		Choice: Address_Object_Opt,
+		Value: &ObjectRef{
+			Name:  T(name),
+			Field: T(field),
+			Dot:   MakeDot(path...),
+		},
 	}
 }
 
-func GetName(v string, path ...any) *GetFromName {
-	return &GetFromName{
-		Name: T(v),
-		Dot:  MakeDot(path...),
+func Variable(name string, path ...any) Address {
+	return Address{
+		Choice: Address_Variable_Opt,
+		Value: &VariableRef{
+			Name: T(name),
+			Dot:  MakeDot(path...),
+		},
 	}
-}
-
-func SetVar(name string, patheval ...any) (ret rt.Execute) {
-	n := T(name)
-	cnt := len(patheval)
-	eval := patheval[cnt-1]
-	dots := MakeDot(patheval[:cnt-1]...)
-	var val SourceValue
-	switch eval := eval.(type) {
-	case rt.BoolEval:
-		val = MakeFromBool(eval)
-	case rt.NumberEval:
-		val = MakeFromNumber(eval)
-	case rt.TextEval:
-		val = MakeFromText(eval)
-	case rt.ListEval:
-		val = MakeFromList(eval)
-	case rt.RecordEval:
-		val = MakeFromRecord(eval)
-	default:
-		panic("unknown eval type")
-	}
-	return &SetVarFromValue{Name: n, Value: val, Dot: dots}
 }
 
 func MakeDot(path ...any) []Dot {
@@ -79,40 +65,57 @@ func MakeDot(path ...any) []Dot {
 			out[i] = &AtField{Field: T(el)}
 		case int:
 			out[i] = &AtIndex{Index: I(el)}
+		case Dot:
+			out[i] = el
 		default:
-			panic("expected an int or string element")
+			panic(errutil.Fmt("expected an int or string element; got %T", el))
 		}
 	}
 	return out
 }
 
-func MakeFromBool(eval rt.BoolEval) SourceValue {
-	return SourceValue{
-		Choice: SourceValue_Bool_Opt,
+func AssignFromBool(eval rt.BoolEval) Assignment {
+	return Assignment{
+		Choice: Assignment_Bool_Opt,
 		Value:  &FromBool{Val: eval},
 	}
 }
-func MakeFromNumber(eval rt.NumberEval) SourceValue {
-	return SourceValue{
-		Choice: SourceValue_Number_Opt,
+func AssignFromNumber(eval rt.NumberEval) Assignment {
+	return Assignment{
+		Choice: Assignment_Number_Opt,
 		Value:  &FromNumber{Val: eval},
 	}
 }
-func MakeFromText(eval rt.TextEval) SourceValue {
-	return SourceValue{
-		Choice: SourceValue_Text_Opt,
+func AssignFromText(eval rt.TextEval) Assignment {
+	return Assignment{
+		Choice: Assignment_Text_Opt,
 		Value:  &FromText{Val: eval},
 	}
 }
-func MakeFromList(eval rt.ListEval) SourceValue {
-	return SourceValue{
-		Choice: SourceValue_List_Opt,
-		Value:  &FromList{Val: eval},
+func AssignFromRecord(eval rt.RecordEval) Assignment {
+	return Assignment{
+		Choice: Assignment_Record_Opt,
+		Value:  &FromRecord{Val: eval},
 	}
 }
-func MakeFromRecord(eval rt.RecordEval) SourceValue {
-	return SourceValue{
-		Choice: SourceValue_Record_Opt,
-		Value:  &FromRecord{Val: eval},
+
+func AssignFromNumList(eval rt.NumListEval) Assignment {
+	return Assignment{
+		Choice: Assignment_NumList_Opt,
+		Value:  &FromNumList{Val: eval},
+	}
+}
+
+func AssignFromTextList(eval rt.TextListEval) Assignment {
+	return Assignment{
+		Choice: Assignment_TextList_Opt,
+		Value:  &FromTextList{Val: eval},
+	}
+}
+
+func AssignFromRecordList(eval rt.RecordListEval) Assignment {
+	return Assignment{
+		Choice: Assignment_RecordList_Opt,
+		Value:  &FromRecordList{Val: eval},
 	}
 }

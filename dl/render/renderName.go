@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -17,7 +16,7 @@ import (
 
 func (op *RenderName) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if v, e := op.getName(run); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	} else {
 		ret = v
 	}
@@ -44,9 +43,6 @@ func (op *RenderName) getName(run rt.Runtime) (ret g.Value, err error) {
 				str := strconv.FormatFloat(v.Float(), 'g', -1, 64)
 				ret = g.StringOf(str)
 
-			case affine.Object:
-				ret, err = op.getPrintedNamedOf(run, v.String())
-
 			case affine.Text:
 				str := v.String()
 				// if there's no type, just assume the author was asking for the variable's text
@@ -70,7 +66,7 @@ func (op *RenderName) getPrintedNamedOf(run rt.Runtime, objectName string) (ret 
 	if printedName, e := safe.GetText(run, &core.BufferText{Does: core.MakeActivity(
 		&core.CallPattern{
 			Pattern:   core.PatternName{Str: "print_name"},
-			Arguments: core.Args(&core.FromText{Val: &literal.TextValue{Value: objectName}})})}); e != nil {
+			Arguments: core.MakeArgs(core.AssignFromText(T(objectName)))})}); e != nil {
 		err = e
 	} else {
 		ret = printedName

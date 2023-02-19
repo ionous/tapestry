@@ -97,7 +97,7 @@ func TestSkippedSlot(t *testing.T) {
 // empty slots shouldn't get extra closes
 // previously this was getting 4 extra closes
 // func TestEndSlot(t *testing.T) {
-//   if e := testBlocks(&list.PutEdge{
+//   if e := testBlocks(&list.ListPush{
 //     From: &core.GetVar{},
 //   }, `{
 //   "type": "put_edge",

@@ -13,7 +13,7 @@ func (c *Catalog) WriteChecks(w Writer) (err error) {
 		for _, deps := range ds { // list of dependencies
 			d := deps.Leaf().(*Domain) // panics if it fails
 			names := make([]string, 0, len(d.checks))
-			for k, _ := range d.checks {
+			for k := range d.checks {
 				// re: "expectation" changes, no longer requiring a test statement/ test output for the check to be valid.
 				// maybe at runtime we can say "this didn't have any expectations", or "didn't have any program data".
 				// if isValid := len(t.expectAff) > 0 && len(t.prog) > 0; isValid {

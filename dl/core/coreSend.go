@@ -17,12 +17,14 @@ func (op *CallSend) Execute(run rt.Runtime) (err error) {
 // GetBool returns the first matching bool evaluation.
 func (op *CallSend) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	if path, e := safe.GetTextList(run, op.Path); e != nil {
-		err = e
+		err = cmdError(op, e)
 	} else if evt, ok := op.Event.(*CallPattern); !ok {
-		err = errutil.New("expected call pattern in send")
+		err = cmdError(op, errutil.New("expected call pattern in send"))
 	} else {
 		name, up := evt.Pattern.String(), path.Strings()
-		if v, e := run.Send(name, up, evt.Arguments); e != nil {
+		if rec, e := MakeRecord(run, name, evt.Arguments...); e != nil {
+			err = cmdError(op, e)
+		} else if v, e := run.Send(rec, up); e != nil {
 			err = cmdErrorCtx(op, name, e)
 		} else {
 			ret = v

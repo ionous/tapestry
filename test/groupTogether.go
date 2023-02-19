@@ -10,8 +10,8 @@ import (
 )
 
 var runGroupTogther = list.ListMap{
-	FromList:     V("objects"),
-	ToList:       W("settings"),
+	Target:       core.Variable("settings"),
+	List:         core.AssignFromTextList(GetVariable("objects")),
 	UsingPattern: W("assign_grouping"),
 }
 
@@ -31,13 +31,17 @@ var assignGrouping = testpat.Pattern{
 	},
 	Rules: []rt.Rule{
 		{Execute: []rt.Execute{
-			Put("out", "name", V("in")),
+			&core.SetValue{
+				Target: core.Variable("out", "name"),
+				Value:  core.AssignFromText(GetVariable("in"))},
 			&core.ChooseAction{
 				If: &core.Matches{
-					Text:    V("in"),
+					Text:    GetVariable("in"),
 					Pattern: "^thing"},
 				Does: core.MakeActivity(
-					Put("out", "label", &core.FromText{Val: T("thingies")}),
+					&core.SetValue{
+						Target: core.Variable("out", "label"),
+						Value:  core.AssignFromText(T("thingies"))},
 				),
 			},
 		}},

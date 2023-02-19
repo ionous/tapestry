@@ -57,14 +57,14 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 						err = e
 					} else {
 						out := &core.CallPattern{Pattern: core.PatternName{sig.Name}}
-						var call []rt.Arg
+						var call []core.Arg
 						for i, p := range sig.Params {
-							var ptr rt.Assignment
-							if e := decode(rt.Assignment_Slot{&ptr}, args[i], reg); e != nil {
+							var ptr core.Assignment
+							if e := decode(&ptr, args[i], reg); e != nil {
 								err = e
 								break
 							} else {
-								call = append(call, rt.Arg{Name: p.Label, From: ptr})
+								call = append(call, core.Arg{Name: p.Label, Value: ptr})
 							}
 						}
 						if len(sig.Params) == len(call) {

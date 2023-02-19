@@ -31,8 +31,8 @@ func (c *Converter) Convert(xs template.Expression) (ret interface{}, err error)
 	} else if op, e := c.stack.flush(); e != nil {
 		err = e
 	} else if on, ok := op.(dotName); ok {
-		// if the entire template can be reduced to an dotName
-		// ex. {.lantern} then we treat it as a request for the friendly name of the object
+		// if the entire template can be reduced to an dotName ( ex. `{.lantern}` )
+		// then we treat it as a request for the friendly name of an object
 		ret = on.getPrintedName()
 	} else {
 		ret = op
@@ -131,7 +131,9 @@ func (c *Converter) buildSequence(cmd rt.TextEval, pAt *string, pParts *[]rt.Tex
 // build an command named in the export Slat
 // names in templates are currently "mixedCase" rather than "underscore_case".
 func (c *Converter) buildExport(name string, arity int) (err error) {
+	// if its in the coreCache its a known command
 	if a, ok := coreCache.get(name); !ok {
+		// if its not, the user is probably calling a patter
 		err = c.buildPattern(name, arity)
 	} else if args, e := c.stack.pop(arity); e != nil {
 		err = e
@@ -148,59 +150,54 @@ func (c *Converter) buildExport(name string, arity int) (err error) {
 }
 
 func (c *Converter) buildPattern(name string, arity int) (err error) {
+	// pull the number of arguments needed ( already converted into commands )
+	// args is a slice of package reflect r.Value(s)
 	if args, e := c.stack.pop(arity); e != nil {
 		err = e
 	} else {
-		var ps []rt.Arg
+		values := make([]render.RenderEval, len(args))
 		for i, arg := range args {
-			if newa, e := newAssignment(arg); e != nil {
-				err = errutil.Append(e)
-			} else {
-				newp := rt.Arg{
-					Name: W("$" + strconv.Itoa(i+1)),
-					From: newa,
-				}
-				ps = append(ps, newp)
-			}
+			values[i] = unpackPatternArg(arg)
 		}
 		if err == nil {
 			c.buildOne(&render.RenderPattern{
-				Call: core.CallPattern{
-					Pattern:   P(name),
-					Arguments: ps,
-				},
+				Pattern: name,
+				Render:  values,
 			})
 		}
 	}
 	return
 }
 
-// an eval has been passed to a pattern, return the command to assign the eval to an arg.
-func newAssignment(arg r.Value) (ret rt.Assignment, err error) {
+func unpackPatternArg(arg r.Value) render.RenderEval {
+	var assign core.Assignment
 	switch arg := arg.Interface().(type) {
-	case dotName:
-		ret = arg.getFromVar()
-		// see notes in RenderPattern
-		// it is sort of the "any value" right now
-		// things ( theoretically ) get checked at runtime.
-	case *render.RenderPattern:
-		ret = arg
-	case rt.BoolEval:
-		ret = &core.FromBool{Val: arg}
-	case rt.NumberEval:
-		ret = &core.FromNum{Val: arg}
-	case rt.NumListEval:
-		ret = &core.FromNumbers{Vals: arg}
-	case rt.TextEval:
-		ret = &core.FromText{Val: arg}
-	case rt.TextListEval:
-		ret = &core.FromTexts{Vals: arg}
 	default:
-		err = errutil.Fmt("unknown pattern parameter type %T", arg)
+		panic(errutil.Fmt("unknown argument type %T", arg))
+	case dotName:
+		return arg.getNamedValue()
+	case *render.RenderPattern:
+		return arg
+	case rt.BoolEval:
+		assign = core.AssignFromBool(arg)
+	case rt.NumberEval:
+		assign = core.AssignFromNumber(arg)
+	case rt.TextEval:
+		assign = core.AssignFromText(arg)
+	case rt.RecordEval:
+		assign = core.AssignFromRecord(arg)
+	case rt.NumListEval:
+		assign = core.AssignFromNumList(arg)
+	case rt.TextListEval:
+		assign = core.AssignFromTextList(arg)
+	case rt.RecordListEval:
+		assign = core.AssignFromRecordList(arg)
 	}
-	return
+	// fall through handling for assignments
+	return &render.RenderValue{Value: assign}
 }
 
+// an eval h
 func (c *Converter) buildUnless(cmd interface{}, arity int) (err error) {
 	if args, e := c.stack.pop(arity); e != nil {
 		err = e
@@ -287,7 +284,7 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 				for i, field := range fields[1:] {
 					dot[i] = &core.AtField{Field: T(field)}
 				}
-				c.buildOne(&core.GetFromName{Name: T(firstField), Dot: dot})
+				c.buildOne(&render.RenderRef{Name: T(firstField), Dot: dot})
 			}
 		}
 

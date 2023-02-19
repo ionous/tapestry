@@ -7,44 +7,6 @@
             "Group contains:":
             [
                 {
-                    "--": "Runtime version of argument.",
-                    "Spec:with flow:":
-                    [
-                        "arg",
-                        {
-                            "Flow uses:":
-                            [
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "_",
-                                        "name",
-                                        "text"
-                                    ]
-                                },
-                                {
-                                    "Term:type:":
-                                    [
-                                        "from",
-                                        "assignment"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "--": "Helper for setting variables.",
-                    "--blockly-color": "PROCEDURES_HUE",
-                    "Spec:with slot:":
-                    [
-                        "assignment",
-                        {
-                            "Slot": true
-                        }
-                    ]
-                },
-                {
                     "--": "Statements which return true/false values.",
                     "--blockly-color": "LOGIC_HUE",
                     "Spec:with slot:":
@@ -128,17 +90,6 @@
                     "Spec:with slot:":
                     [
                         "record_list_eval",
-                        {
-                            "Slot": true
-                        }
-                    ]
-                },
-                {
-                    "--": "Statements which return a list of values.",
-                    "--blockly-color": "MATH_HUE",
-                    "Spec:with slot:":
-                    [
-                        "list_eval",
                         {
                             "Slot": true
                         }

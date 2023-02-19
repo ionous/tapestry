@@ -10,19 +10,15 @@ func MakeActivity(exe ...rt.Execute) []rt.Execute {
 	return exe
 }
 
-func Args(from ...rt.Assignment) (ret []rt.Arg) {
-	for i, from := range from {
-		ret = append(ret, rt.Arg{
-			Name: W("$" + strconv.Itoa(i+1)),
-			From: from,
+// takes any of the rt evals
+func MakeArgs(as ...Assignment) (ret []Arg) {
+	for i, a := range as {
+		ret = append(ret, Arg{
+			// FIX: this is silly, just have no name and count the args when they are used.
+			// in which case MakeArgs itself should be removed.
+			Name:  W("$" + strconv.Itoa(i+1)),
+			Value: a,
 		})
 	}
 	return
-}
-
-func NamedArgs(name string, from rt.Assignment) []rt.Arg {
-	return []rt.Arg{{
-		Name: W(name),
-		From: from,
-	}}
 }

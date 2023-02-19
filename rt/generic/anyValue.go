@@ -52,7 +52,7 @@ type Value interface {
 	// errors if the types are mismatched
 	SetIndex(int, Value) error
 	// adds a *copy* of a value, or a copy of a slice of values, to the end of this slice.
-	// panics if this value isn't a slice.
+	// panics if this value isn't an appropriate kind of slice; errors on subtype.
 	// In golang, this is a package level function, presumably to mirror the built-in append()
 	Appends(Value) error
 	// return a *copy* of this slice and its values containing the first index up to (and not including) the second index.

@@ -5,6 +5,7 @@ import (
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
+// given an id, return the (a) name defined for it by the author
 func (run *Runner) getObjectName(id string) (ret string, err error) {
 	if c, e := run.values.cache(func() (ret interface{}, err error) {
 		ret, err = run.qdb.NounName(id)
@@ -13,25 +14,6 @@ func (run *Runner) getObjectName(id string) (ret string, err error) {
 		err = e
 	} else {
 		ret = c.(string)
-	}
-	return
-}
-
-func (run *Runner) getObjectByName(name string) (ret *qnaObject, err error) {
-	// note: if were able to get the object kind, then the object is in scope.
-	if ok, e := run.getObjectInfo(name); e != nil {
-		err = e
-	} else if c, e := run.values.cache(func() (ret interface{}, err error) {
-		if k, e := run.GetKindByName(ok.Kind); e != nil {
-			err = e
-		} else {
-			ret = &qnaObject{run: run, domain: ok.Domain, name: ok.Id, kind: k}
-		}
-		return
-	}, "objectByName", name); e != nil {
-		err = e
-	} else {
-		ret = c.(*qnaObject)
 	}
 	return
 }

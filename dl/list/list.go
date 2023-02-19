@@ -2,28 +2,23 @@ package list
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/composer"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"github.com/ionous/errutil"
 )
 
-func cmdError(op composer.Composer, err error) error {
-	return errutil.Append(err, &composer.CommandError{Cmd: op})
+// can v be inserted into els?
+func IsInsertable(v, els g.Value) (okay bool) {
+	return isInsertable(els, v.Affinity(), v.Type())
 }
 
-// can add be inserted into els?
-func IsInsertable(ins, els g.Value) (okay bool) {
-	return isInsertable(els, ins.Affinity(), ins.Type())
-}
-
-// can add be appended to els?
-// this is similar to IsInsertable, except that the add can itself be a list.
-func IsAppendable(ins, els g.Value) (okay bool) {
-	inAff := ins.Affinity()
+// can v be appended to els?
+// this is similar to IsInsertable, except that v can itself be a list.
+func IsAppendable(v, els g.Value) (okay bool) {
+	inAff := v.Affinity()
 	if unlist := affine.Element(inAff); len(unlist) > 0 {
 		inAff = unlist
 	}
-	return isInsertable(els, inAff, ins.Type())
+	return isInsertable(els, inAff, v.Type())
 }
 
 func isInsertable(els g.Value, haveAff affine.Affinity, haveType string) (okay bool) {
@@ -40,11 +35,11 @@ func isInsertable(els g.Value, haveAff affine.Affinity, haveType string) (okay b
 }
 
 type insertError struct {
-	ins, els g.Value
+	v, els g.Value
 }
 
 func (e insertError) Error() string {
 	return errutil.Sprintf("%s of %q isn't insertable into %s of %q",
-		e.ins.Affinity(), e.ins.Type(),
+		e.v.Affinity(), e.v.Type(),
 		e.els.Affinity(), e.els.Type())
 }
