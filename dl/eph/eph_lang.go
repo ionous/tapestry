@@ -2,8 +2,8 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/composer"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
@@ -1531,10 +1531,10 @@ func EphOpposites_Marshal(m jsn.Marshaler, val *EphOpposites) (err error) {
 // while 'class' is used to indicate an interpretation of that parameter, for example a reference to a kind.
 // Pattern locals can have an initial value, other uses of parameter cannot.
 type EphParams struct {
-	Affinity  Affinity        `if:"label=have"`
-	Name      string          `if:"label=called,type=text"`
-	Class     string          `if:"label=of,optional,type=text"`
-	Initially core.Assignment `if:"label=initially,optional"`
+	Affinity  Affinity          `if:"label=have"`
+	Name      string            `if:"label=called,type=text"`
+	Class     string            `if:"label=of,optional,type=text"`
+	Initially assign.Assignment `if:"label=initially,optional"`
 	Markup    map[string]any
 }
 
@@ -1646,7 +1646,7 @@ func EphParams_Marshal(m jsn.Marshaler, val *EphParams) (err error) {
 		}
 		e3 := m.MarshalKey("initially", EphParams_Field_Initially)
 		if e3 == nil {
-			e3 = core.Assignment_Optional_Marshal(m, &val.Initially)
+			e3 = assign.Assignment_Optional_Marshal(m, &val.Initially)
 		}
 		if e3 != nil && e3 != jsn.Missing {
 			m.Error(errutil.New(e3, "in flow at", EphParams_Field_Initially))
@@ -3151,20 +3151,10 @@ var Slats = []composer.Composer{
 var Signatures = map[uint64]interface{}{
 	5836720772794648281:  (*Affinity)(nil),       /* Affinity: */
 	9182060341586636438:  (*EphAt)(nil),          /* Eph at:eph: */
-	3393973143376734418:  (*EphParams)(nil),      /* Eph have:called:initially bool: */
-	6716173099327544466:  (*EphParams)(nil),      /* Eph have:called:initially numList: */
-	3983533540334616413:  (*EphParams)(nil),      /* Eph have:called:initially number: */
-	4521364304987774257:  (*EphParams)(nil),      /* Eph have:called:initially record: */
-	9708990616814138117:  (*EphParams)(nil),      /* Eph have:called:initially recordList: */
-	6175192720297510411:  (*EphParams)(nil),      /* Eph have:called:initially text: */
-	18040755923633814707: (*EphParams)(nil),      /* Eph have:called:initially textList: */
-	2645642922563758991:  (*EphParams)(nil),      /* Eph have:called:of:initially bool: */
-	14519048986034581725: (*EphParams)(nil),      /* Eph have:called:of:initially numList: */
-	16560289094209896688: (*EphParams)(nil),      /* Eph have:called:of:initially number: */
-	14619692685129280688: (*EphParams)(nil),      /* Eph have:called:of:initially record: */
-	10200398422168252500: (*EphParams)(nil),      /* Eph have:called:of:initially recordList: */
-	14810603062817881074: (*EphParams)(nil),      /* Eph have:called:of:initially text: */
-	2383588304698240378:  (*EphParams)(nil),      /* Eph have:called:of:initially textList: */
+	12259359132675429189: (*EphParams)(nil),      /* Eph have:called: */
+	16868970960604249858: (*EphParams)(nil),      /* Eph have:called:initially: */
+	277028977564474262:   (*EphParams)(nil),      /* Eph have:called:of: */
+	16991751007965772137: (*EphParams)(nil),      /* Eph have:called:of:initially: */
 	11648725103497180078: (*EphList)(nil),        /* Eph list: */
 	2686821152326169213:  (*EphAlways)(nil),      /* EphAlways: */
 	18342259850011553446: (*EphCardinality)(nil), /* EphCardinality manyMany: */

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
@@ -19,7 +20,7 @@ func Decode(dst jsn.Marshalee, msg json.RawMessage, sig cin.Signatures) error {
 
 func decode(dst jsn.Marshalee, msg json.RawMessage, reg cin.TypeCreator) error {
 	return cin.NewDecoder(reg).
-		//SetFlowDecoder(CompactFlowDecoder).
+		SetFlowDecoder(core.CompactFlowDecoder).
 		SetSlotDecoder(CompactSlotDecoder).
 		Decode(dst, msg)
 
@@ -59,8 +60,8 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 						out := &core.CallPattern{Pattern: core.PatternName{sig.Name}}
 						var call []core.Arg
 						for i, p := range sig.Params {
-							var ptr core.Assignment
-							if e := decode(&ptr, args[i], reg); e != nil {
+							var ptr assign.Assignment
+							if e := decode(assign.Assignment_Slot{&ptr}, args[i], reg); e != nil {
 								err = e
 								break
 							} else {

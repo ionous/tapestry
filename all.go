@@ -1,6 +1,7 @@
 package tapestry
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
@@ -15,6 +16,7 @@ import (
 )
 
 var AllSlats = [][]composer.Composer{
+	assign.Slats,
 	core.Slats,
 	debug.Slats,
 	grammar.Slats,
@@ -27,6 +29,7 @@ var AllSlats = [][]composer.Composer{
 }
 
 var AllSignatures = []map[uint64]interface{}{
+	assign.Signatures,
 	core.Signatures,
 	debug.Signatures,
 	grammar.Signatures,

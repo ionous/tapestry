@@ -2,6 +2,7 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -20,7 +21,7 @@ func refArgs(k string, parentKind kindsOf.Kinds, args []core.Arg) (ret *eph.EphR
 	for _, arg := range args {
 		refs = append(refs, eph.EphParams{
 			Name:     arg.Name,
-			Affinity: affineToAffinity(arg.Value.Affinity()),
+			Affinity: affineToAffinity(assign.GetAffinity(arg.Value)),
 		})
 	}
 	ret = Refs(&eph.EphKinds{

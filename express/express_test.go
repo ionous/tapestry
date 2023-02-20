@@ -3,6 +3,7 @@ package express
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -222,7 +223,7 @@ func TestTemplates(t *testing.T) {
 		if e := testTemplate("{'world'|hello!}",
 			&render.RenderPattern{
 				Pattern: W("hello"), Render: []render.RenderEval{
-					&render.RenderValue{Value: core.AssignFromText(T("world"))},
+					&render.RenderValue{Value: &assign.FromText{Value: T("world")}},
 				}}); e != nil {
 			t.Fatal(e)
 		}
@@ -252,7 +253,7 @@ func TestTemplates(t *testing.T) {
 
 // yuck: the assignment swap is concrete when its a field
 // when used as
-func assignToEval(a core.Assignment) *core.Assignment {
+func assignToEval(a assign.Assignment) *assign.Assignment {
 	return &a
 }
 

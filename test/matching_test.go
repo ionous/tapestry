@@ -3,6 +3,7 @@ package test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -43,8 +44,8 @@ func TestMatching(t *testing.T) {
 
 		runMatching := &core.CallPattern{
 			Pattern: P(kargs.Name()), Arguments: core.MakeArgs(
-				core.AssignFromRecord(core.GetVariable("a")),
-				core.AssignFromRecord(core.GetVariable("b")),
+				&assign.FromRecord{Value: core.GetVariable("a")},
+				&assign.FromRecord{Value: core.GetVariable("b")},
 			)}
 		// default should match
 		{

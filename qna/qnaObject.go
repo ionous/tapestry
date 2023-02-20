@@ -2,7 +2,7 @@ package qna
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -114,9 +114,9 @@ func (run *Runner) getFieldCache(obj qdb.NounInfo, field g.Field) (ret g.Value, 
 		switch c := c.(type) {
 		case g.Value:
 			ret = c
-		case core.Assignment:
+		case assign.Assignment:
 			// evaluate the assignment to get the current value
-			if v, e := c.GetValue(run); e != nil {
+			if v, e := assign.GetValue(run, c); e != nil {
 				err = e
 			} else {
 				ret, err = safe.AutoConvert(run, field, v)

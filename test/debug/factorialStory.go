@@ -1,6 +1,7 @@
 package debug
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/story"
@@ -58,9 +59,9 @@ var FactorialCheck = []rt.Execute{
 				Pattern: factorialName,
 				Arguments: []core.Arg{core.Arg{
 					Name:  "num",
-					Value: core.AssignFromNumber(F(3)),
+					Value: &assign.FromNumber{Value: F(3)},
 					// fix: for some reason, the comment isn't appearing in the output.
-					Markup: UserComment("start the factorial with '3'"),
+					// Markup: UserComment("start the factorial with '3'"),
 				}}},
 		},
 	},
@@ -70,20 +71,20 @@ var FactorialCheck = []rt.Execute{
 var FactorialMulMinusOne = []rt.Execute{
 	&core.SetValue{
 		Target: core.Variable("num"),
-		Value: core.AssignFromNumber(&core.ProductOf{
+		Value: &assign.FromNumber{Value: &core.ProductOf{
 			A: GetVariable("num"),
 			B: &core.DiffOf{
 				A: GetVariable("num"),
 				B: I(1),
 			},
-		})},
+		}}},
 }
 
 // at 0, use the number 1
 var FactorialUseOne = []rt.Execute{
 	&core.SetValue{
 		Target: core.Variable("num"),
-		Value:  core.AssignFromNumber(I(1)),
+		Value:  &assign.FromNumber{Value: I(1)},
 	},
 }
 

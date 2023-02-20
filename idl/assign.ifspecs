@@ -1,0 +1,171 @@
+{
+    "--": "assign",
+    "Spec:with group:":
+    [
+        "assign",
+        {
+            "Group contains:":
+            [
+                {
+                    "--": "Reads from evals in a uniform manner for common functions.",
+                    "Spec:with slot:":
+                    [
+                        "assignment",
+                        {
+                            "Slot": true
+                        }
+                    ]
+                },
+                {
+                    "--": "Assigns the calculated boolean value.",
+                    "Spec:slots:with flow:":
+                    [
+                        "from_bool",
+                        "assignment",
+                        {
+                            "Flow uses:":
+                            [
+                                {
+                                    "Term:name:type:":
+                                    [
+                                        "_",
+                                        "value",
+                                        "bool_eval"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "--": "Assigns the calculated number.",
+                    "Spec:slots:with flow:":
+                    [
+                        "from_number",
+                        "assignment",
+                        {
+                            "Flow uses:":
+                            [
+                                {
+                                    "Term:name:type:":
+                                    [
+                                        "_",
+                                        "value",
+                                        "number_eval"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+
+                {
+                    "--": "Assigns the calculated piece of text.",
+                    "Spec:slots:with flow:":
+                    [
+                        "from_text",
+                        "assignment",
+                        {
+                            "Flow uses:":
+                            [
+                                {
+                                    "Term:name:type:":
+                                    [
+                                        "_",
+                                        "value",
+                                        "text_eval"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "--": "Assigns the calculated record.",
+                    "Spec:slots:with flow:":
+                    [
+                        "from_record",
+                        "assignment",
+                        {
+                            "Flow uses:":
+                            [
+                                {
+                                    "Term:name:type:":
+                                    [
+                                        "_",
+                                        "value",
+                                        "record_eval"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                   {
+                    "--": "Assigns the calculated numbers.",
+                    "Spec:slots:with flow:":
+                    [
+                        "from_num_list",
+                        "assignment",
+                        {
+                            "Flow uses:":
+                            [
+                                {
+                                    "Term:name:type:":
+                                    [
+                                        "_",
+                                        "value",
+                                        "num_list_eval"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+
+                {
+                    "--": "Assigns the calculated pieces of text.",
+                    "Spec:slots:with flow:":
+                    [
+                        "from_text_list",
+                        "assignment",
+                        {
+                            "Flow uses:":
+                            [
+                                {
+                                    "Term:name:type:":
+                                    [
+                                        "_",
+                                        "value",
+                                        "text_list_eval"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "--": "Assigns the calculated records.",
+                    "Spec:slots:with flow:":
+                    [
+                        "from_record_list",
+                        "assignment",
+                        {
+                            "Flow uses:":
+                            [
+                                {
+                                    "Term:name:type:":
+                                    [
+                                        "_",
+                                        "value",
+                                        "record_list_eval"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

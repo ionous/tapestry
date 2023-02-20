@@ -1,6 +1,7 @@
 package debug
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -17,7 +18,7 @@ func (op *Comment) PreImport(k *imp.Importer) (ret interface{}, err error) {
 		ret = op
 	} else {
 		ret = &DebugLog{
-			Value: core.AssignFromText(core.T(op.Lines.String())),
+			Value: &assign.FromText{Value: core.T(op.Lines.String())},
 			LogLevel: LoggingLevel{
 				Str: LoggingLevel_Note,
 			},

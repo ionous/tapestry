@@ -1,7 +1,7 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/express"
 	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -36,7 +36,7 @@ func ConvertText(k *imp.Importer, str string) (ret string, err error) {
 		} else if eval, ok := got.(rt.TextEval); !ok {
 			err = errutil.Fmt("render template has unknown expression %T", got)
 		} else {
-			ret, err = k.Marshal(&core.FromText{Val: eval})
+			ret, err = k.Marshal(&assign.FromText{Value: eval})
 		}
 	}
 	return

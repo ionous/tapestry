@@ -1,6 +1,7 @@
 package core
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
@@ -12,7 +13,7 @@ func (op *SetValue) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *SetValue) setValue(run rt.Runtime) (err error) {
-	if newValue, e := op.Value.GetValue(run); e != nil {
+	if newValue, e := assign.GetValue(run, op.Value); e != nil {
 		err = e
 	} else if ref, e := op.Target.GetRefValue(run); e != nil {
 		err = e

@@ -2,8 +2,8 @@
 package debug
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/composer"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn"
@@ -117,8 +117,8 @@ func Comment_Marshal(m jsn.Marshaler, val *Comment) (err error) {
 
 // DebugLog Debug log.
 type DebugLog struct {
-	Value    core.Assignment `if:"label=_"`
-	LogLevel LoggingLevel    `if:"label=as,optional"`
+	Value    assign.Assignment `if:"label=_"`
+	LogLevel LoggingLevel      `if:"label=as,optional"`
 	Markup   map[string]any
 }
 
@@ -210,7 +210,7 @@ func DebugLog_Marshal(m jsn.Marshaler, val *DebugLog) (err error) {
 	if err = m.MarshalBlock(DebugLog_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", DebugLog_Field_Value)
 		if e0 == nil {
-			e0 = core.Assignment_Marshal(m, &val.Value)
+			e0 = assign.Assignment_Marshal(m, &val.Value)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", DebugLog_Field_Value))
@@ -959,20 +959,8 @@ var Signatures = map[uint64]interface{}{
 	13157581199995609923: (*ExpectOutput)(nil), /* execute=Expect output: */
 	16489874106085927697: (*ExpectText)(nil),   /* execute=Expect text: */
 	11108202414968227788: (*Expect)(nil),       /* execute=Expect: */
-	16795987075070426029: (*DebugLog)(nil),     /* execute=Log bool: */
-	5012568709724178077:  (*DebugLog)(nil),     /* execute=Log bool:as: */
-	11025036665223722299: (*DebugLog)(nil),     /* execute=Log numList: */
-	4529139608964459239:  (*DebugLog)(nil),     /* execute=Log numList:as: */
-	1390363919902601830:  (*DebugLog)(nil),     /* execute=Log number: */
-	17998232074276565512: (*DebugLog)(nil),     /* execute=Log number:as: */
-	11782064324136796938: (*DebugLog)(nil),     /* execute=Log record: */
-	1657399181350410676:  (*DebugLog)(nil),     /* execute=Log record:as: */
-	2149069978071789330:  (*DebugLog)(nil),     /* execute=Log recordList: */
-	6331337283802285564:  (*DebugLog)(nil),     /* execute=Log recordList:as: */
-	13582919122428505684: (*DebugLog)(nil),     /* execute=Log text: */
-	11981136151035964234: (*DebugLog)(nil),     /* execute=Log text:as: */
-	12986530220286244824: (*DebugLog)(nil),     /* execute=Log textList: */
-	5207466180783630758:  (*DebugLog)(nil),     /* execute=Log textList:as: */
+	17230987244745403983: (*DebugLog)(nil),     /* execute=Log: */
+	9146550673186999987:  (*DebugLog)(nil),     /* execute=Log:as: */
 	9865864948070946448:  (*Test)(nil),         /* story_statement=Test:dependsOn:do: */
 	12698818979331053506: (*Test)(nil),         /* story_statement=Test:dependsOn:withScene:do: */
 	9283516926116088792:  (*Test)(nil),         /* story_statement=Test:do: */

@@ -3,6 +3,7 @@ package list_test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -121,13 +122,13 @@ func TestMapRecords(t *testing.T) {
 
 var remapStrings = list.ListMap{
 	Target:       core.Variable("results"),
-	List:         core.AssignFromTextList(core.GetVariable("fruits")),
+	List:         &assign.FromTextList{Value: core.GetVariable("fruits")},
 	UsingPattern: W("remap"),
 }
 
 var remapRecords = list.ListMap{
 	Target:       core.Variable("results"),
-	List:         core.AssignFromRecordList(core.GetVariable("fruits")),
+	List:         &assign.FromRecordList{Value: core.GetVariable("fruits")},
 	UsingPattern: W("remap"),
 }
 
@@ -139,7 +140,7 @@ var reverseStrings = testpat.Pattern{
 		Execute: core.MakeActivity(
 			&core.SetValue{
 				Target: core.Variable("out"),
-				Value:  core.AssignFromText(&core.MakeReversed{Text: GetVariable("in")})},
+				Value:  &assign.FromText{Value: &core.MakeReversed{Text: GetVariable("in")}}},
 		),
 	}},
 }
@@ -152,7 +153,7 @@ var reverseRecords = testpat.Pattern{
 		Execute: core.MakeActivity(
 			&core.SetValue{
 				Target: core.Variable("out", "name"),
-				Value:  core.AssignFromText(&core.MakeReversed{Text: GetVariable("in", "name")})},
+				Value:  &assign.FromText{Value: &core.MakeReversed{Text: GetVariable("in", "name")}}},
 		),
 	}},
 }

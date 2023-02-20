@@ -117,7 +117,7 @@ func addPatternDef(d *Domain, k *ScopedKind, key, at, v string) (err error) {
 
 func reduceRes(param *EphParams, at string, outp *[]UniformField) (ret string, err error) {
 	if param != nil {
-		if param.Initially.IsValid() {
+		if param.Initially != nil {
 			err = errutil.New("return values dont currently support initial values")
 		} else if p, e := param.unify(at); e != nil {
 			err = e
@@ -132,7 +132,7 @@ func reduceRes(param *EphParams, at string, outp *[]UniformField) (ret string, e
 func reduceArgs(params []EphParams, at string, outp *[]UniformField) (ret string, err error) {
 	var labels strings.Builder
 	for i, param := range params {
-		if param.Initially.IsValid() {
+		if param.Initially != nil {
 			err = errutil.New("args dont currently support initial values")
 		} else if p, e := param.unify(at); e != nil {
 			err = e

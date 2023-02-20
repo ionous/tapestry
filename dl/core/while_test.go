@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -16,7 +17,7 @@ func TestLoopBreak(t *testing.T) {
 			True: B(true), Does: MakeActivity(
 				&SetValue{
 					Target: Variable("i"),
-					Value:  AssignFromNumber(&SumOf{A: GetVariable("i"), B: I(1)})},
+					Value:  &assign.FromNumber{Value: &SumOf{A: GetVariable("i"), B: I(1)}}},
 				&ChooseAction{
 					If: &CompareNum{A: GetVariable("i"), Is: AtLeast, B: I(4)},
 					Does: MakeActivity(
@@ -25,7 +26,7 @@ func TestLoopBreak(t *testing.T) {
 				},
 				&SetValue{
 					Target: Variable("j"),
-					Value:  AssignFromNumber(&SumOf{A: GetVariable("j"), B: I(1)})},
+					Value:  &assign.FromNumber{Value: &SumOf{A: GetVariable("j"), B: I(1)}}},
 			)},
 	); e != nil {
 		t.Fatal("failed to run:", e)
@@ -41,7 +42,7 @@ func TestLoopNext(t *testing.T) {
 			True: B(true), Does: MakeActivity(
 				&SetValue{
 					Target: Variable("i"),
-					Value:  AssignFromNumber(&SumOf{A: GetVariable("i"), B: I(1)})},
+					Value:  &assign.FromNumber{Value: &SumOf{A: GetVariable("i"), B: I(1)}}},
 				&ChooseAction{
 					If: &CompareNum{A: GetVariable("i"), Is: AtLeast, B: I(4)},
 					Does: MakeActivity(
@@ -51,7 +52,7 @@ func TestLoopNext(t *testing.T) {
 				&Next{},
 				&SetValue{
 					Target: Variable("j"),
-					Value:  AssignFromNumber(&SumOf{A: GetVariable("j"), B: I(1)})},
+					Value:  &assign.FromNumber{Value: &SumOf{A: GetVariable("j"), B: I(1)}}},
 			)},
 	); e != nil {
 		t.Fatal(e)
@@ -68,7 +69,7 @@ func TestLoopInfinite(t *testing.T) {
 			True: B(true), Does: MakeActivity(
 				&SetValue{
 					Target: Variable("i"),
-					Value:  AssignFromNumber(&SumOf{A: GetVariable("i"), B: I(1)})},
+					Value:  &assign.FromNumber{Value: &SumOf{A: GetVariable("i"), B: I(1)}}},
 			)},
 	); !errors.Is(e, MaxLoopIterations) {
 		t.Fatal(e)

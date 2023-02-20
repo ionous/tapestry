@@ -4,8 +4,8 @@ import (
 	"errors"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/composer"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
@@ -50,8 +50,8 @@ func (c *Catalog) WriteLocals(w Writer) (err error) {
 		for _, dep := range deps {
 			k := dep.Leaf().(*ScopedKind)
 			for _, fd := range k.fields {
-				if init := fd.initially; init.IsValid() {
-					if value, e := marshalout(&init); e != nil {
+				if init := fd.initially; init != nil {
+					if value, e := marshalout(init); e != nil {
 						err = e
 						break
 					} else if e := w.Write(mdl.Assign, k.domain.name, k.name, fd.name, value); e != nil {
@@ -88,7 +88,7 @@ var FieldActions = PhaseAction{
 type UniformField struct {
 	name, class string
 	affinity    affine.Affinity
-	initially   core.Assignment
+	initially   assign.Assignment
 	at          string
 }
 
@@ -116,10 +116,10 @@ func MakeUniformField(fieldAffinity Affinity, fieldName, fieldClass, at string) 
 }
 
 // if there's an initial value, make sure it works with our field
-func (uf *UniformField) setAssignment(init core.Assignment) (err error) {
-	if init.IsValid() {
+func (uf *UniformField) setAssignment(init assign.Assignment) (err error) {
+	if init != nil {
 		// fix? some statements have unknown affinity ( statements that pivot )
-		if initAff := init.Affinity(); len(initAff) > 0 && initAff != uf.affinity {
+		if initAff := assign.GetAffinity(init); len(initAff) > 0 && initAff != uf.affinity {
 			err = errutil.Fmt("mismatched affinity of initial value (a %s) for field %q (a %s)", initAff, uf.name, uf.affinity)
 		} else {
 			uf.initially = init
@@ -151,8 +151,8 @@ func (uf *UniformField) assembleField(kind *ScopedKind) (err error) {
 			// -- AddField needs refactoring to put this in there easily.
 			for i, was := range kind.fields {
 				if was.name == uf.name {
-					hadInit := was.initially.IsValid()
-					wantsInit := uf.initially.IsValid()
+					hadInit := was.initially != nil
+					wantsInit := uf.initially != nil
 					switch {
 					case wantsInit && !hadInit:
 						was.initially = uf.initially // use the init

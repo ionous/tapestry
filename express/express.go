@@ -4,6 +4,7 @@ import (
 	r "reflect"
 	"strconv"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -170,7 +171,7 @@ func (c *Converter) buildPattern(name string, arity int) (err error) {
 }
 
 func unpackPatternArg(arg r.Value) render.RenderEval {
-	var assign core.Assignment
+	var out assign.Assignment
 	switch arg := arg.Interface().(type) {
 	default:
 		panic(errutil.Fmt("unknown argument type %T", arg))
@@ -179,22 +180,22 @@ func unpackPatternArg(arg r.Value) render.RenderEval {
 	case *render.RenderPattern:
 		return arg
 	case rt.BoolEval:
-		assign = core.AssignFromBool(arg)
+		out = &assign.FromBool{Value: arg}
 	case rt.NumberEval:
-		assign = core.AssignFromNumber(arg)
+		out = &assign.FromNumber{Value: arg}
 	case rt.TextEval:
-		assign = core.AssignFromText(arg)
+		out = &assign.FromText{Value: arg}
 	case rt.RecordEval:
-		assign = core.AssignFromRecord(arg)
+		out = &assign.FromRecord{Value: arg}
 	case rt.NumListEval:
-		assign = core.AssignFromNumList(arg)
+		out = &assign.FromNumList{Value: arg}
 	case rt.TextListEval:
-		assign = core.AssignFromTextList(arg)
+		out = &assign.FromTextList{Value: arg}
 	case rt.RecordListEval:
-		assign = core.AssignFromRecordList(arg)
+		out = &assign.FromRecordList{Value: arg}
 	}
 	// fall through handling for assignments
-	return &render.RenderValue{Value: assign}
+	return &render.RenderValue{Value: out}
 }
 
 // an eval h

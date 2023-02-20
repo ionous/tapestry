@@ -3,6 +3,7 @@ package core_test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
 )
@@ -13,7 +14,7 @@ func TestCompactEncoder(t *testing.T) {
 		Arguments: []core.Arg{{
 			Name: "num",
 			/// in the old bits this will generate an error if the assignment is emptyl
-			Value: core.AssignFromNumber(core.I(1)),
+			Value: &assign.FromNumber{Value: core.I(1)},
 		}}}
 
 	if have, e := cout.Marshal(out, core.CompactEncoder); e != nil {

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -53,7 +54,7 @@ func eachTest(t *testing.T, src []string, res []accum, otherwise int) {
 	var out []string
 	var visits []accum
 	each := &list.ListEach{
-		List: core.AssignFromTextList(GetVariable("source")),
+		List: &assign.FromTextList{Value: GetVariable("source")},
 		As:   W("text"),
 		Does: core.MakeActivity(&visitEach{&visits}),
 		Else: &core.ChooseNothingElse{

@@ -2,6 +2,7 @@ package list
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -51,7 +52,7 @@ func (op *ListSplice) spliceList(run rt.Runtime, aff affine.Affinity) (retVal g.
 		err = e
 	} else if els, e := root.GetList(run); e != nil {
 		err = e
-	} else if ins, e := op.Insert.GetValue(run); e != nil {
+	} else if ins, e := assign.GetValue(run, op.Insert); e != nil {
 		err = e
 	} else if !IsAppendable(ins, els) {
 		err = insertError{ins, els}

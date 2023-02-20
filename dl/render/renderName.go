@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -66,7 +67,7 @@ func (op *RenderName) getPrintedNamedOf(run rt.Runtime, objectName string) (ret 
 	if printedName, e := safe.GetText(run, &core.BufferText{Does: core.MakeActivity(
 		&core.CallPattern{
 			Pattern:   core.PatternName{Str: "print_name"},
-			Arguments: core.MakeArgs(core.AssignFromText(T(objectName)))})}); e != nil {
+			Arguments: core.MakeArgs(&assign.FromText{Value: T(objectName)})})}); e != nil {
 		err = e
 	} else {
 		ret = printedName

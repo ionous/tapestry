@@ -1,6 +1,7 @@
 package asm
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/story"
@@ -55,7 +56,7 @@ func importStory(k *imp.Importer, tgt jsn.Marshalee) error {
 						Contain: []eph.EphParams{{
 							Affinity:  eph.Affinity{eph.Affinity_Text},
 							Name:      resp.Name,
-							Initially: core.AssignFromText(resp.Text),
+							Initially: &assign.FromText{Value: resp.Text},
 						}},
 					})
 				}

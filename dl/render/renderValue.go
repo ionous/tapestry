@@ -2,15 +2,16 @@ package render
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"github.com/ionous/errutil"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 func (op *RenderValue) RenderEval(run rt.Runtime, hint affine.Affinity) (ret g.Value, err error) {
-	if aff := op.Value.Affinity(); hint != aff {
-		err = CmdError(op, errutil.New("mismatched affinity", aff, hint))
-	} else if v, e := op.Value.GetValue(run); e != nil {
+	if v, e := assign.GetValue(run, op.Value); e != nil {
+		err = CmdError(op, e)
+	} else if safe.Check(v, hint); e != nil {
 		err = CmdError(op, e)
 	} else {
 		ret = v

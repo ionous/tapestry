@@ -2,6 +2,7 @@
 package core
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/jsn"
@@ -411,8 +412,8 @@ func AnyTrue_Marshal(m jsn.Marshaler, val *AnyTrue) (err error) {
 
 // Arg Runtime version of argument.
 type Arg struct {
-	Name   string     `if:"label=_,type=text"`
-	Value  Assignment `if:"label=from"`
+	Name   string            `if:"label=_,type=text"`
+	Value  assign.Assignment `if:"label=from"`
 	Markup map[string]any
 }
 
@@ -507,140 +508,12 @@ func Arg_Marshal(m jsn.Marshaler, val *Arg) (err error) {
 		}
 		e1 := m.MarshalKey("from", Arg_Field_Value)
 		if e1 == nil {
-			e1 = Assignment_Marshal(m, &val.Value)
+			e1 = assign.Assignment_Marshal(m, &val.Value)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", Arg_Field_Value))
 		}
 		m.EndBlock()
-	}
-	return
-}
-
-// Assignment swaps between various options
-type Assignment struct {
-	Choice string
-	Value  interface{}
-}
-
-var Assignment_Optional_Marshal = Assignment_Marshal
-
-const Assignment_Bool_Opt = "$BOOL"
-const Assignment_Number_Opt = "$NUMBER"
-const Assignment_Text_Opt = "$TEXT"
-const Assignment_Record_Opt = "$RECORD"
-const Assignment_NumList_Opt = "$NUM_LIST"
-const Assignment_TextList_Opt = "$TEXT_LIST"
-const Assignment_RecordList_Opt = "$RECORD_LIST"
-
-func (*Assignment) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Assignment_Type,
-		Uses: composer.Type_Swap,
-		Choices: []string{
-			Assignment_Bool_Opt, Assignment_Number_Opt, Assignment_Text_Opt, Assignment_Record_Opt, Assignment_NumList_Opt, Assignment_TextList_Opt, Assignment_RecordList_Opt,
-		},
-		Swaps: []interface{}{
-			(*FromBool)(nil),
-			(*FromNumber)(nil),
-			(*FromText)(nil),
-			(*FromRecord)(nil),
-			(*FromNumList)(nil),
-			(*FromTextList)(nil),
-			(*FromRecordList)(nil),
-		},
-	}
-}
-
-const Assignment_Type = "assignment"
-
-func (op *Assignment) GetType() string { return Assignment_Type }
-
-func (op *Assignment) GetSwap() (string, interface{}) {
-	return op.Choice, op.Value
-}
-
-func (op *Assignment) SetSwap(c string) (okay bool) {
-	switch c {
-	case "":
-		op.Choice, op.Value = c, nil
-		okay = true
-	case Assignment_Bool_Opt:
-		op.Choice, op.Value = c, new(FromBool)
-		okay = true
-	case Assignment_Number_Opt:
-		op.Choice, op.Value = c, new(FromNumber)
-		okay = true
-	case Assignment_Text_Opt:
-		op.Choice, op.Value = c, new(FromText)
-		okay = true
-	case Assignment_Record_Opt:
-		op.Choice, op.Value = c, new(FromRecord)
-		okay = true
-	case Assignment_NumList_Opt:
-		op.Choice, op.Value = c, new(FromNumList)
-		okay = true
-	case Assignment_TextList_Opt:
-		op.Choice, op.Value = c, new(FromTextList)
-		okay = true
-	case Assignment_RecordList_Opt:
-		op.Choice, op.Value = c, new(FromRecordList)
-		okay = true
-	}
-	return
-}
-
-func (op *Assignment) Marshal(m jsn.Marshaler) error {
-	return Assignment_Marshal(m, op)
-}
-func Assignment_Marshal(m jsn.Marshaler, val *Assignment) (err error) {
-	if err = m.MarshalBlock(val); err == nil {
-		if _, ptr := val.GetSwap(); ptr != nil {
-			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-type Assignment_Slice []Assignment
-
-func (op *Assignment_Slice) GetType() string { return Assignment_Type }
-
-func (op *Assignment_Slice) Marshal(m jsn.Marshaler) error {
-	return Assignment_Repeats_Marshal(m, (*[]Assignment)(op))
-}
-
-func (op *Assignment_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Assignment_Slice) SetSize(cnt int) {
-	var els []Assignment
-	if cnt >= 0 {
-		els = make(Assignment_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Assignment_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Assignment_Marshal(m, &(*op)[i])
-}
-
-func Assignment_Repeats_Marshal(m jsn.Marshaler, vals *[]Assignment) error {
-	return jsn.RepeatBlock(m, (*Assignment_Slice)(vals))
-}
-
-func Assignment_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Assignment) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Assignment_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -2350,11 +2223,11 @@ func ChooseMore_Marshal(m jsn.Marshaler, val *ChooseMore) (err error) {
 
 // ChooseMoreValue
 type ChooseMoreValue struct {
-	Assign string       `if:"label=_,type=text"`
-	From   Assignment   `if:"label=from"`
-	Filter rt.BoolEval  `if:"label=and"`
-	Does   []rt.Execute `if:"label=does"`
-	Else   Brancher     `if:"label=else,optional"`
+	Assign string            `if:"label=_,type=text"`
+	From   assign.Assignment `if:"label=from"`
+	Filter rt.BoolEval       `if:"label=and"`
+	Does   []rt.Execute      `if:"label=does"`
+	Else   Brancher          `if:"label=else,optional"`
 	Markup map[string]any
 }
 
@@ -2456,7 +2329,7 @@ func ChooseMoreValue_Marshal(m jsn.Marshaler, val *ChooseMoreValue) (err error) 
 		}
 		e1 := m.MarshalKey("from", ChooseMoreValue_Field_From)
 		if e1 == nil {
-			e1 = Assignment_Marshal(m, &val.From)
+			e1 = assign.Assignment_Marshal(m, &val.From)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ChooseMoreValue_Field_From))
@@ -2834,11 +2707,11 @@ func ChooseText_Marshal(m jsn.Marshaler, val *ChooseText) (err error) {
 
 // ChooseValue An if statement with local assignment.
 type ChooseValue struct {
-	Assign string       `if:"label=_,type=text"`
-	From   Assignment   `if:"label=from"`
-	Filter rt.BoolEval  `if:"label=and"`
-	Does   []rt.Execute `if:"label=does"`
-	Else   Brancher     `if:"label=else,optional"`
+	Assign string            `if:"label=_,type=text"`
+	From   assign.Assignment `if:"label=from"`
+	Filter rt.BoolEval       `if:"label=and"`
+	Does   []rt.Execute      `if:"label=does"`
+	Else   Brancher          `if:"label=else,optional"`
 	Markup map[string]any
 }
 
@@ -2941,7 +2814,7 @@ func ChooseValue_Marshal(m jsn.Marshaler, val *ChooseValue) (err error) {
 		}
 		e1 := m.MarshalKey("from", ChooseValue_Field_From)
 		if e1 == nil {
-			e1 = Assignment_Marshal(m, &val.From)
+			e1 = assign.Assignment_Marshal(m, &val.From)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ChooseValue_Field_From))
@@ -3691,699 +3564,6 @@ func During_Marshal(m jsn.Marshaler, val *During) (err error) {
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", During_Field_Pattern))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// FromBool Assigns the calculated boolean value.
-type FromBool struct {
-	Val    rt.BoolEval `if:"label=_"`
-	Markup map[string]any
-}
-
-func (*FromBool) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FromBool_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const FromBool_Type = "from_bool"
-const FromBool_Field_Val = "$VAL"
-
-func (op *FromBool) Marshal(m jsn.Marshaler) error {
-	return FromBool_Marshal(m, op)
-}
-
-type FromBool_Slice []FromBool
-
-func (op *FromBool_Slice) GetType() string { return FromBool_Type }
-
-func (op *FromBool_Slice) Marshal(m jsn.Marshaler) error {
-	return FromBool_Repeats_Marshal(m, (*[]FromBool)(op))
-}
-
-func (op *FromBool_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromBool_Slice) SetSize(cnt int) {
-	var els []FromBool
-	if cnt >= 0 {
-		els = make(FromBool_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromBool_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromBool_Marshal(m, &(*op)[i])
-}
-
-func FromBool_Repeats_Marshal(m jsn.Marshaler, vals *[]FromBool) error {
-	return jsn.RepeatBlock(m, (*FromBool_Slice)(vals))
-}
-
-func FromBool_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromBool) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromBool_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromBool_Flow struct{ ptr *FromBool }
-
-func (n FromBool_Flow) GetType() string      { return FromBool_Type }
-func (n FromBool_Flow) GetLede() string      { return FromBool_Type }
-func (n FromBool_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromBool_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromBool); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromBool_Optional_Marshal(m jsn.Marshaler, pv **FromBool) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromBool_Marshal(m, *pv)
-	} else if !enc {
-		var v FromBool
-		if err = FromBool_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromBool_Marshal(m jsn.Marshaler, val *FromBool) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromBool_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromBool_Field_Val)
-		if e0 == nil {
-			e0 = rt.BoolEval_Marshal(m, &val.Val)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromBool_Field_Val))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// FromNumList Assigns the calculated numbers.
-type FromNumList struct {
-	Val    rt.NumListEval `if:"label=_"`
-	Markup map[string]any
-}
-
-func (*FromNumList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FromNumList_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const FromNumList_Type = "from_num_list"
-const FromNumList_Field_Val = "$VAL"
-
-func (op *FromNumList) Marshal(m jsn.Marshaler) error {
-	return FromNumList_Marshal(m, op)
-}
-
-type FromNumList_Slice []FromNumList
-
-func (op *FromNumList_Slice) GetType() string { return FromNumList_Type }
-
-func (op *FromNumList_Slice) Marshal(m jsn.Marshaler) error {
-	return FromNumList_Repeats_Marshal(m, (*[]FromNumList)(op))
-}
-
-func (op *FromNumList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromNumList_Slice) SetSize(cnt int) {
-	var els []FromNumList
-	if cnt >= 0 {
-		els = make(FromNumList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromNumList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromNumList_Marshal(m, &(*op)[i])
-}
-
-func FromNumList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromNumList) error {
-	return jsn.RepeatBlock(m, (*FromNumList_Slice)(vals))
-}
-
-func FromNumList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromNumList) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromNumList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromNumList_Flow struct{ ptr *FromNumList }
-
-func (n FromNumList_Flow) GetType() string      { return FromNumList_Type }
-func (n FromNumList_Flow) GetLede() string      { return FromNumList_Type }
-func (n FromNumList_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromNumList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromNumList); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromNumList_Optional_Marshal(m jsn.Marshaler, pv **FromNumList) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromNumList_Marshal(m, *pv)
-	} else if !enc {
-		var v FromNumList
-		if err = FromNumList_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromNumList_Marshal(m jsn.Marshaler, val *FromNumList) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromNumList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromNumList_Field_Val)
-		if e0 == nil {
-			e0 = rt.NumListEval_Marshal(m, &val.Val)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromNumList_Field_Val))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// FromNumber Assigns the calculated number.
-type FromNumber struct {
-	Val    rt.NumberEval `if:"label=_"`
-	Markup map[string]any
-}
-
-func (*FromNumber) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FromNumber_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const FromNumber_Type = "from_number"
-const FromNumber_Field_Val = "$VAL"
-
-func (op *FromNumber) Marshal(m jsn.Marshaler) error {
-	return FromNumber_Marshal(m, op)
-}
-
-type FromNumber_Slice []FromNumber
-
-func (op *FromNumber_Slice) GetType() string { return FromNumber_Type }
-
-func (op *FromNumber_Slice) Marshal(m jsn.Marshaler) error {
-	return FromNumber_Repeats_Marshal(m, (*[]FromNumber)(op))
-}
-
-func (op *FromNumber_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromNumber_Slice) SetSize(cnt int) {
-	var els []FromNumber
-	if cnt >= 0 {
-		els = make(FromNumber_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromNumber_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromNumber_Marshal(m, &(*op)[i])
-}
-
-func FromNumber_Repeats_Marshal(m jsn.Marshaler, vals *[]FromNumber) error {
-	return jsn.RepeatBlock(m, (*FromNumber_Slice)(vals))
-}
-
-func FromNumber_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromNumber) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromNumber_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromNumber_Flow struct{ ptr *FromNumber }
-
-func (n FromNumber_Flow) GetType() string      { return FromNumber_Type }
-func (n FromNumber_Flow) GetLede() string      { return FromNumber_Type }
-func (n FromNumber_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromNumber_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromNumber); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromNumber_Optional_Marshal(m jsn.Marshaler, pv **FromNumber) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromNumber_Marshal(m, *pv)
-	} else if !enc {
-		var v FromNumber
-		if err = FromNumber_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromNumber_Marshal(m jsn.Marshaler, val *FromNumber) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromNumber_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromNumber_Field_Val)
-		if e0 == nil {
-			e0 = rt.NumberEval_Marshal(m, &val.Val)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromNumber_Field_Val))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// FromRecord Assigns the calculated record.
-type FromRecord struct {
-	Val    rt.RecordEval `if:"label=_"`
-	Markup map[string]any
-}
-
-func (*FromRecord) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FromRecord_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const FromRecord_Type = "from_record"
-const FromRecord_Field_Val = "$VAL"
-
-func (op *FromRecord) Marshal(m jsn.Marshaler) error {
-	return FromRecord_Marshal(m, op)
-}
-
-type FromRecord_Slice []FromRecord
-
-func (op *FromRecord_Slice) GetType() string { return FromRecord_Type }
-
-func (op *FromRecord_Slice) Marshal(m jsn.Marshaler) error {
-	return FromRecord_Repeats_Marshal(m, (*[]FromRecord)(op))
-}
-
-func (op *FromRecord_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromRecord_Slice) SetSize(cnt int) {
-	var els []FromRecord
-	if cnt >= 0 {
-		els = make(FromRecord_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromRecord_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromRecord_Marshal(m, &(*op)[i])
-}
-
-func FromRecord_Repeats_Marshal(m jsn.Marshaler, vals *[]FromRecord) error {
-	return jsn.RepeatBlock(m, (*FromRecord_Slice)(vals))
-}
-
-func FromRecord_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromRecord) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromRecord_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromRecord_Flow struct{ ptr *FromRecord }
-
-func (n FromRecord_Flow) GetType() string      { return FromRecord_Type }
-func (n FromRecord_Flow) GetLede() string      { return FromRecord_Type }
-func (n FromRecord_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromRecord_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromRecord); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromRecord_Optional_Marshal(m jsn.Marshaler, pv **FromRecord) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromRecord_Marshal(m, *pv)
-	} else if !enc {
-		var v FromRecord
-		if err = FromRecord_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromRecord_Marshal(m jsn.Marshaler, val *FromRecord) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromRecord_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromRecord_Field_Val)
-		if e0 == nil {
-			e0 = rt.RecordEval_Marshal(m, &val.Val)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromRecord_Field_Val))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// FromRecordList Assigns the calculated records.
-type FromRecordList struct {
-	Val    rt.RecordListEval `if:"label=_"`
-	Markup map[string]any
-}
-
-func (*FromRecordList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FromRecordList_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const FromRecordList_Type = "from_record_list"
-const FromRecordList_Field_Val = "$VAL"
-
-func (op *FromRecordList) Marshal(m jsn.Marshaler) error {
-	return FromRecordList_Marshal(m, op)
-}
-
-type FromRecordList_Slice []FromRecordList
-
-func (op *FromRecordList_Slice) GetType() string { return FromRecordList_Type }
-
-func (op *FromRecordList_Slice) Marshal(m jsn.Marshaler) error {
-	return FromRecordList_Repeats_Marshal(m, (*[]FromRecordList)(op))
-}
-
-func (op *FromRecordList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromRecordList_Slice) SetSize(cnt int) {
-	var els []FromRecordList
-	if cnt >= 0 {
-		els = make(FromRecordList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromRecordList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromRecordList_Marshal(m, &(*op)[i])
-}
-
-func FromRecordList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromRecordList) error {
-	return jsn.RepeatBlock(m, (*FromRecordList_Slice)(vals))
-}
-
-func FromRecordList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromRecordList) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromRecordList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromRecordList_Flow struct{ ptr *FromRecordList }
-
-func (n FromRecordList_Flow) GetType() string      { return FromRecordList_Type }
-func (n FromRecordList_Flow) GetLede() string      { return FromRecordList_Type }
-func (n FromRecordList_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromRecordList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromRecordList); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromRecordList_Optional_Marshal(m jsn.Marshaler, pv **FromRecordList) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromRecordList_Marshal(m, *pv)
-	} else if !enc {
-		var v FromRecordList
-		if err = FromRecordList_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromRecordList_Marshal(m jsn.Marshaler, val *FromRecordList) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromRecordList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromRecordList_Field_Val)
-		if e0 == nil {
-			e0 = rt.RecordListEval_Marshal(m, &val.Val)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromRecordList_Field_Val))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// FromText Assigns the calculated piece of text.
-type FromText struct {
-	Val    rt.TextEval `if:"label=_"`
-	Markup map[string]any
-}
-
-func (*FromText) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FromText_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const FromText_Type = "from_text"
-const FromText_Field_Val = "$VAL"
-
-func (op *FromText) Marshal(m jsn.Marshaler) error {
-	return FromText_Marshal(m, op)
-}
-
-type FromText_Slice []FromText
-
-func (op *FromText_Slice) GetType() string { return FromText_Type }
-
-func (op *FromText_Slice) Marshal(m jsn.Marshaler) error {
-	return FromText_Repeats_Marshal(m, (*[]FromText)(op))
-}
-
-func (op *FromText_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromText_Slice) SetSize(cnt int) {
-	var els []FromText
-	if cnt >= 0 {
-		els = make(FromText_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromText_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromText_Marshal(m, &(*op)[i])
-}
-
-func FromText_Repeats_Marshal(m jsn.Marshaler, vals *[]FromText) error {
-	return jsn.RepeatBlock(m, (*FromText_Slice)(vals))
-}
-
-func FromText_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromText) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromText_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromText_Flow struct{ ptr *FromText }
-
-func (n FromText_Flow) GetType() string      { return FromText_Type }
-func (n FromText_Flow) GetLede() string      { return FromText_Type }
-func (n FromText_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromText_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromText); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromText_Optional_Marshal(m jsn.Marshaler, pv **FromText) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromText_Marshal(m, *pv)
-	} else if !enc {
-		var v FromText
-		if err = FromText_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromText_Marshal(m jsn.Marshaler, val *FromText) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromText_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromText_Field_Val)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Val)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromText_Field_Val))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// FromTextList Assigns the calculated pieces of text.
-type FromTextList struct {
-	Val    rt.TextListEval `if:"label=_"`
-	Markup map[string]any
-}
-
-func (*FromTextList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FromTextList_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const FromTextList_Type = "from_text_list"
-const FromTextList_Field_Val = "$VAL"
-
-func (op *FromTextList) Marshal(m jsn.Marshaler) error {
-	return FromTextList_Marshal(m, op)
-}
-
-type FromTextList_Slice []FromTextList
-
-func (op *FromTextList_Slice) GetType() string { return FromTextList_Type }
-
-func (op *FromTextList_Slice) Marshal(m jsn.Marshaler) error {
-	return FromTextList_Repeats_Marshal(m, (*[]FromTextList)(op))
-}
-
-func (op *FromTextList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromTextList_Slice) SetSize(cnt int) {
-	var els []FromTextList
-	if cnt >= 0 {
-		els = make(FromTextList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromTextList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromTextList_Marshal(m, &(*op)[i])
-}
-
-func FromTextList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromTextList) error {
-	return jsn.RepeatBlock(m, (*FromTextList_Slice)(vals))
-}
-
-func FromTextList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromTextList) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromTextList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromTextList_Flow struct{ ptr *FromTextList }
-
-func (n FromTextList_Flow) GetType() string      { return FromTextList_Type }
-func (n FromTextList_Flow) GetLede() string      { return FromTextList_Type }
-func (n FromTextList_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromTextList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromTextList); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromTextList_Optional_Marshal(m jsn.Marshaler, pv **FromTextList) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromTextList_Marshal(m, *pv)
-	} else if !enc {
-		var v FromTextList
-		if err = FromTextList_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromTextList_Marshal(m jsn.Marshaler, val *FromTextList) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromTextList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromTextList_Field_Val)
-		if e0 == nil {
-			e0 = rt.TextListEval_Marshal(m, &val.Val)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromTextList_Field_Val))
 		}
 		m.EndBlock()
 	}
@@ -7930,8 +7110,8 @@ func SayText_Marshal(m jsn.Marshaler, val *SayText) (err error) {
 
 // SetValue Store a value into a local variable ( or pattern argument. )
 type SetValue struct {
-	Target Address    `if:"label=_"`
-	Value  Assignment `if:"label=from"`
+	Target Address           `if:"label=_"`
+	Value  assign.Assignment `if:"label=from"`
 	Markup map[string]any
 }
 
@@ -8030,7 +7210,7 @@ func SetValue_Marshal(m jsn.Marshaler, val *SetValue) (err error) {
 		}
 		e1 := m.MarshalKey("from", SetValue_Field_Value)
 		if e1 == nil {
-			e1 = Assignment_Marshal(m, &val.Value)
+			e1 = assign.Assignment_Marshal(m, &val.Value)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", SetValue_Field_Value))
@@ -9214,7 +8394,6 @@ var Slats = []composer.Composer{
 	(*Always)(nil),
 	(*AnyTrue)(nil),
 	(*Arg)(nil),
-	(*Assignment)(nil),
 	(*AtField)(nil),
 	(*AtIndex)(nil),
 	(*Blankline)(nil),
@@ -9241,13 +8420,6 @@ var Slats = []composer.Composer{
 	(*Comparison)(nil),
 	(*DiffOf)(nil),
 	(*During)(nil),
-	(*FromBool)(nil),
-	(*FromNumList)(nil),
-	(*FromNumber)(nil),
-	(*FromRecord)(nil),
-	(*FromRecordList)(nil),
-	(*FromText)(nil),
-	(*FromTextList)(nil),
 	(*GetValue)(nil),
 	(*HasDominion)(nil),
 	(*IdOf)(nil),
@@ -9299,28 +8471,8 @@ var Slats = []composer.Composer{
 var Signatures = map[uint64]interface{}{
 	14830662449006440500: (*Address)(nil),           /* Address object: */
 	15275535284729771537: (*Address)(nil),           /* Address variable: */
-	2643197561265932993:  (*Arg)(nil),               /* Arg:from bool: */
-	3912837313358859159:  (*Arg)(nil),               /* Arg:from numList: */
-	2284773389402102018:  (*Arg)(nil),               /* Arg:from number: */
-	14392737426111657934: (*Arg)(nil),               /* Arg:from record: */
-	12978349289911234358: (*Arg)(nil),               /* Arg:from recordList: */
-	1372780250379707384:  (*Arg)(nil),               /* Arg:from text: */
-	4278237221364827484:  (*Arg)(nil),               /* Arg:from textList: */
-	16242544916532759166: (*Assignment)(nil),        /* Assignment bool: */
-	15699533039608894982: (*Assignment)(nil),        /* Assignment numList: */
-	10616828856023779905: (*Assignment)(nil),        /* Assignment number: */
-	3660245813868397981:  (*Assignment)(nil),        /* Assignment record: */
-	15091606963976607825: (*Assignment)(nil),        /* Assignment recordList: */
-	7982134690380973031:  (*Assignment)(nil),        /* Assignment text: */
-	2522625035940055503:  (*Assignment)(nil),        /* Assignment textList: */
+	6291103735245333139:  (*Arg)(nil),               /* Arg:from: */
 	15485098871275255450: (*Comparison)(nil),        /* Comparison: */
-	12958508767616079733: (*FromBool)(nil),          /* FromBool: */
-	18053230474023831203: (*FromNumList)(nil),       /* FromNumList: */
-	1452195140371313150:  (*FromNumber)(nil),        /* FromNumber: */
-	4970952219519099442:  (*FromRecord)(nil),        /* FromRecord: */
-	12895254073041262266: (*FromRecordList)(nil),    /* FromRecordList: */
-	2335611467037801148:  (*FromText)(nil),          /* FromText: */
-	704696786365734016:   (*FromTextList)(nil),      /* FromTextList: */
 	3451751676496979714:  (*ObjectRef)(nil),         /* Object:field: */
 	9963017218628298537:  (*ObjectRef)(nil),         /* Object:field:dot: */
 	10347746873548257800: (*PatternName)(nil),       /* PatternName: */
@@ -9361,20 +8513,8 @@ var Signatures = map[uint64]interface{}{
 	11253707510276332344: (*ChooseNothingElse)(nil), /* brancher=ElseDo does: */
 	12123664166410465852: (*ChooseMore)(nil),        /* brancher=ElseIf:does: */
 	10172152994557366141: (*ChooseMore)(nil),        /* brancher=ElseIf:does:else: */
-	17293632830864708497: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from bool:and:does: */
-	10015039162719682858: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from bool:and:does:else: */
-	1263939422214672535:  (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from numList:and:does: */
-	17344025009387239604: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from numList:and:does:else: */
-	4532307208258130872:  (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from number:and:does: */
-	5555096878134439257:  (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from number:and:does:else: */
-	3594951751884693612:  (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from record:and:does: */
-	10314023593706445389: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from record:and:does:else: */
-	11847168890048694820: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from recordList:and:does: */
-	16079960067179687893: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from recordList:and:does:else: */
-	1721309710566118702:  (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from text:and:does: */
-	6221455089989795667:  (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from text:and:does:else: */
-	15888640652150297826: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from textList:and:does: */
-	270276177115702711:   (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from textList:and:does:else: */
+	12734322650065726395: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from:and:does: */
+	16834345759272094552: (*ChooseMoreValue)(nil),   /* brancher=ElseIf:from:and:does:else: */
 	1457631626735043065:  (*TriggerCycle)(nil),      /* trigger=Every */
 	3787151486442609582:  (*GetValue)(nil),          /* bool_eval=Get object: */
 	26868710420597201:    (*GetValue)(nil),          /* num_list_eval=Get object: */
@@ -9396,34 +8536,10 @@ var Signatures = map[uint64]interface{}{
 	14393611566046450287: (*ChooseAction)(nil),      /* execute=If:does: */
 	6302964726971699110:  (*ChooseAction)(nil),      /* brancher=If:does:else: */
 	14501220926082590620: (*ChooseAction)(nil),      /* execute=If:does:else: */
-	17422956557743702456: (*ChooseValue)(nil),       /* brancher=If:from bool:and:does: */
-	15017254134758620782: (*ChooseValue)(nil),       /* execute=If:from bool:and:does: */
-	1270781443612768089:  (*ChooseValue)(nil),       /* brancher=If:from bool:and:does:else: */
-	9128016781271004179:  (*ChooseValue)(nil),       /* execute=If:from bool:and:does:else: */
-	4239861794794232528:  (*ChooseValue)(nil),       /* brancher=If:from numList:and:does: */
-	8840439650252490294:  (*ChooseValue)(nil),       /* execute=If:from numList:and:does: */
-	5393227972194533473:  (*ChooseValue)(nil),       /* brancher=If:from numList:and:does:else: */
-	1272278488687958251:  (*ChooseValue)(nil),       /* execute=If:from numList:and:does:else: */
-	8956797246285213677:  (*ChooseValue)(nil),       /* brancher=If:from number:and:does: */
-	16074758462198199363: (*ChooseValue)(nil),       /* execute=If:from number:and:does: */
-	11241310528320233814: (*ChooseValue)(nil),       /* brancher=If:from number:and:does:else: */
-	2025490709402994000:  (*ChooseValue)(nil),       /* execute=If:from number:and:does:else: */
-	14630675154245371657: (*ChooseValue)(nil),       /* brancher=If:from record:and:does: */
-	4839577635082465035:  (*ChooseValue)(nil),       /* execute=If:from record:and:does: */
-	9961369399137109106:  (*ChooseValue)(nil),       /* brancher=If:from record:and:does:else: */
-	909397421382488072:   (*ChooseValue)(nil),       /* execute=If:from record:and:does:else: */
-	11402537131020082237: (*ChooseValue)(nil),       /* brancher=If:from recordList:and:does: */
-	12430588408770992611: (*ChooseValue)(nil),       /* execute=If:from recordList:and:does: */
-	10775883632195360518: (*ChooseValue)(nil),       /* brancher=If:from recordList:and:does:else: */
-	4571023260385107056:  (*ChooseValue)(nil),       /* execute=If:from recordList:and:does:else: */
-	15877245316294031595: (*ChooseValue)(nil),       /* brancher=If:from text:and:does: */
-	4881940430906735205:  (*ChooseValue)(nil),       /* execute=If:from text:and:does: */
-	2882126629424455016:  (*ChooseValue)(nil),       /* brancher=If:from text:and:does:else: */
-	8368907915607348926:  (*ChooseValue)(nil),       /* execute=If:from text:and:does:else: */
-	17858312151022311939: (*ChooseValue)(nil),       /* brancher=If:from textList:and:does: */
-	13196879225624420393: (*ChooseValue)(nil),       /* execute=If:from textList:and:does: */
-	10973082176696567440: (*ChooseValue)(nil),       /* brancher=If:from textList:and:does:else: */
-	13447163397853831058: (*ChooseValue)(nil),       /* execute=If:from textList:and:does:else: */
+	16406941430984447480: (*ChooseValue)(nil),       /* brancher=If:from:and:does: */
+	12357574444125496774: (*ChooseValue)(nil),       /* execute=If:from:and:does: */
+	100567086370651161:   (*ChooseValue)(nil),       /* brancher=If:from:and:does:else: */
+	1836790182809498779:  (*ChooseValue)(nil),       /* execute=If:from:and:does:else: */
 	11335666314438122404: (*SumOf)(nil),             /* number_eval=Inc: */
 	425597877445155633:   (*SumOf)(nil),             /* number_eval=Inc:by: */
 	10867951538760575464: (*IsEmpty)(nil),           /* bool_eval=Is empty: */
@@ -9458,20 +8574,8 @@ var Signatures = map[uint64]interface{}{
 	10829518726009615643: (*CallSend)(nil),          /* bool_eval=Send:event: */
 	5953636708531320523:  (*CallSend)(nil),          /* execute=Send:event: */
 	10747671703915852065: (*MakeSentenceCase)(nil),  /* text_eval=Sentence: */
-	4965185253517693468:  (*SetValue)(nil),          /* execute=Set object:from bool: */
-	7556745598404233428:  (*SetValue)(nil),          /* execute=Set object:from numList: */
-	8735907795435309039:  (*SetValue)(nil),          /* execute=Set object:from number: */
-	10709952200914288807: (*SetValue)(nil),          /* execute=Set object:from record: */
-	5786508692994240911:  (*SetValue)(nil),          /* execute=Set object:from recordList: */
-	8330522524214153001:  (*SetValue)(nil),          /* execute=Set object:from text: */
-	8872658560125235229:  (*SetValue)(nil),          /* execute=Set object:from textList: */
-	12346400342841196709: (*SetValue)(nil),          /* execute=Set variable:from bool: */
-	12135759660878681043: (*SetValue)(nil),          /* execute=Set variable:from numList: */
-	18353419269292744622: (*SetValue)(nil),          /* execute=Set variable:from number: */
-	2428131260514854178:  (*SetValue)(nil),          /* execute=Set variable:from record: */
-	10938150425622553578: (*SetValue)(nil),          /* execute=Set variable:from recordList: */
-	7748975654977840844:  (*SetValue)(nil),          /* execute=Set variable:from text: */
-	10840237758761273296: (*SetValue)(nil),          /* execute=Set variable:from textList: */
+	15239034336200057028: (*SetValue)(nil),          /* execute=Set object:from: */
+	15672302681716489287: (*SetValue)(nil),          /* execute=Set variable:from: */
 	3632089819497852687:  (*CallShuffle)(nil),       /* text_eval=Shuffle:over: */
 	2397382738676796596:  (*Singularize)(nil),       /* text_eval=Singular of: */
 	1629446371562398452:  (*SlashText)(nil),         /* text_eval=Slashes does: */

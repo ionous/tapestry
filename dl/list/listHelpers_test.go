@@ -1,6 +1,7 @@
 package list_test
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 )
 
@@ -15,11 +16,11 @@ var (
 	GetVariable = core.GetVariable
 )
 
-func FromTs(vs []string) (ret core.Assignment) {
+func FromTs(vs []string) (ret assign.Assignment) {
 	if len(vs) == 1 {
-		ret = core.AssignFromText(core.T(vs[0]))
+		ret = &assign.FromText{Value: core.T(vs[0])}
 	} else {
-		ret = core.AssignFromTextList(core.Ts(vs))
+		ret = &assign.FromTextList{Value: core.Ts(vs)}
 	}
 	return
 }

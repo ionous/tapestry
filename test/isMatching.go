@@ -2,6 +2,7 @@ package test
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -57,6 +58,6 @@ func matches(b bool) []rt.Execute {
 	return []rt.Execute{
 		&core.SetValue{
 			Target: core.Variable("matches"),
-			Value:  core.AssignFromBool(B(b))},
+			Value:  &assign.FromBool{Value: B(b)}},
 	}
 }

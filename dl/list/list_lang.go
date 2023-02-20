@@ -2,6 +2,7 @@
 package list
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
@@ -524,10 +525,10 @@ func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 
 // ListEach Loops over the elements in the passed list, or runs the 'else' activity if empty.
 type ListEach struct {
-	List   core.Assignment `if:"label=across"`
-	As     string          `if:"label=as,type=text"`
-	Does   []rt.Execute    `if:"label=does"`
-	Else   core.Brancher   `if:"label=else,optional"`
+	List   assign.Assignment `if:"label=across"`
+	As     string            `if:"label=as,type=text"`
+	Does   []rt.Execute      `if:"label=does"`
+	Else   core.Brancher     `if:"label=else,optional"`
 	Markup map[string]any
 }
 
@@ -621,7 +622,7 @@ func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
 	if err = m.MarshalBlock(ListEach_Flow{val}); err == nil {
 		e0 := m.MarshalKey("across", ListEach_Field_List)
 		if e0 == nil {
-			e0 = core.Assignment_Marshal(m, &val.List)
+			e0 = assign.Assignment_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListEach_Field_List))
@@ -654,8 +655,8 @@ func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
 
 // ListFind Search a list for a specific value.
 type ListFind struct {
-	Value  core.Assignment `if:"label=_"`
-	List   core.Assignment `if:"label=in_list"`
+	Value  assign.Assignment `if:"label=_"`
+	List   assign.Assignment `if:"label=in_list"`
 	Markup map[string]any
 }
 
@@ -748,14 +749,14 @@ func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
 	if err = m.MarshalBlock(ListFind_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListFind_Field_Value)
 		if e0 == nil {
-			e0 = core.Assignment_Marshal(m, &val.Value)
+			e0 = assign.Assignment_Marshal(m, &val.Value)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListFind_Field_Value))
 		}
 		e1 := m.MarshalKey("in_list", ListFind_Field_List)
 		if e1 == nil {
-			e1 = core.Assignment_Marshal(m, &val.List)
+			e1 = assign.Assignment_Marshal(m, &val.List)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListFind_Field_List))
@@ -769,9 +770,9 @@ func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
 // The named pattern gets with with two parameters for each value in the list:
 // 'in' as each value from the list, and 'out' as the var passed to the gather.
 type ListGather struct {
-	Target core.Address    `if:"label=_"`
-	From   core.Assignment `if:"label=from"`
-	Using  string          `if:"label=using,type=text"`
+	Target core.Address      `if:"label=_"`
+	From   assign.Assignment `if:"label=from"`
+	Using  string            `if:"label=using,type=text"`
 	Markup map[string]any
 }
 
@@ -868,7 +869,7 @@ func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
 		}
 		e1 := m.MarshalKey("from", ListGather_Field_From)
 		if e1 == nil {
-			e1 = core.Assignment_Marshal(m, &val.From)
+			e1 = assign.Assignment_Marshal(m, &val.From)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListGather_Field_From))
@@ -887,7 +888,7 @@ func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
 
 // ListLen Determines the number of values in a list.
 type ListLen struct {
-	List   core.Assignment `if:"label=_"`
+	List   assign.Assignment `if:"label=_"`
 	Markup map[string]any
 }
 
@@ -978,7 +979,7 @@ func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
 	if err = m.MarshalBlock(ListLen_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListLen_Field_List)
 		if e0 == nil {
-			e0 = core.Assignment_Marshal(m, &val.List)
+			e0 = assign.Assignment_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListLen_Field_List))
@@ -991,9 +992,9 @@ func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
 // ListMap Transform the values from one list and place the results in another list.
 // The designated pattern is called with each value from the 'from list', one value at a time.
 type ListMap struct {
-	Target       core.Address    `if:"label=_"`
-	List         core.Assignment `if:"label=from_list"`
-	UsingPattern string          `if:"label=using,type=text"`
+	Target       core.Address      `if:"label=_"`
+	List         assign.Assignment `if:"label=from_list"`
+	UsingPattern string            `if:"label=using,type=text"`
 	Markup       map[string]any
 }
 
@@ -1093,7 +1094,7 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 		}
 		e1 := m.MarshalKey("from_list", ListMap_Field_List)
 		if e1 == nil {
-			e1 = core.Assignment_Marshal(m, &val.List)
+			e1 = assign.Assignment_Marshal(m, &val.List)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListMap_Field_List))
@@ -1112,9 +1113,9 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 
 // ListPush Add a value to a list.
 type ListPush struct {
-	Value  core.Assignment `if:"label=_"`
-	Target core.Address    `if:"label=into"`
-	AtEdge rt.BoolEval     `if:"label=at_front,optional"`
+	Value  assign.Assignment `if:"label=_"`
+	Target core.Address      `if:"label=into"`
+	AtEdge rt.BoolEval       `if:"label=at_front,optional"`
 	Markup map[string]any
 }
 
@@ -1207,7 +1208,7 @@ func ListPush_Marshal(m jsn.Marshaler, val *ListPush) (err error) {
 	if err = m.MarshalBlock(ListPush_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListPush_Field_Value)
 		if e0 == nil {
-			e0 = core.Assignment_Marshal(m, &val.Value)
+			e0 = assign.Assignment_Marshal(m, &val.Value)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListPush_Field_Value))
@@ -1231,13 +1232,13 @@ func ListPush_Marshal(m jsn.Marshaler, val *ListPush) (err error) {
 	return
 }
 
-// ListReduce Combine all of the values in a list with the targeted value.
+// ListReduce Combine all of the values in a list into the targeted value.
 // The designated pattern is called with two parameters:
-// 'in' ( each element of the list ) and 'out' ( the target ).
+// 'in' ( each element of the list ) and 'out' ( ex. a record ).
 type ListReduce struct {
-	Target       core.Address    `if:"label=into"`
-	List         core.Assignment `if:"label=from_list"`
-	UsingPattern string          `if:"label=using,type=text"`
+	Target       core.Address      `if:"label=into"`
+	List         assign.Assignment `if:"label=from_list"`
+	UsingPattern string            `if:"label=using,type=text"`
 	Markup       map[string]any
 }
 
@@ -1337,7 +1338,7 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 		}
 		e1 := m.MarshalKey("from_list", ListReduce_Field_List)
 		if e1 == nil {
-			e1 = core.Assignment_Marshal(m, &val.List)
+			e1 = assign.Assignment_Marshal(m, &val.List)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListReduce_Field_List))
@@ -1465,9 +1466,9 @@ func ListReverse_Marshal(m jsn.Marshaler, val *ListReverse) (err error) {
 // When end is omitted, copy up to and including the last element;
 // and do the same if the end is greater than the length
 type ListSlice struct {
-	List   core.Assignment `if:"label=_"`
-	Start  rt.NumberEval   `if:"label=start,optional"`
-	End    rt.NumberEval   `if:"label=end,optional"`
+	List   assign.Assignment `if:"label=_"`
+	Start  rt.NumberEval     `if:"label=start,optional"`
+	End    rt.NumberEval     `if:"label=end,optional"`
 	Markup map[string]any
 }
 
@@ -1562,7 +1563,7 @@ func ListSlice_Marshal(m jsn.Marshaler, val *ListSlice) (err error) {
 	if err = m.MarshalBlock(ListSlice_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSlice_Field_List)
 		if e0 == nil {
-			e0 = core.Assignment_Marshal(m, &val.List)
+			e0 = assign.Assignment_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSlice_Field_List))
@@ -1845,10 +1846,10 @@ func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
 // If the remove count is missing, this removes all elements from the start to the end;
 // if the remove count is zero or negative, no elements are removed.
 type ListSplice struct {
-	Target core.Address    `if:"label=_"`
-	Start  rt.NumberEval   `if:"label=start"`
-	Remove rt.NumberEval   `if:"label=remove"`
-	Insert core.Assignment `if:"label=insert"`
+	Target core.Address      `if:"label=_"`
+	Start  rt.NumberEval     `if:"label=start"`
+	Remove rt.NumberEval     `if:"label=remove"`
+	Insert assign.Assignment `if:"label=insert"`
 	Markup map[string]any
 }
 
@@ -1966,7 +1967,7 @@ func ListSplice_Marshal(m jsn.Marshaler, val *ListSplice) (err error) {
 		}
 		e3 := m.MarshalKey("insert", ListSplice_Field_Insert)
 		if e3 == nil {
-			e3 = core.Assignment_Marshal(m, &val.Insert)
+			e3 = assign.Assignment_Marshal(m, &val.Insert)
 		}
 		if e3 != nil && e3 != jsn.Missing {
 			m.Error(errutil.New(e3, "in flow at", ListSplice_Field_Insert))
@@ -2122,20 +2123,8 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	4834855566453385149:  (*ListGather)(nil),      /* Gather object:from bool:using: */
-	15211428265749514771: (*ListGather)(nil),      /* Gather object:from numList:using: */
-	1041128765096947214:  (*ListGather)(nil),      /* Gather object:from number:using: */
-	15181035077484080630: (*ListGather)(nil),      /* Gather object:from record:using: */
-	6527107026845627330:  (*ListGather)(nil),      /* Gather object:from recordList:using: */
-	18368601393953066792: (*ListGather)(nil),      /* Gather object:from text:using: */
-	2698192178382880800:  (*ListGather)(nil),      /* Gather object:from textList:using: */
-	15935288953360013024: (*ListGather)(nil),      /* Gather variable:from bool:using: */
-	18258259361055151864: (*ListGather)(nil),      /* Gather variable:from numList:using: */
-	7768636804631335339:  (*ListGather)(nil),      /* Gather variable:from number:using: */
-	8390079513383739007:  (*ListGather)(nil),      /* Gather variable:from record:using: */
-	11612120723995890267: (*ListGather)(nil),      /* Gather variable:from recordList:using: */
-	5201624097684423657:  (*ListGather)(nil),      /* Gather variable:from text:using: */
-	11735105521502822593: (*ListGather)(nil),      /* Gather variable:from textList:using: */
+	5769563723333560303:  (*ListGather)(nil),      /* Gather object:from:using: */
+	6012189601514584992:  (*ListGather)(nil),      /* Gather variable:from:using: */
 	14478606265438922628: (*EraseEdge)(nil),       /* execute=Erase object: */
 	9282735962373956066:  (*EraseEdge)(nil),       /* execute=Erase object:atFront: */
 	12482240611163626049: (*EraseEdge)(nil),       /* execute=Erase variable: */
@@ -2152,271 +2141,37 @@ var Signatures = map[uint64]interface{}{
 	8304679251198058276:  (*ErasingEdge)(nil),     /* execute=Erasing variable:atFront:as:does:else: */
 	10143128393744540981: (*Erasing)(nil),         /* execute=Erasing:from object:atIndex:as:does: */
 	12913506357911229396: (*Erasing)(nil),         /* execute=Erasing:from variable:atIndex:as:does: */
-	4798629662167190311:  (*ListFind)(nil),        /* bool_eval=Find bool:inList bool: */
-	15496679535846055330: (*ListFind)(nil),        /* number_eval=Find bool:inList bool: */
-	9825556450444029045:  (*ListFind)(nil),        /* bool_eval=Find bool:inList numList: */
-	16528474899807055458: (*ListFind)(nil),        /* number_eval=Find bool:inList numList: */
-	12044053119929816536: (*ListFind)(nil),        /* bool_eval=Find bool:inList number: */
-	11913939542662143277: (*ListFind)(nil),        /* number_eval=Find bool:inList number: */
-	3052123319382255080:  (*ListFind)(nil),        /* bool_eval=Find bool:inList record: */
-	9694868371866035137:  (*ListFind)(nil),        /* number_eval=Find bool:inList record: */
-	9023601832477479948:  (*ListFind)(nil),        /* bool_eval=Find bool:inList recordList: */
-	17981633245748776277: (*ListFind)(nil),        /* number_eval=Find bool:inList recordList: */
-	1500647723196650026:  (*ListFind)(nil),        /* bool_eval=Find bool:inList text: */
-	2903868483097085819:  (*ListFind)(nil),        /* number_eval=Find bool:inList text: */
-	4756245556509023346:  (*ListFind)(nil),        /* bool_eval=Find bool:inList textList: */
-	7483576431261612195:  (*ListFind)(nil),        /* number_eval=Find bool:inList textList: */
-	4883391365216342407:  (*ListFind)(nil),        /* bool_eval=Find numList:inList bool: */
-	7840770186716954640:  (*ListFind)(nil),        /* number_eval=Find numList:inList bool: */
-	13572012353775251477: (*ListFind)(nil),        /* bool_eval=Find numList:inList numList: */
-	11728511162266892096: (*ListFind)(nil),        /* number_eval=Find numList:inList numList: */
-	7690016808528207032:  (*ListFind)(nil),        /* bool_eval=Find numList:inList number: */
-	5830452114605157963:  (*ListFind)(nil),        /* number_eval=Find numList:inList number: */
-	17144690344201786184: (*ListFind)(nil),        /* bool_eval=Find numList:inList record: */
-	2826678904067205755:  (*ListFind)(nil),        /* number_eval=Find numList:inList record: */
-	17268211705068730668: (*ListFind)(nil),        /* bool_eval=Find numList:inList recordList: */
-	6623021979824360355:  (*ListFind)(nil),        /* number_eval=Find numList:inList recordList: */
-	7819798664338025866:  (*ListFind)(nil),        /* bool_eval=Find numList:inList text: */
-	4633606205628459677:  (*ListFind)(nil),        /* number_eval=Find numList:inList text: */
-	6124897371284439442:  (*ListFind)(nil),        /* bool_eval=Find numList:inList textList: */
-	14391486515486068049: (*ListFind)(nil),        /* number_eval=Find numList:inList textList: */
-	8751824420486616712:  (*ListFind)(nil),        /* bool_eval=Find number:inList bool: */
-	17900038923979954549: (*ListFind)(nil),        /* number_eval=Find number:inList bool: */
-	1770194941104087992:  (*ListFind)(nil),        /* bool_eval=Find number:inList numList: */
-	18185554683488165027: (*ListFind)(nil),        /* number_eval=Find number:inList numList: */
-	792062938938704979:   (*ListFind)(nil),        /* bool_eval=Find number:inList number: */
-	12660797964853363710: (*ListFind)(nil),        /* number_eval=Find number:inList number: */
-	6670555753527766259:  (*ListFind)(nil),        /* bool_eval=Find number:inList record: */
-	16179555044001150002: (*ListFind)(nil),        /* number_eval=Find number:inList record: */
-	13284160881060722139: (*ListFind)(nil),        /* bool_eval=Find number:inList recordList: */
-	15878707675118176442: (*ListFind)(nil),        /* number_eval=Find number:inList recordList: */
-	10347326664567502389: (*ListFind)(nil),        /* bool_eval=Find number:inList text: */
-	7277141623401675964:  (*ListFind)(nil),        /* number_eval=Find number:inList text: */
-	14877787943524816841: (*ListFind)(nil),        /* bool_eval=Find number:inList textList: */
-	8570194865177788032:  (*ListFind)(nil),        /* number_eval=Find number:inList textList: */
-	6549273478988393980:  (*ListFind)(nil),        /* bool_eval=Find record:inList bool: */
-	1582006419269568565:  (*ListFind)(nil),        /* number_eval=Find record:inList bool: */
-	4983517830338515572:  (*ListFind)(nil),        /* bool_eval=Find record:inList numList: */
-	14956017093881013859: (*ListFind)(nil),        /* number_eval=Find record:inList numList: */
-	7642277694920408143:  (*ListFind)(nil),        /* bool_eval=Find record:inList number: */
-	9617759477496160446:  (*ListFind)(nil),        /* number_eval=Find record:inList number: */
-	5013728000098006919:  (*ListFind)(nil),        /* bool_eval=Find record:inList record: */
-	6662929451280538610:  (*ListFind)(nil),        /* number_eval=Find record:inList record: */
-	6154699522158868655:  (*ListFind)(nil),        /* bool_eval=Find record:inList recordList: */
-	9513159735218572666:  (*ListFind)(nil),        /* number_eval=Find record:inList recordList: */
-	10159493979471565833: (*ListFind)(nil),        /* bool_eval=Find record:inList text: */
-	2926580724521905532:  (*ListFind)(nil),        /* number_eval=Find record:inList text: */
-	7004533036077749309:  (*ListFind)(nil),        /* bool_eval=Find record:inList textList: */
-	11466514096698381888: (*ListFind)(nil),        /* number_eval=Find record:inList textList: */
-	5219655416923856736:  (*ListFind)(nil),        /* bool_eval=Find recordList:inList bool: */
-	16011403491957795353: (*ListFind)(nil),        /* number_eval=Find recordList:inList bool: */
-	7464860859085804624:  (*ListFind)(nil),        /* bool_eval=Find recordList:inList numList: */
-	7039752474390898287:  (*ListFind)(nil),        /* number_eval=Find recordList:inList numList: */
-	7398363037665457947:  (*ListFind)(nil),        /* bool_eval=Find recordList:inList number: */
-	2627971465223708458:  (*ListFind)(nil),        /* number_eval=Find recordList:inList number: */
-	1772582454242836555:  (*ListFind)(nil),        /* bool_eval=Find recordList:inList record: */
-	2020284005342045254:  (*ListFind)(nil),        /* number_eval=Find recordList:inList record: */
-	4782409525887952115:  (*ListFind)(nil),        /* bool_eval=Find recordList:inList recordList: */
-	466116651387500974:   (*ListFind)(nil),        /* number_eval=Find recordList:inList recordList: */
-	13895308172737804621: (*ListFind)(nil),        /* bool_eval=Find recordList:inList text: */
-	5943863057000524496:  (*ListFind)(nil),        /* number_eval=Find recordList:inList text: */
-	15964379503982170689: (*ListFind)(nil),        /* bool_eval=Find recordList:inList textList: */
-	4857120857680337972:  (*ListFind)(nil),        /* number_eval=Find recordList:inList textList: */
-	16548788711483530454: (*ListFind)(nil),        /* bool_eval=Find text:inList bool: */
-	4297686639920227743:  (*ListFind)(nil),        /* number_eval=Find text:inList bool: */
-	16383538306170244670: (*ListFind)(nil),        /* bool_eval=Find text:inList numList: */
-	10290406350836964845: (*ListFind)(nil),        /* number_eval=Find text:inList numList: */
-	5259625134272047465:  (*ListFind)(nil),        /* bool_eval=Find text:inList number: */
-	13307805073849880256: (*ListFind)(nil),        /* number_eval=Find text:inList number: */
-	2072534090034643317:  (*ListFind)(nil),        /* bool_eval=Find text:inList record: */
-	12077988993210590272: (*ListFind)(nil),        /* number_eval=Find text:inList record: */
-	13264851135264311817: (*ListFind)(nil),        /* bool_eval=Find text:inList recordList: */
-	16159500457161101668: (*ListFind)(nil),        /* number_eval=Find text:inList recordList: */
-	3838954189566393919:  (*ListFind)(nil),        /* bool_eval=Find text:inList text: */
-	13545854215908644514: (*ListFind)(nil),        /* number_eval=Find text:inList text: */
-	215654777309859111:   (*ListFind)(nil),        /* bool_eval=Find text:inList textList: */
-	3822119946373754218:  (*ListFind)(nil),        /* number_eval=Find text:inList textList: */
-	10808826658776084734: (*ListFind)(nil),        /* bool_eval=Find textList:inList bool: */
-	14947005753086002727: (*ListFind)(nil),        /* number_eval=Find textList:inList bool: */
-	17906549100233067910: (*ListFind)(nil),        /* bool_eval=Find textList:inList numList: */
-	14744001795738555765: (*ListFind)(nil),        /* number_eval=Find textList:inList numList: */
-	5761838712338347201:  (*ListFind)(nil),        /* bool_eval=Find textList:inList number: */
-	1467581581530417368:  (*ListFind)(nil),        /* number_eval=Find textList:inList number: */
-	17251999743892516893: (*ListFind)(nil),        /* bool_eval=Find textList:inList record: */
-	10922395854692407528: (*ListFind)(nil),        /* number_eval=Find textList:inList record: */
-	9680969228619901649:  (*ListFind)(nil),        /* bool_eval=Find textList:inList recordList: */
-	8954468803612751628:  (*ListFind)(nil),        /* number_eval=Find textList:inList recordList: */
-	2548416432624298599:  (*ListFind)(nil),        /* bool_eval=Find textList:inList text: */
-	11649023814115462442: (*ListFind)(nil),        /* number_eval=Find textList:inList text: */
-	4926794106090969167:  (*ListFind)(nil),        /* bool_eval=Find textList:inList textList: */
-	12827879591764936562: (*ListFind)(nil),        /* number_eval=Find textList:inList textList: */
-	15771146728493073891: (*ListLen)(nil),         /* number_eval=Len bool: */
-	13148152504949517065: (*ListLen)(nil),         /* number_eval=Len numList: */
-	17629935431866945020: (*ListLen)(nil),         /* number_eval=Len number: */
-	6288535260840067156:  (*ListLen)(nil),         /* number_eval=Len record: */
-	5879602511151983064:  (*ListLen)(nil),         /* number_eval=Len recordList: */
-	4894088838788583174:  (*ListLen)(nil),         /* number_eval=Len text: */
-	15268125286018430830: (*ListLen)(nil),         /* number_eval=Len textList: */
-	6300693019956665056:  (*ListMap)(nil),         /* execute=Map object:fromList bool:using: */
-	12370769425037869816: (*ListMap)(nil),         /* execute=Map object:fromList numList:using: */
-	15666754401429763499: (*ListMap)(nil),         /* execute=Map object:fromList number:using: */
-	16288197110182167167: (*ListMap)(nil),         /* execute=Map object:fromList record:using: */
-	7382518741870114395:  (*ListMap)(nil),         /* execute=Map object:fromList recordList:using: */
-	14013772237990627305: (*ListMap)(nil),         /* execute=Map object:fromList text:using: */
-	14822823295607039169: (*ListMap)(nil),         /* execute=Map object:fromList textList:using: */
-	16742008827802526201: (*ListMap)(nil),         /* execute=Map variable:fromList bool:using: */
-	14095417218301489111: (*ListMap)(nil),         /* execute=Map variable:fromList numList:using: */
-	12197544336897376514: (*ListMap)(nil),         /* execute=Map variable:fromList number:using: */
-	2501706441326043762:  (*ListMap)(nil),         /* execute=Map variable:fromList record:using: */
-	12867728403674492990: (*ListMap)(nil),         /* execute=Map variable:fromList recordList:using: */
-	2018364426527770836:  (*ListMap)(nil),         /* execute=Map variable:fromList text:using: */
-	4552143749892410604:  (*ListMap)(nil),         /* execute=Map variable:fromList textList:using: */
-	17460700385371836464: (*ListPush)(nil),        /* execute=Push bool:into object: */
-	6056110790853933910:  (*ListPush)(nil),        /* execute=Push bool:into object:atFront: */
-	2535261440951144669:  (*ListPush)(nil),        /* execute=Push bool:into variable: */
-	18152773814529573991: (*ListPush)(nil),        /* execute=Push bool:into variable:atFront: */
-	11320513384328480706: (*ListPush)(nil),        /* execute=Push numList:into object: */
-	15533273064073310284: (*ListPush)(nil),        /* execute=Push numList:into object:atFront: */
-	457344833627593787:   (*ListPush)(nil),        /* execute=Push numList:into variable: */
-	4050524748381726297:  (*ListPush)(nil),        /* execute=Push numList:into variable:atFront: */
-	12687913441322660603: (*ListPush)(nil),        /* execute=Push number:into object: */
-	3535200343819049625:  (*ListPush)(nil),        /* execute=Push number:into object:atFront: */
-	2012631263590879202:  (*ListPush)(nil),        /* execute=Push number:into variable: */
-	17098403402451646252: (*ListPush)(nil),        /* execute=Push number:into variable:atFront: */
-	9393284254281218439:  (*ListPush)(nil),        /* execute=Push record:into object: */
-	6709774368926077693:  (*ListPush)(nil),        /* execute=Push record:into object:atFront: */
-	5177050190408275070:  (*ListPush)(nil),        /* execute=Push record:into variable: */
-	2015085615115694592:  (*ListPush)(nil),        /* execute=Push record:into variable:atFront: */
-	11873326717073588367: (*ListPush)(nil),        /* execute=Push recordList:into object: */
-	15712815456746515861: (*ListPush)(nil),        /* execute=Push recordList:into object:atFront: */
-	13592019764413832454: (*ListPush)(nil),        /* execute=Push recordList:into variable: */
-	16403912930406815384: (*ListPush)(nil),        /* execute=Push recordList:into variable:atFront: */
-	3369987343011440621:  (*ListPush)(nil),        /* execute=Push text:into object: */
-	3441000633086539703:  (*ListPush)(nil),        /* execute=Push text:into object:atFront: */
-	16318378693412220248: (*ListPush)(nil),        /* execute=Push text:into variable: */
-	3810526518917234510:  (*ListPush)(nil),        /* execute=Push text:into variable:atFront: */
-	5255956843392128465:  (*ListPush)(nil),        /* execute=Push textList:into object: */
-	2686881294722992083:  (*ListPush)(nil),        /* execute=Push textList:into object:atFront: */
-	8013046464578751724:  (*ListPush)(nil),        /* execute=Push textList:into variable: */
-	4562243350258231802:  (*ListPush)(nil),        /* execute=Push textList:into variable:atFront: */
+	8547752949201735569:  (*ListFind)(nil),        /* bool_eval=Find:inList: */
+	16815906459082105780: (*ListFind)(nil),        /* number_eval=Find:inList: */
+	3478260273963207965:  (*ListLen)(nil),         /* number_eval=Len: */
+	14109924172112471968: (*ListMap)(nil),         /* execute=Map object:fromList:using: */
+	15181321716925872955: (*ListMap)(nil),         /* execute=Map variable:fromList:using: */
+	1016607844458715086:  (*ListPush)(nil),        /* execute=Push:into object: */
+	10703475529015318864: (*ListPush)(nil),        /* execute=Push:into object:atFront: */
+	15468034100902542807: (*ListPush)(nil),        /* execute=Push:into variable: */
+	14208536574252942413: (*ListPush)(nil),        /* execute=Push:into variable:atFront: */
 	120416590109430143:   (*Range)(nil),           /* num_list_eval=Range: */
 	15503705420922978310: (*Range)(nil),           /* num_list_eval=Range:byStep: */
 	16618866959380663563: (*Range)(nil),           /* num_list_eval=Range:from: */
 	14227857065891717050: (*Range)(nil),           /* num_list_eval=Range:from:byStep: */
-	17109467529831837198: (*ListReduce)(nil),      /* execute=Reduce into object:fromList bool:using: */
-	17000490356777766358: (*ListReduce)(nil),      /* execute=Reduce into object:fromList numList:using: */
-	9366847048501616273:  (*ListReduce)(nil),      /* execute=Reduce into object:fromList number:using: */
-	4440221666091188953:  (*ListReduce)(nil),      /* execute=Reduce into object:fromList record:using: */
-	11763309932171020849: (*ListReduce)(nil),      /* execute=Reduce into object:fromList recordList:using: */
-	7251766363632235731:  (*ListReduce)(nil),      /* execute=Reduce into object:fromList text:using: */
-	12719000401652018127: (*ListReduce)(nil),      /* execute=Reduce into object:fromList textList:using: */
-	15039942697949797459: (*ListReduce)(nil),      /* execute=Reduce into variable:fromList bool:using: */
-	5358748091708601985:  (*ListReduce)(nil),      /* execute=Reduce into variable:fromList numList:using: */
-	120736126498984868:   (*ListReduce)(nil),      /* execute=Reduce into variable:fromList number:using: */
-	9871203455417191928:  (*ListReduce)(nil),      /* execute=Reduce into variable:fromList record:using: */
-	8792716967726355184:  (*ListReduce)(nil),      /* execute=Reduce into variable:fromList recordList:using: */
-	6088665226617120570:  (*ListReduce)(nil),      /* execute=Reduce into variable:fromList text:using: */
-	18044924664543056838: (*ListReduce)(nil),      /* execute=Reduce into variable:fromList textList:using: */
-	11373769717792348940: (*ListEach)(nil),        /* execute=Repeating across bool:as:does: */
-	6772049628026210925:  (*ListEach)(nil),        /* execute=Repeating across bool:as:does:else: */
-	14905805402665229262: (*ListEach)(nil),        /* execute=Repeating across numList:as:does: */
-	7401547180676923763:  (*ListEach)(nil),        /* execute=Repeating across numList:as:does:else: */
-	9441770216901454627:  (*ListEach)(nil),        /* execute=Repeating across number:as:does: */
-	10613366508938233648: (*ListEach)(nil),        /* execute=Repeating across number:as:does:else: */
-	8482560869331470195:  (*ListEach)(nil),        /* execute=Repeating across record:as:does: */
-	11704780684564553504: (*ListEach)(nil),        /* execute=Repeating across record:as:does:else: */
-	2878151878592905567:  (*ListEach)(nil),        /* execute=Repeating across recordList:as:does: */
-	11591562832854171244: (*ListEach)(nil),        /* execute=Repeating across recordList:as:does:else: */
-	9866670752584273857:  (*ListEach)(nil),        /* execute=Repeating across text:as:does: */
-	13122655079684130170: (*ListEach)(nil),        /* execute=Repeating across text:as:does:else: */
-	2999023839284626713:  (*ListEach)(nil),        /* execute=Repeating across textList:as:does: */
-	5936926416578155938:  (*ListEach)(nil),        /* execute=Repeating across textList:as:does:else: */
+	5516099698791849382:  (*ListReduce)(nil),      /* execute=Reduce into object:fromList:using: */
+	17710760010169952581: (*ListReduce)(nil),      /* execute=Reduce into variable:fromList:using: */
+	8451005089688158034:  (*ListEach)(nil),        /* execute=Repeating across:as:does: */
+	7170937308629588871:  (*ListEach)(nil),        /* execute=Repeating across:as:does:else: */
 	11445472112426895002: (*ListReverse)(nil),     /* execute=Reverse list object: */
 	9028179729453633619:  (*ListReverse)(nil),     /* execute=Reverse list variable: */
-	687740249528241494:   (*ListSlice)(nil),       /* num_list_eval=Slice bool: */
-	7477623252005102885:  (*ListSlice)(nil),       /* record_list_eval=Slice bool: */
-	10583133103161952119: (*ListSlice)(nil),       /* text_list_eval=Slice bool: */
-	9830270355687528203:  (*ListSlice)(nil),       /* num_list_eval=Slice bool:end: */
-	14700213591516078992: (*ListSlice)(nil),       /* record_list_eval=Slice bool:end: */
-	7620261441166002618:  (*ListSlice)(nil),       /* text_list_eval=Slice bool:end: */
-	10091706125993025444: (*ListSlice)(nil),       /* num_list_eval=Slice bool:start: */
-	3618370589102673887:  (*ListSlice)(nil),       /* record_list_eval=Slice bool:start: */
-	2413289201032818373:  (*ListSlice)(nil),       /* text_list_eval=Slice bool:start: */
-	11071611209237880153: (*ListSlice)(nil),       /* num_list_eval=Slice bool:start:end: */
-	16381407642661604418: (*ListSlice)(nil),       /* record_list_eval=Slice bool:start:end: */
-	17697142756383396144: (*ListSlice)(nil),       /* text_list_eval=Slice bool:start:end: */
-	6174045901093974974:  (*ListSlice)(nil),       /* num_list_eval=Slice numList: */
-	6737230864618501459:  (*ListSlice)(nil),       /* record_list_eval=Slice numList: */
-	1777591537678528965:  (*ListSlice)(nil),       /* text_list_eval=Slice numList: */
-	10686284793975073715: (*ListSlice)(nil),       /* num_list_eval=Slice numList:end: */
-	4257341276502486254:  (*ListSlice)(nil),       /* record_list_eval=Slice numList:end: */
-	9758816093257237552:  (*ListSlice)(nil),       /* text_list_eval=Slice numList:end: */
-	9194046234818555932:  (*ListSlice)(nil),       /* num_list_eval=Slice numList:start: */
-	4478864869180331201:  (*ListSlice)(nil),       /* record_list_eval=Slice numList:start: */
-	9500656902410367615:  (*ListSlice)(nil),       /* text_list_eval=Slice numList:start: */
-	10700451860932825873: (*ListSlice)(nil),       /* num_list_eval=Slice numList:start:end: */
-	13060933077919140628: (*ListSlice)(nil),       /* record_list_eval=Slice numList:start:end: */
-	14305657401602515682: (*ListSlice)(nil),       /* text_list_eval=Slice numList:start:end: */
-	7319486253292826089:  (*ListSlice)(nil),       /* num_list_eval=Slice number: */
-	4634686133626189870:  (*ListSlice)(nil),       /* record_list_eval=Slice number: */
-	5676791116388392808:  (*ListSlice)(nil),       /* text_list_eval=Slice number: */
-	13030066371456642044: (*ListSlice)(nil),       /* num_list_eval=Slice number:end: */
-	17985713863645920451: (*ListSlice)(nil),       /* record_list_eval=Slice number:end: */
-	9652603043351421749:  (*ListSlice)(nil),       /* text_list_eval=Slice number:end: */
-	13056061230635284227: (*ListSlice)(nil),       /* num_list_eval=Slice number:start: */
-	5154187822401091244:  (*ListSlice)(nil),       /* record_list_eval=Slice number:start: */
-	435651182264678570:   (*ListSlice)(nil),       /* text_list_eval=Slice number:start: */
-	7381586987032717694:  (*ListSlice)(nil),       /* num_list_eval=Slice number:start:end: */
-	12950392980078948673: (*ListSlice)(nil),       /* record_list_eval=Slice number:start:end: */
-	18312698166011807895: (*ListSlice)(nil),       /* text_list_eval=Slice number:start:end: */
-	4132395209055421941:  (*ListSlice)(nil),       /* num_list_eval=Slice record: */
-	7156142198557851042:  (*ListSlice)(nil),       /* record_list_eval=Slice record: */
-	11544551921255140600: (*ListSlice)(nil),       /* text_list_eval=Slice record: */
-	11928116709124896896: (*ListSlice)(nil),       /* num_list_eval=Slice record:end: */
-	16024736234595360815: (*ListSlice)(nil),       /* record_list_eval=Slice record:end: */
-	11403018960783699685: (*ListSlice)(nil),       /* text_list_eval=Slice record:end: */
-	5985953244105548303:  (*ListSlice)(nil),       /* num_list_eval=Slice record:start: */
-	11915160734447285760: (*ListSlice)(nil),       /* record_list_eval=Slice record:start: */
-	5691947242970543898:  (*ListSlice)(nil),       /* text_list_eval=Slice record:start: */
-	5491171661651386706:  (*ListSlice)(nil),       /* num_list_eval=Slice record:start:end: */
-	15196312810342329485: (*ListSlice)(nil),       /* record_list_eval=Slice record:start:end: */
-	11502927729046873063: (*ListSlice)(nil),       /* text_list_eval=Slice record:start:end: */
-	12519002010128848521: (*ListSlice)(nil),       /* num_list_eval=Slice recordList: */
-	14429883617907033194: (*ListSlice)(nil),       /* record_list_eval=Slice recordList: */
-	11432186531375119964: (*ListSlice)(nil),       /* text_list_eval=Slice recordList: */
-	16536235310257874716: (*ListSlice)(nil),       /* num_list_eval=Slice recordList:end: */
-	12083011931257404887: (*ListSlice)(nil),       /* record_list_eval=Slice recordList:end: */
-	6677257335508720593:  (*ListSlice)(nil),       /* text_list_eval=Slice recordList:end: */
-	15794963570383188899: (*ListSlice)(nil),       /* num_list_eval=Slice recordList:start: */
-	13348208109320820728: (*ListSlice)(nil),       /* record_list_eval=Slice recordList:start: */
-	9740494822366536638:  (*ListSlice)(nil),       /* text_list_eval=Slice recordList:start: */
-	6248542592474266782:  (*ListSlice)(nil),       /* num_list_eval=Slice recordList:start:end: */
-	17273095392328657381: (*ListSlice)(nil),       /* record_list_eval=Slice recordList:start:end: */
-	12201780319389785011: (*ListSlice)(nil),       /* text_list_eval=Slice recordList:start:end: */
-	6424649801320656575:  (*ListSlice)(nil),       /* num_list_eval=Slice text: */
-	2880198564141747020:  (*ListSlice)(nil),       /* record_list_eval=Slice text: */
-	7577541409167942746:  (*ListSlice)(nil),       /* text_list_eval=Slice text: */
-	13833115380441811618: (*ListSlice)(nil),       /* num_list_eval=Slice text:end: */
-	1731565053043038689:  (*ListSlice)(nil),       /* record_list_eval=Slice text:end: */
-	17693088135176660647: (*ListSlice)(nil),       /* text_list_eval=Slice text:end: */
-	13758137233374768093: (*ListSlice)(nil),       /* num_list_eval=Slice text:start: */
-	1123287878359048846:  (*ListSlice)(nil),       /* record_list_eval=Slice text:start: */
-	7399917200046510856:  (*ListSlice)(nil),       /* text_list_eval=Slice text:start: */
-	12296457659283851144: (*ListSlice)(nil),       /* num_list_eval=Slice text:start:end: */
-	12185380936141810083: (*ListSlice)(nil),       /* record_list_eval=Slice text:start:end: */
-	170920642466474965:   (*ListSlice)(nil),       /* text_list_eval=Slice text:start:end: */
-	11769936664949622183: (*ListSlice)(nil),       /* num_list_eval=Slice textList: */
-	8811003461802931280:  (*ListSlice)(nil),       /* record_list_eval=Slice textList: */
-	7475599544229173794:  (*ListSlice)(nil),       /* text_list_eval=Slice textList: */
-	620597108004713610:   (*ListSlice)(nil),       /* num_list_eval=Slice textList:end: */
-	14361736680466806717: (*ListSlice)(nil),       /* record_list_eval=Slice textList:end: */
-	10243148548097836207: (*ListSlice)(nil),       /* text_list_eval=Slice textList:end: */
-	11352720954416934101: (*ListSlice)(nil),       /* num_list_eval=Slice textList:start: */
-	4417532206553105122:  (*ListSlice)(nil),       /* record_list_eval=Slice textList:start: */
-	12363318130645520000: (*ListSlice)(nil),       /* text_list_eval=Slice textList:start: */
-	13255799277286474592: (*ListSlice)(nil),       /* num_list_eval=Slice textList:start:end: */
-	17538828973473648623: (*ListSlice)(nil),       /* record_list_eval=Slice textList:start:end: */
-	2769197376988253453:  (*ListSlice)(nil),       /* text_list_eval=Slice textList:start:end: */
+	4235921801420235638:  (*ListSlice)(nil),       /* num_list_eval=Slice: */
+	13273073049578089927: (*ListSlice)(nil),       /* record_list_eval=Slice: */
+	18323981472330239313: (*ListSlice)(nil),       /* text_list_eval=Slice: */
+	3713929053224137387:  (*ListSlice)(nil),       /* num_list_eval=Slice:end: */
+	326673439235441194:   (*ListSlice)(nil),       /* record_list_eval=Slice:end: */
+	8469880138850798532:  (*ListSlice)(nil),       /* text_list_eval=Slice:end: */
+	6763121597476813124:  (*ListSlice)(nil),       /* num_list_eval=Slice:start: */
+	10126987075066562677: (*ListSlice)(nil),       /* record_list_eval=Slice:start: */
+	2045310658543284955:  (*ListSlice)(nil),       /* text_list_eval=Slice:start: */
+	14495675636779114361: (*ListSlice)(nil),       /* num_list_eval=Slice:start:end: */
+	3241896595896148736:  (*ListSlice)(nil),       /* record_list_eval=Slice:start:end: */
+	8901512565003460886:  (*ListSlice)(nil),       /* text_list_eval=Slice:start:end: */
 	421498711850031655:   (*ListSortNumbers)(nil), /* execute=SortNumbers object:byField: */
 	16497684129300035417: (*ListSortNumbers)(nil), /* execute=SortNumbers object:byField:descending: */
 	5849496999430306662:  (*ListSortNumbers)(nil), /* execute=SortNumbers variable:byField: */
@@ -2429,60 +2184,12 @@ var Signatures = map[uint64]interface{}{
 	11003982858264652004: (*ListSortText)(nil),    /* execute=SortTexts variable:byField:descending: */
 	16749751527264114426: (*ListSortText)(nil),    /* execute=SortTexts variable:byField:descending:usingCase: */
 	7681352795670764826:  (*ListSortText)(nil),    /* execute=SortTexts variable:byField:usingCase: */
-	254505568650062711:   (*ListSplice)(nil),      /* execute=Splice object:start:remove:insert bool: */
-	14473465088241368288: (*ListSplice)(nil),      /* num_list_eval=Splice object:start:remove:insert bool: */
-	10907694060219474095: (*ListSplice)(nil),      /* record_list_eval=Splice object:start:remove:insert bool: */
-	9588020195550516101:  (*ListSplice)(nil),      /* text_list_eval=Splice object:start:remove:insert bool: */
-	4953874312339275205:  (*ListSplice)(nil),      /* execute=Splice object:start:remove:insert numList: */
-	10036210830066206928: (*ListSplice)(nil),      /* num_list_eval=Splice object:start:remove:insert numList: */
-	11877450138547579581: (*ListSplice)(nil),      /* record_list_eval=Splice object:start:remove:insert numList: */
-	17320190953942263027: (*ListSplice)(nil),      /* text_list_eval=Splice object:start:remove:insert numList: */
-	6212968220386894696:  (*ListSplice)(nil),      /* execute=Splice object:start:remove:insert number: */
-	10837284387544461467: (*ListSplice)(nil),      /* num_list_eval=Splice object:start:remove:insert number: */
-	16548514040101249424: (*ListSplice)(nil),      /* record_list_eval=Splice object:start:remove:insert number: */
-	18327819217042272398: (*ListSplice)(nil),      /* text_list_eval=Splice object:start:remove:insert number: */
-	12080729025253642488: (*ListSplice)(nil),      /* execute=Splice object:start:remove:insert record: */
-	5211503804121840075:  (*ListSplice)(nil),      /* num_list_eval=Splice object:start:remove:insert record: */
-	7989605691056834896:  (*ListSplice)(nil),      /* record_list_eval=Splice object:start:remove:insert record: */
-	4167651507363618818:  (*ListSplice)(nil),      /* text_list_eval=Splice object:start:remove:insert record: */
-	18191097171320504924: (*ListSplice)(nil),      /* execute=Splice object:start:remove:insert recordList: */
-	4841682711032149619:  (*ListSplice)(nil),      /* num_list_eval=Splice object:start:remove:insert recordList: */
-	16734101867085488820: (*ListSplice)(nil),      /* record_list_eval=Splice object:start:remove:insert recordList: */
-	13611854116028542730: (*ListSplice)(nil),      /* text_list_eval=Splice object:start:remove:insert recordList: */
-	15695657948365604954: (*ListSplice)(nil),      /* execute=Splice object:start:remove:insert text: */
-	4702373770345764557:  (*ListSplice)(nil),      /* num_list_eval=Splice object:start:remove:insert text: */
-	4870934094039167890:  (*ListSplice)(nil),      /* record_list_eval=Splice object:start:remove:insert text: */
-	4990595507687160236:  (*ListSplice)(nil),      /* text_list_eval=Splice object:start:remove:insert text: */
-	2809903728659791394:  (*ListSplice)(nil),      /* execute=Splice object:start:remove:insert textList: */
-	18434334661778163649: (*ListSplice)(nil),      /* num_list_eval=Splice object:start:remove:insert textList: */
-	17848994770818519514: (*ListSplice)(nil),      /* record_list_eval=Splice object:start:remove:insert textList: */
-	6255332626240908784:  (*ListSplice)(nil),      /* text_list_eval=Splice object:start:remove:insert textList: */
-	94692154838844448:    (*ListSplice)(nil),      /* execute=Splice variable:start:remove:insert bool: */
-	834002895175246815:   (*ListSplice)(nil),      /* num_list_eval=Splice variable:start:remove:insert bool: */
-	3091564847518459832:  (*ListSplice)(nil),      /* record_list_eval=Splice variable:start:remove:insert bool: */
-	2290242410755864938:  (*ListSplice)(nil),      /* text_list_eval=Splice variable:start:remove:insert bool: */
-	15946286690290403600: (*ListSplice)(nil),      /* execute=Splice variable:start:remove:insert numList: */
-	17078132711325563949: (*ListSplice)(nil),      /* num_list_eval=Splice variable:start:remove:insert numList: */
-	5885731321866503976:  (*ListSplice)(nil),      /* record_list_eval=Splice variable:start:remove:insert numList: */
-	15234187832380791946: (*ListSplice)(nil),      /* text_list_eval=Splice variable:start:remove:insert numList: */
-	16504995663933432027: (*ListSplice)(nil),      /* execute=Splice variable:start:remove:insert number: */
-	15428307853647068160: (*ListSplice)(nil),      /* num_list_eval=Splice variable:start:remove:insert number: */
-	6377975723711103747:  (*ListSplice)(nil),      /* record_list_eval=Splice variable:start:remove:insert number: */
-	2374993890198756581:  (*ListSplice)(nil),      /* text_list_eval=Splice variable:start:remove:insert number: */
-	10495292378639235851: (*ListSplice)(nil),      /* execute=Splice variable:start:remove:insert record: */
-	6198982235816317568:  (*ListSplice)(nil),      /* num_list_eval=Splice variable:start:remove:insert record: */
-	8114195147842030883:  (*ListSplice)(nil),      /* record_list_eval=Splice variable:start:remove:insert record: */
-	2303881887029688521:  (*ListSplice)(nil),      /* text_list_eval=Splice variable:start:remove:insert record: */
-	9158900994911257011:  (*ListSplice)(nil),      /* execute=Splice variable:start:remove:insert recordList: */
-	6164668362673214372:  (*ListSplice)(nil),      /* num_list_eval=Splice variable:start:remove:insert recordList: */
-	6305393212333269451:  (*ListSplice)(nil),      /* record_list_eval=Splice variable:start:remove:insert recordList: */
-	16939933291233560829: (*ListSplice)(nil),      /* text_list_eval=Splice variable:start:remove:insert recordList: */
-	15249617378531728397: (*ListSplice)(nil),      /* execute=Splice variable:start:remove:insert text: */
-	9837287241376951266:  (*ListSplice)(nil),      /* num_list_eval=Splice variable:start:remove:insert text: */
-	10306364190290141637: (*ListSplice)(nil),      /* record_list_eval=Splice variable:start:remove:insert text: */
-	11138339034756661923: (*ListSplice)(nil),      /* text_list_eval=Splice variable:start:remove:insert text: */
-	16704899702181821441: (*ListSplice)(nil),      /* execute=Splice variable:start:remove:insert textList: */
-	12938904036510151082: (*ListSplice)(nil),      /* num_list_eval=Splice variable:start:remove:insert textList: */
-	14769204272593250009: (*ListSplice)(nil),      /* record_list_eval=Splice variable:start:remove:insert textList: */
-	11691226362631679819: (*ListSplice)(nil),      /* text_list_eval=Splice variable:start:remove:insert textList: */
+	3969479757310220625:  (*ListSplice)(nil),      /* execute=Splice object:start:remove:insert: */
+	4242542493653247736:  (*ListSplice)(nil),      /* num_list_eval=Splice object:start:remove:insert: */
+	16228218341859535625: (*ListSplice)(nil),      /* record_list_eval=Splice object:start:remove:insert: */
+	15272943831520387495: (*ListSplice)(nil),      /* text_list_eval=Splice object:start:remove:insert: */
+	221374144086457784:   (*ListSplice)(nil),      /* execute=Splice variable:start:remove:insert: */
+	15817343778888703961: (*ListSplice)(nil),      /* num_list_eval=Splice variable:start:remove:insert: */
+	14581550462073160400: (*ListSplice)(nil),      /* record_list_eval=Splice variable:start:remove:insert: */
+	17468827333339687738: (*ListSplice)(nil),      /* text_list_eval=Splice variable:start:remove:insert: */
 }

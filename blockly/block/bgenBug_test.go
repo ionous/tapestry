@@ -84,45 +84,21 @@ func TestStringHints(t *testing.T) {
 }
 
 // blocks with optional members should just skip happily to the next member
+// fix? empty strings render extraState -- but they probably dont need to.
 func TestSkippedSlot(t *testing.T) {
   if e := testBlocks(&list.ListEach{}, `{
   "type": "list_each",
   "id": "test-1",
-  "extraState": {}
+  "extraState": {
+    "AS": 1
+  },
+  "fields": {
+    "AS": ""
+  }
 }`); e != nil {
     t.Fatal(e)
   }
 }
-
-// empty slots shouldn't get extra closes
-// previously this was getting 4 extra closes
-// func TestEndSlot(t *testing.T) {
-//   if e := testBlocks(&list.ListPush{
-//     From: &core.GetVar{},
-//   }, `{
-//   "type": "put_edge",
-//   "id": "test-1",
-//   "extraState": {
-//     "FROM": 1
-//   },
-//   "inputs": {
-//     "FROM": {
-//       "block": {
-//         "type": "get_var",
-//         "id": "test-2",
-//         "extraState": {
-//           "NAME": 1
-//         },
-//         "fields": {
-//           "NAME": ""
-//         }
-//       }
-//     }
-//   }
-// }`); e != nil {
-//     t.Fatal(e)
-//   }
-// }
 
 // blocks without mutations shouldnt get extra data
 // ( or blockly exceptions and gets very unhappy )

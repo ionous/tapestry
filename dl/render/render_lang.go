@@ -2,6 +2,7 @@
 package render
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
@@ -420,7 +421,7 @@ func RenderRef_Marshal(m jsn.Marshaler, val *RenderRef) (err error) {
 
 // RenderValue Pull a value from an assignment of unknown affinity.
 type RenderValue struct {
-	Value  core.Assignment `if:"label=_"`
+	Value  assign.Assignment `if:"label=_"`
 	Markup map[string]any
 }
 
@@ -510,7 +511,7 @@ func RenderValue_Marshal(m jsn.Marshaler, val *RenderValue) (err error) {
 	if err = m.MarshalBlock(RenderValue_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderValue_Field_Value)
 		if e0 == nil {
-			e0 = core.Assignment_Marshal(m, &val.Value)
+			e0 = assign.Assignment_Marshal(m, &val.Value)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", RenderValue_Field_Value))
@@ -552,11 +553,5 @@ var Signatures = map[uint64]interface{}{
 	7883271647282708009:  (*RenderRef)(nil),     /* render_eval=RenderRef:dot: */
 	239223853229152058:   (*RenderRef)(nil),     /* text_eval=RenderRef:dot: */
 	3872622981826050135:  (*RenderRef)(nil),     /* text_list_eval=RenderRef:dot: */
-	5546765122772182078:  (*RenderValue)(nil),   /* render_eval=RenderValue bool: */
-	1938529954128905414:  (*RenderValue)(nil),   /* render_eval=RenderValue numList: */
-	17296925855329251073: (*RenderValue)(nil),   /* render_eval=RenderValue number: */
-	4105953575081645405:  (*RenderValue)(nil),   /* render_eval=RenderValue record: */
-	2589861995547169809:  (*RenderValue)(nil),   /* render_eval=RenderValue recordList: */
-	3904666836584194471:  (*RenderValue)(nil),   /* render_eval=RenderValue text: */
-	15181167970046501519: (*RenderValue)(nil),   /* render_eval=RenderValue textList: */
+	7608693554121607902:  (*RenderValue)(nil),   /* render_eval=RenderValue: */
 }

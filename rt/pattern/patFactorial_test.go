@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -36,16 +37,16 @@ func TestFactorial(t *testing.T) {
 					Execute: core.MakeActivity(
 						&core.SetValue{
 							Target: core.Variable("num"),
-							Value: core.AssignFromNumber(&core.ProductOf{
+							Value: &assign.FromNumber{&core.ProductOf{
 								A: GetVariable("num"),
 								B: &core.CallPattern{
 									Pattern: P("factorial"),
 									Arguments: []core.Arg{{
 										Name: "num",
-										Value: core.AssignFromNumber(&core.DiffOf{
+										Value: &assign.FromNumber(&core.DiffOf{
 											A: GetVariable("num"),
 											B: I(1),
-										})}}}})}),
+										})}}}}}}),
 				}, {
 					Filter: &core.CompareNum{
 						A:  GetVariable("num"),
@@ -55,7 +56,7 @@ func TestFactorial(t *testing.T) {
 					Execute: core.MakeActivity(
 						&core.SetValue{
 							Target: core.Variable("num"),
-							Value:  core.AssignFromNumber(I(1))},
+							Value:  &assign.FromNumber{Value: I(1)}},
 					),
 				}}},
 		}}
@@ -64,7 +65,7 @@ func TestFactorial(t *testing.T) {
 		Pattern: P("factorial"),
 		Arguments: []core.Arg{{
 			Name:  "num",
-			Value: core.AssignFromNumber(I(3)),
+			Value: &assign.FromNumber{Value: I(3)},
 		}},
 	}
 	if v, e := safe.GetNumber(&run, &det); e != nil {

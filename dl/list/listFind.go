@@ -2,6 +2,7 @@ package list
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"github.com/ionous/errutil"
@@ -31,9 +32,9 @@ func (op *ListFind) GetNumber(run rt.Runtime) (ret g.Value, err error) {
 
 // zero-based
 func (op *ListFind) getIndex(run rt.Runtime) (ret int, err error) {
-	if val, e := op.Value.GetValue(run); e != nil {
+	if val, e := assign.GetValue(run, op.Value); e != nil {
 		err = e
-	} else if els, e := op.List.GetList(run); e != nil {
+	} else if els, e := assign.GetValue(run, op.List); e != nil {
 		err = e
 	} else if listAff, aff := els.Affinity(), val.Affinity(); aff != affine.Element(listAff) {
 		err = errutil.New(listAff, "can't contain", aff)

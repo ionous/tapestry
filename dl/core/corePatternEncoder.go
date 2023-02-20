@@ -3,6 +3,7 @@ package core
 import (
 	"unicode"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang"
 )
@@ -17,7 +18,7 @@ func EncodePattern(m jsn.Marshaler, op *CallPattern) (err error) {
 			if e := m.MarshalKey(argName, argName); e != nil {
 				err = e
 				break
-			} else if e := Assignment_Marshal(m, &arg.Value); e != nil {
+			} else if e := assign.Assignment_Marshal(m, &arg.Value); e != nil {
 				err = e
 				break
 			}

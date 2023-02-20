@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -130,7 +131,7 @@ func (src *RootValue) GetValue(run rt.Runtime) (ret g.Value, err error) {
 
 // FIX: convert and warn instead of error on field affinity checks
 func (src *RootValue) GetCheckedValue(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	if v, e := src.GetValue(run); e != nil {
+	if v, e := assign.GetValue(run, src); e != nil {
 		err = e
 	} else if e := safe.Check(v, aff); e != nil {
 		err = errutil.New(e, "at", src.RefValue.String())

@@ -1,6 +1,7 @@
 package list
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -13,7 +14,7 @@ func (op *ListPush) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListPush) push(run rt.Runtime) (err error) {
-	if ins, e := op.Value.GetValue(run); e != nil {
+	if ins, e := assign.GetValue(run, op.Value); e != nil {
 		err = e
 	} else if root, e := op.Target.GetRootValue(run); e != nil {
 		err = e

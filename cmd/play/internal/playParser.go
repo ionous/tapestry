@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"github.com/ionous/errutil"
@@ -112,7 +113,7 @@ func (p *Parser) Step(words string) (ret *Result, err error) {
 
 type argList []core.Arg
 
-func (l *argList) add(a core.Assignment) {
+func (l *argList) add(a assign.Assignment) {
 	(*l) = append((*l), core.Arg{
 		Name:  "$" + strconv.Itoa(len((*l))+1),
 		Value: a,

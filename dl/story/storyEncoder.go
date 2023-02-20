@@ -12,7 +12,7 @@ func Encode(src *StoryFile) (interface{}, error) {
 }
 
 // customized writer of compact data
-var CompactEncoder = core.CompactEncoder(m, flow)
+var CompactEncoder = core.CompactEncoder
 
 // change from old format composer friendly paragraph blocks into simpler to read and edit lines.
 func (op *Story) Reformat() (out []StoryStatement) {

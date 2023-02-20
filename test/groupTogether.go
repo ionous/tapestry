@@ -2,6 +2,7 @@ package test
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -11,7 +12,7 @@ import (
 
 var runGroupTogther = list.ListMap{
 	Target:       core.Variable("settings"),
-	List:         core.AssignFromTextList(GetVariable("objects")),
+	List:         &assign.FromTextList{Value: GetVariable("objects")},
 	UsingPattern: W("assign_grouping"),
 }
 
@@ -33,7 +34,7 @@ var assignGrouping = testpat.Pattern{
 		{Execute: []rt.Execute{
 			&core.SetValue{
 				Target: core.Variable("out", "name"),
-				Value:  core.AssignFromText(GetVariable("in"))},
+				Value:  &assign.FromText{Value: GetVariable("in")}},
 			&core.ChooseAction{
 				If: &core.Matches{
 					Text:    GetVariable("in"),
@@ -41,7 +42,7 @@ var assignGrouping = testpat.Pattern{
 				Does: core.MakeActivity(
 					&core.SetValue{
 						Target: core.Variable("out", "label"),
-						Value:  core.AssignFromText(T("thingies"))},
+						Value:  &assign.FromText{Value: T("thingies")}},
 				),
 			},
 		}},

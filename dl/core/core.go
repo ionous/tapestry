@@ -3,7 +3,6 @@ package core
 import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 
@@ -72,50 +71,4 @@ func MakeDot(path ...any) []Dot {
 		}
 	}
 	return out
-}
-
-func AssignFromBool(eval rt.BoolEval) Assignment {
-	return Assignment{
-		Choice: Assignment_Bool_Opt,
-		Value:  &FromBool{Val: eval},
-	}
-}
-func AssignFromNumber(eval rt.NumberEval) Assignment {
-	return Assignment{
-		Choice: Assignment_Number_Opt,
-		Value:  &FromNumber{Val: eval},
-	}
-}
-func AssignFromText(eval rt.TextEval) Assignment {
-	return Assignment{
-		Choice: Assignment_Text_Opt,
-		Value:  &FromText{Val: eval},
-	}
-}
-func AssignFromRecord(eval rt.RecordEval) Assignment {
-	return Assignment{
-		Choice: Assignment_Record_Opt,
-		Value:  &FromRecord{Val: eval},
-	}
-}
-
-func AssignFromNumList(eval rt.NumListEval) Assignment {
-	return Assignment{
-		Choice: Assignment_NumList_Opt,
-		Value:  &FromNumList{Val: eval},
-	}
-}
-
-func AssignFromTextList(eval rt.TextListEval) Assignment {
-	return Assignment{
-		Choice: Assignment_TextList_Opt,
-		Value:  &FromTextList{Val: eval},
-	}
-}
-
-func AssignFromRecordList(eval rt.RecordListEval) Assignment {
-	return Assignment{
-		Choice: Assignment_RecordList_Opt,
-		Value:  &FromRecordList{Val: eval},
-	}
 }

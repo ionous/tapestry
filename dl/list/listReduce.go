@@ -3,9 +3,12 @@ package list
 import (
 	"errors"
 
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"github.com/ionous/errutil"
 )
 
 func (op *ListReduce) Execute(run rt.Runtime) (err error) {
@@ -19,8 +22,10 @@ func (op *ListReduce) reduce(run rt.Runtime) (err error) {
 	pat := op.UsingPattern
 	if tgt, e := op.Target.GetRootValue(run); e != nil {
 		err = e
-	} else if fromList, e := op.List.GetList(run); e != nil {
+	} else if fromList, e := assign.GetValue(run, op.List); e != nil {
 		err = e
+	} else if !affine.IsList(fromList.Affinity()) {
+		err = errutil.New("not a list")
 	} else {
 		const (
 			inArg = iota

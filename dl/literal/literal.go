@@ -9,7 +9,7 @@ import (
 )
 
 // LiteralValue marks script constants.
-// ( same interface as core.Assignment currently )
+// ( same interface as assign.Assignment currently )
 type LiteralValue interface {
 	Affinity() affine.Affinity // alt: use a switch on the eval type to generate affinity.
 	GetAssignedValue(rt.Runtime) (g.Value, error)

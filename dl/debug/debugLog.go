@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/generic"
 	"github.com/ionous/errutil"
@@ -19,7 +20,7 @@ var LogLevel LoggingLevel
 func (op *DebugLog) Execute(run rt.Runtime) (err error) {
 	// fix? at this time we cant guarantee a lack of side-effects
 	// so we always eval even if we don't print.
-	if v, e := op.Value.GetValue(run); e != nil {
+	if v, e := assign.GetValue(run, op.Value); e != nil {
 		err = CmdError(op, e)
 	} else {
 		var i interface{}

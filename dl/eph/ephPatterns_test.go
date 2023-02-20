@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/kr/pretty"
@@ -30,7 +30,7 @@ func TestPatternSingle(t *testing.T) {
 			}, {
 				Name:      "l2",
 				Affinity:  Affinity{Affinity_Number},
-				Initially: core.AssignFromNumber(I(10)),
+				Initially: &assign.FromNumber{Value: I(10)},
 			}},
 			Result: &EphParams{
 				Name:     "success",
@@ -76,7 +76,7 @@ func TestPatternSeparateLocals(t *testing.T) {
 			Locals: []EphParams{{
 				Name:      "l2",
 				Affinity:  Affinity{Affinity_Number},
-				Initially: core.AssignFromNumber(I(10)),
+				Initially: &assign.FromNumber{Value: I(10)},
 			}}},
 	)
 	expectFullResults(t, dt)
@@ -117,7 +117,7 @@ func TestPatternSeparateDomains(t *testing.T) {
 			Locals: []EphParams{{
 				Name:      "l2",
 				Affinity:  Affinity{Affinity_Number},
-				Initially: core.AssignFromNumber(I(10)),
+				Initially: &assign.FromNumber{Value: I(10)},
 			}}},
 	)
 	expectFullResults(t, dt)
@@ -164,7 +164,7 @@ func expectFullResults(t *testing.T, dt domainTest) {
 		if e := cat.WriteLocals(&outlocals); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(outlocals[1:], testOut{
-			`a:p:l_2:{"Assignment number:":{"FromNumber:":10}}`,
+			`a:p:l_2:{"FromNumber:":10}`,
 		}); len(diff) > 0 {
 			t.Log("got:", pretty.Sprint(outlocals))
 			t.Fatal(diff)
@@ -266,7 +266,7 @@ func TestPatternConflictingInit(t *testing.T) {
 			Locals: []EphParams{{
 				Name:      "n",
 				Affinity:  Affinity{Affinity_Number},
-				Initially: core.AssignFromText(T("mismatched")),
+				Initially: &assign.FromText{Value: T("mismatched")},
 			}},
 		},
 	)

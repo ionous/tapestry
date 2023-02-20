@@ -3,6 +3,7 @@ package core
 import (
 	"strconv"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
@@ -11,7 +12,7 @@ func MakeActivity(exe ...rt.Execute) []rt.Execute {
 }
 
 // takes any of the rt evals
-func MakeArgs(as ...Assignment) (ret []Arg) {
+func MakeArgs(as ...assign.Assignment) (ret []Arg) {
 	for i, a := range as {
 		ret = append(ret, Arg{
 			// FIX: this is silly, just have no name and count the args when they are used.

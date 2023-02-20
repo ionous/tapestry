@@ -2,9 +2,11 @@ package list
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"github.com/ionous/errutil"
 )
 
 func (op *ListMap) Execute(run rt.Runtime) (err error) {
@@ -16,8 +18,10 @@ func (op *ListMap) Execute(run rt.Runtime) (err error) {
 
 func (op *ListMap) remap(run rt.Runtime) (err error) {
 	pat := op.UsingPattern
-	if src, e := op.List.GetList(run); e != nil {
+	if src, e := assign.GetValue(run, op.List); e != nil {
 		err = e
+	} else if !affine.IsList(src.Affinity()) {
+		err = errutil.New("not a list")
 	} else if root, e := op.Target.GetRootValue(run); e != nil {
 		err = e
 	} else if tgt, e := root.GetList(run); e != nil {

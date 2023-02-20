@@ -2,6 +2,7 @@ package debug
 
 import (
   "git.sr.ht/~ionous/tapestry/affine"
+  "git.sr.ht/~ionous/tapestry/dl/assign"
   "git.sr.ht/~ionous/tapestry/dl/core"
   "git.sr.ht/~ionous/tapestry/jsn"
   "git.sr.ht/~ionous/tapestry/rt"
@@ -49,7 +50,7 @@ func DetermineSay(i int) *core.CallPattern {
     Pattern: core.PatternName{Str: "say_me"},
     Arguments: []core.Arg{{
       Name:  "num",
-      Value: core.AssignFromNumber(I(i)),
+      Value: &assign.FromNumber{Value: I(i)},
     }},
   }
 }
