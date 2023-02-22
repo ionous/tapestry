@@ -166,20 +166,24 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "success",
+                  "Set variable:from:": [
+                    "@success",
                     {
                       "FromBool:": {
                         "Cmp:is:txt:": [
                           "@obj",
                           "equal_to",
                           {
-                            "Get:from:": [
-                              "pawn",
-                              {
-                                "ObjFields:": "player"
-                              }
-                            ]
+                            "Get object:": {
+                              "Object:dot:": [
+                                "player",
+                                [
+                                  {
+                                    "AtField:": "pawn"
+                                  }
+                                ]
+                              ]
+                            }
                           }
                         ]
                       }
@@ -199,8 +203,8 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "success",
+                  "Set variable:from:": [
+                    "@success",
                     {
                       "FromBool:": {
                         "Cmp:is:txt:": [
@@ -230,7 +234,7 @@
           {
             "Expect:": {
               "IsPlayer obj:": {
-                "FromTxt:": "self"
+                "FromText:": "self"
               }
             }
           }

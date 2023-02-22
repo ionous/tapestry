@@ -18,12 +18,16 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "agent",
+                    [
+                      {
+                        "AtField:": "pawn"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -32,20 +36,32 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@actor"
+                  }
+                }
               },
               [
                 {
                   "If:from:and:does:else:": [
                     "result",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanReach actor:action:noun:requiresLight:": [
-                          "@actor",
                           {
-                            "FromTxt:": "peeking"
+                            "FromText:": {
+                              "Text value:": "@actor"
+                            }
                           },
-                          "@noun",
+                          {
+                            "FromText:": "peeking"
+                          },
+                          {
+                            "FromText:": {
+                              "Text value:": "@noun"
+                            }
+                          },
                           {
                             "FromBool:": true
                           }
@@ -69,12 +85,24 @@
                             {
                               "Send:event:": [
                                 {
-                                  "Capture obj:": "@noun"
+                                  "Capture obj:": {
+                                    "FromText:": {
+                                      "Text value:": "@noun"
+                                    }
+                                  }
                                 },
                                 {
                                   "Peek actor:noun:": [
-                                    "@actor",
-                                    "@noun"
+                                    {
+                                      "FromText:": {
+                                        "Text value:": "@actor"
+                                      }
+                                    },
+                                    {
+                                      "FromText:": {
+                                        "Text value:": "@noun"
+                                      }
+                                    }
                                   ]
                                 }
                               ]
@@ -82,8 +110,16 @@
                             [
                               {
                                 "ReportPeeking actor:noun:": [
-                                  "@actor",
-                                  "@noun"
+                                  {
+                                    "FromText:": {
+                                      "Text value:": "@actor"
+                                    }
+                                  },
+                                  {
+                                    "FromText:": {
+                                      "Text value:": "@noun"
+                                    }
+                                  }
                                 ]
                               }
                             ]
@@ -127,9 +163,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
@@ -148,7 +182,11 @@
             "PatternRule:does:": [
               {
                 "Not:": {
-                  "IsPlayer obj:": "@actor"
+                  "IsPlayer obj:": {
+                    "FromText:": {
+                      "Text value:": "@actor"
+                    }
+                  }
                 }
               },
               [

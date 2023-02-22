@@ -96,13 +96,13 @@
                       {
                         "RetrievingFrom agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "coffee"
+                            "FromText:": "coffee"
                           },
                           {
-                            "FromTxt:": "machine"
+                            "FromText:": "machine"
                           }
                         ]
                       }
@@ -123,13 +123,13 @@
                       {
                         "RetrievingFrom agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "soup"
+                            "FromText:": "soup"
                           },
                           {
-                            "FromTxt:": "shelf"
+                            "FromText:": "shelf"
                           }
                         ]
                       },
@@ -155,13 +155,13 @@
                       {
                         "RetrievingFrom agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "hook"
+                            "FromText:": "hook"
                           },
                           {
-                            "FromTxt:": "cabinet"
+                            "FromText:": "cabinet"
                           }
                         ]
                       },
@@ -182,13 +182,13 @@
                       {
                         "RetrievingFrom agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "hat"
+                            "FromText:": "hat"
                           },
                           {
-                            "FromTxt:": "cabinet"
+                            "FromText:": "cabinet"
                           }
                         ]
                       }
@@ -204,13 +204,13 @@
                       {
                         "RetrievingFrom agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "apple"
+                            "FromText:": "apple"
                           },
                           {
-                            "FromTxt:": "Mildred"
+                            "FromText:": "Mildred"
                           }
                         ]
                       }

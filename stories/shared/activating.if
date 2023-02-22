@@ -18,12 +18,16 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "agent",
+                    [
+                      {
+                        "AtField:": "pawn"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -32,20 +36,32 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@actor"
+                  }
+                }
               },
               [
                 {
                   "If:from:and:does:else:": [
                     "resp",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanReach actor:action:noun:": [
-                          "@actor",
                           {
-                            "FromTxt:": "activating"
+                            "FromText:": {
+                              "Text value:": "@actor"
+                            }
                           },
-                          "@noun"
+                          {
+                            "FromText:": "activating"
+                          },
+                          {
+                            "FromText:": {
+                              "Text value:": "@noun"
+                            }
+                          }
                         ]
                       }
                     },
@@ -65,13 +81,21 @@
                           "If:from:and:does:else:": [
                             "resp",
                             {
-                              "FromTxt:": {
+                              "FromText:": {
                                 "CanUse actor:action:noun:": [
-                                  "@actor",
                                   {
-                                    "FromTxt:": "activating"
+                                    "FromText:": {
+                                      "Text value:": "@actor"
+                                    }
                                   },
-                                  "@noun"
+                                  {
+                                    "FromText:": "activating"
+                                  },
+                                  {
+                                    "FromText:": {
+                                      "Text value:": "@noun"
+                                    }
+                                  }
                                 ]
                               }
                             },
@@ -90,20 +114,32 @@
                                 {
                                   "Send:event:": [
                                     {
-                                      "Capture obj:": "@noun"
+                                      "Capture obj:": {
+                                        "FromText:": {
+                                          "Text value:": "@noun"
+                                        }
+                                      }
                                     },
                                     {
                                       "StateChange actor:noun:trait:guard:change:": [
-                                        "@actor",
-                                        "@noun",
                                         {
-                                          "FromTxt:": "activated"
+                                          "FromText:": {
+                                            "Text value:": "@actor"
+                                          }
                                         },
                                         {
-                                          "FromTxt:": "activatable"
+                                          "FromText:": {
+                                            "Text value:": "@noun"
+                                          }
                                         },
                                         {
-                                          "FromTxt:": "switch on"
+                                          "FromText:": "activated"
+                                        },
+                                        {
+                                          "FromText:": "activatable"
+                                        },
+                                        {
+                                          "FromText:": "switch on"
                                         }
                                       ]
                                     }
@@ -144,12 +180,16 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "agent",
+                    [
+                      {
+                        "AtField:": "pawn"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -158,20 +198,32 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@actor"
+                  }
+                }
               },
               [
                 {
                   "If:from:and:does:else:": [
                     "resp",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanReach actor:action:noun:": [
-                          "@actor",
                           {
-                            "FromTxt:": "deactivating"
+                            "FromText:": {
+                              "Text value:": "@actor"
+                            }
                           },
-                          "@noun"
+                          {
+                            "FromText:": "deactivating"
+                          },
+                          {
+                            "FromText:": {
+                              "Text value:": "@noun"
+                            }
+                          }
                         ]
                       }
                     },
@@ -191,13 +243,21 @@
                           "If:from:and:does:else:": [
                             "resp",
                             {
-                              "FromTxt:": {
+                              "FromText:": {
                                 "CanUse actor:action:noun:": [
-                                  "@actor",
                                   {
-                                    "FromTxt:": "deactivating"
+                                    "FromText:": {
+                                      "Text value:": "@actor"
+                                    }
                                   },
-                                  "@noun"
+                                  {
+                                    "FromText:": "deactivating"
+                                  },
+                                  {
+                                    "FromText:": {
+                                      "Text value:": "@noun"
+                                    }
+                                  }
                                 ]
                               }
                             },
@@ -216,20 +276,32 @@
                                 {
                                   "Send:event:": [
                                     {
-                                      "Capture obj:": "@noun"
+                                      "Capture obj:": {
+                                        "FromText:": {
+                                          "Text value:": "@noun"
+                                        }
+                                      }
                                     },
                                     {
                                       "StateChange actor:noun:trait:guard:change:": [
-                                        "@actor",
-                                        "@noun",
                                         {
-                                          "FromTxt:": "deactivated"
+                                          "FromText:": {
+                                            "Text value:": "@actor"
+                                          }
                                         },
                                         {
-                                          "FromTxt:": "activatable"
+                                          "FromText:": {
+                                            "Text value:": "@noun"
+                                          }
                                         },
                                         {
-                                          "FromTxt:": "switch off"
+                                          "FromText:": "deactivated"
+                                        },
+                                        {
+                                          "FromText:": "activatable"
+                                        },
+                                        {
+                                          "FromText:": "switch off"
                                         }
                                       ]
                                     }

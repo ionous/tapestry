@@ -330,7 +330,7 @@
         [
           {
             "Looking agent:": {
-              "FromTxt:": "player"
+              "FromText:": "player"
             }
           },
           {
@@ -342,10 +342,10 @@
           {
             "Traveling agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "faux door"
+                "FromText:": "faux door"
               }
             ]
           },
@@ -355,10 +355,10 @@
           {
             "Traveling agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "double doors"
+                "FromText:": "double doors"
               }
             ]
           },
@@ -368,10 +368,10 @@
           {
             "Opening agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "double doors"
+                "FromText:": "double doors"
               }
             ]
           },
@@ -381,10 +381,10 @@
           {
             "Traveling agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "double doors"
+                "FromText:": "double doors"
               }
             ]
           },

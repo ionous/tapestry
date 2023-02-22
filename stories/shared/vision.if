@@ -15,12 +15,16 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "ObjFields:": "player"
-                  }
-                ]
+                "Get object:": {
+                  "Object:dot:": [
+                    "player",
+                    [
+                      {
+                        "AtField:": "pawn"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           },
@@ -28,10 +32,12 @@
             "Bool:initially:": [
               "was lit",
               {
-                "Get obj:trait:": [
-                  "@actor",
-                  "not in darkness"
-                ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@actor",
+                    "not in darkness"
+                  ]
+                }
               }
             ]
           },
@@ -39,7 +45,11 @@
             "Bool:initially:": [
               "now lit",
               {
-                "ContainsLight spot:": "@actor"
+                "ContainsLight spot:": {
+                  "FromText:": {
+                    "Text value:": "@actor"
+                  }
+                }
               }
             ]
           }
@@ -81,18 +91,24 @@
           },
           {
             "PatternRule:flags:does:": [
-              {
-                "Always": true
-              },
+              true,
               "before",
               [
                 {
-                  "Put:from:at:": [
+                  "Set variable:from:": [
                     {
-                      "VarField:": "actor"
+                      "Variable:dot:": [
+                        "actor",
+                        [
+                          {
+                            "AtField:": "not in darkness"
+                          }
+                        ]
+                      ]
                     },
-                    { "FromBool:": "@now lit"}, 
-                    "not in darkness"
+                    {
+                      "FromBool:": "@now lit"
+                    }
                   ]
                 }
               ]
@@ -113,9 +129,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
@@ -143,19 +157,22 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "PrintVantage where:": {
-                    "FromText:":  {
-                      "Get:from:": [
-                        "pawn",
-                        {
-                          "ObjFields:": "player"
-                        }
-                      ] }
+                    "FromText:": {
+                      "Get object:": {
+                        "Object:dot:": [
+                          "player",
+                          [
+                            {
+                              "AtField:": "pawn"
+                            }
+                          ]
+                        ]
+                      }
+                    }
                   }
                 }
               ]

@@ -35,8 +35,8 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "matching",
+                  "Set variable:from:": [
+                    "@matching",
                     {
                       "FromBool:": true
                     }
@@ -55,8 +55,8 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "matching",
+                  "Set variable:from:": [
+                    "@matching",
                     {
                       "FromBool:": false
                     }
@@ -75,8 +75,8 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "matching",
+                  "Set variable:from:": [
+                    "@matching",
                     {
                       "FromBool:": true
                     }
@@ -97,7 +97,7 @@
               "Txt if:then:else:": [
                 {
                   "StartsWithVowel text:": {
-                    "FromTxt:": "house"
+                    "FromText:": "house"
                   }
                 },
                 "error: house doesn't start with a vowel.",
@@ -113,7 +113,7 @@
               "Txt if:then:else:": [
                 {
                   "StartsWithVowel text:": {
-                    "FromTxt:": "hour"
+                    "FromText:": "hour"
                   }
                 },
                 "ok.",
@@ -129,7 +129,7 @@
               "Txt if:then:else:": [
                 {
                   "StartsWithVowel text:": {
-                    "FromTxt:": "beta"
+                    "FromText:": "beta"
                   }
                 },
                 "error: beta doesn't start with a vowel.",
@@ -145,7 +145,7 @@
               "Txt if:then:else:": [
                 {
                   "StartsWithVowel text:": {
-                    "FromTxt:": "alpha"
+                    "FromText:": "alpha"
                   }
                 },
                 "ok.",

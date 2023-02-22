@@ -31,12 +31,16 @@
               "grouping",
               "grouping",
               {
-                "Get:from:": [
-                  "grouping",
-                  {
-                    "VarFields:": "group"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "group",
+                    [
+                      {
+                        "AtField:": "grouping"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           },
@@ -44,12 +48,16 @@
             "TextList:initially:": [
               "objs",
               {
-                "Get:from:": [
-                  "objects",
-                  {
-                    "VarFields:": "group"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "group",
+                    [
+                      {
+                        "AtField:": "objects"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -60,12 +68,16 @@
               {
                 "AllTrue:": [
                   {
-                    "Get:from:": [
-                      "not hide objects",
-                      {
-                        "VarFields:": "grouping"
-                      }
-                    ]
+                    "Get variable:": {
+                      "Variable:dot:": [
+                        "grouping",
+                        [
+                          {
+                            "AtField:": "not hide objects"
+                          }
+                        ]
+                      ]
+                    }
                   }
                 ]
               },
@@ -76,12 +88,16 @@
                 {
                   "If:does:else:": [
                     {
-                      "Get:from:": [
-                        "not hide size",
-                        {
-                          "VarFields:": "grouping"
-                        }
-                      ]
+                      "Get variable:": {
+                        "Variable:dot:": [
+                          "grouping",
+                          [
+                            {
+                              "AtField:": "not hide size"
+                            }
+                          ]
+                        ]
+                      }
                     },
                     [
                       {
@@ -92,15 +108,23 @@
                                 "Commas does:": [
                                   {
                                     "Repeating across:as:does:": [
-                                      "@objs",
                                       {
-                                        "AsTxt:": "obj"
+                                        "FromTextList:": "@objs"
                                       },
+                                      "obj",
                                       [
                                         {
                                           "PrintGroupedObject obj:grouping:": [
-                                            "@obj",
-                                            "@grouping"
+                                            {
+                                              "FromText:": {
+                                                "Text value:": "@obj"
+                                              }
+                                            },
+                                            {
+                                              "FromText:": {
+                                                "Text value:": "@grouping"
+                                              }
+                                            }
                                           ]
                                         }
                                       ]
@@ -120,15 +144,23 @@
                             "Commas does:": [
                               {
                                 "Repeating across:as:does:": [
-                                  "@objs",
                                   {
-                                    "AsTxt:": "obj"
+                                    "FromTextList:": "@objs"
                                   },
+                                  "obj",
                                   [
                                     {
                                       "PrintGroupedObject obj:grouping:": [
-                                        "@obj",
-                                        "@grouping"
+                                        {
+                                          "FromText:": {
+                                            "Text value:": "@obj"
+                                          }
+                                        },
+                                        {
+                                          "FromText:": {
+                                            "Text value:": "@grouping"
+                                          }
+                                        }
                                       ]
                                     }
                                   ]
@@ -149,20 +181,28 @@
               {
                 "AllTrue:": [
                   {
-                    "Get:from:": [
-                      "is hide size",
-                      {
-                        "VarFields:": "grouping"
-                      }
-                    ]
+                    "Get variable:": {
+                      "Variable:dot:": [
+                        "grouping",
+                        [
+                          {
+                            "AtField:": "is hide size"
+                          }
+                        ]
+                      ]
+                    }
                   },
                   {
-                    "Get:from:": [
-                      "not hide label",
-                      {
-                        "VarFields:": "grouping"
-                      }
-                    ]
+                    "Get variable:": {
+                      "Variable:dot:": [
+                        "grouping",
+                        [
+                          {
+                            "AtField:": "not hide label"
+                          }
+                        ]
+                      ]
+                    }
                   }
                 ]
               },
@@ -172,12 +212,16 @@
                 },
                 {
                   "Say:": {
-                    "Get:from:": [
-                      "label",
-                      {
-                        "VarFields:": "grouping"
-                      }
-                    ]
+                    "Get variable:": {
+                      "Variable:dot:": [
+                        "grouping",
+                        [
+                          {
+                            "AtField:": "label"
+                          }
+                        ]
+                      ]
+                    }
                   }
                 }
               ]
@@ -188,12 +232,16 @@
               {
                 "AllTrue:": [
                   {
-                    "Get:from:": [
-                      "not hide size",
-                      {
-                        "VarFields:": "grouping"
-                      }
-                    ]
+                    "Get variable:": {
+                      "Variable:dot:": [
+                        "grouping",
+                        [
+                          {
+                            "AtField:": "not hide size"
+                          }
+                        ]
+                      ]
+                    }
                   }
                 ]
               },
@@ -204,36 +252,52 @@
                 {
                   "PrintSeveral obj:groupSize:label:": [
                     {
-                      "FromTxt:": {
-                        "Get:index:": [
-                          "@objs",
-                          1
-                        ]
+                      "FromText:": {
+                        "Get variable:": {
+                          "Variable:dot:": [
+                            "@objs",
+                            [
+                              {
+                                "AtIndex:": 1
+                              }
+                            ]
+                          ]
+                        }
                       }
                     },
                     {
-                      "FromNum:": {
-                        "Len:": "@objs"
+                      "FromNumber:": {
+                        "Len:": {
+                          "FromTextList:": "@objs"
+                        }
                       }
                     },
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Txt if:then:else:": [
                           {
-                            "Get:from:": [
-                              "not hide label",
-                              {
-                                "VarFields:": "grouping"
-                              }
-                            ]
+                            "Get variable:": {
+                              "Variable:dot:": [
+                                "grouping",
+                                [
+                                  {
+                                    "AtField:": "not hide label"
+                                  }
+                                ]
+                              ]
+                            }
                           },
                           {
-                            "Get:from:": [
-                              "label",
-                              {
-                                "VarFields:": "grouping"
-                              }
-                            ]
+                            "Get variable:": {
+                              "Variable:dot:": [
+                                "grouping",
+                                [
+                                  {
+                                    "AtField:": "label"
+                                  }
+                                ]
+                              ]
+                            }
                           },
                           ""
                         ]
@@ -250,12 +314,16 @@
                 "AllTrue:": [
                   {
                     "Is empty:": {
-                      "Get:from:": [
-                        "label",
-                        {
-                          "VarFields:": "grouping"
-                        }
-                      ]
+                      "Get variable:": {
+                        "Variable:dot:": [
+                          "grouping",
+                          [
+                            {
+                              "AtField:": "label"
+                            }
+                          ]
+                        ]
+                      }
                     }
                   }
                 ]
@@ -266,17 +334,23 @@
                 },
                 {
                   "PrintGroupedObject obj:": {
-                    "FromTxt:": {
-                      "Get:index:": [
-                        "@objs",
-                        1
-                      ]
+                    "FromText:": {
+                      "Get variable:": {
+                        "Variable:dot:": [
+                          "@objs",
+                          [
+                            {
+                              "AtIndex:": 1
+                            }
+                          ]
+                        ]
+                      }
                     }
                   }
                 },
                 {
-                  "Let:be:": [
-                    "success",
+                  "Set variable:from:": [
+                    "@success",
                     {
                       "FromBool:": true
                     }
@@ -287,13 +361,11 @@
           },
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Log:": {
-                    "FromRec:": "@group"
+                    "FromRecord:": "@group"
                   }
                 }
               ]
@@ -333,12 +405,14 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "PrintObject obj:": "@obj"
+                  "PrintObject obj:": {
+                    "FromText:": {
+                      "Text value:": "@obj"
+                    }
+                  }
                 }
               ]
             ]

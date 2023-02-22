@@ -132,15 +132,17 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "PrintArticle obj:name:": [
-                    "@noun",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
+                        "Text value:": "@noun"
+                      }
+                    },
+                    {
+                      "FromText:": {
                         "RenderTemplate:": "{.noun}"
                       }
                     }
@@ -174,18 +176,20 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "PrintArticle article:obj:name:": [
                     {
-                      "FromTxt:": "the"
+                      "FromText:": "the"
                     },
-                    "@noun",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
+                        "Text value:": "@noun"
+                      }
+                    },
+                    {
+                      "FromText:": {
                         "RenderTemplate:": "{.noun}"
                       }
                     }
@@ -225,9 +229,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
@@ -240,7 +242,11 @@
           {
             "PatternRule:does:": [
               {
-                "StartsWithVowel text:": "@name"
+                "StartsWithVowel text:": {
+                  "FromText:": {
+                    "Text value:": "@name"
+                  }
+                }
               },
               [
                 {
@@ -254,10 +260,12 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
-                  "@obj",
-                  "plural named"
-                ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@obj",
+                    "plural named"
+                  ]
+                }
               },
               [
                 {
@@ -273,12 +281,16 @@
               {
                 "Cmp:is:txt:": [
                   {
-                    "Get:from:": [
-                      "indefinite article",
-                      {
-                        "VarFields:": "obj"
-                      }
-                    ]
+                    "Get variable:": {
+                      "Variable:dot:": [
+                        "obj",
+                        [
+                          {
+                            "AtField:": "indefinite article"
+                          }
+                        ]
+                      ]
+                    }
                   },
                   "other_than",
                   ""
@@ -314,10 +326,12 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
-                  "@obj",
-                  "proper named"
-                ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@obj",
+                    "proper named"
+                  ]
+                }
               },
               [
                 {

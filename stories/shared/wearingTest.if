@@ -79,10 +79,10 @@
           {
             "Wearing agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "flower"
+                "FromText:": "flower"
               }
             ]
           },
@@ -95,10 +95,10 @@
           {
             "Removing agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "flower"
+                "FromText:": "flower"
               }
             ]
           },
@@ -119,10 +119,10 @@
           {
             "Removing agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "flower"
+                "FromText:": "flower"
               }
             ]
           },
@@ -135,10 +135,10 @@
           {
             "Wearing agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "flower"
+                "FromText:": "flower"
               }
             ]
           },
@@ -167,10 +167,10 @@
           {
             "Wearing agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "knife"
+                "FromText:": "knife"
               }
             ]
           },
@@ -199,10 +199,10 @@
           {
             "Wearing agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "purse"
+                "FromText:": "purse"
               }
             ]
           },
@@ -215,10 +215,10 @@
           {
             "Removing agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "purse"
+                "FromText:": "purse"
               }
             ]
           },
@@ -231,10 +231,10 @@
           {
             "Wearing agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "purse"
+                "FromText:": "purse"
               }
             ]
           },

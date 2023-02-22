@@ -39,10 +39,10 @@
           {
             "Dropping agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "knife"
+                "FromText:": "knife"
               }
             ]
           },
@@ -60,10 +60,10 @@
           {
             "Dropping agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "knife"
+                "FromText:": "knife"
               }
             ]
           },

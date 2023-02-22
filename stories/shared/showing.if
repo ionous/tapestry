@@ -102,12 +102,16 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "agent",
+                    [
+                      {
+                        "AtField:": "pawn"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -116,21 +120,37 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@actor"
+                  }
+                }
               },
               [
                 {
                   "If:from:and:does:else:": [
                     "response",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanHandle actor:action:noun:otherNoun:": [
-                          "@actor",
                           {
-                            "FromTxt:": "showing"
+                            "FromText:": {
+                              "Text value:": "@actor"
+                            }
                           },
-                          "@noun",
-                          "@other noun"
+                          {
+                            "FromText:": "showing"
+                          },
+                          {
+                            "FromText:": {
+                              "Text value:": "@noun"
+                            }
+                          },
+                          {
+                            "FromText:": {
+                              "Text value:": "@other noun"
+                            }
+                          }
                         ]
                       }
                     },
@@ -148,13 +168,21 @@
                       "ElseIf:from:and:does:else:": [
                         "result",
                         {
-                          "FromTxt:": {
+                          "FromText:": {
                             "CanReach actor:action:noun:": [
-                              "@actor",
                               {
-                                "FromTxt:": "showing"
+                                "FromText:": {
+                                  "Text value:": "@actor"
+                                }
                               },
-                              "@other noun"
+                              {
+                                "FromText:": "showing"
+                              },
+                              {
+                                "FromText:": {
+                                  "Text value:": "@other noun"
+                                }
+                              }
                             ]
                           }
                         },
@@ -172,9 +200,21 @@
                           "ElseDo does:": [
                             {
                               "ReportShowing actor:noun:otherNoun:": [
-                                "@actor",
-                                "@noun",
-                                "@other noun"
+                                {
+                                  "FromText:": {
+                                    "Text value:": "@actor"
+                                  }
+                                },
+                                {
+                                  "FromText:": {
+                                    "Text value:": "@noun"
+                                  }
+                                },
+                                {
+                                  "FromText:": {
+                                    "Text value:": "@other noun"
+                                  }
+                                }
                               ]
                             }
                           ]
@@ -223,9 +263,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
@@ -244,7 +282,11 @@
             "PatternRule:does:": [
               {
                 "Not:": {
-                  "IsPlayer obj:": "@actor"
+                  "IsPlayer obj:": {
+                    "FromText:": {
+                      "Text value:": "@actor"
+                    }
+                  }
                 }
               },
               [

@@ -44,7 +44,11 @@
               {
                 "Cmp:is:txt:": [
                   {
-                    "ParentOf obj:": "@noun"
+                    "ParentOf obj:": {
+                      "FromText:": {
+                        "Text value:": "@noun"
+                      }
+                    }
                   },
                   "other_than",
                   "@actor"
@@ -52,10 +56,10 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set variable:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Response:text:": [
                           "can only use possessions",
                           {

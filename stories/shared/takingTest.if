@@ -149,10 +149,10 @@
                       {
                         "Taking agent:noun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "coffee"
+                            "FromText:": "coffee"
                           }
                         ]
                       }
@@ -173,10 +173,10 @@
                       {
                         "Taking agent:noun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "apple"
+                            "FromText:": "apple"
                           }
                         ]
                       }
@@ -192,10 +192,10 @@
                       {
                         "Taking agent:noun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "coin"
+                            "FromText:": "coin"
                           }
                         ]
                       }
@@ -211,10 +211,10 @@
                       {
                         "Taking agent:noun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "purse"
+                            "FromText:": "purse"
                           }
                         ]
                       }
@@ -235,10 +235,10 @@
                       {
                         "Taking agent:noun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "knife"
+                            "FromText:": "knife"
                           }
                         ]
                       },
@@ -259,10 +259,10 @@
                       {
                         "Taking agent:noun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "self"
+                            "FromText:": "self"
                           }
                         ]
                       }
@@ -278,10 +278,10 @@
                       {
                         "Taking agent:noun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "mildred"
+                            "FromText:": "mildred"
                           }
                         ]
                       }
@@ -297,10 +297,10 @@
                       {
                         "Taking agent:noun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "cabinet"
+                            "FromText:": "cabinet"
                           }
                         ]
                       }
@@ -316,10 +316,10 @@
                       {
                         "Taking agent:noun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "machine"
+                            "FromText:": "machine"
                           }
                         ]
                       }

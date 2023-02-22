@@ -19,7 +19,11 @@
               "groups",
               "object group",
               {
-                "MakeGroups objs:": "@objs"
+                "MakeGroups objs:": {
+                  "FromText:": {
+                    "Text value:": "@objs"
+                  }
+                }
               }
             ]
           }
@@ -27,25 +31,27 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
                     "Commas does:": [
                       {
                         "Repeating across:as:does:": [
-                          "@groups",
                           {
-                            "AsRec:": "group"
+                            "FromRecordList:": "@groups"
                           },
+                          "group",
                           [
                             {
                               "Say:": {
                                 "Spaces does:": [
                                   {
-                                    "PrintGroup group:": "@group"
+                                    "PrintGroup group:": {
+                                      "FromText:": {
+                                        "Text value:": "@group"
+                                      }
+                                    }
                                   }
                                 ]
                               }
@@ -84,7 +90,11 @@
               "groups",
               "object group",
               {
-                "MakeGroups objs:": "@objs"
+                "MakeGroups objs:": {
+                  "FromText:": {
+                    "Text value:": "@objs"
+                  }
+                }
               }
             ]
           }
@@ -92,25 +102,27 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
                     "Rows does:": [
                       {
                         "Repeating across:as:does:": [
-                          "@groups",
                           {
-                            "AsRec:": "group"
+                            "FromRecordList:": "@groups"
                           },
+                          "group",
                           [
                             {
                               "Say:": {
                                 "Row does:": [
                                   {
-                                    "PrintGroup group:": "@group"
+                                    "PrintGroup group:": {
+                                      "FromText:": {
+                                        "Text value:": "@group"
+                                      }
+                                    }
                                   }
                                 ]
                               }
@@ -170,9 +182,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
@@ -207,13 +217,21 @@
                   "Say:": {
                     "Spaces does:": [
                       {
-                        "A noun:": "@obj"
+                        "A noun:": {
+                          "FromText:": {
+                            "Text value:": "@obj"
+                          }
+                        }
                       },
                       {
                         "Say:": {
                           "Brackets does:": [
                             {
-                              "PrintDetails obj:": "@obj"
+                              "PrintDetails obj:": {
+                                "FromText:": {
+                                  "Text value:": "@obj"
+                                }
+                              }
                             }
                           ]
                         }
@@ -246,7 +264,11 @@
               },
               [
                 {
-                  "PrintBlock obj:": "@obj"
+                  "PrintBlock obj:": {
+                    "FromText:": {
+                      "Text value:": "@obj"
+                    }
+                  }
                 }
               ]
             ]
@@ -278,7 +300,11 @@
             "TextList:initially:": [
               "kids",
               {
-                "VisibleStorage obj:": "@obj"
+                "VisibleStorage obj:": {
+                  "FromText:": {
+                    "Text value:": "@obj"
+                  }
+                }
               }
             ]
           },
@@ -288,7 +314,9 @@
               {
                 "Cmp:is:num:": [
                   {
-                    "Len:": "@kids"
+                    "Len:": {
+                      "FromTextList:": "@kids"
+                    }
                   },
                   "greater_than",
                   0
@@ -300,19 +328,25 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
                     "Spaces does:": [
                       {
-                        "A noun:": "@obj"
+                        "A noun:": {
+                          "FromText:": {
+                            "Text value:": "@obj"
+                          }
+                        }
                       },
                       {
                         "PrintStatus obj:isEmpty:": [
-                          "@obj",
+                          {
+                            "FromText:": {
+                              "Text value:": "@obj"
+                            }
+                          },
                           {
                             "FromBool:": {
                               "Not:": "@hasKids"
@@ -328,7 +362,11 @@
                     "@hasKids",
                     [
                       {
-                        "PrintBlocks objs:": "@kids"
+                        "PrintBlocks objs:": {
+                          "FromText:": {
+                            "Text value:": "@kids"
+                          }
+                        }
                       }
                     ]
                   ]
@@ -368,7 +406,11 @@
             "TextList:initially:": [
               "kids",
               {
-                "VisibleStorage obj:": "@obj"
+                "VisibleStorage obj:": {
+                  "FromText:": {
+                    "Text value:": "@obj"
+                  }
+                }
               }
             ]
           }
@@ -379,7 +421,9 @@
               {
                 "Cmp:is:num:": [
                   {
-                    "Len:": "@kids"
+                    "Len:": {
+                      "FromTextList:": "@kids"
+                    }
                   },
                   "greater_than",
                   0
@@ -397,8 +441,8 @@
                   }
                 },
                 {
-                  "Let:be:": [
-                    "success",
+                  "Set variable:from:": [
+                    "@success",
                     {
                       "FromBool:": true
                     }
@@ -437,7 +481,11 @@
             "TextList:initially:": [
               "kids",
               {
-                "VisibleStorage obj:": "@obj"
+                "VisibleStorage obj:": {
+                  "FromText:": {
+                    "Text value:": "@obj"
+                  }
+                }
               }
             ]
           }
@@ -480,10 +528,12 @@
                     ]
                   },
                   {
-                    "Get obj:trait:": [
-                      "@obj",
-                      "closed"
-                    ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@obj",
+                        "closed"
+                      ]
+                    }
                   }
                 ]
               },
@@ -506,7 +556,9 @@
                   {
                     "Cmp:is:num:": [
                       {
-                        "Len:": "@kids"
+                        "Len:": {
+                          "FromTextList:": "@kids"
+                        }
                       },
                       "greater_than",
                       0
@@ -564,9 +616,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
@@ -579,8 +629,16 @@
                                 "Commas does:": [
                                   {
                                     "PrintInnerStatus obj:isEmpty:": [
-                                      "@obj",
-                                      "@isEmpty"
+                                      {
+                                        "FromText:": {
+                                          "Text value:": "@obj"
+                                        }
+                                      },
+                                      {
+                                        "FromText:": {
+                                          "Text value:": "@isEmpty"
+                                        }
+                                      }
                                     ]
                                   }
                                 ]
@@ -632,10 +690,12 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
-                  "@obj",
-                  "locked"
-                ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@obj",
+                    "locked"
+                  ]
+                }
               },
               [
                 {
@@ -656,16 +716,20 @@
               {
                 "AllTrue:": [
                   {
-                    "Get obj:trait:": [
-                      "@obj",
-                      "transparent"
-                    ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@obj",
+                        "transparent"
+                      ]
+                    }
                   },
                   {
-                    "Get obj:trait:": [
-                      "@obj",
-                      "unopenable"
-                    ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@obj",
+                        "unopenable"
+                      ]
+                    }
                   }
                 ]
               },
@@ -686,10 +750,12 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
-                  "@obj",
-                  "openable"
-                ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@obj",
+                    "openable"
+                  ]
+                }
               },
               [
                 {
@@ -708,10 +774,12 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
-                  "@obj",
-                  "worn"
-                ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@obj",
+                    "worn"
+                  ]
+                }
               },
               [
                 {
@@ -730,10 +798,12 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
-                  "@obj",
-                  "lit"
-                ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@obj",
+                    "lit"
+                  ]
+                }
               },
               [
                 {

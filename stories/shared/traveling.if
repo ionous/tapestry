@@ -23,12 +23,16 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "agent",
+                    [
+                      {
+                        "AtField:": "pawn"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           },
@@ -38,12 +42,16 @@
               "destination",
               "room",
               {
-                "Get:from:": [
-                  "destination",
-                  {
-                    "VarFields:": "noun"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "noun",
+                    [
+                      {
+                        "AtField:": "destination"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -52,20 +60,32 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@actor"
+                  }
+                }
               },
               [
                 {
                   "If:from:and:does:else:": [
                     "resp",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanReach actor:action:noun:": [
-                          "@actor",
                           {
-                            "FromTxt:": "traveling"
+                            "FromText:": {
+                              "Text value:": "@actor"
+                            }
                           },
-                          "@noun"
+                          {
+                            "FromText:": "traveling"
+                          },
+                          {
+                            "FromText:": {
+                              "Text value:": "@noun"
+                            }
+                          }
                         ]
                       }
                     },
@@ -85,14 +105,26 @@
                           "If:from:and:does:else:": [
                             "resp",
                             {
-                              "FromTxt:": {
+                              "FromText:": {
                                 "CanUse actor:action:noun:otherNoun:": [
-                                  "@actor",
                                   {
-                                    "FromTxt:": "traveling"
+                                    "FromText:": {
+                                      "Text value:": "@actor"
+                                    }
                                   },
-                                  "@noun",
-                                  "@destination"
+                                  {
+                                    "FromText:": "traveling"
+                                  },
+                                  {
+                                    "FromText:": {
+                                      "Text value:": "@noun"
+                                    }
+                                  },
+                                  {
+                                    "FromText:": {
+                                      "Text value:": "@destination"
+                                    }
+                                  }
                                 ]
                               }
                             },
@@ -113,12 +145,24 @@
                                     {
                                       "Send:event:": [
                                         {
-                                          "Capture obj:": "@noun"
+                                          "Capture obj:": {
+                                            "FromText:": {
+                                              "Text value:": "@noun"
+                                            }
+                                          }
                                         },
                                         {
                                           "Travel actor:noun:": [
-                                            "@actor",
-                                            "@noun"
+                                            {
+                                              "FromText:": {
+                                                "Text value:": "@actor"
+                                              }
+                                            },
+                                            {
+                                              "FromText:": {
+                                                "Text value:": "@noun"
+                                              }
+                                            }
                                           ]
                                         }
                                       ]
@@ -126,8 +170,16 @@
                                     [
                                       {
                                         "ReportTraveling actor:noun:": [
-                                          "@actor",
-                                          "@noun"
+                                          {
+                                            "FromText:": {
+                                              "Text value:": "@actor"
+                                            }
+                                          },
+                                          {
+                                            "FromText:": {
+                                              "Text value:": "@noun"
+                                            }
+                                          }
                                         ]
                                       }
                                     ]
@@ -165,12 +217,16 @@
                     "destination",
                     "room",
                     {
-                      "Get:from:": [
-                        "destination",
-                        {
-                          "VarFields:": "noun"
-                        }
-                      ]
+                      "Get variable:": {
+                        "Variable:dot:": [
+                          "noun",
+                          [
+                            {
+                              "AtField:": "destination"
+                            }
+                          ]
+                        ]
+                      }
                     }
                   ]
                 }
@@ -178,18 +234,24 @@
               [
                 {
                   "PatternRule:does:": [
-                    {
-                      "Always": true
-                    },
+                    true,
                     [
                       {
                         "If:from:and:does:else:": [
                           "error",
                           {
-                            "FromTxt:": {
+                            "FromText:": {
                               "MoveObject obj:dest:": [
-                                "@actor",
-                                "@destination"
+                                {
+                                  "FromText:": {
+                                    "Text value:": "@actor"
+                                  }
+                                },
+                                {
+                                  "FromText:": {
+                                    "Text value:": "@destination"
+                                  }
+                                }
                               ]
                             }
                           },
@@ -203,8 +265,8 @@
                               "Say:": "@error"
                             },
                             {
-                              "Let:be:": [
-                                "success",
+                              "Set variable:from:": [
+                                "@success",
                                 {
                                   "FromBool:": false
                                 }
@@ -215,14 +277,14 @@
                             "ElseDo does:": [
                               {
                                 "Log:": {
-                                  "FromTxt:": {
+                                  "FromText:": {
                                     "RenderTemplate:": "{The: .actor} {are: .actor} traveling to {the: .destination} via {the: .noun} ..."
                                   }
                                 }
                               },
                               {
-                                "Let:be:": [
-                                  "success",
+                                "Set variable:from:": [
+                                  "@success",
                                   {
                                     "FromBool:": true
                                   }
@@ -269,25 +331,33 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "PrintVantage where:inDarkness:": [
                     {
-                      "FromTxt:": {
-                        "ParentOf obj:": "@actor"
-                      }
-                    }, {"FromBool:": {
-                    
-                      "Get:from:": [
-                        "is in darkness",
-                        {
-                          "VarFields:": "actor"
+                      "FromText:": {
+                        "ParentOf obj:": {
+                          "FromText:": {
+                            "Text value:": "@actor"
+                          }
                         }
-                      ]
-                    }}
+                      }
+                    },
+                    {
+                      "FromBool:": {
+                        "Get variable:": {
+                          "Variable:dot:": [
+                            "actor",
+                            [
+                              {
+                                "AtField:": "is in darkness"
+                              }
+                            ]
+                          ]
+                        }
+                      }
+                    }
                   ]
                 }
               ]
@@ -297,7 +367,11 @@
             "PatternRule:does:": [
               {
                 "Not:": {
-                  "IsPlayer obj:": "@actor"
+                  "IsPlayer obj:": {
+                    "FromText:": {
+                      "Text value:": "@actor"
+                    }
+                  }
                 }
               },
               [
@@ -348,10 +422,10 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set variable:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Response:text:": [
                           "can only travel to a destination",
                           {
@@ -377,19 +451,21 @@
                     ]
                   },
                   {
-                    "Get obj:trait:": [
-                      "@noun",
-                      "closed"
-                    ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@noun",
+                        "closed"
+                      ]
+                    }
                   }
                 ]
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set variable:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Response:text:": [
                           "can't travel through closed doors",
                           {
@@ -415,25 +491,29 @@
                     ]
                   },
                   {
-                    "Get obj:trait:": [
-                      "@noun",
-                      "closed"
-                    ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@noun",
+                        "closed"
+                      ]
+                    }
                   },
                   {
-                    "Get obj:trait:": [
-                      "@noun",
-                      "locked"
-                    ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@noun",
+                        "locked"
+                      ]
+                    }
                   }
                 ]
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set variable:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Response:text:": [
                           "can't travel through locked doors",
                           {

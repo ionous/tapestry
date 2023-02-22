@@ -35,8 +35,8 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "success",
+                  "Set variable:from:": [
+                    "@success",
                     {
                       "FromBool:": true
                     }
@@ -55,8 +55,8 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "success",
+                  "Set variable:from:": [
+                    "@success",
                     {
                       "FromBool:": true
                     }
@@ -99,16 +99,24 @@
           {
             "PatternRule:does:": [
               {
-                "ProvidesStorage obj:": "@obj"
+                "ProvidesStorage obj:": {
+                  "FromText:": {
+                    "Text value:": "@obj"
+                  }
+                }
               },
               [
                 {
-                  "Let:be:": [
-                    "success",
+                  "Set variable:from:": [
+                    "@success",
                     {
                       "FromBool:": {
                         "Not:": {
-                          "FullyOpaque obj:": "@obj"
+                          "FullyOpaque obj:": {
+                            "FromText:": {
+                              "Text value:": "@obj"
+                            }
+                          }
                         }
                       }
                     }
@@ -151,19 +159,25 @@
           {
             "PatternRule:does:": [
               {
-                "ShowsStorage obj:": "@obj"
+                "ShowsStorage obj:": {
+                  "FromText:": {
+                    "Text value:": "@obj"
+                  }
+                }
               },
               [
                 {
                   "Repeating across:as:does:": [
                     {
-                      "FromTxts:": {
-                        "ChildrenOf obj:": "@obj"
+                      "FromTextList:": {
+                        "ChildrenOf obj:": {
+                          "FromText:": {
+                            "Text value:": "@obj"
+                          }
+                        }
                       }
                     },
-                    {
-                      "AsTxt:": "it"
-                    },
+                    "it",
                     [
                       {
                         "If:does:": [
@@ -175,31 +189,37 @@
                                     "@it",
                                     "equal_to",
                                     {
-                                      "Get:from:": [
-                                        "pawn",
-                                        {
-                                          "ObjFields:": "player"
-                                        }
-                                      ]
+                                      "Get object:": {
+                                        "Object:dot:": [
+                                          "player",
+                                          [
+                                            {
+                                              "AtField:": "pawn"
+                                            }
+                                          ]
+                                        ]
+                                      }
                                     }
                                   ]
                                 },
                                 {
-                                  "Get obj:trait:": [
-                                    "@it",
-                                    "scenery"
-                                  ]
+                                  "Get object:": {
+                                    "Object:field:": [
+                                      "@it",
+                                      "scenery"
+                                    ]
+                                  }
                                 }
                               ]
                             }
                           },
                           [
                             {
-                              "Put:into:": [
-                                "@it",
+                              "Push:into variable:": [
                                 {
-                                  "IntoTxts:": "out"
-                                }
+                                  "FromText:": "@it"
+                                },
+                                "@out"
                               ]
                             }
                           ]
@@ -245,12 +265,16 @@
           {
             "PatternRule:does:": [
               {
-                "ProvidesStorage obj:": "@obj"
+                "ProvidesStorage obj:": {
+                  "FromText:": {
+                    "Text value:": "@obj"
+                  }
+                }
               },
               [
                 {
-                  "Let:be:": [
-                    "success",
+                  "Set variable:from:": [
+                    "@success",
                     {
                       "FromBool:": true
                     }
@@ -270,17 +294,19 @@
                     ]
                   },
                   {
-                    "Get obj:trait:": [
-                      "@obj",
-                      "closed"
-                    ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@obj",
+                        "closed"
+                      ]
+                    }
                   }
                 ]
               },
               [
                 {
-                  "Let:be:": [
-                    "success",
+                  "Set variable:from:": [
+                    "@success",
                     {
                       "FromBool:": false
                     }

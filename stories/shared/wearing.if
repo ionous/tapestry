@@ -18,12 +18,16 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "agent",
+                    [
+                      {
+                        "AtField:": "pawn"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -32,20 +36,32 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@actor"
+                  }
+                }
               },
               [
                 {
                   "If:from:and:does:else:": [
                     "resp",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanHandle actor:action:noun:": [
-                          "@actor",
                           {
-                            "FromTxt:": "wearing"
+                            "FromText:": {
+                              "Text value:": "@actor"
+                            }
                           },
-                          "@noun"
+                          {
+                            "FromText:": "wearing"
+                          },
+                          {
+                            "FromText:": {
+                              "Text value:": "@noun"
+                            }
+                          }
                         ]
                       }
                     },
@@ -64,20 +80,32 @@
                         {
                           "Send:event:": [
                             {
-                              "Capture obj:": "@noun"
+                              "Capture obj:": {
+                                "FromText:": {
+                                  "Text value:": "@noun"
+                                }
+                              }
                             },
                             {
                               "StateChange actor:noun:trait:guard:change:": [
-                                "@actor",
-                                "@noun",
                                 {
-                                  "FromTxt:": "worn"
+                                  "FromText:": {
+                                    "Text value:": "@actor"
+                                  }
                                 },
                                 {
-                                  "FromTxt:": "wearable"
+                                  "FromText:": {
+                                    "Text value:": "@noun"
+                                  }
                                 },
                                 {
-                                  "FromTxt:": "put on"
+                                  "FromText:": "worn"
+                                },
+                                {
+                                  "FromText:": "wearable"
+                                },
+                                {
+                                  "FromText:": "put on"
                                 }
                               ]
                             }
@@ -114,12 +142,16 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "agent",
+                    [
+                      {
+                        "AtField:": "pawn"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -128,20 +160,32 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@actor"
+                  }
+                }
               },
               [
                 {
                   "If:from:and:does:else:": [
                     "resp",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanHandle actor:action:noun:": [
-                          "@actor",
                           {
-                            "FromTxt:": "removing"
+                            "FromText:": {
+                              "Text value:": "@actor"
+                            }
                           },
-                          "@noun"
+                          {
+                            "FromText:": "removing"
+                          },
+                          {
+                            "FromText:": {
+                              "Text value:": "@noun"
+                            }
+                          }
                         ]
                       }
                     },
@@ -160,20 +204,32 @@
                         {
                           "Send:event:": [
                             {
-                              "Capture obj:": "@noun"
+                              "Capture obj:": {
+                                "FromText:": {
+                                  "Text value:": "@noun"
+                                }
+                              }
                             },
                             {
                               "StateChange actor:noun:trait:guard:change:": [
-                                "@actor",
-                                "@noun",
                                 {
-                                  "FromTxt:": "not worn"
+                                  "FromText:": {
+                                    "Text value:": "@actor"
+                                  }
                                 },
                                 {
-                                  "FromTxt:": "wearable"
+                                  "FromText:": {
+                                    "Text value:": "@noun"
+                                  }
                                 },
                                 {
-                                  "FromTxt:": "take off"
+                                  "FromText:": "not worn"
+                                },
+                                {
+                                  "FromText:": "wearable"
+                                },
+                                {
+                                  "FromText:": "take off"
                                 }
                               ]
                             }
@@ -215,7 +271,11 @@
                       "@actor",
                       "other_than",
                       {
-                        "WearerOf obj:": "@noun"
+                        "WearerOf obj:": {
+                          "FromText:": {
+                            "Text value:": "@noun"
+                          }
+                        }
                       }
                     ]
                   }
@@ -223,10 +283,10 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "result",
+                  "Set variable:from:": [
+                    "@result",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Response:text:": [
                           "can only remove what's worn",
                           {

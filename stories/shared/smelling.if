@@ -49,12 +49,16 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "agent",
+                    [
+                      {
+                        "AtField:": "pawn"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -62,16 +66,22 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Smelling actor:noun:": [
-                    "@actor",
                     {
-                      "FromTxt:": {
-                        "LocationOf obj:": "@actor"
+                      "FromText:": {
+                        "Text value:": "@actor"
+                      }
+                    },
+                    {
+                      "FromText:": {
+                        "LocationOf obj:": {
+                          "FromText:": {
+                            "Text value:": "@actor"
+                          }
+                        }
                       }
                     }
                   ]
@@ -103,12 +113,16 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "agent",
+                    [
+                      {
+                        "AtField:": "pawn"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -117,20 +131,32 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@actor"
+                  }
+                }
               },
               [
                 {
                   "If:from:and:does:else:": [
                     "resp",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanReach actor:action:noun:": [
-                          "@actor",
                           {
-                            "FromTxt:": "smelling"
+                            "FromText:": {
+                              "Text value:": "@actor"
+                            }
                           },
-                          "@noun"
+                          {
+                            "FromText:": "smelling"
+                          },
+                          {
+                            "FromText:": {
+                              "Text value:": "@noun"
+                            }
+                          }
                         ]
                       }
                     },
@@ -150,13 +176,21 @@
                           "If:from:and:does:else:": [
                             "resp",
                             {
-                              "FromTxt:": {
+                              "FromText:": {
                                 "CanUse actor:action:noun:": [
-                                  "@actor",
                                   {
-                                    "FromTxt:": "smelling"
+                                    "FromText:": {
+                                      "Text value:": "@actor"
+                                    }
                                   },
-                                  "@noun"
+                                  {
+                                    "FromText:": "smelling"
+                                  },
+                                  {
+                                    "FromText:": {
+                                      "Text value:": "@noun"
+                                    }
+                                  }
                                 ]
                               }
                             },
@@ -174,8 +208,16 @@
                               "ElseDo does:": [
                                 {
                                   "ReportSmelling actor:noun:": [
-                                    "@actor",
-                                    "@noun"
+                                    {
+                                      "FromText:": {
+                                        "Text value:": "@actor"
+                                      }
+                                    },
+                                    {
+                                      "FromText:": {
+                                        "Text value:": "@noun"
+                                      }
+                                    }
                                   ]
                                 }
                               ]
@@ -220,9 +262,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
@@ -240,7 +280,11 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@actor"
+                  }
+                }
               },
               [
                 {

@@ -58,13 +58,13 @@
             "If:from:and:does:else:": [
               "resp",
               {
-                "FromTxt:": {
+                "FromText:": {
                   "CanReach actor:noun:": [
                     {
-                      "FromTxt:": "self"
+                      "FromText:": "self"
                     },
                     {
-                      "FromTxt:": "beans"
+                      "FromText:": "beans"
                     }
                   ]
                 }
@@ -97,13 +97,13 @@
             "If:from:and:does:else:": [
               "resp",
               {
-                "FromTxt:": {
+                "FromText:": {
                   "CanReach actor:noun:": [
                     {
-                      "FromTxt:": "self"
+                      "FromText:": "self"
                     },
                     {
-                      "FromTxt:": "tomatoes"
+                      "FromText:": "tomatoes"
                     }
                   ]
                 }
@@ -133,27 +133,29 @@
             "Expect output:": "okay: reached outside the open cabinet."
           },
           {
-            "Put:from:at:": [
+            "Set object:from:": [
               {
-                "ObjField:": "espresso machine"
+                "Object:field:": [
+                  "espresso machine",
+                  "open"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "open"
+              }
             ]
           },
           {
             "If:from:and:does:else:": [
               "resp",
               {
-                "FromTxt:": {
+                "FromText:": {
                   "CanReach actor:noun:": [
                     {
-                      "FromTxt:": "self"
+                      "FromText:": "self"
                     },
                     {
-                      "FromTxt:": "beans"
+                      "FromText:": "beans"
                     }
                   ]
                 }
@@ -183,27 +185,29 @@
             "Expect output:": "okay: reached inside the open espresso machine."
           },
           {
-            "Put:from:at:": [
+            "Set object:from:": [
               {
-                "ObjField:": "cabinet"
+                "Object:field:": [
+                  "cabinet",
+                  "closed"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "closed"
+              }
             ]
           },
           {
             "If:from:and:does:else:": [
               "resp",
               {
-                "FromTxt:": {
+                "FromText:": {
                   "CanReach actor:noun:": [
                     {
-                      "FromTxt:": "self"
+                      "FromText:": "self"
                     },
                     {
-                      "FromTxt:": "tomatoes"
+                      "FromText:": "tomatoes"
                     }
                   ]
                 }
@@ -236,13 +240,13 @@
             "If:from:and:does:else:": [
               "resp",
               {
-                "FromTxt:": {
+                "FromText:": {
                   "CanReach actor:noun:": [
                     {
-                      "FromTxt:": "self"
+                      "FromText:": "self"
                     },
                     {
-                      "FromTxt:": "cloak"
+                      "FromText:": "cloak"
                     }
                   ]
                 }

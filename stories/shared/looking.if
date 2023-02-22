@@ -16,12 +16,16 @@
               "actor",
               "object",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "agent",
+                    [
+                      {
+                        "AtField:": "pawn"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -30,16 +34,28 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@actor"
+                  }
+                }
               },
               [
                 {
                   "Send:event:": [
                     {
-                      "Capture obj:": "@actor"
+                      "Capture obj:": {
+                        "FromText:": {
+                          "Text value:": "@actor"
+                        }
+                      }
                     },
                     {
-                      "Look actor:": "@actor"
+                      "Look actor:": {
+                        "FromText:": {
+                          "Text value:": "@actor"
+                        }
+                      }
                     }
                   ]
                 }
@@ -66,7 +82,11 @@
                     "location",
                     "object",
                     {
-                      "LocationOf obj:": "@actor"
+                      "LocationOf obj:": {
+                        "FromText:": {
+                          "Text value:": "@actor"
+                        }
+                      }
                     }
                   ]
                 }
@@ -74,29 +94,32 @@
               [
                 {
                   "PatternRule:does:": [
-                    {
-                      "Always": true
-                    },
+                    true,
                     [
                       {
                         "PrintVantage where:inDarkness:": [
                           {
-                            "FromText:":"@location"
+                            "FromText:": "@location"
                           },
-                          { "FromBool:":
                           {
-                            "Get:from:": [
-                              "is in darkness",
-                              {
-                                "VarFields:": "actor"
+                            "FromBool:": {
+                              "Get variable:": {
+                                "Variable:dot:": [
+                                  "actor",
+                                  [
+                                    {
+                                      "AtField:": "is in darkness"
+                                    }
+                                  ]
+                                ]
                               }
-                            ]
-                          }}
+                            }
+                          }
                         ]
                       },
                       {
-                        "Let:be:": [
-                          "success",
+                        "Set variable:from:": [
+                          "@success",
                           {
                             "FromBool:": true
                           }
@@ -139,7 +162,11 @@
             "TextList:initially:": [
               "enclosures",
               {
-                "TransparentList obj:": "@where"
+                "TransparentList obj:": {
+                  "FromText:": {
+                    "Text value:": "@where"
+                  }
+                }
               }
             ]
           },
@@ -148,7 +175,11 @@
               "room",
               "object",
               {
-                "CurrentRoom obj:": "@where"
+                "CurrentRoom obj:": {
+                  "FromText:": {
+                    "Text value:": "@where"
+                  }
+                }
               }
             ]
           }
@@ -156,13 +187,11 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Log:": {
-                    "FromTxt:": {
+                    "FromText:": {
                       "RenderTemplate:": "print vantage: from:{.where}"
                     }
                   }
@@ -175,7 +204,11 @@
                     "@inDarkness",
                     [
                       {
-                        "PrintDarkHeader room:": "@room"
+                        "PrintDarkHeader room:": {
+                          "FromText:": {
+                            "Text value:": "@room"
+                          }
+                        }
                       },
                       {
                         "Comment:": "fix? if \"thedark\" was an object, darkness witnessed could be \"thedark.visited.\" ( same as below )"
@@ -185,30 +218,42 @@
                           {
                             "AnyTrue:": [
                               {
-                                "Get:from:": [
-                                  "verbose",
-                                  {
-                                    "ObjFields:": "settings"
-                                  }
-                                ]
+                                "Get object:": {
+                                  "Object:dot:": [
+                                    "settings",
+                                    [
+                                      {
+                                        "AtField:": "verbose"
+                                      }
+                                    ]
+                                  ]
+                                }
                               },
                               {
                                 "AllTrue:": [
                                   {
-                                    "Get:from:": [
-                                      "brief",
-                                      {
-                                        "ObjFields:": "settings"
-                                      }
-                                    ]
+                                    "Get object:": {
+                                      "Object:dot:": [
+                                        "settings",
+                                        [
+                                          {
+                                            "AtField:": "brief"
+                                          }
+                                        ]
+                                      ]
+                                    }
                                   },
                                   {
-                                    "Get:from:": [
-                                      "not darkness witnessed",
-                                      {
-                                        "ObjFields:": "settings"
-                                      }
-                                    ]
+                                    "Get object:": {
+                                      "Object:dot:": [
+                                        "settings",
+                                        [
+                                          {
+                                            "AtField:": "not darkness witnessed"
+                                          }
+                                        ]
+                                      ]
+                                    }
                                   }
                                 ]
                               }
@@ -216,7 +261,11 @@
                           },
                           [
                             {
-                              "PrintDarkDescription room:": "@room"
+                              "PrintDarkDescription room:": {
+                                "FromText:": {
+                                  "Text value:": "@room"
+                                }
+                              }
                             }
                           ]
                         ]
@@ -229,12 +278,24 @@
                         },
                         {
                           "PrintLocaleTitle room:enclosures:": [
-                            "@room",
-                            "@enclosures"
+                            {
+                              "FromText:": {
+                                "Text value:": "@room"
+                              }
+                            },
+                            {
+                              "FromText:": {
+                                "Text value:": "@enclosures"
+                              }
+                            }
                           ]
                         },
                         {
-                          "PrintLocaleSubtitle enclosures:": "@enclosures"
+                          "PrintLocaleSubtitle enclosures:": {
+                            "FromText:": {
+                              "Text value:": "@enclosures"
+                            }
+                          }
                         },
                         {
                           "Say:": "."
@@ -247,30 +308,42 @@
                             {
                               "AnyTrue:": [
                                 {
-                                  "Get:from:": [
-                                    "verbose",
-                                    {
-                                      "ObjFields:": "settings"
-                                    }
-                                  ]
+                                  "Get object:": {
+                                    "Object:dot:": [
+                                      "settings",
+                                      [
+                                        {
+                                          "AtField:": "verbose"
+                                        }
+                                      ]
+                                    ]
+                                  }
                                 },
                                 {
                                   "AllTrue:": [
                                     {
-                                      "Get:from:": [
-                                        "brief",
-                                        {
-                                          "ObjFields:": "settings"
-                                        }
-                                      ]
+                                      "Get object:": {
+                                        "Object:dot:": [
+                                          "settings",
+                                          [
+                                            {
+                                              "AtField:": "brief"
+                                            }
+                                          ]
+                                        ]
+                                      }
                                     },
                                     {
-                                      "Get:from:": [
-                                        "not visited",
-                                        {
-                                          "VarFields:": "room"
-                                        }
-                                      ]
+                                      "Get variable:": {
+                                        "Variable:dot:": [
+                                          "room",
+                                          [
+                                            {
+                                              "AtField:": "not visited"
+                                            }
+                                          ]
+                                        ]
+                                      }
                                     }
                                   ]
                                 }
@@ -282,23 +355,31 @@
                               },
                               {
                                 "Reverse list:": {
-                                  "VarOfTxts:": "enclosures"
+                                  "FromTextList:": "@enclosures"
                                 }
                               },
                               {
                                 "Repeating across:as:does:": [
-                                  "@enclosures",
                                   {
-                                    "AsTxt:": "it"
+                                    "FromTextList:": "@enclosures"
                                   },
+                                  "it",
                                   [
                                     {
                                       "PrintLocaleDescription where:viewpoint:room:": [
                                         {
-                                          "FromTxt:": "@it"
+                                          "FromText:": "@it"
                                         },
-                                        "@where",
-                                        "@room"
+                                        {
+                                          "FromText:": {
+                                            "Text value:": "@where"
+                                          }
+                                        },
+                                        {
+                                          "FromText:": {
+                                            "Text value:": "@room"
+                                          }
+                                        }
                                       ]
                                     }
                                   ]
@@ -316,28 +397,36 @@
                     "@inDarkness",
                     [
                       {
-                        "Put:from:at:": [
+                        "Set object:from:": [
                           {
-                            "ObjField:": "settings"
+                            "Object:field:": [
+                              "settings",
+                              "darkness witnessed"
+                            ]
                           },
                           {
                             "FromBool:": true
-                          },
-                          "darkness witnessed"
+                          }
                         ]
                       }
                     ],
                     {
                       "ElseDo does:": [
                         {
-                          "Put:from:at:": [
+                          "Set variable:from:": [
                             {
-                              "VarField:": "room"
+                              "Variable:dot:": [
+                                "room",
+                                [
+                                  {
+                                    "AtField:": "visited"
+                                  }
+                                ]
+                              ]
                             },
                             {
                               "FromBool:": true
-                            },
-                            "visited"
+                            }
                           ]
                         }
                       ]
@@ -372,9 +461,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
@@ -412,9 +499,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
@@ -458,12 +543,20 @@
               "ceiling",
               "object",
               {
-                "Get:index:": [
-                  "@enclosures",
-                  {
-                    "Len:": "@enclosures"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "@enclosures",
+                    [
+                      {
+                        "AtIndex:": {
+                          "Len:": {
+                            "FromTextList:": "@enclosures"
+                          }
+                        }
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -471,9 +564,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "If:does:else:": [
@@ -530,12 +621,20 @@
               "ceiling",
               "object",
               {
-                "Get:index:": [
-                  "@enclosures",
-                  {
-                    "Len:": "@enclosures"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "@enclosures",
+                    [
+                      {
+                        "AtIndex:": {
+                          "Len:": {
+                            "FromTextList:": "@enclosures"
+                          }
+                        }
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -543,16 +642,14 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Repeating across:as:does:": [
-                    "@enclosures",
                     {
-                      "AsTxt:": "it"
+                      "FromTextList:": "@enclosures"
                     },
+                    "it",
                     [
                       {
                         "If:does:": [
@@ -620,7 +717,11 @@
             "TextList:initially:": [
               "kids",
               {
-                "ChildrenOf obj:": "@where"
+                "ChildrenOf obj:": {
+                  "FromText:": {
+                    "Text value:": "@where"
+                  }
+                }
               }
             ]
           },
@@ -628,12 +729,16 @@
             "Number:initially:": [
               "previousMentions",
               {
-                "Get:from:": [
-                  "mentions",
-                  {
-                    "ObjFields:": "settings"
-                  }
-                ]
+                "Get object:": {
+                  "Object:dot:": [
+                    "settings",
+                    [
+                      {
+                        "AtField:": "mentions"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           },
@@ -644,9 +749,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "If:does:": [
@@ -660,12 +763,16 @@
                     [
                       {
                         "Say:": {
-                          "Get:from:": [
-                            "description",
-                            {
-                              "VarFields:": "room"
-                            }
-                          ]
+                          "Get variable:": {
+                            "Variable:dot:": [
+                              "room",
+                              [
+                                {
+                                  "AtField:": "description"
+                                }
+                              ]
+                            ]
+                          }
                         }
                       }
                     ]
@@ -673,16 +780,20 @@
                 },
                 {
                   "SortTexts:byField:": [
-                    "kids",
-                    "grouping label"
+                    {
+                      "FromText:": "kids"
+                    },
+                    {
+                      "FromText:": "grouping label"
+                    }
                   ]
                 },
                 {
                   "Repeating across:as:does:": [
-                    "@kids",
                     {
-                      "AsTxt:": "it"
+                      "FromTextList:": "@kids"
                     },
+                    "it",
                     [
                       {
                         "Comment:": "exclude objects that enclose the viewpoint, those get their own locale descriptions"
@@ -701,45 +812,65 @@
                                 },
                                 {
                                   "AncestorOf obj:root:": [
-                                    "@viewpoint",
-                                    "@it"
+                                    {
+                                      "FromText:": {
+                                        "Text value:": "@viewpoint"
+                                      }
+                                    },
+                                    {
+                                      "FromText:": {
+                                        "Text value:": "@it"
+                                      }
+                                    }
                                   ]
                                 },
                                 {
-                                  "IsPlayer obj:": "@it"
+                                  "IsPlayer obj:": {
+                                    "FromText:": {
+                                      "Text value:": "@it"
+                                    }
+                                  }
                                 }
                               ]
                             }
                           },
                           [
                             {
-                              "PrintObjectDescription obj:": "@it"
+                              "PrintObjectDescription obj:": {
+                                "FromText:": {
+                                  "Text value:": "@it"
+                                }
+                              }
                             },
                             {
                               "If:does:": [
                                 {
                                   "AllTrue:": [
                                     {
-                                      "Get obj:trait:": [
-                                        "@it",
-                                        "not mentioned"
-                                      ]
+                                      "Get object:": {
+                                        "Object:field:": [
+                                          "@it",
+                                          "not mentioned"
+                                        ]
+                                      }
                                     },
                                     {
-                                      "Get obj:trait:": [
-                                        "@it",
-                                        "not scenery"
-                                      ]
+                                      "Get object:": {
+                                        "Object:field:": [
+                                          "@it",
+                                          "not scenery"
+                                        ]
+                                      }
                                     }
                                   ]
                                 },
                                 [
                                   {
-                                    "Put:into:": [
-                                      "@it",
+                                    "Push:into variable:": [
                                       {
-                                        "IntoTxts:": "remainingKids"
-                                      }
+                                        "FromText:": "@it"
+                                      },
+                                      "@remainingKids"
                                     ]
                                   }
                                 ]
@@ -753,7 +884,11 @@
                 },
                 {
                   "CanAlsoSee where:here:children:firstMention:": [
-                    "@where",
+                    {
+                      "FromText:": {
+                        "Text value:": "@where"
+                      }
+                    },
                     {
                       "FromBool:": {
                         "Cmp:is:txt:": [
@@ -764,7 +899,7 @@
                       }
                     },
                     {
-                      "FromTxts:": "@remainingKids"
+                      "FromTextList:": "@remainingKids"
                     },
                     {
                       "FromBool:": {
@@ -772,12 +907,16 @@
                           "@previousMentions",
                           "equal_to",
                           {
-                            "Get:from:": [
-                              "mentions",
-                              {
-                                "ObjFields:": "settings"
-                              }
-                            ]
+                            "Get object:": {
+                              "Object:dot:": [
+                                "settings",
+                                [
+                                  {
+                                    "AtField:": "mentions"
+                                  }
+                                ]
+                              ]
+                            }
                           }
                         ]
                       }
@@ -829,10 +968,12 @@
               {
                 "AllTrue:": [
                   {
-                    "Get obj:trait:": [
-                      "@obj",
-                      "mentioned"
-                    ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@obj",
+                        "mentioned"
+                      ]
+                    }
                   },
                   {
                     "KindOf:is:": [
@@ -850,7 +991,11 @@
                   ]
                 },
                 {
-                  "PrintInlineStorage obj:": "@obj"
+                  "PrintInlineStorage obj:": {
+                    "FromText:": {
+                      "Text value:": "@obj"
+                    }
+                  }
                 }
               ]
             ]
@@ -860,10 +1005,12 @@
               {
                 "AllTrue:": [
                   {
-                    "Get obj:trait:": [
-                      "@obj",
-                      "scenery"
-                    ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@obj",
+                        "scenery"
+                      ]
+                    }
                   },
                   {
                     "KindOf:is:": [
@@ -881,7 +1028,11 @@
                   ]
                 },
                 {
-                  "Mention obj:": "@obj"
+                  "Mention obj:": {
+                    "FromText:": {
+                      "Text value:": "@obj"
+                    }
+                  }
                 }
               ]
             ]
@@ -889,10 +1040,12 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
-                  "@obj",
-                  "not mentioned"
-                ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@obj",
+                    "not mentioned"
+                  ]
+                }
               },
               [
                 {
@@ -900,8 +1053,16 @@
                 },
                 {
                   "PrintImpressionOf obj:locale:": [
-                    "@obj",
-                    "@locale"
+                    {
+                      "FromText:": {
+                        "Text value:": "@obj"
+                      }
+                    },
+                    {
+                      "FromText:": {
+                        "Text value:": "@locale"
+                      }
+                    }
                   ]
                 }
               ]
@@ -920,8 +1081,8 @@
                   "Comment:": "d. by default, we dont want to say anything special for actors"
                 },
                 {
-                  "Let:be:": [
-                    "success",
+                  "Set variable:from:": [
+                    "@success",
                     {
                       "FromBool:": true
                     }
@@ -970,26 +1131,34 @@
               {
                 "AllTrue:": [
                   {
-                    "Get obj:trait:": [
-                      "@obj",
-                      "not mentioned"
-                    ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@obj",
+                        "not mentioned"
+                      ]
+                    }
                   },
                   {
-                    "Get obj:trait:": [
-                      "@obj",
-                      "not scenery"
-                    ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@obj",
+                        "not scenery"
+                      ]
+                    }
                   },
                   {
                     "Not:": {
                       "Is empty:": {
-                        "Get:from:": [
-                          "initial appearance",
-                          {
-                            "VarFields:": "obj"
-                          }
-                        ]
+                        "Get variable:": {
+                          "Variable:dot:": [
+                            "obj",
+                            [
+                              {
+                                "AtField:": "initial appearance"
+                              }
+                            ]
+                          ]
+                        }
                       }
                     }
                   }
@@ -1005,10 +1174,12 @@
                 "AllTrue:": [
                   "@first look",
                   {
-                    "Get obj:trait:": [
-                      "@obj",
-                      "not mentioned"
-                    ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@obj",
+                        "not mentioned"
+                      ]
+                    }
                   }
                 ]
               },
@@ -1019,11 +1190,15 @@
                   }
                 },
                 {
-                  "Mention obj:": "@obj"
+                  "Mention obj:": {
+                    "FromText:": {
+                      "Text value:": "@obj"
+                    }
+                  }
                 },
                 {
-                  "Let:be:": [
-                    "success",
+                  "Set variable:from:": [
+                    "@success",
                     {
                       "FromBool:": true
                     }
@@ -1045,7 +1220,11 @@
                   {
                     "Cmp:is:txt:": [
                       {
-                        "ParentOf obj:": "@obj"
+                        "ParentOf obj:": {
+                          "FromText:": {
+                            "Text value:": "@obj"
+                          }
+                        }
                       },
                       "equal_to",
                       "@locale"
@@ -1060,16 +1239,22 @@
                 {
                   "Repeating across:as:does:": [
                     {
-                      "FromTxts:": {
-                        "ChildrenOf obj:": "@obj"
+                      "FromTextList:": {
+                        "ChildrenOf obj:": {
+                          "FromText:": {
+                            "Text value:": "@obj"
+                          }
+                        }
                       }
                     },
-                    {
-                      "AsTxt:": "it"
-                    },
+                    "it",
                     [
                       {
-                        "PrintImpressionOf obj:": "@it"
+                        "PrintImpressionOf obj:": {
+                          "FromText:": {
+                            "Text value:": "@it"
+                          }
+                        }
                       }
                     ]
                   ]
@@ -1111,9 +1296,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
@@ -1143,41 +1326,41 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Put:from:at:": [
+                  "Set object:from:": [
                     {
-                      "ObjField:": "settings"
+                      "Object:field:": [
+                        "settings",
+                        "mentions"
+                      ]
                     },
                     {
-                      "FromNum:": 0
-                    },
-                    "mentions"
+                      "FromNumber:": 0
+                    }
                   ]
                 },
                 {
                   "Repeating across:as:does:": [
                     {
-                      "FromTxts:": {
+                      "FromTextList:": {
                         "KindsOf:": "things"
                       }
                     },
-                    {
-                      "AsTxt:": "it"
-                    },
+                    "it",
                     [
                       {
-                        "Put:from:at:": [
+                        "Set object:from:": [
                           {
-                            "ObjField:": "@it"
+                            "Object:field:": [
+                              "@it",
+                              "not mentioned"
+                            ]
                           },
                           {
                             "FromBool:": true
-                          },
-                          "not mentioned"
+                          }
                         ]
                       }
                     ]

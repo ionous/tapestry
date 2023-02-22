@@ -151,18 +151,18 @@
                     [
                       {
                         "PatternRule:does:": [
-                          {
-                            "Always": true
-                          },
+                          true,
                           [
                             {
                               "--": [
                                 "For patterns which return a value, assigning a return value ends the pattern matching.",
                                 "So end this pattern and block out the default handler."
                               ],
-                              "Let:be:": [
-                                "grouping",
-                                "@grouping"
+                              "Set variable:from:": [
+                                "@grouping",
+                                {
+                                  "FromText:": "@grouping"
+                                }
                               ]
                             }
                           ]
@@ -175,7 +175,7 @@
               [
                 {
                   "PrintInlineObjects objs:": {
-                    "FromTxts:": [
+                    "FromTextList:": [
                       "Clarence",
                       "apple",
                       "pen",
@@ -201,7 +201,7 @@
               [
                 {
                   "PrintInlineObjects objs:": {
-                    "FromTxts:": [
+                    "FromTextList:": [
                       "Clarence",
                       "apple",
                       "pen",
@@ -239,36 +239,54 @@
                           },
                           [
                             {
-                              "Put:from:at:": [
+                              "Set variable:from:": [
                                 {
-                                  "VarField:": "grouping"
+                                  "Variable:dot:": [
+                                    "grouping",
+                                    [
+                                      {
+                                        "AtField:": "label"
+                                      }
+                                    ]
+                                  ]
                                 },
                                 {
-                                  "FromTxt:": "props"
-                                },
-                                "label"
+                                  "FromText:": "props"
+                                }
                               ]
                             },
                             {
-                              "Put:from:at:": [
+                              "Set variable:from:": [
                                 {
-                                  "VarField:": "grouping"
+                                  "Variable:dot:": [
+                                    "grouping",
+                                    [
+                                      {
+                                        "AtField:": "is hide label"
+                                      }
+                                    ]
+                                  ]
                                 },
                                 {
                                   "FromBool:": true
-                                },
-                                "is hide label"
+                                }
                               ]
                             },
                             {
-                              "Put:from:at:": [
+                              "Set variable:from:": [
                                 {
-                                  "VarField:": "grouping"
+                                  "Variable:dot:": [
+                                    "grouping",
+                                    [
+                                      {
+                                        "AtField:": "is hide size"
+                                      }
+                                    ]
+                                  ]
                                 },
                                 {
                                   "FromBool:": true
-                                },
-                                "is hide size"
+                                }
                               ]
                             }
                           ]
@@ -320,7 +338,7 @@
                     "Spaces does:": [
                       {
                         "PrintInlineObjects objs:": {
-                          "FromTxts:": [
+                          "FromTextList:": [
                             "Clarence",
                             "apple",
                             "pen",
@@ -334,7 +352,7 @@
                       },
                       {
                         "PrintInlineObjects objs:": {
-                          "FromTxts:": [
+                          "FromTextList:": [
                             "Clarence",
                             "apple",
                             "pen",
@@ -372,36 +390,54 @@
                           },
                           [
                             {
-                              "Put:from:at:": [
+                              "Set variable:from:": [
                                 {
-                                  "VarField:": "grouping"
+                                  "Variable:dot:": [
+                                    "grouping",
+                                    [
+                                      {
+                                        "AtField:": "label"
+                                      }
+                                    ]
+                                  ]
                                 },
                                 {
-                                  "FromTxt:": "some things"
-                                },
-                                "label"
+                                  "FromText:": "some things"
+                                }
                               ]
                             },
                             {
-                              "Put:from:at:": [
+                              "Set variable:from:": [
                                 {
-                                  "VarField:": "grouping"
+                                  "Variable:dot:": [
+                                    "grouping",
+                                    [
+                                      {
+                                        "AtField:": "is hide size"
+                                      }
+                                    ]
+                                  ]
                                 },
                                 {
                                   "FromBool:": true
-                                },
-                                "is hide size"
+                                }
                               ]
                             },
                             {
-                              "Put:from:at:": [
+                              "Set variable:from:": [
                                 {
-                                  "VarField:": "grouping"
+                                  "Variable:dot:": [
+                                    "grouping",
+                                    [
+                                      {
+                                        "AtField:": "is hide objects"
+                                      }
+                                    ]
+                                  ]
                                 },
                                 {
                                   "FromBool:": true
-                                },
-                                "is hide objects"
+                                }
                               ]
                             }
                           ]
@@ -417,7 +453,7 @@
                     "Spaces does:": [
                       {
                         "PrintInlineObjects objs:": {
-                          "FromTxts:": [
+                          "FromTextList:": [
                             "Clarence",
                             "apple",
                             "pen",
@@ -431,7 +467,7 @@
                       },
                       {
                         "PrintInlineObjects objs:": {
-                          "FromTxts:": [
+                          "FromTextList:": [
                             "Clarence",
                             "apple"
                           ]
@@ -467,25 +503,37 @@
                           },
                           [
                             {
-                              "Put:from:at:": [
+                              "Set variable:from:": [
                                 {
-                                  "VarField:": "grouping"
+                                  "Variable:dot:": [
+                                    "grouping",
+                                    [
+                                      {
+                                        "AtField:": "label"
+                                      }
+                                    ]
+                                  ]
                                 },
                                 {
-                                  "FromTxt:": "the tiles"
-                                },
-                                "label"
+                                  "FromText:": "the tiles"
+                                }
                               ]
                             },
                             {
-                              "Put:from:at:": [
+                              "Set variable:from:": [
                                 {
-                                  "VarField:": "grouping"
+                                  "Variable:dot:": [
+                                    "grouping",
+                                    [
+                                      {
+                                        "AtField:": "is hide size"
+                                      }
+                                    ]
+                                  ]
                                 },
                                 {
                                   "FromBool:": true
-                                },
-                                "is hide size"
+                                }
                               ]
                             }
                           ]
@@ -506,19 +554,19 @@
                           {
                             "Cmp:is:txt:": [
                               {
-                                "Get:from:": [
-                                  "label",
-                                  {
-                                    "RecFields:": {
-                                      "Get:from:": [
-                                        "grouping",
-                                        {
-                                          "VarFields:": "group"
-                                        }
-                                      ]
-                                    }
-                                  }
-                                ]
+                                "Get variable:": {
+                                  "Variable:dot:": [
+                                    "group",
+                                    [
+                                      {
+                                        "AtField:": "grouping"
+                                      },
+                                      {
+                                        "AtField:": "label"
+                                      }
+                                    ]
+                                  ]
+                                }
                               },
                               "equal_to",
                               "the tiles"
@@ -569,7 +617,7 @@
                     "Spaces does:": [
                       {
                         "PrintInlineObjects objs:": {
-                          "FromTxts:": [
+                          "FromTextList:": [
                             "x",
                             "w",
                             "f",
@@ -583,7 +631,7 @@
                       },
                       {
                         "PrintInlineObjects objs:": {
-                          "FromTxts:": [
+                          "FromTextList:": [
                             "Clarence",
                             "x",
                             "w",
@@ -623,14 +671,20 @@
                           },
                           [
                             {
-                              "Put:from:at:": [
+                              "Set variable:from:": [
                                 {
-                                  "VarField:": "grouping"
+                                  "Variable:dot:": [
+                                    "grouping",
+                                    [
+                                      {
+                                        "AtField:": "label"
+                                      }
+                                    ]
+                                  ]
                                 },
                                 {
-                                  "FromTxt:": "scrabble tiles"
-                                },
-                                "label"
+                                  "FromText:": "scrabble tiles"
+                                }
                               ]
                             }
                           ]
@@ -670,7 +724,7 @@
               [
                 {
                   "PrintInlineObjects objs:": {
-                    "FromTxts:": [
+                    "FromTextList:": [
                       "Clarence",
                       "x",
                       "w",
@@ -707,14 +761,20 @@
                           },
                           [
                             {
-                              "Put:from:at:": [
+                              "Set variable:from:": [
                                 {
-                                  "VarField:": "grouping"
+                                  "Variable:dot:": [
+                                    "grouping",
+                                    [
+                                      {
+                                        "AtField:": "label"
+                                      }
+                                    ]
+                                  ]
                                 },
                                 {
-                                  "FromTxt:": "scrabble tiles"
-                                },
-                                "label"
+                                  "FromText:": "scrabble tiles"
+                                }
                               ]
                             }
                           ]
@@ -727,7 +787,7 @@
               [
                 {
                   "PrintInlineObjects objs:": {
-                    "FromTxts:": [
+                    "FromTextList:": [
                       "Clarence",
                       "x",
                       "w",
@@ -764,14 +824,20 @@
                           },
                           [
                             {
-                              "Put:from:at:": [
+                              "Set variable:from:": [
                                 {
-                                  "VarField:": "grouping"
+                                  "Variable:dot:": [
+                                    "grouping",
+                                    [
+                                      {
+                                        "AtField:": "label"
+                                      }
+                                    ]
+                                  ]
                                 },
                                 {
-                                  "FromTxt:": "things"
-                                },
-                                "label"
+                                  "FromText:": "things"
+                                }
                               ]
                             }
                           ]
@@ -787,7 +853,7 @@
                     "Spaces does:": [
                       {
                         "PrintInlineObjects objs:": {
-                          "FromTxts:": [
+                          "FromTextList:": [
                             "Clarence",
                             "apple",
                             "pen",
@@ -800,7 +866,7 @@
                       },
                       {
                         "PrintInlineObjects objs:": {
-                          "FromTxts:": [
+                          "FromTextList:": [
                             "Clarence",
                             "apple",
                             "pen",

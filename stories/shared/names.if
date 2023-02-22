@@ -114,9 +114,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
@@ -126,7 +124,11 @@
                   }
                 },
                 {
-                  "Mention obj:": "@obj"
+                  "Mention obj:": {
+                    "FromText:": {
+                      "Text value:": "@obj"
+                    }
+                  }
                 }
               ]
             ]
@@ -134,10 +136,12 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
-                  "@obj",
-                  "publicly named"
-                ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@obj",
+                    "publicly named"
+                  ]
+                }
               },
               [
                 {
@@ -146,7 +150,11 @@
                   }
                 },
                 {
-                  "Mention obj:": "@obj"
+                  "Mention obj:": {
+                    "FromText:": {
+                      "Text value:": "@obj"
+                    }
+                  }
                 }
               ]
             ]
@@ -156,12 +164,16 @@
               {
                 "Cmp:is:txt:": [
                   {
-                    "Get:from:": [
-                      "printed name",
-                      {
-                        "VarFields:": "obj"
-                      }
-                    ]
+                    "Get variable:": {
+                      "Variable:dot:": [
+                        "obj",
+                        [
+                          {
+                            "AtField:": "printed name"
+                          }
+                        ]
+                      ]
+                    }
                   },
                   "other_than",
                   ""
@@ -170,16 +182,24 @@
               [
                 {
                   "Say:": {
-                    "Get:from:": [
-                      "printed name",
-                      {
-                        "VarFields:": "obj"
-                      }
-                    ]
+                    "Get variable:": {
+                      "Variable:dot:": [
+                        "obj",
+                        [
+                          {
+                            "AtField:": "printed name"
+                          }
+                        ]
+                      ]
+                    }
                   }
                 },
                 {
-                  "Mention obj:": "@obj"
+                  "Mention obj:": {
+                    "FromText:": {
+                      "Text value:": "@obj"
+                    }
+                  }
                 }
               ]
             ]
@@ -217,37 +237,45 @@
               },
               [
                 {
-                  "Put:from:at:": [
+                  "Set object:from:": [
                     {
-                      "ObjField:": "@obj"
+                      "Object:field:": [
+                        "@obj",
+                        "mentioned"
+                      ]
                     },
                     {
                       "FromBool:": true
-                    },
-                    "mentioned"
+                    }
                   ]
                 },
                 {
-                  "Put:from:at:": [
+                  "Set object:from:": [
                     {
-                      "ObjField:": "settings"
+                      "Object:field:": [
+                        "@settings",
+                        "mentions"
+                      ]
                     },
                     {
-                      "FromNum:": {
+                      "FromNumber:": {
                         "Inc:by:": [
                           1,
                           {
-                            "Get:from:": [
-                              "mentions",
-                              {
-                                "ObjFields:": "settings"
-                              }
-                            ]
+                            "Get object:": {
+                              "Object:dot:": [
+                                "settings",
+                                [
+                                  {
+                                    "AtField:": "mentions"
+                                  }
+                                ]
+                              ]
+                            }
                           }
                         ]
                       }
-                    },
-                    "mentions"
+                    }
                   ]
                 }
               ]

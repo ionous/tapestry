@@ -47,20 +47,34 @@
               [
                 {
                   "PatternRule:does:": [
-                    {
-                      "Always": true
-                    },
+                    true,
                     [
                       {
                         "If:from:and:does:else:": [
                           "resp",
                           {
-                            "FromTxt:": {
+                            "FromText:": {
                               "StateChanging noun:trait:guard:change:": [
-                                "@noun",
-                                "@trait",
-                                "@guard",
-                                "@change"
+                                {
+                                  "FromText:": {
+                                    "Text value:": "@noun"
+                                  }
+                                },
+                                {
+                                  "FromText:": {
+                                    "Text value:": "@trait"
+                                  }
+                                },
+                                {
+                                  "FromText:": {
+                                    "Text value:": "@guard"
+                                  }
+                                },
+                                {
+                                  "FromText:": {
+                                    "Text value:": "@change"
+                                  }
+                                }
                               ]
                             }
                           },
@@ -74,8 +88,8 @@
                               "Say:": "@resp"
                             },
                             {
-                              "Let:be:": [
-                                "success",
+                              "Set variable:from:": [
+                                "@success",
                                 {
                                   "FromBool:": false
                                 }
@@ -88,14 +102,21 @@
                                 "Comment:": "nothing has stopped us, so lets change the state now."
                               },
                               {
-                                "Put obj:trait:": [
-                                  "@noun",
-                                  "@trait"
+                                "Set object:from:": [
+                                  {
+                                    "Object:field:": [
+                                      "@noun",
+                                      "@trait"
+                                    ]
+                                  },
+                                  {
+                                    "FromBool:": true
+                                  }
                                 ]
                               },
                               {
-                                "Let:be:": [
-                                  "success",
+                                "Set variable:from:": [
+                                  "@success",
                                   {
                                     "FromBool:": true
                                   }
@@ -128,9 +149,7 @@
               [
                 {
                   "PatternRule:does:": [
-                    {
-                      "Always": true
-                    },
+                    true,
                     [
                       {
                         "Say:": {
@@ -143,8 +162,8 @@
                         }
                       },
                       {
-                        "Let:be:": [
-                          "success",
+                        "Set variable:from:": [
+                          "@success",
                           {
                             "FromBool:": true
                           }
@@ -157,7 +176,7 @@
                   "PatternRule:does:": [
                     {
                       "IsPlayer obj:": {
-                        "FromTxt:": "@actor"
+                        "FromText:": "@actor"
                       }
                     },
                     [
@@ -172,8 +191,8 @@
                         }
                       },
                       {
-                        "Let:be:": [
-                          "success",
+                        "Set variable:from:": [
+                          "@success",
                           {
                             "FromBool:": true
                           }
@@ -231,20 +250,22 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
-                  "@noun",
-                  "@trait"
-                ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@noun",
+                    "@trait"
+                  ]
+                }
               },
               [
                 {
                   "Comment:": "can't change what is."
                 },
                 {
-                  "Let:be:": [
-                    "result",
+                  "Set variable:from:": [
+                    "@result",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Response:text:": [
                           "can't change what is",
                           {
@@ -269,10 +290,12 @@
                   },
                   {
                     "Not:": {
-                      "Get obj:trait:": [
-                        "@noun",
-                        "@guard"
-                      ]
+                      "Get object:": {
+                        "Object:field:": [
+                          "@noun",
+                          "@guard"
+                        ]
+                      }
                     }
                   }
                 ]
@@ -282,10 +305,10 @@
                   "Comment:": "can't change the unchangeable."
                 },
                 {
-                  "Let:be:": [
-                    "result",
+                  "Set variable:from:": [
+                    "@result",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Response:text:": [
                           "can't change the unchangeable",
                           {

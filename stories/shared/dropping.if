@@ -18,12 +18,16 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "agent",
+                    [
+                      {
+                        "AtField:": "pawn"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -32,7 +36,11 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@actor"
+                  }
+                }
               },
               [
                 {
@@ -44,13 +52,21 @@
                         "the result will be empty if we can",
                         "or an error message if we cant"
                       ],
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanHandle actor:action:noun:": [
-                          "@actor",
                           {
-                            "FromTxt:": "dropping"
+                            "FromText:": {
+                              "Text value:": "@actor"
+                            }
                           },
-                          "@noun"
+                          {
+                            "FromText:": "dropping"
+                          },
+                          {
+                            "FromText:": {
+                              "Text value:": "@noun"
+                            }
+                          }
                         ]
                       }
                     },
@@ -76,12 +92,24 @@
                               ],
                               "Send:event:": [
                                 {
-                                  "Capture obj:": "@noun"
+                                  "Capture obj:": {
+                                    "FromText:": {
+                                      "Text value:": "@noun"
+                                    }
+                                  }
                                 },
                                 {
                                   "Drop actor:noun:": [
-                                    "@actor",
-                                    "@noun"
+                                    {
+                                      "FromText:": {
+                                        "Text value:": "@actor"
+                                      }
+                                    },
+                                    {
+                                      "FromText:": {
+                                        "Text value:": "@noun"
+                                      }
+                                    }
                                   ]
                                 }
                               ]
@@ -89,8 +117,16 @@
                             [
                               {
                                 "ReportDropping actor:noun:": [
-                                  "@actor",
-                                  "@noun"
+                                  {
+                                    "FromText:": {
+                                      "Text value:": "@actor"
+                                    }
+                                  },
+                                  {
+                                    "FromText:": {
+                                      "Text value:": "@noun"
+                                    }
+                                  }
                                 ]
                               }
                             ]
@@ -120,20 +156,26 @@
               [
                 {
                   "PatternRule:does:": [
-                    {
-                      "Always": true
-                    },
+                    true,
                     [
                       {
                         "If:from:and:does:else:": [
                           "error",
                           {
-                            "FromTxt:": {
+                            "FromText:": {
                               "MoveObject obj:dest:": [
-                                "@noun",
                                 {
-                                  "FromTxt:": {
-                                    "ParentOf obj:": "@actor"
+                                  "FromText:": {
+                                    "Text value:": "@noun"
+                                  }
+                                },
+                                {
+                                  "FromText:": {
+                                    "ParentOf obj:": {
+                                      "FromText:": {
+                                        "Text value:": "@actor"
+                                      }
+                                    }
                                   }
                                 }
                               ]
@@ -149,8 +191,8 @@
                               "Say:": "@error"
                             },
                             {
-                              "Let:be:": [
-                                "success",
+                              "Set variable:from:": [
+                                "@success",
                                 {
                                   "FromBool:": false
                                 }
@@ -161,14 +203,14 @@
                             "ElseDo does:": [
                               {
                                 "Log:": {
-                                  "FromTxt:": {
+                                  "FromText:": {
                                     "RenderTemplate:": "{The: .actor} is taking {the: .noun} ..."
                                   }
                                 }
                               },
                               {
-                                "Let:be:": [
-                                  "success",
+                                "Set variable:from:": [
+                                  "@success",
                                   {
                                     "FromBool:": true
                                   }
@@ -215,9 +257,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
@@ -236,7 +276,11 @@
             "PatternRule:does:": [
               {
                 "Not:": {
-                  "IsPlayer obj:": "@actor"
+                  "IsPlayer obj:": {
+                    "FromText:": {
+                      "Text value:": "@actor"
+                    }
+                  }
                 }
               },
               [
@@ -277,11 +321,19 @@
                   {
                     "Cmp:is:txt:": [
                       {
-                        "ParentOf obj:": "@actor"
+                        "ParentOf obj:": {
+                          "FromText:": {
+                            "Text value:": "@actor"
+                          }
+                        }
                       },
                       "equal_to",
                       {
-                        "LocationOf obj:": "@noun"
+                        "LocationOf obj:": {
+                          "FromText:": {
+                            "Text value:": "@noun"
+                          }
+                        }
                       }
                     ]
                   }
@@ -292,10 +344,10 @@
                   "Comment:": "Tell the player that they've already accomplished the goal they are trying to achieve ( vs. that they can't accomplish what they are trying to achieve. )"
                 },
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set variable:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Response:text:": [
                           "can't drop what's already there",
                           {
@@ -331,10 +383,10 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set variable:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Response:text:": [
                           "can't drop yourself",
                           {

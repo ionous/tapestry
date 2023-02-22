@@ -18,12 +18,16 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "agent",
+                    [
+                      {
+                        "AtField:": "pawn"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -32,7 +36,11 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@actor"
+                  }
+                }
               },
               [
                 {
@@ -42,13 +50,21 @@
                   "If:from:and:does:else:": [
                     "result",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanReach actor:action:noun:": [
-                          "@actor",
                           {
-                            "FromTxt:": "retrieving from"
+                            "FromText:": {
+                              "Text value:": "@actor"
+                            }
                           },
-                          "@noun"
+                          {
+                            "FromText:": "retrieving from"
+                          },
+                          {
+                            "FromText:": {
+                              "Text value:": "@noun"
+                            }
+                          }
                         ]
                       }
                     },
@@ -68,14 +84,26 @@
                           "If:from:and:does:else:": [
                             "result",
                             {
-                              "FromTxt:": {
+                              "FromText:": {
                                 "CanUse actor:action:noun:otherNoun:": [
-                                  "@actor",
                                   {
-                                    "FromTxt:": "retrieving from"
+                                    "FromText:": {
+                                      "Text value:": "@actor"
+                                    }
                                   },
-                                  "@noun",
-                                  "@other noun"
+                                  {
+                                    "FromText:": "retrieving from"
+                                  },
+                                  {
+                                    "FromText:": {
+                                      "Text value:": "@noun"
+                                    }
+                                  },
+                                  {
+                                    "FromText:": {
+                                      "Text value:": "@other noun"
+                                    }
+                                  }
                                 ]
                               }
                             },
@@ -96,13 +124,29 @@
                                     {
                                       "Send:event:": [
                                         {
-                                          "Capture obj:": "@noun"
+                                          "Capture obj:": {
+                                            "FromText:": {
+                                              "Text value:": "@noun"
+                                            }
+                                          }
                                         },
                                         {
                                           "RetrieveFrom actor:noun:otherNoun:": [
-                                            "@actor",
-                                            "@noun",
-                                            "@other noun"
+                                            {
+                                              "FromText:": {
+                                                "Text value:": "@actor"
+                                              }
+                                            },
+                                            {
+                                              "FromText:": {
+                                                "Text value:": "@noun"
+                                              }
+                                            },
+                                            {
+                                              "FromText:": {
+                                                "Text value:": "@other noun"
+                                              }
+                                            }
                                           ]
                                         }
                                       ]
@@ -110,9 +154,21 @@
                                     [
                                       {
                                         "ReportRetrievingFrom actor:noun:otherNoun:": [
-                                          "@actor",
-                                          "@noun",
-                                          "@other noun"
+                                          {
+                                            "FromText:": {
+                                              "Text value:": "@actor"
+                                            }
+                                          },
+                                          {
+                                            "FromText:": {
+                                              "Text value:": "@noun"
+                                            }
+                                          },
+                                          {
+                                            "FromText:": {
+                                              "Text value:": "@other noun"
+                                            }
+                                          }
                                         ]
                                       }
                                     ]
@@ -154,17 +210,21 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set variable:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanReach actor:action:noun:": [
-                          "@actor",
                           {
-                            "FromTxt:": "taking"
+                            "FromText:": {
+                              "Text value:": "@actor"
+                            }
                           },
                           {
-                            "FromTxt:": "@noun"
+                            "FromText:": "taking"
+                          },
+                          {
+                            "FromText:": "@noun"
                           }
                         ]
                       }
@@ -199,17 +259,21 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set variable:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanUse actor:action:noun:": [
-                          "@actor",
                           {
-                            "FromTxt:": "taking"
+                            "FromText:": {
+                              "Text value:": "@actor"
+                            }
                           },
                           {
-                            "FromTxt:": "@noun"
+                            "FromText:": "taking"
+                          },
+                          {
+                            "FromText:": "@noun"
                           }
                         ]
                       }
@@ -233,7 +297,11 @@
                   {
                     "Cmp:is:txt:": [
                       {
-                        "ParentOf obj:": "@noun"
+                        "ParentOf obj:": {
+                          "FromText:": {
+                            "Text value:": "@noun"
+                          }
+                        }
                       },
                       "other_than",
                       "@other noun"
@@ -243,10 +311,10 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set variable:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Response:text:": [
                           "can't retrieve what's not inside",
                           {
@@ -277,23 +345,33 @@
               [
                 {
                   "PatternRule:does:": [
-                    {
-                      "Always": true
-                    },
+                    true,
                     [
                       {
-                        "Let:be:": [
-                          "success",
+                        "Set variable:from:": [
+                          "@success",
                           {
                             "FromBool:": {
                               "Send:event:": [
                                 {
-                                  "Capture obj:": "@noun"
+                                  "Capture obj:": {
+                                    "FromText:": {
+                                      "Text value:": "@noun"
+                                    }
+                                  }
                                 },
                                 {
                                   "Take actor:noun:": [
-                                    "@actor",
-                                    "@noun"
+                                    {
+                                      "FromText:": {
+                                        "Text value:": "@actor"
+                                      }
+                                    },
+                                    {
+                                      "FromText:": {
+                                        "Text value:": "@noun"
+                                      }
+                                    }
                                   ]
                                 }
                               ]
@@ -344,14 +422,20 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "ReportTaking actor:noun:": [
-                    "@actor",
-                    "@noun"
+                    {
+                      "FromText:": {
+                        "Text value:": "@actor"
+                      }
+                    },
+                    {
+                      "FromText:": {
+                        "Text value:": "@noun"
+                      }
+                    }
                   ]
                 }
               ]

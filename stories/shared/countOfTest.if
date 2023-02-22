@@ -13,9 +13,7 @@
               [
                 {
                   "PatternRule:does:": [
-                    {
-                      "Always": true
-                    },
+                    true,
                     [
                       {
                         "Say:": "o"
@@ -82,13 +80,11 @@
           {
             "Repeating across:as:does:": [
               {
-                "FromNums:": {
+                "FromNumList:": {
                   "Range:": 6
                 }
               },
-              {
-                "AsNum:": "i"
-              },
+              "i",
               [
                 {
                   "MagicSymbols": true

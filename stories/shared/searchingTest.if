@@ -68,10 +68,10 @@
           {
             "Searching agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "knife"
+                "FromText:": "knife"
               }
             ]
           },
@@ -81,10 +81,10 @@
           {
             "Searching agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "machine"
+                "FromText:": "machine"
               }
             ]
           },
@@ -94,10 +94,10 @@
           {
             "Searching agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "counter"
+                "FromText:": "counter"
               }
             ]
           },
@@ -107,10 +107,10 @@
           {
             "Searching agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "purse"
+                "FromText:": "purse"
               }
             ]
           },

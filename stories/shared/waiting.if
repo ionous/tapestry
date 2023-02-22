@@ -16,12 +16,16 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "agent",
+                    [
+                      {
+                        "AtField:": "pawn"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -30,7 +34,11 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@actor"
+                  }
+                }
               },
               [
                 {
@@ -38,19 +46,35 @@
                     {
                       "Send:event:": [
                         {
-                          "Capture obj:": "@actor"
+                          "Capture obj:": {
+                            "FromText:": {
+                              "Text value:": "@actor"
+                            }
+                          }
                         },
                         {
                           "Wait actor:noun:": [
-                            "@actor",
-                            "@actor"
+                            {
+                              "FromText:": {
+                                "Text value:": "@actor"
+                              }
+                            },
+                            {
+                              "FromText:": {
+                                "Text value:": "@actor"
+                              }
+                            }
                           ]
                         }
                       ]
                     },
                     [
                       {
-                        "ReportWaiting actor:": "@actor"
+                        "ReportWaiting actor:": {
+                          "FromText:": {
+                            "Text value:": "@actor"
+                          }
+                        }
                       }
                     ]
                   ]
@@ -83,9 +107,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
@@ -104,7 +126,11 @@
             "PatternRule:does:": [
               {
                 "Not:": {
-                  "IsPlayer obj:": "@actor"
+                  "IsPlayer obj:": {
+                    "FromText:": {
+                      "Text value:": "@actor"
+                    }
+                  }
                 }
               },
               [

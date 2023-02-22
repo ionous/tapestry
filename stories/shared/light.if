@@ -27,13 +27,11 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Let:be:": [
-                    "result",
+                  "Set variable:from:": [
+                    "@result",
                     {
                       "FromBool:": false
                     }
@@ -53,23 +51,27 @@
                     ]
                   },
                   {
-                    "Get obj:trait:": [
-                      "@obj",
-                      "opaque"
-                    ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@obj",
+                        "opaque"
+                      ]
+                    }
                   },
                   {
-                    "Get obj:trait:": [
-                      "@obj",
-                      "closed"
-                    ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@obj",
+                        "closed"
+                      ]
+                    }
                   }
                 ]
               },
               [
                 {
-                  "Let:be:": [
-                    "result",
+                  "Set variable:from:": [
+                    "@result",
                     {
                       "FromBool:": true
                     }
@@ -91,8 +93,8 @@
                   "Comment:": "a room is the top of line."
                 },
                 {
-                  "Let:be:": [
-                    "result",
+                  "Set variable:from:": [
+                    "@result",
                     {
                       "FromBool:": true
                     }
@@ -138,7 +140,7 @@
               "object",
               {
                 "ParentOf obj:": {
-                  "FromTxt:": "@obj"
+                  "FromText:": "@obj"
                 }
               }
             ]
@@ -147,18 +149,16 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Comment:": "normally the parent is just the parent."
                 },
                 {
-                  "Let:be:": [
-                    "result",
+                  "Set variable:from:": [
+                    "@result",
                     {
-                      "FromTxt:": "@parent"
+                      "FromText:": "@parent"
                     }
                   ]
                 }
@@ -168,17 +168,21 @@
           {
             "PatternRule:does:": [
               {
-                "FullyOpaque obj:": "@obj"
+                "FullyOpaque obj:": {
+                  "FromText:": {
+                    "Text value:": "@obj"
+                  }
+                }
               },
               [
                 {
                   "Comment:": "for example: if our object is a closed, opaque, container, dont return anything."
                 },
                 {
-                  "Let:be:": [
-                    "result",
+                  "Set variable:from:": [
+                    "@result",
                     {
-                      "FromTxt:": ""
+                      "FromText:": ""
                     }
                   ]
                 }
@@ -218,9 +222,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Repeating:does:": [
@@ -231,20 +233,20 @@
                     },
                     [
                       {
-                        "Put:into:": [
-                          "@obj",
+                        "Push:into variable:": [
                           {
-                            "IntoTxts:": "list"
-                          }
+                            "FromText:": "@obj"
+                          },
+                          "@list"
                         ]
                       },
                       {
-                        "Let:be:": [
-                          "obj",
+                        "Set variable:from:": [
+                          "@obj",
                           {
-                            "FromTxt:": {
+                            "FromText:": {
                               "TransparentOf obj:": {
-                                "FromTxt:": "@obj"
+                                "FromText:": "@obj"
                               }
                             }
                           }
@@ -297,9 +299,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Comment:": "Determine the ceiling, and add it to the queue for processing."
@@ -313,17 +313,23 @@
                     },
                     [
                       {
-                        "Let:be:": [
-                          "ceiling",
-                          "@spot"
+                        "Set variable:from:": [
+                          "@ceiling",
+                          {
+                            "FromText:": "@spot"
+                          }
                         ]
                       },
                       {
-                        "Let:be:": [
-                          "spot",
+                        "Set variable:from:": [
+                          "@spot",
                           {
-                            "FromTxt:": {
-                              "TransparentOf obj:": "@spot"
+                            "FromText:": {
+                              "TransparentOf obj:": {
+                                "FromText:": {
+                                  "Text value:": "@spot"
+                                }
+                              }
                             }
                           }
                         ]
@@ -332,11 +338,11 @@
                   ]
                 },
                 {
-                  "Put:into:": [
-                    "@ceiling",
+                  "Push:into variable:": [
                     {
-                      "IntoTxts:": "queue"
-                    }
+                      "FromText:": "@ceiling"
+                    },
+                    "@queue"
                   ]
                 },
                 {
@@ -344,7 +350,9 @@
                     {
                       "Cmp:is:num:": [
                         {
-                          "Len:": "@queue"
+                          "Len:": {
+                            "FromTextList:": "@queue"
+                          }
                         },
                         "greater_than",
                         0
@@ -352,9 +360,9 @@
                     },
                     [
                       {
-                        "Erasing:as:does:": [
+                        "Erasing variable:as:does:": [
                           {
-                            "VarOfTxts:": "queue"
+                            "Variable:": "@queue"
                           },
                           "it",
                           [
@@ -364,15 +372,17 @@
                             {
                               "If:does:else:": [
                                 {
-                                  "Get obj:trait:": [
-                                    "@it",
-                                    "lit"
-                                  ]
+                                  "Get object:": {
+                                    "Object:field:": [
+                                      "@it",
+                                      "lit"
+                                    ]
+                                  }
                                 },
                                 [
                                   {
-                                    "Let:be:": [
-                                      "result",
+                                    "Set variable:from:": [
+                                      "@result",
                                       {
                                         "FromBool:": true
                                       }
@@ -395,7 +405,11 @@
                                         },
                                         {
                                           "Not:": {
-                                            "FullyOpaque obj:": "@it"
+                                            "FullyOpaque obj:": {
+                                              "FromText:": {
+                                                "Text value:": "@it"
+                                              }
+                                            }
                                           }
                                         }
                                       ]
@@ -405,15 +419,17 @@
                                         "Comment:": "Any children of our ceiling will be considered for their light contributions, even if the ceiling wouldn't transmit that light outward. "
                                       },
                                       {
-                                        "Put:into:": [
+                                        "Push:into variable:": [
                                           {
-                                            "FromTxts:": {
-                                              "ChildrenOf obj:": "@it"
+                                            "FromTextList:": {
+                                              "ChildrenOf obj:": {
+                                                "FromText:": {
+                                                  "Text value:": "@it"
+                                                }
+                                              }
                                             }
                                           },
-                                          {
-                                            "IntoTxts:": "queue"
-                                          }
+                                          "@queue"
                                         ]
                                       }
                                     ]

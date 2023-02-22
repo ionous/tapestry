@@ -82,7 +82,7 @@
         [
           {
             "PrintInventory actor:": {
-              "FromTxt:": {
+              "FromText:": {
                 "IdOf:": "Mildred"
               }
             }

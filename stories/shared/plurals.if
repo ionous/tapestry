@@ -35,9 +35,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
@@ -54,12 +52,16 @@
               {
                 "Cmp:is:txt:": [
                   {
-                    "Get:from:": [
-                      "printed plural name",
-                      {
-                        "VarFields:": "obj"
-                      }
-                    ]
+                    "Get variable:": {
+                      "Variable:dot:": [
+                        "obj",
+                        [
+                          {
+                            "AtField:": "printed plural name"
+                          }
+                        ]
+                      ]
+                    }
                   },
                   "other_than",
                   ""

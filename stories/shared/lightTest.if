@@ -6,14 +6,16 @@
         "Kitchenette",
         [
           {
-            "Put:from:at:": [
+            "Set object:from:": [
               {
-                "ObjField:": "Kitchen"
+                "Object:field:": [
+                  "Kitchen",
+                  "unlit"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "unlit"
+              }
             ]
           },
           {
@@ -25,14 +27,16 @@
             "Expect output:": "ok: The cabinet is dark."
           },
           {
-            "Put:from:at:": [
+            "Set object:from:": [
               {
-                "ObjField:": "Kitchen"
+                "Object:field:": [
+                  "Kitchen",
+                  "lit"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "lit"
+              }
             ]
           },
           {
@@ -44,14 +48,16 @@
             "Expect output:": "ok: The cabinet has light."
           },
           {
-            "Put:from:at:": [
+            "Set object:from:": [
               {
-                "ObjField:": "cabinet"
+                "Object:field:": [
+                  "cabinet",
+                  "closed"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "closed"
+              }
             ]
           },
           {
@@ -63,14 +69,16 @@
             "Expect output:": "ok: The cabinet is dark."
           },
           {
-            "Put:from:at:": [
+            "Set object:from:": [
               {
-                "ObjField:": "matches"
+                "Object:field:": [
+                  "matches",
+                  "lit"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "lit"
+              }
             ]
           },
           {

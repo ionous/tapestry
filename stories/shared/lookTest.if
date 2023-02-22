@@ -11,15 +11,13 @@
           {
             "Repeating across:as:does:": [
               {
-                "FromTxts:": [
+                "FromTextList:": [
                   "cabinet",
                   "kitchen",
                   "shelf"
                 ]
               },
-              {
-                "AsTxt:": "src"
-              },
+              "src",
               [
                 {
                   "Say:": {
@@ -27,15 +25,13 @@
                       {
                         "Repeating across:as:does:": [
                           {
-                            "FromTxts:": {
+                            "FromTextList:": {
                               "TransparentList obj:": {
-                                "FromTxt:": "@src"
+                                "FromText:": "@src"
                               }
                             }
                           },
-                          {
-                            "AsTxt:": "it"
-                          },
+                          "it",
                           [
                             {
                               "Say:": {
@@ -65,28 +61,28 @@
             "Comment:": "Close the cabinet door, and its list of visible objects should change."
           },
           {
-            "Put:from:at:": [
+            "Set object:from:": [
               {
-                "ObjField:": "cabinet"
+                "Object:field:": [
+                  "cabinet",
+                  "closed"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "closed"
+              }
             ]
           },
           {
             "Repeating across:as:does:": [
               {
-                "FromTxts:": {
+                "FromTextList:": {
                   "TransparentList obj:": {
-                    "FromTxt:": "cabinet"
+                    "FromText:": "cabinet"
                   }
                 }
               },
-              {
-                "AsTxt:": "it"
-              },
+              "it",
               [
                 {
                   "Say:": {
@@ -107,9 +103,9 @@
               "Cmp:is:num:": [
                 {
                   "Len:": {
-                    "FromTxts:": {
+                    "FromTextList:": {
                       "TransparentList obj:": {
-                        "FromTxt:": "cabinet"
+                        "FromText:": "cabinet"
                       }
                     }
                   }
@@ -123,14 +119,16 @@
             "Comment:": "Open the cabinet again, and validate the number of visible objects again."
           },
           {
-            "Put:from:at:": [
+            "Set object:from:": [
               {
-                "ObjField:": "cabinet"
+                "Object:field:": [
+                  "cabinet",
+                  "open"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "open"
+              }
             ]
           },
           {
@@ -138,9 +136,9 @@
               "Cmp:is:num:": [
                 {
                   "Len:": {
-                    "FromTxts:": {
+                    "FromTextList:": {
                       "TransparentList obj:": {
-                        "FromTxt:": "cabinet"
+                        "FromText:": "cabinet"
                       }
                     }
                   }
@@ -164,10 +162,10 @@
           {
             "PrintObjectDescription obj:locale:": [
               {
-                "FromTxt:": "hat"
+                "FromText:": "hat"
               },
               {
-                "FromTxt:": "kitchen"
+                "FromText:": "kitchen"
               }
             ]
           },
@@ -177,10 +175,10 @@
           {
             "PrintObjectDescription obj:locale:": [
               {
-                "FromTxt:": "shelf"
+                "FromText:": "shelf"
               },
               {
-                "FromTxt:": "kitchen"
+                "FromText:": "kitchen"
               }
             ]
           },
@@ -190,10 +188,10 @@
           {
             "PrintObjectDescription obj:locale:": [
               {
-                "FromTxt:": "machine"
+                "FromText:": "machine"
               },
               {
-                "FromTxt:": "kitchen"
+                "FromText:": "kitchen"
               }
             ]
           },
@@ -214,7 +212,7 @@
           {
             "PrintVantage where:inDarkness:": [
               {
-                "FromTxt:": "cabinet"
+                "FromText:": "cabinet"
               },
               {
                 "FromBool:": true
@@ -229,7 +227,7 @@
           },
           {
             "PrintVantage where:": {
-              "FromTxt:": "cabinet"
+              "FromText:": "cabinet"
             }
           },
           {
@@ -244,19 +242,21 @@
             ]
           },
           {
-            "Put:from:at:": [
+            "Set object:from:": [
               {
-                "ObjField:": "cabinet"
+                "Object:field:": [
+                  "cabinet",
+                  "closed"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "closed"
+              }
             ]
           },
           {
             "PrintVantage where:": {
-              "FromTxt:": "cabinet"
+              "FromText:": "cabinet"
             }
           },
           {
@@ -278,7 +278,7 @@
           },
           {
             "PrintVantage where:": {
-              "FromTxt:": "cabinet"
+              "FromText:": "cabinet"
             }
           },
           {
@@ -300,7 +300,7 @@
         [
           {
             "PrintInlineObjects objs:": {
-              "FromTxts:": [
+              "FromTextList:": [
                 "mortar",
                 "blender",
                 "counter"

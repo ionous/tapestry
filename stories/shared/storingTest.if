@@ -93,13 +93,13 @@
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "clutch"
+                            "FromText:": "clutch"
                           },
                           {
-                            "FromTxt:": "mildred"
+                            "FromText:": "mildred"
                           }
                         ]
                       },
@@ -120,13 +120,13 @@
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "coffee"
+                            "FromText:": "coffee"
                           },
                           {
-                            "FromTxt:": "machine"
+                            "FromText:": "machine"
                           }
                         ]
                       },
@@ -147,13 +147,13 @@
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "clutch"
+                            "FromText:": "clutch"
                           },
                           {
-                            "FromTxt:": "purse"
+                            "FromText:": "purse"
                           }
                         ]
                       },
@@ -174,13 +174,13 @@
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "coffee"
+                            "FromText:": "coffee"
                           },
                           {
-                            "FromTxt:": "purse"
+                            "FromText:": "purse"
                           }
                         ]
                       },
@@ -201,13 +201,13 @@
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "coin"
+                            "FromText:": "coin"
                           },
                           {
-                            "FromTxt:": "shelf"
+                            "FromText:": "shelf"
                           }
                         ]
                       },
@@ -228,13 +228,13 @@
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "flower"
+                            "FromText:": "flower"
                           },
                           {
-                            "FromTxt:": "shelf"
+                            "FromText:": "shelf"
                           }
                         ]
                       },
@@ -255,13 +255,13 @@
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "broom"
+                            "FromText:": "broom"
                           },
                           {
-                            "FromTxt:": "cabinet"
+                            "FromText:": "cabinet"
                           }
                         ]
                       },
@@ -282,13 +282,13 @@
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "knife"
+                            "FromText:": "knife"
                           },
                           {
-                            "FromTxt:": "purse"
+                            "FromText:": "purse"
                           }
                         ]
                       },
@@ -309,13 +309,13 @@
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "purse"
+                            "FromText:": "purse"
                           },
                           {
-                            "FromTxt:": "wisdom"
+                            "FromText:": "wisdom"
                           }
                         ]
                       },

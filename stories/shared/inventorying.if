@@ -16,12 +16,16 @@
               "actor",
               "object",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
-                ]
+                "Get variable:": {
+                  "Variable:dot:": [
+                    "agent",
+                    [
+                      {
+                        "AtField:": "pawn"
+                      }
+                    ]
+                  ]
+                }
               }
             ]
           }
@@ -30,16 +34,28 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@actor"
+                  }
+                }
               },
               [
                 {
                   "Send:event:": [
                     {
-                      "Capture obj:": "@actor"
+                      "Capture obj:": {
+                        "FromText:": {
+                          "Text value:": "@actor"
+                        }
+                      }
                     },
                     {
-                      "Inventory actor:": "@actor"
+                      "Inventory actor:": {
+                        "FromText:": {
+                          "Text value:": "@actor"
+                        }
+                      }
                     }
                   ]
                 }
@@ -63,16 +79,18 @@
               [
                 {
                   "PatternRule:does:": [
-                    {
-                      "Always": true
-                    },
+                    true,
                     [
                       {
-                        "PrintInventory actor:": "@actor"
+                        "PrintInventory actor:": {
+                          "FromText:": {
+                            "Text value:": "@actor"
+                          }
+                        }
                       },
                       {
-                        "Let:be:": [
-                          "success",
+                        "Set variable:from:": [
+                          "@success",
                           {
                             "FromBool:": true
                           }
@@ -111,7 +129,11 @@
             "TextList:initially:": [
               "kids",
               {
-                "ChildrenOf obj:": "@actor"
+                "ChildrenOf obj:": {
+                  "FromText:": {
+                    "Text value:": "@actor"
+                  }
+                }
               }
             ]
           }
@@ -119,9 +141,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": {
@@ -141,7 +161,9 @@
               {
                 "Cmp:is:num:": [
                   {
-                    "Len:": "@kids"
+                    "Len:": {
+                      "FromTextList:": "@kids"
+                    }
                   },
                   "greater_than",
                   0
@@ -159,7 +181,11 @@
                   }
                 },
                 {
-                  "PrintBlocks objs:": "@kids"
+                  "PrintBlocks objs:": {
+                    "FromText:": {
+                      "Text value:": "@kids"
+                    }
+                  }
                 }
               ]
             ]

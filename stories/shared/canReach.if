@@ -67,14 +67,14 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Let:be:": [
-                    "i",
-                    "@actor"
+                  "Set variable:from:": [
+                    "@i",
+                    {
+                      "FromText:": "@actor"
+                    }
                   ]
                 },
                 {
@@ -89,19 +89,23 @@
                         "Comment:": "There's no problem reaching yourself, so start by putting yourself in the list of visited places."
                       },
                       {
-                        "Put:into:": [
-                          "@i",
+                        "Push:into variable:": [
                           {
-                            "IntoTxts:": "path"
-                          }
+                            "FromText:": "@i"
+                          },
+                          "@path"
                         ]
                       },
                       {
-                        "Let:be:": [
-                          "next",
+                        "Set variable:from:": [
+                          "@next",
                           {
-                            "FromTxt:": {
-                              "ParentOf obj:": "@i"
+                            "FromText:": {
+                              "ParentOf obj:": {
+                                "FromText:": {
+                                  "Text value:": "@i"
+                                }
+                              }
                             }
                           }
                         ]
@@ -119,13 +123,33 @@
                               "If:from:and:does:": [
                                 "response",
                                 {
-                                  "FromTxt:": {
+                                  "FromText:": {
                                     "ReachUp fromObj:intoObj:actor:noun:action:": [
-                                      "@i",
-                                      "@next",
-                                      "@actor",
-                                      "@noun",
-                                      "@action"
+                                      {
+                                        "FromText:": {
+                                          "Text value:": "@i"
+                                        }
+                                      },
+                                      {
+                                        "FromText:": {
+                                          "Text value:": "@next"
+                                        }
+                                      },
+                                      {
+                                        "FromText:": {
+                                          "Text value:": "@actor"
+                                        }
+                                      },
+                                      {
+                                        "FromText:": {
+                                          "Text value:": "@noun"
+                                        }
+                                      },
+                                      {
+                                        "FromText:": {
+                                          "Text value:": "@action"
+                                        }
+                                      }
                                     ]
                                   }
                                 },
@@ -136,19 +160,23 @@
                                 },
                                 [
                                   {
-                                    "Let:be:": [
-                                      "reach error",
+                                    "Set variable:from:": [
+                                      "@reach error",
                                       {
-                                        "FromNum:": {
-                                          "Len:": "@path"
+                                        "FromNumber:": {
+                                          "Len:": {
+                                            "FromTextList:": "@path"
+                                          }
                                         }
                                       }
                                     ]
                                   },
                                   {
-                                    "Let:be:": [
-                                      "reach response",
-                                      "@response"
+                                    "Set variable:from:": [
+                                      "@reach response",
+                                      {
+                                        "FromText:": "@response"
+                                      }
                                     ]
                                   },
                                   {
@@ -164,9 +192,11 @@
                         ]
                       },
                       {
-                        "Let:be:": [
-                          "i",
-                          "@next"
+                        "Set variable:from:": [
+                          "@i",
+                          {
+                            "FromText:": "@next"
+                          }
                         ]
                       }
                     ]
@@ -177,13 +207,15 @@
                 },
                 {
                   "Log:": {
-                    "FromTxts:": "@path"
+                    "FromTextList:": "@path"
                   }
                 },
                 {
-                  "Let:be:": [
-                    "i",
-                    "@noun"
+                  "Set variable:from:": [
+                    "@i",
+                    {
+                      "FromText:": "@noun"
+                    }
                   ]
                 },
                 {
@@ -195,13 +227,21 @@
                     },
                     [
                       {
-                        "Let:be:": [
-                          "lca",
+                        "Set variable:from:": [
+                          "@lca",
                           {
-                            "FromNum:": {
+                            "FromNumber:": {
                               "Find:list:": [
-                                "@i",
-                                "@path"
+                                {
+                                  "FromText:": {
+                                    "Text value:": "@i"
+                                  }
+                                },
+                                {
+                                  "FromText:": {
+                                    "Text value:": "@path"
+                                  }
+                                }
                               ]
                             }
                           }
@@ -227,11 +267,15 @@
                         ]
                       },
                       {
-                        "Let:be:": [
-                          "next",
+                        "Set variable:from:": [
+                          "@next",
                           {
-                            "FromTxt:": {
-                              "ParentOf obj:": "@i"
+                            "FromText:": {
+                              "ParentOf obj:": {
+                                "FromText:": {
+                                  "Text value:": "@i"
+                                }
+                              }
                             }
                           }
                         ]
@@ -240,13 +284,33 @@
                         "If:from:and:does:": [
                           "response",
                           {
-                            "FromTxt:": {
+                            "FromText:": {
                               "ReachDown fromObj:intoObj:actor:noun:action:": [
-                                "@next",
-                                "@i",
-                                "@actor",
-                                "@noun",
-                                "@action"
+                                {
+                                  "FromText:": {
+                                    "Text value:": "@next"
+                                  }
+                                },
+                                {
+                                  "FromText:": {
+                                    "Text value:": "@i"
+                                  }
+                                },
+                                {
+                                  "FromText:": {
+                                    "Text value:": "@actor"
+                                  }
+                                },
+                                {
+                                  "FromText:": {
+                                    "Text value:": "@noun"
+                                  }
+                                },
+                                {
+                                  "FromText:": {
+                                    "Text value:": "@action"
+                                  }
+                                }
                               ]
                             }
                           },
@@ -257,9 +321,11 @@
                           },
                           [
                             {
-                              "Let:be:": [
-                                "dig error",
-                                "@response"
+                              "Set variable:from:": [
+                                "@dig error",
+                                {
+                                  "FromText:": "@response"
+                                }
                               ]
                             },
                             {
@@ -272,9 +338,11 @@
                         ]
                       },
                       {
-                        "Let:be:": [
-                          "i",
-                          "@next"
+                        "Set variable:from:": [
+                          "@i",
+                          {
+                            "FromText:": "@next"
+                          }
                         ]
                       }
                     ]
@@ -297,10 +365,10 @@
                         "Comment:": "No lca ever found? That's the most important error."
                       },
                       {
-                        "Let:be:": [
-                          "response",
+                        "Set variable:from:": [
+                          "@response",
                           {
-                            "FromTxt:": {
+                            "FromText:": {
                               "Response:text:": [
                                 "can't reach a common ancestor",
                                 {
@@ -326,9 +394,11 @@
                             "Comment:": "There is an error reaching up from the actor towards the lca."
                           },
                           {
-                            "Let:be:": [
-                              "response",
-                              "@reach response"
+                            "Set variable:from:": [
+                              "@response",
+                              {
+                                "FromText:": "@reach response"
+                              }
                             ]
                           }
                         ],
@@ -344,9 +414,11 @@
                                 "Comment:": "There was no error reaching up to the lca, so return any errors digging down to the noun."
                               },
                               {
-                                "Let:be:": [
-                                  "response",
-                                  "@dig error"
+                                "Set variable:from:": [
+                                  "@response",
+                                  {
+                                    "FromText:": "@dig error"
+                                  }
                                 ]
                               }
                             ]
@@ -365,12 +437,16 @@
                 "AllTrue:": [
                   "@requires light",
                   {
-                    "Get:from:": [
-                      "is in darkness",
-                      {
-                        "VarFields:": "actor"
-                      }
-                    ]
+                    "Get variable:": {
+                      "Variable:dot:": [
+                        "actor",
+                        [
+                          {
+                            "AtField:": "is in darkness"
+                          }
+                        ]
+                      ]
+                    }
                   }
                 ]
               },
@@ -380,10 +456,10 @@
                   "Comment:": "Used to determine whether an action needing light can proceed. Returns some response text if the action is blocked.  Relies on the player's \"is in darkness\" which is (usually) calculated just once per turn ( in \"adjust light.\" )"
                 },
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set variable:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Response:text:": [
                           "can't act in the dark",
                           {
@@ -457,19 +533,21 @@
                     ]
                   },
                   {
-                    "Get obj:trait:": [
-                      "@fromObj",
-                      "closed"
-                    ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@fromObj",
+                        "closed"
+                      ]
+                    }
                   }
                 ]
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set variable:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Response:text:": [
                           "can't reach outside closed containers",
                           {
@@ -493,10 +571,10 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set variable:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Response:text:": [
                           "can't reach outside rooms",
                           {
@@ -512,13 +590,11 @@
           },
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Log:": {
-                    "FromTxt:": {
+                    "FromText:": {
                       "RenderTemplate:": "reach up: from:{.fromObj} -> into:{.intoObj}"
                     }
                   }
@@ -586,10 +662,12 @@
                     ]
                   },
                   {
-                    "Get obj:trait:": [
-                      "@intoObj",
-                      "closed"
-                    ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@intoObj",
+                        "closed"
+                      ]
+                    }
                   },
                   {
                     "Not:": {
@@ -604,10 +682,10 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set variable:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Response:text:": [
                           "can't reach inside closed containers",
                           {
@@ -631,10 +709,10 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set variable:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Response:text:": [
                           "can't reach inside rooms",
                           {
@@ -650,13 +728,11 @@
           },
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Log:": {
-                    "FromTxt:": {
+                    "FromText:": {
                       "RenderTemplate:": "reach down: from:{.fromObj} -> into:{.intoObj}"
                     }
                   }

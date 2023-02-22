@@ -24,14 +24,14 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Let:be:": [
-                    "result",
-                    "@verb"
+                  "Set variable:from:": [
+                    "@result",
+                    {
+                      "FromText:": "@verb"
+                    }
                   ]
                 }
               ]
@@ -62,9 +62,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "If:does:else:": [
@@ -116,9 +114,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "If:does:else:": [
@@ -170,9 +166,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "If:does:else:": [
@@ -230,9 +224,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "If:does:else:": [
@@ -241,17 +233,21 @@
                         {
                           "Cmp:is:num:": [
                             {
-                              "Len:": "@names"
+                              "Len:": {
+                                "FromTextList:": "@names"
+                              }
                             },
                             "greater_than",
                             1
                           ]
                         },
                         {
-                          "Get obj:trait:": [
-                            "@noun",
-                            "plural named"
-                          ]
+                          "Get object:": {
+                            "Object:field:": [
+                              "@noun",
+                              "plural named"
+                            ]
+                          }
                         }
                       ]
                     },
@@ -275,7 +271,11 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@noun"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@noun"
+                  }
+                }
               },
               [
                 {
@@ -312,9 +312,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": "is not"
@@ -325,10 +323,12 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
-                  "@noun",
-                  "plural named"
-                ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@noun",
+                    "plural named"
+                  ]
+                }
               },
               [
                 {
@@ -340,7 +340,11 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@noun"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@noun"
+                  }
+                }
               },
               [
                 {
@@ -375,9 +379,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": "isn't"
@@ -388,10 +390,12 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
-                  "@noun",
-                  "plural named"
-                ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@noun",
+                    "plural named"
+                  ]
+                }
               },
               [
                 {
@@ -403,7 +407,11 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@noun"
+                "IsPlayer obj:": {
+                  "FromText:": {
+                    "Text value:": "@noun"
+                  }
+                }
               },
               [
                 {
@@ -435,9 +443,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Say:": "doesn't"
@@ -448,10 +454,12 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
-                  "@noun",
-                  "plural named"
-                ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@noun",
+                    "plural named"
+                  ]
+                }
               },
               [
                 {

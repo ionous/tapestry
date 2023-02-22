@@ -85,10 +85,10 @@
           {
             "Activating agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "controls"
+                "FromText:": "controls"
               }
             ]
           },
@@ -106,10 +106,10 @@
           {
             "Deactivating agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "controls"
+                "FromText:": "controls"
               }
             ]
           },
@@ -130,10 +130,10 @@
           {
             "Activating agent:noun:": [
               {
-                "FromTxt:": "player"
+                "FromText:": "player"
               },
               {
-                "FromTxt:": "knife"
+                "FromText:": "knife"
               }
             ]
           },
