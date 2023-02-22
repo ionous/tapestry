@@ -25,6 +25,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/jsn/dout"
+	"git.sr.ht/~ionous/tapestry/web/files"
 	"github.com/ionous/errutil"
 )
 
@@ -35,7 +36,7 @@ const (
 	BlockExt    = ".block"
 )
 
-var exts = []string{SpecExt, DetailedExt, CompactExt, BlockExt}
+var allExts = []string{SpecExt, DetailedExt, CompactExt, BlockExt}
 
 func oppositeExt(ext string) (ret string) {
 	if ext == CompactExt {
@@ -49,80 +50,77 @@ func oppositeExt(ext string) (ret string) {
 }
 
 func main() {
-	var inFile, outFile string
+	var inPath, outPath, inExts, outExt string
 	var pretty bool
-	flag.StringVar(&inFile, "in", "", "input file name (.if|.ifx|.ifspecs)")
-	flag.StringVar(&outFile, "out", "", "optional output file name (.if|.ifx|.ifspecs)")
+	flag.StringVar(&outPath, "out", "", "output directory; required.")
+	flag.StringVar(&inPath, "in", "", "input file(s) or paths(s) (comma separated)")
+	flag.StringVar(&inExts, "filter", ".if",
+		`extension(s) for directory scanning.
+ignored if 'in' refers to a specific file`)
+	flag.StringVar(&outExt, "convert", "",
+		`an optional file extension to force a story format conversion (.if|.ifx|.block)
+underscores are allowed to avoid copying over the original files. (._if, .if_, etc.)
+( ex. if the in and out directories are the same.
+if no extension is specified, the output format is the same as the import format.`)
 	flag.BoolVar(&pretty, "pretty", false, "make the output somewhat human readable")
-	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
+	flag.BoolVar(&errutil.Panic, "panic", false, "pa_nic on error?")
 	flag.Parse()
-	if len(inFile) == 0 {
-		flag.Usage()
-	} else {
-		inExt := filepath.Ext(inFile)
-		var allExts strings.Builder
-		var exists bool
-		for _, x := range exts {
-			if inExt == x {
-				exists = true
-				break
-			}
-			allExts.WriteString(x)
-			allExts.WriteRune(' ')
+
+	tgtExt := strings.ReplaceAll(outExt, "_", "")
+	if len(tgtExt) != 0 && !files.IsValidExtension(tgtExt, allExts) {
+		flag.Usage() // exits
+	} else if len(inPath) == 0 || len(outPath) == 0 {
+		flag.Usage() // exits
+	}
+	process := func(inFile string) (err error) {
+		// skip files we cant handle
+		if !files.IsValidExtension(inFile, allExts) {
+			return
 		}
-		if !exists {
-			println("expected one of the file types:" + allExts.String())
+		// convert the filename
+		var outName string
+		if fileName := filepath.Base(inFile); len(outExt) == 0 {
+			outName = fileName
 		} else {
-			// determine the output extension
-			// ( if nothing was specified, it will be the opposite of in )
-			outExt := filepath.Ext(outFile)
-			if len(outExt) == 0 {
-				outExt = oppositeExt(inExt)
-			} else if outExt == outFile {
-				outFile = ""
-			}
-			// create outfile name if needed
-			if len(outFile) == 0 {
-				outFile = inFile[:len(inFile)-len(inExt)] + outExt
-			} else if ext := filepath.Ext(outFile); len(ext) == 0 || ext == outFile {
-				// convert directory
-				base := filepath.Base(inFile)
-				outFile = filepath.Join(outFile, base[:len(base)-len(inExt)]+outExt)
-			}
-			// transform the files:
-			if inExt == SpecExt {
-				// report on results:
+			fileExt := filepath.Ext(fileName)
+			outName = fileName[:len(fileName)-len(fileExt)] + outExt
+		}
+		outFile := filepath.Join(outPath, outName)
+		// specs can only become specs:
+		if inExt := filepath.Ext(inFile); inExt == SpecExt {
+			if tgtExt == SpecExt {
 				if e := decodeEncodeSpec(inFile, outFile, pretty); e != nil {
-					println(e.Error())
-				} else {
-					println("done.")
+					err = errutil.New("couldnt process", inFile, "=>", outFile, e)
 				}
-			} else {
-				var x xform
-				switch inExt {
-				case DetailedExt:
-					x.decode = detailed.decode
-				case CompactExt:
-					x.decode = compact.decode
-				case BlockExt:
-					x.decode = blockly.decode
-				}
-				switch outExt {
-				case DetailedExt:
-					x.encode = detailed.encode
-				case CompactExt:
-					x.encode = compact.encode
-				case BlockExt:
-					x.encode = blockly.encode
-				}
-				// report on results:
-				if e := x.decodeEncode(inFile, outFile, pretty); e != nil {
-					println(e.Error())
-				} else {
-					println("done.")
-				}
+			}
+		} else {
+			// story files can be converted from one format to another
+			var x xform
+			switch inExt {
+			case DetailedExt:
+				x.decode = detailed.decode
+			case CompactExt:
+				x.decode = compact.decode
+			case BlockExt:
+				x.decode = blockly.decode
+			}
+			switch tgtExt {
+			case DetailedExt:
+				x.encode = detailed.encode
+			case CompactExt:
+				x.encode = compact.encode
+			case BlockExt:
+				x.encode = blockly.encode
+			}
+			// report on results:
+			if e := x.decodeEncode(inFile, outFile, pretty); e != nil {
+				err = errutil.New("couldnt process", inFile, "=>", outFile, e)
 			}
 		}
+		return // done processing
+	}
+	if e := files.ReadPaths(inPath, strings.Split(inExts, ","), process); e != nil {
+		log.Fatal("error processing files", e)
 	}
 }
 

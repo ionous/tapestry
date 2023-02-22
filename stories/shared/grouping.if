@@ -480,14 +480,14 @@
                         "If:does:": [
                           {
                             "MatchGroups first:second:": [
-                              "@grouping",
-                              {
+                              {"FromRecord:": "@grouping"},
+                              {"FromRecord:": {
                                 "Get:from:": [
                                   "grouping",
                                   {
                                     "VarFields:": "el"
                                   }
-                                ]
+                                ]}
                               }
                             ]
                           },
@@ -540,7 +540,7 @@
                           {
                             "VarField:": "group"
                           },
-                          "@names",
+                          { "FromTextList:": "@names" },
                           "objects"
                         ]
                       },
@@ -549,7 +549,8 @@
                           {
                             "VarField:": "group"
                           },
-                          "@grouping",
+                          { "FromRecord:": 
+                          "@grouping" },
                           "grouping"
                         ]
                       },
@@ -616,7 +617,7 @@
                             {
                               "VarField:": "group"
                             },
-                            "@names",
+                            { "FromTextList:": "@names" },
                             "objects"
                           ]
                         },

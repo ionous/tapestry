@@ -91,7 +91,7 @@
                     {
                       "VarField:": "actor"
                     },
-                    "@now lit",
+                    { "FromBool:": "@now lit"}, 
                     "not in darkness"
                   ]
                 }
@@ -149,12 +149,13 @@
               [
                 {
                   "PrintVantage where:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "ObjFields:": "player"
-                      }
-                    ]
+                    "FromText:":  {
+                      "Get:from:": [
+                        "pawn",
+                        {
+                          "ObjFields:": "player"
+                        }
+                      ] }
                   }
                 }
               ]

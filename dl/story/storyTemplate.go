@@ -18,6 +18,9 @@ func (op *RenderTemplate) PreImport(k *imp.Importer) (ret interface{}, err error
 	} else if eval, ok := got.(rt.TextEval); !ok {
 		err = errutil.Fmt("render template has unknown expression %T", got)
 	} else {
+		// note: this used to wrap this in a "RenderExp" which called the eval
+		// that was just a marker; not needed so removed.
+		//  &render.RenderExp{Expression: eval}
 		ret = eval
 		// pretty.Println(eval)
 	}

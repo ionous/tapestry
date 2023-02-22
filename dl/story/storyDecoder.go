@@ -30,7 +30,6 @@ func decode(dst jsn.Marshalee, msg json.RawMessage, reg cin.TypeCreator) error {
 	// for slots to read a slat, the msg already would have been expanded into its final type.
 }
 
-//
 func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage) (err error) {
 	if err = core.CompactSlotDecoder(m, slot, msg); err != nil {
 		// keep this as the provisional error unless we figure out something else
@@ -60,13 +59,23 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 						out := &core.CallPattern{Pattern: core.PatternName{sig.Name}}
 						var call []core.Arg
 						for i, p := range sig.Params {
-							var ptr assign.Assignment
-							if e := decode(assign.Assignment_Slot{&ptr}, args[i], reg); e != nil {
+							arg := args[i]
+							// fix: temp: backwards compat:
+							var str string
+							var flag bool
+							var num float64
+							var val assign.Assignment
+							if e := json.Unmarshal(arg, &str); e == nil {
+								val = &assign.FromText{Value: T(str)}
+							} else if e := json.Unmarshal(arg, &flag); e == nil {
+								val = &assign.FromBool{Value: B(flag)}
+							} else if e := json.Unmarshal(arg, &num); e == nil {
+								val = &assign.FromNumber{Value: F(num)}
+							} else if e := decode(assign.Assignment_Slot{&val}, arg, reg); e != nil {
 								err = e
 								break
-							} else {
-								call = append(call, core.Arg{Name: p.Label, Value: ptr})
 							}
+							call = append(call, core.Arg{Name: p.Label, Value: val})
 						}
 						if len(sig.Params) == len(call) {
 							out.Arguments = call

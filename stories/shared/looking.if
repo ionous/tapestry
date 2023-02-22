@@ -80,7 +80,10 @@
                     [
                       {
                         "PrintVantage where:inDarkness:": [
-                          "@location",
+                          {
+                            "FromText:":"@location"
+                          },
+                          { "FromBool:":
                           {
                             "Get:from:": [
                               "is in darkness",
@@ -88,7 +91,7 @@
                                 "VarFields:": "actor"
                               }
                             ]
-                          }
+                          }}
                         ]
                       },
                       {

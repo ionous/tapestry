@@ -279,15 +279,15 @@
                       "FromTxt:": {
                         "ParentOf obj:": "@actor"
                       }
-                    },
-                    {
+                    }, {"FromBool:": {
+                    
                       "Get:from:": [
                         "is in darkness",
                         {
                           "VarFields:": "actor"
                         }
                       ]
-                    }
+                    }}
                   ]
                 }
               ]
