@@ -39,15 +39,17 @@ func (run *Runner) initializeLocals(rec *g.Record) (err error) {
 		err = e
 	} else {
 		for fieldIndex, init := range cached.init {
-			ft := k.Field(fieldIndex)
-			if src, e := assign.GetValue(run, init); e != nil {
-				err = errutil.New("error determining local", k.Name(), ft.Name, e)
-				break
-			} else if val, e := safe.AutoConvert(run, ft, src); e != nil {
-				err = e
-			} else if e := rec.SetIndexedField(fieldIndex, val); e != nil {
-				err = errutil.New("error setting local", k.Name(), ft.Name, e)
-				break
+			if init != nil {
+				ft := k.Field(fieldIndex)
+				if src, e := assign.GetValue(run, init); e != nil {
+					err = errutil.New("error determining local", k.Name(), ft.Name, e)
+					break
+				} else if val, e := safe.AutoConvert(run, ft, src); e != nil {
+					err = e
+				} else if e := rec.SetIndexedField(fieldIndex, val); e != nil {
+					err = errutil.New("error setting local", k.Name(), ft.Name, e)
+					break
+				}
 			}
 		}
 	}
