@@ -190,13 +190,9 @@
                                     "equal_to",
                                     {
                                       "Get object:": {
-                                        "Object:dot:": [
+                                        "Object:field:": [
                                           "player",
-                                          [
-                                            {
-                                              "AtField:": "pawn"
-                                            }
-                                          ]
+                                          "pawn"
                                         ]
                                       }
                                     }

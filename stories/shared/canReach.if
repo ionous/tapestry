@@ -437,14 +437,10 @@
                 "AllTrue:": [
                   "@requires light",
                   {
-                    "Get variable:": {
-                      "Variable:dot:": [
-                        "actor",
-                        [
-                          {
-                            "AtField:": "is in darkness"
-                          }
-                        ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@actor",
+                        "is in darkness"
                       ]
                     }
                   }

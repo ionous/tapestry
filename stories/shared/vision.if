@@ -16,13 +16,9 @@
               "actor",
               {
                 "Get object:": {
-                  "Object:dot:": [
+                  "Object:field:": [
                     "player",
-                    [
-                      {
-                        "AtField:": "pawn"
-                      }
-                    ]
+                    "pawn"
                   ]
                 }
               }
@@ -97,14 +93,7 @@
                 {
                   "Set variable:from:": [
                     {
-                      "Variable:dot:": [
-                        "actor",
-                        [
-                          {
-                            "AtField:": "not in darkness"
-                          }
-                        ]
-                      ]
+                      "Variable": true
                     },
                     {
                       "FromBool:": "@now lit"
@@ -163,13 +152,9 @@
                   "PrintVantage where:": {
                     "FromText:": {
                       "Get object:": {
-                        "Object:dot:": [
+                        "Object:field:": [
                           "player",
-                          [
-                            {
-                              "AtField:": "pawn"
-                            }
-                          ]
+                          "pawn"
                         ]
                       }
                     }

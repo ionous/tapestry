@@ -281,16 +281,16 @@
               {
                 "Cmp:is:txt:": [
                   {
-                    "Get variable:": {
-                      "Variable:dot:": [
-                        "obj",
-                        [
-                          {
-                            "AtField:": "indefinite article"
-                          }
-                        ]
-                      ]
-                    }
+                    "Get object:field:": [
+                      {
+                        "FromText:": {
+                          "Text value:": "@obj"
+                        }
+                      },
+                      {
+                        "FromText:": "indefinite article"
+                      }
+                    ]
                   },
                   "other_than",
                   ""

@@ -58,14 +58,10 @@
               "actor",
               "actor",
               {
-                "Get variable:": {
-                  "Variable:dot:": [
-                    "agent",
-                    [
-                      {
-                        "AtField:": "pawn"
-                      }
-                    ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@agent",
+                    "pawn"
                   ]
                 }
               }

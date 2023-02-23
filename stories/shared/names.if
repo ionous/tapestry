@@ -164,14 +164,10 @@
               {
                 "Cmp:is:txt:": [
                   {
-                    "Get variable:": {
-                      "Variable:dot:": [
-                        "obj",
-                        [
-                          {
-                            "AtField:": "printed name"
-                          }
-                        ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@obj",
+                        "printed name"
                       ]
                     }
                   },
@@ -182,14 +178,10 @@
               [
                 {
                   "Say:": {
-                    "Get variable:": {
-                      "Variable:dot:": [
-                        "obj",
-                        [
-                          {
-                            "AtField:": "printed name"
-                          }
-                        ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@obj",
+                        "printed name"
                       ]
                     }
                   }
@@ -263,13 +255,9 @@
                           1,
                           {
                             "Get object:": {
-                              "Object:dot:": [
+                              "Object:field:": [
                                 "settings",
-                                [
-                                  {
-                                    "AtField:": "mentions"
-                                  }
-                                ]
+                                "mentions"
                               ]
                             }
                           }

@@ -52,14 +52,10 @@
               {
                 "Cmp:is:txt:": [
                   {
-                    "Get variable:": {
-                      "Variable:dot:": [
-                        "obj",
-                        [
-                          {
-                            "AtField:": "printed plural name"
-                          }
-                        ]
+                    "Get object:": {
+                      "Object:field:": [
+                        "@obj",
+                        "printed plural name"
                       ]
                     }
                   },

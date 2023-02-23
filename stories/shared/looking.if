@@ -16,14 +16,10 @@
               "actor",
               "object",
               {
-                "Get variable:": {
-                  "Variable:dot:": [
-                    "agent",
-                    [
-                      {
-                        "AtField:": "pawn"
-                      }
-                    ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@agent",
+                    "pawn"
                   ]
                 }
               }
@@ -103,14 +99,10 @@
                           },
                           {
                             "FromBool:": {
-                              "Get variable:": {
-                                "Variable:dot:": [
-                                  "actor",
-                                  [
-                                    {
-                                      "AtField:": "is in darkness"
-                                    }
-                                  ]
+                              "Get object:": {
+                                "Object:field:": [
+                                  "@actor",
+                                  "is in darkness"
                                 ]
                               }
                             }
@@ -219,13 +211,9 @@
                             "AnyTrue:": [
                               {
                                 "Get object:": {
-                                  "Object:dot:": [
+                                  "Object:field:": [
                                     "settings",
-                                    [
-                                      {
-                                        "AtField:": "verbose"
-                                      }
-                                    ]
+                                    "verbose"
                                   ]
                                 }
                               },
@@ -233,25 +221,17 @@
                                 "AllTrue:": [
                                   {
                                     "Get object:": {
-                                      "Object:dot:": [
+                                      "Object:field:": [
                                         "settings",
-                                        [
-                                          {
-                                            "AtField:": "brief"
-                                          }
-                                        ]
+                                        "brief"
                                       ]
                                     }
                                   },
                                   {
                                     "Get object:": {
-                                      "Object:dot:": [
+                                      "Object:field:": [
                                         "settings",
-                                        [
-                                          {
-                                            "AtField:": "not darkness witnessed"
-                                          }
-                                        ]
+                                        "not darkness witnessed"
                                       ]
                                     }
                                   }
@@ -309,13 +289,9 @@
                               "AnyTrue:": [
                                 {
                                   "Get object:": {
-                                    "Object:dot:": [
+                                    "Object:field:": [
                                       "settings",
-                                      [
-                                        {
-                                          "AtField:": "verbose"
-                                        }
-                                      ]
+                                      "verbose"
                                     ]
                                   }
                                 },
@@ -323,25 +299,17 @@
                                   "AllTrue:": [
                                     {
                                       "Get object:": {
-                                        "Object:dot:": [
+                                        "Object:field:": [
                                           "settings",
-                                          [
-                                            {
-                                              "AtField:": "brief"
-                                            }
-                                          ]
+                                          "brief"
                                         ]
                                       }
                                     },
                                     {
-                                      "Get variable:": {
-                                        "Variable:dot:": [
-                                          "room",
-                                          [
-                                            {
-                                              "AtField:": "not visited"
-                                            }
-                                          ]
+                                      "Get object:": {
+                                        "Object:field:": [
+                                          "@room",
+                                          "not visited"
                                         ]
                                       }
                                     }
@@ -415,14 +383,7 @@
                         {
                           "Set variable:from:": [
                             {
-                              "Variable:dot:": [
-                                "room",
-                                [
-                                  {
-                                    "AtField:": "visited"
-                                  }
-                                ]
-                              ]
+                              "Variable": true
                             },
                             {
                               "FromBool:": true
@@ -545,7 +506,7 @@
               {
                 "Get variable:": {
                   "Variable:dot:": [
-                    "@enclosures",
+                    "enclosures",
                     [
                       {
                         "AtIndex:": {
@@ -623,7 +584,7 @@
               {
                 "Get variable:": {
                   "Variable:dot:": [
-                    "@enclosures",
+                    "enclosures",
                     [
                       {
                         "AtIndex:": {
@@ -730,13 +691,9 @@
               "previousMentions",
               {
                 "Get object:": {
-                  "Object:dot:": [
+                  "Object:field:": [
                     "settings",
-                    [
-                      {
-                        "AtField:": "mentions"
-                      }
-                    ]
+                    "mentions"
                   ]
                 }
               }
@@ -763,14 +720,10 @@
                     [
                       {
                         "Say:": {
-                          "Get variable:": {
-                            "Variable:dot:": [
-                              "room",
-                              [
-                                {
-                                  "AtField:": "description"
-                                }
-                              ]
+                          "Get object:": {
+                            "Object:field:": [
+                              "@room",
+                              "description"
                             ]
                           }
                         }
@@ -908,13 +861,9 @@
                           "equal_to",
                           {
                             "Get object:": {
-                              "Object:dot:": [
+                              "Object:field:": [
                                 "settings",
-                                [
-                                  {
-                                    "AtField:": "mentions"
-                                  }
-                                ]
+                                "mentions"
                               ]
                             }
                           }
@@ -1149,14 +1098,10 @@
                   {
                     "Not:": {
                       "Is empty:": {
-                        "Get variable:": {
-                          "Variable:dot:": [
-                            "obj",
-                            [
-                              {
-                                "AtField:": "initial appearance"
-                              }
-                            ]
+                        "Get object:": {
+                          "Object:field:": [
+                            "@obj",
+                            "initial appearance"
                           ]
                         }
                       }

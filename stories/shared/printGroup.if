@@ -255,7 +255,7 @@
                       "FromText:": {
                         "Get variable:": {
                           "Variable:dot:": [
-                            "@objs",
+                            "objs",
                             [
                               {
                                 "AtIndex:": 1
@@ -337,7 +337,7 @@
                     "FromText:": {
                       "Get variable:": {
                         "Variable:dot:": [
-                          "@objs",
+                          "objs",
                           [
                             {
                               "AtIndex:": 1

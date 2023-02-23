@@ -84,14 +84,10 @@
                         "Reciprocal:object:": [
                           "whereabouts",
                           {
-                            "Get variable:": {
-                              "Variable:dot:": [
-                                "obj",
-                                [
-                                  {
-                                    "AtField:": "pawn"
-                                  }
-                                ]
+                            "Get object:": {
+                              "Object:field:": [
+                                "@obj",
+                                "pawn"
                               ]
                             }
                           }
@@ -1091,14 +1087,10 @@
                           ]
                         },
                         {
-                          "Get variable:": {
-                            "Variable:dot:": [
-                              "obj",
-                              [
-                                {
-                                  "AtField:": "not worn"
-                                }
-                              ]
+                          "Get object:": {
+                            "Object:field:": [
+                              "@obj",
+                              "not worn"
                             ]
                           }
                         }
@@ -1191,14 +1183,10 @@
                           ]
                         },
                         {
-                          "Get variable:": {
-                            "Variable:dot:": [
-                              "obj",
-                              [
-                                {
-                                  "AtField:": "worn"
-                                }
-                              ]
+                          "Get object:": {
+                            "Object:field:": [
+                              "@obj",
+                              "worn"
                             ]
                           }
                         }

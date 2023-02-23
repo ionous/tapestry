@@ -23,14 +23,10 @@
               "actor",
               "actor",
               {
-                "Get variable:": {
-                  "Variable:dot:": [
-                    "agent",
-                    [
-                      {
-                        "AtField:": "pawn"
-                      }
-                    ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@agent",
+                    "pawn"
                   ]
                 }
               }
@@ -42,14 +38,10 @@
               "destination",
               "room",
               {
-                "Get variable:": {
-                  "Variable:dot:": [
-                    "noun",
-                    [
-                      {
-                        "AtField:": "destination"
-                      }
-                    ]
+                "Get object:": {
+                  "Object:field:": [
+                    "@noun",
+                    "destination"
                   ]
                 }
               }
@@ -217,14 +209,10 @@
                     "destination",
                     "room",
                     {
-                      "Get variable:": {
-                        "Variable:dot:": [
-                          "noun",
-                          [
-                            {
-                              "AtField:": "destination"
-                            }
-                          ]
+                      "Get object:": {
+                        "Object:field:": [
+                          "@noun",
+                          "destination"
                         ]
                       }
                     }
@@ -346,14 +334,10 @@
                     },
                     {
                       "FromBool:": {
-                        "Get variable:": {
-                          "Variable:dot:": [
-                            "actor",
-                            [
-                              {
-                                "AtField:": "is in darkness"
-                              }
-                            ]
+                        "Get object:": {
+                          "Object:field:": [
+                            "@actor",
+                            "is in darkness"
                           ]
                         }
                       }

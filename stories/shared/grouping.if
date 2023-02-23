@@ -681,7 +681,7 @@
                               "FromRecord:": {
                                 "Get variable:": {
                                   "Variable:dot:": [
-                                    "@groups",
+                                    "groups",
                                     [
                                       {
                                         "AtIndex:": "@idx"

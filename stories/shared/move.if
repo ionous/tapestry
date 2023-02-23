@@ -82,14 +82,10 @@
                             {
                               "If:does:": [
                                 {
-                                  "Get variable:": {
-                                    "Variable:dot:": [
-                                      "obj",
-                                      [
-                                        {
-                                          "AtField:": "worn"
-                                        }
-                                      ]
+                                  "Get object:": {
+                                    "Object:field:": [
+                                      "@obj",
+                                      "worn"
                                     ]
                                   }
                                 },
@@ -97,14 +93,7 @@
                                   {
                                     "Set variable:from:": [
                                       {
-                                        "Variable:dot:": [
-                                          "obj",
-                                          [
-                                            {
-                                              "AtField:": "not worn"
-                                            }
-                                          ]
-                                        ]
+                                        "Variable": true
                                       },
                                       {
                                         "FromBool:": true
@@ -206,14 +195,7 @@
                 {
                   "Set variable:from:": [
                     {
-                      "Variable:dot:": [
-                        "obj",
-                        [
-                          {
-                            "AtField:": "not worn"
-                          }
-                        ]
-                      ]
+                      "Variable": true
                     },
                     {
                       "FromBool:": true
@@ -320,14 +302,7 @@
                       {
                         "Set variable:from:": [
                           {
-                            "Variable:dot:": [
-                              "obj",
-                              [
-                                {
-                                  "AtField:": "worn"
-                                }
-                              ]
-                            ]
+                            "Variable": true
                           },
                           {
                             "FromBool:": true
