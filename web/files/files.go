@@ -2,6 +2,7 @@
 package files
 
 import (
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -12,7 +13,7 @@ import (
 // read a comma-separated list of files and directories
 // for directories, ext ( a list of file extensions ) optionally filters the files.
 // fix? maybe filepaths could be turned into an io.fs?
-func ReadPaths(filePaths string, exts []string, onFile func(string) error) (err error) {
+func ReadPaths(filePaths string, recusive bool, exts []string, onFile func(string) error) (err error) {
 	split := strings.Split(filePaths, ",")
 	for _, filePath := range split {
 		if srcPath, e := filepath.Abs(filePath); e != nil {
@@ -20,9 +21,9 @@ func ReadPaths(filePaths string, exts []string, onFile func(string) error) (err 
 		} else if info, e := os.Stat(srcPath); e != nil {
 			err = errutil.Append(err, e)
 		} else if !info.IsDir() {
-			err = errutil.Append(err, readOne(srcPath, info, onFile))
+			err = errutil.Append(err, readOne(srcPath, onFile))
 		} else {
-			err = errutil.Append(err, readMany(srcPath, exts, info, onFile))
+			err = errutil.Append(err, readMany(srcPath, recusive, exts, onFile))
 		}
 	}
 	return
@@ -34,24 +35,26 @@ func ReadFile(path string) (r1et []byte, err error) {
 }
 
 // exts: optional list of ".ext" to filter.
-func readMany(path string, exts []string, _ os.FileInfo, onFile func(string) error) error {
-	if !strings.HasSuffix(path, "/") {
-		path += "/" // for opening symbolic directories
+func readMany(root string, recusive bool, exts []string, onFile func(string) error) error {
+	if !strings.HasSuffix(root, "/") {
+		root += "/" // for opening symbolic directories
 	}
-	outErr := filepath.Walk(path, func(path string, info os.FileInfo, e error) (err error) {
+	outErr := filepath.WalkDir(root, func(path string, info fs.DirEntry, e error) (err error) {
 		if e != nil {
 			err = e
 		} else if !info.IsDir() {
 			if len(exts) == 0 || IsValidExtension(path, exts) {
-				err = readOne(path, info, onFile)
+				err = readOne(path, onFile)
 			}
+		} else if !recusive && path != root {
+			return filepath.SkipDir
 		}
 		return
 	})
 	return outErr
 }
 
-func readOne(path string, info os.FileInfo, onFile func(string) error) (err error) {
+func readOne(path string, onFile func(string) error) (err error) {
 	if e := onFile(path); e != nil {
 		err = errutil.New("error reading", path, e)
 	}

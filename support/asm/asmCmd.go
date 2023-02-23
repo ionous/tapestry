@@ -93,7 +93,8 @@ func collectEphemera(cat *eph.Catalog, out *error) imp.WriterFun {
 
 // read a comma-separated list of files and directories
 func importStoryFiles(k *imp.Importer, srcPath string) (err error) {
-	if e := files.ReadPaths(srcPath,
+	recurse := true
+	if e := files.ReadPaths(srcPath, recurse,
 		[]string{CompactExt, DetailedExt}, func(p string) error {
 			return readOne(k, p)
 		}); e != nil {

@@ -51,12 +51,14 @@ func oppositeExt(ext string) (ret string) {
 
 func main() {
 	var inPath, outPath, inExts, outExt string
-	var pretty bool
+	var recurse, pretty bool
 	flag.StringVar(&outPath, "out", "", "output directory; required.")
 	flag.StringVar(&inPath, "in", "", "input file(s) or paths(s) (comma separated)")
+	flag.BoolVar(&recurse, "recurse", false, "scan input sub-directories")
 	flag.StringVar(&inExts, "filter", ".if",
 		`extension(s) for directory scanning.
 ignored if 'in' refers to a specific file`)
+
 	flag.StringVar(&outExt, "convert", "",
 		`an optional file extension to force a story format conversion (.if|.ifx|.block)
 underscores are allowed to avoid copying over the original files. (._if, .if_, etc.)
@@ -119,7 +121,7 @@ if no extension is specified, the output format is the same as the import format
 		}
 		return // done processing
 	}
-	if e := files.ReadPaths(inPath, strings.Split(inExts, ","), process); e != nil {
+	if e := files.ReadPaths(inPath, recurse, strings.Split(inExts, ","), process); e != nil {
 		log.Fatal("error processing files", e)
 	}
 }

@@ -17,9 +17,10 @@ import (
 
 func main() {
 	var inPath, outPath, match, inExts string
-	var verbose bool
+	var verbose, recurse bool
 	flag.StringVar(&outPath, "out", "", "output directory")
 	flag.StringVar(&inPath, "in", "", "input file(s) or paths(s) (comma separated)")
+	flag.BoolVar(&recurse, "recurse", false, "scan input sub-directories")
 	flag.StringVar(&inExts, "filter", ".if",
 		`extension(s) for directory scanning.
 ignored if 'in' refers to a specific file`)
@@ -70,7 +71,7 @@ ignored if 'in' refers to a specific file`)
 			}
 			return
 		}
-		if e := files.ReadPaths(inPath, strings.Split(inExts, ","), process); e != nil {
+		if e := files.ReadPaths(inPath, recurse, strings.Split(inExts, ","), process); e != nil {
 			log.Fatal("error processing files: ", e)
 		}
 	}
