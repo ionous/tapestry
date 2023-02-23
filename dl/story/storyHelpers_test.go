@@ -1,14 +1,15 @@
 package story_test
 
-import "git.sr.ht/~ionous/tapestry/dl/core"
+import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
+)
 
 var (
-	B           = core.B
-	F           = core.F
-	I           = core.I
-	N           = core.N
-	P           = core.P
-	T           = core.T
-	W           = core.W
-	GetVariable = core.GetVariable
+	B = assign.B
+	F = assign.F
+	I = assign.I
+	N = assign.N
+	P = assign.P
+	T = assign.T
+	W = assign.W
 )

@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"github.com/ionous/errutil"
@@ -19,8 +18,8 @@ func (op *ListReduce) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListReduce) reduce(run rt.Runtime) (err error) {
-	pat := op.UsingPattern
-	if tgt, e := op.Target.GetRootValue(run); e != nil {
+	pat := op.PatternName
+	if tgt, e := assign.GetRootValue(run, op.Target); e != nil {
 		err = e
 	} else if fromList, e := assign.GetValue(run, op.List); e != nil {
 		err = e
@@ -35,7 +34,7 @@ func (op *ListReduce) reduce(run rt.Runtime) (err error) {
 		for it := g.ListIt(fromList); it.HasNext() && err == nil; {
 			if inVal, e := it.GetNext(); e != nil {
 				err = e
-			} else if rec, e := core.MakeRecord(run, pat); e != nil {
+			} else if rec, e := assign.MakeRecord(run, pat); e != nil {
 				err = e // created a fresh record so it has blank default values
 			} else if e := rec.SetIndexedField(inArg, inVal); e != nil {
 				err = e

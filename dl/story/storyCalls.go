@@ -3,7 +3,6 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
@@ -12,11 +11,11 @@ func Refs(refs ...eph.Ephemera) *eph.EphRefs {
 	return &eph.EphRefs{Refs: refs}
 }
 
-func ImportCall(op *core.CallPattern) *eph.EphRefs {
-	return refArgs(op.Pattern.String(), kindsOf.Pattern, op.Arguments)
+func ImportCall(op *assign.CallPattern) *eph.EphRefs {
+	return refArgs(op.PatternName, kindsOf.Pattern, op.Arguments)
 }
 
-func refArgs(k string, parentKind kindsOf.Kinds, args []core.Arg) (ret *eph.EphRefs) {
+func refArgs(k string, parentKind kindsOf.Kinds, args []assign.Arg) (ret *eph.EphRefs) {
 	var refs []eph.EphParams
 	for _, arg := range args {
 		refs = append(refs, eph.EphParams{

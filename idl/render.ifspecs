@@ -126,7 +126,7 @@
                         "Term:name:type:":
                         [
                             "_",
-                            "pattern",
+                            "pattern_name",
                             "text"
                         ]
                     },

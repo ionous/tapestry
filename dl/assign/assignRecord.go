@@ -1,9 +1,8 @@
-package core
+package assign
 
 import (
 	"strconv"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -29,7 +28,7 @@ func MakeRecord(run rt.Runtime, kind string, args ...Arg) (ret *g.Record, err er
 				break
 			} else if at < 0 {
 				break
-			} else if src, e := assign.GetValue(run, a.Value); e != nil {
+			} else if src, e := GetValue(run, a.Value); e != nil {
 				err = errutil.New(e, "while reading arg", i, a.Name)
 				break
 			} else if val, e := safe.AutoConvert(run, kind.Field(at), src); e != nil {

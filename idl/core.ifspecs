@@ -7,241 +7,6 @@
             "Group contains:":
             [
                 {
-                    "--": "Identifies some particular object field, local variable, or pattern argument.",
-                    "Spec:with swap:":
-                    [
-                        "address",
-                        {
-                            "Swap between:":
-                            [
-                                {
-                                    "Pick:type:":
-                                    [
-                                        "object",
-                                        "object_ref"
-                                    ]
-                                },
-                                {
-                                    "Pick:type:":
-                                    [
-                                        "variable",
-                                        "variable_ref"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "Spec:with flow:":
-                    [
-                        "object_ref",
-                        {
-                            "Flow:uses:":
-                            [
-                                "object",
-                                [
-                                    {
-                                        "Term:name:type:":
-                                        [
-                                            "_",
-                                            "name",
-                                            "text_eval"
-                                        ]
-                                    },
-                                    {
-                                        "Term:type:":
-                                        [
-                                            "field",
-                                            "text_eval"
-                                        ]
-                                    },
-                                    {
-                                        "Term:optional:repeats:":
-                                        [
-                                            "dot",
-                                            true,
-                                            true
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "Spec:with flow:":
-                    [
-                        "variable_ref",
-                        {
-                            "Flow:uses:":
-                            [
-                                "variable",
-                                [
-                                    {
-                                        "Term:name:type:":
-                                        [
-                                            "_",
-                                            "name",
-                                            "text_eval"
-                                        ]
-                                    },
-                                    {
-                                        "Term:optional:repeats:":
-                                        [
-                                            "dot",
-                                            true,
-                                            true
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                },
-               
-                {
-                    "--": "Picks values from types containing other values.",
-                    "--blockly-color": "MATH_HUE",
-                    "Spec:with slot:":
-                    [
-                        "dot",
-                        {
-                            "Slot": true
-                        }
-                    ]
-                },
-                {
-                    "Spec:slots:with flow:":
-                    [
-                        "at_field",
-                        "dot",
-                        {
-                            "Flow uses:":
-                            [
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "_",
-                                        "field",
-                                        "text_eval"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "Spec:slots:with flow:":
-                    [
-                        "at_index",
-                        "dot",
-                        {
-                            "Flow uses:":
-                            [
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "_",
-                                        "index",
-                                        "number_eval"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                  {
-                    "--": "Read a value from a local variable ( or pattern parameter. )",
-                    "Spec:slots:with flow:":
-                    [
-                        "get_value",
-                        [
-                            "bool_eval",
-                            "number_eval",
-                            "text_eval",
-                            "record_eval",
-                            "num_list_eval",
-                            "text_list_eval",
-                            "record_list_eval"
-                        ],
-                        {
-                            "Flow:uses:": [ 
-                                "get",
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "_",
-                                        "source",
-                                        "address"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                  {
-                    "--": "Store a value into a local variable ( or pattern argument. )",
-                    "Spec:slots:with flow:":
-                    [
-                        "set_value",
-                        "execute",
-                        {
-                            "Flow:uses:":
-                            [
-                                "set",
-                                [
-                                    {
-                                        "Term:name:type:":
-                                        [
-                                            "_",
-                                            "target",
-                                            "address"
-                                        ]
-                                    },
-                                    {
-                                        "Term:name:type:":
-                                        [
-                                            "from",
-                                            "value",
-                                            "assignment"
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "--": "Runtime version of argument.",
-                    "Spec:with flow:":
-                    [
-                        "arg",
-                        {
-                            "Flow uses:":
-                            [
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "_",
-                                        "name",
-                                        "text"
-                                    ]
-                                },
-                                {
-                                    "Term:name:type:":
-                                    [
-                                        "from",
-                                        "value",
-                                        "assignment"
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-               
-                {
                     "--": "Returns true if all of the evaluations are true.",
                     "Spec:slots:groups:with flow:":
                     [
@@ -423,87 +188,7 @@
                         }
                     ]
                 },
-                {
-                    "--": "Executes a pattern, and potentially returns a value.",
-                    "Spec:slots:with flow:":
-                    [
-                        "call_pattern",
-                        [
-                            "execute",
-                            "bool_eval",
-                            "number_eval",
-                            "text_eval",
-                            "record_eval",
-                            "num_list_eval",
-                            "text_list_eval",
-                            "record_list_eval"
-                        ],
-                        {
-                            "Flow:uses:":
-                            [
-                                "determine",
-                                [
-                                    {
-                                        "Term:name:type:":
-                                        [
-                                            "_",
-                                            "pattern",
-                                            "pattern_name"
-                                        ]
-                                    },
-                                    {
-                                        "Term:name:type:repeats:":
-                                        [
-                                            "args",
-                                            "arguments",
-                                            "arg",
-                                            true
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "--":
-                    [
-                        "Triggers a event, calling the passed event ( a pattern ) for the handlers of the objects on the passed path.",
-                        "Although the event advertises it can take any bool evaluation, only pattern calls are supported.",
-                        "Returns a true/false success value."
-                    ],
-                    "Spec:slots:with flow:":
-                    [
-                        "call_send",
-                        [
-                            "execute",
-                            "bool_eval"
-                        ],
-                        {
-                            "Flow:uses:":
-                            [
-                                "send",
-                                [
-                                    {
-                                        "Term:name:type:":
-                                        [
-                                            "_",
-                                            "path",
-                                            "text_list_eval"
-                                        ]
-                                    },
-                                    {
-                                        "Term:type:":
-                                        [
-                                            "event",
-                                            "bool_eval"
-                                        ]
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                },
+                
                 {
                     "--": "Runtime version of shuffle_text.",
                     "Spec:slots:groups:with flow:":
@@ -1111,8 +796,8 @@
                                     "Term:name:type:":
                                     [
                                         "_",
-                                        "pattern",
-                                        "pattern_name"
+                                        "pattern_name",
+                                        "text"
                                     ]
                                 }
                             ]
@@ -1542,7 +1227,7 @@
                                     "Term:name:type:":
                                     [
                                         "to",
-                                        "pattern",
+                                        "match",
                                         "text"
                                     ]
                                 },
@@ -1666,16 +1351,6 @@
                                     }
                                 ]
                             ]
-                        }
-                    ]
-                },
-                {
-                    "Spec:with str:":
-                    [
-                        "pattern_name",
-                        {
-                            "Str uses:":
-                            []
                         }
                     ]
                 },
@@ -2140,15 +1815,6 @@
                             ]
                         }
                     ]
-                },
-               {
-                "--": "backcompat.",
-                  "Spec:with str:": [
-                    "variable_name",
-                    {
-                      "Str uses:": []
-                    }
-                  ]
                 },
                 {
                     "--": "Keep running a series of actions while a condition is true.",

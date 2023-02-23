@@ -1,10 +1,9 @@
-package core
+package assign
 
 import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -23,32 +22,6 @@ type RefValue struct {
 type RootValue struct {
 	RootValue g.Value
 	RefValue
-}
-
-// determine the location of a value
-func (op *Address) GetRefValue(run rt.Runtime) (ret RefValue, err error) {
-	if ref, ok := op.Value.(Reference); !ok {
-		err = errutil.New("unknown address", op.Choice)
-	} else if objName, e := ref.GetObjectName(run); e != nil {
-		err = e
-	} else if fieldName, e := ref.GetFieldName(run); e != nil {
-		err = e
-	} else if path, e := ResolvePath(run, ref.GetPath()); e != nil {
-		err = e
-	} else {
-		ret = RefValue{objName, fieldName, path}
-	}
-	return
-}
-
-// pull the object.field value from the runtime ( without expanding its path )
-func (op *Address) GetRootValue(run rt.Runtime) (ret RootValue, err error) {
-	if ref, e := op.GetRefValue(run); e != nil {
-		err = e
-	} else {
-		ret, err = ref.GetRootValue(run)
-	}
-	return
 }
 
 // a string representation of the reference ( mainly for debugging )
@@ -131,7 +104,7 @@ func (src *RootValue) GetValue(run rt.Runtime) (ret g.Value, err error) {
 
 // FIX: convert and warn instead of error on field affinity checks
 func (src *RootValue) GetCheckedValue(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	if v, e := assign.GetValue(run, src); e != nil {
+	if v, e := GetValue(run, src); e != nil {
 		err = e
 	} else if e := safe.Check(v, aff); e != nil {
 		err = errutil.New(e, "at", src.RefValue.String())
@@ -150,59 +123,4 @@ func (op *RootValue) GetList(run rt.Runtime) (ret g.Value, err error) {
 		ret = els
 	}
 	return
-}
-
-// uniform access to objects and variables
-// implemented by the members of Address
-type Reference interface {
-	// returns the object name, meta.Variables, or an error
-	GetObjectName(rt.Runtime) (string, error)
-	// returns the targeted field in the named object, the targeted variable, or an error
-	GetFieldName(rt.Runtime) (string, error)
-	// path within the value identified by this reference
-	GetPath() []Dot
-}
-
-func (op *ObjectRef) GetObjectName(run rt.Runtime) (ret string, err error) {
-	// note: ObjectText can return a valid empty string; and here i think we want to error
-	// so doing this manually.
-	if name, e := safe.GetText(run, op.Name); e != nil {
-		err = cmdError(op, e)
-	} else if id, e := run.GetField(meta.ObjectId, name.String()); e != nil {
-		err = cmdError(op, e)
-	} else {
-		ret = id.String()
-	}
-	return
-}
-
-func (op *ObjectRef) GetFieldName(run rt.Runtime) (ret string, err error) {
-	if name, e := safe.GetText(run, op.Field); e != nil {
-		err = cmdError(op, e)
-	} else {
-		ret = name.String()
-	}
-	return
-}
-
-func (op *ObjectRef) GetPath() []Dot {
-	return op.Dot
-}
-
-// always returns meta.Variables as its object
-func (op *VariableRef) GetObjectName(run rt.Runtime) (string, error) {
-	return meta.Variables, nil
-}
-
-func (op *VariableRef) GetFieldName(run rt.Runtime) (ret string, err error) {
-	if name, e := safe.GetText(run, op.Name); e != nil {
-		err = cmdError(op, e)
-	} else {
-		ret = name.String()
-	}
-	return
-}
-
-func (op *VariableRef) GetPath() []Dot {
-	return op.Dot
 }

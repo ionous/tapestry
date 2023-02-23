@@ -29,7 +29,7 @@ func (op *EventBlock) PostImport(k *imp.Importer) (err error) {
 				err = errutil.Append(e)
 			} else if locals := ImportLocals(k, evt, h.Locals); len(locals) > 0 {
 				// and these are locals used by those rules
-				k.WriteEphemera(&eph.EphPatterns{Name: evt, Locals: locals})
+				k.WriteEphemera(&eph.EphPatterns{PatternName: evt, Locals: locals})
 			}
 		}
 	}

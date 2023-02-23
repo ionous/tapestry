@@ -2,7 +2,7 @@ package render
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -90,9 +90,9 @@ func (op *RenderRef) RenderEval(run rt.Runtime, hint affine.Affinity) (ret g.Val
 func (op *RenderRef) renderRef(run rt.Runtime, hint affine.Affinity) (ret g.Value, err error) {
 	if name, e := safe.GetText(run, op.Name); e != nil {
 		err = e
-	} else if path, e := core.ResolvePath(run, op.Dot); e != nil {
+	} else if path, e := assign.ResolvePath(run, op.Dot); e != nil {
 		err = e
-	} else if tv, e := core.ResolveName(run, name.String(), path); e != nil {
+	} else if tv, e := assign.ResolveName(run, name.String(), path); e != nil {
 		err = e
 	} else {
 		ret, err = tv.GetCheckedValue(run, hint)

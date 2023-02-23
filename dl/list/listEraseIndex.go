@@ -1,7 +1,7 @@
 package list
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -16,12 +16,12 @@ func (op *EraseIndex) Execute(run rt.Runtime) (err error) {
 
 func eraseIndex(run rt.Runtime,
 	count rt.NumberEval,
-	target core.Address,
+	target assign.Address,
 	atIndex rt.NumberEval,
 ) (ret g.Value, err error) {
 	if rub, e := safe.GetOptionalNumber(run, count, 0); e != nil {
 		err = e
-	} else if root, e := target.GetRootValue(run); e != nil {
+	} else if root, e := assign.GetRootValue(run, target); e != nil {
 		err = e
 	} else if els, e := root.GetList(run); e != nil {
 		err = e

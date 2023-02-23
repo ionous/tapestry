@@ -1,7 +1,7 @@
 package list
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -14,8 +14,8 @@ func (op *EraseEdge) Execute(run rt.Runtime) (err error) {
 	return
 }
 
-func eraseEdge(run rt.Runtime, target core.Address, atFront rt.BoolEval) (ret g.Value, err error) {
-	if root, e := target.GetRootValue(run); e != nil {
+func eraseEdge(run rt.Runtime, target assign.Address, atFront rt.BoolEval) (ret g.Value, err error) {
+	if root, e := assign.GetRootValue(run, target); e != nil {
 		err = e
 	} else if els, e := root.GetList(run); e != nil {
 		err = e

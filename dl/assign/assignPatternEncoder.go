@@ -1,16 +1,15 @@
-package core
+package assign
 
 import (
 	"unicode"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/lang"
 )
 
 // rewrite pattern calls to look like normal operations.
 func EncodePattern(m jsn.Marshaler, op *CallPattern) (err error) {
-	patName := recase(op.Pattern.Str, false)
+	patName := recase(op.PatternName, false)
 	pb := patternBlock(patName)
 	if err = m.MarshalBlock(pb); err == nil {
 		for _, arg := range op.Arguments {
@@ -18,7 +17,7 @@ func EncodePattern(m jsn.Marshaler, op *CallPattern) (err error) {
 			if e := m.MarshalKey(argName, argName); e != nil {
 				err = e
 				break
-			} else if e := assign.Assignment_Marshal(m, &arg.Value); e != nil {
+			} else if e := Assignment_Marshal(m, &arg.Value); e != nil {
 				err = e
 				break
 			}

@@ -5983,10 +5983,10 @@ func Paragraph_Marshal(m jsn.Marshaler, val *Paragraph) (err error) {
 // PatternActions Add actions to a pattern.
 // Actions to take when using a pattern.
 type PatternActions struct {
-	Name   core.PatternName `if:"label=_"`
-	Locals []Field          `if:"label=provides,optional"`
-	Rules  []PatternRule    `if:"label=rules"`
-	Markup map[string]any
+	PatternName string        `if:"label=_,type=text"`
+	Locals      []Field       `if:"label=provides,optional"`
+	Rules       []PatternRule `if:"label=rules"`
+	Markup      map[string]any
 }
 
 // User implemented slots:
@@ -6001,7 +6001,7 @@ func (*PatternActions) Compose() composer.Spec {
 }
 
 const PatternActions_Type = "pattern_actions"
-const PatternActions_Field_Name = "$NAME"
+const PatternActions_Field_PatternName = "$PATTERN_NAME"
 const PatternActions_Field_Locals = "$LOCALS"
 const PatternActions_Field_Rules = "$RULES"
 
@@ -6076,12 +6076,12 @@ func PatternActions_Optional_Marshal(m jsn.Marshaler, pv **PatternActions) (err 
 func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PatternActions_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PatternActions_Field_Name)
+		e0 := m.MarshalKey("", PatternActions_Field_PatternName)
 		if e0 == nil {
-			e0 = core.PatternName_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.PatternName)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PatternActions_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", PatternActions_Field_PatternName))
 		}
 		e1 := m.MarshalKey("provides", PatternActions_Field_Locals)
 		if e1 == nil {
@@ -6104,9 +6104,9 @@ func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
 
 // PatternDecl Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.  Each function in a given pattern has "guards" which determine whether the function applies in a particular situation.
 type PatternDecl struct {
-	Name          core.PatternName `if:"label=_"`
-	Params        []Field          `if:"label=requires,optional"`
-	PatternReturn *PatternReturn   `if:"label=returns,optional"`
+	PatternName   string         `if:"label=_,type=text"`
+	Params        []Field        `if:"label=requires,optional"`
+	PatternReturn *PatternReturn `if:"label=returns,optional"`
 	Markup        map[string]any
 }
 
@@ -6122,7 +6122,7 @@ func (*PatternDecl) Compose() composer.Spec {
 }
 
 const PatternDecl_Type = "pattern_decl"
-const PatternDecl_Field_Name = "$NAME"
+const PatternDecl_Field_PatternName = "$PATTERN_NAME"
 const PatternDecl_Field_Params = "$PARAMS"
 const PatternDecl_Field_PatternReturn = "$PATTERN_RETURN"
 
@@ -6197,12 +6197,12 @@ func PatternDecl_Optional_Marshal(m jsn.Marshaler, pv **PatternDecl) (err error)
 func PatternDecl_Marshal(m jsn.Marshaler, val *PatternDecl) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PatternDecl_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PatternDecl_Field_Name)
+		e0 := m.MarshalKey("", PatternDecl_Field_PatternName)
 		if e0 == nil {
-			e0 = core.PatternName_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.PatternName)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PatternDecl_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", PatternDecl_Field_PatternName))
 		}
 		e1 := m.MarshalKey("requires", PatternDecl_Field_Params)
 		if e1 == nil {

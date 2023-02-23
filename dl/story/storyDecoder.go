@@ -56,8 +56,8 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 					if sig, args, e := op.ReadMsg(); e != nil {
 						err = e
 					} else {
-						out := &core.CallPattern{Pattern: core.PatternName{sig.Name}}
-						var call []core.Arg
+						out := &assign.CallPattern{PatternName: sig.Name}
+						var call []assign.Arg
 						for i, p := range sig.Params {
 							arg := args[i]
 							// fix: temp: backwards compat:
@@ -75,7 +75,7 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 								err = e
 								break
 							}
-							call = append(call, core.Arg{Name: p.Label, Value: val})
+							call = append(call, assign.Arg{Name: p.Label, Value: val})
 						}
 						if len(sig.Params) == len(call) {
 							out.Arguments = call

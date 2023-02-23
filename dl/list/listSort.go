@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -31,7 +32,7 @@ func (op *ListSortNumbers) sortByNum(run rt.Runtime) (err error) {
 
 	// check for diry everywher
 
-	if root, e := op.Target.GetRootValue(run); e != nil {
+	if root, e := assign.GetRootValue(run, op.Target); e != nil {
 		err = e
 	} else if els, e := root.GetCheckedValue(run, affine.NumList); e != nil {
 		err = e
@@ -56,7 +57,7 @@ func (op *ListSortNumbers) sortByNum(run rt.Runtime) (err error) {
 }
 
 func (op *ListSortText) sortByText(run rt.Runtime) (err error) {
-	if root, e := op.Target.GetRootValue(run); e != nil {
+	if root, e := assign.GetRootValue(run, op.Target); e != nil {
 		err = e
 	} else if els, e := root.GetCheckedValue(run, affine.TextList); e != nil {
 		err = e

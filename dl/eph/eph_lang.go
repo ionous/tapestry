@@ -1663,11 +1663,11 @@ func EphParams_Marshal(m jsn.Marshaler, val *EphParams) (err error) {
 // While multiple pattern commands can be used to define a pattern,
 // the set of arguments and the return can only be specified once.
 type EphPatterns struct {
-	Name   string      `if:"label=pattern,type=text"`
-	Params []EphParams `if:"label=with,optional"`
-	Locals []EphParams `if:"label=locals,optional"`
-	Result *EphParams  `if:"label=result,optional"`
-	Markup map[string]any
+	PatternName string      `if:"label=pattern,type=text"`
+	Params      []EphParams `if:"label=with,optional"`
+	Locals      []EphParams `if:"label=locals,optional"`
+	Result      *EphParams  `if:"label=result,optional"`
+	Markup      map[string]any
 }
 
 // User implemented slots:
@@ -1682,7 +1682,7 @@ func (*EphPatterns) Compose() composer.Spec {
 }
 
 const EphPatterns_Type = "eph_patterns"
-const EphPatterns_Field_Name = "$NAME"
+const EphPatterns_Field_PatternName = "$PATTERN_NAME"
 const EphPatterns_Field_Params = "$PARAMS"
 const EphPatterns_Field_Locals = "$LOCALS"
 const EphPatterns_Field_Result = "$RESULT"
@@ -1758,12 +1758,12 @@ func EphPatterns_Optional_Marshal(m jsn.Marshaler, pv **EphPatterns) (err error)
 func EphPatterns_Marshal(m jsn.Marshaler, val *EphPatterns) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(EphPatterns_Flow{val}); err == nil {
-		e0 := m.MarshalKey("pattern", EphPatterns_Field_Name)
+		e0 := m.MarshalKey("pattern", EphPatterns_Field_PatternName)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.PatternName)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphPatterns_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", EphPatterns_Field_PatternName))
 		}
 		e1 := m.MarshalKey("with", EphPatterns_Field_Params)
 		if e1 == nil {
@@ -2244,13 +2244,13 @@ func EphRelatives_Marshal(m jsn.Marshaler, val *EphRelatives) (err error) {
 
 // EphRules
 type EphRules struct {
-	Name   string       `if:"label=pattern,type=text"`
-	Target string       `if:"label=target,optional,type=text"`
-	Filter rt.BoolEval  `if:"label=if"`
-	When   EphTiming    `if:"label=when"`
-	Exe    []rt.Execute `if:"label=does"`
-	Touch  EphAlways    `if:"label=touch,optional"`
-	Markup map[string]any
+	PatternName string       `if:"label=pattern,type=text"`
+	Target      string       `if:"label=target,optional,type=text"`
+	Filter      rt.BoolEval  `if:"label=if"`
+	When        EphTiming    `if:"label=when"`
+	Exe         []rt.Execute `if:"label=does"`
+	Touch       EphAlways    `if:"label=touch,optional"`
+	Markup      map[string]any
 }
 
 // User implemented slots:
@@ -2265,7 +2265,7 @@ func (*EphRules) Compose() composer.Spec {
 }
 
 const EphRules_Type = "eph_rules"
-const EphRules_Field_Name = "$NAME"
+const EphRules_Field_PatternName = "$PATTERN_NAME"
 const EphRules_Field_Target = "$TARGET"
 const EphRules_Field_Filter = "$FILTER"
 const EphRules_Field_When = "$WHEN"
@@ -2343,12 +2343,12 @@ func EphRules_Optional_Marshal(m jsn.Marshaler, pv **EphRules) (err error) {
 func EphRules_Marshal(m jsn.Marshaler, val *EphRules) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(EphRules_Flow{val}); err == nil {
-		e0 := m.MarshalKey("pattern", EphRules_Field_Name)
+		e0 := m.MarshalKey("pattern", EphRules_Field_PatternName)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.PatternName)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphRules_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", EphRules_Field_PatternName))
 		}
 		e1 := m.MarshalKey("target", EphRules_Field_Target)
 		if e1 == nil {

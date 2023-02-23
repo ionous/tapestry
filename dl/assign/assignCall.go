@@ -1,4 +1,4 @@
-package core
+package assign
 
 import (
 	"errors"
@@ -43,7 +43,7 @@ func (op *CallPattern) GetRecordList(run rt.Runtime) (g.Value, error) {
 }
 
 func (op *CallPattern) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	pat := op.Pattern.String()
+	pat := op.PatternName
 	if rec, e := MakeRecord(run, pat, op.Arguments...); e != nil {
 		err = cmdError(op, e)
 	} else if v, e := run.Call(rec, aff); e != nil && !errors.Is(e, rt.NoResult{}) {

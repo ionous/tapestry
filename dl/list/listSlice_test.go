@@ -60,7 +60,7 @@ func slice(start, end int, src []string) (ret string) {
 		ret = e.Error()
 	} else {
 		ret = joinText(run, &list.ListSlice{
-			List:  &assign.FromTextList{Value: GetVariable("source")},
+			List:  &assign.FromTextList{Value: assign.Variable("source")},
 			Start: I(start),
 			End:   I(end),
 		})

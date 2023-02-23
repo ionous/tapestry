@@ -71,9 +71,9 @@ func TestReduce(t *testing.T) {
 }
 
 var reduce = list.ListReduce{
-	Target:       core.Variable("results"),
-	List:         &assign.FromRecordList{Value: core.GetVariable("fruits")},
-	UsingPattern: W("reduce"),
+	Target:      assign.Variable("results"),
+	List:        &assign.FromRecordList{Value: assign.Variable("fruits")},
+	PatternName: W("reduce"),
 }
 
 // join each record in turn
@@ -83,13 +83,13 @@ var reduceRecords = testpat.Pattern{
 	Labels: []string{"in", "out"},
 	Rules: []rt.Rule{{
 		Execute: core.MakeActivity(
-			&core.SetValue{
-				Target: core.Variable("out"),
+			&assign.SetValue{
+				Target: assign.Variable("out"),
 				Value: &assign.FromText{Value: &core.Join{
 					Sep: T(", "),
 					Parts: []rt.TextEval{
-						GetVariable("out"),
-						GetVariable("in", "name"),
+						assign.Variable("out"),
+						assign.Variable("in", "name"),
 					}}}},
 		),
 	}},

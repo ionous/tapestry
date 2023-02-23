@@ -48,7 +48,7 @@ func (op *ListSplice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
 
 // modify a list by adding and removing elements.
 func (op *ListSplice) spliceList(run rt.Runtime, aff affine.Affinity) (retVal g.Value, retType string, err error) {
-	if root, e := op.Target.GetRootValue(run); e != nil {
+	if root, e := assign.GetRootValue(run, op.Target); e != nil {
 		err = e
 	} else if els, e := root.GetList(run); e != nil {
 		err = e

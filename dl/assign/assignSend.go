@@ -1,4 +1,4 @@
-package core
+package assign
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -21,7 +21,7 @@ func (op *CallSend) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	} else if evt, ok := op.Event.(*CallPattern); !ok {
 		err = cmdError(op, errutil.New("expected call pattern in send"))
 	} else {
-		name, up := evt.Pattern.String(), path.Strings()
+		name, up := evt.PatternName, path.Strings()
 		if rec, e := MakeRecord(run, name, evt.Arguments...); e != nil {
 			err = cmdError(op, e)
 		} else if v, e := run.Send(rec, up); e != nil {

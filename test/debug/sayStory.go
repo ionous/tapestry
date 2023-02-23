@@ -45,10 +45,10 @@ func (op *MatchNumber) GetBool(run rt.Runtime) (ret g.Value, err error) {
   return
 }
 
-func DetermineSay(i int) *core.CallPattern {
-  return &core.CallPattern{
-    Pattern: core.PatternName{Str: "say_me"},
-    Arguments: []core.Arg{{
+func DetermineSay(i int) *assign.CallPattern {
+  return &assign.CallPattern{
+    PatternName: "say_me",
+    Arguments: []assign.Arg{{
       Name:  "num",
       Value: &assign.FromNumber{Value: I(i)},
     }},

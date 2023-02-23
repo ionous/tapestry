@@ -1,6 +1,7 @@
 package list
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
@@ -13,7 +14,7 @@ func (op *ListReverse) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListReverse) reverse(run rt.Runtime) (err error) {
-	if root, e := op.Target.GetRootValue(run); e != nil {
+	if root, e := assign.GetRootValue(run, op.Target); e != nil {
 		err = e
 	} else if els, e := root.GetList(run); e != nil {
 		err = e

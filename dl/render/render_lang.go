@@ -4,7 +4,6 @@ package render
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/composer"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -188,9 +187,9 @@ func RenderName_Marshal(m jsn.Marshaler, val *RenderName) (err error) {
 
 // RenderPattern A special version of the core call pattern that figures out how to evaluate its arguments at call time.
 type RenderPattern struct {
-	Pattern string       `if:"label=_,type=text"`
-	Render  []RenderEval `if:"label=render"`
-	Markup  map[string]any
+	PatternName string       `if:"label=_,type=text"`
+	Render      []RenderEval `if:"label=render"`
+	Markup      map[string]any
 }
 
 // User implemented slots:
@@ -207,7 +206,7 @@ func (*RenderPattern) Compose() composer.Spec {
 }
 
 const RenderPattern_Type = "render_pattern"
-const RenderPattern_Field_Pattern = "$PATTERN"
+const RenderPattern_Field_PatternName = "$PATTERN_NAME"
 const RenderPattern_Field_Render = "$RENDER"
 
 func (op *RenderPattern) Marshal(m jsn.Marshaler) error {
@@ -281,12 +280,12 @@ func RenderPattern_Optional_Marshal(m jsn.Marshaler, pv **RenderPattern) (err er
 func RenderPattern_Marshal(m jsn.Marshaler, val *RenderPattern) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RenderPattern_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", RenderPattern_Field_Pattern)
+		e0 := m.MarshalKey("", RenderPattern_Field_PatternName)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Pattern)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.PatternName)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", RenderPattern_Field_Pattern))
+			m.Error(errutil.New(e0, "in flow at", RenderPattern_Field_PatternName))
 		}
 		e1 := m.MarshalKey("render", RenderPattern_Field_Render)
 		if e1 == nil {
@@ -303,8 +302,8 @@ func RenderPattern_Marshal(m jsn.Marshaler, val *RenderPattern) (err error) {
 // RenderRef Pull a value from name that might refer either to a variable, or to an object.
 // If the name is an object, returns the object id.
 type RenderRef struct {
-	Name   rt.TextEval `if:"label=_"`
-	Dot    []core.Dot  `if:"label=dot,optional"`
+	Name   rt.TextEval  `if:"label=_"`
+	Dot    []assign.Dot `if:"label=dot,optional"`
 	Markup map[string]any
 }
 
@@ -409,7 +408,7 @@ func RenderRef_Marshal(m jsn.Marshaler, val *RenderRef) (err error) {
 		}
 		e1 := m.MarshalKey("dot", RenderRef_Field_Dot)
 		if e1 == nil {
-			e1 = core.Dot_Optional_Repeats_Marshal(m, &val.Dot)
+			e1 = assign.Dot_Optional_Repeats_Marshal(m, &val.Dot)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", RenderRef_Field_Dot))

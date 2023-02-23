@@ -26,7 +26,7 @@ func ExampleSayMe() {
 	// say 4 numbers
 	for i := 1; i <= 4; i++ {
 		fmt.Printf(`say_me %d = "`, i)
-		// creates a core.CallPattern and runs it through the debug runtime
+		// creates a assign.CallPattern and runs it through the debug runtime
 		if e := debug.DetermineSay(i).Execute(&run); e != nil {
 			fmt.Println("Error:", e)
 		}

@@ -13,8 +13,8 @@ import (
 
 // EraseEdge Erase at edge: Remove one or more values from a list.
 type EraseEdge struct {
-	Target core.Address `if:"label=_"`
-	AtEdge rt.BoolEval  `if:"label=at_front,optional"`
+	Target assign.Address `if:"label=_"`
+	AtEdge rt.BoolEval    `if:"label=at_front,optional"`
 	Markup map[string]any
 }
 
@@ -106,7 +106,7 @@ func EraseEdge_Marshal(m jsn.Marshaler, val *EraseEdge) (err error) {
 	if err = m.MarshalBlock(EraseEdge_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", EraseEdge_Field_Target)
 		if e0 == nil {
-			e0 = core.Address_Marshal(m, &val.Target)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EraseEdge_Field_Target))
@@ -125,9 +125,9 @@ func EraseEdge_Marshal(m jsn.Marshaler, val *EraseEdge) (err error) {
 
 // EraseIndex Erase at index: Remove one or more values from a list.
 type EraseIndex struct {
-	Count   rt.NumberEval `if:"label=_"`
-	Target  core.Address  `if:"label=from"`
-	AtIndex rt.NumberEval `if:"label=at_index"`
+	Count   rt.NumberEval  `if:"label=_"`
+	Target  assign.Address `if:"label=from"`
+	AtIndex rt.NumberEval  `if:"label=at_index"`
 	Markup  map[string]any
 }
 
@@ -227,7 +227,7 @@ func EraseIndex_Marshal(m jsn.Marshaler, val *EraseIndex) (err error) {
 		}
 		e1 := m.MarshalKey("from", EraseIndex_Field_Target)
 		if e1 == nil {
-			e1 = core.Address_Marshal(m, &val.Target)
+			e1 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", EraseIndex_Field_Target))
@@ -248,11 +248,11 @@ func EraseIndex_Marshal(m jsn.Marshaler, val *EraseIndex) (err error) {
 // Runs a pattern with a list containing the erased values.
 // If nothing was erased, the pattern will be called with an empty list.
 type Erasing struct {
-	Count   rt.NumberEval `if:"label=_"`
-	Target  core.Address  `if:"label=from"`
-	AtIndex rt.NumberEval `if:"label=at_index"`
-	As      string        `if:"label=as,type=text"`
-	Does    []rt.Execute  `if:"label=does"`
+	Count   rt.NumberEval  `if:"label=_"`
+	Target  assign.Address `if:"label=from"`
+	AtIndex rt.NumberEval  `if:"label=at_index"`
+	As      string         `if:"label=as,type=text"`
+	Does    []rt.Execute   `if:"label=does"`
 	Markup  map[string]any
 }
 
@@ -353,7 +353,7 @@ func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
 		}
 		e1 := m.MarshalKey("from", Erasing_Field_Target)
 		if e1 == nil {
-			e1 = core.Address_Marshal(m, &val.Target)
+			e1 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", Erasing_Field_Target))
@@ -386,11 +386,11 @@ func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
 
 // ErasingEdge Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
 type ErasingEdge struct {
-	Target core.Address  `if:"label=_"`
-	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
-	As     string        `if:"label=as,type=text"`
-	Does   []rt.Execute  `if:"label=does"`
-	Else   core.Brancher `if:"label=else,optional"`
+	Target assign.Address `if:"label=_"`
+	AtEdge rt.BoolEval    `if:"label=at_front,optional"`
+	As     string         `if:"label=as,type=text"`
+	Does   []rt.Execute   `if:"label=does"`
+	Else   core.Brancher  `if:"label=else,optional"`
 	Markup map[string]any
 }
 
@@ -485,7 +485,7 @@ func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 	if err = m.MarshalBlock(ErasingEdge_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ErasingEdge_Field_Target)
 		if e0 == nil {
-			e0 = core.Address_Marshal(m, &val.Target)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ErasingEdge_Field_Target))
@@ -770,7 +770,7 @@ func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
 // The named pattern gets with with two parameters for each value in the list:
 // 'in' as each value from the list, and 'out' as the var passed to the gather.
 type ListGather struct {
-	Target core.Address      `if:"label=_"`
+	Target assign.Address    `if:"label=_"`
 	From   assign.Assignment `if:"label=from"`
 	Using  string            `if:"label=using,type=text"`
 	Markup map[string]any
@@ -862,7 +862,7 @@ func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
 	if err = m.MarshalBlock(ListGather_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListGather_Field_Target)
 		if e0 == nil {
-			e0 = core.Address_Marshal(m, &val.Target)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListGather_Field_Target))
@@ -992,10 +992,10 @@ func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
 // ListMap Transform the values from one list and place the results in another list.
 // The designated pattern is called with each value from the 'from list', one value at a time.
 type ListMap struct {
-	Target       core.Address      `if:"label=_"`
-	List         assign.Assignment `if:"label=from_list"`
-	UsingPattern string            `if:"label=using,type=text"`
-	Markup       map[string]any
+	Target      assign.Address    `if:"label=_"`
+	List        assign.Assignment `if:"label=from_list"`
+	PatternName string            `if:"label=using,type=text"`
+	Markup      map[string]any
 }
 
 // User implemented slots:
@@ -1012,7 +1012,7 @@ func (*ListMap) Compose() composer.Spec {
 const ListMap_Type = "list_map"
 const ListMap_Field_Target = "$TARGET"
 const ListMap_Field_List = "$LIST"
-const ListMap_Field_UsingPattern = "$USING_PATTERN"
+const ListMap_Field_PatternName = "$PATTERN_NAME"
 
 func (op *ListMap) Marshal(m jsn.Marshaler) error {
 	return ListMap_Marshal(m, op)
@@ -1087,7 +1087,7 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 	if err = m.MarshalBlock(ListMap_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListMap_Field_Target)
 		if e0 == nil {
-			e0 = core.Address_Marshal(m, &val.Target)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListMap_Field_Target))
@@ -1099,12 +1099,12 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListMap_Field_List))
 		}
-		e2 := m.MarshalKey("using", ListMap_Field_UsingPattern)
+		e2 := m.MarshalKey("using", ListMap_Field_PatternName)
 		if e2 == nil {
-			e2 = prim.Text_Unboxed_Marshal(m, &val.UsingPattern)
+			e2 = prim.Text_Unboxed_Marshal(m, &val.PatternName)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", ListMap_Field_UsingPattern))
+			m.Error(errutil.New(e2, "in flow at", ListMap_Field_PatternName))
 		}
 		m.EndBlock()
 	}
@@ -1114,7 +1114,7 @@ func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 // ListPush Add a value to a list.
 type ListPush struct {
 	Value  assign.Assignment `if:"label=_"`
-	Target core.Address      `if:"label=into"`
+	Target assign.Address    `if:"label=into"`
 	AtEdge rt.BoolEval       `if:"label=at_front,optional"`
 	Markup map[string]any
 }
@@ -1215,7 +1215,7 @@ func ListPush_Marshal(m jsn.Marshaler, val *ListPush) (err error) {
 		}
 		e1 := m.MarshalKey("into", ListPush_Field_Target)
 		if e1 == nil {
-			e1 = core.Address_Marshal(m, &val.Target)
+			e1 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListPush_Field_Target))
@@ -1236,10 +1236,10 @@ func ListPush_Marshal(m jsn.Marshaler, val *ListPush) (err error) {
 // The designated pattern is called with two parameters:
 // 'in' ( each element of the list ) and 'out' ( ex. a record ).
 type ListReduce struct {
-	Target       core.Address      `if:"label=into"`
-	List         assign.Assignment `if:"label=from_list"`
-	UsingPattern string            `if:"label=using,type=text"`
-	Markup       map[string]any
+	Target      assign.Address    `if:"label=into"`
+	List        assign.Assignment `if:"label=from_list"`
+	PatternName string            `if:"label=using,type=text"`
+	Markup      map[string]any
 }
 
 // User implemented slots:
@@ -1256,7 +1256,7 @@ func (*ListReduce) Compose() composer.Spec {
 const ListReduce_Type = "list_reduce"
 const ListReduce_Field_Target = "$TARGET"
 const ListReduce_Field_List = "$LIST"
-const ListReduce_Field_UsingPattern = "$USING_PATTERN"
+const ListReduce_Field_PatternName = "$PATTERN_NAME"
 
 func (op *ListReduce) Marshal(m jsn.Marshaler) error {
 	return ListReduce_Marshal(m, op)
@@ -1331,7 +1331,7 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 	if err = m.MarshalBlock(ListReduce_Flow{val}); err == nil {
 		e0 := m.MarshalKey("into", ListReduce_Field_Target)
 		if e0 == nil {
-			e0 = core.Address_Marshal(m, &val.Target)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListReduce_Field_Target))
@@ -1343,12 +1343,12 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListReduce_Field_List))
 		}
-		e2 := m.MarshalKey("using", ListReduce_Field_UsingPattern)
+		e2 := m.MarshalKey("using", ListReduce_Field_PatternName)
 		if e2 == nil {
-			e2 = prim.Text_Unboxed_Marshal(m, &val.UsingPattern)
+			e2 = prim.Text_Unboxed_Marshal(m, &val.PatternName)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", ListReduce_Field_UsingPattern))
+			m.Error(errutil.New(e2, "in flow at", ListReduce_Field_PatternName))
 		}
 		m.EndBlock()
 	}
@@ -1357,7 +1357,7 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 
 // ListReverse Reverse a list.
 type ListReverse struct {
-	Target core.Address `if:"label=list"`
+	Target assign.Address `if:"label=list"`
 	Markup map[string]any
 }
 
@@ -1448,7 +1448,7 @@ func ListReverse_Marshal(m jsn.Marshaler, val *ListReverse) (err error) {
 	if err = m.MarshalBlock(ListReverse_Flow{val}); err == nil {
 		e0 := m.MarshalKey("list", ListReverse_Field_Target)
 		if e0 == nil {
-			e0 = core.Address_Marshal(m, &val.Target)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListReverse_Field_Target))
@@ -1589,9 +1589,9 @@ func ListSlice_Marshal(m jsn.Marshaler, val *ListSlice) (err error) {
 
 // ListSortNumbers
 type ListSortNumbers struct {
-	Target     core.Address `if:"label=_"`
-	ByField    string       `if:"label=by_field,type=text"`
-	Descending rt.BoolEval  `if:"label=descending,optional"`
+	Target     assign.Address `if:"label=_"`
+	ByField    string         `if:"label=by_field,type=text"`
+	Descending rt.BoolEval    `if:"label=descending,optional"`
 	Markup     map[string]any
 }
 
@@ -1684,7 +1684,7 @@ func ListSortNumbers_Marshal(m jsn.Marshaler, val *ListSortNumbers) (err error) 
 	if err = m.MarshalBlock(ListSortNumbers_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSortNumbers_Field_Target)
 		if e0 == nil {
-			e0 = core.Address_Marshal(m, &val.Target)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSortNumbers_Field_Target))
@@ -1710,10 +1710,10 @@ func ListSortNumbers_Marshal(m jsn.Marshaler, val *ListSortNumbers) (err error) 
 
 // ListSortText Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 type ListSortText struct {
-	Target     core.Address `if:"label=_"`
-	ByField    string       `if:"label=by_field,type=text"`
-	Descending rt.BoolEval  `if:"label=descending,optional"`
-	UsingCase  rt.BoolEval  `if:"label=using_case,optional"`
+	Target     assign.Address `if:"label=_"`
+	ByField    string         `if:"label=by_field,type=text"`
+	Descending rt.BoolEval    `if:"label=descending,optional"`
+	UsingCase  rt.BoolEval    `if:"label=using_case,optional"`
 	Markup     map[string]any
 }
 
@@ -1807,7 +1807,7 @@ func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
 	if err = m.MarshalBlock(ListSortText_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSortText_Field_Target)
 		if e0 == nil {
-			e0 = core.Address_Marshal(m, &val.Target)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSortText_Field_Target))
@@ -1846,7 +1846,7 @@ func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
 // If the remove count is missing, this removes all elements from the start to the end;
 // if the remove count is zero or negative, no elements are removed.
 type ListSplice struct {
-	Target core.Address      `if:"label=_"`
+	Target assign.Address    `if:"label=_"`
 	Start  rt.NumberEval     `if:"label=start"`
 	Remove rt.NumberEval     `if:"label=remove"`
 	Insert assign.Assignment `if:"label=insert"`
@@ -1946,7 +1946,7 @@ func ListSplice_Marshal(m jsn.Marshaler, val *ListSplice) (err error) {
 	if err = m.MarshalBlock(ListSplice_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSplice_Field_Target)
 		if e0 == nil {
-			e0 = core.Address_Marshal(m, &val.Target)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSplice_Field_Target))
@@ -2123,43 +2123,29 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	5769563723333560303:  (*ListGather)(nil),      /* Gather object:from:using: */
-	6012189601514584992:  (*ListGather)(nil),      /* Gather variable:from:using: */
-	14478606265438922628: (*EraseEdge)(nil),       /* execute=Erase object: */
-	9282735962373956066:  (*EraseEdge)(nil),       /* execute=Erase object:atFront: */
-	12482240611163626049: (*EraseEdge)(nil),       /* execute=Erase variable: */
-	4367519203676111939:  (*EraseEdge)(nil),       /* execute=Erase variable:atFront: */
-	2783457209873625683:  (*EraseIndex)(nil),      /* execute=Erase:from object:atIndex: */
-	7431187839812372978:  (*EraseIndex)(nil),      /* execute=Erase:from variable:atIndex: */
-	6467041291453091024:  (*ErasingEdge)(nil),     /* execute=Erasing object:as:does: */
-	6340310696015763041:  (*ErasingEdge)(nil),     /* execute=Erasing object:as:does:else: */
-	18171821493907737090: (*ErasingEdge)(nil),     /* execute=Erasing object:atFront:as:does: */
-	4857564834398783063:  (*ErasingEdge)(nil),     /* execute=Erasing object:atFront:as:does:else: */
-	10291819134056353121: (*ErasingEdge)(nil),     /* execute=Erasing variable:as:does: */
-	6288078742401258778:  (*ErasingEdge)(nil),     /* execute=Erasing variable:as:does:else: */
-	11123972830297154727: (*ErasingEdge)(nil),     /* execute=Erasing variable:atFront:as:does: */
-	8304679251198058276:  (*ErasingEdge)(nil),     /* execute=Erasing variable:atFront:as:does:else: */
-	10143128393744540981: (*Erasing)(nil),         /* execute=Erasing:from object:atIndex:as:does: */
-	12913506357911229396: (*Erasing)(nil),         /* execute=Erasing:from variable:atIndex:as:does: */
+	6334415563934548256:  (*ListGather)(nil),      /* Gather:from:using: */
+	17857642077015906043: (*EraseEdge)(nil),       /* execute=Erase: */
+	4911242881414594201:  (*EraseEdge)(nil),       /* execute=Erase:atFront: */
+	13326390992756169124: (*EraseIndex)(nil),      /* execute=Erase:from:atIndex: */
+	16587893764566352449: (*ErasingEdge)(nil),     /* execute=Erasing:as:does: */
+	1771685988622306554:  (*ErasingEdge)(nil),     /* execute=Erasing:as:does:else: */
+	12709950044197813063: (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:does: */
+	307909849155983812:   (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:does:else: */
+	1558163885147286548:  (*Erasing)(nil),         /* execute=Erasing:from:atIndex:as:does: */
 	8547752949201735569:  (*ListFind)(nil),        /* bool_eval=Find:inList: */
 	16815906459082105780: (*ListFind)(nil),        /* number_eval=Find:inList: */
 	3478260273963207965:  (*ListLen)(nil),         /* number_eval=Len: */
-	14109924172112471968: (*ListMap)(nil),         /* execute=Map object:fromList:using: */
-	15181321716925872955: (*ListMap)(nil),         /* execute=Map variable:fromList:using: */
-	1016607844458715086:  (*ListPush)(nil),        /* execute=Push:into object: */
-	10703475529015318864: (*ListPush)(nil),        /* execute=Push:into object:atFront: */
-	15468034100902542807: (*ListPush)(nil),        /* execute=Push:into variable: */
-	14208536574252942413: (*ListPush)(nil),        /* execute=Push:into variable:atFront: */
+	8449127989109999373:  (*ListMap)(nil),         /* execute=Map:fromList:using: */
+	14590825769568398889: (*ListPush)(nil),        /* execute=Push:into: */
+	17497959320325918107: (*ListPush)(nil),        /* execute=Push:into:atFront: */
 	120416590109430143:   (*Range)(nil),           /* num_list_eval=Range: */
 	15503705420922978310: (*Range)(nil),           /* num_list_eval=Range:byStep: */
 	16618866959380663563: (*Range)(nil),           /* num_list_eval=Range:from: */
 	14227857065891717050: (*Range)(nil),           /* num_list_eval=Range:from:byStep: */
-	5516099698791849382:  (*ListReduce)(nil),      /* execute=Reduce into object:fromList:using: */
-	17710760010169952581: (*ListReduce)(nil),      /* execute=Reduce into variable:fromList:using: */
+	18245549119758376391: (*ListReduce)(nil),      /* execute=Reduce into:fromList:using: */
 	8451005089688158034:  (*ListEach)(nil),        /* execute=Repeating across:as:does: */
 	7170937308629588871:  (*ListEach)(nil),        /* execute=Repeating across:as:does:else: */
-	11445472112426895002: (*ListReverse)(nil),     /* execute=Reverse list object: */
-	9028179729453633619:  (*ListReverse)(nil),     /* execute=Reverse list variable: */
+	177314099445105829:   (*ListReverse)(nil),     /* execute=Reverse list: */
 	4235921801420235638:  (*ListSlice)(nil),       /* num_list_eval=Slice: */
 	13273073049578089927: (*ListSlice)(nil),       /* record_list_eval=Slice: */
 	18323981472330239313: (*ListSlice)(nil),       /* text_list_eval=Slice: */
@@ -2172,24 +2158,14 @@ var Signatures = map[uint64]interface{}{
 	14495675636779114361: (*ListSlice)(nil),       /* num_list_eval=Slice:start:end: */
 	3241896595896148736:  (*ListSlice)(nil),       /* record_list_eval=Slice:start:end: */
 	8901512565003460886:  (*ListSlice)(nil),       /* text_list_eval=Slice:start:end: */
-	421498711850031655:   (*ListSortNumbers)(nil), /* execute=SortNumbers object:byField: */
-	16497684129300035417: (*ListSortNumbers)(nil), /* execute=SortNumbers object:byField:descending: */
-	5849496999430306662:  (*ListSortNumbers)(nil), /* execute=SortNumbers variable:byField: */
-	5424404571725863098:  (*ListSortNumbers)(nil), /* execute=SortNumbers variable:byField:descending: */
-	14456995616405811689: (*ListSortText)(nil),    /* execute=SortTexts object:byField: */
-	6503987754421782359:  (*ListSortText)(nil),    /* execute=SortTexts object:byField:descending: */
-	600977390647603797:   (*ListSortText)(nil),    /* execute=SortTexts object:byField:descending:usingCase: */
-	3621745037740421335:  (*ListSortText)(nil),    /* execute=SortTexts object:byField:usingCase: */
-	14942187006010075588: (*ListSortText)(nil),    /* execute=SortTexts variable:byField: */
-	11003982858264652004: (*ListSortText)(nil),    /* execute=SortTexts variable:byField:descending: */
-	16749751527264114426: (*ListSortText)(nil),    /* execute=SortTexts variable:byField:descending:usingCase: */
-	7681352795670764826:  (*ListSortText)(nil),    /* execute=SortTexts variable:byField:usingCase: */
-	3969479757310220625:  (*ListSplice)(nil),      /* execute=Splice object:start:remove:insert: */
-	4242542493653247736:  (*ListSplice)(nil),      /* num_list_eval=Splice object:start:remove:insert: */
-	16228218341859535625: (*ListSplice)(nil),      /* record_list_eval=Splice object:start:remove:insert: */
-	15272943831520387495: (*ListSplice)(nil),      /* text_list_eval=Splice object:start:remove:insert: */
-	221374144086457784:   (*ListSplice)(nil),      /* execute=Splice variable:start:remove:insert: */
-	15817343778888703961: (*ListSplice)(nil),      /* num_list_eval=Splice variable:start:remove:insert: */
-	14581550462073160400: (*ListSplice)(nil),      /* record_list_eval=Splice variable:start:remove:insert: */
-	17468827333339687738: (*ListSplice)(nil),      /* text_list_eval=Splice variable:start:remove:insert: */
+	2873147130324862012:  (*ListSortNumbers)(nil), /* execute=SortNumbers:byField: */
+	16697045456605499852: (*ListSortNumbers)(nil), /* execute=SortNumbers:byField:descending: */
+	16004888373963195994: (*ListSortText)(nil),    /* execute=SortTexts:byField: */
+	10015011362106184366: (*ListSortText)(nil),    /* execute=SortTexts:byField:descending: */
+	10595238214248400404: (*ListSortText)(nil),    /* execute=SortTexts:byField:descending:usingCase: */
+	10680774202307610784: (*ListSortText)(nil),    /* execute=SortTexts:byField:usingCase: */
+	13203130291219794646: (*ListSplice)(nil),      /* execute=Splice:start:remove:insert: */
+	6201472222981604265:  (*ListSplice)(nil),      /* num_list_eval=Splice:start:remove:insert: */
+	15778591428898251294: (*ListSplice)(nil),      /* record_list_eval=Splice:start:remove:insert: */
+	11160578659475180120: (*ListSplice)(nil),      /* text_list_eval=Splice:start:remove:insert: */
 }

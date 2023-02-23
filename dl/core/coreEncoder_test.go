@@ -10,9 +10,9 @@ import (
 )
 
 func TestCompactEncoder(t *testing.T) {
-	out := &core.CallPattern{
-		Pattern: core.P("factorial"),
-		Arguments: []core.Arg{{
+	out := &assign.CallPattern{
+		PatternName: core.P("factorial"),
+		Arguments: []assign.Arg{{
 			Name: "num",
 			/// in the old bits this will generate an error if the assignment is emptyl
 			Value: &assign.FromNumber{Value: core.I(1)},
@@ -26,39 +26,25 @@ func TestCompactEncoder(t *testing.T) {
 }
 
 func TestGetTrait(t *testing.T) {
-	out := &core.GetValue{
-		Source: core.Address{
-			Choice: core.Address_Object_Opt,
-			Value: &core.ObjectRef{
-				Name:  core.GetVariable("noun"),
-				Field: core.GetVariable("trait"),
-			},
-		}}
-
+	out := &assign.ObjectRef{
+		Name:  assign.Variable("noun"),
+		Field: assign.Variable("trait"),
+	}
 	if have, e := cout.Marshal(out, core.CompactEncoder); e != nil {
 		t.Fatal(e)
-	} else if have != `{"Get object:":{"Object:field:":["@noun","@trait"]}}` {
+	} else if have != `{"Object:field:":["@noun","@trait"]}` {
 		t.Fatal(have)
 	}
 }
 
 func TestGetVariablePath(t *testing.T) {
-	out := &core.GetValue{
-		Source: core.Address{
-			Choice: core.Address_Variable_Opt,
-			Value: &core.VariableRef{
-				Name: core.T("pawn"),
-				Dot: []core.Dot{
-					&core.AtField{Field: core.T("trait")},
-				},
-			},
-		}}
+	out := assign.Variable("pawn", "trait")
 
 	// fix: this should have path syntax ( re: expressions )
 	// ex. @pawn.trait
 	if have, e := cout.Marshal(out, core.CompactEncoder); e != nil {
 		t.Fatal(e)
-	} else if have != `{"Get variable:":{"Variable:dot:":["pawn",[{"AtField:":"trait"}]]}}` {
+	} else if have != `{"Variable:dot:":["pawn",[{"AtField:":"trait"}]]}` {
 		t.Fatal(have)
 	}
 }
@@ -66,20 +52,16 @@ func TestGetVariablePath(t *testing.T) {
 // true, not a core test *shrug*
 func TestListPush(t *testing.T) {
 	out := &list.ListPush{
-		Value:  &assign.FromText{Value: core.GetVariable("obj")},
+		Value:  &assign.FromText{Value: assign.Variable("obj")},
 		AtEdge: core.B(true),
-		Target: core.Address{
-			Choice: core.Address_Variable_Opt,
-			Value: &core.VariableRef{
-				Name: core.T("bounds"),
-			},
-		}}
+		Target: assign.Variable("bounds"),
+	}
 
 	// fix: this should have path syntax ( re: expressions )
 	// ex. @pawn.trait
 	if have, e := cout.Marshal(out, core.CompactEncoder); e != nil {
 		t.Fatal(e)
-	} else if have != `{"Push:into variable:atFront:":[{"FromText:":"@obj"},"@bounds",true]}` {
+	} else if have != `{"Push:into:atFront:":[{"FromText:":"@obj"},"@bounds",true]}` {
 		t.Fatal(have)
 	}
 }

@@ -3,6 +3,7 @@ package core
 import (
 	"encoding/json"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
@@ -11,23 +12,20 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// move some part of this into package assign
 func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 	typeName := flow.GetType()
 	switch op := flow.GetFlow().(type) {
-	case *CallPattern:
-		err = EncodePattern(m, op)
-	case *GetValue:
-		if name := encodeAddress(op.Source); len(name) == 0 {
-			err = chart.Unhandled(typeName)
-		} else {
-			err = m.MarshalValue(typeName, name)
-		}
-	case *VariableRef:
+	case *assign.CallPattern:
+		err = assign.EncodePattern(m, op)
+
+	case *assign.VariableRef:
 		if name := encodeVariableRef(op); len(name) == 0 {
 			err = chart.Unhandled(typeName)
 		} else {
 			err = m.MarshalValue(typeName, name)
 		}
+
 	case *literal.TextValue:
 		// if the text starts with an @, skip it:
 		// ( ie. dont confuse the rare text literal starting with an ampersand, with GetVar )
@@ -46,14 +44,7 @@ func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 // write variables as a string prepended by @
 // fix: it'd be nice if all parts were literals to write dot/bracket syntax a.b[5]
 // fix: it'd be nicest if this could use package express to handle the parsing.
-func encodeAddress(addr Address) (ret string) {
-	if vref, ok := addr.Value.(*VariableRef); ok {
-		ret = encodeVariableRef(vref)
-	}
-	return
-}
-
-func encodeVariableRef(vref *VariableRef) (ret string) {
+func encodeVariableRef(vref *assign.VariableRef) (ret string) {
 	if len(vref.Dot) == 0 {
 		if name, ok := vref.Name.(*literal.TextValue); ok {
 			ret = "@" + name.Value
@@ -73,7 +64,7 @@ func CompactFlowDecoder(m jsn.Marshaler, flow jsn.FlowBlock, msg json.RawMessage
 	if e := json.Unmarshal(msg, &str); e != nil || len(str) == 0 && str[0] != '@' {
 		err = chart.Unhandled(flow.GetType())
 	} else {
-		if (!flow.SetFlow(&VariableRef{Name: T(str[1:])})) {
+		if (!flow.SetFlow(&assign.VariableRef{Name: T(str[1:])})) {
 			err = errutil.New("couldnt set variable ref")
 		}
 	}
@@ -87,16 +78,19 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 	default:
 		err = chart.Unhandled(typeName)
 	case
+		// reading from a variable:
 		rt.BoolEval_Type,
 		rt.NumberEval_Type,
 		rt.TextEval_Type,
 		rt.NumListEval_Type,
 		rt.TextListEval_Type,
 		rt.RecordEval_Type,
-		rt.RecordListEval_Type:
+		rt.RecordListEval_Type,
+		// writing to a variable:
+		assign.Address_Type:
 		var str string
 		if e := json.Unmarshal(msg, &str); e == nil && len(str) > 0 && str[0] == '@' {
-			if !slot.SetSlot(GetVariable(str[1:])) {
+			if !slot.SetSlot(assign.Variable(str[1:])) {
 				err = errutil.New("unexpected error setting slot")
 			}
 		} else {

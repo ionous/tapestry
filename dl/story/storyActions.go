@@ -32,9 +32,9 @@ func (op *ActionDecl) makePattern(k *imp.Importer, name, tgt string, sub kindsOf
 		Class:    tgt,
 	}}
 	k.WriteEphemera(&eph.EphPatterns{
-		Name:   name,
-		Params: append(ps, extra...),
-		Result: res,
+		PatternName: name,
+		Params:      append(ps, extra...),
+		Result:      res,
 	})
 }
 

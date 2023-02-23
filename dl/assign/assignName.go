@@ -1,4 +1,4 @@
-package core
+package assign
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"

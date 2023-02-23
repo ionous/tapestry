@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -68,8 +69,8 @@ func (op *RenderPattern) RenderEval(run rt.Runtime, hint affine.Affinity) (ret g
 }
 
 func (op *RenderPattern) render(run rt.Runtime, hint affine.Affinity) (ret g.Value, err error) {
-	name := op.Pattern
-	if rec, e := core.MakeRecord(run, name); e != nil {
+	name := op.PatternName
+	if rec, e := assign.MakeRecord(run, name); e != nil {
 		err = e
 	} else {
 		k := rec.Kind()

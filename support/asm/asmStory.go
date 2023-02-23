@@ -32,11 +32,11 @@ func importStory(k *imp.Importer, tgt jsn.Marshalee) error {
 				return
 			},
 		},
-		core.CallPattern_Type: chart.KeyMap{
+		assign.CallPattern_Type: chart.KeyMap{
 			chart.BlockStart: func(b jsn.Block, v interface{}) (err error) {
 				if flow, ok := b.(jsn.FlowBlock); !ok {
 					err = errutil.Fmt("trying to import something other than a flow")
-				} else if op, ok := flow.GetFlow().(*core.CallPattern); !ok {
+				} else if op, ok := flow.GetFlow().(*assign.CallPattern); !ok {
 					err = errutil.Fmt("trying to import something other than a response")
 				} else {
 					k.WriteEphemera(story.ImportCall(op))

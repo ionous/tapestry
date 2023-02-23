@@ -86,14 +86,14 @@ func (op *EphRules) Phase() Phase { return PatternPhase }
 // validate that the pattern for the rule exists then add the rule to the *current* domain
 // ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
 func (op *EphRules) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if name, ok := UniformString(op.Name); !ok {
-		err = InvalidString(op.Name)
+	if name, ok := UniformString(op.PatternName); !ok {
+		err = InvalidString(op.PatternName)
 	} else if k, ok := d.GetKind(name); !ok || !k.HasAncestor(kindsOf.Pattern) {
-		err = errutil.Fmt("unknown or invalid pattern %q", op.Name)
+		err = errutil.Fmt("unknown or invalid pattern %q", op.PatternName)
 	} else if part, ok := op.When.GetPartition(); !ok {
-		err = errutil.Fmt("couldn't compute flags for %q for pattern %q", op.When.Str, op.Name)
+		err = errutil.Fmt("couldn't compute flags for %q for pattern %q", op.When.Str, op.PatternName)
 	} else if tgt, ok := op.getTargetName(d); !ok {
-		err = errutil.Fmt("unknown or invalid target %q for pattern %q", op.Target, op.Name)
+		err = errutil.Fmt("unknown or invalid target %q for pattern %q", op.Target, op.PatternName)
 	} else {
 		if d.rules == nil {
 			d.rules = make(map[string]Rulesets)

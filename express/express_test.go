@@ -222,7 +222,7 @@ func TestTemplates(t *testing.T) {
 	t.Run("indexed", func(t *testing.T) {
 		if e := testTemplate("{'world'|hello!}",
 			&render.RenderPattern{
-				Pattern: W("hello"), Render: []render.RenderEval{
+				PatternName: W("hello"), Render: []render.RenderEval{
 					&render.RenderValue{Value: &assign.FromText{Value: T("world")}},
 				}}); e != nil {
 			t.Fatal(e)
@@ -258,7 +258,7 @@ func assignToEval(a assign.Assignment) *assign.Assignment {
 }
 
 func renderRef(v string, path ...any) *render.RenderRef {
-	return &render.RenderRef{Name: T(v), Dot: core.MakeDot(path...)}
+	return &render.RenderRef{Name: T(v), Dot: assign.MakeDot(path...)}
 }
 
 func testTemplate(str string, want interface{}) (err error) {

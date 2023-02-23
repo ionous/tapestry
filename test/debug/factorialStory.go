@@ -23,7 +23,7 @@ var FactorialStory = &story.Story{
 				Do: FactorialCheck,
 			},
 			&story.PatternDecl{
-				Name: factorialName,
+				PatternName: factorialName,
 				PatternReturn: &story.PatternReturn{Result: &story.NumberField{
 					Markup: UserComment("the result uses the same variable as the pattern input does"),
 					Name:   "num",
@@ -35,13 +35,13 @@ var FactorialStory = &story.Story{
 					}},
 			},
 			&story.PatternActions{
-				Name: factorialName,
+				PatternName: factorialName,
 				Rules: []story.PatternRule{{
 					Guard: &core.Always{},
 					Does:  FactorialMulMinusOne,
 				}}},
 			&story.PatternActions{
-				Name: factorialName,
+				PatternName: factorialName,
 				Rules: []story.PatternRule{{
 					Markup: UserComment("the rule considered first is the rule that was written last:"),
 					Guard:  FactorialIsZero,
@@ -55,9 +55,9 @@ var FactorialStory = &story.Story{
 var FactorialCheck = []rt.Execute{
 	&debug.Expect{
 		Value: &core.CompareNum{
-			A: F(6), Is: core.Equal, B: &core.CallPattern{
-				Pattern: factorialName,
-				Arguments: []core.Arg{core.Arg{
+			A: F(6), Is: core.Equal, B: &assign.CallPattern{
+				PatternName: factorialName,
+				Arguments: []assign.Arg{assign.Arg{
 					Name:  "num",
 					Value: &assign.FromNumber{Value: F(3)},
 					// fix: for some reason, the comment isn't appearing in the output.
@@ -69,12 +69,12 @@ var FactorialCheck = []rt.Execute{
 
 // subtracts 1 from the num and multiples by one
 var FactorialMulMinusOne = []rt.Execute{
-	&core.SetValue{
-		Target: core.Variable("num"),
+	&assign.SetValue{
+		Target: assign.Variable("num"),
 		Value: &assign.FromNumber{Value: &core.ProductOf{
-			A: GetVariable("num"),
+			A: assign.Variable("num"),
 			B: &core.DiffOf{
-				A: GetVariable("num"),
+				A: assign.Variable("num"),
 				B: I(1),
 			},
 		}}},
@@ -82,16 +82,16 @@ var FactorialMulMinusOne = []rt.Execute{
 
 // at 0, use the number 1
 var FactorialUseOne = []rt.Execute{
-	&core.SetValue{
-		Target: core.Variable("num"),
+	&assign.SetValue{
+		Target: assign.Variable("num"),
 		Value:  &assign.FromNumber{Value: I(1)},
 	},
 }
 
 var FactorialIsZero = &core.CompareNum{
 	Markup: UserComment("so, when we've reached 0..."),
-	A:      GetVariable("num"),
+	A:      assign.Variable("num"),
 	Is:     core.Equal,
 	B:      F(0)}
 
-var factorialName = core.PatternName{Str: "factorial"}
+const factorialName = "factorial"

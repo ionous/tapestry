@@ -35,35 +35,35 @@ func TestFactorial(t *testing.T) {
 				},
 				Rules: []rt.Rule{{
 					Execute: core.MakeActivity(
-						&core.SetValue{
-							Target: core.Variable("num"),
-							Value: &assign.FromNumber{&core.ProductOf{
-								A: GetVariable("num"),
-								B: &core.CallPattern{
-									Pattern: P("factorial"),
-									Arguments: []core.Arg{{
+						&assign.SetValue{
+							Target: assign.Variable("num"),
+							Value: &assign.FromNumber{Value: &core.ProductOf{
+								A: assign.Variable("num"),
+								B: &assign.CallPattern{
+									PatternName: P("factorial"),
+									Arguments: []assign.Arg{{
 										Name: "num",
-										Value: &assign.FromNumber(&core.DiffOf{
-											A: GetVariable("num"),
+										Value: &assign.FromNumber{Value: &core.DiffOf{
+											A: assign.Variable("num"),
 											B: I(1),
-										})}}}}}}),
+										}}}}}}}}),
 				}, {
 					Filter: &core.CompareNum{
-						A:  GetVariable("num"),
+						A:  assign.Variable("num"),
 						Is: core.Equal,
 						B:  I(0),
 					},
 					Execute: core.MakeActivity(
-						&core.SetValue{
-							Target: core.Variable("num"),
+						&assign.SetValue{
+							Target: assign.Variable("num"),
 							Value:  &assign.FromNumber{Value: I(1)}},
 					),
 				}}},
 		}}
 	// determine the factorial of the number 3
-	det := core.CallPattern{
-		Pattern: P("factorial"),
-		Arguments: []core.Arg{{
+	det := assign.CallPattern{
+		PatternName: P("factorial"),
+		Arguments: []assign.Arg{{
 			Name:  "num",
 			Value: &assign.FromNumber{Value: I(3)},
 		}},

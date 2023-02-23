@@ -12,9 +12,9 @@ func MakeActivity(exe ...rt.Execute) []rt.Execute {
 }
 
 // takes any of the rt evals
-func MakeArgs(as ...assign.Assignment) (ret []Arg) {
+func MakeArgs(as ...assign.Assignment) (ret []assign.Arg) {
 	for i, a := range as {
-		ret = append(ret, Arg{
+		ret = append(ret, assign.Arg{
 			// FIX: this is silly, just have no name and count the args when they are used.
 			// in which case MakeArgs itself should be removed.
 			Name:  W("$" + strconv.Itoa(i+1)),

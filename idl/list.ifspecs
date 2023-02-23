@@ -322,7 +322,7 @@
                   {
                     "Term:name:type:": [
                       "using",
-                      "using_pattern",
+                      "pattern_name",
                       "text"
                     ]
                   }
@@ -361,7 +361,7 @@
                   {
                     "Term:name:type:": [
                       "using",
-                      "using_pattern",
+                      "pattern_name",
                       "text"
                     ]
                   }

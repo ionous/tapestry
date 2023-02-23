@@ -162,8 +162,8 @@ func (c *Converter) buildPattern(name string, arity int) (err error) {
 		}
 		if err == nil {
 			c.buildOne(&render.RenderPattern{
-				Pattern: name,
-				Render:  values,
+				PatternName: name,
+				Render:      values,
 			})
 		}
 	}
@@ -281,9 +281,9 @@ func (c *Converter) addFunction(fn postfix.Function) (err error) {
 			} else {
 				// a chain of dots indicates one or more fields of a record
 				// ex.  .object.fieldContainingAnRecord.otherField
-				dot := make([]core.Dot, len(fields)-1)
+				dot := make([]assign.Dot, len(fields)-1)
 				for i, field := range fields[1:] {
-					dot[i] = &core.AtField{Field: T(field)}
+					dot[i] = &assign.AtField{Field: T(field)}
 				}
 				c.buildOne(&render.RenderRef{Name: T(firstField), Dot: dot})
 			}
