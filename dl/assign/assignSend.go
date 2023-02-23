@@ -9,13 +9,14 @@ import (
 )
 
 // Execute runs send without returning a value
-func (op *CallSend) Execute(run rt.Runtime) (err error) {
+func (op *SendPattern) Execute(run rt.Runtime) (err error) {
 	_, err = op.GetBool(run)
 	return
 }
 
 // GetBool returns the first matching bool evaluation.
-func (op *CallSend) GetBool(run rt.Runtime) (ret g.Value, err error) {
+// tbd: since Event must always be a pattern -- can we embed that directly? rather than specifying a bool eval?
+func (op *SendPattern) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	if path, e := safe.GetTextList(run, op.Path); e != nil {
 		err = cmdError(op, e)
 	} else if evt, ok := op.Event.(*CallPattern); !ok {

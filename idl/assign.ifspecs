@@ -255,7 +255,7 @@
                     ],
                     "Spec:slots:with flow:":
                     [
-                        "call_send",
+                        "send_pattern",
                         [
                             "execute",
                             "bool_eval"
@@ -274,6 +274,7 @@
                                         ]
                                     },
                                     {
+                                        "--": "this should always be a pattern call",
                                         "Term:type:":
                                         [
                                             "event",
