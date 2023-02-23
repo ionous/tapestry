@@ -95,6 +95,11 @@ func (dec *xDecoder) readSlot(slot jsn.SlotBlock, msg json.RawMessage) (okay boo
 	if e := dec.customSlot(dec, slot, msg); e == nil {
 		dec.Commit("customSlot")
 	} else {
+		var reparse chart.Reparse
+		if errors.As(e, &reparse) {
+			msg = json.RawMessage(reparse)
+			e = nil
+		}
 		var unhandled chart.Unhandled
 		if !errors.As(e, &unhandled) {
 			dec.Error(e)

@@ -59,18 +59,6 @@ func Decode(dst jsn.Marshalee, msg json.RawMessage, sig cin.Signatures) error {
 		Decode(dst, msg)
 }
 
-func CompactFlowDecoder(m jsn.Marshaler, flow jsn.FlowBlock, msg json.RawMessage) (err error) {
-	var str string
-	if e := json.Unmarshal(msg, &str); e != nil || len(str) == 0 && str[0] != '@' {
-		err = chart.Unhandled(flow.GetType())
-	} else {
-		if (!flow.SetFlow(&assign.VariableRef{Name: T(str[1:])})) {
-			err = errutil.New("couldnt set variable ref")
-		}
-	}
-	return
-}
-
 // unhandled reads are attempted via default readSlot evaluation.
 func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage) (err error) {
 	// switching on the slot ptr's type seems like it should work, but only results in untyped interfaces

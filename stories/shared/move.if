@@ -82,16 +82,19 @@
                             {
                               "If:does:": [
                                 {
-                                    "Object:field:": [
-                                      "@obj",
-                                      "worn"
-                                    ]
+                                  "Object:field:": [
+                                    "@obj",
+                                    "worn"
+                                  ]
                                 },
                                 [
                                   {
                                     "Set:from:": [
                                       {
-                                        "Object:field:": [ "@obj", "not worn"]
+                                        "Object:field:": [
+                                          "@obj",
+                                          "not worn"
+                                        ]
                                       },
                                       {
                                         "FromBool:": true
@@ -193,8 +196,11 @@
                 {
                   "Set:from:": [
                     {
-                                        "Object:field:": [ "@obj", "not worn"]
-                                      },
+                      "Object:field:": [
+                        "@obj",
+                        "not worn"
+                      ]
+                    },
                     {
                       "FromBool:": true
                     }
@@ -299,10 +305,12 @@
                     [
                       {
                         "Set:from:": [
-                            {
-                                        "Object:field:": [ "@obj", "not worn"]
-                                      },
-                          
+                          {
+                            "Object:field:": [
+                              "@obj",
+                              "not worn"
+                            ]
+                          },
                           {
                             "FromBool:": true
                           }

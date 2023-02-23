@@ -66,10 +66,10 @@
           {
             "PatternRule:does:": [
               {
-                  "Object:field:": [
-                    "@noun",
-                    "plural named"
-                  ]
+                "Object:field:": [
+                  "@noun",
+                  "plural named"
+                ]
               },
               [
                 {
@@ -114,10 +114,10 @@
           {
             "PatternRule:does:": [
               {
-                  "Object:field:": [
-                    "@noun",
-                    "plural named"
-                  ]
+                "Object:field:": [
+                  "@noun",
+                  "plural named"
+                ]
               },
               [
                 {

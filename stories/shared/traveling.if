@@ -23,10 +23,10 @@
               "actor",
               "actor",
               {
-                  "Object:field:": [
-                    "@agent",
-                    "pawn"
-                  ]
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
+                ]
               }
             ]
           },
@@ -36,10 +36,10 @@
               "destination",
               "room",
               {
-                  "Object:field:": [
-                    "@noun",
-                    "destination"
-                  ]
+                "Object:field:": [
+                  "@noun",
+                  "destination"
+                ]
               }
             ]
           }
@@ -205,10 +205,10 @@
                     "destination",
                     "room",
                     {
-                        "Object:field:": [
-                          "@noun",
-                          "destination"
-                        ]
+                      "Object:field:": [
+                        "@noun",
+                        "destination"
+                      ]
                     }
                   ]
                 }
@@ -328,10 +328,10 @@
                     },
                     {
                       "FromBool:": {
-                          "Object:field:": [
-                            "@actor",
-                            "is in darkness"
-                          ]
+                        "Object:field:": [
+                          "@actor",
+                          "is in darkness"
+                        ]
                       }
                     }
                   ]
@@ -427,11 +427,10 @@
                     ]
                   },
                   {
-                      "Object:field:": [
-                        "@noun",
-                        "closed"
-                      ]
-                    
+                    "Object:field:": [
+                      "@noun",
+                      "closed"
+                    ]
                   }
                 ]
               },
@@ -466,20 +465,17 @@
                     ]
                   },
                   {
-                      "Object:field:": [
-                        "@noun",
-                        "closed"
-                      ]
-                    
+                    "Object:field:": [
+                      "@noun",
+                      "closed"
+                    ]
                   },
                   {
-                    
-                      "Object:field:": [
-                        "@noun",
-                        "locked"
-                      ]
-                    }
-                  
+                    "Object:field:": [
+                      "@noun",
+                      "locked"
+                    ]
+                  }
                 ]
               },
               [

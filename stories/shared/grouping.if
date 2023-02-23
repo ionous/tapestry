@@ -124,21 +124,21 @@
               {
                 "AllTrue:": [
                   {
-                      "Object:field:": [
-                        "@obj",
-                        "counted"
-                      ]
+                    "Object:field:": [
+                      "@obj",
+                      "counted"
+                    ]
                   },
                   {
                     "Is empty:": {
-                        "Variable:dot:": [
-                          "grouping",
-                          [
-                            {
-                              "AtField:": "label"
-                            }
-                          ]
+                      "Variable:dot:": [
+                        "grouping",
+                        [
+                          {
+                            "AtField:": "label"
+                          }
                         ]
+                      ]
                     }
                   }
                 ]
@@ -299,100 +299,100 @@
                   {
                     "Cmp:is:txt:": [
                       {
-                          "Variable:dot:": [
-                            "first",
-                            [
-                              {
-                                "AtField:": "label"
-                              }
-                            ]
+                        "Variable:dot:": [
+                          "first",
+                          [
+                            {
+                              "AtField:": "label"
+                            }
                           ]
+                        ]
                       },
                       "equal_to",
                       {
-                          "Variable:dot:": [
-                            "second",
-                            [
-                              {
-                                "AtField:": "label"
-                              }
-                            ]
+                        "Variable:dot:": [
+                          "second",
+                          [
+                            {
+                              "AtField:": "label"
+                            }
                           ]
+                        ]
                       }
                     ]
                   },
                   {
                     "Cmp:is:txt:": [
                       {
-                          "Variable:dot:": [
-                            "first",
-                            [
-                              {
-                                "AtField:": "hide label"
-                              }
-                            ]
+                        "Variable:dot:": [
+                          "first",
+                          [
+                            {
+                              "AtField:": "hide label"
+                            }
                           ]
+                        ]
                       },
                       "equal_to",
                       {
-                          "Variable:dot:": [
-                            "second",
-                            [
-                              {
-                                "AtField:": "hide label"
-                              }
-                            ]
+                        "Variable:dot:": [
+                          "second",
+                          [
+                            {
+                              "AtField:": "hide label"
+                            }
                           ]
+                        ]
                       }
                     ]
                   },
                   {
                     "Cmp:is:txt:": [
                       {
-                          "Variable:dot:": [
-                            "first",
-                            [
-                              {
-                                "AtField:": "hide size"
-                              }
-                            ]
+                        "Variable:dot:": [
+                          "first",
+                          [
+                            {
+                              "AtField:": "hide size"
+                            }
                           ]
+                        ]
                       },
                       "equal_to",
                       {
-                          "Variable:dot:": [
-                            "second",
-                            [
-                              {
-                                "AtField:": "hide size"
-                              }
-                            ]
+                        "Variable:dot:": [
+                          "second",
+                          [
+                            {
+                              "AtField:": "hide size"
+                            }
                           ]
+                        ]
                       }
                     ]
                   },
                   {
                     "Cmp:is:txt:": [
                       {
-                          "Variable:dot:": [
-                            "first",
-                            [
-                              {
-                                "AtField:": "hide objects"
-                              }
-                            ]
+                        "Variable:dot:": [
+                          "first",
+                          [
+                            {
+                              "AtField:": "hide objects"
+                            }
                           ]
+                        ]
                       },
                       "equal_to",
                       {
-                          "Variable:dot:": [
-                            "second",
-                            [
-                              {
-                                "AtField:": "hide objects"
-                              }
-                            ]
+                        "Variable:dot:": [
+                          "second",
+                          [
+                            {
+                              "AtField:": "hide objects"
+                            }
                           ]
+                        ]
                       }
                     ]
                   }
@@ -416,29 +416,26 @@
                 "AnyTrue:": [
                   {
                     "Is empty:": {
-                        "Variable:dot:": [
-                          "first",
-                          [
-                            {
-                              "AtField:": "label"
-                            }
-                          ]
+                      "Variable:dot:": [
+                        "first",
+                        [
+                          {
+                            "AtField:": "label"
+                          }
                         ]
-                      
+                      ]
                     }
                   },
                   {
                     "Is empty:": {
-                      
-                        "Variable:dot:": [
-                          "second",
-                          [
-                            {
-                              "AtField:": "label"
-                            }
-                          ]
+                      "Variable:dot:": [
+                        "second",
+                        [
+                          {
+                            "AtField:": "label"
+                          }
                         ]
-                      
+                      ]
                     }
                   }
                 ]
@@ -530,15 +527,15 @@
                               },
                               {
                                 "FromRecord:": {
-                                    "Variable:dot:": [
-                                      "el",
-                                      [
-                                        {
-                                          "AtField:": "grouping"
-                                        }
-                                      ]
+                                  "Variable:dot:": [
+                                    "el",
+                                    [
+                                      {
+                                        "AtField:": "grouping"
+                                      }
                                     ]
-                                  }
+                                  ]
+                                }
                               }
                             ]
                           },
@@ -577,15 +574,15 @@
                         "Push:into:": [
                           {
                             "FromText:": {
-                                "Variable:dot:": [
-                                  "grouping",
-                                  [
-                                    {
-                                      "AtField:": "name"
-                                    }
-                                  ]
+                              "Variable:dot:": [
+                                "grouping",
+                                [
+                                  {
+                                    "AtField:": "name"
+                                  }
                                 ]
-                              }
+                              ]
+                            }
                           },
                           "@names"
                         ]
@@ -646,14 +643,14 @@
                             "@group",
                             {
                               "FromRecord:": {
-                                  "Variable:dot:": [
-                                    "groups",
-                                    [
-                                      {
-                                        "AtIndex:": "@idx"
-                                      }
-                                    ]
+                                "Variable:dot:": [
+                                  "groups",
+                                  [
+                                    {
+                                      "AtIndex:": "@idx"
+                                    }
                                   ]
+                                ]
                               }
                             }
                           ]
@@ -663,15 +660,15 @@
                             "@names",
                             {
                               "FromTextList:": {
-                                  "Variable:dot:": [
-                                    "group",
-                                    [
-                                      {
-                                        "AtField:": "objects"
-                                      }
-                                    ]
+                                "Variable:dot:": [
+                                  "group",
+                                  [
+                                    {
+                                      "AtField:": "objects"
+                                    }
                                   ]
-                                }
+                                ]
+                              }
                             }
                           ]
                         },
@@ -679,15 +676,15 @@
                           "Push:into:": [
                             {
                               "FromText:": {
-                                  "Variable:dot:": [
-                                    "grouping",
-                                    [
-                                      {
-                                        "AtField:": "name"
-                                      }
-                                    ]
+                                "Variable:dot:": [
+                                  "grouping",
+                                  [
+                                    {
+                                      "AtField:": "name"
+                                    }
                                   ]
-                                }
+                                ]
+                              }
                             },
                             "@names"
                           ]

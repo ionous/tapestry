@@ -52,10 +52,10 @@
               {
                 "Cmp:is:txt:": [
                   {
-                      "Object:field:": [
-                        "@obj",
-                        "printed plural name"
-                      ]
+                    "Object:field:": [
+                      "@obj",
+                      "printed plural name"
+                    ]
                   },
                   "other_than",
                   ""

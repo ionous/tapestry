@@ -51,19 +51,16 @@
                     ]
                   },
                   {
-                      "Object:field:": [
-                        "@obj",
-                        "opaque"
-                      ]
-                   
+                    "Object:field:": [
+                      "@obj",
+                      "opaque"
+                    ]
                   },
                   {
-                    
-                      "Object:field:": [
-                        "@obj",
-                        "closed"
-                      ]
-                    
+                    "Object:field:": [
+                      "@obj",
+                      "closed"
+                    ]
                   }
                 ]
               },
@@ -369,10 +366,10 @@
                             {
                               "If:does:else:": [
                                 {
-                                    "Object:field:": [
-                                      "@it",
-                                      "lit"
-                                    ]
+                                  "Object:field:": [
+                                    "@it",
+                                    "lit"
+                                  ]
                                 },
                                 [
                                   {

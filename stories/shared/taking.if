@@ -18,10 +18,10 @@
               "actor",
               "actor",
               {
-                  "Object:field:": [
-                    "@agent",
-                    "pawn"
-                  ]
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
+                ]
               }
             ]
           }
@@ -379,10 +379,10 @@
                     ]
                   },
                   {
-                      "Object:field:": [
-                        "@noun",
-                        "scenery"
-                      ]
+                    "Object:field:": [
+                      "@noun",
+                      "scenery"
+                    ]
                   }
                 ]
               },
@@ -417,11 +417,10 @@
                     ]
                   },
                   {
-                      "Object:field:": [
-                        "@noun",
-                        "fixed in place"
-                      ]
-                    
+                    "Object:field:": [
+                      "@noun",
+                      "fixed in place"
+                    ]
                   }
                 ]
               },

@@ -84,10 +84,10 @@
                         "Reciprocal:object:": [
                           "whereabouts",
                           {
-                              "Object:field:": [
-                                "@obj",
-                                "pawn"
-                              ]
+                            "Object:field:": [
+                              "@obj",
+                              "pawn"
+                            ]
                           }
                         ]
                       }
@@ -1085,11 +1085,11 @@
                           ]
                         },
                         {
-                            "Object:field:": [
-                              "@obj",
-                              "not worn"
-                            ]
-                          }
+                          "Object:field:": [
+                            "@obj",
+                            "not worn"
+                          ]
+                        }
                       ]
                     },
                     [
@@ -1179,10 +1179,10 @@
                           ]
                         },
                         {
-                            "Object:field:": [
-                              "@obj",
-                              "worn"
-                            ]
+                          "Object:field:": [
+                            "@obj",
+                            "worn"
+                          ]
                         }
                       ]
                     },

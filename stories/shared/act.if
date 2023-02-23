@@ -250,10 +250,10 @@
           {
             "PatternRule:does:": [
               {
-                  "Object:field:": [
-                    "@noun",
-                    "@trait"
-                  ]
+                "Object:field:": [
+                  "@noun",
+                  "@trait"
+                ]
               },
               [
                 {
@@ -288,10 +288,10 @@
                   },
                   {
                     "Not:": {
-                        "Object:field:": [
-                          "@noun",
-                          "@guard"
-                        ]
+                      "Object:field:": [
+                        "@noun",
+                        "@guard"
+                      ]
                     }
                   }
                 ]

@@ -554,17 +554,17 @@
                           {
                             "Cmp:is:txt:": [
                               {
-                                  "Variable:dot:": [
-                                    "group",
-                                    [
-                                      {
-                                        "AtField:": "grouping"
-                                      },
-                                      {
-                                        "AtField:": "label"
-                                      }
-                                    ]
+                                "Variable:dot:": [
+                                  "group",
+                                  [
+                                    {
+                                      "AtField:": "grouping"
+                                    },
+                                    {
+                                      "AtField:": "label"
+                                    }
                                   ]
+                                ]
                               },
                               "equal_to",
                               "the tiles"

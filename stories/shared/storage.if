@@ -189,20 +189,18 @@
                                     "@it",
                                     "equal_to",
                                     {
-                                        "Object:field:": [
-                                          "player",
-                                          "pawn"
-                                        ]
-                                      }
+                                      "Object:field:": [
+                                        "player",
+                                        "pawn"
+                                      ]
+                                    }
                                   ]
                                 },
                                 {
-                                  
-                                    "Object:field:": [
-                                      "@it",
-                                      "scenery"
-                                    ]
-                                  
+                                  "Object:field:": [
+                                    "@it",
+                                    "scenery"
+                                  ]
                                 }
                               ]
                             }
@@ -288,10 +286,10 @@
                     ]
                   },
                   {
-                      "Object:field:": [
-                        "@obj",
-                        "closed"
-                      ]
+                    "Object:field:": [
+                      "@obj",
+                      "closed"
+                    ]
                   }
                 ]
               },

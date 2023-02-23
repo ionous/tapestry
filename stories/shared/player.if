@@ -174,10 +174,10 @@
                           "@obj",
                           "equal_to",
                           {
-                              "Object:field:": [
-                                "player",
-                                "pawn"
-                              ]
+                            "Object:field:": [
+                              "player",
+                              "pawn"
+                            ]
                           }
                         ]
                       }

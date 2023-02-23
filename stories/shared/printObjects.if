@@ -528,11 +528,10 @@
                     ]
                   },
                   {
-                      "Object:field:": [
-                        "@obj",
-                        "closed"
-                      ]
-                    
+                    "Object:field:": [
+                      "@obj",
+                      "closed"
+                    ]
                   }
                 ]
               },
@@ -689,10 +688,10 @@
           {
             "PatternRule:does:": [
               {
-                  "Object:field:": [
-                    "@obj",
-                    "locked"
-                  ]
+                "Object:field:": [
+                  "@obj",
+                  "locked"
+                ]
               },
               [
                 {
@@ -713,16 +712,16 @@
               {
                 "AllTrue:": [
                   {
-                      "Object:field:": [
-                        "@obj",
-                        "transparent"
-                      ]
+                    "Object:field:": [
+                      "@obj",
+                      "transparent"
+                    ]
                   },
                   {
-                      "Object:field:": [
-                        "@obj",
-                        "unopenable"
-                      ]
+                    "Object:field:": [
+                      "@obj",
+                      "unopenable"
+                    ]
                   }
                 ]
               },
@@ -743,10 +742,10 @@
           {
             "PatternRule:does:": [
               {
-                  "Object:field:": [
-                    "@obj",
-                    "openable"
-                  ]
+                "Object:field:": [
+                  "@obj",
+                  "openable"
+                ]
               },
               [
                 {
@@ -765,10 +764,10 @@
           {
             "PatternRule:does:": [
               {
-                  "Object:field:": [
-                    "@obj",
-                    "worn"
-                  ]
+                "Object:field:": [
+                  "@obj",
+                  "worn"
+                ]
               },
               [
                 {
@@ -787,10 +786,10 @@
           {
             "PatternRule:does:": [
               {
-                  "Object:field:": [
-                    "@obj",
-                    "lit"
-                  ]
+                "Object:field:": [
+                  "@obj",
+                  "lit"
+                ]
               },
               [
                 {

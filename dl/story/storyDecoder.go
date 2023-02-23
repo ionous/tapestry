@@ -20,14 +20,13 @@ func Decode(dst jsn.Marshalee, msg json.RawMessage, sig cin.Signatures) error {
 
 func decode(dst jsn.Marshalee, msg json.RawMessage, reg cin.TypeCreator) error {
 	return cin.NewDecoder(reg).
-		SetFlowDecoder(core.CompactFlowDecoder).
+		//SetFlowDecoder(core.CompactFlowDecoder).
 		SetSlotDecoder(CompactSlotDecoder).
 		Decode(dst, msg)
 
 	// re: flow decoder
 	// right now, we only get here when the flow is a member of a flow;
 	// when we know what the type is but havent tried to read from the msg yet.
-	// for slots to read a slat, the msg already would have been expanded into its final type.
 }
 
 func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage) (err error) {
@@ -60,18 +59,8 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 						var call []assign.Arg
 						for i, p := range sig.Params {
 							arg := args[i]
-							// fix: temp: backwards compat:
-							var str string
-							var flag bool
-							var num float64
 							var val assign.Assignment
-							if e := json.Unmarshal(arg, &str); e == nil {
-								val = &assign.FromText{Value: T(str)}
-							} else if e := json.Unmarshal(arg, &flag); e == nil {
-								val = &assign.FromBool{Value: B(flag)}
-							} else if e := json.Unmarshal(arg, &num); e == nil {
-								val = &assign.FromNumber{Value: F(num)}
-							} else if e := decode(assign.Assignment_Slot{&val}, arg, reg); e != nil {
+							if e := decode(assign.Assignment_Slot{&val}, arg, reg); e != nil {
 								err = e
 								break
 							}

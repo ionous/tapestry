@@ -30,10 +30,10 @@
           {
             "Expect:": {
               "Not:": {
-                  "Object:field:": [
-                    "self",
-                    "is in darkness"
-                  ]
+                "Object:field:": [
+                  "self",
+                  "is in darkness"
+                ]
               }
             }
           },
@@ -64,10 +64,10 @@
           },
           {
             "Expect:": {
-                "Object:field:": [
-                  "self",
-                  "is in darkness"
-                ]
+              "Object:field:": [
+                "self",
+                "is in darkness"
+              ]
             }
           },
           {
@@ -95,11 +95,11 @@
           {
             "Expect:": {
               "Not:": {
-                  "Object:field:": [
-                    "self",
-                    "is in darkness"
-                  ]
-                }
+                "Object:field:": [
+                  "self",
+                  "is in darkness"
+                ]
+              }
             }
           }
         ]

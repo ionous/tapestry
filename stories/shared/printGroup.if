@@ -31,29 +31,29 @@
               "grouping",
               "grouping",
               {
-                  "Variable:dot:": [
-                    "group",
-                    [
-                      {
-                        "AtField:": "grouping"
-                      }
-                    ]
+                "Variable:dot:": [
+                  "group",
+                  [
+                    {
+                      "AtField:": "grouping"
+                    }
                   ]
-                }
+                ]
+              }
             ]
           },
           {
             "TextList:initially:": [
               "objs",
               {
-                  "Variable:dot:": [
-                    "group",
-                    [
-                      {
-                        "AtField:": "objects"
-                      }
-                    ]
+                "Variable:dot:": [
+                  "group",
+                  [
+                    {
+                      "AtField:": "objects"
+                    }
                   ]
+                ]
               }
             ]
           }
@@ -64,15 +64,14 @@
               {
                 "AllTrue:": [
                   {
-                      "Variable:dot:": [
-                        "grouping",
-                        [
-                          {
-                            "AtField:": "not hide objects"
-                          }
-                        ]
+                    "Variable:dot:": [
+                      "grouping",
+                      [
+                        {
+                          "AtField:": "not hide objects"
+                        }
                       ]
-                    
+                    ]
                   }
                 ]
               },
@@ -83,14 +82,14 @@
                 {
                   "If:does:else:": [
                     {
-                        "Variable:dot:": [
-                          "grouping",
-                          [
-                            {
-                              "AtField:": "not hide size"
-                            }
-                          ]
+                      "Variable:dot:": [
+                        "grouping",
+                        [
+                          {
+                            "AtField:": "not hide size"
+                          }
                         ]
+                      ]
                     },
                     [
                       {
@@ -174,24 +173,24 @@
               {
                 "AllTrue:": [
                   {
-                      "Variable:dot:": [
-                        "grouping",
-                        [
-                          {
-                            "AtField:": "is hide size"
-                          }
-                        ]
+                    "Variable:dot:": [
+                      "grouping",
+                      [
+                        {
+                          "AtField:": "is hide size"
+                        }
                       ]
+                    ]
                   },
                   {
-                      "Variable:dot:": [
-                        "grouping",
-                        [
-                          {
-                            "AtField:": "not hide label"
-                          }
-                        ]
+                    "Variable:dot:": [
+                      "grouping",
+                      [
+                        {
+                          "AtField:": "not hide label"
+                        }
                       ]
+                    ]
                   }
                 ]
               },
@@ -201,15 +200,15 @@
                 },
                 {
                   "Say:": {
-                      "Variable:dot:": [
-                        "grouping",
-                        [
-                          {
-                            "AtField:": "label"
-                          }
-                        ]
+                    "Variable:dot:": [
+                      "grouping",
+                      [
+                        {
+                          "AtField:": "label"
+                        }
                       ]
-                    }
+                    ]
+                  }
                 }
               ]
             ]
@@ -219,14 +218,14 @@
               {
                 "AllTrue:": [
                   {
-                      "Variable:dot:": [
-                        "grouping",
-                        [
-                          {
-                            "AtField:": "not hide size"
-                          }
-                        ]
+                    "Variable:dot:": [
+                      "grouping",
+                      [
+                        {
+                          "AtField:": "not hide size"
+                        }
                       ]
+                    ]
                   }
                 ]
               },
@@ -238,14 +237,14 @@
                   "PrintSeveral obj:groupSize:label:": [
                     {
                       "FromText:": {
-                          "Variable:dot:": [
-                            "objs",
-                            [
-                              {
-                                "AtIndex:": 1
-                              }
-                            ]
+                        "Variable:dot:": [
+                          "objs",
+                          [
+                            {
+                              "AtIndex:": 1
+                            }
                           ]
+                        ]
                       }
                     },
                     {
@@ -259,24 +258,24 @@
                       "FromText:": {
                         "Txt if:then:else:": [
                           {
-                              "Variable:dot:": [
-                                "grouping",
-                                [
-                                  {
-                                    "AtField:": "not hide label"
-                                  }
-                                ]
+                            "Variable:dot:": [
+                              "grouping",
+                              [
+                                {
+                                  "AtField:": "not hide label"
+                                }
                               ]
+                            ]
                           },
                           {
-                              "Variable:dot:": [
-                                "grouping",
-                                [
-                                  {
-                                    "AtField:": "label"
-                                  }
-                                ]
+                            "Variable:dot:": [
+                              "grouping",
+                              [
+                                {
+                                  "AtField:": "label"
+                                }
                               ]
+                            ]
                           },
                           ""
                         ]
@@ -293,14 +292,14 @@
                 "AllTrue:": [
                   {
                     "Is empty:": {
-                        "Variable:dot:": [
-                          "grouping",
-                          [
-                            {
-                              "AtField:": "label"
-                            }
-                          ]
+                      "Variable:dot:": [
+                        "grouping",
+                        [
+                          {
+                            "AtField:": "label"
+                          }
                         ]
+                      ]
                     }
                   }
                 ]
@@ -312,15 +311,15 @@
                 {
                   "PrintGroupedObject obj:": {
                     "FromText:": {
-                        "Variable:dot:": [
-                          "objs",
-                          [
-                            {
-                              "AtIndex:": 1
-                            }
-                          ]
+                      "Variable:dot:": [
+                        "objs",
+                        [
+                          {
+                            "AtIndex:": 1
+                          }
                         ]
-                      }
+                      ]
+                    }
                   }
                 },
                 {

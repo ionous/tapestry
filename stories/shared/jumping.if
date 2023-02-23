@@ -35,10 +35,10 @@
               "actor",
               "object",
               {
-                  "Object:field:": [
-                    "@agent",
-                    "pawn"
-                  ]
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
+                ]
               }
             ]
           }

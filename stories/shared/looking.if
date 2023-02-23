@@ -16,10 +16,10 @@
               "actor",
               "object",
               {
-                  "Object:field:": [
-                    "@agent",
-                    "pawn"
-                  ]
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
+                ]
               }
             ]
           }
@@ -97,10 +97,10 @@
                           },
                           {
                             "FromBool:": {
-                                "Object:field:": [
-                                  "@actor",
-                                  "is in darkness"
-                                ]
+                              "Object:field:": [
+                                "@actor",
+                                "is in darkness"
+                              ]
                             }
                           }
                         ]
@@ -206,28 +206,24 @@
                           {
                             "AnyTrue:": [
                               {
-                                  "Object:field:": [
-                                    "settings",
-                                    "verbose"
-                                  ]
+                                "Object:field:": [
+                                  "settings",
+                                  "verbose"
+                                ]
                               },
                               {
                                 "AllTrue:": [
                                   {
-                                    
-                                      "Object:field:": [
-                                        "settings",
-                                        "brief"
-                                      ]
-                                    
+                                    "Object:field:": [
+                                      "settings",
+                                      "brief"
+                                    ]
                                   },
                                   {
-                                    
-                                      "Object:field:": [
-                                        "settings",
-                                        "not darkness witnessed"
-                                      ]
-                                    
+                                    "Object:field:": [
+                                      "settings",
+                                      "not darkness witnessed"
+                                    ]
                                   }
                                 ]
                               }
@@ -282,25 +278,24 @@
                             {
                               "AnyTrue:": [
                                 {
-                                    "Object:field:": [
-                                      "settings",
-                                      "verbose"
-                                    ]
-                                 
+                                  "Object:field:": [
+                                    "settings",
+                                    "verbose"
+                                  ]
                                 },
                                 {
                                   "AllTrue:": [
                                     {
-                                        "Object:field:": [
-                                          "settings",
-                                          "brief"
-                                        ]
+                                      "Object:field:": [
+                                        "settings",
+                                        "brief"
+                                      ]
                                     },
                                     {
-                                        "Object:field:": [
-                                          "@room",
-                                          "not visited"
-                                        ]
+                                      "Object:field:": [
+                                        "@room",
+                                        "not visited"
+                                      ]
                                     }
                                   ]
                                 }
@@ -370,11 +365,11 @@
                         {
                           "Set:from:": [
                             {
-                            "Object:field:": [
-                              "room",
-                              "darkness visited"
-                            ]
-                          },
+                              "Object:field:": [
+                                "@room",
+                                "darkness visited"
+                              ]
+                            },
                             {
                               "FromBool:": true
                             }
@@ -494,18 +489,18 @@
               "ceiling",
               "object",
               {
-                  "Variable:dot:": [
-                    "enclosures",
-                    [
-                      {
-                        "AtIndex:": {
-                          "Len:": {
-                            "FromTextList:": "@enclosures"
-                          }
+                "Variable:dot:": [
+                  "enclosures",
+                  [
+                    {
+                      "AtIndex:": {
+                        "Len:": {
+                          "FromTextList:": "@enclosures"
                         }
                       }
-                    ]
+                    }
                   ]
+                ]
               }
             ]
           }
@@ -570,18 +565,18 @@
               "ceiling",
               "object",
               {
-                  "Variable:dot:": [
-                    "enclosures",
-                    [
-                      {
-                        "AtIndex:": {
-                          "Len:": {
-                            "FromTextList:": "@enclosures"
-                          }
+                "Variable:dot:": [
+                  "enclosures",
+                  [
+                    {
+                      "AtIndex:": {
+                        "Len:": {
+                          "FromTextList:": "@enclosures"
                         }
                       }
-                    ]
+                    }
                   ]
+                ]
               }
             ]
           }
@@ -676,10 +671,10 @@
             "Number:initially:": [
               "previousMentions",
               {
-                  "Object:field:": [
-                    "settings",
-                    "mentions"
-                  ]
+                "Object:field:": [
+                  "settings",
+                  "mentions"
+                ]
               }
             ]
           },
@@ -704,11 +699,11 @@
                     [
                       {
                         "Say:": {
-                            "Object:field:": [
-                              "@room",
-                              "description"
-                            ]
-                          }
+                          "Object:field:": [
+                            "@room",
+                            "description"
+                          ]
+                        }
                       }
                     ]
                   ]
@@ -778,17 +773,16 @@
                                 {
                                   "AllTrue:": [
                                     {
-                                        "Object:field:": [
-                                          "@it",
-                                          "not mentioned"
-                                        ]
+                                      "Object:field:": [
+                                        "@it",
+                                        "not mentioned"
+                                      ]
                                     },
                                     {
-                                        "Object:field:": [
-                                          "@it",
-                                          "not scenery"
-                                        ]
-                                      
+                                      "Object:field:": [
+                                        "@it",
+                                        "not scenery"
+                                      ]
                                     }
                                   ]
                                 },
@@ -835,10 +829,10 @@
                           "@previousMentions",
                           "equal_to",
                           {
-                              "Object:field:": [
-                                "settings",
-                                "mentions"
-                              ]
+                            "Object:field:": [
+                              "settings",
+                              "mentions"
+                            ]
                           }
                         ]
                       }
@@ -890,10 +884,10 @@
               {
                 "AllTrue:": [
                   {
-                      "Object:field:": [
-                        "@obj",
-                        "mentioned"
-                      ]
+                    "Object:field:": [
+                      "@obj",
+                      "mentioned"
+                    ]
                   },
                   {
                     "KindOf:is:": [
@@ -925,10 +919,10 @@
               {
                 "AllTrue:": [
                   {
-                      "Object:field:": [
-                        "@obj",
-                        "scenery"
-                      ]
+                    "Object:field:": [
+                      "@obj",
+                      "scenery"
+                    ]
                   },
                   {
                     "KindOf:is:": [
@@ -958,10 +952,10 @@
           {
             "PatternRule:does:": [
               {
-                  "Object:field:": [
-                    "@obj",
-                    "not mentioned"
-                  ]
+                "Object:field:": [
+                  "@obj",
+                  "not mentioned"
+                ]
               },
               [
                 {
@@ -1047,25 +1041,24 @@
               {
                 "AllTrue:": [
                   {
-                      "Object:field:": [
-                        "@obj",
-                        "not mentioned"
-                      ]
-                   
+                    "Object:field:": [
+                      "@obj",
+                      "not mentioned"
+                    ]
                   },
                   {
-                      "Object:field:": [
-                        "@obj",
-                        "not scenery"
-                      ]
+                    "Object:field:": [
+                      "@obj",
+                      "not scenery"
+                    ]
                   },
                   {
                     "Not:": {
                       "Is empty:": {
-                          "Object:field:": [
-                            "@obj",
-                            "initial appearance"
-                          ]
+                        "Object:field:": [
+                          "@obj",
+                          "initial appearance"
+                        ]
                       }
                     }
                   }
@@ -1081,11 +1074,10 @@
                 "AllTrue:": [
                   "@first look",
                   {
-                      "Object:field:": [
-                        "@obj",
-                        "not mentioned"
-                      ]
-                    
+                    "Object:field:": [
+                      "@obj",
+                      "not mentioned"
+                    ]
                   }
                 ]
               },

@@ -18,10 +18,10 @@
               "actor",
               "actor",
               {
-                  "Object:field:": [
-                    "@agent",
-                    "pawn"
-                  ]
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
+                ]
               }
             ]
           }
@@ -174,10 +174,10 @@
               "actor",
               "actor",
               {
-                  "Object:field:": [
-                    "@agent",
-                    "pawn"
-                  ]
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
+                ]
               }
             ]
           }

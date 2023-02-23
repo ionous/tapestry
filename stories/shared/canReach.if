@@ -437,11 +437,10 @@
                 "AllTrue:": [
                   "@requires light",
                   {
-                      "Object:field:": [
-                        "@actor",
-                        "is in darkness"
-                      ]
-                    
+                    "Object:field:": [
+                      "@actor",
+                      "is in darkness"
+                    ]
                   }
                 ]
               },
@@ -528,11 +527,10 @@
                     ]
                   },
                   {
-                      "Object:field:": [
-                        "@fromObj",
-                        "closed"
-                      ]
-                   
+                    "Object:field:": [
+                      "@fromObj",
+                      "closed"
+                    ]
                   }
                 ]
               },
@@ -656,11 +654,10 @@
                     ]
                   },
                   {
-                      "Object:field:": [
-                        "@intoObj",
-                        "closed"
-                      ]
-                   
+                    "Object:field:": [
+                      "@intoObj",
+                      "closed"
+                    ]
                   },
                   {
                     "Not:": {

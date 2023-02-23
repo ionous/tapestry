@@ -260,10 +260,10 @@
           {
             "PatternRule:does:": [
               {
-                  "Object:field:": [
-                    "@obj",
-                    "plural named"
-                  ]
+                "Object:field:": [
+                  "@obj",
+                  "plural named"
+                ]
               },
               [
                 {
@@ -280,7 +280,8 @@
                 "Cmp:is:txt:": [
                   {
                     "Object:field:": [
-                      "@obj", "indefinite article"
+                      "@obj",
+                      "indefinite article"
                     ]
                   },
                   "other_than",
@@ -317,10 +318,10 @@
           {
             "PatternRule:does:": [
               {
-                  "Object:field:": [
-                    "@obj",
-                    "proper named"
-                  ]
+                "Object:field:": [
+                  "@obj",
+                  "proper named"
+                ]
               },
               [
                 {

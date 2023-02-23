@@ -15,10 +15,10 @@
               "actor",
               "actor",
               {
-                  "Object:field:": [
-                    "player",
-                    "pawn"
-                  ]
+                "Object:field:": [
+                  "player",
+                  "pawn"
+                ]
               }
             ]
           },
@@ -26,10 +26,10 @@
             "Bool:initially:": [
               "was lit",
               {
-                  "Object:field:": [
-                    "@actor",
-                    "not in darkness"
-                  ]
+                "Object:field:": [
+                  "@actor",
+                  "not in darkness"
+                ]
               }
             ]
           },
@@ -89,7 +89,10 @@
                 {
                   "Set:from:": [
                     {
-                      "Object:field:": [ "actor", "not in darkness"]
+                      "Object:field:": [
+                        "@actor",
+                        "not in darkness"
+                      ]
                     },
                     {
                       "FromBool:": "@now lit"
@@ -147,10 +150,10 @@
                 {
                   "PrintVantage where:": {
                     "FromText:": {
-                        "Object:field:": [
-                          "player",
-                          "pawn"
-                        ]
+                      "Object:field:": [
+                        "player",
+                        "pawn"
+                      ]
                     }
                   }
                 }
