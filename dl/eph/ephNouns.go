@@ -97,8 +97,8 @@ func (op *EphNouns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	} else if !noun.HasAncestor(k.name) {
 		err = NounError{name, errutil.Fmt("can't redefine parent as %q", op.Kind)}
 	} else {
-		e := errutil.New("duplicate noun definition at", at)
-		LogWarning(NounError{name, e})
+		// is this in anyway useful?
+		LogWarning(errutil.Sprint("duplicate noun %s definition at %v", name, at))
 	}
 	return
 }

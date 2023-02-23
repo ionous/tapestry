@@ -2,6 +2,6 @@ package eph
 
 import "log"
 
-var LogWarning = func(e error) {
+var LogWarning = func(e any) {
 	log.Println("Warning:", e) // for now good enough
 }
