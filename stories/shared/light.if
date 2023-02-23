@@ -30,7 +30,7 @@
               true,
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@result",
                     {
                       "FromBool:": false
@@ -51,26 +51,25 @@
                     ]
                   },
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@obj",
                         "opaque"
                       ]
-                    }
+                   
                   },
                   {
-                    "Get object:": {
+                    
                       "Object:field:": [
                         "@obj",
                         "closed"
                       ]
-                    }
+                    
                   }
                 ]
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@result",
                     {
                       "FromBool:": true
@@ -93,7 +92,7 @@
                   "Comment:": "a room is the top of line."
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@result",
                     {
                       "FromBool:": true
@@ -155,7 +154,7 @@
                   "Comment:": "normally the parent is just the parent."
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@result",
                     {
                       "FromText:": "@parent"
@@ -179,7 +178,7 @@
                   "Comment:": "for example: if our object is a closed, opaque, container, dont return anything."
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@result",
                     {
                       "FromText:": ""
@@ -233,7 +232,7 @@
                     },
                     [
                       {
-                        "Push:into variable:": [
+                        "Push:into:": [
                           {
                             "FromText:": "@obj"
                           },
@@ -241,7 +240,7 @@
                         ]
                       },
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@obj",
                           {
                             "FromText:": {
@@ -313,7 +312,7 @@
                     },
                     [
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@ceiling",
                           {
                             "FromText:": "@spot"
@@ -321,7 +320,7 @@
                         ]
                       },
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@spot",
                           {
                             "FromText:": {
@@ -338,7 +337,7 @@
                   ]
                 },
                 {
-                  "Push:into variable:": [
+                  "Push:into:": [
                     {
                       "FromText:": "@ceiling"
                     },
@@ -360,10 +359,8 @@
                     },
                     [
                       {
-                        "Erasing variable:as:does:": [
-                          {
-                            "Variable:": "@queue"
-                          },
+                        "Erasing:as:does:": [
+                          "@queue",
                           "it",
                           [
                             {
@@ -372,16 +369,14 @@
                             {
                               "If:does:else:": [
                                 {
-                                  "Get object:": {
                                     "Object:field:": [
                                       "@it",
                                       "lit"
                                     ]
-                                  }
                                 },
                                 [
                                   {
-                                    "Set variable:from:": [
+                                    "Set:from:": [
                                       "@result",
                                       {
                                         "FromBool:": true
@@ -419,7 +414,7 @@
                                         "Comment:": "Any children of our ceiling will be considered for their light contributions, even if the ceiling wouldn't transmit that light outward. "
                                       },
                                       {
-                                        "Push:into variable:": [
+                                        "Push:into:": [
                                           {
                                             "FromTextList:": {
                                               "ChildrenOf obj:": {

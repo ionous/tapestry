@@ -18,12 +18,10 @@
               "actor",
               "actor",
               {
-                "Get object:": {
                   "Object:field:": [
                     "@agent",
                     "pawn"
                   ]
-                }
               }
             ]
           }
@@ -176,12 +174,10 @@
               "actor",
               "actor",
               {
-                "Get object:": {
                   "Object:field:": [
                     "@agent",
                     "pawn"
                   ]
-                }
               }
             ]
           }
@@ -333,26 +329,22 @@
                     ]
                   },
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@noun",
                         "lockable"
                       ]
-                    }
                   },
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@noun",
                         "locked"
                       ]
-                    }
                   }
                 ]
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@result",
                     {
                       "FromText:": {
@@ -413,12 +405,10 @@
                           ]
                         },
                         {
-                          "Get object:": {
                             "Object:field:": [
                               "@noun",
                               "opaque"
                             ]
-                          }
                         },
                         {
                           "Not:": {
@@ -438,7 +428,7 @@
                     },
                     [
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@concealed items",
                           {
                             "FromTextList:": {
@@ -509,7 +499,7 @@
                               }
                             },
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 "@success",
                                 {
                                   "FromBool:": true

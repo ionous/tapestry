@@ -102,12 +102,10 @@
               "actor",
               "actor",
               {
-                "Get object:": {
                   "Object:field:": [
                     "@agent",
                     "pawn"
                   ]
-                }
               }
             ]
           }

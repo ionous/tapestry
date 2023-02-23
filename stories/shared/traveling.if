@@ -23,12 +23,10 @@
               "actor",
               "actor",
               {
-                "Get object:": {
                   "Object:field:": [
                     "@agent",
                     "pawn"
                   ]
-                }
               }
             ]
           },
@@ -38,12 +36,10 @@
               "destination",
               "room",
               {
-                "Get object:": {
                   "Object:field:": [
                     "@noun",
                     "destination"
                   ]
-                }
               }
             ]
           }
@@ -209,12 +205,10 @@
                     "destination",
                     "room",
                     {
-                      "Get object:": {
                         "Object:field:": [
                           "@noun",
                           "destination"
                         ]
-                      }
                     }
                   ]
                 }
@@ -253,7 +247,7 @@
                               "Say:": "@error"
                             },
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 "@success",
                                 {
                                   "FromBool:": false
@@ -271,7 +265,7 @@
                                 }
                               },
                               {
-                                "Set variable:from:": [
+                                "Set:from:": [
                                   "@success",
                                   {
                                     "FromBool:": true
@@ -334,12 +328,10 @@
                     },
                     {
                       "FromBool:": {
-                        "Get object:": {
                           "Object:field:": [
                             "@actor",
                             "is in darkness"
                           ]
-                        }
                       }
                     }
                   ]
@@ -406,7 +398,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -435,18 +427,17 @@
                     ]
                   },
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@noun",
                         "closed"
                       ]
-                    }
+                    
                   }
                 ]
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -475,26 +466,25 @@
                     ]
                   },
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@noun",
                         "closed"
                       ]
-                    }
+                    
                   },
                   {
-                    "Get object:": {
+                    
                       "Object:field:": [
                         "@noun",
                         "locked"
                       ]
                     }
-                  }
+                  
                 ]
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {

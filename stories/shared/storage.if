@@ -35,7 +35,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@success",
                     {
                       "FromBool:": true
@@ -55,7 +55,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@success",
                     {
                       "FromBool:": true
@@ -107,7 +107,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@success",
                     {
                       "FromBool:": {
@@ -189,29 +189,27 @@
                                     "@it",
                                     "equal_to",
                                     {
-                                      "Get object:": {
                                         "Object:field:": [
                                           "player",
                                           "pawn"
                                         ]
                                       }
-                                    }
                                   ]
                                 },
                                 {
-                                  "Get object:": {
+                                  
                                     "Object:field:": [
                                       "@it",
                                       "scenery"
                                     ]
-                                  }
+                                  
                                 }
                               ]
                             }
                           },
                           [
                             {
-                              "Push:into variable:": [
+                              "Push:into:": [
                                 {
                                   "FromText:": "@it"
                                 },
@@ -269,7 +267,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@success",
                     {
                       "FromBool:": true
@@ -290,18 +288,16 @@
                     ]
                   },
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@obj",
                         "closed"
                       ]
-                    }
                   }
                 ]
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@success",
                     {
                       "FromBool:": false

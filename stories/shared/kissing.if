@@ -40,12 +40,10 @@
               "actor",
               "actor",
               {
-                "Get object:": {
                   "Object:field:": [
                     "@agent",
                     "pawn"
                   ]
-                }
               }
             ]
           }
@@ -197,7 +195,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -243,7 +241,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -287,7 +285,7 @@
                         }
                       },
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@success",
                           {
                             "FromBool:": true

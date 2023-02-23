@@ -133,7 +133,7 @@
             "Expect output:": "okay: reached outside the open cabinet."
           },
           {
-            "Set object:from:": [
+            "Set:from:": [
               {
                 "Object:field:": [
                   "espresso machine",
@@ -185,7 +185,7 @@
             "Expect output:": "okay: reached inside the open espresso machine."
           },
           {
-            "Set object:from:": [
+            "Set:from:": [
               {
                 "Object:field:": [
                   "cabinet",

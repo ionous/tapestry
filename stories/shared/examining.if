@@ -18,12 +18,10 @@
               "actor",
               "actor",
               {
-                "Get object:": {
                   "Object:field:": [
                     "@agent",
                     "pawn"
                   ]
-                }
               }
             ]
           }
@@ -186,12 +184,10 @@
             "Text:initially:": [
               "description",
               {
-                "Get object:": {
                   "Object:field:": [
                     "@obj",
                     "description"
                   ]
-                }
               }
             ]
           }
@@ -298,7 +294,7 @@
                     },
                     [
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@success",
                           {
                             "FromBool:": true
@@ -336,7 +332,7 @@
                                 }
                               },
                               {
-                                "Set variable:from:": [
+                                "Set:from:": [
                                   "@success",
                                   {
                                     "FromBool:": true
@@ -373,7 +369,7 @@
                     },
                     [
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@success",
                           {
                             "FromBool:": true

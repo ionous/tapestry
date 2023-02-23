@@ -66,12 +66,10 @@
           {
             "PatternRule:does:": [
               {
-                "Get object:": {
                   "Object:field:": [
                     "@noun",
                     "plural named"
                   ]
-                }
               },
               [
                 {
@@ -116,12 +114,10 @@
           {
             "PatternRule:does:": [
               {
-                "Get object:": {
                   "Object:field:": [
                     "@noun",
                     "plural named"
                   ]
-                }
               },
               [
                 {

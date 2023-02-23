@@ -32,7 +32,7 @@
               true,
               [
                 {
-                  "Push:into variable:atFront:": [
+                  "Push:into:atFront:": [
                     {
                       "FromText:": "@obj"
                     },
@@ -41,7 +41,7 @@
                   ]
                 },
                 {
-                  "Push:into variable:": [
+                  "Push:into:": [
                     {
                       "FromText:": "@obj"
                     },
@@ -63,10 +63,8 @@
                     },
                     [
                       {
-                        "Erasing variable:atFront:as:does:": [
-                          {
-                            "Variable:": "@queue"
-                          },
+                        "Erasing:atFront:as:does:": [
+                          "@queue",
                           true,
                           "enc",
                           [
@@ -84,7 +82,7 @@
                                 "kid",
                                 [
                                   {
-                                    "Push:into variable:": [
+                                    "Push:into:": [
                                       {
                                         "FromText:": "@kid"
                                       },
@@ -107,7 +105,7 @@
                                           "Comment:": "add this kid for additional processing"
                                         },
                                         {
-                                          "Push:into variable:": [
+                                          "Push:into:": [
                                             {
                                               "FromText:": "@kid"
                                             },

@@ -31,7 +31,6 @@
               "grouping",
               "grouping",
               {
-                "Get variable:": {
                   "Variable:dot:": [
                     "group",
                     [
@@ -41,14 +40,12 @@
                     ]
                   ]
                 }
-              }
             ]
           },
           {
             "TextList:initially:": [
               "objs",
               {
-                "Get variable:": {
                   "Variable:dot:": [
                     "group",
                     [
@@ -57,7 +54,6 @@
                       }
                     ]
                   ]
-                }
               }
             ]
           }
@@ -68,7 +64,6 @@
               {
                 "AllTrue:": [
                   {
-                    "Get variable:": {
                       "Variable:dot:": [
                         "grouping",
                         [
@@ -77,7 +72,7 @@
                           }
                         ]
                       ]
-                    }
+                    
                   }
                 ]
               },
@@ -88,7 +83,6 @@
                 {
                   "If:does:else:": [
                     {
-                      "Get variable:": {
                         "Variable:dot:": [
                           "grouping",
                           [
@@ -97,7 +91,6 @@
                             }
                           ]
                         ]
-                      }
                     },
                     [
                       {
@@ -181,7 +174,6 @@
               {
                 "AllTrue:": [
                   {
-                    "Get variable:": {
                       "Variable:dot:": [
                         "grouping",
                         [
@@ -190,10 +182,8 @@
                           }
                         ]
                       ]
-                    }
                   },
                   {
-                    "Get variable:": {
                       "Variable:dot:": [
                         "grouping",
                         [
@@ -202,7 +192,6 @@
                           }
                         ]
                       ]
-                    }
                   }
                 ]
               },
@@ -212,7 +201,6 @@
                 },
                 {
                   "Say:": {
-                    "Get variable:": {
                       "Variable:dot:": [
                         "grouping",
                         [
@@ -222,7 +210,6 @@
                         ]
                       ]
                     }
-                  }
                 }
               ]
             ]
@@ -232,7 +219,6 @@
               {
                 "AllTrue:": [
                   {
-                    "Get variable:": {
                       "Variable:dot:": [
                         "grouping",
                         [
@@ -241,7 +227,6 @@
                           }
                         ]
                       ]
-                    }
                   }
                 ]
               },
@@ -253,7 +238,6 @@
                   "PrintSeveral obj:groupSize:label:": [
                     {
                       "FromText:": {
-                        "Get variable:": {
                           "Variable:dot:": [
                             "objs",
                             [
@@ -262,7 +246,6 @@
                               }
                             ]
                           ]
-                        }
                       }
                     },
                     {
@@ -276,7 +259,6 @@
                       "FromText:": {
                         "Txt if:then:else:": [
                           {
-                            "Get variable:": {
                               "Variable:dot:": [
                                 "grouping",
                                 [
@@ -285,10 +267,8 @@
                                   }
                                 ]
                               ]
-                            }
                           },
                           {
-                            "Get variable:": {
                               "Variable:dot:": [
                                 "grouping",
                                 [
@@ -297,7 +277,6 @@
                                   }
                                 ]
                               ]
-                            }
                           },
                           ""
                         ]
@@ -314,7 +293,6 @@
                 "AllTrue:": [
                   {
                     "Is empty:": {
-                      "Get variable:": {
                         "Variable:dot:": [
                           "grouping",
                           [
@@ -323,7 +301,6 @@
                             }
                           ]
                         ]
-                      }
                     }
                   }
                 ]
@@ -335,7 +312,6 @@
                 {
                   "PrintGroupedObject obj:": {
                     "FromText:": {
-                      "Get variable:": {
                         "Variable:dot:": [
                           "objs",
                           [
@@ -345,11 +321,10 @@
                           ]
                         ]
                       }
-                    }
                   }
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@success",
                     {
                       "FromBool:": true

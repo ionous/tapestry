@@ -52,7 +52,7 @@
               true,
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@parent",
                     {
                       "FromText:": {
@@ -77,19 +77,17 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@parent",
                     {
                       "FromText:": {
                         "Reciprocal:object:": [
                           "whereabouts",
                           {
-                            "Get object:": {
                               "Object:field:": [
                                 "@obj",
                                 "pawn"
                               ]
-                            }
                           }
                         ]
                       }
@@ -153,7 +151,7 @@
                     },
                     [
                       {
-                        "Push:into variable:": [
+                        "Push:into:": [
                           {
                             "FromText:": "@it"
                           },
@@ -161,7 +159,7 @@
                         ]
                       },
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@it",
                           {
                             "FromText:": {
@@ -211,7 +209,7 @@
               true,
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@kids",
                     {
                       "FromTextList:": {
@@ -289,7 +287,7 @@
                           },
                           [
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 "@room",
                                 {
                                   "FromText:": "@search"
@@ -303,7 +301,7 @@
                         ]
                       },
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@search",
                           {
                             "FromText:": {
@@ -399,7 +397,7 @@
               true,
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@o1",
                     {
                       "FromText:": "@object"
@@ -414,7 +412,7 @@
                     },
                     [
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@o2",
                           {
                             "FromText:": "@other object"
@@ -437,7 +435,7 @@
                                 [
                                   {
                                     "--": "Success!",
-                                    "Set variable:from:": [
+                                    "Set:from:": [
                                       "@ancestor",
                                       {
                                         "FromText:": "@o2"
@@ -451,7 +449,7 @@
                               ]
                             },
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 "@o2",
                                 {
                                   "FromText:": {
@@ -500,7 +498,7 @@
                         ]
                       },
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@o1",
                           {
                             "FromText:": {
@@ -602,7 +600,7 @@
               true,
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@up",
                     {
                       "FromText:": "@obj"
@@ -615,7 +613,7 @@
                     [
                       {
                         "--": "Step up immediately, indirect implies objects dont hold themselves.",
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@up",
                           {
                             "FromText:": {
@@ -674,7 +672,7 @@
                           [
                             {
                               "--": "Success!",
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 "@isAncestor",
                                 {
                                   "FromBool:": true
@@ -773,7 +771,7 @@
                     },
                     [
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@location",
                           {
                             "FromText:": "@parent"
@@ -847,7 +845,7 @@
                     },
                     [
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@supporter",
                           {
                             "FromText:": "@parent"
@@ -921,7 +919,7 @@
                     },
                     [
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@container",
                           {
                             "FromText:": "@parent"
@@ -979,7 +977,7 @@
               true,
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@parent",
                     {
                       "FromText:": {
@@ -1002,7 +1000,7 @@
                     },
                     [
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@owner",
                           {
                             "FromText:": "@parent"
@@ -1063,7 +1061,7 @@
               true,
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@parent",
                     {
                       "FromText:": {
@@ -1087,18 +1085,16 @@
                           ]
                         },
                         {
-                          "Get object:": {
                             "Object:field:": [
                               "@obj",
                               "not worn"
                             ]
                           }
-                        }
                       ]
                     },
                     [
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@carrier",
                           {
                             "FromText:": "@parent"
@@ -1159,7 +1155,7 @@
               true,
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@parent",
                     {
                       "FromText:": {
@@ -1183,18 +1179,16 @@
                           ]
                         },
                         {
-                          "Get object:": {
                             "Object:field:": [
                               "@obj",
                               "worn"
                             ]
-                          }
                         }
                       ]
                     },
                     [
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@wearer",
                           {
                             "FromText:": "@parent"

@@ -260,12 +260,10 @@
           {
             "PatternRule:does:": [
               {
-                "Get object:": {
                   "Object:field:": [
                     "@obj",
                     "plural named"
                   ]
-                }
               },
               [
                 {
@@ -281,15 +279,8 @@
               {
                 "Cmp:is:txt:": [
                   {
-                    "Get object:field:": [
-                      {
-                        "FromText:": {
-                          "Text value:": "@obj"
-                        }
-                      },
-                      {
-                        "FromText:": "indefinite article"
-                      }
+                    "Object:field:": [
+                      "@obj", "indefinite article"
                     ]
                   },
                   "other_than",
@@ -326,12 +317,10 @@
           {
             "PatternRule:does:": [
               {
-                "Get object:": {
                   "Object:field:": [
                     "@obj",
                     "proper named"
                   ]
-                }
               },
               [
                 {

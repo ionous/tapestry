@@ -18,12 +18,10 @@
               "actor",
               "actor",
               {
-                "Get object:": {
                   "Object:field:": [
                     "@agent",
                     "pawn"
                   ]
-                }
               }
             ]
           }
@@ -187,7 +185,7 @@
                               "Say:": "@error"
                             },
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 "@success",
                                 {
                                   "FromBool:": false
@@ -205,7 +203,7 @@
                                 }
                               },
                               {
-                                "Set variable:from:": [
+                                "Set:from:": [
                                   "@success",
                                   {
                                     "FromBool:": true
@@ -340,7 +338,7 @@
                   "Comment:": "Tell the player that they've already accomplished the goal they are trying to achieve ( vs. that they can't accomplish what they are trying to achieve. )"
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -379,7 +377,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {

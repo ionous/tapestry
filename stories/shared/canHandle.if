@@ -56,7 +56,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {

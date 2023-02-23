@@ -158,7 +158,7 @@
                                 "For patterns which return a value, assigning a return value ends the pattern matching.",
                                 "So end this pattern and block out the default handler."
                               ],
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 "@grouping",
                                 {
                                   "FromText:": "@grouping"
@@ -239,7 +239,7 @@
                           },
                           [
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -256,7 +256,7 @@
                               ]
                             },
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -273,7 +273,7 @@
                               ]
                             },
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -390,7 +390,7 @@
                           },
                           [
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -407,7 +407,7 @@
                               ]
                             },
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -424,7 +424,7 @@
                               ]
                             },
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -503,7 +503,7 @@
                           },
                           [
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -520,7 +520,7 @@
                               ]
                             },
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -554,7 +554,6 @@
                           {
                             "Cmp:is:txt:": [
                               {
-                                "Get variable:": {
                                   "Variable:dot:": [
                                     "group",
                                     [
@@ -566,7 +565,6 @@
                                       }
                                     ]
                                   ]
-                                }
                               },
                               "equal_to",
                               "the tiles"
@@ -671,7 +669,7 @@
                           },
                           [
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -761,7 +759,7 @@
                           },
                           [
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",
@@ -824,7 +822,7 @@
                           },
                           [
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 {
                                   "Variable:dot:": [
                                     "grouping",

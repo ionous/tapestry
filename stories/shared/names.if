@@ -136,12 +136,10 @@
           {
             "PatternRule:does:": [
               {
-                "Get object:": {
                   "Object:field:": [
                     "@obj",
                     "publicly named"
                   ]
-                }
               },
               [
                 {
@@ -164,12 +162,10 @@
               {
                 "Cmp:is:txt:": [
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@obj",
                         "printed name"
                       ]
-                    }
                   },
                   "other_than",
                   ""
@@ -178,12 +174,10 @@
               [
                 {
                   "Say:": {
-                    "Get object:": {
                       "Object:field:": [
                         "@obj",
                         "printed name"
                       ]
-                    }
                   }
                 },
                 {
@@ -229,7 +223,7 @@
               },
               [
                 {
-                  "Set object:from:": [
+                  "Set:from:": [
                     {
                       "Object:field:": [
                         "@obj",
@@ -242,7 +236,7 @@
                   ]
                 },
                 {
-                  "Set object:from:": [
+                  "Set:from:": [
                     {
                       "Object:field:": [
                         "@settings",
@@ -254,12 +248,10 @@
                         "Inc:by:": [
                           1,
                           {
-                            "Get object:": {
                               "Object:field:": [
                                 "settings",
                                 "mentions"
                               ]
-                            }
                           }
                         ]
                       }

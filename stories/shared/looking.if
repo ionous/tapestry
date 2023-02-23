@@ -16,12 +16,10 @@
               "actor",
               "object",
               {
-                "Get object:": {
                   "Object:field:": [
                     "@agent",
                     "pawn"
                   ]
-                }
               }
             ]
           }
@@ -99,18 +97,16 @@
                           },
                           {
                             "FromBool:": {
-                              "Get object:": {
                                 "Object:field:": [
                                   "@actor",
                                   "is in darkness"
                                 ]
-                              }
                             }
                           }
                         ]
                       },
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@success",
                           {
                             "FromBool:": true
@@ -210,30 +206,28 @@
                           {
                             "AnyTrue:": [
                               {
-                                "Get object:": {
                                   "Object:field:": [
                                     "settings",
                                     "verbose"
                                   ]
-                                }
                               },
                               {
                                 "AllTrue:": [
                                   {
-                                    "Get object:": {
+                                    
                                       "Object:field:": [
                                         "settings",
                                         "brief"
                                       ]
-                                    }
+                                    
                                   },
                                   {
-                                    "Get object:": {
+                                    
                                       "Object:field:": [
                                         "settings",
                                         "not darkness witnessed"
                                       ]
-                                    }
+                                    
                                   }
                                 ]
                               }
@@ -288,30 +282,25 @@
                             {
                               "AnyTrue:": [
                                 {
-                                  "Get object:": {
                                     "Object:field:": [
                                       "settings",
                                       "verbose"
                                     ]
-                                  }
+                                 
                                 },
                                 {
                                   "AllTrue:": [
                                     {
-                                      "Get object:": {
                                         "Object:field:": [
                                           "settings",
                                           "brief"
                                         ]
-                                      }
                                     },
                                     {
-                                      "Get object:": {
                                         "Object:field:": [
                                           "@room",
                                           "not visited"
                                         ]
-                                      }
                                     }
                                   ]
                                 }
@@ -322,9 +311,7 @@
                                 "Comment:": "Reorder from outer to inner"
                               },
                               {
-                                "Reverse list:": {
-                                  "FromTextList:": "@enclosures"
-                                }
+                                "Reverse list:": "@enclosures"
                               },
                               {
                                 "Repeating across:as:does:": [
@@ -365,7 +352,7 @@
                     "@inDarkness",
                     [
                       {
-                        "Set object:from:": [
+                        "Set:from:": [
                           {
                             "Object:field:": [
                               "settings",
@@ -381,10 +368,13 @@
                     {
                       "ElseDo does:": [
                         {
-                          "Set variable:from:": [
+                          "Set:from:": [
                             {
-                              "Variable": true
-                            },
+                            "Object:field:": [
+                              "room",
+                              "darkness visited"
+                            ]
+                          },
                             {
                               "FromBool:": true
                             }
@@ -504,7 +494,6 @@
               "ceiling",
               "object",
               {
-                "Get variable:": {
                   "Variable:dot:": [
                     "enclosures",
                     [
@@ -517,7 +506,6 @@
                       }
                     ]
                   ]
-                }
               }
             ]
           }
@@ -582,7 +570,6 @@
               "ceiling",
               "object",
               {
-                "Get variable:": {
                   "Variable:dot:": [
                     "enclosures",
                     [
@@ -595,7 +582,6 @@
                       }
                     ]
                   ]
-                }
               }
             ]
           }
@@ -690,12 +676,10 @@
             "Number:initially:": [
               "previousMentions",
               {
-                "Get object:": {
                   "Object:field:": [
                     "settings",
                     "mentions"
                   ]
-                }
               }
             ]
           },
@@ -720,25 +704,19 @@
                     [
                       {
                         "Say:": {
-                          "Get object:": {
                             "Object:field:": [
                               "@room",
                               "description"
                             ]
                           }
-                        }
                       }
                     ]
                   ]
                 },
                 {
                   "SortTexts:byField:": [
-                    {
-                      "FromText:": "kids"
-                    },
-                    {
-                      "FromText:": "grouping label"
-                    }
+                    "@kids",
+                    "grouping label"
                   ]
                 },
                 {
@@ -800,26 +778,23 @@
                                 {
                                   "AllTrue:": [
                                     {
-                                      "Get object:": {
                                         "Object:field:": [
                                           "@it",
                                           "not mentioned"
                                         ]
-                                      }
                                     },
                                     {
-                                      "Get object:": {
                                         "Object:field:": [
                                           "@it",
                                           "not scenery"
                                         ]
-                                      }
+                                      
                                     }
                                   ]
                                 },
                                 [
                                   {
-                                    "Push:into variable:": [
+                                    "Push:into:": [
                                       {
                                         "FromText:": "@it"
                                       },
@@ -860,12 +835,10 @@
                           "@previousMentions",
                           "equal_to",
                           {
-                            "Get object:": {
                               "Object:field:": [
                                 "settings",
                                 "mentions"
                               ]
-                            }
                           }
                         ]
                       }
@@ -917,12 +890,10 @@
               {
                 "AllTrue:": [
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@obj",
                         "mentioned"
                       ]
-                    }
                   },
                   {
                     "KindOf:is:": [
@@ -954,12 +925,10 @@
               {
                 "AllTrue:": [
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@obj",
                         "scenery"
                       ]
-                    }
                   },
                   {
                     "KindOf:is:": [
@@ -989,12 +958,10 @@
           {
             "PatternRule:does:": [
               {
-                "Get object:": {
                   "Object:field:": [
                     "@obj",
                     "not mentioned"
                   ]
-                }
               },
               [
                 {
@@ -1030,7 +997,7 @@
                   "Comment:": "d. by default, we dont want to say anything special for actors"
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@success",
                     {
                       "FromBool:": true
@@ -1080,30 +1047,25 @@
               {
                 "AllTrue:": [
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@obj",
                         "not mentioned"
                       ]
-                    }
+                   
                   },
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@obj",
                         "not scenery"
                       ]
-                    }
                   },
                   {
                     "Not:": {
                       "Is empty:": {
-                        "Get object:": {
                           "Object:field:": [
                             "@obj",
                             "initial appearance"
                           ]
-                        }
                       }
                     }
                   }
@@ -1119,12 +1081,11 @@
                 "AllTrue:": [
                   "@first look",
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@obj",
                         "not mentioned"
                       ]
-                    }
+                    
                   }
                 ]
               },
@@ -1142,7 +1103,7 @@
                   }
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@success",
                     {
                       "FromBool:": true
@@ -1274,7 +1235,7 @@
               true,
               [
                 {
-                  "Set object:from:": [
+                  "Set:from:": [
                     {
                       "Object:field:": [
                         "settings",
@@ -1296,7 +1257,7 @@
                     "it",
                     [
                       {
-                        "Set object:from:": [
+                        "Set:from:": [
                           {
                             "Object:field:": [
                               "@it",

@@ -6,7 +6,7 @@
         "Kitchenette",
         [
           {
-            "Set object:from:": [
+            "Set:from:": [
               {
                 "Object:field:": [
                   "Kitchen",
@@ -27,7 +27,7 @@
             "Expect output:": "ok: The cabinet is dark."
           },
           {
-            "Set object:from:": [
+            "Set:from:": [
               {
                 "Object:field:": [
                   "Kitchen",
@@ -48,7 +48,7 @@
             "Expect output:": "ok: The cabinet has light."
           },
           {
-            "Set object:from:": [
+            "Set:from:": [
               {
                 "Object:field:": [
                   "cabinet",
@@ -69,7 +69,7 @@
             "Expect output:": "ok: The cabinet is dark."
           },
           {
-            "Set object:from:": [
+            "Set:from:": [
               {
                 "Object:field:": [
                   "matches",

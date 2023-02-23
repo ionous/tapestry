@@ -30,12 +30,10 @@
           {
             "Expect:": {
               "Not:": {
-                "Get object:": {
                   "Object:field:": [
                     "self",
                     "is in darkness"
                   ]
-                }
               }
             }
           },
@@ -46,7 +44,7 @@
             ]
           },
           {
-            "Set object:from:": [
+            "Set:from:": [
               {
                 "Object:field:": [
                   "kitchen",
@@ -66,19 +64,17 @@
           },
           {
             "Expect:": {
-              "Get object:": {
                 "Object:field:": [
                   "self",
                   "is in darkness"
                 ]
-              }
             }
           },
           {
             "Comment:": "Verify that light breaks forth in a glorious wonder."
           },
           {
-            "Set object:from:": [
+            "Set:from:": [
               {
                 "Object:field:": [
                   "kitchen",
@@ -99,13 +95,11 @@
           {
             "Expect:": {
               "Not:": {
-                "Get object:": {
                   "Object:field:": [
                     "self",
                     "is in darkness"
                   ]
                 }
-              }
             }
           }
         ]

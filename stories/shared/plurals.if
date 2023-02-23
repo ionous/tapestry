@@ -52,12 +52,10 @@
               {
                 "Cmp:is:txt:": [
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@obj",
                         "printed plural name"
                       ]
-                    }
                   },
                   "other_than",
                   ""

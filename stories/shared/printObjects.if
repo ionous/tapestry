@@ -441,7 +441,7 @@
                   }
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@success",
                     {
                       "FromBool:": true
@@ -528,12 +528,11 @@
                     ]
                   },
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@obj",
                         "closed"
                       ]
-                    }
+                    
                   }
                 ]
               },
@@ -690,12 +689,10 @@
           {
             "PatternRule:does:": [
               {
-                "Get object:": {
                   "Object:field:": [
                     "@obj",
                     "locked"
                   ]
-                }
               },
               [
                 {
@@ -716,20 +713,16 @@
               {
                 "AllTrue:": [
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@obj",
                         "transparent"
                       ]
-                    }
                   },
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@obj",
                         "unopenable"
                       ]
-                    }
                   }
                 ]
               },
@@ -750,12 +743,10 @@
           {
             "PatternRule:does:": [
               {
-                "Get object:": {
                   "Object:field:": [
                     "@obj",
                     "openable"
                   ]
-                }
               },
               [
                 {
@@ -774,12 +765,10 @@
           {
             "PatternRule:does:": [
               {
-                "Get object:": {
                   "Object:field:": [
                     "@obj",
                     "worn"
                   ]
-                }
               },
               [
                 {
@@ -798,12 +787,10 @@
           {
             "PatternRule:does:": [
               {
-                "Get object:": {
                   "Object:field:": [
                     "@obj",
                     "lit"
                   ]
-                }
               },
               [
                 {

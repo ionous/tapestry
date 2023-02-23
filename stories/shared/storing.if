@@ -18,12 +18,10 @@
               "actor",
               "actor",
               {
-                "Get object:": {
                   "Object:field:": [
                     "@agent",
                     "pawn"
                   ]
-                }
               }
             ]
           }
@@ -282,7 +280,7 @@
                               "Say:": "@error"
                             },
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 "@success",
                                 {
                                   "FromBool:": false
@@ -293,7 +291,7 @@
                           {
                             "ElseDo does:": [
                               {
-                                "Set variable:from:": [
+                                "Set:from:": [
                                   "@success",
                                   {
                                     "FromBool:": true
@@ -426,7 +424,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -474,7 +472,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -533,7 +531,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -584,7 +582,7 @@
                   "Comment:": "Assuming we are able to reach the noun, check whether it actually provides storage."
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -625,7 +623,7 @@
                   "Comment:": "If the target noun were owned by reaching actor then the actor would be the lca. By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach."
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {

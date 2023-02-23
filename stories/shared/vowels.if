@@ -35,7 +35,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@matching",
                     {
                       "FromBool:": true
@@ -55,7 +55,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@matching",
                     {
                       "FromBool:": false
@@ -75,7 +75,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@matching",
                     {
                       "FromBool:": true

@@ -70,7 +70,7 @@
               true,
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@i",
                     {
                       "FromText:": "@actor"
@@ -89,7 +89,7 @@
                         "Comment:": "There's no problem reaching yourself, so start by putting yourself in the list of visited places."
                       },
                       {
-                        "Push:into variable:": [
+                        "Push:into:": [
                           {
                             "FromText:": "@i"
                           },
@@ -97,7 +97,7 @@
                         ]
                       },
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@next",
                           {
                             "FromText:": {
@@ -160,7 +160,7 @@
                                 },
                                 [
                                   {
-                                    "Set variable:from:": [
+                                    "Set:from:": [
                                       "@reach error",
                                       {
                                         "FromNumber:": {
@@ -172,7 +172,7 @@
                                     ]
                                   },
                                   {
-                                    "Set variable:from:": [
+                                    "Set:from:": [
                                       "@reach response",
                                       {
                                         "FromText:": "@response"
@@ -192,7 +192,7 @@
                         ]
                       },
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@i",
                           {
                             "FromText:": "@next"
@@ -211,7 +211,7 @@
                   }
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@i",
                     {
                       "FromText:": "@noun"
@@ -227,7 +227,7 @@
                     },
                     [
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@lca",
                           {
                             "FromNumber:": {
@@ -267,7 +267,7 @@
                         ]
                       },
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@next",
                           {
                             "FromText:": {
@@ -321,7 +321,7 @@
                           },
                           [
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 "@dig error",
                                 {
                                   "FromText:": "@response"
@@ -338,7 +338,7 @@
                         ]
                       },
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@i",
                           {
                             "FromText:": "@next"
@@ -365,7 +365,7 @@
                         "Comment:": "No lca ever found? That's the most important error."
                       },
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@response",
                           {
                             "FromText:": {
@@ -394,7 +394,7 @@
                             "Comment:": "There is an error reaching up from the actor towards the lca."
                           },
                           {
-                            "Set variable:from:": [
+                            "Set:from:": [
                               "@response",
                               {
                                 "FromText:": "@reach response"
@@ -414,7 +414,7 @@
                                 "Comment:": "There was no error reaching up to the lca, so return any errors digging down to the noun."
                               },
                               {
-                                "Set variable:from:": [
+                                "Set:from:": [
                                   "@response",
                                   {
                                     "FromText:": "@dig error"
@@ -437,12 +437,11 @@
                 "AllTrue:": [
                   "@requires light",
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@actor",
                         "is in darkness"
                       ]
-                    }
+                    
                   }
                 ]
               },
@@ -452,7 +451,7 @@
                   "Comment:": "Used to determine whether an action needing light can proceed. Returns some response text if the action is blocked.  Relies on the player's \"is in darkness\" which is (usually) calculated just once per turn ( in \"adjust light.\" )"
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -529,18 +528,17 @@
                     ]
                   },
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@fromObj",
                         "closed"
                       ]
-                    }
+                   
                   }
                 ]
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -567,7 +565,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -658,12 +656,11 @@
                     ]
                   },
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@intoObj",
                         "closed"
                       ]
-                    }
+                   
                   },
                   {
                     "Not:": {
@@ -678,7 +675,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -705,7 +702,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {

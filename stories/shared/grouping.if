@@ -37,32 +37,24 @@
               [
                 {
                   "Map:fromList:using:": [
-                    {
-                      "FromText:": "groupings"
-                    },
+                    "@groupings",
                     {
                       "FromText:": {
                         "Text value:": "@objs"
                       }
                     },
-                    {
-                      "FromText:": "assign grouping"
-                    }
+                    "assign grouping"
                   ]
                 },
                 {
                   "Reduce into:fromList:using:": [
-                    {
-                      "FromText:": "groups"
-                    },
+                    "@groups",
                     {
                       "FromText:": {
                         "Text value:": "@groupings"
                       }
                     },
-                    {
-                      "FromText:": "collate groups"
-                    }
+                    "collate groups"
                   ]
                 }
               ]
@@ -117,7 +109,7 @@
               true,
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@grouping",
                     {
                       "FromText:": "@grouping"
@@ -132,16 +124,13 @@
               {
                 "AllTrue:": [
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@obj",
                         "counted"
                       ]
-                    }
                   },
                   {
                     "Is empty:": {
-                      "Get variable:": {
                         "Variable:dot:": [
                           "grouping",
                           [
@@ -150,7 +139,6 @@
                             }
                           ]
                         ]
-                      }
                     }
                   }
                 ]
@@ -158,7 +146,7 @@
               [
                 {
                   "--": "unless already grouped, use print several for unnamed counted nouns.",
-                  "Set variable:from:": [
+                  "Set:from:": [
                     {
                       "Variable:dot:": [
                         "grouping",
@@ -177,7 +165,7 @@
                   ]
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     {
                       "Variable:dot:": [
                         "grouping",
@@ -194,7 +182,7 @@
                   ]
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     {
                       "Variable:dot:": [
                         "grouping",
@@ -311,7 +299,6 @@
                   {
                     "Cmp:is:txt:": [
                       {
-                        "Get variable:": {
                           "Variable:dot:": [
                             "first",
                             [
@@ -320,11 +307,9 @@
                               }
                             ]
                           ]
-                        }
                       },
                       "equal_to",
                       {
-                        "Get variable:": {
                           "Variable:dot:": [
                             "second",
                             [
@@ -333,14 +318,12 @@
                               }
                             ]
                           ]
-                        }
                       }
                     ]
                   },
                   {
                     "Cmp:is:txt:": [
                       {
-                        "Get variable:": {
                           "Variable:dot:": [
                             "first",
                             [
@@ -349,11 +332,9 @@
                               }
                             ]
                           ]
-                        }
                       },
                       "equal_to",
                       {
-                        "Get variable:": {
                           "Variable:dot:": [
                             "second",
                             [
@@ -362,14 +343,12 @@
                               }
                             ]
                           ]
-                        }
                       }
                     ]
                   },
                   {
                     "Cmp:is:txt:": [
                       {
-                        "Get variable:": {
                           "Variable:dot:": [
                             "first",
                             [
@@ -378,11 +357,9 @@
                               }
                             ]
                           ]
-                        }
                       },
                       "equal_to",
                       {
-                        "Get variable:": {
                           "Variable:dot:": [
                             "second",
                             [
@@ -391,14 +368,12 @@
                               }
                             ]
                           ]
-                        }
                       }
                     ]
                   },
                   {
                     "Cmp:is:txt:": [
                       {
-                        "Get variable:": {
                           "Variable:dot:": [
                             "first",
                             [
@@ -407,11 +382,9 @@
                               }
                             ]
                           ]
-                        }
                       },
                       "equal_to",
                       {
-                        "Get variable:": {
                           "Variable:dot:": [
                             "second",
                             [
@@ -420,7 +393,6 @@
                               }
                             ]
                           ]
-                        }
                       }
                     ]
                   }
@@ -428,7 +400,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@matching",
                     {
                       "FromBool:": true
@@ -444,7 +416,6 @@
                 "AnyTrue:": [
                   {
                     "Is empty:": {
-                      "Get variable:": {
                         "Variable:dot:": [
                           "first",
                           [
@@ -453,12 +424,12 @@
                             }
                           ]
                         ]
-                      }
+                      
                     }
                   },
                   {
                     "Is empty:": {
-                      "Get variable:": {
+                      
                         "Variable:dot:": [
                           "second",
                           [
@@ -467,14 +438,14 @@
                             }
                           ]
                         ]
-                      }
+                      
                     }
                   }
                 ]
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@matching",
                     {
                       "FromBool:": false
@@ -559,7 +530,6 @@
                               },
                               {
                                 "FromRecord:": {
-                                  "Get variable:": {
                                     "Variable:dot:": [
                                       "el",
                                       [
@@ -569,13 +539,12 @@
                                       ]
                                     ]
                                   }
-                                }
                               }
                             ]
                           },
                           [
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 "@idx",
                                 {
                                   "FromText:": "@index"
@@ -605,10 +574,9 @@
                     },
                     [
                       {
-                        "Push:into variable:": [
+                        "Push:into:": [
                           {
                             "FromText:": {
-                              "Get variable:": {
                                 "Variable:dot:": [
                                   "grouping",
                                   [
@@ -618,13 +586,12 @@
                                   ]
                                 ]
                               }
-                            }
                           },
                           "@names"
                         ]
                       },
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           {
                             "Variable:dot:": [
                               "group",
@@ -641,7 +608,7 @@
                         ]
                       },
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           {
                             "Variable:dot:": [
                               "group",
@@ -658,7 +625,7 @@
                         ]
                       },
                       {
-                        "Push:into variable:": [
+                        "Push:into:": [
                           {
                             "FromRecord:": "@group"
                           },
@@ -675,11 +642,10 @@
                           ]
                         },
                         {
-                          "Set variable:from:": [
+                          "Set:from:": [
                             "@group",
                             {
                               "FromRecord:": {
-                                "Get variable:": {
                                   "Variable:dot:": [
                                     "groups",
                                     [
@@ -688,17 +654,15 @@
                                       }
                                     ]
                                   ]
-                                }
                               }
                             }
                           ]
                         },
                         {
-                          "Set variable:from:": [
+                          "Set:from:": [
                             "@names",
                             {
                               "FromTextList:": {
-                                "Get variable:": {
                                   "Variable:dot:": [
                                     "group",
                                     [
@@ -708,15 +672,13 @@
                                     ]
                                   ]
                                 }
-                              }
                             }
                           ]
                         },
                         {
-                          "Push:into variable:": [
+                          "Push:into:": [
                             {
                               "FromText:": {
-                                "Get variable:": {
                                   "Variable:dot:": [
                                     "grouping",
                                     [
@@ -726,13 +688,12 @@
                                     ]
                                   ]
                                 }
-                              }
                             },
                             "@names"
                           ]
                         },
                         {
-                          "Set variable:from:": [
+                          "Set:from:": [
                             {
                               "Variable:dot:": [
                                 "group",

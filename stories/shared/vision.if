@@ -15,12 +15,10 @@
               "actor",
               "actor",
               {
-                "Get object:": {
                   "Object:field:": [
                     "player",
                     "pawn"
                   ]
-                }
               }
             ]
           },
@@ -28,12 +26,10 @@
             "Bool:initially:": [
               "was lit",
               {
-                "Get object:": {
                   "Object:field:": [
                     "@actor",
                     "not in darkness"
                   ]
-                }
               }
             ]
           },
@@ -91,9 +87,9 @@
               "before",
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     {
-                      "Variable": true
+                      "Object:field:": [ "actor", "not in darkness"]
                     },
                     {
                       "FromBool:": "@now lit"
@@ -151,12 +147,10 @@
                 {
                   "PrintVantage where:": {
                     "FromText:": {
-                      "Get object:": {
                         "Object:field:": [
                           "player",
                           "pawn"
                         ]
-                      }
                     }
                   }
                 }

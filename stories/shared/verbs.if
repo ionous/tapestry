@@ -27,7 +27,7 @@
               true,
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@result",
                     {
                       "FromText:": "@verb"
@@ -242,12 +242,12 @@
                           ]
                         },
                         {
-                          "Get object:": {
+                         
                             "Object:field:": [
                               "@noun",
                               "plural named"
                             ]
-                          }
+                         
                         }
                       ]
                     },
@@ -323,12 +323,10 @@
           {
             "PatternRule:does:": [
               {
-                "Get object:": {
                   "Object:field:": [
                     "@noun",
                     "plural named"
                   ]
-                }
               },
               [
                 {
@@ -390,12 +388,10 @@
           {
             "PatternRule:does:": [
               {
-                "Get object:": {
                   "Object:field:": [
                     "@noun",
                     "plural named"
                   ]
-                }
               },
               [
                 {
@@ -454,12 +450,10 @@
           {
             "PatternRule:does:": [
               {
-                "Get object:": {
                   "Object:field:": [
                     "@noun",
                     "plural named"
                   ]
-                }
               },
               [
                 {

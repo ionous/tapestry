@@ -39,7 +39,7 @@
                     },
                     [
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@response",
                           {
                             "FromText:": {
@@ -64,7 +64,7 @@
                         },
                         [
                           {
-                            "Set variable:from:": [
+                            "Set:from:": [
                               "@response",
                               {
                                 "FromText:": {
@@ -82,18 +82,16 @@
                             {
                               "If:does:": [
                                 {
-                                  "Get object:": {
                                     "Object:field:": [
                                       "@obj",
                                       "worn"
                                     ]
-                                  }
                                 },
                                 [
                                   {
-                                    "Set variable:from:": [
+                                    "Set:from:": [
                                       {
-                                        "Variable": true
+                                        "Object:field:": [ "@obj", "not worn"]
                                       },
                                       {
                                         "FromBool:": true
@@ -130,7 +128,7 @@
                               ]
                             },
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 "@response",
                                 {
                                   "FromText:": {
@@ -193,10 +191,10 @@
                   ]
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     {
-                      "Variable": true
-                    },
+                                        "Object:field:": [ "@obj", "not worn"]
+                                      },
                     {
                       "FromBool:": true
                     }
@@ -300,10 +298,11 @@
                     },
                     [
                       {
-                        "Set variable:from:": [
-                          {
-                            "Variable": true
-                          },
+                        "Set:from:": [
+                            {
+                                        "Object:field:": [ "@obj", "not worn"]
+                                      },
+                          
                           {
                             "FromBool:": true
                           }

@@ -18,12 +18,10 @@
               "actor",
               "actor",
               {
-                "Get object:": {
                   "Object:field:": [
                     "@agent",
                     "pawn"
                   ]
-                }
               }
             ]
           }
@@ -176,7 +174,7 @@
                               "Say:": "@error"
                             },
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 "@success",
                                 {
                                   "FromBool:": false
@@ -194,7 +192,7 @@
                                 }
                               },
                               {
-                                "Set variable:from:": [
+                                "Set:from:": [
                                   "@success",
                                   {
                                     "FromBool:": true
@@ -313,7 +311,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -352,7 +350,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -381,18 +379,16 @@
                     ]
                   },
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@noun",
                         "scenery"
                       ]
-                    }
                   }
                 ]
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -421,18 +417,17 @@
                     ]
                   },
                   {
-                    "Get object:": {
                       "Object:field:": [
                         "@noun",
                         "fixed in place"
                       ]
-                    }
+                    
                   }
                 ]
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -472,7 +467,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -524,7 +519,7 @@
                   "Comment:": "Reaching up to take the noun, means the noun contains the actor."
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -576,7 +571,7 @@
                     "If the target noun were owned by the reaching actor then the actor would be the lca.",
                     "By checking down, its *below* the lca so it's some other actor's possessions we are trying to reach."
                   ],
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
@@ -623,7 +618,7 @@
               [
                 {
                   "--": "Reaching down to take the noun, means the noun contains the actor.",
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@response",
                     {
                       "FromText:": {

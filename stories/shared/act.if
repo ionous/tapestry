@@ -88,7 +88,7 @@
                               "Say:": "@resp"
                             },
                             {
-                              "Set variable:from:": [
+                              "Set:from:": [
                                 "@success",
                                 {
                                   "FromBool:": false
@@ -102,7 +102,7 @@
                                 "Comment:": "nothing has stopped us, so lets change the state now."
                               },
                               {
-                                "Set object:from:": [
+                                "Set:from:": [
                                   {
                                     "Object:field:": [
                                       "@noun",
@@ -115,7 +115,7 @@
                                 ]
                               },
                               {
-                                "Set variable:from:": [
+                                "Set:from:": [
                                   "@success",
                                   {
                                     "FromBool:": true
@@ -162,7 +162,7 @@
                         }
                       },
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@success",
                           {
                             "FromBool:": true
@@ -191,7 +191,7 @@
                         }
                       },
                       {
-                        "Set variable:from:": [
+                        "Set:from:": [
                           "@success",
                           {
                             "FromBool:": true
@@ -250,19 +250,17 @@
           {
             "PatternRule:does:": [
               {
-                "Get object:": {
                   "Object:field:": [
                     "@noun",
                     "@trait"
                   ]
-                }
               },
               [
                 {
                   "Comment:": "can't change what is."
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@result",
                     {
                       "FromText:": {
@@ -290,12 +288,10 @@
                   },
                   {
                     "Not:": {
-                      "Get object:": {
                         "Object:field:": [
                           "@noun",
                           "@guard"
                         ]
-                      }
                     }
                   }
                 ]
@@ -305,7 +301,7 @@
                   "Comment:": "can't change the unchangeable."
                 },
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@result",
                     {
                       "FromText:": {

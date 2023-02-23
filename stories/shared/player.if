@@ -166,7 +166,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@success",
                     {
                       "FromBool:": {
@@ -174,12 +174,10 @@
                           "@obj",
                           "equal_to",
                           {
-                            "Get object:": {
                               "Object:field:": [
                                 "player",
                                 "pawn"
                               ]
-                            }
                           }
                         ]
                       }
@@ -199,7 +197,7 @@
               },
               [
                 {
-                  "Set variable:from:": [
+                  "Set:from:": [
                     "@success",
                     {
                       "FromBool:": {
