@@ -2,20 +2,20 @@
 
 ## About
 
-This is the tapestry GUI. It uses [wails](https://wails.io/) to provide a native webbrowser in a window managed by go.
+This is the tapestry GUI. It uses [Wails](https://wails.io/) to provide a native webbrowser in a window managed by go.
 
 ## Details
 
-The app supports three modes: Web, Dev, and Production.
+The app supports three modes: Web, Dev, and Production. The first two rely on [Vite](https://vitejs.dev/) to serve assets.
 
 Web
-: Use any local web browser to [interact](http://localhost:8080) with the app. For simplicity's sake: Wails gets built into the application, but it isn't used. The app can be built and run with no special tags.
+: Use any local web browser to [interact](http://localhost:8080/mosaic/) with the app. For simplicity's sake, while built into the application, Wails isn't used. The app can be built and run with no special tags.
 
 Dev
-: Uses wails' "embedded" browser to interact with the app. The app must be built with the "dev" tag. ( ie. go build -tags dev. ) While wails normally has its own web server in this mode; its disabled for Tapestry so everything can route through the same code used by "web".
+: Uses wails' "embedded" browser to interact with the app. The app must be built with the "dev" tag. ( ie. go build -tags dev. ) Wails normally has its own web server in this mode, but it's disabled so everything can route through the same code used by "web".
 
 Production
-: Uses wail's browser to interact with pre-built content. all assets get built into the go app, except for story files which are read/written to by the app. The "production" and "desktop" tags are required, as are several linker options. ( -w -s -H windowsgui ). Wails would normally server the the embedded assets, however Tapestry routes everything through the same multiplexer used for web and dev and instead of asking for a remote asset via vite in this mode, returns the embedded assets instead.
+: Uses wail's browser to interact with pre-built content. all assets get built into the go app, except for story files which are read/written to by the app. The "production" and "desktop" tags are required, as are several linker options. ( -w -s -H windowsgui ). Wails would normally serve the embedded assets, however Tapestry routes everything through the same multiplexer used for web and dev returning the embedded assets manually.
 
 Tapestry doesn't currently expose a javascript api for the wails window.
 

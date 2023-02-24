@@ -41,3 +41,6 @@ create table idl_term( op int not null, label text, field text, term int,
 /** markup from the serialized data; especially comments */
 create table idl_markup( op int not null, term text, markup text, value blob,
     primary key(op, term, markup) );
+
+/** the pairings of ops to slots can be determined from the signature data */
+create view idl_slot as select op,slot from idl_sig where slot is not null group by op, slot;
