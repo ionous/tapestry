@@ -13,7 +13,7 @@ import (
 func (run *Runner) setObjectField(obj qdb.NounInfo, field string, newValue g.Value) (err error) {
 	// tbd: cache the kind in the object info?
 	// or even... cache the ( last n ) field info into "obj.field"?
-	if kind, e := run.getKind(obj.Id); e != nil {
+	if kind, e := run.getKind(obj.Kind); e != nil {
 		err = e
 	} else if fieldIndex := kind.FieldIndex(field); fieldIndex < 0 {
 		err = g.UnknownField(obj.String(), field)
@@ -45,7 +45,7 @@ func (run *Runner) setObjectField(obj qdb.NounInfo, field string, newValue g.Val
 func (run *Runner) getObjectField(obj qdb.NounInfo, field string) (ret g.Value, err error) {
 	// tbd: cache the kind in the object info?
 	// or even... cache the ( last n ) field info into "obj.field"?
-	if kind, e := run.getKind(obj.Id); e != nil {
+	if kind, e := run.getKind(obj.Kind); e != nil {
 		err = e
 	} else if fieldIndex := kind.FieldIndex(field); fieldIndex < 0 {
 		err = g.UnknownField(obj.String(), field)
@@ -116,7 +116,7 @@ func (run *Runner) getFieldCache(obj qdb.NounInfo, field g.Field) (ret g.Value, 
 			ret = c
 		case assign.Assignment:
 			// evaluate the assignment to get the current value
-			if v, e := assign.GetValue(run, c); e != nil {
+			if v, e := assign.GetSafeAssignment(run, c); e != nil {
 				err = e
 			} else {
 				ret, err = safe.AutoConvert(run, field, v)

@@ -31,9 +31,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -49,17 +47,13 @@
                       "FromText:": {
                         "CanHandle actor:action:noun:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "dropping"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@noun"
-                            }
+                            "FromText:": "@noun"
                           }
                         ]
                       }
@@ -87,22 +81,16 @@
                               "Send:event:": [
                                 {
                                   "Capture obj:": {
-                                    "FromText:": {
-                                      "Text value:": "@noun"
-                                    }
+                                    "FromText:": "@noun"
                                   }
                                 },
                                 {
                                   "Drop actor:noun:": [
                                     {
-                                      "FromText:": {
-                                        "Text value:": "@actor"
-                                      }
+                                      "FromText:": "@actor"
                                     },
                                     {
-                                      "FromText:": {
-                                        "Text value:": "@noun"
-                                      }
+                                      "FromText:": "@noun"
                                     }
                                   ]
                                 }
@@ -112,14 +100,10 @@
                               {
                                 "ReportDropping actor:noun:": [
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@actor"
-                                    }
+                                    "FromText:": "@actor"
                                   },
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@noun"
-                                    }
+                                    "FromText:": "@noun"
                                   }
                                 ]
                               }
@@ -159,16 +143,12 @@
                             "FromText:": {
                               "MoveObject obj:dest:": [
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@noun"
-                                  }
+                                  "FromText:": "@noun"
                                 },
                                 {
                                   "FromText:": {
                                     "ParentOf obj:": {
-                                      "FromText:": {
-                                        "Text value:": "@actor"
-                                      }
+                                      "FromText:": "@actor"
                                     }
                                   }
                                 }
@@ -271,9 +251,7 @@
               {
                 "Not:": {
                   "IsPlayer obj:": {
-                    "FromText:": {
-                      "Text value:": "@actor"
-                    }
+                    "FromText:": "@actor"
                   }
                 }
               },
@@ -316,17 +294,13 @@
                     "Cmp:is:txt:": [
                       {
                         "ParentOf obj:": {
-                          "FromText:": {
-                            "Text value:": "@actor"
-                          }
+                          "FromText:": "@actor"
                         }
                       },
                       "equal_to",
                       {
                         "LocationOf obj:": {
-                          "FromText:": {
-                            "Text value:": "@noun"
-                          }
+                          "FromText:": "@noun"
                         }
                       }
                     ]

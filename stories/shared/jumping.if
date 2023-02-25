@@ -48,17 +48,13 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
                 {
                   "ReportJumping actor:": {
-                    "FromText:": {
-                      "Text value:": "@actor"
-                    }
+                    "FromText:": "@actor"
                   }
                 }
               ]
@@ -108,9 +104,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [

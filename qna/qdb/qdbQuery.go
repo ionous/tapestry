@@ -210,10 +210,14 @@ func (q *Query) PluralFromSingular(singular string) (ret string, err error) {
 // the last value is always the result, blank for execute statements
 func (q *Query) PatternLabels(pat string) (ret []string, err error) {
 	var labels, result string
-	if e := q.patternOf.QueryRow(pat).Scan(&labels, &result); e != nil && e != sql.ErrNoRows {
+	switch e := q.patternOf.QueryRow(pat).Scan(&labels, &result); e {
+	case sql.ErrNoRows:
+		// returns blank with no error
+	case nil:
+		parts := strings.Split(labels, ",")
+		ret = append(parts, result)
+	default:
 		err = e
-	} else {
-		ret = append(strings.Split(labels, ","), result)
 	}
 	return
 }
@@ -339,7 +343,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		// path is materialized ids so we return multiple values of resolved names
 		kindOfAncestors: ps.Prep(db,
 			`select mk.kind 
-			from kind_scope ks
+			from kind_scope ks  -- the kinds in domain scope 
 			join mdl_kind mk
 				-- is Y (is their name) a part of X (our path)
 				on instr(',' || ks.path, 

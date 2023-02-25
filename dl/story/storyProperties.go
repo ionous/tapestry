@@ -56,7 +56,7 @@ func (op *TextField) GetParam() eph.EphParams {
 }
 
 func (op *RecordField) GetParam() eph.EphParams {
-	var init assign.Assignment
+	var init assign.Assignment // init here for records is usually going to be a pattern.
 	if i := op.Initially; i != nil {
 		init = &assign.FromRecord{Value: i}
 	}

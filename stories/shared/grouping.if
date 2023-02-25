@@ -39,9 +39,7 @@
                   "Map:fromList:using:": [
                     "@groupings",
                     {
-                      "FromText:": {
-                        "Text value:": "@objs"
-                      }
+                      "FromTextList:": "@objs"
                     },
                     "assign grouping"
                   ]
@@ -50,9 +48,7 @@
                   "Reduce into:fromList:using:": [
                     "@groups",
                     {
-                      "FromText:": {
-                        "Text value:": "@groupings"
-                      }
+                      "FromRecordList:": "@groupings"
                     },
                     "collate groups"
                   ]
@@ -112,7 +108,7 @@
                   "Set:from:": [
                     "@grouping",
                     {
-                      "FromText:": "@grouping"
+                      "FromRecord:": "@grouping"
                     }
                   ]
                 }
@@ -544,7 +540,7 @@
                               "Set:from:": [
                                 "@idx",
                                 {
-                                  "FromText:": "@index"
+                                  "FromNumber:": "@index"
                                 }
                               ]
                             }
@@ -707,19 +703,19 @@
                           ]
                         },
                         {
-                          "Set:index:from:": [
+                          "Set:from:": [
                             {
-                              "FromText:": "groups"
+                              "Variable:dot:": [
+                                "groups",
+                                [
+                                  {
+                                    "AtIndex:": "@idx"
+                                  }
+                                ]
+                              ]
                             },
                             {
-                              "FromText:": {
-                                "Text value:": "@idx"
-                              }
-                            },
-                            {
-                              "FromText:": {
-                                "Text value:": "@group"
-                              }
+                              "FromRecord:": "@group"
                             }
                           ]
                         }

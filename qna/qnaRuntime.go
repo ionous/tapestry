@@ -176,7 +176,7 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 		if obj, e := run.getObjectInfo(target); e != nil {
 			err = e
 		} else {
-			// copies internally once it knows the type of field
+			// copies val internally once it knows the type of field
 			err = run.setObjectField(obj, field, val)
 		}
 	} else {
@@ -204,7 +204,7 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 	// fix: pre-transform field
 	if field := lang.Underscore(rawField); len(field) == 0 {
-		err = errutil.Fmt("requested empty field from %q", target)
+		err = errutil.Fmt("requested an empty %q", target)
 	} else if target[0] != meta.Prefix {
 		// an object from the author's story
 		if obj, e := run.getObjectInfo(target); e != nil {

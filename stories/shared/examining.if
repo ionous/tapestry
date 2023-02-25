@@ -31,9 +31,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -44,17 +42,13 @@
                       "FromText:": {
                         "CanReach actor:action:noun:requiresLight:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "examining"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@noun"
-                            }
+                            "FromText:": "@noun"
                           },
                           {
                             "FromBool:": true
@@ -81,17 +75,13 @@
                               "FromText:": {
                                 "CanUse actor:action:noun:": [
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@actor"
-                                    }
+                                    "FromText:": "@actor"
                                   },
                                   {
                                     "FromText:": "examining"
                                   },
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@noun"
-                                    }
+                                    "FromText:": "@noun"
                                   }
                                 ]
                               }
@@ -114,22 +104,16 @@
                                       "Send:event:": [
                                         {
                                           "Capture obj:": {
-                                            "FromText:": {
-                                              "Text value:": "@noun"
-                                            }
+                                            "FromText:": "@noun"
                                           }
                                         },
                                         {
                                           "Examine actor:noun:": [
                                             {
-                                              "FromText:": {
-                                                "Text value:": "@actor"
-                                              }
+                                              "FromText:": "@actor"
                                             },
                                             {
-                                              "FromText:": {
-                                                "Text value:": "@noun"
-                                              }
+                                              "FromText:": "@noun"
                                             }
                                           ]
                                         }
@@ -138,9 +122,7 @@
                                     [
                                       {
                                         "PrintDescription obj:": {
-                                          "FromText:": {
-                                            "Text value:": "@noun"
-                                          }
+                                          "FromText:": "@noun"
                                         }
                                       }
                                     ]
@@ -202,9 +184,7 @@
                     {
                       "Not:": {
                         "PrintParticulars obj:": {
-                          "FromText:": {
-                            "Text value:": "@obj"
-                          }
+                          "FromText:": "@obj"
                         }
                       }
                     },
@@ -238,9 +218,7 @@
                 },
                 {
                   "PrintParticulars obj:": {
-                    "FromText:": {
-                      "Text value:": "@obj"
-                    }
+                    "FromText:": "@obj"
                   }
                 }
               ]
@@ -287,9 +265,7 @@
                   "If:does:else:": [
                     {
                       "PrintInlineStorage obj:": {
-                        "FromText:": {
-                          "Text value:": "@obj"
-                        }
+                        "FromText:": "@obj"
                       }
                     },
                     [
@@ -362,9 +338,7 @@
                   "If:does:": [
                     {
                       "PrintInlineStorage obj:": {
-                        "FromText:": {
-                          "Text value:": "@obj"
-                        }
+                        "FromText:": "@obj"
                       }
                     },
                     [

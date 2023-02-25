@@ -9,7 +9,7 @@ import (
 )
 
 func (op *ListLen) GetNumber(run rt.Runtime) (ret g.Value, err error) {
-	if els, e := assign.GetValue(run, op.List); e != nil {
+	if els, e := assign.GetSafeAssignment(run, op.List); e != nil {
 		err = CmdError(op, e)
 	} else if !affine.IsList(els.Affinity()) {
 		err = CmdError(op, errutil.New("not a list"))

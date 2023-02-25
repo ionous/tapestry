@@ -56,24 +56,16 @@
                             "FromText:": {
                               "StateChanging noun:trait:guard:change:": [
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@noun"
-                                  }
+                                  "FromText:": "@noun"
                                 },
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@trait"
-                                  }
+                                  "FromText:": "@trait"
                                 },
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@guard"
-                                  }
+                                  "FromText:": "@guard"
                                 },
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@change"
-                                  }
+                                  "FromText:": "@change"
                                 }
                               ]
                             }
@@ -156,7 +148,7 @@
                           "Response:text:": [
                             "something changed itself",
                             {
-                              "RenderTemplate:": "{The: .noun|capitalize!} {are!} {.trait}."
+                              "RenderTemplate:": "{The: .noun|capitalize!} {are:.noun} {.trait}."
                             }
                           ]
                         }
@@ -267,7 +259,7 @@
                         "Response:text:": [
                           "can't change what is",
                           {
-                            "RenderTemplate:": "{They: .noun|capitalize!} {are!} already {.trait}."
+                            "RenderTemplate:": "{They: .noun|capitalize!} {are:.noun} already {.trait}."
                           }
                         ]
                       }
@@ -308,7 +300,7 @@
                         "Response:text:": [
                           "can't change the unchangeable",
                           {
-                            "RenderTemplate:": "{They: .noun|capitalize!} {arent!} something {we!} can {.change}."
+                            "RenderTemplate:": "{They: .noun|capitalize!} {arent: .noun} something {we!} can {.change}."
                           }
                         ]
                       }

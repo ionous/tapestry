@@ -28,7 +28,7 @@ func MakeRecord(run rt.Runtime, kind string, args ...Arg) (ret *g.Record, err er
 				break
 			} else if at < 0 {
 				break
-			} else if src, e := GetValue(run, a.Value); e != nil {
+			} else if src, e := GetSafeAssignment(run, a.Value); e != nil {
 				err = errutil.New(e, "while reading arg", i, a.Name)
 				break
 			} else if val, e := safe.AutoConvert(run, kind.Field(at), src); e != nil {
@@ -100,8 +100,7 @@ func (lf *labelFinder) findNext(run rt.Runtime, i int, a Arg) (ret int, err erro
 	return
 }
 
-// could all this be determined at assembly time?
-
+// could all this be determined at assembly time?s
 func (lf *labelFinder) getLabels(run rt.Runtime) (ret []string, err error) {
 	if lf.labels != nil {
 		ret = lf.labels
@@ -114,13 +113,18 @@ func (lf *labelFinder) getLabels(run rt.Runtime) (ret []string, err error) {
 	return
 }
 
-// returns -1 if not found
+// returns -1 if not found, but startingAt if there are no labels at all
+// ( no labels indicates a CallPattern is being used for record initialization )
 func findLabel(labels []string, name string, startingAt int) (ret int) {
-	ret = -1 // provisionally
-	for i, cnt := startingAt, len(labels); i < cnt; i++ {
-		if l := labels[i]; l == name {
-			ret = i
-			break
+	if cnt := len(labels); cnt == 0 {
+		ret = startingAt
+	} else {
+		ret = -1 // provisionally
+		for i := startingAt; i < cnt; i++ {
+			if l := labels[i]; l == name {
+				ret = i
+				break
+			}
 		}
 	}
 	return

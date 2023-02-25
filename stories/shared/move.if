@@ -112,9 +112,7 @@
                                     "other_than",
                                     {
                                       "ParentOf obj:": {
-                                        "FromText:": {
-                                          "Text value:": "@obj"
-                                        }
+                                        "FromText:": "@obj"
                                       }
                                     }
                                   ]
@@ -259,9 +257,7 @@
                         "Cmp:is:txt:": [
                           {
                             "HolderOf obj:": {
-                              "FromText:": {
-                                "Text value:": "@obj"
-                              }
+                              "FromText:": "@obj"
                             }
                           },
                           "equal_to",
@@ -273,14 +269,10 @@
                       {
                         "MoveObject obj:dest:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@obj"
-                            }
+                            "FromText:": "@obj"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           }
                         ]
                       }
@@ -293,9 +285,7 @@
                       "Cmp:is:txt:": [
                         {
                           "HolderOf obj:": {
-                            "FromText:": {
-                              "Text value:": "@obj"
-                            }
+                            "FromText:": "@obj"
                           }
                         },
                         "equal_to",

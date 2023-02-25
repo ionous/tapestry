@@ -65,16 +65,12 @@
                 {
                   "Smelling actor:noun:": [
                     {
-                      "FromText:": {
-                        "Text value:": "@actor"
-                      }
+                      "FromText:": "@actor"
                     },
                     {
                       "FromText:": {
                         "LocationOf obj:": {
-                          "FromText:": {
-                            "Text value:": "@actor"
-                          }
+                          "FromText:": "@actor"
                         }
                       }
                     }
@@ -120,9 +116,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -133,17 +127,13 @@
                       "FromText:": {
                         "CanReach actor:action:noun:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "smelling"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@noun"
-                            }
+                            "FromText:": "@noun"
                           }
                         ]
                       }
@@ -167,17 +157,13 @@
                               "FromText:": {
                                 "CanUse actor:action:noun:": [
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@actor"
-                                    }
+                                    "FromText:": "@actor"
                                   },
                                   {
                                     "FromText:": "smelling"
                                   },
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@noun"
-                                    }
+                                    "FromText:": "@noun"
                                   }
                                 ]
                               }
@@ -197,14 +183,10 @@
                                 {
                                   "ReportSmelling actor:noun:": [
                                     {
-                                      "FromText:": {
-                                        "Text value:": "@actor"
-                                      }
+                                      "FromText:": "@actor"
                                     },
                                     {
-                                      "FromText:": {
-                                        "Text value:": "@noun"
-                                      }
+                                      "FromText:": "@noun"
                                     }
                                   ]
                                 }
@@ -269,9 +251,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [

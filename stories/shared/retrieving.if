@@ -31,9 +31,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -47,17 +45,13 @@
                       "FromText:": {
                         "CanReach actor:action:noun:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "retrieving from"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@noun"
-                            }
+                            "FromText:": "@noun"
                           }
                         ]
                       }
@@ -81,22 +75,16 @@
                               "FromText:": {
                                 "CanUse actor:action:noun:otherNoun:": [
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@actor"
-                                    }
+                                    "FromText:": "@actor"
                                   },
                                   {
                                     "FromText:": "retrieving from"
                                   },
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@noun"
-                                    }
+                                    "FromText:": "@noun"
                                   },
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@other noun"
-                                    }
+                                    "FromText:": "@other noun"
                                   }
                                 ]
                               }
@@ -119,27 +107,19 @@
                                       "Send:event:": [
                                         {
                                           "Capture obj:": {
-                                            "FromText:": {
-                                              "Text value:": "@noun"
-                                            }
+                                            "FromText:": "@noun"
                                           }
                                         },
                                         {
                                           "RetrieveFrom actor:noun:otherNoun:": [
                                             {
-                                              "FromText:": {
-                                                "Text value:": "@actor"
-                                              }
+                                              "FromText:": "@actor"
                                             },
                                             {
-                                              "FromText:": {
-                                                "Text value:": "@noun"
-                                              }
+                                              "FromText:": "@noun"
                                             },
                                             {
-                                              "FromText:": {
-                                                "Text value:": "@other noun"
-                                              }
+                                              "FromText:": "@other noun"
                                             }
                                           ]
                                         }
@@ -149,19 +129,13 @@
                                       {
                                         "ReportRetrievingFrom actor:noun:otherNoun:": [
                                           {
-                                            "FromText:": {
-                                              "Text value:": "@actor"
-                                            }
+                                            "FromText:": "@actor"
                                           },
                                           {
-                                            "FromText:": {
-                                              "Text value:": "@noun"
-                                            }
+                                            "FromText:": "@noun"
                                           },
                                           {
-                                            "FromText:": {
-                                              "Text value:": "@other noun"
-                                            }
+                                            "FromText:": "@other noun"
                                           }
                                         ]
                                       }
@@ -210,9 +184,7 @@
                       "FromText:": {
                         "CanReach actor:action:noun:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "taking"
@@ -259,9 +231,7 @@
                       "FromText:": {
                         "CanUse actor:action:noun:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "taking"
@@ -292,9 +262,7 @@
                     "Cmp:is:txt:": [
                       {
                         "ParentOf obj:": {
-                          "FromText:": {
-                            "Text value:": "@noun"
-                          }
+                          "FromText:": "@noun"
                         }
                       },
                       "other_than",
@@ -312,7 +280,7 @@
                         "Response:text:": [
                           "can't retrieve what's not inside",
                           {
-                            "RenderTemplate:": "But {they:.noun} {arent:.noun} there now."
+                            "RenderTemplate:": "But {they:.noun} {arent: .noun} there now."
                           }
                         ]
                       }
@@ -349,22 +317,16 @@
                               "Send:event:": [
                                 {
                                   "Capture obj:": {
-                                    "FromText:": {
-                                      "Text value:": "@noun"
-                                    }
+                                    "FromText:": "@noun"
                                   }
                                 },
                                 {
                                   "Take actor:noun:": [
                                     {
-                                      "FromText:": {
-                                        "Text value:": "@actor"
-                                      }
+                                      "FromText:": "@actor"
                                     },
                                     {
-                                      "FromText:": {
-                                        "Text value:": "@noun"
-                                      }
+                                      "FromText:": "@noun"
                                     }
                                   ]
                                 }
@@ -421,14 +383,10 @@
                 {
                   "ReportTaking actor:noun:": [
                     {
-                      "FromText:": {
-                        "Text value:": "@actor"
-                      }
+                      "FromText:": "@actor"
                     },
                     {
-                      "FromText:": {
-                        "Text value:": "@noun"
-                      }
+                      "FromText:": "@noun"
                     }
                   ]
                 }

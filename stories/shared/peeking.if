@@ -31,9 +31,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -44,17 +42,13 @@
                       "FromText:": {
                         "CanReach actor:action:noun:requiresLight:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "peeking"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@noun"
-                            }
+                            "FromText:": "@noun"
                           },
                           {
                             "FromBool:": true
@@ -80,22 +74,16 @@
                               "Send:event:": [
                                 {
                                   "Capture obj:": {
-                                    "FromText:": {
-                                      "Text value:": "@noun"
-                                    }
+                                    "FromText:": "@noun"
                                   }
                                 },
                                 {
                                   "Peek actor:noun:": [
                                     {
-                                      "FromText:": {
-                                        "Text value:": "@actor"
-                                      }
+                                      "FromText:": "@actor"
                                     },
                                     {
-                                      "FromText:": {
-                                        "Text value:": "@noun"
-                                      }
+                                      "FromText:": "@noun"
                                     }
                                   ]
                                 }
@@ -105,14 +93,10 @@
                               {
                                 "ReportPeeking actor:noun:": [
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@actor"
-                                    }
+                                    "FromText:": "@actor"
                                   },
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@noun"
-                                    }
+                                    "FromText:": "@noun"
                                   }
                                 ]
                               }
@@ -177,9 +161,7 @@
               {
                 "Not:": {
                   "IsPlayer obj:": {
-                    "FromText:": {
-                      "Text value:": "@actor"
-                    }
+                    "FromText:": "@actor"
                   }
                 }
               },

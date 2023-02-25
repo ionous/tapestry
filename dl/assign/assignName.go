@@ -22,10 +22,11 @@ func ResolveName(run rt.Runtime, name string, path DottedPath) (ret RootValue, e
 		// otherwise, try as a variable first:
 		switch value, e := run.GetField(meta.Variables, name); e.(type) {
 		case nil:
-			// did the variable contain an object name? then unpack into an object.
-			// fix: yikes. can this be removed? who is using this?
+			// variables and objects are both specified with text evals
+			// because the template cant tell, we try to use that text as an object:
+			// {Say: RenderTemplate: {.obj.indefinite_article} {.name}}}
 			if aff := value.Affinity(); aff == affine.Text && len(path) > 0 {
-				ret, err = tryAsObject(run, name, path)
+				ret, err = tryAsObject(run, value.String(), path)
 			} else {
 				ret = RootValue{
 					RefValue: RefValue{
@@ -39,8 +40,13 @@ func ResolveName(run rt.Runtime, name string, path DottedPath) (ret RootValue, e
 
 		case g.Unknown:
 			// no such variable? try as an object:
-			ret, err = tryAsObject(run, name, path)
-
+			if v, e := tryAsObject(run, name, path); g.IsUnknown(e) {
+				err = g.UnknownName(name)
+			} else if err != nil {
+				err = e
+			} else {
+				ret = v
+			}
 		default:
 			err = e
 		}

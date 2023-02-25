@@ -29,9 +29,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -41,22 +39,16 @@
                       "Send:event:": [
                         {
                           "Capture obj:": {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           }
                         },
                         {
                           "Wait actor:noun:": [
                             {
-                              "FromText:": {
-                                "Text value:": "@actor"
-                              }
+                              "FromText:": "@actor"
                             },
                             {
-                              "FromText:": {
-                                "Text value:": "@actor"
-                              }
+                              "FromText:": "@actor"
                             }
                           ]
                         }
@@ -65,9 +57,7 @@
                     [
                       {
                         "ReportWaiting actor:": {
-                          "FromText:": {
-                            "Text value:": "@actor"
-                          }
+                          "FromText:": "@actor"
                         }
                       }
                     ]
@@ -121,9 +111,7 @@
               {
                 "Not:": {
                   "IsPlayer obj:": {
-                    "FromText:": {
-                      "Text value:": "@actor"
-                    }
+                    "FromText:": "@actor"
                   }
                 }
               },

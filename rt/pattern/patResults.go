@@ -34,13 +34,16 @@ func NewResults(run rt.Runtime, rec *g.Record, aff affine.Affinity) (ret *Result
 		if labels, e := run.GetField(meta.PatternLabels, name); e != nil {
 			err = e
 		} else {
+			// note: this tests labels rather than k.Implements(kindsOf.Record.String())
+			// because several tests use raw golang structs as faux pattern records
+			// ( they have their own implementation of PatternLabels )
 			labels := labels.Strings()
-			if last := len(labels) - 1; last < 0 {
-				err = errutil.New("pattern has unexpectedly few labels", name)
+			if cnt := len(labels); cnt == 0 {
+				err = errutil.Fmt("record %q isn't a pattern", name)
 			} else {
 				ret = &Results{
 					rec:         rec,
-					resultField: labels[last],
+					resultField: labels[cnt-1],
 					expectedAff: aff,
 				}
 			}

@@ -29,9 +29,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -39,16 +37,12 @@
                   "Send:event:": [
                     {
                       "Capture obj:": {
-                        "FromText:": {
-                          "Text value:": "@actor"
-                        }
+                        "FromText:": "@actor"
                       }
                     },
                     {
                       "Look actor:": {
-                        "FromText:": {
-                          "Text value:": "@actor"
-                        }
+                        "FromText:": "@actor"
                       }
                     }
                   ]
@@ -77,9 +71,7 @@
                     "object",
                     {
                       "LocationOf obj:": {
-                        "FromText:": {
-                          "Text value:": "@actor"
-                        }
+                        "FromText:": "@actor"
                       }
                     }
                   ]
@@ -151,9 +143,7 @@
               "enclosures",
               {
                 "TransparentList obj:": {
-                  "FromText:": {
-                    "Text value:": "@where"
-                  }
+                  "FromText:": "@where"
                 }
               }
             ]
@@ -164,9 +154,7 @@
               "object",
               {
                 "CurrentRoom obj:": {
-                  "FromText:": {
-                    "Text value:": "@where"
-                  }
+                  "FromText:": "@where"
                 }
               }
             ]
@@ -193,9 +181,7 @@
                     [
                       {
                         "PrintDarkHeader room:": {
-                          "FromText:": {
-                            "Text value:": "@room"
-                          }
+                          "FromText:": "@room"
                         }
                       },
                       {
@@ -232,9 +218,7 @@
                           [
                             {
                               "PrintDarkDescription room:": {
-                                "FromText:": {
-                                  "Text value:": "@room"
-                                }
+                                "FromText:": "@room"
                               }
                             }
                           ]
@@ -249,22 +233,16 @@
                         {
                           "PrintLocaleTitle room:enclosures:": [
                             {
-                              "FromText:": {
-                                "Text value:": "@room"
-                              }
+                              "FromText:": "@room"
                             },
                             {
-                              "FromText:": {
-                                "Text value:": "@enclosures"
-                              }
+                              "FromTextList:": "@enclosures"
                             }
                           ]
                         },
                         {
                           "PrintLocaleSubtitle enclosures:": {
-                            "FromText:": {
-                              "Text value:": "@enclosures"
-                            }
+                            "FromTextList:": "@enclosures"
                           }
                         },
                         {
@@ -321,14 +299,10 @@
                                           "FromText:": "@it"
                                         },
                                         {
-                                          "FromText:": {
-                                            "Text value:": "@where"
-                                          }
+                                          "FromText:": "@where"
                                         },
                                         {
-                                          "FromText:": {
-                                            "Text value:": "@room"
-                                          }
+                                          "FromText:": "@room"
                                         }
                                       ]
                                     }
@@ -351,7 +325,7 @@
                           {
                             "Object:field:": [
                               "settings",
-                              "darkness witnessed"
+                              "is darkness witnessed"
                             ]
                           },
                           {
@@ -367,7 +341,7 @@
                             {
                               "Object:field:": [
                                 "@room",
-                                "darkness visited"
+                                "is visited"
                               ]
                             },
                             {
@@ -660,9 +634,7 @@
               "kids",
               {
                 "ChildrenOf obj:": {
-                  "FromText:": {
-                    "Text value:": "@where"
-                  }
+                  "FromText:": "@where"
                 }
               }
             ]
@@ -739,22 +711,16 @@
                                 {
                                   "AncestorOf obj:root:": [
                                     {
-                                      "FromText:": {
-                                        "Text value:": "@viewpoint"
-                                      }
+                                      "FromText:": "@viewpoint"
                                     },
                                     {
-                                      "FromText:": {
-                                        "Text value:": "@it"
-                                      }
+                                      "FromText:": "@it"
                                     }
                                   ]
                                 },
                                 {
                                   "IsPlayer obj:": {
-                                    "FromText:": {
-                                      "Text value:": "@it"
-                                    }
+                                    "FromText:": "@it"
                                   }
                                 }
                               ]
@@ -763,9 +729,7 @@
                           [
                             {
                               "PrintObjectDescription obj:": {
-                                "FromText:": {
-                                  "Text value:": "@it"
-                                }
+                                "FromText:": "@it"
                               }
                             },
                             {
@@ -807,9 +771,7 @@
                 {
                   "CanAlsoSee where:here:children:firstMention:": [
                     {
-                      "FromText:": {
-                        "Text value:": "@where"
-                      }
+                      "FromText:": "@where"
                     },
                     {
                       "FromBool:": {
@@ -906,9 +868,7 @@
                 },
                 {
                   "PrintInlineStorage obj:": {
-                    "FromText:": {
-                      "Text value:": "@obj"
-                    }
+                    "FromText:": "@obj"
                   }
                 }
               ]
@@ -941,9 +901,7 @@
                 },
                 {
                   "Mention obj:": {
-                    "FromText:": {
-                      "Text value:": "@obj"
-                    }
+                    "FromText:": "@obj"
                   }
                 }
               ]
@@ -964,14 +922,10 @@
                 {
                   "PrintImpressionOf obj:locale:": [
                     {
-                      "FromText:": {
-                        "Text value:": "@obj"
-                      }
+                      "FromText:": "@obj"
                     },
                     {
-                      "FromText:": {
-                        "Text value:": "@locale"
-                      }
+                      "FromText:": "@locale"
                     }
                   ]
                 }
@@ -1089,9 +1043,7 @@
                 },
                 {
                   "Mention obj:": {
-                    "FromText:": {
-                      "Text value:": "@obj"
-                    }
+                    "FromText:": "@obj"
                   }
                 },
                 {
@@ -1119,9 +1071,7 @@
                     "Cmp:is:txt:": [
                       {
                         "ParentOf obj:": {
-                          "FromText:": {
-                            "Text value:": "@obj"
-                          }
+                          "FromText:": "@obj"
                         }
                       },
                       "equal_to",
@@ -1139,9 +1089,7 @@
                     {
                       "FromTextList:": {
                         "ChildrenOf obj:": {
-                          "FromText:": {
-                            "Text value:": "@obj"
-                          }
+                          "FromText:": "@obj"
                         }
                       }
                     },
@@ -1149,9 +1097,7 @@
                     [
                       {
                         "PrintImpressionOf obj:": {
-                          "FromText:": {
-                            "Text value:": "@it"
-                          }
+                          "FromText:": "@it"
                         }
                       }
                     ]

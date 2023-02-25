@@ -20,9 +20,7 @@
               "object group",
               {
                 "MakeGroups objs:": {
-                  "FromText:": {
-                    "Text value:": "@objs"
-                  }
+                  "FromTextList:": "@objs"
                 }
               }
             ]
@@ -48,9 +46,7 @@
                                 "Spaces does:": [
                                   {
                                     "PrintGroup group:": {
-                                      "FromText:": {
-                                        "Text value:": "@group"
-                                      }
+                                      "FromRecord:": "@group"
                                     }
                                   }
                                 ]
@@ -91,9 +87,7 @@
               "object group",
               {
                 "MakeGroups objs:": {
-                  "FromText:": {
-                    "Text value:": "@objs"
-                  }
+                  "FromTextList:": "@objs"
                 }
               }
             ]
@@ -119,9 +113,7 @@
                                 "Row does:": [
                                   {
                                     "PrintGroup group:": {
-                                      "FromText:": {
-                                        "Text value:": "@group"
-                                      }
+                                      "FromRecord:": "@group"
                                     }
                                   }
                                 ]
@@ -218,9 +210,7 @@
                     "Spaces does:": [
                       {
                         "A noun:": {
-                          "FromText:": {
-                            "Text value:": "@obj"
-                          }
+                          "FromText:": "@obj"
                         }
                       },
                       {
@@ -228,9 +218,7 @@
                           "Brackets does:": [
                             {
                               "PrintDetails obj:": {
-                                "FromText:": {
-                                  "Text value:": "@obj"
-                                }
+                                "FromText:": "@obj"
                               }
                             }
                           ]
@@ -265,9 +253,7 @@
               [
                 {
                   "PrintBlock obj:": {
-                    "FromText:": {
-                      "Text value:": "@obj"
-                    }
+                    "FromText:": "@obj"
                   }
                 }
               ]
@@ -301,9 +287,7 @@
               "kids",
               {
                 "VisibleStorage obj:": {
-                  "FromText:": {
-                    "Text value:": "@obj"
-                  }
+                  "FromText:": "@obj"
                 }
               }
             ]
@@ -335,17 +319,13 @@
                     "Spaces does:": [
                       {
                         "A noun:": {
-                          "FromText:": {
-                            "Text value:": "@obj"
-                          }
+                          "FromText:": "@obj"
                         }
                       },
                       {
                         "PrintStatus obj:isEmpty:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@obj"
-                            }
+                            "FromText:": "@obj"
                           },
                           {
                             "FromBool:": {
@@ -363,9 +343,7 @@
                     [
                       {
                         "PrintBlocks objs:": {
-                          "FromText:": {
-                            "Text value:": "@kids"
-                          }
+                          "FromTextList:": "@kids"
                         }
                       }
                     ]
@@ -407,9 +385,7 @@
               "kids",
               {
                 "VisibleStorage obj:": {
-                  "FromText:": {
-                    "Text value:": "@obj"
-                  }
+                  "FromText:": "@obj"
                 }
               }
             ]
@@ -482,9 +458,7 @@
               "kids",
               {
                 "VisibleStorage obj:": {
-                  "FromText:": {
-                    "Text value:": "@obj"
-                  }
+                  "FromText:": "@obj"
                 }
               }
             ]
@@ -628,14 +602,10 @@
                                   {
                                     "PrintInnerStatus obj:isEmpty:": [
                                       {
-                                        "FromText:": {
-                                          "Text value:": "@obj"
-                                        }
+                                        "FromText:": "@obj"
                                       },
                                       {
-                                        "FromText:": {
-                                          "Text value:": "@isEmpty"
-                                        }
+                                        "FromBool:": "@isEmpty"
                                       }
                                     ]
                                   }

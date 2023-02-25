@@ -306,9 +306,7 @@
                           {
                             "FromText:": {
                               "ParentOf obj:": {
-                                "FromText:": {
-                                  "Text value:": "@search"
-                                }
+                                "FromText:": "@search"
                               }
                             }
                           }
@@ -454,9 +452,7 @@
                                 {
                                   "FromText:": {
                                     "ParentOf obj:": {
-                                      "FromText:": {
-                                        "Text value:": "@o2"
-                                      }
+                                      "FromText:": "@o2"
                                     }
                                   }
                                 }
@@ -503,9 +499,7 @@
                           {
                             "FromText:": {
                               "ParentOf obj:": {
-                                "FromText:": {
-                                  "Text value:": "@o1"
-                                }
+                                "FromText:": "@o1"
                               }
                             }
                           }
@@ -618,9 +612,7 @@
                           {
                             "FromText:": {
                               "ParentOf obj:": {
-                                "FromText:": {
-                                  "Text value:": "@up"
-                                }
+                                "FromText:": "@up"
                               }
                             }
                           }
@@ -732,9 +724,7 @@
               "object",
               {
                 "ParentOf obj:": {
-                  "FromText:": {
-                    "Text value:": "@obj"
-                  }
+                  "FromText:": "@obj"
                 }
               }
             ]
@@ -822,9 +812,7 @@
               "object",
               {
                 "ParentOf obj:": {
-                  "FromText:": {
-                    "Text value:": "@obj"
-                  }
+                  "FromText:": "@obj"
                 }
               }
             ]
@@ -896,9 +884,7 @@
               "object",
               {
                 "ParentOf obj:": {
-                  "FromText:": {
-                    "Text value:": "@obj"
-                  }
+                  "FromText:": "@obj"
                 }
               }
             ]
@@ -982,9 +968,7 @@
                     {
                       "FromText:": {
                         "ParentOf obj:": {
-                          "FromText:": {
-                            "Text value:": "@obj"
-                          }
+                          "FromText:": "@obj"
                         }
                       }
                     }
@@ -1066,9 +1050,7 @@
                     {
                       "FromText:": {
                         "ParentOf obj:": {
-                          "FromText:": {
-                            "Text value:": "@obj"
-                          }
+                          "FromText:": "@obj"
                         }
                       }
                     }
@@ -1160,9 +1142,7 @@
                     {
                       "FromText:": {
                         "ParentOf obj:": {
-                          "FromText:": {
-                            "Text value:": "@obj"
-                          }
+                          "FromText:": "@obj"
                         }
                       }
                     }

@@ -85,12 +85,35 @@ func (ref *RefValue) SetValue(run rt.Runtime, newValue g.Value) (err error) {
 	return
 }
 
+// FIX: convert and warn instead of error on field affinity checks
+func (src *RootValue) GetCheckedValue(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
+	if v, e := src.getValue(run); e != nil {
+		err = e
+	} else if e := safe.Check(v, aff); e != nil {
+		err = errutil.New("get checked value failed", src.RefValue.String(), e)
+	} else {
+		ret = v
+	}
+	return
+}
+
+func (op *RootValue) GetList(run rt.Runtime) (ret g.Value, err error) {
+	if els, e := op.getValue(run); e != nil {
+		err = e
+	} else if aff := els.Affinity(); !affine.IsList(aff) {
+		err = errutil.New("expected %s was a list, but its a %v", op.RefValue, aff)
+	} else {
+		ret = els
+	}
+	return
+}
+
 // unpack a value
-func (src *RootValue) GetValue(run rt.Runtime) (ret g.Value, err error) {
+func (src *RootValue) getValue(run rt.Runtime) (ret g.Value, err error) {
 	val := src.RootValue
 	for i, dot := range src.Path {
 		if next, e := dot.Peek(run, val); e != nil {
-			err = errutil.New(e, "peeking at part", i)
+			err = pathError{i: i, err: e, path: src.Path}
 			break
 		} else {
 			val = next
@@ -102,25 +125,19 @@ func (src *RootValue) GetValue(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-// FIX: convert and warn instead of error on field affinity checks
-func (src *RootValue) GetCheckedValue(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
-	if v, e := GetValue(run, src); e != nil {
-		err = e
-	} else if e := safe.Check(v, aff); e != nil {
-		err = errutil.New(e, "at", src.RefValue.String())
-	} else {
-		ret = v
-	}
-	return
+// note: this hides "Unknown" error and that's useful in its current usage
+// ( for object trait handling in object get bool )
+type pathError struct {
+	i    int
+	err  error
+	path DottedPath
 }
 
-func (op *RootValue) GetList(run rt.Runtime) (ret g.Value, err error) {
-	if els, e := op.GetValue(run); e != nil {
-		err = e
-	} else if aff := els.Affinity(); !affine.IsList(aff) {
-		err = errutil.New("expected %s was a list, but its a %v", op.RefValue, aff)
-	} else {
-		ret = els
-	}
-	return
+// was the error encountered at the very last element?
+func (p *pathError) atLast() bool {
+	return p.i == len(p.path)
+}
+
+func (p pathError) Error() string {
+	return errutil.Sprint("peeking part", p.i, p.err)
 }

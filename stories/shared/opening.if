@@ -31,9 +31,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -44,17 +42,13 @@
                       "FromText:": {
                         "CanReach actor:action:noun:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "opening"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@noun"
-                            }
+                            "FromText:": "@noun"
                           }
                         ]
                       }
@@ -78,17 +72,13 @@
                               "FromText:": {
                                 "CanUse actor:action:noun:": [
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@actor"
-                                    }
+                                    "FromText:": "@actor"
                                   },
                                   {
                                     "FromText:": "opening"
                                   },
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@noun"
-                                    }
+                                    "FromText:": "@noun"
                                   }
                                 ]
                               }
@@ -109,22 +99,16 @@
                                   "Send:event:": [
                                     {
                                       "Capture obj:": {
-                                        "FromText:": {
-                                          "Text value:": "@noun"
-                                        }
+                                        "FromText:": "@noun"
                                       }
                                     },
                                     {
                                       "StateChange actor:noun:trait:guard:change:": [
                                         {
-                                          "FromText:": {
-                                            "Text value:": "@actor"
-                                          }
+                                          "FromText:": "@actor"
                                         },
                                         {
-                                          "FromText:": {
-                                            "Text value:": "@noun"
-                                          }
+                                          "FromText:": "@noun"
                                         },
                                         {
                                           "FromText:": "open"
@@ -187,9 +171,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -200,17 +182,13 @@
                       "FromText:": {
                         "CanReach actor:action:noun:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "closing"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@noun"
-                            }
+                            "FromText:": "@noun"
                           }
                         ]
                       }
@@ -234,17 +212,13 @@
                               "FromText:": {
                                 "CanUse actor:action:noun:": [
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@actor"
-                                    }
+                                    "FromText:": "@actor"
                                   },
                                   {
                                     "FromText:": "closing"
                                   },
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@noun"
-                                    }
+                                    "FromText:": "@noun"
                                   }
                                 ]
                               }
@@ -265,22 +239,16 @@
                                   "Send:event:": [
                                     {
                                       "Capture obj:": {
-                                        "FromText:": {
-                                          "Text value:": "@noun"
-                                        }
+                                        "FromText:": "@noun"
                                       }
                                     },
                                     {
                                       "StateChange actor:noun:trait:guard:change:": [
                                         {
-                                          "FromText:": {
-                                            "Text value:": "@actor"
-                                          }
+                                          "FromText:": "@actor"
                                         },
                                         {
-                                          "FromText:": {
-                                            "Text value:": "@noun"
-                                          }
+                                          "FromText:": "@noun"
                                         },
                                         {
                                           "FromText:": "closed"
@@ -414,9 +382,7 @@
                           "Not:": {
                             "AncestorOf obj:root:": [
                               {
-                                "FromText:": {
-                                  "Text value:": "@noun"
-                                }
+                                "FromText:": "@noun"
                               },
                               {
                                 "FromText:": "@actor"
@@ -433,9 +399,7 @@
                           {
                             "FromTextList:": {
                               "VisibleStorage obj:": {
-                                "FromText:": {
-                                  "Text value:": "@noun"
-                                }
+                                "FromText:": "@noun"
                               }
                             }
                           }

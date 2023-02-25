@@ -41,7 +41,7 @@ func (run *Runner) initializeLocals(rec *g.Record) (err error) {
 		for fieldIndex, init := range cached.init {
 			if init != nil {
 				ft := k.Field(fieldIndex)
-				if src, e := assign.GetValue(run, init); e != nil {
+				if src, e := assign.GetSafeAssignment(run, init); e != nil {
 					err = errutil.New("error determining local", k.Name(), ft.Name, e)
 					break
 				} else if val, e := safe.AutoConvert(run, ft, src); e != nil {

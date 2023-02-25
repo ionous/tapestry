@@ -20,7 +20,7 @@ var LogLevel LoggingLevel
 func (op *DebugLog) Execute(run rt.Runtime) (err error) {
 	// fix? at this time we cant guarantee a lack of side-effects
 	// so we always eval even if we don't print.
-	if v, e := assign.GetValue(run, op.Value); e != nil {
+	if v, e := assign.GetSafeAssignment(run, op.Value); e != nil {
 		err = CmdError(op, e)
 	} else {
 		var i interface{}

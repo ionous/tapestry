@@ -31,9 +31,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -54,22 +52,16 @@
                       "FromText:": {
                         "CanHandle actor:action:noun:otherNoun:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "storing into"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@noun"
-                            }
+                            "FromText:": "@noun"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@other noun"
-                            }
+                            "FromText:": "@other noun"
                           }
                         ]
                       }
@@ -96,17 +88,13 @@
                               "FromText:": {
                                 "CanReach actor:action:noun:": [
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@actor"
-                                    }
+                                    "FromText:": "@actor"
                                   },
                                   {
                                     "FromText:": "storing into"
                                   },
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@other noun"
-                                    }
+                                    "FromText:": "@other noun"
                                   }
                                 ]
                               }
@@ -130,22 +118,16 @@
                                       "FromText:": {
                                         "CanUse actor:action:noun:otherNoun:": [
                                           {
-                                            "FromText:": {
-                                              "Text value:": "@actor"
-                                            }
+                                            "FromText:": "@actor"
                                           },
                                           {
                                             "FromText:": "storing into"
                                           },
                                           {
-                                            "FromText:": {
-                                              "Text value:": "@noun"
-                                            }
+                                            "FromText:": "@noun"
                                           },
                                           {
-                                            "FromText:": {
-                                              "Text value:": "@other noun"
-                                            }
+                                            "FromText:": "@other noun"
                                           }
                                         ]
                                       }
@@ -168,27 +150,19 @@
                                               "Send:event:": [
                                                 {
                                                   "Capture obj:": {
-                                                    "FromText:": {
-                                                      "Text value:": "@noun"
-                                                    }
+                                                    "FromText:": "@noun"
                                                   }
                                                 },
                                                 {
                                                   "StoreInto actor:noun:otherNoun:": [
                                                     {
-                                                      "FromText:": {
-                                                        "Text value:": "@actor"
-                                                      }
+                                                      "FromText:": "@actor"
                                                     },
                                                     {
-                                                      "FromText:": {
-                                                        "Text value:": "@noun"
-                                                      }
+                                                      "FromText:": "@noun"
                                                     },
                                                     {
-                                                      "FromText:": {
-                                                        "Text value:": "@other noun"
-                                                      }
+                                                      "FromText:": "@other noun"
                                                     }
                                                   ]
                                                 }
@@ -198,19 +172,13 @@
                                               {
                                                 "ReportStoringInto actor:noun:otherNoun:": [
                                                   {
-                                                    "FromText:": {
-                                                      "Text value:": "@actor"
-                                                    }
+                                                    "FromText:": "@actor"
                                                   },
                                                   {
-                                                    "FromText:": {
-                                                      "Text value:": "@noun"
-                                                    }
+                                                    "FromText:": "@noun"
                                                   },
                                                   {
-                                                    "FromText:": {
-                                                      "Text value:": "@other noun"
-                                                    }
+                                                    "FromText:": "@other noun"
                                                   }
                                                 ]
                                               }
@@ -258,14 +226,10 @@
                             "FromText:": {
                               "MoveObject obj:dest:": [
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@noun"
-                                  }
+                                  "FromText:": "@noun"
                                 },
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@other noun"
-                                  }
+                                  "FromText:": "@other noun"
                                 }
                               ]
                             }
@@ -365,9 +329,7 @@
               {
                 "Not:": {
                   "IsPlayer obj:": {
-                    "FromText:": {
-                      "Text value:": "@actor"
-                    }
+                    "FromText:": "@actor"
                   }
                 }
               },
@@ -409,14 +371,10 @@
                   {
                     "AncestorOf obj:root:": [
                       {
-                        "FromText:": {
-                          "Text value:": "@other noun"
-                        }
+                        "FromText:": "@other noun"
                       },
                       {
-                        "FromText:": {
-                          "Text value:": "@noun"
-                        }
+                        "FromText:": "@noun"
                       }
                     ]
                   }
@@ -459,9 +417,7 @@
                     "Cmp:is:txt:": [
                       {
                         "WearerOf obj:": {
-                          "FromText:": {
-                            "Text value:": "@noun"
-                          }
+                          "FromText:": "@noun"
                         }
                       },
                       "equal_to",
@@ -521,9 +477,7 @@
                   {
                     "Not:": {
                       "AllowsStorage obj:": {
-                        "FromText:": {
-                          "Text value:": "@intoObj"
-                        }
+                        "FromText:": "@intoObj"
                       }
                     }
                   }
@@ -569,9 +523,7 @@
                   {
                     "Not:": {
                       "ProvidesStorage obj:": {
-                        "FromText:": {
-                          "Text value:": "@intoObj"
-                        }
+                        "FromText:": "@intoObj"
                       }
                     }
                   }

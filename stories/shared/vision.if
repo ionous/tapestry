@@ -38,9 +38,7 @@
               "now lit",
               {
                 "ContainsLight spot:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               }
             ]

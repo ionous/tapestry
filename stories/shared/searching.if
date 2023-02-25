@@ -31,9 +31,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -44,17 +42,13 @@
                       "FromText:": {
                         "CanReach actor:action:noun:requiresLight:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "searching"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@noun"
-                            }
+                            "FromText:": "@noun"
                           },
                           {
                             "FromBool:": true
@@ -80,22 +74,16 @@
                               "Send:event:": [
                                 {
                                   "Capture obj:": {
-                                    "FromText:": {
-                                      "Text value:": "@noun"
-                                    }
+                                    "FromText:": "@noun"
                                   }
                                 },
                                 {
                                   "Search actor:noun:": [
                                     {
-                                      "FromText:": {
-                                        "Text value:": "@actor"
-                                      }
+                                      "FromText:": "@actor"
                                     },
                                     {
-                                      "FromText:": {
-                                        "Text value:": "@noun"
-                                      }
+                                      "FromText:": "@noun"
                                     }
                                   ]
                                 }
@@ -105,14 +93,10 @@
                               {
                                 "ReportSearching actor:noun:": [
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@actor"
-                                    }
+                                    "FromText:": "@actor"
                                   },
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@noun"
-                                    }
+                                    "FromText:": "@noun"
                                   }
                                 ]
                               }
@@ -182,9 +166,7 @@
               {
                 "Not:": {
                   "IsPlayer obj:": {
-                    "FromText:": {
-                      "Text value:": "@actor"
-                    }
+                    "FromText:": "@actor"
                   }
                 }
               },
@@ -208,16 +190,12 @@
                 "AllTrue:": [
                   {
                     "IsPlayer obj:": {
-                      "FromText:": {
-                        "Text value:": "@actor"
-                      }
+                      "FromText:": "@actor"
                     }
                   },
                   {
                     "ShowsStorage obj:": {
-                      "FromText:": {
-                        "Text value:": "@noun"
-                      }
+                      "FromText:": "@noun"
                     }
                   }
                 ]
@@ -229,9 +207,7 @@
                     {
                       "FromTextList:": {
                         "VisibleStorage obj:": {
-                          "FromText:": {
-                            "Text value:": "@noun"
-                          }
+                          "FromText:": "@noun"
                         }
                       }
                     }
@@ -334,9 +310,7 @@
                   },
                   {
                     "FullyOpaque obj:": {
-                      "FromText:": {
-                        "Text value:": "@noun"
-                      }
+                      "FromText:": "@noun"
                     }
                   }
                 ]
@@ -374,9 +348,7 @@
                   {
                     "Not:": {
                       "ProvidesStorage obj:": {
-                        "FromText:": {
-                          "Text value:": "@noun"
-                        }
+                        "FromText:": "@noun"
                       }
                     }
                   }

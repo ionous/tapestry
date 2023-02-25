@@ -108,14 +108,10 @@
                                         {
                                           "PrintGroupedObject obj:grouping:": [
                                             {
-                                              "FromText:": {
-                                                "Text value:": "@obj"
-                                              }
+                                              "FromText:": "@obj"
                                             },
                                             {
-                                              "FromText:": {
-                                                "Text value:": "@grouping"
-                                              }
+                                              "FromRecord:": "@grouping"
                                             }
                                           ]
                                         }
@@ -144,14 +140,10 @@
                                     {
                                       "PrintGroupedObject obj:grouping:": [
                                         {
-                                          "FromText:": {
-                                            "Text value:": "@obj"
-                                          }
+                                          "FromText:": "@obj"
                                         },
                                         {
-                                          "FromText:": {
-                                            "Text value:": "@grouping"
-                                          }
+                                          "FromRecord:": "@grouping"
                                         }
                                       ]
                                     }
@@ -383,9 +375,7 @@
               [
                 {
                   "PrintObject obj:": {
-                    "FromText:": {
-                      "Text value:": "@obj"
-                    }
+                    "FromText:": "@obj"
                   }
                 }
               ]

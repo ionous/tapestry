@@ -1,6 +1,8 @@
 package assign
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -35,10 +37,15 @@ func (op *ObjectRef) GetPath() []Dot {
 }
 
 func (op *ObjectRef) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	if v, e := op.getValue(run, affine.Bool); e != nil {
-		err = cmdError(op, e)
-	} else {
+	var u g.Unknown
+	if v, e := op.getValue(run, affine.Bool); e == nil {
 		ret = v
+	} else if errors.As(e, &u) && u.IsUnknownField() {
+		// asking for a boolean field that doesn't exist?
+		// we allow this so that any object can support trait requests
+		ret = g.False
+	} else {
+		err = cmdError(op, e)
 	}
 	return
 }

@@ -9,36 +9,38 @@ import (
 )
 
 type Assignment interface {
-	GetValue(run rt.Runtime) (ret g.Value, err error)
+	GetAssignedValue(run rt.Runtime) (ret g.Value, err error)
 }
 
-func (op *FromBool) GetValue(run rt.Runtime) (ret g.Value, err error) {
+func (op *FromBool) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	return safe.GetBool(run, op.Value)
 }
-func (op *FromNumber) GetValue(run rt.Runtime) (ret g.Value, err error) {
+func (op *FromNumber) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	return safe.GetNumber(run, op.Value)
 }
-func (op *FromText) GetValue(run rt.Runtime) (ret g.Value, err error) {
+func (op *FromText) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	return safe.GetText(run, op.Value)
 }
-func (op *FromRecord) GetValue(run rt.Runtime) (ret g.Value, err error) {
+func (op *FromRecord) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	return safe.GetRecord(run, op.Value)
 }
-func (op *FromNumList) GetValue(run rt.Runtime) (ret g.Value, err error) {
+func (op *FromNumList) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	return safe.GetNumList(run, op.Value)
 }
-func (op *FromTextList) GetValue(run rt.Runtime) (ret g.Value, err error) {
+func (op *FromTextList) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	return safe.GetTextList(run, op.Value)
 }
-func (op *FromRecordList) GetValue(run rt.Runtime) (ret g.Value, err error) {
+func (op *FromRecordList) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	return safe.GetRecordList(run, op.Value)
 }
 
-func GetValue(run rt.Runtime, a Assignment) (ret g.Value, err error) {
+// handles null assignments by returning "MissingEval" error
+// ( cant live in package safe because package assign uses package safe )
+func GetSafeAssignment(run rt.Runtime, a Assignment) (ret g.Value, err error) {
 	if a == nil {
 		err = safe.MissingEval("assigned value")
 	} else {
-		ret, err = a.GetValue(run)
+		ret, err = a.GetAssignedValue(run)
 	}
 	return
 }

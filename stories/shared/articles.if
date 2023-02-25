@@ -137,9 +137,7 @@
                 {
                   "PrintArticle obj:name:": [
                     {
-                      "FromText:": {
-                        "Text value:": "@noun"
-                      }
+                      "FromText:": "@noun"
                     },
                     {
                       "FromText:": {
@@ -184,9 +182,7 @@
                       "FromText:": "the"
                     },
                     {
-                      "FromText:": {
-                        "Text value:": "@noun"
-                      }
+                      "FromText:": "@noun"
                     },
                     {
                       "FromText:": {
@@ -243,9 +239,7 @@
             "PatternRule:does:": [
               {
                 "StartsWithVowel text:": {
-                  "FromText:": {
-                    "Text value:": "@name"
-                  }
+                  "FromText:": "@name"
                 }
               },
               [

@@ -56,6 +56,10 @@
       ]
     },
     {
+      "--": [
+        "fix? wouldn't these settings make more sense as part of the player?",
+        "or some global game data block, rather than settings configuration"
+      ],
       "Kinds:have:": [
         "Settings",
         [

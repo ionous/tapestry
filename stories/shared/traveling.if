@@ -49,9 +49,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -62,17 +60,13 @@
                       "FromText:": {
                         "CanReach actor:action:noun:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "traveling"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@noun"
-                            }
+                            "FromText:": "@noun"
                           }
                         ]
                       }
@@ -96,22 +90,16 @@
                               "FromText:": {
                                 "CanUse actor:action:noun:otherNoun:": [
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@actor"
-                                    }
+                                    "FromText:": "@actor"
                                   },
                                   {
                                     "FromText:": "traveling"
                                   },
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@noun"
-                                    }
+                                    "FromText:": "@noun"
                                   },
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@destination"
-                                    }
+                                    "FromText:": "@destination"
                                   }
                                 ]
                               }
@@ -134,22 +122,16 @@
                                       "Send:event:": [
                                         {
                                           "Capture obj:": {
-                                            "FromText:": {
-                                              "Text value:": "@noun"
-                                            }
+                                            "FromText:": "@noun"
                                           }
                                         },
                                         {
                                           "Travel actor:noun:": [
                                             {
-                                              "FromText:": {
-                                                "Text value:": "@actor"
-                                              }
+                                              "FromText:": "@actor"
                                             },
                                             {
-                                              "FromText:": {
-                                                "Text value:": "@noun"
-                                              }
+                                              "FromText:": "@noun"
                                             }
                                           ]
                                         }
@@ -159,14 +141,10 @@
                                       {
                                         "ReportTraveling actor:noun:": [
                                           {
-                                            "FromText:": {
-                                              "Text value:": "@actor"
-                                            }
+                                            "FromText:": "@actor"
                                           },
                                           {
-                                            "FromText:": {
-                                              "Text value:": "@noun"
-                                            }
+                                            "FromText:": "@noun"
                                           }
                                         ]
                                       }
@@ -225,14 +203,10 @@
                             "FromText:": {
                               "MoveObject obj:dest:": [
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@actor"
-                                  }
+                                  "FromText:": "@actor"
                                 },
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@destination"
-                                  }
+                                  "FromText:": "@destination"
                                 }
                               ]
                             }
@@ -320,9 +294,7 @@
                     {
                       "FromText:": {
                         "ParentOf obj:": {
-                          "FromText:": {
-                            "Text value:": "@actor"
-                          }
+                          "FromText:": "@actor"
                         }
                       }
                     },
@@ -344,9 +316,7 @@
               {
                 "Not:": {
                   "IsPlayer obj:": {
-                    "FromText:": {
-                      "Text value:": "@actor"
-                    }
+                    "FromText:": "@actor"
                   }
                 }
               },

@@ -9,7 +9,7 @@ import (
 )
 
 func (op *RenderValue) RenderEval(run rt.Runtime, hint affine.Affinity) (ret g.Value, err error) {
-	if v, e := assign.GetValue(run, op.Value); e != nil {
+	if v, e := assign.GetSafeAssignment(run, op.Value); e != nil {
 		err = CmdError(op, e)
 	} else if safe.Check(v, hint); e != nil {
 		err = CmdError(op, e)

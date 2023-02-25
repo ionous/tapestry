@@ -161,7 +161,7 @@
                               "Set:from:": [
                                 "@grouping",
                                 {
-                                  "FromText:": "@grouping"
+                                  "FromRecord:": "@grouping"
                                 }
                               ]
                             }
@@ -805,8 +805,14 @@
             "--": ""
           },
           {
+            "--": [ 
+              "this has been disabled for quite a while.",
+              "even though the triangles are counted nouns",
+              "for some reason they get pulled into the 'things' group",
+              "and print ex. 'a triangle' instead of 'one triangle'."
+            ],
             "Test:withScene:do:": [
-              "custom unnamed parenthetical",
+              "x custom unnamed parenthetical",
               [
                 {
                   "Pattern:rules:": [

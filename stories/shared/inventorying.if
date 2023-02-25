@@ -29,9 +29,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -39,16 +37,12 @@
                   "Send:event:": [
                     {
                       "Capture obj:": {
-                        "FromText:": {
-                          "Text value:": "@actor"
-                        }
+                        "FromText:": "@actor"
                       }
                     },
                     {
                       "Inventory actor:": {
-                        "FromText:": {
-                          "Text value:": "@actor"
-                        }
+                        "FromText:": "@actor"
                       }
                     }
                   ]
@@ -77,9 +71,7 @@
                     [
                       {
                         "PrintInventory actor:": {
-                          "FromText:": {
-                            "Text value:": "@actor"
-                          }
+                          "FromText:": "@actor"
                         }
                       },
                       {
@@ -124,9 +116,7 @@
               "kids",
               {
                 "ChildrenOf obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               }
             ]
@@ -176,9 +166,7 @@
                 },
                 {
                   "PrintBlocks objs:": {
-                    "FromText:": {
-                      "Text value:": "@kids"
-                    }
+                    "FromTextList:": "@kids"
                   }
                 }
               ]

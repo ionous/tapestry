@@ -31,9 +31,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -44,17 +42,13 @@
                       "FromText:": {
                         "CanReach actor:action:noun:requiresLight:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "taking"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@noun"
-                            }
+                            "FromText:": "@noun"
                           },
                           {
                             "FromBool:": false
@@ -80,22 +74,16 @@
                               "Send:event:": [
                                 {
                                   "Capture obj:": {
-                                    "FromText:": {
-                                      "Text value:": "@noun"
-                                    }
+                                    "FromText:": "@noun"
                                   }
                                 },
                                 {
                                   "Take actor:noun:": [
                                     {
-                                      "FromText:": {
-                                        "Text value:": "@actor"
-                                      }
+                                      "FromText:": "@actor"
                                     },
                                     {
-                                      "FromText:": {
-                                        "Text value:": "@noun"
-                                      }
+                                      "FromText:": "@noun"
                                     }
                                   ]
                                 }
@@ -105,14 +93,10 @@
                               {
                                 "ReportTaking actor:noun:": [
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@actor"
-                                    }
+                                    "FromText:": "@actor"
                                   },
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@noun"
-                                    }
+                                    "FromText:": "@noun"
                                   }
                                 ]
                               }
@@ -152,14 +136,10 @@
                             "FromText:": {
                               "MoveObject obj:dest:": [
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@noun"
-                                  }
+                                  "FromText:": "@noun"
                                 },
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@actor"
-                                  }
+                                  "FromText:": "@actor"
                                 }
                               ]
                             }
@@ -260,9 +240,7 @@
               {
                 "Not:": {
                   "IsPlayer obj:": {
-                    "FromText:": {
-                      "Text value:": "@actor"
-                    }
+                    "FromText:": "@actor"
                   }
                 }
               },

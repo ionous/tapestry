@@ -125,9 +125,7 @@
                 },
                 {
                   "Mention obj:": {
-                    "FromText:": {
-                      "Text value:": "@obj"
-                    }
+                    "FromText:": "@obj"
                   }
                 }
               ]
@@ -149,9 +147,7 @@
                 },
                 {
                   "Mention obj:": {
-                    "FromText:": {
-                      "Text value:": "@obj"
-                    }
+                    "FromText:": "@obj"
                   }
                 }
               ]
@@ -182,9 +178,7 @@
                 },
                 {
                   "Mention obj:": {
-                    "FromText:": {
-                      "Text value:": "@obj"
-                    }
+                    "FromText:": "@obj"
                   }
                 }
               ]
@@ -239,7 +233,7 @@
                   "Set:from:": [
                     {
                       "Object:field:": [
-                        "@settings",
+                        "settings",
                         "mentions"
                       ]
                     },
@@ -249,7 +243,7 @@
                           1,
                           {
                             "Object:field:": [
-                              "@settings",
+                              "settings",
                               "mentions"
                             ]
                           }

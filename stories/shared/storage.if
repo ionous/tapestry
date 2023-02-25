@@ -100,9 +100,7 @@
             "PatternRule:does:": [
               {
                 "ProvidesStorage obj:": {
-                  "FromText:": {
-                    "Text value:": "@obj"
-                  }
+                  "FromText:": "@obj"
                 }
               },
               [
@@ -113,9 +111,7 @@
                       "FromBool:": {
                         "Not:": {
                           "FullyOpaque obj:": {
-                            "FromText:": {
-                              "Text value:": "@obj"
-                            }
+                            "FromText:": "@obj"
                           }
                         }
                       }
@@ -160,9 +156,7 @@
             "PatternRule:does:": [
               {
                 "ShowsStorage obj:": {
-                  "FromText:": {
-                    "Text value:": "@obj"
-                  }
+                  "FromText:": "@obj"
                 }
               },
               [
@@ -171,9 +165,7 @@
                     {
                       "FromTextList:": {
                         "ChildrenOf obj:": {
-                          "FromText:": {
-                            "Text value:": "@obj"
-                          }
+                          "FromText:": "@obj"
                         }
                       }
                     },
@@ -258,9 +250,7 @@
             "PatternRule:does:": [
               {
                 "ProvidesStorage obj:": {
-                  "FromText:": {
-                    "Text value:": "@obj"
-                  }
+                  "FromText:": "@obj"
                 }
               },
               [

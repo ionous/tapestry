@@ -102,9 +102,7 @@
                           {
                             "FromText:": {
                               "ParentOf obj:": {
-                                "FromText:": {
-                                  "Text value:": "@i"
-                                }
+                                "FromText:": "@i"
                               }
                             }
                           }
@@ -126,29 +124,19 @@
                                   "FromText:": {
                                     "ReachUp fromObj:intoObj:actor:noun:action:": [
                                       {
-                                        "FromText:": {
-                                          "Text value:": "@i"
-                                        }
+                                        "FromText:": "@i"
                                       },
                                       {
-                                        "FromText:": {
-                                          "Text value:": "@next"
-                                        }
+                                        "FromText:": "@next"
                                       },
                                       {
-                                        "FromText:": {
-                                          "Text value:": "@actor"
-                                        }
+                                        "FromText:": "@actor"
                                       },
                                       {
-                                        "FromText:": {
-                                          "Text value:": "@noun"
-                                        }
+                                        "FromText:": "@noun"
                                       },
                                       {
-                                        "FromText:": {
-                                          "Text value:": "@action"
-                                        }
+                                        "FromText:": "@action"
                                       }
                                     ]
                                   }
@@ -231,16 +219,12 @@
                           "@lca",
                           {
                             "FromNumber:": {
-                              "Find:list:": [
+                              "Find:inList:": [
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@i"
-                                  }
+                                  "FromText:": "@i"
                                 },
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@path"
-                                  }
+                                  "FromTextList:": "@path"
                                 }
                               ]
                             }
@@ -272,9 +256,7 @@
                           {
                             "FromText:": {
                               "ParentOf obj:": {
-                                "FromText:": {
-                                  "Text value:": "@i"
-                                }
+                                "FromText:": "@i"
                               }
                             }
                           }
@@ -287,29 +269,19 @@
                             "FromText:": {
                               "ReachDown fromObj:intoObj:actor:noun:action:": [
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@next"
-                                  }
+                                  "FromText:": "@next"
                                 },
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@i"
-                                  }
+                                  "FromText:": "@i"
                                 },
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@actor"
-                                  }
+                                  "FromText:": "@actor"
                                 },
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@noun"
-                                  }
+                                  "FromText:": "@noun"
                                 },
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@action"
-                                  }
+                                  "FromText:": "@action"
                                 }
                               ]
                             }

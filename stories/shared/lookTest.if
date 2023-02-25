@@ -1,9 +1,28 @@
 {
   "Tapestry:": [
     {
-      "Test:dependsOn:do:": [
+      "Test:dependsOn:withScene:do:": [
         "base vis",
         "Kitchenette",
+        [
+          {
+            "Nouns:startAs:": [
+              [
+                {
+                  "Noun:": "settings"
+                }
+              ],
+              {
+                "NounTraits:trait:": [
+                  "is",
+                  [
+                    "verbose"
+                  ]
+                ]
+              }
+            ]
+          }
+        ],
         [
           {
             "Comment:": "Say the list of visible objects from one of several vantage points."

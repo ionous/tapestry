@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"github.com/ionous/errutil"
 )
 
 // RenderRef reads a value using a name which might refer to a variable or an object.
@@ -89,11 +90,11 @@ func (op *RenderRef) RenderEval(run rt.Runtime, hint affine.Affinity) (ret g.Val
 
 func (op *RenderRef) renderRef(run rt.Runtime, hint affine.Affinity) (ret g.Value, err error) {
 	if name, e := safe.GetText(run, op.Name); e != nil {
-		err = e
+		err = errutil.New("getting text", e)
 	} else if path, e := assign.ResolvePath(run, op.Dot); e != nil {
-		err = e
+		err = errutil.New("resolving path for", name, e)
 	} else if tv, e := assign.ResolveName(run, name.String(), path); e != nil {
-		err = e
+		err = errutil.New("resolving", name, "with path", path, e)
 	} else {
 		ret, err = tv.GetCheckedValue(run, hint)
 	}

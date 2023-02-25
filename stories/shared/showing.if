@@ -115,9 +115,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -128,22 +126,16 @@
                       "FromText:": {
                         "CanHandle actor:action:noun:otherNoun:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "showing"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@noun"
-                            }
+                            "FromText:": "@noun"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@other noun"
-                            }
+                            "FromText:": "@other noun"
                           }
                         ]
                       }
@@ -165,17 +157,13 @@
                           "FromText:": {
                             "CanReach actor:action:noun:": [
                               {
-                                "FromText:": {
-                                  "Text value:": "@actor"
-                                }
+                                "FromText:": "@actor"
                               },
                               {
                                 "FromText:": "showing"
                               },
                               {
-                                "FromText:": {
-                                  "Text value:": "@other noun"
-                                }
+                                "FromText:": "@other noun"
                               }
                             ]
                           }
@@ -195,19 +183,13 @@
                             {
                               "ReportShowing actor:noun:otherNoun:": [
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@actor"
-                                  }
+                                  "FromText:": "@actor"
                                 },
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@noun"
-                                  }
+                                  "FromText:": "@noun"
                                 },
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@other noun"
-                                  }
+                                  "FromText:": "@other noun"
                                 }
                               ]
                             }
@@ -277,9 +259,7 @@
               {
                 "Not:": {
                   "IsPlayer obj:": {
-                    "FromText:": {
-                      "Text value:": "@actor"
-                    }
+                    "FromText:": "@actor"
                   }
                 }
               },

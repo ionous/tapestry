@@ -270,9 +270,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@noun"
-                  }
+                  "FromText:": "@noun"
                 }
               },
               [
@@ -337,9 +335,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@noun"
-                  }
+                  "FromText:": "@noun"
                 }
               },
               [
@@ -402,9 +398,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@noun"
-                  }
+                  "FromText:": "@noun"
                 }
               },
               [

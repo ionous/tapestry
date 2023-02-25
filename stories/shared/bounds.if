@@ -73,9 +73,7 @@
                                 {
                                   "FromTextList:": {
                                     "ChildrenOf obj:": {
-                                      "FromText:": {
-                                        "Text value:": "@enc"
-                                      }
+                                      "FromText:": "@enc"
                                     }
                                   }
                                 },
@@ -94,9 +92,7 @@
                                       {
                                         "Not:": {
                                           "FullyOpaque obj:": {
-                                            "FromText:": {
-                                              "Text value:": "@kid"
-                                            }
+                                            "FromText:": "@kid"
                                           }
                                         }
                                       },

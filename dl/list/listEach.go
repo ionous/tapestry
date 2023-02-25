@@ -20,7 +20,7 @@ func (op *ListEach) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListEach) forEach(run rt.Runtime) (err error) {
-	if vs, e := assign.GetValue(run, op.List); e != nil {
+	if vs, e := assign.GetSafeAssignment(run, op.List); e != nil {
 		err = e
 	} else if !affine.IsList(vs.Affinity()) {
 		err = errutil.New("not a list")

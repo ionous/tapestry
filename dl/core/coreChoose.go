@@ -22,7 +22,7 @@ func (op *ChooseValue) Branch(run rt.Runtime) (err error) {
 }
 
 func (op *ChooseValue) ifDoElse(run rt.Runtime) (err error) {
-	if v, e := assign.GetValue(run, op.From); e != nil {
+	if v, e := assign.GetSafeAssignment(run, op.From); e != nil {
 		err = e
 	} else {
 		run.PushScope(scope.NewSingleValue(op.Assign, v))

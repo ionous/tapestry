@@ -31,9 +31,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -44,17 +42,13 @@
                       "FromText:": {
                         "CanHandle actor:action:noun:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "wearing"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@noun"
-                            }
+                            "FromText:": "@noun"
                           }
                         ]
                       }
@@ -75,22 +69,16 @@
                           "Send:event:": [
                             {
                               "Capture obj:": {
-                                "FromText:": {
-                                  "Text value:": "@noun"
-                                }
+                                "FromText:": "@noun"
                               }
                             },
                             {
                               "StateChange actor:noun:trait:guard:change:": [
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@actor"
-                                  }
+                                  "FromText:": "@actor"
                                 },
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@noun"
-                                  }
+                                  "FromText:": "@noun"
                                 },
                                 {
                                   "FromText:": "worn"
@@ -149,9 +137,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -162,17 +148,13 @@
                       "FromText:": {
                         "CanHandle actor:action:noun:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "removing"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@noun"
-                            }
+                            "FromText:": "@noun"
                           }
                         ]
                       }
@@ -193,22 +175,16 @@
                           "Send:event:": [
                             {
                               "Capture obj:": {
-                                "FromText:": {
-                                  "Text value:": "@noun"
-                                }
+                                "FromText:": "@noun"
                               }
                             },
                             {
                               "StateChange actor:noun:trait:guard:change:": [
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@actor"
-                                  }
+                                  "FromText:": "@actor"
                                 },
                                 {
-                                  "FromText:": {
-                                    "Text value:": "@noun"
-                                  }
+                                  "FromText:": "@noun"
                                 },
                                 {
                                   "FromText:": "not worn"
@@ -260,9 +236,7 @@
                       "other_than",
                       {
                         "WearerOf obj:": {
-                          "FromText:": {
-                            "Text value:": "@noun"
-                          }
+                          "FromText:": "@noun"
                         }
                       }
                     ]

@@ -52,7 +52,7 @@ func (op *ListSplice) spliceList(run rt.Runtime, aff affine.Affinity) (retVal g.
 		err = e
 	} else if els, e := root.GetList(run); e != nil {
 		err = e
-	} else if ins, e := assign.GetValue(run, op.Insert); e != nil {
+	} else if ins, e := assign.GetSafeAssignment(run, op.Insert); e != nil {
 		err = e
 	} else if !IsAppendable(ins, els) {
 		err = insertError{ins, els}

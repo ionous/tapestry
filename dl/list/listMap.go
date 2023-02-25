@@ -17,7 +17,7 @@ func (op *ListMap) Execute(run rt.Runtime) (err error) {
 
 func (op *ListMap) remap(run rt.Runtime) (err error) {
 	pat := op.PatternName
-	if src, e := assign.GetValue(run, op.List); e != nil {
+	if src, e := assign.GetSafeAssignment(run, op.List); e != nil {
 		err = e
 	} else if !affine.IsList(src.Affinity()) {
 		err = errutil.New("not a list")

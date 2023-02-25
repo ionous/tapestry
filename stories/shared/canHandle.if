@@ -45,9 +45,7 @@
                 "Cmp:is:txt:": [
                   {
                     "ParentOf obj:": {
-                      "FromText:": {
-                        "Text value:": "@noun"
-                      }
+                      "FromText:": "@noun"
                     }
                   },
                   "other_than",

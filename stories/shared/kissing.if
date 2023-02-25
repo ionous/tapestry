@@ -53,9 +53,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
@@ -66,17 +64,13 @@
                       "FromText:": {
                         "CanReach actor:action:noun:": [
                           {
-                            "FromText:": {
-                              "Text value:": "@actor"
-                            }
+                            "FromText:": "@actor"
                           },
                           {
                             "FromText:": "kissing"
                           },
                           {
-                            "FromText:": {
-                              "Text value:": "@noun"
-                            }
+                            "FromText:": "@noun"
                           }
                         ]
                       }
@@ -100,17 +94,13 @@
                               "FromText:": {
                                 "CanUse actor:action:noun:": [
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@actor"
-                                    }
+                                    "FromText:": "@actor"
                                   },
                                   {
                                     "FromText:": "kissing"
                                   },
                                   {
-                                    "FromText:": {
-                                      "Text value:": "@noun"
-                                    }
+                                    "FromText:": "@noun"
                                   }
                                 ]
                               }
@@ -131,22 +121,16 @@
                                   "Send:event:": [
                                     {
                                       "Capture obj:": {
-                                        "FromText:": {
-                                          "Text value:": "@noun"
-                                        }
+                                        "FromText:": "@noun"
                                       }
                                     },
                                     {
                                       "Kiss actor:noun:": [
                                         {
-                                          "FromText:": {
-                                            "Text value:": "@actor"
-                                          }
+                                          "FromText:": "@actor"
                                         },
                                         {
-                                          "FromText:": {
-                                            "Text value:": "@noun"
-                                          }
+                                          "FromText:": "@noun"
                                         }
                                       ]
                                     }
@@ -186,9 +170,7 @@
                   },
                   {
                     "IsPlayer obj:": {
-                      "FromText:": {
-                        "Text value:": "@actor"
-                      }
+                      "FromText:": "@actor"
                     }
                   }
                 ]
@@ -232,9 +214,7 @@
                   },
                   {
                     "IsPlayer obj:": {
-                      "FromText:": {
-                        "Text value:": "@actor"
-                      }
+                      "FromText:": "@actor"
                     }
                   }
                 ]
@@ -279,9 +259,7 @@
                     [
                       {
                         "ReportKissing actor:": {
-                          "FromText:": {
-                            "Text value:": "@actor"
-                          }
+                          "FromText:": "@actor"
                         }
                       },
                       {
@@ -342,9 +320,7 @@
             "PatternRule:does:": [
               {
                 "IsPlayer obj:": {
-                  "FromText:": {
-                    "Text value:": "@actor"
-                  }
+                  "FromText:": "@actor"
                 }
               },
               [
