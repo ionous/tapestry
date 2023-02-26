@@ -1,8 +1,6 @@
 package assign
 
 import (
-	"strconv"
-
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -57,43 +55,34 @@ type labelFinder struct {
 
 // returns nil on success; updates internals
 func (lf *labelFinder) findNext(run rt.Runtime, i int, a Arg) (ret int, err error) {
-	// find a matching label:
+	// blank names are positional arguments
 	if n := a.Name; len(n) == 0 {
 		if lf.noMoreBlanks {
 			err = errutil.New("unexpected blank label", i)
 		} else {
 			ret, lf.next = lf.next, lf.next+1
 		}
-	} else if a.Name[0] == '$' {
-		next := lf.next + 1
-		// FIX: use unnamed labels instead of $ ( since the position is the loop index )
-		// ( see also: EphPatterns.Assemble )
-		// note: templates ( and various tests ) currently use positional args.
-		if fn := "$" + strconv.Itoa(next); fn == n {
-			ret, lf.next = lf.next, next
-			lf.noMoreBlanks = true
-		} else {
-			// fix? why isnt this an error?
-			ret = -1
-		}
-	} else if labels, e := lf.getLabels(run); e != nil {
-		err = e
 	} else {
-		n := lang.Underscore(n)
-		// search in increasing order for the next label that matches the specified argument
-		// this is our soft way of allowing patterns to participate in fluid like specs with optional values.
-		if at := findLabel(labels, n, lf.next); at < 0 {
-			err = errutil.New("no matching label for arg", i, n, "in", lf.labels)
+		// otherwise, find the named argument
+		if labels, e := lf.getLabels(run); e != nil {
+			err = e
 		} else {
-			var fn string
-			if at < lf.kind.NumField() {
-				fn = lf.kind.Field(at).Name
-			}
-			if fn == n {
-				ret, lf.next = at, at+1
-				lf.noMoreBlanks = true
+			n := lang.Underscore(n)
+			// search in increasing order for the next label that matches the specified argument
+			// this is our soft way of allowing patterns to participate in fluid like specs with optional values.
+			if at := findLabel(labels, n, lf.next); at < 0 {
+				err = errutil.New("no matching label for arg", i, n, "in", lf.labels)
 			} else {
-				err = errutil.Fmt("mismatched field(%s) for arg(%s) in %q", fn, n, lf.kind.Name())
+				var fn string
+				if at < lf.kind.NumField() {
+					fn = lf.kind.Field(at).Name
+				}
+				if fn == n {
+					ret, lf.next = at, at+1
+					lf.noMoreBlanks = true
+				} else {
+					err = errutil.Fmt("mismatched field(%s) for arg(%s) in %q", fn, n, lf.kind.Name())
+				}
 			}
 		}
 	}

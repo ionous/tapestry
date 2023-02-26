@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
@@ -113,8 +112,5 @@ func (p *Parser) Step(words string) (ret *Result, err error) {
 type argList []assign.Arg
 
 func (l *argList) add(a assign.Assignment) {
-	(*l) = append((*l), assign.Arg{
-		Name:  "$" + strconv.Itoa(len((*l))+1),
-		Value: a,
-	})
+	(*l) = append((*l), assign.Arg{Value: a})
 }
