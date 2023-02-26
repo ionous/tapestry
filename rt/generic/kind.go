@@ -26,7 +26,9 @@ func (ft *Field) isAspectLike() bool {
 	return ft.Affinity == affine.Text && ft.Name == ft.Type
 }
 
-// path is a list of ancestors with the root at the start.
+// path is a list of ancestors from least specific to most
+// the passed name is added to the end of the passed path automatically
+// ex. kinds, objects, things, props, openers.
 func NewKind(kinds Kinds, name string, path []string, fields []Field) *Kind {
 	fullpath := append(path, name)
 	return &Kind{kinds: kinds, name: name, path: fullpath, fields: fields}

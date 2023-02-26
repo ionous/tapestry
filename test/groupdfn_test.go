@@ -11,11 +11,11 @@ func TestKindsForType(t *testing.T) {
     var ks testutil.Kinds
     ks.AddKinds((*GroupCollation)(nil))
     if diff := pretty.Diff(ks.Builder, testutil.KindBuilder{
-        testutil.AspectMap{
+        Aspects: testutil.AspectMap{
             "innumerable":   true,
             "group_options": true,
         },
-        testutil.FieldMap{
+        Fields: testutil.FieldMap{
             "innumerable": {
                 {"not_innumerable", "bool", "" /*"trait"*/},
                 {"is_innumerable", "bool", "" /*"trait"*/},
