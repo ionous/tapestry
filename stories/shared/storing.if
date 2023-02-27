@@ -39,11 +39,14 @@
                   "Comment:": "First, we need to make sure we can use the first noun:"
                 },
                 {
-                  "Log:": {
-                    "FromText:": {
-                      "Say:": "{.actor} storing {the:.noun} to {the:.other_noun}."
+                  "Log:value:": [
+                    "debug",
+                    {
+                      "FromText:": {
+                        "Say:": "{.actor} storing {the:.noun} to {the:.other_noun}."
+                      }
                     }
-                  }
+                  ]
                 },
                 {
                   "If:from:and:does:else:": [

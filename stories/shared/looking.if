@@ -166,11 +166,14 @@
               true,
               [
                 {
-                  "Log:": {
-                    "FromText:": {
-                      "Say:": "print vantage: from:{.where}"
+                  "Log:value:": [
+                    "debug",
+                    {
+                      "FromText:": {
+                        "Say:": "print vantage: from:{.where}"
+                      }
                     }
-                  }
+                  ]
                 },
                 {
                   "SetEverythingUnmentioned": true

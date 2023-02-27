@@ -188,9 +188,12 @@
                     },
                     [
                       {
-                        "Log:": {
-                          "FromText:": "You can't remove nothing from play."
-                        }
+                        "Log:value:": [
+                          "debug",
+                          {
+                            "FromText:": "You can't remove nothing from play."
+                          }
+                        ]
                       }
                     ]
                   ]

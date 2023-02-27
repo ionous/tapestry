@@ -330,9 +330,12 @@
               true,
               [
                 {
-                  "Log:": {
-                    "FromRecord:": "@group"
-                  }
+                  "Log:value:": [
+                    "note",
+                    {
+                      "FromRecord:": "@group"
+                    }
+                  ]
                 }
               ]
             ]

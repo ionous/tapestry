@@ -232,11 +232,14 @@
                           {
                             "ElseDo does:": [
                               {
-                                "Log:": {
-                                  "FromText:": {
-                                    "Say:": "{The: .actor} {are: .actor} traveling to {the: .destination} via {the: .noun} ..."
+                                "Log:value:": [
+                                  "debug",
+                                  {
+                                    "FromText:": {
+                                      "Say:": "{The: .actor} {are: .actor} traveling to {the: .destination} via {the: .noun} ..."
+                                    }
                                   }
-                                }
+                                ]
                               },
                               {
                                 "Set:from:": [

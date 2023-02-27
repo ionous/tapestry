@@ -117,8 +117,8 @@ func Comment_Marshal(m jsn.Marshaler, val *Comment) (err error) {
 
 // DebugLog Debug log.
 type DebugLog struct {
-	Value    assign.Assignment `if:"label=_"`
-	LogLevel LoggingLevel      `if:"label=as,optional"`
+	LogLevel LoggingLevel      `if:"label=_"`
+	Value    assign.Assignment `if:"label=value"`
 	Markup   map[string]any
 }
 
@@ -134,8 +134,8 @@ func (*DebugLog) Compose() composer.Spec {
 }
 
 const DebugLog_Type = "debug_log"
-const DebugLog_Field_Value = "$VALUE"
 const DebugLog_Field_LogLevel = "$LOG_LEVEL"
+const DebugLog_Field_Value = "$VALUE"
 
 func (op *DebugLog) Marshal(m jsn.Marshaler) error {
 	return DebugLog_Marshal(m, op)
@@ -208,19 +208,19 @@ func DebugLog_Optional_Marshal(m jsn.Marshaler, pv **DebugLog) (err error) {
 func DebugLog_Marshal(m jsn.Marshaler, val *DebugLog) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(DebugLog_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", DebugLog_Field_Value)
+		e0 := m.MarshalKey("", DebugLog_Field_LogLevel)
 		if e0 == nil {
-			e0 = assign.Assignment_Marshal(m, &val.Value)
+			e0 = LoggingLevel_Marshal(m, &val.LogLevel)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", DebugLog_Field_Value))
+			m.Error(errutil.New(e0, "in flow at", DebugLog_Field_LogLevel))
 		}
-		e1 := m.MarshalKey("as", DebugLog_Field_LogLevel)
+		e1 := m.MarshalKey("value", DebugLog_Field_Value)
 		if e1 == nil {
-			e1 = LoggingLevel_Optional_Marshal(m, &val.LogLevel)
+			e1 = assign.Assignment_Marshal(m, &val.Value)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", DebugLog_Field_LogLevel))
+			m.Error(errutil.New(e1, "in flow at", DebugLog_Field_Value))
 		}
 		m.EndBlock()
 	}
@@ -648,10 +648,9 @@ func (op *LoggingLevel) String() string {
 }
 
 const LoggingLevel_Note = "$NOTE"
-const LoggingLevel_ToDo = "$TO_DO"
-const LoggingLevel_Fix = "$FIX"
+const LoggingLevel_Debug = "$DEBUG"
 const LoggingLevel_Info = "$INFO"
-const LoggingLevel_Warning = "$WARNING"
+const LoggingLevel_Warn = "$WARN"
 const LoggingLevel_Error = "$ERROR"
 
 func (*LoggingLevel) Compose() composer.Spec {
@@ -659,10 +658,10 @@ func (*LoggingLevel) Compose() composer.Spec {
 		Name: LoggingLevel_Type,
 		Uses: composer.Type_Str,
 		Choices: []string{
-			LoggingLevel_Note, LoggingLevel_ToDo, LoggingLevel_Fix, LoggingLevel_Info, LoggingLevel_Warning, LoggingLevel_Error,
+			LoggingLevel_Note, LoggingLevel_Debug, LoggingLevel_Info, LoggingLevel_Warn, LoggingLevel_Error,
 		},
 		Strings: []string{
-			"note", "to_do", "fix", "info", "warning", "error",
+			"note", "debug", "info", "warn", "error",
 		},
 	}
 }
@@ -959,8 +958,7 @@ var Signatures = map[uint64]interface{}{
 	13157581199995609923: (*ExpectOutput)(nil), /* execute=Expect output: */
 	16489874106085927697: (*ExpectText)(nil),   /* execute=Expect text: */
 	11108202414968227788: (*Expect)(nil),       /* execute=Expect: */
-	17230987244745403983: (*DebugLog)(nil),     /* execute=Log: */
-	9146550673186999987:  (*DebugLog)(nil),     /* execute=Log:as: */
+	14196615958578686010: (*DebugLog)(nil),     /* execute=Log:value: */
 	9865864948070946448:  (*Test)(nil),         /* story_statement=Test:dependsOn:do: */
 	12698818979331053506: (*Test)(nil),         /* story_statement=Test:dependsOn:withScene:do: */
 	9283516926116088792:  (*Test)(nil),         /* story_statement=Test:do: */

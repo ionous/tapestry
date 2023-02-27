@@ -101,16 +101,14 @@
                   {
                     "Term:name:type:": [
                       "_",
-                      "value",
-                      "assignment"
+                      "log_level",
+                      "logging_level"
                     ]
                   },
                   {
-                    "Term:name:type:optional:": [
-                      "as",
-                      "log_level",
-                      "logging_level",
-                      true
+                    "Term:type:": [
+                      "value",
+                      "assignment"
                     ]
                   }
                 ]
@@ -145,19 +143,20 @@
                 true,
                 [
                   {
+                    "--": [
+                      "the lowest logging level.", 
+                      "not displayed unless specifically requested."
+                    ],
                     "Option:": "note"
                   },
                   {
-                    "Option:": "to_do"
-                  },
-                  {
-                    "Option:": "fix"
+                    "Option:": "debug"
                   },
                   {
                     "Option:": "info"
                   },
                   {
-                    "Option:": "warning"
+                    "Option:": "warn"
                   },
                   {
                     "Option:": "error"

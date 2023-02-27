@@ -194,9 +194,12 @@
                   "Comment:": "Simulate digging down from the (yet to be determined) lca by digging up from the target noun (until we find the lca.)"
                 },
                 {
-                  "Log:": {
-                    "FromTextList:": "@path"
-                  }
+                  "Log:value:": [
+                    "note",
+                    {
+                      "FromTextList:": "@path"
+                    }
+                  ]
                 },
                 {
                   "Set:from:": [
@@ -557,11 +560,14 @@
               true,
               [
                 {
-                  "Log:": {
-                    "FromText:": {
-                      "Say:": "reach up: from:{.fromObj} -> into:{.intoObj}"
+                  "Log:value:": [
+                    "note",
+                    {
+                      "FromText:": {
+                        "Say:": "reach up: from:{.fromObj} -> into:{.intoObj}"
+                      }
                     }
-                  }
+                  ]
                 }
               ]
             ]
@@ -693,11 +699,14 @@
               true,
               [
                 {
-                  "Log:": {
-                    "FromText:": {
-                      "Say:": "reach down: from:{.fromObj} -> into:{.intoObj}"
+                  "Log:value:": [
+                    "note",
+                    {
+                      "FromText:": {
+                        "Say:": "reach down: from:{.fromObj} -> into:{.intoObj}"
+                      }
                     }
-                  }
+                  ]
                 }
               ]
             ]
