@@ -13,8 +13,12 @@ type ActionGoal struct {
 	Nouns  []string
 }
 
-func (a *ActionGoal) Objects() []ident.Id {
-	return StringIds(a.Nouns)
+// the returned objects are strings in the string id format
+func (a *ActionGoal) Objects() (ret []string) {
+	for _, str := range a.Nouns {
+		ret = append(ret, ident.IdOf(str).String())
+	}
+	return
 }
 
 // ClarifyGoal - expects that the parser ended ambiguously.

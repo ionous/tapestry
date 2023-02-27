@@ -115,14 +115,6 @@ var ctx = func() (ret MyBounds) {
 
 var myself = makeObject("self", "actors")
 
-// StringIds - convert a list of strings to ids
-func StringIds(strs []string) (ret []ident.Id) {
-	for _, str := range strs {
-		ret = append(ret, ident.IdOf(str))
-	}
-	return
-}
-
 // Log helper - matches testing.T
 type Log interface {
 	Log(args ...interface{})
@@ -189,7 +181,7 @@ func innerParse(log Log, ctx Context, match Scanner, in []string, goals []Goal) 
 			err = errutil.Fmt("expected resolved action %T", last)
 		} else if !strings.EqualFold(act.Name, want.Action) {
 			err = errutil.New("expected action", act, "got", want.Action)
-		} else if want, have := PrettyIds(want.Objects()), PrettyIds(results.Objects()); want != have {
+		} else if want, have := Commas(want.Objects()), Commas(results.Objects()); want != have {
 			err = errutil.Fmt("expected nouns %q got %q", want, have)
 		} else {
 			log.Logf("matched %v", in)

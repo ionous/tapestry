@@ -3,6 +3,7 @@ package parser
 import (
 	"bytes"
 	"strconv"
+	"strings"
 )
 
 // ResultList contains multiple results. Its methods help tease out its contents.
@@ -43,6 +44,7 @@ func (rs *ResultList) Last() (ret Result, okay bool) {
 }
 
 // Objects -- all nouns used by this result.
+// the returned objects are strings in the string id format
 func (rs *ResultList) Objects() (ret []string) {
 	for _, r := range rs.list {
 		switch k := r.(type) {
@@ -59,7 +61,7 @@ func (rs *ResultList) Objects() (ret []string) {
 }
 
 func (rs *ResultList) PrettyObjects() string {
-	return PrettyIds(rs.Objects())
+	return Commas(rs.Objects())
 }
 
 func (rs *ResultList) String() string {
@@ -80,14 +82,7 @@ func (rs *ResultList) String() string {
 	return b.String()
 }
 
-// PrettyIds - convert a ids to a single comma separated string
-func PrettyIds(ids []string) (ret string) {
-	var buf bytes.Buffer
-	for i, id := range ids {
-		if i > 0 {
-			buf.WriteString(", ")
-		}
-		buf.WriteString(id)
-	}
-	return buf.String()
+// Commas - strings into a comma separated string
+func Commas(ids []string) (ret string) {
+	return strings.Join(ids, ", ")
 }
