@@ -38,10 +38,10 @@ func (op *IdOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 // returns the author specified name for the indicated object.
 // returns an error if there is no such object; returns the empty string for an empty request.
 func (op *NameOf) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if obj, e := safe.ObjectText(run, op.Object); e != nil {
+	if id, e := safe.ObjectText(run, op.Object); e != nil {
 		err = cmdError(op, e)
-	} else if obj := obj.String(); len(obj) == 0 {
-		ret = g.Empty // fix: or, should it be "nothing"
+	} else if obj := id.String(); len(obj) == 0 {
+		ret = id
 	} else if v, e := run.GetField(meta.ObjectName, obj); e != nil {
 		err = cmdError(op, e)
 	} else {
@@ -59,12 +59,12 @@ func (op *KindsOf) GetTextList(run rt.Runtime) (g.Value, error) {
 // returns the kind of the indicated object.
 // returns an error if there is no such object; returns the empty string for an empty request.
 func (op *KindOf) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if k, e := objectKind(run, op.Object, false); e != nil {
+	if k, e := objectKind(run, op.Object, op.Nothing); e != nil {
 		err = e
 	} else if k == nil {
 		ret = g.Empty
 	} else {
-		ret = g.StringOf(k.Name())
+		ret = g.StringOf(k.Name()) // tbd: should kind string have a type of meta.ObjectKind?
 	}
 	return
 }

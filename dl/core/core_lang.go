@@ -3617,8 +3617,9 @@ func Join_Marshal(m jsn.Marshaler, val *Join) (err error) {
 
 // KindOf Friendly name of the object's kind.
 type KindOf struct {
-	Object rt.TextEval `if:"label=_"`
-	Markup map[string]any
+	Object  rt.TextEval `if:"label=_"`
+	Nothing bool        `if:"label=nothing,optional,type=bool"`
+	Markup  map[string]any
 }
 
 // User implemented slots:
@@ -3633,6 +3634,7 @@ func (*KindOf) Compose() composer.Spec {
 
 const KindOf_Type = "kind_of"
 const KindOf_Field_Object = "$OBJECT"
+const KindOf_Field_Nothing = "$NOTHING"
 
 func (op *KindOf) Marshal(m jsn.Marshaler) error {
 	return KindOf_Marshal(m, op)
@@ -3711,6 +3713,13 @@ func KindOf_Marshal(m jsn.Marshaler, val *KindOf) (err error) {
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", KindOf_Field_Object))
+		}
+		e1 := m.MarshalKey("nothing", KindOf_Field_Nothing)
+		if e1 == nil {
+			e1 = prim.Bool_Unboxed_Optional_Marshal(m, &val.Nothing)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", KindOf_Field_Nothing))
 		}
 		m.EndBlock()
 	}
@@ -7085,6 +7094,7 @@ var Signatures = map[uint64]interface{}{
 	16744881049704292640: (*IsKindOf)(nil),          /* bool_eval=KindOf:is: */
 	210805642732508805:   (*IsKindOf)(nil),          /* bool_eval=KindOf:is:nothing: */
 	7296079450764183372:  (*IsExactKindOf)(nil),     /* bool_eval=KindOf:isExactly: */
+	4254622167054960918:  (*KindOf)(nil),            /* text_eval=KindOf:nothing: */
 	6869420318733086481:  (*KindsOf)(nil),           /* text_list_eval=KindsOf: */
 	11334467785012784241: (*MakeLowercase)(nil),     /* text_eval=Lower: */
 	7007374677444567783:  (*Matches)(nil),           /* bool_eval=Matches:to: */

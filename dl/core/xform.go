@@ -13,11 +13,11 @@ import (
 func (op *Singularize) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if t, e := safe.GetText(run, op.Text); e != nil {
 		err = cmdError(op, e)
-	} else if t := t.String(); len(t) == 0 {
-		ret = g.Empty
+	} else if str := t.String(); len(str) == 0 {
+		ret = t
 	} else {
-		singular := run.SingularOf(t)
-		ret = g.StringOf(singular)
+		singular := run.SingularOf(str)
+		ret = g.StringFrom(singular, t.Type())
 	}
 	return
 }
@@ -25,11 +25,11 @@ func (op *Singularize) GetText(run rt.Runtime) (ret g.Value, err error) {
 func (op *Pluralize) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if t, e := safe.GetText(run, op.Text); e != nil {
 		err = cmdError(op, e)
-	} else if t := t.String(); len(t) == 0 {
-		ret = g.Empty
+	} else if str := t.String(); len(str) == 0 {
+		ret = t
 	} else {
-		plural := run.PluralOf(t)
-		ret = g.StringOf(plural)
+		plural := run.PluralOf(str)
+		ret = g.StringFrom(plural, t.Type())
 	}
 	return
 }
@@ -37,17 +37,17 @@ func (op *Pluralize) GetText(run rt.Runtime) (ret g.Value, err error) {
 func (op *Capitalize) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if t, e := safe.GetText(run, op.Text); e != nil {
 		err = cmdError(op, e)
-	} else if s := t.String(); len(s) == 0 {
-		ret = g.Empty
+	} else if str := t.String(); len(str) == 0 {
+		ret = t
 	} else {
 		var out strings.Builder
-		for _, ch := range s {
+		for _, ch := range t.String() {
 			if out.Len() == 0 {
 				ch = unicode.ToUpper(ch)
 			}
 			out.WriteRune(ch)
 		}
-		ret = g.StringOf(out.String())
+		ret = g.StringFrom(out.String(), t.Type())
 	}
 	return
 }
@@ -55,9 +55,11 @@ func (op *Capitalize) GetText(run rt.Runtime) (ret g.Value, err error) {
 func (op *MakeLowercase) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if t, e := safe.GetText(run, op.Text); e != nil {
 		err = cmdError(op, e)
+	} else if str := t.String(); len(str) == 0 {
+		ret = t
 	} else {
 		lwr := strings.ToLower(t.String())
-		ret = g.StringOf(lwr)
+		ret = g.StringFrom(lwr, t.Type())
 	}
 	return
 }
@@ -65,9 +67,11 @@ func (op *MakeLowercase) GetText(run rt.Runtime) (ret g.Value, err error) {
 func (op *MakeUppercase) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if t, e := safe.GetText(run, op.Text); e != nil {
 		err = cmdError(op, e)
+	} else if str := t.String(); len(str) == 0 {
+		ret = t
 	} else {
 		upper := strings.ToUpper(t.String())
-		ret = g.StringOf(upper)
+		ret = g.StringFrom(upper, t.Type())
 	}
 	return
 }
@@ -75,11 +79,11 @@ func (op *MakeUppercase) GetText(run rt.Runtime) (ret g.Value, err error) {
 func (op *MakeTitleCase) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if t, e := safe.GetText(run, op.Text); e != nil {
 		err = cmdError(op, e)
-	} else if t := t.String(); len(t) == 0 {
-		ret = g.Empty
+	} else if str := t.String(); len(str) == 0 {
+		ret = t
 	} else {
-		title := lang.Titlecase(t)
-		ret = g.StringOf(title)
+		title := lang.Titlecase(str)
+		ret = g.StringFrom(title, t.Type())
 	}
 	return
 }
@@ -87,11 +91,11 @@ func (op *MakeTitleCase) GetText(run rt.Runtime) (ret g.Value, err error) {
 func (op *MakeSentenceCase) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if t, e := safe.GetText(run, op.Text); e != nil {
 		err = cmdError(op, e)
-	} else if t := t.String(); len(t) == 0 {
-		ret = g.Empty
+	} else if str := t.String(); len(str) == 0 {
+		ret = t
 	} else {
-		sentence := lang.SentenceCase(t)
-		ret = g.StringOf(sentence)
+		sentence := lang.SentenceCase(str)
+		ret = g.StringFrom(sentence, t.Type())
 	}
 	return
 }
@@ -99,13 +103,15 @@ func (op *MakeSentenceCase) GetText(run rt.Runtime) (ret g.Value, err error) {
 func (op *MakeReversed) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if t, e := safe.GetText(run, op.Text); e != nil {
 		err = cmdError(op, e)
+	} else if str := t.String(); len(str) == 0 {
+		ret = t
 	} else {
 		a := []rune(t.String())
 		for i := len(a)/2 - 1; i >= 0; i-- {
 			opp := len(a) - 1 - i
 			a[i], a[opp] = a[opp], a[i]
 		}
-		ret = g.StringOf(string(a))
+		ret = g.StringFrom(string(a), t.Type())
 	}
 	return
 }

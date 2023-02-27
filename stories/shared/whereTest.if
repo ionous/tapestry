@@ -306,7 +306,7 @@
           },
           {
             "Expect output:": [
-              "Nothing carries the basket.",
+              "Nobody carries the basket.",
               "Mildred's parent is the lab.",
               "The basket's parent is the table.",
               "Mildred is in the lab.",
@@ -322,7 +322,7 @@
               "Mildred owns the pen.",
               "Mildred carries the scalpel.",
               "The pen is in Mildred's pocket.",
-              "The scalpel is worn by: nothing.",
+              "The scalpel is worn by: nobody.",
               "The common ancestor of the pen and itself: pen.",
               "The common ancestor of the pen and a sibling: Mildred.",
               "The common ancestor of the sibling and a pen: Mildred.",

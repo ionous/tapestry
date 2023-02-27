@@ -23,6 +23,7 @@ func (run *Runner) Send(pat *g.Record, up []string) (ret g.Value, err error) {
 		err = e
 	} else {
 		// fix: nobody is using "current_noun" currently... so what does that say?
+		// ( and what type should the current noun be here? )
 		currentNoun := scope.NewSingleValue("current_noun", g.Empty)
 		run.PushScope(currentNoun)
 		// note: the scope has to be established before BuildPath gets called
@@ -35,7 +36,7 @@ func (run *Runner) Send(pat *g.Record, up []string) (ret g.Value, err error) {
 			for i, cnt := 0, len(rules); okay && i < cnt && flags != 0; i++ {
 				if phase := rt.Flags(1 << i); phase&flags != 0 {
 					for _, el := range rules[i] {
-						currentNoun.SetValue(g.StringOf(el.Noun))
+						currentNoun.SetValue(g.StringFrom(el.Noun, el.Kind))
 						// fix? would it make more sense to return the result here?
 						// possibly as a pointer so that we can check "has result"
 						if next, e := res.ApplyRule(run, el.Rule, flags); e != nil {

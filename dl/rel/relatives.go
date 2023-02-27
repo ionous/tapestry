@@ -11,7 +11,7 @@ func (op *RelativeOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if a, e := safe.ObjectText(run, op.Object); e != nil {
 		err = CmdError(op, e)
 	} else if a := a.String(); len(a) == 0 {
-		ret = g.Empty
+		ret = g.Empty // fix: if there's 'a' has a type, we should probably return the reciprocated type
 	} else {
 		noun, rel := a, op.Via
 		if vs, e := run.RelativesOf(noun, rel.String()); e != nil {
@@ -47,7 +47,7 @@ func (op *ReciprocalOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if a, e := safe.ObjectText(run, op.Object); e != nil {
 		err = CmdError(op, e)
 	} else if a := a.String(); len(a) == 0 {
-		ret = g.Empty
+		ret = g.Empty // fix: if there's 'a' has a type, we should probably return the reciprocated type
 	} else {
 		noun, rel := a, op.Via
 		if vs, e := run.ReciprocalsOf(noun, rel.String()); e != nil {

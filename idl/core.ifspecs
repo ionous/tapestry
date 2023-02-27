@@ -929,7 +929,18 @@
                     "object",
                     "text_eval"
                   ]
-                }
+                },
+                  {
+                    "--": [
+                      "try to check the type of nothing objects?",
+                      "normally, nothing objects have no kind."
+                    ],
+                    "Term:type:optional:": [
+                      "nothing",
+                      "bool",
+                      true
+                    ]
+                  }
               ]
             }
           ]

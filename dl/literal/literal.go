@@ -81,7 +81,7 @@ func (op *TextValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
 
 // GetText implements interface rt.TextEval providing the dl with a text literal.
 func (op *TextValue) GetText(run rt.Runtime) (ret g.Value, _ error) {
-	ret = g.StringOf(op.Value)
+	ret = g.StringFrom(op.Value, op.Kind)
 	return
 }
 

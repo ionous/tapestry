@@ -269,7 +269,7 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			if n, e := run.getObjectName(field); e != nil {
 				err = run.Report(e)
 			} else {
-				ret = g.StringOf(n)
+				ret = g.StringOf(n) // tbd: should these have a type?
 			}
 
 		// all objects of the named kind

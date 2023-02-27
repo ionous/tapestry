@@ -1028,7 +1028,7 @@
           "PatternResult:": {
             "Text:kind:": [
               "carrier",
-              "object"
+              "actor"
             ]
           }
         }
@@ -1120,7 +1120,7 @@
           "PatternResult:": {
             "Text:kind:": [
               "wearer",
-              "object"
+              "actor"
             ]
           }
         }
