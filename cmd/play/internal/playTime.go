@@ -49,15 +49,14 @@ func (pt *Playtime) Play(name, player string, args []string) (err error) {
 		err = errutil.New("not enough fields", min, max)
 	} else {
 		rec := k.NewRecord()
-		for i, a := range append([]string{player}, args...) {
-			f := k.Field(i)
-			// fix conversion of numbers
-			if aff := f.Affinity; aff != affine.Text {
-				err = errutil.New("field", i, "expected text, have", aff)
-				break
-			} else if e := rec.SetIndexedField(i, g.StringOf(a)); e != nil {
-				err = errutil.New("field", i, e)
-				break
+		if e := setField(rec, 0, "player"); e != nil {
+			err = e
+		} else {
+			for i, a := range args {
+				if e := setField(rec, i+1, a); e != nil {
+					err = e
+					break
+				}
 			}
 		}
 		if err == nil {
@@ -65,6 +64,17 @@ func (pt *Playtime) Play(name, player string, args []string) (err error) {
 				err = e
 			}
 		}
+	}
+	return
+}
+
+func setField(rec *g.Record, i int, a string) (err error) {
+	f := rec.Kind().Field(i)
+	// fix conversion of numbers
+	if aff := f.Affinity; aff != affine.Text {
+		err = errutil.New("field", i, "expected text, have", aff)
+	} else if e := rec.SetIndexedField(i, g.StringOf(a)); e != nil {
+		err = errutil.New("field", i, e)
 	}
 	return
 }

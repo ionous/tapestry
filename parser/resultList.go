@@ -3,8 +3,6 @@ package parser
 import (
 	"bytes"
 	"strconv"
-
-	"git.sr.ht/~ionous/tapestry/parser/ident"
 )
 
 // ResultList contains multiple results. Its methods help tease out its contents.
@@ -45,15 +43,15 @@ func (rs *ResultList) Last() (ret Result, okay bool) {
 }
 
 // Objects -- all nouns used by this result.
-func (rs *ResultList) Objects() (ret []ident.Id) {
+func (rs *ResultList) Objects() (ret []string) {
 	for _, r := range rs.list {
 		switch k := r.(type) {
 		case ResolvedNoun:
 			n := k.NounInstance
-			ret = append(ret, n.Id())
+			ret = append(ret, n.Id().String())
 		case ResolvedMulti:
 			for _, n := range k.Nouns {
-				ret = append(ret, n.Id())
+				ret = append(ret, n.Id().String())
 			}
 		}
 	}
@@ -83,13 +81,13 @@ func (rs *ResultList) String() string {
 }
 
 // PrettyIds - convert a ids to a single comma separated string
-func PrettyIds(ids []ident.Id) (ret string) {
+func PrettyIds(ids []string) (ret string) {
 	var buf bytes.Buffer
 	for i, id := range ids {
 		if i > 0 {
 			buf.WriteString(", ")
 		}
-		buf.WriteString(id.String())
+		buf.WriteString(id)
 	}
 	return buf.String()
 }

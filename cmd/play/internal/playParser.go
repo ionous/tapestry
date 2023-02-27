@@ -77,10 +77,8 @@ func (p *Parser) Step(words string) (ret *Result, err error) {
 				} else {
 					// multi-actions are probably repeats or something
 					// or maybe get passed lists of objects hrmm.
-					objs := res.Objects()
-					nouns := make([]string, len(objs))
-
 					// send these nouns to the runtime
+					nouns := res.Objects()
 					if e := pt.Play(act.Name, "player", nouns); e != nil {
 						err = errutil.New(e, "for", res)
 					} else {
