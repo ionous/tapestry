@@ -76,15 +76,13 @@
               },
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "okay: {.resp}"
-                  }
+                  "Say:": "okay: {.resp}"
                 }
               ],
               {
                 "ElseDo does:": [
                   {
-                    "Say:": "failed: shouldnt have reached into the espresso machine."
+                    "Print:": "failed: shouldnt have reached into the espresso machine."
                   }
                 ]
               }
@@ -115,15 +113,13 @@
               },
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "failed: {.resp}"
-                  }
+                  "Say:": "failed: {.resp}"
                 }
               ],
               {
                 "ElseDo does:": [
                   {
-                    "Say:": "okay: reached outside the open cabinet."
+                    "Print:": "okay: reached outside the open cabinet."
                   }
                 ]
               }
@@ -167,15 +163,13 @@
               },
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "failed: {.resp}"
-                  }
+                  "Say:": "failed: {.resp}"
                 }
               ],
               {
                 "ElseDo does:": [
                   {
-                    "Say:": "okay: reached inside the open espresso machine."
+                    "Print:": "okay: reached inside the open espresso machine."
                   }
                 ]
               }
@@ -219,15 +213,13 @@
               },
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "okay: {.resp}"
-                  }
+                  "Say:": "okay: {.resp}"
                 }
               ],
               {
                 "ElseDo does:": [
                   {
-                    "Say:": "failed: shouldnt have reached from the closed cabinet."
+                    "Print:": "failed: shouldnt have reached from the closed cabinet."
                   }
                 ]
               }
@@ -258,15 +250,13 @@
               },
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "okay: {.resp}"
-                  }
+                  "Say:": "okay: {.resp}"
                 }
               ],
               {
                 "ElseDo does:": [
                   {
-                    "Say:": "failed: shouldnt have reached out of world."
+                    "Print:": "failed: shouldnt have reached out of world."
                   }
                 ]
               }

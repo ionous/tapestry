@@ -77,7 +77,7 @@
                           },
                           [
                             {
-                              "Say:": "@resp"
+                              "Print:": "@resp"
                             },
                             {
                               "Set:from:": [
@@ -144,14 +144,12 @@
                     true,
                     [
                       {
-                        "Say:": {
-                          "Response:text:": [
-                            "something changed itself",
-                            {
-                              "RenderTemplate:": "{The: .noun|capitalize!} {are:.noun} {.trait}."
-                            }
-                          ]
-                        }
+                        "Print response:with:": [
+                          "something changed itself",
+                          {
+                            "Say:": "{The: .noun|capitalize!} {are:.noun} {.trait}."
+                          }
+                        ]
                       },
                       {
                         "Set:from:": [
@@ -173,14 +171,12 @@
                     },
                     [
                       {
-                        "Say:": {
-                          "Response:text:": [
-                            "the player changed something",
-                            {
-                              "RenderTemplate:": "{We!|capitalize!} {.change} {the: .noun}."
-                            }
-                          ]
-                        }
+                        "Print response:with:": [
+                          "the player changed something",
+                          {
+                            "Say:": "{We!|capitalize!} {.change} {the: .noun}."
+                          }
+                        ]
                       },
                       {
                         "Set:from:": [
@@ -256,10 +252,10 @@
                     "@result",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't change what is",
                           {
-                            "RenderTemplate:": "{They: .noun|capitalize!} {are:.noun} already {.trait}."
+                            "Say:": "{They: .noun|capitalize!} {are:.noun} already {.trait}."
                           }
                         ]
                       }
@@ -297,10 +293,10 @@
                     "@result",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't change the unchangeable",
                           {
-                            "RenderTemplate:": "{They: .noun|capitalize!} {arent: .noun} something {we!} can {.change}."
+                            "Say:": "{They: .noun|capitalize!} {arent: .noun} something {we!} can {.change}."
                           }
                         ]
                       }

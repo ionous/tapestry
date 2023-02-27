@@ -29,9 +29,7 @@
         ],
         [
           {
-            "Say:": {
-              "RenderTemplate:": "The knife's ogp: {the: {parentOf: .knife}}."
-            }
+            "Say:": "The knife's ogp: {the: {parentOf: .knife}}."
           },
           {
             "Expect output:": "The knife's ogp: you."
@@ -50,9 +48,7 @@
             "Expect output:": "Dropped."
           },
           {
-            "Say:": {
-              "RenderTemplate:": "The knife's newg: {the: {parentOf: .knife}}."
-            }
+            "Say:": "The knife's newg: {the: {parentOf: .knife}}."
           },
           {
             "Expect output:": "The knife's newg: the Kitchen."

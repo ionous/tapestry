@@ -138,13 +138,13 @@
         ],
         [
           {
-            "Say:": {
+            "Print:": {
               "Rows does:": [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to take from something closed:<br>"
+                        "Print:": "Fail to take from something closed:<br>"
                       },
                       {
                         "Taking agent:noun:": [
@@ -160,15 +160,13 @@
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": {
-                          "RenderTemplate:": "The apple's parent: {the: {parentOf: .apple}}."
-                        }
+                        "Say:": "The apple's parent: {the: {parentOf: .apple}}."
                       },
                       {
-                        "Say:": "Fail to steal:<br>"
+                        "Print:": "Fail to steal:<br>"
                       },
                       {
                         "Taking agent:noun:": [
@@ -184,10 +182,10 @@
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to take possessions:<br>"
+                        "Print:": "Fail to take possessions:<br>"
                       },
                       {
                         "Taking agent:noun:": [
@@ -203,10 +201,10 @@
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to take your container:<br>"
+                        "Print:": "Fail to take your container:<br>"
                       },
                       {
                         "Taking agent:noun:": [
@@ -222,15 +220,13 @@
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": {
-                          "RenderTemplate:": "The knife's parent was: {the: {parentOf: .knife}}."
-                        }
+                        "Say:": "The knife's parent was: {the: {parentOf: .knife}}."
                       },
                       {
-                        "Say:": "Okay, take something:<br>"
+                        "Print:": "Okay, take something:<br>"
                       },
                       {
                         "Taking agent:noun:": [
@@ -243,18 +239,16 @@
                         ]
                       },
                       {
-                        "Say:": {
-                          "RenderTemplate:": "The knife's parent is: {the: {parentOf: .knife}}."
-                        }
+                        "Say:": "The knife's parent is: {the: {parentOf: .knife}}."
                       }
                     ]
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to take your self:<br>"
+                        "Print:": "Fail to take your self:<br>"
                       },
                       {
                         "Taking agent:noun:": [
@@ -270,10 +264,10 @@
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to take someone else:<br>"
+                        "Print:": "Fail to take someone else:<br>"
                       },
                       {
                         "Taking agent:noun:": [
@@ -289,10 +283,10 @@
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to take scenery:<br>"
+                        "Print:": "Fail to take scenery:<br>"
                       },
                       {
                         "Taking agent:noun:": [
@@ -308,10 +302,10 @@
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to take something fixed in place:<br>"
+                        "Print:": "Fail to take something fixed in place:<br>"
                       },
                       {
                         "Taking agent:noun:": [

@@ -63,7 +63,7 @@
                     },
                     [
                       {
-                        "Say:": "@resp"
+                        "Print:": "@resp"
                       }
                     ],
                     {
@@ -93,7 +93,7 @@
                             },
                             [
                               {
-                                "Say:": "@resp"
+                                "Print:": "@resp"
                               }
                             ],
                             {
@@ -190,14 +190,12 @@
                     },
                     [
                       {
-                        "Say:": {
-                          "Response:text:": [
-                            "unremarkable description",
-                            {
-                              "RenderTemplate:": "{We!|make_title_case!} see nothing special about {the: .obj}."
-                            }
-                          ]
-                        }
+                        "Print response:with:": [
+                          "unremarkable description",
+                          {
+                            "Say:": "{We!|make_title_case!} see nothing special about {the: .obj}."
+                          }
+                        ]
                       }
                     ]
                   ]
@@ -214,7 +212,7 @@
               },
               [
                 {
-                  "Say:": "@description"
+                  "Print:": "@description"
                 },
                 {
                   "PrintParticulars obj:": {
@@ -298,14 +296,12 @@
                             },
                             [
                               {
-                                "Say:": {
-                                  "Response:text:": [
-                                    "empty container description",
-                                    {
-                                      "RenderTemplate:": "{The: .obj|capitalize!} {are: .obj} empty."
-                                    }
-                                  ]
-                                }
+                                "Print response:with:": [
+                                  "empty container description",
+                                  {
+                                    "Say:": "{The: .obj|capitalize!} {are: .obj} empty."
+                                  }
+                                ]
                               },
                               {
                                 "Set:from:": [

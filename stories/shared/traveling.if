@@ -78,7 +78,7 @@
                     },
                     [
                       {
-                        "Say:": "@resp"
+                        "Print:": "@resp"
                       }
                     ],
                     {
@@ -111,7 +111,7 @@
                             },
                             [
                               {
-                                "Say:": "@resp"
+                                "Print:": "@resp"
                               }
                             ],
                             {
@@ -218,7 +218,7 @@
                           },
                           [
                             {
-                              "Say:": "@error"
+                              "Print:": "@error"
                             },
                             {
                               "Set:from:": [
@@ -234,7 +234,7 @@
                               {
                                 "Log:": {
                                   "FromText:": {
-                                    "RenderTemplate:": "{The: .actor} {are: .actor} traveling to {the: .destination} via {the: .noun} ..."
+                                    "Say:": "{The: .actor} {are: .actor} traveling to {the: .destination} via {the: .noun} ..."
                                   }
                                 }
                               },
@@ -322,14 +322,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "someone else travels",
-                      {
-                        "RenderTemplate:": "{The: .actor|capitalize!} went through {the: .noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "someone else travels",
+                    {
+                      "Say:": "{The: .actor|capitalize!} went through {the: .noun}."
+                    }
+                  ]
                 }
               ]
             ]
@@ -372,10 +370,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can only travel to a destination",
                           {
-                            "RenderTemplate:": "{They: .noun|capitalize!} {dont:.noun} lead anywhere."
+                            "Say:": "{They: .noun|capitalize!} {dont:.noun} lead anywhere."
                           }
                         ]
                       }
@@ -410,10 +408,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't travel through closed doors",
                           {
-                            "RenderTemplate:": "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be closed."
+                            "Say:": "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be closed."
                           }
                         ]
                       }
@@ -454,10 +452,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't travel through locked doors",
                           {
-                            "RenderTemplate:": "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
+                            "Say:": "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
                           }
                         ]
                       }

@@ -100,7 +100,7 @@
                     },
                     [
                       {
-                        "Say:": "@resp"
+                        "Print:": "@resp"
                       }
                     ],
                     {
@@ -156,14 +156,12 @@
               true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "actor attacking",
-                      {
-                        "RenderTemplate:": "{the:.actor|capitalize!} attacks {the: .noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "actor attacking",
+                    {
+                      "Say:": "{the:.actor|capitalize!} attacks {the: .noun}."
+                    }
+                  ]
                 }
               ]
             ]
@@ -177,14 +175,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player attacking",
-                      {
-                        "RenderTemplate:": "Violence isn't the answer."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "player attacking",
+                    {
+                      "Say:": "Violence isn't the answer."
+                    }
+                  ]
                 }
               ]
             ]

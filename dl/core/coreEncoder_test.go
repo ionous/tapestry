@@ -65,3 +65,16 @@ func TestListPush(t *testing.T) {
 		t.Fatal(have)
 	}
 }
+
+// a unary function:
+func TestUnaryEncoding(t *testing.T) {
+	out := &core.Softline{}
+
+	// fix: this should have path syntax ( re: expressions )
+	// ex. @pawn.trait
+	if have, e := cout.Marshal(out, core.CompactEncoder); e != nil {
+		t.Fatal(e)
+	} else if have != `{"Wbr":true}` {
+		t.Fatal(have)
+	}
+}

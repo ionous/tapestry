@@ -85,13 +85,13 @@
         ],
         [
           {
-            "Say:": {
+            "Print:": {
               "Rows does:": [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to retrieve from something closed:<br>"
+                        "Print:": "Fail to retrieve from something closed:<br>"
                       },
                       {
                         "RetrievingFrom agent:noun:otherNoun:": [
@@ -110,15 +110,13 @@
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": {
-                          "RenderTemplate:": "The soup's parent was: {the: {parentOf: .soup}}."
-                        }
+                        "Say:": "The soup's parent was: {the: {parentOf: .soup}}."
                       },
                       {
-                        "Say:": "Okay, retrieve from supporter:<br>"
+                        "Print:": "Okay, retrieve from supporter:<br>"
                       },
                       {
                         "RetrievingFrom agent:noun:otherNoun:": [
@@ -134,23 +132,19 @@
                         ]
                       },
                       {
-                        "Say:": {
-                          "RenderTemplate:": "The soup's parent is: {the: {parentOf: .soup}}."
-                        }
+                        "Say:": "The soup's parent is: {the: {parentOf: .soup}}."
                       }
                     ]
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": {
-                          "RenderTemplate:": "The hook's parent was: {the: {parentOf: .hook}}."
-                        }
+                        "Say:": "The hook's parent was: {the: {parentOf: .hook}}."
                       },
                       {
-                        "Say:": "Okay, retrieve from container:<br>"
+                        "Print:": "Okay, retrieve from container:<br>"
                       },
                       {
                         "RetrievingFrom agent:noun:otherNoun:": [
@@ -166,18 +160,16 @@
                         ]
                       },
                       {
-                        "Say:": {
-                          "RenderTemplate:": "The hook's parent is: {the: {parentOf: .hook}}."
-                        }
+                        "Say:": "The hook's parent is: {the: {parentOf: .hook}}."
                       }
                     ]
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to retrieve incorrectly:<br>"
+                        "Print:": "Fail to retrieve incorrectly:<br>"
                       },
                       {
                         "RetrievingFrom agent:noun:otherNoun:": [
@@ -196,10 +188,10 @@
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to steal:<br>"
+                        "Print:": "Fail to steal:<br>"
                       },
                       {
                         "RetrievingFrom agent:noun:otherNoun:": [

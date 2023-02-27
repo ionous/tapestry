@@ -93,10 +93,10 @@
                     },
                     [
                       {
-                        "Say:": {
+                        "Print:": {
                           "Brackets does:": [
                             {
-                              "Say:": {
+                              "Print:": {
                                 "Commas does:": [
                                   {
                                     "Repeating across:as:does:": [
@@ -128,7 +128,7 @@
                     {
                       "ElseDo does:": [
                         {
-                          "Say:": {
+                          "Print:": {
                             "Commas does:": [
                               {
                                 "Repeating across:as:does:": [
@@ -191,7 +191,7 @@
                   "Comment:": "print a label with no prefixed size."
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Variable:dot:": [
                       "grouping",
                       [

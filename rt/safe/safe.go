@@ -181,7 +181,7 @@ func GetRecordList(run rt.Runtime, eval rt.RecordListEval) (ret g.Value, err err
 func ObjectText(run rt.Runtime, eval rt.TextEval) (ret g.Value, err error) {
 	if eval == nil {
 		err = MissingEval("object text")
-	} else if t, e := GetText(run, eval); e != nil {
+	} else if t, e := eval.GetText(run); e != nil {
 		err = e
 	} else if n := t.String(); len(n) == 0 {
 		ret = g.Empty

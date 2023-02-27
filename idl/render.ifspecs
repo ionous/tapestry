@@ -30,85 +30,76 @@
           ]
         },
         {
-            "--": "Used with render pattern for arguments of unknown type.",
-            "Spec:groups:with slot:":
-            [
-                "render_eval",
-                "internal",
-                {
-                    "Slot": true
-                }
-            ]
+          "--": "Used with render pattern for arguments of unknown type.",
+          "Spec:groups:with slot:": [
+            "render_eval",
+            "internal",
+            {
+              "Slot": true
+            }
+          ]
         },
         {
-            "--":
+          "--": [
+            "Pull a value from name that might refer either to a variable, or to an object.",
+            "If the name is an object, returns the object id."
+          ],
+          "Spec:slots:groups:with flow:": [
+            "render_ref",
             [
-                "Pull a value from name that might refer either to a variable, or to an object.",
-                "If the name is an object, returns the object id."
+              "bool_eval",
+              "number_eval",
+              "text_eval",
+              "record_eval",
+              "num_list_eval",
+              "text_list_eval",
+              "record_list_eval",
+              "render_eval"
             ],
-            "Spec:slots:groups:with flow:":
-            [
-                "render_ref",
-                [
-                    "bool_eval",
-                    "number_eval",
-                    "text_eval",
-                    "record_eval",
-                    "num_list_eval",
-                    "text_list_eval",
-                    "record_list_eval",
-                    "render_eval"
-                ],
-                "internal",
+            "internal",
+            {
+              "Flow uses:": [
                 {
-                    "Flow uses:":
-                    [
-                        {
-                            "Term:name:type:":
-                            [
-                                "_",
-                                "name",
-                                "text_eval"
-                            ]
-                        },
-                        {
-                            "Term:optional:repeats:":
-                            [
-                                "dot",
-                                true,
-                                true
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },     
-        {
-            "--":
-            [
-                "Pull a value from an assignment of unknown affinity."
-            ],
-            "Spec:slots:groups:with flow:":
-            [
-                "render_value",
-                "render_eval",
-                "internal",
+                  "Term:name:type:": [
+                    "_",
+                    "name",
+                    "text_eval"
+                  ]
+                },
                 {
-                    "Flow uses:":
-                    {
-                        "Term:name:type:":
-                        [
-                            "_",
-                            "value",
-                            "assignment"
-                        ]
-                    }
+                  "Term:optional:repeats:": [
+                    "dot",
+                    true,
+                    true
+                  ]
                 }
-            ]
-        },    
+              ]
+            }
+          ]
+        },
         {
           "--": [
-            "A special version of the core call pattern that figures out how to evaluate its arguments at call time."
+            "Pull a value from an assignment of unknown affinity."
+          ],
+          "Spec:slots:groups:with flow:": [
+            "render_value",
+            "render_eval",
+            "internal",
+            {
+              "Flow uses:": {
+                "Term:name:type:": [
+                  "_",
+                  "value",
+                  "assignment"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "--": [
+            "A version of core's call pattern",
+            "that figures out how to evaluate its arguments at runtime."
           ],
           "Spec:slots:groups:with flow:": [
             "render_pattern",
@@ -122,23 +113,46 @@
               "Flow:uses:": [
                 "render",
                 [
-                    {
-                        "Term:name:type:":
-                        [
-                            "_",
-                            "pattern_name",
-                            "text"
-                        ]
-                    },
-                    {
-                        "Term:type:repeats:":
-                        [
-                            "render",
-                            "render_eval",
-                            true
-                        ]
-                    }
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "pattern_name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:repeats:": [
+                      "render",
+                      "render_eval",
+                      true
+                    ]
+                  }
                 ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Generate text in a replaceable manner.",
+          "Spec:slots:groups:with flow:": [
+            "render_response",
+            ["execute", "text_eval"],
+            "internal",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "name",
+                    "text"
+                  ]
+                },
+                {
+                  "Term:type:": [
+                    "text",
+                    "text_eval"
+                  ]
+                }
               ]
             }
           ]

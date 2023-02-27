@@ -39,7 +39,7 @@
               "src",
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Commas does:": [
                       {
                         "Repeating across:as:does:": [
@@ -53,9 +53,7 @@
                           "it",
                           [
                             {
-                              "Say:": {
-                                "RenderTemplate:": "{print_name: .it}"
-                              }
+                              "Say:": "{print_name: .it}"
                             }
                           ]
                         ]
@@ -64,7 +62,7 @@
                   }
                 },
                 {
-                  "Say:": "."
+                  "Print:": "."
                 }
               ]
             ]
@@ -104,9 +102,7 @@
               "it",
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "{.it}."
-                  }
+                  "Say:": "{.it}."
                 }
               ]
             ]

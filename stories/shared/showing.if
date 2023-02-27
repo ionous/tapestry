@@ -147,7 +147,7 @@
                     },
                     [
                       {
-                        "Say:": "@response"
+                        "Print:": "@response"
                       }
                     ],
                     {
@@ -175,7 +175,7 @@
                         },
                         [
                           {
-                            "Say:": "@response"
+                            "Print:": "@response"
                           }
                         ],
                         {
@@ -242,14 +242,12 @@
               true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player shows",
-                      {
-                        "RenderTemplate:": "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "player shows",
+                    {
+                      "Say:": "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
+                    }
+                  ]
                 }
               ]
             ]
@@ -265,14 +263,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "someone else shows",
-                      {
-                        "RenderTemplate:": "{The: .actor|capitalize!} shows off {the: .noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "someone else shows",
+                    {
+                      "Say:": "{The: .actor|capitalize!} shows off {the: .noun}."
+                    }
+                  ]
                 }
               ]
             ]

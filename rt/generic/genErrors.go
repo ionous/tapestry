@@ -37,10 +37,12 @@ func (e Unknown) Error() (ret string) {
 	switch e.Target {
 	case "":
 		ret = errutil.Sprintf("unknown name %q", e.Field)
+	case meta.ObjectId:
+		ret = errutil.Sprintf("unknown object %q", e.Field)
+	case meta.Response:
+		ret = errutil.Sprintf("unknown response %q", e.Field)
 	case meta.Variables:
 		ret = errutil.Sprintf("unknown variable %q", e.Field)
-	case meta.ObjectId:
-		ret = errutil.Sprintf("unknown object %q", e.Target)
 	default:
 		ret = errutil.Sprintf(`unknown field "%s.%s"`, e.Target, e.Field)
 	}
@@ -49,6 +51,10 @@ func (e Unknown) Error() (ret string) {
 
 func UnknownName(name string) error {
 	return Unknown{Field: name}
+}
+
+func UnknownResponse(v string) error {
+	return Unknown{Target: meta.Response, Field: v}
 }
 
 func UnknownVariable(v string) error {

@@ -118,12 +118,12 @@
               true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "darkness has fallen",
-                      "It is now pitch dark in here!"
-                    ]
-                  }
+                  "Print response:with:": [
+                    "darkness has fallen",
+                    {
+                      "Say:": "It is now pitch dark in here!"
+                    }
+                  ]
                 }
               ]
             ]

@@ -74,13 +74,13 @@
                     },
                     [
                       {
-                        "Say:": "contain"
+                        "Print:": "contain"
                       }
                     ],
                     {
                       "ElseDo does:": [
                         {
-                          "Say:": "support"
+                          "Print:": "support"
                         }
                       ]
                     }
@@ -126,13 +126,13 @@
                     },
                     [
                       {
-                        "Say:": "in"
+                        "Print:": "in"
                       }
                     ],
                     {
                       "ElseDo does:": [
                         {
-                          "Say:": "on"
+                          "Print:": "on"
                         }
                       ]
                     }
@@ -178,13 +178,13 @@
                     },
                     [
                       {
-                        "Say:": "out"
+                        "Print:": "out"
                       }
                     ],
                     {
                       "ElseDo does:": [
                         {
-                          "Say:": "off"
+                          "Print:": "off"
                         }
                       ]
                     }
@@ -251,13 +251,13 @@
                     },
                     [
                       {
-                        "Say:": "are"
+                        "Print:": "are"
                       }
                     ],
                     {
                       "ElseDo does:": [
                         {
-                          "Say:": "is"
+                          "Print:": "is"
                         }
                       ]
                     }
@@ -275,7 +275,7 @@
               },
               [
                 {
-                  "Say:": "are"
+                  "Print:": "are"
                 }
               ]
             ]
@@ -311,7 +311,7 @@
               true,
               [
                 {
-                  "Say:": "is not"
+                  "Print:": "is not"
                 }
               ]
             ]
@@ -326,7 +326,7 @@
               },
               [
                 {
-                  "Say:": "are not"
+                  "Print:": "are not"
                 }
               ]
             ]
@@ -340,7 +340,7 @@
               },
               [
                 {
-                  "Say:": "are not"
+                  "Print:": "are not"
                 }
               ]
             ]
@@ -374,7 +374,7 @@
               true,
               [
                 {
-                  "Say:": "isn't"
+                  "Print:": "isn't"
                 }
               ]
             ]
@@ -389,7 +389,7 @@
               },
               [
                 {
-                  "Say:": "aren't"
+                  "Print:": "aren't"
                 }
               ]
             ]
@@ -403,7 +403,7 @@
               },
               [
                 {
-                  "Say:": "aren't"
+                  "Print:": "aren't"
                 }
               ]
             ]
@@ -434,7 +434,7 @@
               true,
               [
                 {
-                  "Say:": "doesn't"
+                  "Print:": "doesn't"
                 }
               ]
             ]
@@ -449,7 +449,7 @@
               },
               [
                 {
-                  "Say:": "don't"
+                  "Print:": "don't"
                 }
               ]
             ]

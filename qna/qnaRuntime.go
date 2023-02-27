@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 
+	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
@@ -218,6 +219,16 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 		default:
 			err = errutil.Fmt("GetField: unknown target %q (with field %q)", target, rawField)
 			// not one of the predefined options?
+		case meta.Response:
+			// response arent implemented yet.
+			// note: uses raw field so that it matches the meta.Options go generated stringer strings.
+			if flag, e := run.options.Option(meta.PrintResponseNames.String()); e != nil {
+				err = e
+			} else if flag.Affinity() == affine.Bool && flag.Bool() {
+				ret = g.StringOf(field)
+			} else {
+				err = g.UnknownResponse(rawField)
+			}
 
 		case meta.Counter:
 			ret, err = run.getCounter(field)

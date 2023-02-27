@@ -60,7 +60,7 @@
                     },
                     [
                       {
-                        "Say:": "@resp"
+                        "Print:": "@resp"
                       }
                     ],
                     {
@@ -166,7 +166,7 @@
                     },
                     [
                       {
-                        "Say:": "@resp"
+                        "Print:": "@resp"
                       }
                     ],
                     {
@@ -249,10 +249,10 @@
                     "@result",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can only remove what's worn",
                           {
-                            "RenderTemplate:": "{We:|capitalize!} aren't wearing {those:.noun}!"
+                            "Say:": "{We:|capitalize!} aren't wearing {those:.noun}!"
                           }
                         ]
                       }

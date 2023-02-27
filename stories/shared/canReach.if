@@ -341,10 +341,10 @@
                           "@response",
                           {
                             "FromText:": {
-                              "Response:text:": [
+                              "Print response:with:": [
                                 "can't reach a common ancestor",
                                 {
-                                  "RenderTemplate:": "{They:.noun|capitalize!} {arent:.noun} available."
+                                  "Say:": "{They:.noun|capitalize!} {arent:.noun} available."
                                 }
                               ]
                             }
@@ -426,10 +426,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't act in the dark",
                           {
-                            "RenderTemplate:": "It is pitch dark, and {we!} can't see a thing."
+                            "Say:": "It is pitch dark, and {we!} can't see a thing."
                           }
                         ]
                       }
@@ -512,10 +512,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't reach outside closed containers",
                           {
-                            "RenderTemplate:": "{The: .fromObj|capitalize!} {arent: .fromObj} open."
+                            "Say:": "{The: .fromObj|capitalize!} {arent: .fromObj} open."
                           }
                         ]
                       }
@@ -539,10 +539,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't reach outside rooms",
                           {
-                            "RenderTemplate:": "{They:.noun|capitalize!} {arent:.noun} available."
+                            "Say:": "{They:.noun|capitalize!} {arent:.noun} available."
                           }
                         ]
                       }
@@ -559,7 +559,7 @@
                 {
                   "Log:": {
                     "FromText:": {
-                      "RenderTemplate:": "reach up: from:{.fromObj} -> into:{.intoObj}"
+                      "Say:": "reach up: from:{.fromObj} -> into:{.intoObj}"
                     }
                   }
                 }
@@ -648,10 +648,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't reach inside closed containers",
                           {
-                            "RenderTemplate:": "{The: .intoObj|capitalize!} {arent: .intoObj} open."
+                            "Say:": "{The: .intoObj|capitalize!} {arent: .intoObj} open."
                           }
                         ]
                       }
@@ -675,10 +675,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't reach inside rooms",
                           {
-                            "RenderTemplate:": "{We:|capitalize!} can't reach into {the: .intoObj}."
+                            "Say:": "{We:|capitalize!} can't reach into {the: .intoObj}."
                           }
                         ]
                       }
@@ -695,7 +695,7 @@
                 {
                   "Log:": {
                     "FromText:": {
-                      "RenderTemplate:": "reach down: from:{.fromObj} -> into:{.intoObj}"
+                      "Say:": "reach down: from:{.fromObj} -> into:{.intoObj}"
                     }
                   }
                 }

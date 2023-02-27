@@ -93,8 +93,8 @@ func TestPatternRuleImport(t *testing.T) {
 				When: eph.EphTiming{eph.EphTiming_During},
 				// exe is exactly what was specified:
 				Exe: []rt.Execute{
-					&core.SayText{Text: T("hello")},
-					&core.SayText{Text: T("hello")},
+					&core.PrintText{Text: T("hello")},
+					&core.PrintText{Text: T("hello")},
 				},
 			},
 		}

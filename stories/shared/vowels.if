@@ -93,7 +93,7 @@
         "vowel tests",
         [
           {
-            "Say:": {
+            "Print:": {
               "Txt if:then:else:": [
                 {
                   "StartsWithVowel text:": {
@@ -109,7 +109,7 @@
             "Expect output:": "ok."
           },
           {
-            "Say:": {
+            "Print:": {
               "Txt if:then:else:": [
                 {
                   "StartsWithVowel text:": {
@@ -125,7 +125,7 @@
             "Expect output:": "ok."
           },
           {
-            "Say:": {
+            "Print:": {
               "Txt if:then:else:": [
                 {
                   "StartsWithVowel text:": {
@@ -141,7 +141,7 @@
             "Expect output:": "ok."
           },
           {
-            "Say:": {
+            "Print:": {
               "Txt if:then:else:": [
                 {
                   "StartsWithVowel text:": {

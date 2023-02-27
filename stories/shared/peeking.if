@@ -63,7 +63,7 @@
                     },
                     [
                       {
-                        "Say:": "@result"
+                        "Print:": "@result"
                       }
                     ],
                     {
@@ -144,14 +144,12 @@
               true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player peeks",
-                      {
-                        "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "player peeks",
+                    {
+                      "Say:": "{we!|capitalize!} find nothing of interest."
+                    }
+                  ]
                 }
               ]
             ]
@@ -167,14 +165,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "someone else peeks",
-                      {
-                        "RenderTemplate:": "{The: .actor|capitalize!} looks under {the: .noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "someone else peeks",
+                    {
+                      "Say:": "{The: .actor|capitalize!} looks under {the: .noun}."
+                    }
+                  ]
                 }
               ]
             ]

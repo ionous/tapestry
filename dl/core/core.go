@@ -4,10 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 )
 
-type Say = SayText // backwards compat
-var cmdError = assign.CmdError
-
-// backwards compat
+var cmdError = assign.CmdError       // backwards compat
 var cmdErrorCtx = assign.CmdErrorCtx // backwards compat
 
 var (

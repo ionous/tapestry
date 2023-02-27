@@ -128,14 +128,12 @@
               true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "carrying nothing",
-                      {
-                        "RenderTemplate:": "{we:|capitalize!} {are:.actor} carrying nothing."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "carrying nothing",
+                    {
+                      "Say:": "{we:|capitalize!} {are:.actor} carrying nothing."
+                    }
+                  ]
                 }
               ]
             ]
@@ -155,14 +153,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "carrying something",
-                      {
-                        "RenderTemplate:": "You are carrying:"
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "carrying something",
+                    {
+                      "Say:": "You are carrying:"
+                    }
+                  ]
                 },
                 {
                   "PrintBlocks objs:": {

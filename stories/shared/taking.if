@@ -63,7 +63,7 @@
                     },
                     [
                       {
-                        "Say:": "@result"
+                        "Print:": "@result"
                       }
                     ],
                     {
@@ -151,7 +151,7 @@
                           },
                           [
                             {
-                              "Say:": "@error"
+                              "Print:": "@error"
                             },
                             {
                               "Set:from:": [
@@ -167,7 +167,7 @@
                               {
                                 "Log:": {
                                   "FromText:": {
-                                    "RenderTemplate:": "{The: .actor} is taking {the: .noun}..."
+                                    "Say:": "{The: .actor} is taking {the: .noun}..."
                                   }
                                 }
                               },
@@ -223,14 +223,12 @@
               true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player takes",
-                      {
-                        "RenderTemplate:": "Taken."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "player takes",
+                    {
+                      "Say:": "Taken."
+                    }
+                  ]
                 }
               ]
             ]
@@ -246,14 +244,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "someone else takes",
-                      {
-                        "RenderTemplate:": "{The: .actor|capitalize!} picks up {the: .noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "someone else takes",
+                    {
+                      "Say:": "{The: .actor|capitalize!} picks up {the: .noun}."
+                    }
+                  ]
                 }
               ]
             ]
@@ -293,10 +289,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't take other people",
                           {
-                            "RenderTemplate:": "I don't suppose {the: .noun} would care for that."
+                            "Say:": "I don't suppose {the: .noun} would care for that."
                           }
                         ]
                       }
@@ -332,10 +328,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't take yourself",
                           {
-                            "RenderTemplate:": "{we!|capitalize!} {are:.self} always self-possessed."
+                            "Say:": "{we!|capitalize!} {are:.self} always self-possessed."
                           }
                         ]
                       }
@@ -370,10 +366,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't take scenery",
                           {
-                            "RenderTemplate:": "{they:.noun|capitalize!} {are:.noun} hardly portable."
+                            "Say:": "{they:.noun|capitalize!} {are:.noun} hardly portable."
                           }
                         ]
                       }
@@ -408,10 +404,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't take what's fixed in place",
                           {
-                            "RenderTemplate:": "{they:.noun|capitalize!} {are:.noun} fixed in place."
+                            "Say:": "{they:.noun|capitalize!} {are:.noun} fixed in place."
                           }
                         ]
                       }
@@ -448,10 +444,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't take nothings",
                           {
-                            "RenderTemplate:": "{we:|capitalize!} can't carry {the: .noun}."
+                            "Say:": "{we:|capitalize!} can't carry {the: .noun}."
                           }
                         ]
                       }
@@ -500,10 +496,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't take what you're inside",
                           {
-                            "RenderTemplate:": "{We:|capitalize!} would have to get {off:.noun} first."
+                            "Say:": "{We:|capitalize!} would have to get {off:.noun} first."
                           }
                         ]
                       }
@@ -552,10 +548,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't take people's possessions",
                           {
-                            "RenderTemplate:": "{those: .noun|capitalize!} seems to belong to {the: .fromObj}."
+                            "Say:": "{those: .noun|capitalize!} seems to belong to {the: .fromObj}."
                           }
                         ]
                       }
@@ -599,10 +595,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't take what you're holding",
                           {
-                            "RenderTemplate:": "{we:|capitalize!} already have {those:.noun}."
+                            "Say:": "{we:|capitalize!} already have {those:.noun}."
                           }
                         ]
                       }

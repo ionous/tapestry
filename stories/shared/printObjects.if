@@ -32,7 +32,7 @@
               true,
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Commas does:": [
                       {
                         "Repeating across:as:does:": [
@@ -42,7 +42,7 @@
                           "group",
                           [
                             {
-                              "Say:": {
+                              "Print:": {
                                 "Spaces does:": [
                                   {
                                     "PrintGroup group:": {
@@ -99,7 +99,7 @@
               true,
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Rows does:": [
                       {
                         "Repeating across:as:does:": [
@@ -109,7 +109,7 @@
                           "group",
                           [
                             {
-                              "Say:": {
+                              "Print:": {
                                 "Row does:": [
                                   {
                                     "PrintGroup group:": {
@@ -177,9 +177,7 @@
               true,
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "{.obj}"
-                  }
+                  "Say:": "{.obj}"
                 }
               ]
             ]
@@ -206,7 +204,7 @@
               },
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Spaces does:": [
                       {
                         "A noun:": {
@@ -214,7 +212,7 @@
                         }
                       },
                       {
-                        "Say:": {
+                        "Print:": {
                           "Brackets does:": [
                             {
                               "PrintDetails obj:": {
@@ -315,7 +313,7 @@
               true,
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Spaces does:": [
                       {
                         "A noun:": {
@@ -407,14 +405,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "inline storage",
-                      {
-                        "RenderTemplate:": "{On: .obj|capitalize!} {the: .obj} {are: .obj .kids} {print_inline_objects: .kids}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "inline storage",
+                    {
+                      "Say:": "{On: .obj|capitalize!} {the: .obj} {are: .obj .kids} {print_inline_objects: .kids}."
+                    }
+                  ]
                 },
                 {
                   "Set:from:": [
@@ -479,14 +475,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "empty container",
-                      {
-                        "RenderTemplate:": "empty"
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "empty container",
+                    {
+                      "Say:": "empty"
+                    }
+                  ]
                 }
               ]
             ]
@@ -511,12 +505,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "closed container",
-                      "closed"
-                    ]
-                  }
+                  "Print response:with:": [
+                    "closed container",
+                    {
+                      "Say:": "closed"
+                    }
+                  ]
                 }
               ]
             ]
@@ -540,14 +534,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "on which are",
-                      {
-                        "RenderTemplate:": "{on: .obj} which {are: .obj .kids} {print_inline_objects: .kids}"
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "on which are",
+                    {
+                      "Say:": "{on: .obj} which {are: .obj .kids} {print_inline_objects: .kids}"
+                    }
+                  ]
                 }
               ]
             ]
@@ -591,13 +583,13 @@
               true,
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Spaces does:": [
                       {
-                        "Say:": {
+                        "Print:": {
                           "Brackets does:": [
                             {
-                              "Say:": {
+                              "Print:": {
                                 "Commas does:": [
                                   {
                                     "PrintInnerStatus obj:isEmpty:": [
@@ -665,14 +657,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "locked status",
-                      {
-                        "RenderTemplate:": "{if .obj.closed and .obj.locked}locked{end}"
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "locked status",
+                    {
+                      "Say:": "{if .obj.closed and .obj.locked}locked{end}"
+                    }
+                  ]
                 }
               ]
             ]
@@ -697,14 +687,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "transparent status",
-                      {
-                        "RenderTemplate:": "{if .isEmpty}empty{end}"
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "transparent status",
+                    {
+                      "Say:": "{if .isEmpty}empty{end}"
+                    }
+                  ]
                 }
               ]
             ]
@@ -719,14 +707,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "openable status",
-                      {
-                        "RenderTemplate:": "{if .obj.closed}closed{else}open{if .isEmpty} but empty{end}"
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "openable status",
+                    {
+                      "Say:": "{if .obj.closed}closed{else}open{if .isEmpty} but empty{end}"
+                    }
+                  ]
                 }
               ]
             ]
@@ -741,14 +727,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "worn status",
-                      {
-                        "RenderTemplate:": "being worn"
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "worn status",
+                    {
+                      "Say:": "being worn"
+                    }
+                  ]
                 }
               ]
             ]
@@ -763,14 +747,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "lit status",
-                      {
-                        "RenderTemplate:": "providing light"
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "lit status",
+                    {
+                      "Say:": "providing light"
+                    }
+                  ]
                 }
               ]
             ]

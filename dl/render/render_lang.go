@@ -185,7 +185,8 @@ func RenderName_Marshal(m jsn.Marshaler, val *RenderName) (err error) {
 	return
 }
 
-// RenderPattern A special version of the core call pattern that figures out how to evaluate its arguments at call time.
+// RenderPattern A version of core's call pattern
+// that figures out how to evaluate its arguments at runtime.
 type RenderPattern struct {
 	PatternName string       `if:"label=_,type=text"`
 	Render      []RenderEval `if:"label=render"`
@@ -418,6 +419,118 @@ func RenderRef_Marshal(m jsn.Marshaler, val *RenderRef) (err error) {
 	return
 }
 
+// RenderResponse Generate text in a replaceable manner.
+type RenderResponse struct {
+	Name   string      `if:"label=_,type=text"`
+	Text   rt.TextEval `if:"label=text"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*RenderResponse)(nil)
+var _ rt.TextEval = (*RenderResponse)(nil)
+
+func (*RenderResponse) Compose() composer.Spec {
+	return composer.Spec{
+		Name: RenderResponse_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const RenderResponse_Type = "render_response"
+const RenderResponse_Field_Name = "$NAME"
+const RenderResponse_Field_Text = "$TEXT"
+
+func (op *RenderResponse) Marshal(m jsn.Marshaler) error {
+	return RenderResponse_Marshal(m, op)
+}
+
+type RenderResponse_Slice []RenderResponse
+
+func (op *RenderResponse_Slice) GetType() string { return RenderResponse_Type }
+
+func (op *RenderResponse_Slice) Marshal(m jsn.Marshaler) error {
+	return RenderResponse_Repeats_Marshal(m, (*[]RenderResponse)(op))
+}
+
+func (op *RenderResponse_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RenderResponse_Slice) SetSize(cnt int) {
+	var els []RenderResponse
+	if cnt >= 0 {
+		els = make(RenderResponse_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RenderResponse_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RenderResponse_Marshal(m, &(*op)[i])
+}
+
+func RenderResponse_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderResponse) error {
+	return jsn.RepeatBlock(m, (*RenderResponse_Slice)(vals))
+}
+
+func RenderResponse_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderResponse) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = RenderResponse_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type RenderResponse_Flow struct{ ptr *RenderResponse }
+
+func (n RenderResponse_Flow) GetType() string      { return RenderResponse_Type }
+func (n RenderResponse_Flow) GetLede() string      { return RenderResponse_Type }
+func (n RenderResponse_Flow) GetFlow() interface{} { return n.ptr }
+func (n RenderResponse_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RenderResponse); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func RenderResponse_Optional_Marshal(m jsn.Marshaler, pv **RenderResponse) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = RenderResponse_Marshal(m, *pv)
+	} else if !enc {
+		var v RenderResponse
+		if err = RenderResponse_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func RenderResponse_Marshal(m jsn.Marshaler, val *RenderResponse) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(RenderResponse_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", RenderResponse_Field_Name)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RenderResponse_Field_Name))
+		}
+		e1 := m.MarshalKey("text", RenderResponse_Field_Text)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.Text)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", RenderResponse_Field_Text))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // RenderValue Pull a value from an assignment of unknown affinity.
 type RenderValue struct {
 	Value  assign.Assignment `if:"label=_"`
@@ -528,29 +641,32 @@ var Slats = []composer.Composer{
 	(*RenderName)(nil),
 	(*RenderPattern)(nil),
 	(*RenderRef)(nil),
+	(*RenderResponse)(nil),
 	(*RenderValue)(nil),
 }
 
 var Signatures = map[uint64]interface{}{
-	14401057669022842575: (*RenderPattern)(nil), /* bool_eval=Render:render: */
-	2910903954323771519:  (*RenderPattern)(nil), /* render_eval=Render:render: */
-	3385363614654173788:  (*RenderPattern)(nil), /* text_eval=Render:render: */
-	4328811686385928991:  (*RenderName)(nil),    /* text_eval=RenderName: */
-	12372540113328333010: (*RenderRef)(nil),     /* bool_eval=RenderRef: */
-	17707941731931999319: (*RenderRef)(nil),     /* num_list_eval=RenderRef: */
-	586781755231363619:   (*RenderRef)(nil),     /* number_eval=RenderRef: */
-	11952381947639314199: (*RenderRef)(nil),     /* record_eval=RenderRef: */
-	5794615276964665178:  (*RenderRef)(nil),     /* record_list_eval=RenderRef: */
-	15289959684061875714: (*RenderRef)(nil),     /* render_eval=RenderRef: */
-	10542331033523904889: (*RenderRef)(nil),     /* text_eval=RenderRef: */
-	4171261980310148416:  (*RenderRef)(nil),     /* text_list_eval=RenderRef: */
-	18249933776929959289: (*RenderRef)(nil),     /* bool_eval=RenderRef:dot: */
-	9735547470721472920:  (*RenderRef)(nil),     /* num_list_eval=RenderRef:dot: */
-	13239953219501121612: (*RenderRef)(nil),     /* number_eval=RenderRef:dot: */
-	8324158095841155032:  (*RenderRef)(nil),     /* record_eval=RenderRef:dot: */
-	17618593433797581633: (*RenderRef)(nil),     /* record_list_eval=RenderRef:dot: */
-	7883271647282708009:  (*RenderRef)(nil),     /* render_eval=RenderRef:dot: */
-	239223853229152058:   (*RenderRef)(nil),     /* text_eval=RenderRef:dot: */
-	3872622981826050135:  (*RenderRef)(nil),     /* text_list_eval=RenderRef:dot: */
-	7608693554121607902:  (*RenderValue)(nil),   /* render_eval=RenderValue: */
+	14401057669022842575: (*RenderPattern)(nil),  /* bool_eval=Render:render: */
+	2910903954323771519:  (*RenderPattern)(nil),  /* render_eval=Render:render: */
+	3385363614654173788:  (*RenderPattern)(nil),  /* text_eval=Render:render: */
+	4328811686385928991:  (*RenderName)(nil),     /* text_eval=RenderName: */
+	12372540113328333010: (*RenderRef)(nil),      /* bool_eval=RenderRef: */
+	17707941731931999319: (*RenderRef)(nil),      /* num_list_eval=RenderRef: */
+	586781755231363619:   (*RenderRef)(nil),      /* number_eval=RenderRef: */
+	11952381947639314199: (*RenderRef)(nil),      /* record_eval=RenderRef: */
+	5794615276964665178:  (*RenderRef)(nil),      /* record_list_eval=RenderRef: */
+	15289959684061875714: (*RenderRef)(nil),      /* render_eval=RenderRef: */
+	10542331033523904889: (*RenderRef)(nil),      /* text_eval=RenderRef: */
+	4171261980310148416:  (*RenderRef)(nil),      /* text_list_eval=RenderRef: */
+	18249933776929959289: (*RenderRef)(nil),      /* bool_eval=RenderRef:dot: */
+	9735547470721472920:  (*RenderRef)(nil),      /* num_list_eval=RenderRef:dot: */
+	13239953219501121612: (*RenderRef)(nil),      /* number_eval=RenderRef:dot: */
+	8324158095841155032:  (*RenderRef)(nil),      /* record_eval=RenderRef:dot: */
+	17618593433797581633: (*RenderRef)(nil),      /* record_list_eval=RenderRef:dot: */
+	7883271647282708009:  (*RenderRef)(nil),      /* render_eval=RenderRef:dot: */
+	239223853229152058:   (*RenderRef)(nil),      /* text_eval=RenderRef:dot: */
+	3872622981826050135:  (*RenderRef)(nil),      /* text_list_eval=RenderRef:dot: */
+	167592851841791829:   (*RenderResponse)(nil), /* execute=RenderResponse:text: */
+	10415880721138830946: (*RenderResponse)(nil), /* text_eval=RenderResponse:text: */
+	7608693554121607902:  (*RenderValue)(nil),    /* render_eval=RenderValue: */
 }

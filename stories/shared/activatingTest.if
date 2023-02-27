@@ -75,9 +75,7 @@
             ]
           },
           {
-            "Say:": {
-              "RenderTemplate:": "The controls are {.controls.activation}."
-            }
+            "Say:": "The controls are {.controls.activation}."
           },
           {
             "Expect output:": "The controls are deactivated."
@@ -96,9 +94,7 @@
             "Expect output:": "You switch on the espresso controls."
           },
           {
-            "Say:": {
-              "RenderTemplate:": "The controls are {.controls.activation}."
-            }
+            "Say:": "The controls are {.controls.activation}."
           },
           {
             "Expect output:": "The controls are activated."
@@ -117,9 +113,7 @@
             "Expect output:": "You switch off the espresso controls."
           },
           {
-            "Say:": {
-              "RenderTemplate:": "The controls are {.controls.activation}."
-            }
+            "Say:": "The controls are {.controls.activation}."
           },
           {
             "Expect output:": "The controls are deactivated."

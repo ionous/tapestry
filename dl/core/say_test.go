@@ -9,9 +9,9 @@ import (
 )
 
 var helloThereWorld = MakeActivity(
-	&Say{Text: T("hello")},
-	&Say{Text: T("there")},
-	&Say{Text: T("world")},
+	&PrintText{Text: T("hello")},
+	&PrintText{Text: T("there")},
+	&PrintText{Text: T("world")},
 )
 
 func ExampleSpan() {

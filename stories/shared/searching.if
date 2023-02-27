@@ -63,7 +63,7 @@
                     },
                     [
                       {
-                        "Say:": "@result"
+                        "Print:": "@result"
                       }
                     ],
                     {
@@ -149,14 +149,12 @@
               true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player searches something",
-                      {
-                        "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "player searches something",
+                    {
+                      "Say:": "{we!|capitalize!} find nothing of interest."
+                    }
+                  ]
                 }
               ]
             ]
@@ -172,14 +170,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "someone else searches something",
-                      {
-                        "RenderTemplate:": "{The: .actor|capitalize!} searches {the: .noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "someone else searches something",
+                    {
+                      "Say:": "{The: .actor|capitalize!} searches {the: .noun}."
+                    }
+                  ]
                 }
               ]
             ]
@@ -228,57 +224,49 @@
                     },
                     [
                       {
-                        "Say:": {
-                          "Response:text:": [
-                            "player searches empty storage",
-                            {
-                              "RenderTemplate:": "There is nothing {on:.noun} {the:.noun}."
-                            }
-                          ]
-                        }
+                        "Print response:with:": [
+                          "player searches empty storage",
+                          {
+                            "Say:": "There is nothing {on:.noun} {the:.noun}."
+                          }
+                        ]
                       }
                     ],
                     {
                       "ElseDo does:": [
                         {
-                          "Say:": {
-                            "Response:text:": [
-                              "player searches storage",
-                              {
-                                "Spaces does:": [
-                                  {
-                                    "Say:": {
-                                      "RenderTemplate:": "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
-                                    }
-                                  },
-                                  {
-                                    "Say:": {
-                                      "Commas does:": [
-                                        {
-                                          "Repeating across:as:does:": [
+                          "Print response:with:": [
+                            "player searches storage",
+                            {
+                              "Spaces does:": [
+                                {
+                                  "Say:": "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
+                                },
+                                {
+                                  "Print:": {
+                                    "Commas does:": [
+                                      {
+                                        "Repeating across:as:does:": [
+                                          {
+                                            "FromTextList:": "@items"
+                                          },
+                                          "item",
+                                          [
                                             {
-                                              "FromTextList:": "@items"
-                                            },
-                                            "item",
-                                            [
-                                              {
-                                                "Say:": {
-                                                  "RenderTemplate:": "{the: .item}"
-                                                }
-                                              }
-                                            ]
+                                              "Say:": "{the: .item}"
+                                            }
                                           ]
-                                        }
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    "Say:": "."
+                                        ]
+                                      }
+                                    ]
                                   }
-                                ]
-                              }
-                            ]
-                          }
+                                },
+                                {
+                                  "Print:": "."
+                                }
+                              ]
+                            }
+                          ]
                         }
                       ]
                     }
@@ -321,10 +309,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't search opaque objects",
                           {
-                            "RenderTemplate:": "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
+                            "Say:": "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
                           }
                         ]
                       }
@@ -360,10 +348,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can only search storage",
                           {
-                            "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
+                            "Say:": "{we!|capitalize!} find nothing of interest."
                           }
                         ]
                       }

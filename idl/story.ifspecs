@@ -1869,22 +1869,57 @@
         },
         {
           "--": [
-            "Parse text using templates.",
-            "See: https://github.com/ionous/iffy/wiki/Templates."
+            "Used for displaying text to the player.",
+            "The text can contain 'inline-templates';",
+            "mini-commands that help to simplify printing text.",
+            "See also: https://github.com/ionous/iffy/wiki/Templates.",
+            "( note: this is transformed for the runtime into an unnamed 'RenderResponse'. )"
           ],
           "Spec:slots:groups:with flow:": [
-            "render_template",
-            "text_eval",
-            "format",
+            "say_template",
+            ["execute", "text_eval"],
+            "printing",
             {
-              "Flow phrase:uses:": [
-                "render_template {_$template}",
+              "Flow:uses:": [
+                "say",
                 [
                   {
                     "Term:name:type:": [
                       "_",
                       "template",
                       "lines"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "Generate text in a replaceable manner.",
+            "( note: this is transformed for the runtime into a named 'RenderResponse'. )"
+          ],
+          "Spec:slots:groups:with flow:": [
+            "say_response",
+            ["execute", "text_eval"],
+            "printing",
+            {
+              "Flow:uses:": [
+                "print",
+                [
+                  {
+                    "Term:name:type:": [
+                      "response",
+                      "name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "with",
+                      "text",
+                      "text_eval"
                     ]
                   }
                 ]

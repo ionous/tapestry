@@ -13,7 +13,7 @@ import (
 )
 
 func SayIt(s string) []rt.Execute {
-  return []rt.Execute{&core.Say{Text: T(s)}}
+  return []rt.Execute{&core.PrintText{Text: T(s)}}
 }
 
 type MatchNumber struct {
@@ -91,10 +91,10 @@ var SayPattern = testpat.Pattern{
 var SayHelloGoodbye = core.MakeActivity(
   &core.ChooseAction{
     If: B(true),
-    Does: core.MakeActivity(&core.Say{
+    Does: core.MakeActivity(&core.PrintText{
       Text: T("hello"),
     }),
-    Else: &core.ChooseNothingElse{Does: core.MakeActivity(&core.Say{
+    Else: &core.ChooseNothingElse{Does: core.MakeActivity(&core.PrintText{
       Text: T("goodbye"),
     }),
     },
@@ -114,7 +114,7 @@ var SayHelloGoodbyeData = `{
                 "$EXE": [{
                     "type": "execute",
                     "value": {
-                      "type": "say_text",
+                      "type": "say",
                       "value": {
                         "$TEXT": {
                           "type": "text_eval",
@@ -137,7 +137,7 @@ var SayHelloGoodbyeData = `{
                         {
                           "type": "execute",
                           "value": {
-                            "type": "say_text",
+                            "type": "say",
                             "value": {
                               "$TEXT": {
                                 "type": "text_eval",

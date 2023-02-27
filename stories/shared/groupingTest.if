@@ -323,7 +323,7 @@
                           },
                           [
                             {
-                              "Say:": "a few shapely trigons"
+                              "Print:": "a few shapely trigons"
                             }
                           ]
                         ]
@@ -334,7 +334,7 @@
               ],
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Spaces does:": [
                       {
                         "PrintInlineObjects objs:": {
@@ -348,7 +348,7 @@
                         }
                       },
                       {
-                        "Say:": ";"
+                        "Print:": ";"
                       },
                       {
                         "PrintInlineObjects objs:": {
@@ -449,7 +449,7 @@
               ],
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Spaces does:": [
                       {
                         "PrintInlineObjects objs:": {
@@ -463,7 +463,7 @@
                         }
                       },
                       {
-                        "Say:": ";"
+                        "Print:": ";"
                       },
                       {
                         "PrintInlineObjects objs:": {
@@ -573,7 +573,7 @@
                           "before",
                           [
                             {
-                              "Say:": "from a Scrabble set"
+                              "Print:": "from a Scrabble set"
                             }
                           ]
                         ]
@@ -598,9 +598,7 @@
                           },
                           [
                             {
-                              "Say:": {
-                                "RenderTemplate:": "{.obj}"
-                              }
+                              "Say:": "{.obj}"
                             }
                           ]
                         ]
@@ -611,7 +609,7 @@
               ],
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Spaces does:": [
                       {
                         "PrintInlineObjects objs:": {
@@ -625,7 +623,7 @@
                         }
                       },
                       {
-                        "Say:": ";"
+                        "Print:": ";"
                       },
                       {
                         "PrintInlineObjects objs:": {
@@ -708,9 +706,7 @@
                           },
                           [
                             {
-                              "Say:": {
-                                "RenderTemplate:": "{.obj}"
-                              }
+                              "Say:": "{.obj}"
                             }
                           ]
                         ]
@@ -805,7 +801,7 @@
             "--": ""
           },
           {
-            "--": [ 
+            "--": [
               "this has been disabled for quite a while.",
               "even though the triangles are counted nouns",
               "for some reason they get pulled into the 'things' group",
@@ -853,7 +849,7 @@
               ],
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Spaces does:": [
                       {
                         "PrintInlineObjects objs:": {
@@ -866,7 +862,7 @@
                         }
                       },
                       {
-                        "Say:": ";"
+                        "Print:": ";"
                       },
                       {
                         "PrintInlineObjects objs:": {

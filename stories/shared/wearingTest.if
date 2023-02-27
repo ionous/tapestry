@@ -66,9 +66,7 @@
         ],
         [
           {
-            "Say:": {
-              "RenderTemplate:": "The flower's ogp: {the: {parentOf: .flower}}, {.flower.possessiveness}."
-            }
+            "Say:": "The flower's ogp: {the: {parentOf: .flower}}, {.flower.possessiveness}."
           },
           {
             "Expect output:": "The flower's ogp: you, worn."
@@ -106,9 +104,7 @@
             "Expect output:": "You take off the flower."
           },
           {
-            "Say:": {
-              "RenderTemplate:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
-            }
+            "Say:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
           },
           {
             "Expect output:": "The flower's newg: you, not_worn."
@@ -146,17 +142,13 @@
             "Expect output:": "You put on the flower."
           },
           {
-            "Say:": {
-              "RenderTemplate:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
-            }
+            "Say:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
           },
           {
             "Expect output:": "The flower's newg: you, worn."
           },
           {
-            "Say:": {
-              "RenderTemplate:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
-            }
+            "Say:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
           },
           {
             "Expect output:": "The knife's parent: you, not_worn."
@@ -178,17 +170,13 @@
             "Expect output:": "It isn't something you can put on."
           },
           {
-            "Say:": {
-              "RenderTemplate:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
-            }
+            "Say:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
           },
           {
             "Expect output:": "The knife's parent: you, not_worn."
           },
           {
-            "Say:": {
-              "RenderTemplate:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
-            }
+            "Say:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
           },
           {
             "Expect output:": "The purse's parent: the Kitchen, not_worn."
@@ -242,9 +230,7 @@
             "Expect output:": "You haven't got that!"
           },
           {
-            "Say:": {
-              "RenderTemplate:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
-            }
+            "Say:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
           },
           {
             "Expect output:": "The purse's parent: the Kitchen, not_worn."

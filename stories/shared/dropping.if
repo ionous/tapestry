@@ -65,7 +65,7 @@
                     },
                     [
                       {
-                        "Say:": "@result"
+                        "Print:": "@result"
                       }
                     ],
                     {
@@ -162,7 +162,7 @@
                           },
                           [
                             {
-                              "Say:": "@error"
+                              "Print:": "@error"
                             },
                             {
                               "Set:from:": [
@@ -178,7 +178,7 @@
                               {
                                 "Log:": {
                                   "FromText:": {
-                                    "RenderTemplate:": "{The: .actor} is taking {the: .noun} ..."
+                                    "Say:": "{The: .actor} is taking {the: .noun} ..."
                                   }
                                 }
                               },
@@ -234,14 +234,12 @@
               true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player drops",
-                      {
-                        "RenderTemplate:": "Dropped."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "player drops",
+                    {
+                      "Say:": "Dropped."
+                    }
+                  ]
                 }
               ]
             ]
@@ -257,14 +255,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "someone else drops",
-                      {
-                        "RenderTemplate:": "{The: .actor|capitalize!} put down {the: .noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "someone else drops",
+                    {
+                      "Say:": "{The: .actor|capitalize!} put down {the: .noun}."
+                    }
+                  ]
                 }
               ]
             ]
@@ -316,11 +312,9 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't drop what's already there",
-                          {
-                            "RenderTemplate:": "{The: .noun|capitalize!} {are: .noun} already here.\""
-                          }
+                          "{The: .noun|capitalize!} {are: .noun} already here.\""
                         ]
                       }
                     }
@@ -355,10 +349,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't drop yourself",
                           {
-                            "RenderTemplate:": "{We:|capitalize!} lack the dexterity."
+                            "Say:": "{We:|capitalize!} lack the dexterity."
                           }
                         ]
                       }

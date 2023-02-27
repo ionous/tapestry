@@ -279,56 +279,34 @@
         ],
         [
           {
-            "Say:": {
-              "RenderTemplate:": [
-                "Mildred's parent is {the: {parentOf: .Mildred}}.",
-                "The basket's parent is {the: {parentOf: .basket}}.",
-                "Mildred is in {the: {CurrentRoom: .Mildred}}.",
-                "The scalpel is in {the: {CurrentRoom: .scalpel}}.",
-                "{The: {locationOf: .basket}|capitalize!} encloses the basket.",
-                "{The: {locationOf: .apple}|capitalize!} encloses the apple.",
-                "{The: {containerOf: .apple}|capitalize!} contains the apple.",
-                "{The: {containerOf: .basket}|capitalize!} contains the basket.",
-                "{The: {supporterOf: .apple}|capitalize!} supports the apple.",
-                "{The: {supporterOf: .basket}|capitalize!} supports the basket.",
-                "The basket's parent: {name_of: {parentOf: .basket}}.",
-                "The scalpel's parent: {name_of: {parentOf: .scalpel}}.",
-                "{The: {holderOf: .pen}|capitalize!} owns the pen.",
-                "{The: {carrierOf: .pen}|capitalize!} carries the pen.",
-                "{The: {carrierOf: .scalpel}|capitalize!} carries the scalpel.",
-                "The pen is in {the: {wearerOf: .pen}}'s pocket.",
-                "The scalpel is worn by: {name_of: {wearerOf: .scalpel}}.",
-                ""
-              ]
-            }
-          },
-          {
-            "Say:": {
-              "RenderTemplate:": "The common ancestor of the pen and itself: {name_of: {common_ancestor: .pen .pen}}."
-            }
-          },
-          {
-            "Say:": {
-              "RenderTemplate:": "The common ancestor of the pen and a sibling: {name_of: {common_ancestor: .pen .scalpel}}."
-            }
-          },
-          {
-            "Say:": {
-              "RenderTemplate:": "The common ancestor of the sibling and a pen: {name_of: {common_ancestor: .scalpel .pen}}."
-            }
-          },
-          {
-            "Say:": {
-              "RenderTemplate:": "The common ancestor of the pen and its owner: {name_of: {common_ancestor: .Mildred .pen}}."
-            }
-          },
-          {
-            "Say:": {
-              "RenderTemplate:": "The common ancestor of the pen's owner and the pen: {name_of: {common_ancestor: .pen .Mildred}}."
-            }
+            "Say:": [
+              "{The: {carrierOf: .basket}|capitalize!} carries the basket.",
+              "Mildred's parent is {the: {parentOf: .Mildred}}.",
+              "The basket's parent is {the: {parentOf: .basket}}.",
+              "Mildred is in {the: {CurrentRoom: .Mildred}}.",
+              "The scalpel is in {the: {CurrentRoom: .scalpel}}.",
+              "{The: {locationOf: .basket}|capitalize!} encloses the basket.",
+              "{The: {locationOf: .apple}|capitalize!} encloses the apple.",
+              "{The: {containerOf: .apple}|capitalize!} contains the apple.",
+              "{The: {containerOf: .basket}|capitalize!} contains the basket.",
+              "{The: {supporterOf: .apple}|capitalize!} supports the apple.",
+              "{The: {supporterOf: .basket}|capitalize!} supports the basket.",
+              "The basket's parent: {printName: {parentOf: .basket}}.",
+              "The scalpel's parent: {printName: {parentOf: .scalpel}}.",
+              "{The: {holderOf: .pen}|capitalize!} owns the pen.",
+              "{The: {carrierOf: .scalpel}|capitalize!} carries the scalpel.",
+              "The pen is in {the: {wearerOf: .pen}}'s pocket.",
+              "The scalpel is worn by: {printName: {wearerOf: .scalpel}}.",
+              "The common ancestor of the pen and itself: {printName: {common_ancestor: .pen .pen}}.",
+              "The common ancestor of the pen and a sibling: {printName: {common_ancestor: .pen .scalpel}}.",
+              "The common ancestor of the sibling and a pen: {printName: {common_ancestor: .scalpel .pen}}.",
+              "The common ancestor of the pen and its owner: {printName: {common_ancestor: .Mildred .pen}}.",
+              "The common ancestor of the pen's owner and the pen: {printName: {common_ancestor: .pen .Mildred}}."
+            ]
           },
           {
             "Expect output:": [
+              "Nothing carries the basket.",
               "Mildred's parent is the lab.",
               "The basket's parent is the table.",
               "Mildred is in the lab.",
@@ -336,16 +314,15 @@
               "The table encloses the basket.",
               "The basket encloses the apple.",
               "The basket contains the apple.",
-              "The  contains the basket.",
-              "The  supports the apple.",
+              "Nothing contains the basket.",
+              "Nothing supports the apple.",
               "The table supports the basket.",
               "The basket's parent: table.",
               "The scalpel's parent: Mildred.",
               "Mildred owns the pen.",
-              "The  carries the pen.",
               "Mildred carries the scalpel.",
               "The pen is in Mildred's pocket.",
-              "The scalpel is worn by: .",
+              "The scalpel is worn by: nothing.",
               "The common ancestor of the pen and itself: pen.",
               "The common ancestor of the pen and a sibling: Mildred.",
               "The common ancestor of the sibling and a pen: Mildred.",

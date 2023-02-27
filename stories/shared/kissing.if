@@ -82,7 +82,7 @@
                     },
                     [
                       {
-                        "Say:": "@resp"
+                        "Print:": "@resp"
                       }
                     ],
                     {
@@ -112,7 +112,7 @@
                             },
                             [
                               {
-                                "Say:": "@resp"
+                                "Print:": "@resp"
                               }
                             ],
                             {
@@ -181,10 +181,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't kiss without consent",
                           {
-                            "RenderTemplate:": "{the:.noun|capitalize!} might not like that."
+                            "Say:": "{the:.noun|capitalize!} might not like that."
                           }
                         ]
                       }
@@ -225,10 +225,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't kiss yourself",
                           {
-                            "RenderTemplate:": "{we:|capitalize!} don't get much from that."
+                            "Say:": "{we:|capitalize!} don't get much from that."
                           }
                         ]
                       }
@@ -304,14 +304,12 @@
               true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "actor kissing",
-                      {
-                        "RenderTemplate:": "{the:.actor|capitalize!} kisses {the:.noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "actor kissing",
+                    {
+                      "Say:": "{the:.actor|capitalize!} kisses {the:.noun}."
+                    }
+                  ]
                 }
               ]
             ]
@@ -325,14 +323,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player kissing",
-                      {
-                        "RenderTemplate:": "{we:|capitalize!} kiss on {the:.noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "player kissing",
+                    {
+                      "Say:": "{we:|capitalize!} kiss on {the:.noun}."
+                    }
+                  ]
                 }
               ]
             ]

@@ -1,5 +1,8 @@
 package composer
 
+// fix: this uses the *Name* because of how templates work
+// template functions dont specify true signatures
+// so they cant use just the lede ( which might conflict with ledes from other commands )
 func SpecName(c Composer) (ret string) {
 	if c == nil {
 		ret = "<nil>"

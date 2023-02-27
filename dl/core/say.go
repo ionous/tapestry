@@ -12,7 +12,7 @@ import (
 )
 
 // Execute writes text to the runtime's current writer.
-func (op *Say) Execute(run rt.Runtime) (err error) {
+func (op *PrintText) Execute(run rt.Runtime) (err error) {
 	if e := safe.WriteText(run, op.Text); e != nil {
 		err = cmdError(op, e)
 	}

@@ -94,14 +94,12 @@
               true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "the player waits",
-                      {
-                        "RenderTemplate:": "Time passes."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "the player waits",
+                    {
+                      "Say:": "Time passes."
+                    }
+                  ]
                 }
               ]
             ]
@@ -117,14 +115,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "someone waits",
-                      {
-                        "RenderTemplate:": "{The: .actor|capitalize!} waited."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "someone waits",
+                    {
+                      "Say:": "{The: .actor|capitalize!} waited."
+                    }
+                  ]
                 }
               ]
             ]

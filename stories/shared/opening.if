@@ -60,7 +60,7 @@
                     },
                     [
                       {
-                        "Say:": "@resp"
+                        "Print:": "@resp"
                       }
                     ],
                     {
@@ -90,7 +90,7 @@
                             },
                             [
                               {
-                                "Say:": "@resp"
+                                "Print:": "@resp"
                               }
                             ],
                             {
@@ -200,7 +200,7 @@
                     },
                     [
                       {
-                        "Say:": "@resp"
+                        "Print:": "@resp"
                       }
                     ],
                     {
@@ -230,7 +230,7 @@
                             },
                             [
                               {
-                                "Say:": "@resp"
+                                "Print:": "@resp"
                               }
                             ],
                             {
@@ -316,10 +316,10 @@
                     "@result",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't open when locked",
                           {
-                            "RenderTemplate:": "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
+                            "Say:": "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
                           }
                         ]
                       }
@@ -423,44 +423,38 @@
                               "Comment:": "inform doesn't print the inventory details when opening objects, so this doesn't either. "
                             },
                             {
-                              "Say:": {
-                                "Response:text:": [
-                                  "reveal newly visible objects",
-                                  {
-                                    "Spaces does:": [
-                                      {
-                                        "Say:": {
-                                          "RenderTemplate:": "{We!|capitalize!} open {the: .noun}, revealing"
-                                        }
-                                      },
-                                      {
-                                        "Say:": {
-                                          "Commas does:": [
-                                            {
-                                              "Repeating across:as:does:": [
+                              "Print response:with:": [
+                                "reveal newly visible objects",
+                                {
+                                  "Spaces does:": [
+                                    {
+                                      "Say:": "{We!|capitalize!} open {the: .noun}, revealing"
+                                    },
+                                    {
+                                      "Print:": {
+                                        "Commas does:": [
+                                          {
+                                            "Repeating across:as:does:": [
+                                              {
+                                                "FromTextList:": "@concealed items"
+                                              },
+                                              "item",
+                                              [
                                                 {
-                                                  "FromTextList:": "@concealed items"
-                                                },
-                                                "item",
-                                                [
-                                                  {
-                                                    "Say:": {
-                                                      "RenderTemplate:": "{the: .item}"
-                                                    }
-                                                  }
-                                                ]
+                                                  "Say:": "{the: .item}"
+                                                }
                                               ]
-                                            }
-                                          ]
-                                        }
-                                      },
-                                      {
-                                        "Say:": "."
+                                            ]
+                                          }
+                                        ]
                                       }
-                                    ]
-                                  }
-                                ]
-                              }
+                                    },
+                                    {
+                                      "Print:": "."
+                                    }
+                                  ]
+                                }
+                              ]
                             },
                             {
                               "Set:from:": [

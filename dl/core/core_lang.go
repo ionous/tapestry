@@ -3385,9 +3385,10 @@ func IsExactKindOf_Marshal(m jsn.Marshaler, val *IsExactKindOf) (err error) {
 
 // IsKindOf True if the object is compatible with the named kind.
 type IsKindOf struct {
-	Object rt.TextEval `if:"label=_"`
-	Kind   string      `if:"label=is,type=text"`
-	Markup map[string]any
+	Object  rt.TextEval `if:"label=_"`
+	Kind    string      `if:"label=is,type=text"`
+	Nothing bool        `if:"label=nothing,optional,type=bool"`
+	Markup  map[string]any
 }
 
 // User implemented slots:
@@ -3404,6 +3405,7 @@ func (*IsKindOf) Compose() composer.Spec {
 const IsKindOf_Type = "is_kind_of"
 const IsKindOf_Field_Object = "$OBJECT"
 const IsKindOf_Field_Kind = "$KIND"
+const IsKindOf_Field_Nothing = "$NOTHING"
 
 func (op *IsKindOf) Marshal(m jsn.Marshaler) error {
 	return IsKindOf_Marshal(m, op)
@@ -3489,6 +3491,13 @@ func IsKindOf_Marshal(m jsn.Marshaler, val *IsKindOf) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", IsKindOf_Field_Kind))
+		}
+		e2 := m.MarshalKey("nothing", IsKindOf_Field_Nothing)
+		if e2 == nil {
+			e2 = prim.Bool_Unboxed_Optional_Marshal(m, &val.Nothing)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", IsKindOf_Field_Nothing))
 		}
 		m.EndBlock()
 	}
@@ -5333,6 +5342,109 @@ func PrintNumWord_Marshal(m jsn.Marshaler, val *PrintNumWord) (err error) {
 	return
 }
 
+// PrintText Display some text to the player without apply any additional formatting.
+type PrintText struct {
+	Text   rt.TextEval `if:"label=_"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*PrintText)(nil)
+
+func (*PrintText) Compose() composer.Spec {
+	return composer.Spec{
+		Name: PrintText_Type,
+		Uses: composer.Type_Flow,
+		Lede: "print",
+	}
+}
+
+const PrintText_Type = "print_text"
+const PrintText_Field_Text = "$TEXT"
+
+func (op *PrintText) Marshal(m jsn.Marshaler) error {
+	return PrintText_Marshal(m, op)
+}
+
+type PrintText_Slice []PrintText
+
+func (op *PrintText_Slice) GetType() string { return PrintText_Type }
+
+func (op *PrintText_Slice) Marshal(m jsn.Marshaler) error {
+	return PrintText_Repeats_Marshal(m, (*[]PrintText)(op))
+}
+
+func (op *PrintText_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *PrintText_Slice) SetSize(cnt int) {
+	var els []PrintText
+	if cnt >= 0 {
+		els = make(PrintText_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *PrintText_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return PrintText_Marshal(m, &(*op)[i])
+}
+
+func PrintText_Repeats_Marshal(m jsn.Marshaler, vals *[]PrintText) error {
+	return jsn.RepeatBlock(m, (*PrintText_Slice)(vals))
+}
+
+func PrintText_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PrintText) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = PrintText_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type PrintText_Flow struct{ ptr *PrintText }
+
+func (n PrintText_Flow) GetType() string      { return PrintText_Type }
+func (n PrintText_Flow) GetLede() string      { return "print" }
+func (n PrintText_Flow) GetFlow() interface{} { return n.ptr }
+func (n PrintText_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*PrintText); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func PrintText_Optional_Marshal(m jsn.Marshaler, pv **PrintText) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = PrintText_Marshal(m, *pv)
+	} else if !enc {
+		var v PrintText
+		if err = PrintText_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func PrintText_Marshal(m jsn.Marshaler, val *PrintText) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(PrintText_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", PrintText_Field_Text)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Text)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", PrintText_Field_Text))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // ProductOf Multiply two numbers.
 type ProductOf struct {
 	A      rt.NumberEval `if:"label=_"`
@@ -5669,117 +5781,6 @@ func RemainderOf_Marshal(m jsn.Marshaler, val *RemainderOf) (err error) {
 	return
 }
 
-// Response Generate text in a replaceable manner.
-type Response struct {
-	Name   string      `if:"label=_,type=text"`
-	Text   rt.TextEval `if:"label=text,optional"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.TextEval = (*Response)(nil)
-
-func (*Response) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Response_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Response_Type = "response"
-const Response_Field_Name = "$NAME"
-const Response_Field_Text = "$TEXT"
-
-func (op *Response) Marshal(m jsn.Marshaler) error {
-	return Response_Marshal(m, op)
-}
-
-type Response_Slice []Response
-
-func (op *Response_Slice) GetType() string { return Response_Type }
-
-func (op *Response_Slice) Marshal(m jsn.Marshaler) error {
-	return Response_Repeats_Marshal(m, (*[]Response)(op))
-}
-
-func (op *Response_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Response_Slice) SetSize(cnt int) {
-	var els []Response
-	if cnt >= 0 {
-		els = make(Response_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Response_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Response_Marshal(m, &(*op)[i])
-}
-
-func Response_Repeats_Marshal(m jsn.Marshaler, vals *[]Response) error {
-	return jsn.RepeatBlock(m, (*Response_Slice)(vals))
-}
-
-func Response_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Response) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Response_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Response_Flow struct{ ptr *Response }
-
-func (n Response_Flow) GetType() string      { return Response_Type }
-func (n Response_Flow) GetLede() string      { return Response_Type }
-func (n Response_Flow) GetFlow() interface{} { return n.ptr }
-func (n Response_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Response); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Response_Optional_Marshal(m jsn.Marshaler, pv **Response) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Response_Marshal(m, *pv)
-	} else if !enc {
-		var v Response
-		if err = Response_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Response_Marshal(m jsn.Marshaler, val *Response) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(Response_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Response_Field_Name)
-		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Response_Field_Name))
-		}
-		e1 := m.MarshalKey("text", Response_Field_Text)
-		if e1 == nil {
-			e1 = rt.TextEval_Optional_Marshal(m, &val.Text)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Response_Field_Text))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // Row Group text into a single line <li> as part of a list of lines.
 // See also: 'rows'.
 type Row struct {
@@ -5979,109 +5980,6 @@ func Rows_Marshal(m jsn.Marshaler, val *Rows) (err error) {
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Rows_Field_Does))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// SayText Print some bit of text to the player.
-type SayText struct {
-	Text   rt.TextEval `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*SayText)(nil)
-
-func (*SayText) Compose() composer.Spec {
-	return composer.Spec{
-		Name: SayText_Type,
-		Uses: composer.Type_Flow,
-		Lede: "say",
-	}
-}
-
-const SayText_Type = "say_text"
-const SayText_Field_Text = "$TEXT"
-
-func (op *SayText) Marshal(m jsn.Marshaler) error {
-	return SayText_Marshal(m, op)
-}
-
-type SayText_Slice []SayText
-
-func (op *SayText_Slice) GetType() string { return SayText_Type }
-
-func (op *SayText_Slice) Marshal(m jsn.Marshaler) error {
-	return SayText_Repeats_Marshal(m, (*[]SayText)(op))
-}
-
-func (op *SayText_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *SayText_Slice) SetSize(cnt int) {
-	var els []SayText
-	if cnt >= 0 {
-		els = make(SayText_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *SayText_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return SayText_Marshal(m, &(*op)[i])
-}
-
-func SayText_Repeats_Marshal(m jsn.Marshaler, vals *[]SayText) error {
-	return jsn.RepeatBlock(m, (*SayText_Slice)(vals))
-}
-
-func SayText_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SayText) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = SayText_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type SayText_Flow struct{ ptr *SayText }
-
-func (n SayText_Flow) GetType() string      { return SayText_Type }
-func (n SayText_Flow) GetLede() string      { return "say" }
-func (n SayText_Flow) GetFlow() interface{} { return n.ptr }
-func (n SayText_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*SayText); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func SayText_Optional_Marshal(m jsn.Marshaler, pv **SayText) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = SayText_Marshal(m, *pv)
-	} else if !enc {
-		var v SayText
-		if err = SayText_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func SayText_Marshal(m jsn.Marshaler, val *SayText) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(SayText_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", SayText_Field_Text)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Text)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", SayText_Field_Text))
 		}
 		m.EndBlock()
 	}
@@ -7121,13 +7019,12 @@ var Slats = []composer.Composer{
 	(*Pluralize)(nil),
 	(*PrintNum)(nil),
 	(*PrintNumWord)(nil),
+	(*PrintText)(nil),
 	(*ProductOf)(nil),
 	(*QuotientOf)(nil),
 	(*RemainderOf)(nil),
-	(*Response)(nil),
 	(*Row)(nil),
 	(*Rows)(nil),
-	(*SayText)(nil),
 	(*Singularize)(nil),
 	(*SlashText)(nil),
 	(*Softline)(nil),
@@ -7186,6 +7083,7 @@ var Signatures = map[uint64]interface{}{
 	16037301925772243654: (*Join)(nil),              /* text_eval=Join:parts: */
 	16305715626122315047: (*KindOf)(nil),            /* text_eval=KindOf: */
 	16744881049704292640: (*IsKindOf)(nil),          /* bool_eval=KindOf:is: */
+	210805642732508805:   (*IsKindOf)(nil),          /* bool_eval=KindOf:is:nothing: */
 	7296079450764183372:  (*IsExactKindOf)(nil),     /* bool_eval=KindOf:isExactly: */
 	6869420318733086481:  (*KindsOf)(nil),           /* text_list_eval=KindsOf: */
 	11334467785012784241: (*MakeLowercase)(nil),     /* text_eval=Lower: */
@@ -7202,13 +7100,11 @@ var Signatures = map[uint64]interface{}{
 	5709077775967698380:  (*PrintNum)(nil),          /* text_eval=Numeral: */
 	7215745238754840573:  (*Blankline)(nil),         /* execute=P */
 	11420921600352749983: (*Pluralize)(nil),         /* text_eval=Plural of: */
+	4512128922644282356:  (*PrintText)(nil),         /* execute=Print: */
 	2842299911742259355:  (*While)(nil),             /* execute=Repeating:does: */
-	10473004701492618907: (*Response)(nil),          /* text_eval=Response: */
-	7255385262037338050:  (*Response)(nil),          /* text_eval=Response:text: */
 	12963686195606417453: (*MakeReversed)(nil),      /* text_eval=Reverse text: */
 	18412814242923983245: (*Row)(nil),               /* text_eval=Row does: */
 	176976729959796892:   (*Rows)(nil),              /* text_eval=Rows does: */
-	9556993961571292952:  (*SayText)(nil),           /* execute=Say: */
 	10747671703915852065: (*MakeSentenceCase)(nil),  /* text_eval=Sentence: */
 	3632089819497852687:  (*CallShuffle)(nil),       /* text_eval=Shuffle:over: */
 	2397382738676796596:  (*Singularize)(nil),       /* text_eval=Singular of: */

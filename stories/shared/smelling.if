@@ -145,7 +145,7 @@
                     },
                     [
                       {
-                        "Say:": "@resp"
+                        "Print:": "@resp"
                       }
                     ],
                     {
@@ -175,7 +175,7 @@
                             },
                             [
                               {
-                                "Say:": "@resp"
+                                "Print:": "@resp"
                               }
                             ],
                             {
@@ -235,14 +235,12 @@
               true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "actor smelling",
-                      {
-                        "RenderTemplate:": "{the:.actor|capitalize!} sniffs {the: .noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "actor smelling",
+                    {
+                      "Say:": "{the:.actor|capitalize!} sniffs {the: .noun}."
+                    }
+                  ]
                 }
               ]
             ]
@@ -256,14 +254,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player smelling",
-                      {
-                        "RenderTemplate:": "{we:|capitalize!} smell nothing unexpected."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "player smelling",
+                    {
+                      "Say:": "{we:|capitalize!} smell nothing unexpected."
+                    }
+                  ]
                 }
               ]
             ]

@@ -72,23 +72,22 @@
         ],
         [
           {
-            "Say:": {
-              "RenderTemplate:": [
-                "You can only just make out {a: .lamp_post}.",
-                "You can only just make out {a: .Trevor}.",
-                "You can only just make out {a: .soldiers}.",
-                "{a: .lamp_post|capitalize!} can be made out in the mist.",
-                "{a: .Trevor|capitalize!} can be made out in the mist.",
-                "{a: .soldiers|capitalize!} can be made out in the mist.",
-                "You can only just make out {the: .lamp_post}.",
-                "You can only just make out {the: .trevor}.",
-                "You can only just make out {the: .soldiers}.",
-                "{the: .lamp_post|capitalize!} may be a trick of the mist.",
-                "{the: .trevor|capitalize!} may be a trick of the mist.",
-                "{the: .soldiers|capitalize!} may be a trick of the mist.",
-                "You can only just make out {a: .Trevor}."
-              ]
-            }
+            "Say:": [
+              "You can only just make out {a: .lamp_post}.",
+              "You can only just make out {a: .Trevor}.",
+              "You can only just make out {a: .soldiers}.",
+              "{a: .lamp_post|capitalize!} can be made out in the mist.",
+              "{a: .Trevor|capitalize!} can be made out in the mist.",
+              "{a: .soldiers|capitalize!} can be made out in the mist.",
+              "You can only just make out {the: .lamp_post}.",
+              "You can only just make out {the: .trevor}.",
+              "You can only just make out {the: .soldiers}.",
+              "{the: .lamp_post|capitalize!} may be a trick of the mist.",
+              "{the: .trevor|capitalize!} may be a trick of the mist.",
+              "{the: .soldiers|capitalize!} may be a trick of the mist.",
+              "You can only just make out {a: .Trevor}.",
+              "You can see {a:}, {the:}."
+            ]
           },
           {
             "Expect output:": [
@@ -104,7 +103,8 @@
               "The lamp-post may be a trick of the mist.",
               "Trevor may be a trick of the mist.",
               "The soldiers may be a trick of the mist.",
-              "You can only just make out Trevor."
+              "You can only just make out Trevor.",
+              "You can see nothing, nothing."
             ]
           }
         ]
@@ -141,7 +141,7 @@
                     },
                     {
                       "FromText:": {
-                        "RenderTemplate:": "{.noun}"
+                        "Say:": "{.noun}"
                       }
                     }
                   ]
@@ -186,7 +186,7 @@
                     },
                     {
                       "FromText:": {
-                        "RenderTemplate:": "{.noun}"
+                        "Say:": "{.noun}"
                       }
                     }
                   ]
@@ -202,18 +202,102 @@
     },
     {
       "Pattern:requires:": [
+        "Print nothing",
+        [
+          {
+            "--": [
+              "Print nothing takes an object reference.",
+              "It uses that to try to determine the kind of the reference",
+              "even if the reference itself is blank."
+            ],
+            "Text:kind:": [
+              "obj",
+              "object"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "Print nothing",
+        [
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print:": "nothing"
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:nothing:": [
+                  "@obj",
+                  "rooms",
+                  true
+                ]
+              },
+              [
+                {
+                  "Print:": "nowhere"
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:nothing:": [
+                  "@obj",
+                  "actors",
+                  true
+                ]
+              },
+              [
+                {
+                  "Print:": "nobody"
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "--": [
+        "Helper to say the name of a noun and its article.",
+        "For example: 'an apple', 'a bear', 'some honey.'",
+        "Uses properties about the noun, indefinite articles, vowels, etc. to determine what to say."
+      ],
+      "Pattern:requires:": [
         "Print article",
         [
           {
+            "--": [
+              "optional definite article text, for example 'the'.",
+              "if not specified, print article will use the indefinite article."
+            ],
             "Text:": "article"
           },
           {
+            "--": "a reference to the object.",
             "Text:kind:": [
               "obj",
               "object"
             ]
           },
           {
+            "--": [
+              "the text to print for the object's name.",
+              "( allowing the caller to specify this is meant to enhance the pattern's flexibility. )"
+            ],
             "Text:": "name"
           }
         ]
@@ -228,9 +312,7 @@
               true,
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "a {.name}"
-                  }
+                  "Say:": "a {.name}"
                 }
               ]
             ]
@@ -244,9 +326,7 @@
               },
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "an {.name}"
-                  }
+                  "Say:": "an {.name}"
                 }
               ]
             ]
@@ -261,9 +341,7 @@
               },
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "some {.name}"
-                  }
+                  "Say:": "some {.name}"
                 }
               ]
             ]
@@ -284,9 +362,7 @@
               },
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "{.obj.indefinite_article} {.name}"
-                  }
+                  "Say:": "{.obj.indefinite_article} {.name}"
                 }
               ]
             ]
@@ -302,9 +378,7 @@
               },
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "{.article} {.name}"
-                  }
+                  "Say:": "{.article} {.name}"
                 }
               ]
             ]
@@ -322,8 +396,22 @@
                   "Comment:": "by definition proper named objects have no article."
                 },
                 {
-                  "Say:": {
-                    "RenderTemplate:": "{.name}"
+                  "Say:": "{.name}"
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Not:": {
+                  "Is valid:": "@obj"
+                }
+              },
+              [
+                {
+                  "PrintNothing:": {
+                    "FromText:": "@obj"
                   }
                 }
               ]

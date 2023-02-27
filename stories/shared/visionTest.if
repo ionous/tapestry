@@ -14,7 +14,7 @@
                     true,
                     [
                       {
-                        "Say:": "The light, it burns."
+                        "Print:": "The light, it burns."
                       }
                     ]
                   ]

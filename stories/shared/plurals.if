@@ -38,11 +38,7 @@
               true,
               [
                 {
-                  "Say:": {
-                    "Plural of:": {
-                      "RenderTemplate:": "{.obj}"
-                    }
-                  }
+                  "Say:": "{printName:.obj|pluralize!}"
                 }
               ]
             ]
@@ -63,9 +59,7 @@
               },
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "{.obj.printed_plural_name}"
-                  }
+                  "Say:": "{.obj.printed_plural_name}"
                 }
               ]
             ]
@@ -135,9 +129,7 @@
         ],
         [
           {
-            "Say:": {
-              "RenderTemplate:": "{print_plural_name: .flowerpot}, {print_plural_name: .dishes}, {print_plural_name: .spoon}."
-            }
+            "Say:": "{print_plural_name: .flowerpot}, {print_plural_name: .dishes}, {print_plural_name: .spoon}."
           },
           {
             "Expect output:": "broken flower pots, dishes, spoons."

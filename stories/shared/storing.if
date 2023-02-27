@@ -41,7 +41,7 @@
                 {
                   "Log:": {
                     "FromText:": {
-                      "RenderTemplate:": "{.actor} storing {the:.noun} to {the:.other_noun}."
+                      "Say:": "{.actor} storing {the:.noun} to {the:.other_noun}."
                     }
                   }
                 },
@@ -73,7 +73,7 @@
                     },
                     [
                       {
-                        "Say:": "@result"
+                        "Print:": "@result"
                       }
                     ],
                     {
@@ -106,7 +106,7 @@
                             },
                             [
                               {
-                                "Say:": "@result"
+                                "Print:": "@result"
                               }
                             ],
                             {
@@ -139,7 +139,7 @@
                                     },
                                     [
                                       {
-                                        "Say:": "@result"
+                                        "Print:": "@result"
                                       }
                                     ],
                                     {
@@ -241,7 +241,7 @@
                           },
                           [
                             {
-                              "Say:": "@error"
+                              "Print:": "@error"
                             },
                             {
                               "Set:from:": [
@@ -312,14 +312,12 @@
               true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player stores",
-                      {
-                        "RenderTemplate:": "{We:|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "player stores",
+                    {
+                      "Say:": "{We:|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
+                    }
+                  ]
                 }
               ]
             ]
@@ -335,14 +333,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "someone stores",
-                      {
-                        "RenderTemplate:": "{The: .actor|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "someone stores",
+                    {
+                      "Say:": "{The: .actor|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
+                    }
+                  ]
                 }
               ]
             ]
@@ -386,10 +382,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't insert something into itself",
                           {
-                            "RenderTemplate:": "{We:|capitalize!} can't put  {those:.noun} {on:.other_noun} itself."
+                            "Say:": "{We:|capitalize!} can't put  {those:.noun} {on:.other_noun} itself."
                           }
                         ]
                       }
@@ -432,10 +428,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't insert clothing",
                           {
-                            "RenderTemplate:": "{We:|capitalize!} would have to take {those:.noun} off first."
+                            "Say:": "{We:|capitalize!} would have to take {those:.noun} off first."
                           }
                         ]
                       }
@@ -489,10 +485,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can only store when allowed",
                           {
-                            "RenderTemplate:": "{the: .fromObj|capitalize!} is closed."
+                            "Say:": "{the: .fromObj|capitalize!} is closed."
                           }
                         ]
                       }
@@ -538,10 +534,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can only store to storage",
                           {
-                            "RenderTemplate:": "{the: .fromObj|capitalize!} can't {contain:.fromObj} things."
+                            "Say:": "{the: .fromObj|capitalize!} can't {contain:.fromObj} things."
                           }
                         ]
                       }
@@ -579,10 +575,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't store people's possessions",
                           {
-                            "RenderTemplate:": "{those: .noun|capitalize!} seems to belong to {the: .intoObj}."
+                            "Say:": "{those: .noun|capitalize!} seems to belong to {the: .intoObj}."
                           }
                         ]
                       }

@@ -168,7 +168,7 @@
                 {
                   "Log:": {
                     "FromText:": {
-                      "RenderTemplate:": "print vantage: from:{.where}"
+                      "Say:": "print vantage: from:{.where}"
                     }
                   }
                 },
@@ -246,7 +246,7 @@
                           }
                         },
                         {
-                          "Say:": "."
+                          "Print:": "."
                         },
                         {
                           "Comment:": "(b/c we dont have a newline op yet, we use fullstop instead.)"
@@ -384,12 +384,12 @@
               true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "the darkness",
-                      "Darkness."
-                    ]
-                  }
+                  "Print response:with:": [
+                    "the darkness",
+                    {
+                      "Say:": "Darkness."
+                    }
+                  ]
                 }
               ]
             ]
@@ -422,12 +422,12 @@
               true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "pitch dark",
-                      "It is pitch dark, and you can't see a thing."
-                    ]
-                  }
+                  "Print response:with:": [
+                    "pitch dark",
+                    {
+                      "Say:": "It is pitch dark, and you can't see a thing."
+                    }
+                  ]
                 }
               ]
             ]
@@ -495,17 +495,13 @@
                     },
                     [
                       {
-                        "Say:": {
-                          "RenderTemplate:": "{.ceiling}"
-                        }
+                        "Say:": "{.ceiling}"
                       }
                     ],
                     {
                       "ElseDo does:": [
                         {
-                          "Say:": {
-                            "RenderTemplate:": "{The: .ceiling|capitalize!}"
-                          }
+                          "Say:": "{The: .ceiling|capitalize!}"
                         }
                       ]
                     }
@@ -584,9 +580,7 @@
                         ]
                       },
                       {
-                        "Say:": {
-                          "RenderTemplate:": " ({on: .it} {the: .it})"
-                        }
+                        "Say:": " ({on: .it} {the: .it})"
                       }
                     ]
                   ]
@@ -670,7 +664,7 @@
                     },
                     [
                       {
-                        "Say:": {
+                        "Print:": {
                           "Object:field:": [
                             "@room",
                             "description"
@@ -1037,9 +1031,7 @@
               },
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "{.obj.initial_appearance}"
-                  }
+                  "Say:": "{.obj.initial_appearance}"
                 },
                 {
                   "Mention obj:": {
@@ -1143,14 +1135,12 @@
               true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "you can also see",
-                      {
-                        "RenderTemplate:": "{unless .here}{On: .where|capitalize!} {the: .where} you{else}{We!|capitalize!}{end} can {unless .firstMention}also {end}see {print_inline_objects: .children}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "you can also see",
+                    {
+                      "Say:": "{unless .here}{On: .where|capitalize!} {the: .where} you{else}{We!|capitalize!}{end} can {unless .firstMention}also {end}see {print_inline_objects: .children}."
+                    }
+                  ]
                 }
               ]
             ]

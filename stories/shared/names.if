@@ -82,9 +82,7 @@
             ]
           },
           {
-            "Say:": {
-              "RenderTemplate:": "{.named}, {.unnamed}."
-            }
+            "Say:": "{.named}, {.unnamed}."
           },
           {
             "Expect output:": "named object, thing."
@@ -117,7 +115,7 @@
               true,
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Singular of:": {
                       "KindOf:": "@obj"
                     }
@@ -141,7 +139,7 @@
               },
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "NameOf:": "@obj"
                   }
                 },
@@ -169,7 +167,7 @@
               },
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Object:field:": [
                       "@obj",
                       "printed name"
@@ -178,6 +176,22 @@
                 },
                 {
                   "Mention obj:": {
+                    "FromText:": "@obj"
+                  }
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Not:": {
+                  "Is valid:": "@obj"
+                }
+              },
+              [
+                {
+                  "PrintNothing:": {
                     "FromText:": "@obj"
                   }
                 }

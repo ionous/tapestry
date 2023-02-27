@@ -22,7 +22,7 @@
               true,
               [
                 {
-                  "Say:": "you"
+                  "Print:": "you"
                 }
               ]
             ]
@@ -58,7 +58,7 @@
               true,
               [
                 {
-                  "Say:": "it"
+                  "Print:": "it"
                 }
               ]
             ]
@@ -73,7 +73,7 @@
               },
               [
                 {
-                  "Say:": "they"
+                  "Print:": "they"
                 }
               ]
             ]
@@ -106,7 +106,7 @@
               true,
               [
                 {
-                  "Say:": "that"
+                  "Print:": "that"
                 }
               ]
             ]
@@ -121,7 +121,7 @@
               },
               [
                 {
-                  "Say:": "these"
+                  "Print:": "these"
                 }
               ]
             ]

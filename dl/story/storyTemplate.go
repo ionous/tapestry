@@ -2,27 +2,44 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/express"
 	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/template"
 	"git.sr.ht/~ionous/tapestry/template/types"
 	"github.com/ionous/errutil"
 )
 
-func (op *RenderTemplate) PreImport(k *imp.Importer) (ret interface{}, err error) {
-	if xs, e := template.Parse(op.Template.Str); e != nil {
+// transform SayTemplate into a RenderResponse
+func (op *SayTemplate) PreImport(k *imp.Importer) (interface{}, error) {
+	return convertTemplate("", op.Template.Str)
+}
+
+// transform SayResponse into a RenderResponse
+func (op *SayResponse) PreImport(k *imp.Importer) (interface{}, error) {
+	k.WriteEphemera(&eph.EphKinds{
+		Kinds: kindsOf.Response.String(),
+		Contain: []eph.EphParams{{
+			Affinity:  eph.Affinity{eph.Affinity_Text},
+			Name:      op.Name,
+			Initially: &assign.FromText{Value: op.Text},
+		}}})
+	//
+	return &render.RenderResponse{Name: op.Name, Text: op.Text}, nil
+}
+
+func convertTemplate(name, tmpl string) (ret *render.RenderResponse, err error) {
+	if xs, e := template.Parse(tmpl); e != nil {
 		err = e
 	} else if got, e := express.Convert(xs); e != nil {
 		err = errutil.New(e, xs)
 	} else if eval, ok := got.(rt.TextEval); !ok {
 		err = errutil.Fmt("render template has unknown expression %T", got)
 	} else {
-		// note: this used to wrap this in a "RenderExp" which called the eval
-		// that was just a marker; not needed so removed.
-		//  &render.RenderExp{Expression: eval}
-		ret = eval
-		// pretty.Println(eval)
+		ret = &render.RenderResponse{Text: eval}
 	}
 	return
 }

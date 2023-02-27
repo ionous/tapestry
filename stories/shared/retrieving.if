@@ -63,7 +63,7 @@
                     },
                     [
                       {
-                        "Say:": "@result"
+                        "Print:": "@result"
                       }
                     ],
                     {
@@ -96,7 +96,7 @@
                             },
                             [
                               {
-                                "Say:": "@result"
+                                "Print:": "@result"
                               }
                             ],
                             {
@@ -277,10 +277,10 @@
                     "@response",
                     {
                       "FromText:": {
-                        "Response:text:": [
+                        "Print response:with:": [
                           "can't retrieve what's not inside",
                           {
-                            "RenderTemplate:": "But {they:.noun} {arent: .noun} there now."
+                            "Say:": "But {they:.noun} {arent: .noun} there now."
                           }
                         ]
                       }

@@ -24,6 +24,8 @@ func (op *ObjectExists) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
+// return the unique object name for the indicated object.
+// returns an error if there is no such object; returns the empty string for an empty id.
 func (op *IdOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if obj, e := safe.ObjectText(run, op.Object); e != nil {
 		err = cmdError(op, e)
@@ -33,6 +35,8 @@ func (op *IdOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
+// returns the author specified name for the indicated object.
+// returns an error if there is no such object; returns the empty string for an empty request.
 func (op *NameOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 	if obj, e := safe.ObjectText(run, op.Object); e != nil {
 		err = cmdError(op, e)
@@ -46,15 +50,16 @@ func (op *NameOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
-// ex. repeating across all things
+// returns a list of all objects of the specified kind.
 func (op *KindsOf) GetTextList(run rt.Runtime) (g.Value, error) {
 	kind := lang.Underscore(op.Kind) // fix: at assembly time.
 	return run.GetField(meta.ObjectsOfKind, kind)
 }
 
-// returns the kind of this type
+// returns the kind of the indicated object.
+// returns an error if there is no such object; returns the empty string for an empty request.
 func (op *KindOf) GetText(run rt.Runtime) (ret g.Value, err error) {
-	if k, e := objectKind(run, op.Object); e != nil {
+	if k, e := objectKind(run, op.Object, false); e != nil {
 		err = e
 	} else if k == nil {
 		ret = g.Empty
@@ -64,8 +69,11 @@ func (op *KindOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
+// returns true if the indicated object is of the specified kind.
+// returns an error if there is no such object;
+// returns the false for an empty request UNLESS nothing objects were specified as being allowed to match.
 func (op *IsKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	if k, e := objectKind(run, op.Object); e != nil {
+	if k, e := objectKind(run, op.Object, op.Nothing); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ok := k != nil && k.Implements(lang.Underscore(op.Kind))
@@ -74,8 +82,11 @@ func (op *IsKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
+// returns true if the indicated object is of the specified kind
+// but not a kind that derives from the specified kind.
+// returns an error if there is no such object; returns the false for an empty request.
 func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	if k, e := objectKind(run, op.Object); e != nil {
+	if k, e := objectKind(run, op.Object, false); e != nil {
 		err = cmdError(op, e)
 	} else {
 		ok := k != nil && k.Name() == lang.Underscore(op.Kind)
@@ -88,7 +99,7 @@ func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 // handles null references which in some cases still have a type
 // can return nil for a empty reference
 // ( an invalid reference returns error )
-func objectKind(run rt.Runtime, eval rt.TextEval) (ret *g.Kind, err error) {
+func objectKind(run rt.Runtime, eval rt.TextEval, allowNothing bool) (ret *g.Kind, err error) {
 	if eval == nil {
 		err = safe.MissingEval("object text")
 	} else if text, e := eval.GetText(run); e != nil {
@@ -97,9 +108,11 @@ func objectKind(run rt.Runtime, eval rt.TextEval) (ret *g.Kind, err error) {
 		// if the object name is blank, we might still be able to glean some info on kind...
 		// ( useful for things like "nobody" vs "nothing"
 		if name := text.String(); len(name) == 0 {
-			kind := text.Type()
-			if len(kind) != 0 {
-				ret, err = run.GetKindByName(kind)
+			if allowNothing {
+				kind := text.Type()
+				if len(kind) != 0 {
+					ret, err = run.GetKindByName(kind)
+				}
 			}
 		} else {
 			// fix? we cant fully rely on the type of the text because of lists
