@@ -26,7 +26,7 @@ import (
 var CmdIdl = &base.Command{
 	Run:       runGenerate,
 	UsageLine: "tap idlb [file.db]", //  [-run regexp] [-n] [-v] [-x] [build flags] [file.go... | packages]
-	Short:     "generate a language database",
+	Short:     "language database generator",
 	Long: `
 Idlb generates an sqlite database containing the tapestry command language.
 Language extensions must be built into tapestry itself

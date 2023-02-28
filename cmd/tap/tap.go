@@ -1,7 +1,9 @@
-// Adapted from https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/cmd/go/main.go
+// Copyright 2022 Simon Travis.
 // Copyright 2011 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
+
+// Adapted from https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/cmd/go/main.go
 package main
 
 import (
@@ -15,6 +17,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cfg"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/help"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/idlcmd"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/mosaiccmd"
 	"github.com/ionous/errutil"
 )
 
@@ -132,12 +135,18 @@ func invoke(cmd *base.Command, args []string) (err error) {
 	// 	}
 	// }
 
-	// cmd.Flag.Usage = func() { cmd.Usage() }
+	// as far as i can tell, this adds global flags to the command's own flags
+	// sub-commands usually add their command flags in an init, or something via local vars
+	// ex. 	go get: var getD = CmdGet.Flag.Bool("d", false, "")
+	// after selecting the command, this parses the args, and then passes the remaining args to the command.
+
+	cmd.Flag.Usage = func() { cmd.Usage() }
 	if !cmd.CustomFlags {
 		// base.SetFromGOFLAGS(&cmd.Flag)
 		cmd.Flag.Parse(args)
 		args = cmd.Flag.Args()
 	}
+
 	ctx := context.Background()
 	// ctx = maybeStartTrace(ctx)
 	// ctx, span := trace.StartSpan(ctx, fmt.Sprint("Running ", cmd.Name(), " command"))
@@ -151,5 +160,6 @@ func init() {
 	// rewrites the main tap command to simplify exitBadUsage
 	base.Go.Commands = []*base.Command{
 		idlcmd.CmdIdl,
+		mosaiccmd.CmdMosaic,
 	}
 }

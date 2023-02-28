@@ -15,14 +15,13 @@ cmd/gomake/gomake
 cmd/gomake/_temp
 cmd/idl/idl
 cmd/import/import
-cmd/mosaic/_sampledata
-cmd/mosaic/mosaic
 cmd/migrate/migrate
 cmd/play/play
 cmd/regenspec/regenspec
 cmd/serve/serve
 cmd/spec/spec
 cmd/stem/stem
+cmd/tap/tap
 www/dist
 *.zip
 *.go_
