@@ -23,8 +23,8 @@ var CmdMosaic = &base.Command{
 	Run:       runMosaic,
 	Flag:      buildFlags(),
 	UsageLine: "tap mosaic [-in <directory>] [mosaic flags]",
-	Short:     "story editor",
-	Long: `Start the Tapestry editor.
+	Short:     "tapestry story editor",
+	Long: `Start the Tapestry story editor.
 
 The 'in' directory should contain two sub-directories:
 	1. "stories" - containing .if files ( the target for save/load )
