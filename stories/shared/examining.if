@@ -18,11 +18,9 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
                 ]
               }
             ]
@@ -32,20 +30,26 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": "@actor"
+                }
               },
               [
                 {
                   "If:from:and:does:else:": [
                     "resp",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanReach actor:action:noun:requiresLight:": [
-                          "@actor",
                           {
-                            "FromTxt:": "examining"
+                            "FromText:": "@actor"
                           },
-                          "@noun",
+                          {
+                            "FromText:": "examining"
+                          },
+                          {
+                            "FromText:": "@noun"
+                          },
                           {
                             "FromBool:": true
                           }
@@ -59,7 +63,7 @@
                     },
                     [
                       {
-                        "Say:": "@resp"
+                        "Print:": "@resp"
                       }
                     ],
                     {
@@ -68,13 +72,17 @@
                           "If:from:and:does:else:": [
                             "resp",
                             {
-                              "FromTxt:": {
+                              "FromText:": {
                                 "CanUse actor:action:noun:": [
-                                  "@actor",
                                   {
-                                    "FromTxt:": "examining"
+                                    "FromText:": "@actor"
                                   },
-                                  "@noun"
+                                  {
+                                    "FromText:": "examining"
+                                  },
+                                  {
+                                    "FromText:": "@noun"
+                                  }
                                 ]
                               }
                             },
@@ -85,7 +93,7 @@
                             },
                             [
                               {
-                                "Say:": "@resp"
+                                "Print:": "@resp"
                               }
                             ],
                             {
@@ -95,19 +103,27 @@
                                     {
                                       "Send:event:": [
                                         {
-                                          "Capture obj:": "@noun"
+                                          "Capture obj:": {
+                                            "FromText:": "@noun"
+                                          }
                                         },
                                         {
                                           "Examine actor:noun:": [
-                                            "@actor",
-                                            "@noun"
+                                            {
+                                              "FromText:": "@actor"
+                                            },
+                                            {
+                                              "FromText:": "@noun"
+                                            }
                                           ]
                                         }
                                       ]
                                     },
                                     [
                                       {
-                                        "PrintDescription obj:": "@noun"
+                                        "PrintDescription obj:": {
+                                          "FromText:": "@noun"
+                                        }
                                       }
                                     ]
                                   ]
@@ -150,11 +166,9 @@
             "Text:initially:": [
               "description",
               {
-                "Get:from:": [
-                  "description",
-                  {
-                    "ObjFields:": "@obj"
-                  }
+                "Object:field:": [
+                  "@obj",
+                  "description"
                 ]
               }
             ]
@@ -163,27 +177,25 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "If:does:": [
                     {
                       "Not:": {
-                        "PrintParticulars obj:": "@obj"
+                        "PrintParticulars obj:": {
+                          "FromText:": "@obj"
+                        }
                       }
                     },
                     [
                       {
-                        "Say:": {
-                          "Response:text:": [
-                            "unremarkable description",
-                            {
-                              "RenderTemplate:": "{We!|make_title_case!} see nothing special about {the: .obj}."
-                            }
-                          ]
-                        }
+                        "Print response:with:": [
+                          "unremarkable description",
+                          {
+                            "Say:": "{We!|make_title_case!} see nothing special about {the: .obj}."
+                          }
+                        ]
                       }
                     ]
                   ]
@@ -200,10 +212,12 @@
               },
               [
                 {
-                  "Say:": "@description"
+                  "Print:": "@description"
                 },
                 {
-                  "PrintParticulars obj:": "@obj"
+                  "PrintParticulars obj:": {
+                    "FromText:": "@obj"
+                  }
                 }
               ]
             ]
@@ -248,12 +262,14 @@
                 {
                   "If:does:else:": [
                     {
-                      "PrintInlineStorage obj:": "@obj"
+                      "PrintInlineStorage obj:": {
+                        "FromText:": "@obj"
+                      }
                     },
                     [
                       {
-                        "Let:be:": [
-                          "success",
+                        "Set:from:": [
+                          "@success",
                           {
                             "FromBool:": true
                           }
@@ -273,25 +289,23 @@
                                 "other_than",
                                 {
                                   "ContainerOf obj:": {
-                                    "FromTxt:": "player"
+                                    "FromText:": "player"
                                   }
                                 }
                               ]
                             },
                             [
                               {
-                                "Say:": {
-                                  "Response:text:": [
-                                    "empty container description",
-                                    {
-                                      "RenderTemplate:": "{The: .obj|capitalize!} {are: .obj} empty."
-                                    }
-                                  ]
-                                }
+                                "Print response:with:": [
+                                  "empty container description",
+                                  {
+                                    "Say:": "{The: .obj|capitalize!} {are: .obj} empty."
+                                  }
+                                ]
                               },
                               {
-                                "Let:be:": [
-                                  "success",
+                                "Set:from:": [
+                                  "@success",
                                   {
                                     "FromBool:": true
                                   }
@@ -319,12 +333,14 @@
                 {
                   "If:does:": [
                     {
-                      "PrintInlineStorage obj:": "@obj"
+                      "PrintInlineStorage obj:": {
+                        "FromText:": "@obj"
+                      }
                     },
                     [
                       {
-                        "Let:be:": [
-                          "success",
+                        "Set:from:": [
+                          "@success",
                           {
                             "FromBool:": true
                           }
@@ -349,7 +365,7 @@
         [
           {
             "PrintDescription obj:": {
-              "FromTxt:": "blender"
+              "FromText:": "blender"
             }
           },
           {
@@ -357,7 +373,7 @@
           },
           {
             "PrintDescription obj:": {
-              "FromTxt:": "hat"
+              "FromText:": "hat"
             }
           },
           {
@@ -365,7 +381,7 @@
           },
           {
             "PrintDescription obj:": {
-              "FromTxt:": "mortar"
+              "FromText:": "mortar"
             }
           },
           {
@@ -373,7 +389,7 @@
           },
           {
             "PrintDescription obj:": {
-              "FromTxt:": "shelf"
+              "FromText:": "shelf"
             }
           },
           {
@@ -381,7 +397,7 @@
           },
           {
             "PrintDescription obj:": {
-              "FromTxt:": "cabinet"
+              "FromText:": "cabinet"
             }
           },
           {
@@ -399,7 +415,7 @@
           },
           {
             "PrintDescription obj:": {
-              "FromTxt:": "blender"
+              "FromText:": "blender"
             }
           },
           {

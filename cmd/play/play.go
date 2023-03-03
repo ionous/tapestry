@@ -80,10 +80,11 @@ func playGame(inFile, testString, domain string, jsonMode bool) (ret int, err er
 				w = print.NewLineSentences(&bufferedText)
 			}
 			rx := qna.NewRuntimeOptions(w, qdb, opt, tapestry.AllSignatures)
-			run := play.NewPlaytime(rx)
-			if _, e := run.ActivateDomain(domain); e != nil {
+			if _, e := rx.ActivateDomain(domain); e != nil {
 				err = e
 			} else {
+				run := play.NewPlaytime(rx)
+
 				parser := play.NewParser(run, grammar)
 				//
 				if len(testString) > 0 {

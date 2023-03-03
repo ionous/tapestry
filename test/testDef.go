@@ -4,8 +4,8 @@ package test
 type Things struct {
 }
 
-// global variables for grouping tests
-type Values struct {
+// local variables for grouping tests
+type Locals struct {
 	Objects   []string
 	Settings  []GroupSettings
 	Collation GroupCollation

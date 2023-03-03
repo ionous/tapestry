@@ -58,13 +58,13 @@
             "If:from:and:does:else:": [
               "resp",
               {
-                "FromTxt:": {
+                "FromText:": {
                   "CanReach actor:noun:": [
                     {
-                      "FromTxt:": "self"
+                      "FromText:": "self"
                     },
                     {
-                      "FromTxt:": "beans"
+                      "FromText:": "beans"
                     }
                   ]
                 }
@@ -76,15 +76,13 @@
               },
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "okay: {.resp}"
-                  }
+                  "Say:": "okay: {.resp}"
                 }
               ],
               {
                 "ElseDo does:": [
                   {
-                    "Say:": "failed: shouldnt have reached into the espresso machine."
+                    "Print:": "failed: shouldnt have reached into the espresso machine."
                   }
                 ]
               }
@@ -97,13 +95,13 @@
             "If:from:and:does:else:": [
               "resp",
               {
-                "FromTxt:": {
+                "FromText:": {
                   "CanReach actor:noun:": [
                     {
-                      "FromTxt:": "self"
+                      "FromText:": "self"
                     },
                     {
-                      "FromTxt:": "tomatoes"
+                      "FromText:": "tomatoes"
                     }
                   ]
                 }
@@ -115,15 +113,13 @@
               },
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "failed: {.resp}"
-                  }
+                  "Say:": "failed: {.resp}"
                 }
               ],
               {
                 "ElseDo does:": [
                   {
-                    "Say:": "okay: reached outside the open cabinet."
+                    "Print:": "okay: reached outside the open cabinet."
                   }
                 ]
               }
@@ -133,27 +129,29 @@
             "Expect output:": "okay: reached outside the open cabinet."
           },
           {
-            "Put:from:at:": [
+            "Set:from:": [
               {
-                "ObjField:": "espresso machine"
+                "Object:field:": [
+                  "espresso machine",
+                  "open"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "open"
+              }
             ]
           },
           {
             "If:from:and:does:else:": [
               "resp",
               {
-                "FromTxt:": {
+                "FromText:": {
                   "CanReach actor:noun:": [
                     {
-                      "FromTxt:": "self"
+                      "FromText:": "self"
                     },
                     {
-                      "FromTxt:": "beans"
+                      "FromText:": "beans"
                     }
                   ]
                 }
@@ -165,15 +163,13 @@
               },
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "failed: {.resp}"
-                  }
+                  "Say:": "failed: {.resp}"
                 }
               ],
               {
                 "ElseDo does:": [
                   {
-                    "Say:": "okay: reached inside the open espresso machine."
+                    "Print:": "okay: reached inside the open espresso machine."
                   }
                 ]
               }
@@ -183,27 +179,29 @@
             "Expect output:": "okay: reached inside the open espresso machine."
           },
           {
-            "Put:from:at:": [
+            "Set:from:": [
               {
-                "ObjField:": "cabinet"
+                "Object:field:": [
+                  "cabinet",
+                  "closed"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "closed"
+              }
             ]
           },
           {
             "If:from:and:does:else:": [
               "resp",
               {
-                "FromTxt:": {
+                "FromText:": {
                   "CanReach actor:noun:": [
                     {
-                      "FromTxt:": "self"
+                      "FromText:": "self"
                     },
                     {
-                      "FromTxt:": "tomatoes"
+                      "FromText:": "tomatoes"
                     }
                   ]
                 }
@@ -215,15 +213,13 @@
               },
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "okay: {.resp}"
-                  }
+                  "Say:": "okay: {.resp}"
                 }
               ],
               {
                 "ElseDo does:": [
                   {
-                    "Say:": "failed: shouldnt have reached from the closed cabinet."
+                    "Print:": "failed: shouldnt have reached from the closed cabinet."
                   }
                 ]
               }
@@ -236,13 +232,13 @@
             "If:from:and:does:else:": [
               "resp",
               {
-                "FromTxt:": {
+                "FromText:": {
                   "CanReach actor:noun:": [
                     {
-                      "FromTxt:": "self"
+                      "FromText:": "self"
                     },
                     {
-                      "FromTxt:": "cloak"
+                      "FromText:": "cloak"
                     }
                   ]
                 }
@@ -254,15 +250,13 @@
               },
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "okay: {.resp}"
-                  }
+                  "Say:": "okay: {.resp}"
                 }
               ],
               {
                 "ElseDo does:": [
                   {
-                    "Say:": "failed: shouldnt have reached out of world."
+                    "Print:": "failed: shouldnt have reached out of world."
                   }
                 ]
               }

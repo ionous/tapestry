@@ -11,22 +11,22 @@ import (
 
 func newListTime(src []string, p testpat.Map) (ret rt.Runtime, vals *g.Record, err error) {
 	var kinds testutil.Kinds
-	type Values struct{ Source []string }
-	kinds.AddKinds((*Values)(nil))
-	values := kinds.NewRecord("values")
+	type Locals struct{ Source []string }
+	kinds.AddKinds((*Locals)(nil))
+	locals := kinds.NewRecord("locals")
 	lt := testpat.Runtime{
 		p,
 		testutil.Runtime{
 			Kinds: &kinds,
 			Stack: []rt.Scope{
-				g.RecordOf(values),
+				g.RecordOf(locals),
 			},
 		}}
-	if e := values.SetNamedField("source", g.StringsOf(src)); e != nil {
+	if e := locals.SetNamedField("source", g.StringsOf(src)); e != nil {
 		err = e
 	} else {
 		ret = &lt
-		vals = values
+		vals = locals
 	}
 	return
 }

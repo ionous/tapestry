@@ -11,12 +11,10 @@
               [
                 {
                   "PatternRule:does:": [
-                    {
-                      "Always": true
-                    },
+                    true,
                     [
                       {
-                        "Say:": "The light, it burns."
+                        "Print:": "The light, it burns."
                       }
                     ]
                   ]
@@ -32,7 +30,7 @@
           {
             "Expect:": {
               "Not:": {
-                "Get obj:trait:": [
+                "Object:field:": [
                   "self",
                   "is in darkness"
                 ]
@@ -46,14 +44,16 @@
             ]
           },
           {
-            "Put:from:at:": [
+            "Set:from:": [
               {
-                "ObjField:": "kitchen"
+                "Object:field:": [
+                  "kitchen",
+                  "unlit"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "unlit"
+              }
             ]
           },
           {
@@ -64,7 +64,7 @@
           },
           {
             "Expect:": {
-              "Get obj:trait:": [
+              "Object:field:": [
                 "self",
                 "is in darkness"
               ]
@@ -74,14 +74,16 @@
             "Comment:": "Verify that light breaks forth in a glorious wonder."
           },
           {
-            "Put:from:at:": [
+            "Set:from:": [
               {
-                "ObjField:": "kitchen"
+                "Object:field:": [
+                  "kitchen",
+                  "lit"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "lit"
+              }
             ]
           },
           {
@@ -93,7 +95,7 @@
           {
             "Expect:": {
               "Not:": {
-                "Get obj:trait:": [
+                "Object:field:": [
                   "self",
                   "is in darkness"
                 ]

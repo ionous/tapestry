@@ -16,11 +16,9 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
                 ]
               }
             ]
@@ -30,7 +28,9 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": "@actor"
+                }
               },
               [
                 {
@@ -38,19 +38,27 @@
                     {
                       "Send:event:": [
                         {
-                          "Capture obj:": "@actor"
+                          "Capture obj:": {
+                            "FromText:": "@actor"
+                          }
                         },
                         {
                           "Wait actor:noun:": [
-                            "@actor",
-                            "@actor"
+                            {
+                              "FromText:": "@actor"
+                            },
+                            {
+                              "FromText:": "@actor"
+                            }
                           ]
                         }
                       ]
                     },
                     [
                       {
-                        "ReportWaiting actor:": "@actor"
+                        "ReportWaiting actor:": {
+                          "FromText:": "@actor"
+                        }
                       }
                     ]
                   ]
@@ -83,19 +91,15 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "the player waits",
-                      {
-                        "RenderTemplate:": "Time passes."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "the player waits",
+                    {
+                      "Say:": "Time passes."
+                    }
+                  ]
                 }
               ]
             ]
@@ -104,19 +108,19 @@
             "PatternRule:does:": [
               {
                 "Not:": {
-                  "IsPlayer obj:": "@actor"
+                  "IsPlayer obj:": {
+                    "FromText:": "@actor"
+                  }
                 }
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "someone waits",
-                      {
-                        "RenderTemplate:": "{The: .actor|capitalize!} waited."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "someone waits",
+                    {
+                      "Say:": "{The: .actor|capitalize!} waited."
+                    }
+                  ]
                 }
               ]
             ]

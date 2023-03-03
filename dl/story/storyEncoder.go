@@ -1,14 +1,9 @@
 package story
 
 import (
-	"unicode"
-
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/imp"
-	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
-	"git.sr.ht/~ionous/tapestry/lang"
-	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // Write a story to a story file.
@@ -17,59 +12,7 @@ func Encode(src *StoryFile) (interface{}, error) {
 }
 
 // customized writer of compact data
-func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
-	switch op := flow.GetFlow().(type) {
-	case *core.CallPattern:
-		// rewrite pattern calls to look like normal operations.
-		patName := recase(op.Pattern.Str, true)
-		if err = m.MarshalBlock(fakeBlock(patName)); err == nil {
-			for _, arg := range op.Arguments {
-				argName := recase(arg.Name, false)
-				if e := m.MarshalKey(argName, argName); e != nil {
-					err = e
-					break
-				} else if e := rt.Assignment_Marshal(m, &arg.From); e != nil {
-					err = e
-					break
-				}
-			}
-			m.EndBlock()
-		}
-
-	default:
-		err = core.CompactEncoder(m, flow)
-	}
-	return
-}
-
-type fakeBlock string
-
-func (fakeBlock) GetType() string          { return "fakeBlock" }
-func (fb fakeBlock) GetLede() string       { return string(fb) }
-func (fakeBlock) GetFlow() interface{}     { return nil }
-func (fakeBlock) SetFlow(interface{}) bool { return false }
-
-// pascal when true, camel when false
-func recase(str string, cap bool) string {
-	u := lang.Underscore(str)
-	rs := []rune(u)
-	var i int
-	for j, cnt := 0, len(rs); j < cnt; j++ {
-		if n := rs[j]; n == '_' {
-			cap = true
-		} else {
-			if !cap {
-				n = unicode.ToLower(n)
-			} else {
-				n = unicode.ToUpper(n)
-				cap = false
-			}
-			rs[i] = n
-			i++
-		}
-	}
-	return string(rs[:i])
-}
+var CompactEncoder = core.CompactEncoder
 
 // change from old format composer friendly paragraph blocks into simpler to read and edit lines.
 func (op *Story) Reformat() (out []StoryStatement) {

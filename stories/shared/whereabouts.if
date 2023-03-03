@@ -49,15 +49,13 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Let:be:": [
-                    "parent",
+                  "Set:from:": [
+                    "@parent",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Reciprocal:object:": [
                           "whereabouts",
                           "@obj"
@@ -79,18 +77,16 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "parent",
+                  "Set:from:": [
+                    "@parent",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "Reciprocal:object:": [
                           "whereabouts",
                           {
-                            "Get:from:": [
-                              "pawn",
-                              {
-                                "VarFields:": "obj"
-                              }
+                            "Object:field:": [
+                              "@obj",
+                              "pawn"
                             ]
                           }
                         ]
@@ -144,9 +140,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Repeating:does:": [
@@ -157,20 +151,20 @@
                     },
                     [
                       {
-                        "Put:into:": [
-                          "@it",
+                        "Push:into:": [
                           {
-                            "IntoTxts:": "list"
-                          }
+                            "FromText:": "@it"
+                          },
+                          "@list"
                         ]
                       },
                       {
-                        "Let:be:": [
-                          "it",
+                        "Set:from:": [
+                          "@it",
                           {
-                            "FromTxt:": {
+                            "FromText:": {
                               "ParentOf obj:": {
-                                "FromTxt:": "@it"
+                                "FromText:": "@it"
                               }
                             }
                           }
@@ -212,15 +206,13 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Let:be:": [
-                    "kids",
+                  "Set:from:": [
+                    "@kids",
                     {
-                      "FromTxts:": {
+                      "FromTextList:": {
                         "Relatives:object:": [
                           "whereabouts",
                           "@obj"
@@ -275,9 +267,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Repeating:does:": [
@@ -297,10 +287,10 @@
                           },
                           [
                             {
-                              "Let:be:": [
-                                "room",
+                              "Set:from:": [
+                                "@room",
                                 {
-                                  "FromTxt:": "@search"
+                                  "FromText:": "@search"
                                 }
                               ]
                             },
@@ -311,11 +301,13 @@
                         ]
                       },
                       {
-                        "Let:be:": [
-                          "search",
+                        "Set:from:": [
+                          "@search",
                           {
-                            "FromTxt:": {
-                              "ParentOf obj:": "@search"
+                            "FromText:": {
+                              "ParentOf obj:": {
+                                "FromText:": "@search"
+                              }
                             }
                           }
                         ]
@@ -400,14 +392,14 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Let:be:": [
-                    "o1",
-                    "@object"
+                  "Set:from:": [
+                    "@o1",
+                    {
+                      "FromText:": "@object"
+                    }
                   ]
                 },
                 {
@@ -418,9 +410,11 @@
                     },
                     [
                       {
-                        "Let:be:": [
-                          "o2",
-                          "@other object"
+                        "Set:from:": [
+                          "@o2",
+                          {
+                            "FromText:": "@other object"
+                          }
                         ]
                       },
                       {
@@ -439,9 +433,11 @@
                                 [
                                   {
                                     "--": "Success!",
-                                    "Let:be:": [
-                                      "ancestor",
-                                      "@o2"
+                                    "Set:from:": [
+                                      "@ancestor",
+                                      {
+                                        "FromText:": "@o2"
+                                      }
                                     ]
                                   },
                                   {
@@ -451,11 +447,13 @@
                               ]
                             },
                             {
-                              "Let:be:": [
-                                "o2",
+                              "Set:from:": [
+                                "@o2",
                                 {
-                                  "FromTxt:": {
-                                    "ParentOf obj:": "@o2"
+                                  "FromText:": {
+                                    "ParentOf obj:": {
+                                      "FromText:": "@o2"
+                                    }
                                   }
                                 }
                               ]
@@ -496,11 +494,13 @@
                         ]
                       },
                       {
-                        "Let:be:": [
-                          "o1",
+                        "Set:from:": [
+                          "@o1",
                           {
-                            "FromTxt:": {
-                              "ParentOf obj:": "@o1"
+                            "FromText:": {
+                              "ParentOf obj:": {
+                                "FromText:": "@o1"
+                              }
                             }
                           }
                         ]
@@ -591,15 +591,13 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Let:be:": [
-                    "up",
+                  "Set:from:": [
+                    "@up",
                     {
-                      "FromTxt:": "@obj"
+                      "FromText:": "@obj"
                     }
                   ]
                 },
@@ -609,11 +607,13 @@
                     [
                       {
                         "--": "Step up immediately, indirect implies objects dont hold themselves.",
-                        "Let:be:": [
-                          "up",
+                        "Set:from:": [
+                          "@up",
                           {
-                            "FromTxt:": {
-                              "ParentOf obj:": "@up"
+                            "FromText:": {
+                              "ParentOf obj:": {
+                                "FromText:": "@up"
+                              }
                             }
                           }
                         ]
@@ -664,8 +664,8 @@
                           [
                             {
                               "--": "Success!",
-                              "Let:be:": [
-                                "isAncestor",
+                              "Set:from:": [
+                                "@isAncestor",
                                 {
                                   "FromBool:": true
                                 }
@@ -692,7 +692,13 @@
     {
       "--": [
         "If the parent of the specified object is a valid enclosure, return its name.",
-        "By default this means if the parent is a room, a supporter, or a container."
+        "By default the valid enclosures are a room, a supporter, or a container.",
+        "Note: In inform, the only printable phrase is 'holder of'",
+        "and that phrase prints the object's world tree parent: room, person, nothing, whatever.",
+        "Internally, however, it has functions for 'carrier of', 'wearer of', etc.",
+        "and those are exposed through evaluations and relations.",
+        "For example: 'is supporting', 'is supported by', 'is held', 'running through things carried by the actor'.",
+        "Whether for good or ill, Tapestry has no differentiation between phrases and internal commands."
       ],
       "Pattern:requires:returns:": [
         "locationOf",
@@ -723,7 +729,9 @@
               "parent",
               "object",
               {
-                "ParentOf obj:": "@obj"
+                "ParentOf obj:": {
+                  "FromText:": "@obj"
+                }
               }
             ]
           }
@@ -731,9 +739,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "If:does:": [
@@ -761,9 +767,11 @@
                     },
                     [
                       {
-                        "Let:be:": [
-                          "location",
-                          "@parent"
+                        "Set:from:": [
+                          "@location",
+                          {
+                            "FromText:": "@parent"
+                          }
                         ]
                       }
                     ]
@@ -809,7 +817,9 @@
               "parent",
               "object",
               {
-                "ParentOf obj:": "@obj"
+                "ParentOf obj:": {
+                  "FromText:": "@obj"
+                }
               }
             ]
           }
@@ -817,9 +827,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "If:does:": [
@@ -831,9 +839,11 @@
                     },
                     [
                       {
-                        "Let:be:": [
-                          "supporter",
-                          "@parent"
+                        "Set:from:": [
+                          "@supporter",
+                          {
+                            "FromText:": "@parent"
+                          }
                         ]
                       }
                     ]
@@ -879,7 +889,9 @@
               "parent",
               "object",
               {
-                "ParentOf obj:": "@obj"
+                "ParentOf obj:": {
+                  "FromText:": "@obj"
+                }
               }
             ]
           }
@@ -887,9 +899,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "If:does:": [
@@ -901,9 +911,11 @@
                     },
                     [
                       {
-                        "Let:be:": [
-                          "container",
-                          "@parent"
+                        "Set:from:": [
+                          "@container",
+                          {
+                            "FromText:": "@parent"
+                          }
                         ]
                       }
                     ]
@@ -954,16 +966,16 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Let:be:": [
-                    "parent",
+                  "Set:from:": [
+                    "@parent",
                     {
-                      "FromTxt:": {
-                        "ParentOf obj:": "@obj"
+                      "FromText:": {
+                        "ParentOf obj:": {
+                          "FromText:": "@obj"
+                        }
                       }
                     }
                   ]
@@ -978,9 +990,11 @@
                     },
                     [
                       {
-                        "Let:be:": [
-                          "owner",
-                          "@parent"
+                        "Set:from:": [
+                          "@owner",
+                          {
+                            "FromText:": "@parent"
+                          }
                         ]
                       }
                     ]
@@ -1014,7 +1028,7 @@
           "PatternResult:": {
             "Text:kind:": [
               "carrier",
-              "object"
+              "actor"
             ]
           }
         }
@@ -1034,16 +1048,16 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Let:be:": [
-                    "parent",
+                  "Set:from:": [
+                    "@parent",
                     {
-                      "FromTxt:": {
-                        "ParentOf obj:": "@obj"
+                      "FromText:": {
+                        "ParentOf obj:": {
+                          "FromText:": "@obj"
+                        }
                       }
                     }
                   ]
@@ -1059,20 +1073,20 @@
                           ]
                         },
                         {
-                          "Get:from:": [
-                            "not worn",
-                            {
-                              "VarFields:": "obj"
-                            }
+                          "Object:field:": [
+                            "@obj",
+                            "not worn"
                           ]
                         }
                       ]
                     },
                     [
                       {
-                        "Let:be:": [
-                          "carrier",
-                          "@parent"
+                        "Set:from:": [
+                          "@carrier",
+                          {
+                            "FromText:": "@parent"
+                          }
                         ]
                       }
                     ]
@@ -1106,7 +1120,7 @@
           "PatternResult:": {
             "Text:kind:": [
               "wearer",
-              "object"
+              "actor"
             ]
           }
         }
@@ -1126,16 +1140,16 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Let:be:": [
-                    "parent",
+                  "Set:from:": [
+                    "@parent",
                     {
-                      "FromTxt:": {
-                        "ParentOf obj:": "@obj"
+                      "FromText:": {
+                        "ParentOf obj:": {
+                          "FromText:": "@obj"
+                        }
                       }
                     }
                   ]
@@ -1151,20 +1165,20 @@
                           ]
                         },
                         {
-                          "Get:from:": [
-                            "worn",
-                            {
-                              "VarFields:": "obj"
-                            }
+                          "Object:field:": [
+                            "@obj",
+                            "worn"
                           ]
                         }
                       ]
                     },
                     [
                       {
-                        "Let:be:": [
-                          "wearer",
-                          "@parent"
+                        "Set:from:": [
+                          "@wearer",
+                          {
+                            "FromText:": "@parent"
+                          }
                         ]
                       }
                     ]

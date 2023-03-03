@@ -9,7 +9,7 @@ import (
 )
 
 // LiteralValue marks script constants.
-// ( same interface as rt.Assignment currently )
+// ( same interface as assign.Assignment currently )
 type LiteralValue interface {
 	Affinity() affine.Affinity // alt: use a switch on the eval type to generate affinity.
 	GetAssignedValue(rt.Runtime) (g.Value, error)
@@ -81,7 +81,7 @@ func (op *TextValue) GetAssignedValue(run rt.Runtime) (g.Value, error) {
 
 // GetText implements interface rt.TextEval providing the dl with a text literal.
 func (op *TextValue) GetText(run rt.Runtime) (ret g.Value, _ error) {
-	ret = g.StringOf(op.Value)
+	ret = g.StringFrom(op.Value, op.Kind)
 	return
 }
 

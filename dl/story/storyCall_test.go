@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry"
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -15,17 +15,16 @@ import (
 // verifies this expands a pattern call and that it generates a pattern reference.
 func TestDetermineNum(t *testing.T) {
 	var call rt.NumberEval
-	if e := story.Decode(rt.NumberEval_Slot{&call}, []byte(`{"Factorial num:":{"FromNum:": 3}}`), tapestry.AllSignatures); e != nil {
+	if e := story.Decode(rt.NumberEval_Slot{&call}, []byte(`{"Factorial num:":{"FromNumber:": 3}}`), tapestry.AllSignatures); e != nil {
 		t.Fatal(e)
 	} else {
-		call := call.(*core.CallPattern)
-		if diff := pretty.Diff(call, &core.CallPattern{
-			Pattern: core.PatternName{Str: "factorial"},
-			Arguments: []rt.Arg{{
-				Name: "num",
-				From: &core.FromNum{
-					Val: F(3),
-				}}}}); len(diff) > 0 {
+		call := call.(*assign.CallPattern)
+		if diff := pretty.Diff(call, &assign.CallPattern{
+			PatternName: "factorial",
+			Arguments: []assign.Arg{{
+				Name:  "num",
+				Value: &assign.FromNumber{Value: F(3)},
+			}}}); len(diff) > 0 {
 			t.Fatal(diff)
 		} else {
 			refs := story.ImportCall(call)

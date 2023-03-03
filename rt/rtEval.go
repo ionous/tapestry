@@ -1,7 +1,6 @@
 package rt
 
 import (
-	"git.sr.ht/~ionous/tapestry/affine"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
 
@@ -30,6 +29,11 @@ type RecordEval interface {
 	GetRecord(Runtime) (g.Value, error)
 }
 
+// ListEval yields access to a set of fields and their values.
+type ListEval interface {
+	GetList(Runtime) (g.Value, error)
+}
+
 // TextListEval represents the computation of a series of numeric values.
 type NumListEval interface {
 	GetNumList(Runtime) (g.Value, error)
@@ -43,24 +47,4 @@ type TextListEval interface {
 // RecordListEval represents the computation of a series of a set of fields.
 type RecordListEval interface {
 	GetRecordList(Runtime) (g.Value, error)
-}
-
-func AffineOfEval(eval interface{}) (ret affine.Affinity) {
-	switch eval.(type) {
-	case BoolEval:
-		ret = affine.Bool
-	case NumberEval:
-		ret = affine.Number
-	case TextEval:
-		ret = affine.Text
-	case NumListEval:
-		ret = affine.NumList
-	case TextListEval:
-		ret = affine.TextList
-	case RecordEval:
-		ret = affine.Record
-	case RecordListEval:
-		ret = affine.RecordList
-	}
-	return
 }

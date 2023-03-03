@@ -4,9 +4,12 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/rt"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/kr/pretty"
 )
@@ -51,8 +54,8 @@ func eachTest(t *testing.T, src []string, res []accum, otherwise int) {
 	var out []string
 	var visits []accum
 	each := &list.ListEach{
-		List: V("source"),
-		As:   &list.AsTxt{Var: N("text")},
+		List: &assign.FromTextList{Value: assign.Variable("source")},
+		As:   W("text"),
 		Does: core.MakeActivity(&visitEach{&visits}),
 		Else: &core.ChooseNothingElse{
 			Does: core.MakeActivity(&Write{&out, T("x")}),
@@ -68,13 +71,13 @@ func eachTest(t *testing.T, src []string, res []accum, otherwise int) {
 }
 
 func (v *visitEach) Execute(run rt.Runtime) (err error) {
-	if i, e := safe.CheckVariable(run, "index", affine.Number); e != nil {
+	if i, e := checkVariable(run, "index", affine.Number); e != nil {
 		err = e
-	} else if f, e := safe.CheckVariable(run, "first", affine.Bool); e != nil {
+	} else if f, e := checkVariable(run, "first", affine.Bool); e != nil {
 		err = e
-	} else if l, e := safe.CheckVariable(run, "last", affine.Bool); e != nil {
+	} else if l, e := checkVariable(run, "last", affine.Bool); e != nil {
 		err = e
-	} else if t, e := safe.CheckVariable(run, "text", affine.Text); e != nil {
+	} else if t, e := checkVariable(run, "text", affine.Text); e != nil {
 		err = e
 	} else {
 		(*v.visits) = append((*v.visits), accum{
@@ -89,4 +92,16 @@ type accum struct {
 	first bool
 	last  bool
 	text  string
+}
+
+func checkVariable(run rt.Runtime, name string, aff affine.Affinity) (ret g.Value, err error) {
+	if v, e := run.GetField(meta.Variables, name); e != nil {
+		err = e
+	} else if e := safe.Check(v, aff); e != nil {
+		err = e
+	} else {
+		ret = v
+	}
+	return
+
 }

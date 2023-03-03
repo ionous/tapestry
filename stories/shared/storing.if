@@ -18,11 +18,9 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
                 ]
               }
             ]
@@ -32,31 +30,42 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": "@actor"
+                }
               },
               [
                 {
                   "Comment:": "First, we need to make sure we can use the first noun:"
                 },
                 {
-                  "Log:": {
-                    "FromTxt:": {
-                      "RenderTemplate:": "{.actor} storing {the:.noun} to {the:.other_noun}."
+                  "Log:value:": [
+                    "debug",
+                    {
+                      "FromText:": {
+                        "Say:": "{.actor} storing {the:.noun} to {the:.other_noun}."
+                      }
                     }
-                  }
+                  ]
                 },
                 {
                   "If:from:and:does:else:": [
                     "result",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanHandle actor:action:noun:otherNoun:": [
-                          "@actor",
                           {
-                            "FromTxt:": "storing into"
+                            "FromText:": "@actor"
                           },
-                          "@noun",
-                          "@other noun"
+                          {
+                            "FromText:": "storing into"
+                          },
+                          {
+                            "FromText:": "@noun"
+                          },
+                          {
+                            "FromText:": "@other noun"
+                          }
                         ]
                       }
                     },
@@ -67,7 +76,7 @@
                     },
                     [
                       {
-                        "Say:": "@result"
+                        "Print:": "@result"
                       }
                     ],
                     {
@@ -79,13 +88,17 @@
                           "If:from:and:does:else:": [
                             "result",
                             {
-                              "FromTxt:": {
+                              "FromText:": {
                                 "CanReach actor:action:noun:": [
-                                  "@actor",
                                   {
-                                    "FromTxt:": "storing into"
+                                    "FromText:": "@actor"
                                   },
-                                  "@other noun"
+                                  {
+                                    "FromText:": "storing into"
+                                  },
+                                  {
+                                    "FromText:": "@other noun"
+                                  }
                                 ]
                               }
                             },
@@ -96,7 +109,7 @@
                             },
                             [
                               {
-                                "Say:": "@result"
+                                "Print:": "@result"
                               }
                             ],
                             {
@@ -105,14 +118,20 @@
                                   "If:from:and:does:else:": [
                                     "result",
                                     {
-                                      "FromTxt:": {
+                                      "FromText:": {
                                         "CanUse actor:action:noun:otherNoun:": [
-                                          "@actor",
                                           {
-                                            "FromTxt:": "storing into"
+                                            "FromText:": "@actor"
                                           },
-                                          "@noun",
-                                          "@other noun"
+                                          {
+                                            "FromText:": "storing into"
+                                          },
+                                          {
+                                            "FromText:": "@noun"
+                                          },
+                                          {
+                                            "FromText:": "@other noun"
+                                          }
                                         ]
                                       }
                                     },
@@ -123,7 +142,7 @@
                                     },
                                     [
                                       {
-                                        "Say:": "@result"
+                                        "Print:": "@result"
                                       }
                                     ],
                                     {
@@ -133,13 +152,21 @@
                                             {
                                               "Send:event:": [
                                                 {
-                                                  "Capture obj:": "@noun"
+                                                  "Capture obj:": {
+                                                    "FromText:": "@noun"
+                                                  }
                                                 },
                                                 {
                                                   "StoreInto actor:noun:otherNoun:": [
-                                                    "@actor",
-                                                    "@noun",
-                                                    "@other noun"
+                                                    {
+                                                      "FromText:": "@actor"
+                                                    },
+                                                    {
+                                                      "FromText:": "@noun"
+                                                    },
+                                                    {
+                                                      "FromText:": "@other noun"
+                                                    }
                                                   ]
                                                 }
                                               ]
@@ -147,9 +174,15 @@
                                             [
                                               {
                                                 "ReportStoringInto actor:noun:otherNoun:": [
-                                                  "@actor",
-                                                  "@noun",
-                                                  "@other noun"
+                                                  {
+                                                    "FromText:": "@actor"
+                                                  },
+                                                  {
+                                                    "FromText:": "@noun"
+                                                  },
+                                                  {
+                                                    "FromText:": "@other noun"
+                                                  }
                                                 ]
                                               }
                                             ]
@@ -187,18 +220,20 @@
               [
                 {
                   "PatternRule:does:": [
-                    {
-                      "Always": true
-                    },
+                    true,
                     [
                       {
                         "If:from:and:does:else:": [
                           "error",
                           {
-                            "FromTxt:": {
+                            "FromText:": {
                               "MoveObject obj:dest:": [
-                                "@noun",
-                                "@other noun"
+                                {
+                                  "FromText:": "@noun"
+                                },
+                                {
+                                  "FromText:": "@other noun"
+                                }
                               ]
                             }
                           },
@@ -209,11 +244,11 @@
                           },
                           [
                             {
-                              "Say:": "@error"
+                              "Print:": "@error"
                             },
                             {
-                              "Let:be:": [
-                                "success",
+                              "Set:from:": [
+                                "@success",
                                 {
                                   "FromBool:": false
                                 }
@@ -223,8 +258,8 @@
                           {
                             "ElseDo does:": [
                               {
-                                "Let:be:": [
-                                  "success",
+                                "Set:from:": [
+                                  "@success",
                                   {
                                     "FromBool:": true
                                   }
@@ -277,19 +312,15 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player stores",
-                      {
-                        "RenderTemplate:": "{We:|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "player stores",
+                    {
+                      "Say:": "{We:|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
+                    }
+                  ]
                 }
               ]
             ]
@@ -298,19 +329,19 @@
             "PatternRule:does:": [
               {
                 "Not:": {
-                  "IsPlayer obj:": "@actor"
+                  "IsPlayer obj:": {
+                    "FromText:": "@actor"
+                  }
                 }
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "someone stores",
-                      {
-                        "RenderTemplate:": "{The: .actor|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "someone stores",
+                    {
+                      "Say:": "{The: .actor|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
+                    }
+                  ]
                 }
               ]
             ]
@@ -338,22 +369,26 @@
                   },
                   {
                     "AncestorOf obj:root:": [
-                      "@other noun",
-                      "@noun"
+                      {
+                        "FromText:": "@other noun"
+                      },
+                      {
+                        "FromText:": "@noun"
+                      }
                     ]
                   }
                 ]
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
-                        "Response:text:": [
+                      "FromText:": {
+                        "Print response:with:": [
                           "can't insert something into itself",
                           {
-                            "RenderTemplate:": "{We:|capitalize!} can't put  {those:.noun} {on:.other_noun} itself."
+                            "Say:": "{We:|capitalize!} can't put  {those:.noun} {on:.other_noun} itself."
                           }
                         ]
                       }
@@ -380,7 +415,9 @@
                   {
                     "Cmp:is:txt:": [
                       {
-                        "WearerOf obj:": "@noun"
+                        "WearerOf obj:": {
+                          "FromText:": "@noun"
+                        }
                       },
                       "equal_to",
                       "@actor"
@@ -390,14 +427,14 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
-                        "Response:text:": [
+                      "FromText:": {
+                        "Print response:with:": [
                           "can't insert clothing",
                           {
-                            "RenderTemplate:": "{We:|capitalize!} would have to take {those:.noun} off first."
+                            "Say:": "{We:|capitalize!} would have to take {those:.noun} off first."
                           }
                         ]
                       }
@@ -438,21 +475,23 @@
                   },
                   {
                     "Not:": {
-                      "AllowsStorage obj:": "@intoObj"
+                      "AllowsStorage obj:": {
+                        "FromText:": "@intoObj"
+                      }
                     }
                   }
                 ]
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
-                        "Response:text:": [
+                      "FromText:": {
+                        "Print response:with:": [
                           "can only store when allowed",
                           {
-                            "RenderTemplate:": "{the: .fromObj|capitalize!} is closed."
+                            "Say:": "{the: .fromObj|capitalize!} is closed."
                           }
                         ]
                       }
@@ -482,7 +521,9 @@
                   },
                   {
                     "Not:": {
-                      "ProvidesStorage obj:": "@intoObj"
+                      "ProvidesStorage obj:": {
+                        "FromText:": "@intoObj"
+                      }
                     }
                   }
                 ]
@@ -492,14 +533,14 @@
                   "Comment:": "Assuming we are able to reach the noun, check whether it actually provides storage."
                 },
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
-                        "Response:text:": [
+                      "FromText:": {
+                        "Print response:with:": [
                           "can only store to storage",
                           {
-                            "RenderTemplate:": "{the: .fromObj|capitalize!} can't {contain:.fromObj} things."
+                            "Say:": "{the: .fromObj|capitalize!} can't {contain:.fromObj} things."
                           }
                         ]
                       }
@@ -533,14 +574,14 @@
                   "Comment:": "If the target noun were owned by reaching actor then the actor would be the lca. By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach."
                 },
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
-                        "Response:text:": [
+                      "FromText:": {
+                        "Print response:with:": [
                           "can't store people's possessions",
                           {
-                            "RenderTemplate:": "{those: .noun|capitalize!} seems to belong to {the: .intoObj}."
+                            "Say:": "{those: .noun|capitalize!} seems to belong to {the: .intoObj}."
                           }
                         ]
                       }

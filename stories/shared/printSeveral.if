@@ -32,17 +32,13 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Spaces does:": [
                       {
-                        "Say:": {
-                          "RenderTemplate:": "{print_num_word: .group_size}"
-                        }
+                        "Say:": "{print_num_word: .group_size}"
                       },
                       {
                         "If:does:else:": [
@@ -51,17 +47,13 @@
                           },
                           [
                             {
-                              "Say:": {
-                                "RenderTemplate:": "{if .group_size > 1}{print_plural_name: .obj}{else}{print_name: .obj}{end}"
-                              }
+                              "Say:": "{if .group_size > 1}{print_plural_name: .obj}{else}{print_name: .obj}{end}"
                             }
                           ],
                           {
                             "ElseDo does:": [
                               {
-                                "Say:": {
-                                  "RenderTemplate:": "{if .group_size > 1}{pluralize: .label}{else}{singularize: .label}{end}"
-                                }
+                                "Say:": "{if .group_size > 1}{pluralize: .label}{else}{singularize: .label}{end}"
                               }
                             ]
                           }
@@ -106,12 +98,10 @@
         ],
         [
           {
-            "Say:": {
-              "RenderTemplate:": [
-                "{print_several: .books}",
-                "{print_several: .books 5}"
-              ]
-            }
+            "Say:": [
+              "{print_several: .books}",
+              "{print_several: .books 5}"
+            ]
           },
           {
             "Expect output:": [

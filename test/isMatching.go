@@ -2,6 +2,7 @@ package test
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -31,46 +32,32 @@ var matchGroups = testpat.Pattern{
 		Execute: matches(true),
 	}, {
 		Filter: &core.CompareText{
-			A: &core.GetAtField{
-				From:  &core.FromVar{Var: N("a")},
-				Field: W("label"),
-			},
+			A:  assign.Variable("a", "label"),
 			Is: core.Unequal,
-			B: &core.GetAtField{
-				From:  &core.FromVar{Var: N("b")},
-				Field: W("label"),
-			},
+			B:  assign.Variable("b", "label"),
 		},
 		Execute: matches(false),
 	}, {
 		Filter: &core.CompareText{
-			A: &core.GetAtField{
-				From:  &core.FromVar{Var: N("a")},
-				Field: W("innumerable"),
-			},
+			A:  assign.Variable("a", "innumerable"),
 			Is: core.Unequal,
-			B: &core.GetAtField{
-				From:  &core.FromVar{Var: N("b")},
-				Field: W("innumerable"),
-			},
+			B:  assign.Variable("b", "innumerable"),
 		},
 		Execute: matches(false),
 	}, {
 		Filter: &core.CompareText{
-			A: &core.GetAtField{
-				From:  &core.FromVar{Var: N("a")},
-				Field: W("group_options"),
-			},
+			A:  assign.Variable("a", "group_options"),
 			Is: core.Unequal,
-			B: &core.GetAtField{
-				From:  &core.FromVar{Var: N("b")},
-				Field: W("group_options"),
-			},
+			B:  assign.Variable("b", "group_options"),
 		},
 		Execute: matches(false),
 	}},
 }
 
 func matches(b bool) []rt.Execute {
-	return []rt.Execute{&core.Assign{Var: N("matches"), From: &core.FromBool{Val: B(b)}}}
+	return []rt.Execute{
+		&assign.SetValue{
+			Target: assign.Variable("matches"),
+			Value:  &assign.FromBool{Value: B(b)}},
+	}
 }

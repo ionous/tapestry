@@ -1,26 +1,29 @@
 package list
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 func (op *EraseIndex) Execute(run rt.Runtime) (err error) {
-	if _, e := eraseIndex(run, op.Count, op.From, op.AtIndex); e != nil {
-		err = cmdError(op, e)
+	if _, e := eraseIndex(run, op.Count, op.Target, op.AtIndex); e != nil {
+		err = CmdError(op, e)
 	}
 	return
 }
 
 func eraseIndex(run rt.Runtime,
 	count rt.NumberEval,
-	from ListSource,
+	target assign.Address,
 	atIndex rt.NumberEval,
 ) (ret g.Value, err error) {
 	if rub, e := safe.GetOptionalNumber(run, count, 0); e != nil {
 		err = e
-	} else if els, e := GetListSource(run, from); e != nil {
+	} else if root, e := assign.GetRootValue(run, target); e != nil {
+		err = e
+	} else if els, e := root.GetList(run); e != nil {
 		err = e
 	} else if startOne, e := safe.GetNumber(run, atIndex); e != nil {
 		err = e
@@ -47,7 +50,12 @@ func eraseIndex(run rt.Runtime,
 				end = listLen
 			}
 		}
-		ret, err = els.Splice(start, end, nil)
+		if v, e := els.Splice(start, end, nil); e != nil {
+			err = e
+		} else {
+			root.SetDirty(run)
+			ret = v
+		}
 	}
 	return
 }

@@ -1,3 +1,4 @@
+// Copyright 2022 Simon Travis.
 // Copyright 2017 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
@@ -30,19 +31,28 @@ type Command struct {
 
 	// UsageLine is the one-line usage message.
 	// The words between "go" and the first flag or argument in the line are taken to be the command name.
+	// ex. "go fix [-fix list] [packages]"
 	UsageLine string
 
 	// Short is the short description shown in the 'go help' output.
+	// ex. "update packages to use new APIs"
 	Short string
 
 	// Long is the long message shown in the 'go help <this-command>' output.
+	// ex. "Fix runs the Go fix command on the packages named by the import paths...."
+	// -- see help.go which contains a template used to print the command
 	Long string
 
 	// Flag is a set of flags specific to this command.
+	// unless CustomFlags is specified by the command:
+	// main.invoke() merges global flags and calls calls .Parse automatically
+	// any remaining args are sent to Run()
+	// individual commands set their own flags using init() or local vars.
+	// ex. 	go get: var getD = CmdGet.Flag.Bool("d", false, "")
 	Flag flag.FlagSet
 
 	// CustomFlags indicates that the command will do its own
-	// flag parsing.
+	// flag parsing. see: Flag.
 	CustomFlags bool
 
 	// Commands lists the available commands and help topics.
@@ -61,16 +71,25 @@ var Go = &Command{
 
 // hasFlag reports whether a command or any of its subcommands contain the given
 // flag.
-func hasFlag(c *Command, name string) bool {
-	if f := c.Flag.Lookup(name); f != nil {
-		return true
-	}
-	for _, sub := range c.Commands {
-		if hasFlag(sub, name) {
-			return true
-		}
-	}
-	return false
+// func hasFlag(c *Command, name string) bool {
+// 	if f := c.Flag.Lookup(name); f != nil {
+// 		return true
+// 	}
+// 	for _, sub := range c.Commands {
+// 		if hasFlag(sub, name) {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }
+
+func (c *Command) FlagUsage() string {
+	var b strings.Builder
+	was := c.Flag.Output()
+	c.Flag.SetOutput(&b)
+	c.Flag.PrintDefaults()
+	c.Flag.SetOutput(was)
+	return b.String()
 }
 
 // LongName returns the command's long name: all the words in the usage line between "go" and a flag or argument,

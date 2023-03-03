@@ -1,0 +1,119 @@
+-------------------------
+-- one offs:
+-------------------------
+-- the one and only RecFields 
+{"Get:from:":\["label",{"RecFields:":{"Get:from:":\["grouping",{"VarFields:":"group"}]}}]}
+{"Get variable:":{"Variable:dot:":["group",[{"AtField:":"grouping"},{"AtField:":"label"}]]}}
+
+-- the one and only IntoRecs
+{"Put:into:":\["@group",{"IntoRecs:":"groups"}]}
+{"Push:into variable:":[{"FromRecord:":"@group"},"@groups"]}
+
+-- the one and only IntoTxts
+{"Put:into:":\[{"FromTxts:":{"ChildrenOf obj:":"@it"}},{"IntoTxts:":"queue"}]}
+{"Push:into variable:":[{"FromTextList:":{"ChildrenOf obj:":"@it"}},"@queue"]}
+
+-- and this other odd one:
+{"Put:into:":\[{"Get:from:":\["name",{"VarFields:":"grouping"}]},{"IntoTxts:":"names"}]}
+{"Push:into variable:":[{"FromText:":{"Get:from:":["name",{"VarFields:":"grouping"}]}},"@names"]}
+
+-- ditto: b/c second set needs transform.
+{"Put:from:at:":\[{"ObjField:":"settings"},{"FromNum:":{"Inc:by:":\[1,{"Get:from:":\["mentions",{"ObjFields:":"settings"}\]}\]}},"mentions"\]}
+{"Set object:from:":[{"Object:field:":["@settings","mentions"]},{"FromNumber:":{"Inc:by:":[1,{"Get object:":{"Variable:dot:":["settings",[{"AtField:":"mentions"}]]}}]}}]}
+
+{"Let:be:":\["names",{"Get:from:":\["objects",{"VarFields:":"group"}\]}\]}
+{"Set variable:from:":["@names",{"FromTextList:":{"Get variable:":{"Variable:dot:":["group",[{"AtField:":"objects"}]]}}}]}
+
+-------------------------
+-- fairly common things:
+-------------------------
+
+
+-- $1 is the field; ObjFields has the variable name
+"Get:from:":\["([^"]+)",{"ObjFields:":"([^"]+)"}\]
+"Get object:":{"Variable:dot:":["$2",[{"AtField:":"$1"}]]}
+   
+-- $1 is the field; VarFields has the variable name
+"Get:from:":\["([^"]+)",{"VarFields:":"([^"]+)"}\]
+"Get variable:":{"Variable:dot:":["$2",[{"AtField:":"$1"}]]}
+
+-- assumes all are text:
+"Put:into:atFront:":\["([^"]+)",{"IntoTxts:":"([^"]+)"},{"Always":(true|false)}]
+"Push:into variable:atFront:":[{"FromText:":"$1"},"@$2",$3]
+
+"Put:into:":\["([^"]+)",{"IntoTxts:":"(\w+)"}]
+"Push:into variable:":[{"FromText:":"$1"},"@$2"]
+
+"Get obj:trait:":\["([^"]+)","([^"]+)"\]
+"Get object:":{"Object:field:":["$1","$2"]}
+
+-- assume all incoming values are text ( so they can load at least )
+"Let:be:":\["([^"]+)","([^"]+)"\]
+"Set variable:from:":["@$1",{"FromText:":"$2"}]
+
+"Let:be:":\["([^"]+)"
+"Set variable:from:":["@$1"
+
+-- no explicit get index:
+"Get:index:":\["([^"]+)",([^\]]+)\]
+"Get variable:":{"Variable:dot:":["$1",[{"AtIndex:":$2}]]}
+
+----------
+"Put:from:at:":\[{([^,]),"([^"]+)"
+"Put:from:at:":[$1,{"FromText:":"$2"
+
+"Put:from:at:":\[{"VarField:":"([^"]+)"},([^,]+),"([^"]+)"\]
+"Set variable:from:":[{"Variable:dot:":["$1",[{"AtField:":"$3"}]]},$2]
+
+"Put:from:at:":\[{"ObjField:":"([^"]+)"},([^,]+),"([^"]+)"\]
+"Set object:from:":[{"Object:field:":["$1","$3"]},$2]
+
+--- traits:
+"Put obj:trait:":\["([^"]+)","([^"]+)"\]
+"Set object:from:":[{"Object:field:":["$1","$2"]},{"FromBool:":true}]
+
+-- assumes all are text
+"Len:":"([^"]+)"
+"Len:":{"FromTextList:":"$1"}
+
+-- iterators are raw strings
+"@([^"]+)",{"AsNum:":"([^"]+)"}
+{"FromNumList:":"@$1"},"$2"
+
+"@([^"]+)",{"AsTxt:":"([^"]+)"}
+{"FromTextList:":"@$1"},"$2"
+
+"@([^"]+)",{"AsRec:":"([^"]+)"}
+{"FromRecordList:":"@$1"},"$2"
+
+{"As(Num|Txt|Rec):":"([^"]+)"}
+"$2"
+
+-- VarOfTxts is @
+"VarOfTxts:":"([^"]+)"
+"FromTextList:":"@$1"
+
+{"Always":(true|false)}
+$1
+
+"Erasing
+"Erasing variable
+
+
+-------------------------
+-- after everything else, the most common stuff
+-------------------------
+"FromTxt:"
+"FromText:"
+
+"FromNum:"
+"FromNumber:"
+
+"FromRec:"
+"FromRecord:"
+
+"FromTxts:"
+"FromTextList:"
+
+"FromNums:"
+"FromNumList:"

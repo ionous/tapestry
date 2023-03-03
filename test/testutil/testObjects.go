@@ -8,13 +8,14 @@ import (
 
 type Objects map[string]*g.Record
 
-func (or *Objects) AddObjects(kind *g.Kind, names ...string) {
+func (or *Objects) AddObjects(kind *g.Kind, names ...string) int {
 	if *or == nil {
 		*or = make(Objects)
 	}
 	for _, name := range names {
 		(*or)[name] = kind.NewRecord()
 	}
+	return len(names)
 }
 
 func (or *Objects) Names() (ret []string) {

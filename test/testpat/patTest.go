@@ -12,3 +12,7 @@ type Pattern struct {
 	Fields []g.Field // flat list of params and locals and an optional return
 	Rules  []rt.Rule
 }
+
+func (p *Pattern) GetLabels() []string {
+	return append(p.Labels, p.Return)
+}

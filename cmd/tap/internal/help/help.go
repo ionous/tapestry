@@ -1,3 +1,4 @@
+// Copyright 2022 Simon Travis.
 // Copyright 2017 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
@@ -26,6 +27,7 @@ func Help(w io.Writer, args []string) {
 	// mkalldocs.sh builds main.go, runs "go help documentation", outputting (>) to alldocs.go,
 	// runs gofmt to write to alldocs.go, then removes the exe it built.
 	if len(args) == 1 && args[0] == "documentation" {
+		fmt.Fprintln(w, "// Copyright 2023 Simon Travis. All rights reserved.")
 		fmt.Fprintln(w, "// Copyright 2011 The Go Authors. All rights reserved.")
 		fmt.Fprintln(w, "// Use of this source code is governed by a BSD-style")
 		fmt.Fprintln(w, "// license that can be found in the LICENSE file.")
@@ -50,37 +52,40 @@ func Help(w io.Writer, args []string) {
 		tmpl(&commentWriter{W: w}, documentationTemplate, cmds)
 		fmt.Fprintln(w, "package main")
 		return
-	}
-
-	cmd := base.Go
-Args:
-	for i, arg := range args {
-		for _, sub := range cmd.Commands {
-			if sub.Name() == arg {
-				cmd = sub
-				continue Args
-			}
-		}
-
-		// helpSuccess is the help command using as many args as possible that would succeed.
-		helpSuccess := base.Exe + " help"
-		if i > 0 {
-			helpSuccess += " " + strings.Join(args[:i], " ")
-		}
-		fmt.Fprintf(os.Stderr, "%s help %s: unknown help topic. Run '%s'.\n", base.Exe, strings.Join(args, " "), helpSuccess)
-		base.SetExitStatus(2) // failed at 'go help cmd'
-		base.Exit()
-	}
-
-	if len(cmd.Commands) > 0 {
-		PrintUsage(os.Stdout, cmd)
 	} else {
-		tmpl(os.Stdout, helpTemplate, cmd)
+		cmd := base.Go
+	Args:
+		for i, arg := range args {
+			for _, sub := range cmd.Commands {
+				if sub.Name() == arg {
+					cmd = sub
+					continue Args
+				}
+			}
+
+			// helpSuccess is the help command using as many args as possible that would succeed.
+			helpSuccess := base.Exe + " help"
+			if i > 0 {
+				helpSuccess += " " + strings.Join(args[:i], " ")
+			}
+			fmt.Fprintf(os.Stderr, "%s help %s: unknown help topic. Run '%s'.\n", base.Exe, strings.Join(args, " "), helpSuccess)
+			base.SetExitStatus(2) // failed at 'go help cmd'
+			base.Exit()
+		}
+
+		if len(cmd.Commands) > 0 {
+			PrintUsage(os.Stdout, cmd)
+		} else {
+			tmpl(os.Stdout, helpTemplate, cmd)
+		}
 	}
 	// not exit 2: succeeded at 'go help cmd'.
 	return
 }
 
+// -----------------------------
+// used for 'go help documentation'
+// and for 'go help <command>' if the command has sub commands
 var usageTemplate = `{{.Long | trim}}
 
 Usage:
@@ -101,11 +106,18 @@ Use "` + base.Exe + ` help{{with .LongName}} {{.}}{{end}} <topic>" for more info
 {{end}}
 `
 
+// -----------------------------
+// used for 'go help <command>' for commands which lack sub commands
 var helpTemplate = `{{if .Runnable}}usage: {{.UsageLine}}
 
-{{end}}{{.Long | trim}}
+{{end}}{{.Long | trim}}{{if .Runnable}}
+
+{{.FlagUsage}}{{end}}
 `
 
+// -----------------------------
+// used with 'go help documentation' to generate package doc
+// visits every command
 var documentationTemplate = `{{range .}}{{if .Short}}{{.Short | capitalize}}
 
 {{end}}{{if .Commands}}` + usageTemplate + `{{else}}{{if .Runnable}}Usage:
@@ -117,6 +129,7 @@ var documentationTemplate = `{{range .}}{{if .Short}}{{.Short | capitalize}}
 
 {{end}}{{end}}`
 
+// -----------------------------
 // commentWriter writes a Go comment to the underlying io.Writer,
 // using line comment form (//).
 type commentWriter struct {

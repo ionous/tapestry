@@ -1,6 +1,8 @@
 package chart
 
 import (
+	"encoding/json"
+
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"github.com/ionous/errutil"
 )
@@ -18,6 +20,12 @@ type Unhandled string
 
 func (e Unhandled) Error() string {
 	return "Unhandled state during " + string(e)
+}
+
+type Reparse json.RawMessage
+
+func (e Reparse) Error() string {
+	return "Reparse message"
 }
 
 // StateMix implements the jsn.State interface

@@ -3,6 +3,7 @@ package list_test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -17,30 +18,30 @@ func TestMapStrings(t *testing.T) {
 	type Fruit struct {
 		Name string
 	}
-	type Values struct {
+	type Locals struct {
 		Fruits, Results []string
 	}
 	type Remap struct {
 		In, Out string
 	}
-	kinds.AddKinds((*Fruit)(nil), (*Values)(nil), (*Remap)(nil))
-	values := kinds.NewRecord("values") // a record.
+	kinds.AddKinds((*Fruit)(nil), (*Locals)(nil), (*Remap)(nil))
+	locals := kinds.NewRecord("locals") // a record.
 	lt := testpat.Runtime{
 		testpat.Map{
 			"remap": &reverseStrings,
 		},
 		testutil.Runtime{
 			Stack: []rt.Scope{
-				g.RecordOf(values),
+				g.RecordOf(locals),
 			},
 			Kinds: &kinds,
 		},
 	}
-	if e := values.SetNamedField("fruits", g.StringsOf([]string{"Orange", "Lemon", "Mango", "Banana", "Lime"})); e != nil {
+	if e := locals.SetNamedField("fruits", g.StringsOf([]string{"Orange", "Lemon", "Mango", "Banana", "Lime"})); e != nil {
 		t.Fatal(e)
-	} else if e := remap.Execute(&lt); e != nil {
+	} else if e := remapStrings.Execute(&lt); e != nil {
 		t.Fatal(e)
-	} else if results, e := values.GetNamedField("results"); e != nil {
+	} else if results, e := locals.GetNamedField("results"); e != nil {
 		t.Fatal(e)
 	} else {
 		res := results.Strings()
@@ -59,15 +60,15 @@ func TestMapRecords(t *testing.T) {
 	type Fruit struct {
 		Name string
 	}
-	type Values struct {
+	type Locals struct {
 		Fruits  []Fruit
 		Results []Fruit
 	}
 	type Remap struct {
 		In, Out Fruit
 	}
-	kinds.AddKinds((*Fruit)(nil), (*Values)(nil), (*Remap)(nil))
-	values := kinds.NewRecord("values")
+	kinds.AddKinds((*Fruit)(nil), (*Locals)(nil), (*Remap)(nil))
+	locals := kinds.NewRecord("locals")
 	if k, e := kinds.GetKindByName("fruit"); e != nil {
 		t.Fatal(e)
 	} else {
@@ -79,7 +80,7 @@ func TestMapRecords(t *testing.T) {
 			}
 			fruits = append(fruits, one)
 		}
-		if e := values.SetNamedField("fruits", g.RecordsFrom(fruits, k.Name())); e != nil {
+		if e := locals.SetNamedField("fruits", g.RecordsFrom(fruits, k.Name())); e != nil {
 			t.Fatal(e)
 		}
 	}
@@ -91,13 +92,13 @@ func TestMapRecords(t *testing.T) {
 		testutil.Runtime{
 			Kinds: &kinds,
 			Stack: []rt.Scope{
-				g.RecordOf(values),
+				g.RecordOf(locals),
 			},
 		},
 	}
-	if e := remap.Execute(&lt); e != nil {
+	if e := remapRecords.Execute(&lt); e != nil {
 		t.Fatal(e)
-	} else if val, e := values.GetNamedField("results"); e != nil {
+	} else if val, e := locals.GetNamedField("results"); e != nil {
 		t.Fatal(e)
 	} else if res := val.Records(); len(res) != 5 {
 		t.Fatal("missing results")
@@ -119,30 +120,16 @@ func TestMapRecords(t *testing.T) {
 	}
 }
 
-var remap = list.ListMap{
-	FromList:     V("fruits"),
-	ToList:       W("results"),
-	UsingPattern: W("remap"),
+var remapStrings = list.ListMap{
+	Target:      assign.Variable("results"),
+	List:        &assign.FromTextList{Value: assign.Variable("fruits")},
+	PatternName: W("remap"),
 }
 
-var reverseRecords = testpat.Pattern{
-	Name:   "remap",
-	Labels: []string{"in"},
-	Return: "out",
-	Rules: []rt.Rule{{
-		Execute: core.MakeActivity(&core.PutAtField{
-			Into:    &core.IntoVar{Var: N("out")},
-			AtField: W("name"),
-			From: &core.FromText{
-				Val: &core.MakeReversed{
-					Text: &core.GetAtField{
-						Field: W("name"),
-						From:  &core.FromVar{Var: N("in")},
-					},
-				},
-			},
-		}),
-	}},
+var remapRecords = list.ListMap{
+	Target:      assign.Variable("results"),
+	List:        &assign.FromRecordList{Value: assign.Variable("fruits")},
+	PatternName: W("remap"),
 }
 
 var reverseStrings = testpat.Pattern{
@@ -150,11 +137,23 @@ var reverseStrings = testpat.Pattern{
 	Labels: []string{"in"},
 	Return: "out",
 	Rules: []rt.Rule{{
-		Execute: core.MakeActivity(&core.Assign{
-			Var: N("out"),
-			From: &core.FromText{
-				Val: &core.MakeReversed{Text: V("in")},
-			},
-		}),
+		Execute: core.MakeActivity(
+			&assign.SetValue{
+				Target: assign.Variable("out"),
+				Value:  &assign.FromText{Value: &core.MakeReversed{Text: assign.Variable("in")}}},
+		),
+	}},
+}
+
+var reverseRecords = testpat.Pattern{
+	Name:   "remap",
+	Labels: []string{"in"},
+	Return: "out",
+	Rules: []rt.Rule{{
+		Execute: core.MakeActivity(
+			&assign.SetValue{
+				Target: assign.Variable("out", "name"),
+				Value:  &assign.FromText{Value: &core.MakeReversed{Text: assign.Variable("in", "name")}}},
+		),
 	}},
 }

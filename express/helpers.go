@@ -1,26 +1,15 @@
 package express
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/dl/render"
-	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 )
 
-func B(b bool) *literal.BoolValue   { return &literal.BoolValue{Value: b} }
-func I(n int) *literal.NumValue     { return &literal.NumValue{Value: float64(n)} }
-func F(n float64) *literal.NumValue { return &literal.NumValue{Value: n} }
-func T(s string) *literal.TextValue { return &literal.TextValue{Value: s} }
-
-func P(p string) core.PatternName  { return core.PatternName{Str: p} }
-func N(s string) core.VariableName { return core.VariableName{Str: s} }
-func W(v string) string            { return v }
-
-func O(n string, exact bool) (ret rt.TextEval) {
-	if !exact {
-		ret = &render.RenderRef{Name: N(n), Flags: render.RenderFlags{Str: render.RenderFlags_RenderAsAny}}
-	} else {
-		ret = T(n)
-	}
-	return ret
-}
+var (
+	B = assign.B
+	F = assign.F
+	I = assign.I
+	N = assign.N
+	P = assign.P
+	T = assign.T
+	W = assign.W
+)

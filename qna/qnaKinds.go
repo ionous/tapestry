@@ -1,8 +1,8 @@
 package qna
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/lang"
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/generic"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -79,12 +79,12 @@ func (run *Runner) buildKind(k string) (ret cachedKind, err error) {
 
 type cachedKind struct {
 	*g.Kind
-	init []rt.Assignment
+	init []assign.Assignment
 }
 
 type fieldSet struct {
-	fields []g.Field       // the kind's own fields are first, the root fields are last
-	init   []rt.Assignment // fix? move this into g.Kinds ( probably as a callback Init()g.Value to avoid dependency on package rt )
+	fields []g.Field           // the kind's own fields are first, the root fields are last
+	init   []assign.Assignment // fix? move this into g.Kinds ( probably as a callback Init()g.Value to avoid dependency on package rt )
 }
 
 // get the fields and initialization settings of a hierarchy
@@ -99,7 +99,7 @@ func (run *Runner) getFieldSet(kind string, path []string) (ret fieldSet, err er
 		} else {
 			if cnt := len(fs.init); cnt > 0 {
 				if out.init == nil {
-					out.init = make([]rt.Assignment, len(out.fields))
+					out.init = make([]assign.Assignment, len(out.fields))
 				}
 				out.init = append(out.init, fs.init...)
 			}
@@ -124,7 +124,7 @@ func (run *Runner) getFields(kind string) (ret fieldSet, err error) {
 		err = e
 	} else {
 		fields := make([]g.Field, len(fs))
-		var init []rt.Assignment // init is so often empty, only allocate on demand.
+		var init []assign.Assignment // init is so often empty, only allocate on demand.
 		for i, f := range fs {
 			fields[i] = g.Field{f.Name, f.Affinity, f.Class}
 			if prog := f.Init; len(prog) > 0 {
@@ -133,7 +133,7 @@ func (run *Runner) getFields(kind string) (ret fieldSet, err error) {
 					break
 				} else {
 					if init == nil {
-						init = make([]rt.Assignment, len(fs))
+						init = make([]assign.Assignment, len(fs))
 					}
 					init[i] = val
 				}

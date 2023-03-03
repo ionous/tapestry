@@ -25,7 +25,7 @@ package qna
 // 		els := existence
 // 		for _, v := range els {
 // 			name := v.name
-// 			switch _, e := q.GetField(meta.ObjectValue, name); e.(type) {
+// 			switch _, e := q.GetField(meta.ObjectId, name); e.(type) {
 // 			default:
 // 				t.Fatal("assign", e)
 // 			case g.Unknown:
@@ -44,9 +44,7 @@ package qna
 // 		els := FieldTest.kindsOfNoun
 // 		for i, cnt := 0, len(els); i < cnt; i += 2 {
 // 			name, field := els[i], els[i+1]
-// 			if obj, e := q.GetField(meta.ObjectValue, name); e != nil {
-// 				t.Fatal(e)
-// 			} else if p, e := obj.FieldByName(meta.Kind); e != nil {
+// 			if p, e := q.GetField(meta.Kind, name); e != nil {
 // 				t.Fatal(e)
 // 			} else if kind := p.String(); kind != field {
 // 				t.Fatal("mismatch", name, field, "got:", kind, "expected:", field)
@@ -59,9 +57,7 @@ package qna
 // 		for i, cnt := 0, len(els); i < cnt; i += 2 {
 // 			name, field := els[i], els[i+1]
 // 			// asking for "Kinds" should get us the hierarchy
-// 			if obj, e := q.GetField(meta.ObjectValue, name); e != nil {
-// 				t.Fatal(e)
-// 			} else if p, e := obj.FieldByName(meta.Kinds); e != nil {
+// 			if p, e := q.GetField(meta.Kinds, name); e != nil {
 // 				t.Fatal(e)
 // 			} else if path := p.String(); path != field {
 // 				t.Fatal("mismatch", name, field, "got:", name, "expected:", field)
@@ -73,10 +69,9 @@ package qna
 // 		for i, cnt := 0, len(els); i < cnt; i += 3 {
 // 			name, field, value := els[i].(string), els[i+1].(string), els[i+2]
 // 			for n := 0; n < 2; n++ {
-// 				if obj, e := q.GetField(meta.ObjectValue, name); e != nil {
+// 				if p, e := q.GetField(name, field); e != nil {
 // 					t.Fatal(e)
 // 				} else {
-// 					p, e := obj.FieldByName(field)
 // 					switch e.(type) {
 // 					default:
 // 						t.Fatal(e)
@@ -100,9 +95,7 @@ package qna
 // 		for i, cnt := 0, len(els); i < cnt; i += 3 {
 // 			name, field, value := els[i].(string), els[i+1].(string), els[i+2].(float64)
 // 			for i := 0; i < 2; i++ {
-// 				if obj, e := q.GetField(meta.ObjectValue, name); e != nil {
-// 					t.Fatal(e)
-// 				} else if p, e := obj.FieldByName(field); e != nil {
+// 				if obj, e := q.GetField(name, field); e != nil {
 // 					t.Fatal(e)
 // 				} else if num := p.Float(); num != value {
 // 					t.Fatal("mismatch", name, "have:", num, "want:", value)
@@ -114,20 +107,18 @@ package qna
 // 		els := FieldTest.boolValues
 // 		for i, cnt := 0, len(els); i < cnt; i += 2 {
 // 			name, csv := els[i].(string), els[i+1].(string)
-// 			if obj, e := q.GetField(meta.ObjectValue, name); e != nil {
-// 				t.Fatal(e)
-// 			} else if e := testTraits(obj, csv); e != nil {
+// 			if e := testTraits(q, name, csv); e != nil {
 // 				t.Fatal(e)
 // 			}
 // 		}
 // 	})
 // 	t.Run("change_traits", func(t *testing.T) {
 // 		// apple.A had an implicit value of w; change it to "y"
-// 		if apple, e := q.GetField(meta.ObjectValue, "apple"); e != nil {
+// 		if apple, e := q.GetField(meta.ObjectId, "apple"); e != nil {
 // 			t.Fatal(e)
-// 		} else if e := apple.SetFieldByName("a", g.StringOf("y")); e != nil {
+// 		} else if e := q.SetField(apple, "a", g.StringOf("y")); e != nil {
 // 			t.Fatal(e)
-// 		} else if v, e := apple.FieldByName("a"); e != nil {
+// 		} else if v, e := q.GetField(apple, "a"); e != nil {
 // 			t.Fatal(e)
 // 		} else if str := v.String(); str != "y" {
 // 			t.Fatal("mismatch", str)
@@ -136,11 +127,11 @@ package qna
 // 		}
 // 		// b is an aspect with traits "z" and "zz"
 // 		// boat.B has a default value of zz
-// 		if boat, e := q.GetField(meta.ObjectValue, "boat"); e != nil {
+// 		if boat, e := q.GetField(meta.ObjectId, "boat"); e != nil {
 // 			t.Fatal(e)
-// 		} else if e := boat.SetFieldByName("z", g.BoolOf(true)); e != nil {
+// 		} else if e := q.SetField(boat, "z", g.BoolOf(true)); e != nil {
 // 			t.Fatal(e)
-// 		} else if v, e := boat.FieldByName("b"); e != nil {
+// 		} else if v, e := q.GetField(boat, "b"); e != nil {
 // 			t.Fatal(e)
 // 		} else if str := v.String(); str != "z" {
 // 			t.Fatal("mismatch", str)
@@ -148,11 +139,11 @@ package qna
 // 			t.Fatal(e)
 // 		}
 // 		// toy boat.A has an initial value of y
-// 		if toyBoat, e := q.GetField(meta.ObjectValue, "toy_boat"); e != nil {
+// 		if toyBoat, e := q.GetField(meta.ObjectId, "toy_boat"); e != nil {
 // 			t.Fatal(e)
-// 		} else if e := toyBoat.SetFieldByName("w", g.BoolOf(true)); e != nil {
+// 		} else if e := q.SetField("w", g.BoolOf(true)); e != nil {
 // 			t.Fatal(e)
-// 		} else if v, e := toyBoat.FieldByName("a"); e != nil {
+// 		} else if v, e := q.GetField(toyBoat, "a"); e != nil {
 // 			t.Fatal(e)
 // 		} else if str := v.String(); str != "w" {
 // 			t.Fatal("mismatch", str)
@@ -191,13 +182,13 @@ package qna
 // 	return
 // }
 
-// func testTraits(obj g.Value, csv string) (err error) {
+// func testTraits(q rt.Runtime, name, csv string) (err error) {
 // 	traits := strings.Split(csv, ",")
 // 	// the first value in the list of traits is supposed to be true
 // 	for want := true; len(traits) > 0 && err == nil; want = false {
 // 		trait := traits[0]
 // 		traits = traits[1:]
-// 		if p, e := obj.FieldByName(trait); e != nil {
+// 		if p, e := q.GetFieldByName(name, trait); e != nil {
 // 			err = errutil.New(e)
 // 		} else if got := p.Bool(); got != want {
 // 			err = errutil.New("mismatch", trait, "got:", got, "expected:", want)

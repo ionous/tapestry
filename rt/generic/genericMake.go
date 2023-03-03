@@ -39,18 +39,6 @@ func IntFrom(v int, subtype string) Value {
 	return makeValue(affine.Number, subtype, v)
 }
 
-// changes a named object into just the name
-// the returned value has affinity text, with a class of the object's kind.
-func ObjectAsText(v Value) (ret Value) {
-	if v == nil {
-		ret = StringOf("") // fix: or "nothing"?
-	} else {
-		id, typeName := v.String(), v.Type()
-		ret = makeValue(affine.Text, typeName, id)
-	}
-	return
-}
-
 func StringsFrom(vs []string, subtype string) (ret Value) {
 	if a := affine.TextList; vs != nil {
 		ret = makeValue(a, subtype, &vs)

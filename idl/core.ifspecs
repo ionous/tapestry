@@ -56,35 +56,6 @@
           ]
         },
         {
-          "--": "Assigns a variable to a value.",
-          "Spec:slots:groups:with flow:": [
-            "assign",
-            "execute",
-            "variables",
-            {
-              "Flow:uses:": [
-                "let",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "var",
-                      "variable_name"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "be",
-                      "from",
-                      "assignment"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
           "--": "Add a single blank line following some text.",
           "Spec:slots:groups:with flow:": [
             "blankline",
@@ -184,78 +155,6 @@
                       "parts",
                       "text_eval",
                       true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Executes a pattern, and potentially returns a value.",
-          "Spec:slots:with flow:": [
-            "call_pattern",
-            [
-              "execute",
-              "bool_eval",
-              "number_eval",
-              "text_eval",
-              "record_eval",
-              "num_list_eval",
-              "text_list_eval",
-              "record_list_eval"
-            ],
-            {
-              "Flow:uses:": [
-                "determine",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "pattern",
-                      "pattern_name"
-                    ]
-                  },
-                  {
-                    "Term:name:type:repeats:": [
-                      "args",
-                      "arguments",
-                      "arg",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": [
-            "Triggers a event, calling the passed event ( a pattern ) for the handlers of the objects on the passed path.",
-            "Although the event advertises it can take any bool evaluation, only pattern calls are supported.",
-            "Returns a true/false success value."
-          ],
-          "Spec:slots:with flow:": [
-            "call_send",
-            [
-              "execute",
-              "bool_eval"
-            ],
-            {
-              "Flow:uses:": [
-                "send",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "path",
-                      "text_list_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "event",
-                      "bool_eval"
                     ]
                   }
                 ]
@@ -795,301 +694,10 @@
                 {
                   "Term:name:type:": [
                     "_",
-                    "pattern",
-                    "pattern_name"
+                    "pattern_name",
+                    "text"
                   ]
                 }
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Assigns the calculated boolean value.",
-          "Spec:slots:groups:with flow:": [
-            "from_bool",
-            "assignment",
-            "variables",
-            {
-              "Flow uses:": [
-                {
-                  "Term:name:type:": [
-                    "_",
-                    "val",
-                    "bool_eval"
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Assigns the calculated number.",
-          "Spec:slots:groups:with flow:": [
-            "from_num",
-            "assignment",
-            "variables",
-            {
-              "Flow uses:": [
-                {
-                  "Term:name:type:": [
-                    "_",
-                    "val",
-                    "number_eval"
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Assigns the calculated numbers.",
-          "Spec:slots:groups:with flow:": [
-            "from_numbers",
-            "assignment",
-            "variables",
-            {
-              "Flow:uses:": [
-                "from_nums",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "vals",
-                      "num_list_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Targets an object with a computed name.",
-          "Spec:slots:groups:with flow:": [
-            "from_obj",
-            "from_source_fields",
-            "misc",
-            {
-              "Flow:uses:": [
-                "obj_fields",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "object",
-                      "text_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Targets a record stored in a record.",
-          "Spec:slots:groups:with flow:": [
-            "from_rec",
-            "from_source_fields",
-            "misc",
-            {
-              "Flow:uses:": [
-                "rec_fields",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "rec",
-                      "record_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Assigns the calculated record.",
-          "Spec:slots:groups:with flow:": [
-            "from_record",
-            "assignment",
-            "variables",
-            {
-              "Flow:uses:": [
-                "from_rec",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "val",
-                      "record_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Assigns the calculated records.",
-          "Spec:slots:groups:with flow:": [
-            "from_records",
-            "assignment",
-            "variables",
-            {
-              "Flow:uses:": [
-                "from_recs",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "vals",
-                      "record_list_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Helper for getting fields.",
-          "Spec:with slot:": [
-            "from_source_fields",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
-          "--": "Assigns the calculated piece of text.",
-          "Spec:slots:groups:with flow:": [
-            "from_text",
-            "assignment",
-            "variables",
-            {
-              "Flow:uses:": [
-                "from_txt",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "val",
-                      "text_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Assigns the calculated texts.",
-          "Spec:slots:groups:with flow:": [
-            "from_texts",
-            "assignment",
-            "variables",
-            {
-              "Flow:uses:": [
-                "from_txts",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "vals",
-                      "text_list_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Targets a record stored in a variable.",
-          "Spec:slots:groups:with flow:": [
-            "from_var",
-            "from_source_fields",
-            "misc",
-            {
-              "Flow:uses:": [
-                "var_fields",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "var",
-                      "variable_name"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Get a value from a record.",
-          "Spec:slots:groups:with flow:": [
-            "get_at_field",
-            [
-              "assignment",
-              "bool_eval",
-              "number_eval",
-              "text_eval",
-              "record_eval",
-              "num_list_eval",
-              "text_list_eval",
-              "record_list_eval"
-            ],
-            "variables",
-            {
-              "Flow:uses:": [
-                "get",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "field",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "from",
-                      "from_source_fields"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Get Variable: Return the value of the named variable.",
-          "Spec:slots:groups:with flow:": [
-            "get_var",
-            [
-              "assignment",
-              "bool_eval",
-              "number_eval",
-              "text_eval",
-              "record_eval",
-              "num_list_eval",
-              "text_list_eval",
-              "record_list_eval"
-            ],
-            "variables",
-            {
-              "Flow:uses:": [
-                "var",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "name",
-                      "variable_name"
-                    ]
-                  }
-                ]
               ]
             }
           ]
@@ -1143,34 +751,6 @@
           ]
         },
         {
-          "--": "Return true if the object is currently in the requested state.",
-          "Spec:slots:groups:with flow:": [
-            "has_trait",
-            "bool_eval",
-            "objects",
-            {
-              "Flow:uses:": [
-                "get",
-                [
-                  {
-                    "Term:name:type:": [
-                      "obj",
-                      "object",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "trait",
-                      "text_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
           "--": "A unique object identifier.",
           "Spec:slots:groups:with flow:": [
             "id_of",
@@ -1210,59 +790,6 @@
                     "Term:type:": [
                       "part",
                       "text_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Targets an object with a computed name.",
-          "Spec:slots:groups:with flow:": [
-            "into_obj",
-            "into_target_fields",
-            "misc",
-            {
-              "Flow:uses:": [
-                "obj_field",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "object",
-                      "text_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Helper for setting fields.",
-          "Spec:with slot:": [
-            "into_target_fields",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
-          "--": "Targets an object or record stored in a variable.",
-          "Spec:slots:groups:with flow:": [
-            "into_var",
-            "into_target_fields",
-            "misc",
-            {
-              "Flow:uses:": [
-                "var_field",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "var",
-                      "variable_name"
                     ]
                   }
                 ]
@@ -1344,6 +871,17 @@
                       "kind",
                       "text"
                     ]
+                  },
+                  {
+                    "--": [
+                      "try to check the type of nothing objects?",
+                      "normally, nothing objects have no kind."
+                    ],
+                    "Term:type:optional:": [
+                      "nothing",
+                      "bool",
+                      true
+                    ]
                   }
                 ]
               ]
@@ -1391,7 +929,18 @@
                     "object",
                     "text_eval"
                   ]
-                }
+                },
+                  {
+                    "--": [
+                      "try to check the type of nothing objects?",
+                      "normally, nothing objects have no kind."
+                    ],
+                    "Term:type:optional:": [
+                      "nothing",
+                      "bool",
+                      true
+                    ]
+                  }
               ]
             }
           ]
@@ -1542,7 +1091,7 @@
                 {
                   "Term:name:type:": [
                     "to",
-                    "pattern",
+                    "match",
                     "text"
                   ]
                 },
@@ -1654,14 +1203,6 @@
           ]
         },
         {
-          "Spec:with str:": [
-            "pattern_name",
-            {
-              "Str uses:": []
-            }
-          ]
-        },
-        {
           "--": "Returns the plural form of a singular word. (ex. apples for apple. ).",
           "Spec:slots:groups:with flow:": [
             "pluralize",
@@ -1757,41 +1298,6 @@
           ]
         },
         {
-          "--": "Put a value into the field of an record or object.",
-          "Spec:slots:groups:with flow:": [
-            "put_at_field",
-            "execute",
-            "variables",
-            {
-              "Flow:uses:": [
-                "put",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "into",
-                      "into_target_fields"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "from",
-                      "assignment"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "at",
-                      "at_field",
-                      "text"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
           "--": "Divide one number by another.",
           "Spec:slots:groups:with flow:": [
             "quotient_of",
@@ -1850,25 +1356,19 @@
           ]
         },
         {
-          "--": "Generate text in a replaceable manner.",
+          "--": "Display some text to the player without apply any additional formatting.",
           "Spec:slots:groups:with flow:": [
-            "response",
-            "text_eval",
-            "output",
+            "print_text",
+            "execute",
+            "printing",
             {
-              "Flow uses:": [
+              "Flow:uses:": [
+                "print",
                 {
                   "Term:name:type:": [
                     "_",
-                    "name",
-                    "text"
-                  ]
-                },
-                {
-                  "Term:type:optional:": [
                     "text",
-                    "text_eval",
-                    true
+                    "text_eval"
                   ]
                 }
               ]
@@ -1914,56 +1414,6 @@
                     true
                   ]
                 }
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Print some bit of text to the player.",
-          "Spec:slots:groups:with flow:": [
-            "say_text",
-            "execute",
-            "printing",
-            {
-              "Flow:uses:": [
-                "say",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "text",
-                      "text_eval"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Put an object into a particular state.",
-          "Spec:slots:groups:with flow:": [
-            "set_trait",
-            "execute",
-            "objects",
-            {
-              "Flow:uses:": [
-                "put",
-                [
-                  {
-                    "Term:name:type:": [
-                      "obj",
-                      "object",
-                      "text_eval"
-                    ]
-                  },
-                  {
-                    "Term:type:": [
-                      "trait",
-                      "text_eval"
-                    ]
-                  }
-                ]
               ]
             }
           ]
@@ -2123,14 +1573,6 @@
                 "after",
                 []
               ]
-            }
-          ]
-        },
-        {
-          "Spec:with str:": [
-            "variable_name",
-            {
-              "Str uses:": []
             }
           ]
         },

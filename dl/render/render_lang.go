@@ -2,149 +2,52 @@
 package render
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/composer"
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 
-// RenderExp
-type RenderExp struct {
-	Expression rt.TextEval `if:"label=_"`
-	Markup     map[string]any
-}
+const RenderEval_Type = "render_eval"
 
-// User implemented slots:
-var _ rt.TextEval = (*RenderExp)(nil)
+var RenderEval_Optional_Marshal = RenderEval_Marshal
 
-func (*RenderExp) Compose() composer.Spec {
-	return composer.Spec{
-		Name: RenderExp_Type,
-		Uses: composer.Type_Flow,
-	}
-}
+type RenderEval_Slot struct{ Value *RenderEval }
 
-const RenderExp_Type = "render_exp"
-const RenderExp_Field_Expression = "$EXPRESSION"
-
-func (op *RenderExp) Marshal(m jsn.Marshaler) error {
-	return RenderExp_Marshal(m, op)
-}
-
-type RenderExp_Slice []RenderExp
-
-func (op *RenderExp_Slice) GetType() string { return RenderExp_Type }
-
-func (op *RenderExp_Slice) Marshal(m jsn.Marshaler) error {
-	return RenderExp_Repeats_Marshal(m, (*[]RenderExp)(op))
-}
-
-func (op *RenderExp_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *RenderExp_Slice) SetSize(cnt int) {
-	var els []RenderExp
-	if cnt >= 0 {
-		els = make(RenderExp_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *RenderExp_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return RenderExp_Marshal(m, &(*op)[i])
-}
-
-func RenderExp_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderExp) error {
-	return jsn.RepeatBlock(m, (*RenderExp_Slice)(vals))
-}
-
-func RenderExp_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderExp) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = RenderExp_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type RenderExp_Flow struct{ ptr *RenderExp }
-
-func (n RenderExp_Flow) GetType() string      { return RenderExp_Type }
-func (n RenderExp_Flow) GetLede() string      { return RenderExp_Type }
-func (n RenderExp_Flow) GetFlow() interface{} { return n.ptr }
-func (n RenderExp_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*RenderExp); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func RenderExp_Optional_Marshal(m jsn.Marshaler, pv **RenderExp) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = RenderExp_Marshal(m, *pv)
-	} else if !enc {
-		var v RenderExp
-		if err = RenderExp_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func RenderExp_Marshal(m jsn.Marshaler, val *RenderExp) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(RenderExp_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", RenderExp_Field_Expression)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Expression)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", RenderExp_Field_Expression))
+func (at RenderEval_Slot) Marshal(m jsn.Marshaler) (err error) {
+	if err = m.MarshalBlock(at); err == nil {
+		if a, ok := at.GetSlot(); ok {
+			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
+				m.Error(e)
+			}
 		}
 		m.EndBlock()
 	}
 	return
 }
-
-// RenderField in template phrases, picks between record variables, object variables, and named global objects.
-// ex. could be "ringBearer", "SamWise", or "frodo"
-type RenderField struct {
-	Name   rt.TextEval `if:"label=_"`
-	Markup map[string]any
+func (at RenderEval_Slot) GetType() string              { return RenderEval_Type }
+func (at RenderEval_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
+func (at RenderEval_Slot) SetSlot(v interface{}) (okay bool) {
+	(*at.Value), okay = v.(RenderEval)
+	return
 }
 
-// User implemented slots:
-var _ core.FromSourceFields = (*RenderField)(nil)
-
-func (*RenderField) Compose() composer.Spec {
-	return composer.Spec{
-		Name: RenderField_Type,
-		Uses: composer.Type_Flow,
-	}
+func RenderEval_Marshal(m jsn.Marshaler, ptr *RenderEval) (err error) {
+	slot := RenderEval_Slot{ptr}
+	return slot.Marshal(m)
 }
 
-const RenderField_Type = "render_field"
-const RenderField_Field_Name = "$NAME"
+type RenderEval_Slice []RenderEval
 
-func (op *RenderField) Marshal(m jsn.Marshaler) error {
-	return RenderField_Marshal(m, op)
+func (op *RenderEval_Slice) GetType() string { return RenderEval_Type }
+
+func (op *RenderEval_Slice) Marshal(m jsn.Marshaler) error {
+	return RenderEval_Repeats_Marshal(m, (*[]RenderEval)(op))
 }
 
-type RenderField_Slice []RenderField
-
-func (op *RenderField_Slice) GetType() string { return RenderField_Type }
-
-func (op *RenderField_Slice) Marshal(m jsn.Marshaler) error {
-	return RenderField_Repeats_Marshal(m, (*[]RenderField)(op))
-}
-
-func (op *RenderField_Slice) GetSize() (ret int) {
+func (op *RenderEval_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -153,156 +56,33 @@ func (op *RenderField_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *RenderField_Slice) SetSize(cnt int) {
-	var els []RenderField
+func (op *RenderEval_Slice) SetSize(cnt int) {
+	var els []RenderEval
 	if cnt >= 0 {
-		els = make(RenderField_Slice, cnt)
+		els = make(RenderEval_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *RenderField_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return RenderField_Marshal(m, &(*op)[i])
+func (op *RenderEval_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RenderEval_Marshal(m, &(*op)[i])
 }
 
-func RenderField_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderField) error {
-	return jsn.RepeatBlock(m, (*RenderField_Slice)(vals))
+func RenderEval_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderEval) error {
+	return jsn.RepeatBlock(m, (*RenderEval_Slice)(vals))
 }
 
-func RenderField_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderField) (err error) {
+func RenderEval_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderEval) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = RenderField_Repeats_Marshal(m, pv)
+		err = RenderEval_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type RenderField_Flow struct{ ptr *RenderField }
-
-func (n RenderField_Flow) GetType() string      { return RenderField_Type }
-func (n RenderField_Flow) GetLede() string      { return RenderField_Type }
-func (n RenderField_Flow) GetFlow() interface{} { return n.ptr }
-func (n RenderField_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*RenderField); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func RenderField_Optional_Marshal(m jsn.Marshaler, pv **RenderField) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = RenderField_Marshal(m, *pv)
-	} else if !enc {
-		var v RenderField
-		if err = RenderField_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func RenderField_Marshal(m jsn.Marshaler, val *RenderField) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(RenderField_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", RenderField_Field_Name)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", RenderField_Field_Name))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// RenderFlags requires a predefined string.
-type RenderFlags struct {
-	Str string
-}
-
-func (op *RenderFlags) String() string {
-	return op.Str
-}
-
-const RenderFlags_RenderAsVar = "$RENDER_AS_VAR"
-const RenderFlags_RenderAsObj = "$RENDER_AS_OBJ"
-const RenderFlags_RenderAsAny = "$RENDER_AS_ANY"
-
-func (*RenderFlags) Compose() composer.Spec {
-	return composer.Spec{
-		Name: RenderFlags_Type,
-		Uses: composer.Type_Str,
-		Choices: []string{
-			RenderFlags_RenderAsVar, RenderFlags_RenderAsObj, RenderFlags_RenderAsAny,
-		},
-		Strings: []string{
-			"render_as_var", "render_as_obj", "render_as_any",
-		},
-	}
-}
-
-const RenderFlags_Type = "render_flags"
-
-func (op *RenderFlags) Marshal(m jsn.Marshaler) error {
-	return RenderFlags_Marshal(m, op)
-}
-
-func RenderFlags_Optional_Marshal(m jsn.Marshaler, val *RenderFlags) (err error) {
-	var zero RenderFlags
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = RenderFlags_Marshal(m, val)
-	}
-	return
-}
-
-func RenderFlags_Marshal(m jsn.Marshaler, val *RenderFlags) (err error) {
-	return m.MarshalValue(RenderFlags_Type, jsn.MakeEnum(val, &val.Str))
-}
-
-type RenderFlags_Slice []RenderFlags
-
-func (op *RenderFlags_Slice) GetType() string { return RenderFlags_Type }
-
-func (op *RenderFlags_Slice) Marshal(m jsn.Marshaler) error {
-	return RenderFlags_Repeats_Marshal(m, (*[]RenderFlags)(op))
-}
-
-func (op *RenderFlags_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *RenderFlags_Slice) SetSize(cnt int) {
-	var els []RenderFlags
-	if cnt >= 0 {
-		els = make(RenderFlags_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *RenderFlags_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return RenderFlags_Marshal(m, &(*op)[i])
-}
-
-func RenderFlags_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderFlags) error {
-	return jsn.RepeatBlock(m, (*RenderFlags_Slice)(vals))
-}
-
-func RenderFlags_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderFlags) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = RenderFlags_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// RenderName handles changing a template like {.boombip} into text.
-// if the name is a variable containing an object name: return the printed object name ( via "print name" )
-// if the name is a variable with some other text: return that text.
-// if the name isn't a variable but refers to some object: return that object's printed object name.
+// RenderName Handles changing a template like {.boombip} into text.
+// If the name is a variable containing an object name: return the printed object name ( via "print name" );
+// if the name is a variable with some other text: return that text;
+// if the name isn't a variable but refers to some object: return that object's printed object name;
 // otherwise, its an error.
 type RenderName struct {
 	Name   string `if:"label=_,type=text"`
@@ -405,17 +185,18 @@ func RenderName_Marshal(m jsn.Marshaler, val *RenderName) (err error) {
 	return
 }
 
-// RenderPattern printing is generally an activity b/c say is an activity
-// and we want the ability to say several things in series.
+// RenderPattern A version of core's call pattern
+// that figures out how to evaluate its arguments at runtime.
 type RenderPattern struct {
-	Call   core.CallPattern `if:"label=_"`
-	Markup map[string]any
+	PatternName string       `if:"label=_,type=text"`
+	Render      []RenderEval `if:"label=render"`
+	Markup      map[string]any
 }
 
 // User implemented slots:
-var _ rt.Assignment = (*RenderPattern)(nil)
 var _ rt.BoolEval = (*RenderPattern)(nil)
 var _ rt.TextEval = (*RenderPattern)(nil)
+var _ RenderEval = (*RenderPattern)(nil)
 
 func (*RenderPattern) Compose() composer.Spec {
 	return composer.Spec{
@@ -426,7 +207,8 @@ func (*RenderPattern) Compose() composer.Spec {
 }
 
 const RenderPattern_Type = "render_pattern"
-const RenderPattern_Field_Call = "$CALL"
+const RenderPattern_Field_PatternName = "$PATTERN_NAME"
+const RenderPattern_Field_Render = "$RENDER"
 
 func (op *RenderPattern) Marshal(m jsn.Marshaler) error {
 	return RenderPattern_Marshal(m, op)
@@ -499,30 +281,42 @@ func RenderPattern_Optional_Marshal(m jsn.Marshaler, pv **RenderPattern) (err er
 func RenderPattern_Marshal(m jsn.Marshaler, val *RenderPattern) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(RenderPattern_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", RenderPattern_Field_Call)
+		e0 := m.MarshalKey("", RenderPattern_Field_PatternName)
 		if e0 == nil {
-			e0 = core.CallPattern_Marshal(m, &val.Call)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.PatternName)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", RenderPattern_Field_Call))
+			m.Error(errutil.New(e0, "in flow at", RenderPattern_Field_PatternName))
+		}
+		e1 := m.MarshalKey("render", RenderPattern_Field_Render)
+		if e1 == nil {
+			e1 = RenderEval_Repeats_Marshal(m, &val.Render)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", RenderPattern_Field_Render))
 		}
 		m.EndBlock()
 	}
 	return
 }
 
-// RenderRef returns the value of a variable or the id of an object.
+// RenderRef Pull a value from name that might refer either to a variable, or to an object.
+// If the name is an object, returns the object id.
 type RenderRef struct {
-	Name   core.VariableName `if:"label=_"`
-	Flags  RenderFlags       `if:"label=flags"`
+	Name   rt.TextEval  `if:"label=_"`
+	Dot    []assign.Dot `if:"label=dot,optional"`
 	Markup map[string]any
 }
 
 // User implemented slots:
-var _ rt.Assignment = (*RenderRef)(nil)
 var _ rt.BoolEval = (*RenderRef)(nil)
 var _ rt.NumberEval = (*RenderRef)(nil)
 var _ rt.TextEval = (*RenderRef)(nil)
+var _ rt.RecordEval = (*RenderRef)(nil)
+var _ rt.NumListEval = (*RenderRef)(nil)
+var _ rt.TextListEval = (*RenderRef)(nil)
+var _ rt.RecordListEval = (*RenderRef)(nil)
+var _ RenderEval = (*RenderRef)(nil)
 
 func (*RenderRef) Compose() composer.Spec {
 	return composer.Spec{
@@ -533,7 +327,7 @@ func (*RenderRef) Compose() composer.Spec {
 
 const RenderRef_Type = "render_ref"
 const RenderRef_Field_Name = "$NAME"
-const RenderRef_Field_Flags = "$FLAGS"
+const RenderRef_Field_Dot = "$DOT"
 
 func (op *RenderRef) Marshal(m jsn.Marshaler) error {
 	return RenderRef_Marshal(m, op)
@@ -608,42 +402,271 @@ func RenderRef_Marshal(m jsn.Marshaler, val *RenderRef) (err error) {
 	if err = m.MarshalBlock(RenderRef_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", RenderRef_Field_Name)
 		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Name)
+			e0 = rt.TextEval_Marshal(m, &val.Name)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", RenderRef_Field_Name))
 		}
-		e1 := m.MarshalKey("flags", RenderRef_Field_Flags)
+		e1 := m.MarshalKey("dot", RenderRef_Field_Dot)
 		if e1 == nil {
-			e1 = RenderFlags_Marshal(m, &val.Flags)
+			e1 = assign.Dot_Optional_Repeats_Marshal(m, &val.Dot)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", RenderRef_Field_Flags))
+			m.Error(errutil.New(e1, "in flow at", RenderRef_Field_Dot))
 		}
 		m.EndBlock()
 	}
 	return
 }
 
+// RenderResponse Generate text in a replaceable manner.
+type RenderResponse struct {
+	Name   string      `if:"label=_,type=text"`
+	Text   rt.TextEval `if:"label=text"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*RenderResponse)(nil)
+var _ rt.TextEval = (*RenderResponse)(nil)
+
+func (*RenderResponse) Compose() composer.Spec {
+	return composer.Spec{
+		Name: RenderResponse_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const RenderResponse_Type = "render_response"
+const RenderResponse_Field_Name = "$NAME"
+const RenderResponse_Field_Text = "$TEXT"
+
+func (op *RenderResponse) Marshal(m jsn.Marshaler) error {
+	return RenderResponse_Marshal(m, op)
+}
+
+type RenderResponse_Slice []RenderResponse
+
+func (op *RenderResponse_Slice) GetType() string { return RenderResponse_Type }
+
+func (op *RenderResponse_Slice) Marshal(m jsn.Marshaler) error {
+	return RenderResponse_Repeats_Marshal(m, (*[]RenderResponse)(op))
+}
+
+func (op *RenderResponse_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RenderResponse_Slice) SetSize(cnt int) {
+	var els []RenderResponse
+	if cnt >= 0 {
+		els = make(RenderResponse_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RenderResponse_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RenderResponse_Marshal(m, &(*op)[i])
+}
+
+func RenderResponse_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderResponse) error {
+	return jsn.RepeatBlock(m, (*RenderResponse_Slice)(vals))
+}
+
+func RenderResponse_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderResponse) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = RenderResponse_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type RenderResponse_Flow struct{ ptr *RenderResponse }
+
+func (n RenderResponse_Flow) GetType() string      { return RenderResponse_Type }
+func (n RenderResponse_Flow) GetLede() string      { return RenderResponse_Type }
+func (n RenderResponse_Flow) GetFlow() interface{} { return n.ptr }
+func (n RenderResponse_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RenderResponse); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func RenderResponse_Optional_Marshal(m jsn.Marshaler, pv **RenderResponse) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = RenderResponse_Marshal(m, *pv)
+	} else if !enc {
+		var v RenderResponse
+		if err = RenderResponse_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func RenderResponse_Marshal(m jsn.Marshaler, val *RenderResponse) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(RenderResponse_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", RenderResponse_Field_Name)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RenderResponse_Field_Name))
+		}
+		e1 := m.MarshalKey("text", RenderResponse_Field_Text)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.Text)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", RenderResponse_Field_Text))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// RenderValue Pull a value from an assignment of unknown affinity.
+type RenderValue struct {
+	Value  assign.Assignment `if:"label=_"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ RenderEval = (*RenderValue)(nil)
+
+func (*RenderValue) Compose() composer.Spec {
+	return composer.Spec{
+		Name: RenderValue_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const RenderValue_Type = "render_value"
+const RenderValue_Field_Value = "$VALUE"
+
+func (op *RenderValue) Marshal(m jsn.Marshaler) error {
+	return RenderValue_Marshal(m, op)
+}
+
+type RenderValue_Slice []RenderValue
+
+func (op *RenderValue_Slice) GetType() string { return RenderValue_Type }
+
+func (op *RenderValue_Slice) Marshal(m jsn.Marshaler) error {
+	return RenderValue_Repeats_Marshal(m, (*[]RenderValue)(op))
+}
+
+func (op *RenderValue_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *RenderValue_Slice) SetSize(cnt int) {
+	var els []RenderValue
+	if cnt >= 0 {
+		els = make(RenderValue_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *RenderValue_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return RenderValue_Marshal(m, &(*op)[i])
+}
+
+func RenderValue_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderValue) error {
+	return jsn.RepeatBlock(m, (*RenderValue_Slice)(vals))
+}
+
+func RenderValue_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderValue) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = RenderValue_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type RenderValue_Flow struct{ ptr *RenderValue }
+
+func (n RenderValue_Flow) GetType() string      { return RenderValue_Type }
+func (n RenderValue_Flow) GetLede() string      { return RenderValue_Type }
+func (n RenderValue_Flow) GetFlow() interface{} { return n.ptr }
+func (n RenderValue_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*RenderValue); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func RenderValue_Optional_Marshal(m jsn.Marshaler, pv **RenderValue) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = RenderValue_Marshal(m, *pv)
+	} else if !enc {
+		var v RenderValue
+		if err = RenderValue_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func RenderValue_Marshal(m jsn.Marshaler, val *RenderValue) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(RenderValue_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", RenderValue_Field_Value)
+		if e0 == nil {
+			e0 = assign.Assignment_Marshal(m, &val.Value)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", RenderValue_Field_Value))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+var Slots = []interface{}{
+	(*RenderEval)(nil),
+}
+
 var Slats = []composer.Composer{
-	(*RenderExp)(nil),
-	(*RenderField)(nil),
-	(*RenderFlags)(nil),
 	(*RenderName)(nil),
 	(*RenderPattern)(nil),
 	(*RenderRef)(nil),
+	(*RenderResponse)(nil),
+	(*RenderValue)(nil),
 }
 
 var Signatures = map[uint64]interface{}{
-	13441549517428071082: (*RenderFlags)(nil),   /* RenderFlags: */
-	9866174808090639891:  (*RenderPattern)(nil), /* assignment=Render: */
-	9599213113608064507:  (*RenderPattern)(nil), /* bool_eval=Render: */
-	10993729462470844314: (*RenderPattern)(nil), /* text_eval=Render: */
-	6246561451082451915:  (*RenderExp)(nil),     /* text_eval=RenderExp: */
-	15474094145874753222: (*RenderField)(nil),   /* from_source_fields=RenderField: */
-	4328811686385928991:  (*RenderName)(nil),    /* text_eval=RenderName: */
-	1031538011446919677:  (*RenderRef)(nil),     /* assignment=RenderRef:flags: */
-	14782521615539531797: (*RenderRef)(nil),     /* bool_eval=RenderRef:flags: */
-	11391759806425422016: (*RenderRef)(nil),     /* number_eval=RenderRef:flags: */
-	869058050138137118:   (*RenderRef)(nil),     /* text_eval=RenderRef:flags: */
+	14401057669022842575: (*RenderPattern)(nil),  /* bool_eval=Render:render: */
+	2910903954323771519:  (*RenderPattern)(nil),  /* render_eval=Render:render: */
+	3385363614654173788:  (*RenderPattern)(nil),  /* text_eval=Render:render: */
+	4328811686385928991:  (*RenderName)(nil),     /* text_eval=RenderName: */
+	12372540113328333010: (*RenderRef)(nil),      /* bool_eval=RenderRef: */
+	17707941731931999319: (*RenderRef)(nil),      /* num_list_eval=RenderRef: */
+	586781755231363619:   (*RenderRef)(nil),      /* number_eval=RenderRef: */
+	11952381947639314199: (*RenderRef)(nil),      /* record_eval=RenderRef: */
+	5794615276964665178:  (*RenderRef)(nil),      /* record_list_eval=RenderRef: */
+	15289959684061875714: (*RenderRef)(nil),      /* render_eval=RenderRef: */
+	10542331033523904889: (*RenderRef)(nil),      /* text_eval=RenderRef: */
+	4171261980310148416:  (*RenderRef)(nil),      /* text_list_eval=RenderRef: */
+	18249933776929959289: (*RenderRef)(nil),      /* bool_eval=RenderRef:dot: */
+	9735547470721472920:  (*RenderRef)(nil),      /* num_list_eval=RenderRef:dot: */
+	13239953219501121612: (*RenderRef)(nil),      /* number_eval=RenderRef:dot: */
+	8324158095841155032:  (*RenderRef)(nil),      /* record_eval=RenderRef:dot: */
+	17618593433797581633: (*RenderRef)(nil),      /* record_list_eval=RenderRef:dot: */
+	7883271647282708009:  (*RenderRef)(nil),      /* render_eval=RenderRef:dot: */
+	239223853229152058:   (*RenderRef)(nil),      /* text_eval=RenderRef:dot: */
+	3872622981826050135:  (*RenderRef)(nil),      /* text_list_eval=RenderRef:dot: */
+	167592851841791829:   (*RenderResponse)(nil), /* execute=RenderResponse:text: */
+	10415880721138830946: (*RenderResponse)(nil), /* text_eval=RenderResponse:text: */
+	7608693554121607902:  (*RenderValue)(nil),    /* render_eval=RenderValue: */
 }

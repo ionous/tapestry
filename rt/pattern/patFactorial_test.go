@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -34,41 +35,38 @@ func TestFactorial(t *testing.T) {
 				},
 				Rules: []rt.Rule{{
 					Execute: core.MakeActivity(
-						&core.Assign{Var: N("num"),
-							From: &core.FromNum{
-								Val: &core.ProductOf{
-									A: V("num"),
-									B: &core.CallPattern{
-										Pattern: P("factorial"),
-										Arguments: core.NamedArgs(
-											"num", &core.FromNum{
-												Val: &core.DiffOf{
-													A: V("num"),
-													B: I(1),
-												},
-											},
-										)}}}}),
+						&assign.SetValue{
+							Target: assign.Variable("num"),
+							Value: &assign.FromNumber{Value: &core.ProductOf{
+								A: assign.Variable("num"),
+								B: &assign.CallPattern{
+									PatternName: P("factorial"),
+									Arguments: []assign.Arg{{
+										Name: "num",
+										Value: &assign.FromNumber{Value: &core.DiffOf{
+											A: assign.Variable("num"),
+											B: I(1),
+										}}}}}}}}),
 				}, {
 					Filter: &core.CompareNum{
-						A:  V("num"),
+						A:  assign.Variable("num"),
 						Is: core.Equal,
 						B:  I(0),
 					},
 					Execute: core.MakeActivity(
-						&core.Assign{Var: N("num"),
-							From: &core.FromNum{
-								Val: I(1),
-							}},
+						&assign.SetValue{
+							Target: assign.Variable("num"),
+							Value:  &assign.FromNumber{Value: I(1)}},
 					),
 				}}},
 		}}
 	// determine the factorial of the number 3
-	det := core.CallPattern{
-		Pattern: P("factorial"),
-		Arguments: core.NamedArgs(
-			"num", &core.FromNum{
-				Val: I(3),
-			}),
+	det := assign.CallPattern{
+		PatternName: P("factorial"),
+		Arguments: []assign.Arg{{
+			Name:  "num",
+			Value: &assign.FromNumber{Value: I(3)},
+		}},
 	}
 	if v, e := safe.GetNumber(&run, &det); e != nil {
 		t.Fatal(e)

@@ -37,7 +37,7 @@ func TestStoryActivity(t *testing.T) {
 var _say_exec = map[string]interface{}{
 	"type": "execute",
 	"value": map[string]interface{}{
-		"type": "say_text",
+		"type": "print_text",
 		"value": map[string]interface{}{
 			"$TEXT": _text_eval,
 		},

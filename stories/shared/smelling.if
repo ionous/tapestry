@@ -49,11 +49,9 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
                 ]
               }
             ]
@@ -62,16 +60,18 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Smelling actor:noun:": [
-                    "@actor",
                     {
-                      "FromTxt:": {
-                        "LocationOf obj:": "@actor"
+                      "FromText:": "@actor"
+                    },
+                    {
+                      "FromText:": {
+                        "LocationOf obj:": {
+                          "FromText:": "@actor"
+                        }
                       }
                     }
                   ]
@@ -103,11 +103,9 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
                 ]
               }
             ]
@@ -117,20 +115,26 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": "@actor"
+                }
               },
               [
                 {
                   "If:from:and:does:else:": [
                     "resp",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanReach actor:action:noun:": [
-                          "@actor",
                           {
-                            "FromTxt:": "smelling"
+                            "FromText:": "@actor"
                           },
-                          "@noun"
+                          {
+                            "FromText:": "smelling"
+                          },
+                          {
+                            "FromText:": "@noun"
+                          }
                         ]
                       }
                     },
@@ -141,7 +145,7 @@
                     },
                     [
                       {
-                        "Say:": "@resp"
+                        "Print:": "@resp"
                       }
                     ],
                     {
@@ -150,13 +154,17 @@
                           "If:from:and:does:else:": [
                             "resp",
                             {
-                              "FromTxt:": {
+                              "FromText:": {
                                 "CanUse actor:action:noun:": [
-                                  "@actor",
                                   {
-                                    "FromTxt:": "smelling"
+                                    "FromText:": "@actor"
                                   },
-                                  "@noun"
+                                  {
+                                    "FromText:": "smelling"
+                                  },
+                                  {
+                                    "FromText:": "@noun"
+                                  }
                                 ]
                               }
                             },
@@ -167,15 +175,19 @@
                             },
                             [
                               {
-                                "Say:": "@resp"
+                                "Print:": "@resp"
                               }
                             ],
                             {
                               "ElseDo does:": [
                                 {
                                   "ReportSmelling actor:noun:": [
-                                    "@actor",
-                                    "@noun"
+                                    {
+                                      "FromText:": "@actor"
+                                    },
+                                    {
+                                      "FromText:": "@noun"
+                                    }
                                   ]
                                 }
                               ]
@@ -220,19 +232,15 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "actor smelling",
-                      {
-                        "RenderTemplate:": "{the:.actor|capitalize!} sniffs {the: .noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "actor smelling",
+                    {
+                      "Say:": "{the:.actor|capitalize!} sniffs {the: .noun}."
+                    }
+                  ]
                 }
               ]
             ]
@@ -240,18 +248,18 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": "@actor"
+                }
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player smelling",
-                      {
-                        "RenderTemplate:": "{we:|capitalize!} smell nothing unexpected."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "player smelling",
+                    {
+                      "Say:": "{we:|capitalize!} smell nothing unexpected."
+                    }
+                  ]
                 }
               ]
             ]

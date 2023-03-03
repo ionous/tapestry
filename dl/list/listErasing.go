@@ -8,13 +8,13 @@ import (
 
 func (op *Erasing) Execute(run rt.Runtime) (err error) {
 	if e := op.popping(run); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	}
 	return
 }
 
 func (op *Erasing) popping(run rt.Runtime) (err error) {
-	if els, e := eraseIndex(run, op.Count, op.From, op.AtIndex); e != nil {
+	if els, e := eraseIndex(run, op.Count, op.Target, op.AtIndex); e != nil {
 		err = e
 	} else {
 		run.PushScope(scope.NewSingleValue(op.As, els))
@@ -26,13 +26,13 @@ func (op *Erasing) popping(run rt.Runtime) (err error) {
 
 func (op *ErasingEdge) Execute(run rt.Runtime) (err error) {
 	if e := op.popping(run); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	}
 	return
 }
 
 func (op *ErasingEdge) popping(run rt.Runtime) (err error) {
-	if vs, e := eraseEdge(run, op.From, op.AtEdge); e != nil {
+	if vs, e := eraseEdge(run, op.Target, op.AtEdge); e != nil {
 		err = e
 	} else if cnt, otherwise := vs.Len(), op.Else; otherwise != nil && cnt == 0 {
 		err = otherwise.Branch(run)

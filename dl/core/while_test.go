@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -14,18 +15,21 @@ func TestLoopBreak(t *testing.T) {
 	if e := safe.Run(&run,
 		&While{
 			True: B(true), Does: MakeActivity(
-				&Assign{Var: N("i"), From: &FromNum{Val: &SumOf{A: V("i"), B: I(1)}}},
+				&assign.SetValue{
+					Target: assign.Variable("i"),
+					Value:  &assign.FromNumber{Value: &SumOf{A: assign.Variable("i"), B: I(1)}}},
 				&ChooseAction{
-					If: &CompareNum{A: V("i"), Is: AtLeast, B: I(4)},
+					If: &CompareNum{A: assign.Variable("i"), Is: AtLeast, B: I(4)},
 					Does: MakeActivity(
 						&Break{},
 					),
 				},
-				// &Next{},
-				&Assign{Var: N("j"), From: &FromNum{Val: &SumOf{A: V("j"), B: I(1)}}},
+				&assign.SetValue{
+					Target: assign.Variable("j"),
+					Value:  &assign.FromNumber{Value: &SumOf{A: assign.Variable("j"), B: I(1)}}},
 			)},
 	); e != nil {
-		t.Fatal(e)
+		t.Fatal("failed to run:", e)
 	} else if run.i != 4 && run.j != 3 {
 		t.Fatal("bad counters", run.i, run.j)
 	}
@@ -36,15 +40,19 @@ func TestLoopNext(t *testing.T) {
 	if e := safe.Run(&run,
 		&While{
 			True: B(true), Does: MakeActivity(
-				&Assign{Var: N("i"), From: &FromNum{Val: &SumOf{A: V("i"), B: I(1)}}},
+				&assign.SetValue{
+					Target: assign.Variable("i"),
+					Value:  &assign.FromNumber{Value: &SumOf{A: assign.Variable("i"), B: I(1)}}},
 				&ChooseAction{
-					If: &CompareNum{A: V("i"), Is: AtLeast, B: I(4)},
+					If: &CompareNum{A: assign.Variable("i"), Is: AtLeast, B: I(4)},
 					Does: MakeActivity(
 						&Break{},
 					),
 				},
 				&Next{},
-				&Assign{Var: N("j"), From: &FromNum{Val: &SumOf{A: V("j"), B: I(1)}}},
+				&assign.SetValue{
+					Target: assign.Variable("j"),
+					Value:  &assign.FromNumber{Value: &SumOf{A: assign.Variable("j"), B: I(1)}}},
 			)},
 	); e != nil {
 		t.Fatal(e)
@@ -59,7 +67,9 @@ func TestLoopInfinite(t *testing.T) {
 	if e := safe.Run(&run,
 		&While{
 			True: B(true), Does: MakeActivity(
-				&Assign{Var: N("i"), From: &FromNum{Val: &SumOf{A: V("i"), B: I(1)}}},
+				&assign.SetValue{
+					Target: assign.Variable("i"),
+					Value:  &assign.FromNumber{Value: &SumOf{A: assign.Variable("i"), B: I(1)}}},
 			)},
 	); !errors.Is(e, MaxLoopIterations) {
 		t.Fatal(e)

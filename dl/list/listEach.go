@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -13,27 +14,29 @@ import (
 
 func (op *ListEach) Execute(run rt.Runtime) (err error) {
 	if e := op.forEach(run); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	}
 	return
 }
 
 func (op *ListEach) forEach(run rt.Runtime) (err error) {
-	if vs, e := safe.GetAssignedValue(run, op.List); e != nil {
+	if vs, e := assign.GetSafeAssignment(run, op.List); e != nil {
 		err = e
+	} else if !affine.IsList(vs.Affinity()) {
+		err = errutil.New("not a list")
 	} else if cnt, otherwise := vs.Len(), op.Else; otherwise != nil && cnt == 0 {
 		err = otherwise.Branch(run)
 	} else if cnt > 0 {
-		if it := op.As; it == nil {
+		if it := op.As; len(it) == 0 {
+			// fix: a more robust check? an assembly check?
 			err = errutil.New("list iterator was undefined")
-		} else if itAff, elAff := it.Affinity(), affine.Element(vs.Affinity()); itAff != elAff {
-			err = errutil.Fmt("iterator of %s doesnt support elements of %s", itAff, elAff)
 		} else {
 			// could cache this -- just trying to keep it simple right now.
-			// hopefully could live right in the db.
+			// maybe this type could live in the db.
 			const el, index, first, last = 0, 1, 2, 3
+			itAff, itType := affine.Element(vs.Affinity()), vs.Type()
 			ls := g.NewAnonymousRecord(run, []g.Field{
-				{Name: it.Name(), Affinity: itAff, Type: vs.Type()},
+				{Name: it, Affinity: itAff, Type: itType},
 				{Name: "index", Affinity: affine.Number},
 				{Name: "first", Affinity: affine.Bool},
 				{Name: "last", Affinity: affine.Bool},

@@ -6,65 +6,49 @@
         "thingaverse",
         [
           {
-            "Say:": {
-              "RenderTemplate:": "{the: .flower}: {print_status:.flower}."
-            }
+            "Say:": "{the: .flower}: {print_status:.flower}."
           },
           {
             "Expect output:": "the flower: (being worn)."
           },
           {
-            "Say:": {
-              "RenderTemplate:": "{the: .headlamp}: {print_status:.headlamp}."
-            }
+            "Say:": "{the: .headlamp}: {print_status:.headlamp}."
           },
           {
             "Expect output:": "the headlamp: (providing light and being worn)."
           },
           {
-            "Say:": {
-              "RenderTemplate:": "{the: .secrets}: {print_status:.secrets}."
-            }
+            "Say:": "{the: .secrets}: {print_status:.secrets}."
           },
           {
             "Expect output:": "the book of secrets: (closed and locked)."
           },
           {
-            "Say:": {
-              "RenderTemplate:": "{the: .wisdom}: {print_status:.wisdom true}."
-            }
+            "Say:": "{the: .wisdom}: {print_status:.wisdom true}."
           },
           {
             "Expect output:": "the book of wisdom: (open but empty)."
           },
           {
-            "Say:": {
-              "RenderTemplate:": "{the: .clutch}: {print_status:.clutch}."
-            }
+            "Say:": "{the: .clutch}: {print_status:.clutch}."
           },
           {
             "Expect output:": "the clutch: (open)."
           },
           {
-            "Say:": {
-              "RenderTemplate:": "{the: .purse}: {print_status:.purse}."
-            }
+            "Say:": "{the: .purse}: {print_status:.purse}."
           },
           {
             "Expect output:": "the purse: (open)."
           },
           {
-            "Say:": {
-              "RenderTemplate:": "{the: .flashlight}: {print_status:.flashlight}."
-            }
+            "Say:": "{the: .flashlight}: {print_status:.flashlight}."
           },
           {
             "Expect output:": "the flashlight: (providing light)."
           },
           {
-            "Say:": {
-              "RenderTemplate:": "{the: .coin}: {print_status:.coin}."
-            }
+            "Say:": "{the: .coin}: {print_status:.coin}."
           },
           {
             "Expect output:": "the coin: ."
@@ -82,7 +66,7 @@
         [
           {
             "PrintInventory actor:": {
-              "FromTxt:": {
+              "FromText:": {
                 "IdOf:": "Mildred"
               }
             }

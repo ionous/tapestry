@@ -5,81 +5,11 @@
     {
       "Group contains:": [
         {
-          "Spec:slots:groups:with flow:": [
-            "render_exp",
-            "text_eval",
-            "internal",
-            {
-              "Flow uses:": [
-                {
-                  "Term:name:type:": [
-                    "_",
-                    "expression",
-                    "text_eval"
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
           "--": [
-            "in template phrases, picks between record variables, object variables, and named global objects.",
-            "ex. could be \"ringBearer\", \"SamWise\", or \"frodo\""
-          ],
-          "Spec:slots:groups:with flow:": [
-            "render_field",
-            "from_source_fields",
-            "internal",
-            {
-              "Flow uses:": [
-                {
-                  "Term:name:type:": [
-                    "_",
-                    "name",
-                    "text_eval"
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:with str:": [
-            "render_flags",
-            {
-              "Str exclusively:uses:": [
-                true,
-                [
-                  {
-                    "Option:label:": [
-                      "render_as_var",
-                      "as_var"
-                    ]
-                  },
-                  {
-                    "Option:label:": [
-                      "render_as_obj",
-                      "as_obj"
-                    ]
-                  },
-                  {
-                    "Option:label:": [
-                      "render_as_any",
-                      "as_any"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": [
-            "handles changing a template like {.boombip} into text.",
-            "if the name is a variable containing an object name: return the printed object name ( via \"print name\" )",
-            "if the name is a variable with some other text: return that text.",
-            "if the name isn't a variable but refers to some object: return that object's printed object name.",
+            "Handles changing a template like {.boombip} into text.",
+            "If the name is a variable containing an object name: return the printed object name ( via \"print name\" );",
+            "if the name is a variable with some other text: return that text;",
+            "if the name isn't a variable but refers to some object: return that object's printed object name;",
             "otherwise, its an error."
           ],
           "Spec:slots:groups:with flow:": [
@@ -100,16 +30,83 @@
           ]
         },
         {
+          "--": "Used with render pattern for arguments of unknown type.",
+          "Spec:groups:with slot:": [
+            "render_eval",
+            "internal",
+            {
+              "Slot": true
+            }
+          ]
+        },
+        {
           "--": [
-            "printing is generally an activity b/c say is an activity",
-            "and we want the ability to say several things in series."
+            "Pull a value from name that might refer either to a variable, or to an object.",
+            "If the name is an object, returns the object id."
+          ],
+          "Spec:slots:groups:with flow:": [
+            "render_ref",
+            [
+              "bool_eval",
+              "number_eval",
+              "text_eval",
+              "record_eval",
+              "num_list_eval",
+              "text_list_eval",
+              "record_list_eval",
+              "render_eval"
+            ],
+            "internal",
+            {
+              "Flow uses:": [
+                {
+                  "Term:name:type:": [
+                    "_",
+                    "name",
+                    "text_eval"
+                  ]
+                },
+                {
+                  "Term:optional:repeats:": [
+                    "dot",
+                    true,
+                    true
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "Pull a value from an assignment of unknown affinity."
+          ],
+          "Spec:slots:groups:with flow:": [
+            "render_value",
+            "render_eval",
+            "internal",
+            {
+              "Flow uses:": {
+                "Term:name:type:": [
+                  "_",
+                  "value",
+                  "assignment"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "--": [
+            "A version of core's call pattern",
+            "that figures out how to evaluate its arguments at runtime."
           ],
           "Spec:slots:groups:with flow:": [
             "render_pattern",
             [
-              "assignment",
               "bool_eval",
-              "text_eval"
+              "text_eval",
+              "render_eval"
             ],
             "internal",
             {
@@ -119,8 +116,15 @@
                   {
                     "Term:name:type:": [
                       "_",
-                      "call",
-                      "call_pattern"
+                      "pattern_name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:type:repeats:": [
+                      "render",
+                      "render_eval",
+                      true
                     ]
                   }
                 ]
@@ -129,15 +133,10 @@
           ]
         },
         {
-          "--": "returns the value of a variable or the id of an object.",
+          "--": "Generate text in a replaceable manner.",
           "Spec:slots:groups:with flow:": [
-            "render_ref",
-            [
-              "assignment",
-              "bool_eval",
-              "number_eval",
-              "text_eval"
-            ],
+            "render_response",
+            ["execute", "text_eval"],
             "internal",
             {
               "Flow uses:": [
@@ -145,13 +144,13 @@
                   "Term:name:type:": [
                     "_",
                     "name",
-                    "variable_name"
+                    "text"
                   ]
                 },
                 {
                   "Term:type:": [
-                    "flags",
-                    "render_flags"
+                    "text",
+                    "text_eval"
                   ]
                 }
               ]

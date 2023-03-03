@@ -17,7 +17,7 @@ import (
 // verify pattern declaration generate the simplest of pattern ephemera
 func TestPatternImport(t *testing.T) {
 	patternDecl := &story.PatternDecl{
-		Name: P("corral"),
+		PatternName: P("corral"),
 	}
 	var els []eph.Ephemera
 	k := imp.NewImporter(collectEphemera(&els), storyMarshaller)
@@ -26,7 +26,7 @@ func TestPatternImport(t *testing.T) {
 	} else {
 		expect := []eph.Ephemera{
 			&eph.EphPatterns{
-				Name: "corral",
+				PatternName: "corral",
 			},
 		}
 		if diff := pretty.Diff(els, expect); len(diff) > 0 {
@@ -39,7 +39,7 @@ func TestPatternImport(t *testing.T) {
 // verify pattern parameter declarations generate pattern parameter ephemera
 func TestPatternParameterImport(t *testing.T) {
 	patternVariables := &story.PatternDecl{
-		Name: core.PatternName{Str: "corral"},
+		PatternName: "corral",
 		Params: []story.Field{&story.TextField{
 			Name: "pet",
 			Type: "animal",
@@ -52,7 +52,7 @@ func TestPatternParameterImport(t *testing.T) {
 	} else {
 		expect := []eph.Ephemera{
 			&eph.EphPatterns{
-				Name: "corral",
+				PatternName: "corral",
 				Params: []eph.EphParams{{
 					Affinity: eph.Affinity{eph.Affinity_Text},
 					Name:     "pet",
@@ -86,15 +86,15 @@ func TestPatternRuleImport(t *testing.T) {
 			// &eph.EphPatterns{	Name: "example" },
 			&eph.EphRules{
 				// the rules are for the named pattern.
-				Name: "example",
+				PatternName: "example",
 				// "always" was specified as the guard.
 				Filter: &core.Always{},
 				// this is the default timing:
 				When: eph.EphTiming{eph.EphTiming_During},
 				// exe is exactly what was specified:
 				Exe: []rt.Execute{
-					&core.SayText{Text: T("hello")},
-					&core.SayText{Text: T("hello")},
+					&core.PrintText{Text: T("hello")},
+					&core.PrintText{Text: T("hello")},
 				},
 			},
 		}
@@ -109,8 +109,8 @@ func TestPatternRuleImport(t *testing.T) {
 var _pattern_actions = map[string]interface{}{
 	"type": "pattern_actions",
 	"value": map[string]interface{}{
-		"$NAME": map[string]interface{}{
-			"type":  "pattern_name",
+		"$PATTERN_NAME": map[string]interface{}{
+			"type":  "text",
 			"value": "example",
 		},
 		"$RULES": []interface{}{

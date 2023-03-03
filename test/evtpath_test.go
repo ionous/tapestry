@@ -50,15 +50,15 @@ func TestEventPath(t *testing.T) {
 			}
 		}
 		if diff := pretty.Diff(got, []string{
-			"pen-1-Prefix", "pen-0-Prefix", "devices-1-Prefix", "devices-0-Prefix",
+			"pen-1-Prefix", "pen-0-Prefix", "devices-1-Prefix", "devices-0-Prefix", "things-1-Prefix", "things-0-Prefix",
 			"table-1-Prefix", "table-0-Prefix", "things-1-Prefix", "things-0-Prefix",
-			"pen-1-Infix", "pen-0-Infix", "devices-1-Infix", "devices-0-Infix",
+			"pen-1-Infix", "pen-0-Infix", "devices-1-Infix", "devices-0-Infix", "things-1-Infix", "things-0-Infix",
 			// this is the most questionable row.
 			// do we really want to visit rules for the table if the pen is the object in question?
 			"table-1-Infix", "table-0-Infix", "things-1-Infix", "things-0-Infix",
-			"pen-1-Postfix", "pen-0-Postfix", "devices-1-Postfix", "devices-0-Postfix",
+			"pen-1-Postfix", "pen-0-Postfix", "devices-1-Postfix", "devices-0-Postfix", "things-1-Postfix", "things-0-Postfix",
 			"table-1-Postfix", "table-0-Postfix", "things-1-Postfix", "things-0-Postfix",
-			"pen-1-After", "pen-0-After", "devices-1-After", "devices-0-After",
+			"pen-1-After", "pen-0-After", "devices-1-After", "devices-0-After", "things-1-After", "things-0-After",
 			"table-1-After", "table-0-After", "things-1-After", "things-0-After"}); len(diff) > 0 {
 			t.Fatal(got)
 		}

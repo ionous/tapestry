@@ -40,10 +40,11 @@ type Runtime interface {
 	GetKindByName(name string) (*g.Kind, error)
 	// return the runtime rules matching the passed pattern and target
 	GetRules(pattern, target string, pflags *Flags) ([]Rule, error)
-	// run the named pattern; add can be blank for execute style patterns.
-	Call(name string, aff affine.Affinity, args []Arg) (g.Value, error)
+	// run the pattern defined by the passed record.
+	// passes the expected return because patterns can be called in ambiguous context ( ex. template expressions )
+	Call(pat *g.Record, expectedReturn affine.Affinity) (g.Value, error)
 	// trigger the named event, passing the objects to visit: target first, root-most last.
-	Send(name string, up []string, arg []Arg) (g.Value, error)
+	Send(pat *g.Record, up []string) (g.Value, error)
 	// returns a list, even for one-to-one relationships
 	RelativesOf(a, relation string) (g.Value, error)
 	// returns a list, even for one-to-one relationships
@@ -52,14 +53,14 @@ type Runtime interface {
 	RelateTo(a, b, relation string) error
 	// modifies the behavior of Get/SetField meta.Variable
 	VariableStack
-	// various runtime objects (ex. nouns, kinds, etc. ) store data addressed by name.
+	// various runtime objects (ex. nouns, kinds, etc.) store data addressed by name.
 	// the objects and their fields depend on implementation and context.
 	// see package meta for a variety of common objects.
-	GetField(meta, field string) (g.Value, error)
+	GetField(object, field string) (g.Value, error)
 	// store, or at least attempt to store, the passed value at the named field in the named object.
 	// it may return an error if the value is not of a compatible type,
 	// if its considered to be read-only, or if there is no predeclared value of that name.
-	SetField(meta, field string, value g.Value) error
+	SetField(object, field string, value g.Value) error
 	// turn single words into their plural variants, and vice-versa
 	PluralOf(single string) string
 	SingularOf(plural string) string

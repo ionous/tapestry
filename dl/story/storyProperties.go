@@ -1,9 +1,8 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
-	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 type Field interface {
@@ -18,9 +17,9 @@ func (op *AspectField) GetParam() eph.EphParams {
 	return eph.AspectParam(op.Aspect)
 }
 func (op *BoolField) GetParam() eph.EphParams {
-	var init rt.Assignment
+	var init assign.Assignment
 	if i := op.Initially; i != nil {
-		init = &core.FromBool{Val: i}
+		init = &assign.FromBool{Value: i}
 	}
 	return eph.EphParams{
 		Name:      op.Name,
@@ -31,9 +30,9 @@ func (op *BoolField) GetParam() eph.EphParams {
 }
 
 func (op *NumberField) GetParam() eph.EphParams {
-	var init rt.Assignment
+	var init assign.Assignment
 	if i := op.Initially; i != nil {
-		init = &core.FromNum{Val: i}
+		init = &assign.FromNumber{Value: i}
 	}
 	return eph.EphParams{
 		Name:      op.Name,
@@ -44,9 +43,9 @@ func (op *NumberField) GetParam() eph.EphParams {
 }
 
 func (op *TextField) GetParam() eph.EphParams {
-	var init rt.Assignment
+	var init assign.Assignment
 	if i := op.Initially; i != nil {
-		init = &core.FromText{Val: i}
+		init = &assign.FromText{Value: i}
 	}
 	return eph.EphParams{
 		Name:      op.Name,
@@ -56,10 +55,22 @@ func (op *TextField) GetParam() eph.EphParams {
 	}
 }
 
-func (op *NumListField) GetParam() eph.EphParams {
-	var init rt.Assignment
+func (op *RecordField) GetParam() eph.EphParams {
+	var init assign.Assignment // init here for records is usually going to be a pattern.
 	if i := op.Initially; i != nil {
-		init = &core.FromNumbers{Vals: i}
+		init = &assign.FromRecord{Value: i}
+	}
+	return eph.EphParams{
+		Name:      op.Name,
+		Affinity:  eph.Affinity{eph.Affinity_Record},
+		Class:     op.Type,
+		Initially: init,
+	}
+}
+func (op *NumListField) GetParam() eph.EphParams {
+	var init assign.Assignment
+	if i := op.Initially; i != nil {
+		init = &assign.FromNumList{Value: i}
 	}
 	return eph.EphParams{
 		Name:      op.Name,
@@ -70,9 +81,9 @@ func (op *NumListField) GetParam() eph.EphParams {
 }
 
 func (op *TextListField) GetParam() eph.EphParams {
-	var init rt.Assignment
+	var init assign.Assignment
 	if i := op.Initially; i != nil {
-		init = &core.FromTexts{Vals: i}
+		init = &assign.FromTextList{Value: i}
 	}
 	return eph.EphParams{
 		Name:      op.Name,
@@ -82,23 +93,12 @@ func (op *TextListField) GetParam() eph.EphParams {
 	}
 }
 
-func (op *RecordField) GetParam() eph.EphParams {
-	var init rt.Assignment
-	if i := op.Initially; i != nil {
-		init = &core.FromRecord{Val: i}
-	}
-	return eph.EphParams{
-		Name:      op.Name,
-		Affinity:  eph.Affinity{eph.Affinity_Record},
-		Class:     op.Type,
-		Initially: init,
-	}
-}
-
 func (op *RecordListField) GetParam() eph.EphParams {
-	var init rt.Assignment
+	// FIX: always assign the initializer, and use it to determine affinity
+	// instead of the hard coded strings
+	var init assign.Assignment
 	if i := op.Initially; i != nil {
-		init = &core.FromRecords{Vals: i}
+		init = &assign.FromRecordList{Value: i}
 	}
 	return eph.EphParams{
 		Name:      op.Name,

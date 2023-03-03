@@ -3,6 +3,7 @@ package list_test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -16,7 +17,7 @@ func TestReduce(t *testing.T) {
 	type Fruit struct {
 		Name string
 	}
-	type Values struct {
+	type Locals struct {
 		Fruits  []Fruit
 		Results string
 	}
@@ -25,8 +26,8 @@ func TestReduce(t *testing.T) {
 		Out string
 	}
 	var kinds testutil.Kinds
-	kinds.AddKinds((*Fruit)(nil), (*Values)(nil), (*Reduce)(nil))
-	values := kinds.NewRecord("values")
+	kinds.AddKinds((*Fruit)(nil), (*Locals)(nil), (*Reduce)(nil))
+	locals := kinds.NewRecord("locals")
 	if k, e := kinds.GetKindByName("fruit"); e != nil {
 		t.Fatal(e)
 	} else {
@@ -38,7 +39,7 @@ func TestReduce(t *testing.T) {
 			}
 			fruits = append(fruits, one)
 		}
-		if e := values.SetNamedField("fruits", g.RecordsFrom(fruits, k.Name())); e != nil {
+		if e := locals.SetNamedField("fruits", g.RecordsFrom(fruits, k.Name())); e != nil {
 			t.Fatal(e)
 		}
 	}
@@ -50,13 +51,13 @@ func TestReduce(t *testing.T) {
 		testutil.Runtime{
 			Kinds: &kinds,
 			Stack: []rt.Scope{
-				g.RecordOf(values),
+				g.RecordOf(locals),
 			},
 		},
 	}
 	if e := reduce.Execute(&lt); e != nil {
 		t.Fatal(e)
-	} else if res, e := values.GetNamedField("results"); e != nil {
+	} else if res, e := locals.GetNamedField("results"); e != nil {
 		t.Fatal(e)
 	} else {
 		out := res.String()
@@ -70,9 +71,9 @@ func TestReduce(t *testing.T) {
 }
 
 var reduce = list.ListReduce{
-	FromList:     &core.FromRecords{Vals: V("fruits")},
-	IntoValue:    W("results"),
-	UsingPattern: W("reduce"),
+	Target:      assign.Variable("results"),
+	List:        &assign.FromRecordList{Value: assign.Variable("fruits")},
+	PatternName: W("reduce"),
 }
 
 // join each record in turn
@@ -81,12 +82,15 @@ var reduceRecords = testpat.Pattern{
 	Return: "out",
 	Labels: []string{"in", "out"},
 	Rules: []rt.Rule{{
-		Execute: core.MakeActivity(&core.Assign{
-			Var: N("out"),
-			From: &core.FromText{Val: &core.Join{Sep: T(", "), Parts: []rt.TextEval{
-				V("out"),
-				&core.GetAtField{Field: W("name"), From: &core.FromVar{Var: N("in")}},
-			}}},
-		}),
+		Execute: core.MakeActivity(
+			&assign.SetValue{
+				Target: assign.Variable("out"),
+				Value: &assign.FromText{Value: &core.Join{
+					Sep: T(", "),
+					Parts: []rt.TextEval{
+						assign.Variable("out"),
+						assign.Variable("in", "name"),
+					}}}},
+		),
 	}},
 }

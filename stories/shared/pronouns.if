@@ -19,12 +19,10 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": "you"
+                  "Print:": "you"
                 }
               ]
             ]
@@ -57,12 +55,10 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": "it"
+                  "Print:": "it"
                 }
               ]
             ]
@@ -70,14 +66,14 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
+                "Object:field:": [
                   "@noun",
                   "plural named"
                 ]
               },
               [
                 {
-                  "Say:": "they"
+                  "Print:": "they"
                 }
               ]
             ]
@@ -107,12 +103,10 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": "that"
+                  "Print:": "that"
                 }
               ]
             ]
@@ -120,14 +114,14 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
+                "Object:field:": [
                   "@noun",
                   "plural named"
                 ]
               },
               [
                 {
-                  "Say:": "these"
+                  "Print:": "these"
                 }
               ]
             ]

@@ -102,11 +102,9 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
                 ]
               }
             ]
@@ -116,21 +114,29 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": "@actor"
+                }
               },
               [
                 {
                   "If:from:and:does:else:": [
                     "response",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanHandle actor:action:noun:otherNoun:": [
-                          "@actor",
                           {
-                            "FromTxt:": "showing"
+                            "FromText:": "@actor"
                           },
-                          "@noun",
-                          "@other noun"
+                          {
+                            "FromText:": "showing"
+                          },
+                          {
+                            "FromText:": "@noun"
+                          },
+                          {
+                            "FromText:": "@other noun"
+                          }
                         ]
                       }
                     },
@@ -141,20 +147,24 @@
                     },
                     [
                       {
-                        "Say:": "@response"
+                        "Print:": "@response"
                       }
                     ],
                     {
                       "ElseIf:from:and:does:else:": [
                         "result",
                         {
-                          "FromTxt:": {
+                          "FromText:": {
                             "CanReach actor:action:noun:": [
-                              "@actor",
                               {
-                                "FromTxt:": "showing"
+                                "FromText:": "@actor"
                               },
-                              "@other noun"
+                              {
+                                "FromText:": "showing"
+                              },
+                              {
+                                "FromText:": "@other noun"
+                              }
                             ]
                           }
                         },
@@ -165,16 +175,22 @@
                         },
                         [
                           {
-                            "Say:": "@response"
+                            "Print:": "@response"
                           }
                         ],
                         {
                           "ElseDo does:": [
                             {
                               "ReportShowing actor:noun:otherNoun:": [
-                                "@actor",
-                                "@noun",
-                                "@other noun"
+                                {
+                                  "FromText:": "@actor"
+                                },
+                                {
+                                  "FromText:": "@noun"
+                                },
+                                {
+                                  "FromText:": "@other noun"
+                                }
                               ]
                             }
                           ]
@@ -223,19 +239,15 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player shows",
-                      {
-                        "RenderTemplate:": "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "player shows",
+                    {
+                      "Say:": "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
+                    }
+                  ]
                 }
               ]
             ]
@@ -244,19 +256,19 @@
             "PatternRule:does:": [
               {
                 "Not:": {
-                  "IsPlayer obj:": "@actor"
+                  "IsPlayer obj:": {
+                    "FromText:": "@actor"
+                  }
                 }
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "someone else shows",
-                      {
-                        "RenderTemplate:": "{The: .actor|capitalize!} shows off {the: .noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "someone else shows",
+                    {
+                      "Say:": "{The: .actor|capitalize!} shows off {the: .noun}."
+                    }
+                  ]
                 }
               ]
             ]

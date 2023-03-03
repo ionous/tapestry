@@ -23,16 +23,16 @@
                     "Option:": "number"
                   },
                   {
-                    "Option:": "num_list"
-                  },
-                  {
                     "Option:": "text"
                   },
                   {
-                    "Option:": "text_list"
+                    "Option:": "record"
                   },
                   {
-                    "Option:": "record"
+                    "Option:": "num_list"
+                  },
+                  {
+                    "Option:": "text_list"
                   },
                   {
                     "Option:": "record_list"
@@ -447,7 +447,7 @@
                   {
                     "Term:name:type:": [
                       "pattern",
-                      "name",
+                      "pattern_name",
                       "text"
                     ]
                   },
@@ -606,7 +606,7 @@
                   {
                     "Term:name:type:": [
                       "pattern",
-                      "name",
+                      "pattern_name",
                       "text"
                     ]
                   },

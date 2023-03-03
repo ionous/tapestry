@@ -2,14 +2,10 @@ package internal
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/parser"
-	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"github.com/ionous/errutil"
 )
 
@@ -81,32 +77,15 @@ func (p *Parser) Step(words string) (ret *Result, err error) {
 				} else {
 					// multi-actions are probably repeats or something
 					// or maybe get passed lists of objects hrmm.
-					objs := res.Objects()
-					var args argList
-					out := new(Result)
-					out.Action = act.Name
-					if cnt := len(objs); true {
-						args = make([]rt.Arg, 0, cnt+1)
-						args.add(
-							&core.FromText{
-								Val: &core.IdOf{
-									Object: &literal.TextValue{Value: "player"},
-								}})
-						//
-						out.Nouns = make([]string, cnt)
-						for i, obj := range objs {
-							n := obj.String()
-							out.Nouns[i] = n
-							args.add(
-								&core.FromValue{g.StringOf(n)},
-							)
-						}
-					}
 					// send these nouns to the runtime
-					if e := pt.Play(act.Name, args); e != nil {
+					nouns := res.Objects()
+					if e := pt.Play(act.Name, "player", nouns); e != nil {
 						err = errutil.New(e, "for", res)
 					} else {
-						ret = out
+						ret = &Result{
+							Action: act.Name,
+							Nouns:  nouns,
+						}
 					}
 				}
 
@@ -128,11 +107,8 @@ func (p *Parser) Step(words string) (ret *Result, err error) {
 	return
 } // end func
 
-type argList []rt.Arg
+type argList []assign.Arg
 
-func (l *argList) add(a rt.Assignment) {
-	(*l) = append((*l), rt.Arg{
-		Name: "$" + strconv.Itoa(len((*l))+1),
-		From: a,
-	})
+func (l *argList) add(a assign.Assignment) {
+	(*l) = append((*l), assign.Arg{Value: a})
 }

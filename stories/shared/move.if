@@ -30,9 +30,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "If:does:else:": [
@@ -41,13 +39,15 @@
                     },
                     [
                       {
-                        "Let:be:": [
-                          "response",
+                        "Set:from:": [
+                          "@response",
                           {
-                            "FromTxt:": {
-                              "Response:text:": [
+                            "FromText:": {
+                              "Print response:with:": [
                                 "You can't move nothing.",
-                                "You can't move nothing."
+                                {
+                                  "Say:": "You can't move nothing."
+                                }
                               ]
                             }
                           }
@@ -66,13 +66,15 @@
                         },
                         [
                           {
-                            "Let:be:": [
-                              "response",
+                            "Set:from:": [
+                              "@response",
                               {
-                                "FromTxt:": {
-                                  "Response:text:": [
+                                "FromText:": {
+                                  "Print response:with:": [
                                     "You can only move things.",
-                                    "You can only move things."
+                                    {
+                                      "Say:": "You can only move things."
+                                    }
                                   ]
                                 }
                               }
@@ -84,23 +86,23 @@
                             {
                               "If:does:": [
                                 {
-                                  "Get:from:": [
-                                    "worn",
-                                    {
-                                      "VarFields:": "obj"
-                                    }
+                                  "Object:field:": [
+                                    "@obj",
+                                    "worn"
                                   ]
                                 },
                                 [
                                   {
-                                    "Put:from:at:": [
+                                    "Set:from:": [
                                       {
-                                        "VarField:": "obj"
+                                        "Object:field:": [
+                                          "@obj",
+                                          "not worn"
+                                        ]
                                       },
                                       {
                                         "FromBool:": true
-                                      },
-                                      "not worn"
+                                      }
                                     ]
                                   }
                                 ]
@@ -113,7 +115,9 @@
                                     "@dest",
                                     "other_than",
                                     {
-                                      "ParentOf obj:": "@obj"
+                                      "ParentOf obj:": {
+                                        "FromText:": "@obj"
+                                      }
                                     }
                                   ]
                                 },
@@ -129,11 +133,11 @@
                               ]
                             },
                             {
-                              "Let:be:": [
-                                "response",
+                              "Set:from:": [
+                                "@response",
                                 {
-                                  "FromTxt:": {
-                                    "Response:text:": [
+                                  "FromText:": {
+                                    "Print response:with:": [
                                       "okay",
                                       ""
                                     ]
@@ -175,9 +179,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "If:does:": [
@@ -186,22 +188,27 @@
                     },
                     [
                       {
-                        "Log:": {
-                          "FromTxt:": "You can't remove nothing from play."
-                        }
+                        "Log:value:": [
+                          "debug",
+                          {
+                            "FromText:": "You can't remove nothing from play."
+                          }
+                        ]
                       }
                     ]
                   ]
                 },
                 {
-                  "Put:from:at:": [
+                  "Set:from:": [
                     {
-                      "VarField:": "obj"
+                      "Object:field:": [
+                        "@obj",
+                        "not worn"
+                      ]
                     },
                     {
                       "FromBool:": true
-                    },
-                    "not worn"
+                    }
                   ]
                 },
                 {
@@ -248,9 +255,7 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "If:does:": [
@@ -258,7 +263,9 @@
                       "Not:": {
                         "Cmp:is:txt:": [
                           {
-                            "HolderOf obj:": "@obj"
+                            "HolderOf obj:": {
+                              "FromText:": "@obj"
+                            }
                           },
                           "equal_to",
                           "@actor"
@@ -268,8 +275,12 @@
                     [
                       {
                         "MoveObject obj:dest:": [
-                          "@obj",
-                          "@actor"
+                          {
+                            "FromText:": "@obj"
+                          },
+                          {
+                            "FromText:": "@actor"
+                          }
                         ]
                       }
                     ]
@@ -280,7 +291,9 @@
                     {
                       "Cmp:is:txt:": [
                         {
-                          "HolderOf obj:": "@obj"
+                          "HolderOf obj:": {
+                            "FromText:": "@obj"
+                          }
                         },
                         "equal_to",
                         "@actor"
@@ -288,14 +301,16 @@
                     },
                     [
                       {
-                        "Put:from:at:": [
+                        "Set:from:": [
                           {
-                            "VarField:": "obj"
+                            "Object:field:": [
+                              "@obj",
+                              "not worn"
+                            ]
                           },
                           {
                             "FromBool:": true
-                          },
-                          "worn"
+                          }
                         ]
                       }
                     ]

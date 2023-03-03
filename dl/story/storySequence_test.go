@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/story"
@@ -27,11 +28,11 @@ func TestImportSequence(t *testing.T) {
 	} else if e := din.Decode(&cmd, tapestry.Registry(), b); e != nil {
 		t.Fatal(e)
 	} else {
-		p := core.FromText{Val: &cmd} // wrap the cycle text in a slot since that's the level PreImport operates on
+		p := assign.FromText{Value: &cmd} // wrap the cycle text in a slot since that's the level PreImport operates on
 		if asm.ImportStory(k, t.Name(), &p); e != nil {
 			t.Fatal(e)
-		} else if diff := pretty.Diff(p.Val, &_import_target); len(diff) > 0 {
-			t.Fatal(pretty.Print("want:", _import_target, "have:", p.Val))
+		} else if diff := pretty.Diff(p.Value, &_import_target); len(diff) > 0 {
+			t.Fatal(pretty.Print("want:", _import_target, "have:", p.Value))
 		}
 	}
 }

@@ -35,8 +35,8 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "matching",
+                  "Set:from:": [
+                    "@matching",
                     {
                       "FromBool:": true
                     }
@@ -55,8 +55,8 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "matching",
+                  "Set:from:": [
+                    "@matching",
                     {
                       "FromBool:": false
                     }
@@ -75,8 +75,8 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "matching",
+                  "Set:from:": [
+                    "@matching",
                     {
                       "FromBool:": true
                     }
@@ -93,11 +93,11 @@
         "vowel tests",
         [
           {
-            "Say:": {
+            "Print:": {
               "Txt if:then:else:": [
                 {
                   "StartsWithVowel text:": {
-                    "FromTxt:": "house"
+                    "FromText:": "house"
                   }
                 },
                 "error: house doesn't start with a vowel.",
@@ -109,11 +109,11 @@
             "Expect output:": "ok."
           },
           {
-            "Say:": {
+            "Print:": {
               "Txt if:then:else:": [
                 {
                   "StartsWithVowel text:": {
-                    "FromTxt:": "hour"
+                    "FromText:": "hour"
                   }
                 },
                 "ok.",
@@ -125,11 +125,11 @@
             "Expect output:": "ok."
           },
           {
-            "Say:": {
+            "Print:": {
               "Txt if:then:else:": [
                 {
                   "StartsWithVowel text:": {
-                    "FromTxt:": "beta"
+                    "FromText:": "beta"
                   }
                 },
                 "error: beta doesn't start with a vowel.",
@@ -141,11 +141,11 @@
             "Expect output:": "ok."
           },
           {
-            "Say:": {
+            "Print:": {
               "Txt if:then:else:": [
                 {
                   "StartsWithVowel text:": {
-                    "FromTxt:": "alpha"
+                    "FromText:": "alpha"
                   }
                 },
                 "ok.",

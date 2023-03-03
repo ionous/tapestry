@@ -18,7 +18,7 @@ func TestPatternRules(t *testing.T) {
 		append(append([]Ephemera{
 			&EphKinds{Kinds: kindsOf.Pattern.String()}, // declare the patterns table
 			&EphPatterns{
-				Name: "p",
+				PatternName: "p",
 				Result: &EphParams{
 					Name:     "success",
 					Affinity: Affinity{Affinity_Bool},
@@ -59,10 +59,10 @@ func TestPatternRules(t *testing.T) {
 func makeRules(pattern, group, timing string, cnt int) (ret []Ephemera) {
 	for i := 0; i < cnt; i++ {
 		ret = append(ret, &EphRules{
-			Name:   pattern,
-			Filter: filter{T("filter-" + group + strconv.Itoa(i))},
-			When:   EphTiming{timing},
-			Exe:    []rt.Execute{prog{T("prog-" + group + strconv.Itoa(i))}},
+			PatternName: pattern,
+			Filter:      filter{T("filter-" + group + strconv.Itoa(i))},
+			When:        EphTiming{timing},
+			Exe:         []rt.Execute{prog{T("prog-" + group + strconv.Itoa(i))}},
 		})
 	}
 	return

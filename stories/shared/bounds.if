@@ -29,27 +29,23 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Put:into:atFront:": [
-                    "@obj",
+                  "Push:into:atFront:": [
                     {
-                      "IntoTxts:": "bounds"
+                      "FromText:": "@obj"
                     },
-                    {
-                      "Always": true
-                    }
+                    "@bounds",
+                    true
                   ]
                 },
                 {
-                  "Put:into:": [
-                    "@obj",
+                  "Push:into:": [
                     {
-                      "IntoTxts:": "queue"
-                    }
+                      "FromText:": "@obj"
+                    },
+                    "@queue"
                   ]
                 },
                 {
@@ -57,7 +53,9 @@
                     {
                       "Cmp:is:num:": [
                         {
-                          "Len:": "@queue"
+                          "Len:": {
+                            "FromTextList:": "@queue"
+                          }
                         },
                         "greater_than",
                         0
@@ -66,38 +64,36 @@
                     [
                       {
                         "Erasing:atFront:as:does:": [
-                          {
-                            "VarOfTxts:": "queue"
-                          },
-                          {
-                            "Always": true
-                          },
+                          "@queue",
+                          true,
                           "enc",
                           [
                             {
                               "Repeating across:as:does:": [
                                 {
-                                  "FromTxts:": {
-                                    "ChildrenOf obj:": "@enc"
+                                  "FromTextList:": {
+                                    "ChildrenOf obj:": {
+                                      "FromText:": "@enc"
+                                    }
                                   }
                                 },
-                                {
-                                  "AsTxt:": "kid"
-                                },
+                                "kid",
                                 [
                                   {
-                                    "Put:into:": [
-                                      "@kid",
+                                    "Push:into:": [
                                       {
-                                        "IntoTxts:": "bounds"
-                                      }
+                                        "FromText:": "@kid"
+                                      },
+                                      "@bounds"
                                     ]
                                   },
                                   {
                                     "If:does:": [
                                       {
                                         "Not:": {
-                                          "FullyOpaque obj:": "@kid"
+                                          "FullyOpaque obj:": {
+                                            "FromText:": "@kid"
+                                          }
                                         }
                                       },
                                       [
@@ -105,11 +101,11 @@
                                           "Comment:": "add this kid for additional processing"
                                         },
                                         {
-                                          "Put:into:": [
-                                            "@kid",
+                                          "Push:into:": [
                                             {
-                                              "IntoTxts:": "queue"
-                                            }
+                                              "FromText:": "@kid"
+                                            },
+                                            "@queue"
                                           ]
                                         }
                                       ]

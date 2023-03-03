@@ -2,6 +2,7 @@ package list
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -9,14 +10,14 @@ import (
 
 func (op *ListSplice) Execute(run rt.Runtime) (err error) {
 	if _, _, e := op.spliceList(run, ""); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	}
 	return
 }
 
 func (op *ListSplice) GetNumList(run rt.Runtime) (ret g.Value, err error) {
 	if v, _, e := op.spliceList(run, affine.NumList); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	} else if v == nil {
 		ret = g.FloatsOf(nil)
 	} else {
@@ -24,10 +25,9 @@ func (op *ListSplice) GetNumList(run rt.Runtime) (ret g.Value, err error) {
 	}
 	return
 }
-
 func (op *ListSplice) GetTextList(run rt.Runtime) (ret g.Value, err error) {
 	if v, _, e := op.spliceList(run, affine.TextList); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	} else if v == nil {
 		ret = g.StringsOf(nil)
 	} else {
@@ -35,10 +35,9 @@ func (op *ListSplice) GetTextList(run rt.Runtime) (ret g.Value, err error) {
 	}
 	return
 }
-
 func (op *ListSplice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
 	if v, t, e := op.spliceList(run, affine.RecordList); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	} else if v == nil {
 		ret = g.RecordsFrom(nil, t)
 	} else {
@@ -47,12 +46,13 @@ func (op *ListSplice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
 	return
 }
 
+// modify a list by adding and removing elements.
 func (op *ListSplice) spliceList(run rt.Runtime, aff affine.Affinity) (retVal g.Value, retType string, err error) {
-	if els, e := safe.List(run, op.List); e != nil {
+	if root, e := assign.GetRootValue(run, op.Target); e != nil {
 		err = e
-	} else if e := safe.Check(els, aff); e != nil {
+	} else if els, e := root.GetList(run); e != nil {
 		err = e
-	} else if ins, e := safe.GetAssignedValue(run, op.Insert); e != nil {
+	} else if ins, e := assign.GetSafeAssignment(run, op.Insert); e != nil {
 		err = e
 	} else if !IsAppendable(ins, els) {
 		err = insertError{ins, els}
@@ -63,6 +63,7 @@ func (op *ListSplice) spliceList(run rt.Runtime, aff affine.Affinity) (retVal g.
 			retVal, err = els.Splice(i, j, ins)
 		}
 		if err == nil {
+			root.SetDirty(run)
 			retType = els.Type()
 		}
 	}

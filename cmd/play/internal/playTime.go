@@ -3,10 +3,11 @@ package internal
 import (
 	"log"
 
+	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/parser"
 	"git.sr.ht/~ionous/tapestry/parser/ident"
 	"git.sr.ht/~ionous/tapestry/qna"
-	"git.sr.ht/~ionous/tapestry/rt"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"github.com/ionous/errutil"
 )
 
@@ -16,7 +17,7 @@ type Playtime struct {
 	*qna.Runner
 	player   string
 	relation string
-	bounds   string
+	bounds   *g.Kind
 }
 
 func NewPlaytime(run *qna.Runner) *Playtime {
@@ -26,20 +27,54 @@ func NewPlaytime(run *qna.Runner) *Playtime {
 // the named relation should yield a single object for the named player.
 // the bounds pattern should return the objects in that player's local area.
 func NewCustomPlaytime(run *qna.Runner, player, relation, bounds string) *Playtime {
-	return &Playtime{
-		Runner:   run,
-		player:   player,
-		relation: relation,
-		bounds:   bounds,
+	if bounds, e := run.GetKindByName(bounds); e != nil {
+		panic(e)
+	} else {
+		return &Playtime{
+			Runner:   run,
+			player:   player,
+			relation: relation,
+			bounds:   bounds,
+		}
 	}
 }
 
 // step the world by running some command
-func (pt *Playtime) Play(name string, args []rt.Arg) (err error) {
+func (pt *Playtime) Play(name, player string, args []string) (err error) {
 	// future: to differentiate b/t system actions and "timed" actions,
 	// consider using naming convention: ex. #save.
-	if _, e := pt.Call(name, "", args); e != nil {
+	if k, e := pt.GetKindByName(name); e != nil {
 		err = e
+	} else if max, min := k.NumField(), len(args)+1; max < min {
+		err = errutil.New("not enough fields", min, max)
+	} else {
+		rec := k.NewRecord()
+		if e := setField(rec, 0, "player"); e != nil {
+			err = e
+		} else {
+			for i, a := range args {
+				if e := setField(rec, i+1, a); e != nil {
+					err = e
+					break
+				}
+			}
+		}
+		if err == nil {
+			if _, e := pt.Call(rec, affine.None); e != nil {
+				err = e
+			}
+		}
+	}
+	return
+}
+
+func setField(rec *g.Record, i int, a string) (err error) {
+	f := rec.Kind().Field(i)
+	// fix conversion of numbers
+	if aff := f.Affinity; aff != affine.Text {
+		err = errutil.New("field", i, "expected text, have", aff)
+	} else if e := rec.SetIndexedField(i, g.StringOf(a)); e != nil {
+		err = errutil.New("field", i, e)
 	}
 	return
 }

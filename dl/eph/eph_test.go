@@ -42,8 +42,8 @@ type Warnings []error
 // 2. raises a Fatal error if there are any unhandled warnings.
 func (w *Warnings) catch(t *testing.T) func() {
 	was := LogWarning
-	LogWarning = func(e error) {
-		(*w) = append((*w), e)
+	LogWarning = func(e any) {
+		(*w) = append((*w), e.(error))
 	}
 	return func() {
 		if len(*w) > 0 {

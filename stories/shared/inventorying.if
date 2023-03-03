@@ -16,11 +16,9 @@
               "actor",
               "object",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
                 ]
               }
             ]
@@ -30,16 +28,22 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": "@actor"
+                }
               },
               [
                 {
                   "Send:event:": [
                     {
-                      "Capture obj:": "@actor"
+                      "Capture obj:": {
+                        "FromText:": "@actor"
+                      }
                     },
                     {
-                      "Inventory actor:": "@actor"
+                      "Inventory actor:": {
+                        "FromText:": "@actor"
+                      }
                     }
                   ]
                 }
@@ -63,16 +67,16 @@
               [
                 {
                   "PatternRule:does:": [
-                    {
-                      "Always": true
-                    },
+                    true,
                     [
                       {
-                        "PrintInventory actor:": "@actor"
+                        "PrintInventory actor:": {
+                          "FromText:": "@actor"
+                        }
                       },
                       {
-                        "Let:be:": [
-                          "success",
+                        "Set:from:": [
+                          "@success",
                           {
                             "FromBool:": true
                           }
@@ -111,7 +115,9 @@
             "TextList:initially:": [
               "kids",
               {
-                "ChildrenOf obj:": "@actor"
+                "ChildrenOf obj:": {
+                  "FromText:": "@actor"
+                }
               }
             ]
           }
@@ -119,19 +125,15 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "carrying nothing",
-                      {
-                        "RenderTemplate:": "{we:|capitalize!} {are:.actor} carrying nothing."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "carrying nothing",
+                    {
+                      "Say:": "{we:|capitalize!} {are:.actor} carrying nothing."
+                    }
+                  ]
                 }
               ]
             ]
@@ -141,7 +143,9 @@
               {
                 "Cmp:is:num:": [
                   {
-                    "Len:": "@kids"
+                    "Len:": {
+                      "FromTextList:": "@kids"
+                    }
                   },
                   "greater_than",
                   0
@@ -149,17 +153,17 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "carrying something",
-                      {
-                        "RenderTemplate:": "You are carrying:"
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "carrying something",
+                    {
+                      "Say:": "You are carrying:"
+                    }
+                  ]
                 },
                 {
-                  "PrintBlocks objs:": "@kids"
+                  "PrintBlocks objs:": {
+                    "FromTextList:": "@kids"
+                  }
                 }
               ]
             ]

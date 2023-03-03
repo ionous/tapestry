@@ -18,11 +18,9 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
                 ]
               }
             ]
@@ -32,20 +30,26 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": "@actor"
+                }
               },
               [
                 {
                   "If:from:and:does:else:": [
                     "result",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanReach actor:action:noun:requiresLight:": [
-                          "@actor",
                           {
-                            "FromTxt:": "taking"
+                            "FromText:": "@actor"
                           },
-                          "@noun",
+                          {
+                            "FromText:": "taking"
+                          },
+                          {
+                            "FromText:": "@noun"
+                          },
                           {
                             "FromBool:": false
                           }
@@ -59,7 +63,7 @@
                     },
                     [
                       {
-                        "Say:": "@result"
+                        "Print:": "@result"
                       }
                     ],
                     {
@@ -69,12 +73,18 @@
                             {
                               "Send:event:": [
                                 {
-                                  "Capture obj:": "@noun"
+                                  "Capture obj:": {
+                                    "FromText:": "@noun"
+                                  }
                                 },
                                 {
                                   "Take actor:noun:": [
-                                    "@actor",
-                                    "@noun"
+                                    {
+                                      "FromText:": "@actor"
+                                    },
+                                    {
+                                      "FromText:": "@noun"
+                                    }
                                   ]
                                 }
                               ]
@@ -82,8 +92,12 @@
                             [
                               {
                                 "ReportTaking actor:noun:": [
-                                  "@actor",
-                                  "@noun"
+                                  {
+                                    "FromText:": "@actor"
+                                  },
+                                  {
+                                    "FromText:": "@noun"
+                                  }
                                 ]
                               }
                             ]
@@ -113,18 +127,20 @@
               [
                 {
                   "PatternRule:does:": [
-                    {
-                      "Always": true
-                    },
+                    true,
                     [
                       {
                         "If:from:and:does:else:": [
                           "error",
                           {
-                            "FromTxt:": {
+                            "FromText:": {
                               "MoveObject obj:dest:": [
-                                "@noun",
-                                "@actor"
+                                {
+                                  "FromText:": "@noun"
+                                },
+                                {
+                                  "FromText:": "@actor"
+                                }
                               ]
                             }
                           },
@@ -135,11 +151,11 @@
                           },
                           [
                             {
-                              "Say:": "@error"
+                              "Print:": "@error"
                             },
                             {
-                              "Let:be:": [
-                                "success",
+                              "Set:from:": [
+                                "@success",
                                 {
                                   "FromBool:": false
                                 }
@@ -149,15 +165,18 @@
                           {
                             "ElseDo does:": [
                               {
-                                "Log:": {
-                                  "FromTxt:": {
-                                    "RenderTemplate:": "{The: .actor} is taking {the: .noun}..."
+                                "Log:value:": [
+                                  "debug",
+                                  {
+                                    "FromText:": {
+                                      "Say:": "{The: .actor} is taking {the: .noun}..."
+                                    }
                                   }
-                                }
+                                ]
                               },
                               {
-                                "Let:be:": [
-                                  "success",
+                                "Set:from:": [
+                                  "@success",
                                   {
                                     "FromBool:": true
                                   }
@@ -204,19 +223,15 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player takes",
-                      {
-                        "RenderTemplate:": "Taken."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "player takes",
+                    {
+                      "Say:": "Taken."
+                    }
+                  ]
                 }
               ]
             ]
@@ -225,19 +240,19 @@
             "PatternRule:does:": [
               {
                 "Not:": {
-                  "IsPlayer obj:": "@actor"
+                  "IsPlayer obj:": {
+                    "FromText:": "@actor"
+                  }
                 }
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "someone else takes",
-                      {
-                        "RenderTemplate:": "{The: .actor|capitalize!} picks up {the: .noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "someone else takes",
+                    {
+                      "Say:": "{The: .actor|capitalize!} picks up {the: .noun}."
+                    }
+                  ]
                 }
               ]
             ]
@@ -273,14 +288,14 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
-                        "Response:text:": [
+                      "FromText:": {
+                        "Print response:with:": [
                           "can't take other people",
                           {
-                            "RenderTemplate:": "I don't suppose {the: .noun} would care for that."
+                            "Say:": "I don't suppose {the: .noun} would care for that."
                           }
                         ]
                       }
@@ -312,14 +327,14 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
-                        "Response:text:": [
+                      "FromText:": {
+                        "Print response:with:": [
                           "can't take yourself",
                           {
-                            "RenderTemplate:": "{we!|capitalize!} {are:.self} always self-possessed."
+                            "Say:": "{we!|capitalize!} {are:.self} always self-possessed."
                           }
                         ]
                       }
@@ -341,7 +356,7 @@
                     ]
                   },
                   {
-                    "Get obj:trait:": [
+                    "Object:field:": [
                       "@noun",
                       "scenery"
                     ]
@@ -350,14 +365,14 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
-                        "Response:text:": [
+                      "FromText:": {
+                        "Print response:with:": [
                           "can't take scenery",
                           {
-                            "RenderTemplate:": "{they:.noun|capitalize!} {are:.noun} hardly portable."
+                            "Say:": "{they:.noun|capitalize!} {are:.noun} hardly portable."
                           }
                         ]
                       }
@@ -379,7 +394,7 @@
                     ]
                   },
                   {
-                    "Get obj:trait:": [
+                    "Object:field:": [
                       "@noun",
                       "fixed in place"
                     ]
@@ -388,14 +403,14 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
-                        "Response:text:": [
+                      "FromText:": {
+                        "Print response:with:": [
                           "can't take what's fixed in place",
                           {
-                            "RenderTemplate:": "{they:.noun|capitalize!} {are:.noun} fixed in place."
+                            "Say:": "{they:.noun|capitalize!} {are:.noun} fixed in place."
                           }
                         ]
                       }
@@ -428,14 +443,14 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
-                        "Response:text:": [
+                      "FromText:": {
+                        "Print response:with:": [
                           "can't take nothings",
                           {
-                            "RenderTemplate:": "{we:|capitalize!} can't carry {the: .noun}."
+                            "Say:": "{we:|capitalize!} can't carry {the: .noun}."
                           }
                         ]
                       }
@@ -480,14 +495,14 @@
                   "Comment:": "Reaching up to take the noun, means the noun contains the actor."
                 },
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
-                        "Response:text:": [
+                      "FromText:": {
+                        "Print response:with:": [
                           "can't take what you're inside",
                           {
-                            "RenderTemplate:": "{We:|capitalize!} would have to get {off:.noun} first."
+                            "Say:": "{We:|capitalize!} would have to get {off:.noun} first."
                           }
                         ]
                       }
@@ -532,14 +547,14 @@
                     "If the target noun were owned by the reaching actor then the actor would be the lca.",
                     "By checking down, its *below* the lca so it's some other actor's possessions we are trying to reach."
                   ],
-                  "Let:be:": [
-                    "response",
+                  "Set:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
-                        "Response:text:": [
+                      "FromText:": {
+                        "Print response:with:": [
                           "can't take people's possessions",
                           {
-                            "RenderTemplate:": "{those: .noun|capitalize!} seems to belong to {the: .fromObj}."
+                            "Say:": "{those: .noun|capitalize!} seems to belong to {the: .fromObj}."
                           }
                         ]
                       }
@@ -579,14 +594,14 @@
               [
                 {
                   "--": "Reaching down to take the noun, means the noun contains the actor.",
-                  "Let:be:": [
-                    "response",
+                  "Set:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
-                        "Response:text:": [
+                      "FromText:": {
+                        "Print response:with:": [
                           "can't take what you're holding",
                           {
-                            "RenderTemplate:": "{we:|capitalize!} already have {those:.noun}."
+                            "Say:": "{we:|capitalize!} already have {those:.noun}."
                           }
                         ]
                       }

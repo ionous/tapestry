@@ -6,77 +6,77 @@
         "Kitchenette",
         [
           {
-            "Put:from:at:": [
+            "Set:from:": [
               {
-                "ObjField:": "Kitchen"
+                "Object:field:": [
+                  "Kitchen",
+                  "unlit"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "unlit"
+              }
             ]
           },
           {
-            "Say:": {
-              "RenderTemplate:": "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
-            }
+            "Say:": "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
           },
           {
             "Expect output:": "ok: The cabinet is dark."
           },
           {
-            "Put:from:at:": [
+            "Set:from:": [
               {
-                "ObjField:": "Kitchen"
+                "Object:field:": [
+                  "Kitchen",
+                  "lit"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "lit"
+              }
             ]
           },
           {
-            "Say:": {
-              "RenderTemplate:": "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
-            }
+            "Say:": "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
           },
           {
             "Expect output:": "ok: The cabinet has light."
           },
           {
-            "Put:from:at:": [
+            "Set:from:": [
               {
-                "ObjField:": "cabinet"
+                "Object:field:": [
+                  "cabinet",
+                  "closed"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "closed"
+              }
             ]
           },
           {
-            "Say:": {
-              "RenderTemplate:": "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
-            }
+            "Say:": "{if contains_light: .cabinet}ng: The cabinet has light.{else}ok: The cabinet is dark.{end}"
           },
           {
             "Expect output:": "ok: The cabinet is dark."
           },
           {
-            "Put:from:at:": [
+            "Set:from:": [
               {
-                "ObjField:": "matches"
+                "Object:field:": [
+                  "matches",
+                  "lit"
+                ]
               },
               {
                 "FromBool:": true
-              },
-              "lit"
+              }
             ]
           },
           {
-            "Say:": {
-              "RenderTemplate:": "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
-            }
+            "Say:": "{if contains_light: .cabinet}ok: The cabinet has light.{else}ng: The cabinet is dark.{end}"
           },
           {
             "Expect output:": "ok: The cabinet has light."

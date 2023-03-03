@@ -43,7 +43,7 @@ func TestFactorialImport(t *testing.T) {
 			},
 			// a pattern definition including one parameter
 			&eph.EphPatterns{
-				Name: "factorial",
+				PatternName: "factorial",
 				Params: []eph.EphParams{{
 					Affinity: eph.Affinity{eph.Affinity_Number},
 					Name:     "num",
@@ -59,10 +59,10 @@ func TestFactorialImport(t *testing.T) {
 			// },
 			// our lowest priority rule
 			&eph.EphRules{
-				Name:   "factorial",
-				Filter: &core.Always{},
-				When:   eph.EphTiming{eph.EphTiming_During},
-				Exe:    debug.FactorialMulMinusOne,
+				PatternName: "factorial",
+				Filter:      &core.Always{},
+				When:        eph.EphTiming{eph.EphTiming_During},
+				Exe:         debug.FactorialMulMinusOne,
 			},
 			// the story happens to declare the return value twice
 			// once before each rule.... that's fine it will be logged but it wont fail.
@@ -75,10 +75,10 @@ func TestFactorialImport(t *testing.T) {
 			// },
 			// our highest priority rule ( that tests for zero )
 			&eph.EphRules{
-				Name:   "factorial",
-				Filter: debug.FactorialIsZero,
-				When:   eph.EphTiming{eph.EphTiming_During},
-				Exe:    debug.FactorialUseOne,
+				PatternName: "factorial",
+				Filter:      debug.FactorialIsZero,
+				When:        eph.EphTiming{eph.EphTiming_During},
+				Exe:         debug.FactorialUseOne,
 			},
 		}
 		if diff := pretty.Diff(els, expect); len(diff) > 0 {

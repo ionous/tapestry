@@ -166,19 +166,17 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "success",
+                  "Set:from:": [
+                    "@success",
                     {
                       "FromBool:": {
                         "Cmp:is:txt:": [
                           "@obj",
                           "equal_to",
                           {
-                            "Get:from:": [
-                              "pawn",
-                              {
-                                "ObjFields:": "player"
-                              }
+                            "Object:field:": [
+                              "player",
+                              "pawn"
                             ]
                           }
                         ]
@@ -199,8 +197,8 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "success",
+                  "Set:from:": [
+                    "@success",
                     {
                       "FromBool:": {
                         "Cmp:is:txt:": [
@@ -230,7 +228,7 @@
           {
             "Expect:": {
               "IsPlayer obj:": {
-                "FromTxt:": "self"
+                "FromText:": "self"
               }
             }
           }

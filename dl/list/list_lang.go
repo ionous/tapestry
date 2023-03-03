@@ -2,6 +2,7 @@
 package list
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
@@ -10,316 +11,10 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// AsNum Define the name of a number variable.
-type AsNum struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ ListIterator = (*AsNum)(nil)
-
-func (*AsNum) Compose() composer.Spec {
-	return composer.Spec{
-		Name: AsNum_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const AsNum_Type = "as_num"
-const AsNum_Field_Var = "$VAR"
-
-func (op *AsNum) Marshal(m jsn.Marshaler) error {
-	return AsNum_Marshal(m, op)
-}
-
-type AsNum_Slice []AsNum
-
-func (op *AsNum_Slice) GetType() string { return AsNum_Type }
-
-func (op *AsNum_Slice) Marshal(m jsn.Marshaler) error {
-	return AsNum_Repeats_Marshal(m, (*[]AsNum)(op))
-}
-
-func (op *AsNum_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *AsNum_Slice) SetSize(cnt int) {
-	var els []AsNum
-	if cnt >= 0 {
-		els = make(AsNum_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *AsNum_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return AsNum_Marshal(m, &(*op)[i])
-}
-
-func AsNum_Repeats_Marshal(m jsn.Marshaler, vals *[]AsNum) error {
-	return jsn.RepeatBlock(m, (*AsNum_Slice)(vals))
-}
-
-func AsNum_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AsNum) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = AsNum_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type AsNum_Flow struct{ ptr *AsNum }
-
-func (n AsNum_Flow) GetType() string      { return AsNum_Type }
-func (n AsNum_Flow) GetLede() string      { return AsNum_Type }
-func (n AsNum_Flow) GetFlow() interface{} { return n.ptr }
-func (n AsNum_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*AsNum); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func AsNum_Optional_Marshal(m jsn.Marshaler, pv **AsNum) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = AsNum_Marshal(m, *pv)
-	} else if !enc {
-		var v AsNum
-		if err = AsNum_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func AsNum_Marshal(m jsn.Marshaler, val *AsNum) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(AsNum_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", AsNum_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", AsNum_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// AsRec Define the name of a record variable.
-type AsRec struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ ListIterator = (*AsRec)(nil)
-
-func (*AsRec) Compose() composer.Spec {
-	return composer.Spec{
-		Name: AsRec_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const AsRec_Type = "as_rec"
-const AsRec_Field_Var = "$VAR"
-
-func (op *AsRec) Marshal(m jsn.Marshaler) error {
-	return AsRec_Marshal(m, op)
-}
-
-type AsRec_Slice []AsRec
-
-func (op *AsRec_Slice) GetType() string { return AsRec_Type }
-
-func (op *AsRec_Slice) Marshal(m jsn.Marshaler) error {
-	return AsRec_Repeats_Marshal(m, (*[]AsRec)(op))
-}
-
-func (op *AsRec_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *AsRec_Slice) SetSize(cnt int) {
-	var els []AsRec
-	if cnt >= 0 {
-		els = make(AsRec_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *AsRec_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return AsRec_Marshal(m, &(*op)[i])
-}
-
-func AsRec_Repeats_Marshal(m jsn.Marshaler, vals *[]AsRec) error {
-	return jsn.RepeatBlock(m, (*AsRec_Slice)(vals))
-}
-
-func AsRec_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AsRec) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = AsRec_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type AsRec_Flow struct{ ptr *AsRec }
-
-func (n AsRec_Flow) GetType() string      { return AsRec_Type }
-func (n AsRec_Flow) GetLede() string      { return AsRec_Type }
-func (n AsRec_Flow) GetFlow() interface{} { return n.ptr }
-func (n AsRec_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*AsRec); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func AsRec_Optional_Marshal(m jsn.Marshaler, pv **AsRec) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = AsRec_Marshal(m, *pv)
-	} else if !enc {
-		var v AsRec
-		if err = AsRec_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func AsRec_Marshal(m jsn.Marshaler, val *AsRec) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(AsRec_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", AsRec_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", AsRec_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// AsTxt Define the name of a text variable.
-type AsTxt struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ ListIterator = (*AsTxt)(nil)
-
-func (*AsTxt) Compose() composer.Spec {
-	return composer.Spec{
-		Name: AsTxt_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const AsTxt_Type = "as_txt"
-const AsTxt_Field_Var = "$VAR"
-
-func (op *AsTxt) Marshal(m jsn.Marshaler) error {
-	return AsTxt_Marshal(m, op)
-}
-
-type AsTxt_Slice []AsTxt
-
-func (op *AsTxt_Slice) GetType() string { return AsTxt_Type }
-
-func (op *AsTxt_Slice) Marshal(m jsn.Marshaler) error {
-	return AsTxt_Repeats_Marshal(m, (*[]AsTxt)(op))
-}
-
-func (op *AsTxt_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *AsTxt_Slice) SetSize(cnt int) {
-	var els []AsTxt
-	if cnt >= 0 {
-		els = make(AsTxt_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *AsTxt_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return AsTxt_Marshal(m, &(*op)[i])
-}
-
-func AsTxt_Repeats_Marshal(m jsn.Marshaler, vals *[]AsTxt) error {
-	return jsn.RepeatBlock(m, (*AsTxt_Slice)(vals))
-}
-
-func AsTxt_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AsTxt) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = AsTxt_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type AsTxt_Flow struct{ ptr *AsTxt }
-
-func (n AsTxt_Flow) GetType() string      { return AsTxt_Type }
-func (n AsTxt_Flow) GetLede() string      { return AsTxt_Type }
-func (n AsTxt_Flow) GetFlow() interface{} { return n.ptr }
-func (n AsTxt_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*AsTxt); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func AsTxt_Optional_Marshal(m jsn.Marshaler, pv **AsTxt) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = AsTxt_Marshal(m, *pv)
-	} else if !enc {
-		var v AsTxt
-		if err = AsTxt_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func AsTxt_Marshal(m jsn.Marshaler, val *AsTxt) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(AsTxt_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", AsTxt_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", AsTxt_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // EraseEdge Erase at edge: Remove one or more values from a list.
 type EraseEdge struct {
-	From   ListSource  `if:"label=_"`
-	AtEdge rt.BoolEval `if:"label=at_front,optional"`
+	Target assign.Address `if:"label=_"`
+	AtEdge rt.BoolEval    `if:"label=at_front,optional"`
 	Markup map[string]any
 }
 
@@ -335,7 +30,7 @@ func (*EraseEdge) Compose() composer.Spec {
 }
 
 const EraseEdge_Type = "erase_edge"
-const EraseEdge_Field_From = "$FROM"
+const EraseEdge_Field_Target = "$TARGET"
 const EraseEdge_Field_AtEdge = "$AT_EDGE"
 
 func (op *EraseEdge) Marshal(m jsn.Marshaler) error {
@@ -409,12 +104,12 @@ func EraseEdge_Optional_Marshal(m jsn.Marshaler, pv **EraseEdge) (err error) {
 func EraseEdge_Marshal(m jsn.Marshaler, val *EraseEdge) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(EraseEdge_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", EraseEdge_Field_From)
+		e0 := m.MarshalKey("", EraseEdge_Field_Target)
 		if e0 == nil {
-			e0 = ListSource_Marshal(m, &val.From)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EraseEdge_Field_From))
+			m.Error(errutil.New(e0, "in flow at", EraseEdge_Field_Target))
 		}
 		e1 := m.MarshalKey("at_front", EraseEdge_Field_AtEdge)
 		if e1 == nil {
@@ -430,9 +125,9 @@ func EraseEdge_Marshal(m jsn.Marshaler, val *EraseEdge) (err error) {
 
 // EraseIndex Erase at index: Remove one or more values from a list.
 type EraseIndex struct {
-	Count   rt.NumberEval `if:"label=_"`
-	From    ListSource    `if:"label=from"`
-	AtIndex rt.NumberEval `if:"label=at_index"`
+	Count   rt.NumberEval  `if:"label=_"`
+	Target  assign.Address `if:"label=from"`
+	AtIndex rt.NumberEval  `if:"label=at_index"`
 	Markup  map[string]any
 }
 
@@ -449,7 +144,7 @@ func (*EraseIndex) Compose() composer.Spec {
 
 const EraseIndex_Type = "erase_index"
 const EraseIndex_Field_Count = "$COUNT"
-const EraseIndex_Field_From = "$FROM"
+const EraseIndex_Field_Target = "$TARGET"
 const EraseIndex_Field_AtIndex = "$AT_INDEX"
 
 func (op *EraseIndex) Marshal(m jsn.Marshaler) error {
@@ -530,12 +225,12 @@ func EraseIndex_Marshal(m jsn.Marshaler, val *EraseIndex) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EraseIndex_Field_Count))
 		}
-		e1 := m.MarshalKey("from", EraseIndex_Field_From)
+		e1 := m.MarshalKey("from", EraseIndex_Field_Target)
 		if e1 == nil {
-			e1 = ListSource_Marshal(m, &val.From)
+			e1 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", EraseIndex_Field_From))
+			m.Error(errutil.New(e1, "in flow at", EraseIndex_Field_Target))
 		}
 		e2 := m.MarshalKey("at_index", EraseIndex_Field_AtIndex)
 		if e2 == nil {
@@ -549,13 +244,15 @@ func EraseIndex_Marshal(m jsn.Marshaler, val *EraseIndex) (err error) {
 	return
 }
 
-// Erasing Erase elements from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
+// Erasing Erase elements from the front or back of a list.
+// Runs a pattern with a list containing the erased values.
+// If nothing was erased, the pattern will be called with an empty list.
 type Erasing struct {
-	Count   rt.NumberEval `if:"label=_"`
-	From    ListSource    `if:"label=from"`
-	AtIndex rt.NumberEval `if:"label=at_index"`
-	As      string        `if:"label=as,type=text"`
-	Does    []rt.Execute  `if:"label=does"`
+	Count   rt.NumberEval  `if:"label=_"`
+	Target  assign.Address `if:"label=from"`
+	AtIndex rt.NumberEval  `if:"label=at_index"`
+	As      string         `if:"label=as,type=text"`
+	Does    []rt.Execute   `if:"label=does"`
 	Markup  map[string]any
 }
 
@@ -571,7 +268,7 @@ func (*Erasing) Compose() composer.Spec {
 
 const Erasing_Type = "erasing"
 const Erasing_Field_Count = "$COUNT"
-const Erasing_Field_From = "$FROM"
+const Erasing_Field_Target = "$TARGET"
 const Erasing_Field_AtIndex = "$AT_INDEX"
 const Erasing_Field_As = "$AS"
 const Erasing_Field_Does = "$DOES"
@@ -654,12 +351,12 @@ func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", Erasing_Field_Count))
 		}
-		e1 := m.MarshalKey("from", Erasing_Field_From)
+		e1 := m.MarshalKey("from", Erasing_Field_Target)
 		if e1 == nil {
-			e1 = ListSource_Marshal(m, &val.From)
+			e1 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Erasing_Field_From))
+			m.Error(errutil.New(e1, "in flow at", Erasing_Field_Target))
 		}
 		e2 := m.MarshalKey("at_index", Erasing_Field_AtIndex)
 		if e2 == nil {
@@ -689,11 +386,11 @@ func Erasing_Marshal(m jsn.Marshaler, val *Erasing) (err error) {
 
 // ErasingEdge Erase one element from the front or back of a list. Runs an activity with a list containing the erased values; the list can be empty if nothing was erased.
 type ErasingEdge struct {
-	From   ListSource    `if:"label=_"`
-	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
-	As     string        `if:"label=as,type=text"`
-	Does   []rt.Execute  `if:"label=does"`
-	Else   core.Brancher `if:"label=else,optional"`
+	Target assign.Address `if:"label=_"`
+	AtEdge rt.BoolEval    `if:"label=at_front,optional"`
+	As     string         `if:"label=as,type=text"`
+	Does   []rt.Execute   `if:"label=does"`
+	Else   core.Brancher  `if:"label=else,optional"`
 	Markup map[string]any
 }
 
@@ -709,7 +406,7 @@ func (*ErasingEdge) Compose() composer.Spec {
 }
 
 const ErasingEdge_Type = "erasing_edge"
-const ErasingEdge_Field_From = "$FROM"
+const ErasingEdge_Field_Target = "$TARGET"
 const ErasingEdge_Field_AtEdge = "$AT_EDGE"
 const ErasingEdge_Field_As = "$AS"
 const ErasingEdge_Field_Does = "$DOES"
@@ -786,12 +483,12 @@ func ErasingEdge_Optional_Marshal(m jsn.Marshaler, pv **ErasingEdge) (err error)
 func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ErasingEdge_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ErasingEdge_Field_From)
+		e0 := m.MarshalKey("", ErasingEdge_Field_Target)
 		if e0 == nil {
-			e0 = ListSource_Marshal(m, &val.From)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ErasingEdge_Field_From))
+			m.Error(errutil.New(e0, "in flow at", ErasingEdge_Field_Target))
 		}
 		e1 := m.MarshalKey("at_front", ErasingEdge_Field_AtEdge)
 		if e1 == nil {
@@ -826,744 +523,12 @@ func ErasingEdge_Marshal(m jsn.Marshaler, val *ErasingEdge) (err error) {
 	return
 }
 
-// FromNumList Uses a list of numbers.
-type FromNumList struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ ListSource = (*FromNumList)(nil)
-
-func (*FromNumList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FromNumList_Type,
-		Uses: composer.Type_Flow,
-		Lede: "var_of_nums",
-	}
-}
-
-const FromNumList_Type = "from_num_list"
-const FromNumList_Field_Var = "$VAR"
-
-func (op *FromNumList) Marshal(m jsn.Marshaler) error {
-	return FromNumList_Marshal(m, op)
-}
-
-type FromNumList_Slice []FromNumList
-
-func (op *FromNumList_Slice) GetType() string { return FromNumList_Type }
-
-func (op *FromNumList_Slice) Marshal(m jsn.Marshaler) error {
-	return FromNumList_Repeats_Marshal(m, (*[]FromNumList)(op))
-}
-
-func (op *FromNumList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromNumList_Slice) SetSize(cnt int) {
-	var els []FromNumList
-	if cnt >= 0 {
-		els = make(FromNumList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromNumList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromNumList_Marshal(m, &(*op)[i])
-}
-
-func FromNumList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromNumList) error {
-	return jsn.RepeatBlock(m, (*FromNumList_Slice)(vals))
-}
-
-func FromNumList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromNumList) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromNumList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromNumList_Flow struct{ ptr *FromNumList }
-
-func (n FromNumList_Flow) GetType() string      { return FromNumList_Type }
-func (n FromNumList_Flow) GetLede() string      { return "var_of_nums" }
-func (n FromNumList_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromNumList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromNumList); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromNumList_Optional_Marshal(m jsn.Marshaler, pv **FromNumList) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromNumList_Marshal(m, *pv)
-	} else if !enc {
-		var v FromNumList
-		if err = FromNumList_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromNumList_Marshal(m jsn.Marshaler, val *FromNumList) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromNumList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromNumList_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromNumList_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// FromRecList Uses a list of records.
-type FromRecList struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ ListSource = (*FromRecList)(nil)
-
-func (*FromRecList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FromRecList_Type,
-		Uses: composer.Type_Flow,
-		Lede: "var_of_recs",
-	}
-}
-
-const FromRecList_Type = "from_rec_list"
-const FromRecList_Field_Var = "$VAR"
-
-func (op *FromRecList) Marshal(m jsn.Marshaler) error {
-	return FromRecList_Marshal(m, op)
-}
-
-type FromRecList_Slice []FromRecList
-
-func (op *FromRecList_Slice) GetType() string { return FromRecList_Type }
-
-func (op *FromRecList_Slice) Marshal(m jsn.Marshaler) error {
-	return FromRecList_Repeats_Marshal(m, (*[]FromRecList)(op))
-}
-
-func (op *FromRecList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromRecList_Slice) SetSize(cnt int) {
-	var els []FromRecList
-	if cnt >= 0 {
-		els = make(FromRecList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromRecList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromRecList_Marshal(m, &(*op)[i])
-}
-
-func FromRecList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromRecList) error {
-	return jsn.RepeatBlock(m, (*FromRecList_Slice)(vals))
-}
-
-func FromRecList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromRecList) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromRecList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromRecList_Flow struct{ ptr *FromRecList }
-
-func (n FromRecList_Flow) GetType() string      { return FromRecList_Type }
-func (n FromRecList_Flow) GetLede() string      { return "var_of_recs" }
-func (n FromRecList_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromRecList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromRecList); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromRecList_Optional_Marshal(m jsn.Marshaler, pv **FromRecList) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromRecList_Marshal(m, *pv)
-	} else if !enc {
-		var v FromRecList
-		if err = FromRecList_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromRecList_Marshal(m jsn.Marshaler, val *FromRecList) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromRecList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromRecList_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromRecList_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// FromTxtList Uses a list of text.
-type FromTxtList struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ ListSource = (*FromTxtList)(nil)
-
-func (*FromTxtList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: FromTxtList_Type,
-		Uses: composer.Type_Flow,
-		Lede: "var_of_txts",
-	}
-}
-
-const FromTxtList_Type = "from_txt_list"
-const FromTxtList_Field_Var = "$VAR"
-
-func (op *FromTxtList) Marshal(m jsn.Marshaler) error {
-	return FromTxtList_Marshal(m, op)
-}
-
-type FromTxtList_Slice []FromTxtList
-
-func (op *FromTxtList_Slice) GetType() string { return FromTxtList_Type }
-
-func (op *FromTxtList_Slice) Marshal(m jsn.Marshaler) error {
-	return FromTxtList_Repeats_Marshal(m, (*[]FromTxtList)(op))
-}
-
-func (op *FromTxtList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *FromTxtList_Slice) SetSize(cnt int) {
-	var els []FromTxtList
-	if cnt >= 0 {
-		els = make(FromTxtList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *FromTxtList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return FromTxtList_Marshal(m, &(*op)[i])
-}
-
-func FromTxtList_Repeats_Marshal(m jsn.Marshaler, vals *[]FromTxtList) error {
-	return jsn.RepeatBlock(m, (*FromTxtList_Slice)(vals))
-}
-
-func FromTxtList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]FromTxtList) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = FromTxtList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type FromTxtList_Flow struct{ ptr *FromTxtList }
-
-func (n FromTxtList_Flow) GetType() string      { return FromTxtList_Type }
-func (n FromTxtList_Flow) GetLede() string      { return "var_of_txts" }
-func (n FromTxtList_Flow) GetFlow() interface{} { return n.ptr }
-func (n FromTxtList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*FromTxtList); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func FromTxtList_Optional_Marshal(m jsn.Marshaler, pv **FromTxtList) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = FromTxtList_Marshal(m, *pv)
-	} else if !enc {
-		var v FromTxtList
-		if err = FromTxtList_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func FromTxtList_Marshal(m jsn.Marshaler, val *FromTxtList) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(FromTxtList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", FromTxtList_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", FromTxtList_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// IntoNumList Targets a list of numbers.
-type IntoNumList struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ ListTarget = (*IntoNumList)(nil)
-
-func (*IntoNumList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: IntoNumList_Type,
-		Uses: composer.Type_Flow,
-		Lede: "into_nums",
-	}
-}
-
-const IntoNumList_Type = "into_num_list"
-const IntoNumList_Field_Var = "$VAR"
-
-func (op *IntoNumList) Marshal(m jsn.Marshaler) error {
-	return IntoNumList_Marshal(m, op)
-}
-
-type IntoNumList_Slice []IntoNumList
-
-func (op *IntoNumList_Slice) GetType() string { return IntoNumList_Type }
-
-func (op *IntoNumList_Slice) Marshal(m jsn.Marshaler) error {
-	return IntoNumList_Repeats_Marshal(m, (*[]IntoNumList)(op))
-}
-
-func (op *IntoNumList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *IntoNumList_Slice) SetSize(cnt int) {
-	var els []IntoNumList
-	if cnt >= 0 {
-		els = make(IntoNumList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *IntoNumList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return IntoNumList_Marshal(m, &(*op)[i])
-}
-
-func IntoNumList_Repeats_Marshal(m jsn.Marshaler, vals *[]IntoNumList) error {
-	return jsn.RepeatBlock(m, (*IntoNumList_Slice)(vals))
-}
-
-func IntoNumList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoNumList) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = IntoNumList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type IntoNumList_Flow struct{ ptr *IntoNumList }
-
-func (n IntoNumList_Flow) GetType() string      { return IntoNumList_Type }
-func (n IntoNumList_Flow) GetLede() string      { return "into_nums" }
-func (n IntoNumList_Flow) GetFlow() interface{} { return n.ptr }
-func (n IntoNumList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*IntoNumList); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func IntoNumList_Optional_Marshal(m jsn.Marshaler, pv **IntoNumList) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = IntoNumList_Marshal(m, *pv)
-	} else if !enc {
-		var v IntoNumList
-		if err = IntoNumList_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func IntoNumList_Marshal(m jsn.Marshaler, val *IntoNumList) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(IntoNumList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", IntoNumList_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", IntoNumList_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// IntoRecList Targets a list of records.
-type IntoRecList struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ ListTarget = (*IntoRecList)(nil)
-
-func (*IntoRecList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: IntoRecList_Type,
-		Uses: composer.Type_Flow,
-		Lede: "into_recs",
-	}
-}
-
-const IntoRecList_Type = "into_rec_list"
-const IntoRecList_Field_Var = "$VAR"
-
-func (op *IntoRecList) Marshal(m jsn.Marshaler) error {
-	return IntoRecList_Marshal(m, op)
-}
-
-type IntoRecList_Slice []IntoRecList
-
-func (op *IntoRecList_Slice) GetType() string { return IntoRecList_Type }
-
-func (op *IntoRecList_Slice) Marshal(m jsn.Marshaler) error {
-	return IntoRecList_Repeats_Marshal(m, (*[]IntoRecList)(op))
-}
-
-func (op *IntoRecList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *IntoRecList_Slice) SetSize(cnt int) {
-	var els []IntoRecList
-	if cnt >= 0 {
-		els = make(IntoRecList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *IntoRecList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return IntoRecList_Marshal(m, &(*op)[i])
-}
-
-func IntoRecList_Repeats_Marshal(m jsn.Marshaler, vals *[]IntoRecList) error {
-	return jsn.RepeatBlock(m, (*IntoRecList_Slice)(vals))
-}
-
-func IntoRecList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoRecList) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = IntoRecList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type IntoRecList_Flow struct{ ptr *IntoRecList }
-
-func (n IntoRecList_Flow) GetType() string      { return IntoRecList_Type }
-func (n IntoRecList_Flow) GetLede() string      { return "into_recs" }
-func (n IntoRecList_Flow) GetFlow() interface{} { return n.ptr }
-func (n IntoRecList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*IntoRecList); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func IntoRecList_Optional_Marshal(m jsn.Marshaler, pv **IntoRecList) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = IntoRecList_Marshal(m, *pv)
-	} else if !enc {
-		var v IntoRecList
-		if err = IntoRecList_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func IntoRecList_Marshal(m jsn.Marshaler, val *IntoRecList) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(IntoRecList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", IntoRecList_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", IntoRecList_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// IntoTxtList Targets a list of text.
-type IntoTxtList struct {
-	Var    core.VariableName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ ListTarget = (*IntoTxtList)(nil)
-
-func (*IntoTxtList) Compose() composer.Spec {
-	return composer.Spec{
-		Name: IntoTxtList_Type,
-		Uses: composer.Type_Flow,
-		Lede: "into_txts",
-	}
-}
-
-const IntoTxtList_Type = "into_txt_list"
-const IntoTxtList_Field_Var = "$VAR"
-
-func (op *IntoTxtList) Marshal(m jsn.Marshaler) error {
-	return IntoTxtList_Marshal(m, op)
-}
-
-type IntoTxtList_Slice []IntoTxtList
-
-func (op *IntoTxtList_Slice) GetType() string { return IntoTxtList_Type }
-
-func (op *IntoTxtList_Slice) Marshal(m jsn.Marshaler) error {
-	return IntoTxtList_Repeats_Marshal(m, (*[]IntoTxtList)(op))
-}
-
-func (op *IntoTxtList_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *IntoTxtList_Slice) SetSize(cnt int) {
-	var els []IntoTxtList
-	if cnt >= 0 {
-		els = make(IntoTxtList_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *IntoTxtList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return IntoTxtList_Marshal(m, &(*op)[i])
-}
-
-func IntoTxtList_Repeats_Marshal(m jsn.Marshaler, vals *[]IntoTxtList) error {
-	return jsn.RepeatBlock(m, (*IntoTxtList_Slice)(vals))
-}
-
-func IntoTxtList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]IntoTxtList) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = IntoTxtList_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type IntoTxtList_Flow struct{ ptr *IntoTxtList }
-
-func (n IntoTxtList_Flow) GetType() string      { return IntoTxtList_Type }
-func (n IntoTxtList_Flow) GetLede() string      { return "into_txts" }
-func (n IntoTxtList_Flow) GetFlow() interface{} { return n.ptr }
-func (n IntoTxtList_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*IntoTxtList); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func IntoTxtList_Optional_Marshal(m jsn.Marshaler, pv **IntoTxtList) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = IntoTxtList_Marshal(m, *pv)
-	} else if !enc {
-		var v IntoTxtList
-		if err = IntoTxtList_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func IntoTxtList_Marshal(m jsn.Marshaler, val *IntoTxtList) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(IntoTxtList_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", IntoTxtList_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", IntoTxtList_Field_Var))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// ListAt Get a value from a list. The first element is is index 1.
-type ListAt struct {
-	List   rt.Assignment `if:"label=_"`
-	Index  rt.NumberEval `if:"label=index"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.NumberEval = (*ListAt)(nil)
-var _ rt.TextEval = (*ListAt)(nil)
-var _ rt.RecordEval = (*ListAt)(nil)
-
-func (*ListAt) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ListAt_Type,
-		Uses: composer.Type_Flow,
-		Lede: "get",
-	}
-}
-
-const ListAt_Type = "list_at"
-const ListAt_Field_List = "$LIST"
-const ListAt_Field_Index = "$INDEX"
-
-func (op *ListAt) Marshal(m jsn.Marshaler) error {
-	return ListAt_Marshal(m, op)
-}
-
-type ListAt_Slice []ListAt
-
-func (op *ListAt_Slice) GetType() string { return ListAt_Type }
-
-func (op *ListAt_Slice) Marshal(m jsn.Marshaler) error {
-	return ListAt_Repeats_Marshal(m, (*[]ListAt)(op))
-}
-
-func (op *ListAt_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ListAt_Slice) SetSize(cnt int) {
-	var els []ListAt
-	if cnt >= 0 {
-		els = make(ListAt_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ListAt_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListAt_Marshal(m, &(*op)[i])
-}
-
-func ListAt_Repeats_Marshal(m jsn.Marshaler, vals *[]ListAt) error {
-	return jsn.RepeatBlock(m, (*ListAt_Slice)(vals))
-}
-
-func ListAt_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListAt) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListAt_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ListAt_Flow struct{ ptr *ListAt }
-
-func (n ListAt_Flow) GetType() string      { return ListAt_Type }
-func (n ListAt_Flow) GetLede() string      { return "get" }
-func (n ListAt_Flow) GetFlow() interface{} { return n.ptr }
-func (n ListAt_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ListAt); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ListAt_Optional_Marshal(m jsn.Marshaler, pv **ListAt) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ListAt_Marshal(m, *pv)
-	} else if !enc {
-		var v ListAt
-		if err = ListAt_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ListAt_Marshal(m jsn.Marshaler, val *ListAt) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ListAt_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListAt_Field_List)
-		if e0 == nil {
-			e0 = rt.Assignment_Marshal(m, &val.List)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListAt_Field_List))
-		}
-		e1 := m.MarshalKey("index", ListAt_Field_Index)
-		if e1 == nil {
-			e1 = rt.NumberEval_Marshal(m, &val.Index)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListAt_Field_Index))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // ListEach Loops over the elements in the passed list, or runs the 'else' activity if empty.
 type ListEach struct {
-	List   rt.Assignment `if:"label=across"`
-	As     ListIterator  `if:"label=as"`
-	Does   []rt.Execute  `if:"label=does"`
-	Else   core.Brancher `if:"label=else,optional"`
+	List   assign.Assignment `if:"label=across"`
+	As     string            `if:"label=as,type=text"`
+	Does   []rt.Execute      `if:"label=does"`
+	Else   core.Brancher     `if:"label=else,optional"`
 	Markup map[string]any
 }
 
@@ -1657,14 +622,14 @@ func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
 	if err = m.MarshalBlock(ListEach_Flow{val}); err == nil {
 		e0 := m.MarshalKey("across", ListEach_Field_List)
 		if e0 == nil {
-			e0 = rt.Assignment_Marshal(m, &val.List)
+			e0 = assign.Assignment_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListEach_Field_List))
 		}
 		e1 := m.MarshalKey("as", ListEach_Field_As)
 		if e1 == nil {
-			e1 = ListIterator_Marshal(m, &val.As)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.As)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListEach_Field_As))
@@ -1690,8 +655,8 @@ func ListEach_Marshal(m jsn.Marshaler, val *ListEach) (err error) {
 
 // ListFind Search a list for a specific value.
 type ListFind struct {
-	Value  rt.Assignment `if:"label=_"`
-	List   rt.Assignment `if:"label=list"`
+	Value  assign.Assignment `if:"label=_"`
+	List   assign.Assignment `if:"label=in_list"`
 	Markup map[string]any
 }
 
@@ -1784,14 +749,14 @@ func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
 	if err = m.MarshalBlock(ListFind_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListFind_Field_Value)
 		if e0 == nil {
-			e0 = rt.Assignment_Marshal(m, &val.Value)
+			e0 = assign.Assignment_Marshal(m, &val.Value)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListFind_Field_Value))
 		}
-		e1 := m.MarshalKey("list", ListFind_Field_List)
+		e1 := m.MarshalKey("in_list", ListFind_Field_List)
 		if e1 == nil {
-			e1 = rt.Assignment_Marshal(m, &val.List)
+			e1 = assign.Assignment_Marshal(m, &val.List)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListFind_Field_List))
@@ -1801,10 +766,12 @@ func ListFind_Marshal(m jsn.Marshaler, val *ListFind) (err error) {
 	return
 }
 
-// ListGather Transform the values from a list. The named pattern gets called once for each value in the list. It get called with two parameters: 'in' as each value from the list, and 'out' as the var passed to the gather.
+// ListGather Transform the values from a list.
+// The named pattern gets with with two parameters for each value in the list:
+// 'in' as each value from the list, and 'out' as the var passed to the gather.
 type ListGather struct {
-	Var    core.VariableName `if:"label=_"`
-	From   ListSource        `if:"label=from"`
+	Target assign.Address    `if:"label=_"`
+	From   assign.Assignment `if:"label=from"`
 	Using  string            `if:"label=using,type=text"`
 	Markup map[string]any
 }
@@ -1818,7 +785,7 @@ func (*ListGather) Compose() composer.Spec {
 }
 
 const ListGather_Type = "list_gather"
-const ListGather_Field_Var = "$VAR"
+const ListGather_Field_Target = "$TARGET"
 const ListGather_Field_From = "$FROM"
 const ListGather_Field_Using = "$USING"
 
@@ -1893,16 +860,16 @@ func ListGather_Optional_Marshal(m jsn.Marshaler, pv **ListGather) (err error) {
 func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListGather_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListGather_Field_Var)
+		e0 := m.MarshalKey("", ListGather_Field_Target)
 		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListGather_Field_Var))
+			m.Error(errutil.New(e0, "in flow at", ListGather_Field_Target))
 		}
 		e1 := m.MarshalKey("from", ListGather_Field_From)
 		if e1 == nil {
-			e1 = ListSource_Marshal(m, &val.From)
+			e1 = assign.Assignment_Marshal(m, &val.From)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ListGather_Field_From))
@@ -1919,78 +886,9 @@ func ListGather_Marshal(m jsn.Marshaler, val *ListGather) (err error) {
 	return
 }
 
-const ListIterator_Type = "list_iterator"
-
-var ListIterator_Optional_Marshal = ListIterator_Marshal
-
-type ListIterator_Slot struct{ Value *ListIterator }
-
-func (at ListIterator_Slot) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(at); err == nil {
-		if a, ok := at.GetSlot(); ok {
-			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-func (at ListIterator_Slot) GetType() string              { return ListIterator_Type }
-func (at ListIterator_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at ListIterator_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(ListIterator)
-	return
-}
-
-func ListIterator_Marshal(m jsn.Marshaler, ptr *ListIterator) (err error) {
-	slot := ListIterator_Slot{ptr}
-	return slot.Marshal(m)
-}
-
-type ListIterator_Slice []ListIterator
-
-func (op *ListIterator_Slice) GetType() string { return ListIterator_Type }
-
-func (op *ListIterator_Slice) Marshal(m jsn.Marshaler) error {
-	return ListIterator_Repeats_Marshal(m, (*[]ListIterator)(op))
-}
-
-func (op *ListIterator_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ListIterator_Slice) SetSize(cnt int) {
-	var els []ListIterator
-	if cnt >= 0 {
-		els = make(ListIterator_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ListIterator_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListIterator_Marshal(m, &(*op)[i])
-}
-
-func ListIterator_Repeats_Marshal(m jsn.Marshaler, vals *[]ListIterator) error {
-	return jsn.RepeatBlock(m, (*ListIterator_Slice)(vals))
-}
-
-func ListIterator_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListIterator) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListIterator_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
 // ListLen Determines the number of values in a list.
 type ListLen struct {
-	List   rt.Assignment `if:"label=_"`
+	List   assign.Assignment `if:"label=_"`
 	Markup map[string]any
 }
 
@@ -2081,7 +979,7 @@ func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
 	if err = m.MarshalBlock(ListLen_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListLen_Field_List)
 		if e0 == nil {
-			e0 = rt.Assignment_Marshal(m, &val.List)
+			e0 = assign.Assignment_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListLen_Field_List))
@@ -2091,12 +989,13 @@ func ListLen_Marshal(m jsn.Marshaler, val *ListLen) (err error) {
 	return
 }
 
-// ListMap Transform the values from one list and place the results in another list. The designated pattern is called with each value from the 'from list', one value at a time.
+// ListMap Transform the values from one list and place the results in another list.
+// The designated pattern is called with each value from the 'from list', one value at a time.
 type ListMap struct {
-	ToList       string        `if:"label=_,type=text"`
-	FromList     rt.Assignment `if:"label=from_list"`
-	UsingPattern string        `if:"label=using,type=text"`
-	Markup       map[string]any
+	Target      assign.Address    `if:"label=_"`
+	List        assign.Assignment `if:"label=from_list"`
+	PatternName string            `if:"label=using,type=text"`
+	Markup      map[string]any
 }
 
 // User implemented slots:
@@ -2111,9 +1010,9 @@ func (*ListMap) Compose() composer.Spec {
 }
 
 const ListMap_Type = "list_map"
-const ListMap_Field_ToList = "$TO_LIST"
-const ListMap_Field_FromList = "$FROM_LIST"
-const ListMap_Field_UsingPattern = "$USING_PATTERN"
+const ListMap_Field_Target = "$TARGET"
+const ListMap_Field_List = "$LIST"
+const ListMap_Field_PatternName = "$PATTERN_NAME"
 
 func (op *ListMap) Marshal(m jsn.Marshaler) error {
 	return ListMap_Marshal(m, op)
@@ -2186,38 +1085,161 @@ func ListMap_Optional_Marshal(m jsn.Marshaler, pv **ListMap) (err error) {
 func ListMap_Marshal(m jsn.Marshaler, val *ListMap) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListMap_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListMap_Field_ToList)
+		e0 := m.MarshalKey("", ListMap_Field_Target)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.ToList)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListMap_Field_ToList))
+			m.Error(errutil.New(e0, "in flow at", ListMap_Field_Target))
 		}
-		e1 := m.MarshalKey("from_list", ListMap_Field_FromList)
+		e1 := m.MarshalKey("from_list", ListMap_Field_List)
 		if e1 == nil {
-			e1 = rt.Assignment_Marshal(m, &val.FromList)
+			e1 = assign.Assignment_Marshal(m, &val.List)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListMap_Field_FromList))
+			m.Error(errutil.New(e1, "in flow at", ListMap_Field_List))
 		}
-		e2 := m.MarshalKey("using", ListMap_Field_UsingPattern)
+		e2 := m.MarshalKey("using", ListMap_Field_PatternName)
 		if e2 == nil {
-			e2 = prim.Text_Unboxed_Marshal(m, &val.UsingPattern)
+			e2 = prim.Text_Unboxed_Marshal(m, &val.PatternName)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", ListMap_Field_UsingPattern))
+			m.Error(errutil.New(e2, "in flow at", ListMap_Field_PatternName))
 		}
 		m.EndBlock()
 	}
 	return
 }
 
-// ListReduce Transform the values from one list by combining them into a single value. The named pattern is called with two parameters: 'in' ( each element of the list ) and 'out' ( ex. a record ).
+// ListPush Add a value to a list.
+type ListPush struct {
+	Value  assign.Assignment `if:"label=_"`
+	Target assign.Address    `if:"label=into"`
+	AtEdge rt.BoolEval       `if:"label=at_front,optional"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*ListPush)(nil)
+
+func (*ListPush) Compose() composer.Spec {
+	return composer.Spec{
+		Name: ListPush_Type,
+		Uses: composer.Type_Flow,
+		Lede: "push",
+	}
+}
+
+const ListPush_Type = "list_push"
+const ListPush_Field_Value = "$VALUE"
+const ListPush_Field_Target = "$TARGET"
+const ListPush_Field_AtEdge = "$AT_EDGE"
+
+func (op *ListPush) Marshal(m jsn.Marshaler) error {
+	return ListPush_Marshal(m, op)
+}
+
+type ListPush_Slice []ListPush
+
+func (op *ListPush_Slice) GetType() string { return ListPush_Type }
+
+func (op *ListPush_Slice) Marshal(m jsn.Marshaler) error {
+	return ListPush_Repeats_Marshal(m, (*[]ListPush)(op))
+}
+
+func (op *ListPush_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *ListPush_Slice) SetSize(cnt int) {
+	var els []ListPush
+	if cnt >= 0 {
+		els = make(ListPush_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *ListPush_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return ListPush_Marshal(m, &(*op)[i])
+}
+
+func ListPush_Repeats_Marshal(m jsn.Marshaler, vals *[]ListPush) error {
+	return jsn.RepeatBlock(m, (*ListPush_Slice)(vals))
+}
+
+func ListPush_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListPush) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = ListPush_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type ListPush_Flow struct{ ptr *ListPush }
+
+func (n ListPush_Flow) GetType() string      { return ListPush_Type }
+func (n ListPush_Flow) GetLede() string      { return "push" }
+func (n ListPush_Flow) GetFlow() interface{} { return n.ptr }
+func (n ListPush_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*ListPush); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func ListPush_Optional_Marshal(m jsn.Marshaler, pv **ListPush) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = ListPush_Marshal(m, *pv)
+	} else if !enc {
+		var v ListPush
+		if err = ListPush_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func ListPush_Marshal(m jsn.Marshaler, val *ListPush) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(ListPush_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", ListPush_Field_Value)
+		if e0 == nil {
+			e0 = assign.Assignment_Marshal(m, &val.Value)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", ListPush_Field_Value))
+		}
+		e1 := m.MarshalKey("into", ListPush_Field_Target)
+		if e1 == nil {
+			e1 = assign.Address_Marshal(m, &val.Target)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", ListPush_Field_Target))
+		}
+		e2 := m.MarshalKey("at_front", ListPush_Field_AtEdge)
+		if e2 == nil {
+			e2 = rt.BoolEval_Optional_Marshal(m, &val.AtEdge)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", ListPush_Field_AtEdge))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// ListReduce Combine all of the values in a list into the targeted value.
+// The designated pattern is called with two parameters:
+// 'in' ( each element of the list ) and 'out' ( ex. a record ).
 type ListReduce struct {
-	IntoValue    string        `if:"label=into,type=text"`
-	FromList     rt.Assignment `if:"label=from_list"`
-	UsingPattern string        `if:"label=using,type=text"`
-	Markup       map[string]any
+	Target      assign.Address    `if:"label=into"`
+	List        assign.Assignment `if:"label=from_list"`
+	PatternName string            `if:"label=using,type=text"`
+	Markup      map[string]any
 }
 
 // User implemented slots:
@@ -2232,9 +1254,9 @@ func (*ListReduce) Compose() composer.Spec {
 }
 
 const ListReduce_Type = "list_reduce"
-const ListReduce_Field_IntoValue = "$INTO_VALUE"
-const ListReduce_Field_FromList = "$FROM_LIST"
-const ListReduce_Field_UsingPattern = "$USING_PATTERN"
+const ListReduce_Field_Target = "$TARGET"
+const ListReduce_Field_List = "$LIST"
+const ListReduce_Field_PatternName = "$PATTERN_NAME"
 
 func (op *ListReduce) Marshal(m jsn.Marshaler) error {
 	return ListReduce_Marshal(m, op)
@@ -2307,26 +1329,26 @@ func ListReduce_Optional_Marshal(m jsn.Marshaler, pv **ListReduce) (err error) {
 func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListReduce_Flow{val}); err == nil {
-		e0 := m.MarshalKey("into", ListReduce_Field_IntoValue)
+		e0 := m.MarshalKey("into", ListReduce_Field_Target)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.IntoValue)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListReduce_Field_IntoValue))
+			m.Error(errutil.New(e0, "in flow at", ListReduce_Field_Target))
 		}
-		e1 := m.MarshalKey("from_list", ListReduce_Field_FromList)
+		e1 := m.MarshalKey("from_list", ListReduce_Field_List)
 		if e1 == nil {
-			e1 = rt.Assignment_Marshal(m, &val.FromList)
+			e1 = assign.Assignment_Marshal(m, &val.List)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListReduce_Field_FromList))
+			m.Error(errutil.New(e1, "in flow at", ListReduce_Field_List))
 		}
-		e2 := m.MarshalKey("using", ListReduce_Field_UsingPattern)
+		e2 := m.MarshalKey("using", ListReduce_Field_PatternName)
 		if e2 == nil {
-			e2 = prim.Text_Unboxed_Marshal(m, &val.UsingPattern)
+			e2 = prim.Text_Unboxed_Marshal(m, &val.PatternName)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", ListReduce_Field_UsingPattern))
+			m.Error(errutil.New(e2, "in flow at", ListReduce_Field_PatternName))
 		}
 		m.EndBlock()
 	}
@@ -2335,7 +1357,7 @@ func ListReduce_Marshal(m jsn.Marshaler, val *ListReduce) (err error) {
 
 // ListReverse Reverse a list.
 type ListReverse struct {
-	List   ListSource `if:"label=list"`
+	Target assign.Address `if:"label=list"`
 	Markup map[string]any
 }
 
@@ -2351,7 +1373,7 @@ func (*ListReverse) Compose() composer.Spec {
 }
 
 const ListReverse_Type = "list_reverse"
-const ListReverse_Field_List = "$LIST"
+const ListReverse_Field_Target = "$TARGET"
 
 func (op *ListReverse) Marshal(m jsn.Marshaler) error {
 	return ListReverse_Marshal(m, op)
@@ -2424,133 +1446,12 @@ func ListReverse_Optional_Marshal(m jsn.Marshaler, pv **ListReverse) (err error)
 func ListReverse_Marshal(m jsn.Marshaler, val *ListReverse) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListReverse_Flow{val}); err == nil {
-		e0 := m.MarshalKey("list", ListReverse_Field_List)
+		e0 := m.MarshalKey("list", ListReverse_Field_Target)
 		if e0 == nil {
-			e0 = ListSource_Marshal(m, &val.List)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListReverse_Field_List))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// ListSet Overwrite an existing value in a list.
-type ListSet struct {
-	List   string        `if:"label=_,type=text"`
-	Index  rt.NumberEval `if:"label=index"`
-	From   rt.Assignment `if:"label=from"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*ListSet)(nil)
-
-func (*ListSet) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ListSet_Type,
-		Uses: composer.Type_Flow,
-		Lede: "set",
-	}
-}
-
-const ListSet_Type = "list_set"
-const ListSet_Field_List = "$LIST"
-const ListSet_Field_Index = "$INDEX"
-const ListSet_Field_From = "$FROM"
-
-func (op *ListSet) Marshal(m jsn.Marshaler) error {
-	return ListSet_Marshal(m, op)
-}
-
-type ListSet_Slice []ListSet
-
-func (op *ListSet_Slice) GetType() string { return ListSet_Type }
-
-func (op *ListSet_Slice) Marshal(m jsn.Marshaler) error {
-	return ListSet_Repeats_Marshal(m, (*[]ListSet)(op))
-}
-
-func (op *ListSet_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ListSet_Slice) SetSize(cnt int) {
-	var els []ListSet
-	if cnt >= 0 {
-		els = make(ListSet_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ListSet_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListSet_Marshal(m, &(*op)[i])
-}
-
-func ListSet_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSet) error {
-	return jsn.RepeatBlock(m, (*ListSet_Slice)(vals))
-}
-
-func ListSet_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSet) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListSet_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ListSet_Flow struct{ ptr *ListSet }
-
-func (n ListSet_Flow) GetType() string      { return ListSet_Type }
-func (n ListSet_Flow) GetLede() string      { return "set" }
-func (n ListSet_Flow) GetFlow() interface{} { return n.ptr }
-func (n ListSet_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ListSet); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ListSet_Optional_Marshal(m jsn.Marshaler, pv **ListSet) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ListSet_Marshal(m, *pv)
-	} else if !enc {
-		var v ListSet
-		if err = ListSet_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ListSet_Marshal(m jsn.Marshaler, val *ListSet) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ListSet_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListSet_Field_List)
-		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.List)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListSet_Field_List))
-		}
-		e1 := m.MarshalKey("index", ListSet_Field_Index)
-		if e1 == nil {
-			e1 = rt.NumberEval_Marshal(m, &val.Index)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListSet_Field_Index))
-		}
-		e2 := m.MarshalKey("from", ListSet_Field_From)
-		if e2 == nil {
-			e2 = rt.Assignment_Marshal(m, &val.From)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", ListSet_Field_From))
+			m.Error(errutil.New(e0, "in flow at", ListReverse_Field_Target))
 		}
 		m.EndBlock()
 	}
@@ -2565,9 +1466,9 @@ func ListSet_Marshal(m jsn.Marshaler, val *ListSet) (err error) {
 // When end is omitted, copy up to and including the last element;
 // and do the same if the end is greater than the length
 type ListSlice struct {
-	List   rt.Assignment `if:"label=_"`
-	Start  rt.NumberEval `if:"label=start,optional"`
-	End    rt.NumberEval `if:"label=end,optional"`
+	List   assign.Assignment `if:"label=_"`
+	Start  rt.NumberEval     `if:"label=start,optional"`
+	End    rt.NumberEval     `if:"label=end,optional"`
 	Markup map[string]any
 }
 
@@ -2662,7 +1563,7 @@ func ListSlice_Marshal(m jsn.Marshaler, val *ListSlice) (err error) {
 	if err = m.MarshalBlock(ListSlice_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ListSlice_Field_List)
 		if e0 == nil {
-			e0 = rt.Assignment_Marshal(m, &val.List)
+			e0 = assign.Assignment_Marshal(m, &val.List)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ListSlice_Field_List))
@@ -2688,9 +1589,9 @@ func ListSlice_Marshal(m jsn.Marshaler, val *ListSlice) (err error) {
 
 // ListSortNumbers
 type ListSortNumbers struct {
-	Var        core.VariableName `if:"label=_"`
-	ByField    string            `if:"label=by_field,type=text"`
-	Descending rt.BoolEval       `if:"label=descending,optional"`
+	Target     assign.Address `if:"label=_"`
+	ByField    string         `if:"label=by_field,type=text"`
+	Descending rt.BoolEval    `if:"label=descending,optional"`
 	Markup     map[string]any
 }
 
@@ -2706,7 +1607,7 @@ func (*ListSortNumbers) Compose() composer.Spec {
 }
 
 const ListSortNumbers_Type = "list_sort_numbers"
-const ListSortNumbers_Field_Var = "$VAR"
+const ListSortNumbers_Field_Target = "$TARGET"
 const ListSortNumbers_Field_ByField = "$BY_FIELD"
 const ListSortNumbers_Field_Descending = "$DESCENDING"
 
@@ -2781,12 +1682,12 @@ func ListSortNumbers_Optional_Marshal(m jsn.Marshaler, pv **ListSortNumbers) (er
 func ListSortNumbers_Marshal(m jsn.Marshaler, val *ListSortNumbers) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListSortNumbers_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListSortNumbers_Field_Var)
+		e0 := m.MarshalKey("", ListSortNumbers_Field_Target)
 		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListSortNumbers_Field_Var))
+			m.Error(errutil.New(e0, "in flow at", ListSortNumbers_Field_Target))
 		}
 		e1 := m.MarshalKey("by_field", ListSortNumbers_Field_ByField)
 		if e1 == nil {
@@ -2809,10 +1710,10 @@ func ListSortNumbers_Marshal(m jsn.Marshaler, val *ListSortNumbers) (err error) 
 
 // ListSortText Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
 type ListSortText struct {
-	Var        core.VariableName `if:"label=_"`
-	ByField    string            `if:"label=by_field,type=text"`
-	Descending rt.BoolEval       `if:"label=descending,optional"`
-	UsingCase  rt.BoolEval       `if:"label=using_case,optional"`
+	Target     assign.Address `if:"label=_"`
+	ByField    string         `if:"label=by_field,type=text"`
+	Descending rt.BoolEval    `if:"label=descending,optional"`
+	UsingCase  rt.BoolEval    `if:"label=using_case,optional"`
 	Markup     map[string]any
 }
 
@@ -2828,7 +1729,7 @@ func (*ListSortText) Compose() composer.Spec {
 }
 
 const ListSortText_Type = "list_sort_text"
-const ListSortText_Field_Var = "$VAR"
+const ListSortText_Field_Target = "$TARGET"
 const ListSortText_Field_ByField = "$BY_FIELD"
 const ListSortText_Field_Descending = "$DESCENDING"
 const ListSortText_Field_UsingCase = "$USING_CASE"
@@ -2904,12 +1805,12 @@ func ListSortText_Optional_Marshal(m jsn.Marshaler, pv **ListSortText) (err erro
 func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListSortText_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListSortText_Field_Var)
+		e0 := m.MarshalKey("", ListSortText_Field_Target)
 		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListSortText_Field_Var))
+			m.Error(errutil.New(e0, "in flow at", ListSortText_Field_Target))
 		}
 		e1 := m.MarshalKey("by_field", ListSortText_Field_ByField)
 		if e1 == nil {
@@ -2937,193 +1838,18 @@ func ListSortText_Marshal(m jsn.Marshaler, val *ListSortText) (err error) {
 	return
 }
 
-// ListSortUsing Rearrange the elements in the named list by using the designated pattern to test pairs of elements.
-type ListSortUsing struct {
-	Var    core.VariableName `if:"label=_"`
-	Using  string            `if:"label=using,type=text"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*ListSortUsing)(nil)
-
-func (*ListSortUsing) Compose() composer.Spec {
-	return composer.Spec{
-		Name: ListSortUsing_Type,
-		Uses: composer.Type_Flow,
-		Lede: "sort",
-	}
-}
-
-const ListSortUsing_Type = "list_sort_using"
-const ListSortUsing_Field_Var = "$VAR"
-const ListSortUsing_Field_Using = "$USING"
-
-func (op *ListSortUsing) Marshal(m jsn.Marshaler) error {
-	return ListSortUsing_Marshal(m, op)
-}
-
-type ListSortUsing_Slice []ListSortUsing
-
-func (op *ListSortUsing_Slice) GetType() string { return ListSortUsing_Type }
-
-func (op *ListSortUsing_Slice) Marshal(m jsn.Marshaler) error {
-	return ListSortUsing_Repeats_Marshal(m, (*[]ListSortUsing)(op))
-}
-
-func (op *ListSortUsing_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ListSortUsing_Slice) SetSize(cnt int) {
-	var els []ListSortUsing
-	if cnt >= 0 {
-		els = make(ListSortUsing_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ListSortUsing_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListSortUsing_Marshal(m, &(*op)[i])
-}
-
-func ListSortUsing_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSortUsing) error {
-	return jsn.RepeatBlock(m, (*ListSortUsing_Slice)(vals))
-}
-
-func ListSortUsing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSortUsing) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListSortUsing_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type ListSortUsing_Flow struct{ ptr *ListSortUsing }
-
-func (n ListSortUsing_Flow) GetType() string      { return ListSortUsing_Type }
-func (n ListSortUsing_Flow) GetLede() string      { return "sort" }
-func (n ListSortUsing_Flow) GetFlow() interface{} { return n.ptr }
-func (n ListSortUsing_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*ListSortUsing); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func ListSortUsing_Optional_Marshal(m jsn.Marshaler, pv **ListSortUsing) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = ListSortUsing_Marshal(m, *pv)
-	} else if !enc {
-		var v ListSortUsing
-		if err = ListSortUsing_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func ListSortUsing_Marshal(m jsn.Marshaler, val *ListSortUsing) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(ListSortUsing_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListSortUsing_Field_Var)
-		if e0 == nil {
-			e0 = core.VariableName_Marshal(m, &val.Var)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListSortUsing_Field_Var))
-		}
-		e1 := m.MarshalKey("using", ListSortUsing_Field_Using)
-		if e1 == nil {
-			e1 = prim.Text_Unboxed_Marshal(m, &val.Using)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", ListSortUsing_Field_Using))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-const ListSource_Type = "list_source"
-
-var ListSource_Optional_Marshal = ListSource_Marshal
-
-type ListSource_Slot struct{ Value *ListSource }
-
-func (at ListSource_Slot) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(at); err == nil {
-		if a, ok := at.GetSlot(); ok {
-			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-func (at ListSource_Slot) GetType() string              { return ListSource_Type }
-func (at ListSource_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at ListSource_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(ListSource)
-	return
-}
-
-func ListSource_Marshal(m jsn.Marshaler, ptr *ListSource) (err error) {
-	slot := ListSource_Slot{ptr}
-	return slot.Marshal(m)
-}
-
-type ListSource_Slice []ListSource
-
-func (op *ListSource_Slice) GetType() string { return ListSource_Type }
-
-func (op *ListSource_Slice) Marshal(m jsn.Marshaler) error {
-	return ListSource_Repeats_Marshal(m, (*[]ListSource)(op))
-}
-
-func (op *ListSource_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ListSource_Slice) SetSize(cnt int) {
-	var els []ListSource
-	if cnt >= 0 {
-		els = make(ListSource_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ListSource_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListSource_Marshal(m, &(*op)[i])
-}
-
-func ListSource_Repeats_Marshal(m jsn.Marshaler, vals *[]ListSource) error {
-	return jsn.RepeatBlock(m, (*ListSource_Slice)(vals))
-}
-
-func ListSource_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListSource) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListSource_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// ListSplice Modify a list by adding and removing elements. Note: the type of the elements being added must match the type of the list. Text cant be added to a list of numbers, numbers cant be added to a list of text. If the starting index is negative, it will begin that many elements from the end of the array. If list's length + the start is less than 0, it will begin from index 0. If the remove count is missing, it removes all elements from the start to the end; if it is 0 or negative, no elements are removed.
+// ListSplice Modify a list by adding and removing elements.
+// The type of the elements being added must match the type of the list.
+// Text cant be added to a list of numbers, numbers cant be added to a list of text.
+// If the starting index is negative, this begins that many elements from the end of the array;
+// if list's length plus the start is less than zero, this begins from index zero.
+// If the remove count is missing, this removes all elements from the start to the end;
+// if the remove count is zero or negative, no elements are removed.
 type ListSplice struct {
-	List   string        `if:"label=_,type=text"`
-	Start  rt.NumberEval `if:"label=start"`
-	Remove rt.NumberEval `if:"label=remove"`
-	Insert rt.Assignment `if:"label=insert"`
+	Target assign.Address    `if:"label=_"`
+	Start  rt.NumberEval     `if:"label=start"`
+	Remove rt.NumberEval     `if:"label=remove"`
+	Insert assign.Assignment `if:"label=insert"`
 	Markup map[string]any
 }
 
@@ -3142,7 +1868,7 @@ func (*ListSplice) Compose() composer.Spec {
 }
 
 const ListSplice_Type = "list_splice"
-const ListSplice_Field_List = "$LIST"
+const ListSplice_Field_Target = "$TARGET"
 const ListSplice_Field_Start = "$START"
 const ListSplice_Field_Remove = "$REMOVE"
 const ListSplice_Field_Insert = "$INSERT"
@@ -3218,12 +1944,12 @@ func ListSplice_Optional_Marshal(m jsn.Marshaler, pv **ListSplice) (err error) {
 func ListSplice_Marshal(m jsn.Marshaler, val *ListSplice) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(ListSplice_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", ListSplice_Field_List)
+		e0 := m.MarshalKey("", ListSplice_Field_Target)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.List)
+			e0 = assign.Address_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", ListSplice_Field_List))
+			m.Error(errutil.New(e0, "in flow at", ListSplice_Field_Target))
 		}
 		e1 := m.MarshalKey("start", ListSplice_Field_Start)
 		if e1 == nil {
@@ -3241,321 +1967,10 @@ func ListSplice_Marshal(m jsn.Marshaler, val *ListSplice) (err error) {
 		}
 		e3 := m.MarshalKey("insert", ListSplice_Field_Insert)
 		if e3 == nil {
-			e3 = rt.Assignment_Marshal(m, &val.Insert)
+			e3 = assign.Assignment_Marshal(m, &val.Insert)
 		}
 		if e3 != nil && e3 != jsn.Missing {
 			m.Error(errutil.New(e3, "in flow at", ListSplice_Field_Insert))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-const ListTarget_Type = "list_target"
-
-var ListTarget_Optional_Marshal = ListTarget_Marshal
-
-type ListTarget_Slot struct{ Value *ListTarget }
-
-func (at ListTarget_Slot) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(at); err == nil {
-		if a, ok := at.GetSlot(); ok {
-			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-func (at ListTarget_Slot) GetType() string              { return ListTarget_Type }
-func (at ListTarget_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at ListTarget_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(ListTarget)
-	return
-}
-
-func ListTarget_Marshal(m jsn.Marshaler, ptr *ListTarget) (err error) {
-	slot := ListTarget_Slot{ptr}
-	return slot.Marshal(m)
-}
-
-type ListTarget_Slice []ListTarget
-
-func (op *ListTarget_Slice) GetType() string { return ListTarget_Type }
-
-func (op *ListTarget_Slice) Marshal(m jsn.Marshaler) error {
-	return ListTarget_Repeats_Marshal(m, (*[]ListTarget)(op))
-}
-
-func (op *ListTarget_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *ListTarget_Slice) SetSize(cnt int) {
-	var els []ListTarget
-	if cnt >= 0 {
-		els = make(ListTarget_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *ListTarget_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return ListTarget_Marshal(m, &(*op)[i])
-}
-
-func ListTarget_Repeats_Marshal(m jsn.Marshaler, vals *[]ListTarget) error {
-	return jsn.RepeatBlock(m, (*ListTarget_Slice)(vals))
-}
-
-func ListTarget_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ListTarget) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = ListTarget_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// PutEdge Add a value to a list.
-type PutEdge struct {
-	From   rt.Assignment `if:"label=_"`
-	Into   ListTarget    `if:"label=into"`
-	AtEdge rt.BoolEval   `if:"label=at_front,optional"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*PutEdge)(nil)
-
-func (*PutEdge) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PutEdge_Type,
-		Uses: composer.Type_Flow,
-		Lede: "put",
-	}
-}
-
-const PutEdge_Type = "put_edge"
-const PutEdge_Field_From = "$FROM"
-const PutEdge_Field_Into = "$INTO"
-const PutEdge_Field_AtEdge = "$AT_EDGE"
-
-func (op *PutEdge) Marshal(m jsn.Marshaler) error {
-	return PutEdge_Marshal(m, op)
-}
-
-type PutEdge_Slice []PutEdge
-
-func (op *PutEdge_Slice) GetType() string { return PutEdge_Type }
-
-func (op *PutEdge_Slice) Marshal(m jsn.Marshaler) error {
-	return PutEdge_Repeats_Marshal(m, (*[]PutEdge)(op))
-}
-
-func (op *PutEdge_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PutEdge_Slice) SetSize(cnt int) {
-	var els []PutEdge
-	if cnt >= 0 {
-		els = make(PutEdge_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PutEdge_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PutEdge_Marshal(m, &(*op)[i])
-}
-
-func PutEdge_Repeats_Marshal(m jsn.Marshaler, vals *[]PutEdge) error {
-	return jsn.RepeatBlock(m, (*PutEdge_Slice)(vals))
-}
-
-func PutEdge_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PutEdge) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PutEdge_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type PutEdge_Flow struct{ ptr *PutEdge }
-
-func (n PutEdge_Flow) GetType() string      { return PutEdge_Type }
-func (n PutEdge_Flow) GetLede() string      { return "put" }
-func (n PutEdge_Flow) GetFlow() interface{} { return n.ptr }
-func (n PutEdge_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*PutEdge); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func PutEdge_Optional_Marshal(m jsn.Marshaler, pv **PutEdge) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = PutEdge_Marshal(m, *pv)
-	} else if !enc {
-		var v PutEdge
-		if err = PutEdge_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func PutEdge_Marshal(m jsn.Marshaler, val *PutEdge) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(PutEdge_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PutEdge_Field_From)
-		if e0 == nil {
-			e0 = rt.Assignment_Marshal(m, &val.From)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PutEdge_Field_From))
-		}
-		e1 := m.MarshalKey("into", PutEdge_Field_Into)
-		if e1 == nil {
-			e1 = ListTarget_Marshal(m, &val.Into)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", PutEdge_Field_Into))
-		}
-		e2 := m.MarshalKey("at_front", PutEdge_Field_AtEdge)
-		if e2 == nil {
-			e2 = rt.BoolEval_Optional_Marshal(m, &val.AtEdge)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", PutEdge_Field_AtEdge))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// PutIndex Replace one value in a list with another.
-type PutIndex struct {
-	From    rt.Assignment `if:"label=_"`
-	Into    ListTarget    `if:"label=into"`
-	AtIndex rt.NumberEval `if:"label=at_index"`
-	Markup  map[string]any
-}
-
-// User implemented slots:
-var _ rt.Execute = (*PutIndex)(nil)
-
-func (*PutIndex) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PutIndex_Type,
-		Uses: composer.Type_Flow,
-		Lede: "put",
-	}
-}
-
-const PutIndex_Type = "put_index"
-const PutIndex_Field_From = "$FROM"
-const PutIndex_Field_Into = "$INTO"
-const PutIndex_Field_AtIndex = "$AT_INDEX"
-
-func (op *PutIndex) Marshal(m jsn.Marshaler) error {
-	return PutIndex_Marshal(m, op)
-}
-
-type PutIndex_Slice []PutIndex
-
-func (op *PutIndex_Slice) GetType() string { return PutIndex_Type }
-
-func (op *PutIndex_Slice) Marshal(m jsn.Marshaler) error {
-	return PutIndex_Repeats_Marshal(m, (*[]PutIndex)(op))
-}
-
-func (op *PutIndex_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PutIndex_Slice) SetSize(cnt int) {
-	var els []PutIndex
-	if cnt >= 0 {
-		els = make(PutIndex_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PutIndex_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PutIndex_Marshal(m, &(*op)[i])
-}
-
-func PutIndex_Repeats_Marshal(m jsn.Marshaler, vals *[]PutIndex) error {
-	return jsn.RepeatBlock(m, (*PutIndex_Slice)(vals))
-}
-
-func PutIndex_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PutIndex) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PutIndex_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type PutIndex_Flow struct{ ptr *PutIndex }
-
-func (n PutIndex_Flow) GetType() string      { return PutIndex_Type }
-func (n PutIndex_Flow) GetLede() string      { return "put" }
-func (n PutIndex_Flow) GetFlow() interface{} { return n.ptr }
-func (n PutIndex_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*PutIndex); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func PutIndex_Optional_Marshal(m jsn.Marshaler, pv **PutIndex) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = PutIndex_Marshal(m, *pv)
-	} else if !enc {
-		var v PutIndex
-		if err = PutIndex_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func PutIndex_Marshal(m jsn.Marshaler, val *PutIndex) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(PutIndex_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PutIndex_Field_From)
-		if e0 == nil {
-			e0 = rt.Assignment_Marshal(m, &val.From)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PutIndex_Field_From))
-		}
-		e1 := m.MarshalKey("into", PutIndex_Field_Into)
-		if e1 == nil {
-			e1 = ListTarget_Marshal(m, &val.Into)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", PutIndex_Field_Into))
-		}
-		e2 := m.MarshalKey("at_index", PutIndex_Field_AtIndex)
-		if e2 == nil {
-			e2 = rt.NumberEval_Marshal(m, &val.AtIndex)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", PutIndex_Field_AtIndex))
 		}
 		m.EndBlock()
 	}
@@ -3687,50 +2102,28 @@ func Range_Marshal(m jsn.Marshaler, val *Range) (err error) {
 	return
 }
 
-var Slots = []interface{}{
-	(*ListIterator)(nil),
-	(*ListSource)(nil),
-	(*ListTarget)(nil),
-}
-
 var Slats = []composer.Composer{
-	(*AsNum)(nil),
-	(*AsRec)(nil),
-	(*AsTxt)(nil),
 	(*EraseEdge)(nil),
 	(*EraseIndex)(nil),
 	(*Erasing)(nil),
 	(*ErasingEdge)(nil),
-	(*FromNumList)(nil),
-	(*FromRecList)(nil),
-	(*FromTxtList)(nil),
-	(*IntoNumList)(nil),
-	(*IntoRecList)(nil),
-	(*IntoTxtList)(nil),
-	(*ListAt)(nil),
 	(*ListEach)(nil),
 	(*ListFind)(nil),
 	(*ListGather)(nil),
 	(*ListLen)(nil),
 	(*ListMap)(nil),
+	(*ListPush)(nil),
 	(*ListReduce)(nil),
 	(*ListReverse)(nil),
-	(*ListSet)(nil),
 	(*ListSlice)(nil),
 	(*ListSortNumbers)(nil),
 	(*ListSortText)(nil),
-	(*ListSortUsing)(nil),
 	(*ListSplice)(nil),
-	(*PutEdge)(nil),
-	(*PutIndex)(nil),
 	(*Range)(nil),
 }
 
 var Signatures = map[uint64]interface{}{
 	6334415563934548256:  (*ListGather)(nil),      /* Gather:from:using: */
-	17577768627337399713: (*AsNum)(nil),           /* list_iterator=AsNum: */
-	6572817319640344459:  (*AsRec)(nil),           /* list_iterator=AsRec: */
-	8904662885358797385:  (*AsTxt)(nil),           /* list_iterator=AsTxt: */
 	17857642077015906043: (*EraseEdge)(nil),       /* execute=Erase: */
 	4911242881414594201:  (*EraseEdge)(nil),       /* execute=Erase:atFront: */
 	13326390992756169124: (*EraseIndex)(nil),      /* execute=Erase:from:atIndex: */
@@ -3739,19 +2132,12 @@ var Signatures = map[uint64]interface{}{
 	12709950044197813063: (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:does: */
 	307909849155983812:   (*ErasingEdge)(nil),     /* execute=Erasing:atFront:as:does:else: */
 	1558163885147286548:  (*Erasing)(nil),         /* execute=Erasing:from:atIndex:as:does: */
-	18376577513349667220: (*ListFind)(nil),        /* bool_eval=Find:list: */
-	7284088252284022973:  (*ListFind)(nil),        /* number_eval=Find:list: */
-	17398975598795870578: (*ListAt)(nil),          /* number_eval=Get:index: */
-	787317922352878550:   (*ListAt)(nil),          /* record_eval=Get:index: */
-	7596656253168052952:  (*ListAt)(nil),          /* text_eval=Get:index: */
-	15036602113576414357: (*IntoNumList)(nil),     /* list_target=IntoNums: */
-	16834697660106297299: (*IntoRecList)(nil),     /* list_target=IntoRecs: */
-	3948826211612626645:  (*IntoTxtList)(nil),     /* list_target=IntoTxts: */
+	8547752949201735569:  (*ListFind)(nil),        /* bool_eval=Find:inList: */
+	16815906459082105780: (*ListFind)(nil),        /* number_eval=Find:inList: */
 	3478260273963207965:  (*ListLen)(nil),         /* number_eval=Len: */
 	8449127989109999373:  (*ListMap)(nil),         /* execute=Map:fromList:using: */
-	15271403541048273402: (*PutEdge)(nil),         /* execute=Put:into: */
-	6274609263035146740:  (*PutEdge)(nil),         /* execute=Put:into:atFront: */
-	7979316796785967069:  (*PutIndex)(nil),        /* execute=Put:into:atIndex: */
+	14590825769568398889: (*ListPush)(nil),        /* execute=Push:into: */
+	17497959320325918107: (*ListPush)(nil),        /* execute=Push:into:atFront: */
 	120416590109430143:   (*Range)(nil),           /* num_list_eval=Range: */
 	15503705420922978310: (*Range)(nil),           /* num_list_eval=Range:byStep: */
 	16618866959380663563: (*Range)(nil),           /* num_list_eval=Range:from: */
@@ -3760,7 +2146,6 @@ var Signatures = map[uint64]interface{}{
 	8451005089688158034:  (*ListEach)(nil),        /* execute=Repeating across:as:does: */
 	7170937308629588871:  (*ListEach)(nil),        /* execute=Repeating across:as:does:else: */
 	177314099445105829:   (*ListReverse)(nil),     /* execute=Reverse list: */
-	6510320425987392359:  (*ListSet)(nil),         /* execute=Set:index:from: */
 	4235921801420235638:  (*ListSlice)(nil),       /* num_list_eval=Slice: */
 	13273073049578089927: (*ListSlice)(nil),       /* record_list_eval=Slice: */
 	18323981472330239313: (*ListSlice)(nil),       /* text_list_eval=Slice: */
@@ -3773,7 +2158,6 @@ var Signatures = map[uint64]interface{}{
 	14495675636779114361: (*ListSlice)(nil),       /* num_list_eval=Slice:start:end: */
 	3241896595896148736:  (*ListSlice)(nil),       /* record_list_eval=Slice:start:end: */
 	8901512565003460886:  (*ListSlice)(nil),       /* text_list_eval=Slice:start:end: */
-	7368886897948327017:  (*ListSortUsing)(nil),   /* execute=Sort:using: */
 	2873147130324862012:  (*ListSortNumbers)(nil), /* execute=SortNumbers:byField: */
 	16697045456605499852: (*ListSortNumbers)(nil), /* execute=SortNumbers:byField:descending: */
 	16004888373963195994: (*ListSortText)(nil),    /* execute=SortTexts:byField: */
@@ -3784,7 +2168,4 @@ var Signatures = map[uint64]interface{}{
 	6201472222981604265:  (*ListSplice)(nil),      /* num_list_eval=Splice:start:remove:insert: */
 	15778591428898251294: (*ListSplice)(nil),      /* record_list_eval=Splice:start:remove:insert: */
 	11160578659475180120: (*ListSplice)(nil),      /* text_list_eval=Splice:start:remove:insert: */
-	8822543248886909391:  (*FromNumList)(nil),     /* list_source=VarOfNums: */
-	15957126709573357801: (*FromRecList)(nil),     /* list_source=VarOfRecs: */
-	4755017405222224827:  (*FromTxtList)(nil),     /* list_source=VarOfTxts: */
 }

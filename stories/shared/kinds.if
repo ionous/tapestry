@@ -436,6 +436,7 @@
       ]
     },
     {
+      "--": "generates 'is visited' and 'not visited'",
       "Kinds:have:": [
         "Rooms",
         [

@@ -82,247 +82,229 @@
         ],
         [
           {
-            "Say:": {
+            "Print:": {
               "Rows does:": [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to store something into an actor:<br>"
+                        "Print:": "Fail to store something into an actor:<br>"
                       },
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "clutch"
+                            "FromText:": "clutch"
                           },
                           {
-                            "FromTxt:": "mildred"
+                            "FromText:": "mildred"
                           }
                         ]
                       },
                       {
-                        "Say:": {
-                          "RenderTemplate:": "clutch parent: {parentOf:.purse}."
-                        }
+                        "Say:": "clutch parent: {parentOf:.purse}."
                       }
                     ]
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to store something into a closed container:<br>"
+                        "Print:": "Fail to store something into a closed container:<br>"
                       },
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "coffee"
+                            "FromText:": "coffee"
                           },
                           {
-                            "FromTxt:": "machine"
+                            "FromText:": "machine"
                           }
                         ]
                       },
                       {
-                        "Say:": {
-                          "RenderTemplate:": "coffee parent: {parentOf:.coffee}."
-                        }
+                        "Say:": "coffee parent: {parentOf:.coffee}."
                       }
                     ]
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to store something into something nested:<br>"
+                        "Print:": "Fail to store something into something nested:<br>"
                       },
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "clutch"
+                            "FromText:": "clutch"
                           },
                           {
-                            "FromTxt:": "purse"
+                            "FromText:": "purse"
                           }
                         ]
                       },
                       {
-                        "Say:": {
-                          "RenderTemplate:": "clutch parent: {parentOf:.clutch}."
-                        }
+                        "Say:": "clutch parent: {parentOf:.clutch}."
                       }
                     ]
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Okay, store something into an open container:<br>"
+                        "Print:": "Okay, store something into an open container:<br>"
                       },
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "coffee"
+                            "FromText:": "coffee"
                           },
                           {
-                            "FromTxt:": "purse"
+                            "FromText:": "purse"
                           }
                         ]
                       },
                       {
-                        "Say:": {
-                          "RenderTemplate:": "coffee parent: {parentOf:.coffee}."
-                        }
+                        "Say:": "coffee parent: {parentOf:.coffee}."
                       }
                     ]
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Okay, store something onto a supporter:<br>"
+                        "Print:": "Okay, store something onto a supporter:<br>"
                       },
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "coin"
+                            "FromText:": "coin"
                           },
                           {
-                            "FromTxt:": "shelf"
+                            "FromText:": "shelf"
                           }
                         ]
                       },
                       {
-                        "Say:": {
-                          "RenderTemplate:": "coin parent: {parentOf:.coin}."
-                        }
+                        "Say:": "coin parent: {parentOf:.coin}."
                       }
                     ]
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to store something worn:<br>"
+                        "Print:": "Fail to store something worn:<br>"
                       },
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "flower"
+                            "FromText:": "flower"
                           },
                           {
-                            "FromTxt:": "shelf"
+                            "FromText:": "shelf"
                           }
                         ]
                       },
                       {
-                        "Say:": {
-                          "RenderTemplate:": "flower parent: {parentOf:.flower}."
-                        }
+                        "Say:": "flower parent: {parentOf:.flower}."
                       }
                     ]
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to store something not held:<br>"
+                        "Print:": "Fail to store something not held:<br>"
                       },
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "broom"
+                            "FromText:": "broom"
                           },
                           {
-                            "FromTxt:": "cabinet"
+                            "FromText:": "cabinet"
                           }
                         ]
                       },
                       {
-                        "Say:": {
-                          "RenderTemplate:": "broom parent: {parentOf:.broom}."
-                        }
+                        "Say:": "broom parent: {parentOf:.broom}."
                       }
                     ]
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Okay, store something into something held:<br>"
+                        "Print:": "Okay, store something into something held:<br>"
                       },
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "knife"
+                            "FromText:": "knife"
                           },
                           {
-                            "FromTxt:": "purse"
+                            "FromText:": "purse"
                           }
                         ]
                       },
                       {
-                        "Say:": {
-                          "RenderTemplate:": "knife parent: {parentOf:.knife}."
-                        }
+                        "Say:": "knife parent: {parentOf:.knife}."
                       }
                     ]
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to store something to somewhere unreachable:<br>"
+                        "Print:": "Fail to store something to somewhere unreachable:<br>"
                       },
                       {
                         "StoringInto agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "purse"
+                            "FromText:": "purse"
                           },
                           {
-                            "FromTxt:": "wisdom"
+                            "FromText:": "wisdom"
                           }
                         ]
                       },
                       {
-                        "Say:": {
-                          "RenderTemplate:": "purse parent: {parentOf:.purse}."
-                        }
+                        "Say:": "purse parent: {parentOf:.purse}."
                       }
                     ]
                   }

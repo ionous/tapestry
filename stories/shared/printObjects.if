@@ -19,7 +19,9 @@
               "groups",
               "object group",
               {
-                "MakeGroups objs:": "@objs"
+                "MakeGroups objs:": {
+                  "FromTextList:": "@objs"
+                }
               }
             ]
           }
@@ -27,25 +29,25 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Commas does:": [
                       {
                         "Repeating across:as:does:": [
-                          "@groups",
                           {
-                            "AsRec:": "group"
+                            "FromRecordList:": "@groups"
                           },
+                          "group",
                           [
                             {
-                              "Say:": {
+                              "Print:": {
                                 "Spaces does:": [
                                   {
-                                    "PrintGroup group:": "@group"
+                                    "PrintGroup group:": {
+                                      "FromRecord:": "@group"
+                                    }
                                   }
                                 ]
                               }
@@ -84,7 +86,9 @@
               "groups",
               "object group",
               {
-                "MakeGroups objs:": "@objs"
+                "MakeGroups objs:": {
+                  "FromTextList:": "@objs"
+                }
               }
             ]
           }
@@ -92,25 +96,25 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Rows does:": [
                       {
                         "Repeating across:as:does:": [
-                          "@groups",
                           {
-                            "AsRec:": "group"
+                            "FromRecordList:": "@groups"
                           },
+                          "group",
                           [
                             {
-                              "Say:": {
+                              "Print:": {
                                 "Row does:": [
                                   {
-                                    "PrintGroup group:": "@group"
+                                    "PrintGroup group:": {
+                                      "FromRecord:": "@group"
+                                    }
                                   }
                                 ]
                               }
@@ -170,14 +174,10 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
-                    "RenderTemplate:": "{.obj}"
-                  }
+                  "Say:": "{.obj}"
                 }
               ]
             ]
@@ -204,16 +204,20 @@
               },
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Spaces does:": [
                       {
-                        "A noun:": "@obj"
+                        "A noun:": {
+                          "FromText:": "@obj"
+                        }
                       },
                       {
-                        "Say:": {
+                        "Print:": {
                           "Brackets does:": [
                             {
-                              "PrintDetails obj:": "@obj"
+                              "PrintDetails obj:": {
+                                "FromText:": "@obj"
+                              }
                             }
                           ]
                         }
@@ -246,7 +250,9 @@
               },
               [
                 {
-                  "PrintBlock obj:": "@obj"
+                  "PrintBlock obj:": {
+                    "FromText:": "@obj"
+                  }
                 }
               ]
             ]
@@ -278,7 +284,9 @@
             "TextList:initially:": [
               "kids",
               {
-                "VisibleStorage obj:": "@obj"
+                "VisibleStorage obj:": {
+                  "FromText:": "@obj"
+                }
               }
             ]
           },
@@ -288,7 +296,9 @@
               {
                 "Cmp:is:num:": [
                   {
-                    "Len:": "@kids"
+                    "Len:": {
+                      "FromTextList:": "@kids"
+                    }
                   },
                   "greater_than",
                   0
@@ -300,19 +310,21 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Spaces does:": [
                       {
-                        "A noun:": "@obj"
+                        "A noun:": {
+                          "FromText:": "@obj"
+                        }
                       },
                       {
                         "PrintStatus obj:isEmpty:": [
-                          "@obj",
+                          {
+                            "FromText:": "@obj"
+                          },
                           {
                             "FromBool:": {
                               "Not:": "@hasKids"
@@ -328,7 +340,9 @@
                     "@hasKids",
                     [
                       {
-                        "PrintBlocks objs:": "@kids"
+                        "PrintBlocks objs:": {
+                          "FromTextList:": "@kids"
+                        }
                       }
                     ]
                   ]
@@ -368,7 +382,9 @@
             "TextList:initially:": [
               "kids",
               {
-                "VisibleStorage obj:": "@obj"
+                "VisibleStorage obj:": {
+                  "FromText:": "@obj"
+                }
               }
             ]
           }
@@ -379,7 +395,9 @@
               {
                 "Cmp:is:num:": [
                   {
-                    "Len:": "@kids"
+                    "Len:": {
+                      "FromTextList:": "@kids"
+                    }
                   },
                   "greater_than",
                   0
@@ -387,18 +405,16 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "inline storage",
-                      {
-                        "RenderTemplate:": "{On: .obj|capitalize!} {the: .obj} {are: .obj .kids} {print_inline_objects: .kids}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "inline storage",
+                    {
+                      "Say:": "{On: .obj|capitalize!} {the: .obj} {are: .obj .kids} {print_inline_objects: .kids}."
+                    }
+                  ]
                 },
                 {
-                  "Let:be:": [
-                    "success",
+                  "Set:from:": [
+                    "@success",
                     {
                       "FromBool:": true
                     }
@@ -437,7 +453,9 @@
             "TextList:initially:": [
               "kids",
               {
-                "VisibleStorage obj:": "@obj"
+                "VisibleStorage obj:": {
+                  "FromText:": "@obj"
+                }
               }
             ]
           }
@@ -457,14 +475,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "empty container",
-                      {
-                        "RenderTemplate:": "empty"
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "empty container",
+                    {
+                      "Say:": "empty"
+                    }
+                  ]
                 }
               ]
             ]
@@ -480,7 +496,7 @@
                     ]
                   },
                   {
-                    "Get obj:trait:": [
+                    "Object:field:": [
                       "@obj",
                       "closed"
                     ]
@@ -489,12 +505,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "closed container",
-                      "closed"
-                    ]
-                  }
+                  "Print response:with:": [
+                    "closed container",
+                    {
+                      "Say:": "closed"
+                    }
+                  ]
                 }
               ]
             ]
@@ -506,7 +522,9 @@
                   {
                     "Cmp:is:num:": [
                       {
-                        "Len:": "@kids"
+                        "Len:": {
+                          "FromTextList:": "@kids"
+                        }
                       },
                       "greater_than",
                       0
@@ -516,14 +534,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "on which are",
-                      {
-                        "RenderTemplate:": "{on: .obj} which {are: .obj .kids} {print_inline_objects: .kids}"
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "on which are",
+                    {
+                      "Say:": "{on: .obj} which {are: .obj .kids} {print_inline_objects: .kids}"
+                    }
+                  ]
                 }
               ]
             ]
@@ -564,23 +580,25 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Spaces does:": [
                       {
-                        "Say:": {
+                        "Print:": {
                           "Brackets does:": [
                             {
-                              "Say:": {
+                              "Print:": {
                                 "Commas does:": [
                                   {
                                     "PrintInnerStatus obj:isEmpty:": [
-                                      "@obj",
-                                      "@isEmpty"
+                                      {
+                                        "FromText:": "@obj"
+                                      },
+                                      {
+                                        "FromBool:": "@isEmpty"
+                                      }
                                     ]
                                   }
                                 ]
@@ -632,21 +650,19 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
+                "Object:field:": [
                   "@obj",
                   "locked"
                 ]
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "locked status",
-                      {
-                        "RenderTemplate:": "{if .obj.closed and .obj.locked}locked{end}"
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "locked status",
+                    {
+                      "Say:": "{if .obj.closed and .obj.locked}locked{end}"
+                    }
+                  ]
                 }
               ]
             ]
@@ -656,13 +672,13 @@
               {
                 "AllTrue:": [
                   {
-                    "Get obj:trait:": [
+                    "Object:field:": [
                       "@obj",
                       "transparent"
                     ]
                   },
                   {
-                    "Get obj:trait:": [
+                    "Object:field:": [
                       "@obj",
                       "unopenable"
                     ]
@@ -671,14 +687,12 @@
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "transparent status",
-                      {
-                        "RenderTemplate:": "{if .isEmpty}empty{end}"
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "transparent status",
+                    {
+                      "Say:": "{if .isEmpty}empty{end}"
+                    }
+                  ]
                 }
               ]
             ]
@@ -686,21 +700,19 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
+                "Object:field:": [
                   "@obj",
                   "openable"
                 ]
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "openable status",
-                      {
-                        "RenderTemplate:": "{if .obj.closed}closed{else}open{if .isEmpty} but empty{end}"
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "openable status",
+                    {
+                      "Say:": "{if .obj.closed}closed{else}open{if .isEmpty} but empty{end}"
+                    }
+                  ]
                 }
               ]
             ]
@@ -708,21 +720,19 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
+                "Object:field:": [
                   "@obj",
                   "worn"
                 ]
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "worn status",
-                      {
-                        "RenderTemplate:": "being worn"
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "worn status",
+                    {
+                      "Say:": "being worn"
+                    }
+                  ]
                 }
               ]
             ]
@@ -730,21 +740,19 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
+                "Object:field:": [
                   "@obj",
                   "lit"
                 ]
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "lit status",
-                      {
-                        "RenderTemplate:": "providing light"
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "lit status",
+                    {
+                      "Say:": "providing light"
+                    }
+                  ]
                 }
               ]
             ]

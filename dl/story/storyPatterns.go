@@ -8,9 +8,9 @@ import (
 )
 
 func (op *PatternActions) PostImport(k *imp.Importer) (err error) {
-	patternName := op.Name.String()
+	patternName := op.PatternName
 	if locals := ImportLocals(k, patternName, op.Locals); len(locals) > 0 {
-		k.WriteEphemera(&eph.EphPatterns{Name: patternName, Locals: locals})
+		k.WriteEphemera(&eph.EphPatterns{PatternName: patternName, Locals: locals})
 	}
 	// write the rules last ( order doesnt matter except it helps with test output consistency )
 	return ImportRules(k, patternName, "", op.Rules, eph.EphTiming{})
@@ -18,10 +18,10 @@ func (op *PatternActions) PostImport(k *imp.Importer) (err error) {
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
 func (op *PatternDecl) PostImport(k *imp.Importer) (err error) {
-	patternName := op.Name.String()
+	patternName := op.PatternName
 	ps := op.reduceProps()
 	res := convertRes(op.PatternReturn)
-	k.WriteEphemera(&eph.EphPatterns{Name: patternName, Result: res, Params: ps})
+	k.WriteEphemera(&eph.EphPatterns{PatternName: patternName, Result: res, Params: ps})
 	return
 }
 
@@ -72,12 +72,12 @@ func (op *PatternRule) importRule(k *imp.Importer, pattern, target string, tgtFl
 			// 		guard,
 			// 	}}
 			k.WriteEphemera(&eph.EphRules{
-				Name:   pattern,
-				Target: target, // fix: this should become part of the guards i think, even if its less slightly less efficient
-				Filter: op.Guard,
-				When:   flags,
-				Exe:    act,
-				Touch:  always})
+				PatternName: pattern,
+				Target:      target, // fix: this should become part of the guards i think, even if its less slightly less efficient
+				Filter:      op.Guard,
+				When:        flags,
+				Exe:         act,
+				Touch:       always})
 		}
 	}
 	return

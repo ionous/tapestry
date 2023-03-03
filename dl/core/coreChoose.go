@@ -1,6 +1,7 @@
 package core
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
@@ -21,7 +22,7 @@ func (op *ChooseValue) Branch(run rt.Runtime) (err error) {
 }
 
 func (op *ChooseValue) ifDoElse(run rt.Runtime) (err error) {
-	if v, e := safe.GetAssignedValue(run, op.From); e != nil {
+	if v, e := assign.GetSafeAssignment(run, op.From); e != nil {
 		err = e
 	} else {
 		run.PushScope(scope.NewSingleValue(op.Assign, v))

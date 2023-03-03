@@ -232,10 +232,7 @@ func TestQueries(t *testing.T) {
 		t.Fatal(id, e) // should be blank because the table is out of scope
 	} else if got, e := q.PatternLabels(pattern); e != nil {
 		t.Fatal("patternLabels:", e)
-	} else if diff := pretty.Diff(got, qdb.PatternLabels{
-		"ancestor",
-		[]string{"object", "other_object"},
-	}); len(diff) > 0 {
+	} else if diff := pretty.Diff(got, []string{"object", "other_object", "ancestor"}); len(diff) > 0 {
 		t.Fatal(e, diff)
 	} else if got, e := q.RulesFor(pattern, ""); e != nil {
 		t.Fatal(e)

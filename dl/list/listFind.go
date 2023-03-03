@@ -2,63 +2,72 @@ package list
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 
+// return true if the value exists in the list
 func (op *ListFind) GetBool(run rt.Runtime) (ret g.Value, err error) {
-	if i, e := op.findIndex(run); e != nil {
-		err = cmdError(op, e)
+	// fix: with autoconversion of int to bool and one-based indices -
+	// only the GetNumber variant would be needed.
+	if i, e := op.getIndex(run); e != nil {
+		err = CmdError(op, e)
 	} else {
 		ret = g.BoolOf(i >= 0)
 	}
 	return
 }
 
+// returns 1 based index of the value in the list
 func (op *ListFind) GetNumber(run rt.Runtime) (ret g.Value, err error) {
-	if i, e := op.findIndex(run); e != nil {
-		err = cmdError(op, e)
+	if i, e := op.getIndex(run); e != nil {
+		err = CmdError(op, e)
 	} else {
 		ret = g.IntOf(i + 1)
 	}
 	return
 }
 
-// zero based
-func (op *ListFind) findIndex(run rt.Runtime) (ret int, err error) {
-	if vs, e := safe.GetAssignedValue(run, op.List); e != nil {
+// zero-based
+func (op *ListFind) getIndex(run rt.Runtime) (ret int, err error) {
+	if val, e := assign.GetSafeAssignment(run, op.Value); e != nil {
 		err = e
-	} else if el := affine.Element(vs.Affinity()); len(el) == 0 {
-		err = errutil.New("not a list")
-	} else if v, e := safe.GetAssignedValue(run, op.Value); e != nil {
+	} else if els, e := assign.GetSafeAssignment(run, op.List); e != nil {
 		err = e
-	} else if aff := v.Affinity(); aff != el {
-		err = errutil.New("expected", el, "have", aff)
+	} else if listAff, aff := els.Affinity(), val.Affinity(); aff != affine.Element(listAff) {
+		err = errutil.New(listAff, "can't contain", aff)
 	} else {
-		switch el {
+		switch aff {
 		case affine.Number:
-			ret = -1
-			match := v.Float()
-			for i, n := range vs.Floats() {
-				if n == match { //epsilon?
-					ret = i
-					break
-				}
-			}
+			ret = findFloat(els, val.Float())
 		case affine.Text:
-			ret = -1
-			match := v.String()
-			for i, n := range vs.Strings() {
-				if n == match {
-					ret = i
-					break
-				}
-			}
+			ret = findString(els, val.String())
 		default:
-			// fix?
-			err = errutil.New("cant search list of", el)
+			err = errutil.New(aff, "not implemented")
+		}
+	}
+	return
+}
+
+func findFloat(els g.Value, match float64) (ret int) {
+	ret = -1
+	for i, n := range els.Floats() {
+		if n == match { //epsilon?
+			ret = i
+			break
+		}
+	}
+	return
+}
+
+func findString(els g.Value, match string) (ret int) {
+	ret = -1
+	for i, n := range els.Strings() {
+		if n == match {
+			ret = i
+			break
 		}
 	}
 	return

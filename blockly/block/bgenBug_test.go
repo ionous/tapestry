@@ -3,7 +3,6 @@ package block_test
 import (
   "testing"
 
-  "git.sr.ht/~ionous/tapestry/dl/core"
   "git.sr.ht/~ionous/tapestry/dl/list"
   "git.sr.ht/~ionous/tapestry/dl/literal"
   "git.sr.ht/~ionous/tapestry/dl/story"
@@ -85,40 +84,16 @@ func TestStringHints(t *testing.T) {
 }
 
 // blocks with optional members should just skip happily to the next member
+// fix? empty strings render extraState -- but they probably dont need to.
 func TestSkippedSlot(t *testing.T) {
   if e := testBlocks(&list.ListEach{}, `{
   "type": "list_each",
   "id": "test-1",
-  "extraState": {}
-}`); e != nil {
-    t.Fatal(e)
-  }
-}
-
-// empty slots shouldn't get extra closes
-// previously this was getting 4 extra closes
-func TestEndSlot(t *testing.T) {
-  if e := testBlocks(&list.PutEdge{
-    From: &core.GetVar{},
-  }, `{
-  "type": "put_edge",
-  "id": "test-1",
   "extraState": {
-    "FROM": 1
+    "AS": 1
   },
-  "inputs": {
-    "FROM": {
-      "block": {
-        "type": "get_var",
-        "id": "test-2",
-        "extraState": {
-          "NAME": 1
-        },
-        "fields": {
-          "NAME": ""
-        }
-      }
-    }
+  "fields": {
+    "AS": ""
   }
 }`); e != nil {
     t.Fatal(e)

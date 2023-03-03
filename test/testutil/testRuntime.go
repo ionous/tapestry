@@ -36,7 +36,7 @@ func (x *Runtime) ReplaceScope(s rt.Scope, init bool) (ret rt.Scope, err error) 
 func (x *Runtime) SetField(target, field string, value g.Value) (err error) {
 	switch target {
 	case meta.Variables:
-		err = x.Stack.SetFieldByName(field, value)
+		err = x.Stack.SetFieldByName(field, g.CopyValue(value))
 	default:
 		err = g.UnknownField(target, field)
 	}
@@ -45,6 +45,14 @@ func (x *Runtime) SetField(target, field string, value g.Value) (err error) {
 
 func (x *Runtime) GetField(target, field string) (ret g.Value, err error) {
 	switch target {
+	case meta.ObjectId:
+		if _, ok := x.ObjectMap[field]; !ok {
+			err = g.UnknownObject(field)
+		} else {
+			// in the test runtime the name of the object is generally the same as id
+			ret = g.StringOf(field)
+		}
+
 	// return type of an object
 	case meta.ObjectKind:
 		if a, ok := x.ObjectMap[field]; !ok {
@@ -61,18 +69,15 @@ func (x *Runtime) GetField(target, field string) (ret g.Value, err error) {
 			ret = g.StringsOf(a.Kind().Path())
 		}
 
-	case meta.ObjectValue:
-		if obj, ok := x.ObjectMap[field]; ok {
-			ret = g.RecordOf(obj)
-		} else {
-			err = g.UnknownObject(field)
-		}
-
 	case meta.Variables:
 		ret, err = x.Stack.FieldByName(field)
 
 	default:
-		err = g.UnknownField(target, field)
+		if a, ok := x.ObjectMap[target]; !ok {
+			err = g.UnknownField(target, field)
+		} else {
+			ret, err = a.GetNamedField(field)
+		}
 	}
 	return
 }

@@ -3,6 +3,7 @@ package express
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -86,51 +87,23 @@ func TestExpressions(t *testing.T) {
 		}
 	})
 	t.Run("big dot", func(t *testing.T) {
+		// get 'num' out of 'A' ( which is in this case an object )
 		if e := testExpression(".A.num",
-			// get 'num' out of 'A' ( note: get field at supports any value )
-			&core.GetAtField{
-				Field: W("num"),
-				// get "a" -- some value supporting field access
-				// could be a record or an object variable, or a global object.
-				// ( b/c its capitalized, we know its going to be a global object )
-				From: &render.RenderField{
-					Name: T("A"),
-				},
-			}); e != nil {
+			renderRef("A", "num")); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("little dot", func(t *testing.T) {
 		if e := testExpression(".a.b.c",
-			// c, a value in b, can be anything.
-			&core.GetAtField{
-				Field: W("c"),
-				// to get a value from b, b must have been specifically a record.
-				From: &core.FromRec{
-					// get b out of a ( note: get field at supports any value )
-					Rec: &core.GetAtField{
-						Field: W("b"),
-						// get "a" -- some value supporting field access
-						// could be a record or an object variable, or a global object.
-						From: &render.RenderField{
-							Name: T("a"),
-						},
-					},
-				}}); e != nil {
+			renderRef("a", "b", "c")); e != nil {
 			t.Fatal(e)
 		}
 	})
 	t.Run("binary", func(t *testing.T) {
 		if e := testExpression(".A.num * .b.num",
 			&core.ProductOf{
-				A: &core.GetAtField{
-					Field: W("num"),
-					From:  &render.RenderField{Name: T("A")},
-				},
-				B: &core.GetAtField{
-					Field: W("num"),
-					From:  &render.RenderField{Name: T("b")},
-				},
+				A: renderRef("A", "num"),
+				B: renderRef("b", "num"),
 			}); e != nil {
 			t.Fatal(e)
 		}
@@ -143,7 +116,7 @@ func testExpression(str string, want interface{}) (err error) {
 	} else if got, e := Convert(xs); e != nil {
 		err = errutil.New(e)
 	} else if diff := pretty.Diff(got, want); len(diff) > 0 {
-		err = errutil.New("failed:", pretty.Sprint(got))
+		err = errutil.New("have:", pretty.Sprint(got), "want:", pretty.Sprint(want))
 	}
 	return
 }
@@ -154,8 +127,7 @@ func TestTemplates(t *testing.T) {
 		if e := testTemplate("{print_num_word: .group_size}",
 			&core.PrintNumWord{
 				Num: &render.RenderRef{
-					Name:  N("group_size"),
-					Flags: render.RenderFlags{Str: render.RenderFlags_RenderAsAny},
+					Name: T("group_size"),
 				},
 			}); e != nil {
 			t.Fatal(e)
@@ -250,10 +222,9 @@ func TestTemplates(t *testing.T) {
 	t.Run("indexed", func(t *testing.T) {
 		if e := testTemplate("{'world'|hello!}",
 			&render.RenderPattern{
-				Call: core.CallPattern{
-					Pattern: P("hello"), Arguments: core.Args(
-						&core.FromText{Val: T("world")},
-					)}}); e != nil {
+				PatternName: W("hello"), Render: []render.RenderEval{
+					&render.RenderValue{Value: &assign.FromText{Value: T("world")}},
+				}}); e != nil {
 			t.Fatal(e)
 		}
 	})
@@ -270,20 +241,26 @@ func TestTemplates(t *testing.T) {
 	})
 
 	// dotted names started with capital letters are requests for objects exactly matching that name
-	// note: we do the cap check at runtime now, so there's no difference in the resulting commands b/t .Object and .object
+	// note: this does the case check at runtime now, so there's no difference in the resulting commands b/t .Object and .object
 	t.Run("global prop", func(t *testing.T) {
 		if e := testTemplate("{.Object.prop}",
-			&core.GetAtField{
-				Field: W("prop"),
-				From: &render.RenderField{
-					Name: T("Object"),
-				},
-			},
+			renderRef("Object", "prop"),
 		); e != nil {
 			t.Fatal(e)
 		}
 	})
 }
+
+// yuck: the assignment swap is concrete when its a field
+// when used as
+func assignToEval(a assign.Assignment) *assign.Assignment {
+	return &a
+}
+
+func renderRef(v string, path ...any) *render.RenderRef {
+	return &render.RenderRef{Name: T(v), Dot: assign.MakeDot(path...)}
+}
+
 func testTemplate(str string, want interface{}) (err error) {
 	if xs, e := template.Parse(str); e != nil {
 		err = e

@@ -13,35 +13,35 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/test/debug"
+	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 
 	"git.sr.ht/~ionous/tapestry/jsn/dout"
 )
 
-func TestDetailsEncode(t *testing.T) {
-	file := &story.StoryFile{StoryLines: debug.FactorialStory.Reformat()}
-	if d, e := dout.Encode(file); e != nil {
+// test that the detailed format can be used to write out, and read back in the same data
+// we dont much care what it looks like anymore.
+func TestDetailsEncodeDecode(t *testing.T) {
+	out := &story.StoryFile{StoryLines: debug.FactorialStory.Reformat()}
+	if d, e := dout.Encode(out); e != nil {
 		t.Fatal(e)
 	} else if b, e := json.Marshal(d); e != nil {
 		t.Fatal(e)
-	} else if str := string(b); str != jsnTestIfx {
-		t.Fatal(str)
-	}
-}
-
-func TestDetailsDecode(t *testing.T) {
-	var file story.StoryFile
-	if e := din.Decode(&file, tapestry.Registry(), []byte(jsnTestIfx)); e != nil {
-		t.Fatal(e)
 	} else {
-		paragraphs := story.ReformatStory(file.StoryLines)
-		if diff := pretty.Diff(debug.FactorialStory, &paragraphs); len(diff) != 0 {
-			pretty.Print(file.StoryLines)
-			t.Fatal(diff)
+		var in story.StoryFile
+		if e := din.Decode(&in, tapestry.Registry(), b); e != nil {
+			t.Fatal(e)
+		} else {
+			paragraphs := story.ReformatStory(in.StoryLines)
+			if diff := pretty.Diff(debug.FactorialStory, &paragraphs); len(diff) != 0 {
+				pretty.Print(in.StoryLines)
+				t.Fatal(diff)
+			}
 		}
 	}
 }
 
+// test that the compact encoding matches a particular "golden image"
 func TestCompactEncoder(t *testing.T) {
 	file := &story.StoryFile{StoryLines: debug.FactorialStory.Reformat()}
 	if str, e := cout.Marshal(file, story.CompactEncoder); e != nil {
@@ -51,7 +51,9 @@ func TestCompactEncoder(t *testing.T) {
 	}
 }
 
+// test the compact decoder can read from the "golden image" and get the hardwired factorial story.
 func TestCompactDecode(t *testing.T) {
+	errutil.Panic = true
 	var file story.StoryFile
 	if e := story.Decode(&file, []byte(jsnTestIf), tapestry.AllSignatures); e != nil {
 		pretty.Println(file)
@@ -64,9 +66,6 @@ func TestCompactDecode(t *testing.T) {
 		}
 	}
 }
-
-//go:embed jsnTest.ifx
-var jsnTestIfx string
 
 //go:embed jsnTest.if
 var jsnTestIf string
@@ -118,29 +117,6 @@ func TestAnonymousOptional(t *testing.T) {
 			pretty.Println("test", i, "got:", have)
 			t.Fatal(diff)
 		}
-	}
-}
-
-// TestVarAsBool - unit test for broken parsing case
-// @requires light double committed
-func TestVarAsBool(t *testing.T) {
-	in := `{"AllTrue:":["@requires light",{"Get:from:":["is in darkness",{"VarFields:":"actor"}]}]}`
-	want := core.AllTrue{Test: []rt.BoolEval{
-		&core.GetVar{
-			Name: core.VariableName{Str: "requires light"},
-		},
-		&core.GetAtField{
-			Field: "is in darkness",
-			From:  &core.FromVar{Var: core.VariableName{Str: "actor"}},
-		},
-	}}
-	var have core.AllTrue
-	if e := story.Decode(&have, []byte(in), tapestry.AllSignatures); e != nil {
-		pretty.Println("got:", have)
-		t.Fatal(e)
-	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
-		pretty.Println("got:", have)
-		t.Fatal(diff)
 	}
 }
 

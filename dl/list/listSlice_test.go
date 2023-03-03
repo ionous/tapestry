@@ -3,6 +3,7 @@ package list_test
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 )
 
@@ -58,7 +59,11 @@ func slice(start, end int, src []string) (ret string) {
 	if run, _, e := newListTime(src, nil); e != nil {
 		ret = e.Error()
 	} else {
-		ret = joinText(run, &list.ListSlice{List: V("source"), Start: I(start), End: I(end)})
+		ret = joinText(run, &list.ListSlice{
+			List:  &assign.FromTextList{Value: assign.Variable("source")},
+			Start: I(start),
+			End:   I(end),
+		})
 	}
 	return
 }

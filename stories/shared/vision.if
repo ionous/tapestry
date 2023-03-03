@@ -15,11 +15,9 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "ObjFields:": "player"
-                  }
+                "Object:field:": [
+                  "player",
+                  "pawn"
                 ]
               }
             ]
@@ -28,7 +26,7 @@
             "Bool:initially:": [
               "was lit",
               {
-                "Get obj:trait:": [
+                "Object:field:": [
                   "@actor",
                   "not in darkness"
                 ]
@@ -39,7 +37,9 @@
             "Bool:initially:": [
               "now lit",
               {
-                "ContainsLight spot:": "@actor"
+                "ContainsLight spot:": {
+                  "FromText:": "@actor"
+                }
               }
             ]
           }
@@ -81,18 +81,20 @@
           },
           {
             "PatternRule:flags:does:": [
-              {
-                "Always": true
-              },
+              true,
               "before",
               [
                 {
-                  "Put:from:at:": [
+                  "Set:from:": [
                     {
-                      "VarField:": "actor"
+                      "Object:field:": [
+                        "@actor",
+                        "not in darkness"
+                      ]
                     },
-                    "@now lit",
-                    "not in darkness"
+                    {
+                      "FromBool:": "@now lit"
+                    }
                   ]
                 }
               ]
@@ -113,17 +115,15 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "darkness has fallen",
-                      "It is now pitch dark in here!"
-                    ]
-                  }
+                  "Print response:with:": [
+                    "darkness has fallen",
+                    {
+                      "Say:": "It is now pitch dark in here!"
+                    }
+                  ]
                 }
               ]
             ]
@@ -143,18 +143,16 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "PrintVantage where:": {
-                    "Get:from:": [
-                      "pawn",
-                      {
-                        "ObjFields:": "player"
-                      }
-                    ]
+                    "FromText:": {
+                      "Object:field:": [
+                        "player",
+                        "pawn"
+                      ]
+                    }
                   }
                 }
               ]

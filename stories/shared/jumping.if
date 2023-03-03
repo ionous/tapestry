@@ -35,11 +35,9 @@
               "actor",
               "object",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
                 ]
               }
             ]
@@ -49,11 +47,15 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": "@actor"
+                }
               },
               [
                 {
-                  "ReportJumping actor:": "@actor"
+                  "ReportJumping actor:": {
+                    "FromText:": "@actor"
+                  }
                 }
               ]
             ]
@@ -83,19 +85,15 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "actor jumping",
-                      {
-                        "RenderTemplate:": "{the:.actor|capitalize!} jumps on the spot."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "actor jumping",
+                    {
+                      "Say:": "{the:.actor|capitalize!} jumps on the spot."
+                    }
+                  ]
                 }
               ]
             ]
@@ -103,18 +101,18 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": "@actor"
+                }
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player jumping",
-                      {
-                        "RenderTemplate:": "{we:|capitalize!} jump on the spot."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "player jumping",
+                    {
+                      "Say:": "{we:|capitalize!} jump on the spot."
+                    }
+                  ]
                 }
               ]
             ]

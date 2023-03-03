@@ -7,6 +7,8 @@ func (op *EphRefs) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	return
 }
 
+// refs imply some fact about the world that will be defined elsewhere.
+// assembly would verify that the referenced thing really exists
 var refsNotImplemented PrintOnce = "refs not implemented"
 
 type PrintOnce string

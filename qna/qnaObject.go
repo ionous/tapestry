@@ -2,192 +2,128 @@ package qna
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/lang"
-	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 
-// qnaObject implements the generic Value interface
-// FIX? should it ( and meta.Value, affine.Object ) go away?
-// the reason that you need it is: how else do you Set(key, value) to assign an object property?
-// you need to give the caller an object that looks like a record [ or you need a new method in Runtime specically for objects ]
-//
-// currently, it feels like we have two ways to access object values
-// 		1. run.Get/SetField(object, field)
-// 		2. run.Get/SetField(meta.Value, objectName) -> returns this qnaObject which acts like a g.Record
-// right now the code is only using #2 --- but why? why have both?
-//
-// related issues:
-// 	  1. object references ( both in properties and local variables )
-//       - if you dont store a domain, your object might mutate;
-//       - but what happens to stored references to things outside of your domain that go out of scope?
-//    2. object local variables -- vs. object text variables storing ( #names )
-//    3. affine.Object
-//
-// to me if feels like either nouns should become named records,
-// or: objects should only be exposed via GetField
-//
-// TBD: where does tapestry treat object as a value? what are the returns from meta.Value passed to.
-//
-type qnaObject struct {
-	g.PanicValue
-	run    *Runner // for pointing back to the field cache
-	domain string
-	name   string
-	kind   *g.Kind
-}
-
-func (obj *qnaObject) Affinity() affine.Affinity {
-	return affine.Object
-	//  FIX: is there any reason not to return record???
-	/// ( record could implement String(), and regular records could be "unnamed" empty string )
-	// well... Record isnt an interface --
-	// so we'd have to "snapshot" the whole noun at once --
-	// the only reason that's bad at all is "speed"
-	// ( but picking db values one by one is not necessarily fast anyway )
-	// and save ( but we could keep a list of all values )
-	// OR -- .Record() and .Records() arent used much
-	// 1. debug printing [ but RecordToValue could become ValueToMap and use the field interface ]
-	// 2. copy and copyRecords (-- but it is traveliing by field already )
-	// 3. sorting record lists
-	//- -- this is a little more difficult, buy could add a Swap(i,j) to the Value interface
-	// BASICALLY, record and []record could back a value -- but so could object.
-	// you could make records of "animals" but the they wouldnt be named
-	// and conversion would happen through the interface that allows both.
-	// possibly removing Floats and Strings as methods too --s
-}
-
-func (obj *qnaObject) String() (ret string) {
-	// hrmm... and note: if this runs through under underscore() it breaks.
-	// return "#" + obj.domain + "::" + obj.name
-	return obj.name
-}
-
-func (obj *qnaObject) Kind() (ret *g.Kind) {
-	return obj.kind
-
-}
-func (obj *qnaObject) Type() (ret string) {
-	return obj.kind.Name()
-}
-
-func (obj *qnaObject) FieldByName(rawField string) (ret g.Value, err error) {
-	field := lang.Underscore(rawField) // fix: why here?
-	//
-	if i := obj.kind.FieldIndex(field); i < 0 {
-		err = g.UnknownField(obj.String(), rawField)
+// expects field to be a normalized name already.
+func (run *Runner) setObjectField(obj qdb.NounInfo, field string, newValue g.Value) (err error) {
+	// tbd: cache the kind in the object info?
+	// or even... cache the ( last n ) field info into "obj.field"?
+	if kind, e := run.getKind(obj.Kind); e != nil {
+		err = e
+	} else if fieldIndex := kind.FieldIndex(field); fieldIndex < 0 {
+		err = g.UnknownField(obj.String(), field)
 	} else {
-		// just a regular field?
-		if ft := obj.kind.Field(i); ft.Name == field {
-			ret, err = getObjectField(obj.run, obj.domain, obj.name, ft)
+		fieldData := kind.Field(fieldIndex)
+		if fieldData.Name == field {
+			// the field we found is the name we asked for: its a normal field.
+			err = run.setFieldCache(obj, fieldData, newValue)
 		} else {
-			// asking for a trait; so ft.Name is now the aspect field
-			// note: kind also does this -- but since the data here isnt stored in a record
-			// ( it's stored in the noun value cache ) we have to duplicate the aspect/field check.
-			if v, e := getObjectField(obj.run, obj.domain, obj.name, ft); e != nil {
-				err = e
-			} else {
-				// return true if the aspect field holds the particular requested field
-				trait := v.String()
-				ret = g.BoolOf(trait == field)
-			}
-		}
-	}
-	return
-}
-
-func (obj *qnaObject) SetFieldByName(rawField string, val g.Value) (err error) {
-	field := lang.Underscore(rawField)
-	if i := obj.kind.FieldIndex(field); i < 0 {
-		err = g.UnknownField(obj.String(), rawField)
-	} else {
-		// just a regular field?
-		if ft := obj.kind.Field(i); ft.Name == field {
-			setObjectField(obj.run, obj.domain, obj.name, ft, val)
-		} else {
-			// setting a trait.
-			// FIX: should we transform in some way the value so that it has type of the aspect?
+			// when the name differs, we must have found the aspect for a trait.
+			// FIX: should we transform the value so that it has type of the aspect?
 			// FIX: records dont have opposite day so this seems ... unfair.
-			// FIX: im also curious about aspects that only have one trait, and ... blank ( nothing ).
-			if aff := val.Affinity(); aff != affine.Bool {
+			// FIX: im also curious about aspects that only have one trait, or blank ( nothing ).
+			if aff := newValue.Affinity(); aff != affine.Bool {
 				err = errutil.New("can only set a trait with booleans, have", aff)
-			} else if trait, e := oppositeDay(obj.run, ft.Name, field, val.Bool()); e != nil {
+			} else if trait, e := oppositeDay(run, fieldData.Name, field, newValue.Bool()); e != nil {
 				err = e
 			} else {
 				// set the aspect to the value of the requested trait
-				setObjectField(obj.run, obj.domain, obj.name, ft, g.StringFrom(trait, ft.Type))
+				traitValue := g.StringFrom(trait, fieldData.Type)
+				err = run.setFieldCache(obj, fieldData, traitValue)
 			}
 		}
 	}
 	return
 }
 
-// to support text templates stored in object properties:
-// calls to get the object field result in "dynamic values".
-func getObjectField(run *Runner, domain, noun string, field g.Field) (ret g.Value, err error) {
+// expects field to be a normalized name already.
+func (run *Runner) getObjectField(obj qdb.NounInfo, field string) (ret g.Value, err error) {
+	// tbd: cache the kind in the object info?
+	// or even... cache the ( last n ) field info into "obj.field"?
+	if kind, e := run.getKind(obj.Kind); e != nil {
+		err = e
+	} else if fieldIndex := kind.FieldIndex(field); fieldIndex < 0 {
+		err = g.UnknownField(obj.String(), field)
+	} else {
+		fieldData := kind.Field(fieldIndex)
+		if v, e := run.getFieldCache(obj, fieldData); e != nil {
+			err = e
+		} else if fieldData.Name == field {
+			// the field we found is the name we asked for:
+			// so this is a regular field.
+			ret = v
+		} else {
+			// when the name differs, we must have found the aspect for a trait.
+			// note: kind also does this -- but since the data here isnt stored in a record
+			// ( it's stored in the noun value cache ) we have to duplicate the aspect/field check.
+			// return true if the aspect field holds the particular requested field
+			ret = g.BoolOf(field == v.String())
+		}
+	}
+	return
+}
+
+func (run *Runner) setFieldCache(obj qdb.NounInfo, field g.Field, val g.Value) (err error) {
+	// fix: convert when appropriate.
+	if aff := val.Affinity(); aff != field.Affinity {
+		err = errutil.Fmt(`mismatched affinity "%s.%s(%s)" writing %s`, obj, field.Name, field.Affinity, aff)
+	} else {
+		key := makeKey(obj.Domain, obj.Id, field.Name)
+		run.nounValues[key] = cachedValue{v: g.CopyValue(val)}
+	}
+	return
+}
+
+func (run *Runner) getFieldCache(obj qdb.NounInfo, field g.Field) (ret g.Value, err error) {
 	if c, e := run.nounValues.cache(func() (ret interface{}, err error) {
 		// note: in the original version of this, we queried *all* fields
 		// ( unioning in those with traits, and those without defaults )
-		if b, e := run.qdb.NounValue(noun, field.Name); e != nil {
+		if b, e := run.qdb.NounValue(obj.Id, field.Name); e != nil {
 			err = e
 		} else {
+			// fields be empty, have literal values, or dynamic values.
 			if len(b) == 0 {
 				if v, e := g.NewDefaultValue(run, field.Affinity, field.Type); e != nil {
 					err = e
 				} else {
-					ret = &objectValue{shared: v}
+					ret = v
 				}
 			} else if isEvalLike := b[0] == '{'; !isEvalLike {
-				if v, e := readLiteralValue(field.Affinity, field.Type, b); e != nil {
+				if v, e := parseLiteral(field.Affinity, field.Type, b); e != nil {
 					err = e
 				} else {
-					ret = &objectValue{shared: v}
+					ret = v
 				}
 			} else {
-				if a, e := readEvalValue(field.Affinity, b, run.signatures); e != nil {
+				if a, e := parseEval(field.Affinity, b, run.signatures); e != nil {
 					err = e
 				} else {
-					ret = &objectValue{dynamic: a}
+					ret = a // a is an assignment which generate values.
 				}
 			}
 		}
 		return
-	}, domain, noun, field.Name); e != nil {
+	}, obj.Domain, obj.Id, field.Name); e != nil {
 		err = e
 	} else {
-		ov := c.(*objectValue)
-		ret, err = ov.getValue(run, field)
-	}
-	return
-}
-
-// both obj and field are normalized, and field is not a trait
-func setObjectField(run *Runner, domain, noun string, field g.Field, val g.Value) (err error) {
-	if aff := val.Affinity(); aff != field.Affinity {
-		err = errutil.Fmt(`mismatched affinity "#%s::%s.%s(%s)" writing %s`, domain, noun, field.Name, field.Affinity, aff)
-	} else {
-		key := makeKey(domain, noun, field.Name)
-		run.nounValues[key] = cachedValue{v: &objectValue{shared: g.CopyValue(val)}}
-	}
-	return
-}
-
-type objectValue struct {
-	dynamic rt.Assignment // from the db, calls to the get the field result in "dynamic values"
-	shared  g.Value       // when runtime code sets fields, it can only set concrete values
-}
-
-func (ov *objectValue) getValue(run rt.Runtime, ft g.Field) (ret g.Value, err error) {
-	if v := ov.shared; v != nil {
-		ret = v
-	} else if a := ov.dynamic; a == nil {
-		err = errutil.New("unexpectedly empty object value")
-	} else if v, e := a.GetAssignedValue(run); e != nil {
-		err = e
-	} else {
-		ret, err = safe.AutoConvert(run, ft, v)
+		switch c := c.(type) {
+		case g.Value:
+			ret = c
+		case assign.Assignment:
+			// evaluate the assignment to get the current value
+			if v, e := assign.GetSafeAssignment(run, c); e != nil {
+				err = e
+			} else {
+				ret, err = safe.AutoConvert(run, field, v)
+			}
+		default:
+			err = errutil.Fmt("unexpected type in object cache %T", c)
+		}
 	}
 	return
 }

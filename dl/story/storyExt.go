@@ -33,8 +33,24 @@ func (*StoppingText) GetText(rt.Runtime) (g.Value, error) {
 	panic("unexpected use of story method")
 }
 
-var _ imp.PreImport = (*RenderTemplate)(nil)
+// the import step transforms say template into a render.RenderResponse
+var _ imp.PreImport = (*SayTemplate)(nil)
 
-func (*RenderTemplate) GetText(rt.Runtime) (g.Value, error) {
+func (*SayTemplate) GetText(rt.Runtime) (g.Value, error) {
+	panic("unexpected use of story method")
+}
+
+func (*SayTemplate) Execute(rt.Runtime) error {
+	panic("unexpected use of story method")
+}
+
+// the import step transforms say response into a render.RenderResponse
+var _ imp.PreImport = (*SayResponse)(nil)
+
+func (*SayResponse) GetText(rt.Runtime) (g.Value, error) {
+	panic("unexpected use of story method")
+}
+
+func (*SayResponse) Execute(rt.Runtime) error {
 	panic("unexpected use of story method")
 }

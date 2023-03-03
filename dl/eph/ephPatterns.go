@@ -33,8 +33,8 @@ func (c *Catalog) WritePatterns(w Writer) (err error) {
 func (op *EphPatterns) Phase() Phase { return AncestryPhase }
 
 func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if name, ok := UniformString(op.Name); !ok {
-		err = InvalidString(op.Name)
+	if name, ok := UniformString(op.PatternName); !ok {
+		err = InvalidString(op.PatternName)
 	} else {
 		k := d.EnsureKind(name, at)
 		k.AddRequirement(kindsOf.Pattern.String())

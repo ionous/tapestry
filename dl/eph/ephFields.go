@@ -4,8 +4,8 @@ import (
 	"errors"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/composer"
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
@@ -88,7 +88,7 @@ var FieldActions = PhaseAction{
 type UniformField struct {
 	name, class string
 	affinity    affine.Affinity
-	initially   rt.Assignment
+	initially   assign.Assignment
 	at          string
 }
 
@@ -116,10 +116,10 @@ func MakeUniformField(fieldAffinity Affinity, fieldName, fieldClass, at string) 
 }
 
 // if there's an initial value, make sure it works with our field
-func (uf *UniformField) setAssignment(init rt.Assignment) (err error) {
+func (uf *UniformField) setAssignment(init assign.Assignment) (err error) {
 	if init != nil {
 		// fix? some statements have unknown affinity ( statements that pivot )
-		if initAff := init.Affinity(); len(initAff) > 0 && initAff != uf.affinity {
+		if initAff := assign.GetAffinity(init); len(initAff) > 0 && initAff != uf.affinity {
 			err = errutil.Fmt("mismatched affinity of initial value (a %s) for field %q (a %s)", initAff, uf.name, uf.affinity)
 		} else {
 			uf.initially = init

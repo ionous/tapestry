@@ -1,28 +1,19 @@
 package core
 
 import (
-	"strconv"
-
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
+// turn a series of statements into a slice of execute statements.
 func MakeActivity(exe ...rt.Execute) []rt.Execute {
 	return exe
 }
 
-func Args(from ...rt.Assignment) (ret []rt.Arg) {
-	for i, from := range from {
-		ret = append(ret, rt.Arg{
-			Name: W("$" + strconv.Itoa(i+1)),
-			From: from,
-		})
+// turn a series of assignments ( FromX commands ) into a slice of arguments.
+func MakeArgs(as ...assign.Assignment) (ret []assign.Arg) {
+	for _, a := range as {
+		ret = append(ret, assign.Arg{Value: a})
 	}
 	return
-}
-
-func NamedArgs(name string, from rt.Assignment) []rt.Arg {
-	return []rt.Arg{{
-		Name: W(name),
-		From: from,
-	}}
 }

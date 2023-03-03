@@ -5,9 +5,9 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
@@ -20,8 +20,8 @@ var LogLevel LoggingLevel
 func (op *DebugLog) Execute(run rt.Runtime) (err error) {
 	// fix? at this time we cant guarantee a lack of side-effects
 	// so we always eval even if we don't print.
-	if v, e := safe.GetAssignedValue(run, op.Value); e != nil {
-		err = cmdError(op, e)
+	if v, e := assign.GetSafeAssignment(run, op.Value); e != nil {
+		err = CmdError(op, e)
 	} else {
 		var i interface{}
 		switch a := v.Affinity(); a {
@@ -35,15 +35,13 @@ func (op *DebugLog) Execute(run rt.Runtime) (err error) {
 			i = v.String()
 		case affine.TextList:
 			i = v.Strings()
-		case affine.Object: // this probably never happens... but just in case.
-			i = v.String()
 		case affine.Record:
 			i = pretty.Sprint(generic.RecordToValue(v.Record()))
 		case affine.RecordList:
 			i = pretty.Sprint(generic.RecordsToValue(v.Records()))
 		default:
 			e := errutil.New("unknown affinity", a)
-			err = cmdError(op, e)
+			err = CmdError(op, e)
 		}
 		global := LogLevel.Index()
 		level := op.LogLevel.Index()

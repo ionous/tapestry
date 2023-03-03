@@ -1,32 +1,20 @@
 package core
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/composer"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"github.com/ionous/errutil"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 )
 
-type Say = SayText // backwards compat
+var cmdError = assign.CmdError       // backwards compat
+var cmdErrorCtx = assign.CmdErrorCtx // backwards compat
 
-func cmdError(op composer.Composer, err error) error {
-	return cmdErrorCtx(op, "", err)
-}
-
-func cmdErrorCtx(op composer.Composer, ctx string, err error) error {
-	// avoid triggering errutil panics for break statements
-	if _, ok := err.(DoInterrupt); !ok {
-		e := &composer.CommandError{Cmd: op, Ctx: ctx}
-		err = errutil.Append(err, e)
-	}
-	return err
-}
-
-func B(b bool) *literal.BoolValue   { return &literal.BoolValue{Value: b} }
-func I(n int) *literal.NumValue     { return &literal.NumValue{Value: float64(n)} }
-func F(n float64) *literal.NumValue { return &literal.NumValue{Value: n} }
-func T(s string) *literal.TextValue { return &literal.TextValue{Value: s} }
-
-func P(p string) PatternName  { return PatternName{Str: p} }
-func N(v string) VariableName { return VariableName{Str: v} }
-func V(i string) *GetVar      { return &GetVar{Name: N(i)} }
-func W(v string) string       { return v }
+var (
+	B           = assign.B
+	F           = assign.F
+	I           = assign.I
+	N           = assign.N
+	P           = assign.P
+	T           = assign.T
+	W           = assign.W
+	CmdError    = assign.CmdError    // backwards compat
+	CmdErrorCtx = assign.CmdErrorCtx // backwards compat
+)

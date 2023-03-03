@@ -85,24 +85,24 @@
         ],
         [
           {
-            "Say:": {
+            "Print:": {
               "Rows does:": [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to retrieve from something closed:<br>"
+                        "Print:": "Fail to retrieve from something closed:<br>"
                       },
                       {
                         "RetrievingFrom agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "coffee"
+                            "FromText:": "coffee"
                           },
                           {
-                            "FromTxt:": "machine"
+                            "FromText:": "machine"
                           }
                         ]
                       }
@@ -110,85 +110,77 @@
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": {
-                          "RenderTemplate:": "The soup's parent was: {the: {parentOf: .soup}}."
-                        }
+                        "Say:": "The soup's parent was: {the: {parentOf: .soup}}."
                       },
                       {
-                        "Say:": "Okay, retrieve from supporter:<br>"
+                        "Print:": "Okay, retrieve from supporter:<br>"
                       },
                       {
                         "RetrievingFrom agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "soup"
+                            "FromText:": "soup"
                           },
                           {
-                            "FromTxt:": "shelf"
+                            "FromText:": "shelf"
                           }
                         ]
                       },
                       {
-                        "Say:": {
-                          "RenderTemplate:": "The soup's parent is: {the: {parentOf: .soup}}."
-                        }
+                        "Say:": "The soup's parent is: {the: {parentOf: .soup}}."
                       }
                     ]
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": {
-                          "RenderTemplate:": "The hook's parent was: {the: {parentOf: .hook}}."
-                        }
+                        "Say:": "The hook's parent was: {the: {parentOf: .hook}}."
                       },
                       {
-                        "Say:": "Okay, retrieve from container:<br>"
+                        "Print:": "Okay, retrieve from container:<br>"
                       },
                       {
                         "RetrievingFrom agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "hook"
+                            "FromText:": "hook"
                           },
                           {
-                            "FromTxt:": "cabinet"
+                            "FromText:": "cabinet"
                           }
                         ]
                       },
                       {
-                        "Say:": {
-                          "RenderTemplate:": "The hook's parent is: {the: {parentOf: .hook}}."
-                        }
+                        "Say:": "The hook's parent is: {the: {parentOf: .hook}}."
                       }
                     ]
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to retrieve incorrectly:<br>"
+                        "Print:": "Fail to retrieve incorrectly:<br>"
                       },
                       {
                         "RetrievingFrom agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "hat"
+                            "FromText:": "hat"
                           },
                           {
-                            "FromTxt:": "cabinet"
+                            "FromText:": "cabinet"
                           }
                         ]
                       }
@@ -196,21 +188,21 @@
                   }
                 },
                 {
-                  "Say:": {
+                  "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "Fail to steal:<br>"
+                        "Print:": "Fail to steal:<br>"
                       },
                       {
                         "RetrievingFrom agent:noun:otherNoun:": [
                           {
-                            "FromTxt:": "player"
+                            "FromText:": "player"
                           },
                           {
-                            "FromTxt:": "apple"
+                            "FromText:": "apple"
                           },
                           {
-                            "FromTxt:": "Mildred"
+                            "FromText:": "Mildred"
                           }
                         ]
                       }

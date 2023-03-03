@@ -168,6 +168,15 @@ func (n *NounInfo) IsValid() bool {
 	return len(n.Id) != 0
 }
 
+func (n *NounInfo) String() (ret string) {
+	if !n.IsValid() {
+		ret = "<unknown object>"
+	} else {
+		ret = strings.Join([]string{n.Domain, n.Id}, "::")
+	}
+	return
+}
+
 func (q *Query) NounIsNamed(id, name string) (ret bool, err error) {
 	return scanOne(q.nounIsNamed, id, name)
 }
@@ -198,17 +207,17 @@ func (q *Query) PluralFromSingular(singular string) (ret string, err error) {
 	return scanString(q.pluralFromSingular, singular)
 }
 
-type PatternLabels struct {
-	Result string
-	Labels []string
-}
-
-func (q *Query) PatternLabels(pat string) (ret PatternLabels, err error) {
+// the last value is always the result, blank for execute statements
+func (q *Query) PatternLabels(pat string) (ret []string, err error) {
 	var labels, result string
-	if e := q.patternOf.QueryRow(pat).Scan(&labels, &result); e != nil && e != sql.ErrNoRows {
+	switch e := q.patternOf.QueryRow(pat).Scan(&labels, &result); e {
+	case sql.ErrNoRows:
+		// returns blank with no error
+	case nil:
+		parts := strings.Split(labels, ",")
+		ret = append(parts, result)
+	default:
 		err = e
-	} else {
-		ret = PatternLabels{result, strings.Split(labels, ",")}
 	}
 	return
 }
@@ -334,7 +343,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		// path is materialized ids so we return multiple values of resolved names
 		kindOfAncestors: ps.Prep(db,
 			`select mk.kind 
-			from kind_scope ks
+			from kind_scope ks  -- the kinds in domain scope 
 			join mdl_kind mk
 				-- is Y (is their name) a part of X (our path)
 				on instr(',' || ks.path, 

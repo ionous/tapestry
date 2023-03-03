@@ -1,19 +1,22 @@
 package list
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // A normal reduce would return a value, instead we accumulate into a variable
 func (op *ListReverse) Execute(run rt.Runtime) (err error) {
 	if e := op.reverse(run); e != nil {
-		err = cmdError(op, e)
+		err = CmdError(op, e)
 	}
 	return
 }
 
 func (op *ListReverse) reverse(run rt.Runtime) (err error) {
-	if els, e := GetListSource(run, op.List); e != nil {
+	if root, e := assign.GetRootValue(run, op.Target); e != nil {
+		err = e
+	} else if els, e := root.GetList(run); e != nil {
 		err = e
 	} else {
 		cnt := els.Len()

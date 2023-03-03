@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
@@ -19,17 +20,15 @@ func Decode(dst jsn.Marshalee, msg json.RawMessage, sig cin.Signatures) error {
 
 func decode(dst jsn.Marshalee, msg json.RawMessage, reg cin.TypeCreator) error {
 	return cin.NewDecoder(reg).
-		//SetFlowDecoder(CompactFlowDecoder).
+		//SetFlowDecoder(core.CompactFlowDecoder).
 		SetSlotDecoder(CompactSlotDecoder).
 		Decode(dst, msg)
 
 	// re: flow decoder
 	// right now, we only get here when the flow is a member of a flow;
 	// when we know what the type is but havent tried to read from the msg yet.
-	// for slots to read a slat, the msg already would have been expanded into its final type.
 }
 
-//
 func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage) (err error) {
 	if err = core.CompactSlotDecoder(m, slot, msg); err != nil {
 		// keep this as the provisional error unless we figure out something else
@@ -56,16 +55,16 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 					if sig, args, e := op.ReadMsg(); e != nil {
 						err = e
 					} else {
-						out := &core.CallPattern{Pattern: core.PatternName{sig.Name}}
-						var call []rt.Arg
+						out := &assign.CallPattern{PatternName: sig.Name}
+						var call []assign.Arg
 						for i, p := range sig.Params {
-							var ptr rt.Assignment
-							if e := decode(rt.Assignment_Slot{&ptr}, args[i], reg); e != nil {
+							arg := args[i]
+							var val assign.Assignment
+							if e := decode(assign.Assignment_Slot{&val}, arg, reg); e != nil {
 								err = e
 								break
-							} else {
-								call = append(call, rt.Arg{Name: p.Label, From: ptr})
 							}
+							call = append(call, assign.Arg{Name: p.Label, Value: val})
 						}
 						if len(sig.Params) == len(call) {
 							out.Arguments = call

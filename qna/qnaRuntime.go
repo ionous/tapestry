@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 
+	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
@@ -95,14 +96,15 @@ func (run *Runner) PluralOf(singular string) (ret string) {
 	return
 }
 
-func (run *Runner) PatternLabels(pat string) (ret qdb.PatternLabels, err error) {
+// the last value is the results; blank if need be
+func (run *Runner) PatternLabels(pat string) (ret []string, err error) {
 	if c, e := run.values.cache(func() (ret interface{}, err error) {
 		ret, err = run.qdb.PatternLabels(pat)
 		return
 	}, "PatternLabels", pat); e != nil {
 		run.Report(e)
 	} else {
-		ret = c.(qdb.PatternLabels)
+		ret = c.([]string)
 	}
 	return
 }
@@ -170,19 +172,30 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 	// fix: pre-transform field
 	if field := lang.Underscore(rawField); len(field) == 0 {
 		err = errutil.Fmt("invalid targeted field '%s.%s'", target, rawField)
+	} else if target[0] != meta.Prefix {
+		// an object from the author's story
+		if obj, e := run.getObjectInfo(target); e != nil {
+			err = e
+		} else {
+			// copies val internally once it knows the type of field
+			err = run.setObjectField(obj, field, val)
+		}
 	} else {
+		// one of the predefined faux objects:
 		switch target {
 		case meta.Variables:
+			val := g.CopyValue(val)
 			err = run.Stack.SetFieldByName(field, val)
 
 		case meta.Option:
+			val := g.CopyValue(val)
 			err = run.options.SetOptionByName(field, val)
 
 		case meta.Counter:
+			// doesnt copy because it assumes the value is a number anyway.
 			err = run.setCounter(field, val)
 
 		default:
-			// maybe they meant to get the object?
 			err = errutil.Fmt("invalid targeted field '%s.%s'", target, field)
 		}
 	}
@@ -190,12 +203,32 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 }
 
 func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
+	// fix: pre-transform field
 	if field := lang.Underscore(rawField); len(field) == 0 {
-		err = errutil.Fmt("requested empty field from %q", target)
+		err = errutil.Fmt("requested an empty %q", target)
+	} else if target[0] != meta.Prefix {
+		// an object from the author's story
+		if obj, e := run.getObjectInfo(target); e != nil {
+			err = e
+		} else {
+			ret, err = run.getObjectField(obj, field)
+		}
 	} else {
+		// one of the predefined faux objects:
 		switch target {
 		default:
 			err = errutil.Fmt("GetField: unknown target %q (with field %q)", target, rawField)
+			// not one of the predefined options?
+		case meta.Response:
+			// response arent implemented yet.
+			// note: uses raw field so that it matches the meta.Options go generated stringer strings.
+			if flag, e := run.options.Option(meta.PrintResponseNames.String()); e != nil {
+				err = e
+			} else if flag.Affinity() == affine.Bool && flag.Bool() {
+				ret = g.StringOf(field)
+			} else {
+				err = g.UnknownResponse(rawField)
+			}
 
 		case meta.Counter:
 			ret, err = run.getCounter(field)
@@ -236,12 +269,8 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			if n, e := run.getObjectName(field); e != nil {
 				err = run.Report(e)
 			} else {
-				ret = g.StringOf(n)
+				ret = g.StringOf(n) // tbd: should these have a type?
 			}
-
-		// fix: see notes in qnaObject --
-		case meta.ObjectValue:
-			ret, err = run.getObjectByName(field)
 
 		// all objects of the named kind
 		case meta.ObjectsOfKind:
@@ -258,6 +287,13 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 				err = run.Report(e)
 			} else {
 				ret = t
+			}
+
+		case meta.PatternLabels:
+			if vs, e := run.PatternLabels(field); e != nil {
+				err = run.Report(e)
+			} else {
+				ret = g.StringsOf(vs)
 			}
 
 		case meta.PatternRunning:

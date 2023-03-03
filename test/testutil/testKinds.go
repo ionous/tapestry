@@ -20,10 +20,12 @@ type Kinds struct {
 type KindMap map[string]*g.Kind
 type FieldMap map[string]*[]g.Field // kind name to fields
 type AspectMap map[string]bool
+type ParentMap map[string]string
 
 type KindBuilder struct {
 	Aspects AspectMap
 	Fields  FieldMap
+	Parents ParentMap
 }
 
 // register kinds from a struct using reflection
@@ -64,21 +66,23 @@ func (ks *Kinds) GetKindByName(name string) (ret *g.Kind, err error) {
 		if fs, ok := b.Fields[name]; !ok {
 			err = errutil.New("unknown kind", name)
 		} else {
-			fs := *fs
 			if ks.Kinds == nil {
 				ks.Kinds = make(KindMap)
 			}
 			var path []string
-			// magic parent field for fake objects
-			if len(fs) > 0 && len(fs[0].Affinity) == 0 {
-				path = append(path, fs[0].Type)
+			if p, ok := b.Parents[name]; ok {
+				if k, e := ks.GetKindByName(p); e != nil {
+					panic(e)
+				} else {
+					path = k.Path()
+				}
 			}
 			// magic field for aspects
 			if b.Aspects[name] {
 				path = append(path, kindsOf.Aspect.String())
 			}
 			// create the kind from the stored fields
-			k := g.NewKind(ks, name, path, fs)
+			k := g.NewKind(ks, name, path, *fs)
 			ks.Kinds[name] = k
 			ret = k
 		}
@@ -93,8 +97,10 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 	if kb.Fields == nil {
 		kb.Fields = make(FieldMap)
 		kb.Aspects = make(AspectMap)
+		kb.Parents = make(ParentMap)
 	}
 
+	// already built?
 	name := nameOfType(t)
 	if kb.Fields[name] != nil {
 		return
@@ -140,18 +146,23 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 			kb.addType(ks, fieldType)
 
 		case r.Struct:
-			name := nameOfType(fieldType)
-			b.Type = name
-			if f.Anonymous {
-				if len((*pfields)) > 0 {
-					panic("anonymous structs are used for hierarchy and should be the first member")
-				}
-				parent := ks.Kind(name)
-				b.Type = parent.Name()
-
-			} else {
+			if !f.Anonymous {
+				b.Type = nameOfType(fieldType)
 				b.Aff = affine.Record
+				// recurse to add the type
 				kb.addType(ks, fieldType)
+
+			} else if len((*pfields)) > 0 {
+				panic("anonymous structs are used for hierarchy and should be the first member")
+			} else {
+				parentName := nameOfType(fieldType)
+				kb.Parents[name] = parentName
+
+				// note: this doesnt set affinity, and so doesnt get added as a field
+				// todo: document what's happening here.
+				//kb.Fields[name] = pfields
+				// parent := ks.Kind(name)
+				// b.Type = parent.Name()
 			}
 
 		case r.Slice:

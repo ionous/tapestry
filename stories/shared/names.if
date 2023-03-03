@@ -82,9 +82,7 @@
             ]
           },
           {
-            "Say:": {
-              "RenderTemplate:": "{.named}, {.unnamed}."
-            }
+            "Say:": "{.named}, {.unnamed}."
           },
           {
             "Expect output:": "named object, thing."
@@ -114,19 +112,19 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "Singular of:": {
                       "KindOf:": "@obj"
                     }
                   }
                 },
                 {
-                  "Mention obj:": "@obj"
+                  "Mention obj:": {
+                    "FromText:": "@obj"
+                  }
                 }
               ]
             ]
@@ -134,19 +132,21 @@
           {
             "PatternRule:does:": [
               {
-                "Get obj:trait:": [
+                "Object:field:": [
                   "@obj",
                   "publicly named"
                 ]
               },
               [
                 {
-                  "Say:": {
+                  "Print:": {
                     "NameOf:": "@obj"
                   }
                 },
                 {
-                  "Mention obj:": "@obj"
+                  "Mention obj:": {
+                    "FromText:": "@obj"
+                  }
                 }
               ]
             ]
@@ -156,11 +156,9 @@
               {
                 "Cmp:is:txt:": [
                   {
-                    "Get:from:": [
-                      "printed name",
-                      {
-                        "VarFields:": "obj"
-                      }
+                    "Object:field:": [
+                      "@obj",
+                      "printed name"
                     ]
                   },
                   "other_than",
@@ -169,17 +167,103 @@
               },
               [
                 {
-                  "Say:": {
-                    "Get:from:": [
-                      "printed name",
-                      {
-                        "VarFields:": "obj"
-                      }
+                  "Print:": {
+                    "Object:field:": [
+                      "@obj",
+                      "printed name"
                     ]
                   }
                 },
                 {
-                  "Mention obj:": "@obj"
+                  "Mention obj:": {
+                    "FromText:": "@obj"
+                  }
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Not:": {
+                  "Is valid:": "@obj"
+                }
+              },
+              [
+                {
+                  "PrintNothing:": {
+                    "FromText:": "@obj"
+                  }
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": ""
+    },
+    {
+      "Pattern:requires:": [
+        "Print nothing",
+        [
+          {
+            "--": [
+              "Print nothing takes an object reference.",
+              "It uses that to try to determine the kind of the reference",
+              "even if the reference itself is blank."
+            ],
+            "Text:kind:": [
+              "obj",
+              "object"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Pattern:rules:": [
+        "Print nothing",
+        [
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print:": "nothing"
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:nothing:": [
+                  "@obj",
+                  "rooms",
+                  true
+                ]
+              },
+              [
+                {
+                  "Print:": "nowhere"
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:nothing:": [
+                  "@obj",
+                  "actors",
+                  true
+                ]
+              },
+              [
+                {
+                  "Print:": "nobody"
                 }
               ]
             ]
@@ -217,37 +301,39 @@
               },
               [
                 {
-                  "Put:from:at:": [
+                  "Set:from:": [
                     {
-                      "ObjField:": "@obj"
+                      "Object:field:": [
+                        "@obj",
+                        "mentioned"
+                      ]
                     },
                     {
                       "FromBool:": true
-                    },
-                    "mentioned"
+                    }
                   ]
                 },
                 {
-                  "Put:from:at:": [
+                  "Set:from:": [
                     {
-                      "ObjField:": "settings"
+                      "Object:field:": [
+                        "settings",
+                        "mentions"
+                      ]
                     },
                     {
-                      "FromNum:": {
+                      "FromNumber:": {
                         "Inc:by:": [
                           1,
                           {
-                            "Get:from:": [
-                              "mentions",
-                              {
-                                "ObjFields:": "settings"
-                              }
+                            "Object:field:": [
+                              "settings",
+                              "mentions"
                             ]
                           }
                         ]
                       }
-                    },
-                    "mentions"
+                    }
                   ]
                 }
               ]

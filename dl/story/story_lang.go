@@ -5983,10 +5983,10 @@ func Paragraph_Marshal(m jsn.Marshaler, val *Paragraph) (err error) {
 // PatternActions Add actions to a pattern.
 // Actions to take when using a pattern.
 type PatternActions struct {
-	Name   core.PatternName `if:"label=_"`
-	Locals []Field          `if:"label=provides,optional"`
-	Rules  []PatternRule    `if:"label=rules"`
-	Markup map[string]any
+	PatternName string        `if:"label=_,type=text"`
+	Locals      []Field       `if:"label=provides,optional"`
+	Rules       []PatternRule `if:"label=rules"`
+	Markup      map[string]any
 }
 
 // User implemented slots:
@@ -6001,7 +6001,7 @@ func (*PatternActions) Compose() composer.Spec {
 }
 
 const PatternActions_Type = "pattern_actions"
-const PatternActions_Field_Name = "$NAME"
+const PatternActions_Field_PatternName = "$PATTERN_NAME"
 const PatternActions_Field_Locals = "$LOCALS"
 const PatternActions_Field_Rules = "$RULES"
 
@@ -6076,12 +6076,12 @@ func PatternActions_Optional_Marshal(m jsn.Marshaler, pv **PatternActions) (err 
 func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PatternActions_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PatternActions_Field_Name)
+		e0 := m.MarshalKey("", PatternActions_Field_PatternName)
 		if e0 == nil {
-			e0 = core.PatternName_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.PatternName)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PatternActions_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", PatternActions_Field_PatternName))
 		}
 		e1 := m.MarshalKey("provides", PatternActions_Field_Locals)
 		if e1 == nil {
@@ -6104,9 +6104,9 @@ func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
 
 // PatternDecl Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.  Each function in a given pattern has "guards" which determine whether the function applies in a particular situation.
 type PatternDecl struct {
-	Name          core.PatternName `if:"label=_"`
-	Params        []Field          `if:"label=requires,optional"`
-	PatternReturn *PatternReturn   `if:"label=returns,optional"`
+	PatternName   string         `if:"label=_,type=text"`
+	Params        []Field        `if:"label=requires,optional"`
+	PatternReturn *PatternReturn `if:"label=returns,optional"`
 	Markup        map[string]any
 }
 
@@ -6122,7 +6122,7 @@ func (*PatternDecl) Compose() composer.Spec {
 }
 
 const PatternDecl_Type = "pattern_decl"
-const PatternDecl_Field_Name = "$NAME"
+const PatternDecl_Field_PatternName = "$PATTERN_NAME"
 const PatternDecl_Field_Params = "$PARAMS"
 const PatternDecl_Field_PatternReturn = "$PATTERN_RETURN"
 
@@ -6197,12 +6197,12 @@ func PatternDecl_Optional_Marshal(m jsn.Marshaler, pv **PatternDecl) (err error)
 func PatternDecl_Marshal(m jsn.Marshaler, val *PatternDecl) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(PatternDecl_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PatternDecl_Field_Name)
+		e0 := m.MarshalKey("", PatternDecl_Field_PatternName)
 		if e0 == nil {
-			e0 = core.PatternName_Marshal(m, &val.Name)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.PatternName)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PatternDecl_Field_Name))
+			m.Error(errutil.New(e0, "in flow at", PatternDecl_Field_PatternName))
 		}
 		e1 := m.MarshalKey("requires", PatternDecl_Field_Params)
 		if e1 == nil {
@@ -7243,39 +7243,43 @@ func RelativeToNoun_Marshal(m jsn.Marshaler, val *RelativeToNoun) (err error) {
 	return
 }
 
-// RenderTemplate Parse text using templates.
-// See: https://github.com/ionous/iffy/wiki/Templates.
-type RenderTemplate struct {
-	Template prim.Lines `if:"label=_"`
-	Markup   map[string]any
+// SayResponse Generate text in a replaceable manner.
+// ( note: this is transformed for the runtime into a named 'RenderResponse'. )
+type SayResponse struct {
+	Name   string      `if:"label=response,type=text"`
+	Text   rt.TextEval `if:"label=with"`
+	Markup map[string]any
 }
 
 // User implemented slots:
-var _ rt.TextEval = (*RenderTemplate)(nil)
+var _ rt.Execute = (*SayResponse)(nil)
+var _ rt.TextEval = (*SayResponse)(nil)
 
-func (*RenderTemplate) Compose() composer.Spec {
+func (*SayResponse) Compose() composer.Spec {
 	return composer.Spec{
-		Name: RenderTemplate_Type,
+		Name: SayResponse_Type,
 		Uses: composer.Type_Flow,
+		Lede: "print",
 	}
 }
 
-const RenderTemplate_Type = "render_template"
-const RenderTemplate_Field_Template = "$TEMPLATE"
+const SayResponse_Type = "say_response"
+const SayResponse_Field_Name = "$NAME"
+const SayResponse_Field_Text = "$TEXT"
 
-func (op *RenderTemplate) Marshal(m jsn.Marshaler) error {
-	return RenderTemplate_Marshal(m, op)
+func (op *SayResponse) Marshal(m jsn.Marshaler) error {
+	return SayResponse_Marshal(m, op)
 }
 
-type RenderTemplate_Slice []RenderTemplate
+type SayResponse_Slice []SayResponse
 
-func (op *RenderTemplate_Slice) GetType() string { return RenderTemplate_Type }
+func (op *SayResponse_Slice) GetType() string { return SayResponse_Type }
 
-func (op *RenderTemplate_Slice) Marshal(m jsn.Marshaler) error {
-	return RenderTemplate_Repeats_Marshal(m, (*[]RenderTemplate)(op))
+func (op *SayResponse_Slice) Marshal(m jsn.Marshaler) error {
+	return SayResponse_Repeats_Marshal(m, (*[]SayResponse)(op))
 }
 
-func (op *RenderTemplate_Slice) GetSize() (ret int) {
+func (op *SayResponse_Slice) GetSize() (ret int) {
 	if els := *op; els != nil {
 		ret = len(els)
 	} else {
@@ -7284,62 +7288,177 @@ func (op *RenderTemplate_Slice) GetSize() (ret int) {
 	return
 }
 
-func (op *RenderTemplate_Slice) SetSize(cnt int) {
-	var els []RenderTemplate
+func (op *SayResponse_Slice) SetSize(cnt int) {
+	var els []SayResponse
 	if cnt >= 0 {
-		els = make(RenderTemplate_Slice, cnt)
+		els = make(SayResponse_Slice, cnt)
 	}
 	(*op) = els
 }
 
-func (op *RenderTemplate_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return RenderTemplate_Marshal(m, &(*op)[i])
+func (op *SayResponse_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return SayResponse_Marshal(m, &(*op)[i])
 }
 
-func RenderTemplate_Repeats_Marshal(m jsn.Marshaler, vals *[]RenderTemplate) error {
-	return jsn.RepeatBlock(m, (*RenderTemplate_Slice)(vals))
+func SayResponse_Repeats_Marshal(m jsn.Marshaler, vals *[]SayResponse) error {
+	return jsn.RepeatBlock(m, (*SayResponse_Slice)(vals))
 }
 
-func RenderTemplate_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RenderTemplate) (err error) {
+func SayResponse_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SayResponse) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
-		err = RenderTemplate_Repeats_Marshal(m, pv)
+		err = SayResponse_Repeats_Marshal(m, pv)
 	}
 	return
 }
 
-type RenderTemplate_Flow struct{ ptr *RenderTemplate }
+type SayResponse_Flow struct{ ptr *SayResponse }
 
-func (n RenderTemplate_Flow) GetType() string      { return RenderTemplate_Type }
-func (n RenderTemplate_Flow) GetLede() string      { return RenderTemplate_Type }
-func (n RenderTemplate_Flow) GetFlow() interface{} { return n.ptr }
-func (n RenderTemplate_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*RenderTemplate); ok {
+func (n SayResponse_Flow) GetType() string      { return SayResponse_Type }
+func (n SayResponse_Flow) GetLede() string      { return "print" }
+func (n SayResponse_Flow) GetFlow() interface{} { return n.ptr }
+func (n SayResponse_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*SayResponse); ok {
 		*n.ptr, okay = *ptr, true
 	}
 	return
 }
 
-func RenderTemplate_Optional_Marshal(m jsn.Marshaler, pv **RenderTemplate) (err error) {
+func SayResponse_Optional_Marshal(m jsn.Marshaler, pv **SayResponse) (err error) {
 	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = RenderTemplate_Marshal(m, *pv)
+		err = SayResponse_Marshal(m, *pv)
 	} else if !enc {
-		var v RenderTemplate
-		if err = RenderTemplate_Marshal(m, &v); err == nil {
+		var v SayResponse
+		if err = SayResponse_Marshal(m, &v); err == nil {
 			*pv = &v
 		}
 	}
 	return
 }
 
-func RenderTemplate_Marshal(m jsn.Marshaler, val *RenderTemplate) (err error) {
+func SayResponse_Marshal(m jsn.Marshaler, val *SayResponse) (err error) {
 	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(RenderTemplate_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", RenderTemplate_Field_Template)
+	if err = m.MarshalBlock(SayResponse_Flow{val}); err == nil {
+		e0 := m.MarshalKey("response", SayResponse_Field_Name)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", SayResponse_Field_Name))
+		}
+		e1 := m.MarshalKey("with", SayResponse_Field_Text)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.Text)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", SayResponse_Field_Text))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// SayTemplate Used for displaying text to the player.
+// The text can contain 'inline-templates';
+// mini-commands that help to simplify printing text.
+// See also: https://github.com/ionous/iffy/wiki/Templates.
+// ( note: this is transformed for the runtime into an unnamed 'RenderResponse'. )
+type SayTemplate struct {
+	Template prim.Lines `if:"label=_"`
+	Markup   map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*SayTemplate)(nil)
+var _ rt.TextEval = (*SayTemplate)(nil)
+
+func (*SayTemplate) Compose() composer.Spec {
+	return composer.Spec{
+		Name: SayTemplate_Type,
+		Uses: composer.Type_Flow,
+		Lede: "say",
+	}
+}
+
+const SayTemplate_Type = "say_template"
+const SayTemplate_Field_Template = "$TEMPLATE"
+
+func (op *SayTemplate) Marshal(m jsn.Marshaler) error {
+	return SayTemplate_Marshal(m, op)
+}
+
+type SayTemplate_Slice []SayTemplate
+
+func (op *SayTemplate_Slice) GetType() string { return SayTemplate_Type }
+
+func (op *SayTemplate_Slice) Marshal(m jsn.Marshaler) error {
+	return SayTemplate_Repeats_Marshal(m, (*[]SayTemplate)(op))
+}
+
+func (op *SayTemplate_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *SayTemplate_Slice) SetSize(cnt int) {
+	var els []SayTemplate
+	if cnt >= 0 {
+		els = make(SayTemplate_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *SayTemplate_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return SayTemplate_Marshal(m, &(*op)[i])
+}
+
+func SayTemplate_Repeats_Marshal(m jsn.Marshaler, vals *[]SayTemplate) error {
+	return jsn.RepeatBlock(m, (*SayTemplate_Slice)(vals))
+}
+
+func SayTemplate_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SayTemplate) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = SayTemplate_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type SayTemplate_Flow struct{ ptr *SayTemplate }
+
+func (n SayTemplate_Flow) GetType() string      { return SayTemplate_Type }
+func (n SayTemplate_Flow) GetLede() string      { return "say" }
+func (n SayTemplate_Flow) GetFlow() interface{} { return n.ptr }
+func (n SayTemplate_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*SayTemplate); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func SayTemplate_Optional_Marshal(m jsn.Marshaler, pv **SayTemplate) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = SayTemplate_Marshal(m, *pv)
+	} else if !enc {
+		var v SayTemplate
+		if err = SayTemplate_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func SayTemplate_Marshal(m jsn.Marshaler, val *SayTemplate) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(SayTemplate_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", SayTemplate_Field_Template)
 		if e0 == nil {
 			e0 = prim.Lines_Marshal(m, &val.Template)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", RenderTemplate_Field_Template))
+			m.Error(errutil.New(e0, "in flow at", SayTemplate_Field_Template))
 		}
 		m.EndBlock()
 	}
@@ -8557,7 +8676,8 @@ var Slats = []composer.Composer{
 	(*RecordListField)(nil),
 	(*RelationCardinality)(nil),
 	(*RelativeToNoun)(nil),
-	(*RenderTemplate)(nil),
+	(*SayResponse)(nil),
+	(*SayTemplate)(nil),
 	(*ShuffleText)(nil),
 	(*SingularKind)(nil),
 	(*StoppingText)(nil),
@@ -8678,6 +8798,8 @@ var Signatures = map[uint64]interface{}{
 	10828994360773868920: (*PatternDecl)(nil),           /* story_statement=Pattern:requires:returns: */
 	13721253842616561476: (*PatternDecl)(nil),           /* story_statement=Pattern:returns: */
 	15334083968500114832: (*PatternActions)(nil),        /* story_statement=Pattern:rules: */
+	16830519956255384977: (*SayResponse)(nil),           /* execute=Print response:with: */
+	10478796600040997822: (*SayResponse)(nil),           /* text_eval=Print response:with: */
 	8137307643484617139:  (*RecordField)(nil),           /* field=Record: */
 	14268486262656655408: (*RecordField)(nil),           /* field=Record:initially: */
 	355191898393732025:   (*RecordField)(nil),           /* field=Record:kind: */
@@ -8687,7 +8809,8 @@ var Signatures = map[uint64]interface{}{
 	1057635318610052945:  (*RecordListField)(nil),       /* field=RecordList:kind: */
 	1164224146587824190:  (*RecordListField)(nil),       /* field=RecordList:kind:initially: */
 	12491084454766142785: (*RelativeToNoun)(nil),        /* story_statement=RelativeToNoun:nouns:areBeing:otherNouns: */
-	1267533044749019804:  (*RenderTemplate)(nil),        /* text_eval=RenderTemplate: */
+	9556993961571292952:  (*SayTemplate)(nil),           /* execute=Say: */
+	15989777734244204735: (*SayTemplate)(nil),           /* text_eval=Say: */
 	9910951906340888308:  (*ShuffleText)(nil),           /* text_eval=ShuffleText: */
 	13921723804355948971: (*StoppingText)(nil),          /* text_eval=StoppingText: */
 	8130344761444222709:  (*TextField)(nil),             /* field=Text: */

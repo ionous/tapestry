@@ -12,8 +12,8 @@ func CopyValue(val Value) (ret Value) {
 		panic("failed to copy nil value")
 	}
 	switch a := val.Affinity(); a {
-	// because we dont have a value.set the values of primitives are immutable
-	// so we dont have to actually copy them, which saves us from having to mange their subtypes
+	// because we dont have a 'value.set()', the values of primitives are immutable.
+	// therefore we dont have to copy them, which saves us from having to mange their subtypes.
 	// ( ex. copy of an int, should still probably be an int under the hood. )
 	case affine.Bool, affine.Number, affine.Text:
 		ret = val

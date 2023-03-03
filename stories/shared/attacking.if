@@ -58,11 +58,9 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
                 ]
               }
             ]
@@ -72,20 +70,26 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": "@actor"
+                }
               },
               [
                 {
                   "If:from:and:does:else:": [
                     "resp",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanReach actor:action:noun:": [
-                          "@actor",
                           {
-                            "FromTxt:": "attacking"
+                            "FromText:": "@actor"
                           },
-                          "@noun"
+                          {
+                            "FromText:": "attacking"
+                          },
+                          {
+                            "FromText:": "@noun"
+                          }
                         ]
                       }
                     },
@@ -96,15 +100,19 @@
                     },
                     [
                       {
-                        "Say:": "@resp"
+                        "Print:": "@resp"
                       }
                     ],
                     {
                       "ElseDo does:": [
                         {
                           "ReportAttacking actor:noun:": [
-                            "@actor",
-                            "@noun"
+                            {
+                              "FromText:": "@actor"
+                            },
+                            {
+                              "FromText:": "@noun"
+                            }
                           ]
                         }
                       ]
@@ -145,19 +153,15 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "actor attacking",
-                      {
-                        "RenderTemplate:": "{the:.actor|capitalize!} attacks {the: .noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "actor attacking",
+                    {
+                      "Say:": "{the:.actor|capitalize!} attacks {the: .noun}."
+                    }
+                  ]
                 }
               ]
             ]
@@ -165,18 +169,18 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": "@actor"
+                }
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player attacking",
-                      {
-                        "RenderTemplate:": "Violence isn't the answer."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "player attacking",
+                    {
+                      "Say:": "Violence isn't the answer."
+                    }
+                  ]
                 }
               ]
             ]

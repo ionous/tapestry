@@ -4,7 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
-// Map - a simple helper for testing to provide patterns w/o a db.
+// Map - a simple helper to provide patterns w/o a db.
 type Map map[string]*Pattern
 
 func (m Map) GetRules(patname, target string, pflags *rt.Flags) (ret []rt.Rule, err error) {

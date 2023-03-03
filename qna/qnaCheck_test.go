@@ -21,11 +21,11 @@ func TestCheck(t *testing.T) {
 		Test: []rt.Execute{
 			&core.ChooseAction{
 				If: &literal.BoolValue{Value: true},
-				Does: core.MakeActivity(&core.Say{
+				Does: core.MakeActivity(&core.PrintText{
 					Text: &literal.TextValue{Value: "hello"},
 				}),
 				Else: &core.ChooseNothingElse{
-					Does: core.MakeActivity(&core.Say{
+					Does: core.MakeActivity(&core.PrintText{
 						Text: &literal.TextValue{Value: "goodbye"},
 					})},
 			}},

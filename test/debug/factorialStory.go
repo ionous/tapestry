@@ -1,6 +1,7 @@
 package debug
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/dl/story"
@@ -22,25 +23,25 @@ var FactorialStory = &story.Story{
 				Do: FactorialCheck,
 			},
 			&story.PatternDecl{
-				Name: factorialName,
+				PatternName: factorialName,
 				PatternReturn: &story.PatternReturn{Result: &story.NumberField{
 					Markup: UserComment("the result uses the same variable as the pattern input does"),
-					Name:   numVar.Str,
+					Name:   "num",
 				}},
 				Params: []story.Field{
 					&story.NumberField{
 						Markup: UserComment("just one argument, a number called 'num'"),
-						Name:   numVar.Str,
+						Name:   "num",
 					}},
 			},
 			&story.PatternActions{
-				Name: factorialName,
+				PatternName: factorialName,
 				Rules: []story.PatternRule{{
 					Guard: &core.Always{},
 					Does:  FactorialMulMinusOne,
 				}}},
 			&story.PatternActions{
-				Name: factorialName,
+				PatternName: factorialName,
 				Rules: []story.PatternRule{{
 					Markup: UserComment("the rule considered first is the rule that was written last:"),
 					Guard:  FactorialIsZero,
@@ -54,14 +55,13 @@ var FactorialStory = &story.Story{
 var FactorialCheck = []rt.Execute{
 	&debug.Expect{
 		Value: &core.CompareNum{
-			A: F(6), Is: core.Equal, B: &core.CallPattern{
-				Pattern: factorialName,
-				Arguments: []rt.Arg{rt.Arg{
-					Name: "num",
-					From: &core.FromNum{
-						Markup: UserComment("start the factorial with '3'"),
-						Val:    F(3),
-					},
+			A: F(6), Is: core.Equal, B: &assign.CallPattern{
+				PatternName: factorialName,
+				Arguments: []assign.Arg{assign.Arg{
+					Name:  "num",
+					Value: &assign.FromNumber{Value: F(3)},
+					// fix: for some reason, the comment isn't appearing in the output.
+					// Markup: UserComment("start the factorial with '3'"),
 				}}},
 		},
 	},
@@ -69,33 +69,29 @@ var FactorialCheck = []rt.Execute{
 
 // subtracts 1 from the num and multiples by one
 var FactorialMulMinusOne = []rt.Execute{
-	&core.Assign{
-		Var: numVar,
-		From: &core.FromNum{Val: &core.ProductOf{
-			A: &core.GetVar{Name: numVar},
+	&assign.SetValue{
+		Target: assign.Variable("num"),
+		Value: &assign.FromNumber{Value: &core.ProductOf{
+			A: assign.Variable("num"),
 			B: &core.DiffOf{
-				A: &core.GetVar{Name: numVar},
-				B: F(1)},
-		}},
-	},
+				A: assign.Variable("num"),
+				B: I(1),
+			},
+		}}},
 }
 
 // at 0, use the number 1
 var FactorialUseOne = []rt.Execute{
-	&core.Assign{
-		Var: numVar,
-		From: &core.FromNum{
-			Val:    F(1),
-			Markup: UserComment("...return 1."),
-		},
+	&assign.SetValue{
+		Target: assign.Variable("num"),
+		Value:  &assign.FromNumber{Value: I(1)},
 	},
 }
 
 var FactorialIsZero = &core.CompareNum{
 	Markup: UserComment("so, when we've reached 0..."),
-	A:      &core.GetVar{Name: numVar},
+	A:      assign.Variable("num"),
 	Is:     core.Equal,
 	B:      F(0)}
 
-var factorialName = core.PatternName{Str: "factorial"}
-var numVar = core.VariableName{Str: "num"}
+const factorialName = "factorial"

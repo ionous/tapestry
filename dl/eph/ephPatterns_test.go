@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/kr/pretty"
@@ -18,7 +18,7 @@ func TestPatternSingle(t *testing.T) {
 		&EphKinds{Kinds: "k"},                      // a base for a parameter of k
 		//
 		&EphPatterns{
-			Name: "p",
+			PatternName: "p",
 			Params: []EphParams{{
 				Name:     "p1",
 				Affinity: Affinity{Affinity_Text},
@@ -30,7 +30,7 @@ func TestPatternSingle(t *testing.T) {
 			}, {
 				Name:      "l2",
 				Affinity:  Affinity{Affinity_Number},
-				Initially: &core.FromNum{Val: I(10)},
+				Initially: &assign.FromNumber{Value: I(10)},
 			}},
 			Result: &EphParams{
 				Name:     "success",
@@ -51,30 +51,32 @@ func TestPatternSeparateLocals(t *testing.T) {
 		&EphKinds{Kinds: "k"},                      // a base for a parameter of k
 		//
 		&EphPatterns{
-			Name: "p",
+			PatternName: "p",
 			Result: &EphParams{
 				Name:     "success",
 				Affinity: Affinity{Affinity_Bool},
 			}},
 		&EphPatterns{
-			Name: "p",
+			PatternName: "p",
 			Params: []EphParams{{
 				Name:     "p1",
 				Affinity: Affinity{Affinity_Text},
 				Class:    "k",
 			}}},
 		&EphPatterns{
-			Name: "p",
+			PatternName: "p",
 			Locals: []EphParams{{
-				Name:     "l1",
+				Name: "l1",
+				// FIX: rather than give an affinity
+				// assign an empty assignment of the right type
 				Affinity: Affinity{Affinity_NumList},
 			}}},
 		&EphPatterns{
-			Name: "p",
+			PatternName: "p",
 			Locals: []EphParams{{
 				Name:      "l2",
 				Affinity:  Affinity{Affinity_Number},
-				Initially: &core.FromNum{Val: I(10)},
+				Initially: &assign.FromNumber{Value: I(10)},
 			}}},
 	)
 	expectFullResults(t, dt)
@@ -90,20 +92,20 @@ func TestPatternSeparateDomains(t *testing.T) {
 		&EphKinds{Kinds: "k"},                      // a base for a parameter of k
 		//
 		&EphPatterns{
-			Name: "p",
+			PatternName: "p",
 			Params: []EphParams{{
 				Name:     "p1",
 				Affinity: Affinity{Affinity_Text},
 				Class:    "k",
 			}}},
 		&EphPatterns{
-			Name: "p",
+			PatternName: "p",
 			Result: &EphParams{
 				Name:     "success",
 				Affinity: Affinity{Affinity_Bool},
 			}},
 		&EphPatterns{
-			Name: "p",
+			PatternName: "p",
 			Locals: []EphParams{{
 				Name:     "l1",
 				Affinity: Affinity{Affinity_NumList},
@@ -111,11 +113,11 @@ func TestPatternSeparateDomains(t *testing.T) {
 	)
 	dt.makeDomain(dd("b", "a"),
 		&EphPatterns{
-			Name: "p",
+			PatternName: "p",
 			Locals: []EphParams{{
 				Name:      "l2",
 				Affinity:  Affinity{Affinity_Number},
-				Initially: &core.FromNum{Val: I(10)},
+				Initially: &assign.FromNumber{Value: I(10)},
 			}}},
 	)
 	expectFullResults(t, dt)
@@ -162,7 +164,7 @@ func expectFullResults(t *testing.T, dt domainTest) {
 		if e := cat.WriteLocals(&outlocals); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(outlocals[1:], testOut{
-			`a:p:l_2:{"FromNum:":10}`,
+			`a:p:l_2:{"FromNumber:":10}`,
 		}); len(diff) > 0 {
 			t.Log("got:", pretty.Sprint(outlocals))
 			t.Fatal(diff)
@@ -176,7 +178,7 @@ func TestPatternSplitDomain(t *testing.T) {
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kinds: kindsOf.Pattern.String()}, // declare the patterns table
 		&EphPatterns{
-			Name: "p",
+			PatternName: "p",
 			Result: &EphParams{
 				Name:     "success",
 				Affinity: Affinity{Affinity_Bool},
@@ -184,7 +186,7 @@ func TestPatternSplitDomain(t *testing.T) {
 	)
 	dt.makeDomain(dd("b", "a"),
 		&EphPatterns{
-			Name: "p",
+			PatternName: "p",
 			Params: []EphParams{{
 				Name:     "p1",
 				Affinity: Affinity{Affinity_Text},
@@ -204,14 +206,14 @@ func TestPatternMultipleReturn(t *testing.T) {
 		&EphKinds{Kinds: kindsOf.Pattern.String()},
 		//
 		&EphPatterns{
-			Name: "p",
+			PatternName: "p",
 			Result: &EphParams{
 				Name:     "success",
 				Affinity: Affinity{Affinity_Bool},
 			},
 		},
 		&EphPatterns{
-			Name: "p",
+			PatternName: "p",
 			Result: &EphParams{
 				Name:     "more success",
 				Affinity: Affinity{Affinity_Bool},
@@ -232,14 +234,14 @@ func TestPatternMultipleArgSets(t *testing.T) {
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kinds: kindsOf.Pattern.String()},
 		&EphPatterns{
-			Name: "p",
+			PatternName: "p",
 			Params: []EphParams{{
 				Name:     "p1",
 				Affinity: Affinity{Affinity_Text},
 			}},
 		},
 		&EphPatterns{
-			Name: "p",
+			PatternName: "p",
 			Params: []EphParams{{
 				Name:     "p2",
 				Affinity: Affinity{Affinity_Text},
@@ -260,11 +262,11 @@ func TestPatternConflictingInit(t *testing.T) {
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kinds: kindsOf.Pattern.String()}, // declare the patterns table
 		&EphPatterns{
-			Name: "p",
+			PatternName: "p",
 			Locals: []EphParams{{
 				Name:      "n",
 				Affinity:  Affinity{Affinity_Number},
-				Initially: &core.FromText{Val: T("mismatched")},
+				Initially: &assign.FromText{Value: T("mismatched")},
 			}},
 		},
 	)
@@ -280,7 +282,7 @@ func TestPatternNoResults(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kinds: kindsOf.Pattern.String()}, // declare the patterns table
-		&EphPatterns{Name: "p"},
+		&EphPatterns{PatternName: "p"},
 	)
 	if cat, e := buildAncestors(dt); e != nil {
 		t.Fatal(e)

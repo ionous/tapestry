@@ -44,7 +44,9 @@
               {
                 "Cmp:is:txt:": [
                   {
-                    "ParentOf obj:": "@noun"
+                    "ParentOf obj:": {
+                      "FromText:": "@noun"
+                    }
                   },
                   "other_than",
                   "@actor"
@@ -52,14 +54,14 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
-                        "Response:text:": [
+                      "FromText:": {
+                        "Print response:with:": [
                           "can only use possessions",
                           {
-                            "RenderTemplate:": "{we:|capitalize!} haven't got {those:.noun}!"
+                            "Say:": "{we:|capitalize!} haven't got {those:.noun}!"
                           }
                         ]
                       }

@@ -13,12 +13,10 @@
               [
                 {
                   "PatternRule:does:": [
-                    {
-                      "Always": true
-                    },
+                    true,
                     [
                       {
-                        "Say:": "o"
+                        "Print:": "o"
                       }
                     ]
                   ]
@@ -35,7 +33,7 @@
                     },
                     [
                       {
-                        "Say:": "x"
+                        "Print:": "x"
                       }
                     ]
                   ]
@@ -52,7 +50,7 @@
                     },
                     [
                       {
-                        "Say:": "-"
+                        "Print:": "-"
                       }
                     ]
                   ]
@@ -69,7 +67,7 @@
                     },
                     [
                       {
-                        "Say:": "*"
+                        "Print:": "*"
                       }
                     ]
                   ]
@@ -82,13 +80,11 @@
           {
             "Repeating across:as:does:": [
               {
-                "FromNums:": {
+                "FromNumList:": {
                   "Range:": 6
                 }
               },
-              {
-                "AsNum:": "i"
-              },
+              "i",
               [
                 {
                   "MagicSymbols": true

@@ -18,11 +18,9 @@
               "actor",
               "actor",
               {
-                "Get:from:": [
-                  "pawn",
-                  {
-                    "VarFields:": "agent"
-                  }
+                "Object:field:": [
+                  "@agent",
+                  "pawn"
                 ]
               }
             ]
@@ -32,20 +30,26 @@
           {
             "PatternRule:does:": [
               {
-                "IsPlayer obj:": "@actor"
+                "IsPlayer obj:": {
+                  "FromText:": "@actor"
+                }
               },
               [
                 {
                   "If:from:and:does:else:": [
                     "result",
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "CanReach actor:action:noun:requiresLight:": [
-                          "@actor",
                           {
-                            "FromTxt:": "searching"
+                            "FromText:": "@actor"
                           },
-                          "@noun",
+                          {
+                            "FromText:": "searching"
+                          },
+                          {
+                            "FromText:": "@noun"
+                          },
                           {
                             "FromBool:": true
                           }
@@ -59,7 +63,7 @@
                     },
                     [
                       {
-                        "Say:": "@result"
+                        "Print:": "@result"
                       }
                     ],
                     {
@@ -69,12 +73,18 @@
                             {
                               "Send:event:": [
                                 {
-                                  "Capture obj:": "@noun"
+                                  "Capture obj:": {
+                                    "FromText:": "@noun"
+                                  }
                                 },
                                 {
                                   "Search actor:noun:": [
-                                    "@actor",
-                                    "@noun"
+                                    {
+                                      "FromText:": "@actor"
+                                    },
+                                    {
+                                      "FromText:": "@noun"
+                                    }
                                   ]
                                 }
                               ]
@@ -82,8 +92,12 @@
                             [
                               {
                                 "ReportSearching actor:noun:": [
-                                  "@actor",
-                                  "@noun"
+                                  {
+                                    "FromText:": "@actor"
+                                  },
+                                  {
+                                    "FromText:": "@noun"
+                                  }
                                 ]
                               }
                             ]
@@ -132,19 +146,15 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "player searches something",
-                      {
-                        "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "player searches something",
+                    {
+                      "Say:": "{we!|capitalize!} find nothing of interest."
+                    }
+                  ]
                 }
               ]
             ]
@@ -153,19 +163,19 @@
             "PatternRule:does:": [
               {
                 "Not:": {
-                  "IsPlayer obj:": "@actor"
+                  "IsPlayer obj:": {
+                    "FromText:": "@actor"
+                  }
                 }
               },
               [
                 {
-                  "Say:": {
-                    "Response:text:": [
-                      "someone else searches something",
-                      {
-                        "RenderTemplate:": "{The: .actor|capitalize!} searches {the: .noun}."
-                      }
-                    ]
-                  }
+                  "Print response:with:": [
+                    "someone else searches something",
+                    {
+                      "Say:": "{The: .actor|capitalize!} searches {the: .noun}."
+                    }
+                  ]
                 }
               ]
             ]
@@ -175,20 +185,26 @@
               {
                 "AllTrue:": [
                   {
-                    "IsPlayer obj:": "@actor"
+                    "IsPlayer obj:": {
+                      "FromText:": "@actor"
+                    }
                   },
                   {
-                    "ShowsStorage obj:": "@noun"
+                    "ShowsStorage obj:": {
+                      "FromText:": "@noun"
+                    }
                   }
                 ]
               },
               [
                 {
-                  "Let:be:": [
-                    "items",
+                  "Set:from:": [
+                    "@items",
                     {
-                      "FromTxts:": {
-                        "VisibleStorage obj:": "@noun"
+                      "FromTextList:": {
+                        "VisibleStorage obj:": {
+                          "FromText:": "@noun"
+                        }
                       }
                     }
                   ]
@@ -198,7 +214,9 @@
                     {
                       "Cmp:is:num:": [
                         {
-                          "Len:": "@items"
+                          "Len:": {
+                            "FromTextList:": "@items"
+                          }
                         },
                         "equal_to",
                         0
@@ -206,57 +224,49 @@
                     },
                     [
                       {
-                        "Say:": {
-                          "Response:text:": [
-                            "player searches empty storage",
-                            {
-                              "RenderTemplate:": "There is nothing {on:.noun} {the:.noun}."
-                            }
-                          ]
-                        }
+                        "Print response:with:": [
+                          "player searches empty storage",
+                          {
+                            "Say:": "There is nothing {on:.noun} {the:.noun}."
+                          }
+                        ]
                       }
                     ],
                     {
                       "ElseDo does:": [
                         {
-                          "Say:": {
-                            "Response:text:": [
-                              "player searches storage",
-                              {
-                                "Spaces does:": [
-                                  {
-                                    "Say:": {
-                                      "RenderTemplate:": "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
-                                    }
-                                  },
-                                  {
-                                    "Say:": {
-                                      "Commas does:": [
-                                        {
-                                          "Repeating across:as:does:": [
-                                            "@items",
+                          "Print response:with:": [
+                            "player searches storage",
+                            {
+                              "Spaces does:": [
+                                {
+                                  "Say:": "{On:.noun|capitalize!} {the: .noun} {are: .noun .items}"
+                                },
+                                {
+                                  "Print:": {
+                                    "Commas does:": [
+                                      {
+                                        "Repeating across:as:does:": [
+                                          {
+                                            "FromTextList:": "@items"
+                                          },
+                                          "item",
+                                          [
                                             {
-                                              "AsTxt:": "item"
-                                            },
-                                            [
-                                              {
-                                                "Say:": {
-                                                  "RenderTemplate:": "{the: .item}"
-                                                }
-                                              }
-                                            ]
+                                              "Say:": "{the: .item}"
+                                            }
                                           ]
-                                        }
-                                      ]
-                                    }
-                                  },
-                                  {
-                                    "Say:": "."
+                                        ]
+                                      }
+                                    ]
                                   }
-                                ]
-                              }
-                            ]
-                          }
+                                },
+                                {
+                                  "Print:": "."
+                                }
+                              ]
+                            }
+                          ]
                         }
                       ]
                     }
@@ -287,20 +297,22 @@
                     ]
                   },
                   {
-                    "FullyOpaque obj:": "@noun"
+                    "FullyOpaque obj:": {
+                      "FromText:": "@noun"
+                    }
                   }
                 ]
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
-                        "Response:text:": [
+                      "FromText:": {
+                        "Print response:with:": [
                           "can't search opaque objects",
                           {
-                            "RenderTemplate:": "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
+                            "Say:": "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
                           }
                         ]
                       }
@@ -323,21 +335,23 @@
                   },
                   {
                     "Not:": {
-                      "ProvidesStorage obj:": "@noun"
+                      "ProvidesStorage obj:": {
+                        "FromText:": "@noun"
+                      }
                     }
                   }
                 ]
               },
               [
                 {
-                  "Let:be:": [
-                    "response",
+                  "Set:from:": [
+                    "@response",
                     {
-                      "FromTxt:": {
-                        "Response:text:": [
+                      "FromText:": {
+                        "Print response:with:": [
                           "can only search storage",
                           {
-                            "RenderTemplate:": "{we!|capitalize!} find nothing of interest."
+                            "Say:": "{we!|capitalize!} find nothing of interest."
                           }
                         ]
                       }

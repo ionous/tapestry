@@ -3,6 +3,7 @@ package core
 import (
 	"encoding/json"
 
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
@@ -11,17 +12,24 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// move some part of this into package assign
 func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 	typeName := flow.GetType()
-	switch ptr := flow.GetFlow().(type) {
-	case *GetVar:
-		// write variables as a string prepended by @
-		err = m.MarshalValue(typeName, "@"+ptr.Name.Str)
+	switch op := flow.GetFlow().(type) {
+	case *assign.CallPattern:
+		err = assign.EncodePattern(m, op)
+
+	case *assign.VariableRef:
+		if name := encodeVariableRef(op); len(name) == 0 {
+			err = chart.Unhandled(typeName)
+		} else {
+			err = m.MarshalValue(typeName, name)
+		}
 
 	case *literal.TextValue:
 		// if the text starts with an @, skip it:
 		// ( ie. dont confuse the rare text literal starting with an ampersand, with GetVar )
-		if str := ptr.Value; len(str) > 0 && str[0] == '@' {
+		if str := op.Value; len(str) > 0 && str[0] == '@' {
 			err = chart.Unhandled(typeName)
 		} else {
 			err = literal.CompactEncoder(m, flow)
@@ -29,6 +37,18 @@ func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 
 	default:
 		err = literal.CompactEncoder(m, flow)
+	}
+	return
+}
+
+// write variables as a string prepended by @
+// fix: it'd be nice if all parts were literals to write dot/bracket syntax a.b[5]
+// fix: it'd be nicest if this could use package express to handle the parsing.
+func encodeVariableRef(vref *assign.VariableRef) (ret string) {
+	if len(vref.Dot) == 0 {
+		if name, ok := vref.Name.(*literal.TextValue); ok {
+			ret = "@" + name.Value
+		}
 	}
 	return
 }
@@ -46,24 +66,23 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 	default:
 		err = chart.Unhandled(typeName)
 	case
-		rt.Assignment_Type,
+		// reading from a variable:
 		rt.BoolEval_Type,
 		rt.NumberEval_Type,
 		rt.TextEval_Type,
 		rt.NumListEval_Type,
 		rt.TextListEval_Type,
 		rt.RecordEval_Type,
-		rt.RecordListEval_Type:
+		rt.RecordListEval_Type,
+		// writing to a variable:
+		assign.Address_Type:
 		var str string
 		if e := json.Unmarshal(msg, &str); e == nil && len(str) > 0 && str[0] == '@' {
-			v := &GetVar{Name: VariableName{Str: str[1:]}}
-			if !slot.SetSlot(v) {
+			if !slot.SetSlot(assign.Variable(str[1:])) {
 				err = errutil.New("unexpected error setting slot")
 			}
-		} else if typeName != rt.Assignment_Type {
-			err = literal.CompactSlotDecoder(m, slot, msg)
 		} else {
-			err = chart.Unhandled(typeName)
+			err = literal.CompactSlotDecoder(m, slot, msg)
 		}
 	}
 	return

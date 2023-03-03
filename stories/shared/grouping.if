@@ -33,23 +33,23 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "--": "Determine the grouping values, one for for each object.",
                   "Map:fromList:using:": [
-                    "groupings",
-                    "@objs",
+                    "@groupings",
+                    {
+                      "FromTextList:": "@objs"
+                    },
                     "assign grouping"
                   ]
                 },
                 {
-                  "--": "Separate the objects based on their grouping values, one for each group.",
                   "Reduce into:fromList:using:": [
-                    "groups",
-                    "@groupings",
+                    "@groups",
+                    {
+                      "FromRecordList:": "@groupings"
+                    },
                     "collate groups"
                   ]
                 }
@@ -93,7 +93,7 @@
               "grouping",
               {
                 "Groupings name:": {
-                  "FromTxt:": "@obj"
+                  "FromText:": "@obj"
                 }
               }
             ]
@@ -102,14 +102,14 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
-                  "Let:be:": [
-                    "grouping",
-                    "@grouping"
+                  "Set:from:": [
+                    "@grouping",
+                    {
+                      "FromRecord:": "@grouping"
+                    }
                   ]
                 }
               ]
@@ -120,18 +120,20 @@
               {
                 "AllTrue:": [
                   {
-                    "Get obj:trait:": [
+                    "Object:field:": [
                       "@obj",
                       "counted"
                     ]
                   },
                   {
                     "Is empty:": {
-                      "Get:from:": [
-                        "label",
-                        {
-                          "VarFields:": "grouping"
-                        }
+                      "Variable:dot:": [
+                        "grouping",
+                        [
+                          {
+                            "AtField:": "label"
+                          }
+                        ]
                       ]
                     }
                   }
@@ -140,38 +142,56 @@
               [
                 {
                   "--": "unless already grouped, use print several for unnamed counted nouns.",
-                  "Put:from:at:": [
+                  "Set:from:": [
                     {
-                      "VarField:": "grouping"
+                      "Variable:dot:": [
+                        "grouping",
+                        [
+                          {
+                            "AtField:": "label"
+                          }
+                        ]
+                      ]
                     },
                     {
-                      "FromTxt:": {
+                      "FromText:": {
                         "KindOf:": "@obj"
                       }
-                    },
-                    "label"
+                    }
                   ]
                 },
                 {
-                  "Put:from:at:": [
+                  "Set:from:": [
                     {
-                      "VarField:": "grouping"
+                      "Variable:dot:": [
+                        "grouping",
+                        [
+                          {
+                            "AtField:": "is hide label"
+                          }
+                        ]
+                      ]
                     },
                     {
                       "FromBool:": true
-                    },
-                    "is hide label"
+                    }
                   ]
                 },
                 {
-                  "Put:from:at:": [
+                  "Set:from:": [
                     {
-                      "VarField:": "grouping"
+                      "Variable:dot:": [
+                        "grouping",
+                        [
+                          {
+                            "AtField:": "is hide objects"
+                          }
+                        ]
+                      ]
                     },
                     {
                       "FromBool:": true
-                    },
-                    "is hide objects"
+                    }
                   ]
                 }
               ]
@@ -275,20 +295,24 @@
                   {
                     "Cmp:is:txt:": [
                       {
-                        "Get:from:": [
-                          "label",
-                          {
-                            "VarFields:": "first"
-                          }
+                        "Variable:dot:": [
+                          "first",
+                          [
+                            {
+                              "AtField:": "label"
+                            }
+                          ]
                         ]
                       },
                       "equal_to",
                       {
-                        "Get:from:": [
-                          "label",
-                          {
-                            "VarFields:": "second"
-                          }
+                        "Variable:dot:": [
+                          "second",
+                          [
+                            {
+                              "AtField:": "label"
+                            }
+                          ]
                         ]
                       }
                     ]
@@ -296,20 +320,24 @@
                   {
                     "Cmp:is:txt:": [
                       {
-                        "Get:from:": [
-                          "hide label",
-                          {
-                            "VarFields:": "first"
-                          }
+                        "Variable:dot:": [
+                          "first",
+                          [
+                            {
+                              "AtField:": "hide label"
+                            }
+                          ]
                         ]
                       },
                       "equal_to",
                       {
-                        "Get:from:": [
-                          "hide label",
-                          {
-                            "VarFields:": "second"
-                          }
+                        "Variable:dot:": [
+                          "second",
+                          [
+                            {
+                              "AtField:": "hide label"
+                            }
+                          ]
                         ]
                       }
                     ]
@@ -317,20 +345,24 @@
                   {
                     "Cmp:is:txt:": [
                       {
-                        "Get:from:": [
-                          "hide size",
-                          {
-                            "VarFields:": "first"
-                          }
+                        "Variable:dot:": [
+                          "first",
+                          [
+                            {
+                              "AtField:": "hide size"
+                            }
+                          ]
                         ]
                       },
                       "equal_to",
                       {
-                        "Get:from:": [
-                          "hide size",
-                          {
-                            "VarFields:": "second"
-                          }
+                        "Variable:dot:": [
+                          "second",
+                          [
+                            {
+                              "AtField:": "hide size"
+                            }
+                          ]
                         ]
                       }
                     ]
@@ -338,20 +370,24 @@
                   {
                     "Cmp:is:txt:": [
                       {
-                        "Get:from:": [
-                          "hide objects",
-                          {
-                            "VarFields:": "first"
-                          }
+                        "Variable:dot:": [
+                          "first",
+                          [
+                            {
+                              "AtField:": "hide objects"
+                            }
+                          ]
                         ]
                       },
                       "equal_to",
                       {
-                        "Get:from:": [
-                          "hide objects",
-                          {
-                            "VarFields:": "second"
-                          }
+                        "Variable:dot:": [
+                          "second",
+                          [
+                            {
+                              "AtField:": "hide objects"
+                            }
+                          ]
                         ]
                       }
                     ]
@@ -360,8 +396,8 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "matching",
+                  "Set:from:": [
+                    "@matching",
                     {
                       "FromBool:": true
                     }
@@ -376,21 +412,25 @@
                 "AnyTrue:": [
                   {
                     "Is empty:": {
-                      "Get:from:": [
-                        "label",
-                        {
-                          "VarFields:": "first"
-                        }
+                      "Variable:dot:": [
+                        "first",
+                        [
+                          {
+                            "AtField:": "label"
+                          }
+                        ]
                       ]
                     }
                   },
                   {
                     "Is empty:": {
-                      "Get:from:": [
-                        "label",
-                        {
-                          "VarFields:": "second"
-                        }
+                      "Variable:dot:": [
+                        "second",
+                        [
+                          {
+                            "AtField:": "label"
+                          }
+                        ]
                       ]
                     }
                   }
@@ -398,8 +438,8 @@
               },
               [
                 {
-                  "Let:be:": [
-                    "matching",
+                  "Set:from:": [
+                    "@matching",
                     {
                       "FromBool:": false
                     }
@@ -462,40 +502,46 @@
         [
           {
             "PatternRule:does:": [
-              {
-                "Always": true
-              },
+              true,
               [
                 {
                   "Comment:": "find the index of the matching group"
                 },
                 {
                   "Repeating across:as:does:": [
-                    "@groups",
                     {
-                      "AsRec:": "el"
+                      "FromRecordList:": "@groups"
                     },
+                    "el",
                     [
                       {
                         "If:does:": [
                           {
                             "MatchGroups first:second:": [
-                              "@grouping",
                               {
-                                "Get:from:": [
-                                  "grouping",
-                                  {
-                                    "VarFields:": "el"
-                                  }
-                                ]
+                                "FromRecord:": "@grouping"
+                              },
+                              {
+                                "FromRecord:": {
+                                  "Variable:dot:": [
+                                    "el",
+                                    [
+                                      {
+                                        "AtField:": "grouping"
+                                      }
+                                    ]
+                                  ]
+                                }
                               }
                             ]
                           },
                           [
                             {
-                              "Let:be:": [
-                                "idx",
-                                "@index"
+                              "Set:from:": [
+                                "@idx",
+                                {
+                                  "FromNumber:": "@index"
+                                }
                               ]
                             }
                           ]
@@ -521,44 +567,62 @@
                     },
                     [
                       {
-                        "Put:into:": [
+                        "Push:into:": [
                           {
-                            "Get:from:": [
-                              "name",
-                              {
-                                "VarFields:": "grouping"
-                              }
+                            "FromText:": {
+                              "Variable:dot:": [
+                                "grouping",
+                                [
+                                  {
+                                    "AtField:": "name"
+                                  }
+                                ]
+                              ]
+                            }
+                          },
+                          "@names"
+                        ]
+                      },
+                      {
+                        "Set:from:": [
+                          {
+                            "Variable:dot:": [
+                              "group",
+                              [
+                                {
+                                  "AtField:": "objects"
+                                }
+                              ]
                             ]
                           },
                           {
-                            "IntoTxts:": "names"
+                            "FromTextList:": "@names"
                           }
                         ]
                       },
                       {
-                        "Put:from:at:": [
+                        "Set:from:": [
                           {
-                            "VarField:": "group"
+                            "Variable:dot:": [
+                              "group",
+                              [
+                                {
+                                  "AtField:": "grouping"
+                                }
+                              ]
+                            ]
                           },
-                          "@names",
-                          "objects"
-                        ]
-                      },
-                      {
-                        "Put:from:at:": [
                           {
-                            "VarField:": "group"
-                          },
-                          "@grouping",
-                          "grouping"
-                        ]
-                      },
-                      {
-                        "Put:into:": [
-                          "@group",
-                          {
-                            "IntoRecs:": "groups"
+                            "FromRecord:": "@grouping"
                           }
+                        ]
+                      },
+                      {
+                        "Push:into:": [
+                          {
+                            "FromRecord:": "@group"
+                          },
+                          "@groups"
                         ]
                       }
                     ],
@@ -571,60 +635,88 @@
                           ]
                         },
                         {
-                          "Let:be:": [
-                            "group",
+                          "Set:from:": [
+                            "@group",
                             {
-                              "FromRec:": {
-                                "Get:index:": [
-                                  "@groups",
-                                  "@idx"
+                              "FromRecord:": {
+                                "Variable:dot:": [
+                                  "groups",
+                                  [
+                                    {
+                                      "AtIndex:": "@idx"
+                                    }
+                                  ]
                                 ]
                               }
                             }
                           ]
                         },
                         {
-                          "Let:be:": [
-                            "names",
-                            {
-                              "Get:from:": [
-                                "objects",
-                                {
-                                  "VarFields:": "group"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "Put:into:": [
-                            {
-                              "Get:from:": [
-                                "name",
-                                {
-                                  "VarFields:": "grouping"
-                                }
-                              ]
-                            },
-                            {
-                              "IntoTxts:": "names"
-                            }
-                          ]
-                        },
-                        {
-                          "Put:from:at:": [
-                            {
-                              "VarField:": "group"
-                            },
+                          "Set:from:": [
                             "@names",
-                            "objects"
+                            {
+                              "FromTextList:": {
+                                "Variable:dot:": [
+                                  "group",
+                                  [
+                                    {
+                                      "AtField:": "objects"
+                                    }
+                                  ]
+                                ]
+                              }
+                            }
                           ]
                         },
                         {
-                          "Set:index:from:": [
-                            "groups",
-                            "@idx",
-                            "@group"
+                          "Push:into:": [
+                            {
+                              "FromText:": {
+                                "Variable:dot:": [
+                                  "grouping",
+                                  [
+                                    {
+                                      "AtField:": "name"
+                                    }
+                                  ]
+                                ]
+                              }
+                            },
+                            "@names"
+                          ]
+                        },
+                        {
+                          "Set:from:": [
+                            {
+                              "Variable:dot:": [
+                                "group",
+                                [
+                                  {
+                                    "AtField:": "objects"
+                                  }
+                                ]
+                              ]
+                            },
+                            {
+                              "FromTextList:": "@names"
+                            }
+                          ]
+                        },
+                        {
+                          "Set:from:": [
+                            {
+                              "Variable:dot:": [
+                                "groups",
+                                [
+                                  {
+                                    "AtIndex:": "@idx"
+                                  }
+                                ]
+                              ]
+                            },
+                            {
+                              "FromRecord:": "@group"
+                            }
                           ]
                         }
                       ]
