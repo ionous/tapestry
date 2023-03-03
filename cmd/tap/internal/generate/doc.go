@@ -1,2 +1,2 @@
 // internal package for gomake cmd
-package gomake
+package generate

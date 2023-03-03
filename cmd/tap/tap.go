@@ -15,9 +15,11 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cfg"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdgenerate"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdidlb"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdmosaic"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/help"
-	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/idlcmd"
-	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/mosaiccmd"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/mosaic"
 	"github.com/ionous/errutil"
 )
 
@@ -142,6 +144,10 @@ func invoke(cmd *base.Command, args []string) (err error) {
 
 	cmd.Flag.Usage = func() { cmd.Usage() }
 	if !cmd.CustomFlags {
+		// fix? build flags should probably be at tapestry level.
+		if mosaic.BuildConfig != mosaic.Prod {
+			flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
+		}
 		// base.SetFromGOFLAGS(&cmd.Flag)
 		cmd.Flag.Parse(args)
 		args = cmd.Flag.Args()
@@ -159,7 +165,8 @@ const UnknownCommand errutil.Error = "unknown command"
 func init() {
 	// rewrites the main tap command to simplify exitBadUsage
 	base.Go.Commands = []*base.Command{
-		idlcmd.CmdIdl,
-		mosaiccmd.CmdMosaic,
+		cmdidlb.CmdIdl,
+		cmdgenerate.CmdGenerate,
+		cmdmosaic.CmdMosaic,
 	}
 }

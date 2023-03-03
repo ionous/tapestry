@@ -1,7 +1,7 @@
-// Generate the golang dl from .ifspec(s)
-package main
+package cmdgenerate
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -9,25 +9,31 @@ import (
 	"path/filepath"
 	"strings"
 
-	gomake "git.sr.ht/~ionous/tapestry/cmd/gomake/internal"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/generate"
 	"git.sr.ht/~ionous/tapestry/idl"
 	"github.com/ionous/errutil"
 	"golang.org/x/tools/imports"
 )
 
-func main() {
-	var dl, out string
-	flag.StringVar(&dl, "dl", "", "limit to which groups")
-	flag.StringVar(&out, "out", "./_temp", "output directory")
-	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
-	flag.Parse()
-	if path, e := filepath.Abs(out); e != nil {
+var CmdGenerate = &base.Command{
+	Run:       runMake,
+	UsageLine: "tap make -out ../../dl",
+	Short:     "generate golang serializers from .ifspecs",
+	Long: `
+Make generates .go language  serialization code for reading and writing .if files.
+Currently, the tapestry embeds the .ifspecs descriptions into the gomake executable.`,
+}
+
+// FIX: where do keyword specs come from?
+func runMake(ctx context.Context, cmd *base.Command, args []string) (err error) {
+	if path, e := filepath.Abs(genfLags.out); e != nil {
 		flag.Usage()
 		log.Fatal(e)
 	} else {
 		dlLike := strings.HasSuffix(path, string(filepath.Separator)+"dl")
-		if e := gomake.WriteSpecs(idl.Specs, func(groupName string, b []byte) (err error) {
-			if len(dl) == 0 || (dl == groupName) {
+		if e := generate.WriteSpecs(idl.Specs, func(groupName string, b []byte) (err error) {
+			if len(genfLags.dl) == 0 || (genfLags.dl == groupName) {
 				// fix: an option to do everything in memory and write to stdout?
 				path := path
 				if groupName == "rt" && dlLike {
@@ -56,18 +62,5 @@ func main() {
 			log.Fatal(e)
 		}
 	}
-}
-
-const Description = //
-`gomake generates go language serialization code for reading and writing .if files.
-Currently, the compiler embeds the .ifspecs descriptions into the gomake executable.
-`
-const Example = "go run gomake.go -out ../../dl"
-
-func init() {
-	flag.Usage = func() {
-		println(Description)
-		flag.PrintDefaults()
-		println("\nex.", Example)
-	}
+	return
 }

@@ -1,4 +1,4 @@
-package idlcmd
+package cmdidlb
 
 import (
 	"git.sr.ht/~ionous/tapestry/tables/idl"

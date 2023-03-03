@@ -1,4 +1,4 @@
-package gomake
+package generate
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/spec"

@@ -1,4 +1,4 @@
-package gomake
+package generate
 
 import (
 	"embed"

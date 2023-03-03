@@ -1,4 +1,4 @@
-package mosaiccmd
+package cmdmosaic
 
 import (
 	"context"
