@@ -11,29 +11,28 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/generate"
-	"git.sr.ht/~ionous/tapestry/idl"
 	"github.com/ionous/errutil"
 	"golang.org/x/tools/imports"
 )
 
 var CmdGenerate = &base.Command{
-	Run:       runMake,
-	UsageLine: "tap make -out ../../dl",
+	Run:       runGenerate,
+	Flag:      buildFlags(),
+	UsageLine: "tap generate [-out ../../dl]",
 	Short:     "generate golang serializers from .ifspecs",
 	Long: `
-Make generates .go language  serialization code for reading and writing .if files.
-Currently, the tapestry embeds the .ifspecs descriptions into the gomake executable.`,
+Make generates .go language serialization code for reading and writing .if files.`,
 }
 
 // FIX: where do keyword specs come from?
-func runMake(ctx context.Context, cmd *base.Command, args []string) (err error) {
-	if path, e := filepath.Abs(genfLags.out); e != nil {
+func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err error) {
+	if path, e := filepath.Abs(genFlags.out); e != nil {
 		flag.Usage()
 		log.Fatal(e)
 	} else {
 		dlLike := strings.HasSuffix(path, string(filepath.Separator)+"dl")
-		if e := generate.WriteSpecs(idl.Specs, func(groupName string, b []byte) (err error) {
-			if len(genfLags.dl) == 0 || (genfLags.dl == groupName) {
+		if e := generate.WriteSpecs(os.DirFS(genFlags.in), func(groupName string, b []byte) (err error) {
+			if len(genFlags.dl) == 0 || (genFlags.dl == groupName) {
 				// fix: an option to do everything in memory and write to stdout?
 				path := path
 				if groupName == "rt" && dlLike {

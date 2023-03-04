@@ -4,6 +4,7 @@ package rs
 import (
 	"io/fs"
 	"sort"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/jsn"
@@ -46,7 +47,7 @@ func FromSpecs(files fs.FS) (ret TypeSpecs, err error) {
 	if e := fs.WalkDir(files, ".", func(path string, d fs.DirEntry, e error) (err error) {
 		if e != nil {
 			err = e // can happen if it failed to read the contents of a director
-		} else if !d.IsDir() { // the first dir we get is "."
+		} else if !d.IsDir() && strings.HasSuffix(d.Name(), ".ifspecs") { // the first dir we get is "."
 			if _, e := readSpec(&types, files, path); e != nil {
 				err = errutil.New(e, "reading", path)
 			}

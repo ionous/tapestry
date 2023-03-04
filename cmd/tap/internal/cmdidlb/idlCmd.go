@@ -31,8 +31,7 @@ var CmdIdl = &base.Command{
 Idlb generates an sqlite database containing the tapestry command language.
 Language extensions must be built into tapestry itself
 ( they require an implementation that tapestry can execute )
-so there are no options for this command except the output filename.
-	`,
+so there are no options for this command except the output filename.`,
 }
 
 // all specs

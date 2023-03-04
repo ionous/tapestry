@@ -146,7 +146,7 @@ func invoke(cmd *base.Command, args []string) (err error) {
 	if !cmd.CustomFlags {
 		// fix? build flags should probably be at tapestry level.
 		if mosaic.BuildConfig != mosaic.Prod {
-			flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
+			cmd.Flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
 		}
 		// base.SetFromGOFLAGS(&cmd.Flag)
 		cmd.Flag.Parse(args)
