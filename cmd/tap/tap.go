@@ -12,6 +12,7 @@ import (
 	"flag"
 	"log"
 	"os"
+	"runtime/pprof"
 
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cfg"
@@ -19,8 +20,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdgenerate"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdidlb"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdmosaic"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdweave"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/help"
-	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/mosaic"
 	"github.com/ionous/errutil"
 )
 
@@ -143,15 +144,24 @@ func invoke(cmd *base.Command, args []string) (err error) {
 	// ex. 	go get: var getD = CmdGet.Flag.Bool("d", false, "")
 	// after selecting the command, this parses the args, and then passes the remaining args to the command.
 
+	var profile string
 	cmd.Flag.Usage = func() { cmd.Usage() }
 	if !cmd.CustomFlags {
-		// fix? build flags should probably be at tapestry level.
-		if mosaic.BuildConfig != mosaic.Prod {
-			cmd.Flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
-		}
+		cmd.Flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
+		cmd.Flag.StringVar(&profile, "profile", "", "write cpu profile to file")
+
 		// base.SetFromGOFLAGS(&cmd.Flag)
 		cmd.Flag.Parse(args)
 		args = cmd.Flag.Args()
+	}
+
+	if profile != "" {
+		f, err := os.Create(profile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
 	}
 
 	ctx := context.Background()
@@ -170,5 +180,6 @@ func init() {
 		cmdcompact.CmdCompact,
 		cmdgenerate.CmdGenerate,
 		cmdmosaic.CmdMosaic,
+		cmdweave.CmdWeave,
 	}
 }

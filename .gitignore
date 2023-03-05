@@ -26,4 +26,4 @@ www/dist
 *.zip
 *.go_
 cmd/tap/tap.db
-stories/temp
+_temp
