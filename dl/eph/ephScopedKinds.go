@@ -6,6 +6,7 @@ import "github.com/ionous/errutil"
 // ready after phase Ancestry
 type ScopedKinds map[string]*ScopedKind
 
+// tries to use the pased name as a plural, if that fails, tries as a singular word
 func (d *Domain) GetPluralKind(name string) (ret *ScopedKind, okay bool) {
 	if a, ok := d.GetKind(name); ok {
 		ret, okay = a, true

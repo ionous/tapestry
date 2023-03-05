@@ -31,7 +31,7 @@ func TestDetermineNum(t *testing.T) {
 			if diff := pretty.Diff(refs, &eph.EphRefs{
 				Refs: []eph.Ephemera{
 					&eph.EphKinds{
-						Kinds: "factorial",
+						Kind: "factorial",
 						// From:  kindsOf.Pattern.String() -- see note in ImportCall
 						Contain: []eph.EphParams{{
 							Affinity: eph.Affinity{eph.Affinity_Number},

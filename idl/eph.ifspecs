@@ -285,14 +285,16 @@
                 "eph",
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
                       "kinds",
+                      "kind",
                       "text"
                     ]
                   },
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
                       "from",
+                      "ancestor",
                       "text"
                     ]
                   },

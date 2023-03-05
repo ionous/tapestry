@@ -12,12 +12,12 @@ func TestValueFieldAssignment(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
 		// some random set of kinds
-		&EphKinds{Kinds: "k"},
-		&EphKinds{Kinds: "l", From: "k"},
-		&EphKinds{Kinds: "m", From: "l"},
+		&EphKinds{Kind: "k"},
+		&EphKinds{Kind: "l", Ancestor: "k"},
+		&EphKinds{Kind: "m", Ancestor: "l"},
 		// some simple fields
 		// the name of the field has to match the name of the aspect
-		&EphKinds{Kinds: "k", Contain: []EphParams{
+		&EphKinds{Kind: "k", Contain: []EphParams{
 			{Name: "t", Affinity: Affinity{Affinity_Text}},
 			{Name: "d", Affinity: Affinity{Affinity_Number}},
 		}},
@@ -54,9 +54,9 @@ func TestMissingField(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
 		// some random set of kinds
-		&EphKinds{Kinds: "k"},
+		&EphKinds{Kind: "k"},
 		// a field
-		&EphKinds{Kinds: "k", Contain: []EphParams{{Name: "d", Affinity: Affinity{Affinity_Number}}}},
+		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "d", Affinity: Affinity{Affinity_Number}}}},
 		// a noun
 		&EphNouns{Noun: "n", Kind: "k"},
 		// and not that field
@@ -73,16 +73,16 @@ func TestValueTraitAssignment(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
 		// some random set of kinds
-		&EphKinds{Kinds: "k"},
-		&EphKinds{Kinds: "l", From: "k"},
-		&EphKinds{Kinds: "m", From: "l"},
+		&EphKinds{Kind: "k"},
+		&EphKinds{Kind: "l", Ancestor: "k"},
+		&EphKinds{Kind: "m", Ancestor: "l"},
 		// aspects
-		&EphKinds{Kinds: kindsOf.Aspect.String()},
+		&EphKinds{Kind: kindsOf.Aspect.String()},
 		&EphAspects{Aspects: "a", Traits: dd("w", "x", "y")},
 		&EphAspects{Aspects: "b", Traits: dd("z")},
 		// fields using those aspects:
 		// the name of the field has to match the name of the aspect
-		&EphKinds{Kinds: "k", Contain: []EphParams{
+		&EphKinds{Kind: "k", Contain: []EphParams{
 			AspectParam("a"),
 			AspectParam("b"),
 		}},
@@ -119,19 +119,19 @@ func TestValuePaths(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
 		// declare the existence of records
-		&EphKinds{Kinds: kindsOf.Record.String()},
+		&EphKinds{Kind: kindsOf.Record.String()},
 		// a record with some fields
-		&EphKinds{Kinds: "inner", From: kindsOf.Record.String(), Contain: []EphParams{
+		&EphKinds{Kind: "inner", Ancestor: kindsOf.Record.String(), Contain: []EphParams{
 			{Name: "num", Affinity: Affinity{Affinity_Number}},
 			{Name: "text", Affinity: Affinity{Affinity_Text}},
 		}},
 		// a record holding that record
-		&EphKinds{Kinds: "outer", From: kindsOf.Record.String(), Contain: []EphParams{
+		&EphKinds{Kind: "outer", Ancestor: kindsOf.Record.String(), Contain: []EphParams{
 			// we use the shortcut: a field named _ of type record will (attempt) to be a kind of that record.
 			{Name: "inner", Affinity: Affinity{Affinity_Record}},
 		}},
 		//  a proper kind holding the record of records
-		&EphKinds{Kinds: "k", Contain: []EphParams{
+		&EphKinds{Kind: "k", Contain: []EphParams{
 			{Name: "outer", Affinity: Affinity{Affinity_Record}},
 		}},
 		// a noun of that kind, with the record of records.

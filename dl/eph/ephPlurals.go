@@ -11,11 +11,14 @@ func (d *Domain) AddPlural(plural, singular string) (okay bool) {
 	return d.plural.AddPair(plural, singular)
 }
 
-// use the domain rules ( and hierarchy ) to turn the passed plural into its singular form
+// use the domain rules ( and hierarchy ) to turn the passed singular word into its plural form.
 // the way plurals are defined, there can be more than one plural word for a given singular word.
 // in that case, attempts to pick one.
 func (d *Domain) Pluralize(singular string) (ret string, err error) {
-	if e := VisitTree(d, func(dep Dependency) (err error) {
+	// dont bother with one letter kinds ( ex. tests )
+	if len(singular) < 2 {
+		ret = singular
+	} else if e := VisitTree(d, func(dep Dependency) (err error) {
 		scope := dep.(*Domain)
 		if n, ok := scope.plural.FindPlural(singular); ok {
 			ret, err = n, Visited
@@ -29,9 +32,14 @@ func (d *Domain) Pluralize(singular string) (ret string, err error) {
 	return
 }
 
-// see: Pluralize
+// use the domain rules ( and hierarchy ) to turn the passed plural into its singular form
+// the way plurals are defined, there can be more than one plural word for a given singular word.
+// in that case, attempts to pick one.
 func (d *Domain) Singularize(plural string) (ret string, err error) {
-	if e := VisitTree(d, func(dep Dependency) (err error) {
+	// dont bother with one letter kinds ( ex. tests )
+	if len(plural) < 2 {
+		ret = plural
+	} else if e := VisitTree(d, func(dep Dependency) (err error) {
 		scope := dep.(*Domain)
 		if n, ok := scope.plural.FindSingular(plural); ok {
 			ret, err = n, Visited

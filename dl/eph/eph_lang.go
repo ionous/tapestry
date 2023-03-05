@@ -1082,10 +1082,10 @@ func EphEndDomain_Marshal(m jsn.Marshaler, val *EphEndDomain) (err error) {
 // and it can be used wherever one of its ancestor kinds is needed.
 // ( The reverse isn't true because the new kind can have its own unique properties not available to its ancestors. )
 type EphKinds struct {
-	Kinds   string      `if:"label=kinds,type=text"`
-	From    string      `if:"label=from,type=text"`
-	Contain []EphParams `if:"label=contain"`
-	Markup  map[string]any
+	Kind     string      `if:"label=kinds,type=text"`
+	Ancestor string      `if:"label=from,type=text"`
+	Contain  []EphParams `if:"label=contain"`
+	Markup   map[string]any
 }
 
 // User implemented slots:
@@ -1100,8 +1100,8 @@ func (*EphKinds) Compose() composer.Spec {
 }
 
 const EphKinds_Type = "eph_kinds"
-const EphKinds_Field_Kinds = "$KINDS"
-const EphKinds_Field_From = "$FROM"
+const EphKinds_Field_Kind = "$KIND"
+const EphKinds_Field_Ancestor = "$ANCESTOR"
 const EphKinds_Field_Contain = "$CONTAIN"
 
 func (op *EphKinds) Marshal(m jsn.Marshaler) error {
@@ -1175,19 +1175,19 @@ func EphKinds_Optional_Marshal(m jsn.Marshaler, pv **EphKinds) (err error) {
 func EphKinds_Marshal(m jsn.Marshaler, val *EphKinds) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(EphKinds_Flow{val}); err == nil {
-		e0 := m.MarshalKey("kinds", EphKinds_Field_Kinds)
+		e0 := m.MarshalKey("kinds", EphKinds_Field_Kind)
 		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Kinds)
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Kind)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", EphKinds_Field_Kinds))
+			m.Error(errutil.New(e0, "in flow at", EphKinds_Field_Kind))
 		}
-		e1 := m.MarshalKey("from", EphKinds_Field_From)
+		e1 := m.MarshalKey("from", EphKinds_Field_Ancestor)
 		if e1 == nil {
-			e1 = prim.Text_Unboxed_Marshal(m, &val.From)
+			e1 = prim.Text_Unboxed_Marshal(m, &val.Ancestor)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", EphKinds_Field_From))
+			m.Error(errutil.New(e1, "in flow at", EphKinds_Field_Ancestor))
 		}
 		e2 := m.MarshalKey("contain", EphKinds_Field_Contain)
 		if e2 == nil {

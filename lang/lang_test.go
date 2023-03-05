@@ -38,6 +38,21 @@ func TestInflect(t *testing.T) {
 		format     func(s string) string
 	}{
 		{
+			"animals",
+			"animals",
+			Pluralize,
+		},
+		{
+			"people",
+			"people",
+			Pluralize,
+		},
+		{
+			"things",
+			"things",
+			Pluralize,
+		},
+		{
 			"boop",
 			"Boop",
 			Capitalize,

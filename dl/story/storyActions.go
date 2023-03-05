@@ -22,8 +22,8 @@ func (op *ActionDecl) PostImport(k *imp.Importer) (err error) {
 func (op *ActionDecl) makePattern(k *imp.Importer, name, tgt string, sub kindsOf.Kinds, extra []eph.EphParams, res *eph.EphParams) {
 	// pattern subtype -- maybe if we really need this an optional parameter of patterns?
 	k.WriteEphemera(&eph.EphKinds{
-		Kinds: name,
-		From:  sub.String(),
+		Kind:     name,
+		Ancestor: sub.String(),
 	})
 	// the first parameter is always "agent" of type "agent"
 	ps := []eph.EphParams{{

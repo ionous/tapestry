@@ -3,6 +3,7 @@ package block_test
 import (
   "testing"
 
+  "git.sr.ht/~ionous/tapestry/dl/assign"
   "git.sr.ht/~ionous/tapestry/dl/list"
   "git.sr.ht/~ionous/tapestry/dl/literal"
   "git.sr.ht/~ionous/tapestry/dl/story"
@@ -27,25 +28,25 @@ func TestBoolChoice(t *testing.T) {
   }
 }
 
-// closed strings use drop downs, and the field should be their $KEY
-func TestStringChoice(t *testing.T) {
-  if e := testBlocks(
-    &story.TraitPhrase{
-      AreEither: story.AreEither{
-        Str: story.AreEither_Canbe,
-      }}, `{
-  "type": "trait_phrase",
-  "id": "test-1",
-  "extraState": {
-    "ARE_EITHER": 1
-  },
-  "fields": {
-    "ARE_EITHER": "$CANBE"
-  }
-}`); e != nil {
-    t.Fatal(e)
-  }
-}
+// // closed strings use drop downs, and the field should be their $KEY
+// func TestStringChoice(t *testing.T) {
+//  if e := testBlocks(
+//    &story.TraitPhrase{
+//      AreEither: story.AreEither{
+//        Str: story.AreEither_Canbe,
+//      }}, `{
+//   "type": "trait_phrase",
+//   "id": "test-1",
+//   "extraState": {
+//     "ARE_EITHER": 1
+//   },
+//   "fields": {
+//     "ARE_EITHER": "$CANBE"
+//   }
+// }`); e != nil {
+//    t.Fatal(e)
+//  }
+// }
 
 // until there are variables ( or something ) for the hints
 // their text should hold normal text not $KEY values
@@ -140,13 +141,13 @@ func TestExcessState(t *testing.T) {
 func TestStoryLines(t *testing.T) {
   if e := testBlocks(&story.StoryFile{
     StoryLines: []story.StoryStatement{
-      &story.KindsOfKind{
-        PluralKinds:  story.PluralKinds{"cats"},
-        SingularKind: story.SingularKind{"animal"},
+      &story.DefineKinds{
+        Kinds:    assign.Ts("cats"),
+        Ancestor: assign.T("animal"),
       },
-      &story.KindsOfKind{
-        PluralKinds:  story.PluralKinds{"cats"},
-        SingularKind: story.SingularKind{"animal"},
+      &story.DefineKinds{
+        Kinds:    assign.Ts("cats"),
+        Ancestor: assign.T("animal"),
       },
     },
   }, `{
@@ -158,27 +159,71 @@ func TestStoryLines(t *testing.T) {
   "inputs": {
     "STORY_LINES": {
       "block": {
-        "type": "_kinds_of_kind_stack",
+        "type": "_define_kinds_stack",
         "id": "test-2",
         "extraState": {
-          "PLURAL_KINDS": 1,
-          "SINGULAR_KIND": 1
+          "KINDS": 1,
+          "ANCESTOR": 1
         },
-        "fields": {
-          "PLURAL_KINDS": "cats",
-          "SINGULAR_KIND": "animal"
+        "inputs": {
+          "KINDS": {
+            "block": {
+              "type": "text_values",
+              "id": "test-3",
+              "extraState": {
+                "VALUES": 1
+              },
+              "fields": {
+                "VALUES0": "cats"
+              }
+            }
+          },
+          "ANCESTOR": {
+            "block": {
+              "type": "text_value",
+              "id": "test-4",
+              "extraState": {
+                "VALUE": 1
+              },
+              "fields": {
+                "VALUE": "animal"
+              }
+            }
+          }
         },
         "next": {
           "block": {
-            "type": "_kinds_of_kind_stack",
-            "id": "test-3",
+            "type": "_define_kinds_stack",
+            "id": "test-5",
             "extraState": {
-              "PLURAL_KINDS": 1,
-              "SINGULAR_KIND": 1
+              "KINDS": 1,
+              "ANCESTOR": 1
             },
-            "fields": {
-              "PLURAL_KINDS": "cats",
-              "SINGULAR_KIND": "animal"
+            "inputs": {
+              "KINDS": {
+                "block": {
+                  "type": "text_values",
+                  "id": "test-6",
+                  "extraState": {
+                    "VALUES": 1
+                  },
+                  "fields": {
+                    "VALUES0": "cats"
+                  }
+                }
+              },
+              "ANCESTOR": {
+                "block": {
+                  "type": "text_value",
+                  "id": "test-7",
+                  "extraState": {
+                    "VALUE": 1
+                  },
+                  "fields": {
+                    "VALUE": "animal"
+                  }
+                }
+              }
             }
           }
         }

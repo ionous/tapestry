@@ -44,10 +44,34 @@ func ImportNamedNouns(k *imp.Importer, els []NamedNoun) (err error) {
 	return
 }
 
+func ImportNouns(k *imp.Importer, nouns []string) (ret []string, err error) {
+	for _, noun := range nouns {
+		// FIX: this should be happening during the weave, not during import.
+		article, word := lang.SliceArticle(noun)
+		name := NounNamed{Name: NounName{word}}
+
+		var legacy NamedNoun
+		if len(article) == 0 {
+			legacy = &name
+		} else {
+			legacy = &CommonNoun{
+				Determiner: Determiner{article},
+				Noun:       name,
+			}
+		}
+		if e := legacy.ImportNoun(k); e != nil {
+			err = errutil.Append(err, e)
+		} else {
+			ret = append(ret, word)
+		}
+	}
+	return
+}
+
 // declare a noun class that has several default fields
 func declareNounClass(k *imp.Importer) {
 	if once := "noun"; k.Once(once) {
-		k.WriteOnce(&eph.EphKinds{Kinds: "objects", From: kindsOf.Kind.String()})
+		k.WriteOnce(&eph.EphKinds{Kind: "objects", Ancestor: kindsOf.Kind.String()})
 		// common or proper nouns ( rabbit, vs. Roger )
 		k.AddImplicitAspect("noun_types", "objects", "common_named", "proper_named", "counted")
 		// whether a player can refer to an object by its name.
@@ -60,7 +84,7 @@ func declareNounClass(k *imp.Importer) {
 // also, we probably want noun stacks not individually duplicated names
 func (op *CountedNouns) ImportNoun(k *imp.Importer) (err error) {
 	if once := "printed_name"; k.Once(once) {
-		k.WriteOnce(&eph.EphKinds{Kinds: "objects", Contain: []eph.EphParams{{Name: "printed_name", Affinity: eph.Affinity{eph.Affinity_Text}}}})
+		k.WriteOnce(&eph.EphKinds{Kind: "objects", Contain: []eph.EphParams{{Name: "printed_name", Affinity: eph.Affinity{eph.Affinity_Text}}}})
 	}
 	if cnt, ok := lang.WordsToNum(op.Count); !ok {
 		err = errutil.New("couldnt turn", op.Count, "into a number")
@@ -89,7 +113,7 @@ func (op *CountedNouns) ImportNoun(k *imp.Importer) (err error) {
 					kind, err = d.Singularize(kindOrKinds)
 				}
 				if err == nil {
-					if e := d.AddEphemera(at, &eph.EphKinds{Kinds: kinds, From: "thing"}); e != nil {
+					if e := d.AddEphemera(at, &eph.EphKinds{Kind: kinds, Ancestor: "thing"}); e != nil {
 						err = e
 					} else {
 						for _, n := range names {
@@ -134,7 +158,7 @@ func (op *CommonNoun) ImportNoun(k *imp.Importer) (err error) {
 	if !detFound {
 		// create a "indefinite article" field for all objects
 		if k.Once("named_noun") {
-			k.WriteOnce(&eph.EphKinds{Kinds: "objects", Contain: []eph.EphParams{{Name: "indefinite_article", Affinity: eph.Affinity{eph.Affinity_Text}}}})
+			k.WriteOnce(&eph.EphKinds{Kind: "objects", Contain: []eph.EphParams{{Name: "indefinite_article", Affinity: eph.Affinity{eph.Affinity_Text}}}})
 		}
 		// set the indefinite article field
 		k.WriteEphemera(&eph.EphValues{Noun: op.Noun.NounName(), Field: "indefinite_article", Value: T(detStr)})
@@ -183,40 +207,4 @@ func (op *NounNamed) addNoun(k *imp.Importer, detStr string) {
 			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: "proper_named", Value: B(true)})
 		}
 	}
-}
-
-// ex. "[the box] (is a) (closed) (container) ((on) (the beach))"
-func (op *KindOfNoun) importNounPhrase(k *imp.Importer) (err error) {
-	// we collected the nouns and delayed processing them till now.
-	kind := op.Kind.String()
-	for _, noun := range k.Env().Recent.Nouns.Subjects {
-		k.WriteEphemera(&eph.EphNouns{Noun: noun, Kind: kind})
-	}
-	return
-}
-
-// ex. [the cat and the hat] (are) (in) (the book)
-// ex. [Hector and Maria] (are) (suspicious of) (Santa and Santana).
-func (op *NounRelation) importNounPhrase(k *imp.Importer) (err error) {
-	if e := CollectObjectNouns(k, op.OtherNouns); e != nil {
-		err = e
-	} else {
-		rel := op.Relation.String()
-		for _, subject := range k.Env().Recent.Nouns.Subjects {
-			for _, object := range k.Env().Recent.Nouns.Objects {
-				k.WriteEphemera(&eph.EphRelatives{Rel: rel, Noun: object, OtherNoun: subject})
-			}
-		}
-	}
-	return
-}
-
-//
-func (op *NounTraits) importNounPhrase(k *imp.Importer) (err error) {
-	for _, trait := range op.Trait {
-		for _, noun := range k.Env().Recent.Nouns.Subjects {
-			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: trait.String(), Value: B(true)})
-		}
-	}
-	return
 }

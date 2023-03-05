@@ -18,7 +18,7 @@ func FromTs(vs []string) (ret assign.Assignment) {
 	if len(vs) == 1 {
 		ret = &assign.FromText{Value: assign.T(vs[0])}
 	} else {
-		ret = &assign.FromTextList{Value: assign.Ts(vs)}
+		ret = &assign.FromTextList{Value: assign.Ts(vs...)}
 	}
 	return
 }

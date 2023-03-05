@@ -7,7 +7,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/dl/rel"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"git.sr.ht/~ionous/tapestry/jsn/din"
@@ -90,33 +89,6 @@ func TestAnonymousSwap(t *testing.T) {
 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
 		pretty.Println(have)
 		t.Fatal(diff)
-	}
-}
-
-// TestAnonymousOptional - unit test for broken parsing case
-func TestAnonymousOptional(t *testing.T) {
-	inputs := []string{
-		`{ "NounRelation relation:otherNouns:":["whereabouts",[]]}`,
-		`{ "NounRelation areBeing:relation:otherNouns:":["is", "whereabouts",[]]}`,
-	}
-	wants := []story.NounRelation{{
-		AreBeing:   story.AreBeing{},
-		Relation:   rel.RelationName{Str: "whereabouts"},
-		OtherNouns: []story.NamedNoun{},
-	}, {
-		AreBeing:   story.AreBeing{Str: story.AreBeing_Is},
-		Relation:   rel.RelationName{Str: "whereabouts"},
-		OtherNouns: []story.NamedNoun{},
-	}}
-	for i, in := range inputs {
-		var have story.NounRelation
-		if e := story.Decode(&have, []byte(in), tapestry.AllSignatures); e != nil {
-			pretty.Println("test", i, "got:", have)
-			t.Fatal(e)
-		} else if diff := pretty.Diff(&wants[i], &have); len(diff) != 0 {
-			pretty.Println("test", i, "got:", have)
-			t.Fatal(diff)
-		}
 	}
 }
 

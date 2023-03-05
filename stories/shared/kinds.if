@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Make:kind:": [
+      "Define kinds:as:": [
         "Objects",
         "kind"
       ]
@@ -30,7 +30,7 @@
       "--": ""
     },
     {
-      "Make:kind:": [
+      "Define kinds:as:": [
         "Things",
         "object"
       ]
@@ -197,13 +197,13 @@
       "--": ""
     },
     {
-      "Make:kind:": [
+      "Define kinds:as:": [
         "Actors",
         "thing"
       ]
     },
     {
-      "Make:kind:": [
+      "Define kinds:as:": [
         "animals",
         "actor"
       ]
@@ -212,7 +212,7 @@
       "--": ""
     },
     {
-      "Make:kind:": [
+      "Define kinds:as:": [
         "props",
         "thing"
       ]
@@ -221,7 +221,7 @@
       "--": ""
     },
     {
-      "Make:kind:": [
+      "Define kinds:as:": [
         "openers",
         "prop"
       ]
@@ -317,7 +317,7 @@
       "--": ""
     },
     {
-      "Make:kind:": [
+      "Define kinds:as:": [
         "containers",
         "opener"
       ]
@@ -421,7 +421,7 @@
       "--": ""
     },
     {
-      "Make:kind:": [
+      "Define kinds:as:": [
         "supporters",
         "prop"
       ]
@@ -430,7 +430,7 @@
       "--": ""
     },
     {
-      "Make:kind:": [
+      "Define kinds:as:": [
         "rooms",
         "object"
       ]
@@ -450,7 +450,7 @@
       "--": ""
     },
     {
-      "Make:kind:": [
+      "Define kinds:as:": [
         "regions",
         "object"
       ]

@@ -13,9 +13,9 @@ import (
 func TestAspectFormation(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("d"),
-		&EphKinds{Kinds: kindsOf.Aspect.String()},            // say that aspects exist
-		&EphKinds{Kinds: "a", From: kindsOf.Aspect.String()}, // make an aspect
-		&EphAspects{Aspects: "a", Traits: []string{ // fix? should "Aspects" be singular?
+		&EphKinds{Kind: kindsOf.Aspect.String()},                // say that aspects exist
+		&EphKinds{Kind: "a", Ancestor: kindsOf.Aspect.String()}, // make an aspect
+		&EphAspects{Aspects: "a", Traits: []string{
 			"one", "several", "oh so many", //
 		}},
 	)
@@ -39,15 +39,15 @@ func TestAspectFormation(t *testing.T) {
 func TestAspectUsage(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: kindsOf.Aspect.String()},            // say that aspects exist
-		&EphKinds{Kinds: "a", From: kindsOf.Aspect.String()}, // make an aspect
+		&EphKinds{Kind: kindsOf.Aspect.String()},                // say that aspects exist
+		&EphKinds{Kind: "a", Ancestor: kindsOf.Aspect.String()}, // make an aspect
 		&EphAspects{Aspects: "a", Traits: []string{
 			"one", "several", "oh so many", //
 		}},
 	)
 	dt.makeDomain(dd("b", "a"),
-		&EphKinds{Kinds: "k"},
-		&EphKinds{Kinds: "k", Contain: []EphParams{AspectParam("a")}},
+		&EphKinds{Kind: "k"},
+		&EphKinds{Kind: "k", Contain: []EphParams{AspectParam("a")}},
 	)
 	out := testOut{mdl.Field}
 	if cat, e := buildAncestors(dt); e != nil {
@@ -58,7 +58,7 @@ func TestAspectUsage(t *testing.T) {
 		"a:a:one:bool::x",
 		"a:a:several:bool::x",
 		"a:a:oh_so_many:bool::x",
-		"b:k:a:text:a:x",
+		"b:k:a:text:a:x", // MISSING THIS.... fields for the aspect
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -69,16 +69,16 @@ func TestAspectUsage(t *testing.T) {
 func TestAspectConflictingFields(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: kindsOf.Aspect.String()},            // say that aspects exist
-		&EphKinds{Kinds: "a", From: kindsOf.Aspect.String()}, // make an aspect
+		&EphKinds{Kind: kindsOf.Aspect.String()},                // say that aspects exist
+		&EphKinds{Kind: "a", Ancestor: kindsOf.Aspect.String()}, // make an aspect
 		&EphAspects{Aspects: "a", Traits: []string{
 			"one", "several", "oh so many", //
 		}},
 	)
 	dt.makeDomain(dd("b", "a"),
-		&EphKinds{Kinds: "k"},
-		&EphKinds{Kinds: "k", Contain: []EphParams{AspectParam("a")}},
-		&EphKinds{Kinds: "k", Contain: []EphParams{{Name: "one", Affinity: Affinity{Affinity_Text}}}},
+		&EphKinds{Kind: "k"},
+		&EphKinds{Kind: "k", Contain: []EphParams{AspectParam("a")}},
+		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "one", Affinity: Affinity{Affinity_Text}}}},
 	)
 	if _, e := buildAncestors(dt); e == nil {
 		t.Fatal("expected error")
@@ -90,20 +90,20 @@ func TestAspectConflictingFields(t *testing.T) {
 func TestAspectConflictingTraits(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: kindsOf.Aspect.String()},            // say that aspects exist
-		&EphKinds{Kinds: "a", From: kindsOf.Aspect.String()}, // make an aspect
+		&EphKinds{Kind: kindsOf.Aspect.String()},                // say that aspects exist
+		&EphKinds{Kind: "a", Ancestor: kindsOf.Aspect.String()}, // make an aspect
 		&EphAspects{Aspects: "a", Traits: []string{ // add some traits
 			"one", "several", "oh so many", //
 		}},
-		&EphKinds{Kinds: "b", From: kindsOf.Aspect.String()}, // make an aspect
+		&EphKinds{Kind: "b", Ancestor: kindsOf.Aspect.String()}, // make an aspect
 		&EphAspects{Aspects: "b", Traits: []string{ // add some traits
 			"one", "two", "blue", //
 		}},
 	)
 	dt.makeDomain(dd("b", "a"),
-		&EphKinds{Kinds: "k"},
-		&EphKinds{Kinds: "k", Contain: []EphParams{AspectParam("a")}},
-		&EphKinds{Kinds: "k", Contain: []EphParams{AspectParam("b")}},
+		&EphKinds{Kind: "k"},
+		&EphKinds{Kind: "k", Contain: []EphParams{AspectParam("a")}},
+		&EphKinds{Kind: "k", Contain: []EphParams{AspectParam("b")}},
 	)
 	var conflict *Conflict
 	if _, e := buildAncestors(dt); e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {

@@ -16,7 +16,7 @@ func TestNounFormation(t *testing.T) {
 
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: "k"},
+		&EphKinds{Kind: "k"},
 		&EphNouns{Noun: "apple", Kind: "k"},
 		&EphNouns{Noun: "pear", Kind: "k"},
 	)
@@ -62,10 +62,10 @@ func TestNounFailure(t *testing.T) {
 func TestNounHierarchy(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: "t"},
-		&EphKinds{Kinds: "p", From: "t"},
-		&EphKinds{Kinds: "c", From: "p"},
-		&EphKinds{Kinds: "d", From: "p"},
+		&EphKinds{Kind: "t"},
+		&EphKinds{Kind: "p", Ancestor: "t"},
+		&EphKinds{Kind: "c", Ancestor: "p"},
+		&EphKinds{Kind: "d", Ancestor: "p"},
 		&EphNouns{Noun: "apple", Kind: "c"},
 		&EphNouns{Noun: "apple", Kind: "p"},
 		&EphNouns{Noun: "pear", Kind: "d"},
@@ -97,9 +97,9 @@ func TestNounHierarchy(t *testing.T) {
 func TestNounHierarchyFailure(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: "t"},
-		&EphKinds{Kinds: "c", From: "t"},
-		&EphKinds{Kinds: "d", From: "t"},
+		&EphKinds{Kind: "t"},
+		&EphKinds{Kind: "c", Ancestor: "t"},
+		&EphKinds{Kind: "d", Ancestor: "t"},
 		&EphNouns{Noun: "apple", Kind: "c"},
 		&EphNouns{Noun: "apple", Kind: "d"},
 	)
@@ -114,7 +114,7 @@ func TestNounHierarchyFailure(t *testing.T) {
 func TestNounParts(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: "t"},
+		&EphKinds{Kind: "t"},
 		&EphNouns{Noun: "collection of words", Kind: "t"},
 	)
 	nouns, names := testOut{mdl.Noun}, testOut{mdl.Name}
@@ -140,7 +140,7 @@ func TestNounParts(t *testing.T) {
 func TestNounAliases(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("b"),
-		&EphKinds{Kinds: "k"},
+		&EphKinds{Kind: "k"},
 		&EphNouns{Noun: "toy boat", Kind: "k"},
 		&EphNouns{Noun: "apple", Kind: "k"},
 		&EphAliases{ShortName: "toy", Aliases: dd("model")},
@@ -174,7 +174,7 @@ func TestNounDistance(t *testing.T) {
 
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: "k"},
+		&EphKinds{Kind: "k"},
 		&EphNouns{Noun: "toy boat", Kind: "k"},
 		&EphNouns{Noun: "boat", Kind: "k"},
 	)

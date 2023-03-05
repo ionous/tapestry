@@ -16,7 +16,7 @@ func TestPatternRules(t *testing.T) {
 	dt := domainTest{noShuffle: true}
 	dt.makeDomain(dd("a"),
 		append(append([]Ephemera{
-			&EphKinds{Kinds: kindsOf.Pattern.String()}, // declare the patterns table
+			&EphKinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
 			&EphPatterns{
 				PatternName: "p",
 				Result: &EphParams{

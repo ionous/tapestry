@@ -27,8 +27,8 @@ func TestFactorialImport(t *testing.T) {
 			// referencing a call to the factorial pattern
 			&eph.EphRefs{Refs: []eph.Ephemera{
 				&eph.EphKinds{
-					Kinds: "factorial",
-					// From:  kindsOf.Pattern.String() -- see note in ImportCall
+					Kind: "factorial",
+					// Ancestor:  kindsOf.Pattern.String() -- see note in ImportCall
 					Contain: []eph.EphParams{{
 						Affinity: eph.Affinity{eph.Affinity_Number},
 						Name:     "num",

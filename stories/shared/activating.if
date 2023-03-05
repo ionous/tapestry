@@ -281,7 +281,7 @@
       "--": ""
     },
     {
-      "Make:kind:": [
+      "Define kinds:as:": [
         "Devices",
         "prop"
       ]

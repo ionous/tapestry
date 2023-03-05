@@ -72,19 +72,19 @@
             ]
           },
           {
-            "Make:kind:": [
+            "Define kinds:as:": [
               "triangles",
               "prop"
             ]
           },
           {
-            "Make:kind:": [
+            "Define kinds:as:": [
               "scrabble tiles",
               "prop"
             ]
           },
           {
-            "Make:kind:": [
+            "Define kinds:as:": [
               "cats",
               "animal"
             ]

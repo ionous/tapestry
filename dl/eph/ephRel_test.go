@@ -18,11 +18,11 @@ func TestRelAssembly(t *testing.T) {
 
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: kindsOf.Relation.String()}, // declare the relation table
-		&EphKinds{Kinds: "p"},
+		&EphKinds{Kind: kindsOf.Relation.String()}, // declare the relation table
+		&EphKinds{Kind: "p"},
 	)
 	dt.makeDomain(dd("b", "a"),
-		&EphKinds{Kinds: "q"},
+		&EphKinds{Kind: "q"},
 		&EphRelations{Rel: "r", Cardinality: EphCardinality{
 			Choice: EphCardinality_OneOne_Opt,
 			Value:  &OneOne{Kind: "p", OtherKind: "q"},

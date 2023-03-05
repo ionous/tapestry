@@ -82,7 +82,7 @@
             "--": ""
           },
           {
-            "Make:kind:": [
+            "Define kinds:as:": [
               "cats",
               "animal"
             ]

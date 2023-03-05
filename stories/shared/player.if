@@ -1,13 +1,13 @@
 {
   "Tapestry:": [
     {
-      "Make:kind:": [
+      "Define kinds:as:": [
         "agents",
         "object"
       ]
     },
     {
-      "Make:kind:": [
+      "Define kinds:as:": [
         "players",
         "agent"
       ]

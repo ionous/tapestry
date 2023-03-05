@@ -204,7 +204,7 @@
       "--": ""
     },
     {
-      "Make:kind:": [
+      "Define kinds:as:": [
         "Groupings",
         "record"
       ]
@@ -236,7 +236,7 @@
       "--": ""
     },
     {
-      "Make:kind:": [
+      "Define kinds:as:": [
         "Object groups",
         "records"
       ]

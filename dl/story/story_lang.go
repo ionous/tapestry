@@ -497,417 +497,6 @@ func ActionParams_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]ActionParams) 
 	return
 }
 
-// Ana requires a predefined string.
-type Ana struct {
-	Str string
-}
-
-func (op *Ana) String() string {
-	return op.Str
-}
-
-const Ana_A = "$A"
-const Ana_An = "$AN"
-
-func (*Ana) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Ana_Type,
-		Uses: composer.Type_Str,
-		Choices: []string{
-			Ana_A, Ana_An,
-		},
-		Strings: []string{
-			"a", "an",
-		},
-	}
-}
-
-const Ana_Type = "ana"
-
-func (op *Ana) Marshal(m jsn.Marshaler) error {
-	return Ana_Marshal(m, op)
-}
-
-func Ana_Optional_Marshal(m jsn.Marshaler, val *Ana) (err error) {
-	var zero Ana
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = Ana_Marshal(m, val)
-	}
-	return
-}
-
-func Ana_Marshal(m jsn.Marshaler, val *Ana) (err error) {
-	return m.MarshalValue(Ana_Type, jsn.MakeEnum(val, &val.Str))
-}
-
-type Ana_Slice []Ana
-
-func (op *Ana_Slice) GetType() string { return Ana_Type }
-
-func (op *Ana_Slice) Marshal(m jsn.Marshaler) error {
-	return Ana_Repeats_Marshal(m, (*[]Ana)(op))
-}
-
-func (op *Ana_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Ana_Slice) SetSize(cnt int) {
-	var els []Ana
-	if cnt >= 0 {
-		els = make(Ana_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Ana_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Ana_Marshal(m, &(*op)[i])
-}
-
-func Ana_Repeats_Marshal(m jsn.Marshaler, vals *[]Ana) error {
-	return jsn.RepeatBlock(m, (*Ana_Slice)(vals))
-}
-
-func Ana_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Ana) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Ana_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// AreAn requires a predefined string.
-type AreAn struct {
-	Str string
-}
-
-func (op *AreAn) String() string {
-	return op.Str
-}
-
-const AreAn_Are = "$ARE"
-const AreAn_Area = "$AREA"
-const AreAn_Arean = "$AREAN"
-const AreAn_Is = "$IS"
-const AreAn_Isa = "$ISA"
-const AreAn_Isan = "$ISAN"
-
-func (*AreAn) Compose() composer.Spec {
-	return composer.Spec{
-		Name: AreAn_Type,
-		Uses: composer.Type_Str,
-		Choices: []string{
-			AreAn_Are, AreAn_Area, AreAn_Arean, AreAn_Is, AreAn_Isa, AreAn_Isan,
-		},
-		Strings: []string{
-			"are", "area", "arean", "is", "isa", "isan",
-		},
-	}
-}
-
-const AreAn_Type = "are_an"
-
-func (op *AreAn) Marshal(m jsn.Marshaler) error {
-	return AreAn_Marshal(m, op)
-}
-
-func AreAn_Optional_Marshal(m jsn.Marshaler, val *AreAn) (err error) {
-	var zero AreAn
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = AreAn_Marshal(m, val)
-	}
-	return
-}
-
-func AreAn_Marshal(m jsn.Marshaler, val *AreAn) (err error) {
-	return m.MarshalValue(AreAn_Type, jsn.MakeEnum(val, &val.Str))
-}
-
-type AreAn_Slice []AreAn
-
-func (op *AreAn_Slice) GetType() string { return AreAn_Type }
-
-func (op *AreAn_Slice) Marshal(m jsn.Marshaler) error {
-	return AreAn_Repeats_Marshal(m, (*[]AreAn)(op))
-}
-
-func (op *AreAn_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *AreAn_Slice) SetSize(cnt int) {
-	var els []AreAn
-	if cnt >= 0 {
-		els = make(AreAn_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *AreAn_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return AreAn_Marshal(m, &(*op)[i])
-}
-
-func AreAn_Repeats_Marshal(m jsn.Marshaler, vals *[]AreAn) error {
-	return jsn.RepeatBlock(m, (*AreAn_Slice)(vals))
-}
-
-func AreAn_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AreAn) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = AreAn_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// AreBeing requires a predefined string.
-type AreBeing struct {
-	Str string
-}
-
-func (op *AreBeing) String() string {
-	return op.Str
-}
-
-const AreBeing_Are = "$ARE"
-const AreBeing_Is = "$IS"
-
-func (*AreBeing) Compose() composer.Spec {
-	return composer.Spec{
-		Name: AreBeing_Type,
-		Uses: composer.Type_Str,
-		Choices: []string{
-			AreBeing_Are, AreBeing_Is,
-		},
-		Strings: []string{
-			"are", "is",
-		},
-	}
-}
-
-const AreBeing_Type = "are_being"
-
-func (op *AreBeing) Marshal(m jsn.Marshaler) error {
-	return AreBeing_Marshal(m, op)
-}
-
-func AreBeing_Optional_Marshal(m jsn.Marshaler, val *AreBeing) (err error) {
-	var zero AreBeing
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = AreBeing_Marshal(m, val)
-	}
-	return
-}
-
-func AreBeing_Marshal(m jsn.Marshaler, val *AreBeing) (err error) {
-	return m.MarshalValue(AreBeing_Type, jsn.MakeEnum(val, &val.Str))
-}
-
-type AreBeing_Slice []AreBeing
-
-func (op *AreBeing_Slice) GetType() string { return AreBeing_Type }
-
-func (op *AreBeing_Slice) Marshal(m jsn.Marshaler) error {
-	return AreBeing_Repeats_Marshal(m, (*[]AreBeing)(op))
-}
-
-func (op *AreBeing_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *AreBeing_Slice) SetSize(cnt int) {
-	var els []AreBeing
-	if cnt >= 0 {
-		els = make(AreBeing_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *AreBeing_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return AreBeing_Marshal(m, &(*op)[i])
-}
-
-func AreBeing_Repeats_Marshal(m jsn.Marshaler, vals *[]AreBeing) error {
-	return jsn.RepeatBlock(m, (*AreBeing_Slice)(vals))
-}
-
-func AreBeing_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AreBeing) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = AreBeing_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// AreEither requires a predefined string.
-type AreEither struct {
-	Str string
-}
-
-func (op *AreEither) String() string {
-	return op.Str
-}
-
-const AreEither_Canbe = "$CANBE"
-const AreEither_Either = "$EITHER"
-
-func (*AreEither) Compose() composer.Spec {
-	return composer.Spec{
-		Name: AreEither_Type,
-		Uses: composer.Type_Str,
-		Choices: []string{
-			AreEither_Canbe, AreEither_Either,
-		},
-		Strings: []string{
-			"canbe", "either",
-		},
-	}
-}
-
-const AreEither_Type = "are_either"
-
-func (op *AreEither) Marshal(m jsn.Marshaler) error {
-	return AreEither_Marshal(m, op)
-}
-
-func AreEither_Optional_Marshal(m jsn.Marshaler, val *AreEither) (err error) {
-	var zero AreEither
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = AreEither_Marshal(m, val)
-	}
-	return
-}
-
-func AreEither_Marshal(m jsn.Marshaler, val *AreEither) (err error) {
-	return m.MarshalValue(AreEither_Type, jsn.MakeEnum(val, &val.Str))
-}
-
-type AreEither_Slice []AreEither
-
-func (op *AreEither_Slice) GetType() string { return AreEither_Type }
-
-func (op *AreEither_Slice) Marshal(m jsn.Marshaler) error {
-	return AreEither_Repeats_Marshal(m, (*[]AreEither)(op))
-}
-
-func (op *AreEither_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *AreEither_Slice) SetSize(cnt int) {
-	var els []AreEither
-	if cnt >= 0 {
-		els = make(AreEither_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *AreEither_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return AreEither_Marshal(m, &(*op)[i])
-}
-
-func AreEither_Repeats_Marshal(m jsn.Marshaler, vals *[]AreEither) error {
-	return jsn.RepeatBlock(m, (*AreEither_Slice)(vals))
-}
-
-func AreEither_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AreEither) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = AreEither_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// Aspect requires a user-specified string.
-type Aspect struct {
-	Str string
-}
-
-func (op *Aspect) String() string {
-	return op.Str
-}
-
-func (*Aspect) Compose() composer.Spec {
-	return composer.Spec{
-		Name:        Aspect_Type,
-		Uses:        composer.Type_Str,
-		OpenStrings: true,
-	}
-}
-
-const Aspect_Type = "aspect"
-
-func (op *Aspect) Marshal(m jsn.Marshaler) error {
-	return Aspect_Marshal(m, op)
-}
-
-func Aspect_Optional_Marshal(m jsn.Marshaler, val *Aspect) (err error) {
-	var zero Aspect
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = Aspect_Marshal(m, val)
-	}
-	return
-}
-
-func Aspect_Marshal(m jsn.Marshaler, val *Aspect) (err error) {
-	return m.MarshalValue(Aspect_Type, &val.Str)
-}
-
-type Aspect_Slice []Aspect
-
-func (op *Aspect_Slice) GetType() string { return Aspect_Type }
-
-func (op *Aspect_Slice) Marshal(m jsn.Marshaler) error {
-	return Aspect_Repeats_Marshal(m, (*[]Aspect)(op))
-}
-
-func (op *Aspect_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Aspect_Slice) SetSize(cnt int) {
-	var els []Aspect
-	if cnt >= 0 {
-		els = make(Aspect_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Aspect_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Aspect_Marshal(m, &(*op)[i])
-}
-
-func Aspect_Repeats_Marshal(m jsn.Marshaler, vals *[]Aspect) error {
-	return jsn.RepeatBlock(m, (*Aspect_Slice)(vals))
-}
-
-func Aspect_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Aspect) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Aspect_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
 // AspectField
 type AspectField struct {
 	Aspect string `if:"label=_,type=text"`
@@ -1005,117 +594,6 @@ func AspectField_Marshal(m jsn.Marshaler, val *AspectField) (err error) {
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", AspectField_Field_Aspect))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// AspectTraits Add traits to an aspect
-type AspectTraits struct {
-	Aspect      Aspect      `if:"label=_"`
-	TraitPhrase TraitPhrase `if:"label=trait_phrase"`
-	Markup      map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*AspectTraits)(nil)
-
-func (*AspectTraits) Compose() composer.Spec {
-	return composer.Spec{
-		Name: AspectTraits_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const AspectTraits_Type = "aspect_traits"
-const AspectTraits_Field_Aspect = "$ASPECT"
-const AspectTraits_Field_TraitPhrase = "$TRAIT_PHRASE"
-
-func (op *AspectTraits) Marshal(m jsn.Marshaler) error {
-	return AspectTraits_Marshal(m, op)
-}
-
-type AspectTraits_Slice []AspectTraits
-
-func (op *AspectTraits_Slice) GetType() string { return AspectTraits_Type }
-
-func (op *AspectTraits_Slice) Marshal(m jsn.Marshaler) error {
-	return AspectTraits_Repeats_Marshal(m, (*[]AspectTraits)(op))
-}
-
-func (op *AspectTraits_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *AspectTraits_Slice) SetSize(cnt int) {
-	var els []AspectTraits
-	if cnt >= 0 {
-		els = make(AspectTraits_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *AspectTraits_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return AspectTraits_Marshal(m, &(*op)[i])
-}
-
-func AspectTraits_Repeats_Marshal(m jsn.Marshaler, vals *[]AspectTraits) error {
-	return jsn.RepeatBlock(m, (*AspectTraits_Slice)(vals))
-}
-
-func AspectTraits_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AspectTraits) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = AspectTraits_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type AspectTraits_Flow struct{ ptr *AspectTraits }
-
-func (n AspectTraits_Flow) GetType() string      { return AspectTraits_Type }
-func (n AspectTraits_Flow) GetLede() string      { return AspectTraits_Type }
-func (n AspectTraits_Flow) GetFlow() interface{} { return n.ptr }
-func (n AspectTraits_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*AspectTraits); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func AspectTraits_Optional_Marshal(m jsn.Marshaler, pv **AspectTraits) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = AspectTraits_Marshal(m, *pv)
-	} else if !enc {
-		var v AspectTraits
-		if err = AspectTraits_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func AspectTraits_Marshal(m jsn.Marshaler, val *AspectTraits) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(AspectTraits_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", AspectTraits_Field_Aspect)
-		if e0 == nil {
-			e0 = Aspect_Marshal(m, &val.Aspect)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", AspectTraits_Field_Aspect))
-		}
-		e1 := m.MarshalKey("trait_phrase", AspectTraits_Field_TraitPhrase)
-		if e1 == nil {
-			e1 = TraitPhrase_Marshal(m, &val.TraitPhrase)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", AspectTraits_Field_TraitPhrase))
 		}
 		m.EndBlock()
 	}
@@ -1239,220 +717,6 @@ func BoolField_Marshal(m jsn.Marshaler, val *BoolField) (err error) {
 			m.Error(errutil.New(e2, "in flow at", BoolField_Field_Initially))
 		}
 		m.EndBlock()
-	}
-	return
-}
-
-// Certainties Give a kind a trait
-type Certainties struct {
-	PluralKinds PluralKinds `if:"label=_"`
-	AreBeing    AreBeing    `if:"label=are_being"`
-	Certainty   Certainty   `if:"label=certainty"`
-	Trait       Trait       `if:"label=trait"`
-	Markup      map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*Certainties)(nil)
-
-func (*Certainties) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Certainties_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Certainties_Type = "certainties"
-const Certainties_Field_PluralKinds = "$PLURAL_KINDS"
-const Certainties_Field_AreBeing = "$ARE_BEING"
-const Certainties_Field_Certainty = "$CERTAINTY"
-const Certainties_Field_Trait = "$TRAIT"
-
-func (op *Certainties) Marshal(m jsn.Marshaler) error {
-	return Certainties_Marshal(m, op)
-}
-
-type Certainties_Slice []Certainties
-
-func (op *Certainties_Slice) GetType() string { return Certainties_Type }
-
-func (op *Certainties_Slice) Marshal(m jsn.Marshaler) error {
-	return Certainties_Repeats_Marshal(m, (*[]Certainties)(op))
-}
-
-func (op *Certainties_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Certainties_Slice) SetSize(cnt int) {
-	var els []Certainties
-	if cnt >= 0 {
-		els = make(Certainties_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Certainties_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Certainties_Marshal(m, &(*op)[i])
-}
-
-func Certainties_Repeats_Marshal(m jsn.Marshaler, vals *[]Certainties) error {
-	return jsn.RepeatBlock(m, (*Certainties_Slice)(vals))
-}
-
-func Certainties_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Certainties) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Certainties_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Certainties_Flow struct{ ptr *Certainties }
-
-func (n Certainties_Flow) GetType() string      { return Certainties_Type }
-func (n Certainties_Flow) GetLede() string      { return Certainties_Type }
-func (n Certainties_Flow) GetFlow() interface{} { return n.ptr }
-func (n Certainties_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Certainties); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Certainties_Optional_Marshal(m jsn.Marshaler, pv **Certainties) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Certainties_Marshal(m, *pv)
-	} else if !enc {
-		var v Certainties
-		if err = Certainties_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Certainties_Marshal(m jsn.Marshaler, val *Certainties) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(Certainties_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Certainties_Field_PluralKinds)
-		if e0 == nil {
-			e0 = PluralKinds_Marshal(m, &val.PluralKinds)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Certainties_Field_PluralKinds))
-		}
-		e1 := m.MarshalKey("are_being", Certainties_Field_AreBeing)
-		if e1 == nil {
-			e1 = AreBeing_Marshal(m, &val.AreBeing)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", Certainties_Field_AreBeing))
-		}
-		e2 := m.MarshalKey("certainty", Certainties_Field_Certainty)
-		if e2 == nil {
-			e2 = Certainty_Marshal(m, &val.Certainty)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", Certainties_Field_Certainty))
-		}
-		e3 := m.MarshalKey("trait", Certainties_Field_Trait)
-		if e3 == nil {
-			e3 = Trait_Marshal(m, &val.Trait)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", Certainties_Field_Trait))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// Certainty requires a predefined string.
-type Certainty struct {
-	Str string
-}
-
-func (op *Certainty) String() string {
-	return op.Str
-}
-
-const Certainty_Usually = "$USUALLY"
-const Certainty_Always = "$ALWAYS"
-const Certainty_Seldom = "$SELDOM"
-const Certainty_Never = "$NEVER"
-
-func (*Certainty) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Certainty_Type,
-		Uses: composer.Type_Str,
-		Choices: []string{
-			Certainty_Usually, Certainty_Always, Certainty_Seldom, Certainty_Never,
-		},
-		Strings: []string{
-			"usually", "always", "seldom", "never",
-		},
-	}
-}
-
-const Certainty_Type = "certainty"
-
-func (op *Certainty) Marshal(m jsn.Marshaler) error {
-	return Certainty_Marshal(m, op)
-}
-
-func Certainty_Optional_Marshal(m jsn.Marshaler, val *Certainty) (err error) {
-	var zero Certainty
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = Certainty_Marshal(m, val)
-	}
-	return
-}
-
-func Certainty_Marshal(m jsn.Marshaler, val *Certainty) (err error) {
-	return m.MarshalValue(Certainty_Type, jsn.MakeEnum(val, &val.Str))
-}
-
-type Certainty_Slice []Certainty
-
-func (op *Certainty_Slice) GetType() string { return Certainty_Type }
-
-func (op *Certainty_Slice) Marshal(m jsn.Marshaler) error {
-	return Certainty_Repeats_Marshal(m, (*[]Certainty)(op))
-}
-
-func (op *Certainty_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Certainty_Slice) SetSize(cnt int) {
-	var els []Certainty
-	if cnt >= 0 {
-		els = make(Certainty_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Certainty_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Certainty_Marshal(m, &(*op)[i])
-}
-
-func Certainty_Repeats_Marshal(m jsn.Marshaler, vals *[]Certainty) error {
-	return jsn.RepeatBlock(m, (*Certainty_Slice)(vals))
-}
-
-func Certainty_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Certainty) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Certainty_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -1999,6 +1263,593 @@ func CycleText_Marshal(m jsn.Marshaler, val *CycleText) (err error) {
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CycleText_Field_Parts))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// DefineFields Add properties to a kind
+type DefineFields struct {
+	Kind   rt.TextEval `if:"label=kind"`
+	Props  []Field     `if:"label=has"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*DefineFields)(nil)
+
+func (*DefineFields) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DefineFields_Type,
+		Uses: composer.Type_Flow,
+		Lede: "define",
+	}
+}
+
+const DefineFields_Type = "define_fields"
+const DefineFields_Field_Kind = "$KIND"
+const DefineFields_Field_Props = "$PROPS"
+
+func (op *DefineFields) Marshal(m jsn.Marshaler) error {
+	return DefineFields_Marshal(m, op)
+}
+
+type DefineFields_Slice []DefineFields
+
+func (op *DefineFields_Slice) GetType() string { return DefineFields_Type }
+
+func (op *DefineFields_Slice) Marshal(m jsn.Marshaler) error {
+	return DefineFields_Repeats_Marshal(m, (*[]DefineFields)(op))
+}
+
+func (op *DefineFields_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DefineFields_Slice) SetSize(cnt int) {
+	var els []DefineFields
+	if cnt >= 0 {
+		els = make(DefineFields_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DefineFields_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DefineFields_Marshal(m, &(*op)[i])
+}
+
+func DefineFields_Repeats_Marshal(m jsn.Marshaler, vals *[]DefineFields) error {
+	return jsn.RepeatBlock(m, (*DefineFields_Slice)(vals))
+}
+
+func DefineFields_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefineFields) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DefineFields_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DefineFields_Flow struct{ ptr *DefineFields }
+
+func (n DefineFields_Flow) GetType() string      { return DefineFields_Type }
+func (n DefineFields_Flow) GetLede() string      { return "define" }
+func (n DefineFields_Flow) GetFlow() interface{} { return n.ptr }
+func (n DefineFields_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DefineFields); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DefineFields_Optional_Marshal(m jsn.Marshaler, pv **DefineFields) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DefineFields_Marshal(m, *pv)
+	} else if !enc {
+		var v DefineFields
+		if err = DefineFields_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DefineFields_Marshal(m jsn.Marshaler, val *DefineFields) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DefineFields_Flow{val}); err == nil {
+		e0 := m.MarshalKey("kind", DefineFields_Field_Kind)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Kind)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DefineFields_Field_Kind))
+		}
+		e1 := m.MarshalKey("has", DefineFields_Field_Props)
+		if e1 == nil {
+			e1 = Field_Repeats_Marshal(m, &val.Props)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DefineFields_Field_Props))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// DefineKinds
+type DefineKinds struct {
+	Kinds    rt.TextListEval `if:"label=kinds"`
+	Ancestor rt.TextEval     `if:"label=as"`
+	Markup   map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*DefineKinds)(nil)
+
+func (*DefineKinds) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DefineKinds_Type,
+		Uses: composer.Type_Flow,
+		Lede: "define",
+	}
+}
+
+const DefineKinds_Type = "define_kinds"
+const DefineKinds_Field_Kinds = "$KINDS"
+const DefineKinds_Field_Ancestor = "$ANCESTOR"
+
+func (op *DefineKinds) Marshal(m jsn.Marshaler) error {
+	return DefineKinds_Marshal(m, op)
+}
+
+type DefineKinds_Slice []DefineKinds
+
+func (op *DefineKinds_Slice) GetType() string { return DefineKinds_Type }
+
+func (op *DefineKinds_Slice) Marshal(m jsn.Marshaler) error {
+	return DefineKinds_Repeats_Marshal(m, (*[]DefineKinds)(op))
+}
+
+func (op *DefineKinds_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DefineKinds_Slice) SetSize(cnt int) {
+	var els []DefineKinds
+	if cnt >= 0 {
+		els = make(DefineKinds_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DefineKinds_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DefineKinds_Marshal(m, &(*op)[i])
+}
+
+func DefineKinds_Repeats_Marshal(m jsn.Marshaler, vals *[]DefineKinds) error {
+	return jsn.RepeatBlock(m, (*DefineKinds_Slice)(vals))
+}
+
+func DefineKinds_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefineKinds) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DefineKinds_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DefineKinds_Flow struct{ ptr *DefineKinds }
+
+func (n DefineKinds_Flow) GetType() string      { return DefineKinds_Type }
+func (n DefineKinds_Flow) GetLede() string      { return "define" }
+func (n DefineKinds_Flow) GetFlow() interface{} { return n.ptr }
+func (n DefineKinds_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DefineKinds); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DefineKinds_Optional_Marshal(m jsn.Marshaler, pv **DefineKinds) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DefineKinds_Marshal(m, *pv)
+	} else if !enc {
+		var v DefineKinds
+		if err = DefineKinds_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DefineKinds_Marshal(m jsn.Marshaler, val *DefineKinds) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DefineKinds_Flow{val}); err == nil {
+		e0 := m.MarshalKey("kinds", DefineKinds_Field_Kinds)
+		if e0 == nil {
+			e0 = rt.TextListEval_Marshal(m, &val.Kinds)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DefineKinds_Field_Kinds))
+		}
+		e1 := m.MarshalKey("as", DefineKinds_Field_Ancestor)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.Ancestor)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DefineKinds_Field_Ancestor))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// DefineNouns
+type DefineNouns struct {
+	Nouns  rt.TextListEval `if:"label=nouns"`
+	Kind   rt.TextEval     `if:"label=as"`
+	Traits rt.TextListEval `if:"label=traits,optional"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*DefineNouns)(nil)
+
+func (*DefineNouns) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DefineNouns_Type,
+		Uses: composer.Type_Flow,
+		Lede: "define",
+	}
+}
+
+const DefineNouns_Type = "define_nouns"
+const DefineNouns_Field_Nouns = "$NOUNS"
+const DefineNouns_Field_Kind = "$KIND"
+const DefineNouns_Field_Traits = "$TRAITS"
+
+func (op *DefineNouns) Marshal(m jsn.Marshaler) error {
+	return DefineNouns_Marshal(m, op)
+}
+
+type DefineNouns_Slice []DefineNouns
+
+func (op *DefineNouns_Slice) GetType() string { return DefineNouns_Type }
+
+func (op *DefineNouns_Slice) Marshal(m jsn.Marshaler) error {
+	return DefineNouns_Repeats_Marshal(m, (*[]DefineNouns)(op))
+}
+
+func (op *DefineNouns_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DefineNouns_Slice) SetSize(cnt int) {
+	var els []DefineNouns
+	if cnt >= 0 {
+		els = make(DefineNouns_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DefineNouns_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DefineNouns_Marshal(m, &(*op)[i])
+}
+
+func DefineNouns_Repeats_Marshal(m jsn.Marshaler, vals *[]DefineNouns) error {
+	return jsn.RepeatBlock(m, (*DefineNouns_Slice)(vals))
+}
+
+func DefineNouns_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefineNouns) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DefineNouns_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DefineNouns_Flow struct{ ptr *DefineNouns }
+
+func (n DefineNouns_Flow) GetType() string      { return DefineNouns_Type }
+func (n DefineNouns_Flow) GetLede() string      { return "define" }
+func (n DefineNouns_Flow) GetFlow() interface{} { return n.ptr }
+func (n DefineNouns_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DefineNouns); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DefineNouns_Optional_Marshal(m jsn.Marshaler, pv **DefineNouns) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DefineNouns_Marshal(m, *pv)
+	} else if !enc {
+		var v DefineNouns
+		if err = DefineNouns_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DefineNouns_Marshal(m jsn.Marshaler, val *DefineNouns) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DefineNouns_Flow{val}); err == nil {
+		e0 := m.MarshalKey("nouns", DefineNouns_Field_Nouns)
+		if e0 == nil {
+			e0 = rt.TextListEval_Marshal(m, &val.Nouns)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DefineNouns_Field_Nouns))
+		}
+		e1 := m.MarshalKey("as", DefineNouns_Field_Kind)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.Kind)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DefineNouns_Field_Kind))
+		}
+		e2 := m.MarshalKey("traits", DefineNouns_Field_Traits)
+		if e2 == nil {
+			e2 = rt.TextListEval_Optional_Marshal(m, &val.Traits)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", DefineNouns_Field_Traits))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// DefineRelatives Relate nouns to each other
+type DefineRelatives struct {
+	Nouns     rt.TextListEval `if:"label=nouns"`
+	Kind      rt.TextEval     `if:"label=as,optional"`
+	Relation  rt.TextEval     `if:"label=relation"`
+	OtherNoun rt.TextEval     `if:"label=noun"`
+	Markup    map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*DefineRelatives)(nil)
+
+func (*DefineRelatives) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DefineRelatives_Type,
+		Uses: composer.Type_Flow,
+		Lede: "define",
+	}
+}
+
+const DefineRelatives_Type = "define_relatives"
+const DefineRelatives_Field_Nouns = "$NOUNS"
+const DefineRelatives_Field_Kind = "$KIND"
+const DefineRelatives_Field_Relation = "$RELATION"
+const DefineRelatives_Field_OtherNoun = "$OTHER_NOUN"
+
+func (op *DefineRelatives) Marshal(m jsn.Marshaler) error {
+	return DefineRelatives_Marshal(m, op)
+}
+
+type DefineRelatives_Slice []DefineRelatives
+
+func (op *DefineRelatives_Slice) GetType() string { return DefineRelatives_Type }
+
+func (op *DefineRelatives_Slice) Marshal(m jsn.Marshaler) error {
+	return DefineRelatives_Repeats_Marshal(m, (*[]DefineRelatives)(op))
+}
+
+func (op *DefineRelatives_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DefineRelatives_Slice) SetSize(cnt int) {
+	var els []DefineRelatives
+	if cnt >= 0 {
+		els = make(DefineRelatives_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DefineRelatives_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DefineRelatives_Marshal(m, &(*op)[i])
+}
+
+func DefineRelatives_Repeats_Marshal(m jsn.Marshaler, vals *[]DefineRelatives) error {
+	return jsn.RepeatBlock(m, (*DefineRelatives_Slice)(vals))
+}
+
+func DefineRelatives_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefineRelatives) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DefineRelatives_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DefineRelatives_Flow struct{ ptr *DefineRelatives }
+
+func (n DefineRelatives_Flow) GetType() string      { return DefineRelatives_Type }
+func (n DefineRelatives_Flow) GetLede() string      { return "define" }
+func (n DefineRelatives_Flow) GetFlow() interface{} { return n.ptr }
+func (n DefineRelatives_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DefineRelatives); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DefineRelatives_Optional_Marshal(m jsn.Marshaler, pv **DefineRelatives) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DefineRelatives_Marshal(m, *pv)
+	} else if !enc {
+		var v DefineRelatives
+		if err = DefineRelatives_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DefineRelatives_Marshal(m jsn.Marshaler, val *DefineRelatives) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DefineRelatives_Flow{val}); err == nil {
+		e0 := m.MarshalKey("nouns", DefineRelatives_Field_Nouns)
+		if e0 == nil {
+			e0 = rt.TextListEval_Marshal(m, &val.Nouns)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DefineRelatives_Field_Nouns))
+		}
+		e1 := m.MarshalKey("as", DefineRelatives_Field_Kind)
+		if e1 == nil {
+			e1 = rt.TextEval_Optional_Marshal(m, &val.Kind)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DefineRelatives_Field_Kind))
+		}
+		e2 := m.MarshalKey("relation", DefineRelatives_Field_Relation)
+		if e2 == nil {
+			e2 = rt.TextEval_Marshal(m, &val.Relation)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", DefineRelatives_Field_Relation))
+		}
+		e3 := m.MarshalKey("noun", DefineRelatives_Field_OtherNoun)
+		if e3 == nil {
+			e3 = rt.TextEval_Marshal(m, &val.OtherNoun)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", DefineRelatives_Field_OtherNoun))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// DefineTraits Add traits to an aspect
+type DefineTraits struct {
+	Traits rt.TextListEval `if:"label=traits"`
+	Aspect rt.TextEval     `if:"label=aspect"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*DefineTraits)(nil)
+
+func (*DefineTraits) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DefineTraits_Type,
+		Uses: composer.Type_Flow,
+		Lede: "define",
+	}
+}
+
+const DefineTraits_Type = "define_traits"
+const DefineTraits_Field_Traits = "$TRAITS"
+const DefineTraits_Field_Aspect = "$ASPECT"
+
+func (op *DefineTraits) Marshal(m jsn.Marshaler) error {
+	return DefineTraits_Marshal(m, op)
+}
+
+type DefineTraits_Slice []DefineTraits
+
+func (op *DefineTraits_Slice) GetType() string { return DefineTraits_Type }
+
+func (op *DefineTraits_Slice) Marshal(m jsn.Marshaler) error {
+	return DefineTraits_Repeats_Marshal(m, (*[]DefineTraits)(op))
+}
+
+func (op *DefineTraits_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DefineTraits_Slice) SetSize(cnt int) {
+	var els []DefineTraits
+	if cnt >= 0 {
+		els = make(DefineTraits_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DefineTraits_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DefineTraits_Marshal(m, &(*op)[i])
+}
+
+func DefineTraits_Repeats_Marshal(m jsn.Marshaler, vals *[]DefineTraits) error {
+	return jsn.RepeatBlock(m, (*DefineTraits_Slice)(vals))
+}
+
+func DefineTraits_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefineTraits) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DefineTraits_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DefineTraits_Flow struct{ ptr *DefineTraits }
+
+func (n DefineTraits_Flow) GetType() string      { return DefineTraits_Type }
+func (n DefineTraits_Flow) GetLede() string      { return "define" }
+func (n DefineTraits_Flow) GetFlow() interface{} { return n.ptr }
+func (n DefineTraits_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DefineTraits); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DefineTraits_Optional_Marshal(m jsn.Marshaler, pv **DefineTraits) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DefineTraits_Marshal(m, *pv)
+	} else if !enc {
+		var v DefineTraits
+		if err = DefineTraits_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DefineTraits_Marshal(m jsn.Marshaler, val *DefineTraits) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DefineTraits_Flow{val}); err == nil {
+		e0 := m.MarshalKey("traits", DefineTraits_Field_Traits)
+		if e0 == nil {
+			e0 = rt.TextListEval_Marshal(m, &val.Traits)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DefineTraits_Field_Traits))
+		}
+		e1 := m.MarshalKey("aspect", DefineTraits_Field_Aspect)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.Aspect)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DefineTraits_Field_Aspect))
 		}
 		m.EndBlock()
 	}
@@ -2764,118 +2615,6 @@ func GrammarDecl_Marshal(m jsn.Marshaler, val *GrammarDecl) (err error) {
 	return
 }
 
-// KindOfNoun
-type KindOfNoun struct {
-	AreAn  AreAn        `if:"label=_"`
-	Kind   SingularKind `if:"label=named"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ NounContinuation = (*KindOfNoun)(nil)
-
-func (*KindOfNoun) Compose() composer.Spec {
-	return composer.Spec{
-		Name: KindOfNoun_Type,
-		Uses: composer.Type_Flow,
-		Lede: "Kind",
-	}
-}
-
-const KindOfNoun_Type = "kind_of_noun"
-const KindOfNoun_Field_AreAn = "$ARE_AN"
-const KindOfNoun_Field_Kind = "$KIND"
-
-func (op *KindOfNoun) Marshal(m jsn.Marshaler) error {
-	return KindOfNoun_Marshal(m, op)
-}
-
-type KindOfNoun_Slice []KindOfNoun
-
-func (op *KindOfNoun_Slice) GetType() string { return KindOfNoun_Type }
-
-func (op *KindOfNoun_Slice) Marshal(m jsn.Marshaler) error {
-	return KindOfNoun_Repeats_Marshal(m, (*[]KindOfNoun)(op))
-}
-
-func (op *KindOfNoun_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *KindOfNoun_Slice) SetSize(cnt int) {
-	var els []KindOfNoun
-	if cnt >= 0 {
-		els = make(KindOfNoun_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *KindOfNoun_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return KindOfNoun_Marshal(m, &(*op)[i])
-}
-
-func KindOfNoun_Repeats_Marshal(m jsn.Marshaler, vals *[]KindOfNoun) error {
-	return jsn.RepeatBlock(m, (*KindOfNoun_Slice)(vals))
-}
-
-func KindOfNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]KindOfNoun) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = KindOfNoun_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type KindOfNoun_Flow struct{ ptr *KindOfNoun }
-
-func (n KindOfNoun_Flow) GetType() string      { return KindOfNoun_Type }
-func (n KindOfNoun_Flow) GetLede() string      { return "Kind" }
-func (n KindOfNoun_Flow) GetFlow() interface{} { return n.ptr }
-func (n KindOfNoun_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*KindOfNoun); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func KindOfNoun_Optional_Marshal(m jsn.Marshaler, pv **KindOfNoun) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = KindOfNoun_Marshal(m, *pv)
-	} else if !enc {
-		var v KindOfNoun
-		if err = KindOfNoun_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func KindOfNoun_Marshal(m jsn.Marshaler, val *KindOfNoun) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(KindOfNoun_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", KindOfNoun_Field_AreAn)
-		if e0 == nil {
-			e0 = AreAn_Marshal(m, &val.AreAn)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", KindOfNoun_Field_AreAn))
-		}
-		e1 := m.MarshalKey("named", KindOfNoun_Field_Kind)
-		if e1 == nil {
-			e1 = SingularKind_Marshal(m, &val.Kind)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", KindOfNoun_Field_Kind))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // KindOfRelation
 type KindOfRelation struct {
 	Relation    rel.RelationName    `if:"label=_"`
@@ -2981,332 +2720,6 @@ func KindOfRelation_Marshal(m jsn.Marshaler, val *KindOfRelation) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", KindOfRelation_Field_Cardinality))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// KindsHaveProperties Add properties to a kind
-type KindsHaveProperties struct {
-	PluralKinds PluralKinds `if:"label=_"`
-	Props       []Field     `if:"label=have"`
-	Markup      map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*KindsHaveProperties)(nil)
-
-func (*KindsHaveProperties) Compose() composer.Spec {
-	return composer.Spec{
-		Name: KindsHaveProperties_Type,
-		Uses: composer.Type_Flow,
-		Lede: "Kinds",
-	}
-}
-
-const KindsHaveProperties_Type = "kinds_have_properties"
-const KindsHaveProperties_Field_PluralKinds = "$PLURAL_KINDS"
-const KindsHaveProperties_Field_Props = "$PROPS"
-
-func (op *KindsHaveProperties) Marshal(m jsn.Marshaler) error {
-	return KindsHaveProperties_Marshal(m, op)
-}
-
-type KindsHaveProperties_Slice []KindsHaveProperties
-
-func (op *KindsHaveProperties_Slice) GetType() string { return KindsHaveProperties_Type }
-
-func (op *KindsHaveProperties_Slice) Marshal(m jsn.Marshaler) error {
-	return KindsHaveProperties_Repeats_Marshal(m, (*[]KindsHaveProperties)(op))
-}
-
-func (op *KindsHaveProperties_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *KindsHaveProperties_Slice) SetSize(cnt int) {
-	var els []KindsHaveProperties
-	if cnt >= 0 {
-		els = make(KindsHaveProperties_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *KindsHaveProperties_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return KindsHaveProperties_Marshal(m, &(*op)[i])
-}
-
-func KindsHaveProperties_Repeats_Marshal(m jsn.Marshaler, vals *[]KindsHaveProperties) error {
-	return jsn.RepeatBlock(m, (*KindsHaveProperties_Slice)(vals))
-}
-
-func KindsHaveProperties_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]KindsHaveProperties) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = KindsHaveProperties_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type KindsHaveProperties_Flow struct{ ptr *KindsHaveProperties }
-
-func (n KindsHaveProperties_Flow) GetType() string      { return KindsHaveProperties_Type }
-func (n KindsHaveProperties_Flow) GetLede() string      { return "Kinds" }
-func (n KindsHaveProperties_Flow) GetFlow() interface{} { return n.ptr }
-func (n KindsHaveProperties_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*KindsHaveProperties); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func KindsHaveProperties_Optional_Marshal(m jsn.Marshaler, pv **KindsHaveProperties) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = KindsHaveProperties_Marshal(m, *pv)
-	} else if !enc {
-		var v KindsHaveProperties
-		if err = KindsHaveProperties_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func KindsHaveProperties_Marshal(m jsn.Marshaler, val *KindsHaveProperties) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(KindsHaveProperties_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", KindsHaveProperties_Field_PluralKinds)
-		if e0 == nil {
-			e0 = PluralKinds_Marshal(m, &val.PluralKinds)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", KindsHaveProperties_Field_PluralKinds))
-		}
-		e1 := m.MarshalKey("have", KindsHaveProperties_Field_Props)
-		if e1 == nil {
-			e1 = Field_Repeats_Marshal(m, &val.Props)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", KindsHaveProperties_Field_Props))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// KindsOfAspect
-type KindsOfAspect struct {
-	Aspect Aspect `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*KindsOfAspect)(nil)
-
-func (*KindsOfAspect) Compose() composer.Spec {
-	return composer.Spec{
-		Name: KindsOfAspect_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const KindsOfAspect_Type = "kinds_of_aspect"
-const KindsOfAspect_Field_Aspect = "$ASPECT"
-
-func (op *KindsOfAspect) Marshal(m jsn.Marshaler) error {
-	return KindsOfAspect_Marshal(m, op)
-}
-
-type KindsOfAspect_Slice []KindsOfAspect
-
-func (op *KindsOfAspect_Slice) GetType() string { return KindsOfAspect_Type }
-
-func (op *KindsOfAspect_Slice) Marshal(m jsn.Marshaler) error {
-	return KindsOfAspect_Repeats_Marshal(m, (*[]KindsOfAspect)(op))
-}
-
-func (op *KindsOfAspect_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *KindsOfAspect_Slice) SetSize(cnt int) {
-	var els []KindsOfAspect
-	if cnt >= 0 {
-		els = make(KindsOfAspect_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *KindsOfAspect_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return KindsOfAspect_Marshal(m, &(*op)[i])
-}
-
-func KindsOfAspect_Repeats_Marshal(m jsn.Marshaler, vals *[]KindsOfAspect) error {
-	return jsn.RepeatBlock(m, (*KindsOfAspect_Slice)(vals))
-}
-
-func KindsOfAspect_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]KindsOfAspect) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = KindsOfAspect_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type KindsOfAspect_Flow struct{ ptr *KindsOfAspect }
-
-func (n KindsOfAspect_Flow) GetType() string      { return KindsOfAspect_Type }
-func (n KindsOfAspect_Flow) GetLede() string      { return KindsOfAspect_Type }
-func (n KindsOfAspect_Flow) GetFlow() interface{} { return n.ptr }
-func (n KindsOfAspect_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*KindsOfAspect); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func KindsOfAspect_Optional_Marshal(m jsn.Marshaler, pv **KindsOfAspect) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = KindsOfAspect_Marshal(m, *pv)
-	} else if !enc {
-		var v KindsOfAspect
-		if err = KindsOfAspect_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func KindsOfAspect_Marshal(m jsn.Marshaler, val *KindsOfAspect) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(KindsOfAspect_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", KindsOfAspect_Field_Aspect)
-		if e0 == nil {
-			e0 = Aspect_Marshal(m, &val.Aspect)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", KindsOfAspect_Field_Aspect))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// KindsOfKind Declare a kind
-type KindsOfKind struct {
-	PluralKinds  PluralKinds  `if:"label=_"`
-	SingularKind SingularKind `if:"label=kind"`
-	Markup       map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*KindsOfKind)(nil)
-
-func (*KindsOfKind) Compose() composer.Spec {
-	return composer.Spec{
-		Name: KindsOfKind_Type,
-		Uses: composer.Type_Flow,
-		Lede: "Make",
-	}
-}
-
-const KindsOfKind_Type = "kinds_of_kind"
-const KindsOfKind_Field_PluralKinds = "$PLURAL_KINDS"
-const KindsOfKind_Field_SingularKind = "$SINGULAR_KIND"
-
-func (op *KindsOfKind) Marshal(m jsn.Marshaler) error {
-	return KindsOfKind_Marshal(m, op)
-}
-
-type KindsOfKind_Slice []KindsOfKind
-
-func (op *KindsOfKind_Slice) GetType() string { return KindsOfKind_Type }
-
-func (op *KindsOfKind_Slice) Marshal(m jsn.Marshaler) error {
-	return KindsOfKind_Repeats_Marshal(m, (*[]KindsOfKind)(op))
-}
-
-func (op *KindsOfKind_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *KindsOfKind_Slice) SetSize(cnt int) {
-	var els []KindsOfKind
-	if cnt >= 0 {
-		els = make(KindsOfKind_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *KindsOfKind_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return KindsOfKind_Marshal(m, &(*op)[i])
-}
-
-func KindsOfKind_Repeats_Marshal(m jsn.Marshaler, vals *[]KindsOfKind) error {
-	return jsn.RepeatBlock(m, (*KindsOfKind_Slice)(vals))
-}
-
-func KindsOfKind_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]KindsOfKind) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = KindsOfKind_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type KindsOfKind_Flow struct{ ptr *KindsOfKind }
-
-func (n KindsOfKind_Flow) GetType() string      { return KindsOfKind_Type }
-func (n KindsOfKind_Flow) GetLede() string      { return "Make" }
-func (n KindsOfKind_Flow) GetFlow() interface{} { return n.ptr }
-func (n KindsOfKind_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*KindsOfKind); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func KindsOfKind_Optional_Marshal(m jsn.Marshaler, pv **KindsOfKind) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = KindsOfKind_Marshal(m, *pv)
-	} else if !enc {
-		var v KindsOfKind
-		if err = KindsOfKind_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func KindsOfKind_Marshal(m jsn.Marshaler, val *KindsOfKind) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(KindsOfKind_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", KindsOfKind_Field_PluralKinds)
-		if e0 == nil {
-			e0 = PluralKinds_Marshal(m, &val.PluralKinds)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", KindsOfKind_Field_PluralKinds))
-		}
-		e1 := m.MarshalKey("kind", KindsOfKind_Field_SingularKind)
-		if e1 == nil {
-			e1 = SingularKind_Marshal(m, &val.SingularKind)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", KindsOfKind_Field_SingularKind))
 		}
 		m.EndBlock()
 	}
@@ -4181,114 +3594,6 @@ func MapHeading_Marshal(m jsn.Marshaler, val *MapHeading) (err error) {
 	return
 }
 
-// NamedField
-type NamedField struct {
-	Name   string `if:"label=_,type=text"`
-	Type   string `if:"label=type,optional,type=text"`
-	Markup map[string]any
-}
-
-func (*NamedField) Compose() composer.Spec {
-	return composer.Spec{
-		Name: NamedField_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const NamedField_Type = "named_field"
-const NamedField_Field_Name = "$NAME"
-const NamedField_Field_Type = "$TYPE"
-
-func (op *NamedField) Marshal(m jsn.Marshaler) error {
-	return NamedField_Marshal(m, op)
-}
-
-type NamedField_Slice []NamedField
-
-func (op *NamedField_Slice) GetType() string { return NamedField_Type }
-
-func (op *NamedField_Slice) Marshal(m jsn.Marshaler) error {
-	return NamedField_Repeats_Marshal(m, (*[]NamedField)(op))
-}
-
-func (op *NamedField_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *NamedField_Slice) SetSize(cnt int) {
-	var els []NamedField
-	if cnt >= 0 {
-		els = make(NamedField_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *NamedField_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NamedField_Marshal(m, &(*op)[i])
-}
-
-func NamedField_Repeats_Marshal(m jsn.Marshaler, vals *[]NamedField) error {
-	return jsn.RepeatBlock(m, (*NamedField_Slice)(vals))
-}
-
-func NamedField_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NamedField) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = NamedField_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type NamedField_Flow struct{ ptr *NamedField }
-
-func (n NamedField_Flow) GetType() string      { return NamedField_Type }
-func (n NamedField_Flow) GetLede() string      { return NamedField_Type }
-func (n NamedField_Flow) GetFlow() interface{} { return n.ptr }
-func (n NamedField_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*NamedField); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func NamedField_Optional_Marshal(m jsn.Marshaler, pv **NamedField) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = NamedField_Marshal(m, *pv)
-	} else if !enc {
-		var v NamedField
-		if err = NamedField_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func NamedField_Marshal(m jsn.Marshaler, val *NamedField) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(NamedField_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", NamedField_Field_Name)
-		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", NamedField_Field_Name))
-		}
-		e1 := m.MarshalKey("type", NamedField_Field_Type)
-		if e1 == nil {
-			e1 = prim.Text_Unboxed_Optional_Marshal(m, &val.Type)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NamedField_Field_Type))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 const NamedNoun_Type = "named_noun"
 
 var NamedNoun_Optional_Marshal = NamedNoun_Marshal
@@ -4480,196 +3785,6 @@ func NounAssignment_Marshal(m jsn.Marshaler, val *NounAssignment) (err error) {
 	return
 }
 
-const NounContinuation_Type = "noun_continuation"
-
-var NounContinuation_Optional_Marshal = NounContinuation_Marshal
-
-type NounContinuation_Slot struct{ Value *NounContinuation }
-
-func (at NounContinuation_Slot) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(at); err == nil {
-		if a, ok := at.GetSlot(); ok {
-			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-func (at NounContinuation_Slot) GetType() string              { return NounContinuation_Type }
-func (at NounContinuation_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at NounContinuation_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(NounContinuation)
-	return
-}
-
-func NounContinuation_Marshal(m jsn.Marshaler, ptr *NounContinuation) (err error) {
-	slot := NounContinuation_Slot{ptr}
-	return slot.Marshal(m)
-}
-
-type NounContinuation_Slice []NounContinuation
-
-func (op *NounContinuation_Slice) GetType() string { return NounContinuation_Type }
-
-func (op *NounContinuation_Slice) Marshal(m jsn.Marshaler) error {
-	return NounContinuation_Repeats_Marshal(m, (*[]NounContinuation)(op))
-}
-
-func (op *NounContinuation_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *NounContinuation_Slice) SetSize(cnt int) {
-	var els []NounContinuation
-	if cnt >= 0 {
-		els = make(NounContinuation_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *NounContinuation_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NounContinuation_Marshal(m, &(*op)[i])
-}
-
-func NounContinuation_Repeats_Marshal(m jsn.Marshaler, vals *[]NounContinuation) error {
-	return jsn.RepeatBlock(m, (*NounContinuation_Slice)(vals))
-}
-
-func NounContinuation_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounContinuation) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = NounContinuation_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// NounKindStatement
-type NounKindStatement struct {
-	Nouns      []NamedNoun        `if:"label=_"`
-	KindOfNoun KindOfNoun         `if:"label=depict"`
-	More       []NounContinuation `if:"label=and,optional"`
-	Markup     map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*NounKindStatement)(nil)
-
-func (*NounKindStatement) Compose() composer.Spec {
-	return composer.Spec{
-		Name: NounKindStatement_Type,
-		Uses: composer.Type_Flow,
-		Lede: "Nouns",
-	}
-}
-
-const NounKindStatement_Type = "noun_kind_statement"
-const NounKindStatement_Field_Nouns = "$NOUNS"
-const NounKindStatement_Field_KindOfNoun = "$KIND_OF_NOUN"
-const NounKindStatement_Field_More = "$MORE"
-
-func (op *NounKindStatement) Marshal(m jsn.Marshaler) error {
-	return NounKindStatement_Marshal(m, op)
-}
-
-type NounKindStatement_Slice []NounKindStatement
-
-func (op *NounKindStatement_Slice) GetType() string { return NounKindStatement_Type }
-
-func (op *NounKindStatement_Slice) Marshal(m jsn.Marshaler) error {
-	return NounKindStatement_Repeats_Marshal(m, (*[]NounKindStatement)(op))
-}
-
-func (op *NounKindStatement_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *NounKindStatement_Slice) SetSize(cnt int) {
-	var els []NounKindStatement
-	if cnt >= 0 {
-		els = make(NounKindStatement_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *NounKindStatement_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NounKindStatement_Marshal(m, &(*op)[i])
-}
-
-func NounKindStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]NounKindStatement) error {
-	return jsn.RepeatBlock(m, (*NounKindStatement_Slice)(vals))
-}
-
-func NounKindStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounKindStatement) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = NounKindStatement_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type NounKindStatement_Flow struct{ ptr *NounKindStatement }
-
-func (n NounKindStatement_Flow) GetType() string      { return NounKindStatement_Type }
-func (n NounKindStatement_Flow) GetLede() string      { return "Nouns" }
-func (n NounKindStatement_Flow) GetFlow() interface{} { return n.ptr }
-func (n NounKindStatement_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*NounKindStatement); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func NounKindStatement_Optional_Marshal(m jsn.Marshaler, pv **NounKindStatement) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = NounKindStatement_Marshal(m, *pv)
-	} else if !enc {
-		var v NounKindStatement
-		if err = NounKindStatement_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func NounKindStatement_Marshal(m jsn.Marshaler, val *NounKindStatement) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(NounKindStatement_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", NounKindStatement_Field_Nouns)
-		if e0 == nil {
-			e0 = NamedNoun_Repeats_Marshal(m, &val.Nouns)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", NounKindStatement_Field_Nouns))
-		}
-		e1 := m.MarshalKey("depict", NounKindStatement_Field_KindOfNoun)
-		if e1 == nil {
-			e1 = KindOfNoun_Marshal(m, &val.KindOfNoun)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NounKindStatement_Field_KindOfNoun))
-		}
-		e2 := m.MarshalKey("and", NounKindStatement_Field_More)
-		if e2 == nil {
-			e2 = NounContinuation_Optional_Repeats_Marshal(m, &val.More)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", NounKindStatement_Field_More))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // NounName requires a user-specified string.
 type NounName struct {
 	Str string
@@ -4845,479 +3960,6 @@ func NounNamed_Marshal(m jsn.Marshaler, val *NounNamed) (err error) {
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", NounNamed_Field_Name))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// NounRelation
-type NounRelation struct {
-	AreBeing   AreBeing         `if:"label=are_being,optional"`
-	Relation   rel.RelationName `if:"label=relation"`
-	OtherNouns []NamedNoun      `if:"label=other_nouns"`
-	Markup     map[string]any
-}
-
-// User implemented slots:
-var _ NounContinuation = (*NounRelation)(nil)
-
-func (*NounRelation) Compose() composer.Spec {
-	return composer.Spec{
-		Name: NounRelation_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const NounRelation_Type = "noun_relation"
-const NounRelation_Field_AreBeing = "$ARE_BEING"
-const NounRelation_Field_Relation = "$RELATION"
-const NounRelation_Field_OtherNouns = "$OTHER_NOUNS"
-
-func (op *NounRelation) Marshal(m jsn.Marshaler) error {
-	return NounRelation_Marshal(m, op)
-}
-
-type NounRelation_Slice []NounRelation
-
-func (op *NounRelation_Slice) GetType() string { return NounRelation_Type }
-
-func (op *NounRelation_Slice) Marshal(m jsn.Marshaler) error {
-	return NounRelation_Repeats_Marshal(m, (*[]NounRelation)(op))
-}
-
-func (op *NounRelation_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *NounRelation_Slice) SetSize(cnt int) {
-	var els []NounRelation
-	if cnt >= 0 {
-		els = make(NounRelation_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *NounRelation_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NounRelation_Marshal(m, &(*op)[i])
-}
-
-func NounRelation_Repeats_Marshal(m jsn.Marshaler, vals *[]NounRelation) error {
-	return jsn.RepeatBlock(m, (*NounRelation_Slice)(vals))
-}
-
-func NounRelation_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounRelation) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = NounRelation_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type NounRelation_Flow struct{ ptr *NounRelation }
-
-func (n NounRelation_Flow) GetType() string      { return NounRelation_Type }
-func (n NounRelation_Flow) GetLede() string      { return NounRelation_Type }
-func (n NounRelation_Flow) GetFlow() interface{} { return n.ptr }
-func (n NounRelation_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*NounRelation); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func NounRelation_Optional_Marshal(m jsn.Marshaler, pv **NounRelation) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = NounRelation_Marshal(m, *pv)
-	} else if !enc {
-		var v NounRelation
-		if err = NounRelation_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func NounRelation_Marshal(m jsn.Marshaler, val *NounRelation) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(NounRelation_Flow{val}); err == nil {
-		e0 := m.MarshalKey("are_being", NounRelation_Field_AreBeing)
-		if e0 == nil {
-			e0 = AreBeing_Optional_Marshal(m, &val.AreBeing)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", NounRelation_Field_AreBeing))
-		}
-		e1 := m.MarshalKey("relation", NounRelation_Field_Relation)
-		if e1 == nil {
-			e1 = rel.RelationName_Marshal(m, &val.Relation)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NounRelation_Field_Relation))
-		}
-		e2 := m.MarshalKey("other_nouns", NounRelation_Field_OtherNouns)
-		if e2 == nil {
-			e2 = NamedNoun_Repeats_Marshal(m, &val.OtherNouns)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", NounRelation_Field_OtherNouns))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// NounRelationStatement
-type NounRelationStatement struct {
-	Nouns        []NamedNoun        `if:"label=_"`
-	NounRelation NounRelation       `if:"label=relate_to"`
-	More         []NounContinuation `if:"label=and,optional"`
-	Markup       map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*NounRelationStatement)(nil)
-
-func (*NounRelationStatement) Compose() composer.Spec {
-	return composer.Spec{
-		Name: NounRelationStatement_Type,
-		Uses: composer.Type_Flow,
-		Lede: "Nouns",
-	}
-}
-
-const NounRelationStatement_Type = "noun_relation_statement"
-const NounRelationStatement_Field_Nouns = "$NOUNS"
-const NounRelationStatement_Field_NounRelation = "$NOUN_RELATION"
-const NounRelationStatement_Field_More = "$MORE"
-
-func (op *NounRelationStatement) Marshal(m jsn.Marshaler) error {
-	return NounRelationStatement_Marshal(m, op)
-}
-
-type NounRelationStatement_Slice []NounRelationStatement
-
-func (op *NounRelationStatement_Slice) GetType() string { return NounRelationStatement_Type }
-
-func (op *NounRelationStatement_Slice) Marshal(m jsn.Marshaler) error {
-	return NounRelationStatement_Repeats_Marshal(m, (*[]NounRelationStatement)(op))
-}
-
-func (op *NounRelationStatement_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *NounRelationStatement_Slice) SetSize(cnt int) {
-	var els []NounRelationStatement
-	if cnt >= 0 {
-		els = make(NounRelationStatement_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *NounRelationStatement_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NounRelationStatement_Marshal(m, &(*op)[i])
-}
-
-func NounRelationStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]NounRelationStatement) error {
-	return jsn.RepeatBlock(m, (*NounRelationStatement_Slice)(vals))
-}
-
-func NounRelationStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounRelationStatement) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = NounRelationStatement_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type NounRelationStatement_Flow struct{ ptr *NounRelationStatement }
-
-func (n NounRelationStatement_Flow) GetType() string      { return NounRelationStatement_Type }
-func (n NounRelationStatement_Flow) GetLede() string      { return "Nouns" }
-func (n NounRelationStatement_Flow) GetFlow() interface{} { return n.ptr }
-func (n NounRelationStatement_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*NounRelationStatement); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func NounRelationStatement_Optional_Marshal(m jsn.Marshaler, pv **NounRelationStatement) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = NounRelationStatement_Marshal(m, *pv)
-	} else if !enc {
-		var v NounRelationStatement
-		if err = NounRelationStatement_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func NounRelationStatement_Marshal(m jsn.Marshaler, val *NounRelationStatement) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(NounRelationStatement_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", NounRelationStatement_Field_Nouns)
-		if e0 == nil {
-			e0 = NamedNoun_Repeats_Marshal(m, &val.Nouns)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", NounRelationStatement_Field_Nouns))
-		}
-		e1 := m.MarshalKey("relate_to", NounRelationStatement_Field_NounRelation)
-		if e1 == nil {
-			e1 = NounRelation_Marshal(m, &val.NounRelation)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NounRelationStatement_Field_NounRelation))
-		}
-		e2 := m.MarshalKey("and", NounRelationStatement_Field_More)
-		if e2 == nil {
-			e2 = NounContinuation_Optional_Repeats_Marshal(m, &val.More)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", NounRelationStatement_Field_More))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// NounTraitStatement
-type NounTraitStatement struct {
-	Nouns      []NamedNoun        `if:"label=_"`
-	NounTraits NounTraits         `if:"label=start_as"`
-	More       []NounContinuation `if:"label=and,optional"`
-	Markup     map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*NounTraitStatement)(nil)
-
-func (*NounTraitStatement) Compose() composer.Spec {
-	return composer.Spec{
-		Name: NounTraitStatement_Type,
-		Uses: composer.Type_Flow,
-		Lede: "Nouns",
-	}
-}
-
-const NounTraitStatement_Type = "noun_trait_statement"
-const NounTraitStatement_Field_Nouns = "$NOUNS"
-const NounTraitStatement_Field_NounTraits = "$NOUN_TRAITS"
-const NounTraitStatement_Field_More = "$MORE"
-
-func (op *NounTraitStatement) Marshal(m jsn.Marshaler) error {
-	return NounTraitStatement_Marshal(m, op)
-}
-
-type NounTraitStatement_Slice []NounTraitStatement
-
-func (op *NounTraitStatement_Slice) GetType() string { return NounTraitStatement_Type }
-
-func (op *NounTraitStatement_Slice) Marshal(m jsn.Marshaler) error {
-	return NounTraitStatement_Repeats_Marshal(m, (*[]NounTraitStatement)(op))
-}
-
-func (op *NounTraitStatement_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *NounTraitStatement_Slice) SetSize(cnt int) {
-	var els []NounTraitStatement
-	if cnt >= 0 {
-		els = make(NounTraitStatement_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *NounTraitStatement_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NounTraitStatement_Marshal(m, &(*op)[i])
-}
-
-func NounTraitStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]NounTraitStatement) error {
-	return jsn.RepeatBlock(m, (*NounTraitStatement_Slice)(vals))
-}
-
-func NounTraitStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounTraitStatement) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = NounTraitStatement_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type NounTraitStatement_Flow struct{ ptr *NounTraitStatement }
-
-func (n NounTraitStatement_Flow) GetType() string      { return NounTraitStatement_Type }
-func (n NounTraitStatement_Flow) GetLede() string      { return "Nouns" }
-func (n NounTraitStatement_Flow) GetFlow() interface{} { return n.ptr }
-func (n NounTraitStatement_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*NounTraitStatement); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func NounTraitStatement_Optional_Marshal(m jsn.Marshaler, pv **NounTraitStatement) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = NounTraitStatement_Marshal(m, *pv)
-	} else if !enc {
-		var v NounTraitStatement
-		if err = NounTraitStatement_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func NounTraitStatement_Marshal(m jsn.Marshaler, val *NounTraitStatement) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(NounTraitStatement_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", NounTraitStatement_Field_Nouns)
-		if e0 == nil {
-			e0 = NamedNoun_Repeats_Marshal(m, &val.Nouns)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", NounTraitStatement_Field_Nouns))
-		}
-		e1 := m.MarshalKey("start_as", NounTraitStatement_Field_NounTraits)
-		if e1 == nil {
-			e1 = NounTraits_Marshal(m, &val.NounTraits)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NounTraitStatement_Field_NounTraits))
-		}
-		e2 := m.MarshalKey("and", NounTraitStatement_Field_More)
-		if e2 == nil {
-			e2 = NounContinuation_Optional_Repeats_Marshal(m, &val.More)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", NounTraitStatement_Field_More))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// NounTraits
-type NounTraits struct {
-	AreBeing AreBeing `if:"label=_"`
-	Trait    []Trait  `if:"label=trait"`
-	Markup   map[string]any
-}
-
-// User implemented slots:
-var _ NounContinuation = (*NounTraits)(nil)
-
-func (*NounTraits) Compose() composer.Spec {
-	return composer.Spec{
-		Name: NounTraits_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const NounTraits_Type = "noun_traits"
-const NounTraits_Field_AreBeing = "$ARE_BEING"
-const NounTraits_Field_Trait = "$TRAIT"
-
-func (op *NounTraits) Marshal(m jsn.Marshaler) error {
-	return NounTraits_Marshal(m, op)
-}
-
-type NounTraits_Slice []NounTraits
-
-func (op *NounTraits_Slice) GetType() string { return NounTraits_Type }
-
-func (op *NounTraits_Slice) Marshal(m jsn.Marshaler) error {
-	return NounTraits_Repeats_Marshal(m, (*[]NounTraits)(op))
-}
-
-func (op *NounTraits_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *NounTraits_Slice) SetSize(cnt int) {
-	var els []NounTraits
-	if cnt >= 0 {
-		els = make(NounTraits_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *NounTraits_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NounTraits_Marshal(m, &(*op)[i])
-}
-
-func NounTraits_Repeats_Marshal(m jsn.Marshaler, vals *[]NounTraits) error {
-	return jsn.RepeatBlock(m, (*NounTraits_Slice)(vals))
-}
-
-func NounTraits_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounTraits) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = NounTraits_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type NounTraits_Flow struct{ ptr *NounTraits }
-
-func (n NounTraits_Flow) GetType() string      { return NounTraits_Type }
-func (n NounTraits_Flow) GetLede() string      { return NounTraits_Type }
-func (n NounTraits_Flow) GetFlow() interface{} { return n.ptr }
-func (n NounTraits_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*NounTraits); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func NounTraits_Optional_Marshal(m jsn.Marshaler, pv **NounTraits) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = NounTraits_Marshal(m, *pv)
-	} else if !enc {
-		var v NounTraits
-		if err = NounTraits_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func NounTraits_Marshal(m jsn.Marshaler, val *NounTraits) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(NounTraits_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", NounTraits_Field_AreBeing)
-		if e0 == nil {
-			e0 = AreBeing_Marshal(m, &val.AreBeing)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", NounTraits_Field_AreBeing))
-		}
-		e1 := m.MarshalKey("trait", NounTraits_Field_Trait)
-		if e1 == nil {
-			e1 = Trait_Repeats_Marshal(m, &val.Trait)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", NounTraits_Field_Trait))
 		}
 		m.EndBlock()
 	}
@@ -7114,135 +5756,6 @@ func RelationCardinality_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Relatio
 	return
 }
 
-// RelativeToNoun Relate nouns to each other
-type RelativeToNoun struct {
-	Relation   rel.RelationName `if:"label=_"`
-	Nouns      []NamedNoun      `if:"label=nouns"`
-	AreBeing   AreBeing         `if:"label=are_being"`
-	OtherNouns []NamedNoun      `if:"label=other_nouns"`
-	Markup     map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*RelativeToNoun)(nil)
-
-func (*RelativeToNoun) Compose() composer.Spec {
-	return composer.Spec{
-		Name: RelativeToNoun_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const RelativeToNoun_Type = "relative_to_noun"
-const RelativeToNoun_Field_Relation = "$RELATION"
-const RelativeToNoun_Field_Nouns = "$NOUNS"
-const RelativeToNoun_Field_AreBeing = "$ARE_BEING"
-const RelativeToNoun_Field_OtherNouns = "$OTHER_NOUNS"
-
-func (op *RelativeToNoun) Marshal(m jsn.Marshaler) error {
-	return RelativeToNoun_Marshal(m, op)
-}
-
-type RelativeToNoun_Slice []RelativeToNoun
-
-func (op *RelativeToNoun_Slice) GetType() string { return RelativeToNoun_Type }
-
-func (op *RelativeToNoun_Slice) Marshal(m jsn.Marshaler) error {
-	return RelativeToNoun_Repeats_Marshal(m, (*[]RelativeToNoun)(op))
-}
-
-func (op *RelativeToNoun_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *RelativeToNoun_Slice) SetSize(cnt int) {
-	var els []RelativeToNoun
-	if cnt >= 0 {
-		els = make(RelativeToNoun_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *RelativeToNoun_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return RelativeToNoun_Marshal(m, &(*op)[i])
-}
-
-func RelativeToNoun_Repeats_Marshal(m jsn.Marshaler, vals *[]RelativeToNoun) error {
-	return jsn.RepeatBlock(m, (*RelativeToNoun_Slice)(vals))
-}
-
-func RelativeToNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]RelativeToNoun) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = RelativeToNoun_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type RelativeToNoun_Flow struct{ ptr *RelativeToNoun }
-
-func (n RelativeToNoun_Flow) GetType() string      { return RelativeToNoun_Type }
-func (n RelativeToNoun_Flow) GetLede() string      { return RelativeToNoun_Type }
-func (n RelativeToNoun_Flow) GetFlow() interface{} { return n.ptr }
-func (n RelativeToNoun_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*RelativeToNoun); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func RelativeToNoun_Optional_Marshal(m jsn.Marshaler, pv **RelativeToNoun) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = RelativeToNoun_Marshal(m, *pv)
-	} else if !enc {
-		var v RelativeToNoun
-		if err = RelativeToNoun_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func RelativeToNoun_Marshal(m jsn.Marshaler, val *RelativeToNoun) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(RelativeToNoun_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", RelativeToNoun_Field_Relation)
-		if e0 == nil {
-			e0 = rel.RelationName_Marshal(m, &val.Relation)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", RelativeToNoun_Field_Relation))
-		}
-		e1 := m.MarshalKey("nouns", RelativeToNoun_Field_Nouns)
-		if e1 == nil {
-			e1 = NamedNoun_Repeats_Marshal(m, &val.Nouns)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", RelativeToNoun_Field_Nouns))
-		}
-		e2 := m.MarshalKey("are_being", RelativeToNoun_Field_AreBeing)
-		if e2 == nil {
-			e2 = AreBeing_Marshal(m, &val.AreBeing)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", RelativeToNoun_Field_AreBeing))
-		}
-		e3 := m.MarshalKey("other_nouns", RelativeToNoun_Field_OtherNouns)
-		if e3 == nil {
-			e3 = NamedNoun_Repeats_Marshal(m, &val.OtherNouns)
-		}
-		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", RelativeToNoun_Field_OtherNouns))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // SayResponse Generate text in a replaceable manner.
 // ( note: this is transformed for the runtime into a named 'RenderResponse'. )
 type SayResponse struct {
@@ -8417,193 +6930,9 @@ func TextListField_Marshal(m jsn.Marshaler, val *TextListField) (err error) {
 	return
 }
 
-// Trait requires a user-specified string.
-type Trait struct {
-	Str string
-}
-
-func (op *Trait) String() string {
-	return op.Str
-}
-
-func (*Trait) Compose() composer.Spec {
-	return composer.Spec{
-		Name:        Trait_Type,
-		Uses:        composer.Type_Str,
-		OpenStrings: true,
-	}
-}
-
-const Trait_Type = "trait"
-
-func (op *Trait) Marshal(m jsn.Marshaler) error {
-	return Trait_Marshal(m, op)
-}
-
-func Trait_Optional_Marshal(m jsn.Marshaler, val *Trait) (err error) {
-	var zero Trait
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = Trait_Marshal(m, val)
-	}
-	return
-}
-
-func Trait_Marshal(m jsn.Marshaler, val *Trait) (err error) {
-	return m.MarshalValue(Trait_Type, &val.Str)
-}
-
-type Trait_Slice []Trait
-
-func (op *Trait_Slice) GetType() string { return Trait_Type }
-
-func (op *Trait_Slice) Marshal(m jsn.Marshaler) error {
-	return Trait_Repeats_Marshal(m, (*[]Trait)(op))
-}
-
-func (op *Trait_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Trait_Slice) SetSize(cnt int) {
-	var els []Trait
-	if cnt >= 0 {
-		els = make(Trait_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Trait_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Trait_Marshal(m, &(*op)[i])
-}
-
-func Trait_Repeats_Marshal(m jsn.Marshaler, vals *[]Trait) error {
-	return jsn.RepeatBlock(m, (*Trait_Slice)(vals))
-}
-
-func Trait_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Trait) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Trait_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// TraitPhrase
-type TraitPhrase struct {
-	AreEither AreEither `if:"label=_"`
-	Trait     []Trait   `if:"label=trait"`
-	Markup    map[string]any
-}
-
-func (*TraitPhrase) Compose() composer.Spec {
-	return composer.Spec{
-		Name: TraitPhrase_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const TraitPhrase_Type = "trait_phrase"
-const TraitPhrase_Field_AreEither = "$ARE_EITHER"
-const TraitPhrase_Field_Trait = "$TRAIT"
-
-func (op *TraitPhrase) Marshal(m jsn.Marshaler) error {
-	return TraitPhrase_Marshal(m, op)
-}
-
-type TraitPhrase_Slice []TraitPhrase
-
-func (op *TraitPhrase_Slice) GetType() string { return TraitPhrase_Type }
-
-func (op *TraitPhrase_Slice) Marshal(m jsn.Marshaler) error {
-	return TraitPhrase_Repeats_Marshal(m, (*[]TraitPhrase)(op))
-}
-
-func (op *TraitPhrase_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *TraitPhrase_Slice) SetSize(cnt int) {
-	var els []TraitPhrase
-	if cnt >= 0 {
-		els = make(TraitPhrase_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *TraitPhrase_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return TraitPhrase_Marshal(m, &(*op)[i])
-}
-
-func TraitPhrase_Repeats_Marshal(m jsn.Marshaler, vals *[]TraitPhrase) error {
-	return jsn.RepeatBlock(m, (*TraitPhrase_Slice)(vals))
-}
-
-func TraitPhrase_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TraitPhrase) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = TraitPhrase_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type TraitPhrase_Flow struct{ ptr *TraitPhrase }
-
-func (n TraitPhrase_Flow) GetType() string      { return TraitPhrase_Type }
-func (n TraitPhrase_Flow) GetLede() string      { return TraitPhrase_Type }
-func (n TraitPhrase_Flow) GetFlow() interface{} { return n.ptr }
-func (n TraitPhrase_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*TraitPhrase); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func TraitPhrase_Optional_Marshal(m jsn.Marshaler, pv **TraitPhrase) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = TraitPhrase_Marshal(m, *pv)
-	} else if !enc {
-		var v TraitPhrase
-		if err = TraitPhrase_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func TraitPhrase_Marshal(m jsn.Marshaler, val *TraitPhrase) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(TraitPhrase_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", TraitPhrase_Field_AreEither)
-		if e0 == nil {
-			e0 = AreEither_Marshal(m, &val.AreEither)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", TraitPhrase_Field_AreEither))
-		}
-		e1 := m.MarshalKey("trait", TraitPhrase_Field_Trait)
-		if e1 == nil {
-			e1 = Trait_Repeats_Marshal(m, &val.Trait)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", TraitPhrase_Field_Trait))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 var Slots = []interface{}{
 	(*Field)(nil),
 	(*NamedNoun)(nil),
-	(*NounContinuation)(nil),
 	(*SingularNoun)(nil),
 	(*StoryStatement)(nil),
 }
@@ -8614,21 +6943,18 @@ var Slats = []composer.Composer{
 	(*ActionDecl)(nil),
 	(*ActionName)(nil),
 	(*ActionParams)(nil),
-	(*Ana)(nil),
-	(*AreAn)(nil),
-	(*AreBeing)(nil),
-	(*AreEither)(nil),
-	(*Aspect)(nil),
 	(*AspectField)(nil),
-	(*AspectTraits)(nil),
 	(*BoolField)(nil),
-	(*Certainties)(nil),
-	(*Certainty)(nil),
 	(*CommonAction)(nil),
 	(*CommonNoun)(nil),
 	(*CountOf)(nil),
 	(*CountedNouns)(nil),
 	(*CycleText)(nil),
+	(*DefineFields)(nil),
+	(*DefineKinds)(nil),
+	(*DefineNouns)(nil),
+	(*DefineRelatives)(nil),
+	(*DefineTraits)(nil),
 	(*Determiner)(nil),
 	(*EventBlock)(nil),
 	(*EventHandler)(nil),
@@ -8636,11 +6962,7 @@ var Slats = []composer.Composer{
 	(*EventPhase)(nil),
 	(*EventTarget)(nil),
 	(*GrammarDecl)(nil),
-	(*KindOfNoun)(nil),
 	(*KindOfRelation)(nil),
-	(*KindsHaveProperties)(nil),
-	(*KindsOfAspect)(nil),
-	(*KindsOfKind)(nil),
 	(*MakeOpposite)(nil),
 	(*MakePlural)(nil),
 	(*ManyToMany)(nil),
@@ -8649,15 +6971,9 @@ var Slats = []composer.Composer{
 	(*MapDeparting)(nil),
 	(*MapDirection)(nil),
 	(*MapHeading)(nil),
-	(*NamedField)(nil),
 	(*NounAssignment)(nil),
-	(*NounKindStatement)(nil),
 	(*NounName)(nil),
 	(*NounNamed)(nil),
-	(*NounRelation)(nil),
-	(*NounRelationStatement)(nil),
-	(*NounTraitStatement)(nil),
-	(*NounTraits)(nil),
 	(*NumListField)(nil),
 	(*NumberField)(nil),
 	(*OneToMany)(nil),
@@ -8675,7 +6991,6 @@ var Slats = []composer.Composer{
 	(*RecordField)(nil),
 	(*RecordListField)(nil),
 	(*RelationCardinality)(nil),
-	(*RelativeToNoun)(nil),
 	(*SayResponse)(nil),
 	(*SayTemplate)(nil),
 	(*ShuffleText)(nil),
@@ -8686,139 +7001,118 @@ var Slats = []composer.Composer{
 	(*StoryFile)(nil),
 	(*TextField)(nil),
 	(*TextListField)(nil),
-	(*Trait)(nil),
-	(*TraitPhrase)(nil),
 }
 
 var Signatures = map[uint64]interface{}{
-	15843873826946452289: (*AbstractAction)(nil),        /* AbstractAction: */
-	7872120455849093108:  (*ActionContext)(nil),         /* ActionContext: */
-	6874395953916233682:  (*ActionName)(nil),            /* ActionName: */
-	14902711848163440508: (*ActionParams)(nil),          /* ActionParams common: */
-	11902859627634050329: (*ActionParams)(nil),          /* ActionParams dual: */
-	5868886119925925865:  (*ActionParams)(nil),          /* ActionParams none: */
-	1469860725486105197:  (*Ana)(nil),                   /* Ana: */
-	9841269650536464428:  (*AreAn)(nil),                 /* AreAn: */
-	614443619025154862:   (*AreBeing)(nil),              /* AreBeing: */
-	1161860135848198194:  (*AreEither)(nil),             /* AreEither: */
-	2623386078654023505:  (*Aspect)(nil),                /* Aspect: */
-	9748568452847225344:  (*Certainty)(nil),             /* Certainty: */
-	13295757043766156580: (*CommonAction)(nil),          /* CommonAction: */
-	11796688776587655409: (*CommonAction)(nil),          /* CommonAction:actionContext: */
-	3594459841754826354:  (*Determiner)(nil),            /* Determiner: */
-	9237333280207697554:  (*EventName)(nil),             /* EventName: */
-	10643959568823028160: (*EventPhase)(nil),            /* EventPhase: */
-	18010503397334720257: (*EventTarget)(nil),           /* EventTarget kinds: */
-	14691585264072030736: (*EventTarget)(nil),           /* EventTarget noun: */
-	17563761532337350103: (*ManyToMany)(nil),            /* ManyToMany:otherKinds: */
-	4129025779762507875:  (*ManyToOne)(nil),             /* ManyToOne:kind: */
-	13422667607848275221: (*MapConnection)(nil),         /* MapConnection: */
-	691606134106503892:   (*MapDirection)(nil),          /* MapDirection: */
-	10837790669084117256: (*NamedField)(nil),            /* NamedField: */
-	18180187190576385518: (*NamedField)(nil),            /* NamedField:type: */
-	7274788867537390664:  (*NounName)(nil),              /* NounName: */
-	17075866407822548206: (*OneToMany)(nil),             /* OneToMany:kinds: */
-	13766274136867271026: (*OneToOne)(nil),              /* OneToOne:otherKind: */
-	18143853777230560632: (*PairedAction)(nil),          /* PairedAction: */
-	6457542997147343897:  (*Paragraph)(nil),             /* Paragraph */
-	1044755875845214073:  (*Paragraph)(nil),             /* Paragraph: */
-	355438255946453678:   (*PatternFlags)(nil),          /* PatternFlags: */
-	3203894909373400694:  (*PatternReturn)(nil),         /* PatternResult: */
-	10703761093736583840: (*PatternRule)(nil),           /* PatternRule:does: */
-	1493717172765332753:  (*PatternRule)(nil),           /* PatternRule:flags:does: */
-	8871095629143932769:  (*PatternType)(nil),           /* PatternType: */
-	6559594854670367592:  (*PluralKinds)(nil),           /* PluralKinds: */
-	14147411094705515606: (*Property)(nil),              /* Property: */
-	14287924768394488954: (*RelationCardinality)(nil),   /* RelationCardinality manyToMany: */
-	10453256446593418889: (*RelationCardinality)(nil),   /* RelationCardinality manyToOne: */
-	18092929693239672593: (*RelationCardinality)(nil),   /* RelationCardinality oneToMany: */
-	5587008972147064084:  (*RelationCardinality)(nil),   /* RelationCardinality oneToOne: */
-	12747929101973989672: (*SingularKind)(nil),          /* SingularKind: */
-	11597613116511938589: (*Story)(nil),                 /* Story paragraphs: */
-	5991962903091297123:  (*StoryFile)(nil),             /* Tapestry: */
-	12987203149897380515: (*Trait)(nil),                 /* Trait: */
-	14061432096605043790: (*TraitPhrase)(nil),           /* TraitPhrase:trait: */
-	8990910809673849454:  (*EventHandler)(nil),          /* With:event:provides:rules: */
-	3588173502446728488:  (*EventHandler)(nil),          /* With:event:rules: */
-	4360765066804052293:  (*StoryBreak)(nil),            /* story_statement=-- */
-	5917691408841273556:  (*AspectField)(nil),           /* field=Aspect: */
-	16852603647561115409: (*AspectTraits)(nil),          /* story_statement=AspectTraits:traitPhrase: */
-	929259210929400392:   (*BoolField)(nil),             /* field=Bool: */
-	8800077586553476131:  (*BoolField)(nil),             /* field=Bool:initially: */
-	12371124790835217408: (*BoolField)(nil),             /* field=Bool:kind: */
-	3110376293195187131:  (*BoolField)(nil),             /* field=Bool:kind:initially: */
-	6843411504396242728:  (*Certainties)(nil),           /* story_statement=Certainties:areBeing:certainty:trait: */
-	10143132576483224253: (*CountOf)(nil),               /* bool_eval=CountOf:num: */
-	231398832069830353:   (*CycleText)(nil),             /* text_eval=CycleText: */
-	12862689211056047959: (*MapDeparting)(nil),          /* story_statement=Departing from:via:and:otherRoom: */
-	12226644017914492267: (*ActionDecl)(nil),            /* story_statement=Event:action:args common: */
-	11054984519068268358: (*ActionDecl)(nil),            /* story_statement=Event:action:args dual: */
-	8992747511707391102:  (*ActionDecl)(nil),            /* story_statement=Event:action:args none: */
-	4045441026877120438:  (*GrammarDecl)(nil),           /* story_statement=GrammarDecl: */
-	2625420806444094675:  (*MapHeading)(nil),            /* story_statement=Heading:from:and:otherRoom: */
-	9997819433665596617:  (*MapHeading)(nil),            /* story_statement=Heading:from:via:and:otherRoom: */
-	5251814733452424201:  (*KindOfNoun)(nil),            /* noun_continuation=Kind:named: */
-	14551249057549655331: (*KindOfRelation)(nil),        /* story_statement=KindOfRelation:cardinality manyToMany: */
-	3383078616901163718:  (*KindOfRelation)(nil),        /* story_statement=KindOfRelation:cardinality manyToOne: */
-	5643087631915217830:  (*KindOfRelation)(nil),        /* story_statement=KindOfRelation:cardinality oneToMany: */
-	5160168163884592453:  (*KindOfRelation)(nil),        /* story_statement=KindOfRelation:cardinality oneToOne: */
-	15565711780925163000: (*KindsHaveProperties)(nil),   /* story_statement=Kinds:have: */
-	6308831945803832851:  (*KindsOfAspect)(nil),         /* story_statement=KindsOfAspect: */
-	17526933228095224780: (*EventBlock)(nil),            /* story_statement=Listen kinds:handlers: */
-	12304970653546840411: (*EventBlock)(nil),            /* story_statement=Listen noun:handlers: */
-	4364279276143636783:  (*KindsOfKind)(nil),           /* story_statement=Make:kind: */
-	12130342806058120266: (*MakeOpposite)(nil),          /* story_statement=Make:opposite: */
-	8107023930195182683:  (*MakePlural)(nil),            /* story_statement=Make:plural: */
-	7315903014127055020:  (*NounNamed)(nil),             /* named_noun=Noun: */
-	2148674162701691978:  (*NounNamed)(nil),             /* singular_noun=Noun: */
-	6508739485154276153:  (*CommonNoun)(nil),            /* named_noun=Noun:named: */
-	9335207376881300111:  (*CommonNoun)(nil),            /* singular_noun=Noun:named: */
-	8983976057391918886:  (*NounAssignment)(nil),        /* story_statement=NounAssignment:nouns:lines: */
-	9140865151012438596:  (*NounRelation)(nil),          /* noun_continuation=NounRelation areBeing:relation:otherNouns: */
-	10679174935447767001: (*NounRelation)(nil),          /* noun_continuation=NounRelation relation:otherNouns: */
-	10231941673534471951: (*NounTraits)(nil),            /* noun_continuation=NounTraits:trait: */
-	2819811603870068065:  (*NounKindStatement)(nil),     /* story_statement=Nouns:depict: */
-	6526395371997792336:  (*NounKindStatement)(nil),     /* story_statement=Nouns:depict:and: */
-	1119385123956310430:  (*CountedNouns)(nil),          /* named_noun=Nouns:named: */
-	14408552188370402952: (*NounRelationStatement)(nil), /* story_statement=Nouns:relateTo: */
-	3302808320047972257:  (*NounRelationStatement)(nil), /* story_statement=Nouns:relateTo:and: */
-	4416345853480779800:  (*NounTraitStatement)(nil),    /* story_statement=Nouns:startAs: */
-	77311373495214865:    (*NounTraitStatement)(nil),    /* story_statement=Nouns:startAs:and: */
-	17312507452399750264: (*NumListField)(nil),          /* field=NumList: */
-	13189420990506792051: (*NumListField)(nil),          /* field=NumList:initially: */
-	9348125496154177200:  (*NumListField)(nil),          /* field=NumList:kind: */
-	1285150463477439883:  (*NumListField)(nil),          /* field=NumList:kind:initially: */
-	8487518704472251667:  (*NumberField)(nil),           /* field=Number: */
-	12240858331879781776: (*NumberField)(nil),           /* field=Number:initially: */
-	16068510506387834393: (*NumberField)(nil),           /* field=Number:kind: */
-	931083588704034470:   (*NumberField)(nil),           /* field=Number:kind:initially: */
-	11805892574345609795: (*PatternDecl)(nil),           /* story_statement=Pattern: */
-	5803330913337388662:  (*PatternActions)(nil),        /* story_statement=Pattern:provides:rules: */
-	17499264412780813319: (*PatternDecl)(nil),           /* story_statement=Pattern:requires: */
-	10828994360773868920: (*PatternDecl)(nil),           /* story_statement=Pattern:requires:returns: */
-	13721253842616561476: (*PatternDecl)(nil),           /* story_statement=Pattern:returns: */
-	15334083968500114832: (*PatternActions)(nil),        /* story_statement=Pattern:rules: */
-	16830519956255384977: (*SayResponse)(nil),           /* execute=Print response:with: */
-	10478796600040997822: (*SayResponse)(nil),           /* text_eval=Print response:with: */
-	8137307643484617139:  (*RecordField)(nil),           /* field=Record: */
-	14268486262656655408: (*RecordField)(nil),           /* field=Record:initially: */
-	355191898393732025:   (*RecordField)(nil),           /* field=Record:kind: */
-	17210787958517369542: (*RecordField)(nil),           /* field=Record:kind:initially: */
-	11959710305603894939: (*RecordListField)(nil),       /* field=RecordList: */
-	11931798142536216664: (*RecordListField)(nil),       /* field=RecordList:initially: */
-	1057635318610052945:  (*RecordListField)(nil),       /* field=RecordList:kind: */
-	1164224146587824190:  (*RecordListField)(nil),       /* field=RecordList:kind:initially: */
-	12491084454766142785: (*RelativeToNoun)(nil),        /* story_statement=RelativeToNoun:nouns:areBeing:otherNouns: */
-	9556993961571292952:  (*SayTemplate)(nil),           /* execute=Say: */
-	15989777734244204735: (*SayTemplate)(nil),           /* text_eval=Say: */
-	9910951906340888308:  (*ShuffleText)(nil),           /* text_eval=ShuffleText: */
-	13921723804355948971: (*StoppingText)(nil),          /* text_eval=StoppingText: */
-	8130344761444222709:  (*TextField)(nil),             /* field=Text: */
-	6524581251606795538:  (*TextField)(nil),             /* field=Text:initially: */
-	17964742375211875755: (*TextField)(nil),             /* field=Text:kind: */
-	9452278286570155464:  (*TextField)(nil),             /* field=Text:kind:initially: */
-	10624393162610648969: (*TextListField)(nil),         /* field=TextList: */
-	16555060041426966326: (*TextListField)(nil),         /* field=TextList:initially: */
-	5819932921227536375:  (*TextListField)(nil),         /* field=TextList:kind: */
-	3965346382920662612:  (*TextListField)(nil),         /* field=TextList:kind:initially: */
+	15843873826946452289: (*AbstractAction)(nil),      /* AbstractAction: */
+	7872120455849093108:  (*ActionContext)(nil),       /* ActionContext: */
+	6874395953916233682:  (*ActionName)(nil),          /* ActionName: */
+	14902711848163440508: (*ActionParams)(nil),        /* ActionParams common: */
+	11902859627634050329: (*ActionParams)(nil),        /* ActionParams dual: */
+	5868886119925925865:  (*ActionParams)(nil),        /* ActionParams none: */
+	13295757043766156580: (*CommonAction)(nil),        /* CommonAction: */
+	11796688776587655409: (*CommonAction)(nil),        /* CommonAction:actionContext: */
+	3594459841754826354:  (*Determiner)(nil),          /* Determiner: */
+	9237333280207697554:  (*EventName)(nil),           /* EventName: */
+	10643959568823028160: (*EventPhase)(nil),          /* EventPhase: */
+	18010503397334720257: (*EventTarget)(nil),         /* EventTarget kinds: */
+	14691585264072030736: (*EventTarget)(nil),         /* EventTarget noun: */
+	17563761532337350103: (*ManyToMany)(nil),          /* ManyToMany:otherKinds: */
+	4129025779762507875:  (*ManyToOne)(nil),           /* ManyToOne:kind: */
+	13422667607848275221: (*MapConnection)(nil),       /* MapConnection: */
+	691606134106503892:   (*MapDirection)(nil),        /* MapDirection: */
+	7274788867537390664:  (*NounName)(nil),            /* NounName: */
+	17075866407822548206: (*OneToMany)(nil),           /* OneToMany:kinds: */
+	13766274136867271026: (*OneToOne)(nil),            /* OneToOne:otherKind: */
+	18143853777230560632: (*PairedAction)(nil),        /* PairedAction: */
+	6457542997147343897:  (*Paragraph)(nil),           /* Paragraph */
+	1044755875845214073:  (*Paragraph)(nil),           /* Paragraph: */
+	355438255946453678:   (*PatternFlags)(nil),        /* PatternFlags: */
+	3203894909373400694:  (*PatternReturn)(nil),       /* PatternResult: */
+	10703761093736583840: (*PatternRule)(nil),         /* PatternRule:does: */
+	1493717172765332753:  (*PatternRule)(nil),         /* PatternRule:flags:does: */
+	8871095629143932769:  (*PatternType)(nil),         /* PatternType: */
+	6559594854670367592:  (*PluralKinds)(nil),         /* PluralKinds: */
+	14147411094705515606: (*Property)(nil),            /* Property: */
+	14287924768394488954: (*RelationCardinality)(nil), /* RelationCardinality manyToMany: */
+	10453256446593418889: (*RelationCardinality)(nil), /* RelationCardinality manyToOne: */
+	18092929693239672593: (*RelationCardinality)(nil), /* RelationCardinality oneToMany: */
+	5587008972147064084:  (*RelationCardinality)(nil), /* RelationCardinality oneToOne: */
+	12747929101973989672: (*SingularKind)(nil),        /* SingularKind: */
+	11597613116511938589: (*Story)(nil),               /* Story paragraphs: */
+	5991962903091297123:  (*StoryFile)(nil),           /* Tapestry: */
+	8990910809673849454:  (*EventHandler)(nil),        /* With:event:provides:rules: */
+	3588173502446728488:  (*EventHandler)(nil),        /* With:event:rules: */
+	4360765066804052293:  (*StoryBreak)(nil),          /* story_statement=-- */
+	5917691408841273556:  (*AspectField)(nil),         /* field=Aspect: */
+	929259210929400392:   (*BoolField)(nil),           /* field=Bool: */
+	8800077586553476131:  (*BoolField)(nil),           /* field=Bool:initially: */
+	12371124790835217408: (*BoolField)(nil),           /* field=Bool:kind: */
+	3110376293195187131:  (*BoolField)(nil),           /* field=Bool:kind:initially: */
+	10143132576483224253: (*CountOf)(nil),             /* bool_eval=CountOf:num: */
+	231398832069830353:   (*CycleText)(nil),           /* text_eval=CycleText: */
+	8980281312975545398:  (*DefineFields)(nil),        /* story_statement=Define kind:has: */
+	11622379079031968031: (*DefineKinds)(nil),         /* story_statement=Define kinds:as: */
+	7397461044941158073:  (*DefineNouns)(nil),         /* story_statement=Define nouns:as: */
+	3312780025686222185:  (*DefineRelatives)(nil),     /* story_statement=Define nouns:as:relation:noun: */
+	15286672803702417298: (*DefineNouns)(nil),         /* story_statement=Define nouns:as:traits: */
+	6831984772337915121:  (*DefineRelatives)(nil),     /* story_statement=Define nouns:relation:noun: */
+	15529630764532221441: (*DefineTraits)(nil),        /* story_statement=Define traits:aspect: */
+	12862689211056047959: (*MapDeparting)(nil),        /* story_statement=Departing from:via:and:otherRoom: */
+	12226644017914492267: (*ActionDecl)(nil),          /* story_statement=Event:action:args common: */
+	11054984519068268358: (*ActionDecl)(nil),          /* story_statement=Event:action:args dual: */
+	8992747511707391102:  (*ActionDecl)(nil),          /* story_statement=Event:action:args none: */
+	4045441026877120438:  (*GrammarDecl)(nil),         /* story_statement=GrammarDecl: */
+	2625420806444094675:  (*MapHeading)(nil),          /* story_statement=Heading:from:and:otherRoom: */
+	9997819433665596617:  (*MapHeading)(nil),          /* story_statement=Heading:from:via:and:otherRoom: */
+	14551249057549655331: (*KindOfRelation)(nil),      /* story_statement=KindOfRelation:cardinality manyToMany: */
+	3383078616901163718:  (*KindOfRelation)(nil),      /* story_statement=KindOfRelation:cardinality manyToOne: */
+	5643087631915217830:  (*KindOfRelation)(nil),      /* story_statement=KindOfRelation:cardinality oneToMany: */
+	5160168163884592453:  (*KindOfRelation)(nil),      /* story_statement=KindOfRelation:cardinality oneToOne: */
+	17526933228095224780: (*EventBlock)(nil),          /* story_statement=Listen kinds:handlers: */
+	12304970653546840411: (*EventBlock)(nil),          /* story_statement=Listen noun:handlers: */
+	12130342806058120266: (*MakeOpposite)(nil),        /* story_statement=Make:opposite: */
+	8107023930195182683:  (*MakePlural)(nil),          /* story_statement=Make:plural: */
+	7315903014127055020:  (*NounNamed)(nil),           /* named_noun=Noun: */
+	2148674162701691978:  (*NounNamed)(nil),           /* singular_noun=Noun: */
+	6508739485154276153:  (*CommonNoun)(nil),          /* named_noun=Noun:named: */
+	9335207376881300111:  (*CommonNoun)(nil),          /* singular_noun=Noun:named: */
+	8983976057391918886:  (*NounAssignment)(nil),      /* story_statement=NounAssignment:nouns:lines: */
+	1119385123956310430:  (*CountedNouns)(nil),        /* named_noun=Nouns:named: */
+	17312507452399750264: (*NumListField)(nil),        /* field=NumList: */
+	13189420990506792051: (*NumListField)(nil),        /* field=NumList:initially: */
+	9348125496154177200:  (*NumListField)(nil),        /* field=NumList:kind: */
+	1285150463477439883:  (*NumListField)(nil),        /* field=NumList:kind:initially: */
+	8487518704472251667:  (*NumberField)(nil),         /* field=Number: */
+	12240858331879781776: (*NumberField)(nil),         /* field=Number:initially: */
+	16068510506387834393: (*NumberField)(nil),         /* field=Number:kind: */
+	931083588704034470:   (*NumberField)(nil),         /* field=Number:kind:initially: */
+	11805892574345609795: (*PatternDecl)(nil),         /* story_statement=Pattern: */
+	5803330913337388662:  (*PatternActions)(nil),      /* story_statement=Pattern:provides:rules: */
+	17499264412780813319: (*PatternDecl)(nil),         /* story_statement=Pattern:requires: */
+	10828994360773868920: (*PatternDecl)(nil),         /* story_statement=Pattern:requires:returns: */
+	13721253842616561476: (*PatternDecl)(nil),         /* story_statement=Pattern:returns: */
+	15334083968500114832: (*PatternActions)(nil),      /* story_statement=Pattern:rules: */
+	16830519956255384977: (*SayResponse)(nil),         /* execute=Print response:with: */
+	10478796600040997822: (*SayResponse)(nil),         /* text_eval=Print response:with: */
+	8137307643484617139:  (*RecordField)(nil),         /* field=Record: */
+	14268486262656655408: (*RecordField)(nil),         /* field=Record:initially: */
+	355191898393732025:   (*RecordField)(nil),         /* field=Record:kind: */
+	17210787958517369542: (*RecordField)(nil),         /* field=Record:kind:initially: */
+	11959710305603894939: (*RecordListField)(nil),     /* field=RecordList: */
+	11931798142536216664: (*RecordListField)(nil),     /* field=RecordList:initially: */
+	1057635318610052945:  (*RecordListField)(nil),     /* field=RecordList:kind: */
+	1164224146587824190:  (*RecordListField)(nil),     /* field=RecordList:kind:initially: */
+	9556993961571292952:  (*SayTemplate)(nil),         /* execute=Say: */
+	15989777734244204735: (*SayTemplate)(nil),         /* text_eval=Say: */
+	9910951906340888308:  (*ShuffleText)(nil),         /* text_eval=ShuffleText: */
+	13921723804355948971: (*StoppingText)(nil),        /* text_eval=StoppingText: */
+	8130344761444222709:  (*TextField)(nil),           /* field=Text: */
+	6524581251606795538:  (*TextField)(nil),           /* field=Text:initially: */
+	17964742375211875755: (*TextField)(nil),           /* field=Text:kind: */
+	9452278286570155464:  (*TextField)(nil),           /* field=Text:kind:initially: */
+	10624393162610648969: (*TextListField)(nil),       /* field=TextList: */
+	16555060041426966326: (*TextListField)(nil),       /* field=TextList:initially: */
+	5819932921227536375:  (*TextListField)(nil),       /* field=TextList:kind: */
+	3965346382920662612:  (*TextListField)(nil),       /* field=TextList:kind:initially: */
 }

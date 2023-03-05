@@ -116,58 +116,24 @@
           ]
         },
         {
-          "Spec:with str:": [
-            "ana",
+          "--": "Add traits to an aspect",
+          "Spec:slots:with flow:": [
+            "define_traits",
+            "story_statement",
             {
-              "Str exclusively:uses:": [
-                true,
+              "Flow:uses:": [
+                "define",
                 [
                   {
-                    "Option:": "a"
-                  },
-                  {
-                    "Option:": "an"
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:with str:": [
-            "are_an",
-            {
-              "Str exclusively:uses:": [
-                true,
-                [
-                  {
-                    "Option:": "are"
-                  },
-                  {
-                    "Option:label:": [
-                      "area",
-                      "are a"
+                    "Term:type:": [
+                      "traits",
+                      "text_list_eval"
                     ]
                   },
                   {
-                    "Option:label:": [
-                      "arean",
-                      "are an"
-                    ]
-                  },
-                  {
-                    "Option:": "is"
-                  },
-                  {
-                    "Option:label:": [
-                      "isa",
-                      "is a"
-                    ]
-                  },
-                  {
-                    "Option:label:": [
-                      "isan",
-                      "is an"
+                    "Term:type:": [
+                      "aspect",
+                      "text_eval"
                     ]
                   }
                 ]
@@ -176,65 +142,12 @@
           ]
         },
         {
-          "Spec:with str:": [
-            "are_being",
-            {
-              "Str exclusively:uses:": [
-                true,
-                [
-                  {
-                    "Option:": "are"
-                  },
-                  {
-                    "Option:": "is"
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:with str:": [
-            "are_either",
-            {
-              "Str exclusively:uses:": [
-                true,
-                [
-                  {
-                    "Option:label:": [
-                      "canbe",
-                      "can be"
-                    ]
-                  },
-                  {
-                    "Option:label:": [
-                      "either",
-                      "are either"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:groups:with str:": [
-            "aspect",
-            "traits",
-            {
-              "Str uses:": []
-            }
-          ]
-        },
-        {
-          "Spec:slots:groups:with flow:": [
+          "Spec:slots:with flow:": [
             "aspect_field",
             "field",
-            "properties",
             {
-              "Flow:phrase:uses:": [
+              "Flow:uses:": [
                 "aspect",
-                "an aspect {aspect$aspect}",
                 [
                   {
                     "Term:name:type:": [
@@ -242,30 +155,6 @@
                       "aspect",
                       "text"
                     ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Add traits to an aspect",
-          "Spec:slots:groups:with flow:": [
-            "aspect_traits",
-            "story_statement",
-            "traits",
-            {
-              "Flow phrase:uses:": [
-                "{$aspect} {$trait_phrase}",
-                [
-                  {
-                    "Term:name:": [
-                      "_",
-                      "aspect"
-                    ]
-                  },
-                  {
-                    "Term:": "trait_phrase"
                   }
                 ]
               ]
@@ -309,62 +198,7 @@
             }
           ]
         },
-        {
-          "--": "Give a kind a trait",
-          "Spec:slots:groups:with flow:": [
-            "certainties",
-            "story_statement",
-            "properties",
-            {
-              "Flow phrase:uses:": [
-                "{$plural_kinds} {$are_being} {$certainty} {$trait}.",
-                [
-                  {
-                    "Term:name:": [
-                      "_",
-                      "plural_kinds"
-                    ]
-                  },
-                  {
-                    "Term:": "are_being"
-                  },
-                  {
-                    "Term:": "certainty"
-                  },
-                  {
-                    "Term:": "trait"
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Whether an trait applies to a kind of noun.",
-          "Spec:groups:with str:": [
-            "certainty",
-            "properties",
-            {
-              "Str exclusively:uses:": [
-                true,
-                [
-                  {
-                    "Option:": "usually"
-                  },
-                  {
-                    "Option:": "always"
-                  },
-                  {
-                    "Option:": "seldom"
-                  },
-                  {
-                    "Option:": "never"
-                  }
-                ]
-              ]
-            }
-          ]
-        },
+
         {
           "Spec:groups:with flow:": [
             "common_action",
@@ -734,34 +568,6 @@
         },
         {
           "Spec:slots:groups:with flow:": [
-            "kind_of_noun",
-            "noun_continuation",
-            "nouns",
-            {
-              "Flow:phrase:uses:": [
-                "Kind",
-                "{$are_an} {kind$kind}",
-                [
-                  {
-                    "Term:name:": [
-                      "_",
-                      "are_an"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "named",
-                      "kind",
-                      "singular_kind"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:slots:groups:with flow:": [
             "kind_of_relation",
             "story_statement",
             "relations",
@@ -789,24 +595,22 @@
         },
         {
           "--": "Add properties to a kind",
-          "Spec:slots:groups:with flow:": [
-            "kinds_have_properties",
+          "Spec:slots:with flow:": [
+            "define_fields",
             "story_statement",
-            "kinds",
             {
-              "Flow:phrase:uses:": [
-                "Kinds",
-                "{$plural_kinds} have {props$props}.",
+              "Flow:uses:": [
+                "define",
                 [
                   {
-                    "Term:name:": [
-                      "_",
-                      "plural_kinds"
+                    "Term:type:": [
+                      "kind",
+                      "text_eval"
                     ]
                   },
                   {
                     "Term:name:type:repeats:": [
-                      "have",
+                      "has",
                       "props",
                       "field",
                       true
@@ -818,46 +622,24 @@
           ]
         },
         {
-          "Spec:slots:groups:with flow:": [
-            "kinds_of_aspect",
+          "Spec:slots:with flow:": [
+            "define_kinds",
             "story_statement",
-            "traits",
             {
-              "Flow phrase:uses:": [
-                "{$aspect} is a kind of value.",
+              "Flow:uses:": [
+                "define",
                 [
                   {
-                    "Term:name:": [
-                      "_",
-                      "aspect"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "Declare a kind",
-          "Spec:slots:groups:with flow:": [
-            "kinds_of_kind",
-            "story_statement",
-            "kinds",
-            {
-              "Flow:phrase:uses:": [
-                "Make",
-                "{plural kinds$plural_kinds} are a kind of {singular kind$singular_kind}.",
-                [
-                  {
-                    "Term:name:": [
-                      "_",
-                      "plural_kinds"
+                    "Term:type:": [
+                      "kinds",
+                      "text_list_eval"
                     ]
                   },
                   {
-                    "Term:name:": [
-                      "kind",
-                      "singular_kind"
+                    "Term:name:type:": [
+                      "as",
+                      "ancestor",
+                      "text_eval"
                     ]
                   }
                 ]
@@ -1108,33 +890,6 @@
           ]
         },
         {
-          "Spec:groups:with flow:": [
-            "named_field",
-            "properties",
-            {
-              "Flow phrase:uses:": [
-                "named {$name} ( {of$type} )",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "name",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:type:optional:": [
-                      "type",
-                      "text",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
           "--": [
             "Assign text to a noun.",
             "Assign text.",
@@ -1170,179 +925,30 @@
           ]
         },
         {
-          "Spec:groups:with slot:": [
-            "noun_continuation",
-            "nouns",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
-          "Spec:slots:groups:with flow:": [
-            "noun_kind_statement",
+          "Spec:slots:with flow:": [
+            "define_nouns",
             "story_statement",
-            "nouns",
             {
-              "Flow:phrase:uses:": [
-                "Nouns",
-                "{$nouns} {is a kind$kind_of_noun} {$more}.",
+              "Flow:uses:": [
+                "define",
                 [
-                  {
-                    "Term:name:type:repeats:": [
-                      "_",
-                      "nouns",
-                      "named_noun",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:name:": [
-                      "depict",
-                      "kind_of_noun"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:repeats:": [
-                      "and",
-                      "more",
-                      "noun_continuation",
-                      true,
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:slots:groups:with flow:": [
-            "noun_relation",
-            "noun_continuation",
-            "nouns",
-            {
-              "Flow phrase:uses:": [
-                "{$are_being} {$relation} {$other_nouns}",
-                [
-                  {
-                    "Term:optional:": [
-                      "are_being",
-                      true
-                    ]
-                  },
                   {
                     "Term:type:": [
-                      "relation",
-                      "relation_name"
-                    ]
-                  },
-                  {
-                    "Term:type:repeats:": [
-                      "other_nouns",
-                      "named_noun",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:slots:groups:with flow:": [
-            "noun_relation_statement",
-            "story_statement",
-            "nouns",
-            {
-              "Flow:phrase:uses:": [
-                "Nouns",
-                "{$nouns} {noun relation$noun_relation} {$more}.",
-                [
-                  {
-                    "Term:name:type:repeats:": [
-                      "_",
                       "nouns",
-                      "named_noun",
-                      true
+                      "text_list_eval"
                     ]
                   },
                   {
-                    "Term:name:": [
-                      "relate_to",
-                      "noun_relation"
+                    "Term:name:type:": [
+                      "as",
+                      "kind",
+                      "text_eval"
                     ]
                   },
                   {
-                    "Term:name:type:optional:repeats:": [
-                      "and",
-                      "more",
-                      "noun_continuation",
-                      true,
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:slots:groups:with flow:": [
-            "noun_trait_statement",
-            "story_statement",
-            "nouns",
-            {
-              "Flow:phrase:uses:": [
-                "Nouns",
-                "{$nouns} {noun traits$noun_traits} {$more}.",
-                [
-                  {
-                    "Term:name:type:repeats:": [
-                      "_",
-                      "nouns",
-                      "named_noun",
-                      true
-                    ]
-                  },
-                  {
-                    "Term:name:": [
-                      "start_as",
-                      "noun_traits"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:repeats:": [
-                      "and",
-                      "more",
-                      "noun_continuation",
-                      true,
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:slots:groups:with flow:": [
-            "noun_traits",
-            "noun_continuation",
-            "nouns",
-            {
-              "Flow phrase:uses:": [
-                "{$are_being} {$trait}",
-                [
-                  {
-                    "Term:name:": [
-                      "_",
-                      "are_being"
-                    ]
-                  },
-                  {
-                    "Term:repeats:": [
-                      "trait",
+                    "Term:type:optional:": [
+                      "traits",
+                      "text_list_eval",
                       true
                     ]
                   }
@@ -1830,36 +1436,38 @@
         },
         {
           "--": "Relate nouns to each other",
-          "Spec:slots:groups:with flow:": [
-            "relative_to_noun",
+          "Spec:slots:with flow:": [
+            "define_relatives",
             "story_statement",
-            "nouns",
             {
-              "Flow phrase:uses:": [
-                "The {$relation} of {$nouns} {$are_being} {$other_nouns}.",
+              "Flow:uses:": [
+                "define",
                 [
                   {
-                    "Term:name:type:": [
-                      "_",
-                      "relation",
-                      "relation_name"
-                    ]
-                  },
-                  {
-                    "Term:type:repeats:": [
+                    "Term:type:": [
                       "nouns",
-                      "named_noun",
+                      "text_list_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:": [
+                      "as",
+                      "kind",
+                      "text_eval",
                       true
                     ]
                   },
                   {
-                    "Term:": "are_being"
+                    "Term:type:": [
+                      "relation",
+                      "text_eval"
+                    ]
                   },
                   {
-                    "Term:type:repeats:": [
-                      "other_nouns",
-                      "named_noun",
-                      true
+                    "Term:name:type:": [
+                      "noun",
+                      "other_noun",
+                      "text_eval"
                     ]
                   }
                 ]
@@ -1877,7 +1485,10 @@
           ],
           "Spec:slots:groups:with flow:": [
             "say_template",
-            ["execute", "text_eval"],
+            [
+              "execute",
+              "text_eval"
+            ],
             "printing",
             {
               "Flow:uses:": [
@@ -1902,7 +1513,10 @@
           ],
           "Spec:slots:groups:with flow:": [
             "say_response",
-            ["execute", "text_eval"],
+            [
+              "execute",
+              "text_eval"
+            ],
             "printing",
             {
               "Flow:uses:": [
@@ -2126,40 +1740,6 @@
                     "Term:type:optional:": [
                       "initially",
                       "text_eval",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:groups:with str:": [
-            "trait",
-            "traits",
-            {
-              "Str uses:": []
-            }
-          ]
-        },
-        {
-          "Spec:groups:with flow:": [
-            "trait_phrase",
-            "traits",
-            {
-              "Flow phrase:uses:": [
-                "{$are_either} {$trait}.",
-                [
-                  {
-                    "Term:name:": [
-                      "_",
-                      "are_either"
-                    ]
-                  },
-                  {
-                    "Term:repeats:": [
-                      "trait",
                       true
                     ]
                   }

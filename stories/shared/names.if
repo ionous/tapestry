@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Make:kind:": [
+      "Define kinds:as:": [
         "things",
         "kind"
       ]

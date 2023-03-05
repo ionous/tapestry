@@ -78,7 +78,7 @@ func collectEphemera(cat *eph.Catalog, out *error) imp.WriterFun {
 		pk := k.Parent()
 		if e := cat.AddEphemera(
 			"built in kinds",
-			&eph.EphKinds{Kinds: k.String(), From: pk.String()}); e != nil {
+			&eph.EphKinds{Kind: k.String(), Ancestor: pk.String()}); e != nil {
 			panic(e)
 		}
 	}

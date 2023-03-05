@@ -3,25 +3,30 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-// ex. colors are a kind of value
-func (op *KindsOfAspect) PostImport(k *imp.Importer) (err error) {
-	// fix: is this even useful? see EphAspects.Assemble which has to work around the empty traits list.
-	k.WriteEphemera(&eph.EphAspects{Aspects: op.Aspect.Str})
-	return
-}
-
 // ex. "cats are a kind of animal"
-func (op *KindsOfKind) PostImport(k *imp.Importer) (err error) {
-	k.WriteEphemera(&eph.EphKinds{Kinds: op.PluralKinds.Str, From: op.SingularKind.Str})
+func (op *DefineKinds) PostImport(k *imp.Importer) (err error) {
+	// FIX: macro runtime
+	if kinds, e := safe.GetTextList(nil, op.Kinds); e != nil {
+		err = e
+	} else if ancestor, e := safe.GetText(nil, op.Ancestor); e != nil {
+		err = e
+	} else {
+		for _, kind := range kinds.Strings() {
+			k.WriteEphemera(&eph.EphKinds{Kind: kind, Ancestor: ancestor.String()})
+		}
+	}
 	return
 }
 
 // ex. cats have some text called breed.
 // ex. horses have an aspect called speed.
-func (op *KindsHaveProperties) PostImport(k *imp.Importer) (err error) {
-	if len(op.Props) > 0 {
+func (op *DefineFields) PostImport(k *imp.Importer) (err error) {
+	if kind, e := safe.GetText(nil, op.Kind); e != nil {
+		err = e
+	} else if len(op.Props) > 0 {
 		var ps []eph.EphParams
 		for _, el := range op.Props {
 			// bool fields become implicit aspects
@@ -39,7 +44,8 @@ func (op *KindsHaveProperties) PostImport(k *imp.Importer) (err error) {
 				ps = append(ps, eph.AspectParam(aspect))
 			}
 		}
-		k.WriteEphemera(&eph.EphKinds{Kinds: op.PluralKinds.Str, Contain: ps})
+
+		k.WriteEphemera(&eph.EphKinds{Kind: kind.String(), Contain: ps})
 	}
 	return
 }

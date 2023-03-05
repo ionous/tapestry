@@ -85,7 +85,7 @@ func (k *Importer) Once(s string) (ret bool) {
 func (k *Importer) AddImplicitAspect(aspect, kind string, traits ...string) {
 	if src := "implicit " + kind + "." + aspect; k.Once(src) {
 		k.WriteOnce(&eph.EphAspects{Aspects: aspect, Traits: traits})
-		k.WriteOnce(&eph.EphKinds{Kinds: kind, Contain: []eph.EphParams{eph.AspectParam(aspect)}})
+		k.WriteOnce(&eph.EphKinds{Kind: kind, Contain: []eph.EphParams{eph.AspectParam(aspect)}})
 	}
 }
 

@@ -24,7 +24,7 @@ func refArgs(k string, parentKind kindsOf.Kinds, args []assign.Arg) (ret *eph.Ep
 		})
 	}
 	ret = Refs(&eph.EphKinds{
-		Kinds: k,
+		Kind: k,
 		// we dont actually know.
 		// its probably a pattern, but it could be a record just as well....
 		// From:    parentKind.String(),

@@ -21,7 +21,7 @@ func (op *SayTemplate) PreImport(k *imp.Importer) (interface{}, error) {
 // transform SayResponse into a RenderResponse
 func (op *SayResponse) PreImport(k *imp.Importer) (interface{}, error) {
 	k.WriteEphemera(&eph.EphKinds{
-		Kinds: kindsOf.Response.String(),
+		Kind: kindsOf.Response.String(),
 		Contain: []eph.EphParams{{
 			Affinity:  eph.Affinity{eph.Affinity_Text},
 			Name:      op.Name,

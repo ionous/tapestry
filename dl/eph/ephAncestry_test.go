@@ -13,15 +13,15 @@ import (
 func TestAncestry(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: "k"},
+		&EphKinds{Kind: "k"},
 	)
 	dt.makeDomain(dd("b", "a"),
-		&EphKinds{Kinds: "m", From: "k"}, // parent/root domain
+		&EphKinds{Kind: "m", Ancestor: "k"}, // parent/root domain
 	)
 	dt.makeDomain(dd("c", "b"),
-		&EphKinds{Kinds: "q", From: "j"}, // same domain
-		&EphKinds{Kinds: "n", From: "k"}, // root domain
-		&EphKinds{Kinds: "j", From: "m"}, // parent domain
+		&EphKinds{Kind: "q", Ancestor: "j"}, // same domain
+		&EphKinds{Kind: "n", Ancestor: "k"}, // root domain
+		&EphKinds{Kind: "j", Ancestor: "m"}, // parent domain
 	)
 	out := testOut{mdl.Kind}
 	if e := writeKinds(dt, &out); e != nil {
@@ -38,9 +38,9 @@ func TestAncestry(t *testing.T) {
 func TestAncestryCycle(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: "t"},
-		&EphKinds{Kinds: "p", From: "t"},
-		&EphKinds{Kinds: "t", From: "p"},
+		&EphKinds{Kind: "t"},
+		&EphKinds{Kind: "p", Ancestor: "t"},
+		&EphKinds{Kind: "t", Ancestor: "p"},
 	)
 	if _, e := buildAncestors(dt); e == nil || !strings.HasPrefix(e.Error(), "circular reference detected") {
 		t.Fatal("expected failure", e)
@@ -53,11 +53,11 @@ func TestAncestryCycle(t *testing.T) {
 func TestAncestryMultipleParents(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: "t"},
-		&EphKinds{Kinds: "p", From: "t"},
-		&EphKinds{Kinds: "q", From: "t"},
-		&EphKinds{Kinds: "k", From: "p"},
-		&EphKinds{Kinds: "k", From: "q"},
+		&EphKinds{Kind: "t"},
+		&EphKinds{Kind: "p", Ancestor: "t"},
+		&EphKinds{Kind: "q", Ancestor: "t"},
+		&EphKinds{Kind: "k", Ancestor: "p"},
+		&EphKinds{Kind: "k", Ancestor: "q"},
 	)
 	if _, e := buildAncestors(dt); e == nil || e.Error() != `"k" has more than one parent` {
 		t.Fatal("expected failure", e)
@@ -70,15 +70,15 @@ func TestAncestryMultipleParents(t *testing.T) {
 func TestAncestryRedundancy(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: "k"},
+		&EphKinds{Kind: "k"},
 	)
 	dt.makeDomain(dd("b", "a"),
-		&EphKinds{Kinds: "m", From: "k"}, // parent/root domain
+		&EphKinds{Kind: "m", Ancestor: "k"}, // parent/root domain
 	)
 	dt.makeDomain(dd("c", "b"),
-		&EphKinds{Kinds: "n", From: "k"}, // root domain
-		&EphKinds{Kinds: "n", From: "m"}, // more specific
-		&EphKinds{Kinds: "n", From: "k"}, // duped
+		&EphKinds{Kind: "n", Ancestor: "k"}, // root domain
+		&EphKinds{Kind: "n", Ancestor: "m"}, // more specific
+		&EphKinds{Kind: "n", Ancestor: "k"}, // duped
 	)
 	out := testOut{mdl.Kind}
 	if e := writeKinds(dt, &out); e != nil {
@@ -94,10 +94,10 @@ func TestAncestryRedundancy(t *testing.T) {
 func TestAncestryMissing(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: "k"},
+		&EphKinds{Kind: "k"},
 	)
 	dt.makeDomain(dd("b", "a"),
-		&EphKinds{Kinds: "m", From: "x"},
+		&EphKinds{Kind: "m", Ancestor: "x"},
 	)
 	out := testOut{mdl.Domain}
 	if e := writeKinds(dt, &out); e == nil || e.Error() != `unknown dependency "x" for kind "m"` {
@@ -113,16 +113,16 @@ func TestAncestryRedefined(t *testing.T) {
 	defer unwarn()
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: "k"},
-		&EphKinds{Kinds: "q", From: "k"},
+		&EphKinds{Kind: "k"},
+		&EphKinds{Kind: "q", Ancestor: "k"},
 	)
 	dt.makeDomain(dd("b", "a"),
-		&EphKinds{Kinds: "m", From: "k"},
-		&EphKinds{Kinds: "n", From: "k"},
-		&EphKinds{Kinds: "q", From: "k"}, // should be okay.
+		&EphKinds{Kind: "m", Ancestor: "k"},
+		&EphKinds{Kind: "n", Ancestor: "k"},
+		&EphKinds{Kind: "q", Ancestor: "k"}, // should be okay.
 	)
 	dt.makeDomain(dd("c", "b"),
-		&EphKinds{Kinds: "m", From: "n"}, // should fail.
+		&EphKinds{Kind: "m", Ancestor: "n"}, // should fail.
 	)
 	out := testOut{mdl.Domain}
 	if e := writeKinds(dt, &out); e == nil || e.Error() != `can't redefine parent as "n" for kind "m"` {
@@ -141,13 +141,13 @@ func TestAncestryRivalsOkay(t *testing.T) {
 	defer unwarn()
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: "k"},
+		&EphKinds{Kind: "k"},
 	)
 	dt.makeDomain(dd("b", "a"),
-		&EphKinds{Kinds: "m", From: "k"},
+		&EphKinds{Kind: "m", Ancestor: "k"},
 	)
 	dt.makeDomain(dd("d", "a"),
-		&EphKinds{Kinds: "m", From: "k"}, // second in a parallel domain should be fine
+		&EphKinds{Kind: "m", Ancestor: "k"}, // second in a parallel domain should be fine
 	)
 	out := testOut{mdl.Kind}
 	if e := writeKinds(dt, &out); e != nil {
@@ -164,13 +164,13 @@ func TestAncestryRivalsOkay(t *testing.T) {
 func TestAncestryRivalConflict(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: "k"},
+		&EphKinds{Kind: "k"},
 	)
 	dt.makeDomain(dd("b", "a"),
-		&EphKinds{Kinds: "m", From: "k"},
+		&EphKinds{Kind: "m", Ancestor: "k"},
 	)
 	dt.makeDomain(dd("d", "a"),
-		&EphKinds{Kinds: "m", From: "k"}, // re: TestScopedRivalsOkay, should be okay.
+		&EphKinds{Kind: "m", Ancestor: "k"}, // re: TestScopedRivalsOkay, should be okay.
 	)
 	dt.makeDomain(dd("z", "b", "d")) // trying to include both should be a problem; they are two unique kinds...
 	out := testOut{mdl.Domain}

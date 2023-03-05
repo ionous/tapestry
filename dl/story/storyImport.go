@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 // top level imports
@@ -18,31 +19,16 @@ type nounImporter interface {
 }
 
 // (the) colors are red, blue, or green.
-func (op *AspectTraits) PostImport(k *imp.Importer) (err error) {
-	var ts []string
-	for _, t := range op.TraitPhrase.Trait {
-		ts = append(ts, t.String())
+func (op *DefineTraits) PostImport(k *imp.Importer) (err error) {
+	if traits, e := safe.GetTextList(nil, op.Traits); e != nil {
+		err = e
+	} else if aspect, e := safe.GetText(nil, op.Aspect); e != nil {
+		err = e
+	} else {
+		k.WriteEphemera(&eph.EphAspects{Aspects: aspect.String(), Traits: traits.Strings()})
 	}
-	k.WriteEphemera(&eph.EphAspects{Aspects: op.Aspect.String(), Traits: ts})
 	return
 }
-
-// horses are usually fast.
-func (op *Certainties) PostImport(k *imp.Importer) (err error) {
-	certaintiesNotImplemented.PrintOnce()
-	// if certainty, e := op.Certainty.ImportString(k); e != nil {
-	// 	err = e
-	// } else if trait, e := NewTrait(k, op.Trait); e != nil {
-	// 	err = e
-	// } else if kind, e := NewPluralKinds(k, op.PluralKinds); e != nil {
-	// 	err = e
-	// } else {
-	// 	k.NewCertainty(certainty, trait, kind)
-	// }
-	return
-}
-
-var certaintiesNotImplemented eph.PrintOnce = "certainties not implemented"
 
 func (op *GrammarDecl) PostImport(k *imp.Importer) (err error) {
 	switch el := op.Grammar.(type) {
@@ -55,36 +41,26 @@ func (op *GrammarDecl) PostImport(k *imp.Importer) (err error) {
 	return
 }
 
-type NounContinuation interface {
-	importNounPhrase(*imp.Importer) error
-}
-
-func (op *NounKindStatement) PostImport(k *imp.Importer) error {
-	var yuck []NamedNoun // cast the elements to their less specific type
-	for _, n := range op.Nouns {
-		yuck = append(yuck, n)
-	}
-	return importNounPhrase(k, yuck, &op.KindOfNoun, op.More)
-}
-
-func (op *NounTraitStatement) PostImport(k *imp.Importer) error {
-	return importNounPhrase(k, op.Nouns, &op.NounTraits, op.More)
-}
-
-func (op *NounRelationStatement) PostImport(k *imp.Importer) error {
-	return importNounPhrase(k, op.Nouns, &op.NounRelation, op.More)
-}
-
-func importNounPhrase(k *imp.Importer, nouns []NamedNoun, first NounContinuation, rest []NounContinuation) (err error) {
-	if e := CollectSubjectNouns(k, nouns); e != nil {
+func (op *DefineNouns) PostImport(k *imp.Importer) (err error) {
+	if nouns, e := safe.GetTextList(nil, op.Nouns); e != nil {
 		err = e
-	} else if e := first.importNounPhrase(k); e != nil {
+	} else if kind, e := safe.GetText(nil, op.Kind); e != nil {
+		err = e
+	} else if traits, e := safe.GetTextList(nil, op.Traits); e != nil {
+		err = e
+	} else if bareNames, e := ImportNouns(k, nouns.Strings()); e != nil {
 		err = e
 	} else {
-		for _, el := range rest {
-			if e := el.importNounPhrase(k); e != nil {
-				err = e
-				break
+		if kind := kind.String(); len(kind) > 0 {
+			for _, n := range bareNames {
+				k.WriteEphemera(&eph.EphNouns{Noun: n, Kind: kind})
+			}
+		}
+		if traits := traits.Strings(); len(traits) > 0 {
+			for _, t := range traits {
+				for _, n := range bareNames {
+					k.WriteEphemera(&eph.EphValues{Noun: n, Field: t, Value: B(true)})
+				}
 			}
 		}
 	}
@@ -106,17 +82,28 @@ func (op *NounAssignment) PostImport(k *imp.Importer) (err error) {
 	return
 }
 
-// ex. On the beach are shells.
-func (op *RelativeToNoun) PostImport(k *imp.Importer) (err error) {
-	if e := CollectObjectNouns(k, op.Nouns); e != nil {
+func (op *DefineRelatives) PostImport(k *imp.Importer) (err error) {
+	if nouns, e := safe.GetTextList(nil, op.Nouns); e != nil {
 		err = e
-	} else if e := CollectSubjectNouns(k, op.OtherNouns); e != nil {
+	} else if kind, e := safe.GetText(nil, op.Kind); e != nil {
+		err = e
+	} else if relation, e := safe.GetText(nil, op.Relation); e != nil {
+		err = e
+	} else if otherNoun, e := safe.GetText(nil, op.OtherNoun); e != nil {
+		err = e
+	} else if a, e := ImportNouns(k, nouns.Strings()); e != nil {
+		err = e
+	} else if b, e := ImportNouns(k, []string{otherNoun.String()}); e != nil {
 		err = e
 	} else {
-		relation := op.Relation.String()
-		for _, object := range k.Env().Recent.Nouns.Objects {
-			for _, subject := range k.Env().Recent.Nouns.Subjects {
-				k.WriteEphemera(&eph.EphRelatives{Rel: relation, Noun: subject, OtherNoun: object})
+		for _, subject := range a {
+			if kind := kind.String(); len(kind) > 0 {
+				k.WriteEphemera(&eph.EphNouns{Noun: subject, Kind: kind})
+			}
+			if rel := relation.String(); len(rel) > 0 {
+				for _, object := range b {
+					k.WriteEphemera(&eph.EphRelatives{Rel: rel, Noun: subject, OtherNoun: object})
+				}
 			}
 		}
 	}

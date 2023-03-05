@@ -16,6 +16,7 @@ func (op *AspectField) GetParam() eph.EphParams {
 	// ( ex. in case the same aspect is assigned twice, or twice at difference depths )
 	return eph.AspectParam(op.Aspect)
 }
+
 func (op *BoolField) GetParam() eph.EphParams {
 	var init assign.Assignment
 	if i := op.Initially; i != nil {

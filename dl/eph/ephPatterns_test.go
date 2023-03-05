@@ -14,8 +14,8 @@ import (
 func TestPatternSingle(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: kindsOf.Pattern.String()}, // declare the patterns table
-		&EphKinds{Kinds: "k"},                      // a base for a parameter of k
+		&EphKinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
+		&EphKinds{Kind: "k"},                      // a base for a parameter of k
 		//
 		&EphPatterns{
 			PatternName: "p",
@@ -47,8 +47,8 @@ func TestPatternSeparateLocals(t *testing.T) {
 	// ( ex. return value first, last, always? )
 	dt := domainTest{noShuffle: true}
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: kindsOf.Pattern.String()}, // declare the patterns table
-		&EphKinds{Kinds: "k"},                      // a base for a parameter of k
+		&EphKinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
+		&EphKinds{Kind: "k"},                      // a base for a parameter of k
 		//
 		&EphPatterns{
 			PatternName: "p",
@@ -88,8 +88,8 @@ func TestPatternSeparateDomains(t *testing.T) {
 	// ( ex. return value first, last, always? )
 	dt := domainTest{noShuffle: true}
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: kindsOf.Pattern.String()}, // declare the patterns table
-		&EphKinds{Kinds: "k"},                      // a base for a parameter of k
+		&EphKinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
+		&EphKinds{Kind: "k"},                      // a base for a parameter of k
 		//
 		&EphPatterns{
 			PatternName: "p",
@@ -176,7 +176,7 @@ func expectFullResults(t *testing.T, dt domainTest) {
 func TestPatternSplitDomain(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: kindsOf.Pattern.String()}, // declare the patterns table
+		&EphKinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
 		&EphPatterns{
 			PatternName: "p",
 			Result: &EphParams{
@@ -203,7 +203,7 @@ func TestPatternSplitDomain(t *testing.T) {
 func TestPatternMultipleReturn(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: kindsOf.Pattern.String()},
+		&EphKinds{Kind: kindsOf.Pattern.String()},
 		//
 		&EphPatterns{
 			PatternName: "p",
@@ -232,7 +232,7 @@ func TestPatternMultipleReturn(t *testing.T) {
 func TestPatternMultipleArgSets(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: kindsOf.Pattern.String()},
+		&EphKinds{Kind: kindsOf.Pattern.String()},
 		&EphPatterns{
 			PatternName: "p",
 			Params: []EphParams{{
@@ -260,7 +260,7 @@ func TestPatternMultipleArgSets(t *testing.T) {
 func TestPatternConflictingInit(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: kindsOf.Pattern.String()}, // declare the patterns table
+		&EphKinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
 		&EphPatterns{
 			PatternName: "p",
 			Locals: []EphParams{{
@@ -281,7 +281,7 @@ func TestPatternConflictingInit(t *testing.T) {
 func TestPatternNoResults(t *testing.T) {
 	var dt domainTest
 	dt.makeDomain(dd("a"),
-		&EphKinds{Kinds: kindsOf.Pattern.String()}, // declare the patterns table
+		&EphKinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
 		&EphPatterns{PatternName: "p"},
 	)
 	if cat, e := buildAncestors(dt); e != nil {

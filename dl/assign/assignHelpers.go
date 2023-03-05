@@ -5,11 +5,11 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func B(b bool) *literal.BoolValue       { return &literal.BoolValue{Value: b} }
-func I(n int) *literal.NumValue         { return &literal.NumValue{Value: float64(n)} }
-func F(n float64) *literal.NumValue     { return &literal.NumValue{Value: n} }
-func T(s string) *literal.TextValue     { return &literal.TextValue{Value: s} }
-func Ts(s []string) *literal.TextValues { return &literal.TextValues{Values: s} }
+func B(b bool) *literal.BoolValue        { return &literal.BoolValue{Value: b} }
+func I(n int) *literal.NumValue          { return &literal.NumValue{Value: float64(n)} }
+func F(n float64) *literal.NumValue      { return &literal.NumValue{Value: n} }
+func T(s string) *literal.TextValue      { return &literal.TextValue{Value: s} }
+func Ts(s ...string) *literal.TextValues { return &literal.TextValues{Values: s} }
 
 func P(patternName string) string  { return patternName }
 func N(variableName string) string { return variableName }
