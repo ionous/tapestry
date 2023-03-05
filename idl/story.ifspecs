@@ -131,7 +131,8 @@
                     ]
                   },
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                      "as",
                       "aspect",
                       "text_eval"
                     ]
@@ -609,9 +610,8 @@
                     ]
                   },
                   {
-                    "Term:name:type:repeats:": [
-                      "has",
-                      "props",
+                    "Term:type:repeats:": [
+                      "fields",
                       "field",
                       true
                     ]
@@ -944,12 +944,38 @@
                       "kind",
                       "text_eval"
                     ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "define_noun_traits",
+            "story_statement",
+            {
+              "Flow:uses:": [
+                "define",
+                [
+                  {
+                    "Term:type:": [
+                      "nouns",
+                      "text_list_eval"
+                    ]
                   },
                   {
-                    "Term:type:optional:": [
-                      "traits",
-                      "text_list_eval",
+                    "Term:name:type:optional:": [
+                      "as",
+                      "kind",
+                      "text_eval",
                       true
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "traits",
+                      "text_list_eval"
                     ]
                   }
                 ]
@@ -1464,10 +1490,41 @@
                     ]
                   },
                   {
-                    "Term:name:type:": [
-                      "noun",
-                      "other_noun",
+                    "Term:type:": [
+                      "other_nouns",
+                      "text_list_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Relate nouns to each other",
+          "Spec:slots:with flow:": [
+            "define_other_relatives",
+            "story_statement",
+            {
+              "Flow:uses:": [
+                "define",
+                [
+                  {
+                    "Term:type:": [
+                      "relation",
                       "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "nouns",
+                      "text_list_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "other_nouns",
+                      "text_list_eval"
                     ]
                   }
                 ]

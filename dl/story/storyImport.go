@@ -41,7 +41,7 @@ func (op *GrammarDecl) PostImport(k *imp.Importer) (err error) {
 	return
 }
 
-func (op *DefineNouns) PostImport(k *imp.Importer) (err error) {
+func (op *DefineNounTraits) PostImport(k *imp.Importer) (err error) {
 	if nouns, e := safe.GetTextList(nil, op.Nouns); e != nil {
 		err = e
 	} else if kind, e := safe.GetText(nil, op.Kind); e != nil {
@@ -61,6 +61,23 @@ func (op *DefineNouns) PostImport(k *imp.Importer) (err error) {
 				for _, n := range bareNames {
 					k.WriteEphemera(&eph.EphValues{Noun: n, Field: t, Value: B(true)})
 				}
+			}
+		}
+	}
+	return
+}
+
+func (op *DefineNouns) PostImport(k *imp.Importer) (err error) {
+	if nouns, e := safe.GetTextList(nil, op.Nouns); e != nil {
+		err = e
+	} else if kind, e := safe.GetText(nil, op.Kind); e != nil {
+		err = e
+	} else if bareNames, e := ImportNouns(k, nouns.Strings()); e != nil {
+		err = e
+	} else {
+		if kind := kind.String(); len(kind) > 0 {
+			for _, n := range bareNames {
+				k.WriteEphemera(&eph.EphNouns{Noun: n, Kind: kind})
 			}
 		}
 	}
@@ -89,11 +106,11 @@ func (op *DefineRelatives) PostImport(k *imp.Importer) (err error) {
 		err = e
 	} else if relation, e := safe.GetText(nil, op.Relation); e != nil {
 		err = e
-	} else if otherNoun, e := safe.GetText(nil, op.OtherNoun); e != nil {
+	} else if otherNouns, e := safe.GetTextList(nil, op.OtherNouns); e != nil {
 		err = e
 	} else if a, e := ImportNouns(k, nouns.Strings()); e != nil {
 		err = e
-	} else if b, e := ImportNouns(k, []string{otherNoun.String()}); e != nil {
+	} else if b, e := ImportNouns(k, otherNouns.Strings()); e != nil {
 		err = e
 	} else {
 		for _, subject := range a {
@@ -103,6 +120,30 @@ func (op *DefineRelatives) PostImport(k *imp.Importer) (err error) {
 			if rel := relation.String(); len(rel) > 0 {
 				for _, object := range b {
 					k.WriteEphemera(&eph.EphRelatives{Rel: rel, Noun: subject, OtherNoun: object})
+				}
+			}
+		}
+	}
+	return
+}
+
+func (op *DefineOtherRelatives) PostImport(k *imp.Importer) (err error) {
+	if nouns, e := safe.GetTextList(nil, op.Nouns); e != nil {
+		err = e
+	} else if relation, e := safe.GetText(nil, op.Relation); e != nil {
+		err = e
+	} else if otherNouns, e := safe.GetTextList(nil, op.OtherNouns); e != nil {
+		err = e
+	} else if a, e := ImportNouns(k, nouns.Strings()); e != nil {
+		err = e
+	} else if b, e := ImportNouns(k, otherNouns.Strings()); e != nil {
+		err = e
+	} else {
+		if rel := relation.String(); len(rel) > 0 {
+			for _, subject := range a {
+				for _, object := range b {
+					// reverses the relation: maybe should just be a flag
+					k.WriteEphemera(&eph.EphRelatives{Rel: rel, OtherNoun: object, Noun: subject})
 				}
 			}
 		}

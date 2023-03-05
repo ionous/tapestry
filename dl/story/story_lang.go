@@ -1272,7 +1272,7 @@ func CycleText_Marshal(m jsn.Marshaler, val *CycleText) (err error) {
 // DefineFields Add properties to a kind
 type DefineFields struct {
 	Kind   rt.TextEval `if:"label=kind"`
-	Props  []Field     `if:"label=has"`
+	Fields []Field     `if:"label=fields"`
 	Markup map[string]any
 }
 
@@ -1289,7 +1289,7 @@ func (*DefineFields) Compose() composer.Spec {
 
 const DefineFields_Type = "define_fields"
 const DefineFields_Field_Kind = "$KIND"
-const DefineFields_Field_Props = "$PROPS"
+const DefineFields_Field_Fields = "$FIELDS"
 
 func (op *DefineFields) Marshal(m jsn.Marshaler) error {
 	return DefineFields_Marshal(m, op)
@@ -1369,12 +1369,12 @@ func DefineFields_Marshal(m jsn.Marshaler, val *DefineFields) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", DefineFields_Field_Kind))
 		}
-		e1 := m.MarshalKey("has", DefineFields_Field_Props)
+		e1 := m.MarshalKey("fields", DefineFields_Field_Fields)
 		if e1 == nil {
-			e1 = Field_Repeats_Marshal(m, &val.Props)
+			e1 = Field_Repeats_Marshal(m, &val.Fields)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", DefineFields_Field_Props))
+			m.Error(errutil.New(e1, "in flow at", DefineFields_Field_Fields))
 		}
 		m.EndBlock()
 	}
@@ -1493,11 +1493,131 @@ func DefineKinds_Marshal(m jsn.Marshaler, val *DefineKinds) (err error) {
 	return
 }
 
+// DefineNounTraits
+type DefineNounTraits struct {
+	Nouns  rt.TextListEval `if:"label=nouns"`
+	Kind   rt.TextEval     `if:"label=as,optional"`
+	Traits rt.TextListEval `if:"label=traits"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*DefineNounTraits)(nil)
+
+func (*DefineNounTraits) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DefineNounTraits_Type,
+		Uses: composer.Type_Flow,
+		Lede: "define",
+	}
+}
+
+const DefineNounTraits_Type = "define_noun_traits"
+const DefineNounTraits_Field_Nouns = "$NOUNS"
+const DefineNounTraits_Field_Kind = "$KIND"
+const DefineNounTraits_Field_Traits = "$TRAITS"
+
+func (op *DefineNounTraits) Marshal(m jsn.Marshaler) error {
+	return DefineNounTraits_Marshal(m, op)
+}
+
+type DefineNounTraits_Slice []DefineNounTraits
+
+func (op *DefineNounTraits_Slice) GetType() string { return DefineNounTraits_Type }
+
+func (op *DefineNounTraits_Slice) Marshal(m jsn.Marshaler) error {
+	return DefineNounTraits_Repeats_Marshal(m, (*[]DefineNounTraits)(op))
+}
+
+func (op *DefineNounTraits_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DefineNounTraits_Slice) SetSize(cnt int) {
+	var els []DefineNounTraits
+	if cnt >= 0 {
+		els = make(DefineNounTraits_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DefineNounTraits_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DefineNounTraits_Marshal(m, &(*op)[i])
+}
+
+func DefineNounTraits_Repeats_Marshal(m jsn.Marshaler, vals *[]DefineNounTraits) error {
+	return jsn.RepeatBlock(m, (*DefineNounTraits_Slice)(vals))
+}
+
+func DefineNounTraits_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefineNounTraits) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DefineNounTraits_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DefineNounTraits_Flow struct{ ptr *DefineNounTraits }
+
+func (n DefineNounTraits_Flow) GetType() string      { return DefineNounTraits_Type }
+func (n DefineNounTraits_Flow) GetLede() string      { return "define" }
+func (n DefineNounTraits_Flow) GetFlow() interface{} { return n.ptr }
+func (n DefineNounTraits_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DefineNounTraits); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DefineNounTraits_Optional_Marshal(m jsn.Marshaler, pv **DefineNounTraits) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DefineNounTraits_Marshal(m, *pv)
+	} else if !enc {
+		var v DefineNounTraits
+		if err = DefineNounTraits_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DefineNounTraits_Marshal(m jsn.Marshaler, val *DefineNounTraits) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DefineNounTraits_Flow{val}); err == nil {
+		e0 := m.MarshalKey("nouns", DefineNounTraits_Field_Nouns)
+		if e0 == nil {
+			e0 = rt.TextListEval_Marshal(m, &val.Nouns)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DefineNounTraits_Field_Nouns))
+		}
+		e1 := m.MarshalKey("as", DefineNounTraits_Field_Kind)
+		if e1 == nil {
+			e1 = rt.TextEval_Optional_Marshal(m, &val.Kind)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DefineNounTraits_Field_Kind))
+		}
+		e2 := m.MarshalKey("traits", DefineNounTraits_Field_Traits)
+		if e2 == nil {
+			e2 = rt.TextListEval_Marshal(m, &val.Traits)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", DefineNounTraits_Field_Traits))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // DefineNouns
 type DefineNouns struct {
 	Nouns  rt.TextListEval `if:"label=nouns"`
 	Kind   rt.TextEval     `if:"label=as"`
-	Traits rt.TextListEval `if:"label=traits,optional"`
 	Markup map[string]any
 }
 
@@ -1515,7 +1635,6 @@ func (*DefineNouns) Compose() composer.Spec {
 const DefineNouns_Type = "define_nouns"
 const DefineNouns_Field_Nouns = "$NOUNS"
 const DefineNouns_Field_Kind = "$KIND"
-const DefineNouns_Field_Traits = "$TRAITS"
 
 func (op *DefineNouns) Marshal(m jsn.Marshaler) error {
 	return DefineNouns_Marshal(m, op)
@@ -1602,12 +1721,126 @@ func DefineNouns_Marshal(m jsn.Marshaler, val *DefineNouns) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", DefineNouns_Field_Kind))
 		}
-		e2 := m.MarshalKey("traits", DefineNouns_Field_Traits)
+		m.EndBlock()
+	}
+	return
+}
+
+// DefineOtherRelatives Relate nouns to each other
+type DefineOtherRelatives struct {
+	Relation   rt.TextEval     `if:"label=relation"`
+	Nouns      rt.TextListEval `if:"label=nouns"`
+	OtherNouns rt.TextListEval `if:"label=other_nouns"`
+	Markup     map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*DefineOtherRelatives)(nil)
+
+func (*DefineOtherRelatives) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DefineOtherRelatives_Type,
+		Uses: composer.Type_Flow,
+		Lede: "define",
+	}
+}
+
+const DefineOtherRelatives_Type = "define_other_relatives"
+const DefineOtherRelatives_Field_Relation = "$RELATION"
+const DefineOtherRelatives_Field_Nouns = "$NOUNS"
+const DefineOtherRelatives_Field_OtherNouns = "$OTHER_NOUNS"
+
+func (op *DefineOtherRelatives) Marshal(m jsn.Marshaler) error {
+	return DefineOtherRelatives_Marshal(m, op)
+}
+
+type DefineOtherRelatives_Slice []DefineOtherRelatives
+
+func (op *DefineOtherRelatives_Slice) GetType() string { return DefineOtherRelatives_Type }
+
+func (op *DefineOtherRelatives_Slice) Marshal(m jsn.Marshaler) error {
+	return DefineOtherRelatives_Repeats_Marshal(m, (*[]DefineOtherRelatives)(op))
+}
+
+func (op *DefineOtherRelatives_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DefineOtherRelatives_Slice) SetSize(cnt int) {
+	var els []DefineOtherRelatives
+	if cnt >= 0 {
+		els = make(DefineOtherRelatives_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DefineOtherRelatives_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DefineOtherRelatives_Marshal(m, &(*op)[i])
+}
+
+func DefineOtherRelatives_Repeats_Marshal(m jsn.Marshaler, vals *[]DefineOtherRelatives) error {
+	return jsn.RepeatBlock(m, (*DefineOtherRelatives_Slice)(vals))
+}
+
+func DefineOtherRelatives_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefineOtherRelatives) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DefineOtherRelatives_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DefineOtherRelatives_Flow struct{ ptr *DefineOtherRelatives }
+
+func (n DefineOtherRelatives_Flow) GetType() string      { return DefineOtherRelatives_Type }
+func (n DefineOtherRelatives_Flow) GetLede() string      { return "define" }
+func (n DefineOtherRelatives_Flow) GetFlow() interface{} { return n.ptr }
+func (n DefineOtherRelatives_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DefineOtherRelatives); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DefineOtherRelatives_Optional_Marshal(m jsn.Marshaler, pv **DefineOtherRelatives) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DefineOtherRelatives_Marshal(m, *pv)
+	} else if !enc {
+		var v DefineOtherRelatives
+		if err = DefineOtherRelatives_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DefineOtherRelatives_Marshal(m jsn.Marshaler, val *DefineOtherRelatives) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DefineOtherRelatives_Flow{val}); err == nil {
+		e0 := m.MarshalKey("relation", DefineOtherRelatives_Field_Relation)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Relation)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DefineOtherRelatives_Field_Relation))
+		}
+		e1 := m.MarshalKey("nouns", DefineOtherRelatives_Field_Nouns)
+		if e1 == nil {
+			e1 = rt.TextListEval_Marshal(m, &val.Nouns)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DefineOtherRelatives_Field_Nouns))
+		}
+		e2 := m.MarshalKey("other_nouns", DefineOtherRelatives_Field_OtherNouns)
 		if e2 == nil {
-			e2 = rt.TextListEval_Optional_Marshal(m, &val.Traits)
+			e2 = rt.TextListEval_Marshal(m, &val.OtherNouns)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", DefineNouns_Field_Traits))
+			m.Error(errutil.New(e2, "in flow at", DefineOtherRelatives_Field_OtherNouns))
 		}
 		m.EndBlock()
 	}
@@ -1616,11 +1849,11 @@ func DefineNouns_Marshal(m jsn.Marshaler, val *DefineNouns) (err error) {
 
 // DefineRelatives Relate nouns to each other
 type DefineRelatives struct {
-	Nouns     rt.TextListEval `if:"label=nouns"`
-	Kind      rt.TextEval     `if:"label=as,optional"`
-	Relation  rt.TextEval     `if:"label=relation"`
-	OtherNoun rt.TextEval     `if:"label=noun"`
-	Markup    map[string]any
+	Nouns      rt.TextListEval `if:"label=nouns"`
+	Kind       rt.TextEval     `if:"label=as,optional"`
+	Relation   rt.TextEval     `if:"label=relation"`
+	OtherNouns rt.TextListEval `if:"label=other_nouns"`
+	Markup     map[string]any
 }
 
 // User implemented slots:
@@ -1638,7 +1871,7 @@ const DefineRelatives_Type = "define_relatives"
 const DefineRelatives_Field_Nouns = "$NOUNS"
 const DefineRelatives_Field_Kind = "$KIND"
 const DefineRelatives_Field_Relation = "$RELATION"
-const DefineRelatives_Field_OtherNoun = "$OTHER_NOUN"
+const DefineRelatives_Field_OtherNouns = "$OTHER_NOUNS"
 
 func (op *DefineRelatives) Marshal(m jsn.Marshaler) error {
 	return DefineRelatives_Marshal(m, op)
@@ -1732,12 +1965,12 @@ func DefineRelatives_Marshal(m jsn.Marshaler, val *DefineRelatives) (err error) 
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", DefineRelatives_Field_Relation))
 		}
-		e3 := m.MarshalKey("noun", DefineRelatives_Field_OtherNoun)
+		e3 := m.MarshalKey("other_nouns", DefineRelatives_Field_OtherNouns)
 		if e3 == nil {
-			e3 = rt.TextEval_Marshal(m, &val.OtherNoun)
+			e3 = rt.TextListEval_Marshal(m, &val.OtherNouns)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", DefineRelatives_Field_OtherNoun))
+			m.Error(errutil.New(e3, "in flow at", DefineRelatives_Field_OtherNouns))
 		}
 		m.EndBlock()
 	}
@@ -1747,7 +1980,7 @@ func DefineRelatives_Marshal(m jsn.Marshaler, val *DefineRelatives) (err error) 
 // DefineTraits Add traits to an aspect
 type DefineTraits struct {
 	Traits rt.TextListEval `if:"label=traits"`
-	Aspect rt.TextEval     `if:"label=aspect"`
+	Aspect rt.TextEval     `if:"label=as"`
 	Markup map[string]any
 }
 
@@ -1844,7 +2077,7 @@ func DefineTraits_Marshal(m jsn.Marshaler, val *DefineTraits) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", DefineTraits_Field_Traits))
 		}
-		e1 := m.MarshalKey("aspect", DefineTraits_Field_Aspect)
+		e1 := m.MarshalKey("as", DefineTraits_Field_Aspect)
 		if e1 == nil {
 			e1 = rt.TextEval_Marshal(m, &val.Aspect)
 		}
@@ -6952,7 +7185,9 @@ var Slats = []composer.Composer{
 	(*CycleText)(nil),
 	(*DefineFields)(nil),
 	(*DefineKinds)(nil),
+	(*DefineNounTraits)(nil),
 	(*DefineNouns)(nil),
+	(*DefineOtherRelatives)(nil),
 	(*DefineRelatives)(nil),
 	(*DefineTraits)(nil),
 	(*Determiner)(nil),
@@ -7004,115 +7239,117 @@ var Slats = []composer.Composer{
 }
 
 var Signatures = map[uint64]interface{}{
-	15843873826946452289: (*AbstractAction)(nil),      /* AbstractAction: */
-	7872120455849093108:  (*ActionContext)(nil),       /* ActionContext: */
-	6874395953916233682:  (*ActionName)(nil),          /* ActionName: */
-	14902711848163440508: (*ActionParams)(nil),        /* ActionParams common: */
-	11902859627634050329: (*ActionParams)(nil),        /* ActionParams dual: */
-	5868886119925925865:  (*ActionParams)(nil),        /* ActionParams none: */
-	13295757043766156580: (*CommonAction)(nil),        /* CommonAction: */
-	11796688776587655409: (*CommonAction)(nil),        /* CommonAction:actionContext: */
-	3594459841754826354:  (*Determiner)(nil),          /* Determiner: */
-	9237333280207697554:  (*EventName)(nil),           /* EventName: */
-	10643959568823028160: (*EventPhase)(nil),          /* EventPhase: */
-	18010503397334720257: (*EventTarget)(nil),         /* EventTarget kinds: */
-	14691585264072030736: (*EventTarget)(nil),         /* EventTarget noun: */
-	17563761532337350103: (*ManyToMany)(nil),          /* ManyToMany:otherKinds: */
-	4129025779762507875:  (*ManyToOne)(nil),           /* ManyToOne:kind: */
-	13422667607848275221: (*MapConnection)(nil),       /* MapConnection: */
-	691606134106503892:   (*MapDirection)(nil),        /* MapDirection: */
-	7274788867537390664:  (*NounName)(nil),            /* NounName: */
-	17075866407822548206: (*OneToMany)(nil),           /* OneToMany:kinds: */
-	13766274136867271026: (*OneToOne)(nil),            /* OneToOne:otherKind: */
-	18143853777230560632: (*PairedAction)(nil),        /* PairedAction: */
-	6457542997147343897:  (*Paragraph)(nil),           /* Paragraph */
-	1044755875845214073:  (*Paragraph)(nil),           /* Paragraph: */
-	355438255946453678:   (*PatternFlags)(nil),        /* PatternFlags: */
-	3203894909373400694:  (*PatternReturn)(nil),       /* PatternResult: */
-	10703761093736583840: (*PatternRule)(nil),         /* PatternRule:does: */
-	1493717172765332753:  (*PatternRule)(nil),         /* PatternRule:flags:does: */
-	8871095629143932769:  (*PatternType)(nil),         /* PatternType: */
-	6559594854670367592:  (*PluralKinds)(nil),         /* PluralKinds: */
-	14147411094705515606: (*Property)(nil),            /* Property: */
-	14287924768394488954: (*RelationCardinality)(nil), /* RelationCardinality manyToMany: */
-	10453256446593418889: (*RelationCardinality)(nil), /* RelationCardinality manyToOne: */
-	18092929693239672593: (*RelationCardinality)(nil), /* RelationCardinality oneToMany: */
-	5587008972147064084:  (*RelationCardinality)(nil), /* RelationCardinality oneToOne: */
-	12747929101973989672: (*SingularKind)(nil),        /* SingularKind: */
-	11597613116511938589: (*Story)(nil),               /* Story paragraphs: */
-	5991962903091297123:  (*StoryFile)(nil),           /* Tapestry: */
-	8990910809673849454:  (*EventHandler)(nil),        /* With:event:provides:rules: */
-	3588173502446728488:  (*EventHandler)(nil),        /* With:event:rules: */
-	4360765066804052293:  (*StoryBreak)(nil),          /* story_statement=-- */
-	5917691408841273556:  (*AspectField)(nil),         /* field=Aspect: */
-	929259210929400392:   (*BoolField)(nil),           /* field=Bool: */
-	8800077586553476131:  (*BoolField)(nil),           /* field=Bool:initially: */
-	12371124790835217408: (*BoolField)(nil),           /* field=Bool:kind: */
-	3110376293195187131:  (*BoolField)(nil),           /* field=Bool:kind:initially: */
-	10143132576483224253: (*CountOf)(nil),             /* bool_eval=CountOf:num: */
-	231398832069830353:   (*CycleText)(nil),           /* text_eval=CycleText: */
-	8980281312975545398:  (*DefineFields)(nil),        /* story_statement=Define kind:has: */
-	11622379079031968031: (*DefineKinds)(nil),         /* story_statement=Define kinds:as: */
-	7397461044941158073:  (*DefineNouns)(nil),         /* story_statement=Define nouns:as: */
-	3312780025686222185:  (*DefineRelatives)(nil),     /* story_statement=Define nouns:as:relation:noun: */
-	15286672803702417298: (*DefineNouns)(nil),         /* story_statement=Define nouns:as:traits: */
-	6831984772337915121:  (*DefineRelatives)(nil),     /* story_statement=Define nouns:relation:noun: */
-	15529630764532221441: (*DefineTraits)(nil),        /* story_statement=Define traits:aspect: */
-	12862689211056047959: (*MapDeparting)(nil),        /* story_statement=Departing from:via:and:otherRoom: */
-	12226644017914492267: (*ActionDecl)(nil),          /* story_statement=Event:action:args common: */
-	11054984519068268358: (*ActionDecl)(nil),          /* story_statement=Event:action:args dual: */
-	8992747511707391102:  (*ActionDecl)(nil),          /* story_statement=Event:action:args none: */
-	4045441026877120438:  (*GrammarDecl)(nil),         /* story_statement=GrammarDecl: */
-	2625420806444094675:  (*MapHeading)(nil),          /* story_statement=Heading:from:and:otherRoom: */
-	9997819433665596617:  (*MapHeading)(nil),          /* story_statement=Heading:from:via:and:otherRoom: */
-	14551249057549655331: (*KindOfRelation)(nil),      /* story_statement=KindOfRelation:cardinality manyToMany: */
-	3383078616901163718:  (*KindOfRelation)(nil),      /* story_statement=KindOfRelation:cardinality manyToOne: */
-	5643087631915217830:  (*KindOfRelation)(nil),      /* story_statement=KindOfRelation:cardinality oneToMany: */
-	5160168163884592453:  (*KindOfRelation)(nil),      /* story_statement=KindOfRelation:cardinality oneToOne: */
-	17526933228095224780: (*EventBlock)(nil),          /* story_statement=Listen kinds:handlers: */
-	12304970653546840411: (*EventBlock)(nil),          /* story_statement=Listen noun:handlers: */
-	12130342806058120266: (*MakeOpposite)(nil),        /* story_statement=Make:opposite: */
-	8107023930195182683:  (*MakePlural)(nil),          /* story_statement=Make:plural: */
-	7315903014127055020:  (*NounNamed)(nil),           /* named_noun=Noun: */
-	2148674162701691978:  (*NounNamed)(nil),           /* singular_noun=Noun: */
-	6508739485154276153:  (*CommonNoun)(nil),          /* named_noun=Noun:named: */
-	9335207376881300111:  (*CommonNoun)(nil),          /* singular_noun=Noun:named: */
-	8983976057391918886:  (*NounAssignment)(nil),      /* story_statement=NounAssignment:nouns:lines: */
-	1119385123956310430:  (*CountedNouns)(nil),        /* named_noun=Nouns:named: */
-	17312507452399750264: (*NumListField)(nil),        /* field=NumList: */
-	13189420990506792051: (*NumListField)(nil),        /* field=NumList:initially: */
-	9348125496154177200:  (*NumListField)(nil),        /* field=NumList:kind: */
-	1285150463477439883:  (*NumListField)(nil),        /* field=NumList:kind:initially: */
-	8487518704472251667:  (*NumberField)(nil),         /* field=Number: */
-	12240858331879781776: (*NumberField)(nil),         /* field=Number:initially: */
-	16068510506387834393: (*NumberField)(nil),         /* field=Number:kind: */
-	931083588704034470:   (*NumberField)(nil),         /* field=Number:kind:initially: */
-	11805892574345609795: (*PatternDecl)(nil),         /* story_statement=Pattern: */
-	5803330913337388662:  (*PatternActions)(nil),      /* story_statement=Pattern:provides:rules: */
-	17499264412780813319: (*PatternDecl)(nil),         /* story_statement=Pattern:requires: */
-	10828994360773868920: (*PatternDecl)(nil),         /* story_statement=Pattern:requires:returns: */
-	13721253842616561476: (*PatternDecl)(nil),         /* story_statement=Pattern:returns: */
-	15334083968500114832: (*PatternActions)(nil),      /* story_statement=Pattern:rules: */
-	16830519956255384977: (*SayResponse)(nil),         /* execute=Print response:with: */
-	10478796600040997822: (*SayResponse)(nil),         /* text_eval=Print response:with: */
-	8137307643484617139:  (*RecordField)(nil),         /* field=Record: */
-	14268486262656655408: (*RecordField)(nil),         /* field=Record:initially: */
-	355191898393732025:   (*RecordField)(nil),         /* field=Record:kind: */
-	17210787958517369542: (*RecordField)(nil),         /* field=Record:kind:initially: */
-	11959710305603894939: (*RecordListField)(nil),     /* field=RecordList: */
-	11931798142536216664: (*RecordListField)(nil),     /* field=RecordList:initially: */
-	1057635318610052945:  (*RecordListField)(nil),     /* field=RecordList:kind: */
-	1164224146587824190:  (*RecordListField)(nil),     /* field=RecordList:kind:initially: */
-	9556993961571292952:  (*SayTemplate)(nil),         /* execute=Say: */
-	15989777734244204735: (*SayTemplate)(nil),         /* text_eval=Say: */
-	9910951906340888308:  (*ShuffleText)(nil),         /* text_eval=ShuffleText: */
-	13921723804355948971: (*StoppingText)(nil),        /* text_eval=StoppingText: */
-	8130344761444222709:  (*TextField)(nil),           /* field=Text: */
-	6524581251606795538:  (*TextField)(nil),           /* field=Text:initially: */
-	17964742375211875755: (*TextField)(nil),           /* field=Text:kind: */
-	9452278286570155464:  (*TextField)(nil),           /* field=Text:kind:initially: */
-	10624393162610648969: (*TextListField)(nil),       /* field=TextList: */
-	16555060041426966326: (*TextListField)(nil),       /* field=TextList:initially: */
-	5819932921227536375:  (*TextListField)(nil),       /* field=TextList:kind: */
-	3965346382920662612:  (*TextListField)(nil),       /* field=TextList:kind:initially: */
+	15843873826946452289: (*AbstractAction)(nil),       /* AbstractAction: */
+	7872120455849093108:  (*ActionContext)(nil),        /* ActionContext: */
+	6874395953916233682:  (*ActionName)(nil),           /* ActionName: */
+	14902711848163440508: (*ActionParams)(nil),         /* ActionParams common: */
+	11902859627634050329: (*ActionParams)(nil),         /* ActionParams dual: */
+	5868886119925925865:  (*ActionParams)(nil),         /* ActionParams none: */
+	13295757043766156580: (*CommonAction)(nil),         /* CommonAction: */
+	11796688776587655409: (*CommonAction)(nil),         /* CommonAction:actionContext: */
+	3594459841754826354:  (*Determiner)(nil),           /* Determiner: */
+	9237333280207697554:  (*EventName)(nil),            /* EventName: */
+	10643959568823028160: (*EventPhase)(nil),           /* EventPhase: */
+	18010503397334720257: (*EventTarget)(nil),          /* EventTarget kinds: */
+	14691585264072030736: (*EventTarget)(nil),          /* EventTarget noun: */
+	17563761532337350103: (*ManyToMany)(nil),           /* ManyToMany:otherKinds: */
+	4129025779762507875:  (*ManyToOne)(nil),            /* ManyToOne:kind: */
+	13422667607848275221: (*MapConnection)(nil),        /* MapConnection: */
+	691606134106503892:   (*MapDirection)(nil),         /* MapDirection: */
+	7274788867537390664:  (*NounName)(nil),             /* NounName: */
+	17075866407822548206: (*OneToMany)(nil),            /* OneToMany:kinds: */
+	13766274136867271026: (*OneToOne)(nil),             /* OneToOne:otherKind: */
+	18143853777230560632: (*PairedAction)(nil),         /* PairedAction: */
+	6457542997147343897:  (*Paragraph)(nil),            /* Paragraph */
+	1044755875845214073:  (*Paragraph)(nil),            /* Paragraph: */
+	355438255946453678:   (*PatternFlags)(nil),         /* PatternFlags: */
+	3203894909373400694:  (*PatternReturn)(nil),        /* PatternResult: */
+	10703761093736583840: (*PatternRule)(nil),          /* PatternRule:does: */
+	1493717172765332753:  (*PatternRule)(nil),          /* PatternRule:flags:does: */
+	8871095629143932769:  (*PatternType)(nil),          /* PatternType: */
+	6559594854670367592:  (*PluralKinds)(nil),          /* PluralKinds: */
+	14147411094705515606: (*Property)(nil),             /* Property: */
+	14287924768394488954: (*RelationCardinality)(nil),  /* RelationCardinality manyToMany: */
+	10453256446593418889: (*RelationCardinality)(nil),  /* RelationCardinality manyToOne: */
+	18092929693239672593: (*RelationCardinality)(nil),  /* RelationCardinality oneToMany: */
+	5587008972147064084:  (*RelationCardinality)(nil),  /* RelationCardinality oneToOne: */
+	12747929101973989672: (*SingularKind)(nil),         /* SingularKind: */
+	11597613116511938589: (*Story)(nil),                /* Story paragraphs: */
+	5991962903091297123:  (*StoryFile)(nil),            /* Tapestry: */
+	8990910809673849454:  (*EventHandler)(nil),         /* With:event:provides:rules: */
+	3588173502446728488:  (*EventHandler)(nil),         /* With:event:rules: */
+	4360765066804052293:  (*StoryBreak)(nil),           /* story_statement=-- */
+	5917691408841273556:  (*AspectField)(nil),          /* field=Aspect: */
+	929259210929400392:   (*BoolField)(nil),            /* field=Bool: */
+	8800077586553476131:  (*BoolField)(nil),            /* field=Bool:initially: */
+	12371124790835217408: (*BoolField)(nil),            /* field=Bool:kind: */
+	3110376293195187131:  (*BoolField)(nil),            /* field=Bool:kind:initially: */
+	10143132576483224253: (*CountOf)(nil),              /* bool_eval=CountOf:num: */
+	231398832069830353:   (*CycleText)(nil),            /* text_eval=CycleText: */
+	15268150405724581221: (*DefineFields)(nil),         /* story_statement=Define kind:fields: */
+	11622379079031968031: (*DefineKinds)(nil),          /* story_statement=Define kinds:as: */
+	7397461044941158073:  (*DefineNouns)(nil),          /* story_statement=Define nouns:as: */
+	15827986568629578700: (*DefineRelatives)(nil),      /* story_statement=Define nouns:as:relation:otherNouns: */
+	15286672803702417298: (*DefineNounTraits)(nil),     /* story_statement=Define nouns:as:traits: */
+	3677325358342499188:  (*DefineRelatives)(nil),      /* story_statement=Define nouns:relation:otherNouns: */
+	15794171433650329114: (*DefineNounTraits)(nil),     /* story_statement=Define nouns:traits: */
+	3057287383316085006:  (*DefineOtherRelatives)(nil), /* story_statement=Define relation:nouns:otherNouns: */
+	3652615969014829573:  (*DefineTraits)(nil),         /* story_statement=Define traits:as: */
+	12862689211056047959: (*MapDeparting)(nil),         /* story_statement=Departing from:via:and:otherRoom: */
+	12226644017914492267: (*ActionDecl)(nil),           /* story_statement=Event:action:args common: */
+	11054984519068268358: (*ActionDecl)(nil),           /* story_statement=Event:action:args dual: */
+	8992747511707391102:  (*ActionDecl)(nil),           /* story_statement=Event:action:args none: */
+	4045441026877120438:  (*GrammarDecl)(nil),          /* story_statement=GrammarDecl: */
+	2625420806444094675:  (*MapHeading)(nil),           /* story_statement=Heading:from:and:otherRoom: */
+	9997819433665596617:  (*MapHeading)(nil),           /* story_statement=Heading:from:via:and:otherRoom: */
+	14551249057549655331: (*KindOfRelation)(nil),       /* story_statement=KindOfRelation:cardinality manyToMany: */
+	3383078616901163718:  (*KindOfRelation)(nil),       /* story_statement=KindOfRelation:cardinality manyToOne: */
+	5643087631915217830:  (*KindOfRelation)(nil),       /* story_statement=KindOfRelation:cardinality oneToMany: */
+	5160168163884592453:  (*KindOfRelation)(nil),       /* story_statement=KindOfRelation:cardinality oneToOne: */
+	17526933228095224780: (*EventBlock)(nil),           /* story_statement=Listen kinds:handlers: */
+	12304970653546840411: (*EventBlock)(nil),           /* story_statement=Listen noun:handlers: */
+	12130342806058120266: (*MakeOpposite)(nil),         /* story_statement=Make:opposite: */
+	8107023930195182683:  (*MakePlural)(nil),           /* story_statement=Make:plural: */
+	7315903014127055020:  (*NounNamed)(nil),            /* named_noun=Noun: */
+	2148674162701691978:  (*NounNamed)(nil),            /* singular_noun=Noun: */
+	6508739485154276153:  (*CommonNoun)(nil),           /* named_noun=Noun:named: */
+	9335207376881300111:  (*CommonNoun)(nil),           /* singular_noun=Noun:named: */
+	8983976057391918886:  (*NounAssignment)(nil),       /* story_statement=NounAssignment:nouns:lines: */
+	1119385123956310430:  (*CountedNouns)(nil),         /* named_noun=Nouns:named: */
+	17312507452399750264: (*NumListField)(nil),         /* field=NumList: */
+	13189420990506792051: (*NumListField)(nil),         /* field=NumList:initially: */
+	9348125496154177200:  (*NumListField)(nil),         /* field=NumList:kind: */
+	1285150463477439883:  (*NumListField)(nil),         /* field=NumList:kind:initially: */
+	8487518704472251667:  (*NumberField)(nil),          /* field=Number: */
+	12240858331879781776: (*NumberField)(nil),          /* field=Number:initially: */
+	16068510506387834393: (*NumberField)(nil),          /* field=Number:kind: */
+	931083588704034470:   (*NumberField)(nil),          /* field=Number:kind:initially: */
+	11805892574345609795: (*PatternDecl)(nil),          /* story_statement=Pattern: */
+	5803330913337388662:  (*PatternActions)(nil),       /* story_statement=Pattern:provides:rules: */
+	17499264412780813319: (*PatternDecl)(nil),          /* story_statement=Pattern:requires: */
+	10828994360773868920: (*PatternDecl)(nil),          /* story_statement=Pattern:requires:returns: */
+	13721253842616561476: (*PatternDecl)(nil),          /* story_statement=Pattern:returns: */
+	15334083968500114832: (*PatternActions)(nil),       /* story_statement=Pattern:rules: */
+	16830519956255384977: (*SayResponse)(nil),          /* execute=Print response:with: */
+	10478796600040997822: (*SayResponse)(nil),          /* text_eval=Print response:with: */
+	8137307643484617139:  (*RecordField)(nil),          /* field=Record: */
+	14268486262656655408: (*RecordField)(nil),          /* field=Record:initially: */
+	355191898393732025:   (*RecordField)(nil),          /* field=Record:kind: */
+	17210787958517369542: (*RecordField)(nil),          /* field=Record:kind:initially: */
+	11959710305603894939: (*RecordListField)(nil),      /* field=RecordList: */
+	11931798142536216664: (*RecordListField)(nil),      /* field=RecordList:initially: */
+	1057635318610052945:  (*RecordListField)(nil),      /* field=RecordList:kind: */
+	1164224146587824190:  (*RecordListField)(nil),      /* field=RecordList:kind:initially: */
+	9556993961571292952:  (*SayTemplate)(nil),          /* execute=Say: */
+	15989777734244204735: (*SayTemplate)(nil),          /* text_eval=Say: */
+	9910951906340888308:  (*ShuffleText)(nil),          /* text_eval=ShuffleText: */
+	13921723804355948971: (*StoppingText)(nil),         /* text_eval=StoppingText: */
+	8130344761444222709:  (*TextField)(nil),            /* field=Text: */
+	6524581251606795538:  (*TextField)(nil),            /* field=Text:initially: */
+	17964742375211875755: (*TextField)(nil),            /* field=Text:kind: */
+	9452278286570155464:  (*TextField)(nil),            /* field=Text:kind:initially: */
+	10624393162610648969: (*TextListField)(nil),        /* field=TextList: */
+	16555060041426966326: (*TextListField)(nil),        /* field=TextList:initially: */
+	5819932921227536375:  (*TextListField)(nil),        /* field=TextList:kind: */
+	3965346382920662612:  (*TextListField)(nil),        /* field=TextList:kind:initially: */
 }

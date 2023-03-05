@@ -26,9 +26,9 @@ func (op *DefineKinds) PostImport(k *imp.Importer) (err error) {
 func (op *DefineFields) PostImport(k *imp.Importer) (err error) {
 	if kind, e := safe.GetText(nil, op.Kind); e != nil {
 		err = e
-	} else if len(op.Props) > 0 {
+	} else if len(op.Fields) > 0 {
 		var ps []eph.EphParams
-		for _, el := range op.Props {
+		for _, el := range op.Fields {
 			// bool fields become implicit aspects
 			// ( vs. bool pattern vars which stay bools -- see reduceProps )
 			if p := el.GetParam(); p.Affinity.Str != eph.Affinity_Bool {
