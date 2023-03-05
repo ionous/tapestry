@@ -29,12 +29,6 @@ func CollectSubjectNouns(k *imp.Importer, els []NamedNoun) error {
 	})
 }
 
-func CollectObjectNouns(k *imp.Importer, els []NamedNoun) error {
-	return k.Env().Recent.Nouns.CollectObjects(func() error {
-		return ImportNamedNouns(k, els)
-	})
-}
-
 func ImportNamedNouns(k *imp.Importer, els []NamedNoun) (err error) {
 	for _, el := range els {
 		if e := el.ImportNoun(k); e != nil {
@@ -45,26 +39,47 @@ func ImportNamedNouns(k *imp.Importer, els []NamedNoun) (err error) {
 }
 
 func ImportNouns(k *imp.Importer, nouns []string) (ret []string, err error) {
+	recent := &k.Env().Recent.Nouns
 	for _, noun := range nouns {
-		// FIX: this should be happening during the weave, not during import.
-		article, word := lang.SliceArticle(noun)
-		name := NounNamed{Name: NounName{word}}
+		// ugh.
+		var counted bool
+		var name string
+
+		parts := strings.Fields(noun)
+		if len(parts) > 0 {
+			_, counted = lang.WordsToNum(parts[0])
+		}
 
 		var legacy NamedNoun
-		if len(article) == 0 {
-			legacy = &name
+		if counted {
+			// what's gross and ugly
+			recent.Subjects = nil
+			legacy = &CountedNouns{Count: parts[0], Kinds: PluralKinds{Str: strings.Join(parts[1:], " ")}}
 		} else {
-			legacy = &CommonNoun{
-				Determiner: Determiner{article},
-				Noun:       name,
+			// FIX: this should be happening during the weave, not during import.
+			article, word := lang.SliceArticle(noun)
+			nounNamed := NounNamed{Name: NounName{word}}
+			name = word
+
+			if len(article) == 0 {
+				legacy = &nounNamed
+			} else {
+				legacy = &CommonNoun{
+					Determiner: Determiner{article},
+					Noun:       nounNamed,
+				}
 			}
 		}
 		if e := legacy.ImportNoun(k); e != nil {
 			err = errutil.Append(err, e)
+		} else if !counted {
+			ret = append(ret, name)
 		} else {
-			ret = append(ret, word)
+			ret = append(ret, recent.Subjects...)
 		}
 	}
+	// cleanup legacy bits
+	recent.Subjects = nil
 	return
 }
 
@@ -84,7 +99,7 @@ func declareNounClass(k *imp.Importer) {
 // also, we probably want noun stacks not individually duplicated names
 func (op *CountedNouns) ImportNoun(k *imp.Importer) (err error) {
 	if once := "printed_name"; k.Once(once) {
-		k.WriteOnce(&eph.EphKinds{Kind: "objects", Contain: []eph.EphParams{{Name: "printed_name", Affinity: eph.Affinity{eph.Affinity_Text}}}})
+		k.WriteOnce(&eph.EphKinds{Kind: "objects", Contain: []eph.EphParams{{Name: "printed_name", Affinity: eph.Affinity{Str: eph.Affinity_Text}}}})
 	}
 	if cnt, ok := lang.WordsToNum(op.Count); !ok {
 		err = errutil.New("couldnt turn", op.Count, "into a number")
@@ -101,8 +116,8 @@ func (op *CountedNouns) ImportNoun(k *imp.Importer) (err error) {
 			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: "counted", Value: B(true)})
 			names[i] = noun
 		}
-		k.WriteEphemera(eph.PhaseFunction{eph.AncestryPhase,
-			func(c *eph.Catalog, d *eph.Domain, at string) (err error) {
+		k.WriteEphemera(eph.PhaseFunction{OnPhase: eph.AncestryPhase,
+			Do: func(c *eph.Catalog, d *eph.Domain, at string) (err error) {
 				// by now, plurals will be determined, so we can determine which is which.
 				var kind, kinds string
 				if cnt == 1 {

@@ -13,27 +13,13 @@
       ]
     },
     {
-      "Nouns:depict:": [
-        [
-          {
-            "Noun:named:": [
-              "the",
-              {
-                "Noun:": "player"
-              }
-            ]
-          }
-        ],
-        {
-          "Kind:named:": [
-            "isa",
-            "players"
-          ]
-        }
+      "Define nouns:as:": [
+        "the player",
+        "players"
       ]
     },
     {
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Agents",
         [
           {
@@ -43,7 +29,7 @@
       ]
     },
     {
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Actors",
         [
           {
@@ -56,35 +42,15 @@
       "--": ""
     },
     {
-      "Nouns:depict:": [
-        [
-          {
-            "Noun:": "self"
-          }
-        ],
-        {
-          "Kind:named:": [
-            "isan",
-            "actor"
-          ]
-        }
+      "Define nouns:as:": [
+        "self",
+        "actor"
       ]
     },
     {
-      "Nouns:startAs:": [
-        [
-          {
-            "Noun:": "self"
-          }
-        ],
-        {
-          "NounTraits:trait:": [
-            "is",
-            [
-              "privately named"
-            ]
-          ]
-        }
+      "Define nouns:traits:": [
+        "self",
+        "privately named"
       ]
     },
     {
@@ -115,20 +81,9 @@
       ]
     },
     {
-      "Nouns:startAs:": [
-        [
-          {
-            "Noun:": "self"
-          }
-        ],
-        {
-          "NounTraits:trait:": [
-            "is",
-            [
-              "proper named"
-            ]
-          ]
-        }
+      "Define nouns:traits:": [
+        "self",
+        "proper named"
       ]
     },
     {

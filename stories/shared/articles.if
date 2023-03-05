@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Objects",
         [
           {
@@ -15,21 +15,19 @@
       ]
     },
     {
-      "AspectTraits:traitPhrase:": [
-        "pluralization",
-        {
-          "TraitPhrase:trait:": [
-            "canbe",
-            [
-              "singular named",
-              "plural named"
-            ]
-          ]
-        }
+      "Define traits:as:": [
+        [
+          "singular named",
+          "plural named"
+        ],
+        "pluralization"
       ]
     },
     {
-      "KindsOfAspect:": "pluralization"
+      "Define kinds:as:": [
+        "pluralization",
+        "aspect"
+      ]
     },
     {
       "--": ""
@@ -39,34 +37,13 @@
         "articles",
         [
           {
-            "Nouns:depict:": [
+            "Define nouns:as:": [
               [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "lamp-post"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "some",
-                    {
-                      "Noun:": "soldiers"
-                    }
-                  ]
-                },
-                {
-                  "Noun:": "Trevor"
-                }
+                "a lamp-post",
+                "some soldiers",
+                "Trevor"
               ],
-              {
-                "Kind:named:": [
-                  "area",
-                  "thing"
-                ]
-              }
+              "things"
             ]
           }
         ],

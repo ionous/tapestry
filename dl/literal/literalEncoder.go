@@ -26,10 +26,18 @@ func CompactEncoder(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
 		err = m.MarshalValue(typeName, out.Value)
 
 	case *NumValues:
-		err = m.MarshalValue(typeName, out.Values)
+		if len(out.Values) == 1 {
+			err = m.MarshalValue(typeName, out.Values[0])
+		} else {
+			err = m.MarshalValue(typeName, out.Values)
+		}
 
 	case *TextValues:
-		err = m.MarshalValue(typeName, out.Values)
+		if len(out.Values) == 1 {
+			err = m.MarshalValue(typeName, out.Values[0])
+		} else {
+			err = m.MarshalValue(typeName, out.Values)
+		}
 
 	// records dont want to contain the names of their records
 	// since that's generally recoverable from knowing the names of the fields
@@ -108,19 +116,29 @@ func readLiteral(typeName, kind string, msg json.RawMessage) (ret LiteralValue, 
 		}
 
 	case rt.NumListEval_Type:
-		var val []float64
-		if e := json.Unmarshal(msg, &val); e != nil {
-			err = chart.Unhandled(typeName)
+		var vals []float64
+		if e := json.Unmarshal(msg, &vals); e == nil {
+			ret = &NumValues{Values: vals, Kind: kind}
 		} else {
-			ret = &NumValues{Values: val, Kind: kind}
+			var val float64
+			if e := json.Unmarshal(msg, &val); e == nil {
+				ret = &NumValues{Values: []float64{val}, Kind: kind}
+			} else {
+				err = chart.Unhandled(typeName)
+			}
 		}
 
 	case rt.TextListEval_Type:
-		var val []string
-		if e := json.Unmarshal(msg, &val); e != nil {
-			err = chart.Unhandled(typeName)
+		var vals []string
+		if e := json.Unmarshal(msg, &vals); e == nil {
+			ret = &TextValues{Values: vals, Kind: kind}
 		} else {
-			ret = &TextValues{Values: val, Kind: kind}
+			var val string
+			if e := json.Unmarshal(msg, &val); e == nil {
+				ret = &TextValues{Values: []string{val}, Kind: kind}
+			} else {
+				err = chart.Unhandled(typeName)
+			}
 		}
 	}
 	return

@@ -6,23 +6,9 @@
         "Kitchenette",
         [
           {
-            "Nouns:depict:": [
-              [
-                {
-                  "Noun:named:": [
-                    "an",
-                    {
-                      "Noun:": "other worldly cloak"
-                    }
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "isa",
-                  "thing"
-                ]
-              }
+            "Define nouns:as:": [
+              "an other worldly cloak",
+              "a thing"
             ]
           },
           {
@@ -32,24 +18,10 @@
             "--": ""
           },
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
-              [
-                {
-                  "Noun:": "self"
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "cabinet"
-                    }
-                  ]
-                }
-              ]
+              "self",
+              "the cabinet"
             ]
           }
         ],

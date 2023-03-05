@@ -176,9 +176,14 @@
                           {
                             "ElseDo does:": [
                               {
-                                "Log:value:":["debug", { "FromText:": {
-                                    "Say:": "{The: .actor} is taking {the: .noun} ..." 
-                                  }}]
+                                "Log:value:": [
+                                  "debug",
+                                  {
+                                    "FromText:": {
+                                      "Say:": "{The: .actor} is taking {the: .noun} ..."
+                                    }
+                                  }
+                                ]
                               },
                               {
                                 "Set:from:": [

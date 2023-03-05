@@ -287,7 +287,7 @@
       ]
     },
     {
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Devices",
         [
           {
@@ -303,37 +303,33 @@
       "--": ""
     },
     {
-      "KindsOfAspect:": "activatability"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
+      "Define kinds:as:": [
         "activatability",
-        {
-          "TraitPhrase:trait:": [
-            "canbe",
-            [
-              "activatable",
-              "not activatable"
-            ]
-          ]
-        }
+        "aspect"
       ]
     },
     {
-      "KindsOfAspect:": "activation"
+      "Define traits:as:": [
+        [
+          "activatable",
+          "not activatable"
+        ],
+        "activatability"
+      ]
     },
     {
-      "AspectTraits:traitPhrase:": [
+      "Define kinds:as:": [
         "activation",
-        {
-          "TraitPhrase:trait:": [
-            "canbe",
-            [
-              "deactivated",
-              "activated"
-            ]
-          ]
-        }
+        "aspect"
+      ]
+    },
+    {
+      "Define traits:as:": [
+        [
+          "deactivated",
+          "activated"
+        ],
+        "activation"
       ]
     }
   ]

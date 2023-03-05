@@ -6,44 +6,16 @@
         "Thingaverse",
         [
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
-              [
-                {
-                  "Noun:": "self"
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "kitchen"
-                    }
-                  ]
-                }
-              ]
+              "self",
+              "the kitchen"
             ]
           },
           {
-            "Nouns:depict:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "kitchen"
-                    }
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "isa",
-                  "room"
-                ]
-              }
+            "Define nouns:as:": [
+              "the kitchen",
+              "a room"
             ]
           },
           {
@@ -88,75 +60,23 @@
             ]
           },
           {
-            "Nouns:relateTo:": [
+            "Define nouns:relation:otherNouns:": [
               [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "broom"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "a",
-                    {
-                      "Noun:": "hat"
-                    }
-                  ]
-                },
-                {
-                  "Nouns:named:": [
-                    "two",
-                    "cats"
-                  ]
-                }
+                "the broom",
+                "a hat",
+                "two cats"
               ],
-              {
-                "NounRelation areBeing:relation:otherNouns:": [
-                  "are",
-                  "whereabouts",
-                  [
-                    {
-                      "Noun:named:": [
-                        "the",
-                        {
-                          "Noun:": "kitchen"
-                        }
-                      ]
-                    }
-                  ]
-                ]
-              }
+              "whereabouts",
+              "the kitchen"
             ]
           },
           {
-            "Nouns:depict:": [
+            "Define nouns:as:": [
               [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "broom"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "a",
-                    {
-                      "Noun:": "hat"
-                    }
-                  ]
-                }
+                "the broom",
+                "a hat"
               ],
-              {
-                "Kind:named:": [
-                  "are",
-                  "things"
-                ]
-              }
+              "things"
             ]
           },
           {
@@ -195,138 +115,39 @@
             "--": ""
           },
           {
-            "Nouns:startAs:": [
+            "Define nouns:traits:": [
+              "the cabinet",
               [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "cabinet"
-                    }
-                  ]
-                }
-              ],
-              {
-                "NounTraits:trait:": [
-                  "is",
-                  [
-                    "openable",
-                    "enterable",
-                    "scenery"
-                  ]
-                ]
-              }
-            ]
-          },
-          {
-            "Nouns:depict:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "cabinet"
-                    }
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "isa",
-                  "container"
-                ]
-              }
-            ]
-          },
-          {
-            "Nouns:relateTo:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "cabinet"
-                    }
-                  ]
-                }
-              ],
-              {
-                "NounRelation areBeing:relation:otherNouns:": [
-                  "is",
-                  "whereabouts",
-                  [
-                    {
-                      "Noun:named:": [
-                        "the",
-                        {
-                          "Noun:": "kitchen"
-                        }
-                      ]
-                    }
-                  ]
-                ]
-              }
-            ]
-          },
-          {
-            "Nouns:depict:and:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "book of matches"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "a",
-                    {
-                      "Noun:": "bottle of descaling solution"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "a",
-                    {
-                      "Noun:": "fish hook"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "a",
-                    {
-                      "Noun:": "rusty knife"
-                    }
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "are",
-                  "things"
-                ]
-              },
-              [
-                {
-                  "NounRelation relation:otherNouns:": [
-                    "whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          {
-                            "Noun:": "cabinet"
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
+                "openable",
+                "enterable",
+                "scenery"
               ]
+            ]
+          },
+          {
+            "Define nouns:as:": [
+              "the cabinet",
+              "container"
+            ]
+          },
+          {
+            "Define nouns:relation:otherNouns:": [
+              "the cabinet",
+              "whereabouts",
+              "the kitchen"
+            ]
+          },
+          {
+            "Define nouns:as:relation:otherNouns:": [
+              [
+                "a book of matches",
+                "a bottle of descaling solution",
+                "a fish hook",
+                "the rusty knife"
+              ],
+              "things",
+              "whereabouts",
+              "the cabinet"
             ]
           },
           {
@@ -373,342 +194,90 @@
             "--": ""
           },
           {
-            "Nouns:startAs:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "shelf"
-                    }
-                  ]
-                }
-              ],
-              {
-                "NounTraits:trait:": [
-                  "is",
-                  [
-                    "scenery"
-                  ]
-                ]
-              }
+            "Define nouns:traits:": [
+              "the shelf",
+              "scenery"
             ]
           },
           {
-            "Nouns:depict:and:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "shelf"
-                    }
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "isa",
-                  "supporter"
-                ]
-              },
-              [
-                {
-                  "NounRelation relation:otherNouns:": [
-                    "whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          {
-                            "Noun:": "kitchen"
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
+            "Define nouns:as:relation:otherNouns:": [
+              "the shelf",
+              "supporter",
+              "whereabouts",
+              "the kitchen"
             ]
           },
           {
-            "Nouns:depict:and:": [
+            "Define nouns:as:relation:otherNouns:": [
               [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "can of tomatoes"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "a",
-                    {
-                      "Noun:": "can of potato leek soup"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "a",
-                    {
-                      "Noun:": "tin of deflating powder"
-                    }
-                  ]
-                }
+                "a can of tomatoes",
+                "a can of potato leek soup",
+                "a tin of deflating powder"
               ],
-              {
-                "Kind:named:": [
-                  "are",
-                  "things"
-                ]
-              },
-              [
-                {
-                  "NounRelation relation:otherNouns:": [
-                    "whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          {
-                            "Noun:": "shelf"
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
+              "things",
+              "whereabouts",
+              "the shelf"
             ]
           },
           {
             "--": ""
           },
           {
-            "Nouns:depict:and:": [
+            "Define nouns:as:relation:otherNouns:": [
+              "the counter",
+              "supporter",
+              "whereabouts",
+              "the kitchen"
+            ]
+          },
+          {
+            "Define nouns:as:traits:": [
+              "the espresso machine",
+              "container",
               [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "counter"
-                    }
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "isa",
-                  "supporter"
-                ]
-              },
-              [
-                {
-                  "NounRelation relation:otherNouns:": [
-                    "whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          {
-                            "Noun:": "kitchen"
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
+                "fixed in place",
+                "closed"
               ]
             ]
           },
           {
-            "Nouns:depict:and:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "espresso machine"
-                    }
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "isa",
-                  "container"
-                ]
-              },
-              [
-                {
-                  "NounTraits:trait:": [
-                    "is",
-                    [
-                      "fixed in place",
-                      "closed"
-                    ]
-                  ]
-                },
-                {
-                  "NounRelation relation:otherNouns:": [
-                    "whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          {
-                            "Noun:": "counter"
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
+            "Define nouns:relation:otherNouns:": [
+              "the espresso machine",
+              "whereabouts",
+              "the counter"
             ]
           },
           {
-            "Nouns:depict:and:": [
-              [
-                {
-                  "Noun:named:": [
-                    "some",
-                    {
-                      "Noun:": "coffee beans"
-                    }
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "area",
-                  "thing"
-                ]
-              },
-              [
-                {
-                  "NounRelation relation:otherNouns:": [
-                    "whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          {
-                            "Noun:": "espresso machine"
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
+            "Define nouns:as:relation:otherNouns:": [
+              "coffee beans",
+              "thing",
+              "whereabouts",
+              "the espresso machine"
             ]
           },
           {
-            "Nouns:startAs:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "beans"
-                    }
-                  ]
-                }
-              ],
-              {
-                "NounTraits:trait:": [
-                  "are",
-                  [
-                    "plural named"
-                  ]
-                ]
-              }
+            "Define nouns:traits:": [
+              "the beans",
+              "plural named"
             ]
           },
           {
-            "Nouns:depict:and:": [
+            "Define nouns:as:relation:otherNouns:": [
               [
-                {
-                  "Noun:named:": [
-                    "a",
-                    {
-                      "Noun:": "blender"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "a",
-                    {
-                      "Noun:": "mortar"
-                    }
-                  ]
-                }
+                "a blender",
+                "the mortar"
               ],
-              {
-                "Kind:named:": [
-                  "are",
-                  "containers"
-                ]
-              },
-              [
-                {
-                  "NounRelation relation:otherNouns:": [
-                    "whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          {
-                            "Noun:": "counter"
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
+              "containers",
+              "whereabouts",
+              "the counter"
             ]
           },
           {
-            "Nouns:depict:and:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "pestle"
-                    }
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "isa",
-                  "thing"
-                ]
-              },
-              [
-                {
-                  "NounRelation relation:otherNouns:": [
-                    "whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          {
-                            "Noun:": "mortar"
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
+            "Define nouns:as:relation:otherNouns:": [
+              "a pestle",
+              "thing",
+              "whereabouts",
+              "the mortar"
             ]
           },
           {

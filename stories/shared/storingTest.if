@@ -6,77 +6,23 @@
         "Kitchenette",
         [
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
               [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "coffee"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "coin"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "clutch"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "knife"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "flower"
-                    }
-                  ]
-                }
+                "the coffee",
+                "the coin",
+                "the clutch",
+                "the knife",
+                "the flower"
               ],
-              "are",
-              [
-                {
-                  "Noun:": "self"
-                }
-              ]
+              "self"
             ]
           },
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
-              [
-                {
-                  "Noun:": "Mildred"
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "kitchen"
-                    }
-                  ]
-                }
-              ]
+              "Mildred",
+              "the kitchen"
             ]
           }
         ],

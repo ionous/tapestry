@@ -210,7 +210,7 @@
       ]
     },
     {
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Groupings",
         [
           {
@@ -242,7 +242,7 @@
       ]
     },
     {
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Object groups",
         [
           {

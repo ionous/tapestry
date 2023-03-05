@@ -6,133 +6,53 @@
         "Kitchenette",
         [
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
-              [
-                {
-                  "Noun:": "self"
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "purse"
-                    }
-                  ]
-                }
-              ]
+              "self",
+              "the purse"
             ]
           },
           {
             "--": ""
           },
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
               [
-                {
-                  "Noun:": "Mildred"
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "purse"
-                    }
-                  ]
-                }
+                "Mildred",
+                "the purse"
               ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "kitchen"
-                    }
-                  ]
-                }
-              ]
+              "the kitchen"
             ]
           },
           {
             "--": ""
           },
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "coin"
-                    }
-                  ]
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:": "self"
-                }
-              ]
+              "the coin",
+              "self"
             ]
           },
           {
             "--": ""
           },
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "empire apple"
-                    }
-                  ]
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:": "Mildred"
-                }
-              ]
+              "an empire apple",
+              "Mildred"
             ]
           },
           {
             "--": ""
           },
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "coffee"
-                    }
-                  ]
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "machine"
-                    }
-                  ]
-                }
-              ]
+              "the coffee",
+              "the machine"
             ]
           }
         ],

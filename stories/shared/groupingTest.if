@@ -5,70 +5,25 @@
         "grouping tests",
         [
           {
-            "Nouns:depict:": [
-              [
-                {
-                  "Noun:": "Clarence"
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "isa",
-                  "actor"
-                ]
-              }
+            "Define nouns:as:": [
+              "Clarence",
+              "an actor"
             ]
           },
           {
-            "Nouns:depict:": [
-              [
-                {
-                  "Nouns:named:": [
-                    "two",
-                    "cats"
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "area",
-                  "animals"
-                ]
-              }
+            "Define nouns:as:": [
+              "two cats",
+              "animals"
             ]
           },
           {
-            "Nouns:depict:": [
+            "Define nouns:as:": [
               [
-                {
-                  "Noun:named:": [
-                    "an",
-                    {
-                      "Noun:": "empire apple"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "a",
-                    {
-                      "Noun:": "pen"
-                    }
-                  ]
-                },
-                {
-                  "Nouns:named:": [
-                    "two",
-                    "triangles"
-                  ]
-                }
+                "an empire apple",
+                "a pen",
+                "two triangles"
               ],
-              {
-                "Kind:named:": [
-                  "area",
-                  "prop"
-                ]
-              }
+              "props"
             ]
           },
           {
@@ -90,55 +45,15 @@
             ]
           },
           {
-            "Nouns:depict:": [
+            "Define nouns:as:": [
               [
-                {
-                  "Noun:named:": [
-                    "an",
-                    {
-                      "Noun:": "X"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "a",
-                    {
-                      "Noun:": "W"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "an",
-                    {
-                      "Noun:": "F"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "a",
-                    {
-                      "Noun:": "Y"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "a",
-                    {
-                      "Noun:": "Z"
-                    }
-                  ]
-                }
+                "an X",
+                "a W",
+                "an F",
+                "a Y",
+                "a Z"
               ],
-              {
-                "Kind:named:": [
-                  "are",
-                  "scrabble tile"
-                ]
-              }
+              "scrabble tiles"
             ]
           },
           {
@@ -792,7 +707,7 @@
                   }
                 },
                 {
-                  "Expect output:": "Clarence and five scrabble tiles (a X, a W, a F, a Y, and a Z)"
+                  "Expect output:": "Clarence and five scrabble tiles (an X, a W, an F, a Y, and a Z)"
                 }
               ]
             ]

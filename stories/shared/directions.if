@@ -7,7 +7,7 @@
       ]
     },
     {
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Rooms",
         [
           {
@@ -17,7 +17,7 @@
       ]
     },
     {
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Compasses",
         [
           {
@@ -84,7 +84,7 @@
       ]
     },
     {
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Doors",
         [
           {

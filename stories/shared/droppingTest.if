@@ -6,24 +6,10 @@
         "Kitchenette",
         [
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "knife"
-                    }
-                  ]
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:": "self"
-                }
-              ]
+              "the knife",
+              "self"
             ]
           }
         ],

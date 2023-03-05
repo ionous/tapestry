@@ -6,61 +6,23 @@
         "Kitchenette",
         [
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
               [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "flower"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "knife"
-                    }
-                  ]
-                }
+                "the flower",
+                "the knife"
               ],
-              "is",
-              [
-                {
-                  "Noun:": "self"
-                }
-              ]
+              "self"
             ]
           },
           {
             "--": ""
           },
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "purse"
-                    }
-                  ]
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "kitchen"
-                    }
-                  ]
-                }
-              ]
+              "the purse",
+              "the kitchen"
             ]
           }
         ],

@@ -6,64 +6,21 @@
         "Kitchenette",
         [
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "knife"
-                    }
-                  ]
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:": "self"
-                }
-              ]
+              "the knife",
+              "self"
             ]
           },
           {
             "--": ""
           },
           {
-            "Nouns:depict:and:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "espresso controls"
-                    }
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "area",
-                  "device"
-                ]
-              },
-              [
-                {
-                  "NounRelation relation:otherNouns:": [
-                    "whereabouts",
-                    [
-                      {
-                        "Noun:named:": [
-                          "the",
-                          {
-                            "Noun:": "kitchen"
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                }
-              ]
+            "Define nouns:as:relation:otherNouns:": [
+              "the espresso controls",
+              "a device",
+              "whereabouts",
+              "the kitchen"
             ]
           }
         ],

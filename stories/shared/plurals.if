@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Things",
         [
           {
@@ -75,39 +75,13 @@
         "plural name printing",
         [
           {
-            "Nouns:depict:": [
+            "Define nouns:as:": [
               [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "flowerpot"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "dishes"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "spoon"
-                    }
-                  ]
-                }
+                "the flowerpot",
+                "the dishes",
+                "the spoon"
               ],
-              {
-                "Kind:named:": [
-                  "are",
-                  "thing"
-                ]
-              }
+              "things"
             ]
           },
           {

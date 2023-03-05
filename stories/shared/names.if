@@ -7,7 +7,7 @@
       ]
     },
     {
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Things",
         [
           {
@@ -24,53 +24,18 @@
         "name of a kind",
         [
           {
-            "Nouns:depict:": [
+            "Define nouns:as:": [
               [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "named object"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "unnamed object"
-                    }
-                  ]
-                }
+                "the named object",
+                "the unnamed object"
               ],
-              {
-                "Kind:named:": [
-                  "are",
-                  "thing"
-                ]
-              }
+              "things"
             ]
           },
           {
-            "Nouns:startAs:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "unnamed object"
-                    }
-                  ]
-                }
-              ],
-              {
-                "NounTraits:trait:": [
-                  "is",
-                  [
-                    "privately named"
-                  ]
-                ]
-              }
+            "Define nouns:traits:": [
+              "the unnamed object",
+              "privately named"
             ]
           }
         ],

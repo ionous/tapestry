@@ -5,155 +5,47 @@
         "traversal",
         [
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
+              "self",
+              "the Lobby"
+            ]
+          },
+          {
+            "Define nouns:as:": [
+              "the faux door",
+              "door"
+            ]
+          },
+          {
+            "Define relation:nouns:otherNouns:": [
+              "whereabouts",
+              "the faux door",
+              "the Lobby"
+            ]
+          },
+          {
+            "--": "fix: we shouldnt have to flag these as plural named manually.",
+            "Define nouns:traits:": [
+              "the double doors",
               [
-                {
-                  "Noun:": "self"
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "Lobby"
-                    }
-                  ]
-                }
+                "plural named",
+                "closed",
+                "openable"
               ]
             ]
           },
           {
-            "Nouns:depict:": [
+            "Define nouns:as:": [
               [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "faux door"
-                    }
-                  ]
-                }
+                "the Lobby",
+                "the Parapet",
+                "the Foyer",
+                "the Cloak Room",
+                "the Basement",
+                "the Outside"
               ],
-              {
-                "Kind:named:": [
-                  "isa",
-                  "door"
-                ]
-              }
-            ]
-          },
-          {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
-              "whereabouts",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "faux door"
-                    }
-                  ]
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "Lobby"
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "Nouns:startAs:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "double doors"
-                    }
-                  ]
-                }
-              ],
-              {
-                "--": "fix: we shouldnt have to flag these as plural named manually.",
-                "NounTraits:trait:": [
-                  "are",
-                  [
-                    "plural named",
-                    "closed",
-                    "openable"
-                  ]
-                ]
-              }
-            ]
-          },
-          {
-            "Nouns:depict:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "Lobby"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "Parapet"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "Foyer"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "Cloak Room"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "Basement"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "Outside"
-                    }
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "isa",
-                  "room"
-                ]
-              }
+              "rooms"
             ]
           },
           {

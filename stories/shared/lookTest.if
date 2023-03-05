@@ -6,20 +6,9 @@
         "Kitchenette",
         [
           {
-            "Nouns:startAs:": [
-              [
-                {
-                  "Noun:": "settings"
-                }
-              ],
-              {
-                "NounTraits:trait:": [
-                  "is",
-                  [
-                    "verbose"
-                  ]
-                ]
-              }
+            "Define nouns:traits:": [
+              "settings",
+              "verbose"
             ]
           }
         ],
@@ -253,7 +242,7 @@
               "On the shelf are a can of potato leek soup, a can of tomatoes, and a tin of deflating powder.",
               "You can also see a broom, two cats, and a counter (on which are a blender (empty), an espresso machine (closed), and a mortar (in which is a pestle)).",
               "Beneath your feet is a bright and shiny hook.",
-              "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife."
+              "In the cabinet you can also see a book of matches, a bottle of descaling solution, and the rusty knife."
             ]
           },
           {
@@ -278,7 +267,7 @@
             "Expect output:": [
               "The cabinet.",
               "Beneath your feet is a bright and shiny hook.",
-              "In the cabinet you can also see a book of matches, a bottle of descaling solution, and a rusty knife."
+              "In the cabinet you can also see a book of matches, a bottle of descaling solution, and the rusty knife."
             ]
           },
           {
@@ -299,7 +288,7 @@
           {
             "Expect output:": [
               "The cabinet.",
-              "In the cabinet you can see a book of matches, a bottle of descaling solution, and a rusty knife."
+              "In the cabinet you can see a book of matches, a bottle of descaling solution, and the rusty knife."
             ]
           }
         ]

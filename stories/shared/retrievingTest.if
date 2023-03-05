@@ -6,80 +6,33 @@
         "Kitchenette",
         [
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
               [
-                {
-                  "Noun:": "self"
-                },
-                {
-                  "Noun:": "Mildred"
-                }
+                "self",
+                "Mildred"
               ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "kitchen"
-                    }
-                  ]
-                }
-              ]
+              "the kitchen"
             ]
           },
           {
             "--": ""
           },
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "coffee"
-                    }
-                  ]
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "machine"
-                    }
-                  ]
-                }
-              ]
+              "the coffee",
+              "the machine"
             ]
           },
           {
             "--": ""
           },
           {
-            "RelativeToNoun:nouns:areBeing:otherNouns:": [
+            "Define relation:nouns:otherNouns:": [
               "whereabouts",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "empire apple"
-                    }
-                  ]
-                }
-              ],
-              "is",
-              [
-                {
-                  "Noun:": "Mildred"
-                }
-              ]
+              "an empire apple",
+              "Mildred"
             ]
           }
         ],

@@ -7,7 +7,7 @@
       ]
     },
     {
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Objects",
         [
           {
@@ -17,7 +17,7 @@
       ]
     },
     {
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Objects",
         [
           {
@@ -36,41 +36,37 @@
       ]
     },
     {
-      "KindsOfAspect:": "possessiveness"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
+      "Define kinds:as:": [
         "possessiveness",
-        {
-          "TraitPhrase:trait:": [
-            "canbe",
-            [
-              "not worn",
-              "worn"
-            ]
-          ]
-        }
+        "aspect"
       ]
     },
     {
-      "KindsOfAspect:": "portability"
+      "Define traits:as:": [
+        [
+          "not worn",
+          "worn"
+        ],
+        "possessiveness"
+      ]
     },
     {
-      "AspectTraits:traitPhrase:": [
+      "Define kinds:as:": [
         "portability",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "portable",
-              "fixed in place"
-            ]
-          ]
-        }
+        "aspect"
       ]
     },
     {
-      "Kinds:have:": [
+      "Define traits:as:": [
+        [
+          "portable",
+          "fixed in place"
+        ],
+        "portability"
+      ]
+    },
+    {
+      "Define kind:fields:": [
         "Things",
         [
           {
@@ -86,24 +82,22 @@
       ]
     },
     {
-      "KindsOfAspect:": "scenery status"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
+      "Define kinds:as:": [
         "scenery status",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "not scenery",
-              "scenery"
-            ]
-          ]
-        }
+        "aspect"
       ]
     },
     {
-      "Kinds:have:": [
+      "Define traits:as:": [
+        [
+          "not scenery",
+          "scenery"
+        ],
+        "scenery status"
+      ]
+    },
+    {
+      "Define kind:fields:": [
         "Things",
         [
           {
@@ -113,7 +107,7 @@
       ]
     },
     {
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Things",
         [
           {
@@ -123,7 +117,7 @@
       ]
     },
     {
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Things",
         [
           {
@@ -133,24 +127,22 @@
       ]
     },
     {
-      "KindsOfAspect:": "mentionable"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
+      "Define kinds:as:": [
         "mentionable",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "not mentioned",
-              "mentioned"
-            ]
-          ]
-        }
+        "aspect"
       ]
     },
     {
-      "Kinds:have:": [
+      "Define traits:as:": [
+        [
+          "not mentioned",
+          "mentioned"
+        ],
+        "mentionable"
+      ]
+    },
+    {
+      "Define kind:fields:": [
         "Things",
         [
           {
@@ -160,37 +152,33 @@
       ]
     },
     {
-      "KindsOfAspect:": "handleable"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
+      "Define kinds:as:": [
         "handleable",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "not handled",
-              "handled"
-            ]
-          ]
-        }
+        "aspect"
       ]
     },
     {
-      "KindsOfAspect:": "wearability"
+      "Define traits:as:": [
+        [
+          "not handled",
+          "handled"
+        ],
+        "handleable"
+      ]
     },
     {
-      "AspectTraits:traitPhrase:": [
+      "Define kinds:as:": [
         "wearability",
-        {
-          "TraitPhrase:trait:": [
-            "canbe",
-            [
-              "not wearable",
-              "wearable"
-            ]
-          ]
-        }
+        "aspect"
+      ]
+    },
+    {
+      "Define traits:as:": [
+        [
+          "not wearable",
+          "wearable"
+        ],
+        "wearability"
       ]
     },
     {
@@ -227,75 +215,67 @@
       ]
     },
     {
-      "KindsOfAspect:": "open status"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
+      "Define kinds:as:": [
         "open status",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "open",
-              "closed"
-            ]
-          ]
-        }
+        "aspect"
       ]
     },
     {
-      "KindsOfAspect:": "openability"
+      "Define traits:as:": [
+        [
+          "open",
+          "closed"
+        ],
+        "open status"
+      ]
     },
     {
-      "AspectTraits:traitPhrase:": [
+      "Define kinds:as:": [
         "openability",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "unopenable",
-              "openable"
-            ]
-          ]
-        }
+        "aspect"
       ]
     },
     {
-      "KindsOfAspect:": "locked status"
+      "Define traits:as:": [
+        [
+          "unopenable",
+          "openable"
+        ],
+        "openability"
+      ]
     },
     {
-      "AspectTraits:traitPhrase:": [
+      "Define kinds:as:": [
         "locked status",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "unlocked",
-              "locked"
-            ]
-          ]
-        }
+        "aspect"
       ]
     },
     {
-      "KindsOfAspect:": "lockable status"
+      "Define traits:as:": [
+        [
+          "unlocked",
+          "locked"
+        ],
+        "locked status"
+      ]
     },
     {
-      "AspectTraits:traitPhrase:": [
+      "Define kinds:as:": [
         "lockable status",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "lockable",
-              "unlockable"
-            ]
-          ]
-        }
+        "aspect"
       ]
     },
     {
-      "Kinds:have:": [
+      "Define traits:as:": [
+        [
+          "lockable",
+          "unlockable"
+        ],
+        "lockable status"
+      ]
+    },
+    {
+      "Define kind:fields:": [
         "Openers",
         [
           {
@@ -323,41 +303,37 @@
       ]
     },
     {
-      "KindsOfAspect:": "enterability"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
+      "Define kinds:as:": [
         "enterability",
-        {
-          "TraitPhrase:trait:": [
-            "canbe",
-            [
-              "enterable",
-              "not enterable"
-            ]
-          ]
-        }
+        "aspect"
       ]
     },
     {
-      "KindsOfAspect:": "opacity"
+      "Define traits:as:": [
+        [
+          "enterable",
+          "not enterable"
+        ],
+        "enterability"
+      ]
     },
     {
-      "AspectTraits:traitPhrase:": [
+      "Define kinds:as:": [
         "opacity",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "opaque",
-              "transparent"
-            ]
-          ]
-        }
+        "aspect"
       ]
     },
     {
-      "Kinds:have:": [
+      "Define traits:as:": [
+        [
+          "opaque",
+          "transparent"
+        ],
+        "opacity"
+      ]
+    },
+    {
+      "Define kind:fields:": [
         "Containers",
         [
           {
@@ -373,24 +349,22 @@
       "--": ""
     },
     {
-      "KindsOfAspect:": "illumination"
-    },
-    {
-      "AspectTraits:traitPhrase:": [
+      "Define kinds:as:": [
         "illumination",
-        {
-          "TraitPhrase:trait:": [
-            "either",
-            [
-              "unlit",
-              "lit"
-            ]
-          ]
-        }
+        "aspect"
       ]
     },
     {
-      "Kinds:have:": [
+      "Define traits:as:": [
+        [
+          "unlit",
+          "lit"
+        ],
+        "illumination"
+      ]
+    },
+    {
+      "Define kind:fields:": [
         "Things",
         [
           {
@@ -400,7 +374,7 @@
       ]
     },
     {
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Rooms",
         [
           {
@@ -410,7 +384,8 @@
       ]
     },
     {
-      "Certainties:areBeing:certainty:trait:": [
+      "--": "FIX: Certainties aren't implemented",
+      "-- Certainties:areBeing:certainty:trait:": [
         "rooms",
         "are",
         "usually",
@@ -437,7 +412,7 @@
     },
     {
       "--": "generates 'is visited' and 'not visited'",
-      "Kinds:have:": [
+      "Define kind:fields:": [
         "Rooms",
         [
           {

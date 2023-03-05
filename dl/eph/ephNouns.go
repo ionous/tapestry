@@ -83,9 +83,12 @@ func (op *EphNouns) Phase() Phase { return NounPhase }
 
 // noun, kind
 func (op *EphNouns) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if name, ok := UniformString(op.Noun); !ok {
+	_, noun := d.StripDeterminer(op.Noun)
+	_, kind := d.StripDeterminer(op.Kind)
+
+	if name, ok := UniformString(noun); !ok {
 		err = InvalidString(op.Noun)
-	} else if kn, ok := UniformString(op.Kind); !ok {
+	} else if kn, ok := UniformString(kind); !ok {
 		err = InvalidString(op.Kind)
 	} else if k, ok := d.GetPluralKind(kn); !ok {
 		err = errutil.New("unknown kind", op.Kind)
@@ -98,7 +101,7 @@ func (op *EphNouns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		err = NounError{name, errutil.Fmt("can't redefine parent as %q", op.Kind)}
 	} else {
 		// is this in anyway useful?
-		LogWarning(errutil.Sprint("duplicate noun %s definition at %v", name, at))
+		LogWarning(errutil.Sprintf("duplicate noun %s definition at %v", name, at))
 	}
 	return
 }

@@ -6,276 +6,92 @@
         "thingaverse",
         [
           {
-            "Nouns:depict:": [
-              [
-                {
-                  "Noun:": "Mildred"
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "isa",
-                  "actor"
-                ]
-              }
+            "Define nouns:as:": [
+              "Mildred",
+              "an actor"
             ]
           },
           {
-            "Nouns:depict:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "table"
-                    }
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "isa",
-                  "supporter"
-                ]
-              }
+            "Define nouns:as:": [
+              "the table",
+              "a supporter"
             ]
           },
           {
-            "Nouns:depict:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "lab"
-                    }
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "isa",
-                  "room"
-                ]
-              }
+            "Define nouns:as:": [
+              "the lab",
+              "room"
             ]
           },
           {
-            "Nouns:depict:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "basket"
-                    }
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "isa",
-                  "container"
-                ]
-              }
+            "Define nouns:as:": [
+              "the basket",
+              "container"
             ]
           },
           {
-            "Nouns:depict:": [
+            "Define nouns:as:": [
               [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "scalpel"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "an",
-                    {
-                      "Noun:": "empire apple"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "a",
-                    {
-                      "Noun:": "pen"
-                    }
-                  ]
-                }
+                "the scalpel",
+                "an empire apple",
+                "a pen"
               ],
-              {
-                "Kind:named:": [
-                  "isa",
-                  "prop"
-                ]
-              }
+              "props"
             ]
           },
           {
-            "Nouns:relateTo:": [
+            "Define nouns:relation:otherNouns:": [
               [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "table"
-                    }
-                  ]
-                },
-                {
-                  "Noun:": "Mildred"
-                }
+                "the table",
+                "Mildred"
               ],
-              {
-                "NounRelation areBeing:relation:otherNouns:": [
-                  "are",
-                  "whereabouts",
-                  [
-                    {
-                      "Noun:named:": [
-                        "the",
-                        {
-                          "Noun:": "lab"
-                        }
-                      ]
-                    }
-                  ]
-                ]
-              }
+              "whereabouts",
+              "the lab"
             ]
           },
           {
             "--": ""
           },
           {
-            "Nouns:relateTo:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "basket"
-                    }
-                  ]
-                }
-              ],
-              {
-                "NounRelation areBeing:relation:otherNouns:": [
-                  "is",
-                  "whereabouts",
-                  [
-                    {
-                      "Noun:named:": [
-                        "the",
-                        {
-                          "Noun:": "table"
-                        }
-                      ]
-                    }
-                  ]
-                ]
-              }
+            "Define nouns:relation:otherNouns:": [
+              "the basket",
+              "whereabouts",
+              "the table"
             ]
           },
           {
             "--": ""
           },
           {
-            "Nouns:relateTo:": [
+            "Define nouns:relation:otherNouns:": [
               [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "scalpel"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "pen"
-                    }
-                  ]
-                }
+                "the scalpel",
+                "a pen"
               ],
-              {
-                "NounRelation areBeing:relation:otherNouns:": [
-                  "are",
-                  "whereabouts",
-                  [
-                    {
-                      "Noun:": "Mildred"
-                    }
-                  ]
-                ]
-              }
+              "whereabouts",
+              "Mildred"
             ]
           },
           {
             "--": ""
           },
           {
-            "Nouns:startAs:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "pen"
-                    }
-                  ]
-                }
-              ],
-              {
-                "NounTraits:trait:": [
-                  "is",
-                  [
-                    "worn"
-                  ]
-                ]
-              }
+            "Define nouns:traits:": [
+              "a pen",
+              "worn"
             ]
           },
           {
             "--": ""
           },
           {
-            "Nouns:relateTo:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "apple"
-                    }
-                  ]
-                }
-              ],
-              {
-                "NounRelation areBeing:relation:otherNouns:": [
-                  "is",
-                  "whereabouts",
-                  [
-                    {
-                      "Noun:named:": [
-                        "the",
-                        {
-                          "Noun:": "basket"
-                        }
-                      ]
-                    }
-                  ]
-                ]
-              }
+            "Define nouns:relation:otherNouns:": [
+              "apple",
+              "whereabouts",
+              "the basket"
             ]
           }
+
         ],
         [
           {

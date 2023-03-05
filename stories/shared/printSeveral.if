@@ -76,23 +76,9 @@
         "print several",
         [
           {
-            "Nouns:depict:": [
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "books"
-                    }
-                  ]
-                }
-              ],
-              {
-                "Kind:named:": [
-                  "area",
-                  "thing"
-                ]
-              }
+            "Define nouns:as:": [
+              "the books",
+              "thing"
             ]
           }
         ],

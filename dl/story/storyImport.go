@@ -44,7 +44,7 @@ func (op *GrammarDecl) PostImport(k *imp.Importer) (err error) {
 func (op *DefineNounTraits) PostImport(k *imp.Importer) (err error) {
 	if nouns, e := safe.GetTextList(nil, op.Nouns); e != nil {
 		err = e
-	} else if kind, e := safe.GetText(nil, op.Kind); e != nil {
+	} else if kind, e := safe.GetOptionalText(nil, op.Kind, ""); e != nil {
 		err = e
 	} else if traits, e := safe.GetTextList(nil, op.Traits); e != nil {
 		err = e
@@ -102,7 +102,7 @@ func (op *NounAssignment) PostImport(k *imp.Importer) (err error) {
 func (op *DefineRelatives) PostImport(k *imp.Importer) (err error) {
 	if nouns, e := safe.GetTextList(nil, op.Nouns); e != nil {
 		err = e
-	} else if kind, e := safe.GetText(nil, op.Kind); e != nil {
+	} else if kind, e := safe.GetOptionalText(nil, op.Kind, ""); e != nil {
 		err = e
 	} else if relation, e := safe.GetText(nil, op.Relation); e != nil {
 		err = e
@@ -119,7 +119,7 @@ func (op *DefineRelatives) PostImport(k *imp.Importer) (err error) {
 			}
 			if rel := relation.String(); len(rel) > 0 {
 				for _, object := range b {
-					k.WriteEphemera(&eph.EphRelatives{Rel: rel, Noun: subject, OtherNoun: object})
+					k.WriteEphemera(&eph.EphRelatives{Rel: rel, Noun: object, OtherNoun: subject})
 				}
 			}
 		}
@@ -142,8 +142,7 @@ func (op *DefineOtherRelatives) PostImport(k *imp.Importer) (err error) {
 		if rel := relation.String(); len(rel) > 0 {
 			for _, subject := range a {
 				for _, object := range b {
-					// reverses the relation: maybe should just be a flag
-					k.WriteEphemera(&eph.EphRelatives{Rel: rel, OtherNoun: object, Noun: subject})
+					k.WriteEphemera(&eph.EphRelatives{Rel: rel, Noun: object, OtherNoun: subject})
 				}
 			}
 		}
