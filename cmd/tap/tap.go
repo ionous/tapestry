@@ -15,6 +15,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cfg"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdcompact"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdgenerate"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdidlb"
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdmosaic"
@@ -166,6 +167,7 @@ func init() {
 	// rewrites the main tap command to simplify exitBadUsage
 	base.Go.Commands = []*base.Command{
 		cmdidlb.CmdIdl,
+		cmdcompact.CmdCompact,
 		cmdgenerate.CmdGenerate,
 		cmdmosaic.CmdMosaic,
 	}

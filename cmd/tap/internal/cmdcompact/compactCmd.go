@@ -1,10 +1,10 @@
-// Package main for 'compact'.
 // Transforms detailed format json files to their compact format, and back again.
 // Relies on the file extension ".ifx" being used for detailed format files, and ".if" for compact files.
-package main
+package cmdcompact
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"flag"
 	"io"
@@ -16,6 +16,7 @@ import (
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/blockly/block"
 	"git.sr.ht/~ionous/tapestry/blockly/unblock"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 	"git.sr.ht/~ionous/tapestry/dl/spec/rs"
 	"git.sr.ht/~ionous/tapestry/dl/story"
@@ -49,29 +50,12 @@ func oppositeExt(ext string) (ret string) {
 	return
 }
 
-func main() {
-	var inPath, outPath, inExts, outExt string
-	var recurse, pretty bool
-	flag.StringVar(&outPath, "out", "", "output directory; required.")
-	flag.StringVar(&inPath, "in", "", "input file(s) or paths(s) (comma separated)")
-	flag.BoolVar(&recurse, "recurse", false, "scan input sub-directories")
-	flag.StringVar(&inExts, "filter", ".if",
-		`extension(s) for directory scanning.
-ignored if 'in' refers to a specific file`)
+func runCompact(ctx context.Context, cmd *base.Command, args []string) (err error) {
 
-	flag.StringVar(&outExt, "convert", "",
-		`an optional file extension to force a story format conversion (.if|.ifx|.block)
-underscores are allowed to avoid copying over the original files. (._if, .if_, etc.)
-( ex. if the in and out directories are the same.
-if no extension is specified, the output format is the same as the import format.`)
-	flag.BoolVar(&pretty, "pretty", false, "make the output somewhat human readable")
-	flag.BoolVar(&errutil.Panic, "panic", false, "pa_nic on error?")
-	flag.Parse()
-
-	tgtExt := strings.ReplaceAll(outExt, "_", "")
+	tgtExt := strings.ReplaceAll(compactFlags.outExt, "_", "")
 	if len(tgtExt) != 0 && !files.IsValidExtension(tgtExt, allExts) {
 		flag.Usage() // exits
-	} else if len(inPath) == 0 || len(outPath) == 0 {
+	} else if len(compactFlags.inPath) == 0 || len(compactFlags.outPath) == 0 {
 		flag.Usage() // exits
 	}
 	process := func(inFile string) (err error) {
@@ -81,17 +65,17 @@ if no extension is specified, the output format is the same as the import format
 		}
 		// convert the filename
 		var outName string
-		if fileName := filepath.Base(inFile); len(outExt) == 0 {
+		if fileName := filepath.Base(inFile); len(compactFlags.outExt) == 0 {
 			outName = fileName
 		} else {
 			fileExt := filepath.Ext(fileName)
-			outName = fileName[:len(fileName)-len(fileExt)] + outExt
+			outName = fileName[:len(fileName)-len(fileExt)] + compactFlags.outExt
 		}
-		outFile := filepath.Join(outPath, outName)
+		outFile := filepath.Join(compactFlags.outPath, outName)
 		// specs can only become specs:
 		if inExt := filepath.Ext(inFile); inExt == SpecExt {
 			if tgtExt == SpecExt {
-				if e := decodeEncodeSpec(inFile, outFile, pretty); e != nil {
+				if e := decodeEncodeSpec(inFile, outFile, compactFlags.pretty); e != nil {
 					err = errutil.New("couldnt process", inFile, "=>", outFile, e)
 				}
 			}
@@ -101,11 +85,15 @@ if no extension is specified, the output format is the same as the import format
 			switch inExt {
 			case DetailedExt:
 				x.decode = detailed.decode
+				x.encode = detailed.encode
 			case CompactExt:
 				x.decode = compact.decode
+				x.encode = compact.encode
 			case BlockExt:
 				x.decode = blockly.decode
+				x.encode = blockly.encode
 			}
+			// override the default encoding if any specified
 			switch tgtExt {
 			case DetailedExt:
 				x.encode = detailed.encode
@@ -115,15 +103,16 @@ if no extension is specified, the output format is the same as the import format
 				x.encode = blockly.encode
 			}
 			// report on results:
-			if e := x.decodeEncode(inFile, outFile, pretty); e != nil {
+			if e := x.decodeEncode(inFile, outFile, compactFlags.pretty); e != nil {
 				err = errutil.New("couldnt process", inFile, "=>", outFile, e)
 			}
 		}
 		return // done processing
 	}
-	if e := files.ReadPaths(inPath, recurse, strings.Split(inExts, ","), process); e != nil {
-		log.Fatal("error processing files", e)
+	if e := files.ReadPaths(compactFlags.inPath, compactFlags.recurse, strings.Split(compactFlags.inExts, ","), process); e != nil {
+		err = errutil.New("error processing files", e)
 	}
+	return
 }
 
 type xform struct {
@@ -249,87 +238,24 @@ func xformStory(tgt jsn.Marshalee) (err error) {
 	return
 }
 
-// define  a custom spec encoder.
-var customSpecEncoder cout.CustomFlow = nil
-var customStoryEncoder = story.CompactEncoder
+var CmdCompact = &base.Command{
+	Run:       runCompact,
+	Flag:      buildFlags(),
+	UsageLine: "tap compact [-in path] [-out path]",
+	Short:     "reformat story files",
+	Long: `Transform and reformat various Tapestry file formats.
 
-// example removing "trim" for underscore names
-// func init() {
-// 	customSpecEncoder = func(m jsn.Marshaler, flow jsn.FlowBlock) (err error) {
-// 		switch op := flow.GetFlow().(type) {
-// 		case *spec.FlowSpec:
-// 			if op.Trim {
-// 				if len(op.Terms) == 0 {
-// 					panic("empty terms " + op.Name)
-// 				}
-// 				if op.Terms[0].Name != "" {
-// 					panic("unexpected name " + op.Name + " " + op.Terms[0].Name)
-// 				}
-// 				if op.Terms[0].Key == "" {
-// 					panic("unexpected key " + op.Name)
-// 				} else {
-// 					op.Terms[0].Name = op.Terms[0].Key
-// 					op.Terms[0].Key = "_"
-// 				}
-// 				op.Trim = false
-// 			}
-// 		}
-// 		// we haven't serialized it -- just poked at its memory
-// 		return chart.Unhandled("no custom encoder")
-// 	}
-// }
+Known file types include:
 
-// install a custom encoder to rewrite things
-// func init() {
-// 	customStoryEncoder = func(m jsn.Marshaler, flow jsn.FlowBlock) error {
-// 		switch op := flow.GetFlow().(type) {
-// 		case *story.AspectProperty:
-// 			swap(&op.UserComment, &op.Comment)
-// 		case *story.BoolProperty:
-// 			swap(&op.UserComment, &op.NamedProperty.Comment)
-// 		case *story.NumberProperty:
-// 			swap(&op.UserComment, &op.NamedProperty.Comment)
-// 		case *story.NumListProperty:
-// 			swap(&op.UserComment, &op.NamedProperty.Comment)
-// 		case *story.RecordProperty:
-// 			swap(&op.UserComment, &op.NamedProperty.Comment)
-// 		case *story.RecordListProperty:
-// 			swap(&op.UserComment, &op.NamedProperty.Comment)
-// 		case *story.TextListProperty:
-// 			swap(&op.UserComment, &op.NamedProperty.Comment)
-// 		case *story.TextProperty:
-// 			swap(&op.UserComment, &op.NamedProperty.Comment)
-// 		}
-// 		return core.CompactEncoder(m, flow)
-// 	}
-// }
+	.if: default tapestry story file format
+	.ifx: an older, more verbose story file format
+	.ifspecs: idl files
+	.block: blockly formatted story files
 
-const Description = //
-`Transforms detailed format json files to their compact format, and back again.
-`
-const Example = `
-ex. go run compact.go -in ../../stories/blank.ifx [-out ../../stories/]
+Example:
+	tap compact -in ../../stories/blank.if
 
-bulk conversion examples:
-
-from the generated .if files, generate the .ifx files:
-	go build compact.go; for f in ../../stories/*.if; do ./compact -in $f; done;
-
-	or, load and rewrite the .if files
-	go build compact.go; for f in ../../stories/shared/*.if; do ./compact -pretty -in $f -out .if; done;
-	go build compact.go; for f in ../regenspec/out/*.ifspecs; do ./compact -pretty -in $f -out $f; done;
-	go build compact.go; for f in ../../stories/shared/*.if; do ./compact -pretty -in $f -out .block; done;
-	go build compact.go; for f in ../../stories/shared/*.block; do ./compact -pretty -in $f -out .if; done;
-
-windows:
-	for %i in (..\..\stories\shared\*.if) do ( compact -pretty -in %i -out %i )
-	for %i in (..\..\idl\*.ifspecs) do ( compact -pretty -in %i -out %i )
-`
-
-func init() {
-	flag.Usage = func() {
-		println(Description)
-		flag.PrintDefaults()
-		println(Example)
-	}
+Bulk conversion example:
+	tap compact -in ../../stories/shared -out ../../stories/shared
+`,
 }
