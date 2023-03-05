@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	git.sr.ht/~ionous/tapestry v0.0.0-00010101000000-000000000000
-	github.com/ionous/errutil v0.0.0-20210301225645-f05ff1857722
+	github.com/ionous/errutil v0.0.0-20230227195626-6de478250a3b
 	github.com/wailsapp/wails/v2 v2.0.0-beta.42
 	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9
 	golang.org/x/tools v0.1.10
