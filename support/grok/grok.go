@@ -5,19 +5,43 @@ import (
 )
 
 // fix: should be customizable
-var traits = []string{
-	// fix: kinds as traits is handy, but becomes difficult with plurals.
-	// and there _are_ some places where its wrong to have a trait and required to have a kind
-	"thing",
-	"container",
-	"supporter",
-	"things",
-	"containers",
-	"supporters",
-	// real traits
-	"closed",
-	"open",
-	"openable",
+var known = struct {
+	determiners, macros, traits spans
+}{
+	determiners: makeSpans([]string{
+		"the", "a", "an", "some", "our",
+		// ex. kettle of fish
+		"a kettle of",
+	}),
+	macros: makeSpans([]string{
+		// right now assumes the first set are kinds of
+		// could it use the fact there's only one set of definitions.
+		// is any thing else like that?
+		// tbd: need more thought.
+		"kind of",   // for "a closed kind of container"
+		"kinds of",  // for "are closed containers"
+		"a kind of", // for "a kind of container"
+		// other macros
+		"on",
+		"in",
+	}),
+	traits: makeSpans([]string{
+		// fix: kinds as traits is handy, but becomes difficult with plurals.
+		// and there _are_ some places where its wrong to have a trait and required to have a kind
+		"thing",
+		"container",
+		"supporter",
+		"things",
+		"containers",
+		"supporters",
+		// real traits
+		"closed",
+		"open",
+		"openable",
+		"transparent",
+		"fixed in place",
+	},
+	),
 }
 
 var keywords = struct {
@@ -29,18 +53,6 @@ var keywords = struct {
 	comma:  plainHash(","),
 	has:    plainHash("has"),
 	is:     plainHash("is"),
-}
-
-// fix: should be customizable
-var known = struct {
-	determiners, traits spans
-}{
-	traits: makeSpans(traits),
-	determiners: makeSpans([]string{
-		"the", "a", "an", "some", "our",
-		// ex. kettle of fish
-		"a kettle of",
-	}),
 }
 
 type match struct {
@@ -56,79 +68,21 @@ type results struct {
 	macro    span
 }
 
-// fix: should be customizable;
-// fix: special handling for kinds/of?
-// should things have aliases?
-var macros = makeSpans([]string{
-	"kind of",   // for "a closed kind of container"
-	"kinds of",  // for "are closed containers"
-	"a kind of", // for "a kind of container"
-	"on",
-})
-
 func Grok(p string) (ret results, err error) {
 	out := &results{}
 	if words, e := hashWords(p); e != nil {
 		err = e
 	} else {
-		matched := struct {
-			macro, toBe int // one-index within "words" of the successful match
-			whichMacro  int // zero index with the list of all macros
-		}{}
-
-		// scan left to right, looking for "is/are" or a macro phrase
+		// scan for "is/are" or a macro verb, which ever comes first:
 		for i, w := range words {
 			if w.equals(keywords.is) || w.equals(keywords.are) {
-				// split here.
-				if matched.toBe > 0 {
-					err = makeWordError(w, "only one is/are expected")
-					break
-				}
-				matched.toBe = i + 1
-			}
-			// should this try to keep matching no matter what? ( like to/be does )
-			if matched.macro == 0 {
-				restOfTheSentence := words[i:]
-				if at := macros.findPrefix(restOfTheSentence); at >= 0 {
-					out.macro = macros[at]
-					matched.macro = i + 1
-					matched.whichMacro = at
-				}
-			}
-			if matched.toBe > 0 && matched.macro > 0 {
+				err = afterIs(out, words[:i], words[i+1:])
 				break
-			}
-		}
-		// explicit error if "toBe" falls at the end of a sentence?
-		if err == nil {
-			switch {
-			case matched.toBe > 0 && matched.macro > 0:
-				// ex. the closed box "is" "in" the lobby
-				// ex. the box "is" a closed container "in" the lobby
-				macroLen := len(macros[matched.whichMacro])
-				if beStart, macStart := matched.toBe-1, matched.macro-1; beStart < macStart {
-					lhs, rhs, mid := words[:beStart], words[macStart+macroLen:], words[beStart+1:macStart]
-					// fix? parse the source while first looping over the words.
-					if e := genSubjects(out, lhs); e != nil {
-						err = errutil.New("parsing source", e)
-					} else {
-						// fix? this isnt satisfying
-						if matched.whichMacro < 3 {
-							if e := applyExtras(out, mid); e != nil {
-								err = errutil.New("parsing extras", e)
-							} else if e := applyKind(out, rhs); e != nil {
-								err = errutil.New("parsing target", e)
-							}
-						} else {
-							if rest, e := genNoun(&out.targets, rhs); e != nil {
-								err = errutil.New("parsing target", e)
-							} else if len(rest) > 0 {
-								err = makeWordError(rest[0], "unexpected trailing text")
-							} else if e := applyExtras(out, mid); e != nil {
-								err = errutil.New("parsing extras", e)
-							}
-						}
-					}
+			} else {
+				if at, skip := known.macros.findPrefix(words[i:]); skip > 0 {
+					out.macro = known.macros[at]
+					err = afterMacro(out, words[:i], words[i+skip:])
+					break
 				}
 			}
 		}
@@ -136,6 +90,116 @@ func Grok(p string) (ret results, err error) {
 	if err == nil {
 		ret = *out
 	}
+	return
+}
+
+// after finding is/are, scan for a macro;
+// handle either an "is-verb" or a pure "is" statement.
+func afterIs(out *results, lhs, rhs []word) (err error) {
+	var traits [][]word
+	at, cnt := 0, len(rhs)
+	for at < cnt {
+		// break on extra is.
+		if w := rhs[at]; w.equals(keywords.is) || w.equals(keywords.are) {
+			err = makeWordError(w, "only one is/are expected")
+			break
+		}
+		// scan for traits so multi word traits don't get confused for verbs
+		// ( ex. "fixed in place" vs. "in the lobby" )
+		// but these are dropped if a macro is actually detected.
+		if trait, skip := known.traits.findPrefix(rhs[at:]); skip > 0 {
+			if skipAnd, e := countAnd(rhs[skip:]); e != nil {
+				err = e
+				break
+			} else {
+				traits = append(traits, known.traits[trait])
+				at += skip + skipAnd
+			}
+		} else if macro, skip := known.macros.findPrefix(rhs[at:]); skip == 0 {
+			at++
+		} else {
+			// fix? parse the subject while first looping over the words?
+			if e := genSubjects(out, lhs); e != nil {
+				err = errutil.New("parsing subject", e)
+			} else {
+				// before the macro, and after
+				// ex. the closed box "is" "in" the lobby
+				// ex. the box "is" a closed container "in" the lobby
+				pre, post := rhs[:at], rhs[at+skip:]
+
+				// fix? this isnt satisfying
+				if macro < 3 {
+					if e := applyExtras(out, pre); e != nil {
+						err = errutil.New("parsing extras", e)
+					} else if e := applyKind(out, post); e != nil {
+						err = errutil.New("parsing target", e)
+					}
+				} else {
+					if rest, e := genNounCalled(&out.targets, post); e != nil {
+						err = errutil.New("parsing target", e)
+					} else if len(rest) > 0 {
+						err = makeWordError(rest[0], "unexpected trailing text")
+					} else if e := applyExtras(out, pre); e != nil {
+						err = errutil.New("parsing extras", e)
+					}
+				}
+				if err == nil {
+					out.macro = known.macros[macro]
+				}
+				break // done now regardless
+			}
+		}
+	}
+	// never hit a macro?
+	// ex. (the box) is (closed).
+	if nothingLeft := at == cnt; nothingLeft {
+		if e := genSubjects(out, lhs); e != nil {
+			err = errutil.New("parsing subject", e)
+		} else {
+			applyTraits(out.subjects, traits)
+		}
+	}
+	return
+}
+
+// XXXXXXX haven't actually looked at this.
+func afterMacro(out *results, lhs, rhs []word) (err error) {
+	panic("not implemented")
+	// at, cnt := 0, len(ws)
+	// for ; at < cnt; at++ {
+	// 	if w := ws[at]; w.equals(keywords.is) || w.equals(keywords.are) {
+	// 		err = makeWordError(w, "only one is/are expected")
+	// 		break
+	// 	} else {
+	// 		err = foundMacroIs(out, ws[at+at:])
+	// 		break
+	// 	}
+	// }
+	// // never is?
+	// if nothingLeft := at == len(ws); nothingLeft {
+	// 	// //err = foundIsOnly(out, ws)
+	// 	// // lhs are the nouns; rhs are the traits
+	// 	// if e := genSubjects(out, lhs); e != nil {
+	// 	// 	err = errutil.New("parsing subject", e)
+	// 	// } else if e := applyExtras(out, rhs); e != nil {
+	// 	// 	err = errutil.New("parsing extras", e)
+	// 	// }
+	// }
+	return
+}
+
+// ex. the bottle) is (closed.
+func foundIsOnly(out *results, lhs, rhs []word) (err error) {
+	// lhs are the nouns; rhs are the traits
+	if e := genSubjects(out, lhs); e != nil {
+		err = errutil.New("parsing subject", e)
+	} else if e := applyExtras(out, rhs); e != nil {
+		err = errutil.New("parsing extras", e)
+	}
+	return
+}
+
+func foundMacroIs(out *results, ws []word) (err error) {
 	return
 }
 
@@ -156,7 +220,7 @@ func genSubjects(out *results, words []word) (err error) {
 		err = errutil.New("expected at least one subject")
 	} else {
 		for len(words) > 0 && err == nil {
-			if rem, e := genNoun(&out.subjects, words); e != nil {
+			if rem, e := genNounCalled(&out.subjects, words); e != nil {
 				err = e
 			} else {
 				words, err = eatAnd(rem)
@@ -171,15 +235,19 @@ func genSubjects(out *results, words []word) (err error) {
 // ex. the box is [a] closed [container] in the lobby.
 func applyExtras(out *results, words []word) (err error) {
 	if len(words) > 0 {
-		if ts, e := parseTraits(words); e != nil {
+		if traits, e := parseTraits(words); e != nil {
 			err = e
 		} else {
-			for i, n := range out.subjects {
-				out.subjects[i].traits = append(n.traits, ts...)
-			}
+			applyTraits(out.subjects, traits)
 		}
 	}
 	return
+}
+
+func applyTraits(out []noun, traits [][]word) {
+	for i := range out {
+		out[i].traits = append(out[i].traits, traits...)
+	}
 }
 
 // a kind of <traits> <kind>.
@@ -198,7 +266,7 @@ func applyKind(out *results, words []word) (err error) {
 // ex. ... <the noun> [and ....]
 // note: without the "called" leading words become the name of the noun.
 // returns any unprocessed words
-func genNoun(out *[]noun, words []word) (rest []word, err error) {
+func genNounCalled(out *[]noun, words []word) (rest []word, err error) {
 	var traits [][]word
 	var andAt int // one indexed
 	for i, t := range words {
@@ -273,15 +341,26 @@ func parseTraits(words []word) (traits [][]word, err error) {
 	return
 }
 
+// like countAnd, but returns a new slice
+func eatAnd(words []word) (ret []word, err error) {
+	if skip, e := countAnd(words); e != nil {
+		err = e
+	} else {
+		ret = words[skip:]
+	}
+	return
+}
+
 // note: when words were parsed commas became their own word
 // either of these patterns will be ate ", and" or "and"
-func eatAnd(words []word) (ret []word, err error) {
+// returns the number of eaten words
+func countAnd(ws []word) (ret int, err error) {
 	var comma bool
 	var and bool
-	ate := words
+	at, cnt := 0, len(ws)
 Loop:
-	for len(ate) > 0 {
-		switch w := ate[0]; w.hash {
+	for at < cnt {
+		switch w := ws[at]; w.hash {
 		default:
 			break Loop
 
@@ -290,21 +369,22 @@ Loop:
 				err = makeWordError(w, "unexpected comma")
 				break Loop
 			}
-			ate, comma = ate[1:], true
+			at, comma = at+1, true
 
 		case keywords.and:
 			if and {
 				err = makeWordError(w, "unexpected and")
 				break Loop
 			}
-			ate, and = ate[1:], true
+			at, and = at+1, true
 		}
 	}
 	// nothingness is okay, but not nothingness after a comma or and.
-	if err == nil && (and || comma) && len(ate) == 0 {
-		err = makeWordError(words[0], "unexpected ending")
+	if nothingLeft := at == len(ws); nothingLeft && (and || comma) {
+		// to get nothing, we must have had no error...
+		err = makeWordError(ws[0], "unexpected ending")
 	} else {
-		ret = ate
+		ret = at
 	}
 	return
 }

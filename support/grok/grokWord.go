@@ -55,15 +55,13 @@ func makeSpans(strs []string) (out spans) {
 }
 
 // find the index of the span which matches the passed words
-func (ws spans) findPrefix(match []word) (ret int) {
-	ret = -1 // provisionally
+func (ws spans) findPrefix(match []word) (ret int, retLen int) {
 	if mcnt := len(match); mcnt > 0 {
-		best := -1
 		for prefixIndex, prefix := range ws {
 			// every word in el has to exist in match for it to be a prefix
 			// and it has to be longer than any other previous match for it to be the best match
 			// ( fix? try a sort search> my first attempt failed miserably )
-			if pcnt := len(prefix); pcnt <= mcnt && pcnt > best {
+			if pcnt := len(prefix); pcnt <= mcnt && pcnt > retLen {
 				var failed bool
 				for i, a := range prefix {
 					if a.hash != match[i].hash {
@@ -72,7 +70,7 @@ func (ws spans) findPrefix(match []word) (ret int) {
 					}
 				}
 				if !failed {
-					ret, best = prefixIndex, pcnt
+					ret, retLen = prefixIndex, pcnt
 				}
 			}
 		}
@@ -81,14 +79,14 @@ func (ws spans) findPrefix(match []word) (ret int) {
 }
 
 // given this pool of known words;
-// split the leading part of a phrase from its tail "[the brace of] quick foxes"
+// split the best matching prefix ( if any ) from its tail
+// "[the brace of] quick foxes"
 func (ws spans) cut(name []word) (ret []word, rest []word) {
-	if at := ws.findPrefix(name); at < 0 {
-		rest = name // no det, everything is a name
+	if _, cnt := ws.findPrefix(name); cnt == 0 {
+		rest = name // no prefix, everything left as is.
 	} else {
-		cnt := len(ws[at])
-		ret = name[:cnt]  // the first part is the span of determiners
-		rest = name[cnt:] // the second part is anything after
+		ret = name[:cnt]  // the first part is the prefix
+		rest = name[cnt:] // the remainder is everything after
 	}
 	return
 }

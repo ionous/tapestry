@@ -7,28 +7,95 @@ import (
 	"github.com/kr/pretty"
 )
 
+func TestPhrases(t *testing.T) {
+	var skipped int
+	for i, p := range phrases {
+		if p.result == nil {
+			continue
+		} else if p.skip {
+			skipped++
+		} else if res, e := Grok(p.test); e != nil {
+			t.Fatal("test", i, e)
+		} else {
+			m := resultMap(res)
+			if d := pretty.Diff(p.result, m); len(d) > 0 {
+				t.Log("test", i, p.test, "got:\n", pretty.Sprint(m))
+				//t.Log("want:", pretty.Sprint(p.result))
+				t.Fatal(d)
+			}
+		}
+	}
+	if skipped > 0 {
+		t.Fatalf("skipped %d", skipped)
+	}
+}
+
 var phrases = []struct {
 	test   string
 	result map[string]any
 	skip   bool
 }{
 	// simple trait:
-	{test: `The bottle is closed.`},
+	{
+		test: `The bottle is closed.`,
+		result: map[string]any{
+			"subjects": []map[string]any{{
+				"det":    "The", // uppercase because its the real value from the original string.
+				"name":   "bottle",
+				"traits": []string{"closed"},
+			}},
+		},
+	},
 	// multi word trait:
-	{test: `The tree is fixed in place.`},
+	{
+		test: `The tree is fixed in place.`,
+		result: map[string]any{
+			"subjects": []map[string]any{{
+				"det":    "The",
+				"name":   "tree",
+				"traits": []string{"fixed in place"},
+			}},
+		},
+	},
+
+	// multiple trailing properties, using the kind as a property.
+	{
+		test: `The bottle is a transparent, open, container.`,
+		result: map[string]any{
+			"subjects": []map[string]any{{
+				"det":    "The",
+				"name":   "bottle",
+				"traits": []string{"transparent", "open", "container"},
+			}},
+		},
+	},
+	// using 'called' without a macro
+	{
+		test: `The container called the sarcophagus is open.`,
+		result: map[string]any{
+			"subjects": []map[string]any{{
+				"det":    "the", // lowercase, its the bit closet to the noun
+				"name":   "sarcophagus",
+				"traits": []string{"container", "open"}, // traits are left to right
+			}},
+		},
+	},
+
 	// a kind of declaration ( uses a 'macro' verb )
+	// "is" left of macro
 	{
 		test: `The box is a kind of container.`,
 		result: map[string]any{
 			"macro": "a kind of",
 			"subjects": []map[string]any{{
-				"det":    "The", // uppercase because its the real value from the original string.
+				"det":    "The",
 				"name":   "box",
 				"traits": []string{"container"},
 			}},
 		},
 	},
 	// kind of: adding trailing properties
+	// "is" left of macro
 	{
 		test: `The box is a kind of closed container.`,
 		result: map[string]any{
@@ -41,6 +108,7 @@ var phrases = []struct {
 		},
 	},
 	// kind of: adding middle properties
+	// "is" left of macro
 	{
 		test: `The box is a closed kind of container.`,
 		result: map[string]any{
@@ -52,8 +120,10 @@ var phrases = []struct {
 			}},
 		},
 	},
-	// kind of, "correctly" failing prefixed properties
+	// kind of, "correctly" failing prefixed properties.
 	// note: in inform, this also yields a noun named the "closed box".
+	// similarly, The kind of the box is a container, yields a name "kind of the box".
+	// "is" left of macro.
 	{
 		test: `The closed box is a kind of container.`,
 		result: map[string]any{
@@ -82,12 +152,25 @@ var phrases = []struct {
 			}},
 		},
 	},
-	// multiple trailing properties, using the kind as a property.
-	{test: `The bottle is a transparent, open, container.`},
-	// add leading properties in the lede by using 'called' ( 'in' is also a macro verb )
-	{test: `The closed openable container called the trunk is in the lobby.`},
-	// using 'called' without a macro
-	{test: `The container called the sarcophagus is open.`},
+	// add leading properties in the lede by using 'called'
+	// "is" left of the macro "in".
+	// slightly different parsing than "kind/s of":
+	// those expect only expect one set of nouns; these have two.
+	{
+		test: `The closed openable container called the trunk is in the lobby.`,
+		result: map[string]any{
+			"macro": "in",
+			"subjects": []map[string]any{{
+				"det":    "the", // lowercase, the closest to the trunk
+				"name":   "trunk",
+				"traits": []string{"closed", "openable", "container"},
+			}},
+			"targets": []map[string]any{{
+				"det":  "the",
+				"name": "lobby",
+			}},
+		},
+	},
 	// a leading macro
 	{test: `In the coffin are some coins, a notebook, and a gripping hand.`},
 	// same pattern as the middle properties above; but not using kind of
@@ -120,29 +203,6 @@ var phrases = []struct {
 	{test: `Hector and Maria are suspicious of Santa and Santana.`},
 	// fix: in this case i think inform eats the first "is" and allows a subsequent one ( and also allows values )
 	// fix: the device called the detonator is on the supporter called the shelf and is proper named"
-}
-
-func TestPhrases(t *testing.T) {
-	var skipped int
-	for i, p := range phrases {
-		if p.result == nil {
-			continue
-		} else if p.skip {
-			skipped++
-		} else if res, e := Grok(p.test); e != nil {
-			t.Fatal(e)
-		} else {
-			m := resultMap(res)
-			if d := pretty.Diff(p.result, m); len(d) > 0 {
-				t.Log(i, "got:", pretty.Sprint(m))
-				//t.Log("want:", pretty.Sprint(p.result))
-				t.Fatal(d)
-			}
-		}
-	}
-	if skipped > 0 {
-		t.Fatal("skipped %d", skipped)
-	}
 }
 
 func TestTraits(t *testing.T) {
