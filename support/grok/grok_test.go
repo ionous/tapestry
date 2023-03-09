@@ -17,7 +17,7 @@ func TestPhrases(t *testing.T) {
 		// simple trait:
 		{
 			test: `The bottle is closed.`,
-			skip: map[string]any{
+			result: map[string]any{
 				"sources": []map[string]any{{
 					"det":    "The", // uppercase because its the real value from the original string.
 					"name":   "bottle",
@@ -28,7 +28,7 @@ func TestPhrases(t *testing.T) {
 		// multi Word trait:
 		{
 			test: `The tree is fixed in place.`,
-			skip: map[string]any{
+			result: map[string]any{
 				"sources": []map[string]any{{
 					"det":    "The",
 					"name":   "tree",
@@ -39,7 +39,7 @@ func TestPhrases(t *testing.T) {
 		// multiple trailing properties, using the kind as a property.
 		{
 			test: `The bottle is a transparent, open, container.`,
-			skip: map[string]any{
+			result: map[string]any{
 				"sources": []map[string]any{{
 					"det":    "The",
 					"name":   "bottle",
@@ -51,7 +51,7 @@ func TestPhrases(t *testing.T) {
 		// using 'called' without a macro
 		{
 			test: `The container called the sarcophagus is open.`,
-			skip: map[string]any{
+			result: map[string]any{
 				"sources": []map[string]any{{
 					"det":    "the", // lowercase, its the bit closet to the Noun
 					"name":   "sarcophagus",
@@ -64,7 +64,7 @@ func TestPhrases(t *testing.T) {
 		// "is" left of macro
 		{
 			test: `The box is a kind of container.`,
-			skip: map[string]any{
+			result: map[string]any{
 				"macro": "a kind of",
 				"sources": []map[string]any{{
 					"det":   "The",
@@ -77,7 +77,7 @@ func TestPhrases(t *testing.T) {
 		// "is" left of macro
 		{
 			test: `The box is a kind of closed container.`,
-			skip: map[string]any{
+			result: map[string]any{
 				"macro": "a kind of",
 				"sources": []map[string]any{{
 					"det":    "The",
@@ -94,7 +94,7 @@ func TestPhrases(t *testing.T) {
 		// "is" left of macro.
 		{
 			test: `The closed box is a kind of container.`,
-			skip: map[string]any{
+			result: map[string]any{
 				"macro": "a kind of",
 				"sources": []map[string]any{{
 					"det":   "The",
@@ -106,7 +106,7 @@ func TestPhrases(t *testing.T) {
 		// multiple kinds of things
 		{
 			// 	test: `The box and the top are closed kinds of containers.`,
-			// 	skip:  map[string]any{
+			// 	result:   map[string]any{
 			// 		"macro": "kinds of",
 			// 		"sources": []map[string]any{{
 			// 			"det":    "The",
@@ -125,7 +125,7 @@ func TestPhrases(t *testing.T) {
 		// not allowed in inform.
 		{
 			// 	test: `The box is a closed kind of container.`,
-			// 	skip:  map[string]any{
+			// 	result:   map[string]any{
 			// 		"macro": "kind of",
 			// 		"sources": []map[string]any{{
 			// 			"det":    "The",
@@ -136,13 +136,13 @@ func TestPhrases(t *testing.T) {
 		},
 		{
 			//test: `A device is in the lobby.`,
-			//skip:  errutil.New("this is specifically disallowed, and should generate an error"),
+			//result:   errutil.New("this is specifically disallowed, and should generate an error"),
 		},
 		// giving properties to the rhs and right targets isnt permitted:
 		// tbd: but it might be possible...
 		{
 			test: `The unhappy man is in the closed bottle.`,
-			skip: map[string]any{
+			result: map[string]any{
 				"macro": "in",
 				"sources": []map[string]any{{
 					"det":  "The",
@@ -156,7 +156,7 @@ func TestPhrases(t *testing.T) {
 		// same pattern as the middle properties above; but not using kind of
 		{
 			test: `The coffin is a closed container in the antechamber.`,
-			skip: map[string]any{
+			result: map[string]any{
 				"macro": "in",
 				"sources": []map[string]any{{
 					"det":    "The",
@@ -179,7 +179,7 @@ func TestPhrases(t *testing.T) {
 		// note, this is allowed even though it implies something different than what is written:
 		{
 			test: `The bottle is openable in the kitchen.`,
-			skip: map[string]any{
+			result: map[string]any{
 				"macro": "in",
 				"sources": []map[string]any{{
 					"det":    "The",
@@ -196,7 +196,7 @@ func TestPhrases(t *testing.T) {
 		// FIX: ITS GIE THE STAKE BOTH KINDS AND THE ALTAR DOESNT EXIST
 		{
 			test: `The thing called the stake is on the supporter called the altar.`,
-			skip: map[string]any{
+			result: map[string]any{
 				"macro": "on",
 				"sources": []map[string]any{{
 					"det":   "the",
@@ -219,7 +219,7 @@ func TestPhrases(t *testing.T) {
 		// those expect only expect one set of nouns; these have two.
 		{
 			test: `The closed openable container called the trunk is in the lobby.`,
-			skip: map[string]any{
+			result: map[string]any{
 				"macro": "in",
 				"sources": []map[string]any{{
 					"det":    "the", // lowercase, the closest to the trunk
@@ -236,7 +236,7 @@ func TestPhrases(t *testing.T) {
 		// a leading macro
 		{
 			test: `In the coffin are some coins, a notebook, and the gripping hand.`,
-			skip: map[string]any{
+			result: map[string]any{
 				"macro": "in",
 				"targets": []map[string]any{{
 					"det":  "the", // lowercase, the closest to the trunk
@@ -258,11 +258,11 @@ func TestPhrases(t *testing.T) {
 			test: `In the lobby are a supporter and a container.`,
 			result: map[string]any{
 				"macro": "in",
-				"sources": []map[string]any{{
-					"det":  "the", // lowercase, the closest to the trunk
+				"targets": []map[string]any{{
+					"det":  "the",
 					"name": "lobby",
 				}},
-				"target": []map[string]any{{
+				"sources": []map[string]any{{
 					"kinds": []string{"supporter"},
 				}, {
 					"kinds": []string{"container"},
@@ -318,32 +318,32 @@ func TestTraits(t *testing.T) {
 		skip   any
 	}{{
 		test: "open container",
-		skip: map[string]any{
+		result: map[string]any{
 			"kind":   "container",
 			"traits": []string{"open"},
 		},
 	}, {
 		test: "the open and an openable container",
-		skip: map[string]any{
+		result: map[string]any{
 			"kind":   "container",
 			"traits": []string{"open", "openable"},
 		},
 	}, {
 		test: "open, and openable",
-		skip: map[string]any{
+		result: map[string]any{
 			"traits": []string{"open", "openable"},
 		},
 	}, {
 		test: "open, openable",
-		skip: map[string]any{
+		result: map[string]any{
 			"traits": []string{"open", "openable"},
 		},
 	}, {
-		test: "open and and openable",
-		skip: errutil.New("two ands should fail"),
+		test:   "open and and openable",
+		result: errutil.New("two ands should fail"),
 	}, {
-		test: "open and, openable",
-		skip: errutil.New("backwards commas should fail"),
+		test:   "open and, openable",
+		result: errutil.New("backwards commas should fail"),
 	}}
 	var skipped int
 	for i, p := range phrases {
