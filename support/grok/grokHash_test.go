@@ -95,7 +95,7 @@ func TestMatching(t *testing.T) {
 		2,
 		-1,
 	}
-	prefixList := makeSpans(prefixes)
+	prefixList := panicSpans(prefixes)
 	for i, w := range tests {
 		h := panicHash(w)
 		matched, skip := prefixList.findPrefix(h)

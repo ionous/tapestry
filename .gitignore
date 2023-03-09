@@ -1,5 +1,6 @@
 _
 .vscode
+.idea
 __debug_bin
 node_modules
 cmd/asm/asm
