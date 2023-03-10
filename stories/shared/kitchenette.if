@@ -140,10 +140,10 @@
           {
             "Define nouns:as:relation:otherNouns:": [
               [
-                "a book of matches",
+                "the book of matches",
                 "a bottle of descaling solution",
                 "a fish hook",
-                "the rusty knife"
+                "a rusty knife"
               ],
               "things",
               "whereabouts",
@@ -249,7 +249,7 @@
           },
           {
             "Define nouns:as:relation:otherNouns:": [
-              "coffee beans",
+              "some coffee beans",
               "thing",
               "whereabouts",
               "the espresso machine"
@@ -265,7 +265,7 @@
             "Define nouns:as:relation:otherNouns:": [
               [
                 "a blender",
-                "the mortar"
+                "a mortar"
               ],
               "containers",
               "whereabouts",

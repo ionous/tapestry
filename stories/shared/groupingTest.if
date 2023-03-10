@@ -57,6 +57,41 @@
             ]
           },
           {
+            "Comment:": [
+              "fix? the rules for deciding whether something starts with a vowel ( and therefore should use indefinite article 'an' ) ",
+              "are defined by the \"starts with vowel\" pattern. so, even though, we've explicitly said \"an x\" in the declaration: that doesn't matter.",
+              "ImportNouns() doesn't see the \"an\" as being special, and so doesn't get assign the noun a customized indefinite article.",
+              "( Inform also has this issue. ) ",
+              "Potentially, the importer could look for the \"starts with vowel\" pattern, and if it exists, call it, and if it differs store the article.",
+              "Or, maybe we could store the (various) articles used when defining the noun, sort through them, and pick the most reasonable one -- always storing that regardless.",
+              "saying only ever \"the X\" , for example, would be remembered, but wouldn't alter the set of indefinite articles."
+            ]
+          },
+          {
+            "NounAssignment:nouns:lines:": [
+              "indefinite article",
+              [
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "x"
+                    }
+                  ]
+                },
+                {
+                  "Noun:named:": [
+                    "the",
+                    {
+                      "Noun:": "f"
+                    }
+                  ]
+                }
+              ],
+              "an"
+            ]
+          },
+          {
             "Test:withScene:do:": [
               "no grouping",
               [

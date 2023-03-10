@@ -64,8 +64,17 @@ func ImportNouns(k *imp.Importer, nouns []string) (ret []string, err error) {
 			if len(article) == 0 {
 				legacy = &nounNamed
 			} else {
+				// ...
+				var det Determiner
+				compose := det.Compose()
+				if key, index := compose.IndexOfValue(article); index < 0 {
+					det.Str = article
+				} else {
+					det.Str = key
+				}
+
 				legacy = &CommonNoun{
-					Determiner: Determiner{article},
+					Determiner: det,
 					Noun:       nounNamed,
 				}
 			}
@@ -170,13 +179,15 @@ func (op *CommonNoun) ImportNoun(k *imp.Importer) (err error) {
 	declareNounClass(k)
 	detStr, detFound := composer.FindChoice(&op.Determiner, op.Determiner.Str)
 	// setup the indefinite article
+	// NOTE: this isn't quite right still -- if i define something as
 	if !detFound {
 		// create a "indefinite article" field for all objects
 		if k.Once("named_noun") {
 			k.WriteOnce(&eph.EphKinds{Kind: "objects", Contain: []eph.EphParams{{Name: "indefinite_article", Affinity: eph.Affinity{eph.Affinity_Text}}}})
 		}
-		// set the indefinite article field
+		// set the indefinite article field for this object.
 		k.WriteEphemera(&eph.EphValues{Noun: op.Noun.NounName(), Field: "indefinite_article", Value: T(detStr)})
+		composer.FindChoice(&op.Determiner, op.Determiner.Str)
 	}
 	op.Noun.addNoun(k, detStr)
 	return

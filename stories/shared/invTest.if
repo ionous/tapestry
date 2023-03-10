@@ -72,16 +72,15 @@
             }
           },
           {
-            "--": "fix: some of these articles don't look right to me....",
             "Expect output:": [
               "You are carrying:",
-              "  - the book of secrets (closed and locked)",
-              "  - the book of wisdom (open but empty)",
-              "  - the clutch (open) ",
-              "    - the purse (open) ",
-              "      - the coin",
-              "  - the flower (being worn)",
-              "  - the headlamp (providing light and being worn)"
+              "  - a book of secrets (closed and locked)",
+              "  - a book of wisdom (open but empty)",
+              "  - a clutch (open) ",
+              "    - a purse (open) ",
+              "      - a coin",
+              "  - a flower (being worn)",
+              "  - a headlamp (providing light and being worn)"
             ]
           }
         ]
