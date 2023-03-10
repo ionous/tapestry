@@ -37,10 +37,10 @@ func (w *Word) String() string {
 	return w.slice
 }
 
-type spans [][]Word
+type spanList [][]Word
 
-func panicSpans(strs []string) (out spans) {
-	out = make(spans, len(strs))
+func panicSpans(strs []string) (out spanList) {
+	out = make(spanList, len(strs))
 	for i, str := range strs {
 		out[i] = panicHash(str)
 	}
@@ -48,12 +48,12 @@ func panicSpans(strs []string) (out spans) {
 }
 
 // find the index and length of a prefix matching the passed words
-func (ws spans) findPrefix(words []Word) (retWhich int, retLen int) {
+func (ws spanList) findPrefix(words []Word) (retWhich int, retLen int) {
 	if wordCount := len(words); wordCount > 0 {
 		for prefixIndex, prefix := range ws {
 			// every Word in el has to exist in words for it to be a prefix
 			// and it has to be longer than any other previous match for it to be the best match
-			// ( fix? try a sort search> my first attempt failed miserably )
+			// ( tbd? try a sort search? my first attempt failed miserably )
 			if prefixLen := len(prefix); prefixLen <= wordCount && prefixLen > retLen {
 				var failed bool
 				for i, a := range prefix {

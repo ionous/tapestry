@@ -25,15 +25,24 @@ func beingPhrase(out *Results, lhs, rhs []Word) (err error) {
 			}
 		} else {
 			// case 2: found a macro:
-			out.macro = known.macros[macro]
+			var macroType macroType
+			out.macro, macroType = known.macros.get(macro)
 			postMacro := afterRightLede[skipMacro:]
+			var lhsFlag, rhsFlag genFlag
+			switch macroType {
+			case OneToMany, ManyToOne:
+				lhsFlag, rhsFlag = AllowMany|OnlyNamed, OnlyOne|AllowAnonymous
+			case ManyToMany:
+				lhsFlag, rhsFlag = AllowMany|OnlyNamed, AllowMany|OnlyNamed
+			}
+
 			// [lhs: The coffin is] (rhs: (pre: a closed container) *in* (post: the antechamber.))
-			if e := genNouns(&out.sources, lhs, AllowMany|OnlyNamed); e != nil {
+			if e := genNouns(&out.sources, lhs, lhsFlag); e != nil {
 				err = errutil.New("parsing subject", e)
 			} else {
-				// fix? this branching isnt satisfying: some sort of flags ( or ordinal ) on the macro?
-				if macro > 2 {
-					if e := genNouns(&out.targets, postMacro, OnlyOne|AllowAnonymous); e != nil {
+				// fix? this branching isnt satisfying
+				if macroType > ManyToOne {
+					if e := genNouns(&out.targets, postMacro, rhsFlag); e != nil {
 						err = errutil.New("parsing target", e)
 					}
 				} else {

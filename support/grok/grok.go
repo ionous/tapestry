@@ -2,25 +2,25 @@ package grok
 
 // fix: should be customizable
 var known = struct {
-	determiners, macros, kinds, traits spans
+	determiners, kinds, traits spanList
+	macros                     macroList
 }{
 	determiners: panicSpans([]string{
 		"the", "a", "an", "some", "our",
 		// ex. kettle of fish
 		"a kettle of",
 	}),
-	macros: panicSpans([]string{
-		// right now assumes the first set are kinds of
-		// could it use the fact there's only one set of definitions.
-		// is any thing else like that?
-		// tbd: need more thought.
-		"kind of",   // for "a closed kind of container"
-		"kinds of",  // for "are closed containers"
-		"a kind of", // for "a kind of container"
+	macros: panicMacros(
+		// tbd: flags need more thought.
+		ManyToOne, "kind of", // for "a closed kind of container"
+		ManyToOne, "kinds of", // for "are closed containers"
+		ManyToOne, "a kind of", // for "a kind of container"
 		// other macros
-		"on",
-		"in",
-	}),
+		OneToMany, "on", // on the x are the w,y,z
+		OneToMany, "in",
+		//
+		ManyToMany, "suspicious of",
+	),
 	kinds: panicSpans([]string{
 		"thing", "things",
 		"container", "containers",
@@ -75,7 +75,7 @@ func Grok(p string) (ret Results, err error) {
 				break
 			} else {
 				if at, skip := known.macros.findPrefix(words[i:]); skip > 0 {
-					out.macro = known.macros[at]
+					out.macro, _ = known.macros.get(at)
 					err = macroPhrase(out, words[i+skip:])
 					break
 				}

@@ -48,12 +48,29 @@ func TestPhrases(t *testing.T) {
 				}},
 			},
 		},
+		// multiple kinds of things
+		{
+			test: `The box and the top are closed containers.`,
+			result: map[string]any{
+				"sources": []map[string]any{{
+					"det":    "The",
+					"name":   "box",
+					"traits": []string{"closed"},
+					"kinds":  []string{"containers"},
+				}, {
+					"det":    "the",
+					"name":   "top",
+					"traits": []string{"closed"},
+					"kinds":  []string{"containers"},
+				}},
+			},
+		},
 		// using 'called' without a macro
 		{
 			test: `The container called the sarcophagus is open.`,
 			result: map[string]any{
 				"sources": []map[string]any{{
-					"det":    "the", // lowercase, its the bit closet to the Noun
+					"det":    "the", // lowercase, its the bit closet to the noun
 					"name":   "sarcophagus",
 					"kinds":  []string{"container"},
 					"traits": []string{"open"},
@@ -87,9 +104,8 @@ func TestPhrases(t *testing.T) {
 				}},
 			},
 		},
-
 		// kind of, "correctly" failing prefixed properties.
-		// note: in inform, this also yields a Noun named the "closed box".
+		// note: in inform, this also yields a noun named the "closed box".
 		// similarly, The kind of the box is a container, yields a name "kind of the box".
 		// "is" left of macro.
 		{
@@ -103,40 +119,16 @@ func TestPhrases(t *testing.T) {
 				}},
 			},
 		},
-		// multiple kinds of things
-		{
-			// 	test: `The box and the top are closed kinds of containers.`,
-			// 	result:   map[string]any{
-			// 		"macro": "kinds of",
-			// 		"sources": []map[string]any{{
-			// 			"det":    "The",
-			// 			"name":   "box",
-			// 			"traits": []string{"closed"},
-			// 		}, {
-			// 			"det":    "the",
-			// 			"name":   "top",
-			// 			"traits": []string{"closed"},
-			// 			"kinds":  []string{"things"},
-			// 		}},
-			// 	},
-		},
 		// kind of: adding middle properties
+		// tbd: not allowed, but maybe it should be....
 		// "is" left of macro
-		// not allowed in inform.
 		{
-			// 	test: `The box is a closed kind of container.`,
-			// 	result:   map[string]any{
-			// 		"macro": "kind of",
-			// 		"sources": []map[string]any{{
-			// 			"det":    "The",
-			// 			"name":   "box",
-			// 			"traits": []string{"closed", "container"},
-			// 		}},
-			// 	},
+			test:   `The box is a closed kind of container.`,
+			result: errutil.New("not allowed"),
 		},
 		{
-			//test: `A device is in the lobby.`,
-			//result:   errutil.New("this is specifically disallowed, and should generate an error"),
+			test:   `A container is in the lobby.`,
+			result: errutil.New("this is specifically disallowed, and should generate an error"),
 		},
 		// giving properties to the rhs and right targets isnt permitted:
 		// tbd: but it might be possible...
@@ -170,12 +162,6 @@ func TestPhrases(t *testing.T) {
 				}},
 			},
 		},
-
-		// trailing properties applying to the lhs
-		{
-			//test: `The bottle in the kitchen is openable and has age 42.`,
-			// FIX: values.
-		},
 		// note, this is allowed even though it implies something different than what is written:
 		{
 			test: `The bottle is openable in the kitchen.`,
@@ -193,7 +179,8 @@ func TestPhrases(t *testing.T) {
 			},
 		},
 		// called both before and after the macro
-		// FIX: ITS GIE THE STAKE BOTH KINDS AND THE ALTAR DOESNT EXIST
+		// note: The closed openable container called the trunk and the box is in the lobby.
+		// would create a noun called "the trunk and the box"
 		{
 			test: `The thing called the stake is on the supporter called the altar.`,
 			result: map[string]any{
@@ -210,10 +197,7 @@ func TestPhrases(t *testing.T) {
 				}},
 			},
 		},
-		{
-			// FIX: add multiple subject macro'd tests
-		},
-		// add leading properties in the lede by using 'called'
+		// add leading properties using 'called'
 		// "is" left of the macro "in".
 		// slightly different parsing than "kind/s of":
 		// those expect only expect one set of nouns; these have two.
@@ -233,7 +217,29 @@ func TestPhrases(t *testing.T) {
 				}},
 			},
 		},
-		// a leading macro
+		// multiple sources:
+		// "is" left of the macro "in".
+		{
+			test: `Some coins, a notebook, and the gripping hand are in the coffin.`,
+			result: map[string]any{
+				"macro": "in",
+				"targets": []map[string]any{{
+					"det":  "the", // lowercase, the closest to the trunk
+					"name": "coffin",
+				}},
+				"sources": []map[string]any{{
+					"det":  "Some",
+					"name": "coins",
+				}, {
+					"det":  "a",
+					"name": "notebook",
+				}, {
+					"det":  "the",
+					"name": "gripping hand",
+				}},
+			},
+		},
+		// multiple sources with a leading macro
 		{
 			test: `In the coffin are some coins, a notebook, and the gripping hand.`,
 			result: map[string]any{
@@ -254,6 +260,7 @@ func TestPhrases(t *testing.T) {
 				}},
 			},
 		},
+		// multiple anonymous nouns.
 		{
 			test: `In the lobby are a supporter and a container.`,
 			result: map[string]any{
@@ -269,17 +276,49 @@ func TestPhrases(t *testing.T) {
 				}},
 			},
 		},
-
 		// the special nxn description: no properties are allowed.
 		{
-			//	test: `Hector and Maria are suspicious of Santa and Santana.`,
+			test: `Hector and Maria are suspicious of Santa and Santana.`,
+			result: map[string]any{
+				"macro": "suspicious of",
+				"sources": []map[string]any{{
+					"name": "Hector",
+				}, {
+					"name": "Maria",
+				}},
+				"targets": []map[string]any{{
+					"name": "Santa",
+				}, {
+					"name": "Santana",
+				}},
+			},
 		},
-		// fix: in this case i think inform eats the first "is" and allows a subsequent one ( and also allows values )
-		// fix: the device called the detonator is on the supporter called the shelf and is proper named"
-
-		// humorous: "In the lobby are two supporters the bat and the hat."
-		// generates a Noun called "two supporters..."
-		// "In the lobby are two supporters" ( and "Two supporters are in..." works fine. )
+		// fix: trailing properties applying to the lhs
+		{
+			test: `The bottle in the kitchen is openable.`,
+			skip: map[string]any{
+				"macro": "in",
+				"sources": []map[string]any{{
+					"det":    "The",
+					"traits": []string{"openable"},
+					"name":   "bottle",
+				}},
+				"targets": []map[string]any{{
+					"det":  "the",
+					"name": "kitchen",
+				}},
+			},
+		},
+		// TODO: values.
+		{
+			//test:  `The bottle in the kitchen is openable and has age 42.`,
+		},
+		{
+			//test: `The age of the bottle is 42.`,
+		},
+		// todo:  the device called the detonator is on the supporter called the shelf and is proper named"
+		// todo: In the lobby are two supporters" ( and "Two supporters are in..." works fine. )
+		// note: "In the lobby are two supporters the bat and the hat." generates a noun called "two supporters..."
 	}
 	var skipped int
 	for i, p := range phrases {
