@@ -16,8 +16,8 @@ import (
 
 // verify pattern declaration generate the simplest of pattern ephemera
 func TestPatternImport(t *testing.T) {
-	patternDecl := &story.PatternDecl{
-		PatternName: P("corral"),
+	patternDecl := &story.DefinePattern{
+		PatternName: T("corral"),
 	}
 	var els []eph.Ephemera
 	k := imp.NewImporter(collectEphemera(&els), storyMarshaller)
@@ -38,9 +38,9 @@ func TestPatternImport(t *testing.T) {
 
 // verify pattern parameter declarations generate pattern parameter ephemera
 func TestPatternParameterImport(t *testing.T) {
-	patternVariables := &story.PatternDecl{
-		PatternName: "corral",
-		Params: []story.Field{&story.TextField{
+	patternVariables := &story.DefinePattern{
+		PatternName: T("corral"),
+		Params: []story.FieldDefinition{&story.TextField{
 			Name: "pet",
 			Type: "animal",
 		}},

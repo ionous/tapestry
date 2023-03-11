@@ -5,8 +5,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 )
 
-type Field interface {
+type FieldDefinition interface {
 	GetParam() eph.EphParams
+}
+
+func (op *NothingField) GetParam() (nothing eph.EphParams) {
+	return
 }
 
 func (op *AspectField) GetParam() eph.EphParams {

@@ -75,7 +75,7 @@ func (pd *patternHeader) flush() (ret []UniformField) {
 // writes a definition of patternName?res=name
 func (op *EphPatterns) assembleRes(d *Domain, k *ScopedKind, at string, outp *patternHeader) (err error) {
 	var res []UniformField
-	if op.Result != nil && k.domain != d {
+	if op.Result != nil && len(op.Result.Affinity.Str) > 0 && k.domain != d {
 		err = errutil.New("can only declare results in the original domain")
 	} else if patres, e := reduceRes(op.Result, at, &res); e != nil {
 		err = e

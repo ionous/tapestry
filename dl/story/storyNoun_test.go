@@ -129,7 +129,7 @@ func countedNouns(kind string, cnt int) (out []eph.Ephemera) {
 			// story.SingularCountedNoun(n),
 			/*&eph.EphValues{
 				Noun:  n,
-				Field: "printed_name",
+				FieldDefinition: "printed_name",
 				Value: T(kind),
 			}*/)
 	}

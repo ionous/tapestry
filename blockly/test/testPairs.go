@@ -1,29 +1,29 @@
 package test
 
 import (
-  "git.sr.ht/~ionous/tapestry/dl/literal"
-  "git.sr.ht/~ionous/tapestry/dl/story"
-  "git.sr.ht/~ionous/tapestry/dl/testdl"
-  "git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/dl/testdl"
+	"git.sr.ht/~ionous/tapestry/jsn"
 )
 
 // contents of block files and their matching representation in go.
 // ( used by un/block to test read/writing of block files )
 var Pairs = []struct {
-  Name string
-  Test jsn.Marshalee
-  Json string
+	Name string
+	Test jsn.Marshalee
+	Json string
 }{{
-  // swap member of the flow
-  /*test*/ "Swap",
-  &testdl.TestFlow{
-    Swap: testdl.TestSwap{
-      Choice: testdl.TestSwap_C_Opt,
-      Value: &testdl.TestTxt{
-        Str: "something",
-      },
-    },
-  }, `{
+	// swap member of the flow
+	/*test*/ "Swap",
+	&testdl.TestFlow{
+		Swap: testdl.TestSwap{
+			Choice: testdl.TestSwap_C_Opt,
+			Value: &testdl.TestTxt{
+				Str: "something",
+			},
+		},
+	}, `{
   "type": "test_flow",
   "id": "test-1",
   "extraState": {
@@ -44,20 +44,20 @@ var Pairs = []struct {
     }
   }
 }`}, {
-  // repeats of a specific flow
-  /*test*/ "Slice",
-  &literal.FieldList{
-    Fields: []literal.FieldValue{{
-      Field: "first",
-      Value: &literal.NumValue{
-        Value: 5,
-      }}, {
-      Field: "second",
-      Value: &literal.TextValue{
-        Value: "five",
-      }},
-    },
-  }, `{
+	// repeats of a specific flow
+	/*test*/ "Slice",
+	&literal.FieldList{
+		Fields: []literal.FieldValue{{
+			Field: "first",
+			Value: &literal.NumValue{
+				Value: 5,
+			}}, {
+			Field: "second",
+			Value: &literal.TextValue{
+				Value: "five",
+			}},
+		},
+	}, `{
   "type": "field_list",
   "id": "test-1",
   "extraState": {
@@ -120,12 +120,12 @@ var Pairs = []struct {
     }
   }
 }`}, {
-  // ------------------------------------------------------------
-  // a flow within a flow
-  /*test*/ "Embed",
-  &testdl.TestEmbed{
-    TestFlow: testdl.TestFlow{},
-  }, `{
+	// ------------------------------------------------------------
+	// a flow within a flow
+	/*test*/ "Embed",
+	&testdl.TestEmbed{
+		TestFlow: testdl.TestFlow{},
+	}, `{
   "type": "test_embed",
   "id": "test-1",
   "extraState": {
@@ -141,14 +141,14 @@ var Pairs = []struct {
     }
   }
 }`}, {
-  // ------------------------------------------------------------
-  // a flow with a single slot.
-  /*test*/ "Slot",
-  &literal.FieldValue{
-    Field: "test",
-    Value: &literal.NumValue{
-      Value: 5,
-    }}, `{
+	// ------------------------------------------------------------
+	// a flow with a single slot.
+	/*test*/ "Slot",
+	&literal.FieldValue{
+		Field: "test",
+		Value: &literal.NumValue{
+			Value: 5,
+		}}, `{
   "type": "field_value",
   "id": "test-1",
   "extraState": {
@@ -173,14 +173,14 @@ var Pairs = []struct {
     }
   }
 }`}, {
-  // ------------------------------------------------------------
-  // repeats of a non-stacking slot.
-  /*test*/ "Series",
-  &testdl.TestFlow{
-    Slots: []testdl.TestSlot{
-      &testdl.TestFlow{},
-      &testdl.TestFlow{},
-    }}, `{
+	// ------------------------------------------------------------
+	// repeats of a non-stacking slot.
+	/*test*/ "Series",
+	&testdl.TestFlow{
+		Slots: []testdl.TestSlot{
+			&testdl.TestFlow{},
+			&testdl.TestFlow{},
+		}}, `{
   "type": "test_flow",
   "id": "test-1",
   "extraState": {
@@ -203,10 +203,10 @@ var Pairs = []struct {
     }
   }
 }`}, {
-  // ------------------------------------------------------------
-  // test a block with a field:value pair (use some literal text)
-  /*test*/ "Field",
-  &literal.TextValue{Value: "hello world"}, `{
+	// ------------------------------------------------------------
+	// test a block with a field:value pair (use some literal text)
+	/*test*/ "FieldDefinition",
+	&literal.TextValue{Value: "hello world"}, `{
   "type": "text_value",
   "id": "test-1",
   "extraState": {
@@ -216,14 +216,14 @@ var Pairs = []struct {
     "VALUE": "hello world"
   }
 }`}, {
-  // ------------------------------------------------------------
-  // an array of primitives is a list of dummy inputs.
-  // ( noting that blockly ignores dummies when saving,
-  // so they get saved in the "fields" section )
-  /*test*/ "List",
-  &literal.TextValues{
-    Values: []string{"a", "b", "c"},
-  }, `{
+	// ------------------------------------------------------------
+	// an array of primitives is a list of dummy inputs.
+	// ( noting that blockly ignores dummies when saving,
+	// so they get saved in the "fields" section )
+	/*test*/ "List",
+	&literal.TextValues{
+		Values: []string{"a", "b", "c"},
+	}, `{
   "type": "text_values",
   "id": "test-1",
   "extraState": {
@@ -235,15 +235,15 @@ var Pairs = []struct {
     "VALUES2": "c"
   }
 }`}, {
-  // ------------------------------------------------------------
-  // nested content-free blocks
-  /*test*/ "Stack",
-  &story.StoryFile{
-    StoryLines: []story.StoryStatement{
-      &story.StoryBreak{},
-      &story.StoryBreak{},
-      &story.StoryBreak{},
-    }}, `{
+	// ------------------------------------------------------------
+	// nested content-free blocks
+	/*test*/ "Stack",
+	&story.StoryFile{
+		StoryLines: []story.StoryStatement{
+			&story.StoryBreak{},
+			&story.StoryBreak{},
+			&story.StoryBreak{},
+		}}, `{
   "type": "story_file",
   "id": "test-1",
   "extraState": {
@@ -273,12 +273,12 @@ var Pairs = []struct {
     }
   }
 }`}, {
-  // ------------------------------------------------------------
-  // repeats of an empty series
-  /*test*/ "EmptySeries",
-  &testdl.TestFlow{
-    Slots: []testdl.TestSlot{},
-  }, `{
+	// ------------------------------------------------------------
+	// repeats of an empty series
+	/*test*/ "EmptySeries",
+	&testdl.TestFlow{
+		Slots: []testdl.TestSlot{},
+	}, `{
   "type": "test_flow",
   "id": "test-1",
   "extraState": {}

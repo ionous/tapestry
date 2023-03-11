@@ -1,13 +1,17 @@
 package cmdcompact
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
 )
 
 // define  a custom spec encoder.
 var customSpecEncoder cout.CustomFlow = nil
-var customStoryEncoder = story.CompactEncoder
+var customStoryFlow = story.CompactEncoder
+var customStorySlot cout.CustomSlot = nil
 
 // example removing "trim" for underscore names
 // func init() {
@@ -36,26 +40,25 @@ var customStoryEncoder = story.CompactEncoder
 // }
 
 // install a custom encoder to rewrite things
-// func init() {
-// 	customStoryEncoder = func(m jsn.Marshaler, flow jsn.FlowBlock) error {
-// 		switch op := flow.GetFlow().(type) {
-// 		case *story.AspectProperty:
-// 			swap(&op.UserComment, &op.Comment)
-// 		case *story.BoolProperty:
-// 			swap(&op.UserComment, &op.NamedProperty.Comment)
-// 		case *story.NumberProperty:
-// 			swap(&op.UserComment, &op.NamedProperty.Comment)
-// 		case *story.NumListProperty:
-// 			swap(&op.UserComment, &op.NamedProperty.Comment)
-// 		case *story.RecordProperty:
-// 			swap(&op.UserComment, &op.NamedProperty.Comment)
-// 		case *story.RecordListProperty:
-// 			swap(&op.UserComment, &op.NamedProperty.Comment)
-// 		case *story.TextListProperty:
-// 			swap(&op.UserComment, &op.NamedProperty.Comment)
-// 		case *story.TextProperty:
-// 			swap(&op.UserComment, &op.NamedProperty.Comment)
-// 		}
-// 		return core.CompactEncoder(m, flow)
-// 	}
-// }
+func init() {
+	customStorySlot = func(m jsn.Marshaler, block jsn.SlotBlock) error {
+		if slot, ok := block.GetSlot(); ok {
+			switch op := slot.(type) {
+			case *story.PatternActions:
+				a := op.Rules
+				for i := len(a)/2 - 1; i >= 0; i-- {
+					opp := len(a) - 1 - i
+					a[i], a[opp] = a[opp], a[i]
+				}
+				block.SetSlot(&story.ExtendPattern{
+					PatternName: assign.T(op.PatternName),
+					Locals:      op.Locals,
+					Rules:       a,
+					Markup:      op.Markup,
+				})
+			}
+		}
+		return chart.Unhandled("always returns unhandled")
+	}
+
+}

@@ -46,10 +46,10 @@ func FromSpecs(files fs.FS) (ret TypeSpecs, err error) {
 	types := TypeSpecs{Types: make(typeMap)}
 	if e := fs.WalkDir(files, ".", func(path string, d fs.DirEntry, e error) (err error) {
 		if e != nil {
-			err = e // can happen if it failed to read the contents of a director
+			err = e
 		} else if !d.IsDir() && strings.HasSuffix(d.Name(), ".ifspecs") { // the first dir we get is "."
 			if _, e := readSpec(&types, files, path); e != nil {
-				err = errutil.New(e, "reading", path)
+				err = errutil.New("reading", path, e)
 			}
 		}
 		return

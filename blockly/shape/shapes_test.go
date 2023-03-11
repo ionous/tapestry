@@ -129,7 +129,7 @@ func TestStoryTextShape(t *testing.T) {
   "type": "text_field",
   "output": [
     "text_field",
-    "field"
+    "field_definition"
   ],
   "colour": "%{BKY_TAP_HUE}",
   "extensions": [

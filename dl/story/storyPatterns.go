@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 
@@ -16,16 +17,36 @@ func (op *PatternActions) PostImport(k *imp.Importer) (err error) {
 	return ImportRules(k, patternName, "", op.Rules, eph.EphTiming{})
 }
 
-// Adds a new pattern declaration and optionally some associated pattern parameters.
-func (op *PatternDecl) PostImport(k *imp.Importer) (err error) {
-	patternName := op.PatternName
-	ps := op.reduceProps()
-	res := convertRes(op.PatternReturn)
-	k.WriteEphemera(&eph.EphPatterns{PatternName: patternName, Result: res, Params: ps})
+func (op *ExtendPattern) PostImport(k *imp.Importer) (err error) {
+	if name, e := safe.GetText(nil, op.PatternName); e != nil {
+		err = e
+	} else if locals := ImportLocals(k, name.String(), op.Locals); len(locals) > 0 {
+		k.WriteEphemera(&eph.EphPatterns{PatternName: name.String(), Locals: locals})
+		// write the rules last ( order doesnt matter except it helps with test output consistency )
+		err = ImportRules(k, name.String(), "", op.Rules, eph.EphTiming{})
+	}
 	return
 }
 
-func (op *PatternDecl) reduceProps() []eph.EphParams {
+// Adds a new pattern declaration and optionally some associated pattern parameters.
+func (op *DefinePattern) PostImport(k *imp.Importer) (err error) {
+	ps := op.reduceProps()
+	if name, e := safe.GetText(nil, op.PatternName); e != nil {
+		err = e
+	} else {
+		var pres *eph.EphParams
+		if opres := op.Result; opres != nil {
+			res := opres.GetParam()
+			pres = &res
+		}
+		k.WriteEphemera(&eph.EphPatterns{PatternName: name.String(), Result: pres, Params: ps})
+		// write the rules last ( order doesnt matter except it helps with test output consistency )
+		err = ImportRules(k, name.String(), "", op.Rules, eph.EphTiming{})
+	}
+	return
+}
+
+func (op *DefinePattern) reduceProps() []eph.EphParams {
 	return reduceProps(op.Params)
 }
 
@@ -101,22 +122,14 @@ func (op *PatternFlags) ReadFlags() (ret eph.EphTiming, err error) {
 	return
 }
 
-func ImportLocals(k *imp.Importer, patternName string, locals []Field) (ret []eph.EphParams) {
+func ImportLocals(k *imp.Importer, patternName string, locals []FieldDefinition) (ret []eph.EphParams) {
 	for _, el := range locals {
 		ret = append(ret, el.GetParam())
 	}
 	return
 }
 
-func convertRes(res *PatternReturn) (ret *eph.EphParams) {
-	if res != nil {
-		p := res.Result.GetParam()
-		ret = &p
-	}
-	return
-}
-
-func reduceProps(els []Field) []eph.EphParams {
+func reduceProps(els []FieldDefinition) []eph.EphParams {
 	var out []eph.EphParams
 	for _, el := range els {
 		out = append(out, el.GetParam())

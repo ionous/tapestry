@@ -22,27 +22,21 @@ var FactorialStory = &story.Story{
 				},
 				Do: FactorialCheck,
 			},
-			&story.PatternDecl{
-				PatternName: factorialName,
-				PatternReturn: &story.PatternReturn{Result: &story.NumberField{
-					Markup: UserComment("the result uses the same variable as the pattern input does"),
-					Name:   "num",
-				}},
-				Params: []story.Field{
+			&story.DefinePattern{
+				PatternName: T("factorial"),
+				Params: []story.FieldDefinition{
 					&story.NumberField{
 						Markup: UserComment("just one argument, a number called 'num'"),
 						Name:   "num",
 					}},
-			},
-			&story.PatternActions{
-				PatternName: factorialName,
+				Result: &story.NumberField{
+					Markup: UserComment("the result uses the same variable as the pattern input does"),
+					Name:   "num",
+				},
 				Rules: []story.PatternRule{{
 					Guard: &core.Always{},
 					Does:  FactorialMulMinusOne,
-				}}},
-			&story.PatternActions{
-				PatternName: factorialName,
-				Rules: []story.PatternRule{{
+				}, {
 					Markup: UserComment("the rule considered first is the rule that was written last:"),
 					Guard:  FactorialIsZero,
 					Does:   FactorialUseOne,
@@ -56,8 +50,8 @@ var FactorialCheck = []rt.Execute{
 	&debug.Expect{
 		Value: &core.CompareNum{
 			A: F(6), Is: core.Equal, B: &assign.CallPattern{
-				PatternName: factorialName,
-				Arguments: []assign.Arg{assign.Arg{
+				PatternName: "factorial",
+				Arguments: []assign.Arg{{
 					Name:  "num",
 					Value: &assign.FromNumber{Value: F(3)},
 					// fix: for some reason, the comment isn't appearing in the output.
@@ -93,5 +87,3 @@ var FactorialIsZero = &core.CompareNum{
 	A:      assign.Variable("num"),
 	Is:     core.Equal,
 	B:      F(0)}
-
-const factorialName = "factorial"

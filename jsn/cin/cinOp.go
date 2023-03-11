@@ -54,7 +54,15 @@ func (op *Op) ReadMsg() (retSig Signature, retArgs []json.RawMessage, err error)
 		}
 		if err == nil {
 			if an := len(args); pn != an {
-				err = errutil.New("mismatched params and args", pn, an)
+				snippet := "???"
+				if an > 0 {
+					x := args[0]
+					if cap := 25; len(x) > cap {
+						x = x[:cap]
+					}
+					snippet = string(x)
+				}
+				err = errutil.Fmt("%q given %d args: %s", sig.DebugString(), an, snippet)
 			} else {
 				retSig = sig
 				retArgs = args

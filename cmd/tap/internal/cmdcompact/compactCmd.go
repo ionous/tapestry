@@ -155,7 +155,10 @@ var compact = xform{
 		return story.Decode(dst, b, tapestry.AllSignatures)
 	},
 	func(src jsn.Marshalee) (interface{}, error) {
-		return cout.Encode(src, customStoryEncoder)
+		return cout.CustomEncode(src, cout.Handlers{
+			Flow: customStoryFlow,
+			Slot: customStorySlot,
+		})
 	},
 }
 var detailed = xform{

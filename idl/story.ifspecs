@@ -143,9 +143,13 @@
           ]
         },
         {
+          "-- tbd": [
+            "is a separate interface required for object kinds separate from everything else?",
+            "in theory, generic.Kind supports fields of type aspect... but i'm not sure weave handles that."
+          ],
           "Spec:slots:with flow:": [
             "aspect_field",
-            "field",
+            "field_definition",
             {
               "Flow:uses:": [
                 "aspect",
@@ -163,10 +167,9 @@
           ]
         },
         {
-          "Spec:slots:groups:with flow:": [
+          "Spec:slots:with flow:": [
             "bool_field",
-            "field",
-            "properties",
+            "field_definition",
             {
               "Flow:phrase:uses:": [
                 "bool",
@@ -199,7 +202,6 @@
             }
           ]
         },
-
         {
           "Spec:groups:with flow:": [
             "common_action",
@@ -472,7 +474,7 @@
                     "Term:name:type:optional:repeats:": [
                       "provides",
                       "locals",
-                      "field",
+                      "field_definition",
                       true,
                       true
                     ]
@@ -612,7 +614,7 @@
                   {
                     "Term:type:repeats:": [
                       "fields",
-                      "field",
+                      "field_definition",
                       true
                     ]
                   }
@@ -891,33 +893,35 @@
         },
         {
           "--": [
-            "Assign text to a noun.",
-            "Assign text.",
-            "Gives a noun one or more lines of text."
+            "Assign one or more lines of text to a noun."
           ],
-          "Spec:slots:groups:with flow:": [
+          "Spec:slots:with flow:": [
             "noun_assignment",
             "story_statement",
-            "properties",
             {
-              "Flow phrase:uses:": [
-                "The {$property} of {$nouns} is {the text$lines}",
+              "Flow:uses:": [
+                "define",
                 [
                   {
-                    "Term:name:": [
-                      "_",
-                      "property"
+                    "Term:name:type:": [
+                      "value",
+                      "field_name",
+                      "text_eval"
                     ]
                   },
                   {
-                    "Term:type:repeats:": [
+                    "Term:name:type:": [
+                      "of",
                       "nouns",
-                      "named_noun",
-                      true
+                      "text_list_eval"
                     ]
                   },
                   {
-                    "Term:": "lines"
+                    "Term:name:type:": [
+                      "as_lines",
+                      "lines",
+                      "lines"
+                    ]
                   }
                 ]
               ]
@@ -984,10 +988,9 @@
           ]
         },
         {
-          "Spec:slots:groups:with flow:": [
+          "Spec:slots:with flow:": [
             "num_list_field",
-            "field",
-            "properties",
+            "field_definition",
             {
               "Flow:phrase:uses:": [
                 "num_list",
@@ -1021,10 +1024,9 @@
           ]
         },
         {
-          "Spec:slots:groups:with flow:": [
+          "Spec:slots:with flow:": [
             "number_field",
-            "field",
-            "properties",
+            "field_definition",
             {
               "Flow:phrase:uses:": [
                 "number",
@@ -1176,7 +1178,7 @@
                     "Term:name:type:optional:repeats:": [
                       "provides",
                       "locals",
-                      "field",
+                      "field_definition",
                       true,
                       true
                     ]
@@ -1194,36 +1196,95 @@
           ]
         },
         {
-          "--": "Declare a pattern: A pattern is a bundle of functions which can either change the game world or provide information about it.  Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation.",
+          "--": [
+            "Change the behavior of an existing pattern."
+          ],
           "Spec:slots:groups:with flow:": [
-            "pattern_decl",
+            "extend_pattern",
             "story_statement",
             "patterns",
             {
-              "Flow:phrase:uses:": [
-                "Pattern",
-                "To determine {$name} {params$params} {pattern return$pattern_return}.",
+              "Flow:uses:": [
+                "extend",
                 [
                   {
                     "Term:name:type:": [
-                      "_",
+                      "pattern",
                       "pattern_name",
-                      "text"
+                      "text_eval"
                     ]
                   },
                   {
                     "Term:name:type:optional:repeats:": [
-                      "requires",
-                      "params",
-                      "field",
+                      "provides",
+                      "locals",
+                      "field_definition",
                       true,
                       true
                     ]
                   },
                   {
-                    "Term:name:optional:": [
-                      "returns",
-                      "pattern_return",
+                    "Term:name:type:repeats:": [
+                      "with_rules",
+                      "rules",
+                      "pattern_rule",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "Declare a new pattern.",
+            "A pattern is a bundle of functions which can either change the game world or provide information about it.",
+            "Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation."
+          ],
+          "Spec:slots:groups:with flow:": [
+            "define_pattern",
+            "story_statement",
+            "patterns",
+            {
+              "Flow:uses:": [
+                "define",
+                [
+                  {
+                    "Term:name:type:": [
+                      "pattern",
+                      "pattern_name",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                      "requires",
+                      "params",
+                      "field_definition",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "result",
+                      "field_definition"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:repeats:": [
+                      "provides",
+                      "locals",
+                      "field_definition",
+                      true,
+                      true
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                      "with_rules",
+                      "rules",
+                      "pattern_rule",
                       true
                     ]
                   }
@@ -1254,27 +1315,6 @@
                   },
                   {
                     "Option:": "terminate"
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:groups:with flow:": [
-            "pattern_return",
-            "patterns",
-            {
-              "Flow:phrase:uses:": [
-                "pattern_result",
-                "returning {$result}",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "result",
-                      "field"
-                    ]
                   }
                 ]
               ]
@@ -1346,29 +1386,18 @@
           ]
         },
         {
-          "Spec:groups:with str:": [
-            "property",
-            "properties",
-            {
-              "Str uses:": []
-            }
-          ]
-        },
-        {
-          "--": "future: each slot should support an appropriate 'starting as' initial value",
-          "Spec:groups:with slot:": [
-            "field",
-            "properties",
+          "--": "Fields are used to define the members of kinds, records, patterns, and so on.",
+          "Spec:with slot:": [
+            "field_definition",
             {
               "Slot": true
             }
           ]
         },
         {
-          "Spec:slots:groups:with flow:": [
+          "Spec:slots:with flow:": [
             "record_list_field",
-            "field",
-            "properties",
+            "field_definition",
             {
               "Flow:phrase:uses:": [
                 "record_list",
@@ -1402,10 +1431,9 @@
           ]
         },
         {
-          "Spec:slots:groups:with flow:": [
+          "Spec:slots:with flow:": [
             "record_field",
-            "field",
-            "properties",
+            "field_definition",
             {
               "Flow:phrase:uses:": [
                 "record",
@@ -1732,10 +1760,9 @@
           ]
         },
         {
-          "Spec:slots:groups:with flow:": [
+          "Spec:slots:with flow:": [
             "text_list_field",
-            "field",
-            "properties",
+            "field_definition",
             {
               "Flow:phrase:uses:": [
                 "text_list",
@@ -1769,10 +1796,9 @@
           ]
         },
         {
-          "Spec:slots:groups:with flow:": [
+          "Spec:slots:with flow:": [
             "text_field",
-            "field",
-            "properties",
+            "field_definition",
             {
               "Flow:phrase:uses:": [
                 "text",
@@ -1801,6 +1827,22 @@
                     ]
                   }
                 ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
+            "A valueless field.",
+            "Intended mainly for patterns which don't need to return a value."
+          ],
+          "Spec:slots:with flow:": [
+            "nothing_field",
+            "field_definition",
+            {
+              "Flow:uses:": [
+                "nothing",
+                []
               ]
             }
           ]

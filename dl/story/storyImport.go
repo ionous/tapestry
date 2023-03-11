@@ -1,6 +1,7 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/eph"
@@ -12,10 +13,6 @@ import (
 // top level imports
 type StoryStatement interface {
 	PostImport(*imp.Importer) error
-}
-
-type nounImporter interface {
-	importNouns(*imp.Importer) error
 }
 
 // (the) colors are red, blue, or green.
@@ -85,15 +82,28 @@ func (op *DefineNouns) PostImport(k *imp.Importer) (err error) {
 }
 
 // ex. The description of the nets is xxx
-func (op *NounAssignment) PostImport(k *imp.Importer) (err error) {
-	if text, e := ConvertText(k, op.Lines.String()); e != nil {
+func (op *NounAssignment) postImport(k *imp.Importer) (err error) {
+	if e := op.postImport(k); e != nil {
+		err = assign.CmdError(op, e)
+	} else {
 		err = e
-	} else if e := CollectSubjectNouns(k, op.Nouns); e != nil {
+	}
+	return
+}
+
+func (op *NounAssignment) PostImport(k *imp.Importer) (err error) {
+	if nouns, e := safe.GetTextList(nil, op.Nouns); e != nil {
+		err = e
+	} else if field, e := safe.GetText(nil, op.FieldName); e != nil {
+		err = e
+	} else if lines, e := ConvertText(k, op.Lines.String()); e != nil {
+		err = e
+	} else if subjects, e := ImportNouns(k, nouns.Strings()); e != nil {
 		err = e
 	} else {
-		prop := op.Property.String()
-		for _, noun := range k.Env().Recent.Nouns.Subjects {
-			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: prop, Value: T(text)})
+		field, lines := field.String(), T(lines)
+		for _, noun := range subjects {
+			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: field, Value: lines})
 		}
 	}
 	return
