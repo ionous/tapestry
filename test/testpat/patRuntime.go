@@ -27,6 +27,12 @@ func (run *Runtime) GetField(object, field string) (ret g.Value, err error) {
 }
 
 func (run *Runtime) Call(rec *g.Record, aff affine.Affinity) (ret g.Value, err error) {
+	// fix: this duplicates qnaCall....
+	// maybe it could all be moved into package rt/pattern?
+	// ( some tweak to handle "startedPattern/endedPattern" would be needed.
+	//   some ideas: maybe be writing to a global, using SetField with a start/end key,
+	//               checking replace scope for a patter results type )
+	//  see also maybe "Send" -- which uses "BuildPath"
 	if res, e := pattern.NewResults(run, rec, aff); e != nil {
 		err = e
 	} else if oldScope, e := run.ReplaceScope(res, true); e != nil {
@@ -39,6 +45,9 @@ func (run *Runtime) Call(rec *g.Record, aff affine.Affinity) (ret g.Value, err e
 			err = e
 		} else {
 			ret, err = res.GetResult()
+			if !res.ComputedResult() {
+				err = rt.NoResult{}
+			}
 		}
 		// only init can return an error
 		run.ReplaceScope(oldScope, false)

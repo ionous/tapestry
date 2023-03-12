@@ -1,10 +1,10 @@
-package test
+package qna_test
 
 import (
+	"git.sr.ht/~ionous/tapestry/qna"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/evt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
@@ -14,6 +14,8 @@ import (
 func TestEventPath(t *testing.T) {
 	type EventValues struct {
 		Objects []string
+	}
+	type Things struct {
 	}
 	type Devices struct {
 		Things
@@ -40,7 +42,7 @@ func TestEventPath(t *testing.T) {
 	}
 
 	// pen is a child of table
-	if path, e := evt.BuildPath(run, "event", []string{"pen", "table"}, nil); e != nil {
+	if path, e := qna.BuildPath(run, "event", []string{"pen", "table"}, nil); e != nil {
 		t.Fatal(e)
 	} else {
 		var got []string

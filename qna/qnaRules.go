@@ -7,6 +7,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
+// return the runtime rules matching the passed pattern and target
 func (run *Runner) GetRules(pattern, target string, pflags *rt.Flags) (ret []rt.Rule, err error) {
 	pat, tgt := lang.Underscore(pattern), lang.Underscore(target) // FIX: caller normalization would be best.
 	if rs, e := run.getRules(pat, tgt); e != nil {

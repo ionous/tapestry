@@ -3,7 +3,6 @@ package qna
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/evt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/pattern"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
@@ -29,7 +28,7 @@ func (run *Runner) Send(pat *g.Record, up []string) (ret g.Value, err error) {
 		// note: the scope has to be established before BuildPath gets called
 		// ( suspiciously like initialize value )
 		var flags rt.Flags
-		if rules, e := evt.BuildPath(run, name, up, &flags); e != nil {
+		if rules, e := BuildPath(run, name, up, &flags); e != nil {
 			err = e
 		} else {
 		AllPhases:

@@ -1,4 +1,4 @@
-package evt
+package qna
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
