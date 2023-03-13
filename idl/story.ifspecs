@@ -1155,48 +1155,6 @@
         },
         {
           "--": [
-            "Add actions to a pattern.",
-            "Actions to take when using a pattern."
-          ],
-          "Spec:slots:groups:with flow:": [
-            "pattern_actions",
-            "story_statement",
-            "patterns",
-            {
-              "Flow:phrase:uses:": [
-                "pattern",
-                "To determine {pattern name$name} {locals$locals} do: {$rules}",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "pattern_name",
-                      "text"
-                    ]
-                  },
-                  {
-                    "Term:name:type:optional:repeats:": [
-                      "provides",
-                      "locals",
-                      "field_definition",
-                      true,
-                      true
-                    ]
-                  },
-                  {
-                    "Term:type:repeats:": [
-                      "rules",
-                      "pattern_rule",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": [
             "Change the behavior of an existing pattern."
           ],
           "Spec:slots:groups:with flow:": [

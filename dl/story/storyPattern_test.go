@@ -1,15 +1,12 @@
 package story_test
 
 import (
-	"encoding/json"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/imp"
-	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/kr/pretty"
 )
@@ -72,18 +69,21 @@ func TestPatternParameterImport(t *testing.T) {
 func TestPatternRuleImport(t *testing.T) {
 	var els []eph.Ephemera
 	k := imp.NewImporter(collectEphemera(&els), storyMarshaller)
-
-	var prog story.PatternActions
-	if b, e := json.Marshal(_pattern_actions); e != nil {
-		t.Fatal(e)
-	} else if e := din.Decode(&prog, tapestry.Registry(), b); e != nil {
-		t.Fatal(e)
-	} else if e := prog.PostImport(k); e != nil {
+	prog := story.DefinePattern{
+		PatternName: T("example"),
+		Rules: []story.PatternRule{{
+			Guard: &core.Always{},
+			Does: []rt.Execute{
+				&core.PrintText{Text: T("hello")},
+				&core.PrintText{Text: T("hello")},
+			},
+		}},
+	}
+	if e := prog.PostImport(k); e != nil {
 		t.Fatal(e)
 	} else {
 		expect := []eph.Ephemera{
-			// doesnt generate the pattern anymore, just the rules:
-			// &eph.EphPatterns{	Name: "example" },
+			&eph.EphPatterns{PatternName: "example"},
 			&eph.EphRules{
 				// the rules are for the named pattern.
 				PatternName: "example",
@@ -103,28 +103,4 @@ func TestPatternRuleImport(t *testing.T) {
 			t.Error(pretty.Sprint(els))
 		}
 	}
-}
-
-// see also: TestStoryActivity which runs the hook specified by these rules
-var _pattern_actions = map[string]interface{}{
-	"type": "pattern_actions",
-	"value": map[string]interface{}{
-		"$PATTERN_NAME": map[string]interface{}{
-			"type":  "text",
-			"value": "example",
-		},
-		"$RULES": []interface{}{
-			map[string]interface{}{
-				"type": "pattern_rule",
-				"value": map[string]interface{}{
-					"$GUARD": map[string]interface{}{
-						"type": "bool_eval",
-						"value": map[string]interface{}{
-							"type":  "always",
-							"value": map[string]interface{}{},
-						}},
-					"$DOES": []interface{}{
-						_say_exec,
-						_say_exec,
-					}}}}},
 }

@@ -8,15 +8,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func (op *PatternActions) PostImport(k *imp.Importer) (err error) {
-	patternName := op.PatternName
-	if locals := ImportLocals(k, patternName, op.Locals); len(locals) > 0 {
-		k.WriteEphemera(&eph.EphPatterns{PatternName: patternName, Locals: locals})
-	}
-	// write the rules last ( to help with test output consistency )
-	return ImportRules(k, patternName, "", op.Rules, eph.EphTiming{})
-}
-
 func (op *ExtendPattern) PostImport(k *imp.Importer) (err error) {
 	if name, e := safe.GetText(nil, op.PatternName); e != nil {
 		err = e

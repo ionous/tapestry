@@ -5211,128 +5211,6 @@ func Paragraph_Marshal(m jsn.Marshaler, val *Paragraph) (err error) {
 	return
 }
 
-// PatternActions Add actions to a pattern.
-// Actions to take when using a pattern.
-type PatternActions struct {
-	PatternName string            `if:"label=_,type=text"`
-	Locals      []FieldDefinition `if:"label=provides,optional"`
-	Rules       []PatternRule     `if:"label=rules"`
-	Markup      map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*PatternActions)(nil)
-
-func (*PatternActions) Compose() composer.Spec {
-	return composer.Spec{
-		Name: PatternActions_Type,
-		Uses: composer.Type_Flow,
-		Lede: "pattern",
-	}
-}
-
-const PatternActions_Type = "pattern_actions"
-const PatternActions_Field_PatternName = "$PATTERN_NAME"
-const PatternActions_Field_Locals = "$LOCALS"
-const PatternActions_Field_Rules = "$RULES"
-
-func (op *PatternActions) Marshal(m jsn.Marshaler) error {
-	return PatternActions_Marshal(m, op)
-}
-
-type PatternActions_Slice []PatternActions
-
-func (op *PatternActions_Slice) GetType() string { return PatternActions_Type }
-
-func (op *PatternActions_Slice) Marshal(m jsn.Marshaler) error {
-	return PatternActions_Repeats_Marshal(m, (*[]PatternActions)(op))
-}
-
-func (op *PatternActions_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PatternActions_Slice) SetSize(cnt int) {
-	var els []PatternActions
-	if cnt >= 0 {
-		els = make(PatternActions_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PatternActions_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PatternActions_Marshal(m, &(*op)[i])
-}
-
-func PatternActions_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternActions) error {
-	return jsn.RepeatBlock(m, (*PatternActions_Slice)(vals))
-}
-
-func PatternActions_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternActions) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PatternActions_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type PatternActions_Flow struct{ ptr *PatternActions }
-
-func (n PatternActions_Flow) GetType() string      { return PatternActions_Type }
-func (n PatternActions_Flow) GetLede() string      { return "pattern" }
-func (n PatternActions_Flow) GetFlow() interface{} { return n.ptr }
-func (n PatternActions_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*PatternActions); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func PatternActions_Optional_Marshal(m jsn.Marshaler, pv **PatternActions) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = PatternActions_Marshal(m, *pv)
-	} else if !enc {
-		var v PatternActions
-		if err = PatternActions_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func PatternActions_Marshal(m jsn.Marshaler, val *PatternActions) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(PatternActions_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", PatternActions_Field_PatternName)
-		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.PatternName)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", PatternActions_Field_PatternName))
-		}
-		e1 := m.MarshalKey("provides", PatternActions_Field_Locals)
-		if e1 == nil {
-			e1 = FieldDefinition_Optional_Repeats_Marshal(m, &val.Locals)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", PatternActions_Field_Locals))
-		}
-		e2 := m.MarshalKey("rules", PatternActions_Field_Rules)
-		if e2 == nil {
-			e2 = PatternRule_Repeats_Marshal(m, &val.Rules)
-		}
-		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", PatternActions_Field_Rules))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // PatternFlags requires a predefined string.
 type PatternFlags struct {
 	Str string
@@ -7278,7 +7156,6 @@ var Slats = []composer.Composer{
 	(*OneToOne)(nil),
 	(*PairedAction)(nil),
 	(*Paragraph)(nil),
-	(*PatternActions)(nil),
 	(*PatternFlags)(nil),
 	(*PatternRule)(nil),
 	(*PatternType)(nil),
@@ -7387,8 +7264,6 @@ var Signatures = map[uint64]interface{}{
 	7599754526096278866:  (*NumberField)(nil),          /* field_definition=Number:initially: */
 	13275028962550729195: (*NumberField)(nil),          /* field_definition=Number:kind: */
 	8920589511475179656:  (*NumberField)(nil),          /* field_definition=Number:kind:initially: */
-	5803330913337388662:  (*PatternActions)(nil),       /* story_statement=Pattern:provides:rules: */
-	15334083968500114832: (*PatternActions)(nil),       /* story_statement=Pattern:rules: */
 	16830519956255384977: (*SayResponse)(nil),          /* execute=Print response:with: */
 	10478796600040997822: (*SayResponse)(nil),          /* text_eval=Print response:with: */
 	7896413305974623897:  (*RecordField)(nil),          /* field_definition=Record: */

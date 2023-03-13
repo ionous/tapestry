@@ -1,10 +1,7 @@
 package cmdcompact
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/jsn"
-	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
 )
 
@@ -39,26 +36,25 @@ var customStorySlot cout.CustomSlot = nil
 // 	}
 // }
 
-// install a custom encoder to rewrite things
-func init() {
-	customStorySlot = func(m jsn.Marshaler, block jsn.SlotBlock) error {
-		if slot, ok := block.GetSlot(); ok {
-			switch op := slot.(type) {
-			case *story.PatternActions:
-				a := op.Rules
-				for i := len(a)/2 - 1; i >= 0; i-- {
-					opp := len(a) - 1 - i
-					a[i], a[opp] = a[opp], a[i]
-				}
-				block.SetSlot(&story.ExtendPattern{
-					PatternName: assign.T(op.PatternName),
-					Locals:      op.Locals,
-					Rules:       a,
-					Markup:      op.Markup,
-				})
-			}
-		}
-		return chart.Unhandled("always returns unhandled")
-	}
-
-}
+//// install a custom encoder to rewrite things
+//func init() {
+//	customStorySlot = func(m jsn.Marshaler, block jsn.SlotBlock) error {
+//		if slot, ok := block.GetSlot(); ok {
+//			switch op := slot.(type) {
+//			case *story.PatternActions:
+//				a := op.Rules
+//				for i := len(a)/2 - 1; i >= 0; i-- {
+//					opp := len(a) - 1 - i
+//					a[i], a[opp] = a[opp], a[i]
+//				}
+//				block.SetSlot(&story.ExtendPattern{
+//					PatternName: assign.T(op.PatternName),
+//					Locals:      op.Locals,
+//					Rules:       a,
+//					Markup:      op.Markup,
+//				})
+//			}
+//		}
+//		return chart.Unhandled("always returns unhandled")
+//	}
+//}
