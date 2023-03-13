@@ -20,10 +20,11 @@ func (op *PatternActions) PostImport(k *imp.Importer) (err error) {
 func (op *ExtendPattern) PostImport(k *imp.Importer) (err error) {
 	if name, e := safe.GetText(nil, op.PatternName); e != nil {
 		err = e
+	} else if e := ImportRules(k, name.String(), "", op.Rules, eph.EphTiming{}); e != nil {
+		err = e
 	} else if locals := ImportLocals(k, name.String(), op.Locals); len(locals) > 0 {
 		k.WriteEphemera(&eph.EphPatterns{PatternName: name.String(), Locals: locals})
 		// write the rules last ( order doesnt matter except it helps with test output consistency )
-		err = ImportRules(k, name.String(), "", op.Rules, eph.EphTiming{})
 	}
 	return
 }
@@ -36,8 +37,9 @@ func (op *DefinePattern) PostImport(k *imp.Importer) (err error) {
 	} else {
 		var pres *eph.EphParams
 		if opres := op.Result; opres != nil {
-			res := opres.GetParam()
-			pres = &res
+			if res, okay := opres.GetParam(); okay {
+				pres = &res
+			}
 		}
 		k.WriteEphemera(&eph.EphPatterns{PatternName: name.String(), Result: pres, Params: ps})
 		// write the rules last ( order doesnt matter except it helps with test output consistency )
@@ -125,7 +127,9 @@ func (op *PatternFlags) ReadFlags() (ret eph.EphTiming, err error) {
 
 func ImportLocals(k *imp.Importer, patternName string, locals []FieldDefinition) (ret []eph.EphParams) {
 	for _, el := range locals {
-		ret = append(ret, el.GetParam())
+		if p, ok := el.GetParam(); ok {
+			ret = append(ret, p)
+		}
 	}
 	return
 }
@@ -133,7 +137,9 @@ func ImportLocals(k *imp.Importer, patternName string, locals []FieldDefinition)
 func reduceProps(els []FieldDefinition) []eph.EphParams {
 	var out []eph.EphParams
 	for _, el := range els {
-		out = append(out, el.GetParam())
+		if p, ok := el.GetParam(); ok {
+			out = append(out, p)
+		}
 	}
 	return out
 }

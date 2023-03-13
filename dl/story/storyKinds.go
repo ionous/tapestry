@@ -31,9 +31,9 @@ func (op *DefineFields) PostImport(k *imp.Importer) (err error) {
 		for _, el := range op.Fields {
 			// bool fields become implicit aspects
 			// ( vs. bool pattern vars which stay bools -- see reduceProps )
-			if p := el.GetParam(); p.Affinity.Str != eph.Affinity_Bool {
+			if p, ok := el.GetParam(); ok && p.Affinity.Str != eph.Affinity_Bool {
 				ps = append(ps, p)
-			} else {
+			} else if ok {
 				// first: add the aspect
 				aspect := p.Name
 				traits := []string{"not_" + aspect, "is_" + aspect}
