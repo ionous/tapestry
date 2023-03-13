@@ -13,7 +13,7 @@ func (op *PatternActions) PostImport(k *imp.Importer) (err error) {
 	if locals := ImportLocals(k, patternName, op.Locals); len(locals) > 0 {
 		k.WriteEphemera(&eph.EphPatterns{PatternName: patternName, Locals: locals})
 	}
-	// write the rules last ( order doesnt matter except it helps with test output consistency )
+	// write the rules last ( to help with test output consistency )
 	return ImportRules(k, patternName, "", op.Rules, eph.EphTiming{})
 }
 
@@ -52,8 +52,9 @@ func (op *DefinePattern) reduceProps() []eph.EphParams {
 
 // note:  statements can set flags for a bunch of rules at once or within each rule separately, but not both.
 func ImportRules(k *imp.Importer, pattern, target string, els []PatternRule, flags eph.EphTiming) (err error) {
-	for _, el := range els {
-		if e := el.importRule(k, pattern, target, flags); e != nil {
+	// write in reverse order because within a given pattern, earlier rules take precedence.
+	for i := len(els) - 1; i >= 0; i-- {
+		if e := els[i].importRule(k, pattern, target, flags); e != nil {
 			err = errutil.Append(err, e)
 		}
 	}

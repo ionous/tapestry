@@ -34,12 +34,12 @@ var FactorialStory = &story.Story{
 					Name:   "num",
 				},
 				Rules: []story.PatternRule{{
-					Guard: &core.Always{},
-					Does:  FactorialMulMinusOne,
-				}, {
-					Markup: UserComment("the rule considered first is the rule that was written last:"),
+					Markup: UserComment("rules within a set of rules are evaluated top to bottom"),
 					Guard:  FactorialIsZero,
 					Does:   FactorialUseOne,
+				}, {
+					Guard: &core.Always{},
+					Does:  FactorialMulMinusOne,
 				}},
 			}},
 	}},
