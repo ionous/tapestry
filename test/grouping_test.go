@@ -1,6 +1,7 @@
 package test
 
 import (
+	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -28,7 +29,7 @@ func TestGrouping(t *testing.T) {
 			Kinds:     &kinds,
 			ObjectMap: objs,
 			Stack: []rt.Scope{
-				g.RecordOf(locals),
+				scope.FromRecord(locals),
 			},
 		},
 		Map: testpat.Map{
