@@ -10,7 +10,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "peeking",
         [
           {
@@ -117,7 +117,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "report peeking",
         [
           {
@@ -132,28 +132,17 @@
               "thing"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "report peeking",
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print response:with:": [
-                    "player peeks",
-                    {
-                      "Say:": "{we!|capitalize!} find nothing of interest."
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -169,6 +158,21 @@
                     "someone else peeks",
                     {
                       "Say:": "{The: .actor|capitalize!} looks under {the: .noun}."
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print response:with:": [
+                    "player peeks",
+                    {
+                      "Say:": "{we!|capitalize!} find nothing of interest."
                     }
                   ]
                 }

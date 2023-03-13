@@ -32,7 +32,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "kissing",
         [
           {
@@ -154,46 +154,9 @@
       "--": ""
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "can use",
         [
-          {
-            "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "kissing"
-                    ]
-                  },
-                  {
-                    "IsPlayer obj:": {
-                      "FromText:": "@actor"
-                    }
-                  }
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Print response:with:": [
-                          "can't kiss without consent",
-                          {
-                            "Say:": "{the:.noun|capitalize!} might not like that."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -229,6 +192,43 @@
                           "can't kiss yourself",
                           {
                             "Say:": "{we:|capitalize!} don't get much from that."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      "equal_to",
+                      "kissing"
+                    ]
+                  },
+                  {
+                    "IsPlayer obj:": {
+                      "FromText:": "@actor"
+                    }
+                  }
+                ]
+              },
+              [
+                {
+                  "Set:from:": [
+                    "@response",
+                    {
+                      "FromText:": {
+                        "Print response:with:": [
+                          "can't kiss without consent",
+                          {
+                            "Say:": "{the:.noun|capitalize!} might not like that."
                           }
                         ]
                       }
@@ -283,7 +283,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "report kissing",
         [
           {
@@ -292,28 +292,17 @@
               "actor"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "report kissing",
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print response:with:": [
-                    "actor kissing",
-                    {
-                      "Say:": "{the:.actor|capitalize!} kisses {the:.noun}."
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -327,6 +316,21 @@
                     "player kissing",
                     {
                       "Say:": "{we:|capitalize!} kiss on {the:.noun}."
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print response:with:": [
+                    "actor kissing",
+                    {
+                      "Say:": "{the:.actor|capitalize!} kisses {the:.noun}."
                     }
                   ]
                 }

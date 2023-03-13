@@ -54,29 +54,16 @@
       ]
     },
     {
-      "NounAssignment:nouns:lines:": [
+      "Define value:of:asLines:": [
         "pawn",
-        [
-          {
-            "Noun:named:": [
-              "the",
-              {
-                "Noun:": "player"
-              }
-            ]
-          }
-        ],
+        "the player",
         "self"
       ]
     },
     {
-      "NounAssignment:nouns:lines:": [
+      "Define value:of:asLines:": [
         "printed name",
-        [
-          {
-            "Noun:": "self"
-          }
-        ],
+        "self",
         "you"
       ]
     },
@@ -90,7 +77,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "isPlayer",
         [
           {
@@ -101,16 +88,43 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Bool:": "success"
-          }
-        }
+          "Bool:": "success"
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "isPlayer",
         [
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@obj",
+                  "agents"
+                ]
+              },
+              [
+                {
+                  "Set:from:": [
+                    "@success",
+                    {
+                      "FromBool:": {
+                        "Cmp:is:txt:": [
+                          "@obj",
+                          "equal_to",
+                          {
+                            "IdOf:": "player"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
           {
             "PatternRule:does:": [
               {
@@ -133,34 +147,6 @@
                               "player",
                               "pawn"
                             ]
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "KindOf:is:": [
-                  "@obj",
-                  "agents"
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@success",
-                    {
-                      "FromBool:": {
-                        "Cmp:is:txt:": [
-                          "@obj",
-                          "equal_to",
-                          {
-                            "IdOf:": "player"
                           }
                         ]
                       }

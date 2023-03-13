@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "provides storage",
         [
           {
@@ -12,17 +12,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Bool:": "success"
-          }
-        }
+          "Bool:": "success"
+        },
+        []
       ]
     },
     {
       "Comment:": "Does the object allow items to be stored inside or on top of it? "
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "provides storage",
         [
           {
@@ -30,7 +29,7 @@
               {
                 "KindOf:is:": [
                   "@obj",
-                  "containers"
+                  "supporters"
                 ]
               },
               [
@@ -50,7 +49,7 @@
               {
                 "KindOf:is:": [
                   "@obj",
-                  "supporters"
+                  "containers"
                 ]
               },
               [
@@ -72,7 +71,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "shows storage",
         [
           {
@@ -83,17 +82,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Bool:": "success"
-          }
-        }
+          "Bool:": "success"
+        },
+        []
       ]
     },
     {
       "Comment:": "Does the object provide storage, and can that storage be seen from outside? "
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "shows storage",
         [
           {
@@ -128,7 +126,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "visible storage",
         [
           {
@@ -139,17 +137,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "TextList:": "out"
-          }
-        }
+          "TextList:": "out"
+        },
+        []
       ]
     },
     {
       "Comment:": "Return a list containing any visible contents."
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "visible storage",
         [
           {
@@ -222,7 +219,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "allows storage",
         [
           {
@@ -233,38 +230,18 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Bool:": "success"
-          }
-        }
+          "Bool:": "success"
+        },
+        []
       ]
     },
     {
       "Comment:": "Returns true when the storage can be accessed."
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "allows storage",
         [
-          {
-            "PatternRule:does:": [
-              {
-                "ProvidesStorage obj:": {
-                  "FromText:": "@obj"
-                }
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@success",
-                    {
-                      "FromBool:": true
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -289,6 +266,25 @@
                     "@success",
                     {
                       "FromBool:": false
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "ProvidesStorage obj:": {
+                  "FromText:": "@obj"
+                }
+              },
+              [
+                {
+                  "Set:from:": [
+                    "@success",
+                    {
+                      "FromBool:": true
                     }
                   ]
                 }

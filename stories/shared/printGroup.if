@@ -5,7 +5,7 @@
         "Prints the objects in a pre-determined group.",
         "Having this as its own pattern allows authors to add custom prefixes and suffixes using before and after rules."
       ],
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "print group",
         [
           {
@@ -16,14 +16,13 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Bool:": "success"
-          }
-        }
+          "Bool:": "success"
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "print group",
         [
           {
@@ -59,6 +58,186 @@
           }
         ],
         [
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Log:value:": [
+                    "note",
+                    {
+                      "FromRecord:": "@group"
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Is empty:": {
+                      "Variable:dot:": [
+                        "grouping",
+                        [
+                          {
+                            "AtField:": "label"
+                          }
+                        ]
+                      ]
+                    }
+                  }
+                ]
+              },
+              [
+                {
+                  "Comment:": "completely unobject groups; presumably just one for each group."
+                },
+                {
+                  "PrintGroupedObject obj:": {
+                    "FromText:": {
+                      "Variable:dot:": [
+                        "objs",
+                        [
+                          {
+                            "AtIndex:": 1
+                          }
+                        ]
+                      ]
+                    }
+                  }
+                },
+                {
+                  "Set:from:": [
+                    "@success",
+                    {
+                      "FromBool:": true
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Variable:dot:": [
+                      "grouping",
+                      [
+                        {
+                          "AtField:": "not hide size"
+                        }
+                      ]
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Comment:": "print the size, and possibly a label, for a group of objects."
+                },
+                {
+                  "PrintSeveral obj:groupSize:label:": [
+                    {
+                      "FromText:": {
+                        "Variable:dot:": [
+                          "objs",
+                          [
+                            {
+                              "AtIndex:": 1
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    {
+                      "FromNumber:": {
+                        "Len:": {
+                          "FromTextList:": "@objs"
+                        }
+                      }
+                    },
+                    {
+                      "FromText:": {
+                        "Txt if:then:else:": [
+                          {
+                            "Variable:dot:": [
+                              "grouping",
+                              [
+                                {
+                                  "AtField:": "not hide label"
+                                }
+                              ]
+                            ]
+                          },
+                          {
+                            "Variable:dot:": [
+                              "grouping",
+                              [
+                                {
+                                  "AtField:": "label"
+                                }
+                              ]
+                            ]
+                          },
+                          ""
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Variable:dot:": [
+                      "grouping",
+                      [
+                        {
+                          "AtField:": "is hide size"
+                        }
+                      ]
+                    ]
+                  },
+                  {
+                    "Variable:dot:": [
+                      "grouping",
+                      [
+                        {
+                          "AtField:": "not hide label"
+                        }
+                      ]
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Comment:": "print a label with no prefixed size."
+                },
+                {
+                  "Print:": {
+                    "Variable:dot:": [
+                      "grouping",
+                      [
+                        {
+                          "AtField:": "label"
+                        }
+                      ]
+                    ]
+                  }
+                }
+              ]
+            ]
+          },
           {
             "PatternRule:does:": [
               {
@@ -159,186 +338,6 @@
                 }
               ]
             ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Variable:dot:": [
-                      "grouping",
-                      [
-                        {
-                          "AtField:": "is hide size"
-                        }
-                      ]
-                    ]
-                  },
-                  {
-                    "Variable:dot:": [
-                      "grouping",
-                      [
-                        {
-                          "AtField:": "not hide label"
-                        }
-                      ]
-                    ]
-                  }
-                ]
-              },
-              [
-                {
-                  "Comment:": "print a label with no prefixed size."
-                },
-                {
-                  "Print:": {
-                    "Variable:dot:": [
-                      "grouping",
-                      [
-                        {
-                          "AtField:": "label"
-                        }
-                      ]
-                    ]
-                  }
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Variable:dot:": [
-                      "grouping",
-                      [
-                        {
-                          "AtField:": "not hide size"
-                        }
-                      ]
-                    ]
-                  }
-                ]
-              },
-              [
-                {
-                  "Comment:": "print the size, and possibly a label, for a group of objects."
-                },
-                {
-                  "PrintSeveral obj:groupSize:label:": [
-                    {
-                      "FromText:": {
-                        "Variable:dot:": [
-                          "objs",
-                          [
-                            {
-                              "AtIndex:": 1
-                            }
-                          ]
-                        ]
-                      }
-                    },
-                    {
-                      "FromNumber:": {
-                        "Len:": {
-                          "FromTextList:": "@objs"
-                        }
-                      }
-                    },
-                    {
-                      "FromText:": {
-                        "Txt if:then:else:": [
-                          {
-                            "Variable:dot:": [
-                              "grouping",
-                              [
-                                {
-                                  "AtField:": "not hide label"
-                                }
-                              ]
-                            ]
-                          },
-                          {
-                            "Variable:dot:": [
-                              "grouping",
-                              [
-                                {
-                                  "AtField:": "label"
-                                }
-                              ]
-                            ]
-                          },
-                          ""
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Is empty:": {
-                      "Variable:dot:": [
-                        "grouping",
-                        [
-                          {
-                            "AtField:": "label"
-                          }
-                        ]
-                      ]
-                    }
-                  }
-                ]
-              },
-              [
-                {
-                  "Comment:": "completely unobject groups; presumably just one for each group."
-                },
-                {
-                  "PrintGroupedObject obj:": {
-                    "FromText:": {
-                      "Variable:dot:": [
-                        "objs",
-                        [
-                          {
-                            "AtIndex:": 1
-                          }
-                        ]
-                      ]
-                    }
-                  }
-                },
-                {
-                  "Set:from:": [
-                    "@success",
-                    {
-                      "FromBool:": true
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Log:value:": [
-                    "note",
-                    {
-                      "FromRecord:": "@group"
-                    }
-                  ]
-                }
-              ]
-            ]
           }
         ]
       ]
@@ -347,7 +346,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "print grouped object",
         [
           {
@@ -362,14 +361,18 @@
               "grouping"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
       "Comment:": "By default, just calls \"print object\" but can be overridden based on the grouping. "
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "print grouped object",
         [
           {

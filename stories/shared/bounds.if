@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "parser bounds",
         [
           {
@@ -12,14 +12,13 @@
           }
         ],
         {
-          "PatternResult:": {
-            "TextList:": "bounds"
-          }
-        }
+          "TextList:": "bounds"
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "parser bounds",
         [
           {

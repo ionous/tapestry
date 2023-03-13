@@ -7,7 +7,7 @@
       ]
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "starts with vowel",
         [
           {
@@ -15,14 +15,13 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Bool:": "matching"
-          }
-        }
+          "Bool:": "matching"
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "starts with vowel",
         [
           {
@@ -30,7 +29,7 @@
               {
                 "Matches:to:": [
                   "@text",
-                  "^(?i:A|E|I|O|U)"
+                  "^(?i:HEIR|HERB|HOMAGE|HONEST|HONOR|HONOUR|HORS|HOUR)"
                 ]
               },
               [
@@ -70,7 +69,7 @@
               {
                 "Matches:to:": [
                   "@text",
-                  "^(?i:HEIR|HERB|HOMAGE|HONEST|HONOR|HONOUR|HORS|HOUR)"
+                  "^(?i:A|E|I|O|U)"
                 ]
               },
               [

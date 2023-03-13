@@ -10,7 +10,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "storing into",
         [
           {
@@ -282,7 +282,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "report storing into",
         [
           {
@@ -303,28 +303,17 @@
               "thing"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "report storing into",
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print response:with:": [
-                    "player stores",
-                    {
-                      "Say:": "{We:|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -345,6 +334,21 @@
                 }
               ]
             ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print response:with:": [
+                    "player stores",
+                    {
+                      "Say:": "{We:|capitalize!} put {the: .noun} {on:.other_noun} {the: .other_noun}."
+                    }
+                  ]
+                }
+              ]
+            ]
           }
         ]
       ]
@@ -353,9 +357,52 @@
       "--": ""
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "can handle",
         [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      "equal_to",
+                      "storing into"
+                    ]
+                  },
+                  {
+                    "Cmp:is:txt:": [
+                      {
+                        "WearerOf obj:": {
+                          "FromText:": "@noun"
+                        }
+                      },
+                      "equal_to",
+                      "@actor"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Set:from:": [
+                    "@response",
+                    {
+                      "FromText:": {
+                        "Print response:with:": [
+                          "can't insert clothing",
+                          {
+                            "Say:": "{We:|capitalize!} would have to take {those:.noun} off first."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
           {
             "PatternRule:does:": [
               {
@@ -400,49 +447,6 @@
                 }
               ]
             ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "storing into"
-                    ]
-                  },
-                  {
-                    "Cmp:is:txt:": [
-                      {
-                        "WearerOf obj:": {
-                          "FromText:": "@noun"
-                        }
-                      },
-                      "equal_to",
-                      "@actor"
-                    ]
-                  }
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Print response:with:": [
-                          "can't insert clothing",
-                          {
-                            "Say:": "{We:|capitalize!} would have to take {those:.noun} off first."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
           }
         ]
       ]
@@ -451,11 +455,10 @@
       "--": ""
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "reach down",
         [
           {
-            "--": "Assuming we are able to reach the noun, check whether it actually allows storage right now. ( ex. open, not closed. )",
             "PatternRule:does:": [
               {
                 "AllTrue:": [
@@ -467,31 +470,26 @@
                     ]
                   },
                   {
-                    "Cmp:is:txt:": [
+                    "KindOf:is:": [
                       "@intoObj",
-                      "equal_to",
-                      "@noun"
+                      "actors"
                     ]
-                  },
-                  {
-                    "Not:": {
-                      "AllowsStorage obj:": {
-                        "FromText:": "@intoObj"
-                      }
-                    }
                   }
                 ]
               },
               [
+                {
+                  "Comment:": "If the target noun were owned by reaching actor then the actor would be the lca. By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach."
+                },
                 {
                   "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
                         "Print response:with:": [
-                          "can only store when allowed",
+                          "can't store people's possessions",
                           {
-                            "Say:": "{the: .fromObj|capitalize!} is closed."
+                            "Say:": "{those: .noun|capitalize!} seems to belong to {the: .intoObj}."
                           }
                         ]
                       }
@@ -551,6 +549,7 @@
             ]
           },
           {
+            "--": "Assuming we are able to reach the noun, check whether it actually allows storage right now. ( ex. open, not closed. )",
             "PatternRule:does:": [
               {
                 "AllTrue:": [
@@ -562,26 +561,31 @@
                     ]
                   },
                   {
-                    "KindOf:is:": [
+                    "Cmp:is:txt:": [
                       "@intoObj",
-                      "actors"
+                      "equal_to",
+                      "@noun"
                     ]
+                  },
+                  {
+                    "Not:": {
+                      "AllowsStorage obj:": {
+                        "FromText:": "@intoObj"
+                      }
+                    }
                   }
                 ]
               },
               [
-                {
-                  "Comment:": "If the target noun were owned by reaching actor then the actor would be the lca. By checking \"reach down\" we are checking *below* the lca so it would have to be some other actor's possessions we are trying to reach."
-                },
                 {
                   "Set:from:": [
                     "@response",
                     {
                       "FromText:": {
                         "Print response:with:": [
-                          "can't store people's possessions",
+                          "can only store when allowed",
                           {
-                            "Say:": "{those: .noun|capitalize!} seems to belong to {the: .intoObj}."
+                            "Say:": "{the: .fromObj|capitalize!} is closed."
                           }
                         ]
                       }

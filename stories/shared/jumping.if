@@ -27,7 +27,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "jumping",
         [
           {
@@ -67,7 +67,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "report jumping",
         [
           {
@@ -76,28 +76,17 @@
               "actor"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "report jumping",
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print response:with:": [
-                    "actor jumping",
-                    {
-                      "Say:": "{the:.actor|capitalize!} jumps on the spot."
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -111,6 +100,21 @@
                     "player jumping",
                     {
                       "Say:": "{we:|capitalize!} jump on the spot."
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print response:with:": [
+                    "actor jumping",
+                    {
+                      "Say:": "{the:.actor|capitalize!} jumps on the spot."
                     }
                   ]
                 }

@@ -23,7 +23,7 @@
         "An object indicating the position or ownership of another:",
         "A kitchen encloses the cook, the cook holds a sack, the sack contains some flour."
       ],
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "parentOf",
         [
           {
@@ -34,39 +34,18 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:kind:": [
-              "parent",
-              "object"
-            ]
-          }
-        }
+          "Text:kind:": [
+            "parent",
+            "object"
+          ]
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "parentOf",
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Set:from:": [
-                    "@parent",
-                    {
-                      "FromText:": {
-                        "Reciprocal:object:": [
-                          "whereabouts",
-                          "@obj"
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -96,6 +75,26 @@
                 }
               ]
             ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Set:from:": [
+                    "@parent",
+                    {
+                      "FromText:": {
+                        "Reciprocal:object:": [
+                          "whereabouts",
+                          "@obj"
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
           }
         ]
       ]
@@ -108,7 +107,7 @@
         "Returns the name of the specified object followed by all of its parents names.",
         "Often used for event handling."
       ],
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "Capture",
         [
           {
@@ -119,14 +118,13 @@
           }
         ],
         {
-          "PatternResult:": {
-            "TextList:": "list"
-          }
-        }
+          "TextList:": "list"
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "Capture",
         [
           {
@@ -183,7 +181,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "childrenOf",
         [
           {
@@ -194,14 +192,13 @@
           }
         ],
         {
-          "PatternResult:": {
-            "TextList:": "kids"
-          }
-        }
+          "TextList:": "kids"
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "childrenOf",
         [
           {
@@ -232,7 +229,7 @@
     },
     {
       "--": "The room in which an object can be found.",
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "CurrentRoom",
         [
           {
@@ -243,17 +240,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:kind:": [
-              "room",
-              "room"
-            ]
-          }
-        }
+          "Text:kind:": [
+            "room",
+            "room"
+          ]
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "CurrentRoom",
         [
           {
@@ -346,7 +342,7 @@
         "Finds the innermost object housing two objects.",
         "However, if one object directly encloses the other, it will return that object."
       ],
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "Common Ancestor",
         [
           {
@@ -363,17 +359,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:kind:": [
-              "ancestor",
-              "object"
-            ]
-          }
-        }
+          "Text:kind:": [
+            "ancestor",
+            "object"
+          ]
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "Common Ancestor",
         [
           {
@@ -553,7 +548,7 @@
     },
     {
       "--": "Returns true if the root is a parent of the object.",
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "ancestorOf",
         [
           {
@@ -570,15 +565,14 @@
           }
         ],
         {
-          "PatternResult:": {
-            "--": "true if one object acts as the ancestor of another.",
-            "Bool:": "isAncestor"
-          }
-        }
+          "--": "true if one object acts as the ancestor of another.",
+          "Bool:": "isAncestor"
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "ancestorOf",
         [
           {
@@ -700,7 +694,7 @@
         "For example: 'is supporting', 'is supported by', 'is held', 'running through things carried by the actor'.",
         "Whether for good or ill, Tapestry has no differentiation between phrases and internal commands."
       ],
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "locationOf",
         [
           {
@@ -711,17 +705,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:kind:": [
-              "location",
-              "object"
-            ]
-          }
-        }
+          "Text:kind:": [
+            "location",
+            "object"
+          ]
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "locationOf",
         [
           {
@@ -788,7 +781,7 @@
     },
     {
       "--": "If the parent of the specified object is a kind of supporter, return its name.",
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "SupporterOf",
         [
           {
@@ -799,17 +792,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:kind:": [
-              "supporter",
-              "supporter"
-            ]
-          }
-        }
+          "Text:kind:": [
+            "supporter",
+            "supporter"
+          ]
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "SupporterOf",
         [
           {
@@ -860,7 +852,7 @@
     },
     {
       "--": "If the parent of the specified object is a kind of container, return its name.",
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "ContainerOf",
         [
           {
@@ -871,17 +863,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:kind:": [
-              "container",
-              "container"
-            ]
-          }
-        }
+          "Text:kind:": [
+            "container",
+            "container"
+          ]
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "ContainerOf",
         [
           {
@@ -932,7 +923,7 @@
     },
     {
       "--": "If the parent of the specified object is wearing or carrying the noun, return its name.",
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "holderOf",
         [
           {
@@ -943,17 +934,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:kind:": [
-              "owner",
-              "actor"
-            ]
-          }
-        }
+          "Text:kind:": [
+            "owner",
+            "actor"
+          ]
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "holderOf",
         [
           {
@@ -1014,7 +1004,7 @@
         "If the parent of the specified object is carrying the noun, return its name.",
         "Note that only actors can carry other objects."
       ],
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "CarrierOf",
         [
           {
@@ -1025,17 +1015,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:kind:": [
-              "carrier",
-              "actor"
-            ]
-          }
-        }
+          "Text:kind:": [
+            "carrier",
+            "actor"
+          ]
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "CarrierOf",
         [
           {
@@ -1106,7 +1095,7 @@
         "If the parent of the specified object is wearing the noun, return its name.",
         "Note that only actors can wear other objects."
       ],
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "WearerOf",
         [
           {
@@ -1117,17 +1106,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:kind:": [
-              "wearer",
-              "actor"
-            ]
-          }
-        }
+          "Text:kind:": [
+            "wearer",
+            "actor"
+          ]
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "WearerOf",
         [
           {

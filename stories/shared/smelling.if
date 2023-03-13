@@ -41,7 +41,7 @@
     },
     {
       "--": "Sniffing means smelling the current location.",
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "sniffing",
         [
           {
@@ -95,7 +95,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "smelling",
         [
           {
@@ -208,7 +208,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "report smelling",
         [
           {
@@ -223,28 +223,17 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "report smelling",
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print response:with:": [
-                    "actor smelling",
-                    {
-                      "Say:": "{the:.actor|capitalize!} sniffs {the: .noun}."
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -258,6 +247,21 @@
                     "player smelling",
                     {
                       "Say:": "{we:|capitalize!} smell nothing unexpected."
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print response:with:": [
+                    "actor smelling",
+                    {
+                      "Say:": "{the:.actor|capitalize!} sniffs {the: .noun}."
                     }
                   ]
                 }

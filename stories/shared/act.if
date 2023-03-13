@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "state change",
         [
           {
@@ -27,10 +27,9 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Bool:": "success"
-          }
-        }
+          "Bool:": "success"
+        },
+        []
       ]
     },
     {
@@ -141,29 +140,6 @@
               [
                 {
                   "PatternRule:does:": [
-                    true,
-                    [
-                      {
-                        "Print response:with:": [
-                          "something changed itself",
-                          {
-                            "Say:": "{The: .noun|capitalize!} {are:.noun} {.trait}."
-                          }
-                        ]
-                      },
-                      {
-                        "Set:from:": [
-                          "@success",
-                          {
-                            "FromBool:": true
-                          }
-                        ]
-                      }
-                    ]
-                  ]
-                },
-                {
-                  "PatternRule:does:": [
                     {
                       "IsPlayer obj:": {
                         "FromText:": "@actor"
@@ -188,6 +164,29 @@
                       }
                     ]
                   ]
+                },
+                {
+                  "PatternRule:does:": [
+                    true,
+                    [
+                      {
+                        "Print response:with:": [
+                          "something changed itself",
+                          {
+                            "Say:": "{The: .noun|capitalize!} {are:.noun} {.trait}."
+                          }
+                        ]
+                      },
+                      {
+                        "Set:from:": [
+                          "@success",
+                          {
+                            "FromBool:": true
+                          }
+                        ]
+                      }
+                    ]
+                  ]
                 }
               ]
             ]
@@ -199,7 +198,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "state changing",
         [
           {
@@ -222,49 +221,18 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:": "result"
-          }
-        }
+          "Text:": "result"
+        },
+        []
       ]
     },
     {
       "Comment:": "Called from the state change event to attempt to change the state. "
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "state changing",
         [
-          {
-            "PatternRule:does:": [
-              {
-                "Object:field:": [
-                  "@noun",
-                  "@trait"
-                ]
-              },
-              [
-                {
-                  "Comment:": "can't change what is."
-                },
-                {
-                  "Set:from:": [
-                    "@result",
-                    {
-                      "FromText:": {
-                        "Print response:with:": [
-                          "can't change what is",
-                          {
-                            "Say:": "{They: .noun|capitalize!} {are:.noun} already {.trait}."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -297,6 +265,36 @@
                           "can't change the unchangeable",
                           {
                             "Say:": "{They: .noun|capitalize!} {arent: .noun} something {we!} can {.change}."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Object:field:": [
+                  "@noun",
+                  "@trait"
+                ]
+              },
+              [
+                {
+                  "Comment:": "can't change what is."
+                },
+                {
+                  "Set:from:": [
+                    "@result",
+                    {
+                      "FromText:": {
+                        "Print response:with:": [
+                          "can't change what is",
+                          {
+                            "Say:": "{They: .noun|capitalize!} {are:.noun} already {.trait}."
                           }
                         ]
                       }

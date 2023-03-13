@@ -59,7 +59,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "print name",
         [
           {
@@ -68,48 +68,27 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "print name",
         [
           {
             "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print:": {
-                    "Singular of:": {
-                      "KindOf:": "@obj"
-                    }
-                  }
-                },
-                {
-                  "Mention obj:": {
-                    "FromText:": "@obj"
-                  }
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
               {
-                "Object:field:": [
-                  "@obj",
-                  "publicly named"
-                ]
+                "Not:": {
+                  "Is valid:": "@obj"
+                }
               },
               [
                 {
-                  "Print:": {
-                    "NameOf:": "@obj"
-                  }
-                },
-                {
-                  "Mention obj:": {
+                  "PrintNothing:": {
                     "FromText:": "@obj"
                   }
                 }
@@ -150,13 +129,38 @@
           {
             "PatternRule:does:": [
               {
-                "Not:": {
-                  "Is valid:": "@obj"
-                }
+                "Object:field:": [
+                  "@obj",
+                  "publicly named"
+                ]
               },
               [
                 {
-                  "PrintNothing:": {
+                  "Print:": {
+                    "NameOf:": "@obj"
+                  }
+                },
+                {
+                  "Mention obj:": {
+                    "FromText:": "@obj"
+                  }
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print:": {
+                    "Singular of:": {
+                      "KindOf:": "@obj"
+                    }
+                  }
+                },
+                {
+                  "Mention obj:": {
                     "FromText:": "@obj"
                   }
                 }
@@ -170,7 +174,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "Print nothing",
         [
           {
@@ -184,19 +188,29 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "Print nothing",
         [
           {
             "PatternRule:does:": [
-              true,
+              {
+                "KindOf:is:nothing:": [
+                  "@obj",
+                  "actors",
+                  true
+                ]
+              },
               [
                 {
-                  "Print:": "nothing"
+                  "Print:": "nobody"
                 }
               ]
             ]
@@ -219,16 +233,10 @@
           },
           {
             "PatternRule:does:": [
-              {
-                "KindOf:is:nothing:": [
-                  "@obj",
-                  "actors",
-                  true
-                ]
-              },
+              true,
               [
                 {
-                  "Print:": "nobody"
+                  "Print:": "nothing"
                 }
               ]
             ]
@@ -240,7 +248,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "mention",
         [
           {
@@ -249,11 +257,15 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "mention",
         [
           {

@@ -10,7 +10,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "dropping",
         [
           {
@@ -210,7 +210,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "report dropping",
         [
           {
@@ -225,28 +225,17 @@
               "thing"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "report dropping",
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print response:with:": [
-                    "player drops",
-                    {
-                      "Say:": "Dropped."
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -267,6 +256,21 @@
                 }
               ]
             ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print response:with:": [
+                    "player drops",
+                    {
+                      "Say:": "Dropped."
+                    }
+                  ]
+                }
+              ]
+            ]
           }
         ]
       ]
@@ -275,9 +279,48 @@
       "--": ""
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "can reach",
         [
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      "equal_to",
+                      "dropping"
+                    ]
+                  },
+                  {
+                    "Cmp:is:txt:": [
+                      "@actor",
+                      "equal_to",
+                      "@noun"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Set:from:": [
+                    "@response",
+                    {
+                      "FromText:": {
+                        "Print response:with:": [
+                          "can't drop yourself",
+                          {
+                            "Say:": "{We:|capitalize!} lack the dexterity."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
           {
             "PatternRule:does:": [
               {
@@ -318,45 +361,6 @@
                         "Print response:with:": [
                           "can't drop what's already there",
                           "{The: .noun|capitalize!} {are: .noun} already here.\""
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "dropping"
-                    ]
-                  },
-                  {
-                    "Cmp:is:txt:": [
-                      "@actor",
-                      "equal_to",
-                      "@noun"
-                    ]
-                  }
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Print response:with:": [
-                          "can't drop yourself",
-                          {
-                            "Say:": "{We:|capitalize!} lack the dexterity."
-                          }
                         ]
                       }
                     }

@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "verbing",
         [
           {
@@ -9,17 +9,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:": "result"
-          }
-        }
+          "Text:": "result"
+        },
+        []
       ]
     },
     {
       "Comment:": "verb adapts a verb from its specified (usually present) tense, to the story's tense. [ this is just a placeholder for future work. ] "
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "verbing",
         [
           {
@@ -44,7 +43,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "contain",
         [
           {
@@ -53,11 +52,15 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "contain",
         [
           {
@@ -96,7 +99,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "On",
         [
           {
@@ -105,11 +108,15 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "On",
         [
           {
@@ -148,7 +155,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "Off",
         [
           {
@@ -157,11 +164,15 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "Off",
         [
           {
@@ -200,7 +211,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "Are",
         [
           {
@@ -212,16 +223,34 @@
           {
             "TextList:": "names"
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
       "Comment:": "print \"is\" or \"are\" depending on the plurality of the noun, and (optionally) the length of the passed list of names. "
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "Are",
         [
+          {
+            "PatternRule:does:": [
+              {
+                "IsPlayer obj:": {
+                  "FromText:": "@noun"
+                }
+              },
+              [
+                {
+                  "Print:": "are"
+                }
+              ]
+            ]
+          },
           {
             "PatternRule:does:": [
               true,
@@ -265,20 +294,6 @@
                 }
               ]
             ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@noun"
-                }
-              },
-              [
-                {
-                  "Print:": "are"
-                }
-              ]
-            ]
           }
         ]
       ]
@@ -290,7 +305,7 @@
       "Comment:": "say the phrase of are not or is not ( depending on the plural of the noun )"
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "Are not",
         [
           {
@@ -299,19 +314,27 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "Are not",
         [
           {
             "PatternRule:does:": [
-              true,
+              {
+                "IsPlayer obj:": {
+                  "FromText:": "@noun"
+                }
+              },
               [
                 {
-                  "Print:": "is not"
+                  "Print:": "are not"
                 }
               ]
             ]
@@ -333,14 +356,10 @@
           },
           {
             "PatternRule:does:": [
-              {
-                "IsPlayer obj:": {
-                  "FromText:": "@noun"
-                }
-              },
+              true,
               [
                 {
-                  "Print:": "are not"
+                  "Print:": "is not"
                 }
               ]
             ]
@@ -353,7 +372,7 @@
     },
     {
       "--": "Say the contraction aren't or isn't ( depending on the plural of the noun ).",
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "Arent",
         [
           {
@@ -362,38 +381,17 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "Arent",
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print:": "isn't"
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "Object:field:": [
-                  "@noun",
-                  "plural named"
-                ]
-              },
-              [
-                {
-                  "Print:": "aren't"
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -407,37 +405,6 @@
                 }
               ]
             ]
-          }
-        ]
-      ]
-    },
-    {
-      "--": "Say the contraction don't or doesn't ( depending on the plural of the noun ).",
-      "Pattern:requires:": [
-        "Dont",
-        [
-          {
-            "Text:kind:": [
-              "noun",
-              "object"
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "Pattern:rules:": [
-        "Dont",
-        [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print:": "doesn't"
-                }
-              ]
-            ]
           },
           {
             "PatternRule:does:": [
@@ -449,7 +416,67 @@
               },
               [
                 {
+                  "Print:": "aren't"
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print:": "isn't"
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": "Say the contraction don't or doesn't ( depending on the plural of the noun ).",
+      "Define pattern:requires:result:withRules:": [
+        "Dont",
+        [
+          {
+            "Text:kind:": [
+              "noun",
+              "object"
+            ]
+          }
+        ],
+        {
+          "Nothing": true
+        },
+        []
+      ]
+    },
+    {
+      "Extend pattern:withRules:": [
+        "Dont",
+        [
+          {
+            "PatternRule:does:": [
+              {
+                "Object:field:": [
+                  "@noun",
+                  "plural named"
+                ]
+              },
+              [
+                {
                   "Print:": "don't"
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print:": "doesn't"
                 }
               ]
             ]

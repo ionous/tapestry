@@ -2,7 +2,7 @@
   "Tapestry:": [
     {
       "--": "Returns a list of the objects partitioned into groups.",
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "make groups",
         [
           {
@@ -10,17 +10,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "RecordList:kind:": [
-              "groups",
-              "object group"
-            ]
-          }
-        }
+          "RecordList:kind:": [
+            "groups",
+            "object group"
+          ]
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "make groups",
         [
           {
@@ -63,7 +62,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "assign grouping",
         [
           {
@@ -74,17 +73,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Record:kind:": [
-              "grouping",
-              "grouping"
-            ]
-          }
-        }
+          "Record:kind:": [
+            "grouping",
+            "grouping"
+          ]
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "assign grouping",
         [
           {
@@ -100,21 +98,6 @@
           }
         ],
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Set:from:": [
-                    "@grouping",
-                    {
-                      "FromRecord:": "@grouping"
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -196,6 +179,21 @@
                 }
               ]
             ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Set:from:": [
+                    "@grouping",
+                    {
+                      "FromRecord:": "@grouping"
+                    }
+                  ]
+                }
+              ]
+            ]
           }
         ]
       ]
@@ -261,7 +259,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "match groups",
         [
           {
@@ -278,16 +276,57 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Bool:": "matching"
-          }
-        }
+          "Bool:": "matching"
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "match groups",
         [
+          {
+            "PatternRule:does:": [
+              {
+                "AnyTrue:": [
+                  {
+                    "Is empty:": {
+                      "Variable:dot:": [
+                        "first",
+                        [
+                          {
+                            "AtField:": "label"
+                          }
+                        ]
+                      ]
+                    }
+                  },
+                  {
+                    "Is empty:": {
+                      "Variable:dot:": [
+                        "second",
+                        [
+                          {
+                            "AtField:": "label"
+                          }
+                        ]
+                      ]
+                    }
+                  }
+                ]
+              },
+              [
+                {
+                  "Set:from:": [
+                    "@matching",
+                    {
+                      "FromBool:": false
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
           {
             "PatternRule:does:": [
               {
@@ -405,48 +444,6 @@
                 }
               ]
             ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "AnyTrue:": [
-                  {
-                    "Is empty:": {
-                      "Variable:dot:": [
-                        "first",
-                        [
-                          {
-                            "AtField:": "label"
-                          }
-                        ]
-                      ]
-                    }
-                  },
-                  {
-                    "Is empty:": {
-                      "Variable:dot:": [
-                        "second",
-                        [
-                          {
-                            "AtField:": "label"
-                          }
-                        ]
-                      ]
-                    }
-                  }
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@matching",
-                    {
-                      "FromBool:": false
-                    }
-                  ]
-                }
-              ]
-            ]
           }
         ]
       ]
@@ -456,7 +453,7 @@
     },
     {
       "--": "Adds a grouping to a collated list of groupings, and returns the new list.",
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "collate groups",
         [
           {
@@ -473,17 +470,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "RecordList:kind:": [
-              "groups",
-              "object group"
-            ]
-          }
-        }
+          "RecordList:kind:": [
+            "groups",
+            "object group"
+          ]
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "collate groups",
         [
           {

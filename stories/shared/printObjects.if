@@ -1,17 +1,21 @@
 {
   "Tapestry:": [
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "print inline objects",
         [
           {
             "TextList:": "objs"
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "print inline objects",
         [
           {
@@ -68,17 +72,21 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "print blocks",
         [
           {
             "TextList:": "objs"
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "print blocks",
         [
           {
@@ -135,7 +143,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "print object",
         [
           {
@@ -144,14 +152,18 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
       "Comment:": "Say the object's name ( and some object details. ) "
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "print object",
         [
           {
@@ -174,10 +186,29 @@
         [
           {
             "PatternRule:does:": [
-              true,
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:num:": [
+                      "@block depth",
+                      "greater_than",
+                      0
+                    ]
+                  },
+                  {
+                    "Cmp:is:num:": [
+                      "@block depth",
+                      "greater_than",
+                      "@inline depth"
+                    ]
+                  }
+                ]
+              },
               [
                 {
-                  "Say:": "{.obj}"
+                  "PrintBlock obj:": {
+                    "FromText:": "@obj"
+                  }
                 }
               ]
             ]
@@ -230,29 +261,10 @@
           },
           {
             "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:num:": [
-                      "@block depth",
-                      "greater_than",
-                      0
-                    ]
-                  },
-                  {
-                    "Cmp:is:num:": [
-                      "@block depth",
-                      "greater_than",
-                      "@inline depth"
-                    ]
-                  }
-                ]
-              },
+              true,
               [
                 {
-                  "PrintBlock obj:": {
-                    "FromText:": "@obj"
-                  }
+                  "Say:": "{.obj}"
                 }
               ]
             ]
@@ -264,7 +276,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "print block",
         [
           {
@@ -273,11 +285,15 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "print block",
         [
           {
@@ -357,7 +373,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "print inline storage",
         [
           {
@@ -368,14 +384,13 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Bool:": "success"
-          }
-        }
+          "Bool:": "success"
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "print inline storage",
         [
           {
@@ -430,7 +445,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "print details",
         [
           {
@@ -439,14 +454,18 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
       "Comment:": "Says some (usually parenthetical) details about an object -- for instance: its contents.  (Alternatively, see \"print status\" which writes bare bones information about an object.)"
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "print details",
         [
           {
@@ -466,9 +485,14 @@
               {
                 "AllTrue:": [
                   {
-                    "KindOf:is:": [
-                      "@obj",
-                      "containers"
+                    "Cmp:is:num:": [
+                      {
+                        "Len:": {
+                          "FromTextList:": "@kids"
+                        }
+                      },
+                      "greater_than",
+                      0
                     ]
                   }
                 ]
@@ -476,9 +500,9 @@
               [
                 {
                   "Print response:with:": [
-                    "empty container",
+                    "on which are",
                     {
-                      "Say:": "empty"
+                      "Say:": "{on: .obj} which {are: .obj .kids} {print_inline_objects: .kids}"
                     }
                   ]
                 }
@@ -520,14 +544,9 @@
               {
                 "AllTrue:": [
                   {
-                    "Cmp:is:num:": [
-                      {
-                        "Len:": {
-                          "FromTextList:": "@kids"
-                        }
-                      },
-                      "greater_than",
-                      0
+                    "KindOf:is:": [
+                      "@obj",
+                      "containers"
                     ]
                   }
                 ]
@@ -535,9 +554,9 @@
               [
                 {
                   "Print response:with:": [
-                    "on which are",
+                    "empty container",
                     {
-                      "Say:": "{on: .obj} which {are: .obj .kids} {print_inline_objects: .kids}"
+                      "Say:": "empty"
                     }
                   ]
                 }
@@ -551,7 +570,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "print status",
         [
           {
@@ -565,17 +584,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Bool:": "skip"
-          }
-        }
+          "Bool:": "skip"
+        },
+        []
       ]
     },
     {
       "Comment:": "extra information about an object useful for inventorying ( usually appearing inside brackets )"
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "print status",
         [
           {
@@ -620,7 +638,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "print inner status",
         [
           {
@@ -634,17 +652,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Bool:": "skip"
-          }
-        }
+          "Bool:": "skip"
+        },
+        []
       ]
     },
     {
       "Comment:": "usually called via \"print status\" to add spacing and comma-and separators "
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "print inner status",
         [
           {
@@ -652,15 +669,55 @@
               {
                 "Object:field:": [
                   "@obj",
-                  "locked"
+                  "lit"
                 ]
               },
               [
                 {
                   "Print response:with:": [
-                    "locked status",
+                    "lit status",
                     {
-                      "Say:": "{if .obj.closed and .obj.locked}locked{end}"
+                      "Say:": "providing light"
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Object:field:": [
+                  "@obj",
+                  "worn"
+                ]
+              },
+              [
+                {
+                  "Print response:with:": [
+                    "worn status",
+                    {
+                      "Say:": "being worn"
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Object:field:": [
+                  "@obj",
+                  "openable"
+                ]
+              },
+              [
+                {
+                  "Print response:with:": [
+                    "openable status",
+                    {
+                      "Say:": "{if .obj.closed}closed{else}open{if .isEmpty} but empty{end}"
                     }
                   ]
                 }
@@ -702,55 +759,15 @@
               {
                 "Object:field:": [
                   "@obj",
-                  "openable"
+                  "locked"
                 ]
               },
               [
                 {
                   "Print response:with:": [
-                    "openable status",
+                    "locked status",
                     {
-                      "Say:": "{if .obj.closed}closed{else}open{if .isEmpty} but empty{end}"
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "Object:field:": [
-                  "@obj",
-                  "worn"
-                ]
-              },
-              [
-                {
-                  "Print response:with:": [
-                    "worn status",
-                    {
-                      "Say:": "being worn"
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "Object:field:": [
-                  "@obj",
-                  "lit"
-                ]
-              },
-              [
-                {
-                  "Print response:with:": [
-                    "lit status",
-                    {
-                      "Say:": "providing light"
+                      "Say:": "{if .obj.closed and .obj.locked}locked{end}"
                     }
                   ]
                 }

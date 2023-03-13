@@ -1,20 +1,24 @@
 {
   "Tapestry:": [
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "We",
         [
           {
             "TextList:": "names"
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
       "Comment:": "We refers to the player. As with all the customizable grammar, we use the plural for the name of pattern."
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "We",
         [
           {
@@ -37,7 +41,7 @@
       "Comment:": "they, [we], [ey], it. "
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "They",
         [
           {
@@ -46,23 +50,17 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "They",
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print:": "it"
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -77,6 +75,16 @@
                 }
               ]
             ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print:": "it"
+                }
+              ]
+            ]
           }
         ]
       ]
@@ -85,7 +93,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "Those",
         [
           {
@@ -94,23 +102,17 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "Those",
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print:": "that"
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -122,6 +124,16 @@
               [
                 {
                   "Print:": "these"
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print:": "that"
                 }
               ]
             ]

@@ -10,7 +10,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "examining",
         [
           {
@@ -146,7 +146,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "Print description",
         [
           {
@@ -155,11 +155,15 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "Print description",
         [
           {
@@ -175,6 +179,25 @@
           }
         ],
         [
+          {
+            "PatternRule:does:": [
+              {
+                "Not:": {
+                  "Is empty:": "@description"
+                }
+              },
+              [
+                {
+                  "Print:": "@description"
+                },
+                {
+                  "PrintParticulars obj:": {
+                    "FromText:": "@obj"
+                  }
+                }
+              ]
+            ]
+          },
           {
             "PatternRule:does:": [
               true,
@@ -202,25 +225,6 @@
                 }
               ]
             ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "Not:": {
-                  "Is empty:": "@description"
-                }
-              },
-              [
-                {
-                  "Print:": "@description"
-                },
-                {
-                  "PrintParticulars obj:": {
-                    "FromText:": "@obj"
-                  }
-                }
-              ]
-            ]
           }
         ]
       ]
@@ -229,7 +233,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "Print particulars",
         [
           {
@@ -240,16 +244,46 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Bool:": "success"
-          }
-        }
+          "Bool:": "success"
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "Print particulars",
         [
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@obj",
+                  "supporters"
+                ]
+              },
+              [
+                {
+                  "If:does:": [
+                    {
+                      "PrintInlineStorage obj:": {
+                        "FromText:": "@obj"
+                      }
+                    },
+                    [
+                      {
+                        "Set:from:": [
+                          "@success",
+                          {
+                            "FromBool:": true
+                          }
+                        ]
+                      }
+                    ]
+                  ]
+                }
+              ]
+            ]
+          },
           {
             "PatternRule:does:": [
               {
@@ -316,37 +350,6 @@
                         }
                       ]
                     }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "KindOf:is:": [
-                  "@obj",
-                  "supporters"
-                ]
-              },
-              [
-                {
-                  "If:does:": [
-                    {
-                      "PrintInlineStorage obj:": {
-                        "FromText:": "@obj"
-                      }
-                    },
-                    [
-                      {
-                        "Set:from:": [
-                          "@success",
-                          {
-                            "FromBool:": true
-                          }
-                        ]
-                      }
-                    ]
                   ]
                 }
               ]

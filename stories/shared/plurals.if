@@ -14,7 +14,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "print plural name",
         [
           {
@@ -23,26 +23,20 @@
               "thing"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
       "Comment:": "It says the plural of the target's name. "
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "print plural name",
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Say:": "{printName:.obj|pluralize!}"
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -60,6 +54,16 @@
               [
                 {
                   "Say:": "{.obj.printed_plural_name}"
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Say:": "{printName:.obj|pluralize!}"
                 }
               ]
             ]
@@ -85,18 +89,9 @@
             ]
           },
           {
-            "NounAssignment:nouns:lines:": [
+            "Define value:of:asLines:": [
               "printed plural name",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "flowerpot"
-                    }
-                  ]
-                }
-              ],
+              "the flowerpot",
               "broken flower pots"
             ]
           }

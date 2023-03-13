@@ -1,13 +1,24 @@
 {
   "Tapestry:": [
     {
-      "Pattern:": "adjust light"
+      "Define pattern:requires:result:withRules:": [
+        "adjust light",
+        [
+          {
+            "Nothing": true
+          }
+        ],
+        {
+          "Nothing": true
+        },
+        []
+      ]
     },
     {
       "Comment:": "Adjust light runs at the end of the turn, examining the changes in the world to determine if the player has been plunged into darkness or thrust into the light. "
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "adjust light",
         [
           {
@@ -46,18 +57,22 @@
         ],
         [
           {
-            "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  "@was lit",
-                  {
-                    "Not:": "@now lit"
-                  }
-                ]
-              },
+            "PatternRule:flags:does:": [
+              true,
+              "before",
               [
                 {
-                  "PrintNewsOfDarkness": true
+                  "Set:from:": [
+                    {
+                      "Object:field:": [
+                        "@actor",
+                        "not in darkness"
+                      ]
+                    },
+                    {
+                      "FromBool:": "@now lit"
+                    }
+                  ]
                 }
               ]
             ]
@@ -80,22 +95,18 @@
             ]
           },
           {
-            "PatternRule:flags:does:": [
-              true,
-              "before",
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  "@was lit",
+                  {
+                    "Not:": "@now lit"
+                  }
+                ]
+              },
               [
                 {
-                  "Set:from:": [
-                    {
-                      "Object:field:": [
-                        "@actor",
-                        "not in darkness"
-                      ]
-                    },
-                    {
-                      "FromBool:": "@now lit"
-                    }
-                  ]
+                  "PrintNewsOfDarkness": true
                 }
               ]
             ]
@@ -107,10 +118,21 @@
       "--": ""
     },
     {
-      "Pattern:": "Print news of darkness"
+      "Define pattern:requires:result:withRules:": [
+        "Print news of darkness",
+        [
+          {
+            "Nothing": true
+          }
+        ],
+        {
+          "Nothing": true
+        },
+        []
+      ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "Print news of darkness",
         [
           {
@@ -135,10 +157,21 @@
       "--": ""
     },
     {
-      "Pattern:": "Print news of light"
+      "Define pattern:requires:result:withRules:": [
+        "Print news of light",
+        [
+          {
+            "Nothing": true
+          }
+        ],
+        {
+          "Nothing": true
+        },
+        []
+      ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "Print news of light",
         [
           {

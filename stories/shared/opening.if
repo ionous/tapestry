@@ -10,7 +10,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "opening",
         [
           {
@@ -150,7 +150,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "closing",
         [
           {
@@ -282,7 +282,7 @@
     },
     {
       "--": "Can't open when locked.",
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "state changing",
         [
           {

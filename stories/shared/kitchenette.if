@@ -19,34 +19,16 @@
             ]
           },
           {
-            "NounAssignment:nouns:lines:": [
+            "Define value:of:asLines:": [
               "description",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "kitchen"
-                    }
-                  ]
-                }
-              ],
+              "the kitchen",
               "Your Aunt Fiona's kitchen looks as though it has been at the eye of a glitter storm. Fine, sparkling grit dusts every surface. The appliances are slightly askew, too, as though they hadn't quite settled after a vigorous earthquake."
             ]
           },
           {
-            "NounAssignment:nouns:lines:": [
+            "Define value:of:asLines:": [
               "printed name",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "kitchen"
-                    }
-                  ]
-                }
-              ],
+              "the kitchen",
               "Kitchen"
             ]
           },
@@ -80,34 +62,16 @@
             ]
           },
           {
-            "NounAssignment:nouns:lines:": [
+            "Define value:of:asLines:": [
               "initial appearance",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "hat"
-                    }
-                  ]
-                }
-              ],
+              "the hat",
               "A pointed black hat lies discarded on the floor under a dusty shelf."
             ]
           },
           {
-            "NounAssignment:nouns:lines:": [
+            "Define value:of:asLines:": [
               "description",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "hat"
-                    }
-                  ]
-                }
-              ],
+              "the hat",
               "Your aunt's very own witches hat, a Halloween favorite."
             ]
           },
@@ -151,34 +115,16 @@
             ]
           },
           {
-            "NounAssignment:nouns:lines:": [
+            "Define value:of:asLines:": [
               "initial appearance",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "hook"
-                    }
-                  ]
-                }
-              ],
+              "the hook",
               "Beneath your feet is a bright and shiny hook."
             ]
           },
           {
-            "NounAssignment:nouns:lines:": [
+            "Define value:of:asLines:": [
               "description",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "cabinet"
-                    }
-                  ]
-                }
-              ],
+              "the cabinet",
               "An ancient teak wardrobe repurposed as a kitchen cupboard."
             ]
           },
@@ -281,18 +227,9 @@
             ]
           },
           {
-            "NounAssignment:nouns:lines:": [
+            "Define value:of:asLines:": [
               "initial appearance",
-              [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "espresso machine"
-                    }
-                  ]
-                }
-              ],
+              "the espresso machine",
               "Steam leaks from the top of a recently used espresso machine."
             ]
           }

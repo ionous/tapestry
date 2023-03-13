@@ -94,7 +94,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "showing",
         [
           {
@@ -209,7 +209,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "report showing",
         [
           {
@@ -230,28 +230,17 @@
               "actor"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "report showing",
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print response:with:": [
-                    "player shows",
-                    {
-                      "Say:": "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -267,6 +256,21 @@
                     "someone else shows",
                     {
                       "Say:": "{The: .actor|capitalize!} shows off {the: .noun}."
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print response:with:": [
+                    "player shows",
+                    {
+                      "Say:": "{the: .other_noun|capitalize!} {are: .other_noun} unimpressed."
                     }
                   ]
                 }

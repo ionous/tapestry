@@ -10,7 +10,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "taking",
         [
           {
@@ -199,7 +199,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "report taking",
         [
           {
@@ -214,28 +214,17 @@
               "thing"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "report taking",
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print response:with:": [
-                    "player takes",
-                    {
-                      "Say:": "Taken."
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -256,6 +245,21 @@
                 }
               ]
             ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print response:with:": [
+                    "player takes",
+                    {
+                      "Say:": "Taken."
+                    }
+                  ]
+                }
+              ]
+            ]
           }
         ]
       ]
@@ -264,7 +268,7 @@
       "--": ""
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "can reach",
         [
           {
@@ -279,9 +283,49 @@
                     ]
                   },
                   {
-                    "KindOf:is:": [
+                    "Not:": {
+                      "KindOf:is:": [
+                        "@noun",
+                        "things"
+                      ]
+                    }
+                  }
+                ]
+              },
+              [
+                {
+                  "Set:from:": [
+                    "@response",
+                    {
+                      "FromText:": {
+                        "Print response:with:": [
+                          "can't take nothings",
+                          {
+                            "Say:": "{we:|capitalize!} can't carry {the: .noun}."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      "equal_to",
+                      "taking"
+                    ]
+                  },
+                  {
+                    "Object:field:": [
                       "@noun",
-                      "actors"
+                      "fixed in place"
                     ]
                   }
                 ]
@@ -293,9 +337,47 @@
                     {
                       "FromText:": {
                         "Print response:with:": [
-                          "can't take other people",
+                          "can't take what's fixed in place",
                           {
-                            "Say:": "I don't suppose {the: .noun} would care for that."
+                            "Say:": "{they:.noun|capitalize!} {are:.noun} fixed in place."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      "equal_to",
+                      "taking"
+                    ]
+                  },
+                  {
+                    "Object:field:": [
+                      "@noun",
+                      "scenery"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Set:from:": [
+                    "@response",
+                    {
+                      "FromText:": {
+                        "Print response:with:": [
+                          "can't take scenery",
+                          {
+                            "Say:": "{they:.noun|capitalize!} {are:.noun} hardly portable."
                           }
                         ]
                       }
@@ -356,9 +438,9 @@
                     ]
                   },
                   {
-                    "Object:field:": [
+                    "KindOf:is:": [
                       "@noun",
-                      "scenery"
+                      "actors"
                     ]
                   }
                 ]
@@ -370,87 +452,9 @@
                     {
                       "FromText:": {
                         "Print response:with:": [
-                          "can't take scenery",
+                          "can't take other people",
                           {
-                            "Say:": "{they:.noun|capitalize!} {are:.noun} hardly portable."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "taking"
-                    ]
-                  },
-                  {
-                    "Object:field:": [
-                      "@noun",
-                      "fixed in place"
-                    ]
-                  }
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Print response:with:": [
-                          "can't take what's fixed in place",
-                          {
-                            "Say:": "{they:.noun|capitalize!} {are:.noun} fixed in place."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "taking"
-                    ]
-                  },
-                  {
-                    "Not:": {
-                      "KindOf:is:": [
-                        "@noun",
-                        "things"
-                      ]
-                    }
-                  }
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Print response:with:": [
-                          "can't take nothings",
-                          {
-                            "Say:": "{we:|capitalize!} can't carry {the: .noun}."
+                            "Say:": "I don't suppose {the: .noun} would care for that."
                           }
                         ]
                       }
@@ -467,7 +471,7 @@
       "--": ""
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "reach up",
         [
           {
@@ -519,51 +523,9 @@
       "--": ""
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "reach down",
         [
-          {
-            "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "taking"
-                    ]
-                  },
-                  {
-                    "KindOf:is:": [
-                      "@fromObj",
-                      "actors"
-                    ]
-                  }
-                ]
-              },
-              [
-                {
-                  "--": [
-                    "If the target noun were owned by the reaching actor then the actor would be the lca.",
-                    "By checking down, its *below* the lca so it's some other actor's possessions we are trying to reach."
-                  ],
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Print response:with:": [
-                          "can't take people's possessions",
-                          {
-                            "Say:": "{those: .noun|capitalize!} seems to belong to {the: .fromObj}."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -602,6 +564,48 @@
                           "can't take what you're holding",
                           {
                             "Say:": "{we:|capitalize!} already have {those:.noun}."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      "equal_to",
+                      "taking"
+                    ]
+                  },
+                  {
+                    "KindOf:is:": [
+                      "@fromObj",
+                      "actors"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "--": [
+                    "If the target noun were owned by the reaching actor then the actor would be the lca.",
+                    "By checking down, its *below* the lca so it's some other actor's possessions we are trying to reach."
+                  ],
+                  "Set:from:": [
+                    "@response",
+                    {
+                      "FromText:": {
+                        "Print response:with:": [
+                          "can't take people's possessions",
+                          {
+                            "Say:": "{those: .noun|capitalize!} seems to belong to {the: .fromObj}."
                           }
                         ]
                       }

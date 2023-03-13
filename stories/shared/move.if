@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "Move Object",
         [
           {
@@ -18,14 +18,13 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:": "response"
-          }
-        }
+          "Text:": "response"
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "Move Object",
         [
           {
@@ -161,7 +160,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "RemoveFromPlay",
         [
           {
@@ -170,11 +169,15 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "RemoveFromPlay",
         [
           {
@@ -228,7 +231,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "WearObject",
         [
           {
@@ -243,14 +246,18 @@
               "actor"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
       "Comment:": "This is pretty low level. For instance, it doesnt check wearable."
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "WearObject",
         [
           {

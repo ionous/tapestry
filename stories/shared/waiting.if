@@ -8,7 +8,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "waiting",
         [
           {
@@ -73,7 +73,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "report waiting",
         [
           {
@@ -82,28 +82,17 @@
               "actor"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "report waiting",
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print response:with:": [
-                    "the player waits",
-                    {
-                      "Say:": "Time passes."
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -119,6 +108,21 @@
                     "someone waits",
                     {
                       "Say:": "{The: .actor|capitalize!} waited."
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print response:with:": [
+                    "the player waits",
+                    {
+                      "Say:": "Time passes."
                     }
                   ]
                 }

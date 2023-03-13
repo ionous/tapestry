@@ -10,7 +10,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "searching",
         [
           {
@@ -117,7 +117,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "report searching",
         [
           {
@@ -132,11 +132,15 @@
               "thing"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "report searching",
         [
           {
@@ -144,42 +148,6 @@
           }
         ],
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print response:with:": [
-                    "player searches something",
-                    {
-                      "Say:": "{we!|capitalize!} find nothing of interest."
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "Not:": {
-                  "IsPlayer obj:": {
-                    "FromText:": "@actor"
-                  }
-                }
-              },
-              [
-                {
-                  "Print response:with:": [
-                    "someone else searches something",
-                    {
-                      "Say:": "{The: .actor|capitalize!} searches {the: .noun}."
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -274,6 +242,42 @@
                 }
               ]
             ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Not:": {
+                  "IsPlayer obj:": {
+                    "FromText:": "@actor"
+                  }
+                }
+              },
+              [
+                {
+                  "Print response:with:": [
+                    "someone else searches something",
+                    {
+                      "Say:": "{The: .actor|capitalize!} searches {the: .noun}."
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print response:with:": [
+                    "player searches something",
+                    {
+                      "Say:": "{we!|capitalize!} find nothing of interest."
+                    }
+                  ]
+                }
+              ]
+            ]
           }
         ]
       ]
@@ -282,46 +286,9 @@
       "--": ""
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "can reach",
         [
-          {
-            "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "searching"
-                    ]
-                  },
-                  {
-                    "FullyOpaque obj:": {
-                      "FromText:": "@noun"
-                    }
-                  }
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Print response:with:": [
-                          "can't search opaque objects",
-                          {
-                            "Say:": "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -352,6 +319,43 @@
                           "can only search storage",
                           {
                             "Say:": "{we!|capitalize!} find nothing of interest."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      "equal_to",
+                      "searching"
+                    ]
+                  },
+                  {
+                    "FullyOpaque obj:": {
+                      "FromText:": "@noun"
+                    }
+                  }
+                ]
+              },
+              [
+                {
+                  "Set:from:": [
+                    "@response",
+                    {
+                      "FromText:": {
+                        "Print response:with:": [
+                          "can't search opaque objects",
+                          {
+                            "Say:": "{we:|capitalize!} can't see inside, {they: .noun} {are: .noun} closed."
                           }
                         ]
                       }

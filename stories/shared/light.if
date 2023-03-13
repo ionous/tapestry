@@ -1,7 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "fully opaque",
         [
           {
@@ -12,28 +12,35 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Bool:": "result"
-          }
-        }
+          "Bool:": "result"
+        },
+        []
       ]
     },
     {
       "Comment:": "Returns true if light gets stopped when passing from inside an object to outside an object. Note that \"lit\" objects emit light from all of their surfaces, so while a closed box might not reveal a flashlight locked inside, a glowing haunted treasure chest would illuminate its contents and the room it's in. "
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "fully opaque",
         [
           {
             "PatternRule:does:": [
-              true,
+              {
+                "KindOf:is:": [
+                  "@obj",
+                  "rooms"
+                ]
+              },
               [
+                {
+                  "Comment:": "a room is the top of line."
+                },
                 {
                   "Set:from:": [
                     "@result",
                     {
-                      "FromBool:": false
+                      "FromBool:": true
                     }
                   ]
                 }
@@ -78,21 +85,13 @@
           },
           {
             "PatternRule:does:": [
-              {
-                "KindOf:is:": [
-                  "@obj",
-                  "rooms"
-                ]
-              },
+              true,
               [
-                {
-                  "Comment:": "a room is the top of line."
-                },
                 {
                   "Set:from:": [
                     "@result",
                     {
-                      "FromBool:": true
+                      "FromBool:": false
                     }
                   ]
                 }
@@ -106,7 +105,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "transparentOf",
         [
           {
@@ -117,17 +116,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:kind:": [
-              "result",
-              "object"
-            ]
-          }
-        }
+          "Text:kind:": [
+            "result",
+            "object"
+          ]
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "transparentOf",
         [
           {
@@ -143,24 +141,6 @@
           }
         ],
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Comment:": "normally the parent is just the parent."
-                },
-                {
-                  "Set:from:": [
-                    "@result",
-                    {
-                      "FromText:": "@parent"
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -182,6 +162,24 @@
                 }
               ]
             ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Comment:": "normally the parent is just the parent."
+                },
+                {
+                  "Set:from:": [
+                    "@result",
+                    {
+                      "FromText:": "@parent"
+                    }
+                  ]
+                }
+              ]
+            ]
           }
         ]
       ]
@@ -190,7 +188,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "transparentList",
         [
           {
@@ -201,17 +199,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "TextList:": "list"
-          }
-        }
+          "TextList:": "list"
+        },
+        []
       ]
     },
     {
       "Comment:": "Return a list containing the object and all of its transparent parents. "
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "transparentList",
         [
           {
@@ -259,7 +256,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "contains light",
         [
           {
@@ -270,17 +267,16 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Bool:": "result"
-          }
-        }
+          "Bool:": "result"
+        },
+        []
       ]
     },
     {
       "Comment:": "Returns true if the passed spot is illuminated ( because of its own light, or because of the light of some nearby objet. ) This roughly correlates to Inform's \"offers light\" routine."
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "contains light",
         [
           {

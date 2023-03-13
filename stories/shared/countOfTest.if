@@ -5,35 +5,36 @@
         "countOf",
         [
           {
-            "Pattern:": "magic symbols"
-          },
-          {
-            "Pattern:rules:": [
+            "Define pattern:requires:result:withRules:": [
               "magic symbols",
               [
                 {
-                  "PatternRule:does:": [
-                    true,
-                    [
-                      {
-                        "Print:": "o"
-                      }
-                    ]
-                  ]
-                },
+                  "Nothing": true
+                }
+              ],
+              {
+                "Nothing": true
+              },
+              []
+            ]
+          },
+          {
+            "Extend pattern:withRules:": [
+              "magic symbols",
+              [
                 {
                   "PatternRule:does:": [
                     {
                       "CountOf:num:": [
                         {
-                          "After": true
+                          "Every": true
                         },
-                        5
+                        2
                       ]
                     },
                     [
                       {
-                        "Print:": "x"
+                        "Print:": "*"
                       }
                     ]
                   ]
@@ -60,14 +61,24 @@
                     {
                       "CountOf:num:": [
                         {
-                          "Every": true
+                          "After": true
                         },
-                        2
+                        5
                       ]
                     },
                     [
                       {
-                        "Print:": "*"
+                        "Print:": "x"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "PatternRule:does:": [
+                    true,
+                    [
+                      {
+                        "Print:": "o"
                       }
                     ]
                   ]

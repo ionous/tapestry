@@ -8,7 +8,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "looking",
         [
           {
@@ -118,7 +118,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "Print vantage",
         [
           {
@@ -131,11 +131,15 @@
             "--": "for testing, darkness gets passed in as a flag.",
             "Bool:": "inDarkness"
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "Print vantage",
         [
           {
@@ -366,7 +370,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "PrintDarkHeader",
         [
           {
@@ -375,11 +379,15 @@
               "room"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "PrintDarkHeader",
         [
           {
@@ -404,7 +412,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "PrintDarkDescription",
         [
           {
@@ -413,11 +421,15 @@
               "room"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "PrintDarkDescription",
         [
           {
@@ -442,7 +454,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "PrintLocaleTitle",
         [
           {
@@ -454,11 +466,15 @@
           {
             "TextList:": "enclosures"
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "PrintLocaleTitle",
         [
           {
@@ -520,17 +536,21 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "PrintLocaleSubtitle",
         [
           {
             "TextList:": "enclosures"
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "PrintLocaleSubtitle",
         [
           {
@@ -598,7 +618,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "PrintLocaleDescription",
         [
           {
@@ -619,11 +639,15 @@
               "room"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "PrintLocaleDescription",
         [
           {
@@ -811,7 +835,7 @@
       "Comment:": "prints the first impression of an object, and gives a chance for certain objects (ex. supporters) to say something more afterwards."
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "print object description",
         [
           {
@@ -828,45 +852,59 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Bool:": "success"
-          }
-        }
+          "Bool:": "success"
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "print object description",
         [
           {
             "PatternRule:does:": [
               {
-                "AllTrue:": [
-                  {
-                    "Object:field:": [
-                      "@obj",
-                      "mentioned"
-                    ]
-                  },
-                  {
-                    "KindOf:is:": [
-                      "@obj",
-                      "supporters"
-                    ]
-                  }
+                "KindOf:is:": [
+                  "@obj",
+                  "actors"
                 ]
               },
               [
                 {
-                  "Comment:": [
-                    "a. mentioned supporters",
-                    "this prints \"on the...\" for any supporters mentioned by the scenery supporters rule or mentioned by the author."
-                  ]
+                  "Comment:": "d. by default, we dont want to say anything special for actors"
                 },
                 {
-                  "PrintInlineStorage obj:": {
-                    "FromText:": "@obj"
-                  }
+                  "Set:from:": [
+                    "@success",
+                    {
+                      "FromBool:": true
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "Object:field:": [
+                  "@obj",
+                  "not mentioned"
+                ]
+              },
+              [
+                {
+                  "Comment:": "c. print the impression of everything but actors ( note: by default, print impression prints objects with an initial appearance, and flags them as mentioned. )"
+                },
+                {
+                  "PrintImpressionOf obj:locale:": [
+                    {
+                      "FromText:": "@obj"
+                    },
+                    {
+                      "FromText:": "@locale"
+                    }
+                  ]
                 }
               ]
             ]
@@ -907,47 +945,32 @@
           {
             "PatternRule:does:": [
               {
-                "Object:field:": [
-                  "@obj",
-                  "not mentioned"
+                "AllTrue:": [
+                  {
+                    "Object:field:": [
+                      "@obj",
+                      "mentioned"
+                    ]
+                  },
+                  {
+                    "KindOf:is:": [
+                      "@obj",
+                      "supporters"
+                    ]
+                  }
                 ]
               },
               [
                 {
-                  "Comment:": "c. print the impression of everything but actors ( note: by default, print impression prints objects with an initial appearance, and flags them as mentioned. )"
+                  "Comment:": [
+                    "a. mentioned supporters",
+                    "this prints \"on the...\" for any supporters mentioned by the scenery supporters rule or mentioned by the author."
+                  ]
                 },
                 {
-                  "PrintImpressionOf obj:locale:": [
-                    {
-                      "FromText:": "@obj"
-                    },
-                    {
-                      "FromText:": "@locale"
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "KindOf:is:": [
-                  "@obj",
-                  "actors"
-                ]
-              },
-              [
-                {
-                  "Comment:": "d. by default, we dont want to say anything special for actors"
-                },
-                {
-                  "Set:from:": [
-                    "@success",
-                    {
-                      "FromBool:": true
-                    }
-                  ]
+                  "PrintInlineStorage obj:": {
+                    "FromText:": "@obj"
+                  }
                 }
               ]
             ]
@@ -959,7 +982,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "PrintImpressionOf",
         [
           {
@@ -976,14 +999,13 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Bool:": "success"
-          }
-        }
+          "Bool:": "success"
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "PrintImpressionOf",
         [
           {
@@ -1019,39 +1041,6 @@
           }
         ],
         [
-          {
-            "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  "@first look",
-                  {
-                    "Object:field:": [
-                      "@obj",
-                      "not mentioned"
-                    ]
-                  }
-                ]
-              },
-              [
-                {
-                  "Say:": "{.obj.initial_appearance}"
-                },
-                {
-                  "Mention obj:": {
-                    "FromText:": "@obj"
-                  }
-                },
-                {
-                  "Set:from:": [
-                    "@success",
-                    {
-                      "FromBool:": true
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -1100,6 +1089,39 @@
                 }
               ]
             ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  "@first look",
+                  {
+                    "Object:field:": [
+                      "@obj",
+                      "not mentioned"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Say:": "{.obj.initial_appearance}"
+                },
+                {
+                  "Mention obj:": {
+                    "FromText:": "@obj"
+                  }
+                },
+                {
+                  "Set:from:": [
+                    "@success",
+                    {
+                      "FromBool:": true
+                    }
+                  ]
+                }
+              ]
+            ]
           }
         ]
       ]
@@ -1108,7 +1130,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "CanAlsoSee",
         [
           {
@@ -1126,11 +1148,15 @@
           {
             "Bool:": "firstMention"
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "CanAlsoSee",
         [
           {
@@ -1155,10 +1181,21 @@
       "--": ""
     },
     {
-      "Pattern:": "set everything unmentioned"
+      "Define pattern:requires:result:withRules:": [
+        "set everything unmentioned",
+        [
+          {
+            "Nothing": true
+          }
+        ],
+        {
+          "Nothing": true
+        },
+        []
+      ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "set everything unmentioned",
         [
           {

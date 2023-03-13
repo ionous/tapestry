@@ -2,7 +2,7 @@
   "Tapestry:": [
     {
       "--": "Determines whether an actor can manipulate some specific object.",
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "can handle",
         [
           {
@@ -29,14 +29,13 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:": "response"
-          }
-        }
+          "Text:": "response"
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "can handle",
         [
           {

@@ -68,25 +68,11 @@
             ]
           },
           {
-            "NounAssignment:nouns:lines:": [
+            "Define value:of:asLines:": [
               "indefinite article",
               [
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "x"
-                    }
-                  ]
-                },
-                {
-                  "Noun:named:": [
-                    "the",
-                    {
-                      "Noun:": "f"
-                    }
-                  ]
-                }
+                "the x",
+                "the f"
               ],
               "an"
             ]
@@ -96,7 +82,7 @@
               "no grouping",
               [
                 {
-                  "Pattern:rules:": [
+                  "Extend pattern:withRules:": [
                     "assign grouping",
                     [
                       {
@@ -176,7 +162,7 @@
               "custom few",
               [
                 {
-                  "Pattern:rules:": [
+                  "Extend pattern:withRules:": [
                     "assign grouping",
                     [
                       {
@@ -249,7 +235,7 @@
                   "--": ""
                 },
                 {
-                  "Pattern:rules:": [
+                  "Extend pattern:withRules:": [
                     "print several",
                     [
                       {
@@ -327,7 +313,7 @@
               "x custom replacement",
               [
                 {
-                  "Pattern:rules:": [
+                  "Extend pattern:withRules:": [
                     "assign grouping",
                     [
                       {
@@ -440,7 +426,7 @@
               "custom fancy phrase",
               [
                 {
-                  "Pattern:rules:": [
+                  "Extend pattern:withRules:": [
                     "assign grouping",
                     [
                       {
@@ -496,7 +482,7 @@
                   "--": ""
                 },
                 {
-                  "Pattern:rules:": [
+                  "Extend pattern:withRules:": [
                     "print group",
                     [
                       {
@@ -535,7 +521,7 @@
                   "--": ""
                 },
                 {
-                  "Pattern:rules:": [
+                  "Extend pattern:withRules:": [
                     "print grouped object",
                     [
                       {
@@ -604,7 +590,7 @@
               "custom parenthetical",
               [
                 {
-                  "Pattern:rules:": [
+                  "Extend pattern:withRules:": [
                     "assign grouping",
                     [
                       {
@@ -643,7 +629,7 @@
                   "--": ""
                 },
                 {
-                  "Pattern:rules:": [
+                  "Extend pattern:withRules:": [
                     "print grouped object",
                     [
                       {
@@ -692,7 +678,7 @@
               "custom parenthetical articles",
               [
                 {
-                  "Pattern:rules:": [
+                  "Extend pattern:withRules:": [
                     "assign grouping",
                     [
                       {
@@ -761,7 +747,7 @@
               "x custom unnamed parenthetical",
               [
                 {
-                  "Pattern:rules:": [
+                  "Extend pattern:withRules:": [
                     "assign grouping",
                     [
                       {

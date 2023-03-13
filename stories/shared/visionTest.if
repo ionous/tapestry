@@ -6,7 +6,7 @@
         "Kitchenette",
         [
           {
-            "Pattern:rules:": [
+            "Extend pattern:withRules:": [
               "Print news of light",
               [
                 {

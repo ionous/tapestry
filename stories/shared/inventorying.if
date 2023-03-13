@@ -8,7 +8,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "inventorying",
         [
           {
@@ -95,7 +95,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "print inventory",
         [
           {
@@ -104,11 +104,15 @@
               "actor"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "print inventory",
         [
           {
@@ -123,21 +127,6 @@
           }
         ],
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print response:with:": [
-                    "carrying nothing",
-                    {
-                      "Say:": "{we:|capitalize!} {are:.actor} carrying nothing."
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -164,6 +153,21 @@
                   "PrintBlocks objs:": {
                     "FromTextList:": "@kids"
                   }
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print response:with:": [
+                    "carrying nothing",
+                    {
+                      "Say:": "{we:|capitalize!} {are:.actor} carrying nothing."
+                    }
+                  ]
                 }
               ]
             ]

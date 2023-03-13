@@ -2,7 +2,7 @@
   "Tapestry:": [
     {
       "--": "Determine whether an actor can touch some specific object.",
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "can reach",
         [
           {
@@ -26,14 +26,13 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:": "response"
-          }
-        }
+          "Text:": "response"
+        },
+        []
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "can reach",
         [
           {
@@ -65,6 +64,42 @@
           }
         ],
         [
+          {
+            "PatternRule:flags:does:": [
+              {
+                "AllTrue:": [
+                  "@requires light",
+                  {
+                    "Object:field:": [
+                      "@actor",
+                      "is in darkness"
+                    ]
+                  }
+                ]
+              },
+              "after",
+              [
+                {
+                  "Comment:": "Used to determine whether an action needing light can proceed. Returns some response text if the action is blocked.  Relies on the player's \"is in darkness\" which is (usually) calculated just once per turn ( in \"adjust light.\" )"
+                },
+                {
+                  "Set:from:": [
+                    "@response",
+                    {
+                      "FromText:": {
+                        "Print response:with:": [
+                          "can't act in the dark",
+                          {
+                            "Say:": "It is pitch dark, and {we!} can't see a thing."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
           {
             "PatternRule:does:": [
               true,
@@ -405,42 +440,6 @@
                 }
               ]
             ]
-          },
-          {
-            "PatternRule:flags:does:": [
-              {
-                "AllTrue:": [
-                  "@requires light",
-                  {
-                    "Object:field:": [
-                      "@actor",
-                      "is in darkness"
-                    ]
-                  }
-                ]
-              },
-              "after",
-              [
-                {
-                  "Comment:": "Used to determine whether an action needing light can proceed. Returns some response text if the action is blocked.  Relies on the player's \"is in darkness\" which is (usually) calculated just once per turn ( in \"adjust light.\" )"
-                },
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Print response:with:": [
-                          "can't act in the dark",
-                          {
-                            "Say:": "It is pitch dark, and {we!} can't see a thing."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
           }
         ]
       ]
@@ -449,7 +448,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "reach up",
         [
           {
@@ -481,46 +480,25 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:": "response"
-          }
-        }
+          "Text:": "response"
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "reach up",
         [
           {
             "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  {
-                    "KindOf:is:": [
-                      "@fromObj",
-                      "containers"
-                    ]
-                  },
-                  {
-                    "Object:field:": [
-                      "@fromObj",
-                      "closed"
-                    ]
-                  }
-                ]
-              },
+              true,
               [
                 {
-                  "Set:from:": [
-                    "@response",
+                  "Log:value:": [
+                    "note",
                     {
                       "FromText:": {
-                        "Print response:with:": [
-                          "can't reach outside closed containers",
-                          {
-                            "Say:": "{The: .fromObj|capitalize!} {arent: .fromObj} open."
-                          }
-                        ]
+                        "Say:": "reach up: from:{.fromObj} -> into:{.intoObj}"
                       }
                     }
                   ]
@@ -557,14 +535,34 @@
           },
           {
             "PatternRule:does:": [
-              true,
+              {
+                "AllTrue:": [
+                  {
+                    "KindOf:is:": [
+                      "@fromObj",
+                      "containers"
+                    ]
+                  },
+                  {
+                    "Object:field:": [
+                      "@fromObj",
+                      "closed"
+                    ]
+                  }
+                ]
+              },
               [
                 {
-                  "Log:value:": [
-                    "note",
+                  "Set:from:": [
+                    "@response",
                     {
                       "FromText:": {
-                        "Say:": "reach up: from:{.fromObj} -> into:{.intoObj}"
+                        "Print response:with:": [
+                          "can't reach outside closed containers",
+                          {
+                            "Say:": "{The: .fromObj|capitalize!} {arent: .fromObj} open."
+                          }
+                        ]
                       }
                     }
                   ]
@@ -579,7 +577,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:returns:": [
+      "Define pattern:requires:result:withRules:": [
         "reach down",
         [
           {
@@ -611,16 +609,59 @@
           }
         ],
         {
-          "PatternResult:": {
-            "Text:": "response"
-          }
-        }
+          "Text:": "response"
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "reach down",
         [
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Log:value:": [
+                    "note",
+                    {
+                      "FromText:": {
+                        "Say:": "reach down: from:{.fromObj} -> into:{.intoObj}"
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "KindOf:is:": [
+                  "@intoObj",
+                  "rooms"
+                ]
+              },
+              [
+                {
+                  "Set:from:": [
+                    "@response",
+                    {
+                      "FromText:": {
+                        "Print response:with:": [
+                          "can't reach inside rooms",
+                          {
+                            "Say:": "{We:|capitalize!} can't reach into {the: .intoObj}."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
           {
             "PatternRule:does:": [
               {
@@ -660,50 +701,6 @@
                             "Say:": "{The: .intoObj|capitalize!} {arent: .intoObj} open."
                           }
                         ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "KindOf:is:": [
-                  "@intoObj",
-                  "rooms"
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "Print response:with:": [
-                          "can't reach inside rooms",
-                          {
-                            "Say:": "{We:|capitalize!} can't reach into {the: .intoObj}."
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Log:value:": [
-                    "note",
-                    {
-                      "FromText:": {
-                        "Say:": "reach down: from:{.fromObj} -> into:{.intoObj}"
                       }
                     }
                   ]

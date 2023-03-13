@@ -50,7 +50,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "attacking",
         [
           {
@@ -129,7 +129,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "report attacking",
         [
           {
@@ -144,28 +144,17 @@
               "object"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "report attacking",
         [
-          {
-            "PatternRule:does:": [
-              true,
-              [
-                {
-                  "Print response:with:": [
-                    "actor attacking",
-                    {
-                      "Say:": "{the:.actor|capitalize!} attacks {the: .noun}."
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -179,6 +168,21 @@
                     "player attacking",
                     {
                       "Say:": "Violence isn't the answer."
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              true,
+              [
+                {
+                  "Print response:with:": [
+                    "actor attacking",
+                    {
+                      "Say:": "{the:.actor|capitalize!} attacks {the: .noun}."
                     }
                   ]
                 }

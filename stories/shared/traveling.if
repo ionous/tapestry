@@ -14,7 +14,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "traveling",
         [
           {
@@ -266,7 +266,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "report traveling",
         [
           {
@@ -281,13 +281,38 @@
               "thing"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "report traveling",
         [
+          {
+            "PatternRule:does:": [
+              {
+                "Not:": {
+                  "IsPlayer obj:": {
+                    "FromText:": "@actor"
+                  }
+                }
+              },
+              [
+                {
+                  "Print response:with:": [
+                    "someone else travels",
+                    {
+                      "Say:": "{The: .actor|capitalize!} went through {the: .noun}."
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
           {
             "PatternRule:does:": [
               true,
@@ -313,27 +338,6 @@
                 }
               ]
             ]
-          },
-          {
-            "PatternRule:does:": [
-              {
-                "Not:": {
-                  "IsPlayer obj:": {
-                    "FromText:": "@actor"
-                  }
-                }
-              },
-              [
-                {
-                  "Print response:with:": [
-                    "someone else travels",
-                    {
-                      "Say:": "{The: .actor|capitalize!} went through {the: .noun}."
-                    }
-                  ]
-                }
-              ]
-            ]
           }
         ]
       ]
@@ -342,13 +346,12 @@
       "--": ""
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "can use",
         [
           {
             "PatternRule:does:": [
               {
-                "--": "can only travel to valid destinations",
                 "AllTrue:": [
                   {
                     "Cmp:is:txt:": [
@@ -358,12 +361,16 @@
                     ]
                   },
                   {
-                    "Not:": {
-                      "KindOf:is:": [
-                        "@other noun",
-                        "rooms"
-                      ]
-                    }
+                    "Object:field:": [
+                      "@noun",
+                      "closed"
+                    ]
+                  },
+                  {
+                    "Object:field:": [
+                      "@noun",
+                      "locked"
+                    ]
                   }
                 ]
               },
@@ -374,9 +381,9 @@
                     {
                       "FromText:": {
                         "Print response:with:": [
-                          "can only travel to a destination",
+                          "can't travel through locked doors",
                           {
-                            "Say:": "{They: .noun|capitalize!} {dont:.noun} lead anywhere."
+                            "Say:": "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
                           }
                         ]
                       }
@@ -427,6 +434,7 @@
           {
             "PatternRule:does:": [
               {
+                "--": "can only travel to valid destinations",
                 "AllTrue:": [
                   {
                     "Cmp:is:txt:": [
@@ -436,16 +444,12 @@
                     ]
                   },
                   {
-                    "Object:field:": [
-                      "@noun",
-                      "closed"
-                    ]
-                  },
-                  {
-                    "Object:field:": [
-                      "@noun",
-                      "locked"
-                    ]
+                    "Not:": {
+                      "KindOf:is:": [
+                        "@other noun",
+                        "rooms"
+                      ]
+                    }
                   }
                 ]
               },
@@ -456,9 +460,9 @@
                     {
                       "FromText:": {
                         "Print response:with:": [
-                          "can't travel through locked doors",
+                          "can only travel to a destination",
                           {
-                            "Say:": "{They: .noun|capitalize!} seem{unless .noun.plural_named}s{end} to be locked."
+                            "Say:": "{They: .noun|capitalize!} {dont:.noun} lead anywhere."
                           }
                         ]
                       }

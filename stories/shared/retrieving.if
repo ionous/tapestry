@@ -10,7 +10,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "retrieving from",
         [
           {
@@ -160,7 +160,7 @@
       "--": ""
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "can reach",
         [
           {
@@ -207,46 +207,9 @@
       "--": ""
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "can use",
         [
-          {
-            "PatternRule:does:": [
-              {
-                "AllTrue:": [
-                  {
-                    "Cmp:is:txt:": [
-                      "@action",
-                      "equal_to",
-                      "retrieving from"
-                    ]
-                  }
-                ]
-              },
-              [
-                {
-                  "Set:from:": [
-                    "@response",
-                    {
-                      "FromText:": {
-                        "CanUse actor:action:noun:": [
-                          {
-                            "FromText:": "@actor"
-                          },
-                          {
-                            "FromText:": "taking"
-                          },
-                          {
-                            "FromText:": "@noun"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              ]
-            ]
-          },
           {
             "PatternRule:does:": [
               {
@@ -281,6 +244,43 @@
                           "can't retrieve what's not inside",
                           {
                             "Say:": "But {they:.noun} {arent: .noun} there now."
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "PatternRule:does:": [
+              {
+                "AllTrue:": [
+                  {
+                    "Cmp:is:txt:": [
+                      "@action",
+                      "equal_to",
+                      "retrieving from"
+                    ]
+                  }
+                ]
+              },
+              [
+                {
+                  "Set:from:": [
+                    "@response",
+                    {
+                      "FromText:": {
+                        "CanUse actor:action:noun:": [
+                          {
+                            "FromText:": "@actor"
+                          },
+                          {
+                            "FromText:": "taking"
+                          },
+                          {
+                            "FromText:": "@noun"
                           }
                         ]
                       }
@@ -348,7 +348,7 @@
       "--": ""
     },
     {
-      "Pattern:requires:": [
+      "Define pattern:requires:result:withRules:": [
         "report retrieving from",
         [
           {
@@ -369,11 +369,15 @@
               "thing"
             ]
           }
-        ]
+        ],
+        {
+          "Nothing": true
+        },
+        []
       ]
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "report retrieving from",
         [
           {

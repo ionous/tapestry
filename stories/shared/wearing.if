@@ -10,7 +10,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "wearing",
         [
           {
@@ -116,7 +116,7 @@
       ]
     },
     {
-      "Pattern:provides:rules:": [
+      "Extend pattern:provides:withRules:": [
         "removing",
         [
           {
@@ -216,7 +216,7 @@
       "Comment:": "Can only remove what's worn. ( This isn't perfectly symmetrical with can only wear possessions, and that's okay. ) "
     },
     {
-      "Pattern:rules:": [
+      "Extend pattern:withRules:": [
         "state changing",
         [
           {
