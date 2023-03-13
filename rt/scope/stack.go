@@ -67,3 +67,17 @@ func (k *Stack) SetFieldByName(field string, v g.Value) (err error) {
 	}
 	return
 }
+
+// SetFieldDirty - tell the current scope the named value has changed.
+func (k *Stack) SetFieldDirty(field string) (err error) {
+	i := k.size() - 1
+	for ; i >= 0; i-- {
+		if err = (*k)[i].SetFieldDirty(field); !g.IsUnknown(err) {
+			break // while isUnknown keep going; otherwise done.
+		}
+	}
+	if i < 0 {
+		err = g.UnknownVariable(field)
+	}
+	return
+}

@@ -40,6 +40,7 @@ func TestUnderscore(t *testing.T) {
 		"BöseÜberraschung", "böse_überraschung",
 		"Two  spaces", "two_spaces",
 		"BadUTF8\xe2\xe2\xa1", "bad_utf_8",
+		"$meta_value", "$meta_value",
 	}
 	for i, cnt := 0, len(pairs); i < cnt; i += 2 {
 		test, want := pairs[i], pairs[i+1]

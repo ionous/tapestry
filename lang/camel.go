@@ -118,7 +118,7 @@ func combineCase(name string, changeFirst, changeAny bool) *parts {
 	var parts parts
 	inword, wasUpper := noword, 0
 	changeCase := changeFirst
-	for _, r := range name {
+	for i, r := range name {
 		if r == '_' || unicode.In(r, unicode.Hyphen) || unicode.IsSpace(r) {
 			inword = noword
 			wasUpper = 0
@@ -131,7 +131,7 @@ func combineCase(name string, changeFirst, changeAny bool) *parts {
 			parts.WriteRune(r)
 			wasUpper = 0
 			inword = number
-		} else if unicode.IsLetter(r) {
+		} else if unicode.IsLetter(r) || (i == 0 && r == '$') {
 			// classify some common word changes
 			lower := unicode.ToLower(r)
 			currUpper := lower != r

@@ -169,7 +169,7 @@ func (run *Runner) ReciprocalsOf(b, rel string) (ret g.Value, err error) {
 }
 
 func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
-	// fix: pre-transform field
+	// fix: pre-transform field name
 	if field := lang.Underscore(rawField); len(field) == 0 {
 		err = errutil.Fmt("invalid targeted field '%s.%s'", target, rawField)
 	} else if target[0] != meta.Prefix {
@@ -184,16 +184,32 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 		// one of the predefined faux objects:
 		switch target {
 		case meta.Variables:
-			val := g.CopyValue(val)
-			err = run.Stack.SetFieldByName(field, val)
+			copy := g.CopyValue(val)
+			err = run.Stack.SetFieldByName(field, copy)
 
 		case meta.Option:
-			val := g.CopyValue(val)
-			err = run.options.SetOptionByName(field, val)
+			copy := g.CopyValue(val)
+			err = run.options.SetOptionByName(field, copy)
 
 		case meta.Counter:
-			// doesnt copy because it assumes the value is a number anyway.
+			// doesnt copy because it errors if the value isn't a number
+			// ( and numbers dont need to be copied ).
 			err = run.setCounter(field, val)
+
+		case meta.ValueChanged:
+			if val.Affinity() != affine.Text {
+				err = errutil.New("the value of value changed should be the name of the field that changed")
+			} else {
+				// unpack the real target and field
+				switch target, field := field, val.String(); target {
+				case meta.Variables:
+					err = run.Stack.SetFieldDirty(field)
+				default:
+					// todo: example, flag object or db for save.
+					// for now, simply verify that the field exists.
+					_, err = run.GetField(target, field)
+				}
+			}
 
 		default:
 			err = errutil.Fmt("invalid targeted field '%s.%s'", target, field)

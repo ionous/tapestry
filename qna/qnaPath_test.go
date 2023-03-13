@@ -2,10 +2,10 @@ package qna_test
 
 import (
 	"git.sr.ht/~ionous/tapestry/qna"
+	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
 	"git.sr.ht/~ionous/tapestry/test/testutil"
 	"github.com/kr/pretty"
@@ -35,7 +35,7 @@ func TestEventPath(t *testing.T) {
 				Kinds:     &kinds,
 				ObjectMap: objects,
 				Stack: []rt.Scope{
-					g.RecordOf(values),
+					scope.FromRecord(values),
 				},
 			},
 		},

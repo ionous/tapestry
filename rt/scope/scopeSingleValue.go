@@ -32,3 +32,10 @@ func (k *SingleValue) SetFieldByName(field string, val g.Value) (err error) {
 	}
 	return
 }
+
+func (k *SingleValue) SetFieldDirty(field string) (err error) {
+	if found := len(field) > 0 && field == k.name; !found {
+		err = g.UnknownVariable(field)
+	}
+	return
+}

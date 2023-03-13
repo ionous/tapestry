@@ -1,6 +1,7 @@
 package list_test
 
 import (
+	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
@@ -26,7 +27,7 @@ func TestSort(t *testing.T) {
 		Kinds:     &kinds,
 		ObjectMap: objs,
 		Stack: []rt.Scope{
-			g.RecordOf(locals),
+			scope.FromRecord(locals),
 		},
 	}
 	// create a new value of type "locals" containing "Objects:objectNames"

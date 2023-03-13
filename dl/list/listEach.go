@@ -2,6 +2,7 @@ package list
 
 import (
 	"errors"
+	"git.sr.ht/~ionous/tapestry/rt/scope"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
@@ -41,7 +42,7 @@ func (op *ListEach) forEach(run rt.Runtime) (err error) {
 				{Name: "first", Affinity: affine.Bool},
 				{Name: "last", Affinity: affine.Bool},
 			})
-			run.PushScope(g.RecordOf(ls))
+			run.PushScope(scope.FromRecord(ls))
 			for i := 0; i < cnt; i++ {
 				at := vs.Index(i)
 				if e := ls.SetIndexedField(el, at); e != nil {

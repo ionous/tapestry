@@ -3,19 +3,22 @@ package meta
 const Prefix = '$' // leading character used for all internal targets
 
 // targets for GetField
-const Counter = "$counter"               // sequence counter
-const Domain = "$domain"                 // returns whether a named domain is active
-const ObjectDirty = "$dirty"             // target for indicating an object needs to be saved
-const ObjectId = "$object"               // returns the unique object id from a object name
-const ObjectKind = "$kind"               // type of a game object
-const ObjectKinds = "$ancestry"          // ancestor of an object's type ( a text list, root at the start )
-const ObjectName = "$name"               // given a noun, return the name declared by the author
-const ObjectsOfKind = "$listOfKinds"     // all objects of a given kind
-const Option = "$option"                 // get/set various runtime options ( see below )
-const PatternLabels = "$labels"          // strings of the parameter names, the last is the return
-const PatternRunning = "$runningPattern" // returns true if the named pattern is running
-const Response = "$response"             // returns replacements for named templates
-const Variables = "$variable"            // named values, controlled by scope, not associated with any particular object
+// names are ideally one word ( underscore separated if not ) and have divergent prefixes ( different first letters. )
+const (
+	Counter        = "$counter"   // sequence counter
+	Domain         = "$scene"     // returns whether a named domain is active
+	ObjectId       = "$object"    // returns the unique object id from a object name
+	ObjectKind     = "$kind"      // type of a game object
+	ObjectKinds    = "$ancestry"  // ancestor of an object's type ( a text list, root at the start )
+	ObjectName     = "$name"      // given a noun, return the name declared by the author
+	ObjectsOfKind  = "$instances" // all objects of a given kind
+	Option         = "$flags"     // get/set various runtime options ( see below )
+	PatternLabels  = "$labels"    // strings of the parameter names, the last is the return
+	PatternRunning = "$pattern"   // returns true if the named pattern is running
+	Response       = "$response"  // returns replacements for named templates
+	Variables      = "$variable"  // named values, controlled by scope, not associated with any particular object
+	ValueChanged   = "$dirty"     // indicates the contents inside a value changed
+)
 
 // fields for runtime meta.Option(s)
 // options are initialized at runtime startup

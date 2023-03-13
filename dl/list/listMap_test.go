@@ -1,8 +1,10 @@
 package list_test
 
 import (
+	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"testing"
 
+	"errors"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
@@ -21,18 +23,18 @@ func TestMapStrings(t *testing.T) {
 	type Locals struct {
 		Fruits, Results []string
 	}
-	type Remap struct {
+	type Reverse struct {
 		In, Out string
 	}
-	kinds.AddKinds((*Fruit)(nil), (*Locals)(nil), (*Remap)(nil))
+	kinds.AddKinds((*Fruit)(nil), (*Locals)(nil), (*Reverse)(nil))
 	locals := kinds.NewRecord("locals") // a record.
 	lt := testpat.Runtime{
 		testpat.Map{
-			"remap": &reverseStrings,
+			"reverse": &reverseText,
 		},
 		testutil.Runtime{
 			Stack: []rt.Scope{
-				g.RecordOf(locals),
+				scope.FromRecord(locals),
 			},
 			Kinds: &kinds,
 		},
@@ -64,10 +66,10 @@ func TestMapRecords(t *testing.T) {
 		Fruits  []Fruit
 		Results []Fruit
 	}
-	type Remap struct {
+	type Reverse struct {
 		In, Out Fruit
 	}
-	kinds.AddKinds((*Fruit)(nil), (*Locals)(nil), (*Remap)(nil))
+	kinds.AddKinds((*Fruit)(nil), (*Locals)(nil), (*Reverse)(nil))
 	locals := kinds.NewRecord("locals")
 	if k, e := kinds.GetKindByName("fruit"); e != nil {
 		t.Fatal(e)
@@ -87,21 +89,21 @@ func TestMapRecords(t *testing.T) {
 	//
 	lt := testpat.Runtime{
 		testpat.Map{
-			"remap": &reverseRecords,
+			"reverse": &reverseField,
 		},
 		testutil.Runtime{
 			Kinds: &kinds,
 			Stack: []rt.Scope{
-				g.RecordOf(locals),
+				scope.FromRecord(locals),
 			},
 		},
 	}
-	if e := remapRecords.Execute(&lt); e != nil {
+	if e := remapRecords.Execute(&lt); e != nil && !errors.Is(e, rt.NoResult{}) {
 		t.Fatal(e)
 	} else if val, e := locals.GetNamedField("results"); e != nil {
 		t.Fatal(e)
 	} else if res := val.Records(); len(res) != 5 {
-		t.Fatal("missing results")
+		t.Fatal("expected 5 results, got:", len(res))
 	} else {
 		expect := []string{
 			"egnarO", "nomeL", "ognaM", "ananaB", "emiL",
@@ -123,17 +125,18 @@ func TestMapRecords(t *testing.T) {
 var remapStrings = list.ListMap{
 	Target:      assign.Variable("results"),
 	List:        &assign.FromTextList{Value: assign.Variable("fruits")},
-	PatternName: W("remap"),
+	PatternName: W("reverse"),
 }
 
 var remapRecords = list.ListMap{
 	Target:      assign.Variable("results"),
 	List:        &assign.FromRecordList{Value: assign.Variable("fruits")},
-	PatternName: W("remap"),
+	PatternName: W("reverse"),
 }
 
-var reverseStrings = testpat.Pattern{
-	Name:   "remap",
+// a pattern which takes a string from "in" and returns the reverse of it via "out"
+var reverseText = testpat.Pattern{
+	Name:   "reverse",
 	Labels: []string{"in"},
 	Return: "out",
 	Rules: []rt.Rule{{
@@ -145,8 +148,9 @@ var reverseStrings = testpat.Pattern{
 	}},
 }
 
-var reverseRecords = testpat.Pattern{
-	Name:   "remap",
+// a pattern which takes a string from "in.name" and returns the reverse of it via "out.name"
+var reverseField = testpat.Pattern{
+	Name:   "reverse",
 	Labels: []string{"in"},
 	Return: "out",
 	Rules: []rt.Rule{{

@@ -1,6 +1,7 @@
 package list_test
 
 import (
+	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
@@ -51,7 +52,7 @@ func TestReduce(t *testing.T) {
 		testutil.Runtime{
 			Kinds: &kinds,
 			Stack: []rt.Scope{
-				g.RecordOf(locals),
+				scope.FromRecord(locals),
 			},
 		},
 	}

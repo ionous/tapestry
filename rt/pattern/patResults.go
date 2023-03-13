@@ -62,6 +62,16 @@ func (rw *Results) FieldByName(field string) (g.Value, error) {
 }
 
 // implements rt.Scope
+func (rw *Results) SetFieldDirty(field string) (err error) {
+	if field == rw.resultField {
+		rw.resultCount++
+	} else {
+		_, err = rw.rec.GetNamedField(field)
+	}
+	return
+}
+
+// implements rt.Scope
 func (rw *Results) SetFieldByName(field string, val g.Value) (err error) {
 	// fix: what happens if you set a trait and the aspect should have been the return value
 	// it would be hidden inside SetFieldByName -- and we'd never see it.

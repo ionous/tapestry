@@ -113,3 +113,12 @@ func (k *mockScope) SetFieldByName(field string, v g.Value) (err error) {
 	}
 	return
 }
+
+func (k *mockScope) SetFieldDirty(field string) (err error) {
+	if field != k.name {
+		err = g.UnknownVariable(field)
+	} else {
+		k.sets++
+	}
+	return
+}

@@ -34,7 +34,7 @@ func (ref *RefValue) String() string {
 	return b.String()
 }
 
-// pull the object.field value from the runtime (
+// pull the object.field value from the runtime
 func (ref *RefValue) GetRootValue(run rt.Runtime) (ret RootValue, err error) {
 	if rootValue, e := run.GetField(ref.Object, ref.Field); e != nil {
 		err = e
@@ -44,12 +44,10 @@ func (ref *RefValue) GetRootValue(run rt.Runtime) (ret RootValue, err error) {
 	return
 }
 
-// let an object know if some of its inner contents has changed
-// ( not needed if SetValue is called directly )
+// let an object know if its inner contents has changed
+// ( not needed if SetValue got called directly )
 func (ref *RefValue) SetDirty(run rt.Runtime) {
-	if ref.Object != meta.Variables {
-		run.SetField(meta.ObjectDirty, ref.Object, g.True)
-	}
+	run.SetField(meta.ValueChanged, ref.Object, g.StringOf(ref.Field))
 }
 
 func (ref *RefValue) SetValue(run rt.Runtime, newValue g.Value) (err error) {

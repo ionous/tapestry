@@ -29,6 +29,7 @@ func (op *ListMap) remap(run rt.Runtime) (err error) {
 		const (
 			inArg = iota
 		)
+		var changes int
 		aff := affine.Element(tgt.Affinity())
 		for it := g.ListIt(src); it.HasNext() && err == nil; {
 			if inVal, e := it.GetNext(); e != nil {
@@ -37,15 +38,19 @@ func (op *ListMap) remap(run rt.Runtime) (err error) {
 				err = e // created a fresh record so it has blank default values
 			} else if e := rec.SetIndexedField(inArg, inVal); e != nil {
 				err = e
+			} else if newVal, e := run.Call(rec, aff); e != nil {
+				// note: this treats "no result" as an error because its
+				// trying to map *all* of the elements from one list into another
+				err = e
+			} else if e := tgt.Appends(newVal); e != nil {
+				err = e
 			} else {
-				if newVal, e := run.Call(rec, aff); e != nil {
-					// note: we treat no result as an error because
-					// we are trying to map *all* of the elements from one list into another
-					err = e
-				} else {
-					err = tgt.Appends(newVal)
-				}
+				changes++
 			}
+		}
+		if err == nil && changes > 0 {
+			// Appends doesn't inform the caller of a result; so we have to.
+			root.SetDirty(run)
 		}
 	}
 	return

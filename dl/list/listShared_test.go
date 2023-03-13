@@ -1,6 +1,7 @@
 package list_test
 
 import (
+	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -19,7 +20,7 @@ func newListTime(src []string, p testpat.Map) (ret rt.Runtime, vals *g.Record, e
 		testutil.Runtime{
 			Kinds: &kinds,
 			Stack: []rt.Scope{
-				g.RecordOf(locals),
+				scope.FromRecord(locals),
 			},
 		}}
 	if e := locals.SetNamedField("source", g.StringsOf(src)); e != nil {
