@@ -282,33 +282,13 @@
           ]
         },
         {
-          "Spec:with slot:": [
-            "named_noun",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
-          "Spec:with slot:": [
-            "singular_noun",
-            {
-              "Slot": true
-            }
-          ]
-        },
-        {
           "--": [
             "A specific person, place or thing.",
             "When used with a determiner typically implies a common noun ( 'the cat', 'some fish', 'a snack'. )",
             "When used alone usually implies a proper noun ( 'Hikaru', 'Genesis', or 'Beta Regula One'. )"
           ],
-          "Spec:slots:groups:with flow:": [
-            "noun_named",
-            [
-              "named_noun",
-              "singular_noun"
-            ],
+          "Spec:groups:with flow:": [
+            "singular_noun",
             "mosaic:inline_block",
             {
               "Flow:uses:": [
@@ -318,97 +298,7 @@
                     "Term:name:type:": [
                       "_",
                       "name",
-                      "noun_name"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": [
-            "Some person, place, or thing which lacks a specific name.",
-            "For example, maybe: 'a helicopter', 'some hooded figures', or 'the dog park'."
-          ],
-          "Spec:slots:groups:with flow:": [
-            "common_noun",
-            [
-              "named_noun",
-              "singular_noun"
-            ],
-            "mosaic:inline_block",
-            {
-              "Flow:uses:": [
-                "noun",
-                [
-                  {
-                    "Term:name:": [
-                      "_",
-                      "determiner"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "named",
-                      "noun",
-                      "noun_named"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:with str:": [
-            "determiner",
-            {
-              "Str uses:": [
-                {
-                  "Option:": "a"
-                },
-                {
-                  "Option:": "an"
-                },
-                {
-                  "Option:": "the"
-                },
-                {
-                  "Option:": "our"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:with str:": [
-            "noun_name",
-            {
-              "Str uses:": []
-            }
-          ]
-        },
-        {
-          "Spec:slots:with flow:": [
-            "counted_nouns",
-            "named_noun",
-            {
-              "Flow:uses:": [
-                "nouns",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "count",
                       "text"
-                    ]
-                  },
-                  {
-                    "Term:name:type:": [
-                      "named",
-                      "kinds",
-                      "plural_kinds"
                     ]
                   }
                 ]
@@ -526,6 +416,9 @@
           ]
         },
         {
+          "--": [
+            "fix: it probably makes more sense to have a simple text field and have weave figure out whether a kind or a noun is being referenced."
+          ],
           "Spec:groups:with swap:": [
             "event_target",
             "events",
@@ -798,15 +691,20 @@
                   {
                     "Term:name:type:": [
                       "from",
-                      "room",
-                      "singular_noun"
+                      "room_name",
+                      "text_eval"
                     ]
                   },
                   {
+                    "--": [
+                      "todo? use soft suffix of 'noun_name' to indicate the field should pull autocomplete from pooled nouns.",
+                      "or, should there be pools per kind? ex. rooms",
+                      "and,or, should this use markup instead of naming convention?"
+                    ],
                     "Term:name:type:": [
                       "via",
-                      "door",
-                      "singular_noun"
+                      "door_name",
+                      "text_eval"
                     ]
                   },
                   {
@@ -816,9 +714,10 @@
                     ]
                   },
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
                       "other_room",
-                      "singular_noun"
+                      "other_room_name",
+                      "text_eval"
                     ]
                   }
                 ]
@@ -862,15 +761,15 @@
                   {
                     "Term:name:type:": [
                       "from",
-                      "room",
-                      "singular_noun"
+                      "room_name",
+                      "text_eval"
                     ]
                   },
                   {
                     "Term:name:type:optional:": [
                       "via",
-                      "door",
-                      "singular_noun",
+                      "door_name",
+                      "text_eval",
                       true
                     ]
                   },
@@ -881,9 +780,10 @@
                     ]
                   },
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
                       "other_room",
-                      "singular_noun"
+                      "other_room_name",
+                      "text_eval"
                     ]
                   }
                 ]

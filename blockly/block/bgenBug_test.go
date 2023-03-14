@@ -1,20 +1,20 @@
 package block_test
 
 import (
-  "testing"
+	"testing"
 
-  "git.sr.ht/~ionous/tapestry/dl/assign"
-  "git.sr.ht/~ionous/tapestry/dl/list"
-  "git.sr.ht/~ionous/tapestry/dl/literal"
-  "git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/list"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/dl/story"
 )
 
 // bool values should ( for now ) be $KEY
 func TestBoolChoice(t *testing.T) {
-  if e := testBlocks(
-    &literal.BoolValue{
-      Value: true,
-    }, `{
+	if e := testBlocks(
+		&literal.BoolValue{
+			Value: true,
+		}, `{
   "type": "bool_value",
   "id": "test-1",
   "extraState": {
@@ -24,70 +24,14 @@ func TestBoolChoice(t *testing.T) {
     "VALUE": "$TRUE"
   }
 }`); e != nil {
-    t.Fatal(e)
-  }
-}
-
-// // closed strings use drop downs, and the field should be their $KEY
-// func TestStringChoice(t *testing.T) {
-//  if e := testBlocks(
-//    &story.TraitPhrase{
-//      AreEither: story.AreEither{
-//        Str: story.AreEither_Canbe,
-//      }}, `{
-//   "type": "trait_phrase",
-//   "id": "test-1",
-//   "extraState": {
-//     "ARE_EITHER": 1
-//   },
-//   "fields": {
-//     "ARE_EITHER": "$CANBE"
-//   }
-// }`); e != nil {
-//    t.Fatal(e)
-//  }
-// }
-
-// until there are variables ( or something ) for the hints
-// their text should hold normal text not $KEY values
-func TestStringHints(t *testing.T) {
-  if e := testBlocks(
-    &story.CommonNoun{
-      Determiner: story.Determiner{Str: story.Determiner_The},
-      Noun:       story.NounNamed{Name: story.NounName{Str: "table"}},
-    }, `{
-  "type": "common_noun",
-  "id": "test-1",
-  "extraState": {
-    "DETERMINER": 1,
-    "NOUN": 1
-  },
-  "fields": {
-    "DETERMINER": "the"
-  },
-  "inputs": {
-    "NOUN": {
-      "block": {
-        "type": "noun_named",
-        "id": "test-2",
-        "extraState": {
-          "NAME": 1
-        },
-        "fields": {
-          "NAME": "table"
-        }
-      }
-    }
-  }
-}`); e != nil {
-    t.Fatal(e)
-  }
+		t.Fatal(e)
+	}
 }
 
 // blocks with optional members should just skip happily to the next member
 // fix? empty strings render extraState -- but they probably dont need to.
 func TestSkippedSlot(t *testing.T) {
-  if e := testBlocks(&list.ListEach{}, `{
+	if e := testBlocks(&list.ListEach{}, `{
   "type": "list_each",
   "id": "test-1",
   "extraState": {
@@ -97,21 +41,21 @@ func TestSkippedSlot(t *testing.T) {
     "AS": ""
   }
 }`); e != nil {
-    t.Fatal(e)
-  }
+		t.Fatal(e)
+	}
 }
 
 // blocks without mutations shouldnt get extra data
 // ( or blockly exceptions and gets very unhappy )
 func TestExcessState(t *testing.T) {
-  if e := testBlocks(&story.EventBlock{
-    Target: story.EventTarget{
-      Choice: story.EventTarget_Kinds_Opt,
-      Value: &story.PluralKinds{
-        Str: "x",
-      },
-    },
-  }, `{
+	if e := testBlocks(&story.EventBlock{
+		Target: story.EventTarget{
+			Choice: story.EventTarget_Kinds_Opt,
+			Value: &story.PluralKinds{
+				Str: "x",
+			},
+		},
+	}, `{
   "type": "event_block",
   "id": "test-1",
   "extraState": {
@@ -132,25 +76,25 @@ func TestExcessState(t *testing.T) {
     }
   }
 }`); e != nil {
-    t.Fatal(e)
-  }
+		t.Fatal(e)
+	}
 }
 
 // story lines should be a block with no output, and one stacking input
 // the stacks should all use the "stacked_kinds_of_kind" type
 func TestStoryLines(t *testing.T) {
-  if e := testBlocks(&story.StoryFile{
-    StoryLines: []story.StoryStatement{
-      &story.DefineKinds{
-        Kinds:    assign.Ts("cats"),
-        Ancestor: assign.T("animal"),
-      },
-      &story.DefineKinds{
-        Kinds:    assign.Ts("cats"),
-        Ancestor: assign.T("animal"),
-      },
-    },
-  }, `{
+	if e := testBlocks(&story.StoryFile{
+		StoryLines: []story.StoryStatement{
+			&story.DefineKinds{
+				Kinds:    assign.Ts("cats"),
+				Ancestor: assign.T("animal"),
+			},
+			&story.DefineKinds{
+				Kinds:    assign.Ts("cats"),
+				Ancestor: assign.T("animal"),
+			},
+		},
+	}, `{
   "type": "story_file",
   "id": "test-1",
   "extraState": {
@@ -231,6 +175,6 @@ func TestStoryLines(t *testing.T) {
     }
   }
 }`); e != nil {
-    t.Fatal(e)
-  }
+		t.Fatal(e)
+	}
 }

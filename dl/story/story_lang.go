@@ -829,120 +829,6 @@ func CommonAction_Marshal(m jsn.Marshaler, val *CommonAction) (err error) {
 	return
 }
 
-// CommonNoun Some person, place, or thing which lacks a specific name.
-// For example, maybe: 'a helicopter', 'some hooded figures', or 'the dog park'.
-type CommonNoun struct {
-	Determiner Determiner `if:"label=_"`
-	Noun       NounNamed  `if:"label=named"`
-	Markup     map[string]any
-}
-
-// User implemented slots:
-var _ NamedNoun = (*CommonNoun)(nil)
-var _ SingularNoun = (*CommonNoun)(nil)
-
-func (*CommonNoun) Compose() composer.Spec {
-	return composer.Spec{
-		Name: CommonNoun_Type,
-		Uses: composer.Type_Flow,
-		Lede: "noun",
-	}
-}
-
-const CommonNoun_Type = "common_noun"
-const CommonNoun_Field_Determiner = "$DETERMINER"
-const CommonNoun_Field_Noun = "$NOUN"
-
-func (op *CommonNoun) Marshal(m jsn.Marshaler) error {
-	return CommonNoun_Marshal(m, op)
-}
-
-type CommonNoun_Slice []CommonNoun
-
-func (op *CommonNoun_Slice) GetType() string { return CommonNoun_Type }
-
-func (op *CommonNoun_Slice) Marshal(m jsn.Marshaler) error {
-	return CommonNoun_Repeats_Marshal(m, (*[]CommonNoun)(op))
-}
-
-func (op *CommonNoun_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *CommonNoun_Slice) SetSize(cnt int) {
-	var els []CommonNoun
-	if cnt >= 0 {
-		els = make(CommonNoun_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *CommonNoun_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return CommonNoun_Marshal(m, &(*op)[i])
-}
-
-func CommonNoun_Repeats_Marshal(m jsn.Marshaler, vals *[]CommonNoun) error {
-	return jsn.RepeatBlock(m, (*CommonNoun_Slice)(vals))
-}
-
-func CommonNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CommonNoun) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = CommonNoun_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type CommonNoun_Flow struct{ ptr *CommonNoun }
-
-func (n CommonNoun_Flow) GetType() string      { return CommonNoun_Type }
-func (n CommonNoun_Flow) GetLede() string      { return "noun" }
-func (n CommonNoun_Flow) GetFlow() interface{} { return n.ptr }
-func (n CommonNoun_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*CommonNoun); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func CommonNoun_Optional_Marshal(m jsn.Marshaler, pv **CommonNoun) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = CommonNoun_Marshal(m, *pv)
-	} else if !enc {
-		var v CommonNoun
-		if err = CommonNoun_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func CommonNoun_Marshal(m jsn.Marshaler, val *CommonNoun) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(CommonNoun_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", CommonNoun_Field_Determiner)
-		if e0 == nil {
-			e0 = Determiner_Marshal(m, &val.Determiner)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", CommonNoun_Field_Determiner))
-		}
-		e1 := m.MarshalKey("named", CommonNoun_Field_Noun)
-		if e1 == nil {
-			e1 = NounNamed_Marshal(m, &val.Noun)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", CommonNoun_Field_Noun))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // CountOf A guard which returns true based on a counter.
 // Counters start at zero and are incremented every time the guard gets checked.
 type CountOf struct {
@@ -1049,118 +935,6 @@ func CountOf_Marshal(m jsn.Marshaler, val *CountOf) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", CountOf_Field_Num))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// CountedNouns
-type CountedNouns struct {
-	Count  string      `if:"label=_,type=text"`
-	Kinds  PluralKinds `if:"label=named"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ NamedNoun = (*CountedNouns)(nil)
-
-func (*CountedNouns) Compose() composer.Spec {
-	return composer.Spec{
-		Name: CountedNouns_Type,
-		Uses: composer.Type_Flow,
-		Lede: "nouns",
-	}
-}
-
-const CountedNouns_Type = "counted_nouns"
-const CountedNouns_Field_Count = "$COUNT"
-const CountedNouns_Field_Kinds = "$KINDS"
-
-func (op *CountedNouns) Marshal(m jsn.Marshaler) error {
-	return CountedNouns_Marshal(m, op)
-}
-
-type CountedNouns_Slice []CountedNouns
-
-func (op *CountedNouns_Slice) GetType() string { return CountedNouns_Type }
-
-func (op *CountedNouns_Slice) Marshal(m jsn.Marshaler) error {
-	return CountedNouns_Repeats_Marshal(m, (*[]CountedNouns)(op))
-}
-
-func (op *CountedNouns_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *CountedNouns_Slice) SetSize(cnt int) {
-	var els []CountedNouns
-	if cnt >= 0 {
-		els = make(CountedNouns_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *CountedNouns_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return CountedNouns_Marshal(m, &(*op)[i])
-}
-
-func CountedNouns_Repeats_Marshal(m jsn.Marshaler, vals *[]CountedNouns) error {
-	return jsn.RepeatBlock(m, (*CountedNouns_Slice)(vals))
-}
-
-func CountedNouns_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CountedNouns) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = CountedNouns_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type CountedNouns_Flow struct{ ptr *CountedNouns }
-
-func (n CountedNouns_Flow) GetType() string      { return CountedNouns_Type }
-func (n CountedNouns_Flow) GetLede() string      { return "nouns" }
-func (n CountedNouns_Flow) GetFlow() interface{} { return n.ptr }
-func (n CountedNouns_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*CountedNouns); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func CountedNouns_Optional_Marshal(m jsn.Marshaler, pv **CountedNouns) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = CountedNouns_Marshal(m, *pv)
-	} else if !enc {
-		var v CountedNouns
-		if err = CountedNouns_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func CountedNouns_Marshal(m jsn.Marshaler, val *CountedNouns) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(CountedNouns_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", CountedNouns_Field_Count)
-		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Count)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", CountedNouns_Field_Count))
-		}
-		e1 := m.MarshalKey("named", CountedNouns_Field_Kinds)
-		if e1 == nil {
-			e1 = PluralKinds_Marshal(m, &val.Kinds)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", CountedNouns_Field_Kinds))
 		}
 		m.EndBlock()
 	}
@@ -2226,92 +2000,6 @@ func DefineTraits_Marshal(m jsn.Marshaler, val *DefineTraits) (err error) {
 			m.Error(errutil.New(e1, "in flow at", DefineTraits_Field_Aspect))
 		}
 		m.EndBlock()
-	}
-	return
-}
-
-// Determiner requires a predefined or user-specified string.
-type Determiner struct {
-	Str string
-}
-
-func (op *Determiner) String() string {
-	return op.Str
-}
-
-const Determiner_A = "$A"
-const Determiner_An = "$AN"
-const Determiner_The = "$THE"
-const Determiner_Our = "$OUR"
-
-func (*Determiner) Compose() composer.Spec {
-	return composer.Spec{
-		Name:        Determiner_Type,
-		Uses:        composer.Type_Str,
-		OpenStrings: true,
-		Choices: []string{
-			Determiner_A, Determiner_An, Determiner_The, Determiner_Our,
-		},
-		Strings: []string{
-			"a", "an", "the", "our",
-		},
-	}
-}
-
-const Determiner_Type = "determiner"
-
-func (op *Determiner) Marshal(m jsn.Marshaler) error {
-	return Determiner_Marshal(m, op)
-}
-
-func Determiner_Optional_Marshal(m jsn.Marshaler, val *Determiner) (err error) {
-	var zero Determiner
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = Determiner_Marshal(m, val)
-	}
-	return
-}
-
-func Determiner_Marshal(m jsn.Marshaler, val *Determiner) (err error) {
-	return m.MarshalValue(Determiner_Type, jsn.MakeEnum(val, &val.Str))
-}
-
-type Determiner_Slice []Determiner
-
-func (op *Determiner_Slice) GetType() string { return Determiner_Type }
-
-func (op *Determiner_Slice) Marshal(m jsn.Marshaler) error {
-	return Determiner_Repeats_Marshal(m, (*[]Determiner)(op))
-}
-
-func (op *Determiner_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Determiner_Slice) SetSize(cnt int) {
-	var els []Determiner
-	if cnt >= 0 {
-		els = make(Determiner_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Determiner_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Determiner_Marshal(m, &(*op)[i])
-}
-
-func Determiner_Repeats_Marshal(m jsn.Marshaler, vals *[]Determiner) error {
-	return jsn.RepeatBlock(m, (*Determiner_Slice)(vals))
-}
-
-func Determiner_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Determiner) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Determiner_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -3747,10 +3435,10 @@ func MapConnection_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapConnection
 
 // MapDeparting Leaving a room by by going through a door ( ex. departing the house via the front door... ).
 type MapDeparting struct {
-	Room          SingularNoun  `if:"label=from"`
-	Door          SingularNoun  `if:"label=via"`
+	RoomName      rt.TextEval   `if:"label=from"`
+	DoorName      rt.TextEval   `if:"label=via"`
 	MapConnection MapConnection `if:"label=and"`
-	OtherRoom     SingularNoun  `if:"label=other_room"`
+	OtherRoomName rt.TextEval   `if:"label=other_room"`
 	Markup        map[string]any
 }
 
@@ -3766,10 +3454,10 @@ func (*MapDeparting) Compose() composer.Spec {
 }
 
 const MapDeparting_Type = "map_departing"
-const MapDeparting_Field_Room = "$ROOM"
-const MapDeparting_Field_Door = "$DOOR"
+const MapDeparting_Field_RoomName = "$ROOM_NAME"
+const MapDeparting_Field_DoorName = "$DOOR_NAME"
 const MapDeparting_Field_MapConnection = "$MAP_CONNECTION"
-const MapDeparting_Field_OtherRoom = "$OTHER_ROOM"
+const MapDeparting_Field_OtherRoomName = "$OTHER_ROOM_NAME"
 
 func (op *MapDeparting) Marshal(m jsn.Marshaler) error {
 	return MapDeparting_Marshal(m, op)
@@ -3842,19 +3530,19 @@ func MapDeparting_Optional_Marshal(m jsn.Marshaler, pv **MapDeparting) (err erro
 func MapDeparting_Marshal(m jsn.Marshaler, val *MapDeparting) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(MapDeparting_Flow{val}); err == nil {
-		e0 := m.MarshalKey("from", MapDeparting_Field_Room)
+		e0 := m.MarshalKey("from", MapDeparting_Field_RoomName)
 		if e0 == nil {
-			e0 = SingularNoun_Marshal(m, &val.Room)
+			e0 = rt.TextEval_Marshal(m, &val.RoomName)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", MapDeparting_Field_Room))
+			m.Error(errutil.New(e0, "in flow at", MapDeparting_Field_RoomName))
 		}
-		e1 := m.MarshalKey("via", MapDeparting_Field_Door)
+		e1 := m.MarshalKey("via", MapDeparting_Field_DoorName)
 		if e1 == nil {
-			e1 = SingularNoun_Marshal(m, &val.Door)
+			e1 = rt.TextEval_Marshal(m, &val.DoorName)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", MapDeparting_Field_Door))
+			m.Error(errutil.New(e1, "in flow at", MapDeparting_Field_DoorName))
 		}
 		e2 := m.MarshalKey("and", MapDeparting_Field_MapConnection)
 		if e2 == nil {
@@ -3863,12 +3551,12 @@ func MapDeparting_Marshal(m jsn.Marshaler, val *MapDeparting) (err error) {
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", MapDeparting_Field_MapConnection))
 		}
-		e3 := m.MarshalKey("other_room", MapDeparting_Field_OtherRoom)
+		e3 := m.MarshalKey("other_room", MapDeparting_Field_OtherRoomName)
 		if e3 == nil {
-			e3 = SingularNoun_Marshal(m, &val.OtherRoom)
+			e3 = rt.TextEval_Marshal(m, &val.OtherRoomName)
 		}
 		if e3 != nil && e3 != jsn.Missing {
-			m.Error(errutil.New(e3, "in flow at", MapDeparting_Field_OtherRoom))
+			m.Error(errutil.New(e3, "in flow at", MapDeparting_Field_OtherRoomName))
 		}
 		m.EndBlock()
 	}
@@ -3953,10 +3641,10 @@ func MapDirection_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MapDirection) 
 // MapHeading Leaving a room by moving in a compass direction ( ex. heading east... ).
 type MapHeading struct {
 	Dir           MapDirection  `if:"label=_"`
-	Room          SingularNoun  `if:"label=from"`
-	Door          SingularNoun  `if:"label=via,optional"`
+	RoomName      rt.TextEval   `if:"label=from"`
+	DoorName      rt.TextEval   `if:"label=via,optional"`
 	MapConnection MapConnection `if:"label=and"`
-	OtherRoom     SingularNoun  `if:"label=other_room"`
+	OtherRoomName rt.TextEval   `if:"label=other_room"`
 	Markup        map[string]any
 }
 
@@ -3973,10 +3661,10 @@ func (*MapHeading) Compose() composer.Spec {
 
 const MapHeading_Type = "map_heading"
 const MapHeading_Field_Dir = "$DIR"
-const MapHeading_Field_Room = "$ROOM"
-const MapHeading_Field_Door = "$DOOR"
+const MapHeading_Field_RoomName = "$ROOM_NAME"
+const MapHeading_Field_DoorName = "$DOOR_NAME"
 const MapHeading_Field_MapConnection = "$MAP_CONNECTION"
-const MapHeading_Field_OtherRoom = "$OTHER_ROOM"
+const MapHeading_Field_OtherRoomName = "$OTHER_ROOM_NAME"
 
 func (op *MapHeading) Marshal(m jsn.Marshaler) error {
 	return MapHeading_Marshal(m, op)
@@ -4056,19 +3744,19 @@ func MapHeading_Marshal(m jsn.Marshaler, val *MapHeading) (err error) {
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", MapHeading_Field_Dir))
 		}
-		e1 := m.MarshalKey("from", MapHeading_Field_Room)
+		e1 := m.MarshalKey("from", MapHeading_Field_RoomName)
 		if e1 == nil {
-			e1 = SingularNoun_Marshal(m, &val.Room)
+			e1 = rt.TextEval_Marshal(m, &val.RoomName)
 		}
 		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", MapHeading_Field_Room))
+			m.Error(errutil.New(e1, "in flow at", MapHeading_Field_RoomName))
 		}
-		e2 := m.MarshalKey("via", MapHeading_Field_Door)
+		e2 := m.MarshalKey("via", MapHeading_Field_DoorName)
 		if e2 == nil {
-			e2 = SingularNoun_Optional_Marshal(m, &val.Door)
+			e2 = rt.TextEval_Optional_Marshal(m, &val.DoorName)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", MapHeading_Field_Door))
+			m.Error(errutil.New(e2, "in flow at", MapHeading_Field_DoorName))
 		}
 		e3 := m.MarshalKey("and", MapHeading_Field_MapConnection)
 		if e3 == nil {
@@ -4077,83 +3765,14 @@ func MapHeading_Marshal(m jsn.Marshaler, val *MapHeading) (err error) {
 		if e3 != nil && e3 != jsn.Missing {
 			m.Error(errutil.New(e3, "in flow at", MapHeading_Field_MapConnection))
 		}
-		e4 := m.MarshalKey("other_room", MapHeading_Field_OtherRoom)
+		e4 := m.MarshalKey("other_room", MapHeading_Field_OtherRoomName)
 		if e4 == nil {
-			e4 = SingularNoun_Marshal(m, &val.OtherRoom)
+			e4 = rt.TextEval_Marshal(m, &val.OtherRoomName)
 		}
 		if e4 != nil && e4 != jsn.Missing {
-			m.Error(errutil.New(e4, "in flow at", MapHeading_Field_OtherRoom))
+			m.Error(errutil.New(e4, "in flow at", MapHeading_Field_OtherRoomName))
 		}
 		m.EndBlock()
-	}
-	return
-}
-
-const NamedNoun_Type = "named_noun"
-
-var NamedNoun_Optional_Marshal = NamedNoun_Marshal
-
-type NamedNoun_Slot struct{ Value *NamedNoun }
-
-func (at NamedNoun_Slot) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(at); err == nil {
-		if a, ok := at.GetSlot(); ok {
-			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-func (at NamedNoun_Slot) GetType() string              { return NamedNoun_Type }
-func (at NamedNoun_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at NamedNoun_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(NamedNoun)
-	return
-}
-
-func NamedNoun_Marshal(m jsn.Marshaler, ptr *NamedNoun) (err error) {
-	slot := NamedNoun_Slot{ptr}
-	return slot.Marshal(m)
-}
-
-type NamedNoun_Slice []NamedNoun
-
-func (op *NamedNoun_Slice) GetType() string { return NamedNoun_Type }
-
-func (op *NamedNoun_Slice) Marshal(m jsn.Marshaler) error {
-	return NamedNoun_Repeats_Marshal(m, (*[]NamedNoun)(op))
-}
-
-func (op *NamedNoun_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *NamedNoun_Slice) SetSize(cnt int) {
-	var els []NamedNoun
-	if cnt >= 0 {
-		els = make(NamedNoun_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *NamedNoun_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NamedNoun_Marshal(m, &(*op)[i])
-}
-
-func NamedNoun_Repeats_Marshal(m jsn.Marshaler, vals *[]NamedNoun) error {
-	return jsn.RepeatBlock(m, (*NamedNoun_Slice)(vals))
-}
-
-func NamedNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NamedNoun) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = NamedNoun_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -4368,187 +3987,6 @@ func NounAssignment_Marshal(m jsn.Marshaler, val *NounAssignment) (err error) {
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", NounAssignment_Field_Lines))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// NounName requires a user-specified string.
-type NounName struct {
-	Str string
-}
-
-func (op *NounName) String() string {
-	return op.Str
-}
-
-func (*NounName) Compose() composer.Spec {
-	return composer.Spec{
-		Name:        NounName_Type,
-		Uses:        composer.Type_Str,
-		OpenStrings: true,
-	}
-}
-
-const NounName_Type = "noun_name"
-
-func (op *NounName) Marshal(m jsn.Marshaler) error {
-	return NounName_Marshal(m, op)
-}
-
-func NounName_Optional_Marshal(m jsn.Marshaler, val *NounName) (err error) {
-	var zero NounName
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = NounName_Marshal(m, val)
-	}
-	return
-}
-
-func NounName_Marshal(m jsn.Marshaler, val *NounName) (err error) {
-	return m.MarshalValue(NounName_Type, &val.Str)
-}
-
-type NounName_Slice []NounName
-
-func (op *NounName_Slice) GetType() string { return NounName_Type }
-
-func (op *NounName_Slice) Marshal(m jsn.Marshaler) error {
-	return NounName_Repeats_Marshal(m, (*[]NounName)(op))
-}
-
-func (op *NounName_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *NounName_Slice) SetSize(cnt int) {
-	var els []NounName
-	if cnt >= 0 {
-		els = make(NounName_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *NounName_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NounName_Marshal(m, &(*op)[i])
-}
-
-func NounName_Repeats_Marshal(m jsn.Marshaler, vals *[]NounName) error {
-	return jsn.RepeatBlock(m, (*NounName_Slice)(vals))
-}
-
-func NounName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounName) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = NounName_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// NounNamed A specific person, place or thing.
-// When used with a determiner typically implies a common noun ( 'the cat', 'some fish', 'a snack'. )
-// When used alone usually implies a proper noun ( 'Hikaru', 'Genesis', or 'Beta Regula One'. )
-type NounNamed struct {
-	Name   NounName `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ NamedNoun = (*NounNamed)(nil)
-var _ SingularNoun = (*NounNamed)(nil)
-
-func (*NounNamed) Compose() composer.Spec {
-	return composer.Spec{
-		Name: NounNamed_Type,
-		Uses: composer.Type_Flow,
-		Lede: "noun",
-	}
-}
-
-const NounNamed_Type = "noun_named"
-const NounNamed_Field_Name = "$NAME"
-
-func (op *NounNamed) Marshal(m jsn.Marshaler) error {
-	return NounNamed_Marshal(m, op)
-}
-
-type NounNamed_Slice []NounNamed
-
-func (op *NounNamed_Slice) GetType() string { return NounNamed_Type }
-
-func (op *NounNamed_Slice) Marshal(m jsn.Marshaler) error {
-	return NounNamed_Repeats_Marshal(m, (*[]NounNamed)(op))
-}
-
-func (op *NounNamed_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *NounNamed_Slice) SetSize(cnt int) {
-	var els []NounNamed
-	if cnt >= 0 {
-		els = make(NounNamed_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *NounNamed_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return NounNamed_Marshal(m, &(*op)[i])
-}
-
-func NounNamed_Repeats_Marshal(m jsn.Marshaler, vals *[]NounNamed) error {
-	return jsn.RepeatBlock(m, (*NounNamed_Slice)(vals))
-}
-
-func NounNamed_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]NounNamed) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = NounNamed_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type NounNamed_Flow struct{ ptr *NounNamed }
-
-func (n NounNamed_Flow) GetType() string      { return NounNamed_Type }
-func (n NounNamed_Flow) GetLede() string      { return "noun" }
-func (n NounNamed_Flow) GetFlow() interface{} { return n.ptr }
-func (n NounNamed_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*NounNamed); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func NounNamed_Optional_Marshal(m jsn.Marshaler, pv **NounNamed) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = NounNamed_Marshal(m, *pv)
-	} else if !enc {
-		var v NounNamed
-		if err = NounNamed_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func NounNamed_Marshal(m jsn.Marshaler, val *NounNamed) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(NounNamed_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", NounNamed_Field_Name)
-		if e0 == nil {
-			e0 = NounName_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", NounNamed_Field_Name))
 		}
 		m.EndBlock()
 	}
@@ -6326,33 +5764,27 @@ func SingularKind_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SingularKind) 
 	return
 }
 
-const SingularNoun_Type = "singular_noun"
+// SingularNoun A specific person, place or thing.
+// When used with a determiner typically implies a common noun ( 'the cat', 'some fish', 'a snack'. )
+// When used alone usually implies a proper noun ( 'Hikaru', 'Genesis', or 'Beta Regula One'. )
+type SingularNoun struct {
+	Name   string `if:"label=_,type=text"`
+	Markup map[string]any
+}
 
-var SingularNoun_Optional_Marshal = SingularNoun_Marshal
-
-type SingularNoun_Slot struct{ Value *SingularNoun }
-
-func (at SingularNoun_Slot) Marshal(m jsn.Marshaler) (err error) {
-	if err = m.MarshalBlock(at); err == nil {
-		if a, ok := at.GetSlot(); ok {
-			if e := a.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
+func (*SingularNoun) Compose() composer.Spec {
+	return composer.Spec{
+		Name: SingularNoun_Type,
+		Uses: composer.Type_Flow,
+		Lede: "noun",
 	}
-	return
-}
-func (at SingularNoun_Slot) GetType() string              { return SingularNoun_Type }
-func (at SingularNoun_Slot) GetSlot() (interface{}, bool) { return *at.Value, *at.Value != nil }
-func (at SingularNoun_Slot) SetSlot(v interface{}) (okay bool) {
-	(*at.Value), okay = v.(SingularNoun)
-	return
 }
 
-func SingularNoun_Marshal(m jsn.Marshaler, ptr *SingularNoun) (err error) {
-	slot := SingularNoun_Slot{ptr}
-	return slot.Marshal(m)
+const SingularNoun_Type = "singular_noun"
+const SingularNoun_Field_Name = "$NAME"
+
+func (op *SingularNoun) Marshal(m jsn.Marshaler) error {
+	return SingularNoun_Marshal(m, op)
 }
 
 type SingularNoun_Slice []SingularNoun
@@ -6391,6 +5823,45 @@ func SingularNoun_Repeats_Marshal(m jsn.Marshaler, vals *[]SingularNoun) error {
 func SingularNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SingularNoun) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
 		err = SingularNoun_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type SingularNoun_Flow struct{ ptr *SingularNoun }
+
+func (n SingularNoun_Flow) GetType() string      { return SingularNoun_Type }
+func (n SingularNoun_Flow) GetLede() string      { return "noun" }
+func (n SingularNoun_Flow) GetFlow() interface{} { return n.ptr }
+func (n SingularNoun_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*SingularNoun); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func SingularNoun_Optional_Marshal(m jsn.Marshaler, pv **SingularNoun) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = SingularNoun_Marshal(m, *pv)
+	} else if !enc {
+		var v SingularNoun
+		if err = SingularNoun_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func SingularNoun_Marshal(m jsn.Marshaler, val *SingularNoun) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(SingularNoun_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", SingularNoun_Field_Name)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", SingularNoun_Field_Name))
+		}
+		m.EndBlock()
 	}
 	return
 }
@@ -7103,8 +6574,6 @@ func TextListField_Marshal(m jsn.Marshaler, val *TextListField) (err error) {
 
 var Slots = []interface{}{
 	(*FieldDefinition)(nil),
-	(*NamedNoun)(nil),
-	(*SingularNoun)(nil),
 	(*StoryStatement)(nil),
 }
 
@@ -7117,9 +6586,7 @@ var Slats = []composer.Composer{
 	(*AspectField)(nil),
 	(*BoolField)(nil),
 	(*CommonAction)(nil),
-	(*CommonNoun)(nil),
 	(*CountOf)(nil),
-	(*CountedNouns)(nil),
 	(*CycleText)(nil),
 	(*DefineFields)(nil),
 	(*DefineKinds)(nil),
@@ -7129,7 +6596,6 @@ var Slats = []composer.Composer{
 	(*DefinePattern)(nil),
 	(*DefineRelatives)(nil),
 	(*DefineTraits)(nil),
-	(*Determiner)(nil),
 	(*EventBlock)(nil),
 	(*EventHandler)(nil),
 	(*EventName)(nil),
@@ -7148,8 +6614,6 @@ var Slats = []composer.Composer{
 	(*MapHeading)(nil),
 	(*NothingField)(nil),
 	(*NounAssignment)(nil),
-	(*NounName)(nil),
-	(*NounNamed)(nil),
 	(*NumListField)(nil),
 	(*NumberField)(nil),
 	(*OneToMany)(nil),
@@ -7167,6 +6631,7 @@ var Slats = []composer.Composer{
 	(*SayTemplate)(nil),
 	(*ShuffleText)(nil),
 	(*SingularKind)(nil),
+	(*SingularNoun)(nil),
 	(*StoppingText)(nil),
 	(*Story)(nil),
 	(*StoryBreak)(nil),
@@ -7184,7 +6649,6 @@ var Signatures = map[uint64]interface{}{
 	5868886119925925865:  (*ActionParams)(nil),         /* ActionParams none: */
 	13295757043766156580: (*CommonAction)(nil),         /* CommonAction: */
 	11796688776587655409: (*CommonAction)(nil),         /* CommonAction:actionContext: */
-	3594459841754826354:  (*Determiner)(nil),           /* Determiner: */
 	9237333280207697554:  (*EventName)(nil),            /* EventName: */
 	10643959568823028160: (*EventPhase)(nil),           /* EventPhase: */
 	18010503397334720257: (*EventTarget)(nil),          /* EventTarget kinds: */
@@ -7193,7 +6657,7 @@ var Signatures = map[uint64]interface{}{
 	4129025779762507875:  (*ManyToOne)(nil),            /* ManyToOne:kind: */
 	13422667607848275221: (*MapConnection)(nil),        /* MapConnection: */
 	691606134106503892:   (*MapDirection)(nil),         /* MapDirection: */
-	7274788867537390664:  (*NounName)(nil),             /* NounName: */
+	571163134278291657:   (*SingularNoun)(nil),         /* Noun: */
 	17075866407822548206: (*OneToMany)(nil),            /* OneToMany:kinds: */
 	13766274136867271026: (*OneToOne)(nil),             /* OneToOne:otherKind: */
 	18143853777230560632: (*PairedAction)(nil),         /* PairedAction: */
@@ -7251,11 +6715,6 @@ var Signatures = map[uint64]interface{}{
 	12130342806058120266: (*MakeOpposite)(nil),         /* story_statement=Make:opposite: */
 	8107023930195182683:  (*MakePlural)(nil),           /* story_statement=Make:plural: */
 	14427731589588473385: (*NothingField)(nil),         /* field_definition=Nothing */
-	7315903014127055020:  (*NounNamed)(nil),            /* named_noun=Noun: */
-	2148674162701691978:  (*NounNamed)(nil),            /* singular_noun=Noun: */
-	6508739485154276153:  (*CommonNoun)(nil),           /* named_noun=Noun:named: */
-	9335207376881300111:  (*CommonNoun)(nil),           /* singular_noun=Noun:named: */
-	1119385123956310430:  (*CountedNouns)(nil),         /* named_noun=Nouns:named: */
 	10299801658819864730: (*NumListField)(nil),         /* field_definition=NumList: */
 	12762197545337845485: (*NumListField)(nil),         /* field_definition=NumList:initially: */
 	2289982379805608146:  (*NumListField)(nil),         /* field_definition=NumList:kind: */

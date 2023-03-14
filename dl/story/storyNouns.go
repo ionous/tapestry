@@ -5,95 +5,15 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"github.com/ionous/errutil"
 )
 
-type NamedNoun interface {
-	ImportNoun(*imp.Importer) error
-}
-
-type SingularNoun interface {
-	NamedNoun
-	NounName() string
-	UniformString() (string, error)
-}
-
-func CollectSubjectNouns(k *imp.Importer, els []NamedNoun) error {
-	return k.Env().Recent.Nouns.CollectSubjects(func() error {
-		return ImportNamedNouns(k, els)
-	})
-}
-
-func ImportNamedNouns(k *imp.Importer, els []NamedNoun) (err error) {
-	for _, el := range els {
-		if e := el.ImportNoun(k); e != nil {
-			err = errutil.Append(err, e)
-		}
-	}
-	return
-}
-
 func ImportNouns(k *imp.Importer, nouns []string) (ret []string, err error) {
-	recent := &k.Env().Recent.Nouns
-	for _, noun := range nouns {
-		// ugh.
-		var counted bool
-		var name string
-
-		parts := strings.Fields(noun)
-		if len(parts) > 0 {
-			_, counted = lang.WordsToNum(parts[0])
-		}
-
-		var legacy NamedNoun
-		if counted {
-			// what's gross and ugly
-			recent.Subjects = nil
-			legacy = &CountedNouns{Count: parts[0], Kinds: PluralKinds{Str: strings.Join(parts[1:], " ")}}
-		} else {
-			// FIX: this should be happening during the weave, not during import.
-			article, word := lang.SliceArticle(noun)
-			nounNamed := NounNamed{Name: NounName{word}}
-			name = word
-
-			if len(article) == 0 {
-				legacy = &nounNamed
-			} else {
-				// ...
-				var det Determiner
-				compose := det.Compose()
-				if key, index := compose.IndexOfValue(article); index < 0 {
-					det.Str = article
-				} else {
-					det.Str = key
-				}
-
-				legacy = &CommonNoun{
-					Determiner: det,
-					Noun:       nounNamed,
-				}
-			}
-		}
-		if e := legacy.ImportNoun(k); e != nil {
-			err = errutil.Append(err, e)
-		} else if !counted {
-			ret = append(ret, name)
-		} else {
-			ret = append(ret, recent.Subjects...)
-		}
-	}
-	// cleanup legacy bits
-	recent.Subjects = nil
-	return
-}
-
-// declare a noun class that has several default fields
-func declareNounClass(k *imp.Importer) {
+	// declare a noun class that has several default fields
+	// should be moved to script.
 	if once := "noun"; k.Once(once) {
 		k.WriteOnce(&eph.EphKinds{Kind: "objects", Ancestor: kindsOf.Kind.String()})
 		// common or proper nouns ( rabbit, vs. Roger )
@@ -101,27 +21,112 @@ func declareNounClass(k *imp.Importer) {
 		// whether a player can refer to an object by its name.
 		k.AddImplicitAspect("private_names", "objects", "publicly_named", "privately_named")
 	}
+	for _, noun := range nouns {
+		if next, e := importNoun(k, noun, ret); e != nil {
+			err = e
+			break
+		} else {
+			ret = next
+		}
+	}
+	return
+}
+
+func importNoun(k *imp.Importer, noun string, nouns []string) (ret []string, err error) {
+	if a := makeArticleName(noun); a.count > 0 {
+		if ns, e := importCountedNoun(k, a.count, a.name); e != nil {
+			err = e
+		} else {
+			ret = append(nouns, ns...)
+		}
+	} else {
+		if a.isProper() {
+			k.WriteEphemera(&eph.EphValues{Noun: a.name, Field: "proper_named", Value: B(true)})
+
+		} else if customDet, ok := a.customArticle(); ok {
+			// setup the indefinite article
+			// create a "indefinite article" field for all objects
+			if k.Once("named_noun") {
+				k.WriteOnce(&eph.EphKinds{Kind: "objects", Contain: []eph.EphParams{{Name: "indefinite_article", Affinity: eph.Affinity{eph.Affinity_Text}}}})
+			}
+			// set the indefinite article field for this object.
+			k.WriteEphemera(&eph.EphValues{Noun: a.name, Field: "indefinite_article", Value: T(customDet)})
+		}
+		ret = append(nouns, a.name)
+	}
+	return
+}
+
+type articleName struct {
+	article, name string
+	count         int
+}
+
+// fix: this will never be correct until the indefinite articles are driven by script, parsed first, and the noun munging is in weave.
+func makeArticleName(name string) (ret articleName) {
+	parts := strings.Fields(strings.TrimSpace(name))
+	if last := len(parts) - 1; last == 0 {
+		ret = articleName{
+			name: parts[0],
+		}
+	} else if last > 0 {
+		first, rest := parts[0], parts[1:]
+		if count, counted := lang.WordsToNum(first); counted && count > 0 {
+			ret = articleName{
+				count: count,
+				name:  strings.Join(rest, " "),
+			}
+		} else {
+			// tried using "of" to grab mass nouns; but it doesnt work well for "a can of soup"
+			//split := 1
+			//for i, s := range parts {
+			//	if s == "of" && i < len(parts)-1 {
+			//		first = strings.Join(parts[:i+1], " ")
+			//		split = i + 1
+			//		break
+			//	}
+			//}
+			ret = articleName{
+				article: first,
+				name:    strings.Join(parts[1:], " "),
+			}
+		}
+	}
+	return
+}
+
+// this isn't a correct test... but it will work for now...
+func (an *articleName) isProper() (okay bool) {
+	if n := an.name; len(n) > 1 || an.article == "our" {
+		first, _ := utf8.DecodeRuneInString(n)
+		okay = unicode.ToUpper(first) == first
+	}
+	return
+}
+
+func (an *articleName) customArticle() (ret string, okay bool) {
+	switch an.article {
+	case "a", "an", "the":
+	default:
+		ret, okay = an.article, true
+	}
+	return
 }
 
 // ex. "two triangles" -> triangle is a kind of thing
 // fix? consider a specific counted noun phrase; the noun phrase needs more work.
 // also, we probably want noun stacks not individually duplicated names
-func (op *CountedNouns) ImportNoun(k *imp.Importer) (err error) {
+func importCountedNoun(k *imp.Importer, cnt int, kindOrKinds string) (names []string, err error) {
 	if once := "printed_name"; k.Once(once) {
 		k.WriteOnce(&eph.EphKinds{Kind: "objects", Contain: []eph.EphParams{{Name: "printed_name", Affinity: eph.Affinity{Str: eph.Affinity_Text}}}})
 	}
-	if cnt, ok := lang.WordsToNum(op.Count); !ok {
-		err = errutil.New("couldnt turn", op.Count, "into a number")
-	} else if cnt > 0 {
-
+	if cnt > 0 {
 		// note: kind is phrased in the singular here when count is 1, plural otherwise.
 		// but, because of "Recent.Nouns" processing we have to generate some sort of noun name *immediately*
 		// ( itd be nice to have a more start and stop importer, where we could delay processing of branches of the tree. )
-		kindOrKinds := op.Kinds.String()
-		names := make([]string, cnt)
+		names = make([]string, cnt)
 		for i := 0; i < cnt; i++ {
 			noun := k.NewCounter(kindOrKinds, nil)
-			k.Env().Recent.Nouns.Add(noun) // for relations, etc.
 			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: "counted", Value: B(true)})
 			names[i] = noun
 		}
@@ -165,72 +170,4 @@ func (op *CountedNouns) ImportNoun(k *imp.Importer) (err error) {
 		)
 	}
 	return
-}
-
-func (op *CommonNoun) NounName() string {
-	return op.Noun.NounName()
-}
-
-func (op *CommonNoun) UniformString() (string, error) {
-	return op.Noun.UniformString()
-}
-
-func (op *CommonNoun) ImportNoun(k *imp.Importer) (err error) {
-	declareNounClass(k)
-	detStr, detFound := composer.FindChoice(&op.Determiner, op.Determiner.Str)
-	// setup the indefinite article
-	// NOTE: this isn't quite right still -- if i define something as
-	if !detFound {
-		// create a "indefinite article" field for all objects
-		if k.Once("named_noun") {
-			k.WriteOnce(&eph.EphKinds{Kind: "objects", Contain: []eph.EphParams{{Name: "indefinite_article", Affinity: eph.Affinity{eph.Affinity_Text}}}})
-		}
-		// set the indefinite article field for this object.
-		k.WriteEphemera(&eph.EphValues{Noun: op.Noun.NounName(), Field: "indefinite_article", Value: T(detStr)})
-		composer.FindChoice(&op.Determiner, op.Determiner.Str)
-	}
-	op.Noun.addNoun(k, detStr)
-	return
-}
-
-func (op *NounNamed) NounName() string {
-	return op.Name.NounName()
-}
-
-func (op *NounNamed) UniformString() (string, error) {
-	return op.Name.UniformString()
-}
-
-func (op *NounNamed) ImportNoun(k *imp.Importer) (err error) {
-	declareNounClass(k)
-	op.addNoun(k, "our")
-	return
-}
-
-func (op *NounName) NounName() string {
-	return strings.TrimSpace(op.Str)
-}
-
-func (op *NounName) UniformString() (ret string, err error) {
-	if u, ok := eph.UniformString(op.Str); !ok {
-		err = eph.InvalidString(op.Str)
-	} else {
-		ret = u
-	}
-	return
-}
-
-func (op *NounNamed) addNoun(k *imp.Importer, detStr string) {
-	// strip extraneous spaces that exist for obscure mainline reasons;
-	// testing ToUpper against space ( below ) for capitals was making nouns starting with spaces proper named.
-	noun := op.NounName()
-	k.Env().Recent.Nouns.Add(noun)
-
-	// pick common or proper based on noun capitalization.
-	// fix: implicitly generated facts should be considered preliminary so that authors can override them.
-	if detStr == "our" {
-		if first, _ := utf8.DecodeRuneInString(noun); unicode.ToUpper(first) == first {
-			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: "proper_named", Value: B(true)})
-		}
-	}
 }

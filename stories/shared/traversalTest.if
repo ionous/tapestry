@@ -51,171 +51,59 @@
           {
             "Heading:from:via:and:otherRoom:": [
               "North",
-              {
-                "Noun:named:": [
-                  "the",
-                  {
-                    "Noun:": "Lobby"
-                  }
-                ]
-              },
-              {
-                "Noun:named:": [
-                  "the",
-                  {
-                    "Noun:": "double doors"
-                  }
-                ]
-              },
+              "the Lobby",
+              "the double doors",
               "arriving_at",
-              {
-                "Noun:named:": [
-                  "the",
-                  {
-                    "Noun:": "foyer"
-                  }
-                ]
-              }
+              "the foyer"
             ]
           },
           {
             "Heading:from:and:otherRoom:": [
               "Down",
-              {
-                "Noun:named:": [
-                  "the",
-                  {
-                    "Noun:": "Lobby"
-                  }
-                ]
-              },
+              "the Lobby",
               "arriving_at",
-              {
-                "Noun:named:": [
-                  "the",
-                  {
-                    "Noun:": "basement"
-                  }
-                ]
-              }
+              "the basement"
             ]
           },
           {
             "Heading:from:and:otherRoom:": [
               "Up",
-              {
-                "Noun:named:": [
-                  "the",
-                  {
-                    "Noun:": "Lobby"
-                  }
-                ]
-              },
+              "the Lobby",
               "connecting_to",
-              {
-                "Noun:named:": [
-                  "the",
-                  {
-                    "Noun:": "parapet"
-                  }
-                ]
-              }
+              "the parapet"
             ]
           },
           {
             "Heading:from:and:otherRoom:": [
               "North",
-              {
-                "Noun:named:": [
-                  "the",
-                  {
-                    "Noun:": "foyer"
-                  }
-                ]
-              },
+              "the foyer",
               "connecting_to",
-              {
-                "Noun:named:": [
-                  "the",
-                  {
-                    "Noun:": "outside"
-                  }
-                ]
-              }
+              "the outside"
             ]
           },
           {
             "Heading:from:and:otherRoom:": [
               "West",
-              {
-                "Noun:named:": [
-                  "the",
-                  {
-                    "Noun:": "foyer"
-                  }
-                ]
-              },
+              "the foyer",
               "arriving_at",
-              {
-                "Noun:named:": [
-                  "the",
-                  {
-                    "Noun:": "Lobby"
-                  }
-                ]
-              }
+              "the Lobby"
             ]
           },
           {
             "Heading:from:via:and:otherRoom:": [
               "South",
-              {
-                "Noun:named:": [
-                  "the",
-                  {
-                    "Noun:": "foyer"
-                  }
-                ]
-              },
-              {
-                "Noun:named:": [
-                  "the",
-                  {
-                    "Noun:": "curtain"
-                  }
-                ]
-              },
+              "the foyer",
+              "the curtain",
               "connecting_to",
-              {
-                "Noun:named:": [
-                  "the",
-                  {
-                    "Noun:": "cloak room"
-                  }
-                ]
-              }
+              "the cloak room"
             ]
           },
           {
             "Heading:from:and:otherRoom:": [
               "South",
-              {
-                "Noun:named:": [
-                  "the",
-                  {
-                    "Noun:": "basement"
-                  }
-                ]
-              },
+              "the basement",
               "arriving_at",
-              {
-                "Noun:named:": [
-                  "the",
-                  {
-                    "Noun:": "outside"
-                  }
-                ]
-              }
+              "the outside"
             ]
           }
         ],

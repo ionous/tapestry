@@ -1,12 +1,6 @@
 package imp
 
 type Environ struct {
-	Recent struct {
-		// Scene, Aspect, Test string
-		// Nouns[]? Relation, Trait
-		// string or string
-		Nouns Nouns
-	}
 	ActivityDepth int
 }
 
