@@ -10,6 +10,7 @@ import (
 	"context"
 	"errors"
 	"flag"
+	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdcheck"
 	"log"
 	"os"
 	"runtime/pprof"
@@ -177,6 +178,7 @@ func init() {
 	// rewrites the main tap command to simplify exitBadUsage
 	base.Go.Commands = []*base.Command{
 		cmdidlb.CmdIdl,
+		cmdcheck.CmdCheck,
 		cmdcompact.CmdCompact,
 		cmdgenerate.CmdGenerate,
 		cmdmosaic.CmdMosaic,
