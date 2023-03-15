@@ -21,7 +21,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/jsn/dout"
-	"git.sr.ht/~ionous/tapestry/web/files"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"github.com/ionous/errutil"
 )
 

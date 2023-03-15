@@ -5,13 +5,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"flag"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"log"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/web/files"
 	"github.com/ionous/errutil"
 )
 

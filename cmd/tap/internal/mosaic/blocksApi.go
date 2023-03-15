@@ -3,7 +3,7 @@ package mosaic
 import (
 	"context"
 	"encoding/json"
-	"git.sr.ht/~ionous/tapestry/web/files"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"io"
 	"log"
 	"net/http"
