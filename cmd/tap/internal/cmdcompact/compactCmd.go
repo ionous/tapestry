@@ -3,13 +3,8 @@
 package cmdcompact
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"flag"
-	"io"
-	"log"
-	"os"
 	"path/filepath"
 	"strings"
 
@@ -122,7 +117,7 @@ type xform struct {
 
 func (p *xform) decodeEncode(in, out string, pretty bool) (err error) {
 	var dst story.StoryFile
-	if b, e := readOne(in); e != nil {
+	if b, e := files.ReadFile(in); e != nil {
 		err = e
 	} else if e := p.decode(&dst, b); e != nil {
 		err = e
@@ -131,21 +126,21 @@ func (p *xform) decodeEncode(in, out string, pretty bool) (err error) {
 	} else if data, e := p.encode(&dst); e != nil {
 		err = e
 	} else {
-		err = writeOut(out, data, pretty)
+		err = files.WriteJson(out, data, pretty)
 	}
 	return
 }
 
 func decodeEncodeSpec(in, out string, pretty bool) (err error) {
 	var dst spec.TypeSpec
-	if b, e := readOne(in); e != nil {
+	if b, e := files.ReadFile(in); e != nil {
 		err = e
 	} else if e := cin.Decode(&dst, b, cin.Signatures(tapestry.AllSignatures)); e != nil {
 		err = e
 	} else if data, e := cout.Encode(&dst, customSpecEncoder); e != nil {
 		err = e
 	} else {
-		err = writeOut(out, data, pretty)
+		err = files.WriteJson(out, data, pretty)
 	}
 	return
 }
@@ -191,50 +186,6 @@ var blockly = xform{
 	},
 }
 var ptypes *rs.TypeSpecs // cache of loaded typespecs
-
-func writeOut(outPath string, data interface{}, pretty bool) (err error) {
-	log.Println("writing", outPath)
-	if fp, e := os.Create(outPath); e != nil {
-		err = e
-	} else {
-		defer fp.Close()
-		if str, ok := data.(string); ok {
-			_, err = fp.Write(prettify(str, pretty))
-		} else {
-			js := json.NewEncoder(fp)
-			js.SetEscapeHTML(false)
-			if pretty {
-				js.SetIndent("", "  ")
-			}
-			err = js.Encode(data)
-		}
-	}
-	return
-}
-
-func prettify(str string, pretty bool) (ret []byte) {
-	ret = []byte(str)
-	if pretty {
-		var indent bytes.Buffer
-		if e := json.Indent(&indent, ret, "", "  "); e != nil {
-			log.Println(e)
-		} else {
-			ret = indent.Bytes()
-		}
-	}
-	return
-}
-
-func readOne(filePath string) (ret []byte, err error) {
-	log.Println("reading", filePath)
-	if fp, e := os.Open(filePath); e != nil {
-		err = e
-	} else {
-		ret, err = io.ReadAll(fp)
-		fp.Close()
-	}
-	return
-}
 
 // example of migrating one command to another.
 func xformStory(tgt jsn.Marshalee) (err error) {

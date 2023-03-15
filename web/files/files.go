@@ -30,7 +30,7 @@ func ReadPaths(filePaths string, recusive bool, exts []string, onFile func(strin
 }
 
 // read the complete contents of the passed file
-func ReadFile(path string) (r1et []byte, err error) {
+func ReadFile(path string) ([]byte, error) {
 	return os.ReadFile(path)
 }
 

@@ -1,19 +1,8 @@
 package mosaic
 
 import (
-	"context"
-	"encoding/json"
-	"io"
-	"log"
-	"net/http"
-	"path/filepath"
-	"strings"
-
-	"git.sr.ht/~ionous/tapestry"
-	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/web"
-	"github.com/ionous/errutil"
+	"path/filepath"
 )
 
 func FilesApi(cfg *Config) web.Resource {
@@ -36,43 +25,8 @@ func FilesApi(cfg *Config) web.Resource {
 	}
 }
 
+// note: the root folder used to handle "put" to receive detailed format stories from the inline composer;
+// removed in favor of the mosaic blockly editor which puts individual (compact) files to the file endpoints.
 type rootFolder struct {
 	storyFolder
-}
-
-func (d rootFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
-	var els []struct {
-		Path  string          `json:"path"`
-		Story json.RawMessage `json:"story"`
-	}
-	dec := json.NewDecoder(r)
-	if e := dec.Decode(&els); err != nil {
-		err = e
-	} else {
-		root := d.String()
-		for _, el := range els {
-			if at := filepath.Join(root, el.Path); !strings.HasPrefix(at, root) {
-				e := errutil.New("cant save to", at)
-				err = errutil.Append(err, e)
-			} else {
-				var dst story.Story // composer hands back old format stories ( because that's what we give it )
-				if e := din.Decode(&dst, tapestry.Registry(), el.Story); e != nil {
-					err = e
-				} else {
-					file := story.StoryFile{
-						StoryLines: dst.Reformat(),
-					}
-					if data, e := story.Encode(&file); e != nil {
-						err = errutil.Append(err, e)
-					} else {
-						err = writeOut(at, data)
-					}
-				}
-			}
-		}
-	}
-	if err != nil {
-		log.Println("ERROR", err)
-	}
-	return
 }

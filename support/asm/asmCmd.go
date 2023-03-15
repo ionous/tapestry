@@ -127,13 +127,11 @@ func decodeStory(path string, b []byte) (ret *story.StoryFile, err error) {
 			ret = &curr
 		}
 	case DetailedExt:
-		var curr story.Story // fix: should also be story file...
+		var curr story.StoryFile
 		if e := din.Decode(&curr, tapestry.Registry(), b); e != nil {
 			err = e
 		} else {
-			ret = &story.StoryFile{
-				StoryLines: curr.Reformat(),
-			}
+			ret = &curr
 		}
 	default:
 		err = errutil.Fmt("unknown file type %q", ext)

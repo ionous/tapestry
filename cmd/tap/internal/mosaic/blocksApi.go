@@ -3,6 +3,7 @@ package mosaic
 import (
 	"context"
 	"encoding/json"
+	"git.sr.ht/~ionous/tapestry/web/files"
 	"io"
 	"log"
 	"net/http"
@@ -48,7 +49,7 @@ func (d blocksFolder) Find(sub string) (ret web.Resource) {
 }
 
 // save a bunch of files:
-// the mosasic editor sends multiple files at once so this handlesave at the root folder level.
+// the mosasic editor sends multiple files at once so this handle save at the root folder level.
 // because the same path written twice with the same data should have the same result... this uses put.
 func (d blocksFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
 	var els []struct {
@@ -69,7 +70,7 @@ func (d blocksFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWrite
 				err = errutil.Append(err, e)
 			} else if data, e := story.Encode(&file); e != nil {
 				err = errutil.Append(err, e)
-			} else if e := writeOut(at, data); e != nil {
+			} else if e := files.WriteJson(at, data, true); e != nil {
 				err = errutil.Append(err, e)
 			}
 		}
@@ -100,7 +101,7 @@ func (d blocksFile) Put(ctx context.Context, r io.Reader, w http.ResponseWriter)
 // gets the contents of the story file, transforms it into blocks
 func (d blocksFile) Get(ctx context.Context, w http.ResponseWriter) (err error) {
 	var file story.StoryFile
-	if b, e := readOne(d.path); e != nil {
+	if b, e := files.ReadFile(d.path); e != nil {
 		err = e
 	} else if e := story.Decode(&file, b, tapestry.AllSignatures); e != nil {
 		err = e

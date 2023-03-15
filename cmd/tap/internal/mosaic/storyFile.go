@@ -3,22 +3,20 @@ package mosaic
 import (
 	"context"
 	"encoding/json"
-	"io"
-	"log"
-	"net/http"
-	"os"
-
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn/dout"
 	"git.sr.ht/~ionous/tapestry/web"
+	"git.sr.ht/~ionous/tapestry/web/files"
 	"github.com/ionous/errutil"
+	"io"
+	"net/http"
 )
 
 // endpoint containing a local .if file.
 // handles getting the contents, and a subaction to post a check of the current contents.
-//  - /stories/<path>/<to>/<file>.if: get or put individual story files
-//  - /stories/<path>/<to>/<file>.if/check: post to test story tests
+//   - /stories/<path>/<to>/<file>.if: get or put individual story files
+//   - /stories/<path>/<to>/<file>.if/check: post to test story tests
 type storyFile struct {
 	cfg  *Config
 	path string
@@ -46,23 +44,20 @@ func (sf storyFile) Find(sub string) (ret web.Resource) {
 	return
 }
 
-// files are stored in compact format,
-// this transforms them to detailed format for the composer.
+// files are stored in compact format
+// we check that the file is valid ( by loading it ) before returning it.
 func (sf storyFile) Get(ctx context.Context, w http.ResponseWriter) (err error) {
 	var file story.StoryFile
-	if b, e := readOne(sf.path); e != nil {
+	if b, e := files.ReadFile(sf.path); e != nil {
 		err = e
 	} else if e := story.Decode(&file, b, tapestry.AllSignatures); e != nil {
 		err = e
+	} else if data, e := dout.Encode(&file); e != nil {
+		err = e
 	} else {
-		oldFormat := story.ReformatStory(file.StoryLines)
-		if data, e := dout.Encode(&oldFormat); e != nil {
-			err = e
-		} else {
-			w.Header().Set("Content-Type", "application/json")
-			js := json.NewEncoder(w)
-			err = js.Encode(data)
-		}
+		w.Header().Set("Content-Type", "application/json")
+		js := json.NewEncoder(w)
+		err = js.Encode(data)
 	}
 	return
 }
@@ -72,33 +67,8 @@ func (sf storyFile) Post(ctx context.Context, r io.Reader, w http.ResponseWriter
 	return errutil.New("unsupported post", sf)
 }
 
-// files dont support putting; returns error
-// ( save is handled by putting stories into the folder )
+// story files dont support putting; returns error
+// ( mosaic puts block files )
 func (sf storyFile) Put(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
 	return errutil.New("unsupported put", sf)
-}
-
-func writeOut(outPath string, data interface{}) (err error) {
-	log.Println("writing", outPath)
-	if fp, e := os.Create(outPath); e != nil {
-		err = e
-	} else {
-		js := json.NewEncoder(fp)
-		js.SetIndent("", "  ")
-		js.SetEscapeHTML(false)
-		err = js.Encode(data)
-		fp.Close()
-	}
-	return
-}
-
-func readOne(filePath string) (ret []byte, err error) {
-	log.Println("reading", filePath)
-	if fp, e := os.Open(filePath); e != nil {
-		err = e
-	} else {
-		ret, err = io.ReadAll(fp)
-		fp.Close()
-	}
-	return
 }
