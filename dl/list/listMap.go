@@ -5,6 +5,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 
@@ -17,7 +18,7 @@ func (op *ListMap) Execute(run rt.Runtime) (err error) {
 
 func (op *ListMap) remap(run rt.Runtime) (err error) {
 	pat := op.PatternName
-	if src, e := assign.GetSafeAssignment(run, op.List); e != nil {
+	if src, e := safe.GetAssignment(run, op.List); e != nil {
 		err = e
 	} else if !affine.IsList(src.Affinity()) {
 		err = errutil.New("not a list")

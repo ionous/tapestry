@@ -1,15 +1,12 @@
 package story_test
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 )
 
 var (
-	B = assign.B
-	F = assign.F
-	I = assign.I
-	N = assign.N
-	P = assign.P
-	T = assign.T
-	W = assign.W
+	B = literal.B
+	F = literal.F
+	I = literal.I
+	T = literal.T
 )

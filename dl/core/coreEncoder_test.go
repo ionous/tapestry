@@ -27,8 +27,8 @@ func TestCompactEncoder(t *testing.T) {
 
 func TestGetTrait(t *testing.T) {
 	out := &assign.ObjectRef{
-		Name:  assign.Variable("noun"),
-		Field: assign.Variable("trait"),
+		Name:  core.Variable("noun"),
+		Field: core.Variable("trait"),
 	}
 	if have, e := cout.Marshal(out, core.CompactEncoder); e != nil {
 		t.Fatal(e)
@@ -38,7 +38,7 @@ func TestGetTrait(t *testing.T) {
 }
 
 func TestGetVariablePath(t *testing.T) {
-	out := assign.Variable("pawn", "trait")
+	out := core.Variable("pawn", "trait")
 
 	// fix: this should have path syntax ( re: expressions )
 	// ex. @pawn.trait
@@ -52,9 +52,9 @@ func TestGetVariablePath(t *testing.T) {
 // true, not a core test *shrug*
 func TestListPush(t *testing.T) {
 	out := &list.ListPush{
-		Value:  &assign.FromText{Value: assign.Variable("obj")},
+		Value:  &assign.FromText{Value: core.Variable("obj")},
 		AtEdge: core.B(true),
-		Target: assign.Variable("bounds"),
+		Target: core.Variable("bounds"),
 	}
 
 	// fix: this should have path syntax ( re: expressions )

@@ -14,7 +14,7 @@ func (op *ListPush) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListPush) push(run rt.Runtime) (err error) {
-	if ins, e := assign.GetSafeAssignment(run, op.Value); e != nil {
+	if ins, e := safe.GetAssignment(run, op.Value); e != nil {
 		err = e
 	} else if root, e := assign.GetRootValue(run, op.Target); e != nil {
 		err = e

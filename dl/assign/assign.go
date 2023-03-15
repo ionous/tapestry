@@ -8,9 +8,8 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type Assignment interface {
-	GetAssignedValue(run rt.Runtime) (ret g.Value, err error)
-}
+// todo: cleanup
+type Assignment = rt.Assignment
 
 func (op *FromBool) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	return safe.GetBool(run, op.Value)
@@ -32,17 +31,6 @@ func (op *FromTextList) GetAssignedValue(run rt.Runtime) (ret g.Value, err error
 }
 func (op *FromRecordList) GetAssignedValue(run rt.Runtime) (ret g.Value, err error) {
 	return safe.GetRecordList(run, op.Value)
-}
-
-// handles null assignments by returning "MissingEval" error
-// ( cant live in package safe because package assign uses package safe )
-func GetSafeAssignment(run rt.Runtime, a Assignment) (ret g.Value, err error) {
-	if a == nil {
-		err = safe.MissingEval("assigned value")
-	} else {
-		ret, err = a.GetAssignedValue(run)
-	}
-	return
 }
 
 func GetAffinity(a Assignment) (ret affine.Affinity) {

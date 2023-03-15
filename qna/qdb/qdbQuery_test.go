@@ -2,6 +2,7 @@ package qdb_test
 
 import (
 	"database/sql"
+	"git.sr.ht/~ionous/tapestry/qna/query"
 	"reflect"
 	"strings"
 	"testing"
@@ -190,13 +191,13 @@ func TestQueries(t *testing.T) {
 		t.Fatal("plural", many, e)
 	} else if fd, e := q.FieldsOf(kind); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(fd, []qdb.FieldData{
+	} else if diff := pretty.Diff(fd, []query.FieldData{
 		{Name: aspect, Affinity: affine.Text, Class: aspect},
 	}); len(diff) > 0 {
 		t.Fatal(fd, diff)
 	} else if fd, e := q.FieldsOf(aspect); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(fd, []qdb.FieldData{
+	} else if diff := pretty.Diff(fd, []query.FieldData{
 		{Name: "brief", Affinity: affine.Bool},
 		{Name: "verbose", Affinity: affine.Bool},
 		{Name: "superbrief", Affinity: affine.Bool},
@@ -224,11 +225,11 @@ func TestQueries(t *testing.T) {
 		t.Fatal(e) // should be out of scope
 	} else if name, e := q.NounName("empire_apple"); e != nil || name != "empire apple" {
 		t.Fatal(name, e)
-	} else if id, e := q.NounInfo("apple"); e != nil || id != (qdb.NounInfo{Domain: domain, Id: "apple", Kind: kind}) {
+	} else if id, e := q.NounInfo("apple"); e != nil || id != (query.NounInfo{Domain: domain, Id: "apple", Kind: kind}) {
 		t.Fatal(e, id)
-	} else if id, e := q.NounInfo("empire"); e != nil || id != (qdb.NounInfo{Domain: domain, Id: "empire_apple", Kind: kind}) {
+	} else if id, e := q.NounInfo("empire"); e != nil || id != (query.NounInfo{Domain: domain, Id: "empire_apple", Kind: kind}) {
 		t.Fatal(e, id)
-	} else if id, e := q.NounInfo("table"); e != nil || id != (qdb.NounInfo{}) {
+	} else if id, e := q.NounInfo("table"); e != nil || id != (query.NounInfo{}) {
 		t.Fatal(id, e) // should be blank because the table is out of scope
 	} else if got, e := q.PatternLabels(pattern); e != nil {
 		t.Fatal("patternLabels:", e)
@@ -236,13 +237,13 @@ func TestQueries(t *testing.T) {
 		t.Fatal(e, diff)
 	} else if got, e := q.RulesFor(pattern, ""); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(got, []qdb.Rules{
+	} else if diff := pretty.Diff(got, []query.Rules{
 		{"1", 1, []byte("filter1"), []byte("prog1")},
 	}); len(diff) > 0 {
 		t.Fatal(got, diff)
 	} else if got, e := q.RulesFor(pattern, kind); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(got, []qdb.Rules{
+	} else if diff := pretty.Diff(got, []query.Rules{
 		{"2", 2, []byte("filter2"), []byte("prog2")},
 		{"3", 3, []byte("filter3"), []byte("prog3")},
 	}); len(diff) > 0 {

@@ -2,6 +2,7 @@ package assign
 
 import (
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 func (op *SetValue) Execute(run rt.Runtime) (err error) {
@@ -12,7 +13,7 @@ func (op *SetValue) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *SetValue) setValue(run rt.Runtime) (err error) {
-	if newValue, e := GetSafeAssignment(run, op.Value); e != nil {
+	if newValue, e := safe.GetAssignment(run, op.Value); e != nil {
 		err = e
 	} else if ref, e := GetReference(run, op.Target); e != nil {
 		err = e

@@ -2,15 +2,15 @@ package qna
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/qna/qdb"
+	"git.sr.ht/~ionous/tapestry/qna/query"
+	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 
 // expects field to be a normalized name already.
-func (run *Runner) setObjectField(obj qdb.NounInfo, field string, newValue g.Value) (err error) {
+func (run *Runner) setObjectField(obj query.NounInfo, field string, newValue g.Value) (err error) {
 	// tbd: cache the kind in the object info?
 	// or even... cache the ( last n ) field info into "obj.field"?
 	if kind, e := run.getKind(obj.Kind); e != nil {
@@ -42,7 +42,7 @@ func (run *Runner) setObjectField(obj qdb.NounInfo, field string, newValue g.Val
 }
 
 // expects field to be a normalized name already.
-func (run *Runner) getObjectField(obj qdb.NounInfo, field string) (ret g.Value, err error) {
+func (run *Runner) getObjectField(obj query.NounInfo, field string) (ret g.Value, err error) {
 	// tbd: cache the kind in the object info?
 	// or even... cache the ( last n ) field info into "obj.field"?
 	if kind, e := run.getKind(obj.Kind); e != nil {
@@ -68,7 +68,7 @@ func (run *Runner) getObjectField(obj qdb.NounInfo, field string) (ret g.Value, 
 	return
 }
 
-func (run *Runner) setFieldCache(obj qdb.NounInfo, field g.Field, val g.Value) (err error) {
+func (run *Runner) setFieldCache(obj query.NounInfo, field g.Field, val g.Value) (err error) {
 	// fix: convert when appropriate.
 	if aff := val.Affinity(); aff != field.Affinity {
 		err = errutil.Fmt(`mismatched affinity "%s.%s(%s)" writing %s`, obj, field.Name, field.Affinity, aff)
@@ -79,33 +79,20 @@ func (run *Runner) setFieldCache(obj qdb.NounInfo, field g.Field, val g.Value) (
 	return
 }
 
-func (run *Runner) getFieldCache(obj qdb.NounInfo, field g.Field) (ret g.Value, err error) {
+func (run *Runner) getFieldCache(obj query.NounInfo, field g.Field) (ret g.Value, err error) {
 	if c, e := run.nounValues.cache(func() (ret interface{}, err error) {
 		// note: in the original version of this, we queried *all* fields
 		// ( unioning in those with traits, and those without defaults )
-		if b, e := run.qdb.NounValue(obj.Id, field.Name); e != nil {
+		if b, e := run.query.NounValue(obj.Id, field.Name); e != nil {
 			err = e
+		} else if len(b) != 0 { // fields be empty, have literal values, or dynamic values.
+			ret, e = run.decode.DecodeField(b, field.Affinity, field.Type)
 		} else {
-			// fields be empty, have literal values, or dynamic values.
-			if len(b) == 0 {
-				if v, e := g.NewDefaultValue(run, field.Affinity, field.Type); e != nil {
-					err = e
-				} else {
-					ret = v
-				}
-			} else if isEvalLike := b[0] == '{'; !isEvalLike {
-				if v, e := parseLiteral(field.Affinity, field.Type, b); e != nil {
-					err = e
-				} else {
-					ret = v
-				}
-			} else {
-				if a, e := parseEval(field.Affinity, b, run.signatures); e != nil {
-					err = e
-				} else {
-					ret = a // a is an assignment which generate values.
-				}
-			}
+			// tbd: needed for create record, wish there was a nicer way
+			// at the very least it'd be nice if the decoder could hold this
+			// but then we'd have to set the runtime into it? its loopy and confusing.
+			var ks g.Kinds = run
+			ret, err = g.NewDefaultValue(ks, field.Affinity, field.Type)
 		}
 		return
 	}, obj.Domain, obj.Id, field.Name); e != nil {
@@ -114,9 +101,9 @@ func (run *Runner) getFieldCache(obj qdb.NounInfo, field g.Field) (ret g.Value, 
 		switch c := c.(type) {
 		case g.Value:
 			ret = c
-		case assign.Assignment:
+		case rt.Assignment:
 			// evaluate the assignment to get the current value
-			if v, e := assign.GetSafeAssignment(run, c); e != nil {
+			if v, e := safe.GetAssignment(run, c); e != nil {
 				err = e
 			} else {
 				ret, err = safe.AutoConvert(run, field, v)

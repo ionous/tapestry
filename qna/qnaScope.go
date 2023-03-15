@@ -1,7 +1,6 @@
 package qna
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -41,7 +40,7 @@ func (run *Runner) initializeLocals(rec *g.Record) (err error) {
 		for fieldIndex, init := range cached.init {
 			if init != nil {
 				ft := k.Field(fieldIndex)
-				if src, e := assign.GetSafeAssignment(run, init); e != nil {
+				if src, e := safe.GetAssignment(run, init); e != nil {
 					err = errutil.New("error determining local", k.Name(), ft.Name, e)
 					break
 				} else if val, e := safe.AutoConvert(run, ft, src); e != nil {

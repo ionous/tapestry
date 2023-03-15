@@ -78,7 +78,7 @@ func CompactSlotDecoder(m jsn.Marshaler, slot jsn.SlotBlock, msg json.RawMessage
 		assign.Address_Type:
 		var str string
 		if e := json.Unmarshal(msg, &str); e == nil && len(str) > 0 && str[0] == '@' {
-			if !slot.SetSlot(assign.Variable(str[1:])) {
+			if !slot.SetSlot(Variable(str[1:])) {
 				err = errutil.New("unexpected error setting slot")
 			}
 		} else {

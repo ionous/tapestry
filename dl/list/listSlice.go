@@ -2,7 +2,6 @@ package list
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -43,7 +42,7 @@ func (op *ListSlice) GetRecordList(run rt.Runtime) (ret g.Value, err error) {
 
 // Create a new list from a section of another list.
 func (op *ListSlice) sliceList(run rt.Runtime, aff affine.Affinity) (retVal g.Value, retType string, err error) {
-	if els, e := assign.GetSafeAssignment(run, op.List); e != nil {
+	if els, e := safe.GetAssignment(run, op.List); e != nil {
 		err = e
 	} else if e := safe.Check(els, aff); e != nil {
 		err = e

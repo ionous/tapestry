@@ -36,26 +36,26 @@ func TestFactorial(t *testing.T) {
 				Rules: []rt.Rule{{
 					Execute: core.MakeActivity(
 						&assign.SetValue{
-							Target: assign.Variable("num"),
+							Target: core.Variable("num"),
 							Value: &assign.FromNumber{Value: &core.ProductOf{
-								A: assign.Variable("num"),
+								A: core.Variable("num"),
 								B: &assign.CallPattern{
 									PatternName: P("factorial"),
 									Arguments: []assign.Arg{{
 										Name: "num",
 										Value: &assign.FromNumber{Value: &core.DiffOf{
-											A: assign.Variable("num"),
+											A: core.Variable("num"),
 											B: I(1),
 										}}}}}}}}),
 				}, {
 					Filter: &core.CompareNum{
-						A:  assign.Variable("num"),
+						A:  core.Variable("num"),
 						Is: core.Equal,
 						B:  I(0),
 					},
 					Execute: core.MakeActivity(
 						&assign.SetValue{
-							Target: assign.Variable("num"),
+							Target: core.Variable("num"),
 							Value:  &assign.FromNumber{Value: I(1)}},
 					),
 				}}},

@@ -1,7 +1,6 @@
 package qna
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
@@ -41,37 +40,25 @@ func (run *Runner) getRules(pat, tgt string) (ret cachedRules, err error) {
 
 // build the rules for the passed pat,tgt pair
 func (run *Runner) buildRules(pat, tgt string) (ret cachedRules, err error) {
-	if els, e := run.qdb.RulesFor(pat, tgt); e != nil {
+	if els, e := run.query.RulesFor(pat, tgt); e != nil {
 		err = e
 	} else {
 		var rules []rt.Rule
 		var sum rt.Flags
 		for _, el := range els {
-			var filter rt.BoolEval
-			// fix: we dont want to be bound to core here,
-			// even though we need its custom decoding handlers
-			// probably best is to pass a decoder object in -- not even just run.signatures
-			// ( then you could run it against detail encoding too if you wanted )
-			// might also stack the custom decoders just like with the signatures --
-			// then you just "loop" over them maybe
-			if e := core.Decode(rt.BoolEval_Slot{&filter}, el.Filter, run.signatures); e != nil {
-				e = errutil.New("error decoding filter for", pat, tgt, el.Id, e)
-				err = errutil.Append(err, e)
+			if filter, e := run.decode.DecodeFilter(el.Filter); e != nil {
+				err = errutil.Append(err, errutil.New("decoding filter", pat, tgt, el.Id, e))
+			} else if prog, e := run.decode.DecodeProg(el.Prog); e != nil {
+				err = errutil.Append(err, errutil.New("decoding prog", pat, tgt, el.Id, e))
 			} else {
-				var prog rt.Execute_Slice
-				if e := core.Decode(&prog, el.Prog, run.signatures); e != nil {
-					e = errutil.New("error decoding prog for", pat, tgt, el.Id, e)
-					err = errutil.Append(err, e)
-				} else {
-					flags := rt.MakeFlags(rt.Phase(el.Phase))
-					rules = append(rules, rt.Rule{
-						Name:     el.Id,
-						Filter:   filter,
-						Execute:  prog,
-						RawFlags: float64(flags),
-					})
-					sum |= flags
-				}
+				flags := rt.MakeFlags(rt.Phase(el.Phase))
+				rules = append(rules, rt.Rule{
+					Name:     el.Id,
+					Filter:   filter,
+					Execute:  prog,
+					RawFlags: float64(flags),
+				})
+				sum |= flags
 			}
 		}
 		if err == nil {

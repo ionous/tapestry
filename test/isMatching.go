@@ -32,23 +32,23 @@ var matchGroups = testpat.Pattern{
 		Execute: matches(true),
 	}, {
 		Filter: &core.CompareText{
-			A:  assign.Variable("a", "label"),
+			A:  core.Variable("a", "label"),
 			Is: core.Unequal,
-			B:  assign.Variable("b", "label"),
+			B:  core.Variable("b", "label"),
 		},
 		Execute: matches(false),
 	}, {
 		Filter: &core.CompareText{
-			A:  assign.Variable("a", "innumerable"),
+			A:  core.Variable("a", "innumerable"),
 			Is: core.Unequal,
-			B:  assign.Variable("b", "innumerable"),
+			B:  core.Variable("b", "innumerable"),
 		},
 		Execute: matches(false),
 	}, {
 		Filter: &core.CompareText{
-			A:  assign.Variable("a", "group_options"),
+			A:  core.Variable("a", "group_options"),
 			Is: core.Unequal,
-			B:  assign.Variable("b", "group_options"),
+			B:  core.Variable("b", "group_options"),
 		},
 		Execute: matches(false),
 	}},
@@ -57,7 +57,7 @@ var matchGroups = testpat.Pattern{
 func matches(b bool) []rt.Execute {
 	return []rt.Execute{
 		&assign.SetValue{
-			Target: assign.Variable("matches"),
+			Target: core.Variable("matches"),
 			Value:  &assign.FromBool{Value: B(b)}},
 	}
 }

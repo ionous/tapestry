@@ -33,16 +33,16 @@ func popTest(front bool, amt int, src ...string) []string {
 	pop := &list.Erasing{
 		Count:   I(1),
 		AtIndex: I(start),
-		Target:  assign.Variable("source"),
+		Target:  core.Variable("source"),
 		As:      W("text"),
 		Does: core.MakeActivity(&core.ChooseAction{
 			If: &core.CompareNum{
-				A:  &list.ListLen{List: &assign.FromTextList{Value: assign.Variable("text")}},
+				A:  &list.ListLen{List: &assign.FromTextList{Value: core.Variable("text")}},
 				Is: core.Equal,
 				B:  I(0)},
 			Does: core.MakeActivity(&Write{&out, T("x")}),
 			Else: &core.ChooseNothingElse{
-				Does: core.MakeActivity(&Write{&out, assign.Variable("text", 1)}),
+				Does: core.MakeActivity(&Write{&out, core.Variable("text", 1)}),
 			},
 		}),
 	}

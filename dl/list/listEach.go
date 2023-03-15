@@ -5,7 +5,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -21,7 +20,7 @@ func (op *ListEach) Execute(run rt.Runtime) (err error) {
 }
 
 func (op *ListEach) forEach(run rt.Runtime) (err error) {
-	if vs, e := assign.GetSafeAssignment(run, op.List); e != nil {
+	if vs, e := safe.GetAssignment(run, op.List); e != nil {
 		err = e
 	} else if !affine.IsList(vs.Affinity()) {
 		err = errutil.New("not a list")

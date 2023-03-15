@@ -18,21 +18,6 @@ type Scope interface {
 	SetFieldDirty(field string) error
 }
 
-// VariableStack - a pool of record like name-value pairs.
-// if a variable isnt found in the most recently pushed scope
-// the next most recently pushed scope gets checked and so on.
-type VariableStack interface {
-	// ReplaceScope - swap the current scope for the passed scope
-	// when init is true, try to initialize all the the values in the passed scope.
-	// only init can return an error.
-	ReplaceScope(scope Scope, init bool) (ret Scope, err error)
-	// PushScope - add a set of variables to the internal stack.
-	// ex. loops add to the current namespace.
-	PushScope(Scope)
-	// PopScope - remove the most recently added set of variables from the internal stack.
-	PopScope()
-}
-
 // Runtime environment for an in-progress game.
 type Runtime interface {
 	// ActivateDomain - objects are grouped into potentially hierarchical "domains".
@@ -54,8 +39,12 @@ type Runtime interface {
 	ReciprocalsOf(b, relation string) (g.Value, error)
 	// RelateTo - establish a new relation between nouns and and b.
 	RelateTo(a, b, relation string) error
-	// VariableStack - modifies the behavior of Get/SetField meta.Variable.
-	VariableStack
+	// PushScope - modifies the behavior of Get/SetField meta.Variable
+	// by adding a set of variables to the current namespace.
+	// ex. loops add iterators
+	PushScope(Scope)
+	// PopScope - remove the most recently added set of variables from the internal stack.
+	PopScope()
 	// GetField - various runtime objects (ex. nouns, kinds, etc.) store data addressed by name.
 	// the objects and their fields depend on implementation and context.
 	// see package meta for a variety of common objects.

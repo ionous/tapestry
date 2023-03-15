@@ -1,42 +1,35 @@
 package qna
 
 import (
-	"database/sql"
-	"io"
-	"log"
-	"os"
-
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/lang"
-	"git.sr.ht/~ionous/tapestry/qna/qdb"
+	"git.sr.ht/~ionous/tapestry/qna/query"
+	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
-	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"git.sr.ht/~ionous/tapestry/rt/writer"
-	"git.sr.ht/~ionous/tapestry/web/markup"
 	"github.com/ionous/errutil"
+	"io"
+	"log"
 )
 
-func NewRuntime(db *sql.DB, signatures cin.Signatures) *Runner {
-	opt := NewOptions()
-	qdb, e := qdb.NewQueries(db, true)
-	if e != nil {
-		panic(e)
-	}
-	w := print.NewLineSentences(markup.ToText(os.Stdout))
-	return NewRuntimeOptions(w, qdb, opt, signatures)
+// Decoder transforms the raw bytes pulled from a query into in-memory commands.
+type Decoder interface {
+	DecodeField(b []byte, a affine.Affinity, fieldType string) (rt.Assignment, error)
+	DecodeAssignment(b []byte, a affine.Affinity) (rt.Assignment, error)
+	DecodeFilter(b []byte) (rt.BoolEval, error)
+	DecodeProg(b []byte) (rt.Execute_Slice, error)
 }
 
-func NewRuntimeOptions(w io.Writer, qdb *qdb.Query, options Options, signatures cin.Signatures) *Runner {
+func NewRuntimeOptions(w io.Writer, q query.Query, d Decoder, options Options) *Runner {
 	run := &Runner{
-		qdb:        qdb,
+		query:      q,
+		decode:     d,
 		values:     make(cache),
 		nounValues: make(cache),
 		counters:   make(counters),
-		signatures: signatures,
 		options:    options,
 	}
 	run.SetWriter(w)
@@ -44,12 +37,13 @@ func NewRuntimeOptions(w io.Writer, qdb *qdb.Query, options Options, signatures 
 }
 
 type Runner struct {
-	qdb        *qdb.Query
+	query  query.Query
+	decode Decoder
+
 	values     cache
 	nounValues cache
 	counters
-	signatures cin.Signatures
-	options    Options
+	options Options
 	//
 	scope.Stack
 	Randomizer
@@ -58,13 +52,11 @@ type Runner struct {
 }
 
 func (run *Runner) NounIsNamed(noun, name string) (bool, error) {
-	return run.qdb.NounIsNamed(noun, name)
+	return run.query.NounIsNamed(noun, name)
 }
-
 func (run *Runner) ActivateDomain(domain string) (ret string, err error) {
-	if prev, e := run.qdb.ActivateDomain(domain); e != nil {
-		run.Report(e)
-		err = e
+	if prev, e := run.query.ActivateDomain(domain); e != nil {
+		err = run.reportError(e)
 	} else {
 		run.values = make(cache) // fix? focus cache clear to just the domains that became inactive?
 		ret = prev
@@ -74,8 +66,8 @@ func (run *Runner) ActivateDomain(domain string) (ret string, err error) {
 
 func (run *Runner) SingularOf(plural string) (ret string) {
 	// fix: do we want to cache? we do for everything else.
-	if n, e := run.qdb.PluralToSingular(plural); e != nil {
-		run.Report(e)
+	if n, e := run.query.PluralToSingular(plural); e != nil {
+		run.reportError(e)
 	} else if len(n) > 0 {
 		ret = n
 	} else {
@@ -86,8 +78,8 @@ func (run *Runner) SingularOf(plural string) (ret string) {
 
 func (run *Runner) PluralOf(singular string) (ret string) {
 	// fix: see singularOf.
-	if n, e := run.qdb.PluralFromSingular(singular); e != nil {
-		run.Report(e)
+	if n, e := run.query.PluralFromSingular(singular); e != nil {
+		run.reportError(e)
 	} else if len(n) > 0 {
 		ret = n
 	} else {
@@ -97,21 +89,20 @@ func (run *Runner) PluralOf(singular string) (ret string) {
 }
 
 // the last value is the results; blank if need be
-func (run *Runner) PatternLabels(pat string) (ret []string, err error) {
+func (run *Runner) getPatternLabels(pat string) (ret []string, err error) {
 	if c, e := run.values.cache(func() (ret interface{}, err error) {
-		ret, err = run.qdb.PatternLabels(pat)
+		ret, err = run.query.PatternLabels(pat)
 		return
 	}, "PatternLabels", pat); e != nil {
-		run.Report(e)
+		err = run.reportError(e)
 	} else {
 		ret = c.([]string)
 	}
 	return
 }
 
-func (run *Runner) Report(e error) error {
-	// fix? now what?
-	log.Println(e)
+func (run *Runner) reportError(e error) error {
+	log.Println(e) // fix? now what?
 	return e
 }
 
@@ -130,7 +121,7 @@ func (run *Runner) RelateTo(a, b, rel string) (err error) {
 		} else if _, e := run.getKindOf(nb.Kind, fb.Type); e != nil {
 			err = e
 		} else {
-			err = run.qdb.Relate(k.Name(), na.Id, nb.Id)
+			err = run.query.Relate(k.Name(), na.Id, nb.Id)
 		}
 	}
 	return
@@ -143,7 +134,7 @@ func (run *Runner) RelativesOf(a, rel string) (ret g.Value, err error) {
 		err = e
 	} else if k, e := run.getKindOf(rel, kindsOf.Relation.String()); e != nil {
 		err = e
-	} else if vs, e := run.qdb.RelativesOf(k.Name(), n.Id); e != nil {
+	} else if vs, e := run.query.RelativesOf(k.Name(), n.Id); e != nil {
 		err = e // doesnt cache because relateTo would have to clear the cache.
 	} else {
 		fb := k.Field(1)
@@ -159,7 +150,7 @@ func (run *Runner) ReciprocalsOf(b, rel string) (ret g.Value, err error) {
 		err = e
 	} else if k, e := run.getKindOf(rel, kindsOf.Relation.String()); e != nil {
 		err = e
-	} else if vs, e := run.qdb.ReciprocalsOf(k.Name(), n.Id); e != nil {
+	} else if vs, e := run.query.ReciprocalsOf(k.Name(), n.Id); e != nil {
 		err = e
 	} else {
 		fa := k.Field(0)
@@ -184,12 +175,12 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 		// one of the predefined faux objects:
 		switch target {
 		case meta.Variables:
-			copy := g.CopyValue(val)
-			err = run.Stack.SetFieldByName(field, copy)
+			cpy := g.CopyValue(val)
+			err = run.Stack.SetFieldByName(field, cpy)
 
 		case meta.Option:
-			copy := g.CopyValue(val)
-			err = run.options.SetOptionByName(field, copy)
+			cpy := g.CopyValue(val)
+			err = run.options.SetOptionByName(field, cpy)
 
 		case meta.Counter:
 			// doesnt copy because it errors if the value isn't a number
@@ -250,8 +241,8 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			ret, err = run.getCounter(field)
 
 		case meta.Domain:
-			if b, e := run.qdb.IsDomainActive(field); e != nil {
-				err = run.Report(e)
+			if b, e := run.query.IsDomainActive(field); e != nil {
+				err = run.reportError(e)
 			} else {
 				ret = g.BoolOf(b)
 			}
@@ -275,7 +266,7 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 			if ok, e := run.getObjectInfo(field); e != nil {
 				err = e
 			} else if k, e := run.GetKindByName(ok.Kind); e != nil {
-				err = run.Report(e)
+				err = run.reportError(e)
 			} else {
 				ret = g.StringsOf(k.Path())
 			}
@@ -283,15 +274,15 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 		// given a noun, return the name declared by the author
 		case meta.ObjectName:
 			if n, e := run.getObjectName(field); e != nil {
-				err = run.Report(e)
+				err = run.reportError(e)
 			} else {
 				ret = g.StringOf(n) // tbd: should these have a type?
 			}
 
 		// all objects of the named kind
 		case meta.ObjectsOfKind:
-			if ns, e := run.qdb.NounsByKind(field); e != nil {
-				err = run.Report(e)
+			if ns, e := run.query.NounsByKind(field); e != nil {
+				err = run.reportError(e)
 			} else {
 				ret = g.StringsOf(ns)
 			}
@@ -300,14 +291,14 @@ func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 		case meta.Option:
 			// note: uses raw field so that it matches the meta.Options go generated stringer strings.
 			if t, e := run.options.Option(rawField); e != nil {
-				err = run.Report(e)
+				err = run.reportError(e)
 			} else {
 				ret = t
 			}
 
 		case meta.PatternLabels:
-			if vs, e := run.PatternLabels(field); e != nil {
-				err = run.Report(e)
+			if vs, e := run.query.PatternLabels(field); e != nil {
+				err = run.reportError(e)
 			} else {
 				ret = g.StringsOf(vs)
 			}

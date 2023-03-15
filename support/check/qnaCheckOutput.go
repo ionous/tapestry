@@ -1,4 +1,4 @@
-package qna
+package check
 
 import (
 	"bytes"

@@ -64,11 +64,11 @@ var FactorialCheck = []rt.Execute{
 // subtracts 1 from the num and multiples by one
 var FactorialMulMinusOne = []rt.Execute{
 	&assign.SetValue{
-		Target: assign.Variable("num"),
+		Target: core.Variable("num"),
 		Value: &assign.FromNumber{Value: &core.ProductOf{
-			A: assign.Variable("num"),
+			A: core.Variable("num"),
 			B: &core.DiffOf{
-				A: assign.Variable("num"),
+				A: core.Variable("num"),
 				B: I(1),
 			},
 		}}},
@@ -77,13 +77,13 @@ var FactorialMulMinusOne = []rt.Execute{
 // at 0, use the number 1
 var FactorialUseOne = []rt.Execute{
 	&assign.SetValue{
-		Target: assign.Variable("num"),
+		Target: core.Variable("num"),
 		Value:  &assign.FromNumber{Value: I(1)},
 	},
 }
 
 var FactorialIsZero = &core.CompareNum{
 	Markup: UserComment("so, when we've reached 0..."),
-	A:      assign.Variable("num"),
+	A:      core.Variable("num"),
 	Is:     core.Equal,
 	B:      F(0)}

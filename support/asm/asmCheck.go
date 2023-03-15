@@ -2,6 +2,7 @@ package asm
 
 import (
 	"database/sql"
+	"git.sr.ht/~ionous/tapestry/support/check"
 
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/qna"
@@ -18,7 +19,7 @@ func CheckOutput(inFile, testName string) (ret int, err error) {
 			err = e
 		} else {
 			opt := qna.NewOptions()
-			ret, err = qna.CheckAll(db, testName, opt, tapestry.AllSignatures)
+			ret, err = check.CheckAll(db, testName, opt, tapestry.AllSignatures)
 		}
 	}
 	return

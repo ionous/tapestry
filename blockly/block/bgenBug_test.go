@@ -3,7 +3,6 @@ package block_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
@@ -86,12 +85,12 @@ func TestStoryLines(t *testing.T) {
 	if e := testBlocks(&story.StoryFile{
 		StoryLines: []story.StoryStatement{
 			&story.DefineKinds{
-				Kinds:    assign.Ts("cats"),
-				Ancestor: assign.T("animal"),
+				Kinds:    literal.Ts("cats"),
+				Ancestor: literal.T("animal"),
 			},
 			&story.DefineKinds{
-				Kinds:    assign.Ts("cats"),
-				Ancestor: assign.T("animal"),
+				Kinds:    literal.Ts("cats"),
+				Ancestor: literal.T("animal"),
 			},
 		},
 	}, `{

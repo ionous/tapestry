@@ -2,16 +2,11 @@ package list
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 )
 
 var (
-	B = assign.B
-	F = assign.F
-	I = assign.I
-	N = assign.N
-	P = assign.P
-	T = assign.T
-	W = assign.W
+	T = literal.T
 
 	CmdError    = assign.CmdError
 	CmdErrorCtx = assign.CmdErrorCtx

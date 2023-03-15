@@ -4,9 +4,9 @@ package qdb
 
 import (
 	"database/sql"
+	"git.sr.ht/~ionous/tapestry/qna/query"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
@@ -105,20 +105,12 @@ func (q *Query) ActivateDomain(name string) (ret string, err error) {
 	return
 }
 
-type CheckData struct {
-	Name   string
-	Domain string
-	Aff    affine.Affinity
-	Prog   []byte
-	Value  []byte
-}
-
 // read all the matching tests from the db.
-func (q *Query) ReadChecks(actuallyJustThisOne string) (ret []CheckData, err error) {
+func (q *Query) ReadChecks(actuallyJustThisOne string) (ret []query.CheckData, err error) {
 	if rows, e := q.checks.Query(actuallyJustThisOne); e != nil {
 		err = e
 	} else {
-		var check CheckData
+		var check query.CheckData
 		err = tables.ScanAll(rows, func() (err error) {
 			ret = append(ret, check)
 			return
@@ -127,18 +119,11 @@ func (q *Query) ReadChecks(actuallyJustThisOne string) (ret []CheckData, err err
 	return
 }
 
-type FieldData struct {
-	Name     string
-	Affinity affine.Affinity
-	Class    string
-	Init     []byte
-}
-
-func (q *Query) FieldsOf(kind string) (ret []FieldData, err error) {
+func (q *Query) FieldsOf(kind string) (ret []query.FieldData, err error) {
 	if rows, e := q.fieldsOf.Query(kind); e != nil {
 		err = e
 	} else {
-		var field FieldData
+		var field query.FieldData
 		err = tables.ScanAll(rows, func() (err error) {
 			ret = append(ret, field)
 			return
@@ -153,26 +138,9 @@ func (q *Query) KindOfAncestors(kind string) ([]string, error) {
 }
 
 // given a name, find a noun ( and some useful other context )
-func (q *Query) NounInfo(name string) (ret NounInfo, err error) {
+func (q *Query) NounInfo(name string) (ret query.NounInfo, err error) {
 	if e := q.nounInfo.QueryRow(name).Scan(&ret.Domain, &ret.Id, &ret.Kind); e != nil && e != sql.ErrNoRows {
 		err = e
-	}
-	return
-}
-
-type NounInfo struct {
-	Domain, Id, Kind string // id is the string identifier for the noun, unique within the domain.
-}
-
-func (n *NounInfo) IsValid() bool {
-	return len(n.Id) != 0
-}
-
-func (n *NounInfo) String() (ret string) {
-	if !n.IsValid() {
-		ret = "<unknown object>"
-	} else {
-		ret = strings.Join([]string{n.Domain, n.Id}, "::")
 	}
 	return
 }
@@ -222,17 +190,11 @@ func (q *Query) PatternLabels(pat string) (ret []string, err error) {
 	return
 }
 
-type Rules struct {
-	Id           string // really an id, but we'll let the driver convert
-	Phase        int
-	Filter, Prog []byte
-}
-
-func (q *Query) RulesFor(pat, target string) (ret []Rules, err error) {
+func (q *Query) RulesFor(pat, target string) (ret []query.Rules, err error) {
 	if rows, e := q.rulesFor.Query(pat, target); e != nil {
 		err = e
 	} else {
-		var rule Rules
+		var rule query.Rules
 		if e := tables.ScanAll(rows, func() (err error) {
 			ret = append(ret, rule)
 			return

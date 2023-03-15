@@ -9,6 +9,11 @@ type Execute interface {
 	Execute(Runtime) error
 }
 
+// Assignment accesses values in a generic way.
+type Assignment interface {
+	GetAssignedValue(Runtime) (g.Value, error)
+}
+
 // BoolEval represents the result of some true or false expression.
 type BoolEval interface {
 	GetBool(Runtime) (g.Value, error)
@@ -29,12 +34,7 @@ type RecordEval interface {
 	GetRecord(Runtime) (g.Value, error)
 }
 
-// ListEval yields access to a set of fields and their values.
-type ListEval interface {
-	GetList(Runtime) (g.Value, error)
-}
-
-// TextListEval represents the computation of a series of numeric values.
+// NumListEval represents the computation of a series of numeric values.
 type NumListEval interface {
 	GetNumList(Runtime) (g.Value, error)
 }

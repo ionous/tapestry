@@ -2,23 +2,23 @@ package list_test
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/core"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 )
 
 var (
-	B = assign.B
-	F = assign.F
-	I = assign.I
-	N = assign.N
-	P = assign.P
-	T = assign.T
-	W = assign.W
+	B = literal.B
+	F = literal.F
+	I = literal.I
+	T = literal.T
+	W = core.W
 )
 
 func FromTs(vs []string) (ret assign.Assignment) {
 	if len(vs) == 1 {
-		ret = &assign.FromText{Value: assign.T(vs[0])}
+		ret = &assign.FromText{Value: literal.T(vs[0])}
 	} else {
-		ret = &assign.FromTextList{Value: assign.Ts(vs...)}
+		ret = &assign.FromTextList{Value: literal.Ts(vs...)}
 	}
 	return
 }

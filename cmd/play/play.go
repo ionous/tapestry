@@ -6,8 +6,8 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
+	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -38,7 +38,7 @@ func main() {
 	flag.BoolVar(&errutil.Panic, "panic", false, "panic on error?")
 	flag.Parse()
 	if !debugging {
-		log.SetOutput(ioutil.Discard)
+		log.SetOutput(io.Discard)
 	}
 
 	if cnt, e := playGame(inFile, testString, domain, json); e != nil {
@@ -63,9 +63,11 @@ func playGame(inFile, testString, domain string, jsonMode bool) (ret int, err er
 	} else if db, e := sql.Open(tables.DefaultDriver, inFile); e != nil {
 		err = errutil.New("couldn't create output file", inFile, e)
 	} else {
-		defer db.Close()
+		defer func() {
+			_ = db.Close() // log?
+		}()
 		// fix: some sort of reset flag; but also: how to rejoin properly?
-		if qdb, e := qdb.NewQueries(db, true); e != nil {
+		if query, e := qdb.NewQueries(db, true); e != nil {
 			err = e
 		} else if grammar, e := play.MakeGrammar(db); e != nil {
 			err = e
@@ -76,10 +78,11 @@ func playGame(inFile, testString, domain string, jsonMode bool) (ret int, err er
 			if !jsonMode {
 				w = print.NewLineSentences(markup.ToText(os.Stdout))
 			} else {
-				opt.SetOption(meta.JsonMode, g.BoolOf(jsonMode))
+				_ = opt.SetOption(meta.JsonMode, g.BoolOf(jsonMode))
 				w = print.NewLineSentences(&bufferedText)
 			}
-			rx := qna.NewRuntimeOptions(w, qdb, opt, tapestry.AllSignatures)
+			d := decode.NewDecoder(tapestry.AllSignatures)
+			rx := qna.NewRuntimeOptions(w, query, d, opt)
 			if _, e := rx.ActivateDomain(domain); e != nil {
 				err = e
 			} else {
@@ -114,7 +117,7 @@ func playGame(inFile, testString, domain string, jsonMode bool) (ret int, err er
 								out.Brace(js.Obj, func(inner *js.Builder) {
 									inner.Q("out").R(js.Colon).Q(bufferedText.String())
 								})
-								io.WriteString(os.Stdout, out.String())
+								_, _ = io.WriteString(os.Stdout, out.String())
 								bufferedText.Reset()
 							}
 						}

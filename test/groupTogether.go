@@ -11,8 +11,8 @@ import (
 )
 
 var runGroupTogther = list.ListMap{
-	Target:      assign.Variable("settings"),
-	List:        &assign.FromTextList{Value: assign.Variable("objects")},
+	Target:      core.Variable("settings"),
+	List:        &assign.FromTextList{Value: core.Variable("objects")},
 	PatternName: P("assign_grouping"),
 }
 
@@ -33,15 +33,15 @@ var assignGrouping = testpat.Pattern{
 	Rules: []rt.Rule{
 		{Execute: []rt.Execute{
 			&assign.SetValue{
-				Target: assign.Variable("out", "name"),
-				Value:  &assign.FromText{Value: assign.Variable("in")}},
+				Target: core.Variable("out", "name"),
+				Value:  &assign.FromText{Value: core.Variable("in")}},
 			&core.ChooseAction{
 				If: &core.Matches{
-					Text:  assign.Variable("in"),
+					Text:  core.Variable("in"),
 					Match: "^thing"},
 				Does: core.MakeActivity(
 					&assign.SetValue{
-						Target: assign.Variable("out", "label"),
+						Target: core.Variable("out", "label"),
 						Value:  &assign.FromText{Value: T("thingies")}},
 				),
 			},

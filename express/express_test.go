@@ -12,7 +12,7 @@ import (
 	"github.com/kr/pretty"
 )
 
-var True = B(true)
+// var True = B(true)
 var False = B(false)
 
 // TestExpressions single expressions within a template.
@@ -251,14 +251,8 @@ func TestTemplates(t *testing.T) {
 	})
 }
 
-// yuck: the assignment swap is concrete when its a field
-// when used as
-func assignToEval(a assign.Assignment) *assign.Assignment {
-	return &a
-}
-
 func renderRef(v string, path ...any) *render.RenderRef {
-	return &render.RenderRef{Name: T(v), Dot: assign.MakeDot(path...)}
+	return &render.RenderRef{Name: T(v), Dot: core.MakeDot(path...)}
 }
 
 func testTemplate(str string, want interface{}) (err error) {

@@ -55,9 +55,6 @@ func (PanicRuntime) PushScope(rt.Scope) {
 func (PanicRuntime) PopScope() {
 	panic("Runtime panic")
 }
-func (PanicRuntime) ReplaceScope(scope rt.Scope, init bool) (ret rt.Scope, err error) {
-	panic("Runtime panic")
-}
 func (PanicRuntime) Random(inclusiveMin, exclusiveMax int) int {
 	panic("Runtime panic")
 }

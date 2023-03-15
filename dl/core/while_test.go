@@ -16,17 +16,17 @@ func TestLoopBreak(t *testing.T) {
 		&While{
 			True: B(true), Does: MakeActivity(
 				&assign.SetValue{
-					Target: assign.Variable("i"),
-					Value:  &assign.FromNumber{Value: &SumOf{A: assign.Variable("i"), B: I(1)}}},
+					Target: Variable("i"),
+					Value:  &assign.FromNumber{Value: &SumOf{A: Variable("i"), B: I(1)}}},
 				&ChooseAction{
-					If: &CompareNum{A: assign.Variable("i"), Is: AtLeast, B: I(4)},
+					If: &CompareNum{A: Variable("i"), Is: AtLeast, B: I(4)},
 					Does: MakeActivity(
 						&Break{},
 					),
 				},
 				&assign.SetValue{
-					Target: assign.Variable("j"),
-					Value:  &assign.FromNumber{Value: &SumOf{A: assign.Variable("j"), B: I(1)}}},
+					Target: Variable("j"),
+					Value:  &assign.FromNumber{Value: &SumOf{A: Variable("j"), B: I(1)}}},
 			)},
 	); e != nil {
 		t.Fatal("failed to run:", e)
@@ -41,18 +41,18 @@ func TestLoopNext(t *testing.T) {
 		&While{
 			True: B(true), Does: MakeActivity(
 				&assign.SetValue{
-					Target: assign.Variable("i"),
-					Value:  &assign.FromNumber{Value: &SumOf{A: assign.Variable("i"), B: I(1)}}},
+					Target: Variable("i"),
+					Value:  &assign.FromNumber{Value: &SumOf{A: Variable("i"), B: I(1)}}},
 				&ChooseAction{
-					If: &CompareNum{A: assign.Variable("i"), Is: AtLeast, B: I(4)},
+					If: &CompareNum{A: Variable("i"), Is: AtLeast, B: I(4)},
 					Does: MakeActivity(
 						&Break{},
 					),
 				},
 				&Next{},
 				&assign.SetValue{
-					Target: assign.Variable("j"),
-					Value:  &assign.FromNumber{Value: &SumOf{A: assign.Variable("j"), B: I(1)}}},
+					Target: Variable("j"),
+					Value:  &assign.FromNumber{Value: &SumOf{A: Variable("j"), B: I(1)}}},
 			)},
 	); e != nil {
 		t.Fatal(e)
@@ -68,8 +68,8 @@ func TestLoopInfinite(t *testing.T) {
 		&While{
 			True: B(true), Does: MakeActivity(
 				&assign.SetValue{
-					Target: assign.Variable("i"),
-					Value:  &assign.FromNumber{Value: &SumOf{A: assign.Variable("i"), B: I(1)}}},
+					Target: Variable("i"),
+					Value:  &assign.FromNumber{Value: &SumOf{A: Variable("i"), B: I(1)}}},
 			)},
 	); !errors.Is(e, MaxLoopIterations) {
 		t.Fatal(e)

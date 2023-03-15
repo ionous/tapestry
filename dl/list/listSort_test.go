@@ -1,10 +1,10 @@
 package list_test
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -38,7 +38,7 @@ func TestSort(t *testing.T) {
 	}
 	// sorts in place
 	sorter := &list.ListSortText{
-		Target:  assign.Variable("objects"),
+		Target:  core.Variable("objects"),
 		ByField: "key",
 	}
 	if e := safe.Run(&lt, sorter); e != nil {

@@ -26,7 +26,7 @@ func MakeRecord(run rt.Runtime, kind string, args ...Arg) (ret *g.Record, err er
 				break
 			} else if at < 0 {
 				break
-			} else if src, e := GetSafeAssignment(run, a.Value); e != nil {
+			} else if src, e := safe.GetAssignment(run, a.Value); e != nil {
 				err = errutil.New(e, "while reading arg", i, a.Name)
 				break
 			} else if val, e := safe.AutoConvert(run, kind.Field(at), src); e != nil {

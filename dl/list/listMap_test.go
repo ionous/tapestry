@@ -123,14 +123,14 @@ func TestMapRecords(t *testing.T) {
 }
 
 var remapStrings = list.ListMap{
-	Target:      assign.Variable("results"),
-	List:        &assign.FromTextList{Value: assign.Variable("fruits")},
+	Target:      core.Variable("results"),
+	List:        &assign.FromTextList{Value: core.Variable("fruits")},
 	PatternName: W("reverse"),
 }
 
 var remapRecords = list.ListMap{
-	Target:      assign.Variable("results"),
-	List:        &assign.FromRecordList{Value: assign.Variable("fruits")},
+	Target:      core.Variable("results"),
+	List:        &assign.FromRecordList{Value: core.Variable("fruits")},
 	PatternName: W("reverse"),
 }
 
@@ -142,8 +142,8 @@ var reverseText = testpat.Pattern{
 	Rules: []rt.Rule{{
 		Execute: core.MakeActivity(
 			&assign.SetValue{
-				Target: assign.Variable("out"),
-				Value:  &assign.FromText{Value: &core.MakeReversed{Text: assign.Variable("in")}}},
+				Target: core.Variable("out"),
+				Value:  &assign.FromText{Value: &core.MakeReversed{Text: core.Variable("in")}}},
 		),
 	}},
 }
@@ -156,8 +156,8 @@ var reverseField = testpat.Pattern{
 	Rules: []rt.Rule{{
 		Execute: core.MakeActivity(
 			&assign.SetValue{
-				Target: assign.Variable("out", "name"),
-				Value:  &assign.FromText{Value: &core.MakeReversed{Text: assign.Variable("in", "name")}}},
+				Target: core.Variable("out", "name"),
+				Value:  &assign.FromText{Value: &core.MakeReversed{Text: core.Variable("in", "name")}}},
 		),
 	}},
 }

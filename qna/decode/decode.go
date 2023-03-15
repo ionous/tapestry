@@ -1,4 +1,5 @@
-package qna
+// Package decode unpacks stored programs and values from byte slices
+package decode
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
@@ -7,36 +8,58 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/jsn/cin"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"github.com/ionous/errutil"
 )
 
-// fix? mdl_assign technically has redundant info --
-// because it implicitly stores the assignment type ( FromBool, etc. ) even though the field wont allow anything else
-// storing the evals ( re: readEval below ) would eliminate that.
-func decodeAssignment(a affine.Affinity, prog []byte, signatures cin.Signatures) (ret assign.Assignment, err error) {
-	if e := core.Decode(assign.Assignment_Slot{&ret}, prog, signatures); e != nil {
+type Decoder struct {
+	signatures cin.Signatures
+}
+
+func NewDecoder(signatures cin.Signatures) *Decoder {
+	return &Decoder{
+		signatures: signatures,
+	}
+}
+
+func (d *Decoder) DecodeField(b []byte, a affine.Affinity, fieldType string) (ret rt.Assignment, err error) {
+	if isEvalLike := b[0] == '{'; !isEvalLike {
+		ret, err = literal.ReadLiteral(a, fieldType, b)
+	} else {
+		ret, err = parseEval(a, b, d.signatures)
+	}
+	return
+}
+
+func (d *Decoder) DecodeAssignment(b []byte, a affine.Affinity) (ret rt.Assignment, err error) {
+	// fix? mdl_assign technically has redundant info --
+	// because it implicitly stores the assignment type ( FromBool, etc. ) even though the field wont allow anything else
+	// storing the evals ( re: readEval below ) would eliminate that.
+	var out assign.Assignment
+	if e := core.Decode(assign.Assignment_Slot{&out}, b, d.signatures); e != nil {
+		err = e
+	} else {
+		ret = out
+	}
+	return
+}
+
+func (d *Decoder) DecodeFilter(b []byte) (ret rt.BoolEval, err error) {
+	if e := core.Decode(rt.BoolEval_Slot{&ret}, b, d.signatures); e != nil {
 		err = e
 	}
 	return
 }
 
-// the expected value depends on the affinity (a) of the destination field.
-// fix? if literals implemented GetAssignedValue, then we could use the literal decoder directly
-func parseLiteral(a affine.Affinity, t string, msg []byte) (ret g.Value, err error) {
-	// fix? for text, technically this might be an @variable
-	// but perhaps we could patch that to a full eval write in the assembler.
-	if x, e := literal.ReadLiteral(a, t, msg); e != nil {
+func (d *Decoder) DecodeProg(b []byte) (ret rt.Execute_Slice, err error) {
+	if e := core.Decode(&ret, b, d.signatures); e != nil {
 		err = e
-	} else {
-		ret, err = x.GetAssignedValue(nil)
 	}
 	return
 }
 
 // the expected eval depends on the affinity (a) of the destination field.
 // fix? merge somehow with express.newAssignment? with compact decoding.
-func parseEval(a affine.Affinity, rawValue []byte, signatures cin.Signatures) (ret assign.Assignment, err error) {
+func parseEval(a affine.Affinity, rawValue []byte, signatures cin.Signatures) (ret rt.Assignment, err error) {
 	switch a {
 	case affine.Bool:
 		var v rt.BoolEval

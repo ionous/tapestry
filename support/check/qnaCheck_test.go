@@ -1,12 +1,12 @@
-package qna_test
+package check_test
 
 import (
+	"git.sr.ht/~ionous/tapestry/support/check"
 	"os"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/rt/writer"
@@ -15,7 +15,7 @@ import (
 )
 
 func TestCheck(t *testing.T) {
-	prog := &qna.CheckOutput{
+	prog := &check.CheckOutput{
 		Name:   t.Name(),
 		Expect: "hello",
 		Test: []rt.Execute{
@@ -35,7 +35,7 @@ func TestCheck(t *testing.T) {
 	}
 }
 
-func runTest(prog *qna.CheckOutput) (err error) {
+func runTest(prog *check.CheckOutput) (err error) {
 	var run checkTester
 	run.SetWriter(print.NewLineSentences(markup.ToText(os.Stdout)))
 	return prog.RunTest(&run)

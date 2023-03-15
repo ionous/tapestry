@@ -53,6 +53,17 @@ func WriteText(run rt.Runtime, eval rt.TextEval) (err error) {
 	return
 }
 
+// handles null assignments by returning "MissingEval" error
+// ( cant live in package safe because package assign uses package safe )
+func GetAssignment(run rt.Runtime, a rt.Assignment) (ret g.Value, err error) {
+	if a == nil {
+		err = MissingEval("assigned value")
+	} else {
+		ret, err = a.GetAssignedValue(run)
+	}
+	return
+}
+
 // GetBool runs the specified eval, returning an error if the eval is nil.
 func GetBool(run rt.Runtime, eval rt.BoolEval) (ret g.Value, err error) {
 	if eval == nil {

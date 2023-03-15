@@ -1,25 +1,25 @@
-package qna
+package check
 
 import (
 	"database/sql"
-	"log"
-	"os"
-	"strings"
-
-	"github.com/ionous/errutil"
-
-	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/qna"
+	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
+	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/web/markup"
+	"github.com/ionous/errutil"
+	"log"
+	"os"
+	"strings"
 )
 
 // CheckAll tests stored in the passed db.
 // It logs the results of running the checks, and only returns error on critical errors.
-func CheckAll(db *sql.DB, actuallyJustThisOne string, options Options, signatures []map[uint64]interface{}) (ret int, err error) {
+func CheckAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signatures []map[uint64]interface{}) (ret int, err error) {
 	if qdb, e := qdb.NewQueries(db, false); e != nil {
 		err = e
 	} else if checks, e := qdb.ReadChecks(actuallyJustThisOne); e != nil {
@@ -46,7 +46,7 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options Options, signature
 	return
 }
 
-func checkOne(qdb *qdb.Query, check qdb.CheckData, options Options, signatures []map[uint64]interface{}, pret *int) (err error) {
+func checkOne(qdb *qdb.Query, check query.CheckData, options qna.Options, signatures []map[uint64]interface{}, pret *int) (err error) {
 	var act rt.Execute_Slice
 	if e := story.Decode(&act, check.Prog, signatures); e != nil {
 		err = e
@@ -54,7 +54,8 @@ func checkOne(qdb *qdb.Query, check qdb.CheckData, options Options, signatures [
 		err = e
 	} else {
 		w := print.NewLineSentences(markup.ToText(os.Stdout))
-		run := NewRuntimeOptions(w, qdb, options, tapestry.AllSignatures)
+		d := decode.NewDecoder(signatures)
+		run := qna.NewRuntimeOptions(w, qdb, d, options)
 		t := CheckOutput{
 			Name:   check.Name,
 			Domain: check.Domain,
@@ -67,7 +68,7 @@ func checkOne(qdb *qdb.Query, check qdb.CheckData, options Options, signatures [
 	return
 }
 
-func readLegacyExpectation(check qdb.CheckData) (ret string, err error) {
+func readLegacyExpectation(check query.CheckData) (ret string, err error) {
 	if len(check.Value) > 0 {
 		if v, e := literal.ReadLiteral(check.Aff, "", check.Value); e != nil {
 			err = e

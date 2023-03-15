@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"flag"
+	"git.sr.ht/~ionous/tapestry/support/check"
 	"log"
 	"path/filepath"
 
@@ -48,7 +49,7 @@ func checkFile(inFile, testName string, opt qna.Options) (ret int, err error) {
 		if e := tables.CreateRun(db); e != nil {
 			err = e
 		} else {
-			ret, err = qna.CheckAll(db, testName, opt, tapestry.AllSignatures)
+			ret, err = check.CheckAll(db, testName, opt, tapestry.AllSignatures)
 		}
 	}
 	return

@@ -2,6 +2,7 @@ package list
 
 import (
 	"errors"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
@@ -21,7 +22,7 @@ func (op *ListReduce) reduce(run rt.Runtime) (err error) {
 	pat := op.PatternName
 	if tgt, e := assign.GetRootValue(run, op.Target); e != nil {
 		err = e
-	} else if fromList, e := assign.GetSafeAssignment(run, op.List); e != nil {
+	} else if fromList, e := safe.GetAssignment(run, op.List); e != nil {
 		err = e
 	} else if !affine.IsList(fromList.Affinity()) {
 		err = errutil.New("not a list")
