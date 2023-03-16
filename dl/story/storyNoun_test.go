@@ -14,7 +14,7 @@ import (
 // test named nouns
 func TestImportNamedNouns(t *testing.T) {
 	var els []eph.Ephemera
-	k := imp.NewImporter(collectEphemera(&els), storyMarshaller)
+	k := imp.NewImporter(collectEphemera(&els))
 	// this is really import noun properties at this point...
 	if _, e := story.ImportNouns(k, []string{
 		"our Trevor",

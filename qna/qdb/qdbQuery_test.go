@@ -11,7 +11,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/support/asm"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
@@ -306,7 +305,7 @@ func createTable(db *sql.DB, cb func(eph.Writer) error) (err error) {
 		err = errutil.New("couldnt create model", e)
 	} else if tx, e := db.Begin(); e != nil {
 		err = errutil.New("couldnt create transaction", e)
-	} else if e := cb(asm.NewModelWriter(func(q string, args ...interface{}) (err error) {
+	} else if e := cb(mdl.Writer(func(q string, args ...interface{}) (err error) {
 		// nothing is confusing about these many layered functions... nothing at all...
 		if _, e := tx.Exec(q, args...); e != nil {
 			err = e

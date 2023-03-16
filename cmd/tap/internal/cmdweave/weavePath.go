@@ -1,4 +1,4 @@
-package asm
+package cmdweave
 
 import (
 	"database/sql"
@@ -13,8 +13,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/imp"
-	"git.sr.ht/~ionous/tapestry/jsn"
-	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -27,10 +25,10 @@ const (
 )
 
 // lets do this in the dumbest of ways for now.
-func AssembleFolder(srcPath, outFile string) (err error) {
+func WeavePath(srcPath, outFile string) (err error) {
 	var cat eph.Catalog // fix: capture "Dilemmas" and LogWarning?
 	var writeErr error  // fix: this seems less than ideal; maybe writer should return err.
-	k := imp.NewImporter(collectEphemera(&cat, &writeErr), storyMarshaller)
+	k := imp.NewImporter(collectEphemera(&cat, &writeErr))
 	if e := importStoryFiles(k, srcPath); e != nil {
 		err = e
 	} else if writeErr != nil {
@@ -55,15 +53,10 @@ func assembleCat(cat *eph.Catalog, outFile string) (err error) {
 			err = errutil.New("couldn't create output file", outFile, e)
 		} else {
 			defer db.Close()
-			err = Assemble(cat, db)
+			err = Weave(cat, db)
 		}
 	}
 	return
-}
-
-// fix: this is probably only core marshal here.
-func storyMarshaller(m jsn.Marshalee) (string, error) {
-	return cout.Marshal(m, story.CompactEncoder)
 }
 
 func collectEphemera(cat *eph.Catalog, out *error) imp.WriterFun {
@@ -111,7 +104,7 @@ func readOne(k *imp.Importer, path string) (err error) {
 		err = e
 	} else if script, e := decodeStory(path, b); e != nil {
 		err = errutil.New("couldn't decode", path, "b/c", e)
-	} else if e := ImportStory(k, path, script); e != nil {
+	} else if e := story.ImportStory(k, path, script); e != nil {
 		err = errutil.New("couldn't import", path, "b/c", e)
 	}
 	return

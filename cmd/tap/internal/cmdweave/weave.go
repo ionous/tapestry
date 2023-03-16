@@ -1,7 +1,8 @@
-package asm
+package cmdweave
 
 import (
 	"database/sql"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/dl/eph"
@@ -10,7 +11,7 @@ import (
 )
 
 // write the catalog to the passed database
-func Assemble(cat *eph.Catalog, db *sql.DB) (err error) {
+func Weave(cat *eph.Catalog, db *sql.DB) (err error) {
 	var queue writeCache
 	if e := BuildCatalog(cat, &queue); e != nil {
 		err = e
@@ -21,7 +22,7 @@ func Assemble(cat *eph.Catalog, db *sql.DB) (err error) {
 		} else if tx, e := db.Begin(); e != nil {
 			err = errutil.New("couldnt create transaction", e)
 		} else {
-			w := NewModelWriter(func(q string, args ...interface{}) (err error) {
+			w := mdl.Writer(func(q string, args ...interface{}) (err error) {
 				if _, e := tx.Exec(q, args...); e != nil {
 					err = e
 				}

@@ -10,7 +10,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
-	"git.sr.ht/~ionous/tapestry/support/check"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 	"log"
@@ -57,7 +56,7 @@ func checkFile(inFile, testName string, opt qna.Options) (ret int, err error) {
 		if e := tables.CreateRun(db); e != nil {
 			err = e
 		} else {
-			ret, err = check.CheckAll(db, testName, opt, tapestry.AllSignatures)
+			ret, err = CheckAll(db, testName, opt, tapestry.AllSignatures)
 		}
 	}
 	return

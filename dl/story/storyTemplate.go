@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/express"
 	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/template"
@@ -58,8 +59,8 @@ func ConvertText(k *imp.Importer, str string) (ret string, err error) {
 		} else if eval, ok := got.(rt.TextEval); !ok {
 			err = errutil.Fmt("render template has unknown expression %T", got)
 		} else {
-			// ex. storyMarshaller
-			ret, err = k.Marshal(&assign.FromText{Value: eval})
+			// fix!
+			ret, err = cout.Marshal(&assign.FromText{Value: eval}, CompactEncoder)
 		}
 	}
 	return

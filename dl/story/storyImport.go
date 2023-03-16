@@ -10,11 +10,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-// StoryStatement - a marker interface for commands which produce facts about the game world.
-type StoryStatement interface {
-	PostImport(k *imp.Importer) error
-}
-
 // Execute - called by the macro runtime during weave.
 func (op *DefineTraits) Execute(macro rt.Runtime) error {
 	return imp.StoryStatement(macro, op)

@@ -52,22 +52,27 @@ func WriteSpecs(ifspecs fs.FS, onGroup func(string, []byte) error) (err error) {
 					// all the types in this group:
 					for _, key := range typeNames {
 						t := types.Types[key]
-						reg.AddType(t)
-						//
-						if name := specShortName(t); len(name) == 0 {
-							err = errutil.New("unknown type", t.Spec.Choice)
-						} else if e := tps.ExecuteTemplate(&out, name+".tmpl", t); e != nil {
-							err = errutil.Append(err, errutil.New(e, "couldnt process", key))
+						if t == nil {
+							err = errutil.Fmt("groups in groups need work still ( %q in %q )", key, groupName)
+							break
+						} else {
+							reg.AddType(t)
+							//
+							if name := specShortName(t); len(name) == 0 {
+								err = errutil.New("unknown type", t.Spec.Choice)
+							} else if e := tps.ExecuteTemplate(&out, name+".tmpl", t); e != nil {
+								err = errutil.Append(err, errutil.New(e, "couldnt process", key))
+							}
 						}
-					}
 
-					if e := writeLists(&out, reg, tps); e != nil {
-						err = errutil.Append(err, errutil.New(e, "couldnt write registrations"))
-					}
+						if e := writeLists(&out, reg, tps); e != nil {
+							err = errutil.Append(err, errutil.New(e, "couldnt write registrations"))
+						}
 
-					// get whatever we can of the output errors or no.
-					if e := onGroup(groupName, out.Bytes()); e != nil {
-						err = errutil.Append(err, e)
+						// get whatever we can of the output errors or no.
+						if e := onGroup(groupName, out.Bytes()); e != nil {
+							err = errutil.Append(err, e)
+						}
 					}
 				}
 			}

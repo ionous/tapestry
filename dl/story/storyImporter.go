@@ -1,8 +1,7 @@
-package asm
+package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
@@ -10,7 +9,12 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func ImportStory(k *imp.Importer, path string, tgt jsn.Marshalee) (err error) {
+// StoryStatement - a marker interface for commands which produce facts about the game world.
+type StoryStatement interface {
+	PostImport(k *imp.Importer) error
+}
+
+func ImportStory(k *imp.Importer, path string, tgt *StoryFile) error {
 	k.SetSource(path)
 	return importStory(k, tgt)
 }
@@ -36,7 +40,7 @@ func importStory(k *imp.Importer, tgt jsn.Marshalee) error {
 				} else if op, ok := flow.GetFlow().(*assign.CallPattern); !ok {
 					err = errutil.Fmt("trying to import something other than a response")
 				} else {
-					k.WriteEphemera(story.ImportCall(op))
+					k.WriteEphemera(ImportCall(op))
 				}
 				return
 			},

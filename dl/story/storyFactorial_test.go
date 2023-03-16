@@ -1,12 +1,12 @@
 package story_test
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/story"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/imp"
-	"git.sr.ht/~ionous/tapestry/support/asm"
 	"git.sr.ht/~ionous/tapestry/test/debug"
 	"github.com/kr/pretty"
 )
@@ -14,8 +14,8 @@ import (
 // read the factorial story
 func TestFactorialImport(t *testing.T) {
 	var els []eph.Ephemera
-	k := imp.NewImporter(collectEphemera(&els), storyMarshaller)
-	if e := asm.ImportStory(k, t.Name(), debug.FactorialStory); e != nil {
+	k := imp.NewImporter(collectEphemera(&els))
+	if e := story.ImportStory(k, t.Name(), debug.FactorialStory); e != nil {
 		t.Fatal(e)
 	} else {
 		// the hierarchical story as a flat list of commands used by the assembler

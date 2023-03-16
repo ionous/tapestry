@@ -1,8 +1,8 @@
-package asm
+package cmdweave
 
 import (
 	"database/sql"
-	"git.sr.ht/~ionous/tapestry/support/check"
+	check "git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdcheck"
 
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/qna"

@@ -1,10 +1,10 @@
-package check_test
+package cmdcheck_test
 
 import (
-	"git.sr.ht/~ionous/tapestry/support/check"
 	"os"
 	"testing"
 
+	check "git.sr.ht/~ionous/tapestry/cmd/tap/internal/cmdcheck"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
