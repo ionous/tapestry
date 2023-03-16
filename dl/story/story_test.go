@@ -15,7 +15,7 @@ import (
 )
 
 func TestImportStory(t *testing.T) {
-	var curr story.Story
+	var curr story.StoryFile
 	if e := story.Decode(&curr, debug.Blob, tapestry.AllSignatures); e != nil {
 		t.Fatal(e)
 	} else {

@@ -4,26 +4,37 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 
+// Execute - called by the macro runtime during weave.
+func (op *ExtendPattern) Execute(macro rt.Runtime) error {
+	return imp.StoryStatement(macro, op)
+}
+
 func (op *ExtendPattern) PostImport(k *imp.Importer) (err error) {
-	if name, e := safe.GetText(nil, op.PatternName); e != nil {
+	if name, e := safe.GetText(k, op.PatternName); e != nil {
 		err = e
 	} else if e := ImportRules(k, name.String(), "", op.Rules, eph.EphTiming{}); e != nil {
 		err = e
-	} else if locals := ImportLocals(k, name.String(), op.Locals); len(locals) > 0 {
+	} else if locals := ImportLocals(op.Locals); len(locals) > 0 {
 		k.WriteEphemera(&eph.EphPatterns{PatternName: name.String(), Locals: locals})
 		// write the rules last ( order doesnt matter except it helps with test output consistency )
 	}
 	return
 }
 
+// Execute - called by the macro runtime during weave.
+func (op *DefinePattern) Execute(macro rt.Runtime) error {
+	return imp.StoryStatement(macro, op)
+}
+
 // Adds a new pattern declaration and optionally some associated pattern parameters.
 func (op *DefinePattern) PostImport(k *imp.Importer) (err error) {
 	ps := op.reduceProps()
-	if name, e := safe.GetText(nil, op.PatternName); e != nil {
+	if name, e := safe.GetText(k, op.PatternName); e != nil {
 		err = e
 	} else {
 		var pres *eph.EphParams
@@ -116,7 +127,7 @@ func (op *PatternFlags) ReadFlags() (ret eph.EphTiming, err error) {
 	return
 }
 
-func ImportLocals(k *imp.Importer, patternName string, locals []FieldDefinition) (ret []eph.EphParams) {
+func ImportLocals(locals []FieldDefinition) (ret []eph.EphParams) {
 	for _, el := range locals {
 		if p, ok := el.GetParam(); ok {
 			ret = append(ret, p)

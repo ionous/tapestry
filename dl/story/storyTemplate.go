@@ -46,6 +46,8 @@ func convertTemplate(name, tmpl string) (ret *render.RenderResponse, err error) 
 
 // returns a string or a FromText assignment as a slice of bytes
 func ConvertText(k *imp.Importer, str string) (ret string, err error) {
+	// FIX: it would make more sense if the ephemera stored this as an rt.Assignment
+	// upgrade to include Affinity() for literal value, and all would be well.
 	if xs, e := template.Parse(str); e != nil {
 		err = e
 	} else if str, ok := getSimpleString(xs); ok {
@@ -56,6 +58,7 @@ func ConvertText(k *imp.Importer, str string) (ret string, err error) {
 		} else if eval, ok := got.(rt.TextEval); !ok {
 			err = errutil.Fmt("render template has unknown expression %T", got)
 		} else {
+			// ex. storyMarshaller
 			ret, err = k.Marshal(&assign.FromText{Value: eval})
 		}
 	}

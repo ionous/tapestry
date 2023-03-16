@@ -35,7 +35,6 @@ func TestRepeatingContainers(t *testing.T) {
 	} else if diff := pretty.Diff(reps,
 		[]repeatingContainer{
 			{"field_list", "field_value"},
-			{"paragraph", "story_statement"},
 		}); len(diff) > 0 {
 		for _, rep := range reps {
 			t.Log(rep.outer, rep.inner)
@@ -96,7 +95,7 @@ func TestStoryFileShape(t *testing.T) {
         "label": "Tapestry"
       },
       {
-        "name": "STORY_LINES",
+        "name": "STORY_STATEMENTS",
         "type": "input_statement",
         "checks": [
           "_story_statement_stack"

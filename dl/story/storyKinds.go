@@ -3,15 +3,21 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
+
+// Execute - called by the macro runtime during weave.
+func (op *DefineKinds) Execute(macro rt.Runtime) error {
+	return imp.StoryStatement(macro, op)
+}
 
 // ex. "cats are a kind of animal"
 func (op *DefineKinds) PostImport(k *imp.Importer) (err error) {
 	// FIX: macro runtime
-	if kinds, e := safe.GetTextList(nil, op.Kinds); e != nil {
+	if kinds, e := safe.GetTextList(k, op.Kinds); e != nil {
 		err = e
-	} else if ancestor, e := safe.GetText(nil, op.Ancestor); e != nil {
+	} else if ancestor, e := safe.GetText(k, op.Ancestor); e != nil {
 		err = e
 	} else {
 		for _, kind := range kinds.Strings() {
@@ -21,10 +27,15 @@ func (op *DefineKinds) PostImport(k *imp.Importer) (err error) {
 	return
 }
 
+// Execute - called by the macro runtime during weave.
+func (op *DefineFields) Execute(macro rt.Runtime) error {
+	return imp.StoryStatement(macro, op)
+}
+
 // ex. cats have some text called breed.
 // ex. horses have an aspect called speed.
 func (op *DefineFields) PostImport(k *imp.Importer) (err error) {
-	if kind, e := safe.GetText(nil, op.Kind); e != nil {
+	if kind, e := safe.GetText(k, op.Kind); e != nil {
 		err = e
 	} else if len(op.Fields) > 0 {
 		var ps []eph.EphParams

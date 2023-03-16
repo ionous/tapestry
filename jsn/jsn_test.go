@@ -21,8 +21,7 @@ import (
 // test that the detailed format can be used to write out, and read back in the same data
 // we dont much care what it looks like anymore.
 func TestDetailsEncodeDecode(t *testing.T) {
-	out := &story.StoryFile{StoryLines: debug.FactorialStory.Reformat()}
-	if d, e := dout.Encode(out); e != nil {
+	if d, e := dout.Encode(debug.FactorialStory); e != nil {
 		t.Fatal(e)
 	} else if b, e := json.Marshal(d); e != nil {
 		t.Fatal(e)
@@ -31,9 +30,8 @@ func TestDetailsEncodeDecode(t *testing.T) {
 		if e := din.Decode(&in, tapestry.Registry(), b); e != nil {
 			t.Fatal(e)
 		} else {
-			paragraphs := story.ReformatStory(in.StoryLines)
-			if diff := pretty.Diff(debug.FactorialStory, &paragraphs); len(diff) != 0 {
-				pretty.Print(in.StoryLines)
+			if diff := pretty.Diff(debug.FactorialStory, &in); len(diff) != 0 {
+				pretty.Print(in)
 				t.Fatal(diff)
 			}
 		}
@@ -42,8 +40,7 @@ func TestDetailsEncodeDecode(t *testing.T) {
 
 // test that the compact encoding matches a particular "golden image"
 func TestCompactEncoder(t *testing.T) {
-	file := &story.StoryFile{StoryLines: debug.FactorialStory.Reformat()}
-	if str, e := cout.Marshal(file, story.CompactEncoder); e != nil {
+	if str, e := cout.Marshal(debug.FactorialStory, story.CompactEncoder); e != nil {
 		t.Fatal(e)
 	} else if str != jsnTestIf {
 		t.Fatal(str)
@@ -58,9 +55,8 @@ func TestCompactDecode(t *testing.T) {
 		pretty.Println(file)
 		t.Fatal(e)
 	} else {
-		paragraphs := story.ReformatStory(file.StoryLines)
-		if diff := pretty.Diff(debug.FactorialStory, &paragraphs); len(diff) != 0 {
-			pretty.Print(file.StoryLines)
+		if diff := pretty.Diff(debug.FactorialStory, &file); len(diff) != 0 {
+			pretty.Print(file)
 			t.Fatal(diff)
 		}
 	}

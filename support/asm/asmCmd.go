@@ -2,6 +2,7 @@ package asm
 
 import (
 	"database/sql"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"log"
 	"os"
 	"path"
@@ -17,7 +18,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"git.sr.ht/~ionous/tapestry/web/files"
 	"github.com/ionous/errutil"
 )
 

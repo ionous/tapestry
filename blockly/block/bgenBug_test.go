@@ -83,7 +83,7 @@ func TestExcessState(t *testing.T) {
 // the stacks should all use the "stacked_kinds_of_kind" type
 func TestStoryLines(t *testing.T) {
 	if e := testBlocks(&story.StoryFile{
-		StoryLines: []story.StoryStatement{
+		StoryStatements: []story.StoryStatement{
 			&story.DefineKinds{
 				Kinds:    literal.Ts("cats"),
 				Ancestor: literal.T("animal"),
@@ -97,10 +97,10 @@ func TestStoryLines(t *testing.T) {
   "type": "story_file",
   "id": "test-1",
   "extraState": {
-    "STORY_LINES": 2
+    "STORY_STATEMENTS": 2
   },
   "inputs": {
-    "STORY_LINES": {
+    "STORY_STATEMENTS": {
       "block": {
         "type": "_define_kinds_stack",
         "id": "test-2",

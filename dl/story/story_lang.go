@@ -203,6 +203,7 @@ type ActionDecl struct {
 
 // User implemented slots:
 var _ StoryStatement = (*ActionDecl)(nil)
+var _ rt.Execute = (*ActionDecl)(nil)
 
 func (*ActionDecl) Compose() composer.Spec {
 	return composer.Spec{
@@ -1052,6 +1053,7 @@ type DefineFields struct {
 
 // User implemented slots:
 var _ StoryStatement = (*DefineFields)(nil)
+var _ rt.Execute = (*DefineFields)(nil)
 
 func (*DefineFields) Compose() composer.Spec {
 	return composer.Spec{
@@ -1164,6 +1166,7 @@ type DefineKinds struct {
 
 // User implemented slots:
 var _ StoryStatement = (*DefineKinds)(nil)
+var _ rt.Execute = (*DefineKinds)(nil)
 
 func (*DefineKinds) Compose() composer.Spec {
 	return composer.Spec{
@@ -1267,6 +1270,149 @@ func DefineKinds_Marshal(m jsn.Marshaler, val *DefineKinds) (err error) {
 	return
 }
 
+// DefineMacro Declare a function which can produce statements about the game world.
+// They are processed at import time, and they cannot call patterns
+// nor can patterns -- which are processed during play -- call macros.
+// Unlike patterns, they cannot be extended; the entire definition must live in one place.
+type DefineMacro struct {
+	MacroName       rt.TextEval       `if:"label=macro"`
+	Params          []FieldDefinition `if:"label=requires"`
+	Result          FieldDefinition   `if:"label=result"`
+	Locals          []FieldDefinition `if:"label=provides,optional"`
+	MacroStatements []rt.Execute      `if:"label=with"`
+	Markup          map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*DefineMacro)(nil)
+var _ rt.Execute = (*DefineMacro)(nil)
+
+func (*DefineMacro) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DefineMacro_Type,
+		Uses: composer.Type_Flow,
+		Lede: "define",
+	}
+}
+
+const DefineMacro_Type = "define_macro"
+const DefineMacro_Field_MacroName = "$MACRO_NAME"
+const DefineMacro_Field_Params = "$PARAMS"
+const DefineMacro_Field_Result = "$RESULT"
+const DefineMacro_Field_Locals = "$LOCALS"
+const DefineMacro_Field_MacroStatements = "$MACRO_STATEMENTS"
+
+func (op *DefineMacro) Marshal(m jsn.Marshaler) error {
+	return DefineMacro_Marshal(m, op)
+}
+
+type DefineMacro_Slice []DefineMacro
+
+func (op *DefineMacro_Slice) GetType() string { return DefineMacro_Type }
+
+func (op *DefineMacro_Slice) Marshal(m jsn.Marshaler) error {
+	return DefineMacro_Repeats_Marshal(m, (*[]DefineMacro)(op))
+}
+
+func (op *DefineMacro_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DefineMacro_Slice) SetSize(cnt int) {
+	var els []DefineMacro
+	if cnt >= 0 {
+		els = make(DefineMacro_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DefineMacro_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DefineMacro_Marshal(m, &(*op)[i])
+}
+
+func DefineMacro_Repeats_Marshal(m jsn.Marshaler, vals *[]DefineMacro) error {
+	return jsn.RepeatBlock(m, (*DefineMacro_Slice)(vals))
+}
+
+func DefineMacro_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefineMacro) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DefineMacro_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DefineMacro_Flow struct{ ptr *DefineMacro }
+
+func (n DefineMacro_Flow) GetType() string      { return DefineMacro_Type }
+func (n DefineMacro_Flow) GetLede() string      { return "define" }
+func (n DefineMacro_Flow) GetFlow() interface{} { return n.ptr }
+func (n DefineMacro_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DefineMacro); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DefineMacro_Optional_Marshal(m jsn.Marshaler, pv **DefineMacro) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DefineMacro_Marshal(m, *pv)
+	} else if !enc {
+		var v DefineMacro
+		if err = DefineMacro_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DefineMacro_Marshal(m jsn.Marshaler, val *DefineMacro) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DefineMacro_Flow{val}); err == nil {
+		e0 := m.MarshalKey("macro", DefineMacro_Field_MacroName)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.MacroName)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DefineMacro_Field_MacroName))
+		}
+		e1 := m.MarshalKey("requires", DefineMacro_Field_Params)
+		if e1 == nil {
+			e1 = FieldDefinition_Repeats_Marshal(m, &val.Params)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DefineMacro_Field_Params))
+		}
+		e2 := m.MarshalKey("result", DefineMacro_Field_Result)
+		if e2 == nil {
+			e2 = FieldDefinition_Marshal(m, &val.Result)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", DefineMacro_Field_Result))
+		}
+		e3 := m.MarshalKey("provides", DefineMacro_Field_Locals)
+		if e3 == nil {
+			e3 = FieldDefinition_Optional_Repeats_Marshal(m, &val.Locals)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", DefineMacro_Field_Locals))
+		}
+		e4 := m.MarshalKey("with", DefineMacro_Field_MacroStatements)
+		if e4 == nil {
+			e4 = rt.Execute_Repeats_Marshal(m, &val.MacroStatements)
+		}
+		if e4 != nil && e4 != jsn.Missing {
+			m.Error(errutil.New(e4, "in flow at", DefineMacro_Field_MacroStatements))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // DefineNounTraits
 type DefineNounTraits struct {
 	Nouns  rt.TextListEval `if:"label=nouns"`
@@ -1277,6 +1423,7 @@ type DefineNounTraits struct {
 
 // User implemented slots:
 var _ StoryStatement = (*DefineNounTraits)(nil)
+var _ rt.Execute = (*DefineNounTraits)(nil)
 
 func (*DefineNounTraits) Compose() composer.Spec {
 	return composer.Spec{
@@ -1397,6 +1544,7 @@ type DefineNouns struct {
 
 // User implemented slots:
 var _ StoryStatement = (*DefineNouns)(nil)
+var _ rt.Execute = (*DefineNouns)(nil)
 
 func (*DefineNouns) Compose() composer.Spec {
 	return composer.Spec{
@@ -1510,6 +1658,7 @@ type DefineOtherRelatives struct {
 
 // User implemented slots:
 var _ StoryStatement = (*DefineOtherRelatives)(nil)
+var _ rt.Execute = (*DefineOtherRelatives)(nil)
 
 func (*DefineOtherRelatives) Compose() composer.Spec {
 	return composer.Spec{
@@ -1635,6 +1784,7 @@ type DefinePattern struct {
 
 // User implemented slots:
 var _ StoryStatement = (*DefinePattern)(nil)
+var _ rt.Execute = (*DefinePattern)(nil)
 
 func (*DefinePattern) Compose() composer.Spec {
 	return composer.Spec{
@@ -1773,6 +1923,7 @@ type DefineRelatives struct {
 
 // User implemented slots:
 var _ StoryStatement = (*DefineRelatives)(nil)
+var _ rt.Execute = (*DefineRelatives)(nil)
 
 func (*DefineRelatives) Compose() composer.Spec {
 	return composer.Spec{
@@ -1901,6 +2052,7 @@ type DefineTraits struct {
 
 // User implemented slots:
 var _ StoryStatement = (*DefineTraits)(nil)
+var _ rt.Execute = (*DefineTraits)(nil)
 
 func (*DefineTraits) Compose() composer.Spec {
 	return composer.Spec{
@@ -2014,6 +2166,7 @@ type EventBlock struct {
 
 // User implemented slots:
 var _ StoryStatement = (*EventBlock)(nil)
+var _ rt.Execute = (*EventBlock)(nil)
 
 func (*EventBlock) Compose() composer.Spec {
 	return composer.Spec{
@@ -2516,6 +2669,7 @@ type ExtendPattern struct {
 
 // User implemented slots:
 var _ StoryStatement = (*ExtendPattern)(nil)
+var _ rt.Execute = (*ExtendPattern)(nil)
 
 func (*ExtendPattern) Compose() composer.Spec {
 	return composer.Spec{
@@ -2704,6 +2858,7 @@ type GrammarDecl struct {
 
 // User implemented slots:
 var _ StoryStatement = (*GrammarDecl)(nil)
+var _ rt.Execute = (*GrammarDecl)(nil)
 
 func (*GrammarDecl) Compose() composer.Spec {
 	return composer.Spec{
@@ -2807,6 +2962,7 @@ type KindOfRelation struct {
 
 // User implemented slots:
 var _ StoryStatement = (*KindOfRelation)(nil)
+var _ rt.Execute = (*KindOfRelation)(nil)
 
 func (*KindOfRelation) Compose() composer.Spec {
 	return composer.Spec{
@@ -2918,6 +3074,7 @@ type MakeOpposite struct {
 
 // User implemented slots:
 var _ StoryStatement = (*MakeOpposite)(nil)
+var _ rt.Execute = (*MakeOpposite)(nil)
 
 func (*MakeOpposite) Compose() composer.Spec {
 	return composer.Spec{
@@ -3031,6 +3188,7 @@ type MakePlural struct {
 
 // User implemented slots:
 var _ StoryStatement = (*MakePlural)(nil)
+var _ rt.Execute = (*MakePlural)(nil)
 
 func (*MakePlural) Compose() composer.Spec {
 	return composer.Spec{
@@ -3444,6 +3602,7 @@ type MapDeparting struct {
 
 // User implemented slots:
 var _ StoryStatement = (*MapDeparting)(nil)
+var _ rt.Execute = (*MapDeparting)(nil)
 
 func (*MapDeparting) Compose() composer.Spec {
 	return composer.Spec{
@@ -3650,6 +3809,7 @@ type MapHeading struct {
 
 // User implemented slots:
 var _ StoryStatement = (*MapHeading)(nil)
+var _ rt.Execute = (*MapHeading)(nil)
 
 func (*MapHeading) Compose() composer.Spec {
 	return composer.Spec{
@@ -3882,6 +4042,7 @@ type NounAssignment struct {
 
 // User implemented slots:
 var _ StoryStatement = (*NounAssignment)(nil)
+var _ rt.Execute = (*NounAssignment)(nil)
 
 func (*NounAssignment) Compose() composer.Spec {
 	return composer.Spec{
@@ -4544,105 +4705,6 @@ func PairedAction_Marshal(m jsn.Marshaler, val *PairedAction) (err error) {
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", PairedAction_Field_Kinds))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// Paragraph Phrases
-type Paragraph struct {
-	StoryStatement []StoryStatement `if:"label=_,optional"`
-	Markup         map[string]any
-}
-
-func (*Paragraph) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Paragraph_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Paragraph_Type = "paragraph"
-const Paragraph_Field_StoryStatement = "$STORY_STATEMENT"
-
-func (op *Paragraph) Marshal(m jsn.Marshaler) error {
-	return Paragraph_Marshal(m, op)
-}
-
-type Paragraph_Slice []Paragraph
-
-func (op *Paragraph_Slice) GetType() string { return Paragraph_Type }
-
-func (op *Paragraph_Slice) Marshal(m jsn.Marshaler) error {
-	return Paragraph_Repeats_Marshal(m, (*[]Paragraph)(op))
-}
-
-func (op *Paragraph_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Paragraph_Slice) SetSize(cnt int) {
-	var els []Paragraph
-	if cnt >= 0 {
-		els = make(Paragraph_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Paragraph_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Paragraph_Marshal(m, &(*op)[i])
-}
-
-func Paragraph_Repeats_Marshal(m jsn.Marshaler, vals *[]Paragraph) error {
-	return jsn.RepeatBlock(m, (*Paragraph_Slice)(vals))
-}
-
-func Paragraph_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Paragraph) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Paragraph_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Paragraph_Flow struct{ ptr *Paragraph }
-
-func (n Paragraph_Flow) GetType() string      { return Paragraph_Type }
-func (n Paragraph_Flow) GetLede() string      { return Paragraph_Type }
-func (n Paragraph_Flow) GetFlow() interface{} { return n.ptr }
-func (n Paragraph_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Paragraph); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Paragraph_Optional_Marshal(m jsn.Marshaler, pv **Paragraph) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Paragraph_Marshal(m, *pv)
-	} else if !enc {
-		var v Paragraph
-		if err = Paragraph_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Paragraph_Marshal(m jsn.Marshaler, val *Paragraph) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(Paragraph_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", Paragraph_Field_StoryStatement)
-		if e0 == nil {
-			e0 = StoryStatement_Optional_Repeats_Marshal(m, &val.StoryStatement)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Paragraph_Field_StoryStatement))
 		}
 		m.EndBlock()
 	}
@@ -5968,112 +6030,15 @@ func StoppingText_Marshal(m jsn.Marshaler, val *StoppingText) (err error) {
 	return
 }
 
-// Story
-type Story struct {
-	Paragraph []Paragraph `if:"label=paragraphs"`
-	Markup    map[string]any
-}
-
-func (*Story) Compose() composer.Spec {
-	return composer.Spec{
-		Name: Story_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const Story_Type = "story"
-const Story_Field_Paragraph = "$PARAGRAPH"
-
-func (op *Story) Marshal(m jsn.Marshaler) error {
-	return Story_Marshal(m, op)
-}
-
-type Story_Slice []Story
-
-func (op *Story_Slice) GetType() string { return Story_Type }
-
-func (op *Story_Slice) Marshal(m jsn.Marshaler) error {
-	return Story_Repeats_Marshal(m, (*[]Story)(op))
-}
-
-func (op *Story_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *Story_Slice) SetSize(cnt int) {
-	var els []Story
-	if cnt >= 0 {
-		els = make(Story_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *Story_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return Story_Marshal(m, &(*op)[i])
-}
-
-func Story_Repeats_Marshal(m jsn.Marshaler, vals *[]Story) error {
-	return jsn.RepeatBlock(m, (*Story_Slice)(vals))
-}
-
-func Story_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Story) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = Story_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type Story_Flow struct{ ptr *Story }
-
-func (n Story_Flow) GetType() string      { return Story_Type }
-func (n Story_Flow) GetLede() string      { return Story_Type }
-func (n Story_Flow) GetFlow() interface{} { return n.ptr }
-func (n Story_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*Story); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func Story_Optional_Marshal(m jsn.Marshaler, pv **Story) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = Story_Marshal(m, *pv)
-	} else if !enc {
-		var v Story
-		if err = Story_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func Story_Marshal(m jsn.Marshaler, val *Story) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(Story_Flow{val}); err == nil {
-		e0 := m.MarshalKey("paragraphs", Story_Field_Paragraph)
-		if e0 == nil {
-			e0 = Paragraph_Repeats_Marshal(m, &val.Paragraph)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", Story_Field_Paragraph))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// StoryBreak this cheats a bit by making the signature the same as the comment marker  that allows nodes which look like comments but are actually story breaks.
+// StoryBreak a command with a signature of the comment marker.
+// a cheat which allows nodes that appear to be comments but are actually story breaks.
 type StoryBreak struct {
 	Markup map[string]any
 }
 
 // User implemented slots:
 var _ StoryStatement = (*StoryBreak)(nil)
+var _ rt.Execute = (*StoryBreak)(nil)
 
 func (*StoryBreak) Compose() composer.Spec {
 	return composer.Spec{
@@ -6163,8 +6128,8 @@ func StoryBreak_Marshal(m jsn.Marshaler, val *StoryBreak) (err error) {
 
 // StoryFile top level node, currently just for blockly might eventually contain story metadata  ex. author, description...
 type StoryFile struct {
-	StoryLines []StoryStatement `if:"label=_"`
-	Markup     map[string]any
+	StoryStatements []StoryStatement `if:"label=_"`
+	Markup          map[string]any
 }
 
 func (*StoryFile) Compose() composer.Spec {
@@ -6176,7 +6141,7 @@ func (*StoryFile) Compose() composer.Spec {
 }
 
 const StoryFile_Type = "story_file"
-const StoryFile_Field_StoryLines = "$STORY_LINES"
+const StoryFile_Field_StoryStatements = "$STORY_STATEMENTS"
 
 func (op *StoryFile) Marshal(m jsn.Marshaler) error {
 	return StoryFile_Marshal(m, op)
@@ -6249,12 +6214,12 @@ func StoryFile_Optional_Marshal(m jsn.Marshaler, pv **StoryFile) (err error) {
 func StoryFile_Marshal(m jsn.Marshaler, val *StoryFile) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(StoryFile_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", StoryFile_Field_StoryLines)
+		e0 := m.MarshalKey("", StoryFile_Field_StoryStatements)
 		if e0 == nil {
-			e0 = StoryStatement_Repeats_Marshal(m, &val.StoryLines)
+			e0 = StoryStatement_Repeats_Marshal(m, &val.StoryStatements)
 		}
 		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", StoryFile_Field_StoryLines))
+			m.Error(errutil.New(e0, "in flow at", StoryFile_Field_StoryStatements))
 		}
 		m.EndBlock()
 	}
@@ -6590,6 +6555,7 @@ var Slats = []composer.Composer{
 	(*CycleText)(nil),
 	(*DefineFields)(nil),
 	(*DefineKinds)(nil),
+	(*DefineMacro)(nil),
 	(*DefineNounTraits)(nil),
 	(*DefineNouns)(nil),
 	(*DefineOtherRelatives)(nil),
@@ -6619,7 +6585,6 @@ var Slats = []composer.Composer{
 	(*OneToMany)(nil),
 	(*OneToOne)(nil),
 	(*PairedAction)(nil),
-	(*Paragraph)(nil),
 	(*PatternFlags)(nil),
 	(*PatternRule)(nil),
 	(*PatternType)(nil),
@@ -6633,7 +6598,6 @@ var Slats = []composer.Composer{
 	(*SingularKind)(nil),
 	(*SingularNoun)(nil),
 	(*StoppingText)(nil),
-	(*Story)(nil),
 	(*StoryBreak)(nil),
 	(*StoryFile)(nil),
 	(*TextField)(nil),
@@ -6661,8 +6625,6 @@ var Signatures = map[uint64]interface{}{
 	17075866407822548206: (*OneToMany)(nil),            /* OneToMany:kinds: */
 	13766274136867271026: (*OneToOne)(nil),             /* OneToOne:otherKind: */
 	18143853777230560632: (*PairedAction)(nil),         /* PairedAction: */
-	6457542997147343897:  (*Paragraph)(nil),            /* Paragraph */
-	1044755875845214073:  (*Paragraph)(nil),            /* Paragraph: */
 	355438255946453678:   (*PatternFlags)(nil),         /* PatternFlags: */
 	10703761093736583840: (*PatternRule)(nil),          /* PatternRule:does: */
 	1493717172765332753:  (*PatternRule)(nil),          /* PatternRule:flags:does: */
@@ -6673,10 +6635,10 @@ var Signatures = map[uint64]interface{}{
 	18092929693239672593: (*RelationCardinality)(nil),  /* RelationCardinality oneToMany: */
 	5587008972147064084:  (*RelationCardinality)(nil),  /* RelationCardinality oneToOne: */
 	12747929101973989672: (*SingularKind)(nil),         /* SingularKind: */
-	11597613116511938589: (*Story)(nil),                /* Story paragraphs: */
 	5991962903091297123:  (*StoryFile)(nil),            /* Tapestry: */
 	8990910809673849454:  (*EventHandler)(nil),         /* With:event:provides:rules: */
 	3588173502446728488:  (*EventHandler)(nil),         /* With:event:rules: */
+	15882152812809098721: (*StoryBreak)(nil),           /* execute=-- */
 	4360765066804052293:  (*StoryBreak)(nil),           /* story_statement=-- */
 	13010292396640781698: (*AspectField)(nil),          /* field_definition=Aspect: */
 	12738236274201716794: (*BoolField)(nil),            /* field_definition=Bool: */
@@ -6685,34 +6647,67 @@ var Signatures = map[uint64]interface{}{
 	124015053883609573:   (*BoolField)(nil),            /* field_definition=Bool:kind:initially: */
 	10143132576483224253: (*CountOf)(nil),              /* bool_eval=CountOf:num: */
 	231398832069830353:   (*CycleText)(nil),            /* text_eval=CycleText: */
+	2600953883978299185:  (*DefineFields)(nil),         /* execute=Define kind:fields: */
 	15268150405724581221: (*DefineFields)(nil),         /* story_statement=Define kind:fields: */
+	17025532743550436003: (*DefineKinds)(nil),          /* execute=Define kinds:as: */
 	11622379079031968031: (*DefineKinds)(nil),          /* story_statement=Define kinds:as: */
+	4088968181697308175:  (*DefineMacro)(nil),          /* execute=Define macro:requires:result:provides:with: */
+	13649996907616853483: (*DefineMacro)(nil),          /* story_statement=Define macro:requires:result:provides:with: */
+	15337064981331082689: (*DefineMacro)(nil),          /* execute=Define macro:requires:result:with: */
+	17317068367254309973: (*DefineMacro)(nil),          /* story_statement=Define macro:requires:result:with: */
+	4708575879451717005:  (*DefineNouns)(nil),          /* execute=Define nouns:as: */
 	7397461044941158073:  (*DefineNouns)(nil),          /* story_statement=Define nouns:as: */
+	5682348276020650768:  (*DefineRelatives)(nil),      /* execute=Define nouns:as:relation:otherNouns: */
 	15827986568629578700: (*DefineRelatives)(nil),      /* story_statement=Define nouns:as:relation:otherNouns: */
+	11310404142062902510: (*DefineNounTraits)(nil),     /* execute=Define nouns:as:traits: */
 	15286672803702417298: (*DefineNounTraits)(nil),     /* story_statement=Define nouns:as:traits: */
+	1721080043439298752:  (*DefineRelatives)(nil),      /* execute=Define nouns:relation:otherNouns: */
 	3677325358342499188:  (*DefineRelatives)(nil),      /* story_statement=Define nouns:relation:otherNouns: */
+	9505217264701509662:  (*DefineNounTraits)(nil),     /* execute=Define nouns:traits: */
 	15794171433650329114: (*DefineNounTraits)(nil),     /* story_statement=Define nouns:traits: */
+	15358769559004192942: (*DefinePattern)(nil),        /* execute=Define pattern:requires:result:provides:withRules: */
 	2733154260078704538:  (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:result:provides:withRules: */
+	13567867628780565820: (*DefinePattern)(nil),        /* execute=Define pattern:requires:result:withRules: */
 	13056176094891343360: (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:result:withRules: */
+	17765432678319840138: (*DefineOtherRelatives)(nil), /* execute=Define relation:nouns:otherNouns: */
 	3057287383316085006:  (*DefineOtherRelatives)(nil), /* story_statement=Define relation:nouns:otherNouns: */
+	5891130802416685089:  (*DefineTraits)(nil),         /* execute=Define traits:as: */
 	3652615969014829573:  (*DefineTraits)(nil),         /* story_statement=Define traits:as: */
+	13015531987120768169: (*NounAssignment)(nil),       /* execute=Define value:of:asLines: */
 	6282260507942600093:  (*NounAssignment)(nil),       /* story_statement=Define value:of:asLines: */
+	5241959995092605683:  (*MapDeparting)(nil),         /* execute=Departing from:via:and:otherRoom: */
 	12862689211056047959: (*MapDeparting)(nil),         /* story_statement=Departing from:via:and:otherRoom: */
+	11410817647196565135: (*ActionDecl)(nil),           /* execute=Event:action:args common: */
 	12226644017914492267: (*ActionDecl)(nil),           /* story_statement=Event:action:args common: */
+	16174722799178948842: (*ActionDecl)(nil),           /* execute=Event:action:args dual: */
 	11054984519068268358: (*ActionDecl)(nil),           /* story_statement=Event:action:args dual: */
+	9119181276963693562:  (*ActionDecl)(nil),           /* execute=Event:action:args none: */
 	8992747511707391102:  (*ActionDecl)(nil),           /* story_statement=Event:action:args none: */
+	13239915769926244872: (*ExtendPattern)(nil),        /* execute=Extend pattern:provides:withRules: */
 	17581573717059123596: (*ExtendPattern)(nil),        /* story_statement=Extend pattern:provides:withRules: */
+	478002506548269918:   (*ExtendPattern)(nil),        /* execute=Extend pattern:withRules: */
 	7244900390452508762:  (*ExtendPattern)(nil),        /* story_statement=Extend pattern:withRules: */
+	5982437905673817746:  (*GrammarDecl)(nil),          /* execute=GrammarDecl: */
 	4045441026877120438:  (*GrammarDecl)(nil),          /* story_statement=GrammarDecl: */
+	12883151399789323215: (*MapHeading)(nil),           /* execute=Heading:from:and:otherRoom: */
 	2625420806444094675:  (*MapHeading)(nil),           /* story_statement=Heading:from:and:otherRoom: */
+	5055073108490323709:  (*MapHeading)(nil),           /* execute=Heading:from:via:and:otherRoom: */
 	9997819433665596617:  (*MapHeading)(nil),           /* story_statement=Heading:from:via:and:otherRoom: */
+	11298072733429272983: (*KindOfRelation)(nil),       /* execute=KindOfRelation:cardinality manyToMany: */
 	14551249057549655331: (*KindOfRelation)(nil),       /* story_statement=KindOfRelation:cardinality manyToMany: */
+	9035327882324048362:  (*KindOfRelation)(nil),       /* execute=KindOfRelation:cardinality manyToOne: */
 	3383078616901163718:  (*KindOfRelation)(nil),       /* story_statement=KindOfRelation:cardinality manyToOne: */
+	1519703789264796442:  (*KindOfRelation)(nil),       /* execute=KindOfRelation:cardinality oneToMany: */
 	5643087631915217830:  (*KindOfRelation)(nil),       /* story_statement=KindOfRelation:cardinality oneToMany: */
+	17039693765620696745: (*KindOfRelation)(nil),       /* execute=KindOfRelation:cardinality oneToOne: */
 	5160168163884592453:  (*KindOfRelation)(nil),       /* story_statement=KindOfRelation:cardinality oneToOne: */
+	6487553415967640760:  (*EventBlock)(nil),           /* execute=Listen kinds:handlers: */
 	17526933228095224780: (*EventBlock)(nil),           /* story_statement=Listen kinds:handlers: */
+	8021277241735277711:  (*EventBlock)(nil),           /* execute=Listen noun:handlers: */
 	12304970653546840411: (*EventBlock)(nil),           /* story_statement=Listen noun:handlers: */
+	6624124429048254998:  (*MakeOpposite)(nil),         /* execute=Make:opposite: */
 	12130342806058120266: (*MakeOpposite)(nil),         /* story_statement=Make:opposite: */
+	14758176820705861311: (*MakePlural)(nil),           /* execute=Make:plural: */
 	8107023930195182683:  (*MakePlural)(nil),           /* story_statement=Make:plural: */
 	14427731589588473385: (*NothingField)(nil),         /* field_definition=Nothing */
 	10299801658819864730: (*NumListField)(nil),         /* field_definition=NumList: */

@@ -3,10 +3,17 @@ package imp
 import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/jsn"
+	"git.sr.ht/~ionous/tapestry/qna"
+	"git.sr.ht/~ionous/tapestry/qna/query"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"github.com/ionous/errutil"
+	"log"
 )
 
 // Importer helps read story specific json.
 type Importer struct {
+	// the importer uses a runtime so that it can handle macros.
+	rt.Runtime
 	// sometimes the importer needs to define a singleton like type or instance
 	oneTime     map[string]bool
 	autoCounter Counters
@@ -16,8 +23,8 @@ type Importer struct {
 	queue       []eph.Ephemera
 }
 
-// Post happens at the end of a json block after all of its dependencies have been imported.
-// This is generally the function most story statements implement.
+// PostImport - happens at the end of a json block after all of its dependencies have been PostImported.
+// Most story statements implement this interface.
 type PostImport interface {
 	PostImport(*Importer) error
 }
@@ -25,6 +32,20 @@ type PostImport interface {
 // PreImport happens at the opening of a json block and it can transform the value into something completely new.
 type PreImport interface {
 	PreImport(*Importer) (interface{}, error)
+}
+
+type EphemeraWriter interface{ WriteEphemera(eph.Ephemera) }
+
+// StoryStatement - import a single story statement.
+// used during weave, and expects that the runtime is the importer's own runtime.
+// ( as opposed to the story's playtime. )
+func StoryStatement(run rt.Runtime, op PostImport) (err error) {
+	if k, ok := run.(*Importer); !ok {
+		err = errutil.Fmt("runtime %T doesn't support story statements", run)
+	} else {
+		err = op.PostImport(k)
+	}
+	return
 }
 
 // fix: add origin
@@ -37,11 +58,15 @@ func NewImporter(writer WriterFun, marshal MarshalFun) *Importer {
 		Marshal:     marshal,
 		oneTime:     make(map[string]bool),
 		autoCounter: make(Counters),
+		Runtime: qna.NewRuntimeOptions(
+			log.Writer(),
+			query.QueryNone("import doesn't support object queries"),
+			qna.DecodeNone("import doesn't support the decoder"),
+			qna.NewOptions()),
 	}
 }
 
-func (k *Importer) SetSource(path string) {
-	//
+func (k *Importer) SetSource(string) {
 }
 
 func (k *Importer) Env() *Environ {

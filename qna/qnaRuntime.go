@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/qna/query"
-	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
@@ -14,14 +13,6 @@ import (
 	"io"
 	"log"
 )
-
-// Decoder transforms the raw bytes pulled from a query into in-memory commands.
-type Decoder interface {
-	DecodeField(b []byte, a affine.Affinity, fieldType string) (rt.Assignment, error)
-	DecodeAssignment(b []byte, a affine.Affinity) (rt.Assignment, error)
-	DecodeFilter(b []byte) (rt.BoolEval, error)
-	DecodeProg(b []byte) (rt.Execute_Slice, error)
-}
 
 func NewRuntimeOptions(w io.Writer, q query.Query, d Decoder, options Options) *Runner {
 	run := &Runner{

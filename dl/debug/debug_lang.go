@@ -726,15 +726,16 @@ func LoggingLevel_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]LoggingLevel) 
 
 // Test Create a scene
 type Test struct {
-	TestName  TestName               `if:"label=_"`
-	DependsOn TestName               `if:"label=depends_on,optional"`
-	WithScene []story.StoryStatement `if:"label=with_scene,optional"`
-	Do        []rt.Execute           `if:"label=do"`
-	Markup    map[string]any
+	TestName       TestName               `if:"label=_"`
+	DependsOn      TestName               `if:"label=depends_on,optional"`
+	TestStatements []story.StoryStatement `if:"label=with_scene,optional"`
+	Do             []rt.Execute           `if:"label=do"`
+	Markup         map[string]any
 }
 
 // User implemented slots:
 var _ story.StoryStatement = (*Test)(nil)
+var _ rt.Execute = (*Test)(nil)
 
 func (*Test) Compose() composer.Spec {
 	return composer.Spec{
@@ -746,7 +747,7 @@ func (*Test) Compose() composer.Spec {
 const Test_Type = "test"
 const Test_Field_TestName = "$TEST_NAME"
 const Test_Field_DependsOn = "$DEPENDS_ON"
-const Test_Field_WithScene = "$WITH_SCENE"
+const Test_Field_TestStatements = "$TEST_STATEMENTS"
 const Test_Field_Do = "$DO"
 
 func (op *Test) Marshal(m jsn.Marshaler) error {
@@ -834,12 +835,12 @@ func Test_Marshal(m jsn.Marshaler, val *Test) (err error) {
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", Test_Field_DependsOn))
 		}
-		e2 := m.MarshalKey("with_scene", Test_Field_WithScene)
+		e2 := m.MarshalKey("with_scene", Test_Field_TestStatements)
 		if e2 == nil {
-			e2 = story.StoryStatement_Optional_Repeats_Marshal(m, &val.WithScene)
+			e2 = story.StoryStatement_Optional_Repeats_Marshal(m, &val.TestStatements)
 		}
 		if e2 != nil && e2 != jsn.Missing {
-			m.Error(errutil.New(e2, "in flow at", Test_Field_WithScene))
+			m.Error(errutil.New(e2, "in flow at", Test_Field_TestStatements))
 		}
 		e3 := m.MarshalKey("do", Test_Field_Do)
 		if e3 == nil {
@@ -959,8 +960,12 @@ var Signatures = map[uint64]interface{}{
 	16489874106085927697: (*ExpectText)(nil),   /* execute=Expect text: */
 	11108202414968227788: (*Expect)(nil),       /* execute=Expect: */
 	14196615958578686010: (*DebugLog)(nil),     /* execute=Log:value: */
+	2871145226608221260:  (*Test)(nil),         /* execute=Test:dependsOn:do: */
 	9865864948070946448:  (*Test)(nil),         /* story_statement=Test:dependsOn:do: */
+	5453259149853633814:  (*Test)(nil),         /* execute=Test:dependsOn:withScene:do: */
 	12698818979331053506: (*Test)(nil),         /* story_statement=Test:dependsOn:withScene:do: */
+	13063212444104265068: (*Test)(nil),         /* execute=Test:do: */
 	9283516926116088792:  (*Test)(nil),         /* story_statement=Test:do: */
+	11682383000525011702: (*Test)(nil),         /* execute=Test:withScene:do: */
 	500333266696321514:   (*Test)(nil),         /* story_statement=Test:withScene:do: */
 }

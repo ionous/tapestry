@@ -1,30 +1,40 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
-	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
-// top level imports
+// StoryStatement - a marker interface for commands which produce facts about the game world.
 type StoryStatement interface {
-	PostImport(*imp.Importer) error
+	PostImport(k *imp.Importer) error
+}
+
+// Execute - called by the macro runtime during weave.
+func (op *DefineTraits) Execute(macro rt.Runtime) error {
+	return imp.StoryStatement(macro, op)
 }
 
 // (the) colors are red, blue, or green.
 func (op *DefineTraits) PostImport(k *imp.Importer) (err error) {
-	if traits, e := safe.GetTextList(nil, op.Traits); e != nil {
+	if traits, e := safe.GetTextList(k, op.Traits); e != nil {
 		err = e
-	} else if aspect, e := safe.GetText(nil, op.Aspect); e != nil {
+	} else if aspect, e := safe.GetText(k, op.Aspect); e != nil {
 		err = e
 	} else {
 		k.WriteEphemera(&eph.EphAspects{Aspects: aspect.String(), Traits: traits.Strings()})
 	}
 	return
+}
+
+// Execute - called by the macro runtime during weave.
+func (op *GrammarDecl) Execute(macro rt.Runtime) error {
+	return imp.StoryStatement(macro, op)
 }
 
 func (op *GrammarDecl) PostImport(k *imp.Importer) (err error) {
@@ -38,12 +48,17 @@ func (op *GrammarDecl) PostImport(k *imp.Importer) (err error) {
 	return
 }
 
+// Execute - called by the macro runtime during weave.
+func (op *DefineNounTraits) Execute(macro rt.Runtime) error {
+	return imp.StoryStatement(macro, op)
+}
+
 func (op *DefineNounTraits) PostImport(k *imp.Importer) (err error) {
-	if nouns, e := safe.GetTextList(nil, op.Nouns); e != nil {
+	if nouns, e := safe.GetTextList(k, op.Nouns); e != nil {
 		err = e
-	} else if kind, e := safe.GetOptionalText(nil, op.Kind, ""); e != nil {
+	} else if kind, e := safe.GetOptionalText(k, op.Kind, ""); e != nil {
 		err = e
-	} else if traits, e := safe.GetTextList(nil, op.Traits); e != nil {
+	} else if traits, e := safe.GetTextList(k, op.Traits); e != nil {
 		err = e
 	} else if bareNames, e := ImportNouns(k, nouns.Strings()); e != nil {
 		err = e
@@ -64,10 +79,15 @@ func (op *DefineNounTraits) PostImport(k *imp.Importer) (err error) {
 	return
 }
 
+// Execute - called by the macro runtime during weave.
+func (op *DefineNouns) Execute(macro rt.Runtime) error {
+	return imp.StoryStatement(macro, op)
+}
+
 func (op *DefineNouns) PostImport(k *imp.Importer) (err error) {
-	if nouns, e := safe.GetTextList(nil, op.Nouns); e != nil {
+	if nouns, e := safe.GetTextList(k, op.Nouns); e != nil {
 		err = e
-	} else if kind, e := safe.GetText(nil, op.Kind); e != nil {
+	} else if kind, e := safe.GetText(k, op.Kind); e != nil {
 		err = e
 	} else if bareNames, e := ImportNouns(k, nouns.Strings()); e != nil {
 		err = e
@@ -81,20 +101,16 @@ func (op *DefineNouns) PostImport(k *imp.Importer) (err error) {
 	return
 }
 
-// ex. The description of the nets is xxx
-func (op *NounAssignment) postImport(k *imp.Importer) (err error) {
-	if e := op.postImport(k); e != nil {
-		err = assign.CmdError(op, e)
-	} else {
-		err = e
-	}
-	return
+// Execute - called by the macro runtime during weave.
+func (op *NounAssignment) Execute(macro rt.Runtime) error {
+	return imp.StoryStatement(macro, op)
 }
 
+// ex. The description of the nets is xxx
 func (op *NounAssignment) PostImport(k *imp.Importer) (err error) {
-	if nouns, e := safe.GetTextList(nil, op.Nouns); e != nil {
+	if nouns, e := safe.GetTextList(k, op.Nouns); e != nil {
 		err = e
-	} else if field, e := safe.GetText(nil, op.FieldName); e != nil {
+	} else if field, e := safe.GetText(k, op.FieldName); e != nil {
 		err = e
 	} else if lines, e := ConvertText(k, op.Lines.String()); e != nil {
 		err = e
@@ -109,14 +125,19 @@ func (op *NounAssignment) PostImport(k *imp.Importer) (err error) {
 	return
 }
 
+// Execute - called by the macro runtime during weave.
+func (op *DefineRelatives) Execute(macro rt.Runtime) error {
+	return imp.StoryStatement(macro, op)
+}
+
 func (op *DefineRelatives) PostImport(k *imp.Importer) (err error) {
-	if nouns, e := safe.GetTextList(nil, op.Nouns); e != nil {
+	if nouns, e := safe.GetTextList(k, op.Nouns); e != nil {
 		err = e
-	} else if kind, e := safe.GetOptionalText(nil, op.Kind, ""); e != nil {
+	} else if kind, e := safe.GetOptionalText(k, op.Kind, ""); e != nil {
 		err = e
-	} else if relation, e := safe.GetText(nil, op.Relation); e != nil {
+	} else if relation, e := safe.GetText(k, op.Relation); e != nil {
 		err = e
-	} else if otherNouns, e := safe.GetTextList(nil, op.OtherNouns); e != nil {
+	} else if otherNouns, e := safe.GetTextList(k, op.OtherNouns); e != nil {
 		err = e
 	} else if a, e := ImportNouns(k, nouns.Strings()); e != nil {
 		err = e
@@ -137,12 +158,17 @@ func (op *DefineRelatives) PostImport(k *imp.Importer) (err error) {
 	return
 }
 
+// Execute - called by the macro runtime during weave.
+func (op *DefineOtherRelatives) Execute(macro rt.Runtime) error {
+	return imp.StoryStatement(macro, op)
+}
+
 func (op *DefineOtherRelatives) PostImport(k *imp.Importer) (err error) {
-	if nouns, e := safe.GetTextList(nil, op.Nouns); e != nil {
+	if nouns, e := safe.GetTextList(k, op.Nouns); e != nil {
 		err = e
-	} else if relation, e := safe.GetText(nil, op.Relation); e != nil {
+	} else if relation, e := safe.GetText(k, op.Relation); e != nil {
 		err = e
-	} else if otherNouns, e := safe.GetTextList(nil, op.OtherNouns); e != nil {
+	} else if otherNouns, e := safe.GetTextList(k, op.OtherNouns); e != nil {
 		err = e
 	} else if a, e := ImportNouns(k, nouns.Strings()); e != nil {
 		err = e

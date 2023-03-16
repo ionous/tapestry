@@ -3,6 +3,7 @@ package debug
 import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 func (op *Test) PreImport(k *imp.Importer) (ret interface{}, err error) {
@@ -14,6 +15,11 @@ func (op *Test) PreImport(k *imp.Importer) (ret interface{}, err error) {
 	// everything between this and "EndDomain" in the Post/PostImport will be in this test domain.
 	k.WriteEphemera(&eph.EphBeginDomain{Name: op.TestName.String(), Requires: req})
 	return
+}
+
+// Execute - called by the macro runtime during weave.
+func (op *Test) Execute(macro rt.Runtime) error {
+	return imp.StoryStatement(macro, op)
 }
 
 func (op *Test) PostImport(k *imp.Importer) (err error) {

@@ -13,36 +13,34 @@ func UserComment(s string) map[string]any {
 }
 
 // a program that can check factorials
-var FactorialStory = &story.Story{
-	Paragraph: []story.Paragraph{{
-		StoryStatement: []story.StoryStatement{
-			&debug.Test{
-				TestName: debug.TestName{
-					Str: "factorial",
-				},
-				Do: FactorialCheck,
+var FactorialStory = &story.StoryFile{
+	StoryStatements: []story.StoryStatement{
+		&debug.Test{
+			TestName: debug.TestName{
+				Str: "factorial",
 			},
-			&story.DefinePattern{
-				PatternName: T("factorial"),
-				Params: []story.FieldDefinition{
-					&story.NumberField{
-						Markup: UserComment("just one argument, a number called 'num'"),
-						Name:   "num",
-					}},
-				Result: &story.NumberField{
-					Markup: UserComment("the result uses the same variable as the pattern input does"),
+			Do: FactorialCheck,
+		},
+		&story.DefinePattern{
+			PatternName: T("factorial"),
+			Params: []story.FieldDefinition{
+				&story.NumberField{
+					Markup: UserComment("just one argument, a number called 'num'"),
 					Name:   "num",
-				},
-				Rules: []story.PatternRule{{
-					Markup: UserComment("rules within a set of rules are evaluated top to bottom"),
-					Guard:  FactorialIsZero,
-					Does:   FactorialUseOne,
-				}, {
-					Guard: &core.Always{},
-					Does:  FactorialMulMinusOne,
 				}},
+			Result: &story.NumberField{
+				Markup: UserComment("the result uses the same variable as the pattern input does"),
+				Name:   "num",
+			},
+			Rules: []story.PatternRule{{
+				Markup: UserComment("rules within a set of rules are evaluated top to bottom"),
+				Guard:  FactorialIsZero,
+				Does:   FactorialUseOne,
+			}, {
+				Guard: &core.Always{},
+				Does:  FactorialMulMinusOne,
 			}},
-	}},
+		}},
 }
 
 // run 3! factorial

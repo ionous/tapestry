@@ -144,7 +144,7 @@
                 [
                   {
                     "--": [
-                      "the lowest logging level.", 
+                      "the lowest logging level.",
                       "not displayed unless specifically requested."
                     ],
                     "Option:": "note"
@@ -170,7 +170,10 @@
           "--": "Create a scene",
           "Spec:slots:with flow:": [
             "test",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             {
               "Flow uses:": [
                 {
@@ -187,8 +190,9 @@
                   ]
                 },
                 {
-                  "Term:type:optional:repeats:": [
+                  "Term:name:type:optional:repeats:": [
                     "with_scene",
+                    "test_statements",
                     "story_statement",
                     true,
                     true

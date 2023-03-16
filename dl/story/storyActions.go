@@ -3,10 +3,16 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
-// PostImport - action generates pattern ephemera for now.
+// Execute - called by the macro runtime during weave.
+func (op *ActionDecl) Execute(macro rt.Runtime) error {
+	return imp.StoryStatement(macro, op)
+}
+
+// Execute - actions generate pattern ephemera.
 func (op *ActionDecl) PostImport(k *imp.Importer) (err error) {
 	extra := op.ActionParams.Value.(actionImporter).GetExtraParams()
 	// the extra "pattern kind" is informational only;

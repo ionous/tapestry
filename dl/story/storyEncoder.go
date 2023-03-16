@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
+	"git.sr.ht/~ionous/tapestry/rt"
 )
 
 // Write a story to a story file.
@@ -16,3 +17,8 @@ var CompactEncoder = core.CompactEncoder
 
 // story break is an empty do nothing statement, used as a paragraph marker.
 func (op *StoryBreak) PostImport(k *imp.Importer) error { return nil }
+
+// Execute - called by the macro runtime during weave.
+func (op *StoryBreak) Execute(macro rt.Runtime) error {
+	return imp.StoryStatement(macro, op)
+}

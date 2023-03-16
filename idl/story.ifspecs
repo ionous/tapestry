@@ -44,7 +44,10 @@
           "--": "Declare an activity: Activities help actors perform tasks: for instance, picking up or dropping items.  Activities involve either the player or an npc and possibly one or two other objects.",
           "Spec:slots:groups:with flow:": [
             "action_decl",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             "events",
             {
               "Flow:phrase:uses:": [
@@ -119,7 +122,10 @@
           "--": "Add traits to an aspect",
           "Spec:slots:with flow:": [
             "define_traits",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             {
               "Flow:uses:": [
                 "define",
@@ -313,7 +319,10 @@
           ],
           "Spec:slots:groups:with flow:": [
             "event_block",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             "events",
             {
               "Flow:phrase:uses:": [
@@ -444,7 +453,10 @@
           "--": "Read what the player types and turn it into actions.",
           "Spec:slots:groups:with flow:": [
             "grammar_decl",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             "grammar",
             {
               "Flow phrase:uses:": [
@@ -465,7 +477,10 @@
         {
           "Spec:slots:groups:with flow:": [
             "kind_of_relation",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             "relations",
             {
               "Flow phrase:uses:": [
@@ -493,7 +508,10 @@
           "--": "Add properties to a kind",
           "Spec:slots:with flow:": [
             "define_fields",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             {
               "Flow:uses:": [
                 "define",
@@ -519,7 +537,10 @@
         {
           "Spec:slots:with flow:": [
             "define_kinds",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             {
               "Flow:uses:": [
                 "define",
@@ -546,7 +567,10 @@
           "--": "The opposite of east is west.",
           "Spec:slots:groups:with flow:": [
             "make_opposite",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             "language",
             {
               "Flow:phrase:uses:": [
@@ -578,7 +602,10 @@
           ],
           "Spec:slots:groups:with flow:": [
             "make_plural",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             "language",
             {
               "Flow:phrase:uses:": [
@@ -679,7 +706,10 @@
           "--": "Leaving a room by by going through a door ( ex. departing the house via the front door... ).",
           "Spec:slots:groups:with flow:": [
             "map_departing",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             [
               "map_making",
               "modeling"
@@ -742,7 +772,10 @@
           "--": "Leaving a room by moving in a compass direction ( ex. heading east... ).",
           "Spec:slots:groups:with flow:": [
             "map_heading",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             [
               "map_making",
               "modeling"
@@ -797,7 +830,10 @@
           ],
           "Spec:slots:with flow:": [
             "noun_assignment",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             {
               "Flow:uses:": [
                 "define",
@@ -831,7 +867,10 @@
         {
           "Spec:slots:with flow:": [
             "define_nouns",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             {
               "Flow:uses:": [
                 "define",
@@ -857,7 +896,10 @@
         {
           "Spec:slots:with flow:": [
             "define_noun_traits",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             {
               "Flow:uses:": [
                 "define",
@@ -1032,34 +1074,15 @@
           ]
         },
         {
-          "--": "Phrases",
-          "Spec:groups:with flow:": [
-            "paragraph",
-            "statements",
-            {
-              "Flow phrase:uses:": [
-                "{$story_statement}",
-                [
-                  {
-                    "Term:name:optional:repeats:": [
-                      "_",
-                      "story_statement",
-                      true,
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
           "--": [
             "Change the behavior of an existing pattern."
           ],
           "Spec:slots:groups:with flow:": [
             "extend_pattern",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             "patterns",
             {
               "Flow:uses:": [
@@ -1096,13 +1119,76 @@
         },
         {
           "--": [
+            "Declare a function which can produce statements about the game world.",
+            "They are processed at import time, and they cannot call patterns",
+            "nor can patterns -- which are processed during play -- call macros.",
+            "Unlike patterns, they cannot be extended; the entire definition must live in one place."
+          ],
+          "Spec:slots:with flow:": [
+            "define_macro",
+            [
+              "story_statement",
+              "execute"
+            ],
+            {
+              "Flow:uses:": [
+                "define",
+                [
+                  {
+                    "Term:name:type:": [
+                      "macro",
+                      "macro_name",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                      "requires",
+                      "params",
+                      "field_definition",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:": [
+                      "result",
+                      "field_definition"
+                    ]
+                  },
+                  {
+                    "Term:name:type:optional:repeats:": [
+                      "provides",
+                      "locals",
+                      "field_definition",
+                      true,
+                      true
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                      "with",
+                      "macro_statements",
+                      "execute",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": [
             "Declare a new pattern.",
             "A pattern is a bundle of functions which can either change the game world or provide information about it.",
             "Each function in a given pattern has \"guards\" which determine whether the function applies in a particular situation."
           ],
           "Spec:slots:groups:with flow:": [
             "define_pattern",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             "patterns",
             {
               "Flow:uses:": [
@@ -1350,7 +1436,10 @@
           "--": "Relate nouns to each other",
           "Spec:slots:with flow:": [
             "define_relatives",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             {
               "Flow:uses:": [
                 "define",
@@ -1390,7 +1479,10 @@
           "--": "Relate nouns to each other",
           "Spec:slots:with flow:": [
             "define_other_relatives",
-            "story_statement",
+            [
+              "story_statement",
+              "execute"
+            ],
             {
               "Flow:uses:": [
                 "define",
@@ -1541,33 +1633,15 @@
           ]
         },
         {
-          "Spec:groups:with flow:": [
-            "story",
-            "statements",
-            {
-              "Flow phrase:uses:": [
-                "{paragraph$paragraph}",
-                [
-                  {
-                    "Term:name:repeats:": [
-                      "paragraphs",
-                      "paragraph",
-                      true
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
-        {
-          "--": "this cheats a bit by making the signature the same as the comment marker  that allows nodes which look like comments but are actually story breaks.",
-          "Spec:slots:groups:with flow:": [
+          "--": [
+            "a command with a signature of the comment marker.",
+            "a cheat which allows nodes that appear to be comments but are actually story breaks."
+          ],
+          "Spec:slots:with flow:": [
             "story_break",
-            "story_statement",
             [
-              "statements",
-              "internal"
+              "story_statement",
+              "execute"
             ],
             {
               "Flow:phrase:uses:": [
@@ -1583,10 +1657,7 @@
           "--blockly-color": "TAP_HUE_ROOT",
           "Spec:groups:with flow:": [
             "story_file",
-            [
-              "statements",
-              "mosaic:root_block"
-            ],
+            "mosaic:root_block",
             {
               "Flow:phrase:uses:": [
                 "tapestry",
@@ -1595,7 +1666,7 @@
                   {
                     "Term:name:type:repeats:": [
                       "_",
-                      "story_lines",
+                      "story_statements",
                       "story_statement",
                       true
                     ]
@@ -1609,9 +1680,8 @@
           "--": "Phrase",
           "--blockly-color": "VARIABLES_HUE",
           "--blockly-stack": true,
-          "Spec:groups:with slot:": [
+          "Spec:with slot:": [
             "story_statement",
-            "statements",
             {
               "Slot": true
             }

@@ -7,12 +7,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 )
 
-func (op *Comment) PostImport(k *imp.Importer) (err error) {
-	// do nothing for now.
+// PostImport - comment does nothing when imported.
+func (*Comment) PostImport(*imp.Importer) (none error) {
 	return
 }
 
-// turn a comment execute statement into a debug log.
+// PreImport turns a comment statement into a debug log.
 func (op *Comment) PreImport(k *imp.Importer) (ret interface{}, err error) {
 	if !k.Env().InProgram() {
 		ret = op
@@ -27,8 +27,8 @@ func (op *Comment) PreImport(k *imp.Importer) (ret interface{}, err error) {
 	return
 }
 
-var _ imp.PreImport = (*Comment)(nil)
-
-func (*Comment) Execute(rt.Runtime) error {
-	panic("unexpected use of story method")
+// Execute - called by the macro runtime during weave.
+// since PostImport doesnt do anything, neither do we.
+func (*Comment) Execute(rt.Runtime) (none error) {
+	return
 }

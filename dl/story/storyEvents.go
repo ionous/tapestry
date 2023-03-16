@@ -3,31 +3,36 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
 
-func (op *PluralKinds) GetName(k *imp.Importer) (ret string, err error) {
-	ret = op.String()
-	return
+func (op *PluralKinds) GetName() string {
+	return op.String()
+}
+
+func (op *SingularNoun) GetName() string {
+	return op.Name
+}
+
+// Execute - called by the macro runtime during weave.
+func (op *EventBlock) Execute(macro rt.Runtime) error {
+	return imp.StoryStatement(macro, op)
 }
 
 func (op *EventBlock) PostImport(k *imp.Importer) (err error) {
-	if opt, ok := op.Target.Value.(interface {
-		GetName(*imp.Importer) (string, error)
-	}); !ok {
-		// fix: not yet implemented for "NamedNoun" and should be.
+	if opt, ok := op.Target.Value.(interface{ GetName() string }); !ok {
 		err = errutil.Fmt("unknown event block target %T", opt)
-	} else if tgt, e := opt.GetName(k); e != nil {
-		err = e
 	} else {
+		tgt := opt.GetName()
 		// each handler is a rule...
 		for _, h := range op.Handlers {
 			evt := h.Event.String()
-			if flags, e := h.EventPhase.ReadFlags(k); e != nil {
+			if flags, e := h.EventPhase.ReadFlags(); e != nil {
 				err = errutil.Append(e)
 			} else if e := ImportRules(k, evt, tgt, h.Rules, flags); e != nil {
 				err = errutil.Append(e)
-			} else if locals := ImportLocals(k, evt, h.Locals); len(locals) > 0 {
+			} else if locals := ImportLocals(h.Locals); len(locals) > 0 {
 				// and these are locals used by those rules
 				k.WriteEphemera(&eph.EphPatterns{PatternName: evt, Locals: locals})
 			}
@@ -36,7 +41,7 @@ func (op *EventBlock) PostImport(k *imp.Importer) (err error) {
 	return
 }
 
-func (op *EventPhase) ReadFlags(k *imp.Importer) (ret eph.EphTiming, err error) {
+func (op *EventPhase) ReadFlags() (ret eph.EphTiming, err error) {
 	switch str := op.Str; str {
 	case EventPhase_Before:
 		ret = eph.EphTiming{eph.EphTiming_Before}

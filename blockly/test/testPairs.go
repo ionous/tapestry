@@ -239,7 +239,7 @@ var Pairs = []struct {
 	// nested content-free blocks
 	/*test*/ "Stack",
 	&story.StoryFile{
-		StoryLines: []story.StoryStatement{
+		StoryStatements: []story.StoryStatement{
 			&story.StoryBreak{},
 			&story.StoryBreak{},
 			&story.StoryBreak{},
@@ -247,10 +247,10 @@ var Pairs = []struct {
   "type": "story_file",
   "id": "test-1",
   "extraState": {
-    "STORY_LINES": 3
+    "STORY_STATEMENTS": 3
   },
   "inputs": {
-    "STORY_LINES": {
+    "STORY_STATEMENTS": {
       "block": {
         "type": "_story_break_stack",
         "id": "test-2",

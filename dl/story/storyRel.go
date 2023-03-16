@@ -3,8 +3,14 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
+
+// Execute - called by the macro runtime during weave.
+func (op *KindOfRelation) Execute(macro rt.Runtime) error {
+	return imp.StoryStatement(macro, op)
+}
 
 func (op *KindOfRelation) PostImport(k *imp.Importer) (err error) {
 	if card, e := op.Cardinality.GetCardinality(); e != nil {
