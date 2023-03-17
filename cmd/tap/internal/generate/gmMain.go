@@ -34,6 +34,7 @@ func WriteSpecs(ifspecs fs.FS, onGroup func(string, []byte) error) (err error) {
 		if tps, e := newTemplates(ctx); e != nil {
 			err = e
 		} else {
+		Loop:
 			for _, groupType := range types.Groups {
 				groupName := groupType.Name
 				ctx.currentGroup = groupName
@@ -44,7 +45,8 @@ func WriteSpecs(ifspecs fs.FS, onGroup func(string, []byte) error) (err error) {
 					"Package": groupName,
 					"Imports": []string{},
 				}); e != nil {
-					err = errutil.Append(err, errutil.New(e, "in header", groupName))
+					err = errutil.New(e, "in header", groupName)
+					break Loop
 				} else {
 					// registration lists per group
 					reg := distill.MakeRegistry(types.Types)
@@ -54,25 +56,27 @@ func WriteSpecs(ifspecs fs.FS, onGroup func(string, []byte) error) (err error) {
 						t := types.Types[key]
 						if t == nil {
 							err = errutil.Fmt("groups in groups need work still ( %q in %q )", key, groupName)
-							break
+							break Loop
 						} else {
 							reg.AddType(t)
 							//
 							if name := specShortName(t); len(name) == 0 {
 								err = errutil.New("unknown type", t.Spec.Choice)
+								break Loop
 							} else if e := tps.ExecuteTemplate(&out, name+".tmpl", t); e != nil {
-								err = errutil.Append(err, errutil.New(e, "couldnt process", key))
+								err = errutil.New(e, "couldnt process", key)
+								break Loop
 							}
 						}
+					}
 
-						if e := writeLists(&out, reg, tps); e != nil {
-							err = errutil.Append(err, errutil.New(e, "couldnt write registrations"))
-						}
+					if e := writeLists(&out, reg, tps); e != nil {
+						err = errutil.Append(err, errutil.New(e, "couldnt write registrations"))
+					}
 
-						// get whatever we can of the output errors or no.
-						if e := onGroup(groupName, out.Bytes()); e != nil {
-							err = errutil.Append(err, e)
-						}
+					// get whatever we can of the output errors or no.
+					if e := onGroup(groupName, out.Bytes()); e != nil {
+						err = errutil.Append(err, e)
 					}
 				}
 			}
