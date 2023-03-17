@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+  <object-set>
+    <table path="main.mdl_assign">
+      <column name="rowid" expr="ROWID"/>
+    </table>
+    <table path="main.mdl_check">
+      <column name="rowid" expr="ROWID"/>
+    </table>
+    <table path="main.mdl_domain">
+      <column name="rowid" expr="ROWID"/>
+    </table>
+    <table path="main.mdl_field">
+      <column name="rowid" expr="ROWID"/>
+    </table>
+    <table path="main.mdl_grammar">
+      <column name="rowid" expr="ROWID"/>
+    </table>
+    <table path="main.mdl_kind">
+      <column name="rowid" expr="ROWID"/>
+    </table>
+    <table path="main.mdl_name">
+      <column name="rowid" expr="ROWID"/>
+    </table>
+    <table path="main.mdl_noun">
+      <column name="rowid" expr="ROWID"/>
+    </table>
+    <table path="main.mdl_rev">
+      <column name="rowid" expr="ROWID"/>
+    </table>
+    <table path="main.mdl_pair">
+      <column name="rowid" expr="ROWID"/>
+    </table>
+    <table path="main.mdl_pat">
+      <column name="rowid" expr="ROWID"/>
+    </table>
+    <table path="main.mdl_plural">
+      <column name="rowid" expr="ROWID"/>
+    </table>
+    <table path="main.mdl_rel">
+      <column name="rowid" expr="ROWID"/>
+    </table>
+    <table path="main.mdl_rule">
+      <column name="rowid" expr="ROWID"/>
+    </table>
+    <table path="main.mdl_value">
+      <column name="rowid" expr="ROWID"/>
+    </table>
+  </object-set>
+</data>
