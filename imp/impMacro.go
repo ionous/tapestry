@@ -38,8 +38,8 @@ func (k macroKind) initializeRecord(run rt.Runtime, rec *g.Record) (err error) {
 
 type macroReg map[string]macroKind
 
-func (m macroReg) GetKindByName(n string) (ret *g.Kind, err error) {
-	if a, ok := m[n]; !ok {
+func (k *Importer) GetKindByName(n string) (ret *g.Kind, err error) {
+	if a, ok := k.macros[n]; !ok {
 		err = errutil.New("no such kind")
 	} else {
 		ret = a.Kind
@@ -52,7 +52,7 @@ func (k *Importer) Call(rec *g.Record, expectedReturn affine.Affinity) (ret g.Va
 	kind := rec.Kind()
 	if macro, ok := k.macros[kind.Name()]; !ok {
 		err = errutil.New("unknown macro", kind.Name())
-	} else if res, e := pattern.NewResults(k, rec, expectedReturn); e != nil {
+	} else if res, e := pattern.NewMacroResults(k, rec, expectedReturn); e != nil {
 		err = e
 	} else if e := macro.initializeRecord(k, rec); e != nil {
 		err = e
@@ -62,16 +62,12 @@ func (k *Importer) Call(rec *g.Record, expectedReturn affine.Affinity) (ret g.Va
 			err = e
 		} else if e := safe.RunAll(k, macro.do); e != nil {
 			err = e
+		} else if !res.ComputedResult() && expectedReturn != affine.None {
+			err = rt.NoResult{}
 		} else if v, e := res.GetResult(); e != nil {
 			err = e
 		} else {
-			// warning: in order to generate appropriate defaults ( ex. a record of the right type )
-			// while still informing the caller of lack of pattern decision in a concise manner
-			// can return both a valid value and an error
 			ret = v
-			if !res.ComputedResult() {
-				err = rt.NoResult{}
-			}
 		}
 		k.Stack.ReplaceScope(oldScope)
 	}
@@ -97,18 +93,20 @@ func (k *Importer) registerMacro(op *EphMacro) (err error) {
 		err = errutil.Fmt("macro %q already registered", name)
 	} else {
 		cnt := 1 + len(op.Params) + len(op.Locals)
-		init := make([]assign.Assignment, cnt)
-		fields := make([]g.Field, cnt)
+		init := make([]assign.Assignment, 0, cnt)
+		fields := make([]g.Field, 0, cnt)
 		addParam := func(p eph.EphParams) (err error) {
-			if u, e := p.Unify(op.PatternName); e != nil {
-				err = e
-			} else {
-				init = append(init, u.Initially)
-				fields = append(fields, g.Field{
-					Name:     u.Name,
-					Affinity: u.Affinity,
-					Type:     u.Type,
-				})
+			if len(p.Name) > 0 { // for now, silent skip nothing fields
+				if u, e := p.Unify(op.PatternName); e != nil {
+					err = e
+				} else {
+					init = append(init, u.Initially)
+					fields = append(fields, g.Field{
+						Name:     u.Name,
+						Affinity: u.Affinity,
+						Type:     u.Type,
+					})
+				}
 			}
 			return
 		}
@@ -121,15 +119,15 @@ func (k *Importer) registerMacro(op *EphMacro) (err error) {
 			}
 			return
 		}
-		if e := addParam(*op.Result); e != nil {
-			err = e
-		} else if e := addParams(op.Params); e != nil {
+		if e := addParams(op.Params); e != nil {
 			err = e
 		} else if e := addParams(op.Locals); e != nil {
 			err = e
+		} else if e := addParam(*op.Result); e != nil {
+			err = e // ^ to match patterns, result (if any) is last.
 		} else {
 			k.macros[name] = macroKind{
-				Kind: g.NewKind(k.macros, name, nil, fields),
+				Kind: g.NewKind(k, name, nil, fields),
 				init: init,
 				do:   op.MacroStatements,
 			}

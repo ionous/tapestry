@@ -1,6 +1,7 @@
 package query
 
-// QueryNone - implements Query by returning a NotImplemented error for every method.
+// QueryNone - implements Query by returning empty results for all reads,
+// and the NotImplemented error for mutating methods.
 type QueryNone string
 
 // verify that query none implements every method
@@ -14,7 +15,6 @@ func (e NotImplemented) Error() string {
 }
 
 func (q QueryNone) IsDomainActive(name string) (ret bool, err error) {
-	err = NotImplemented(q)
 	return
 }
 
@@ -24,72 +24,58 @@ func (q QueryNone) ActivateDomain(name string) (ret string, err error) {
 }
 
 func (q QueryNone) ReadChecks(actuallyJustThisOne string) (ret []CheckData, err error) {
-	err = NotImplemented(q)
 	return
 }
 
 func (q QueryNone) FieldsOf(kind string) (ret []FieldData, err error) {
-	err = NotImplemented(q)
 	return
 }
 
 func (q QueryNone) KindOfAncestors(kind string) (ret []string, err error) {
-	err = NotImplemented(q)
 	return
 }
 
 func (q QueryNone) NounInfo(name string) (ret NounInfo, err error) {
-	err = NotImplemented(q)
 	return
 }
 
 func (q QueryNone) NounIsNamed(id, name string) (ret bool, err error) {
-	err = NotImplemented(q)
 	return
 }
 
 func (q QueryNone) NounName(id string) (ret string, err error) {
-	err = NotImplemented(q)
 	return
 }
 
 func (q QueryNone) NounValue(id, field string) (ret []byte, err error) {
-	err = NotImplemented(q)
 	return
 }
 
 func (q QueryNone) NounsByKind(kind string) (ret []string, err error) {
-	err = NotImplemented(q)
 	return
 }
 
 func (q QueryNone) PluralToSingular(plural string) (ret string, err error) {
-	err = NotImplemented(q)
 	return
 }
 
 func (q QueryNone) PluralFromSingular(singular string) (ret string, err error) {
-	err = NotImplemented(q)
 	return
 }
 
 func (q QueryNone) PatternLabels(pat string) (ret []string, err error) {
-	err = NotImplemented(q)
 	return
 }
 
 func (q QueryNone) RulesFor(pat, target string) (ret []Rules, err error) {
-	err = NotImplemented(q)
 	return
 }
 
 func (q QueryNone) ReciprocalsOf(rel, id string) (ret []string, err error) {
-	err = NotImplemented(q)
 	return
 }
 
 func (q QueryNone) RelativesOf(rel, id string) (ret []string, err error) {
-	err = NotImplemented(q)
 	return
 }
 

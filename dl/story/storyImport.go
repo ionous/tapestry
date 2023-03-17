@@ -55,7 +55,7 @@ func (op *DefineNounTraits) PostImport(k *imp.Importer) (err error) {
 		err = e
 	} else if traits, e := safe.GetTextList(k, op.Traits); e != nil {
 		err = e
-	} else if bareNames, e := ImportNouns(k, nouns.Strings()); e != nil {
+	} else if bareNames, e := ImportNounProperties(k, nouns.Strings()); e != nil {
 		err = e
 	} else {
 		if kind := kind.String(); len(kind) > 0 {
@@ -84,7 +84,7 @@ func (op *DefineNouns) PostImport(k *imp.Importer) (err error) {
 		err = e
 	} else if kind, e := safe.GetText(k, op.Kind); e != nil {
 		err = e
-	} else if bareNames, e := ImportNouns(k, nouns.Strings()); e != nil {
+	} else if bareNames, e := ImportNounProperties(k, nouns.Strings()); e != nil {
 		err = e
 	} else {
 		if kind := kind.String(); len(kind) > 0 {
@@ -109,7 +109,7 @@ func (op *NounAssignment) PostImport(k *imp.Importer) (err error) {
 		err = e
 	} else if lines, e := ConvertText(k, op.Lines.String()); e != nil {
 		err = e
-	} else if subjects, e := ImportNouns(k, nouns.Strings()); e != nil {
+	} else if subjects, e := ReadNouns(k, nouns.Strings()); e != nil {
 		err = e
 	} else {
 		field, lines := field.String(), T(lines)
@@ -134,9 +134,9 @@ func (op *DefineRelatives) PostImport(k *imp.Importer) (err error) {
 		err = e
 	} else if otherNouns, e := safe.GetTextList(k, op.OtherNouns); e != nil {
 		err = e
-	} else if a, e := ImportNouns(k, nouns.Strings()); e != nil {
+	} else if a, e := ReadNouns(k, nouns.Strings()); e != nil {
 		err = e
-	} else if b, e := ImportNouns(k, otherNouns.Strings()); e != nil {
+	} else if b, e := ReadNouns(k, otherNouns.Strings()); e != nil {
 		err = e
 	} else {
 		for _, subject := range a {
@@ -165,9 +165,9 @@ func (op *DefineOtherRelatives) PostImport(k *imp.Importer) (err error) {
 		err = e
 	} else if otherNouns, e := safe.GetTextList(k, op.OtherNouns); e != nil {
 		err = e
-	} else if a, e := ImportNouns(k, nouns.Strings()); e != nil {
+	} else if a, e := ReadNouns(k, nouns.Strings()); e != nil {
 		err = e
-	} else if b, e := ImportNouns(k, otherNouns.Strings()); e != nil {
+	} else if b, e := ReadNouns(k, otherNouns.Strings()); e != nil {
 		err = e
 	} else {
 		if rel := relation.String(); len(rel) > 0 {

@@ -52,6 +52,21 @@ func NewResults(run rt.Runtime, rec *g.Record, aff affine.Affinity) (ret *Result
 	return
 }
 
+func NewMacroResults(run rt.Runtime, rec *g.Record, aff affine.Affinity) (ret *Results, err error) {
+	var resultField string
+	if len(aff) != 0 {
+		k := rec.Kind()
+		f := k.Field(k.NumField() - 1)
+		resultField = f.Name
+	}
+	ret = &Results{
+		rec:         rec,
+		resultField: resultField,
+		expectedAff: aff,
+	}
+	return
+}
+
 func (rw *Results) Record() *g.Record {
 	return rw.rec
 }

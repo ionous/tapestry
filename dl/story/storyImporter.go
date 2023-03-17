@@ -22,6 +22,7 @@ func ImportStory(k *imp.Importer, path string, tgt *StoryFile) error {
 // post-processing hooks
 func importStory(k *imp.Importer, tgt jsn.Marshalee) error {
 	ts := chart.MakeEncoder()
+	macroDepth := 0
 	return ts.Marshal(tgt, chart.Map(&ts, chart.BlockMap{
 		rt.Execute_Type: chart.KeyMap{
 			chart.BlockStart: func(b jsn.Block, _ interface{}) (err error) {
@@ -30,6 +31,16 @@ func importStory(k *imp.Importer, tgt jsn.Marshalee) error {
 			},
 			chart.BlockEnd: func(b jsn.Block, _ interface{}) (err error) {
 				k.Env().ActivityDepth--
+				return
+			},
+		},
+		DefineMacro_Type: chart.KeyMap{
+			chart.BlockStart: func(b jsn.Block, _ interface{}) (err error) {
+				macroDepth++
+				return
+			},
+			chart.BlockEnd: func(b jsn.Block, _ interface{}) (err error) {
+				macroDepth--
 				return
 			},
 		},
@@ -61,12 +72,16 @@ func importStory(k *imp.Importer, tgt jsn.Marshalee) error {
 				return
 			},
 			chart.BlockEnd: func(b jsn.Block, v interface{}) (err error) {
-				// sometimes we also get slice blocks...
-				if slot, ok := b.(jsn.SlotBlock); ok {
-					// sometimes we get empty slots...
-					if val, ok := slot.GetSlot(); ok {
-						if stmt, ok := val.(imp.PostImport); ok {
-							err = stmt.PostImport(k)
+				// ignore the contents of macros, because those will get executed by the macro
+				// tbd: macros in macros, and macros containing pre-import statements.
+				if macroDepth == 0 {
+					// sometimes we also get slice blocks...
+					if slot, ok := b.(jsn.SlotBlock); ok {
+						// sometimes we get empty slots...
+						if val, ok := slot.GetSlot(); ok {
+							if stmt, ok := val.(imp.PostImport); ok {
+								err = stmt.PostImport(k)
+							}
 						}
 					}
 				}

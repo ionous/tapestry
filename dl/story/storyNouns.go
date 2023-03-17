@@ -11,7 +11,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
 
-func ImportNouns(k *imp.Importer, nouns []string) (ret []string, err error) {
+// ImportNounProperties -
+// reads ancillary information about nouns from their names and declares properties for them.
+// ex. proper or plural names, etc.
+func ImportNounProperties(k *imp.Importer, nouns []string) (ret []string, err error) {
 	// declare a noun class that has several default fields
 	// should be moved to script.
 	if once := "noun"; k.Once(once) {
@@ -20,13 +23,32 @@ func ImportNouns(k *imp.Importer, nouns []string) (ret []string, err error) {
 		k.AddImplicitAspect("noun_types", "objects", "common_named", "proper_named", "counted")
 		// whether a player can refer to an object by its name.
 		k.AddImplicitAspect("private_names", "objects", "publicly_named", "privately_named")
+		k.AddImplicitAspect("private_names", "objects", "publicly_named", "privately_named")
 	}
+	ret = make([]string, 0, len(nouns))
 	for _, noun := range nouns {
 		if next, e := importNoun(k, noun, ret); e != nil {
 			err = e
 			break
 		} else {
 			ret = next
+		}
+	}
+	return
+}
+
+// ReadNouns - reads noun names without declaring any properties....
+// fix? unless they are counted nouns ( for backwards compatibility of "two cats whereabouts the kitchen" )
+func ReadNouns(k *imp.Importer, nouns []string) (ret []string, err error) {
+	ret = make([]string, 0, len(nouns))
+	for _, noun := range nouns {
+		if a := makeArticleName(noun); a.count == 0 {
+			ret = append(ret, a.name)
+		} else if ns, e := importCountedNoun(k, a.count, a.name); e == nil {
+			ret = append(ret, ns...)
+		} else {
+			err = e
+			break
 		}
 	}
 	return

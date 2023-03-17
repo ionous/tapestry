@@ -16,7 +16,7 @@ func TestImportNamedNouns(t *testing.T) {
 	var els []eph.Ephemera
 	k := imp.NewImporter(collectEphemera(&els))
 	// this is really import noun properties at this point...
-	if _, e := story.ImportNouns(k, []string{
+	if _, e := story.ImportNounProperties(k, []string{
 		"our Trevor",
 		"an apple",
 		// note: we cant really test counted nouns without weaving

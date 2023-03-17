@@ -43,9 +43,9 @@ func (op *DefineMacro) PostImport(k *imp.Importer) (err error) {
 	return
 }
 
+// PostImport for macros calls Execute
 func (op *CallMacro) PostImport(k *imp.Importer) error {
-	//TODO implement me
-	panic("implement me")
+	return op.Execute(k)
 }
 
 func (op *CallMacro) Execute(run rt.Runtime) error {

@@ -1977,6 +1977,324 @@ func ListSplice_Marshal(m jsn.Marshaler, val *ListSplice) (err error) {
 	return
 }
 
+// MakeNumList
+type MakeNumList struct {
+	Values []rt.NumberEval `if:"label=of_numbers"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.NumListEval = (*MakeNumList)(nil)
+
+func (*MakeNumList) Compose() composer.Spec {
+	return composer.Spec{
+		Name: MakeNumList_Type,
+		Uses: composer.Type_Flow,
+		Lede: "list",
+	}
+}
+
+const MakeNumList_Type = "make_num_list"
+const MakeNumList_Field_Values = "$VALUES"
+
+func (op *MakeNumList) Marshal(m jsn.Marshaler) error {
+	return MakeNumList_Marshal(m, op)
+}
+
+type MakeNumList_Slice []MakeNumList
+
+func (op *MakeNumList_Slice) GetType() string { return MakeNumList_Type }
+
+func (op *MakeNumList_Slice) Marshal(m jsn.Marshaler) error {
+	return MakeNumList_Repeats_Marshal(m, (*[]MakeNumList)(op))
+}
+
+func (op *MakeNumList_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *MakeNumList_Slice) SetSize(cnt int) {
+	var els []MakeNumList
+	if cnt >= 0 {
+		els = make(MakeNumList_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *MakeNumList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return MakeNumList_Marshal(m, &(*op)[i])
+}
+
+func MakeNumList_Repeats_Marshal(m jsn.Marshaler, vals *[]MakeNumList) error {
+	return jsn.RepeatBlock(m, (*MakeNumList_Slice)(vals))
+}
+
+func MakeNumList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MakeNumList) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = MakeNumList_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type MakeNumList_Flow struct{ ptr *MakeNumList }
+
+func (n MakeNumList_Flow) GetType() string      { return MakeNumList_Type }
+func (n MakeNumList_Flow) GetLede() string      { return "list" }
+func (n MakeNumList_Flow) GetFlow() interface{} { return n.ptr }
+func (n MakeNumList_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*MakeNumList); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func MakeNumList_Optional_Marshal(m jsn.Marshaler, pv **MakeNumList) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = MakeNumList_Marshal(m, *pv)
+	} else if !enc {
+		var v MakeNumList
+		if err = MakeNumList_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func MakeNumList_Marshal(m jsn.Marshaler, val *MakeNumList) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(MakeNumList_Flow{val}); err == nil {
+		e0 := m.MarshalKey("of_numbers", MakeNumList_Field_Values)
+		if e0 == nil {
+			e0 = rt.NumberEval_Repeats_Marshal(m, &val.Values)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", MakeNumList_Field_Values))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// MakeRecordList
+type MakeRecordList struct {
+	Values []rt.RecordEval `if:"label=of_records"`
+	Kind   rt.TextEval     `if:"label=of_type"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.RecordListEval = (*MakeRecordList)(nil)
+
+func (*MakeRecordList) Compose() composer.Spec {
+	return composer.Spec{
+		Name: MakeRecordList_Type,
+		Uses: composer.Type_Flow,
+		Lede: "list",
+	}
+}
+
+const MakeRecordList_Type = "make_record_list"
+const MakeRecordList_Field_Values = "$VALUES"
+const MakeRecordList_Field_Kind = "$KIND"
+
+func (op *MakeRecordList) Marshal(m jsn.Marshaler) error {
+	return MakeRecordList_Marshal(m, op)
+}
+
+type MakeRecordList_Slice []MakeRecordList
+
+func (op *MakeRecordList_Slice) GetType() string { return MakeRecordList_Type }
+
+func (op *MakeRecordList_Slice) Marshal(m jsn.Marshaler) error {
+	return MakeRecordList_Repeats_Marshal(m, (*[]MakeRecordList)(op))
+}
+
+func (op *MakeRecordList_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *MakeRecordList_Slice) SetSize(cnt int) {
+	var els []MakeRecordList
+	if cnt >= 0 {
+		els = make(MakeRecordList_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *MakeRecordList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return MakeRecordList_Marshal(m, &(*op)[i])
+}
+
+func MakeRecordList_Repeats_Marshal(m jsn.Marshaler, vals *[]MakeRecordList) error {
+	return jsn.RepeatBlock(m, (*MakeRecordList_Slice)(vals))
+}
+
+func MakeRecordList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MakeRecordList) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = MakeRecordList_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type MakeRecordList_Flow struct{ ptr *MakeRecordList }
+
+func (n MakeRecordList_Flow) GetType() string      { return MakeRecordList_Type }
+func (n MakeRecordList_Flow) GetLede() string      { return "list" }
+func (n MakeRecordList_Flow) GetFlow() interface{} { return n.ptr }
+func (n MakeRecordList_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*MakeRecordList); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func MakeRecordList_Optional_Marshal(m jsn.Marshaler, pv **MakeRecordList) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = MakeRecordList_Marshal(m, *pv)
+	} else if !enc {
+		var v MakeRecordList
+		if err = MakeRecordList_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func MakeRecordList_Marshal(m jsn.Marshaler, val *MakeRecordList) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(MakeRecordList_Flow{val}); err == nil {
+		e0 := m.MarshalKey("of_records", MakeRecordList_Field_Values)
+		if e0 == nil {
+			e0 = rt.RecordEval_Repeats_Marshal(m, &val.Values)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", MakeRecordList_Field_Values))
+		}
+		e1 := m.MarshalKey("of_type", MakeRecordList_Field_Kind)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.Kind)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", MakeRecordList_Field_Kind))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// MakeTextList
+type MakeTextList struct {
+	Values []rt.TextEval `if:"label=of_text"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ rt.TextListEval = (*MakeTextList)(nil)
+
+func (*MakeTextList) Compose() composer.Spec {
+	return composer.Spec{
+		Name: MakeTextList_Type,
+		Uses: composer.Type_Flow,
+		Lede: "list",
+	}
+}
+
+const MakeTextList_Type = "make_text_list"
+const MakeTextList_Field_Values = "$VALUES"
+
+func (op *MakeTextList) Marshal(m jsn.Marshaler) error {
+	return MakeTextList_Marshal(m, op)
+}
+
+type MakeTextList_Slice []MakeTextList
+
+func (op *MakeTextList_Slice) GetType() string { return MakeTextList_Type }
+
+func (op *MakeTextList_Slice) Marshal(m jsn.Marshaler) error {
+	return MakeTextList_Repeats_Marshal(m, (*[]MakeTextList)(op))
+}
+
+func (op *MakeTextList_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *MakeTextList_Slice) SetSize(cnt int) {
+	var els []MakeTextList
+	if cnt >= 0 {
+		els = make(MakeTextList_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *MakeTextList_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return MakeTextList_Marshal(m, &(*op)[i])
+}
+
+func MakeTextList_Repeats_Marshal(m jsn.Marshaler, vals *[]MakeTextList) error {
+	return jsn.RepeatBlock(m, (*MakeTextList_Slice)(vals))
+}
+
+func MakeTextList_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]MakeTextList) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = MakeTextList_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type MakeTextList_Flow struct{ ptr *MakeTextList }
+
+func (n MakeTextList_Flow) GetType() string      { return MakeTextList_Type }
+func (n MakeTextList_Flow) GetLede() string      { return "list" }
+func (n MakeTextList_Flow) GetFlow() interface{} { return n.ptr }
+func (n MakeTextList_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*MakeTextList); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func MakeTextList_Optional_Marshal(m jsn.Marshaler, pv **MakeTextList) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = MakeTextList_Marshal(m, *pv)
+	} else if !enc {
+		var v MakeTextList
+		if err = MakeTextList_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func MakeTextList_Marshal(m jsn.Marshaler, val *MakeTextList) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(MakeTextList_Flow{val}); err == nil {
+		e0 := m.MarshalKey("of_text", MakeTextList_Field_Values)
+		if e0 == nil {
+			e0 = rt.TextEval_Repeats_Marshal(m, &val.Values)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", MakeTextList_Field_Values))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // Range Generates a series of numbers r[i] = (start + step*i) where i>=0.
 // Start and step default to 1, stop defaults to start;
 // the inputs are truncated to produce whole numbers;
@@ -2119,6 +2437,9 @@ var Slats = []composer.Composer{
 	(*ListSortNumbers)(nil),
 	(*ListSortText)(nil),
 	(*ListSplice)(nil),
+	(*MakeNumList)(nil),
+	(*MakeRecordList)(nil),
+	(*MakeTextList)(nil),
 	(*Range)(nil),
 }
 
@@ -2135,6 +2456,9 @@ var Signatures = map[uint64]interface{}{
 	8547752949201735569:  (*ListFind)(nil),        /* bool_eval=Find:inList: */
 	16815906459082105780: (*ListFind)(nil),        /* number_eval=Find:inList: */
 	3478260273963207965:  (*ListLen)(nil),         /* number_eval=Len: */
+	11141869806069158915: (*MakeNumList)(nil),     /* num_list_eval=List ofNumbers: */
+	10609280349940760977: (*MakeRecordList)(nil),  /* record_list_eval=List ofRecords:ofType: */
+	15650595833095485421: (*MakeTextList)(nil),    /* text_list_eval=List ofText: */
 	8449127989109999373:  (*ListMap)(nil),         /* execute=Map:fromList:using: */
 	14590825769568398889: (*ListPush)(nil),        /* execute=Push:into: */
 	17497959320325918107: (*ListPush)(nil),        /* execute=Push:into:atFront: */

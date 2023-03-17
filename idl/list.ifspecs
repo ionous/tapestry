@@ -294,6 +294,76 @@
           ]
         },
         {
+          "Spec:slots:with flow:": [
+            "make_text_list",
+            "text_list_eval",
+            {
+              "Flow:uses:": [
+                "list",
+                [
+                  {
+                    "Term:name:type:repeats:": [
+                      "of_text",
+                      "values",
+                      "text_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "make_num_list",
+            "num_list_eval",
+            {
+              "Flow:uses:": [
+                "list",
+                [
+                  {
+                    "Term:name:type:repeats:": [
+                      "of_numbers",
+                      "values",
+                      "number_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "Spec:slots:with flow:": [
+            "make_record_list",
+            "record_list_eval",
+            {
+              "Flow:uses:": [
+                "list",
+                [
+                  {
+                    "Term:name:type:repeats:": [
+                      "of_records",
+                      "values",
+                      "record_eval",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "of_type",
+                      "kind",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
           "--": [
             "Transform the values from one list and place the results in another list.",
             "The designated pattern is called with each value from the 'from list', one value at a time."
