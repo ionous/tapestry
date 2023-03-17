@@ -35,9 +35,9 @@ func (run *Runtime) Call(rec *g.Record, aff affine.Affinity) (ret g.Value, err e
 	//  see also maybe "Send" -- which uses "BuildPath"
 	if res, e := pattern.NewResults(run, rec, aff); e != nil {
 		err = e
-	} else if oldScope, e := run.ReplaceScope(res, true); e != nil {
-		err = e
 	} else {
+		oldScope := run.Stack.ReplaceScope(res)
+		// ignores the initialization of locals during testing...
 		var allFlags rt.Flags
 		if rules, e := run.GetRules(rec.Kind().Name(), "", &allFlags); e != nil {
 			err = e
@@ -49,8 +49,7 @@ func (run *Runtime) Call(rec *g.Record, aff affine.Affinity) (ret g.Value, err e
 				err = rt.NoResult{}
 			}
 		}
-		// only init can return an error
-		run.ReplaceScope(oldScope, false)
+		run.ReplaceScope(oldScope)
 	}
 	return
 }

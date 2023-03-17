@@ -1,19 +1,94 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
-
-func (op *DefineMacro) PreImport(k *imp.Importer) (err error) {
-	return nil
-}
 
 // Execute - called by the macro runtime during weave.
 func (op *DefineMacro) Execute(macro rt.Runtime) error {
 	return imp.StoryStatement(macro, op)
 }
 
+// PostImport - register the macro with the importer;
+// subsequent calls will then be able to find it.
 func (op *DefineMacro) PostImport(k *imp.Importer) (err error) {
-	return nil
+	if name, e := safe.GetText(k, op.MacroName); e != nil {
+		err = e
+	} else {
+		name := lang.Underscore(name.String())
+		out := eph.EphPatterns{
+			PatternName: name,
+			Params:      make([]eph.EphParams, 0, len(op.Params)),
+			Locals:      make([]eph.EphParams, 0, len(op.Params)),
+			Result:      new(eph.EphParams),
+		}
+		*out.Result, _ = op.Result.GetParam()
+		for _, f := range op.Params {
+			p, _ := f.GetParam()
+			out.Params = append(out.Params, p)
+		}
+		for _, f := range op.Locals {
+			p, _ := f.GetParam()
+			out.Locals = append(out.Locals, p)
+		}
+		k.WriteEphemera(&imp.EphMacro{out, op.MacroStatements})
+	}
+	return
+}
+
+func (op *CallMacro) PostImport(k *imp.Importer) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (op *CallMacro) Execute(run rt.Runtime) error {
+	_, err := op.determine(run, affine.None)
+	return err
+}
+
+func (op *CallMacro) GetBool(run rt.Runtime) (g.Value, error) {
+	return op.determine(run, affine.Bool)
+}
+
+func (op *CallMacro) GetNumber(run rt.Runtime) (g.Value, error) {
+	return op.determine(run, affine.Number)
+}
+
+func (op *CallMacro) GetText(run rt.Runtime) (g.Value, error) {
+	return op.determine(run, affine.Text)
+}
+
+func (op *CallMacro) GetRecord(run rt.Runtime) (g.Value, error) {
+	return op.determine(run, affine.Record)
+}
+
+func (op *CallMacro) GetNumList(run rt.Runtime) (g.Value, error) {
+	return op.determine(run, affine.NumList)
+}
+
+func (op *CallMacro) GetTextList(run rt.Runtime) (g.Value, error) {
+	return op.determine(run, affine.TextList)
+}
+
+func (op *CallMacro) GetRecordList(run rt.Runtime) (g.Value, error) {
+	return op.determine(run, affine.RecordList)
+}
+
+func (op *CallMacro) determine(run rt.Runtime, aff affine.Affinity) (ret g.Value, err error) {
+	name := lang.Underscore(op.MacroName)
+	if rec, e := assign.MakeRecord(run, name, op.Arguments...); e != nil {
+		err = assign.CmdError(op, e)
+	} else if v, e := run.Call(rec, aff); e != nil {
+		err = assign.CmdError(op, e)
+	} else {
+		ret = v
+	}
+	return
 }

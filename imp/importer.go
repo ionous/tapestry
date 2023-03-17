@@ -12,14 +12,14 @@ import (
 // Importer helps read story specific json.
 type Importer struct {
 	// the importer uses a runtime so that it can handle macros.
-	rt.Runtime
+	*qna.Runner
 	// sometimes the importer needs to define a singleton like type or instance
 	oneTime     map[string]bool
+	macros      macroReg
 	autoCounter Counters
 	env         Environ
 	writer      WriterFun
-	//Marshal     MarshalFun
-	queue []eph.Ephemera
+	queue       []eph.Ephemera
 }
 
 // PostImport - happens at the end of a json block after all of its dependencies have been PostImported.
@@ -52,15 +52,13 @@ func StoryStatement(run rt.Runtime, op PostImport) (err error) {
 // fix: add origin
 type WriterFun func(eph eph.Ephemera)
 
-//type MarshalFun func(jsn.Marshalee) (string, error)
-
 func NewImporter(writer WriterFun) *Importer {
 	return &Importer{
-		writer: writer,
-		//Marshal:     marshal,
+		writer:      writer,
+		macros:      make(macroReg),
 		oneTime:     make(map[string]bool),
 		autoCounter: make(Counters),
-		Runtime: qna.NewRuntimeOptions(
+		Runner: qna.NewRuntimeOptions(
 			log.Writer(),
 			query.QueryNone("import doesn't support object queries"),
 			qna.DecodeNone("import doesn't support the decoder"),
@@ -79,7 +77,11 @@ func (k *Importer) Env() *Environ {
 
 // WriteEphemera - implements EphemeraWriter; the key part of importation.
 func (k *Importer) WriteEphemera(op eph.Ephemera) {
-	k.writer(op)
+	if p, ok := op.(*EphMacro); !ok {
+		k.writer(op)
+	} else if e := k.registerMacro(p); e != nil {
+		log.Println(e) // hrm.
+	}
 }
 
 // WriteOnce elevates commands to the outermost domain.

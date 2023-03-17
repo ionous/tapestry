@@ -86,13 +86,13 @@ var FieldActions = PhaseAction{
 }
 
 type UniformField struct {
-	name, class string
-	affinity    affine.Affinity
-	initially   assign.Assignment
-	at          string
+	Name, Type string
+	Affinity   affine.Affinity
+	Initially  assign.Assignment
+	At         string
 }
 
-func (ep *EphParams) unify(at string) (UniformField, error) {
+func (ep *EphParams) Unify(at string) (UniformField, error) {
 	return MakeUniformField(ep.Affinity, ep.Name, ep.Class, at)
 }
 
@@ -110,7 +110,7 @@ func MakeUniformField(fieldAffinity Affinity, fieldName, fieldClass, at string) 
 		if len(class) == 0 && isRecordAffinity(aff) {
 			class = name
 		}
-		ret = UniformField{name: name, affinity: aff, class: class, at: at}
+		ret = UniformField{Name: name, Affinity: aff, Type: class, At: at}
 	}
 	return
 }
@@ -119,20 +119,20 @@ func MakeUniformField(fieldAffinity Affinity, fieldName, fieldClass, at string) 
 func (uf *UniformField) setAssignment(init assign.Assignment) (err error) {
 	if init != nil {
 		// fix? some statements have unknown affinity ( statements that pivot )
-		if initAff := assign.GetAffinity(init); len(initAff) > 0 && initAff != uf.affinity {
-			err = errutil.Fmt("mismatched affinity of initial value (a %s) for field %q (a %s)", initAff, uf.name, uf.affinity)
+		if initAff := assign.GetAffinity(init); len(initAff) > 0 && initAff != uf.Affinity {
+			err = errutil.Fmt("mismatched affinity of initial value (a %s) for field %q (a %s)", initAff, uf.Name, uf.Affinity)
 		} else {
-			uf.initially = init
+			uf.Initially = init
 		}
 	}
 	return
 }
 
 func (uf *UniformField) assembleField(kind *ScopedKind) (err error) {
-	if cls, classOk := kind.domain.GetPluralKind(uf.class); !classOk && len(uf.class) > 0 {
-		err = KindError{kind.name, errutil.Fmt("unknown class %q for field %q", uf.class, uf.name)}
-	} else if aff := uf.affinity; classOk && !isClassAffinity(aff) {
-		err = KindError{kind.name, errutil.Fmt("unexpected for field %q of class %q", uf.name, uf.class)}
+	if cls, classOk := kind.domain.GetPluralKind(uf.Type); !classOk && len(uf.Type) > 0 {
+		err = KindError{kind.name, errutil.Fmt("unknown class %q for field %q", uf.Type, uf.Name)}
+	} else if aff := uf.Affinity; classOk && !isClassAffinity(aff) {
+		err = KindError{kind.name, errutil.Fmt("unexpected for field %q of class %q", uf.Name, uf.Type)}
 	} else {
 		var clsName string
 		if classOk {
@@ -141,21 +141,21 @@ func (uf *UniformField) assembleField(kind *ScopedKind) (err error) {
 		// checks for conflicts, allows duplicates.
 		var conflict *Conflict
 		if e := kind.AddField(&fieldDef{
-			at:        uf.at,
-			name:      uf.name, // fieldName; already "uniform"
+			at:        uf.At,
+			name:      uf.Name, // fieldName; already "uniform"
 			affinity:  aff.String(),
 			class:     clsName,
-			initially: uf.initially,
+			initially: uf.Initially,
 		}); errors.As(e, &conflict) && conflict.Reason == Duplicated {
 			// handle conflicting inits...
 			// -- AddField needs refactoring to put this in there easily.
 			for i, was := range kind.fields {
-				if was.name == uf.name {
+				if was.name == uf.Name {
 					hadInit := was.initially != nil
-					wantsInit := uf.initially != nil
+					wantsInit := uf.Initially != nil
 					switch {
 					case wantsInit && !hadInit:
-						was.initially = uf.initially // use the init
+						was.initially = uf.Initially // use the init
 						kind.fields[i] = was         // update the list of structs
 					case wantsInit && hadInit:
 						conflict.Reason = Redefined
@@ -173,7 +173,7 @@ func (uf *UniformField) assembleField(kind *ScopedKind) (err error) {
 			isAspect := cls != nil && cls.HasParent(kindsOf.Aspect) && len(cls.aspects) > 0
 			// when the name of the field is the same as the name of the aspect
 			// that is our special "acts as trait" field, so add the set of traits ( to check for conflicts )
-			if isAspect && uf.name == clsName && aff == affine.Text {
+			if isAspect && uf.Name == clsName && aff == affine.Text {
 				err = kind.AddField(&cls.aspects[0])
 			}
 		}

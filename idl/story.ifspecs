@@ -1178,6 +1178,45 @@
           ]
         },
         {
+          "--": "Executes a macro, and potentially returns a value.",
+          "Spec:slots:with flow:": [
+            "call_macro",
+            [
+              "execute",
+              "bool_eval",
+              "number_eval",
+              "text_eval",
+              "record_eval",
+              "num_list_eval",
+              "text_list_eval",
+              "record_list_eval",
+              "story_statement"
+            ],
+            {
+              "Flow:uses:": [
+                "call",
+                [
+                  {
+                    "Term:name:type:": [
+                      "macro",
+                      "macro_name",
+                      "text"
+                    ]
+                  },
+                  {
+                    "Term:name:type:repeats:": [
+                      "args",
+                      "arguments",
+                      "arg",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
           "--": [
             "Declare a new pattern.",
             "A pattern is a bundle of functions which can either change the game world or provide information about it.",

@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/generic"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
 
@@ -80,6 +81,27 @@ func (run *Runner) buildKind(k string) (ret cachedKind, err error) {
 type cachedKind struct {
 	*g.Kind
 	init []rt.Assignment
+}
+
+// fix? probably would make more sense if this happened when the record was created instead of after.
+// to do that though, the "args" and "locals" would have to be separate
+// ( so that args can be put into scope for locals to see. )
+func (k cachedKind) initializeRecord(run rt.Runtime, rec *g.Record) (err error) {
+	for fieldIndex, init := range k.init {
+		if init != nil {
+			ft := k.Field(fieldIndex)
+			if src, e := safe.GetAssignment(run, init); e != nil {
+				err = errutil.New("error determining local", k.Name(), ft.Name, e)
+				break
+			} else if val, e := safe.AutoConvert(run, ft, src); e != nil {
+				err = e
+			} else if e := rec.SetIndexedField(fieldIndex, val); e != nil {
+				err = errutil.New("error setting local", k.Name(), ft.Name, e)
+				break
+			}
+		}
+	}
+	return
 }
 
 type fieldSet struct {

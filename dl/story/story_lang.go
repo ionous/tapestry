@@ -2,6 +2,7 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
@@ -716,6 +717,126 @@ func BoolField_Marshal(m jsn.Marshaler, val *BoolField) (err error) {
 		}
 		if e2 != nil && e2 != jsn.Missing {
 			m.Error(errutil.New(e2, "in flow at", BoolField_Field_Initially))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// CallMacro Executes a macro, and potentially returns a value.
+type CallMacro struct {
+	MacroName string       `if:"label=macro,type=text"`
+	Arguments []assign.Arg `if:"label=args"`
+	Markup    map[string]any
+}
+
+// User implemented slots:
+var _ rt.Execute = (*CallMacro)(nil)
+var _ rt.BoolEval = (*CallMacro)(nil)
+var _ rt.NumberEval = (*CallMacro)(nil)
+var _ rt.TextEval = (*CallMacro)(nil)
+var _ rt.RecordEval = (*CallMacro)(nil)
+var _ rt.NumListEval = (*CallMacro)(nil)
+var _ rt.TextListEval = (*CallMacro)(nil)
+var _ rt.RecordListEval = (*CallMacro)(nil)
+var _ StoryStatement = (*CallMacro)(nil)
+
+func (*CallMacro) Compose() composer.Spec {
+	return composer.Spec{
+		Name: CallMacro_Type,
+		Uses: composer.Type_Flow,
+		Lede: "call",
+	}
+}
+
+const CallMacro_Type = "call_macro"
+const CallMacro_Field_MacroName = "$MACRO_NAME"
+const CallMacro_Field_Arguments = "$ARGUMENTS"
+
+func (op *CallMacro) Marshal(m jsn.Marshaler) error {
+	return CallMacro_Marshal(m, op)
+}
+
+type CallMacro_Slice []CallMacro
+
+func (op *CallMacro_Slice) GetType() string { return CallMacro_Type }
+
+func (op *CallMacro_Slice) Marshal(m jsn.Marshaler) error {
+	return CallMacro_Repeats_Marshal(m, (*[]CallMacro)(op))
+}
+
+func (op *CallMacro_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *CallMacro_Slice) SetSize(cnt int) {
+	var els []CallMacro
+	if cnt >= 0 {
+		els = make(CallMacro_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *CallMacro_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return CallMacro_Marshal(m, &(*op)[i])
+}
+
+func CallMacro_Repeats_Marshal(m jsn.Marshaler, vals *[]CallMacro) error {
+	return jsn.RepeatBlock(m, (*CallMacro_Slice)(vals))
+}
+
+func CallMacro_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]CallMacro) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = CallMacro_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type CallMacro_Flow struct{ ptr *CallMacro }
+
+func (n CallMacro_Flow) GetType() string      { return CallMacro_Type }
+func (n CallMacro_Flow) GetLede() string      { return "call" }
+func (n CallMacro_Flow) GetFlow() interface{} { return n.ptr }
+func (n CallMacro_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*CallMacro); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func CallMacro_Optional_Marshal(m jsn.Marshaler, pv **CallMacro) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = CallMacro_Marshal(m, *pv)
+	} else if !enc {
+		var v CallMacro
+		if err = CallMacro_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func CallMacro_Marshal(m jsn.Marshaler, val *CallMacro) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(CallMacro_Flow{val}); err == nil {
+		e0 := m.MarshalKey("macro", CallMacro_Field_MacroName)
+		if e0 == nil {
+			e0 = prim.Text_Unboxed_Marshal(m, &val.MacroName)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", CallMacro_Field_MacroName))
+		}
+		e1 := m.MarshalKey("args", CallMacro_Field_Arguments)
+		if e1 == nil {
+			e1 = assign.Arg_Repeats_Marshal(m, &val.Arguments)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", CallMacro_Field_Arguments))
 		}
 		m.EndBlock()
 	}
@@ -6550,6 +6671,7 @@ var Slats = []composer.Composer{
 	(*ActionParams)(nil),
 	(*AspectField)(nil),
 	(*BoolField)(nil),
+	(*CallMacro)(nil),
 	(*CommonAction)(nil),
 	(*CountOf)(nil),
 	(*CycleText)(nil),
@@ -6645,6 +6767,15 @@ var Signatures = map[uint64]interface{}{
 	18077675806901364237: (*BoolField)(nil),            /* field_definition=Bool:initially: */
 	17184788623765734642: (*BoolField)(nil),            /* field_definition=Bool:kind: */
 	124015053883609573:   (*BoolField)(nil),            /* field_definition=Bool:kind:initially: */
+	4843373105631259652:  (*CallMacro)(nil),            /* bool_eval=Call macro:args: */
+	10236024639985130132: (*CallMacro)(nil),            /* execute=Call macro:args: */
+	5651581957203069121:  (*CallMacro)(nil),            /* num_list_eval=Call macro:args: */
+	11693923858603804101: (*CallMacro)(nil),            /* number_eval=Call macro:args: */
+	1853884795003797121:  (*CallMacro)(nil),            /* record_eval=Call macro:args: */
+	12142382415765691372: (*CallMacro)(nil),            /* record_list_eval=Call macro:args: */
+	15275988251373739424: (*CallMacro)(nil),            /* story_statement=Call macro:args: */
+	14675240953305539039: (*CallMacro)(nil),            /* text_eval=Call macro:args: */
+	7066713272892250094:  (*CallMacro)(nil),            /* text_list_eval=Call macro:args: */
 	10143132576483224253: (*CountOf)(nil),              /* bool_eval=CountOf:num: */
 	231398832069830353:   (*CycleText)(nil),            /* text_eval=CycleText: */
 	2600953883978299185:  (*DefineFields)(nil),         /* execute=Define kind:fields: */

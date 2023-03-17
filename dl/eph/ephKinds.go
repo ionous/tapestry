@@ -90,7 +90,7 @@ func (op *EphKinds) Assemble(c *Catalog, d *Domain, at string) (err error) {
 // these make new ephemera which are processed during the PropertyPhase.
 func (op *EphKinds) addFields(k *ScopedKind, at string) (err error) {
 	for _, p := range op.Contain {
-		if uf, e := p.unify(at); e != nil {
+		if uf, e := p.Unify(at); e != nil {
 			err = e
 		} else {
 			k.pendingFields = append(k.pendingFields, uf)

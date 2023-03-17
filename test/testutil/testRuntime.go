@@ -4,7 +4,6 @@ import (
 	"io"
 	"os"
 
-	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
@@ -24,13 +23,6 @@ type Runtime struct {
 
 func (x *Runtime) Writer() io.Writer {
 	return os.Stdout
-}
-
-// we ignore the request to initialize the scope during testing.
-// that's only honored by the real thing.
-func (x *Runtime) ReplaceScope(s rt.Scope, init bool) (ret rt.Scope, err error) {
-	ret = x.Stack.ReplaceScope(s)
-	return
 }
 
 func (x *Runtime) SetField(target, field string, value g.Value) (err error) {

@@ -7,6 +7,7 @@ import (
 )
 
 // Kinds database ( primarily for generating default values )
+// tbd: a better way of handling this might be to pass this into GetIndexedField... etc.
 type Kinds interface {
 	GetKindByName(n string) (*Kind, error)
 }

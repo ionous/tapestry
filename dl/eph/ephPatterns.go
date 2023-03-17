@@ -119,11 +119,11 @@ func reduceRes(param *EphParams, at string, outp *[]UniformField) (ret string, e
 	if param != nil {
 		if param.Initially != nil {
 			err = errutil.New("return values dont currently support initial values")
-		} else if p, e := param.unify(at); e != nil {
+		} else if p, e := param.Unify(at); e != nil {
 			err = e
 		} else {
 			*outp = append(*outp, p)
-			ret = p.name
+			ret = p.Name
 		}
 	}
 	return
@@ -134,7 +134,7 @@ func reduceArgs(params []EphParams, at string, outp *[]UniformField) (ret string
 	for i, param := range params {
 		if param.Initially != nil {
 			err = errutil.New("args dont currently support initial values")
-		} else if p, e := param.unify(at); e != nil {
+		} else if p, e := param.Unify(at); e != nil {
 			err = e
 			break
 		} else {
@@ -143,7 +143,7 @@ func reduceArgs(params []EphParams, at string, outp *[]UniformField) (ret string
 				labels.WriteRune(',') // join
 			}
 			// fix: eventually, labels might be different than the field names
-			labels.WriteString(p.name)
+			labels.WriteString(p.Name)
 		}
 	}
 	if err == nil {
@@ -154,7 +154,7 @@ func reduceArgs(params []EphParams, at string, outp *[]UniformField) (ret string
 
 func reduceLocals(params []EphParams, at string, outp *[]UniformField) (err error) {
 	for _, param := range params {
-		if p, e := param.unify(at); e != nil {
+		if p, e := param.Unify(at); e != nil {
 			err = e
 			break
 		} else if e := p.setAssignment(param.Initially); e != nil {
