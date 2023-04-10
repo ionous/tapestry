@@ -2,6 +2,7 @@ package eph
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"github.com/ionous/errutil"
@@ -16,30 +17,12 @@ type Writer interface {
 type Ephemera interface {
 	// fix? remove catalog from the signature?
 	Assemble(c *Catalog, d *Domain, at string) error
-	Phase() Phase
+	Phase() assert.Phase
 }
 
-type Phase int
-
 //go:generate stringer -type=Phase
-const (
-	DomainPhase Phase = iota
-	PluralPhase
-	AncestryPhase
-	PropertyPhase // collect the properties of kinds
-	AspectPhase   // traits of kinds
-	FieldPhase    // actually assemble those fields
-	NounPhase     // instances ( of kinds )
-	ValuePhase
-	RelativePhase // initial relations between nouns
-	PatternPhase
-	AliasPhase
-	DirectivePhase // more grammar
-	RefPhase
-	NumPhases
-)
 
-type PhaseActions map[Phase]PhaseAction
+type PhaseActions map[assert.Phase]PhaseAction
 
 type PhaseAction struct {
 	Flags PhaseFlags
@@ -51,11 +34,11 @@ type PhaseAction struct {
 // which works because its all the same process space.
 // could separate these out into commands for inter-process communication, logging, etc. if ever needed.
 type PhaseFunction struct {
-	OnPhase Phase
+	OnPhase assert.Phase
 	Do      func(*Catalog, *Domain, string) error
 }
 
-func (fn PhaseFunction) Phase() Phase { return fn.OnPhase }
+func (fn PhaseFunction) Phase() assert.Phase { return fn.OnPhase }
 func (fn PhaseFunction) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	return fn.Do(c, d, at)
 }

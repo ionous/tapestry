@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"sort"
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -77,7 +78,7 @@ func (rs *Relatives) AddPair(a, b, at string) {
 	rs.pairs = append(rs.pairs, Relative{a, b, at})
 }
 
-func (op *EphRelatives) Phase() Phase { return RelativePhase }
+func (op *EphRelatives) Phase() assert.Phase { return assert.RelativePhase }
 
 // validate that the pattern for the rule exists then add the rule to the *current* domain
 // ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )

@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 )
@@ -35,7 +36,7 @@ func (d *Domain) WriteDirectives(w Writer) (err error) {
 }
 
 // we give it its own phase so we can keep its definitions separated out.
-func (op *EphDirectives) Phase() Phase { return DirectivePhase }
+func (op *EphDirectives) Phase() assert.Phase { return assert.DirectivePhase }
 
 // jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
 func (op *EphDirectives) Assemble(c *Catalog, d *Domain, at string) (err error) {

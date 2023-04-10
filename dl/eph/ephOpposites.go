@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 )
@@ -45,7 +46,7 @@ func (c *Catalog) WriteOpposites(w Writer) (err error) {
 	return
 }
 
-func (op *EphOpposites) Phase() Phase { return PluralPhase }
+func (op *EphOpposites) Phase() assert.Phase { return assert.PluralPhase }
 
 func (op *EphOpposites) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if oneWord, ok := UniformString(op.Opposite); !ok {

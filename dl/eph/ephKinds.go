@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 )
@@ -42,7 +43,7 @@ func (n KindError) Unwrap() error {
 }
 
 // name of a kind to assembly info
-func (op *EphKinds) Phase() Phase { return AncestryPhase }
+func (op *EphKinds) Phase() assert.Phase { return assert.AncestryPhase }
 
 // Kinds, From string, Contain []EphParams
 func (op *EphKinds) Assemble(c *Catalog, d *Domain, at string) (err error) {

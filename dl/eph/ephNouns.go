@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 )
@@ -79,7 +80,7 @@ func (n NounError) Unwrap() error {
 }
 
 // name of a noun to assembly info
-func (op *EphNouns) Phase() Phase { return NounPhase }
+func (op *EphNouns) Phase() assert.Phase { return assert.NounPhase }
 
 // noun, kind
 func (op *EphNouns) Assemble(c *Catalog, d *Domain, at string) (err error) {

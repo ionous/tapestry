@@ -2,6 +2,7 @@ package eph
 
 import (
 	"errors"
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
@@ -14,9 +15,9 @@ type DomainFinder interface {
 type Domain struct {
 	Requires      // other domains this needs ( can have multiple direct parents )
 	catalog       *Catalog
-	currPhase     Phase // lift into some "ProcessingDomain" structure?
+	currPhase     assert.Phase // lift into some "ProcessingDomain" structure?
 	defs          Artifacts
-	phases        [NumPhases]PhaseData
+	phases        [assert.NumPhases]PhaseData
 	kinds         ScopedKinds
 	nouns         ScopedNouns
 	checks        asmChecks
@@ -125,7 +126,7 @@ func (d *Domain) RefineDefinition(key keyType, at, value string) (okay bool, err
 }
 
 // the domain is resolved already.
-func (d *Domain) Assemble(w Phase, flags PhaseFlags) (err error) {
+func (d *Domain) Assemble(w assert.Phase, flags PhaseFlags) (err error) {
 	if ds, e := d.GetDependencies(); e != nil {
 		err = e
 	} else {
@@ -154,7 +155,7 @@ func (d *Domain) Assemble(w Phase, flags PhaseFlags) (err error) {
 //
 // NOTE: we're not copying single parents, or even remembering this merged set:
 // instead we're crawling up the conflicts in AddDefinition...
-func (d *Domain) checkRivals(phase Phase, ds Dependencies, allowDupes bool) (err error) {
+func (d *Domain) checkRivals(phase assert.Phase, ds Dependencies, allowDupes bool) (err error) {
 	// start with nothing and merge in to check for artifacts
 	if deps := ds.Parents(); len(deps) > 1 {
 		a := make(Artifacts)
@@ -181,9 +182,8 @@ func (c *Catalog) WriteDomains(w Writer) (err error) {
 }
 
 // EphBeginDomain
-func (op *EphBeginDomain) Phase() Phase { return DomainPhase }
+func (op *EphBeginDomain) Phase() assert.Phase { return assert.DomainPhase }
 
-//
 func (op *EphBeginDomain) Assemble(c *Catalog, _nil *Domain, at string) (err error) {
 	if n, ok := UniformString(op.Name); !ok {
 		err = InvalidString(op.Name)
@@ -198,7 +198,7 @@ func (op *EphBeginDomain) Assemble(c *Catalog, _nil *Domain, at string) (err err
 }
 
 // EphEndDomain
-func (op *EphEndDomain) Phase() Phase { return DomainPhase }
+func (op *EphEndDomain) Phase() assert.Phase { return assert.DomainPhase }
 
 // pop the most recent domain
 func (op *EphEndDomain) Assemble(c *Catalog, _nil *Domain, at string) (err error) {

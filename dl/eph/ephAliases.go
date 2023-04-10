@@ -1,13 +1,14 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"github.com/ionous/errutil"
 )
 
 // fix? right now we're adding aliases in grammar --
 // so its only going to affect player input
 // but... we could add this after noun declaration to allow fields, etc. to use aliased names
-func (op *EphAliases) Phase() Phase { return AliasPhase }
+func (op *EphAliases) Phase() assert.Phase { return assert.AliasPhase }
 
 func (op *EphAliases) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if noun, e := getClosestNoun(d, op.ShortName); e != nil {

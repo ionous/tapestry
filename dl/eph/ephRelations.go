@@ -2,6 +2,7 @@ package eph
 
 import (
 	"errors"
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -52,7 +53,7 @@ func oneOrAny(out *strings.Builder, s string) (ret string) {
 // and an entirely new verification mechanism...
 // we create a relation kind with fields of an appropriate type
 // and use the kind resolving mechanism
-func (op *EphRelations) Phase() Phase { return AncestryPhase }
+func (op *EphRelations) Phase() assert.Phase { return assert.AncestryPhase }
 
 func (op *EphRelations) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	// like aspects, we dont try to singularize these.

@@ -3,6 +3,7 @@ package story
 import (
 	"errors"
 	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"log"
@@ -67,7 +68,7 @@ func (op *MapHeading) PostImport(k *imp.Importer) (err error) {
 
 		// write a fact stating the general direction from one room to the other has been established.
 		// ( used to detect conflicts in (the reverse directional) implications of some other statement )
-		k.WriteEphemera(eph.PhaseFunction{eph.PropertyPhase,
+		k.WriteEphemera(eph.PhaseFunction{assert.PropertyPhase,
 			func(c *eph.Catalog, d *eph.Domain, at string) (err error) {
 				if dir, e := op.Dir.UniformString(); e != nil {
 					err = e
@@ -82,7 +83,7 @@ func (op *MapHeading) PostImport(k *imp.Importer) (err error) {
 			// fix? maybe one way to sort out the ephemera phases would be to give/let
 			// the the StoryStatements have a Phase() implementation directly?
 			// (also maybe the functions should be allowed to be after or before a named phase?)
-			k.WriteEphemera(eph.PhaseFunction{eph.FieldPhase,
+			k.WriteEphemera(eph.PhaseFunction{assert.FieldPhase,
 				func(c *eph.Catalog, d *eph.Domain, at string) (err error) {
 					if dir, e := op.Dir.UniformString(); e != nil {
 						err = e

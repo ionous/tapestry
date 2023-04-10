@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"github.com/ionous/errutil"
 )
 
@@ -26,7 +27,7 @@ func (n DomainError) Unwrap() error {
 
 func (c *Catalog) AddEphemera(at string, ep Ephemera) (err error) {
 	// fix: queue first, and then run?
-	if phase := ep.Phase(); phase == DomainPhase {
+	if phase := ep.Phase(); phase == assert.DomainPhase {
 		err = ep.Assemble(c, nil, at)
 	} else {
 		if d, ok := c.processing.Top(); !ok {
@@ -79,7 +80,7 @@ func (c *Catalog) AssembleCatalog(phaseActions PhaseActions) (err error) {
 		// walks across all domains for each phase to support things like fields:
 		// which exist per kind but which can be added to by multiple domains.
 	Loop:
-		for w := Phase(0); w < NumPhases; w++ {
+		for w := assert.Phase(0); w < assert.NumPhases; w++ {
 			act := phaseActions[w]
 			for _, deps := range ds {
 				d := deps.Leaf().(*Domain) // panics if it fails

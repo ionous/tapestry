@@ -2,6 +2,7 @@ package cmdweave
 
 import (
 	"database/sql"
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"log"
 
@@ -48,9 +49,9 @@ func Weave(cat *eph.Catalog, db *sql.DB) (err error) {
 func BuildCatalog(cat *eph.Catalog, w eph.Writer) (err error) {
 	// go process all of the ephemera
 	if e := cat.AssembleCatalog(eph.PhaseActions{
-		eph.AncestryPhase: eph.AncestryActions,
-		eph.FieldPhase:    eph.FieldActions,
-		eph.NounPhase:     eph.NounActions,
+		assert.AncestryPhase: eph.AncestryActions,
+		assert.FieldPhase:    eph.FieldActions,
+		assert.NounPhase:     eph.NounActions,
 	}); e != nil {
 		err = e
 	} else if e := cat.WritePlurals(w); e != nil {

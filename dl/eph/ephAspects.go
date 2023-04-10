@@ -2,6 +2,7 @@ package eph
 
 import (
 	"errors"
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 )
@@ -14,7 +15,7 @@ func AspectParam(aspectName string) EphParams {
 // uses the ancestry phase because it generates kinds ( one per aspect. )
 // the assembly statement generates new ephemera for the aspect phase
 // ( to fill the aspect's kind with bool fields representing the traits. )
-func (op *EphAspects) Phase() Phase { return AncestryPhase }
+func (op *EphAspects) Phase() assert.Phase { return assert.AncestryPhase }
 
 // generates traits and adds them to a custom aspect kind.
 func (op *EphAspects) Assemble(c *Catalog, d *Domain, at string) (err error) {
@@ -28,7 +29,7 @@ func (op *EphAspects) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		kid := d.EnsureKind(aspect, at)
 		kid.AddRequirement(kindsOf.Aspect.String())
 		if len(traits) > 0 {
-			err = d.AddEphemera(at, PhaseFunction{AspectPhase,
+			err = d.AddEphemera(at, PhaseFunction{assert.AspectPhase,
 				func(c *Catalog, d *Domain, at string) (err error) {
 					var conflict *Conflict // checks for conflicts, allows duplicates.
 					if e := kid.AddField(&traitDef{at, aspect, traits}); errors.As(e, &conflict) && conflict.Reason == Duplicated {

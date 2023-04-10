@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -30,7 +31,7 @@ func (c *Catalog) WritePatterns(w Writer) (err error) {
 }
 
 // pattern commands generate ancestry, fields, and pattern entries....
-func (op *EphPatterns) Phase() Phase { return AncestryPhase }
+func (op *EphPatterns) Phase() assert.Phase { return assert.AncestryPhase }
 
 func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if name, ok := UniformString(op.PatternName); !ok {
@@ -46,7 +47,7 @@ func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		} else if e := reduceLocals(op.Locals, at, &locals); e != nil {
 			err = e
 		} else {
-			err = d.AddEphemera(at, PhaseFunction{PropertyPhase,
+			err = d.AddEphemera(at, PhaseFunction{assert.PropertyPhase,
 				func(c *Catalog, d *Domain, at string) (err error) {
 					k.pendingFields = append(k.pendingFields, k.patternHeader.flush()...)
 					k.pendingFields = append(k.pendingFields, locals...)

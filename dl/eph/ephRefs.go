@@ -1,6 +1,8 @@
 package eph
 
-func (op *EphRefs) Phase() Phase { return RefPhase }
+import "git.sr.ht/~ionous/tapestry/imp/assert"
+
+func (op *EphRefs) Phase() assert.Phase { return assert.RefPhase }
 
 func (op *EphRefs) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	refsNotImplemented.PrintOnce()

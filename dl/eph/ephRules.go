@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"sort"
 
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -9,7 +10,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-//
 func (c *Catalog) WriteRules(w Writer) (err error) {
 	if ds, e := c.ResolveDomains(); e != nil {
 		err = e
@@ -81,7 +81,7 @@ type ephRules struct {
 }
 
 // rules are assembled after kinds and their fields...
-func (op *EphRules) Phase() Phase { return PatternPhase }
+func (op *EphRules) Phase() assert.Phase { return assert.PatternPhase }
 
 // validate that the pattern for the rule exists then add the rule to the *current* domain
 // ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )

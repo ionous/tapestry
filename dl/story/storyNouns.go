@@ -1,6 +1,7 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -152,7 +153,7 @@ func importCountedNoun(k *imp.Importer, cnt int, kindOrKinds string) (names []st
 			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: "counted", Value: B(true)})
 			names[i] = noun
 		}
-		k.WriteEphemera(eph.PhaseFunction{OnPhase: eph.AncestryPhase,
+		k.WriteEphemera(eph.PhaseFunction{OnPhase: assert.AncestryPhase,
 			Do: func(c *eph.Catalog, d *eph.Domain, at string) (err error) {
 				// by now, plurals will be determined, so we can determine which is which.
 				var kind, kinds string

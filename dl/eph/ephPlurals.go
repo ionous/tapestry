@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 	"github.com/ionous/inflect"
@@ -73,7 +74,7 @@ func (c *Catalog) WritePlurals(w Writer) (err error) {
 	return
 }
 
-func (op *EphPlurals) Phase() Phase { return PluralPhase }
+func (op *EphPlurals) Phase() assert.Phase { return assert.PluralPhase }
 
 // add to the plurals to the database and ( maybe ) remember the plural for the current domain's set of rules
 // not more than one singular per plural ( but the other way around is fine. )
