@@ -1,8 +1,8 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/express"
 	"git.sr.ht/~ionous/tapestry/imp"
@@ -20,16 +20,13 @@ func (op *SayTemplate) PreImport(k *imp.Importer) (interface{}, error) {
 }
 
 // transform SayResponse into a RenderResponse
-func (op *SayResponse) PreImport(k *imp.Importer) (interface{}, error) {
-	k.WriteEphemera(&eph.EphKinds{
-		Kind: kindsOf.Response.String(),
-		Contain: []eph.EphParams{{
-			Affinity:  eph.Affinity{eph.Affinity_Text},
-			Name:      op.Name,
-			Initially: &assign.FromText{Value: op.Text},
-		}}})
-	//
-	return &render.RenderResponse{Name: op.Name, Text: op.Text}, nil
+func (op *SayResponse) PreImport(k *imp.Importer) (ret interface{}, err error) {
+	if e := k.AssertField(kindsOf.Response.String(), op.Name, "", affine.Text, &assign.FromText{Value: op.Text}); e != nil {
+		err = e
+	} else {
+		ret = &render.RenderResponse{Name: op.Name, Text: op.Text}
+	}
+	return
 }
 
 func convertTemplate(name, tmpl string) (ret *render.RenderResponse, err error) {

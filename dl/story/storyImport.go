@@ -1,11 +1,13 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/imp"
-	"git.sr.ht/~ionous/tapestry/rt"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/imp/assert"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"github.com/ionous/errutil"
+
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
@@ -22,7 +24,7 @@ func (op *DefineTraits) PostImport(k *imp.Importer) (err error) {
 	} else if aspect, e := safe.GetText(k, op.Aspect); e != nil {
 		err = e
 	} else {
-		k.WriteEphemera(&eph.EphAspects{Aspects: aspect.String(), Traits: traits.Strings()})
+		err = k.AssertAspectTraits(aspect.String(), traits.Strings())
 	}
 	return
 }
@@ -35,10 +37,10 @@ func (op *GrammarDecl) Execute(macro rt.Runtime) error {
 func (op *GrammarDecl) PostImport(k *imp.Importer) (err error) {
 	switch el := op.Grammar.(type) {
 	case *grammar.Alias:
-		k.WriteEphemera(&eph.EphAliases{ShortName: el.AsNoun, Aliases: el.Names})
+		err = k.AssertAlias(el.AsNoun, el.Names...)
 	case *grammar.Directive:
 		name := strings.Join(el.Lede, "/")
-		k.WriteEphemera(&eph.EphDirectives{Name: name, Directive: *el})
+		err = k.AssertGrammar(name, el)
 	}
 	return
 }
@@ -60,16 +62,22 @@ func (op *DefineNounTraits) PostImport(k *imp.Importer) (err error) {
 	} else {
 		if kind := kind.String(); len(kind) > 0 {
 			for _, n := range bareNames {
-				k.WriteEphemera(&eph.EphNouns{Noun: n, Kind: kind})
+				if e := k.AssertNounKind(n, kind); e != nil {
+					err = errutil.Append(err, e)
+				}
 			}
 		}
 		if traits := traits.Strings(); len(traits) > 0 {
 			for _, t := range traits {
 				for _, n := range bareNames {
-					k.WriteEphemera(&eph.EphValues{Noun: n, Field: t, Value: B(true)})
+					if e := assert.AssertNounValue(k, B(true), n, t); e != nil {
+						err = errutil.Append(err, e)
+						break // out of the traits to the next noun
+					}
 				}
 			}
 		}
+
 	}
 	return
 }
@@ -89,7 +97,9 @@ func (op *DefineNouns) PostImport(k *imp.Importer) (err error) {
 	} else {
 		if kind := kind.String(); len(kind) > 0 {
 			for _, n := range bareNames {
-				k.WriteEphemera(&eph.EphNouns{Noun: n, Kind: kind})
+				if e := k.AssertNounKind(n, kind); e != nil {
+					err = errutil.Append(err, e)
+				}
 			}
 		}
 	}
@@ -114,7 +124,9 @@ func (op *NounAssignment) PostImport(k *imp.Importer) (err error) {
 	} else {
 		field, lines := field.String(), T(lines)
 		for _, noun := range subjects {
-			k.WriteEphemera(&eph.EphValues{Noun: noun, Field: field, Value: lines})
+			if e := assert.AssertNounValue(k, lines, noun, field); e != nil {
+				err = errutil.Append(err, e)
+			}
 		}
 	}
 	return
@@ -141,11 +153,15 @@ func (op *DefineRelatives) PostImport(k *imp.Importer) (err error) {
 	} else {
 		for _, subject := range a {
 			if kind := kind.String(); len(kind) > 0 {
-				k.WriteEphemera(&eph.EphNouns{Noun: subject, Kind: kind})
+				if e := k.AssertNounKind(subject, kind); e != nil {
+					err = errutil.New(err, e)
+				}
 			}
 			if rel := relation.String(); len(rel) > 0 {
 				for _, object := range b {
-					k.WriteEphemera(&eph.EphRelatives{Rel: rel, Noun: object, OtherNoun: subject})
+					if e := k.AssertRelative(rel, object, subject); e != nil {
+						err = errutil.New(err, e)
+					}
 				}
 			}
 		}
@@ -173,7 +189,9 @@ func (op *DefineOtherRelatives) PostImport(k *imp.Importer) (err error) {
 		if rel := relation.String(); len(rel) > 0 {
 			for _, subject := range a {
 				for _, object := range b {
-					k.WriteEphemera(&eph.EphRelatives{Rel: rel, Noun: object, OtherNoun: subject})
+					if e := k.AssertRelative(rel, object, subject); e != nil {
+						err = errutil.New(err, e)
+					}
 				}
 			}
 		}

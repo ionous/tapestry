@@ -1,8 +1,10 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 )
@@ -24,6 +26,7 @@ func (op *EventBlock) PostImport(k *imp.Importer) (err error) {
 	if opt, ok := op.Target.Value.(interface{ GetName() string }); !ok {
 		err = errutil.Fmt("unknown event block target %T", opt)
 	} else {
+		//
 		tgt := opt.GetName()
 		// each handler is a rule...
 		for _, h := range op.Handlers {
@@ -32,23 +35,25 @@ func (op *EventBlock) PostImport(k *imp.Importer) (err error) {
 				err = errutil.Append(e)
 			} else if e := ImportRules(k, evt, tgt, h.Rules, flags); e != nil {
 				err = errutil.Append(e)
-			} else if locals := ImportLocals(h.Locals); len(locals) > 0 {
+			} else {
 				// and these are locals used by those rules
-				k.WriteEphemera(&eph.EphPatterns{PatternName: evt, Locals: locals})
+				err = declareFields(h.Locals, func(name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
+					return k.AssertLocal(evt, name, class, aff, init)
+				})
 			}
 		}
 	}
 	return
 }
 
-func (op *EventPhase) ReadFlags() (ret eph.EphTiming, err error) {
+func (op *EventPhase) ReadFlags() (ret assert.EventTiming, err error) {
 	switch str := op.Str; str {
 	case EventPhase_Before:
-		ret = eph.EphTiming{eph.EphTiming_Before}
+		ret = assert.Before
 	case EventPhase_While:
-		ret = eph.EphTiming{eph.EphTiming_During}
+		ret = assert.During
 	case EventPhase_After:
-		ret = eph.EphTiming{eph.EphTiming_After}
+		ret = assert.After
 	default:
 		if len(str) > 0 {
 			err = errutil.Fmt("unknown event flags %q", str)

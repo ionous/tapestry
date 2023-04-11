@@ -2,6 +2,7 @@ package eph
 
 import (
 	"errors"
+
 	"git.sr.ht/~ionous/tapestry/imp/assert"
 
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
@@ -126,7 +127,7 @@ func (d *Domain) RefineDefinition(key keyType, at, value string) (okay bool, err
 }
 
 // the domain is resolved already.
-func (d *Domain) Assemble(w assert.Phase, flags PhaseFlags) (err error) {
+func (d *Domain) AssembleDomain(w assert.Phase, flags PhaseFlags) (err error) {
 	if ds, e := d.GetDependencies(); e != nil {
 		err = e
 	} else {

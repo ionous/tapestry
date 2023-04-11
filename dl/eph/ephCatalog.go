@@ -84,7 +84,7 @@ func (c *Catalog) AssembleCatalog(phaseActions PhaseActions) (err error) {
 			act := phaseActions[w]
 			for _, deps := range ds {
 				d := deps.Leaf().(*Domain) // panics if it fails
-				if e := d.Assemble(w, act.Flags); e != nil {
+				if e := d.AssembleDomain(w, act.Flags); e != nil {
 					err = e
 					break Loop
 				} else if do := act.Do; do != nil {

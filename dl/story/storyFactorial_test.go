@@ -1,11 +1,11 @@
 package story_test
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/story"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/test/debug"
 	"github.com/kr/pretty"
@@ -44,14 +44,20 @@ func TestFactorialImport(t *testing.T) {
 			// a pattern definition including one parameter
 			&eph.EphPatterns{
 				PatternName: "factorial",
-				Params: []eph.EphParams{{
-					Affinity: eph.Affinity{eph.Affinity_Number},
-					Name:     "num",
-				}},
+			},
+			&eph.EphPatterns{
+				PatternName: "factorial",
 				Result: &eph.EphParams{
 					Affinity: eph.Affinity{eph.Affinity_Number},
 					Name:     "num",
 				},
+			},
+			&eph.EphPatterns{
+				PatternName: "factorial",
+				Params: []eph.EphParams{{
+					Affinity: eph.Affinity{eph.Affinity_Number},
+					Name:     "num",
+				}},
 			},
 			// a pattern return ( which happens to use the same input var )
 			// &eph.EphPatterns{

@@ -50,6 +50,9 @@ func TestPatternParameterImport(t *testing.T) {
 		expect := []eph.Ephemera{
 			&eph.EphPatterns{
 				PatternName: "corral",
+			},
+			&eph.EphPatterns{
+				PatternName: "corral",
 				Params: []eph.EphParams{{
 					Affinity: eph.Affinity{eph.Affinity_Text},
 					Name:     "pet",
@@ -59,7 +62,7 @@ func TestPatternParameterImport(t *testing.T) {
 		}
 		if diff := pretty.Diff(els, expect); len(diff) > 0 {
 			t.Log(diff)
-			t.Error(pretty.Sprint(els))
+			t.Error("got:", pretty.Sprint(els))
 		}
 	}
 }
@@ -100,7 +103,7 @@ func TestPatternRuleImport(t *testing.T) {
 		}
 		if diff := pretty.Diff(els, expect); len(diff) > 0 {
 			t.Log(diff)
-			t.Error(pretty.Sprint(els))
+			t.Error("got:", pretty.Sprint(els))
 		}
 	}
 }

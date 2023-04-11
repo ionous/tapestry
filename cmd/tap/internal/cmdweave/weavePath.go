@@ -2,12 +2,13 @@ package cmdweave
 
 import (
 	"database/sql"
-	"git.sr.ht/~ionous/tapestry/support/files"
 	"log"
 	"os"
 	"path"
 	"path/filepath"
 	"strconv"
+
+	"git.sr.ht/~ionous/tapestry/support/files"
 
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
@@ -59,7 +60,7 @@ func assembleCat(cat *eph.Catalog, outFile string) (err error) {
 	return
 }
 
-func collectEphemera(cat *eph.Catalog, out *error) imp.WriterFun {
+func collectEphemera(cat *eph.Catalog, out *error) eph.WriterFun {
 	// fix: needs to be more clever eventually...
 	if e := cat.AddEphemera(
 		"asm",
@@ -92,8 +93,6 @@ func importStoryFiles(k *imp.Importer, srcPath string) (err error) {
 			return readOne(k, p)
 		}); e != nil {
 		err = errutil.New("couldn't read file", srcPath, e)
-	} else {
-		k.Flush()
 	}
 	return
 }

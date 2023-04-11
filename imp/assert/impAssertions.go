@@ -1,6 +1,7 @@
 package assert
 
 import (
+	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
@@ -51,10 +52,10 @@ type Assertions interface {
 	AssertAncestor(kind, ancestor string) error
 	AssertAspectTraits(aspect string, traits []string) error
 
-	AssertField(kind, name, class string, init assign.Assignment) error
-	AssertLocal(kind, name, class string, init assign.Assignment) error
-	AssertParam(kind, name, class string, init assign.Assignment) error
-	AssertResult(kind, name, class string, init assign.Assignment) error
+	AssertField(kind, name, class string, aff affine.Affinity, init assign.Assignment) error
+	AssertLocal(kind, name, class string, aff affine.Affinity, init assign.Assignment) error
+	AssertParam(kind, name, class string, aff affine.Affinity, init assign.Assignment) error
+	AssertResult(kind, name, class string, aff affine.Affinity, init assign.Assignment) error
 
 	AssertGrammar(name string, directive *grammar.Directive) error
 	// AssertMacro(a, b string) error
@@ -78,17 +79,19 @@ type Assertions interface {
 
 	// fix: this is i think the only reason Phase is in assert instead of ... say... weave
 	// is schedule necessary? [ can it be supplanted by commands, even faux ones? ]
-	Schedule(Phase, func() error) error
+	Schedule(Phase, func(World, Assertions) error) error
 }
 
-// // fix: this should eventually be a runtime if at all possible
-// type Model interface {
-// 	PluralOf(single string) string
-// 	SingularOf(plural string) string
-// 	OppositeOf(string) string
-// }
+// fix: this should eventually be a runtime if at all possible
+type World interface {
+	PluralOf(single string) string
+	SingularOf(plural string) string
+	OppositeOf(string) string
+}
 
 // // helper: fix: maybe move to story -- make part of importer?
-// func AssertNounValue(a Assertions, val literal.LiteralValue, noun, field string, path ...string) error {
-// 	return a.AssertNounValue(noun, field, path, val)
-// }
+func AssertNounValue(a Assertions, val literal.LiteralValue, noun string, path ...string) error {
+	last := len(path) - 1
+	field, parts := path[last], path[:last]
+	return a.AssertNounValue(noun, field, parts, val)
+}

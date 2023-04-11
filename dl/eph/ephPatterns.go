@@ -1,8 +1,9 @@
 package eph
 
 import (
-	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"strings"
+
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
@@ -18,9 +19,9 @@ func (c *Catalog) WritePatterns(w Writer) (err error) {
 			if k := dep.Leaf().(*ScopedKind); k.HasAncestor(kindsOf.Pattern) {
 				pat := k.name
 				result := k.domain.GetDefinition(MakeKey("pat", pat, "res"))
-				labels := k.domain.GetDefinition(MakeKey("pat", pat, "args"))
+				labels := k.patternHeader.labels()
 				//
-				if e := w.Write(mdl.Pat, k.domain.name, k.name, labels.value, result.value); e != nil {
+				if e := w.Write(mdl.Pat, k.domain.name, k.name, labels, result.value); e != nil {
 					err = e
 					break
 				}
@@ -48,7 +49,7 @@ func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 			err = e
 		} else {
 			err = d.AddEphemera(at, PhaseFunction{assert.PropertyPhase,
-				func(c *Catalog, d *Domain, at string) (err error) {
+				func(assert.World, assert.Assertions) (err error) {
 					k.pendingFields = append(k.pendingFields, k.patternHeader.flush()...)
 					k.pendingFields = append(k.pendingFields, locals...)
 					return
@@ -63,6 +64,17 @@ func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 type patternHeader struct {
 	res, args []UniformField
 	written   bool
+}
+
+func (pd *patternHeader) labels() (ret string) {
+	var b strings.Builder
+	for i, el := range pd.args {
+		if i > 0 {
+			b.WriteRune(',')
+		}
+		b.WriteString(el.Name)
+	}
+	return b.String()
 }
 
 func (pd *patternHeader) flush() (ret []UniformField) {
@@ -95,14 +107,15 @@ func (op *EphPatterns) assembleArgs(d *Domain, k *ScopedKind, at string, outp *p
 	var args []UniformField
 	if len(op.Params) > 0 && k.domain != d {
 		err = errutil.New("can only declare args in the original domain")
-	} else if patlabels, e := reduceArgs(op.Params, at, &args); e != nil {
+	} else if e := reduceArgs(op.Params, at, &args); e != nil {
 		err = e
-	} else if len(patlabels) > 0 {
-		if e := addPatternDef(d, k, "args", at, patlabels); e != nil {
-			err = e
-		} else {
-			outp.args = args
-		}
+	} else {
+		// there used to be one set of args, now there are individual args
+		// if e := addPatternDef(d, k, "args", at, patlabels); e != nil {
+		// else...
+		// fix: this should probably check that no locals have been written yet
+		// and/or use the "result" to seal in the args.
+		outp.args = append(outp.args, args...)
 	}
 	return
 }
@@ -120,7 +133,8 @@ func reduceRes(param *EphParams, at string, outp *[]UniformField) (ret string, e
 	if param != nil {
 		if param.Initially != nil {
 			err = errutil.New("return values dont currently support initial values")
-		} else if p, e := param.Unify(at); e != nil {
+		}
+		if p, e := param.Unify(at); e != nil {
 			err = e
 		} else {
 			*outp = append(*outp, p)
@@ -130,25 +144,17 @@ func reduceRes(param *EphParams, at string, outp *[]UniformField) (ret string, e
 	return
 }
 
-func reduceArgs(params []EphParams, at string, outp *[]UniformField) (ret string, err error) {
-	var labels strings.Builder
-	for i, param := range params {
+func reduceArgs(params []EphParams, at string, outp *[]UniformField) (err error) {
+	for _, param := range params {
 		if param.Initially != nil {
-			err = errutil.New("args dont currently support initial values")
-		} else if p, e := param.Unify(at); e != nil {
+			err = errutil.New("return values dont currently support initial values")
+		}
+		if p, e := param.Unify(at); e != nil {
 			err = e
 			break
 		} else {
 			*outp = append(*outp, p)
-			if i > 0 {
-				labels.WriteRune(',') // join
-			}
-			// fix: eventually, labels might be different than the field names
-			labels.WriteString(p.Name)
 		}
-	}
-	if err == nil {
-		ret = labels.String()
 	}
 	return
 }

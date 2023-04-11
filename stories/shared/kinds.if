@@ -12,18 +12,42 @@
         [
           {
             "Text:": "description"
+          },
+          {
+            "Text:": "indefinite article"
+          },
+          {
+            "Text:": "grouping label"
+          },
+          {
+            "Aspect:": "noun types"
+          },
+          {
+            "Aspect:": "private names"
+          },
+          {
+            "Text:": "printed name"
           }
         ]
       ]
     },
     {
-      "Define kind:fields:": [
-        "Objects",
+      "Define traits:as:": [
         [
-          {
-            "Text:": "grouping label"
-          }
-        ]
+          "common named",
+          "proper named",
+          "counted"
+        ],
+        "noun types"
+      ]
+    },
+    {
+      "Define traits:as:": [
+        [
+          "publicly named",
+          "privately named"
+        ],
+        "private names"
       ]
     },
     {
@@ -384,13 +408,7 @@
       ]
     },
     {
-      "--": "FIX: Certainties aren't implemented",
-      "-- Certainties:areBeing:certainty:trait:": [
-        "rooms",
-        "are",
-        "usually",
-        "lit"
-      ]
+      "--": "FIX: Certainties aren't implemented"
     },
     {
       "--": ""

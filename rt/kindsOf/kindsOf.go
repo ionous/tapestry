@@ -10,6 +10,7 @@ const None Kinds = 0 //
 const (
 	Aspect   Kinds = 1 << iota // aspects
 	Kind                       // kinds
+	Macro                      // macros
 	Pattern                    // patterns
 	Record                     // records
 	Relation                   // relations

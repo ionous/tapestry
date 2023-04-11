@@ -1,10 +1,12 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"github.com/ionous/errutil"
 )
 
 // Execute - called by the macro runtime during weave.
@@ -21,7 +23,9 @@ func (op *DefineKinds) PostImport(k *imp.Importer) (err error) {
 		err = e
 	} else {
 		for _, kind := range kinds.Strings() {
-			k.WriteEphemera(&eph.EphKinds{Kind: kind, Ancestor: ancestor.String()})
+			if e := k.AssertAncestor(kind, ancestor.String()); e != nil {
+				err = errutil.Append(err, e)
+			}
 		}
 	}
 	return
@@ -35,28 +39,34 @@ func (op *DefineFields) Execute(macro rt.Runtime) error {
 // ex. cats have some text called breed.
 // ex. horses have an aspect called speed.
 func (op *DefineFields) PostImport(k *imp.Importer) (err error) {
-	if kind, e := safe.GetText(k, op.Kind); e != nil {
+	if len(op.Fields) == 0 {
+		// log or something?
+	} else if kind, e := safe.GetText(k, op.Kind); e != nil {
 		err = e
 	} else if len(op.Fields) > 0 {
-		var ps []eph.EphParams
+		kind := kind.String()
 		for _, el := range op.Fields {
-			// bool fields become implicit aspects
-			// ( vs. bool pattern vars which stay bools -- see reduceProps )
-			if p, ok := el.GetParam(); ok && p.Affinity.Str != eph.Affinity_Bool {
-				ps = append(ps, p)
-			} else if ok {
+			// handle every other than bools....
+			if aspect, ok := el.(*BoolField); !ok {
+				err = el.DeclareField(func(name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
+					return k.AssertField(kind, name, class, aff, init)
+				})
+			} else {
+				// bools here become implicit aspects.
+				// ( vs. bool pattern vars which stay bools -- see reduceProps )
 				// first: add the aspect
-				aspect := p.Name
+				aspect := aspect.Name
 				traits := []string{"not_" + aspect, "is_" + aspect}
-				k.WriteEphemera(&eph.EphAspects{Aspects: aspect, Traits: traits})
-				// second: add the field that uses the aspect....
+
 				// fix: future: it'd be nicer to support single trait kinds
 				// not_aspect would instead be: Not{IsTrait{PositiveName}}
-				ps = append(ps, eph.AspectParam(aspect))
+				if k.AssertAspectTraits(aspect, traits); e != nil {
+					err = errutil.Append(err, e)
+				} else if e := k.AssertField(kind, aspect, aspect, affine.Text, nil); e != nil {
+					err = errutil.Append(err, e)
+				}
 			}
 		}
-
-		k.WriteEphemera(&eph.EphKinds{Kind: kind.String(), Contain: ps})
 	}
 	return
 }

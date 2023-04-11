@@ -7,21 +7,32 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"github.com/ionous/errutil"
 )
 
 type EphemeraWriter interface{ WriteEphemera(Ephemera) }
 
-type Queue struct {
+type WriterFun func(eph Ephemera)
+
+func (w WriterFun) WriteEphemera(op Ephemera) {
+	w(op)
+}
+
+func NewCommandBuilder(q EphemeraWriter) *CommandBuilder {
+	return &CommandBuilder{q: q}
+}
+
+type CommandBuilder struct {
 	q       EphemeraWriter
 	domains []string
 }
 
-func (k *Queue) append(p Ephemera) {
+func (k *CommandBuilder) append(p Ephemera) {
 	k.q.WriteEphemera(p)
 }
 
-func (k *Queue) BeginDomain(name string, requires []string) (none error) {
+func (k *CommandBuilder) BeginDomain(name string, requires []string) (none error) {
 	k.domains = append(k.domains, name)
 	k.append(&EphBeginDomain{
 		Name:     name,
@@ -30,7 +41,7 @@ func (k *Queue) BeginDomain(name string, requires []string) (none error) {
 	return
 }
 
-func (k *Queue) EndDomain() (err error) {
+func (k *CommandBuilder) EndDomain() (err error) {
 	if top := len(k.domains) - 1; top < 0 {
 		err = errutil.New("unexpected end domain")
 	} else {
@@ -43,7 +54,7 @@ func (k *Queue) EndDomain() (err error) {
 	return
 }
 
-func (k *Queue) AssertAlias(short string, names ...string) (none error) {
+func (k *CommandBuilder) AssertAlias(short string, names ...string) (none error) {
 	k.append(&EphAliases{
 		ShortName: short,
 		Aliases:   names,
@@ -51,15 +62,20 @@ func (k *Queue) AssertAlias(short string, names ...string) (none error) {
 	return
 }
 
-func (k *Queue) AssertAncestor(kind, ancestor string) (none error) {
-	k.append(&EphKinds{
-		Kind:     kind,
-		Ancestor: ancestor,
-	})
+func (k *CommandBuilder) AssertAncestor(kind, ancestor string) (none error) {
+	if ancestor == kindsOf.Pattern.String() {
+		// fix: this should be possible to replace.
+		k.append(&EphPatterns{PatternName: kind})
+	} else {
+		k.append(&EphKinds{
+			Kind:     kind,
+			Ancestor: ancestor,
+		})
+	}
 	return
 }
 
-func (k *Queue) AssertAspectTraits(aspect string, traits []string) (none error) {
+func (k *CommandBuilder) AssertAspectTraits(aspect string, traits []string) (none error) {
 	k.append(&EphAspects{
 		Aspects: aspect,
 		Traits:  traits,
@@ -67,7 +83,7 @@ func (k *Queue) AssertAspectTraits(aspect string, traits []string) (none error) 
 	return
 }
 
-func (k *Queue) AssertCheck(name string, do []rt.Execute) (none error) {
+func (k *CommandBuilder) AssertCheck(name string, do []rt.Execute) (none error) {
 	k.append(&EphChecks{
 		Name: name,
 		Exe:  do,
@@ -75,25 +91,39 @@ func (k *Queue) AssertCheck(name string, do []rt.Execute) (none error) {
 	return
 }
 
-func (k *Queue) AssertDefinition(path ...string) (none error) {
-	panic("not implemented")
-	// k.append(&EphDefinition{
-	// 	Path: path,
-	// })
+// make an arbitrary string key and value
+// the key includes all elements of the path except for the final one
+// which gets used as the value.
+// differing definitions generation conflicts.
+func (k *CommandBuilder) AssertDefinition(path ...string) (err error) {
+	if end := len(path) - 1; end < 1 {
+		err = errutil.New("missing key value pair for definition", path)
+	} else {
+		k.append(&EphDefinition{
+			Path:  path[:end],
+			Value: path[end],
+		})
+	}
 	return
 }
 
-func makeParam(name, class string, init assign.Assignment) EphParams {
+func makeParam(name, class string, aff affine.Affinity, init assign.Assignment) EphParams {
+	if init != nil {
+		test := assign.GetAffinity(init)
+		if test != aff {
+			panic("?")
+		}
+	}
 	return EphParams{
 		Name:      name,
-		Affinity:  affineToAffinity(assign.GetAffinity(init)),
+		Affinity:  affineToAffinity(aff),
 		Class:     class,
 		Initially: init,
 	}
 }
 
-func (k *Queue) AssertField(kind, name, class string, init assign.Assignment) (err error) {
-	ps := makeParam(name, class, init)
+func (k *CommandBuilder) AssertField(kind, name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
+	ps := makeParam(name, class, aff, init)
 	k.append(&EphKinds{
 		Kind:    kind,
 		Contain: []EphParams{ps},
@@ -101,8 +131,8 @@ func (k *Queue) AssertField(kind, name, class string, init assign.Assignment) (e
 	return
 }
 
-func (k *Queue) AssertParam(kind, name, class string, init assign.Assignment) (err error) {
-	ps := makeParam(name, class, init)
+func (k *CommandBuilder) AssertParam(kind, name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
+	ps := makeParam(name, class, aff, init)
 	k.append(&EphPatterns{
 		PatternName: kind,
 		Params:      []EphParams{ps},
@@ -110,8 +140,8 @@ func (k *Queue) AssertParam(kind, name, class string, init assign.Assignment) (e
 	return
 }
 
-func (k *Queue) AssertLocal(kind, name, class string, init assign.Assignment) (err error) {
-	ps := makeParam(name, class, init)
+func (k *CommandBuilder) AssertLocal(kind, name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
+	ps := makeParam(name, class, aff, init)
 	k.append(&EphPatterns{
 		PatternName: kind,
 		Locals:      []EphParams{ps},
@@ -119,8 +149,8 @@ func (k *Queue) AssertLocal(kind, name, class string, init assign.Assignment) (e
 	return
 }
 
-func (k *Queue) AssertResult(kind, name, class string, init assign.Assignment) (err error) {
-	ps := makeParam(name, class, init)
+func (k *CommandBuilder) AssertResult(kind, name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
+	ps := makeParam(name, class, aff, init)
 	k.append(&EphPatterns{
 		PatternName: kind,
 		Result:      &ps,
@@ -128,7 +158,7 @@ func (k *Queue) AssertResult(kind, name, class string, init assign.Assignment) (
 	return
 }
 
-func (k *Queue) AssertGrammar(name string, d *grammar.Directive) (none error) {
+func (k *CommandBuilder) AssertGrammar(name string, d *grammar.Directive) (none error) {
 	k.append(&EphDirectives{
 		Name:      name,
 		Directive: *d,
@@ -140,7 +170,7 @@ func (k *Queue) AssertGrammar(name string, d *grammar.Directive) (none error) {
 //    // 40: 		k.WriteEphemera(&EphMacro{EphPatterns: out, MacroStatements: op.MacroStatements})
 //  }
 
-func (k *Queue) AssertNounKind(noun, kind string) (none error) {
+func (k *CommandBuilder) AssertNounKind(noun, kind string) (none error) {
 	k.append(&EphNouns{
 		Noun: noun,
 		Kind: kind,
@@ -148,12 +178,12 @@ func (k *Queue) AssertNounKind(noun, kind string) (none error) {
 	return
 }
 
-func (k *Queue) AssertNounPhrase() (none error) {
+func (k *CommandBuilder) AssertNounPhrase() (none error) {
 	panic("not implemented")
 	return
 }
 
-func (k *Queue) AssertNounValue(noun, field string, path []string, val literal.LiteralValue) (none error) {
+func (k *CommandBuilder) AssertNounValue(noun, field string, path []string, val literal.LiteralValue) (none error) {
 	k.append(&EphValues{
 		Noun:  noun,
 		Field: field,
@@ -163,7 +193,7 @@ func (k *Queue) AssertNounValue(noun, field string, path []string, val literal.L
 	return
 }
 
-func (k *Queue) AssertOpposite(a, b string) (none error) {
+func (k *CommandBuilder) AssertOpposite(a, b string) (none error) {
 	k.append(&EphOpposites{
 		Opposite: a,
 		Word:     b,
@@ -171,7 +201,7 @@ func (k *Queue) AssertOpposite(a, b string) (none error) {
 	return
 }
 
-func (k *Queue) AssertPlural(singluar, plural string) (none error) {
+func (k *CommandBuilder) AssertPlural(singluar, plural string) (none error) {
 	k.append(&EphPlurals{
 		Singular: singluar,
 		Plural:   plural,
@@ -179,7 +209,7 @@ func (k *Queue) AssertPlural(singluar, plural string) (none error) {
 	return
 }
 
-func (k *Queue) AssertRelation(rel, a, b string, amany, bmany bool) (err error) {
+func (k *CommandBuilder) AssertRelation(rel, a, b string, amany, bmany bool) (err error) {
 	switch {
 	case amany && bmany:
 		err = k.assertRelation(rel, EphCardinality{
@@ -207,7 +237,7 @@ func (k *Queue) AssertRelation(rel, a, b string, amany, bmany bool) (err error) 
 	return
 }
 
-func (k *Queue) assertRelation(rel string, card EphCardinality) (none error) {
+func (k *CommandBuilder) assertRelation(rel string, card EphCardinality) (none error) {
 	k.append(&EphRelations{
 		Rel:         rel,
 		Cardinality: card,
@@ -215,7 +245,7 @@ func (k *Queue) assertRelation(rel string, card EphCardinality) (none error) {
 	return
 }
 
-func (k *Queue) AssertRelative(rel, noun, otherNoun string) (none error) {
+func (k *CommandBuilder) AssertRelative(rel, noun, otherNoun string) (none error) {
 	k.append(&EphRelatives{
 		Rel:       rel,
 		Noun:      noun,
@@ -223,7 +253,7 @@ func (k *Queue) AssertRelative(rel, noun, otherNoun string) (none error) {
 	})
 	return
 }
-func (k *Queue) AssertRule(name string, target string, guard rt.BoolEval, flags assert.EventTiming, do []rt.Execute) (none error) {
+func (k *CommandBuilder) AssertRule(name string, target string, guard rt.BoolEval, flags assert.EventTiming, do []rt.Execute) (none error) {
 	t, a := fromTiming(flags)
 	k.append(&EphRules{
 		PatternName: name,
@@ -236,9 +266,9 @@ func (k *Queue) AssertRule(name string, target string, guard rt.BoolEval, flags 
 	return
 }
 
-func (k *Queue) Schedule(when assert.Phase, do func() error) (none error) {
-	k.append(PhaseFunction{when, func(*Catalog, *Domain, string) error {
-		return do()
+func (k *CommandBuilder) Schedule(when assert.Phase, do func(assert.World, assert.Assertions) error) (none error) {
+	k.append(PhaseFunction{when, func(nm assert.World, nk assert.Assertions) error {
+		return do(nm, nk)
 	}})
 	return
 }

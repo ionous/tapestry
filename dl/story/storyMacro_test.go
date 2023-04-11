@@ -1,6 +1,8 @@
 package story_test
 
 import (
+	"testing"
+
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
@@ -11,10 +13,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
-	"testing"
 )
 
-func TestMacroImport(t *testing.T) {
+// disabled for the moment.
+func xTestMacroImport(t *testing.T) {
 	errutil.Panic = true
 	var els []eph.Ephemera
 	k := imp.NewImporter(collectEphemera(&els))

@@ -25,7 +25,7 @@ func TestImportStory(t *testing.T) {
 	}
 }
 
-func collectEphemera(sink *[]eph.Ephemera) imp.WriterFun {
+func collectEphemera(sink *[]eph.Ephemera) eph.WriterFun {
 	return func(el eph.Ephemera) {
 		*sink = append(*sink, el)
 	}

@@ -15,10 +15,10 @@
         ],
         [
           {
-            "Say:": "The knife's ogp: {the: {parentOf: .knife}}."
+            "Say:": "The knife's whereabouts: {the: {parentOf: .knife}}."
           },
           {
-            "Expect output:": "The knife's ogp: you."
+            "Expect output:": "The knife's whereabouts: you."
           },
           {
             "Dropping agent:noun:": [
@@ -34,10 +34,10 @@
             "Expect output:": "Dropped."
           },
           {
-            "Say:": "The knife's newg: {the: {parentOf: .knife}}."
+            "Say:": "The knife's new whereabouts: {the: {parentOf: .knife}}."
           },
           {
-            "Expect output:": "The knife's newg: the Kitchen."
+            "Expect output:": "The knife's new whereabouts: the Kitchen."
           },
           {
             "Dropping agent:noun:": [

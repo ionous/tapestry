@@ -52,6 +52,14 @@ func (n *Conflict) Error() string {
 	return errutil.Sprintf("%s %s was %q at %s now %q", n.Reason.String(), n.Key.String(), n.Was.value, n.Was.at, n.Value)
 }
 
+func (n *Conflict) Duplicated() bool {
+	return Duplicated == n.Reason
+
+}
+func (n *Conflict) Redefined() bool {
+	return Redefined == n.Reason
+}
+
 func newConflict(key keyType, why ReasonForConflict, was Definition, newval string) *Conflict {
 	return &Conflict{key, why, was, newval}
 }

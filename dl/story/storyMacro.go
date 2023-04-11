@@ -3,11 +3,11 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
@@ -17,28 +17,34 @@ func (op *DefineMacro) Execute(macro rt.Runtime) error {
 }
 
 // PostImport - register the macro with the importer;
-// subsequent calls will then be able to find it.
+// subsequent CallMacro(s) will be able to run it.
 func (op *DefineMacro) PostImport(k *imp.Importer) (err error) {
 	if name, e := safe.GetText(k, op.MacroName); e != nil {
 		err = e
 	} else {
-		name := lang.Underscore(name.String())
-		out := eph.EphPatterns{
-			PatternName: name,
-			Params:      make([]eph.EphParams, 0, len(op.Params)),
-			Locals:      make([]eph.EphParams, 0, len(op.Params)),
-			Result:      new(eph.EphParams),
+		macro := name.String()
+		if e := k.AssertAncestor(macro, kindsOf.Macro.String()); e != nil {
+			err = e
+		} else {
+			if res := op.Result; res != nil {
+				err = res.DeclareField(func(name, class string, aff affine.Affinity, init assign.Assignment) error {
+					return k.AssertResult(macro, name, class, aff, init)
+				})
+			}
+			if err == nil {
+				if e := declareFields(op.Params, func(name, class string, aff affine.Affinity, init assign.Assignment) error {
+					return k.AssertLocal(macro, name, class, aff, init)
+				}); e != nil {
+					err = e
+				} else if e := declareFields(op.Locals, func(name, class string, aff affine.Affinity, init assign.Assignment) error {
+					return k.AssertLocal(macro, name, class, aff, init)
+				}); e != nil {
+					err = e
+				} else {
+					err = k.AssertRule(macro, "", nil, 0, op.MacroStatements)
+				}
+			}
 		}
-		*out.Result, _ = op.Result.GetParam()
-		for _, f := range op.Params {
-			p, _ := f.GetParam()
-			out.Params = append(out.Params, p)
-		}
-		for _, f := range op.Locals {
-			p, _ := f.GetParam()
-			out.Locals = append(out.Locals, p)
-		}
-		k.WriteEphemera(&imp.EphMacro{out, op.MacroStatements})
 	}
 	return
 }

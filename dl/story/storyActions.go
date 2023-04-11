@@ -1,10 +1,12 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/eph"
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"github.com/ionous/errutil"
 )
 
 // Execute - called by the macro runtime during weave.
@@ -14,65 +16,53 @@ func (op *ActionDecl) Execute(macro rt.Runtime) error {
 
 // Execute - actions generate pattern ephemera.
 func (op *ActionDecl) PostImport(k *imp.Importer) (err error) {
-	extra := op.ActionParams.Value.(actionImporter).GetExtraParams()
-	// the extra "pattern kind" is informational only;
-	// the different pattern types dont/shouldnt affect anything.
-	op.makePattern(k, op.Action.Str, "agent", kindsOf.Action, extra, nil)
-	op.makePattern(k, op.Event.Str, "actor", kindsOf.Event, extra, &eph.EphParams{
-		Name:     "success",
-		Affinity: eph.Affinity{eph.Affinity_Bool},
-	})
-	return
-}
+	patterns := []string{op.Action.Str, op.Event.Str}
+	targets := []string{"agent", "actor"}
+	ancestors := []kindsOf.Kinds{kindsOf.Action, kindsOf.Event}
+	for i, ancestor := range ancestors {
+		tgt := targets[i]
+		pattern := patterns[i]
+		if e := k.AssertAncestor(pattern, ancestor.String()); e != nil {
+			err = e
+			break
+		} else if e := k.AssertParam(pattern, tgt, tgt, affine.Text, nil); e != nil {
+			err = e // ^ the first parameters is always (ex) "agent" of type "agent".
+			break
+		} else if extras, ok := op.ActionParams.Value.(FieldDefinition); !ok {
+			err = errutil.New("unknown field type %T", op.ActionParams.Value)
+			break
+		} else if e := extras.DeclareField(func(name, class string, aff affine.Affinity, init assign.Assignment) error {
+			return k.AssertParam(pattern, name, class, aff, init)
+		}); e != nil {
+			err = e
+			break
+		} else if i == 1 {
+			if e := k.AssertResult(pattern, "success", "", affine.Bool, nil); e != nil {
+				err = e
+				break
+			}
+		}
 
-func (op *ActionDecl) makePattern(k *imp.Importer, name, tgt string, sub kindsOf.Kinds, extra []eph.EphParams, res *eph.EphParams) {
-	// pattern subtype -- maybe if we really need this an optional parameter of patterns?
-	k.WriteEphemera(&eph.EphKinds{
-		Kind:     name,
-		Ancestor: sub.String(),
-	})
-	// the first parameter is always "agent" of type "agent"
-	ps := []eph.EphParams{{
-		Name:     tgt,
-		Affinity: eph.Affinity{eph.Affinity_Text},
-		Class:    tgt,
-	}}
-	k.WriteEphemera(&eph.EphPatterns{
-		PatternName: name,
-		Params:      append(ps, extra...),
-		Result:      res,
-	})
+	}
+	return
 }
 
 const actionNoun = "noun"
 const actionOtherNoun = "other_noun"
 
-func (op *CommonAction) GetExtraParams() []eph.EphParams {
-	return []eph.EphParams{{
-		Name:     actionNoun,
-		Affinity: eph.Affinity{eph.Affinity_Text},
-		Class:    op.Kind.Str,
-	}}
+func (op *CommonAction) DeclareField(fn fieldType) error {
+	return fn(actionNoun, op.Kind.Str, affine.Text, nil)
 }
 
-func (op *PairedAction) GetExtraParams() (ret []eph.EphParams) {
-	return []eph.EphParams{{
-		Name:     actionNoun,
-		Affinity: eph.Affinity{eph.Affinity_Text},
-		Class:    op.Kinds.Str,
-	}, {
-		Name:     actionOtherNoun,
-		Affinity: eph.Affinity{eph.Affinity_Text},
-		Class:    op.Kinds.Str,
-	}}
-}
-
-func (op *AbstractAction) GetExtraParams() (ret []eph.EphParams) {
-	// no extra parameters
+func (op *PairedAction) DeclareField(fn fieldType) (err error) {
+	if e := fn(actionNoun, op.Kinds.Str, affine.Text, nil); e != nil {
+		err = e
+	} else if e := fn(actionOtherNoun, op.Kinds.Str, affine.Text, nil); e != nil {
+		err = e
+	}
 	return
 }
 
-// then the other parameters...
-type actionImporter interface {
-	GetExtraParams() []eph.EphParams
+func (op *AbstractAction) DeclareField(fn fieldType) (none error) {
+	return // no extra parameters
 }

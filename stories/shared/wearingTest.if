@@ -28,10 +28,10 @@
         ],
         [
           {
-            "Say:": "The flower's ogp: {the: {parentOf: .flower}}, {.flower.possessiveness}."
+            "Say:": "The flower's whereabouts: {the: {parentOf: .flower}}, {.flower.possessiveness}."
           },
           {
-            "Expect output:": "The flower's ogp: you, worn."
+            "Expect output:": "The flower's whereabouts: you, worn."
           },
           {
             "Comment:": "Fail to re-wear the flower:"
@@ -66,10 +66,10 @@
             "Expect output:": "You take off the flower."
           },
           {
-            "Say:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
+            "Say:": "The flower's new whereabouts: {the: {parentOf: .flower}}, {.flower.possessiveness}."
           },
           {
-            "Expect output:": "The flower's newg: you, not_worn."
+            "Expect output:": "The flower's new whereabouts: you, not_worn."
           },
           {
             "Comment:": "Fail to re-remove the flower:"
@@ -104,10 +104,10 @@
             "Expect output:": "You put on the flower."
           },
           {
-            "Say:": "The flower's newg: {the: {parentOf: .flower}}, {.flower.possessiveness}."
+            "Say:": "The flower's new whereabouts: {the: {parentOf: .flower}}, {.flower.possessiveness}."
           },
           {
-            "Expect output:": "The flower's newg: you, worn."
+            "Expect output:": "The flower's new whereabouts: you, worn."
           },
           {
             "Say:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."

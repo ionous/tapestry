@@ -35,12 +35,16 @@ type PhaseAction struct {
 // could separate these out into commands for inter-process communication, logging, etc. if ever needed.
 type PhaseFunction struct {
 	OnPhase assert.Phase
-	Do      func(*Catalog, *Domain, string) error
+	Do      func(assert.World, assert.Assertions) error
 }
 
 func (fn PhaseFunction) Phase() assert.Phase { return fn.OnPhase }
+
 func (fn PhaseFunction) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	return fn.Do(c, d, at)
+	var writeEph WriterFun = func(op Ephemera) {
+		d.AddEphemera(at, op)
+	}
+	return fn.Do(c, NewCommandBuilder(writeEph))
 }
 
 type PhaseFlags struct {

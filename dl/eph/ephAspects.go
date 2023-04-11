@@ -2,6 +2,7 @@ package eph
 
 import (
 	"errors"
+
 	"git.sr.ht/~ionous/tapestry/imp/assert"
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -30,7 +31,7 @@ func (op *EphAspects) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		kid.AddRequirement(kindsOf.Aspect.String())
 		if len(traits) > 0 {
 			err = d.AddEphemera(at, PhaseFunction{assert.AspectPhase,
-				func(c *Catalog, d *Domain, at string) (err error) {
+				func(assert.World, assert.Assertions) (err error) {
 					var conflict *Conflict // checks for conflicts, allows duplicates.
 					if e := kid.AddField(&traitDef{at, aspect, traits}); errors.As(e, &conflict) && conflict.Reason == Duplicated {
 						LogWarning(e) // warn if it was a duplicated definition

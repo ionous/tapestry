@@ -228,33 +228,34 @@ func TestPatternMultipleReturn(t *testing.T) {
 	}
 }
 
-// fail multiple arg sets
-func TestPatternMultipleArgSets(t *testing.T) {
-	var dt domainTest
-	dt.makeDomain(dd("a"),
-		&EphKinds{Kind: kindsOf.Pattern.String()},
-		&EphPatterns{
-			PatternName: "p",
-			Params: []EphParams{{
-				Name:     "p1",
-				Affinity: Affinity{Affinity_Text},
-			}},
-		},
-		&EphPatterns{
-			PatternName: "p",
-			Params: []EphParams{{
-				Name:     "p2",
-				Affinity: Affinity{Affinity_Text},
-			}},
-		},
-	)
-	var conflict *Conflict
-	if _, e := buildAncestors(dt); e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
-		t.Fatal("expected an redefined conflict; got", e)
-	} else {
-		t.Log("okay", e)
-	}
-}
+// fail multiple arg sets: args are now written individually so this is allowed.
+// fix: stop args after writing locals or returns?
+// func TestPatternMultipleArgSets(t *testing.T) {
+// 	var dt domainTest
+// 	dt.makeDomain(dd("a"),
+// 		&EphKinds{Kind: kindsOf.Pattern.String()},
+// 		&EphPatterns{
+// 			PatternName: "p",
+// 			Params: []EphParams{{
+// 				Name:     "p1",
+// 				Affinity: Affinity{Affinity_Text},
+// 			}},
+// 		},
+// 		&EphPatterns{
+// 			PatternName: "p",
+// 			Params: []EphParams{{
+// 				Name:     "p2",
+// 				Affinity: Affinity{Affinity_Text},
+// 			}},
+// 		},
+// 	)
+// 	var conflict *Conflict
+// 	if _, e := buildAncestors(dt); e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
+// 		t.Fatal("expected an redefined conflict; got", e)
+// 	} else {
+// 		t.Log("okay", e)
+// 	}
+// }
 
 // fail conflicting assignment
 func TestPatternConflictingInit(t *testing.T) {

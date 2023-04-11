@@ -1,8 +1,9 @@
 package eph
 
 import (
-	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"sort"
+
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 )
@@ -54,7 +55,7 @@ func (op *EphChecks) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	} else {
 		// uses directive phase just to be near the end somewhere...
 		err = d.AddEphemera(at, PhaseFunction{assert.DirectivePhase,
-			func(c *Catalog, d *Domain, at string) (err error) {
+			func(assert.World, assert.Assertions) (err error) {
 				check := d.EnsureCheck(name, at)
 				if e := check.setExpectation(op.Expect); e != nil {
 					err = e
