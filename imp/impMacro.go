@@ -40,7 +40,7 @@ type macroReg map[string]macroKind
 
 func (k *Importer) GetKindByName(n string) (ret *g.Kind, err error) {
 	if a, ok := k.macros[n]; !ok {
-		err = errutil.New("no such kind")
+		err = errutil.New("no such kind", n)
 	} else {
 		ret = a.Kind
 	}

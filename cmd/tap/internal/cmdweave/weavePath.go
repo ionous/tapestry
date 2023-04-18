@@ -8,14 +8,14 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"git.sr.ht/~ionous/tapestry/support/files"
-
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
@@ -30,12 +30,26 @@ func WeavePath(srcPath, outFile string) (err error) {
 	var cat eph.Catalog // fix: capture "Dilemmas" and LogWarning?
 	var writeErr error  // fix: this seems less than ideal; maybe writer should return err.
 	k := imp.NewImporter(collectEphemera(&cat, &writeErr))
-	if e := importStoryFiles(k, srcPath); e != nil {
+	if e := k.BeginDomain("tapestry", nil); e != nil {
+		err = e
+	} else if e := addDefaultKinds(k); e != nil {
+		err = e
+	} else if e := importStoryFiles(k, srcPath); e != nil {
 		err = e
 	} else if writeErr != nil {
 		err = writeErr
 	} else if e := assembleCat(&cat, outFile); e != nil {
 		err = e
+	}
+	return
+}
+
+func addDefaultKinds(n assert.Assertions) (err error) {
+	for _, k := range kindsOf.DefaultKinds {
+		if e := n.AssertAncestor(k.String(), k.Parent().String()); e != nil {
+			err = e
+			break
+		}
 	}
 	return
 }
@@ -61,21 +75,6 @@ func assembleCat(cat *eph.Catalog, outFile string) (err error) {
 }
 
 func collectEphemera(cat *eph.Catalog, out *error) eph.WriterFun {
-	// fix: needs to be more clever eventually...
-	if e := cat.AddEphemera(
-		"asm",
-		&eph.EphBeginDomain{Name: "tapestry"}); e != nil {
-		panic(e)
-	}
-	// built in kinds -- see ephKinds.go
-	for _, k := range kindsOf.DefaultKinds {
-		pk := k.Parent()
-		if e := cat.AddEphemera(
-			"built in kinds",
-			&eph.EphKinds{Kind: k.String(), Ancestor: pk.String()}); e != nil {
-			panic(e)
-		}
-	}
 	var i int
 	return func(el eph.Ephemera) {
 		if e := cat.AddEphemera(strconv.Itoa(i), el); e != nil {

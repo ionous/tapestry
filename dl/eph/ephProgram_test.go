@@ -8,7 +8,7 @@ import (
 	"github.com/kr/pretty"
 )
 
-// /there's not much to test for directives right now
+// there's not much to test for directives right now
 // just verify some text comes out?
 func TestGrammarDirectives(t *testing.T) {
 	var dt domainTest

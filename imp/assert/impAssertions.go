@@ -25,12 +25,12 @@ type Phase int
 //go:generate stringer -type=Phase
 const (
 	DomainPhase Phase = iota
-	MacroPhase        // tbd: could this be DomainPhase?
 	PluralPhase
 	AncestryPhase
 	PropertyPhase // collect the properties of kinds
 	AspectPhase   // traits of kinds
 	FieldPhase    // actually assemble those fields
+	MacroPhase    // tbd: could this be DomainPhase?
 	NounPhase     // instances ( of kinds )
 	ValuePhase
 	RelativePhase // initial relations between nouns

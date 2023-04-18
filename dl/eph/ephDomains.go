@@ -36,7 +36,7 @@ type PhaseData struct {
 
 func (d *Domain) Resolve() (ret Dependencies, err error) {
 	if len(d.at) == 0 {
-		err = DomainError{d.name, errutil.New("never defined")}
+		err = DomainError{d.name, errutil.New("never defined", d.name)}
 	} else if ds, e := d.resolve(d, (*catDependencyFinder)(d.catalog)); e != nil {
 		err = DomainError{d.name, e}
 	} else {

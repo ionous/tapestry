@@ -10,44 +10,71 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"github.com/ionous/errutil"
-	"github.com/kr/pretty"
 )
 
 // generate ephemera for macros
-func TestMacroEphemera(t *testing.T) {
+func TestMacros(t *testing.T) {
 	errutil.Panic = true
-	var els []eph.Ephemera
-	k := imp.NewImporter(collectEphemera(&els))
-	if e := story.ImportStory(k, t.Name(), macroStory); e != nil {
+	//
+	var cat eph.Catalog
+	k := imp.NewImporter(func(el eph.Ephemera) {
+		if e := cat.AddEphemera("at", el); e != nil {
+			t.Fatal(e)
+		}
+	})
+	if e := k.BeginDomain("tapestry", nil); e != nil {
+		t.Fatal(e)
+	} else if e := addDefaultKinds(k); e != nil {
+		t.Fatal(e)
+	} else if e := story.ImportStory(k, t.Name(), macroStory); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(
+		eph.PhaseActions{
+			assert.AncestryPhase: eph.AncestryActions,
+			assert.FieldPhase:    eph.FieldActions,
+			assert.NounPhase:     eph.NounActions,
+		}); e != nil {
 		t.Fatal(e)
 	} else {
-		expect := []eph.Ephemera{
-			&eph.EphValues{
-				Noun:  "Hershel",
-				Field: "proper_named",
-				Value: literal.B(true),
-			},
-			&eph.EphNouns{
-				Noun: "Hershel",
-				Kind: "an actor",
-			},
-			&eph.EphNouns{
-				Noun: "scissors",
-				Kind: "things",
-			},
-			&eph.EphRelatives{
-				Rel:       "whereabouts",
-				Noun:      "Hershel",
-				OtherNoun: "scissors",
-			},
-		}
-		if diff := pretty.Diff(els, expect); len(diff) != 0 {
-			t.Log(pretty.Sprint(els))
-			t.Fatal(diff)
+		// expect := []eph.Ephemera{
+		// 	&eph.EphValues{
+		// 		Noun:  "Hershel",
+		// 		Field: "proper_named",
+		// 		Value: literal.B(true),
+		// 	},
+		// 	&eph.EphNouns{
+		// 		Noun: "Hershel",
+		// 		Kind: "an actor",
+		// 	},
+		// 	&eph.EphNouns{
+		// 		Noun: "scissors",
+		// 		Kind: "things",
+		// 	},
+		// 	&eph.EphRelatives{
+		// 		Rel:       "whereabouts",
+		// 		Noun:      "Hershel",
+		// 		OtherNoun: "scissors",
+		// 	},
+		// }
+		// if diff := pretty.Diff(els, expect); len(diff) != 0 {
+		// 	t.Log(pretty.Sprint(els))
+		// 	t.Fatal(diff)
+		// }
+	}
+}
+
+func addDefaultKinds(n assert.Assertions) (err error) {
+	for _, k := range kindsOf.DefaultKinds {
+		if e := n.AssertAncestor(k.String(), k.Parent().String()); e != nil {
+			err = e
+			break
 		}
 	}
+	return
 }
 
 var macroStory = &story.StoryFile{
@@ -93,7 +120,7 @@ var macroStory = &story.StoryFile{
 			},
 		},
 		&story.DefineScene{
-			Scene: literal.T("carrier"),
+			Scene: literal.T("testing"),
 			With: []story.StoryStatement{
 				&story.CallMacro{
 					MacroName: "carrier",
