@@ -9,24 +9,25 @@ func _() {
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
 	_ = x[DomainPhase-0]
-	_ = x[PluralPhase-1]
-	_ = x[AncestryPhase-2]
-	_ = x[PropertyPhase-3]
-	_ = x[AspectPhase-4]
-	_ = x[FieldPhase-5]
-	_ = x[NounPhase-6]
-	_ = x[ValuePhase-7]
-	_ = x[RelativePhase-8]
-	_ = x[PatternPhase-9]
-	_ = x[AliasPhase-10]
-	_ = x[DirectivePhase-11]
-	_ = x[RefPhase-12]
-	_ = x[NumPhases-13]
+	_ = x[MacroPhase-1]
+	_ = x[PluralPhase-2]
+	_ = x[AncestryPhase-3]
+	_ = x[PropertyPhase-4]
+	_ = x[AspectPhase-5]
+	_ = x[FieldPhase-6]
+	_ = x[NounPhase-7]
+	_ = x[ValuePhase-8]
+	_ = x[RelativePhase-9]
+	_ = x[PatternPhase-10]
+	_ = x[AliasPhase-11]
+	_ = x[DirectivePhase-12]
+	_ = x[RefPhase-13]
+	_ = x[NumPhases-14]
 }
 
-const _Phase_name = "DomainPhasePluralPhaseAncestryPhasePropertyPhaseAspectPhaseFieldPhaseNounPhaseValuePhaseRelativePhasePatternPhaseAliasPhaseDirectivePhaseRefPhaseNumPhases"
+const _Phase_name = "DomainPhaseMacroPhasePluralPhaseAncestryPhasePropertyPhaseAspectPhaseFieldPhaseNounPhaseValuePhaseRelativePhasePatternPhaseAliasPhaseDirectivePhaseRefPhaseNumPhases"
 
-var _Phase_index = [...]uint8{0, 11, 22, 35, 48, 59, 69, 78, 88, 101, 113, 123, 137, 145, 154}
+var _Phase_index = [...]uint8{0, 11, 21, 32, 45, 58, 69, 79, 88, 98, 111, 123, 133, 147, 155, 164}
 
 func (i Phase) String() string {
 	if i < 0 || i >= Phase(len(_Phase_index)-1) {

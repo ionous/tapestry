@@ -166,10 +166,6 @@ func (k *CommandBuilder) AssertGrammar(name string, d *grammar.Directive) (none 
 	return
 }
 
-// func (k *Catalog) AssertMacro( a, b string ) {
-//    // 40: 		k.WriteEphemera(&EphMacro{EphPatterns: out, MacroStatements: op.MacroStatements})
-//  }
-
 func (k *CommandBuilder) AssertNounKind(noun, kind string) (none error) {
 	k.append(&EphNouns{
 		Noun: noun,

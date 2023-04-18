@@ -2164,6 +2164,127 @@ func DefineRelatives_Marshal(m jsn.Marshaler, val *DefineRelatives) (err error) 
 	return
 }
 
+// DefineScene Define a sub world.
+type DefineScene struct {
+	Scene     rt.TextEval      `if:"label=scene"`
+	DependsOn rt.TextListEval  `if:"label=depends_on,optional"`
+	With      []StoryStatement `if:"label=with"`
+	Markup    map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*DefineScene)(nil)
+
+func (*DefineScene) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DefineScene_Type,
+		Uses: composer.Type_Flow,
+		Lede: "define",
+	}
+}
+
+const DefineScene_Type = "define_scene"
+const DefineScene_Field_Scene = "$SCENE"
+const DefineScene_Field_DependsOn = "$DEPENDS_ON"
+const DefineScene_Field_With = "$WITH"
+
+func (op *DefineScene) Marshal(m jsn.Marshaler) error {
+	return DefineScene_Marshal(m, op)
+}
+
+type DefineScene_Slice []DefineScene
+
+func (op *DefineScene_Slice) GetType() string { return DefineScene_Type }
+
+func (op *DefineScene_Slice) Marshal(m jsn.Marshaler) error {
+	return DefineScene_Repeats_Marshal(m, (*[]DefineScene)(op))
+}
+
+func (op *DefineScene_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DefineScene_Slice) SetSize(cnt int) {
+	var els []DefineScene
+	if cnt >= 0 {
+		els = make(DefineScene_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DefineScene_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DefineScene_Marshal(m, &(*op)[i])
+}
+
+func DefineScene_Repeats_Marshal(m jsn.Marshaler, vals *[]DefineScene) error {
+	return jsn.RepeatBlock(m, (*DefineScene_Slice)(vals))
+}
+
+func DefineScene_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefineScene) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DefineScene_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DefineScene_Flow struct{ ptr *DefineScene }
+
+func (n DefineScene_Flow) GetType() string      { return DefineScene_Type }
+func (n DefineScene_Flow) GetLede() string      { return "define" }
+func (n DefineScene_Flow) GetFlow() interface{} { return n.ptr }
+func (n DefineScene_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DefineScene); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DefineScene_Optional_Marshal(m jsn.Marshaler, pv **DefineScene) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DefineScene_Marshal(m, *pv)
+	} else if !enc {
+		var v DefineScene
+		if err = DefineScene_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DefineScene_Marshal(m jsn.Marshaler, val *DefineScene) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DefineScene_Flow{val}); err == nil {
+		e0 := m.MarshalKey("scene", DefineScene_Field_Scene)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Scene)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DefineScene_Field_Scene))
+		}
+		e1 := m.MarshalKey("depends_on", DefineScene_Field_DependsOn)
+		if e1 == nil {
+			e1 = rt.TextListEval_Optional_Marshal(m, &val.DependsOn)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DefineScene_Field_DependsOn))
+		}
+		e2 := m.MarshalKey("with", DefineScene_Field_With)
+		if e2 == nil {
+			e2 = StoryStatement_Repeats_Marshal(m, &val.With)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", DefineScene_Field_With))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // DefineTraits Add traits to an aspect
 type DefineTraits struct {
 	Traits rt.TextListEval `if:"label=traits"`
@@ -6683,6 +6804,7 @@ var Slats = []composer.Composer{
 	(*DefineOtherRelatives)(nil),
 	(*DefinePattern)(nil),
 	(*DefineRelatives)(nil),
+	(*DefineScene)(nil),
 	(*DefineTraits)(nil),
 	(*EventBlock)(nil),
 	(*EventHandler)(nil),
@@ -6802,6 +6924,8 @@ var Signatures = map[uint64]interface{}{
 	13056176094891343360: (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:result:withRules: */
 	17765432678319840138: (*DefineOtherRelatives)(nil), /* execute=Define relation:nouns:otherNouns: */
 	3057287383316085006:  (*DefineOtherRelatives)(nil), /* story_statement=Define relation:nouns:otherNouns: */
+	5110919797933301972:  (*DefineScene)(nil),          /* story_statement=Define scene:dependsOn:with: */
+	13479298094295759568: (*DefineScene)(nil),          /* story_statement=Define scene:with: */
 	5891130802416685089:  (*DefineTraits)(nil),         /* execute=Define traits:as: */
 	3652615969014829573:  (*DefineTraits)(nil),         /* story_statement=Define traits:as: */
 	13015531987120768169: (*NounAssignment)(nil),       /* execute=Define value:of:asLines: */

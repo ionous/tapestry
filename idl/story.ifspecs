@@ -5,6 +5,43 @@
     {
       "Group contains:": [
         {
+          "--": "Define a sub world.",
+          "Spec:slots:with flow:": [
+            "define_scene",
+            [
+              "story_statement"
+            ],
+            {
+              "Flow:uses:": [
+                "define",
+                [
+                  {
+                    "Term:type:": [
+                      "scene",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "depends_on",
+                      "text_list_eval",
+                      true
+                    ]
+                  },
+                  {
+                    "Term:type:required:repeats:": [
+                      "with",
+                      "story_statement",
+                      true,
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
           "Spec:groups:with str:": [
             "abstract_action",
             "events",

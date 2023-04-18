@@ -27,6 +27,7 @@ func (n DomainError) Unwrap() error {
 
 func (c *Catalog) AddEphemera(at string, ep Ephemera) (err error) {
 	// fix: queue first, and then run?
+	// ( would need an initial "top" domain to queue into i think )
 	if phase := ep.Phase(); phase == assert.DomainPhase {
 		err = ep.Assemble(c, nil, at)
 	} else {

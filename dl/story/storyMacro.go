@@ -4,6 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -49,9 +50,11 @@ func (op *DefineMacro) PostImport(k *imp.Importer) (err error) {
 	return
 }
 
-// PostImport for macros calls Execute
+// PostImport for macros calls Execute... eventually... to generate dynamic assertions.
 func (op *CallMacro) PostImport(k *imp.Importer) error {
-	return op.Execute(k)
+	return k.Schedule(assert.MacroPhase, func(assert.World, assert.Assertions) error {
+		return op.Execute(k)
+	})
 }
 
 func (op *CallMacro) Execute(run rt.Runtime) error {

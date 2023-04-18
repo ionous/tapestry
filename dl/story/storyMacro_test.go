@@ -15,8 +15,8 @@ import (
 	"github.com/kr/pretty"
 )
 
-// disabled for the moment.
-func xTestMacroImport(t *testing.T) {
+// generate ephemera for macros
+func TestMacroEphemera(t *testing.T) {
 	errutil.Panic = true
 	var els []eph.Ephemera
 	k := imp.NewImporter(collectEphemera(&els))
@@ -50,8 +50,6 @@ func xTestMacroImport(t *testing.T) {
 	}
 }
 
-// tbd: is there anyway to make the first parameter anonymous? does that even matter in blockly?
-// Carrier actor:carries: [X, Ys]
 var macroStory = &story.StoryFile{
 	StoryStatements: []story.StoryStatement{
 		&story.DefineMacro{
@@ -94,14 +92,19 @@ var macroStory = &story.StoryFile{
 				},
 			},
 		},
-		&story.CallMacro{
-			MacroName: "carrier",
-			Arguments: []assign.Arg{{
-				Name:  "actor",
-				Value: &assign.FromText{Value: literal.T("Hershel")},
-			}, {
-				Name:  "carries",
-				Value: &assign.FromTextList{Value: literal.Ts("the scissors")},
-			}}},
+		&story.DefineScene{
+			Scene: literal.T("carrier"),
+			With: []story.StoryStatement{
+				&story.CallMacro{
+					MacroName: "carrier",
+					Arguments: []assign.Arg{{
+						Name:  "actor",
+						Value: &assign.FromText{Value: literal.T("Hershel")},
+					}, {
+						Name:  "carries",
+						Value: &assign.FromTextList{Value: literal.Ts("the scissors")},
+					}}},
+			},
+		},
 	},
 }
