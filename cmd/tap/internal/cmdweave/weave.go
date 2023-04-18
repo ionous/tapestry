@@ -2,9 +2,10 @@ package cmdweave
 
 import (
 	"database/sql"
+	"log"
+
 	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
-	"log"
 
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -48,44 +49,11 @@ func Weave(cat *eph.Catalog, db *sql.DB) (err error) {
 
 func BuildCatalog(cat *eph.Catalog, w eph.Writer) (err error) {
 	// go process all of the ephemera
-	if e := cat.AssembleCatalog(eph.PhaseActions{
+	return cat.AssembleCatalog(w, eph.PhaseActions{
 		assert.AncestryPhase: eph.AncestryActions,
 		assert.FieldPhase:    eph.FieldActions,
 		assert.NounPhase:     eph.NounActions,
-	}); e != nil {
-		err = e
-	} else if e := cat.WritePlurals(w); e != nil {
-		err = e
-	} else if e := cat.WriteOpposites(w); e != nil {
-		err = e
-	} else if e := cat.WriteDomains(w); e != nil {
-		err = e
-	} else if e := cat.WriteKinds(w); e != nil {
-		err = e
-	} else if e := cat.WriteFields(w); e != nil {
-		err = e
-	} else if e := cat.WriteNouns(w); e != nil {
-		err = e
-	} else if e := cat.WriteNames(w); e != nil {
-		err = e
-	} else if e := cat.WritePatterns(w); e != nil {
-		err = e
-	} else if e := cat.WriteLocals(w); e != nil {
-		err = e
-	} else if e := cat.WriteDirectives(w); e != nil {
-		err = e
-	} else if e := cat.WriteRelations(w); e != nil {
-		err = e
-	} else if e := cat.WritePairs(w); e != nil {
-		err = e
-	} else if e := cat.WriteRules(w); e != nil {
-		err = e
-	} else if e := cat.WriteValues(w); e != nil {
-		err = e
-	} else if e := cat.WriteChecks(w); e != nil {
-		err = e
-	}
-	return
+	})
 }
 
 // a terrible way to optimize database writes

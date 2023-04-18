@@ -2,10 +2,11 @@ package eph
 
 import (
 	"fmt"
-	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"math/rand"
 	"strings"
 	"testing"
+
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -137,7 +138,7 @@ func buildAncestors(dt domainTest) (ret *Catalog, err error) {
 	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		err = e
-	} else if e := cat.AssembleCatalog(PhaseActions{
+	} else if e := cat.AssembleCatalog(nil, PhaseActions{
 		assert.AncestryPhase: AncestryActions,
 		assert.FieldPhase:    FieldActions,
 	}); e != nil {
@@ -152,7 +153,7 @@ func buildNouns(dt domainTest) (ret *Catalog, err error) {
 	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		err = e
-	} else if e := cat.AssembleCatalog(PhaseActions{
+	} else if e := cat.AssembleCatalog(nil, PhaseActions{
 		assert.AncestryPhase: AncestryActions,
 		assert.FieldPhase:    FieldActions,
 		assert.NounPhase:     NounActions,

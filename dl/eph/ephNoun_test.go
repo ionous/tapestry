@@ -181,7 +181,7 @@ func TestNounDistance(t *testing.T) {
 	var cat Catalog
 	if e := dt.addToCat(&cat); e != nil {
 		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(nil); e != nil {
+	} else if e := cat.AssembleCatalog(nil, nil); e != nil {
 		t.Fatal(e)
 	} else if _, e := cat.ResolveNouns(); e != nil {
 		t.Fatal(e)

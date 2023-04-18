@@ -74,7 +74,7 @@ func (c *Catalog) EnsureDomain(n, at string, reqs ...string) (ret *Domain, err e
 }
 
 // walk the domains and run the commands remaining in their queues
-func (c *Catalog) AssembleCatalog(phaseActions PhaseActions) (err error) {
+func (c *Catalog) AssembleCatalog(w Writer, phaseActions PhaseActions) (err error) {
 	if ds, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
@@ -96,6 +96,64 @@ func (c *Catalog) AssembleCatalog(phaseActions PhaseActions) (err error) {
 				}
 			}
 		}
+		if err == nil && w != nil {
+			for p := assert.Phase(0); p < assert.NumPhases; p++ {
+				if e := c.WritePhase(p, w); e != nil {
+					err = e
+					break
+				}
+			}
+		}
+	}
+	return
+}
+
+func (c *Catalog) WritePhase(p assert.Phase, w Writer) (err error) {
+	// switch or map better?
+	switch p {
+	case assert.DomainPhase:
+		err = c.WriteDomains(w)
+	case assert.PluralPhase:
+		if e := c.WritePlurals(w); e != nil {
+			err = e
+		} else if e := c.WriteOpposites(w); e != nil {
+			err = e
+		}
+	case assert.AncestryPhase:
+		err = c.WriteKinds(w)
+	case assert.PropertyPhase:
+	case assert.AspectPhase:
+	case assert.FieldPhase:
+		err = c.WriteFields(w)
+	case assert.MacroPhase:
+	case assert.NounPhase:
+		err = c.WriteNouns(w)
+	case assert.ValuePhase:
+		err = c.WriteValues(w)
+	case assert.RelativePhase:
+		if e := c.WriteRelations(w); e != nil {
+			err = e
+		} else {
+			err = c.WritePairs(w)
+		}
+	case assert.PatternPhase:
+		if e := c.WritePatterns(w); e != nil {
+			err = e
+		} else if e := c.WriteLocals(w); e != nil {
+			err = e
+		} else if e := c.WriteRules(w); e != nil {
+			err = e
+		}
+	case assert.AliasPhase:
+		err = c.WriteNames(w)
+
+	case assert.DirectivePhase:
+		// grammar
+		err = c.WriteDirectives(w)
+
+	case assert.RefPhase:
+		// when to write these?
+		err = c.WriteChecks(w)
 	}
 	return
 }

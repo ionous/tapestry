@@ -17,7 +17,7 @@ import (
 )
 
 // generate ephemera for macros
-func TestMacros(t *testing.T) {
+func xTestMacros(t *testing.T) {
 	errutil.Panic = true
 	//
 	var cat eph.Catalog

@@ -1,8 +1,9 @@
 package eph
 
 import (
-	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"sort"
+
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -15,6 +16,8 @@ func (c *Catalog) WriteRules(w Writer) (err error) {
 		err = e
 	} else {
 	Done:
+		// the rules for latter domains are more important than earlier domains so we put them first.
+		// ( although sorting by the app, using materialized path or runtime domain sorting might be better )
 		for rev := len(ds) - 1; rev >= 0; rev-- {
 			deps := ds[rev]
 			d := deps.Leaf().(*Domain)
