@@ -47,6 +47,7 @@ func runMosaic(ctx context.Context, cmd *base.Command, args []string) (err error
 		// composer.RedirectIndex(mux, "mosaic")
 
 		// FIX: remove the "cmdDir"
+		// everything should be using tap internals at this point i think.
 		cfg := mosaic.Configure(types, build.Default.GOPATH, dir)
 
 		// raw story files ( because why not )
