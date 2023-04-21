@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/rt"
 
@@ -27,20 +26,22 @@ func TestDetermineNum(t *testing.T) {
 			}}}); len(diff) > 0 {
 			t.Fatal(diff)
 		} else {
-			refs := story.ImportCall(call)
-			if diff := pretty.Diff(refs, &eph.EphRefs{
-				Refs: []eph.Ephemera{
-					&eph.EphKinds{
-						Kind: "factorial",
-						// From:  kindsOf.Pattern.String() -- see note in ImportCall
-						Contain: []eph.EphParams{{
-							Affinity: eph.Affinity{eph.Affinity_Number},
-							Name:     "num",
-						}},
-					}},
-			}); len(diff) > 0 {
-				t.Fatal(diff)
-			}
+			// disabling refs for now....
+			// maybe instead could just request from the db that something exists in a scheduled post-weave check.
+			// refs := story.ImportCall(call)
+			// if diff := pretty.Diff(refs, &eph.EphRefs{
+			// 	Refs: []eph.Ephemera{
+			// 		&eph.EphKinds{
+			// 			Kind: "factorial",
+			// 			// From:  kindsOf.Pattern.String() -- see note in ImportCall
+			// 			Contain: []eph.EphParams{{
+			// 				Affinity: eph.Affinity{eph.Affinity_Number},
+			// 				Name:     "num",
+			// 			}},
+			// 		}},
+			// }); len(diff) > 0 {
+			// 	t.Fatal(diff)
+			// }
 		}
 	}
 }

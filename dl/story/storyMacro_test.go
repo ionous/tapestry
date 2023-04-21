@@ -21,18 +21,14 @@ func xTestMacros(t *testing.T) {
 	errutil.Panic = true
 	//
 	var cat eph.Catalog
-	k := imp.NewImporter(func(el eph.Ephemera) {
-		if e := cat.AddEphemera("at", el); e != nil {
-			t.Fatal(e)
-		}
-	})
+	k := imp.NewImporter(eph.NewCommandBuilder(&cat))
 	if e := k.BeginDomain("tapestry", nil); e != nil {
 		t.Fatal(e)
 	} else if e := addDefaultKinds(k); e != nil {
 		t.Fatal(e)
 	} else if e := story.ImportStory(k, t.Name(), macroStory); e != nil {
 		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(
+	} else if e := cat.AssembleCatalog(nil,
 		eph.PhaseActions{
 			assert.AncestryPhase: eph.AncestryActions,
 			assert.FieldPhase:    eph.FieldActions,

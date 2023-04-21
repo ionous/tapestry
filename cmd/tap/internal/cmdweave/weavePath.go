@@ -6,7 +6,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strconv"
 
 	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/eph"
@@ -28,16 +27,15 @@ const (
 // lets do this in the dumbest of ways for now.
 func WeavePath(srcPath, outFile string) (err error) {
 	var cat eph.Catalog // fix: capture "Dilemmas" and LogWarning?
-	var writeErr error  // fix: this seems less than ideal; maybe writer should return err.
-	k := imp.NewImporter(collectEphemera(&cat, &writeErr))
+	k := imp.NewImporter(eph.NewCommandBuilder(&cat))
 	if e := k.BeginDomain("tapestry", nil); e != nil {
 		err = e
 	} else if e := addDefaultKinds(k); e != nil {
 		err = e
 	} else if e := importStoryFiles(k, srcPath); e != nil {
 		err = e
-	} else if writeErr != nil {
-		err = writeErr
+	} else if len(cat.Errors) > 0 {
+		err = errutil.New(cat.Errors)
 	} else if e := assembleCat(&cat, outFile); e != nil {
 		err = e
 	}
@@ -72,16 +70,6 @@ func assembleCat(cat *eph.Catalog, outFile string) (err error) {
 		}
 	}
 	return
-}
-
-func collectEphemera(cat *eph.Catalog, out *error) eph.WriterFun {
-	var i int
-	return func(el eph.Ephemera) {
-		if e := cat.AddEphemera(strconv.Itoa(i), el); e != nil {
-			*out = errutil.Append(*out, e)
-		}
-		i++ // temp
-	}
 }
 
 // read a comma-separated list of files and directories

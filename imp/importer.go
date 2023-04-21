@@ -3,7 +3,6 @@ package imp
 import (
 	"log"
 
-	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/query"
@@ -20,7 +19,6 @@ type Importer struct {
 	macros      macroReg
 	autoCounter Counters
 	env         Environ
-	eph.EphemeraWriter
 	assert.Assertions
 }
 
@@ -49,19 +47,18 @@ func StoryStatement(run rt.Runtime, op PostImport) (err error) {
 	return
 }
 
-func NewImporter(writer eph.WriterFun) *Importer {
+func NewImporter(w assert.Assertions) *Importer {
 	k := &Importer{
-		EphemeraWriter: writer,
-		macros:         make(macroReg),
-		oneTime:        make(map[string]bool),
-		autoCounter:    make(Counters),
+		macros:      make(macroReg),
+		oneTime:     make(map[string]bool),
+		autoCounter: make(Counters),
 		Runner: qna.NewRuntimeOptions(
 			log.Writer(),
 			query.QueryNone("import doesn't support object queries"),
 			qna.DecodeNone("import doesn't support the decoder"),
 			qna.NewOptions()),
 	}
-	k.Assertions = eph.NewCommandBuilder(writer)
+	k.Assertions = w
 	return k
 }
 

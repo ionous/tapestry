@@ -23,6 +23,13 @@ func NewCommandBuilder(q EphemeraWriter) *CommandBuilder {
 	return &CommandBuilder{q: q}
 }
 
+func NewCommandQueue(els *[]Ephemera) *CommandBuilder {
+	var w WriterFun = func(q Ephemera) {
+		(*els) = append(*els, q)
+	}
+	return &CommandBuilder{q: w}
+}
+
 type CommandBuilder struct {
 	q       EphemeraWriter
 	domains []string

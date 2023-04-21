@@ -1,7 +1,6 @@
 package debug
 
 import (
-	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/rt"
 )
@@ -13,7 +12,7 @@ func (op *Test) PreImport(k *imp.Importer) (ret interface{}, err error) {
 		req = []string{n}
 	}
 	// everything between this and "EndDomain" in the Post/PostImport will be in this test domain.
-	k.WriteEphemera(&eph.EphBeginDomain{Name: op.TestName.String(), Requires: req})
+	err = k.BeginDomain(op.TestName.String(), req)
 	return
 }
 
@@ -23,7 +22,10 @@ func (op *Test) Execute(macro rt.Runtime) error {
 }
 
 func (op *Test) PostImport(k *imp.Importer) (err error) {
-	k.WriteEphemera(&eph.EphEndDomain{})
-	k.WriteEphemera(&eph.EphChecks{Name: op.TestName.String(), Exe: op.Do})
+	if e := k.EndDomain(); e != nil {
+		err = e
+	} else if e := k.AssertCheck(op.TestName.String(), op.Do); e != nil {
+		err = e
+	}
 	return
 }

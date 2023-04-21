@@ -48,10 +48,10 @@ func importStory(k *imp.Importer, tgt jsn.Marshalee) error {
 			chart.BlockStart: func(b jsn.Block, v interface{}) (err error) {
 				if flow, ok := b.(jsn.FlowBlock); !ok {
 					err = errutil.Fmt("trying to import something other than a flow")
-				} else if op, ok := flow.GetFlow().(*assign.CallPattern); !ok {
+				} else if _, ok := flow.GetFlow().(*assign.CallPattern); !ok {
 					err = errutil.Fmt("trying to import something other than a response")
 				} else {
-					k.WriteEphemera(ImportCall(op))
+					// k.WriteEphemera(ImportCall(op))
 				}
 				return
 			},

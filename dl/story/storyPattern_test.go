@@ -17,7 +17,7 @@ func TestPatternImport(t *testing.T) {
 		PatternName: T("corral"),
 	}
 	var els []eph.Ephemera
-	k := imp.NewImporter(collectEphemera(&els))
+	k := imp.NewImporter(eph.NewCommandQueue(&els))
 	if e := patternDecl.PostImport(k); e != nil {
 		t.Fatal(e)
 	} else {
@@ -43,7 +43,8 @@ func TestPatternParameterImport(t *testing.T) {
 		}},
 	}
 	var els []eph.Ephemera
-	k := imp.NewImporter(collectEphemera(&els))
+	k := imp.NewImporter(eph.NewCommandQueue(&els))
+
 	if e := patternVariables.PostImport(k); e != nil {
 		t.Log(e)
 	} else {
@@ -71,7 +72,7 @@ func TestPatternParameterImport(t *testing.T) {
 // see also: TestFactorialImport which is more extensive
 func TestPatternRuleImport(t *testing.T) {
 	var els []eph.Ephemera
-	k := imp.NewImporter(collectEphemera(&els))
+	k := imp.NewImporter(eph.NewCommandQueue(&els))
 	prog := story.DefinePattern{
 		PatternName: T("example"),
 		Rules: []story.PatternRule{{

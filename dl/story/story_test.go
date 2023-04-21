@@ -16,17 +16,11 @@ func TestImportStory(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		var els []eph.Ephemera
-		k := imp.NewImporter(collectEphemera(&els))
+		k := imp.NewImporter(eph.NewCommandQueue(&els))
 		if e := story.ImportStory(k, t.Name(), &curr); e != nil {
 			t.Fatal("import", e)
 		} else {
 			t.Log("ok")
 		}
-	}
-}
-
-func collectEphemera(sink *[]eph.Ephemera) eph.WriterFun {
-	return func(el eph.Ephemera) {
-		*sink = append(*sink, el)
 	}
 }

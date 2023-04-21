@@ -16,7 +16,7 @@ import (
 // fix - this doesnt work properly because the implicit aspects are in script
 func xTestImportNamedNouns(t *testing.T) {
 	var els []eph.Ephemera
-	k := imp.NewImporter(collectEphemera(&els))
+	k := imp.NewImporter(eph.NewCommandQueue(&els))
 	// this is really import noun properties at this point...
 	if _, e := story.ImportNounProperties(k, []string{
 		"our Trevor",

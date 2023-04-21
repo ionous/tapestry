@@ -16,7 +16,8 @@ import (
 // test that importing cycling text transforms to the proper runtime command
 func TestImportSequence(t *testing.T) {
 	var els []eph.Ephemera
-	k := imp.NewImporter(collectEphemera(&els))
+	k := imp.NewImporter(eph.NewCommandQueue(&els))
+
 	// create a statement that uses CycleText
 	printText := &core.PrintText{Text: &story.CycleText{Parts: []rt.TextEval{
 		core.T("a"),

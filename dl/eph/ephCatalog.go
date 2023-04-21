@@ -10,6 +10,7 @@ type Catalog struct {
 	domains         map[string]*Domain
 	processing      DomainStack
 	resolvedDomains cachedTable
+	Errors          []error
 }
 
 // fix? consider moving domain error to catalog processing internals ( and removing explicit external use )
@@ -25,7 +26,9 @@ func (n DomainError) Unwrap() error {
 	return n.Err
 }
 
-func (c *Catalog) AddEphemera(at string, ep Ephemera) (err error) {
+func (c *Catalog) WriteEphemera(ep Ephemera) {
+	at := "x"
+	var err error
 	// fix: queue first, and then run?
 	// ( would need an initial "top" domain to queue into i think )
 	if phase := ep.Phase(); phase == assert.DomainPhase {
@@ -36,6 +39,10 @@ func (c *Catalog) AddEphemera(at string, ep Ephemera) (err error) {
 		} else {
 			err = d.AddEphemera(at, ep)
 		}
+	}
+	if err != nil {
+		// hrm.
+		c.Errors = append(c.Errors, err)
 	}
 	return
 }

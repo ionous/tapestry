@@ -100,10 +100,10 @@ func (dt *domainTest) makeDomain(names []string, add ...Ephemera) {
 
 func (dt *domainTest) addToCat(cat *Catalog) (err error) {
 	for _, el := range dt.out {
-		if e := cat.AddEphemera("x", el); e != nil {
-			err = e
-			break
-		}
+		cat.WriteEphemera(el)
+	}
+	if errs := cat.Errors; len(errs) > 0 {
+		err = errutil.New(errs)
 	}
 	return
 }

@@ -44,7 +44,8 @@ const (
 // assert.Facts?
 // fix: more gl like?
 // in that case would ancestor be primary or kind?
-// and would domain requires be declarative or a series of push?
+// field might work  nicer that way... beginLocals, beginParams, etc.
+// the init and noun value could maybe be a write value
 type Assertions interface {
 	BeginDomain(name string, requires []string) error
 	EndDomain() error
