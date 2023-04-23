@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
@@ -100,13 +99,12 @@ func (ep *EphParams) Unify(at string) (UniformField, error) {
 func MakeUniformField(fieldAffinity Affinity, fieldName, fieldClass, at string) (ret UniformField, err error) {
 	if name, ok := UniformString(fieldName); !ok {
 		err = InvalidString(fieldName)
-	} else if aff, ok := composer.FindChoice(&fieldAffinity, fieldAffinity.Str); !ok && len(fieldAffinity.Str) > 0 {
-		err = errutil.New("unknown affinity", aff)
+	} else if aff, e := fromAffinity(fieldAffinity); e != nil {
+		err = e
 	} else if class, ok := UniformString(fieldClass); !ok && len(fieldClass) > 0 {
 		err = InvalidString(fieldClass)
 	} else {
 		// shortcut: if we specify a field name for a record and no class, we'll expect the class to be the name.
-		aff := affine.Affinity(aff)
 		if len(class) == 0 && isRecordAffinity(aff) {
 			class = name
 		}

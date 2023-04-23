@@ -34,6 +34,24 @@ func (c *Catalog) WritePatterns(w Writer) (err error) {
 // pattern commands generate ancestry, fields, and pattern entries....
 func (op *EphPatterns) Phase() assert.Phase { return assert.AncestryPhase }
 
+func (op *EphPatterns) Weave(k assert.Assertions) (err error) {
+	name := op.PatternName
+	if e := k.AssertAncestor(name, kindsOf.Pattern.String()); e != nil {
+		err = e
+	} else {
+		if ps := op.Params; err == nil && len(ps) > 0 {
+			err = weaveFields(name, ps, k.AssertParam)
+		}
+		if ps := op.Locals; err == nil && len(ps) > 0 {
+			err = weaveFields(name, ps, k.AssertLocal)
+		}
+		if ps := op.Result; err == nil && ps != nil {
+			err = weaveField(name, *ps, k.AssertResult)
+		}
+	}
+	return
+}
+
 func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if name, ok := UniformString(op.PatternName); !ok {
 		err = InvalidString(op.PatternName)

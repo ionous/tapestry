@@ -18,6 +18,9 @@ type Ephemera interface {
 	// fix? remove catalog from the signature?
 	Assemble(c *Catalog, d *Domain, at string) error
 	Phase() assert.Phase
+	// the command builder generates commands;
+	// this reverse the direction and generates calls to the command builder.
+	Weave(assert.Assertions) error
 }
 
 //go:generate stringer -type=Phase
@@ -39,6 +42,10 @@ type PhaseFunction struct {
 }
 
 func (fn PhaseFunction) Phase() assert.Phase { return fn.OnPhase }
+
+func (fn PhaseFunction) Weave(k assert.Assertions) (err error) {
+	return k.Schedule(fn.OnPhase, fn.Do)
+}
 
 func (fn PhaseFunction) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	var writeEph WriterFun = func(op Ephemera) {

@@ -1,6 +1,9 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
@@ -44,6 +47,43 @@ func (n KindError) Unwrap() error {
 
 // name of a kind to assembly info
 func (op *EphKinds) Phase() assert.Phase { return assert.AncestryPhase }
+
+func (op *EphKinds) Weave(k assert.Assertions) (err error) {
+	err = k.AssertAncestor(op.Kind, op.Ancestor)
+	//
+	if ps := op.Contain; err == nil && len(ps) > 0 {
+		err = weaveFields(op.Kind, ps, k.AssertField)
+	}
+	return
+}
+
+func weaveFields(kind string, ps []EphParams, w func(kind, name, class string, aff affine.Affinity, init assign.Assignment) error) (err error) {
+	for _, p := range ps {
+		if e := weaveField(kind, p, w); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
+
+func weaveField(kind string, p EphParams, w func(kind, name, class string, aff affine.Affinity, init assign.Assignment) error) (err error) {
+	if aff, e := fromAffinity(p.Affinity); e != nil {
+		err = e
+	} else if e := w(kind, p.Name, p.Class, aff, p.Initially); e != nil {
+		err = e
+	}
+	return
+}
+
+func fromAffinity(fieldAffinity Affinity) (ret affine.Affinity, err error) {
+	if aff, ok := composer.FindChoice(&fieldAffinity, fieldAffinity.Str); !ok && len(fieldAffinity.Str) > 0 {
+		err = errutil.New("unknown affinity", aff)
+	} else {
+		ret = affine.Affinity(aff)
+	}
+	return
+}
 
 // Kinds, From string, Contain []EphParams
 func (op *EphKinds) Assemble(c *Catalog, d *Domain, at string) (err error) {

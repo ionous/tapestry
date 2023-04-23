@@ -48,6 +48,10 @@ func (c *Catalog) WriteOpposites(w Writer) (err error) {
 
 func (op *EphOpposites) Phase() assert.Phase { return assert.PluralPhase }
 
+func (op *EphOpposites) Weave(k assert.Assertions) (err error) {
+	return k.AssertOpposite(op.Opposite, op.Word)
+}
+
 func (op *EphOpposites) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if oneWord, ok := UniformString(op.Opposite); !ok {
 		err = InvalidString(op.Opposite)

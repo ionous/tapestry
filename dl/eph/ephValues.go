@@ -2,6 +2,7 @@ package eph
 
 import (
 	"errors"
+
 	"git.sr.ht/~ionous/tapestry/imp/assert"
 
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
@@ -28,6 +29,10 @@ func (c *Catalog) WriteValues(w Writer) error {
 
 // name of a noun to assembly info
 func (op *EphValues) Phase() assert.Phase { return assert.ValuePhase }
+
+func (op *EphValues) Weave(k assert.Assertions) (err error) {
+	return k.AssertNounValue(op.Noun, op.Field, op.Path, op.Value)
+}
 
 // note: values are written per *noun* not per domain....
 func (op *EphValues) Assemble(c *Catalog, d *Domain, at string) (err error) {

@@ -18,6 +18,10 @@ func AspectParam(aspectName string) EphParams {
 // ( to fill the aspect's kind with bool fields representing the traits. )
 func (op *EphAspects) Phase() assert.Phase { return assert.AncestryPhase }
 
+func (op *EphAspects) Weave(k assert.Assertions) (err error) {
+	return k.AssertAspectTraits(op.Aspects, op.Traits)
+}
+
 // generates traits and adds them to a custom aspect kind.
 func (op *EphAspects) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	// we dont singularize aspects even thought its a kind;

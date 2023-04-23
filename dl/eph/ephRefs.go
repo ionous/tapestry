@@ -4,6 +4,11 @@ import "git.sr.ht/~ionous/tapestry/imp/assert"
 
 func (op *EphRefs) Phase() assert.Phase { return assert.RefPhase }
 
+func (op *EphRefs) Weave(k assert.Assertions) (err error) {
+	// not implemented.
+	return
+}
+
 func (op *EphRefs) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	refsNotImplemented.PrintOnce()
 	return

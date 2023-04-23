@@ -86,6 +86,11 @@ type ephRules struct {
 // rules are assembled after kinds and their fields...
 func (op *EphRules) Phase() assert.Phase { return assert.PatternPhase }
 
+func (op *EphRules) Weave(k assert.Assertions) (err error) {
+	flags := toTiming(op.When, op.Touch)
+	return k.AssertRule(op.PatternName, op.Target, op.Filter, flags, op.Exe)
+}
+
 // validate that the pattern for the rule exists then add the rule to the *current* domain
 // ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
 func (op *EphRules) Assemble(c *Catalog, d *Domain, at string) (err error) {

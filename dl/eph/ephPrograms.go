@@ -38,6 +38,10 @@ func (d *Domain) WriteDirectives(w Writer) (err error) {
 // we give it its own phase so we can keep its definitions separated out.
 func (op *EphDirectives) Phase() assert.Phase { return assert.DirectivePhase }
 
+func (op *EphDirectives) Weave(k assert.Assertions) (err error) {
+	return k.AssertGrammar(op.Name, &op.Directive)
+}
+
 // jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
 func (op *EphDirectives) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	// fix: definitions probably need to be smarter.

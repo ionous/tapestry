@@ -100,10 +100,13 @@ func (dt *domainTest) makeDomain(names []string, add ...Ephemera) {
 
 func (dt *domainTest) addToCat(cat *Catalog) (err error) {
 	for _, el := range dt.out {
-		cat.WriteEphemera(el)
+		if e := el.Weave(cat); e != nil {
+			err = e
+			break
+		}
 	}
 	if errs := cat.Errors; len(errs) > 0 {
-		err = errutil.New(errs)
+		err = errutil.New(err, errs)
 	}
 	return
 }
@@ -136,7 +139,7 @@ func T(s string) *literal.TextValue { return &literal.TextValue{Value: s} }
 
 func buildAncestors(dt domainTest) (ret *Catalog, err error) {
 	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
+	if e := dt.addToCat(cat.Weaver()); e != nil {
 		err = e
 	} else if e := cat.AssembleCatalog(nil, PhaseActions{
 		assert.AncestryPhase: AncestryActions,
@@ -151,7 +154,7 @@ func buildAncestors(dt domainTest) (ret *Catalog, err error) {
 
 func buildNouns(dt domainTest) (ret *Catalog, err error) {
 	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
+	if e := dt.addToCat(cat.Weaver()); e != nil {
 		err = e
 	} else if e := cat.AssembleCatalog(nil, PhaseActions{
 		assert.AncestryPhase: AncestryActions,

@@ -16,7 +16,7 @@ func TestDomainSimplest(t *testing.T) {
 	dt.makeDomain(dd("a", "b"))
 	dt.makeDomain(dd("b"))
 	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
+	if e := dt.addToCat(cat.Weaver()); e != nil {
 		t.Fatal(e)
 	} else if a, e := cat.resolveDomain("a"); e != nil {
 		t.Fatal(e) // test getting just the domains related to "a"
@@ -37,7 +37,7 @@ func TestDomainSimpleTest(t *testing.T) {
 	dt.makeDomain(dd("e", "d"))
 	dt.makeDomain(dd("d"))
 	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
+	if e := dt.addToCat(cat.Weaver()); e != nil {
 		t.Fatal(e)
 	} else if a, e := cat.resolveDomain("a"); e != nil {
 		t.Fatal(e) // test getting just the domains related to "a"
@@ -67,7 +67,7 @@ func TestDomainCatchCycles(t *testing.T) {
 	dt.makeDomain(dd("c", "d", "e"))
 	dt.makeDomain(dd("d", "a"))
 	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
+	if e := dt.addToCat(cat.Weaver()); e != nil {
 		t.Fatal(e)
 	} else if got, e := cat.resolveDomain(
 		"a"); e == nil {
@@ -87,7 +87,7 @@ func TestDomainTable(t *testing.T) {
 	dt.makeDomain(dd("d"))
 	dt.makeDomain(dd("e"))
 	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
+	if e := dt.addToCat(cat.Weaver()); e != nil {
 		t.Fatal(e)
 	} else if ds, e := cat.ResolveDomains(); e != nil {
 		t.Fatal(e)
@@ -128,7 +128,7 @@ func TestDomainWhenUndeclared(t *testing.T) {
 	// and this should result in an error.
 	dt.makeDomain(dd("a", "b"))
 	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
+	if e := dt.addToCat(cat.Weaver()); e != nil {
 		t.Fatal(e)
 	} else if ds, e := cat.ResolveDomains(); e == nil {
 		t.Fatal("expected failure", ds)
@@ -143,7 +143,7 @@ func TestDomainCase(t *testing.T) {
 	dt.makeDomain(dd("alpha   domain", "beta domain"))
 	dt.makeDomain(dd("BetaDomain"))
 	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
+	if e := dt.addToCat(cat.Weaver()); e != nil {
 		t.Fatal(e)
 	} else if ds, e := cat.resolveDomain("alpha_domain"); e != nil {
 		t.Fatal(e)
@@ -161,7 +161,7 @@ func TestRivalStandalone(t *testing.T) {
 	dt.makeDomain(dd("a"), rivalFact("secret"))
 	dt.makeDomain(dd("b"), rivalFact("mongoose"))
 	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
+	if e := dt.addToCat(cat.Weaver()); e != nil {
 		t.Fatal(e)
 	} else if e := cat.AssembleCatalog(nil, nil); e != nil {
 		t.Fatal(e)
@@ -174,7 +174,7 @@ func TestRivalConflict(t *testing.T) {
 	dt.makeDomain(dd("b"), rivalFact("mongoose"))
 	dt.makeDomain(dd("c", "a", "b"))
 	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
+	if e := dt.addToCat(cat.Weaver()); e != nil {
 		t.Fatal(e)
 	} else {
 		var conflict *Conflict
@@ -196,10 +196,14 @@ func namesOf(ds []Dependency) []string {
 	return out
 }
 
-// ephemera for testing which enters a "
+// ephemera for testing which enters a definition
 type rivalFact string
 
 func (el rivalFact) Phase() assert.Phase { return assert.ValuePhase }
+
+func (el rivalFact) Weave(k assert.Assertions) error {
+	return k.AssertDefinition("rivalFact", string(el))
+}
 
 func (el rivalFact) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	return d.AddDefinition(MakeKey("rivalFact"), at, string(el))

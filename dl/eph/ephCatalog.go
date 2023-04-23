@@ -11,6 +11,15 @@ type Catalog struct {
 	processing      DomainStack
 	resolvedDomains cachedTable
 	Errors          []error
+	CommandBuilder
+}
+
+// initializes and returns itself
+func (c *Catalog) Weaver() *Catalog {
+	if c.q == nil {
+		c.q = WriterFun(c.writeEphemera)
+	}
+	return c
 }
 
 // fix? consider moving domain error to catalog processing internals ( and removing explicit external use )
@@ -26,11 +35,9 @@ func (n DomainError) Unwrap() error {
 	return n.Err
 }
 
-func (c *Catalog) WriteEphemera(ep Ephemera) {
+func (c *Catalog) writeEphemera(ep Ephemera) {
 	at := "x"
 	var err error
-	// fix: queue first, and then run?
-	// ( would need an initial "top" domain to queue into i think )
 	if phase := ep.Phase(); phase == assert.DomainPhase {
 		err = ep.Assemble(c, nil, at)
 	} else {
@@ -41,7 +48,6 @@ func (c *Catalog) WriteEphemera(ep Ephemera) {
 		}
 	}
 	if err != nil {
-		// hrm.
 		c.Errors = append(c.Errors, err)
 	}
 	return

@@ -41,6 +41,10 @@ func (c *Catalog) WriteChecks(w Writer) (err error) {
 // ensures that a domain exists for the named check
 func (op *EphChecks) Phase() assert.Phase { return assert.DomainPhase }
 
+func (op *EphChecks) Weave(k assert.Assertions) (err error) {
+	return k.AssertCheck(op.Name, op.Exe)
+}
+
 func (op *EphChecks) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	// fix. todo: this isnt very well thought out right now --
 	// what if a check is part of a story scene? shouldnt it have access to those objects?

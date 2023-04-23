@@ -272,7 +272,7 @@ func TestPatternConflictingInit(t *testing.T) {
 		},
 	)
 	if _, e := buildAncestors(dt); e == nil || e.Error() != `mismatched affinity of initial value (a text) for field "n" (a number)` {
-		t.Fatal("expected an error")
+		t.Fatal("expected an error; got:", e)
 	} else {
 		t.Log("ok", e)
 	}

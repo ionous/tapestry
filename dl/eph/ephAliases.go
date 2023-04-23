@@ -10,6 +10,10 @@ import (
 // but... we could add this after noun declaration to allow fields, etc. to use aliased names
 func (op *EphAliases) Phase() assert.Phase { return assert.AliasPhase }
 
+func (op *EphAliases) Weave(k assert.Assertions) (err error) {
+	return k.AssertAlias(op.ShortName, op.Aliases...)
+}
+
 func (op *EphAliases) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	if noun, e := getClosestNoun(d, op.ShortName); e != nil {
 		err = e

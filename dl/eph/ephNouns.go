@@ -82,6 +82,10 @@ func (n NounError) Unwrap() error {
 // name of a noun to assembly info
 func (op *EphNouns) Phase() assert.Phase { return assert.NounPhase }
 
+func (op *EphNouns) Weave(k assert.Assertions) (err error) {
+	return k.AssertNounKind(op.Noun, op.Kind)
+}
+
 // noun, kind
 func (op *EphNouns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	_, noun := d.StripDeterminer(op.Noun)

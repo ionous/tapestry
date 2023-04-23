@@ -114,54 +114,68 @@ func (k *CommandBuilder) AssertDefinition(path ...string) (err error) {
 	return
 }
 
-func makeParam(name, class string, aff affine.Affinity, init assign.Assignment) EphParams {
+func makeParam(name, class string, aff affine.Affinity, init assign.Assignment) (ret EphParams, err error) {
 	if init != nil {
-		test := assign.GetAffinity(init)
-		if test != aff {
-			panic("?")
+		if test := assign.GetAffinity(init); test != aff {
+			err = errutil.Fmt(`mismatched affinity of initial value (a %s) for field "%s" (a %s)`, test, name, aff)
 		}
 	}
-	return EphParams{
-		Name:      name,
-		Affinity:  affineToAffinity(aff),
-		Class:     class,
-		Initially: init,
+	if err == nil {
+		ret = EphParams{
+			Name:      name,
+			Affinity:  affineToAffinity(aff),
+			Class:     class,
+			Initially: init,
+		}
 	}
+	return
 }
 
 func (k *CommandBuilder) AssertField(kind, name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-	ps := makeParam(name, class, aff, init)
-	k.append(&EphKinds{
-		Kind:    kind,
-		Contain: []EphParams{ps},
-	})
+	if ps, e := makeParam(name, class, aff, init); e != nil {
+		err = e
+	} else {
+		k.append(&EphKinds{
+			Kind:    kind,
+			Contain: []EphParams{ps},
+		})
+	}
 	return
 }
 
 func (k *CommandBuilder) AssertParam(kind, name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-	ps := makeParam(name, class, aff, init)
-	k.append(&EphPatterns{
-		PatternName: kind,
-		Params:      []EphParams{ps},
-	})
+	if ps, e := makeParam(name, class, aff, init); e != nil {
+		err = e
+	} else {
+		k.append(&EphPatterns{
+			PatternName: kind,
+			Params:      []EphParams{ps},
+		})
+	}
 	return
 }
 
 func (k *CommandBuilder) AssertLocal(kind, name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-	ps := makeParam(name, class, aff, init)
-	k.append(&EphPatterns{
-		PatternName: kind,
-		Locals:      []EphParams{ps},
-	})
+	if ps, e := makeParam(name, class, aff, init); e != nil {
+		err = e
+	} else {
+		k.append(&EphPatterns{
+			PatternName: kind,
+			Locals:      []EphParams{ps},
+		})
+	}
 	return
 }
 
 func (k *CommandBuilder) AssertResult(kind, name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-	ps := makeParam(name, class, aff, init)
-	k.append(&EphPatterns{
-		PatternName: kind,
-		Result:      &ps,
-	})
+	if ps, e := makeParam(name, class, aff, init); e != nil {
+		err = e
+	} else {
+		k.append(&EphPatterns{
+			PatternName: kind,
+			Result:      &ps,
+		})
+	}
 	return
 }
 

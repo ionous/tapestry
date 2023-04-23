@@ -2,8 +2,9 @@ package eph
 
 import (
 	"errors"
-	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"strings"
+
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -54,6 +55,20 @@ func oneOrAny(out *strings.Builder, s string) (ret string) {
 // we create a relation kind with fields of an appropriate type
 // and use the kind resolving mechanism
 func (op *EphRelations) Phase() assert.Phase { return assert.AncestryPhase }
+
+func (op *EphRelations) Weave(k assert.Assertions) (err error) {
+	switch c := op.Cardinality.Value.(type) {
+	case *OneOne:
+		err = k.AssertRelation(op.Rel, c.Kind, c.OtherKind, false, false)
+	case *OneMany:
+		err = k.AssertRelation(op.Rel, c.Kind, c.OtherKinds, false, true)
+	case *ManyOne:
+		err = k.AssertRelation(op.Rel, c.Kinds, c.OtherKind, true, false)
+	case *ManyMany:
+		err = k.AssertRelation(op.Rel, c.Kinds, c.OtherKinds, true, true)
+	}
+	return
+}
 
 func (op *EphRelations) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	// like aspects, we dont try to singularize these.

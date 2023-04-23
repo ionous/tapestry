@@ -41,7 +41,7 @@ func TestPluralAssembly(t *testing.T) {
 	// and then it will.... queue all of the ephemera
 	// FIX? should end domain write the domain? hmm... maybe?
 	// ( and for example -- run any queued commands? )
-	if e := dt.addToCat(&cat); e != nil {
+	if e := dt.addToCat(cat.Weaver()); e != nil {
 		t.Fatal(e)
 	} else if e := cat.AssembleCatalog(nil, nil); e != nil {
 		t.Fatal(e)
@@ -91,7 +91,7 @@ func TestPluralDomainConflict(t *testing.T) {
 		&EphPlurals{Singular: "witch", Plural: "unkindness"},
 	)
 	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
+	if e := dt.addToCat(cat.Weaver()); e != nil {
 		t.Fatal(e)
 	} else if e := cat.AssembleCatalog(nil, nil); e == nil {
 		t.Fatal("expected an error")

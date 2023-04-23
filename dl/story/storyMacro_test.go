@@ -21,7 +21,7 @@ func xTestMacros(t *testing.T) {
 	errutil.Panic = true
 	//
 	var cat eph.Catalog
-	k := imp.NewImporter(eph.NewCommandBuilder(&cat))
+	k := imp.NewImporter(cat.Weaver())
 	if e := k.BeginDomain("tapestry", nil); e != nil {
 		t.Fatal(e)
 	} else if e := addDefaultKinds(k); e != nil {

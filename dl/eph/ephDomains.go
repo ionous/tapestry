@@ -185,6 +185,10 @@ func (c *Catalog) WriteDomains(w Writer) (err error) {
 // EphBeginDomain
 func (op *EphBeginDomain) Phase() assert.Phase { return assert.DomainPhase }
 
+func (op *EphBeginDomain) Weave(k assert.Assertions) (err error) {
+	return k.BeginDomain(op.Name, op.Requires)
+}
+
 func (op *EphBeginDomain) Assemble(c *Catalog, _nil *Domain, at string) (err error) {
 	if n, ok := UniformString(op.Name); !ok {
 		err = InvalidString(op.Name)
@@ -200,6 +204,10 @@ func (op *EphBeginDomain) Assemble(c *Catalog, _nil *Domain, at string) (err err
 
 // EphEndDomain
 func (op *EphEndDomain) Phase() assert.Phase { return assert.DomainPhase }
+
+func (op *EphEndDomain) Weave(k assert.Assertions) (err error) {
+	return k.EndDomain()
+}
 
 // pop the most recent domain
 func (op *EphEndDomain) Assemble(c *Catalog, _nil *Domain, at string) (err error) {

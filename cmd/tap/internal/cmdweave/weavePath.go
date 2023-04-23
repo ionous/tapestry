@@ -27,7 +27,7 @@ const (
 // lets do this in the dumbest of ways for now.
 func WeavePath(srcPath, outFile string) (err error) {
 	var cat eph.Catalog // fix: capture "Dilemmas" and LogWarning?
-	k := imp.NewImporter(eph.NewCommandBuilder(&cat))
+	k := imp.NewImporter(cat.Weaver())
 	if e := k.BeginDomain("tapestry", nil); e != nil {
 		err = e
 	} else if e := addDefaultKinds(k); e != nil {
@@ -36,7 +36,7 @@ func WeavePath(srcPath, outFile string) (err error) {
 		err = e
 	} else if len(cat.Errors) > 0 {
 		err = errutil.New(cat.Errors)
-	} else if e := assembleCat(&cat, outFile); e != nil {
+	} else if e := assembleCat(cat.Weaver(), outFile); e != nil {
 		err = e
 	}
 	return

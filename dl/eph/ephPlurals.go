@@ -76,6 +76,10 @@ func (c *Catalog) WritePlurals(w Writer) (err error) {
 
 func (op *EphPlurals) Phase() assert.Phase { return assert.PluralPhase }
 
+func (op *EphPlurals) Weave(k assert.Assertions) (err error) {
+	return k.AssertPlural(op.Singular, op.Plural)
+}
+
 // add to the plurals to the database and ( maybe ) remember the plural for the current domain's set of rules
 // not more than one singular per plural ( but the other way around is fine. )
 func (op *EphPlurals) Assemble(c *Catalog, d *Domain, at string) (err error) {

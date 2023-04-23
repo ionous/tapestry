@@ -24,7 +24,7 @@ func TestGrammarDirectives(t *testing.T) {
 		},
 	)
 	var cat Catalog
-	if e := dt.addToCat(&cat); e != nil {
+	if e := dt.addToCat(cat.Weaver()); e != nil {
 		t.Fatal(e)
 	} else if e := cat.AssembleCatalog(nil, nil); e != nil {
 		t.Fatal(e)
