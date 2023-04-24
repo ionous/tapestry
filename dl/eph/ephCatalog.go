@@ -12,39 +12,51 @@ type Catalog struct {
 	resolvedDomains cachedTable
 	Errors          []error
 	CommandBuilder
+	cursor string
 }
 
 // initializes and returns itself
 func (c *Catalog) Weaver() *Catalog {
 	if c.q == nil {
+		c.cursor = "x"
 		c.q = WriterFun(c.writeEphemera)
 	}
 	return c
 }
 
-// fix? consider moving domain error to catalog processing internals ( and removing explicit external use )
-type DomainError struct {
-	Domain string
-	Err    error
+func (c *Catalog) BeginDomain(name string, requires []string) (err error) {
+	at := c.cursor
+	if n, ok := UniformString(name); !ok {
+		err = InvalidString(name)
+	} else if reqs, e := UniformStrings(requires); e != nil {
+		err = e // transform all the names first to determine any errors
+	} else if d, e := c.EnsureDomain(n, at, reqs...); e != nil {
+		err = e
+	} else {
+		c.processing.Push(d)
+	}
+	return
 }
 
-func (n DomainError) Error() string {
-	return errutil.Sprintf("%v in domain %q", n.Err, n.Domain)
-}
-func (n DomainError) Unwrap() error {
-	return n.Err
+func (c *Catalog) EndDomain() (err error) {
+	if _, ok := c.processing.Top(); !ok {
+		err = errutil.New("unexpected domain ending when there's no domain")
+	} else {
+		c.processing.Pop()
+	}
+	return
 }
 
 func (c *Catalog) writeEphemera(ep Ephemera) {
-	at := "x"
 	var err error
+	at := c.cursor
 	if phase := ep.Phase(); phase == assert.DomainPhase {
 		err = ep.Assemble(c, nil, at)
 	} else {
 		if d, ok := c.processing.Top(); !ok {
 			err = errutil.New("no top domain")
 		} else {
-			err = d.AddEphemera(at, ep)
+			err = d.QueueEphemera(at, ep)
 		}
 	}
 	if err != nil {
@@ -88,13 +100,29 @@ func (c *Catalog) EnsureDomain(n, at string, reqs ...string) (ret *Domain, err e
 
 // walk the domains and run the commands remaining in their queues
 func (c *Catalog) AssembleCatalog(w Writer, phaseActions PhaseActions) (err error) {
+	// ds has the "shallowest" domains first, and the most derived ( "deepest" ) domains last.
 	if ds, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
+		// fix? create a dev/null writer instead of testing for nil?
+		if w != nil {
+			// wip: trying to unwind the writes so that we write one domain at a time
+			for _, deps := range ds {
+				d := deps.Leaf().(*Domain) // panics if it fails
+				if e := d.WriteDomain(w); e != nil {
+					err = e
+					return // FIX
+				}
+			}
+		}
+
+		// FIX: want to add extensions to the db ( fields of kinds, etc. ) as we go.
+		// DONT want to walk across all domains first.
 		// walks across all domains for each phase to support things like fields:
 		// which exist per kind but which can be added to by multiple domains.
 	Loop:
 		for w := assert.Phase(0); w < assert.NumPhases; w++ {
+
 			act := phaseActions[w]
 			for _, deps := range ds {
 				d := deps.Leaf().(*Domain) // panics if it fails
@@ -124,8 +152,6 @@ func (c *Catalog) AssembleCatalog(w Writer, phaseActions PhaseActions) (err erro
 func (c *Catalog) WritePhase(p assert.Phase, w Writer) (err error) {
 	// switch or map better?
 	switch p {
-	case assert.DomainPhase:
-		err = c.WriteDomains(w)
 	case assert.PluralPhase:
 		if e := c.WritePlurals(w); e != nil {
 			err = e

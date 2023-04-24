@@ -89,7 +89,7 @@ func (op *EphRelations) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		} else {
 			kid := d.EnsureKind(rel, at)
 			kid.AddRequirement(kindsOf.Relation.String())
-			err = d.AddEphemera(at, &EphKinds{
+			err = d.QueueEphemera(at, &EphKinds{
 				Kind: rel,
 				Contain: []EphParams{{
 					Affinity: a.affinity(),

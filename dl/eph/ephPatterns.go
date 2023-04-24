@@ -66,7 +66,7 @@ func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		} else if e := reduceLocals(op.Locals, at, &locals); e != nil {
 			err = e
 		} else {
-			err = d.AddEphemera(at, PhaseFunction{assert.PropertyPhase,
+			err = d.QueueEphemera(at, PhaseFunction{assert.PropertyPhase,
 				func(assert.World, assert.Assertions) (err error) {
 					k.pendingFields = append(k.pendingFields, k.patternHeader.flush()...)
 					k.pendingFields = append(k.pendingFields, locals...)
@@ -140,7 +140,7 @@ func (op *EphPatterns) assembleArgs(d *Domain, k *ScopedKind, at string, outp *p
 
 func addPatternDef(d *Domain, k *ScopedKind, key, at, v string) (err error) {
 	if k.domain != d {
-		err = DomainError{d.name, errutil.Fmt("expected the pattern %q and its %s to be defined in the same domain (%q)", k.name, key, k.domain.name)}
+		err = domainError{d.name, errutil.Fmt("expected the pattern %q and its %s to be defined in the same domain (%q)", k.name, key, k.domain.name)}
 	} else if e := d.AddDefinition(MakeKey("pat", k.name, key), at, v); e != nil {
 		err = e // use definition to block the pattern from defining different args
 	}

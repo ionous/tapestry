@@ -36,16 +36,16 @@ type PhaseData struct {
 
 func (d *Domain) Resolve() (ret Dependencies, err error) {
 	if len(d.at) == 0 {
-		err = DomainError{d.name, errutil.New("never defined", d.name)}
+		err = domainError{d.name, errutil.New("never defined", d.name)}
 	} else if ds, e := d.resolve(d, (*catDependencyFinder)(d.catalog)); e != nil {
-		err = DomainError{d.name, e}
+		err = domainError{d.name, e}
 	} else {
 		ret = ds
 	}
 	return
 }
 
-func (d *Domain) AddEphemera(at string, ep Ephemera) (err error) {
+func (d *Domain) QueueEphemera(at string, ep Ephemera) (err error) {
 	if currPhase, phase := d.currPhase, ep.Phase(); currPhase > phase {
 		err = errutil.New("unexpected phase")
 	} else {
@@ -72,7 +72,7 @@ func (d *Domain) AddDefinition(key keyType, at, value string) (err error) {
 	if e := VisitTree(d, func(dep Dependency) (err error) {
 		scope := dep.(*Domain)
 		if e := scope.defs.CheckConflict(key, value); e != nil {
-			err = DomainError{scope.name, e}
+			err = domainError{scope.name, e}
 		}
 		return
 	}); e != nil {
@@ -89,7 +89,7 @@ func (d *Domain) AddDefinition(key keyType, at, value string) (err error) {
 // add a definition that can be overridden in subsequent domains.
 // returns "okay" if the refinement was added ( ex. not duplicated )
 func (d *Domain) RefineDefinition(key keyType, at, value string) (okay bool, err error) {
-	var de DomainError
+	var de domainError
 	var conflict *Conflict
 	if e := d.AddDefinition(key, at, value); e == nil {
 		okay = true
@@ -164,7 +164,7 @@ func (d *Domain) checkRivals(phase assert.Phase, ds Dependencies, allowDupes boo
 			scope := dep.(*Domain) // allow this to panic
 			if defs := scope.defs; len(defs) > 0 {
 				if e := a.Merge(defs, allowDupes); e != nil {
-					err = DomainError{scope.name, e}
+					err = domainError{scope.name, e}
 					break
 				}
 			}
@@ -173,11 +173,13 @@ func (d *Domain) checkRivals(phase assert.Phase, ds Dependencies, allowDupes boo
 	return
 }
 
-func (c *Catalog) WriteDomains(w Writer) (err error) {
-	if ds, e := c.ResolveDomains(); e != nil {
+// for each domain in the passed list, output its full ancestry tree ( or just its parents )
+func (d *Domain) WriteDomain(w Writer) (err error) {
+	if dep, e := d.GetDependencies(); e != nil {
 		err = e
 	} else {
-		err = ds.WriteTable(w, mdl.Domain, true)
+		name, row, at := d.Name(), dep.Strings(true), d.OriginAt()
+		err = w.Write(mdl.Domain, name, row, at)
 	}
 	return
 }
@@ -190,16 +192,7 @@ func (op *EphBeginDomain) Weave(k assert.Assertions) (err error) {
 }
 
 func (op *EphBeginDomain) Assemble(c *Catalog, _nil *Domain, at string) (err error) {
-	if n, ok := UniformString(op.Name); !ok {
-		err = InvalidString(op.Name)
-	} else if reqs, e := UniformStrings(op.Requires); e != nil {
-		err = e // transform all the names first to determine any errors
-	} else if d, e := c.EnsureDomain(n, at, reqs...); e != nil {
-		err = e
-	} else {
-		c.processing.Push(d)
-	}
-	return
+	panic("what should happen here?")
 }
 
 // EphEndDomain
@@ -211,15 +204,5 @@ func (op *EphEndDomain) Weave(k assert.Assertions) (err error) {
 
 // pop the most recent domain
 func (op *EphEndDomain) Assemble(c *Catalog, _nil *Domain, at string) (err error) {
-	// we expect it's the current domain, the parent of this command, that's the one ending
-	if n, ok := UniformString(op.Name); !ok && len(op.Name) > 0 {
-		err = InvalidString(op.Name)
-	} else if d, ok := c.processing.Top(); !ok {
-		err = errutil.New("unexpected domain ending when there's no domain")
-	} else if n != d.name && len(op.Name) > 0 {
-		err = errutil.New("unexpected domain ending, requested", op.Name, "have", d.name)
-	} else {
-		c.processing.Pop()
-	}
-	return
+	panic("what about here?")
 }

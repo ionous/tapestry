@@ -58,7 +58,7 @@ func (op *EphChecks) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		err = e
 	} else {
 		// uses directive phase just to be near the end somewhere...
-		err = d.AddEphemera(at, PhaseFunction{assert.DirectivePhase,
+		err = d.QueueEphemera(at, PhaseFunction{assert.DirectivePhase,
 			func(assert.World, assert.Assertions) (err error) {
 				check := d.EnsureCheck(name, at)
 				if e := check.setExpectation(op.Expect); e != nil {

@@ -38,7 +38,7 @@ func (c *Catalog) WriteOpposites(w Writer) (err error) {
 			for _, p := range d.opposites {
 				def := d.GetDefinition(MakeKey("opposite", p.one))
 				if e := w.Write(mdl.Opposite, d.name, p.one, p.other, def.at); e != nil {
-					err = errutil.Append(err, DomainError{d.name, e})
+					err = errutil.Append(err, domainError{d.name, e})
 				}
 			}
 		}

@@ -39,7 +39,7 @@ func (k *ScopedKind) AddField(field FieldDefinition) (err error) {
 	if e := VisitTree(k, func(dep Dependency) (err error) {
 		kind := dep.(*ScopedKind)
 		if e := field.CheckConflict(kind); e != nil {
-			err = DomainError{kind.domain.name, KindError{kind.name, e}}
+			err = domainError{kind.domain.name, KindError{kind.name, e}}
 		}
 		return
 	}); e != nil {

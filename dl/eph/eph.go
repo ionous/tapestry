@@ -49,7 +49,7 @@ func (fn PhaseFunction) Weave(k assert.Assertions) (err error) {
 
 func (fn PhaseFunction) Assemble(c *Catalog, d *Domain, at string) (err error) {
 	var writeEph WriterFun = func(op Ephemera) {
-		d.AddEphemera(at, op)
+		d.QueueEphemera(at, op)
 	}
 	return fn.Do(c, NewCommandBuilder(writeEph))
 }

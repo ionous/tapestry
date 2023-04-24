@@ -106,7 +106,7 @@ func TestDomainTable(t *testing.T) {
 			t.Fatal(diff)
 		} else {
 			out := testOut{mdl.Domain}
-			if e := cat.WriteDomains(&out); e != nil {
+			if e := cat.AssembleCatalog(&out, nil); e != nil {
 				t.Fatal(e)
 			} else if diff := pretty.Diff(out[1:], testOut{
 				"d::x",

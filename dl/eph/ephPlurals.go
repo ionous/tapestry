@@ -66,7 +66,7 @@ func (c *Catalog) WritePlurals(w Writer) (err error) {
 				s := d.plural.singular[i]
 				def := d.GetDefinition(MakeKey("plurals", p))
 				if e := w.Write(mdl.Plural, d.name, p, s, def.at); e != nil {
-					err = errutil.Append(err, DomainError{d.name, e})
+					err = errutil.Append(err, domainError{d.name, e})
 				}
 			}
 		}

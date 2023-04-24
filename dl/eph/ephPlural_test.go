@@ -72,7 +72,7 @@ func TestPluralAssembly(t *testing.T) {
 }
 
 func okDomainConflict(d string, y ReasonForConflict, e error) (err error) {
-	var de DomainError
+	var de domainError
 	var conflict *Conflict
 	if !errors.As(e, &de) || de.Domain != d ||
 		!errors.As(de.Err, &conflict) || conflict.Reason != y {
