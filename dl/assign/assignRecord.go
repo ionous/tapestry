@@ -21,7 +21,9 @@ func MakeRecord(run rt.Runtime, kind string, args ...Arg) (ret *g.Record, err er
 	} else {
 		lf := labelFinder{kind: kind}
 		for i, a := range args {
-			if at, e := lf.findNext(run, i, a); e != nil {
+			if i >= kind.NumField() {
+				err = errutil.New("too many args", i, "making record", kind)
+			} else if at, e := lf.findNext(run, i, a); e != nil {
 				err = e
 				break
 			} else if at < 0 {
