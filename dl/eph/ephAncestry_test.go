@@ -44,7 +44,10 @@ func TestAncestryCycle(t *testing.T) {
 		&EphKinds{Kind: "p", Ancestor: "t"},
 		&EphKinds{Kind: "t", Ancestor: "p"},
 	)
-	if _, e := buildAncestors(&dt); e == nil || !strings.HasPrefix(e.Error(), "circular reference detected") {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e == nil || !strings.HasPrefix(e.Error(), "circular reference detected") {
 		t.Fatal("expected failure", e)
 	} else {
 		t.Log("ok", e)
@@ -62,7 +65,10 @@ func TestAncestryMultipleParents(t *testing.T) {
 		&EphKinds{Kind: "k", Ancestor: "p"},
 		&EphKinds{Kind: "k", Ancestor: "q"},
 	)
-	if _, e := buildAncestors(&dt); e == nil || e.Error() != `"k" has more than one parent` {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e == nil || e.Error() != `"k" has more than one parent` {
 		t.Fatal("expected failure", e)
 	} else {
 		t.Log("ok", e)
@@ -190,7 +196,10 @@ func TestAncestryRivalConflict(t *testing.T) {
 }
 
 func writeKinds(dt *domainTest, w *testOut) (err error) {
-	if cat, e := buildAncestors(dt); e != nil {
+	cat := NewCatalog(dt.Open("kinds"))
+	if e := dt.addToCat(cat); e != nil {
+		err = e
+	} else if e := cat.AssembleCatalog(); e != nil {
 		err = e
 	} else {
 		err = cat.WriteKinds(w)

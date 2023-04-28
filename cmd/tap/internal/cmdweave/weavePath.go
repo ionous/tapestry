@@ -50,7 +50,7 @@ func WeavePath(srcPath, outFile string) (err error) {
 			} else if len(cat.Errors) > 0 {
 				err = errutil.New(cat.Errors)
 			} else {
-				err = Weave(cat, db)
+				err = cat.AssembleCatalog()
 			}
 		}
 	}

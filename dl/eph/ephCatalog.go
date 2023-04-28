@@ -132,7 +132,12 @@ func (c *Catalog) EnsureDomain(n, at string, reqs ...string) (ret *Domain, err e
 const TempSplit = assert.PluralPhase + 1
 
 // walk the domains and run the commands remaining in their queues
-func (c *Catalog) AssembleCatalog(phaseActions PhaseActions) (err error) {
+func (c *Catalog) AssembleCatalog() (err error) {
+	phaseActions := PhaseActions{
+		assert.AncestryPhase: AncestryActions,
+		assert.FieldPhase:    FieldActions,
+		assert.NounPhase:     NounActions,
+	}
 	// ds has the "shallowest" domains first, and the most derived ( "deepest" ) domains last.
 	if ds, e := c.ResolveDomains(); e != nil {
 		err = e

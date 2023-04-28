@@ -8,7 +8,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"github.com/ionous/errutil"
@@ -156,34 +155,3 @@ func B(b bool) *literal.BoolValue   { return &literal.BoolValue{Value: b} }
 func I(n int) *literal.NumValue     { return &literal.NumValue{Value: float64(n)} }
 func F(n float64) *literal.NumValue { return &literal.NumValue{Value: n} }
 func T(s string) *literal.TextValue { return &literal.TextValue{Value: s} }
-
-func buildAncestors(dt *domainTest) (ret *Catalog, err error) {
-	cat := NewCatalog(dt.Open("ancestors"))
-	if e := dt.addToCat(cat); e != nil {
-		err = e
-	} else if e := cat.AssembleCatalog(PhaseActions{
-		assert.AncestryPhase: AncestryActions,
-		assert.FieldPhase:    FieldActions,
-	}); e != nil {
-		err = e
-	} else {
-		ret = cat
-	}
-	return
-}
-
-func buildNouns(dt *domainTest) (ret *Catalog, err error) {
-	cat := NewCatalog(dt.Open("nouns"))
-	if e := dt.addToCat(cat); e != nil {
-		err = e
-	} else if e := cat.AssembleCatalog(PhaseActions{
-		assert.AncestryPhase: AncestryActions,
-		assert.FieldPhase:    FieldActions,
-		assert.NounPhase:     NounActions,
-	}); e != nil {
-		err = e
-	} else {
-		ret = cat
-	}
-	return
-}

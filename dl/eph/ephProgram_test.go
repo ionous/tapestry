@@ -27,7 +27,7 @@ func TestGrammarDirectives(t *testing.T) {
 	cat := NewCatalog(dt.Open(t.Name()))
 	if e := dt.addToCat(cat); e != nil {
 		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(nil); e != nil {
+	} else if e := cat.AssembleCatalog(); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl.Grammar}

@@ -188,7 +188,7 @@ func TestNounDistance(t *testing.T) {
 	cat := NewCatalog(dt.Open(t.Name()))
 	if e := dt.addToCat(cat); e != nil {
 		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(nil); e != nil {
+	} else if e := cat.AssembleCatalog(); e != nil {
 		t.Fatal(e)
 	} else if _, e := cat.ResolveNouns(); e != nil {
 		t.Fatal(e)
@@ -213,7 +213,10 @@ func TestNounDistance(t *testing.T) {
 }
 
 func writeNouns(dt *domainTest, nouns, names *testOut) (err error) {
-	if cat, e := buildNouns(dt); e != nil {
+	cat := NewCatalog(dt.Open("nouns"))
+	if e := dt.addToCat(cat); e != nil {
+		err = e
+	} else if e := cat.AssembleCatalog(); e != nil {
 		err = e
 	} else {
 		if nouns != nil && err == nil {

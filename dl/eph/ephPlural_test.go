@@ -28,7 +28,7 @@ func TestPluralConflict(t *testing.T) {
 	if e := dt.addToCat(cat); e != nil {
 		t.Fatal(e)
 	} else {
-		err := cat.AssembleCatalog(nil)
+		err := cat.AssembleCatalog()
 		if e := okDomainConflict("a", Redefined, err); e != nil {
 			t.Fatal(e)
 		}
@@ -70,7 +70,7 @@ func TestPluralAssembly(t *testing.T) {
 	if e := dt.addToCat(cat); e != nil {
 		t.Fatal(e)
 	} else {
-		err := cat.AssembleCatalog(nil)
+		err := cat.AssembleCatalog()
 		if e := okDomainConflict("c", Redefined, err); e != nil {
 			t.Fatal(e)
 		} else if e := okDomainConflict("b", Duplicated, warnings.shift()); e != nil {

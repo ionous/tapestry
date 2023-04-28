@@ -37,11 +37,11 @@ create table mdl_pat( kind int not null, labels text, result text, primary key( 
  * within a particular domain, a plural word produces a unique singular word;
  * however the same singular word can be used by various plurals.
  */
-create table mdl_plural( domain int, many text, one text, at text, primary key( domain, many ) );
+create table mdl_plural( domain int not null, many text, one text, at text, primary key( domain, many ) );
 /* relation and constraint between two kinds of nouns */
 create table mdl_rel( relKind int not null, oneKind int not null, otherKind int not null, cardinality text, at text, primary key( relKind ));
 /* opposites */
-create table mdl_rev( domain int, oneWord text, otherWord text, at text );
+create table mdl_rev( domain int not null, oneWord text, otherWord text, at text );
 /* the scope of a rule can be narrower than its parent kind ( or target )
  * fix? can target (kind of nouns the rule applies to) be moved to filter? */
 create table mdl_rule( domain int not null, kind int not null, target int, phase int, filter blob, prog blob, at text );

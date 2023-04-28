@@ -25,12 +25,7 @@ func xTestMacros(t *testing.T) {
 	// 	t.Fatal(e)
 	// } else if e := story.ImportStory(k, t.Name(), macroStory); e != nil {
 	// 	t.Fatal(e)
-	// } else if e := cat.AssembleCatalog(
-	// 	eph.PhaseActions{
-	// 		assert.AncestryPhase: eph.AncestryActions,
-	// 		assert.FieldPhase:    eph.FieldActions,
-	// 		assert.NounPhase:     eph.NounActions,
-	// 	}); e != nil {
+	// } else if e := cat.AssembleCatalog(); e != nil {
 	// 	t.Fatal(e)
 	// } else {
 	// 	// expect := []eph.Ephemera{

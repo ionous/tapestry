@@ -21,7 +21,10 @@ func TestAspectFormation(t *testing.T) {
 		}},
 	)
 	out := testOut{mdl.Field}
-	if cat, e := buildAncestors(&dt); e != nil {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
@@ -52,7 +55,10 @@ func TestAspectUsage(t *testing.T) {
 		&EphKinds{Kind: "k", Contain: []EphParams{AspectParam("a")}},
 	)
 	out := testOut{mdl.Field}
-	if cat, e := buildAncestors(&dt); e != nil {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
@@ -83,7 +89,10 @@ func TestAspectConflictingFields(t *testing.T) {
 		&EphKinds{Kind: "k", Contain: []EphParams{AspectParam("a")}},
 		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "one", Affinity: Affinity{Affinity_Text}}}},
 	)
-	if _, e := buildAncestors(&dt); e == nil {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)
@@ -110,7 +119,10 @@ func TestAspectConflictingTraits(t *testing.T) {
 		&EphKinds{Kind: "k", Contain: []EphParams{AspectParam("b")}},
 	)
 	var conflict *Conflict
-	if _, e := buildAncestors(&dt); e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)

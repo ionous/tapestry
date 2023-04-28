@@ -50,7 +50,11 @@ func TestRelativeFormation(t *testing.T) {
 			"a", "r_x_x", "b",
 		)...,
 	)
-	if cat, e := buildNouns(&dt); e != nil {
+
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl.Pair}
@@ -99,7 +103,11 @@ func TestRelativeOneOneViolation(t *testing.T) {
 			"b", "r_1_1", "d",
 		)...,
 	)
-	if _, e := buildNouns(&dt); e == nil {
+
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)
@@ -116,7 +124,10 @@ func TestRelativeOneManyViolation(t *testing.T) {
 			"c", "r_1_x", "e",
 		)...,
 	)
-	if _, e := buildNouns(&dt); e == nil {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)
@@ -133,7 +144,10 @@ func TestRelativeManyOneViolation(t *testing.T) {
 			"e", "r_x_1", "c",
 		)...,
 	)
-	if _, e := buildNouns(&dt); e == nil {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)

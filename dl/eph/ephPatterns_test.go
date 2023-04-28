@@ -127,7 +127,10 @@ func TestPatternSeparateDomains(t *testing.T) {
 }
 
 func expectFullResults(t *testing.T, dt *domainTest) {
-	if cat, e := buildAncestors(dt); e != nil {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e != nil {
 		t.Fatal(e)
 	} else {
 		outkind := testOut{mdl.Kind}
@@ -196,7 +199,10 @@ func TestPatternSplitDomain(t *testing.T) {
 				Affinity: Affinity{Affinity_Text},
 			}}},
 	)
-	if _, e := buildAncestors(&dt); e == nil {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e == nil {
 		t.Fatal("expected an error")
 	} else {
 		t.Log("okay", e)
@@ -226,7 +232,10 @@ func TestPatternMultipleReturn(t *testing.T) {
 		},
 	)
 	var conflict *Conflict
-	if _, e := buildAncestors(&dt); e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
 		t.Fatal("expected an redefined conflict; got", e)
 	} else {
 		t.Log("okay", e)
@@ -256,7 +265,10 @@ func TestPatternMultipleReturn(t *testing.T) {
 // 		},
 // 	)
 // 	var conflict *Conflict
-// 	if _, e := buildAncestors(&dt); e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
+// 	cat := NewCatalog(dt.Open(t.Name()))
+// if e := dt.addToCat(cat); e != nil {
+// 	t.Fatal(e)
+// } else if e := cat.AssembleCatalog();  e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
 // 		t.Fatal("expected an redefined conflict; got", e)
 // 	} else {
 // 		t.Log("okay", e)
@@ -278,7 +290,8 @@ func TestPatternConflictingInit(t *testing.T) {
 			}},
 		},
 	)
-	if _, e := buildAncestors(&dt); e == nil || e.Error() != `mismatched affinity of initial value (a text) for field "n" (a number)` {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e == nil || e.Error() != `mismatched affinity of initial value (a text) for field "n" (a number)` {
 		t.Fatal("expected an error; got:", e)
 	} else {
 		t.Log("ok", e)
@@ -293,7 +306,10 @@ func TestPatternNoResults(t *testing.T) {
 		&EphKinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
 		&EphPatterns{PatternName: "p"},
 	)
-	if cat, e := buildAncestors(&dt); e != nil {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e != nil {
 		t.Fatal(e)
 	} else {
 		outkind := testOut{mdl.Kind}

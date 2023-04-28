@@ -17,7 +17,10 @@ func TestFields(t *testing.T) {
 		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "n", Affinity: Affinity{Affinity_Number}}}},
 	)
 	out := testOut{mdl.Field}
-	if cat, e := buildAncestors(&dt); e != nil {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
@@ -42,7 +45,10 @@ func TestFieldsCrossDomain(t *testing.T) {
 		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "b", Affinity: Affinity{Affinity_Bool}}}},
 	)
 	out := testOut{mdl.Field}
-	if cat, e := buildAncestors(&dt); e != nil {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
@@ -72,7 +78,10 @@ func TestFieldsRedefine(t *testing.T) {
 		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "n", Affinity: Affinity{Affinity_Number}}}},
 	)
 	out := testOut{mdl.Field}
-	if cat, e := buildAncestors(&dt); e != nil {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e != nil {
 		t.Fatal(e)
 	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
 		t.Fatal(e)
@@ -100,7 +109,10 @@ func TestFieldsConflict(t *testing.T) {
 	dt.makeDomain(dd("b", "a"),
 		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "n", Affinity: Affinity{Affinity_Text}}}},
 	)
-	if _, e := buildAncestors(&dt); e == nil {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e == nil {
 		t.Fatal("expected error")
 	} else if e := okDomainConflict("a", Redefined, e); e != nil {
 		t.Fatal(e)
@@ -129,7 +141,10 @@ func TestFieldsMatchingRivals(t *testing.T) {
 	)
 	dt.makeDomain(dd("z", "c", "d"))
 	out := testOut{mdl.Field}
-	if cat, e := buildAncestors(&dt); e != nil {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e != nil {
 		t.Fatal(e)
 	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
 		t.Fatal(e)
@@ -162,7 +177,10 @@ func TestFieldsMismatchingRivals(t *testing.T) {
 		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "t", Affinity: Affinity{Affinity_Bool}}}},
 	)
 	// dt.makeDomain(dd("z", "c", "d")) <-- fails even without this.
-	if _, e := buildAncestors(&dt); e == nil {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e == nil {
 		t.Fatal("expected error, got:")
 	} else if e := okDomainConflict("a", Redefined, e); e != nil {
 		t.Fatal(e)
@@ -182,7 +200,10 @@ func TestFieldsUnknownClass(t *testing.T) {
 	dt.makeDomain(dd("c", "a"),
 		&EphKinds{Kind: "m"},
 	)
-	if _, e := buildAncestors(&dt); e == nil || e.Error() != `unknown class "m" for field "t" for kind "k"` {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e == nil || e.Error() != `unknown class "m" for field "t" for kind "k"` {
 		t.Fatal("expected error", e)
 	} else {
 		t.Log("ok:", e)
@@ -202,7 +223,10 @@ func TestFieldLca(t *testing.T) {
 		&EphKinds{Kind: "q", Contain: []EphParams{{Name: "t", Affinity: Affinity{Affinity_Text}}}},
 	)
 	out := testOut{mdl.Field}
-	if cat, e := buildAncestors(&dt); e != nil {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
