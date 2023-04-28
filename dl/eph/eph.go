@@ -33,8 +33,6 @@ func ExecWriter(db tables.Executer) WrappedWriter {
 
 // implemented by individual commands
 type Ephemera interface {
-	// fix? remove catalog from the signature?
-	Assemble(ctx *Context) error
 	Phase() assert.Phase
 	// the command builder generates commands;
 	// this reverse the direction and generates calls to the command builder.
@@ -65,12 +63,12 @@ func (fn PhaseFunction) Weave(k assert.Assertions) (err error) {
 	return k.Schedule(fn.OnPhase, fn.Do)
 }
 
-func (fn PhaseFunction) Assemble(ctx *Context) (err error) {
+func (ctx *Context) Schedule(when assert.Phase, do func(assert.World, assert.Assertions) error) (err error) {
 	c, d, at := ctx.c, ctx.d, ctx.at
 	var writeEph WriterFun = func(op Ephemera) {
 		d.QueueEphemera(at, op)
 	}
-	return fn.Do(c, NewCommandBuilder(writeEph))
+	return do(c, NewCommandBuilder(writeEph))
 }
 
 type PhaseFlags struct {

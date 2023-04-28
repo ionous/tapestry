@@ -3,6 +3,8 @@ package eph
 import (
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/imp/assert"
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -42,31 +44,32 @@ func (op *EphPatterns) Weave(k assert.Assertions) (err error) {
 		if ps := op.Params; err == nil && len(ps) > 0 {
 			err = weaveFields(name, ps, k.AssertParam)
 		}
-		if ps := op.Locals; err == nil && len(ps) > 0 {
-			err = weaveFields(name, ps, k.AssertLocal)
-		}
 		if ps := op.Result; err == nil && ps != nil {
 			err = weaveField(name, *ps, k.AssertResult)
+		}
+		if ps := op.Locals; err == nil {
+			err = weaveFields(name, ps, k.AssertLocal)
 		}
 	}
 	return
 }
 
-func (op *EphPatterns) Assemble(ctx *Context) (err error) {
+func (ctx *Context) AssertLocal(patternName, fieldName, class string, aff affine.Affinity, init assign.Assignment) (err error) {
 	d, at := ctx.d, ctx.at
-	if name, ok := UniformString(op.PatternName); !ok {
-		err = InvalidString(op.PatternName)
+	if name, ok := UniformString(patternName); !ok {
+		err = InvalidString(patternName)
 	} else {
 		k := d.EnsureKind(name, at)
 		k.AddRequirement(kindsOf.Pattern.String())
-		var locals []UniformField
-		if e := op.assembleRes(d, k, at, &k.patternHeader); e != nil {
+
+		if p, e := MakeUniformField(affineToAffinity(aff), fieldName, class, at); e != nil {
 			err = e
-		} else if e := op.assembleArgs(d, k, at, &k.patternHeader); e != nil {
-			err = e
-		} else if e := reduceLocals(op.Locals, at, &locals); e != nil {
+		} else if e := p.setAssignment(init); e != nil {
 			err = e
 		} else {
+			var locals []UniformField
+			locals = append(locals, p)
+			//
 			err = d.QueueEphemera(at, PhaseFunction{assert.PropertyPhase,
 				func(assert.World, assert.Assertions) (err error) {
 					k.pendingFields = append(k.pendingFields, k.patternHeader.flush()...)
@@ -104,37 +107,51 @@ func (pd *patternHeader) flush() (ret []UniformField) {
 	return ret
 }
 
-// writes a definition of patternName?res=name
-func (op *EphPatterns) assembleRes(d *Domain, k *ScopedKind, at string, outp *patternHeader) (err error) {
-	var res []UniformField
-	if op.Result != nil && len(op.Result.Affinity.Str) > 0 && k.domain != d {
-		err = errutil.New("can only declare results in the original domain")
-	} else if patres, e := reduceRes(op.Result, at, &res); e != nil {
-		err = e
-	} else if len(patres) > 0 {
-		if e := addPatternDef(d, k, "res", at, patres); e != nil {
+func (ctx *Context) AssertResult(patternName, fieldName, class string, aff affine.Affinity, init assign.Assignment) (err error) {
+	d, at := ctx.d, ctx.at
+	if name, ok := UniformString(patternName); !ok {
+		err = InvalidString(patternName)
+	} else {
+		k := d.EnsureKind(name, at)
+		k.AddRequirement(kindsOf.Pattern.String())
+
+		if k.domain != d {
+			err = errutil.New("can only declare results in the original domain")
+		} else if init != nil {
+			err = errutil.New("return values dont currently support initial values")
+		} else if res, e := MakeUniformField(affineToAffinity(aff), fieldName, class, at); e != nil {
+			err = e
+		} else if e := addPatternDef(d, k, "res", at, res.Name); e != nil {
 			err = e
 		} else {
-			outp.res = res
+			k.patternHeader.res = []UniformField{res}
 		}
 	}
 	return
 }
 
 // writes a definition of patternName?args=arg1,arg2,arg3
-func (op *EphPatterns) assembleArgs(d *Domain, k *ScopedKind, at string, outp *patternHeader) (err error) {
-	var args []UniformField
-	if len(op.Params) > 0 && k.domain != d {
-		err = errutil.New("can only declare args in the original domain")
-	} else if e := reduceArgs(op.Params, at, &args); e != nil {
-		err = e
+func (ctx *Context) AssertParam(patternName, fieldName, class string, aff affine.Affinity, init assign.Assignment) (err error) {
+	d, at := ctx.d, ctx.at
+	if name, ok := UniformString(patternName); !ok {
+		err = InvalidString(patternName)
 	} else {
-		// there used to be one set of args, now there are individual args
-		// if e := addPatternDef(d, k, "args", at, patlabels); e != nil {
-		// else...
-		// fix: this should probably check that no locals have been written yet
-		// and/or use the "result" to seal in the args.
-		outp.args = append(outp.args, args...)
+		k := d.EnsureKind(name, at)
+		k.AddRequirement(kindsOf.Pattern.String())
+		if k.domain != d {
+			err = errutil.New("can only declare args in the original domain")
+		} else if init != nil {
+			err = errutil.New("return values dont currently support initial values")
+		} else if arg, e := MakeUniformField(affineToAffinity(aff), fieldName, class, at); e != nil {
+			err = e
+		} else {
+			// there used to be one set of args, now there are individual args
+			// if e := addPatternDef(d, k, "args", at, patlabels); e != nil {
+			// else...
+			// fix: this should probably check that no locals have been written yet
+			// and/or use the "result" to seal in the args.
+			k.patternHeader.args = append(k.patternHeader.args, arg)
+		}
 	}
 	return
 }
@@ -144,50 +161,6 @@ func addPatternDef(d *Domain, k *ScopedKind, key, at, v string) (err error) {
 		err = domainError{d.name, errutil.Fmt("expected the pattern %q and its %s to be defined in the same domain (%q)", k.name, key, k.domain.name)}
 	} else if e := d.AddDefinition(MakeKey("pat", k.name, key), at, v); e != nil {
 		err = e // use definition to block the pattern from defining different args
-	}
-	return
-}
-
-func reduceRes(param *EphParams, at string, outp *[]UniformField) (ret string, err error) {
-	if param != nil {
-		if param.Initially != nil {
-			err = errutil.New("return values dont currently support initial values")
-		}
-		if p, e := param.Unify(at); e != nil {
-			err = e
-		} else {
-			*outp = append(*outp, p)
-			ret = p.Name
-		}
-	}
-	return
-}
-
-func reduceArgs(params []EphParams, at string, outp *[]UniformField) (err error) {
-	for _, param := range params {
-		if param.Initially != nil {
-			err = errutil.New("return values dont currently support initial values")
-		}
-		if p, e := param.Unify(at); e != nil {
-			err = e
-			break
-		} else {
-			*outp = append(*outp, p)
-		}
-	}
-	return
-}
-
-func reduceLocals(params []EphParams, at string, outp *[]UniformField) (err error) {
-	for _, param := range params {
-		if p, e := param.Unify(at); e != nil {
-			err = e
-			break
-		} else if e := p.setAssignment(param.Initially); e != nil {
-			err = e
-		} else {
-			*outp = append(*outp, p)
-		}
 	}
 	return
 }

@@ -86,57 +86,61 @@ func fromAffinity(fieldAffinity Affinity) (ret affine.Affinity, err error) {
 }
 
 // Kinds, From string, Contain []EphParams
-func (op *EphKinds) Assemble(ctx *Context) (err error) {
+func (ctx *Context) AssertAncestor(opKind, opAncestor string) (err error) {
 	d, at := ctx.d, ctx.at
 	// tbd: are the determiners of kinds useful for anything?
-	kind, ancestor := op.Kind, op.Ancestor
+	kind, ancestor := opKind, opAncestor
 	_, newName := d.StripDeterminer(kind)
 	if newName, ok := UniformString(newName); !ok {
 		err = InvalidString(kind)
-	} else if newName, e := d.Pluralize(newName); e != nil {
-		err = InvalidString(kind)
 	} else {
+
+		// FIX FIX?
+		//	else if newName, e := d.Pluralize(newName); e != nil {
+		//		err = InvalidString(kind)
+		//	} else {
 		// add the kind we're talking about
 		kid := d.EnsureKind(newName, at)
-		// remember these fields for future evaluation
-		if e := op.addFields(kid, at); e != nil {
-			err = e
-		} else {
-			// if a parent kind is specified, make the kid dependent on it.
-			if _, from := d.StripDeterminer(ancestor); len(from) > 0 {
+
+		// if a parent kind is specified, make the kid dependent on it.
+		if _, from := d.StripDeterminer(ancestor); len(from) > 0 {
 			// note: a singular to plural (if needed ) gets handled by the dependency resolver's kindFinder and GetPluralKind()
-				if parentKind, ok := UniformString(from); !ok {
-					err = InvalidString(ancestor)
-				} else {
-			// we can only add requirements to the kind in the same domain that it was declared
-			if kid.domain == d {
-						kid.AddRequirement(parentKind) // fix? maybe it'd make sense for requirements to have origin at?
+			if parentKind, ok := UniformString(from); !ok {
+				err = InvalidString(ancestor)
 			} else {
-				// if in a different domain: the kinds have to match up
-						if pk, ok := d.GetPluralKind(parentKind); !ok {
-					err = errutil.New("unknown parent kind", ancestor)
-				} else if !kid.Requires.HasAncestor(pk.name) {
-					err = KindError{kind, errutil.Fmt("can't redefine parent as %q", ancestor)}
+				// we can only add requirements to the kind in the same domain that it was declared
+				if kid.domain == d {
+					kid.AddRequirement(parentKind) // fix? maybe it'd make sense for requirements to have origin at?
 				} else {
-					LogWarning(KindError{kind, errutil.New("duplicate parent definition at", at)})
-				}
+					// if in a different domain: the kinds have to match up
+					if pk, ok := d.GetPluralKind(parentKind); !ok {
+						err = errutil.New("unknown parent kind", ancestor)
+					} else if !kid.Requires.HasAncestor(pk.name) {
+						err = KindError{kind, errutil.Fmt("can't redefine parent as %q", ancestor)}
+					} else {
+						LogWarning(KindError{kind, errutil.New("duplicate parent definition at", at)})
 					}
 				}
 			}
 		}
 	}
+
 	return
 }
 
 // generated (for instance) from DefineFields...
 // these make new ephemera which are processed during the PropertyPhase.
-func (op *EphKinds) addFields(k *ScopedKind, at string) (err error) {
-	for _, p := range op.Contain {
-		if uf, e := p.Unify(at); e != nil {
-			err = e
-		} else {
-			k.pendingFields = append(k.pendingFields, uf)
-		}
+func (ctx *Context) AssertField(kind, fieldName, class string, aff affine.Affinity, init assign.Assignment) (err error) {
+	d, at := ctx.d, ctx.at
+	_, newName := d.StripDeterminer(kind)
+	if newName, ok := UniformString(newName); !ok {
+		err = InvalidString(kind)
+	} else if kid, ok := d.GetPluralKind(newName); !ok {
+		err = KindError{kind, errutil.New("unknown kind at", at)}
+	} else if uf, e := MakeUniformField(affineToAffinity(aff), fieldName, class, at); e != nil {
+		err = e
+	} else {
+		kid.pendingFields = append(kid.pendingFields, uf)
 	}
 	return
 }

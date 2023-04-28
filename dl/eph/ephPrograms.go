@@ -1,6 +1,7 @@
 package eph
 
 import (
+	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
@@ -43,13 +44,13 @@ func (op *EphDirectives) Weave(k assert.Assertions) (err error) {
 }
 
 // jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
-func (op *EphDirectives) Assemble(ctx *Context) (err error) {
+func (ctx *Context) AssertGrammar(opName string, opDirective *grammar.Directive) (err error) {
 	d, at := ctx.d, ctx.at
 	// fix: definitions probably need to be smarter.
-	if str, e := marshalout(&op.Directive); e != nil {
+	if str, e := marshalout(opDirective); e != nil {
 		err = e
 	} else {
-		err = d.AddDefinition(MakeKey("prog", op.Name), at, str)
+		err = d.AddDefinition(MakeKey("prog", opName), at, str)
 	}
 	return
 }

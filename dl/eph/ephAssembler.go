@@ -1,22 +1,22 @@
 package eph
 
-// see stash: "change assemble to stash"
-// this should have been part of the stash, but git hates me.
-//
-// type assembler struct {
-// 	c  *Catalog
-// 	d  *Domain
-// 	at string
-// }
+import "git.sr.ht/~ionous/tapestry/imp/assert"
 
-// func (k *assembler) BeginDomain(name string, requires []string) error {
-// 	panic("BeginDomain")
-// }
+type Context struct {
+	c     *Catalog
+	d     *Domain
+	at    string
+	phase assert.Phase
+}
 
-// func (k *assembler) EndDomain() error {
-// 	panic("EndDomain")
-// }
+func (ctx *Context) BeginDomain(name string, requires []string) error {
+	panic("BeginDomain")
+}
 
-// func (k *assembler) AssertNounPhrase() error {
+func (ctx *Context) EndDomain() error {
+	panic("EndDomain")
+}
+
+// func (ctx *Context) AssertNounPhrase() error {
 // 	panic("AssertNounPhrase")
 // }

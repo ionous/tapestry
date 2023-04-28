@@ -5,11 +5,6 @@ import "git.sr.ht/~ionous/tapestry/imp/assert"
 func (op *EphRefs) Phase() assert.Phase { return assert.RefPhase }
 
 func (op *EphRefs) Weave(k assert.Assertions) (err error) {
-	// not implemented.
-	return
-}
-
-func (op *EphRefs) Assemble(ctx *Context) (err error) {
 	refsNotImplemented.PrintOnce()
 	return
 }

@@ -3,7 +3,9 @@ package eph
 import (
 	"sort"
 
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/imp/assert"
+	"git.sr.ht/~ionous/tapestry/rt"
 
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 )
@@ -42,10 +44,10 @@ func (c *Catalog) WriteChecks(w Writer) (err error) {
 func (op *EphChecks) Phase() assert.Phase { return assert.DomainPhase }
 
 func (op *EphChecks) Weave(k assert.Assertions) (err error) {
-	return k.AssertCheck(op.Name, op.Exe)
+	return k.AssertCheck(op.Name, op.Exe, op.Expect)
 }
 
-func (op *EphChecks) Assemble(ctx *Context) (err error) {
+func (ctx *Context) AssertCheck(opName string, opExe []rt.Execute, opExpect literal.LiteralValue) (err error) {
 	c, at := ctx.c, ctx.at
 	// fix. todo: this isnt very well thought out right now --
 	// what if a check is part of a story scene? shouldnt it have access to those objects?
@@ -53,8 +55,8 @@ func (op *EphChecks) Assemble(ctx *Context) (err error) {
 	// there are some checks that have their own scenes, some that have expressions to run, some that have things to check.
 	// and others that have just one of those things. ( are there expectations that can simply verify the existence of objects in a model? )
 	// etc.
-	if name, ok := UniformString(op.Name); !ok {
-		err = InvalidString(op.Name)
+	if name, ok := UniformString(opName); !ok {
+		err = InvalidString(opName)
 	} else if d, e := c.EnsureDomain(name, at); e != nil {
 		err = e
 	} else {
@@ -62,9 +64,9 @@ func (op *EphChecks) Assemble(ctx *Context) (err error) {
 		err = d.QueueEphemera(at, PhaseFunction{assert.DirectivePhase,
 			func(assert.World, assert.Assertions) (err error) {
 				check := d.EnsureCheck(name, at)
-				if e := check.setExpectation(op.Expect); e != nil {
+				if e := check.setExpectation(opExpect); e != nil {
 					err = e
-				} else if e := check.setProg(op.Exe); e != nil {
+				} else if e := check.setProg(opExe); e != nil {
 					err = e
 				}
 				return

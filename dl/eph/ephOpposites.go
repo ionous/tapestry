@@ -52,12 +52,12 @@ func (op *EphOpposites) Weave(k assert.Assertions) (err error) {
 	return k.AssertOpposite(op.Opposite, op.Word)
 }
 
-func (op *EphOpposites) Assemble(ctx *Context) (err error) {
+func (ctx *Context) AssertOpposite(opOpposite, opWord string) (err error) {
 	d, at := ctx.d, ctx.at
-	if oneWord, ok := UniformString(op.Opposite); !ok {
-		err = InvalidString(op.Opposite)
-	} else if otherWord, ok := UniformString(op.Word); !ok {
-		err = InvalidString(op.Word)
+	if oneWord, ok := UniformString(opOpposite); !ok {
+		err = InvalidString(opOpposite)
+	} else if otherWord, ok := UniformString(opWord); !ok {
+		err = InvalidString(opWord)
 	} else if ok, e := d.RefineDefinition(MakeKey("opposite", oneWord), at, otherWord); e != nil {
 		err = e
 	} else if ok {

@@ -3,6 +3,7 @@ package eph
 import (
 	"errors"
 
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/imp/assert"
 
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
@@ -35,18 +36,18 @@ func (op *EphValues) Weave(k assert.Assertions) (err error) {
 }
 
 // note: values are written per *noun* not per domain....
-func (op *EphValues) Assemble(ctx *Context) (err error) {
+func (ctx *Context) AssertNounValue(opNoun, opField string, opPath []string, opValue literal.LiteralValue) (err error) {
 	d, at := ctx.d, ctx.at
-	if noun, e := getClosestNoun(d, op.Noun); e != nil {
+	if noun, e := getClosestNoun(d, opNoun); e != nil {
 		err = e
 	} else if rv, e := noun.recordValues(at); e != nil {
 		err = e
-	} else if field, ok := UniformString(op.Field); !ok {
-		err = InvalidString(op.Field)
-	} else if path, e := UniformStrings(op.Path); e != nil {
+	} else if field, ok := UniformString(opField); !ok {
+		err = InvalidString(opField)
+	} else if path, e := UniformStrings(opPath); e != nil {
 		err = e
-	} else if value := op.Value; value == nil {
-		err = errutil.New("null value", op.Noun, op.Field)
+	} else if value := opValue; value == nil {
+		err = errutil.New("null value", opNoun, opField)
 	} else {
 		var conflict *Conflict
 		if e := rv.writeValue(noun.name, at, field, path, value); errors.As(e, &conflict) && conflict.Reason == Duplicated {

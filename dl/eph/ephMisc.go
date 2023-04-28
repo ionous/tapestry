@@ -1,6 +1,9 @@
 package eph
 
-import "git.sr.ht/~ionous/tapestry/imp/assert"
+import (
+	"git.sr.ht/~ionous/tapestry/imp/assert"
+	"github.com/ionous/errutil"
+)
 
 type EphDefinition struct {
 	Path  []string
@@ -14,26 +17,25 @@ func (op *EphDefinition) Weave(k assert.Assertions) (err error) {
 	return k.AssertDefinition(path...)
 }
 
-func (op *EphDefinition) Assemble(ctx *Context) (err error) {
+func (ctx *Context) AssertDefinition(path ...string) (err error) {
 	d, at := ctx.d, ctx.at
-	return d.AddDefinition(MakeKey(op.Path...), at, op.Value)
+	if end := len(path) - 1; end <= 0 {
+		err = errutil.New("path too short", path)
+	} else {
+		path, value := path[:end], path[end]
+		err = d.AddDefinition(MakeKey(path...), at, value)
+	}
+	return
+
 }
 
 func (op *EphBeginDomain) Phase() assert.Phase { return assert.DomainPhase }
-
-func (op *EphBeginDomain) Assemble(*Context) error {
-	panic("what should happen here?")
-}
 
 func (op *EphBeginDomain) Weave(k assert.Assertions) (err error) {
 	return k.BeginDomain(op.Name, op.Requires)
 }
 
 func (op *EphEndDomain) Phase() assert.Phase { return assert.DomainPhase }
-
-func (op *EphEndDomain) Assemble(*Context) error {
-	panic("what should happen here?")
-}
 
 func (op *EphEndDomain) Weave(k assert.Assertions) (err error) {
 	return k.EndDomain()

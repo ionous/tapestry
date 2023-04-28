@@ -62,7 +62,7 @@ type Assertions interface {
 	AssertGrammar(name string, directive *grammar.Directive) error
 	// AssertMacro(a, b string) error
 	AssertNounKind(noun, kind string) error
-	AssertNounPhrase() error
+	//AssertNounPhrase() error
 	// fix should val be assign?
 	// should path be a DottedPath?
 	AssertNounValue(nounName, fieldName string, path []string, val literal.LiteralValue) error
@@ -72,7 +72,7 @@ type Assertions interface {
 	AssertRelation(rel, a, b string, amany, bmany bool) error
 	AssertRelative(rel, noun, otherNoun string) error
 	// can this be a rule or something?
-	AssertCheck(name string, do []rt.Execute) error
+	AssertCheck(name string, do []rt.Execute, expect literal.LiteralValue) error
 	// fix: target should become part of the guard.
 	// and/or rule should be wrapped up more like "grammar.Directive"
 	AssertRule(name string, target string, guard rt.BoolEval, flags EventTiming, do []rt.Execute) error

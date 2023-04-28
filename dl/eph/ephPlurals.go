@@ -36,13 +36,12 @@ func (op *EphPlurals) Weave(k assert.Assertions) (err error) {
 // not more than one singular per plural ( but the other way around is fine. )
 //
 // tbd: consider appending the origin (at) to store the location of each definition?
-// alt: `on conflict (domain, many) where @one == one do nothing` ( or do set )
-func (op *EphPlurals) Assemble(ctx *Context) (err error) {
+func (ctx *Context) AssertPlural(opSingular, opPlural string) (err error) {
 	c, d, at := ctx.c, ctx.d, ctx.at
-	if plural, ok := UniformString(op.Plural); !ok {
-		err = InvalidString(op.Plural)
-	} else if singular, ok := UniformString(op.Singular); !ok {
-		err = InvalidString(op.Singular)
+	if plural, ok := UniformString(opPlural); !ok {
+		err = InvalidString(opPlural)
+	} else if singular, ok := UniformString(opSingular); !ok {
+		err = InvalidString(opSingular)
 	} else {
 		duplicated := false
 		if e := c.qx.FindPluralDefinitions(plural, func(domain, one, at string) (err error) {

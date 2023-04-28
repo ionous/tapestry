@@ -87,24 +87,24 @@ func (op *EphNouns) Weave(k assert.Assertions) (err error) {
 }
 
 // noun, kind
-func (op *EphNouns) Assemble(ctx *Context) (err error) {
+func (ctx *Context) AssertNounKind(opNoun, opKind string) (err error) {
 	d, at := ctx.d, ctx.at
-	_, noun := d.StripDeterminer(op.Noun)
-	_, kind := d.StripDeterminer(op.Kind)
+	_, noun := d.StripDeterminer(opNoun)
+	_, kind := d.StripDeterminer(opKind)
 
 	if name, ok := UniformString(noun); !ok {
-		err = InvalidString(op.Noun)
+		err = InvalidString(opNoun)
 	} else if kn, ok := UniformString(kind); !ok {
-		err = InvalidString(op.Kind)
+		err = InvalidString(opKind)
 	} else if k, ok := d.GetPluralKind(kn); !ok {
-		err = errutil.New("unknown kind", op.Kind)
+		err = errutil.New("unknown kind", opKind)
 	} else if noun := d.EnsureNoun(name, at); noun.domain == d {
 		// we can only add requirements to the noun in the same domain that it was declared
 		// if in a different domain: the nouns have to match up
-		noun.UpdateFriendlyName(op.Noun)
+		noun.UpdateFriendlyName(opNoun)
 		noun.AddRequirement(k.name)
 	} else if !noun.HasAncestor(k.name) {
-		err = NounError{name, errutil.Fmt("can't redefine parent as %q", op.Kind)}
+		err = NounError{name, errutil.Fmt("can't redefine parent as %q", opKind)}
 	} else {
 		// is this in anyway useful?
 		LogWarning(errutil.Sprintf("duplicate noun %s definition at %v", name, at))

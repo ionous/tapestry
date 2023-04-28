@@ -90,10 +90,11 @@ func (k *CommandBuilder) AssertAspectTraits(aspect string, traits []string) (non
 	return
 }
 
-func (k *CommandBuilder) AssertCheck(name string, do []rt.Execute) (none error) {
+func (k *CommandBuilder) AssertCheck(name string, do []rt.Execute, expect literal.LiteralValue) (none error) {
 	k.append(&EphChecks{
-		Name: name,
-		Exe:  do,
+		Name:   name,
+		Exe:    do,
+		Expect: expect,
 	})
 	return
 }
@@ -195,10 +196,10 @@ func (k *CommandBuilder) AssertNounKind(noun, kind string) (none error) {
 	return
 }
 
-func (k *CommandBuilder) AssertNounPhrase() (none error) {
-	panic("not implemented")
-	return
-}
+// func (k *CommandBuilder) AssertNounPhrase() (none error) {
+// 	panic("not implemented")
+// 	return
+// }
 
 func (k *CommandBuilder) AssertNounValue(noun, field string, path []string, val literal.LiteralValue) (none error) {
 	k.append(&EphValues{

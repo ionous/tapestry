@@ -23,13 +23,13 @@ func (op *EphAspects) Weave(k assert.Assertions) (err error) {
 }
 
 // generates traits and adds them to a custom aspect kind.
-func (op *EphAspects) Assemble(ctx *Context) (err error) {
+func (ctx *Context) AssertAspectTraits(opAspects string, opTraits []string) (err error) {
 	d, at := ctx.d, ctx.at
 	// we dont singularize aspects even thought its a kind;
 	// most are really singularizable anyway, and some common things like "darkness" dont singularize correctly.
-	if aspect, ok := UniformString(op.Aspects); !ok {
-		err = InvalidString(op.Aspects)
-	} else if traits, e := UniformStrings(op.Traits); e != nil {
+	if aspect, ok := UniformString(opAspects); !ok {
+		err = InvalidString(opAspects)
+	} else if traits, e := UniformStrings(opTraits); e != nil {
 		err = e
 	} else {
 		kid := d.EnsureKind(aspect, at)

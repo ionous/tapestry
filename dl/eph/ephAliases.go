@@ -14,17 +14,18 @@ func (op *EphAliases) Weave(k assert.Assertions) (err error) {
 	return k.AssertAlias(op.ShortName, op.Aliases...)
 }
 
-func (op *EphAliases) Assemble(ctx *Context) (err error) {
+func (ctx *Context) AssertAlias(opShortName string, opAliases ...string) (err error) {
 	d, at := ctx.d, ctx.at
-	if noun, e := getClosestNoun(d, op.ShortName); e != nil {
+	if noun, e := getClosestNoun(d, opShortName); e != nil {
 		err = e
 	} else {
-		for _, a := range op.Aliases {
+		for _, a := range opAliases {
 			if a, ok := UniformString(a); !ok {
 				err = errutil.Append(err, InvalidString(a))
 			} else {
 				if !noun.AddAlias(a, at) {
-					LogWarning(errutil.Fmt("duplicate alias %q for %q at %s", a, noun.name, at))
+					LogWarning(errutil.Fmt("duplicate alias %q for %q at %s",
+						a, noun.name, at))
 				}
 			}
 		}

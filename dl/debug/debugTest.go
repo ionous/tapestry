@@ -24,7 +24,7 @@ func (op *Test) Execute(macro rt.Runtime) error {
 func (op *Test) PostImport(k *imp.Importer) (err error) {
 	if e := k.EndDomain(); e != nil {
 		err = e
-	} else if e := k.AssertCheck(op.TestName.String(), op.Do); e != nil {
+	} else if e := k.AssertCheck(op.TestName.String(), op.Do, nil); e != nil {
 		err = e
 	}
 	return

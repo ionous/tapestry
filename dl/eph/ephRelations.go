@@ -70,17 +70,17 @@ func (op *EphRelations) Weave(k assert.Assertions) (err error) {
 	return
 }
 
-func (op *EphRelations) Assemble(ctx *Context) (err error) {
-	c, d, at := ctx.c, ctx.d, ctx.at
+func (ctx *Context) AssertRelation(opRel, a, b string, amany, bmany bool) (err error) {
+	d, at := ctx.d, ctx.at
 	// like aspects, we dont try to singularize these.
-	if rel, ok := UniformString(op.Rel); !ok {
-		err = InvalidString(op.Rel)
-	} else if a, b, card := op.getCard(); len(card) == 0 {
+	if rel, ok := UniformString(opRel); !ok {
+		err = InvalidString(opRel)
+	} else if a, b, card := makeKind(a, b, amany, bmany); len(card) == 0 {
 		err = errutil.New("unknown cardinality")
-	} else if ak, e := a.getKind(c, d); e != nil {
-		err = e
-	} else if bk, e := b.getKind(c, d); e != nil {
-		err = e
+	} else if len(a.name) == 0 {
+		err = errutil.New("invalid name")
+	} else if len(b.name) == 0 {
+		err = errutil.New("invalid name")
 	} else {
 		// add the cardinality as a definition
 		// ( used by EphRelatives to determine the cardinality )
@@ -95,11 +95,11 @@ func (op *EphRelations) Assemble(ctx *Context) (err error) {
 				Contain: []EphParams{{
 					Affinity: a.affinity(),
 					Name:     a.short(false),
-					Class:    ak,
+					Class:    a.name,
 				}, {
 					Affinity: b.affinity(),
 					Name:     b.short(true),
-					Class:    bk,
+					Class:    b.name,
 				}},
 			})
 		}
@@ -139,32 +139,25 @@ func (k *relKind) short(other bool) (ret string) {
 	}
 	return
 }
-func (k *relKind) getKind(c *Catalog, d *Domain) (ret string, err error) {
-	if n := strings.TrimSpace(k.name); len(n) == 0 {
-		err = errutil.New("missing name")
-	} else {
-		ret = n
-	}
-	return
-}
 
-func (op *EphRelations) getCard() (first, second relKind, ret string) {
-	switch c := op.Cardinality.Value.(type) {
-	case *OneOne:
-		first = relKind{c.Kind, false}
-		second = relKind{c.OtherKind, false}
+func makeKind(a, b string, amany, bmany bool) (first, second relKind, ret string) {
+	a, b = strings.TrimSpace(a), strings.TrimSpace(b)
+	switch {
+	case !amany && !bmany:
+		first = relKind{a, false}
+		second = relKind{b, false}
 		ret = tables.ONE_TO_ONE
-	case *OneMany:
-		first = relKind{c.Kind, false}
-		second = relKind{c.OtherKinds, true}
+	case !amany && bmany:
+		first = relKind{a, false}
+		second = relKind{b, true}
 		ret = tables.ONE_TO_MANY
-	case *ManyOne:
-		first = relKind{c.Kinds, true}
-		second = relKind{c.OtherKind, false}
+	case amany && !bmany:
+		first = relKind{a, true}
+		second = relKind{b, false}
 		ret = tables.MANY_TO_ONE
-	case *ManyMany:
-		first = relKind{c.Kinds, true}
-		second = relKind{c.OtherKinds, true}
+	case amany && bmany:
+		first = relKind{a, true}
+		second = relKind{b, true}
 		ret = tables.MANY_TO_MANY
 	}
 	return

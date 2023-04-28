@@ -87,17 +87,17 @@ func (op *EphRelatives) Weave(k assert.Assertions) (err error) {
 
 // validate that the pattern for the rule exists then add the rule to the *current* domain
 // ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
-func (op *EphRelatives) Assemble(ctx *Context) (err error) {
+func (ctx *Context) AssertRelative(opRel, opNoun, opOtherNoun string) (err error) {
 	d, at := ctx.d, ctx.at
-	if name, ok := UniformString(op.Rel); !ok {
-		err = InvalidString(op.Rel)
+	if name, ok := UniformString(opRel); !ok {
+		err = InvalidString(opRel)
 	} else if rel, ok := d.GetPluralKind(name); !ok || !rel.HasAncestor(kindsOf.Relation) {
-		err = errutil.Fmt("unknown or invalid relation %q", op.Rel)
+		err = errutil.Fmt("unknown or invalid relation %q", opRel)
 	} else if card := rel.domain.GetDefinition(MakeKey("rel", rel.name, "card")); len(card.value) == 0 {
-		err = errutil.Fmt("unknown or invalid cardinality for %q", op.Rel)
-	} else if first, e := getClosestNoun(d, op.Noun); e != nil {
+		err = errutil.Fmt("unknown or invalid cardinality for %q", opRel)
+	} else if first, e := getClosestNoun(d, opNoun); e != nil {
 		err = e
-	} else if second, e := getClosestNoun(d, op.OtherNoun); e != nil {
+	} else if second, e := getClosestNoun(d, opOtherNoun); e != nil {
 		err = e
 	} else {
 		var addPair bool
@@ -122,7 +122,7 @@ func (op *EphRelatives) Assemble(ctx *Context) (err error) {
 			uniquePair := first.name + second.name
 			addPair, err = relate(d, rel, uniquePair, at, uniquePair)
 		default:
-			err = errutil.Fmt("unknown or invalid cardinality %q for %q", card.value, op.Rel)
+			err = errutil.Fmt("unknown or invalid cardinality %q for %q", card.value, opRel)
 		}
 		//
 		if err == nil && addPair {

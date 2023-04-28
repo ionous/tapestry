@@ -215,11 +215,6 @@ func (el rivalFact) Weave(k assert.Assertions) error {
 	return k.AssertDefinition("rivalFact", string(el))
 }
 
-func (el rivalFact) Assemble(ctx *Context) (err error) {
-	d, at := ctx.d, ctx.at
-	return d.AddDefinition(MakeKey("rivalFact"), at, string(el))
-}
-
 func (c *Catalog) resolveDomain(n string) (ret Dependencies, err error) {
 	if d, ok := c.GetDomain(n); !ok {
 		err = errutil.New("unknown domain", n)

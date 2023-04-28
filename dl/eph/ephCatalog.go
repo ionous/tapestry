@@ -26,13 +26,6 @@ type Catalog struct {
 	qx     query.Queryx
 }
 
-type Context struct {
-	c     *Catalog
-	d     *Domain
-	at    string
-	phase assert.Phase
-}
-
 func NewCatalog(db *sql.DB) *Catalog {
 	var c Catalog
 	qx, e := qdb.NewQueryx(db)
@@ -87,15 +80,10 @@ func (c *Catalog) EndDomain() (err error) {
 
 func (c *Catalog) writeEphemera(ep Ephemera) {
 	var err error
-	at := c.cursor
-	if phase := ep.Phase(); phase == assert.DomainPhase {
-		err = ep.Assemble(&Context{c, nil, at, phase})
+	if d, ok := c.processing.Top(); !ok {
+		err = errutil.New("no top domain")
 	} else {
-		if d, ok := c.processing.Top(); !ok {
-			err = errutil.New("no top domain")
-		} else {
-			err = d.QueueEphemera(at, ep)
-		}
+		err = d.QueueEphemera(c.cursor, ep)
 	}
 	if err != nil {
 		c.Errors = append(c.Errors, err)
@@ -136,7 +124,7 @@ func (c *Catalog) EnsureDomain(n, at string, reqs ...string) (ret *Domain, err e
 	return
 }
 
-const TempSplit = assert.PluralPhase + 1
+var TempSplit = assert.PluralPhase + 1
 
 // walk the domains and run the commands remaining in their queues
 func (c *Catalog) AssembleCatalog() (err error) {

@@ -24,10 +24,9 @@ type Domain struct {
 	checks        asmChecks
 	resolvedKinds cachedTable
 	resolvedNouns cachedTable
-	// plural        PluralPairs
-	opposites OppositePairs
-	rules     map[string]Rulesets  // pattern name to rules for that pattern
-	relatives map[string]Relatives // relation name to pairs of nouns
+	opposites     OppositePairs
+	rules         map[string]Rulesets  // pattern name to rules for that pattern
+	relatives     map[string]Relatives // relation name to pairs of nouns
 }
 
 type PhaseData struct {
@@ -137,12 +136,14 @@ func (d *Domain) AssembleDomain(w assert.Phase, flags PhaseFlags) (err error) {
 		if e := d.checkRivals(ds, !flags.NoDuplicates); e != nil {
 			err = e
 		} else {
+			ctx := Context{c: d.catalog, d: d, phase: w}
 			// don't "range" over the phase data since the contents can change during traversal.
 			// fix: if we were merging in the definitions we wouldnt have to walk upwards...
 			// what's best? see note in checkRivals()
 			for i := 0; i < len(d.phases[w].eph); i++ {
 				op := d.phases[w].eph[i]
-				if e := op.Eph.Assemble(&Context{d.catalog, d, op.At, w}); e != nil {
+				ctx.at = op.At
+				if e := op.Eph.Weave(&ctx); e != nil {
 					err = errutil.Append(err, e)
 				}
 			}
@@ -175,7 +176,7 @@ func (d *Domain) checkRivals(ds Dependencies, allowDupes bool) (err error) {
 
 // for each domain in the passed list, output its full ancestry tree ( or just its parents )
 func (d *Domain) WriteDomain(w Writer) (err error) {
-	if dep, e := d.GetDependencies(); e != nil {
+	if dep, e := d.Resolve(); e != nil {
 		err = e
 	} else {
 		name, row, at := d.Name(), dep.Strings(true), d.OriginAt()
