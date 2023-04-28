@@ -34,3 +34,20 @@ func WriteCsv(db Querier, w io.Writer, q string, cols int) (err error) {
 	}
 	return
 }
+
+// where each row is one string.
+func ScanStrings(db Querier, q string) (ret []string, err error) {
+	if rows, e := db.Query(q); e != nil {
+		err = e
+	} else {
+		var str sql.NullString
+		err = ScanAll(rows, func() (err error) {
+			if !str.Valid {
+				str.String = "NULL"
+			}
+			ret = append(ret, str.String)
+			return
+		}, &str)
+	}
+	return
+}

@@ -56,7 +56,12 @@ type Runtime interface {
 	// or if there is no object or field of the indicated names.
 	SetField(object, field string, value g.Value) error
 	// PluralOf - turn single words into their plural variants, and vice-versa.
+	// each plural word maps to a unique singular.
+	// for example, if the singular of "people" is "person", it cant also be "personage".
 	PluralOf(single string) string
+	// note: one plural word can map to multiple single words.
+	// in that case the returned singular word is arbitrary ( if theoretically consistent )
+	// for example, "person" can have the plural "people" or "persons" and this could return either.
 	SingularOf(plural string) string
 	// Random - return a pseudo-random number.
 	Random(inclusiveMin, exclusiveMax int) int

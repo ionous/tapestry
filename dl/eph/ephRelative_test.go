@@ -12,6 +12,7 @@ import (
 // follow along with relative test except add list of ephemera
 func TestRelativeFormation(t *testing.T) {
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		newRelativeTest(
 			"a", "r_1_1", "a",
@@ -49,7 +50,7 @@ func TestRelativeFormation(t *testing.T) {
 			"a", "r_x_x", "b",
 		)...,
 	)
-	if cat, e := buildNouns(dt); e != nil {
+	if cat, e := buildNouns(&dt); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl.Pair}
@@ -91,13 +92,14 @@ func TestRelativeFormation(t *testing.T) {
 // follow along with relative test except add list of ephemera
 func TestRelativeOneOneViolation(t *testing.T) {
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		newRelativeTest(
 			"b", "r_1_1", "c",
 			"b", "r_1_1", "d",
 		)...,
 	)
-	if _, e := buildNouns(dt); e == nil {
+	if _, e := buildNouns(&dt); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)
@@ -106,6 +108,7 @@ func TestRelativeOneOneViolation(t *testing.T) {
 
 func TestRelativeOneManyViolation(t *testing.T) {
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		newRelativeTest(
 			// ex. one parent to many children
@@ -113,7 +116,7 @@ func TestRelativeOneManyViolation(t *testing.T) {
 			"c", "r_1_x", "e",
 		)...,
 	)
-	if _, e := buildNouns(dt); e == nil {
+	if _, e := buildNouns(&dt); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)
@@ -122,6 +125,7 @@ func TestRelativeOneManyViolation(t *testing.T) {
 
 func TestRelativeManyOneViolation(t *testing.T) {
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		newRelativeTest(
 			// ex. many children to one parent
@@ -129,7 +133,7 @@ func TestRelativeManyOneViolation(t *testing.T) {
 			"e", "r_x_1", "c",
 		)...,
 	)
-	if _, e := buildNouns(dt); e == nil {
+	if _, e := buildNouns(&dt); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)

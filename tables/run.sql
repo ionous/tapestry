@@ -11,27 +11,34 @@ create table if not exists
  * path isnt really needed because any parts of an activated domain are themselves individually active.
  */
 create view if not exists
-domain_scope as 
+active_domains as 
 select md.rowid as domain, md.domain as name
 from run_domain rd 
 join mdl_domain md 
 	on rd.active > 0 and rd.domain = md.rowid;
 
 create view if not exists
-kind_scope as 
+active_kinds as 
 select ds.name as domain, mk.rowid as kind, mk.kind as name, mk.path
-from domain_scope ds
+from active_domains ds
 join mdl_kind mk 
 	using (domain);
 
 /* domain name, noun id, noun name, and kind id
 * the domain name is a nod towards needing the domain name to fully scope the noun */ 
 create view if not exists
-noun_scope as 
+active_nouns as 
 select ds.name as domain, mn.rowid as noun, mn.noun as name, mn.kind
-from domain_scope ds
+from active_domains ds
 join mdl_noun mn 
 	using (domain);
+
+create view if not exists
+active_plurals as 
+select ds.name as domain, mp.many, mp.one, mp.at
+from active_domains ds
+join mdl_plural mp 
+	using (domain);	
 
 /* for finding relatives and reciprocals: returns relName, nounName, otherName */
 create view if not exists

@@ -17,6 +17,7 @@ func TestRelAssembly(t *testing.T) {
 	defer unwarn()
 
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kind: kindsOf.Relation.String()}, // declare the relation table
 		&EphKinds{Kind: "p"},
@@ -42,7 +43,7 @@ func TestRelAssembly(t *testing.T) {
 			Value:  &ManyMany{Kinds: "q", OtherKinds: "p"},
 		}},
 	)
-	if cat, e := buildAncestors(dt); e != nil {
+	if cat, e := buildAncestors(&dt); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl.Rel}

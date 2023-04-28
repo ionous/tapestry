@@ -15,6 +15,7 @@ func TestNounFormation(t *testing.T) {
 	defer unwarn()
 
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kind: "k"},
 		&EphNouns{Noun: "apple", Kind: "k"},
@@ -24,7 +25,7 @@ func TestNounFormation(t *testing.T) {
 		&EphNouns{Noun: "toy boat", Kind: "k"},
 	)
 	nouns, names := testOut{mdl.Noun}, testOut{mdl.Name}
-	if e := writeNouns(dt, &nouns, &names); e != nil {
+	if e := writeNouns(&dt, &nouns, &names); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(nouns[1:], testOut{
 		"a:apple:k:x",
@@ -48,10 +49,11 @@ func TestNounFormation(t *testing.T) {
 
 func TestNounFailure(t *testing.T) {
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&EphNouns{Noun: "bad apple", Kind: "t"},
 	)
-	if e := writeNouns(dt, nil, nil); e == nil ||
+	if e := writeNouns(&dt, nil, nil); e == nil ||
 		e.Error() != `unknown kind t` {
 		t.Fatal("unexpected failure", e)
 	} else {
@@ -61,6 +63,7 @@ func TestNounFailure(t *testing.T) {
 
 func TestNounHierarchy(t *testing.T) {
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kind: "t"},
 		&EphKinds{Kind: "p", Ancestor: "t"},
@@ -73,7 +76,7 @@ func TestNounHierarchy(t *testing.T) {
 		&EphNouns{Noun: "bandanna", Kind: "c"},
 	)
 	nouns, names := testOut{mdl.Noun}, testOut{mdl.Name}
-	if e := writeNouns(dt, &nouns, &names); e != nil {
+	if e := writeNouns(&dt, &nouns, &names); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(nouns[1:], testOut{
 		// note: the new assembler takes the most specific type
@@ -96,6 +99,7 @@ func TestNounHierarchy(t *testing.T) {
 
 func TestNounHierarchyFailure(t *testing.T) {
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kind: "t"},
 		&EphKinds{Kind: "c", Ancestor: "t"},
@@ -103,7 +107,7 @@ func TestNounHierarchyFailure(t *testing.T) {
 		&EphNouns{Noun: "apple", Kind: "c"},
 		&EphNouns{Noun: "apple", Kind: "d"},
 	)
-	if e := writeNouns(dt, nil, nil); e == nil ||
+	if e := writeNouns(&dt, nil, nil); e == nil ||
 		e.Error() != `"apple" has more than one parent` {
 		t.Fatal("unexpected failure", e)
 	} else {
@@ -113,12 +117,13 @@ func TestNounHierarchyFailure(t *testing.T) {
 
 func TestNounParts(t *testing.T) {
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kind: "t"},
 		&EphNouns{Noun: "collection of words", Kind: "t"},
 	)
 	nouns, names := testOut{mdl.Noun}, testOut{mdl.Name}
-	if e := writeNouns(dt, &nouns, &names); e != nil {
+	if e := writeNouns(&dt, &nouns, &names); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(nouns[1:], testOut{
 		"a:collection_of_words:t:x",
@@ -139,6 +144,7 @@ func TestNounParts(t *testing.T) {
 
 func TestNounAliases(t *testing.T) {
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("b"),
 		&EphKinds{Kind: "k"},
 		&EphNouns{Noun: "toy boat", Kind: "k"},
@@ -148,7 +154,7 @@ func TestNounAliases(t *testing.T) {
 		&EphAliases{ShortName: "apple", Aliases: dd("delicious", "fruit")},
 	)
 	names := testOut{mdl.Name}
-	if e := writeNouns(dt, nil, &names); e != nil {
+	if e := writeNouns(&dt, nil, &names); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(names[1:], testOut{
 		"b:apple:delicious:-1:x", // aliases first
@@ -173,15 +179,16 @@ func TestNounDistance(t *testing.T) {
 	defer unwarn()
 
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kind: "k"},
 		&EphNouns{Noun: "toy boat", Kind: "k"},
 		&EphNouns{Noun: "boat", Kind: "k"},
 	)
-	var cat Catalog
-	if e := dt.addToCat(cat.Weaver()); e != nil {
+	cat := NewCatalog(dt.Open(t.Name()))
+	if e := dt.addToCat(cat); e != nil {
 		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(nil, nil); e != nil {
+	} else if e := cat.AssembleCatalog(nil); e != nil {
 		t.Fatal(e)
 	} else if _, e := cat.ResolveNouns(); e != nil {
 		t.Fatal(e)
@@ -205,7 +212,7 @@ func TestNounDistance(t *testing.T) {
 	}
 }
 
-func writeNouns(dt domainTest, nouns, names *testOut) (err error) {
+func writeNouns(dt *domainTest, nouns, names *testOut) (err error) {
 	if cat, e := buildNouns(dt); e != nil {
 		err = e
 	} else {

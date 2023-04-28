@@ -2,23 +2,6 @@ package eph
 
 import "testing"
 
-func TestPluralPairs(t *testing.T) {
-	var ps PluralPairs
-	if ok := ps.AddPair("persons", "person"); ok == false {
-		t.Fatal("couldnt add persons")
-	} else if ok := ps.AddPair("people", "person"); ok == false {
-		t.Fatal("couldnt add people")
-	} else if ok := ps.AddPair("people", "bats"); ok == true {
-		t.Fatal("shouldnt allow conflicting plurals")
-	} else if p, ok := ps.FindPlural("person"); !ok || p != "persons" {
-		t.Fatal(p)
-	} else if p, ok := ps.FindSingular("people"); !ok || p != "person" {
-		t.Fatal(p)
-	} else if p, ok := ps.FindSingular("persons"); !ok || p != "person" {
-		t.Fatal(p)
-	}
-}
-
 func TestOppositePairs(t *testing.T) {
 	var ps OppositePairs
 	if e := ps.AddPair("east", "west"); e != nil {

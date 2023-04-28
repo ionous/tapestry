@@ -4,9 +4,9 @@ package qdb
 
 import (
 	"database/sql"
-	"git.sr.ht/~ionous/tapestry/qna/query"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
@@ -14,6 +14,7 @@ import (
 // Read various data from the play database.
 type Query struct {
 	db *sql.DB
+	activeConflicts,
 	domainActivation,
 	domainScope,
 	domainDelete,
@@ -26,6 +27,7 @@ type Query struct {
 	nounIsNamed,
 	nounsByKind,
 	patternOf,
+	pluralMatches,
 	pluralToSingular,
 	pluralFromSingular,
 	reciprocalOf,
@@ -35,7 +37,6 @@ type Query struct {
 	relatePairs,
 	relativesOf,
 	rulesFor *sql.Stmt
-
 	//
 	domain     string // name of the most recently activated domain ( for scoping new run_pair entries )
 	activation int    // number of domain activation requests ( to find new domains in run_domain )
@@ -60,7 +61,7 @@ func (q *Query) ActivateDomain(name string) (ret string, err error) {
 	} else if len(name) == 0 {
 		q.domain = ""
 		q.activation = q.activation + 1
-		err = resetDomain(q.db)
+		err = resetDomain(q.db, true)
 	} else {
 		// register the new scope(s)
 		act := q.activation + 1
@@ -167,6 +168,32 @@ func (q *Query) NounsByKind(kind string) ([]string, error) {
 	return scanStrings(q.nounsByKind, kind)
 }
 
+func (q *Query) FindActiveConflicts(cb func(domain, key, value, at string) error) (err error) {
+	var domain, many, one string
+	var at sql.NullString
+	if rows, e := q.activeConflicts.Query(); e != nil {
+		err = e
+	} else if e := tables.ScanAll(rows, func() error {
+		return cb(domain, many, one, at.String)
+	}, &domain, &many, &one, &at); e != nil {
+		err = e
+	}
+	return
+}
+
+func (q *Query) FindPluralDefinitions(many string, cb func(domain, one, at string) error) (err error) {
+	var domain, one string
+	var at sql.NullString
+	if rows, e := q.pluralMatches.Query(many); e != nil {
+		err = e
+	} else if e := tables.ScanAll(rows, func() error {
+		return cb(domain, one, at.String)
+	}, &domain, &one, &at); e != nil {
+		err = e
+	}
+	return
+}
+
 func (q *Query) PluralToSingular(plural string) (ret string, err error) {
 	return scanString(q.pluralToSingular, plural)
 }
@@ -224,15 +251,28 @@ func (q *Query) Relate(rel, noun, otherNoun string) (err error) {
 	return
 }
 
-func resetDomain(db *sql.DB) (err error) {
-	_, err = db.Exec(`delete from run_domain; delete from run_pair`)
+func resetDomain(db *sql.DB, reset bool) (err error) {
+	if reset {
+		_, err = db.Exec(`delete from run_domain; delete from run_pair`)
+	}
 	return
 }
 
 func NewQueries(db *sql.DB, reset bool) (ret *Query, err error) {
 	if e := tables.CreateRun(db); e != nil {
 		err = e
-	} else if e := resetDomain(db); e != nil {
+	} else if e := resetDomain(db, reset); e != nil {
+		err = e
+	} else {
+		ret, err = newQueries(db)
+	}
+	return
+}
+
+func NewQueryx(db *sql.DB) (ret *Query, err error) {
+	if e := tables.CreateAll(db); e != nil {
+		err = e
+	} else if e := resetDomain(db, false); e != nil {
 		err = e
 	} else {
 		ret, err = newQueries(db)
@@ -245,6 +285,14 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 	q := &Query{
 		db:         db,
 		activation: 1,
+		activeConflicts: ps.Prep(db,
+			`select a.domain, a.many, a.one, a.at
+			from active_plurals as a 
+			join active_plurals as b 
+			where a.domain != b.domain 
+			and a.many == b.many 
+			and a.one != b.one`,
+		),
 		checks: ps.Prep(db,
 			`select mc.name, md.domain, mc.value, mc.affinity, mc.prog
 			from mdl_check mc
@@ -279,20 +327,20 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		domainDelete: ps.Prep(db,
 			`delete from run_pair
 			where domain not in ( 
-				select domain from domain_scope 
+				select domain from active_domains 
 			)`,
 		),
 		// determine if the named domain is currently in scope.
 		domainScope: ps.Prep(db,
 			`select 1 
-			from domain_scope ds 
+			from active_domains ds 
 			where name = ?1`,
 		),
 		// every field of a given kind, and its initial assignment if any.
 		// ( interestingly the order by seems to generate a shorter query than without )
 		fieldsOf: ps.Prep(db,
 			`select mf.field, mf.affinity, ifnull(mk.kind, '') as type, ma.value
-			from kind_scope ks  -- search for the kind in question
+			from active_kinds ks  -- search for the kind in question
 			join mdl_field mf
 				using (kind)
 			left join mdl_kind mk  -- search for the kind of type 
@@ -305,7 +353,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		// path is materialized ids so we return multiple values of resolved names
 		kindOfAncestors: ps.Prep(db,
 			`select mk.kind 
-			from kind_scope ks  -- the kinds in domain scope 
+			from active_kinds ks  -- the kinds in domain scope 
 			join mdl_kind mk
 				-- is Y (is their name) a part of X (our path)
 				on instr(',' || ks.path, 
@@ -317,7 +365,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		// we filter out parser understandings (which have ranks < 0)
 		nounInfo: ps.Prep(db,
 			`select ns.domain, ns.name, mk.kind
-			from noun_scope ns
+			from active_nouns ns
 			join mdl_name my
 				using (noun)
 			join mdl_kind mk
@@ -330,7 +378,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		nounIsNamed: ps.Prep(db,
 			`select 1
 			from mdl_name my
-			join noun_scope ns
+			join active_nouns ns
 				using (noun)
 			where ns.name=?1
 			and my.name=?2`,
@@ -338,7 +386,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		// given the fullname of a noun, find the best short name
 		nounName: ps.Prep(db,
 			`select my.name as nameOf
-			from noun_scope ns
+			from active_nouns ns
 			join mdl_name my
 				using (noun)
 			where my.rank >= 0 and ns.name = ?1
@@ -348,24 +396,31 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		// given a named kind, find the nouns
 		nounsByKind: ps.Prep(db,
 			`select ns.name
-			from kind_scope ks
-			join noun_scope ns 
+			from active_kinds ks
+			join active_nouns ns 
 				using(kind)
 			where ks.name=?1`, // order?
 		),
 		// find the names of a given pattern ( kind's ) args and results
 		patternOf: ps.Prep(db,
 			`select mp.labels, mp.result
-			from kind_scope ks 
+			from active_kinds ks 
 			join mdl_pat mp
 				using (kind)
 			where ks.name = ?1
 			limit 1`,
 		),
+		pluralMatches: ps.Prep(db,
+			`select domain, one, at 
+			from mdl_plural
+			join active_domains
+				using (domain)
+			where many = ?1`,
+		),
 		pluralToSingular: ps.Prep(db,
 			`select one 
 			from mdl_plural
-			join domain_scope
+			join active_domains
 				using(domain)
 			where many=?
 			limit 1`,
@@ -373,7 +428,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		pluralFromSingular: ps.Prep(db,
 			`select many 
 			from mdl_plural
-			join domain_scope
+			join active_domains
 				using(domain)
 			where one=?
 			limit 1`,
@@ -393,7 +448,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		),
 		activeDomains: ps.Prep(db,
 			`select domain 
-			from domain_scope
+			from active_domains
 			order by domain`,
 		),
 		relatePairs: ps.Prep(db,
@@ -405,7 +460,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		// create view if not exists
 		// rel_scope as
 		// select ds.name as domain, mk.rowid as relKind, mk.kind as name, mr.oneKind, mr.otherKind, mr.cardinality
-		// from domain_scope ds
+		// from active_domains ds
 		// join mdl_kind mk
 		// 	using (domain)
 		// join mdl_rel mr
@@ -433,7 +488,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		// returns the executable rules for a given kind and target
 		rulesFor: ps.Prep(db,
 			`select mu.rowid, mu.phase, mu.filter, mu.prog
-			from domain_scope 
+			from active_domains 
 			join mdl_rule mu
 				using (domain)
 			join mdl_kind mk 
@@ -449,7 +504,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		nounValue: ps.Prep(db,
 			`select mv.value
 			from mdl_value mv
-			join noun_scope ns
+			join active_nouns ns
 				using (noun)
 			join mdl_field mf
 				on (mf.rowid=mv.field)

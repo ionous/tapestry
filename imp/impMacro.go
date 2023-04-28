@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/pattern"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"github.com/ionous/errutil"
 )
@@ -49,28 +48,28 @@ func (k *Importer) GetKindByName(n string) (ret *g.Kind, err error) {
 
 // ugh. see register macro notes.
 func (k *Importer) Call(rec *g.Record, expectedReturn affine.Affinity) (ret g.Value, err error) {
-	kind := rec.Kind()
-	if macro, ok := k.macros[kind.Name()]; !ok {
-		err = errutil.New("unknown macro", kind.Name())
-	} else if res, e := pattern.NewMacroResults(k, rec, expectedReturn); e != nil {
-		err = e
-	} else if e := macro.initializeRecord(k, rec); e != nil {
-		err = e
-	} else {
-		oldScope := k.Stack.ReplaceScope(res)
-		if e := macro.initializeRecord(k, rec); e != nil {
-			err = e
-		} else if e := safe.RunAll(k, macro.do); e != nil {
-			err = e
-		} else if !res.ComputedResult() && expectedReturn != affine.None {
-			err = rt.NoResult{}
-		} else if v, e := res.GetResult(); e != nil {
-			err = e
-		} else {
-			ret = v
-		}
-		k.Stack.ReplaceScope(oldScope)
-	}
+	// kind := rec.Kind()
+	// if macro, ok := k.macros[kind.Name()]; !ok {
+	// 	err = errutil.New("unknown macro", kind.Name())
+	// } else if res, e := pattern.NewMacroResults(k, rec, expectedReturn); e != nil {
+	// 	err = e
+	// } else if e := macro.initializeRecord(k, rec); e != nil {
+	// 	err = e
+	// } else {
+	// 	oldScope := k.Stack.ReplaceScope(res)
+	// 	if e := macro.initializeRecord(k, rec); e != nil {
+	// 		err = e
+	// 	} else if e := safe.RunAll(k, macro.do); e != nil {
+	// 		err = e
+	// 	} else if !res.ComputedResult() && expectedReturn != affine.None {
+	// 		err = rt.NoResult{}
+	// 	} else if v, e := res.GetResult(); e != nil {
+	// 		err = e
+	// 	} else {
+	// 		ret = v
+	// 	}
+	// 	k.Stack.ReplaceScope(oldScope)
+	// }
 	return
 }
 

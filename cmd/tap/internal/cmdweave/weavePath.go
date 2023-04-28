@@ -26,33 +26,6 @@ const (
 
 // lets do this in the dumbest of ways for now.
 func WeavePath(srcPath, outFile string) (err error) {
-	var cat eph.Catalog // fix: capture "Dilemmas" and LogWarning?
-	k := imp.NewImporter(cat.Weaver())
-	if e := k.BeginDomain("tapestry", nil); e != nil {
-		err = e
-	} else if e := addDefaultKinds(k); e != nil {
-		err = e
-	} else if e := importStoryFiles(k, srcPath); e != nil {
-		err = e
-	} else if len(cat.Errors) > 0 {
-		err = errutil.New(cat.Errors)
-	} else if e := assembleCat(cat.Weaver(), outFile); e != nil {
-		err = e
-	}
-	return
-}
-
-func addDefaultKinds(n assert.Assertions) (err error) {
-	for _, k := range kindsOf.DefaultKinds {
-		if e := n.AssertAncestor(k.String(), k.Parent().String()); e != nil {
-			err = e
-			break
-		}
-	}
-	return
-}
-
-func assembleCat(cat *eph.Catalog, outFile string) (err error) {
 	if outFile, e := filepath.Abs(outFile); e != nil {
 		err = e
 	} else if e := os.Remove(outFile); e != nil && !os.IsNotExist(e) {
@@ -66,7 +39,29 @@ func assembleCat(cat *eph.Catalog, outFile string) (err error) {
 			err = errutil.New("couldn't create output file", outFile, e)
 		} else {
 			defer db.Close()
-			err = Weave(cat, db)
+			cat := eph.NewCatalog(db) // fix: capture "Dilemmas" and LogWarning?
+			k := imp.NewImporterRuntime(cat, cat.Runtime())
+			if e := k.BeginDomain("tapestry", nil); e != nil {
+				err = e
+			} else if e := addDefaultKinds(k); e != nil {
+				err = e
+			} else if e := importStoryFiles(k, srcPath); e != nil {
+				err = e
+			} else if len(cat.Errors) > 0 {
+				err = errutil.New(cat.Errors)
+			} else {
+				err = Weave(cat, db)
+			}
+		}
+	}
+	return
+}
+
+func addDefaultKinds(n assert.Assertions) (err error) {
+	for _, k := range kindsOf.DefaultKinds {
+		if e := n.AssertAncestor(k.String(), k.Parent().String()); e != nil {
+			err = e
+			break
 		}
 	}
 	return

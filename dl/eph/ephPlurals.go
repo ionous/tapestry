@@ -4,72 +4,24 @@ import (
 	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
-	"github.com/ionous/inflect"
 )
 
-// returns true if newly added
-func (d *Domain) AddPlural(plural, singular string) (okay bool) {
-	return d.plural.AddPair(plural, singular)
-}
-
-// use the domain rules ( and hierarchy ) to turn the passed singular word into its plural form.
-// the way plurals are defined, there can be more than one plural word for a given singular word.
-// in that case, attempts to pick one.
+// fix: remove this function
 func (d *Domain) Pluralize(singular string) (ret string, err error) {
-	// dont bother with one letter kinds ( ex. tests )
-	if len(singular) < 2 {
-		ret = singular
-	} else if e := VisitTree(d, func(dep Dependency) (err error) {
-		scope := dep.(*Domain)
-		if n, ok := scope.plural.FindPlural(singular); ok {
-			ret, err = n, Visited
-		}
-		return
-	}); e == nil { // not found
-		ret = inflect.Pluralize(singular)
-	} else if e != Visited {
-		err = e
-	}
-	return
-}
-
-// use the domain rules ( and hierarchy ) to turn the passed plural into its singular form
-// the way plurals are defined, there can be more than one plural word for a given singular word.
-// in that case, attempts to pick one.
-func (d *Domain) Singularize(plural string) (ret string, err error) {
-	// dont bother with one letter kinds ( ex. tests )
-	if len(plural) < 2 {
-		ret = plural
-	} else if e := VisitTree(d, func(dep Dependency) (err error) {
-		scope := dep.(*Domain)
-		if n, ok := scope.plural.FindSingular(plural); ok {
-			ret, err = n, Visited
-		}
-		return
-	}); e == nil { // not found
-		ret = inflect.Singularize(plural)
-	} else if e != Visited {
-		err = e
-	}
-	return
-}
-
-// while it'd probably be faster to do this while we assemble,
-// keep this assembly separate from the writing produces nicer code and tests.
-func (c *Catalog) WritePlurals(w Writer) (err error) {
-	if deps, e := c.ResolveDomains(); e != nil {
-		err = e
+	if d.catalog != nil {
+		ret = d.catalog.run.PluralOf(singular)
 	} else {
-		for _, dep := range deps {
-			d := dep.Leaf().(*Domain)
-			for i, p := range d.plural.plural {
-				s := d.plural.singular[i]
-				def := d.GetDefinition(MakeKey("plurals", p))
-				if e := w.Write(mdl.Plural, d.name, p, s, def.at); e != nil {
-					err = errutil.Append(err, domainError{d.name, e})
-				}
-			}
-		}
+		ret = singular // for tests
+	}
+	return
+}
+
+// fix: remove this function
+func (d *Domain) Singularize(plural string) (ret string, err error) {
+	if d.catalog != nil {
+		ret = d.catalog.run.SingularOf(plural)
+	} else {
+		ret = plural // for tests
 	}
 	return
 }
@@ -82,16 +34,39 @@ func (op *EphPlurals) Weave(k assert.Assertions) (err error) {
 
 // add to the plurals to the database and ( maybe ) remember the plural for the current domain's set of rules
 // not more than one singular per plural ( but the other way around is fine. )
+//
+// tbd: consider appending the origin (at) to store the location of each definition?
+// alt: `on conflict (domain, many) where @one == one do nothing` ( or do set )
 func (op *EphPlurals) Assemble(c *Catalog, d *Domain, at string) (err error) {
-	if many, ok := UniformString(op.Plural); !ok {
+	if plural, ok := UniformString(op.Plural); !ok {
 		err = InvalidString(op.Plural)
-	} else if one, ok := UniformString(op.Singular); !ok {
+	} else if singular, ok := UniformString(op.Singular); !ok {
 		err = InvalidString(op.Singular)
-	} else if ok, e := d.RefineDefinition(MakeKey("plurals", many), at, one); e != nil {
-		err = e
-	} else if ok {
-		if !d.AddPlural(many, one) {
-			err = errutil.New("couldnt add plurals", many, one)
+	} else {
+		duplicated := false
+		if e := c.qx.FindPluralDefinitions(plural, func(domain, one, at string) (err error) {
+			why := Redefined
+			if one == singular {
+				why = Duplicated
+				duplicated = true
+			}
+			key := MakeKey("plurals", plural)
+			e := domainError{Domain: d.name, Err: newConflict(key, why,
+				Definition{key, at, one},
+				singular,
+			)}
+			if one == singular {
+				LogWarning(e)
+			} else {
+				err = e
+			}
+			return err
+		}); e != nil {
+			err = e
+		} else if !duplicated {
+			if e := c.writer.Write(mdl.Plural, d.name, plural, singular, at); e != nil {
+				err = errutil.New("error writing plurals", e)
+			}
 		}
 	}
 	return

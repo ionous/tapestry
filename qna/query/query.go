@@ -1,8 +1,9 @@
 package query
 
 import (
-	"git.sr.ht/~ionous/tapestry/affine"
 	"strings"
+
+	"git.sr.ht/~ionous/tapestry/affine"
 )
 
 type CheckData struct {

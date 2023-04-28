@@ -10,6 +10,7 @@ import (
 
 func TestValueFieldAssignment(t *testing.T) {
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		// some random set of kinds
 		&EphKinds{Kind: "k"},
@@ -32,7 +33,7 @@ func TestValueFieldAssignment(t *testing.T) {
 		&EphValues{Noun: "toy", Field: "d", Value: I(321)},
 		&EphValues{Noun: "boat", Field: "t", Value: T("more text")},
 	)
-	if cat, e := buildNouns(dt); e != nil {
+	if cat, e := buildNouns(&dt); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl.Value}
@@ -52,6 +53,7 @@ func TestValueFieldAssignment(t *testing.T) {
 
 func TestMissingField(t *testing.T) {
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		// some random set of kinds
 		&EphKinds{Kind: "k"},
@@ -62,7 +64,7 @@ func TestMissingField(t *testing.T) {
 		// and not that field
 		&EphValues{Noun: "n", Field: "t", Value: T("no such field")},
 	)
-	if _, e := buildNouns(dt); e == nil || e.Error() != `field not found 'k.t'` {
+	if _, e := buildNouns(&dt); e == nil || e.Error() != `field not found 'k.t'` {
 		t.Fatal("expected error", e)
 	} else {
 		t.Log("ok", e)
@@ -71,6 +73,7 @@ func TestMissingField(t *testing.T) {
 
 func TestValueTraitAssignment(t *testing.T) {
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		// some random set of kinds
 		&EphKinds{Kind: "k"},
@@ -97,7 +100,7 @@ func TestValueTraitAssignment(t *testing.T) {
 		&EphValues{Noun: "toy", Field: "w", Value: B(true)},
 		&EphValues{Noun: "boat", Field: "z", Value: B(true)},
 	)
-	if cat, e := buildNouns(dt); e != nil {
+	if cat, e := buildNouns(&dt); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl.Value}
@@ -117,6 +120,7 @@ func TestValueTraitAssignment(t *testing.T) {
 
 func TestValuePaths(t *testing.T) {
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		// declare the existence of records
 		&EphKinds{Kind: kindsOf.Record.String()},
@@ -141,7 +145,7 @@ func TestValuePaths(t *testing.T) {
 			"outer", "inner",
 		}},
 	)
-	if cat, e := buildNouns(dt); e != nil {
+	if cat, e := buildNouns(&dt); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl.Value}

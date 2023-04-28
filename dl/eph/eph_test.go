@@ -1,19 +1,24 @@
 package eph
 
 import (
+	"database/sql"
 	"fmt"
 	"math/rand"
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/imp/assert"
-
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/tables"
+	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"github.com/ionous/errutil"
 )
 
 type testOut []string
+
+func (log *testOut) Results() []string {
+	return (*log)[1:]
+}
 
 // ignores the category for simpler testing
 func (log *testOut) Write(cat string, args ...interface{}) (err error) {
@@ -74,6 +79,21 @@ func (w *Warnings) shift() (err error) {
 type domainTest struct {
 	out       []Ephemera
 	noShuffle bool
+	db        *sql.DB
+}
+
+func (dt *domainTest) Open(name string) *sql.DB {
+	if dt.db == nil {
+		dt.db = testdb.Open(name, testdb.Memory, "")
+	}
+	return dt.db
+}
+
+func (dt *domainTest) Close() {
+	if dt.db != nil {
+		dt.db.Close()
+		dt.db = nil
+	}
 }
 
 func dd(names ...string) []string {
@@ -137,33 +157,33 @@ func I(n int) *literal.NumValue     { return &literal.NumValue{Value: float64(n)
 func F(n float64) *literal.NumValue { return &literal.NumValue{Value: n} }
 func T(s string) *literal.TextValue { return &literal.TextValue{Value: s} }
 
-func buildAncestors(dt domainTest) (ret *Catalog, err error) {
-	var cat Catalog
-	if e := dt.addToCat(cat.Weaver()); e != nil {
+func buildAncestors(dt *domainTest) (ret *Catalog, err error) {
+	cat := NewCatalog(dt.Open("ancestors"))
+	if e := dt.addToCat(cat); e != nil {
 		err = e
-	} else if e := cat.AssembleCatalog(nil, PhaseActions{
+	} else if e := cat.AssembleCatalog(PhaseActions{
 		assert.AncestryPhase: AncestryActions,
 		assert.FieldPhase:    FieldActions,
 	}); e != nil {
 		err = e
 	} else {
-		ret = &cat
+		ret = cat
 	}
 	return
 }
 
-func buildNouns(dt domainTest) (ret *Catalog, err error) {
-	var cat Catalog
-	if e := dt.addToCat(cat.Weaver()); e != nil {
+func buildNouns(dt *domainTest) (ret *Catalog, err error) {
+	cat := NewCatalog(dt.Open("nouns"))
+	if e := dt.addToCat(cat); e != nil {
 		err = e
-	} else if e := cat.AssembleCatalog(nil, PhaseActions{
+	} else if e := cat.AssembleCatalog(PhaseActions{
 		assert.AncestryPhase: AncestryActions,
 		assert.FieldPhase:    FieldActions,
 		assert.NounPhase:     NounActions,
 	}); e != nil {
 		err = e
 	} else {
-		ret = &cat
+		ret = cat
 	}
 	return
 }

@@ -1,7 +1,15 @@
 package eph
 
 import (
+	"database/sql"
+	"log"
+
 	"git.sr.ht/~ionous/tapestry/imp/assert"
+	"git.sr.ht/~ionous/tapestry/qna"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
+	"git.sr.ht/~ionous/tapestry/qna/query"
+	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -13,14 +21,37 @@ type Catalog struct {
 	Errors          []error
 	CommandBuilder
 	cursor string
+	writer Writer
+	run    *qna.Runner
+	qx     query.Queryx
+}
+
+func NewCatalog(db *sql.DB) *Catalog {
+	var c Catalog
+	qx, e := qdb.NewQueryx(db)
+	if e != nil {
+		panic(e)
+	}
+	c.cursor = "x"
+	c.run = qna.NewRuntimeOptions(
+		log.Writer(),
+		qx,
+		qna.DecodeNone("unsupported decoder"),
+		qna.NewOptions())
+	// set command builder
+	c.q = WriterFun(c.writeEphemera)
+	c.qx = qx
+	c.writer = mdl.Writer(ExecWriter(db).Write)
+
+	return &c
+}
+
+func (c *Catalog) Runtime() rt.Runtime {
+	return c.run
 }
 
 // initializes and returns itself
-func (c *Catalog) Weaver() *Catalog {
-	if c.q == nil {
-		c.cursor = "x"
-		c.q = WriterFun(c.writeEphemera)
-	}
+func (c *Catalog) Weaver(db *sql.DB) *Catalog {
 	return c
 }
 
@@ -98,20 +129,43 @@ func (c *Catalog) EnsureDomain(n, at string, reqs ...string) (ret *Domain, err e
 	return
 }
 
+const TempSplit = assert.PluralPhase + 1
+
 // walk the domains and run the commands remaining in their queues
-func (c *Catalog) AssembleCatalog(w Writer, phaseActions PhaseActions) (err error) {
+func (c *Catalog) AssembleCatalog(phaseActions PhaseActions) (err error) {
 	// ds has the "shallowest" domains first, and the most derived ( "deepest" ) domains last.
 	if ds, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
 		// fix? create a dev/null writer instead of testing for nil?
-		if w != nil {
+		if c.writer != nil {
 			// wip: trying to unwind the writes so that we write one domain at a time
 			for _, deps := range ds {
 				d := deps.Leaf().(*Domain) // panics if it fails
-				if e := d.WriteDomain(w); e != nil {
-					err = e
+				if e := d.WriteDomain(c.writer); e != nil {
+					err = errutil.New("failed to write domain", d.name)
 					return // FIX
+				}
+				if _, e := c.run.ActivateDomain(d.name); e != nil {
+					err = errutil.New("error activating domain", d.name)
+					return
+				}
+				// every phase inside this domain:
+				for p := assert.Phase(0); p < TempSplit; p++ {
+					switch p {
+					case assert.PluralPhase:
+						if e := c.qx.FindActiveConflicts(func(domain, key, value, at string) error {
+							// fix: accumulate all conflicts
+							return errutil.New("error checking plural conflicts")
+						}); e != nil {
+							err = e
+							return
+						}
+					}
+					if e := d.AssembleDomain(p, PhaseFlags{}); e != nil {
+						err = errutil.New("error assembling phase", p, e)
+						return // FIX
+					}
 				}
 			}
 		}
@@ -121,12 +175,11 @@ func (c *Catalog) AssembleCatalog(w Writer, phaseActions PhaseActions) (err erro
 		// walks across all domains for each phase to support things like fields:
 		// which exist per kind but which can be added to by multiple domains.
 	Loop:
-		for w := assert.Phase(0); w < assert.NumPhases; w++ {
-
-			act := phaseActions[w]
+		for p := TempSplit; p < assert.NumPhases; p++ {
+			act := phaseActions[p]
 			for _, deps := range ds {
 				d := deps.Leaf().(*Domain) // panics if it fails
-				if e := d.AssembleDomain(w, act.Flags); e != nil {
+				if e := d.AssembleDomain(p, act.Flags); e != nil {
 					err = e
 					break Loop
 				} else if do := act.Do; do != nil {
@@ -137,9 +190,9 @@ func (c *Catalog) AssembleCatalog(w Writer, phaseActions PhaseActions) (err erro
 				}
 			}
 		}
-		if err == nil && w != nil {
+		if err == nil && c.writer != nil {
 			for p := assert.Phase(0); p < assert.NumPhases; p++ {
-				if e := c.WritePhase(p, w); e != nil {
+				if e := c.WritePhase(p, c.writer); e != nil {
 					err = e
 					break
 				}
@@ -153,9 +206,7 @@ func (c *Catalog) WritePhase(p assert.Phase, w Writer) (err error) {
 	// switch or map better?
 	switch p {
 	case assert.PluralPhase:
-		if e := c.WritePlurals(w); e != nil {
-			err = e
-		} else if e := c.WriteOpposites(w); e != nil {
+		if e := c.WriteOpposites(w); e != nil {
 			err = e
 		}
 	case assert.AncestryPhase:

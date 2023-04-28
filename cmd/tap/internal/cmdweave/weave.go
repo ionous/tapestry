@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 
 	"git.sr.ht/~ionous/tapestry/dl/eph"
-	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
 
@@ -19,9 +18,7 @@ func Weave(cat *eph.Catalog, db *sql.DB) (err error) {
 		err = e
 	} else {
 		log.Println("writing", len(queue), "entries")
-		if e := tables.CreateModel(db); e != nil {
-			err = errutil.New("couldnt create model", e)
-		} else if tx, e := db.Begin(); e != nil {
+		if tx, e := db.Begin(); e != nil {
 			err = errutil.New("couldnt create transaction", e)
 		} else {
 			w := mdl.Writer(func(q string, args ...interface{}) (err error) {
@@ -49,7 +46,7 @@ func Weave(cat *eph.Catalog, db *sql.DB) (err error) {
 
 func BuildCatalog(cat *eph.Catalog, w eph.Writer) (err error) {
 	// go process all of the ephemera
-	return cat.AssembleCatalog(w, eph.PhaseActions{
+	return cat.AssembleCatalog(eph.PhaseActions{
 		assert.AncestryPhase: eph.AncestryActions,
 		assert.FieldPhase:    eph.FieldActions,
 		assert.NounPhase:     eph.NounActions,

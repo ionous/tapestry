@@ -10,6 +10,8 @@ import (
 // Prep accumulates any errors that occur when creating a series of sql prepared statements.
 type Prep []*prepErr
 
+type prepResult Prep
+
 type prepErr struct {
 	q string
 	e error
@@ -37,7 +39,7 @@ func (ps *Prep) Reset() {
 }
 
 // Prep implements the error interface.
-func (ps Prep) Error() (ret string) {
+func (ps prepResult) Error() (ret string) {
 	switch len(ps) {
 	case 0:
 		ret = "no issues"
@@ -53,7 +55,7 @@ func (ps Prep) Error() (ret string) {
 // If the list is empty, Err returns nil.
 func (ps Prep) Err() (ret error) {
 	if len(ps) > 0 {
-		ret = ps
+		ret = prepResult(ps)
 	}
 	return
 }
@@ -62,7 +64,7 @@ func (ps Prep) Err() (ret error) {
 // one error per line, if the err parameter is an Prep. Otherwise
 // it prints the err string.
 func PrintPrep(w io.Writer, err error) {
-	if list, ok := err.(Prep); ok {
+	if list, ok := err.(prepResult); ok {
 		for _, e := range list {
 			errutil.Fprintf(w, "%s\n", e)
 		}

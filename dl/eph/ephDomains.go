@@ -24,10 +24,10 @@ type Domain struct {
 	checks        asmChecks
 	resolvedKinds cachedTable
 	resolvedNouns cachedTable
-	plural        PluralPairs
-	opposites     OppositePairs
-	rules         map[string]Rulesets  // pattern name to rules for that pattern
-	relatives     map[string]Relatives // relation name to pairs of nouns
+	// plural        PluralPairs
+	opposites OppositePairs
+	rules     map[string]Rulesets  // pattern name to rules for that pattern
+	relatives map[string]Relatives // relation name to pairs of nouns
 }
 
 type PhaseData struct {
@@ -134,7 +134,7 @@ func (d *Domain) AssembleDomain(w assert.Phase, flags PhaseFlags) (err error) {
 		// note: even if there are no ephemera... in a given phase..
 		// there can still be rivals and other results to process
 		d.currPhase = w // hrmmm...
-		if e := d.checkRivals(w, ds, !flags.NoDuplicates); e != nil {
+		if e := d.checkRivals(ds, !flags.NoDuplicates); e != nil {
 			err = e
 		} else {
 			// don't "range" over the phase data since the contents can change during traversal.
@@ -156,7 +156,7 @@ func (d *Domain) AssembleDomain(w assert.Phase, flags PhaseFlags) (err error) {
 //
 // NOTE: we're not copying single parents, or even remembering this merged set:
 // instead we're crawling up the conflicts in AddDefinition...
-func (d *Domain) checkRivals(phase assert.Phase, ds Dependencies, allowDupes bool) (err error) {
+func (d *Domain) checkRivals(ds Dependencies, allowDupes bool) (err error) {
 	// start with nothing and merge in to check for artifacts
 	if deps := ds.Parents(); len(deps) > 1 {
 		a := make(Artifacts)
@@ -182,27 +182,4 @@ func (d *Domain) WriteDomain(w Writer) (err error) {
 		err = w.Write(mdl.Domain, name, row, at)
 	}
 	return
-}
-
-// EphBeginDomain
-func (op *EphBeginDomain) Phase() assert.Phase { return assert.DomainPhase }
-
-func (op *EphBeginDomain) Weave(k assert.Assertions) (err error) {
-	return k.BeginDomain(op.Name, op.Requires)
-}
-
-func (op *EphBeginDomain) Assemble(c *Catalog, _nil *Domain, at string) (err error) {
-	panic("what should happen here?")
-}
-
-// EphEndDomain
-func (op *EphEndDomain) Phase() assert.Phase { return assert.DomainPhase }
-
-func (op *EphEndDomain) Weave(k assert.Assertions) (err error) {
-	return k.EndDomain()
-}
-
-// pop the most recent domain
-func (op *EphEndDomain) Assemble(c *Catalog, _nil *Domain, at string) (err error) {
-	panic("what about here?")
 }

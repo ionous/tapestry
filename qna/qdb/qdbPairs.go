@@ -28,7 +28,7 @@ var newPairsFromChanges = `
 with newPairs as (
 	select dn.rowid as domain, relKind, oneNoun, otherNoun, cardinality
 	from mdl_pair mp
-	join run_domain rd   -- run_domain instead of domain_scope is a little faster.
+	join run_domain rd   -- run_domain instead of active_domains is a little faster.
 	  on (mp.domain=rd.domain) 
 	join mdl_rel 
 	 using (relKind)
@@ -53,7 +53,7 @@ var newPairsFromNames = `
 with newPairs as (
 	select md.rowid as domain, rel.relKind, one.rowid as oneNoun, other.rowid as otherNoun, rel.cardinality
 	from mdl_rel rel 
-	join kind_scope ks
+	join active_kinds ks
 		on (ks.kind = rel.relKind)
 	join mdl_noun one
 	join mdl_noun other

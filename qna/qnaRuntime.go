@@ -1,6 +1,9 @@
 package qna
 
 import (
+	"io"
+	"log"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/qna/query"
@@ -10,8 +13,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"git.sr.ht/~ionous/tapestry/rt/writer"
 	"github.com/ionous/errutil"
-	"io"
-	"log"
 )
 
 func NewRuntimeOptions(w io.Writer, q query.Query, d Decoder, options Options) *Runner {
@@ -56,8 +57,10 @@ func (run *Runner) ActivateDomain(domain string) (ret string, err error) {
 }
 
 func (run *Runner) SingularOf(plural string) (ret string) {
-	// fix: do we want to cache? we do for everything else.
-	if n, e := run.query.PluralToSingular(plural); e != nil {
+	// fix: do we want to cache? we do for everything else. ( see: singular of )
+	if len(plural) < 2 {
+		ret = plural
+	} else if n, e := run.query.PluralToSingular(plural); e != nil {
 		run.reportError(e)
 	} else if len(n) > 0 {
 		ret = n
@@ -68,8 +71,11 @@ func (run *Runner) SingularOf(plural string) (ret string) {
 }
 
 func (run *Runner) PluralOf(singular string) (ret string) {
-	// fix: see singularOf.
-	if n, e := run.query.PluralFromSingular(singular); e != nil {
+	// cache? see also singularOf.
+	// dont bother with one letter kinds ( ex. tests )
+	if len(singular) < 2 {
+		ret = singular
+	} else if n, e := run.query.PluralFromSingular(singular); e != nil {
 		run.reportError(e)
 	} else if len(n) > 0 {
 		ret = n

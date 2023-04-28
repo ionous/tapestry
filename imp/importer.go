@@ -13,7 +13,7 @@ import (
 // Importer helps read story specific json.
 type Importer struct {
 	// the importer uses a runtime so that it can handle macros.
-	*qna.Runner
+	rt.Runtime
 	// sometimes the importer needs to define a singleton like type or instance
 	oneTime     map[string]bool
 	macros      macroReg
@@ -48,15 +48,20 @@ func StoryStatement(run rt.Runtime, op PostImport) (err error) {
 }
 
 func NewImporter(w assert.Assertions) *Importer {
+	return NewImporterRuntime(w, qna.NewRuntimeOptions(
+		log.Writer(),
+		query.QueryNone("unsupported query"),
+		qna.DecodeNone("unsupported decoder"),
+		qna.NewOptions()))
+}
+
+// temp interface
+func NewImporterRuntime(w assert.Assertions, runner rt.Runtime) *Importer {
 	k := &Importer{
 		macros:      make(macroReg),
 		oneTime:     make(map[string]bool),
 		autoCounter: make(Counters),
-		Runner: qna.NewRuntimeOptions(
-			log.Writer(),
-			query.QueryNone("import doesn't support object queries"),
-			qna.DecodeNone("import doesn't support the decoder"),
-			qna.NewOptions()),
+		Runtime:     runner,
 	}
 	k.Assertions = w
 	return k

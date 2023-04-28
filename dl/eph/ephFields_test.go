@@ -10,13 +10,14 @@ import (
 // add some fields to a kind
 func TestFields(t *testing.T) {
 	dt := domainTest{noShuffle: true} // fields arent sorted
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kind: "k"},
 		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "t", Affinity: Affinity{Affinity_Text}, Class: "k"}}},
 		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "n", Affinity: Affinity{Affinity_Number}}}},
 	)
 	out := testOut{mdl.Field}
-	if cat, e := buildAncestors(dt); e != nil {
+	if cat, e := buildAncestors(&dt); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
@@ -31,7 +32,8 @@ func TestFields(t *testing.T) {
 
 // we can define a kind in one domain, and its fields in another
 func TestFieldsCrossDomain(t *testing.T) {
-	var dt domainTest // fields arent sorted, but are probably added in domain order so...
+	var dt domainTest
+	defer dt.Close() // fields arent sorted, but are probably added in domain order so...
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kind: "k"},
 		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "n", Affinity: Affinity{Affinity_Number}}}},
@@ -40,7 +42,7 @@ func TestFieldsCrossDomain(t *testing.T) {
 		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "b", Affinity: Affinity{Affinity_Bool}}}},
 	)
 	out := testOut{mdl.Field}
-	if cat, e := buildAncestors(dt); e != nil {
+	if cat, e := buildAncestors(&dt); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
@@ -60,6 +62,7 @@ func TestFieldsRedefine(t *testing.T) {
 	defer unwarn()
 	//
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "n", Affinity: Affinity{Affinity_Number}}}},
 		&EphKinds{Kind: "k"},
@@ -69,7 +72,7 @@ func TestFieldsRedefine(t *testing.T) {
 		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "n", Affinity: Affinity{Affinity_Number}}}},
 	)
 	out := testOut{mdl.Field}
-	if cat, e := buildAncestors(dt); e != nil {
+	if cat, e := buildAncestors(&dt); e != nil {
 		t.Fatal(e)
 	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
 		t.Fatal(e)
@@ -89,6 +92,7 @@ func TestFieldsRedefine(t *testing.T) {
 // we can redefine fields in the same domain, and in another
 func TestFieldsConflict(t *testing.T) {
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kind: "k"},
 		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "n", Affinity: Affinity{Affinity_Number}}}},
@@ -96,7 +100,7 @@ func TestFieldsConflict(t *testing.T) {
 	dt.makeDomain(dd("b", "a"),
 		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "n", Affinity: Affinity{Affinity_Text}}}},
 	)
-	if _, e := buildAncestors(dt); e == nil {
+	if _, e := buildAncestors(&dt); e == nil {
 		t.Fatal("expected error")
 	} else if e := okDomainConflict("a", Redefined, e); e != nil {
 		t.Fatal(e)
@@ -113,6 +117,7 @@ func TestFieldsMatchingRivals(t *testing.T) {
 	defer unwarn()
 
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kind: "k"},
 	)
@@ -124,7 +129,7 @@ func TestFieldsMatchingRivals(t *testing.T) {
 	)
 	dt.makeDomain(dd("z", "c", "d"))
 	out := testOut{mdl.Field}
-	if cat, e := buildAncestors(dt); e != nil {
+	if cat, e := buildAncestors(&dt); e != nil {
 		t.Fatal(e)
 	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
 		t.Fatal(e)
@@ -146,6 +151,7 @@ func TestFieldsMismatchingRivals(t *testing.T) {
 	defer unwarn()
 
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kind: "k"},
 	)
@@ -156,7 +162,7 @@ func TestFieldsMismatchingRivals(t *testing.T) {
 		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "t", Affinity: Affinity{Affinity_Bool}}}},
 	)
 	// dt.makeDomain(dd("z", "c", "d")) <-- fails even without this.
-	if _, e := buildAncestors(dt); e == nil {
+	if _, e := buildAncestors(&dt); e == nil {
 		t.Fatal("expected error, got:")
 	} else if e := okDomainConflict("a", Redefined, e); e != nil {
 		t.Fatal(e)
@@ -168,6 +174,7 @@ func TestFieldsMismatchingRivals(t *testing.T) {
 // classes cant refer to kinds that dont exist.
 func TestFieldsUnknownClass(t *testing.T) {
 	var dt domainTest
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kind: "k"},
 		&EphKinds{Kind: "k", Contain: []EphParams{{Name: "t", Affinity: Affinity{Affinity_Text}, Class: "m"}}},
@@ -175,7 +182,7 @@ func TestFieldsUnknownClass(t *testing.T) {
 	dt.makeDomain(dd("c", "a"),
 		&EphKinds{Kind: "m"},
 	)
-	if _, e := buildAncestors(dt); e == nil || e.Error() != `unknown class "m" for field "t" for kind "k"` {
+	if _, e := buildAncestors(&dt); e == nil || e.Error() != `unknown class "m" for field "t" for kind "k"` {
 		t.Fatal("expected error", e)
 	} else {
 		t.Log("ok:", e)
@@ -185,6 +192,7 @@ func TestFieldsUnknownClass(t *testing.T) {
 // note: the original code would push shared fields upwards; the new code doesnt
 func TestFieldLca(t *testing.T) {
 	dt := domainTest{noShuffle: true} // fields arent sorted
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&EphKinds{Kind: "t"},
 		&EphKinds{Kind: "p", Ancestor: "t"},
@@ -194,7 +202,7 @@ func TestFieldLca(t *testing.T) {
 		&EphKinds{Kind: "q", Contain: []EphParams{{Name: "t", Affinity: Affinity{Affinity_Text}}}},
 	)
 	out := testOut{mdl.Field}
-	if cat, e := buildAncestors(dt); e != nil {
+	if cat, e := buildAncestors(&dt); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)

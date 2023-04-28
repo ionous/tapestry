@@ -14,6 +14,7 @@ import (
 
 func TestPatternRules(t *testing.T) {
 	dt := domainTest{noShuffle: true}
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		append(append([]Ephemera{
 			&EphKinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
@@ -30,7 +31,7 @@ func TestPatternRules(t *testing.T) {
 		makeRules("p", "a", EphTiming_After, 3)...,
 	)
 	//
-	if cat, e := buildAncestors(dt); e != nil {
+	if cat, e := buildAncestors(&dt); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl.Rule}

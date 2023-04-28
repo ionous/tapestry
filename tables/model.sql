@@ -33,7 +33,10 @@ create table mdl_pair( domain int not null, relKind int not null, oneNoun int no
 /* pattern, the field ( in md_field ) used for a return value ( if any ) and comma separated labels for calling/processing fields 
  * the scope of the pattern is the same as its kind */
 create table mdl_pat( kind int not null, labels text, result text, primary key( kind ) );
-/* maps common and uncommon words to their plurals */
+/* maps common and uncommon words to their plurals. 
+ * within a particular domain, a plural word produces a unique singular word;
+ * however the same singular word can be used by various plurals.
+ */
 create table mdl_plural( domain int, many text, one text, at text, primary key( domain, many ) );
 /* relation and constraint between two kinds of nouns */
 create table mdl_rel( relKind int not null, oneKind int not null, otherKind int not null, cardinality text, at text, primary key( relKind ));
