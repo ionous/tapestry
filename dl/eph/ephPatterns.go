@@ -52,7 +52,8 @@ func (op *EphPatterns) Weave(k assert.Assertions) (err error) {
 	return
 }
 
-func (op *EphPatterns) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphPatterns) Assemble(ctx *Context) (err error) {
+	d, at := ctx.d, ctx.at
 	if name, ok := UniformString(op.PatternName); !ok {
 		err = InvalidString(op.PatternName)
 	} else {

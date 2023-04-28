@@ -215,7 +215,8 @@ func (el rivalFact) Weave(k assert.Assertions) error {
 	return k.AssertDefinition("rivalFact", string(el))
 }
 
-func (el rivalFact) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (el rivalFact) Assemble(ctx *Context) (err error) {
+	d, at := ctx.d, ctx.at
 	return d.AddDefinition(MakeKey("rivalFact"), at, string(el))
 }
 

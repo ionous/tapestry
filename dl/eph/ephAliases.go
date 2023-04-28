@@ -14,7 +14,8 @@ func (op *EphAliases) Weave(k assert.Assertions) (err error) {
 	return k.AssertAlias(op.ShortName, op.Aliases...)
 }
 
-func (op *EphAliases) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphAliases) Assemble(ctx *Context) (err error) {
+	d, at := ctx.d, ctx.at
 	if noun, e := getClosestNoun(d, op.ShortName); e != nil {
 		err = e
 	} else {

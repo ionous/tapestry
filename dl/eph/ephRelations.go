@@ -70,7 +70,8 @@ func (op *EphRelations) Weave(k assert.Assertions) (err error) {
 	return
 }
 
-func (op *EphRelations) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphRelations) Assemble(ctx *Context) (err error) {
+	c, d, at := ctx.c, ctx.d, ctx.at
 	// like aspects, we dont try to singularize these.
 	if rel, ok := UniformString(op.Rel); !ok {
 		err = InvalidString(op.Rel)

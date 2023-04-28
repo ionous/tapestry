@@ -93,7 +93,8 @@ func (op *EphRules) Weave(k assert.Assertions) (err error) {
 
 // validate that the pattern for the rule exists then add the rule to the *current* domain
 // ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
-func (op *EphRules) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphRules) Assemble(ctx *Context) (err error) {
+	d, at := ctx.d, ctx.at
 	if name, ok := UniformString(op.PatternName); !ok {
 		err = InvalidString(op.PatternName)
 	} else if k, ok := d.GetKind(name); !ok || !k.HasAncestor(kindsOf.Pattern) {

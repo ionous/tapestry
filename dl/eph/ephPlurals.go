@@ -37,7 +37,8 @@ func (op *EphPlurals) Weave(k assert.Assertions) (err error) {
 //
 // tbd: consider appending the origin (at) to store the location of each definition?
 // alt: `on conflict (domain, many) where @one == one do nothing` ( or do set )
-func (op *EphPlurals) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphPlurals) Assemble(ctx *Context) (err error) {
+	c, d, at := ctx.c, ctx.d, ctx.at
 	if plural, ok := UniformString(op.Plural); !ok {
 		err = InvalidString(op.Plural)
 	} else if singular, ok := UniformString(op.Singular); !ok {

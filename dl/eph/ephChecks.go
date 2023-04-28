@@ -45,7 +45,8 @@ func (op *EphChecks) Weave(k assert.Assertions) (err error) {
 	return k.AssertCheck(op.Name, op.Exe)
 }
 
-func (op *EphChecks) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphChecks) Assemble(ctx *Context) (err error) {
+	c, at := ctx.c, ctx.at
 	// fix. todo: this isnt very well thought out right now --
 	// what if a check is part of a story scene? shouldnt it have access to those objects?
 	// if checks always establish their own domain, why do they have a duplicate name?

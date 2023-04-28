@@ -87,7 +87,8 @@ func (op *EphNouns) Weave(k assert.Assertions) (err error) {
 }
 
 // noun, kind
-func (op *EphNouns) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphNouns) Assemble(ctx *Context) (err error) {
+	d, at := ctx.d, ctx.at
 	_, noun := d.StripDeterminer(op.Noun)
 	_, kind := d.StripDeterminer(op.Kind)
 

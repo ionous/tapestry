@@ -14,13 +14,14 @@ func (op *EphDefinition) Weave(k assert.Assertions) (err error) {
 	return k.AssertDefinition(path...)
 }
 
-func (op *EphDefinition) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphDefinition) Assemble(ctx *Context) (err error) {
+	d, at := ctx.d, ctx.at
 	return d.AddDefinition(MakeKey(op.Path...), at, op.Value)
 }
 
 func (op *EphBeginDomain) Phase() assert.Phase { return assert.DomainPhase }
 
-func (op *EphBeginDomain) Assemble(*Catalog, *Domain, string) (err error) {
+func (op *EphBeginDomain) Assemble(*Context) error {
 	panic("what should happen here?")
 }
 
@@ -30,7 +31,7 @@ func (op *EphBeginDomain) Weave(k assert.Assertions) (err error) {
 
 func (op *EphEndDomain) Phase() assert.Phase { return assert.DomainPhase }
 
-func (op *EphEndDomain) Assemble(*Catalog, *Domain, string) (err error) {
+func (op *EphEndDomain) Assemble(*Context) error {
 	panic("what should happen here?")
 }
 

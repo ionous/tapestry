@@ -35,7 +35,8 @@ func (op *EphValues) Weave(k assert.Assertions) (err error) {
 }
 
 // note: values are written per *noun* not per domain....
-func (op *EphValues) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphValues) Assemble(ctx *Context) (err error) {
+	d, at := ctx.d, ctx.at
 	if noun, e := getClosestNoun(d, op.Noun); e != nil {
 		err = e
 	} else if rv, e := noun.recordValues(at); e != nil {

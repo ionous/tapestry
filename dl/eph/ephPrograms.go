@@ -43,7 +43,8 @@ func (op *EphDirectives) Weave(k assert.Assertions) (err error) {
 }
 
 // jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
-func (op *EphDirectives) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphDirectives) Assemble(ctx *Context) (err error) {
+	d, at := ctx.d, ctx.at
 	// fix: definitions probably need to be smarter.
 	if str, e := marshalout(&op.Directive); e != nil {
 		err = e

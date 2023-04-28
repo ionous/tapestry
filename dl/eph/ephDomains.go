@@ -142,7 +142,7 @@ func (d *Domain) AssembleDomain(w assert.Phase, flags PhaseFlags) (err error) {
 			// what's best? see note in checkRivals()
 			for i := 0; i < len(d.phases[w].eph); i++ {
 				op := d.phases[w].eph[i]
-				if e := op.Eph.Assemble(d.catalog, d, op.At); e != nil {
+				if e := op.Eph.Assemble(&Context{d.catalog, d, op.At, w}); e != nil {
 					err = errutil.Append(err, e)
 				}
 			}

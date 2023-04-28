@@ -52,7 +52,8 @@ func (op *EphOpposites) Weave(k assert.Assertions) (err error) {
 	return k.AssertOpposite(op.Opposite, op.Word)
 }
 
-func (op *EphOpposites) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphOpposites) Assemble(ctx *Context) (err error) {
+	d, at := ctx.d, ctx.at
 	if oneWord, ok := UniformString(op.Opposite); !ok {
 		err = InvalidString(op.Opposite)
 	} else if otherWord, ok := UniformString(op.Word); !ok {

@@ -87,7 +87,8 @@ func (op *EphRelatives) Weave(k assert.Assertions) (err error) {
 
 // validate that the pattern for the rule exists then add the rule to the *current* domain
 // ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
-func (op *EphRelatives) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphRelatives) Assemble(ctx *Context) (err error) {
+	d, at := ctx.d, ctx.at
 	if name, ok := UniformString(op.Rel); !ok {
 		err = InvalidString(op.Rel)
 	} else if rel, ok := d.GetPluralKind(name); !ok || !rel.HasAncestor(kindsOf.Relation) {

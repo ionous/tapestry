@@ -86,7 +86,8 @@ func fromAffinity(fieldAffinity Affinity) (ret affine.Affinity, err error) {
 }
 
 // Kinds, From string, Contain []EphParams
-func (op *EphKinds) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphKinds) Assemble(ctx *Context) (err error) {
+	d, at := ctx.d, ctx.at
 	// tbd: are the determiners of kinds useful for anything?
 	kind, ancestor := op.Kind, op.Ancestor
 	_, newName := d.StripDeterminer(kind)
@@ -103,22 +104,22 @@ func (op *EphKinds) Assemble(c *Catalog, d *Domain, at string) (err error) {
 		} else {
 			// if a parent kind is specified, make the kid dependent on it.
 			if _, from := d.StripDeterminer(ancestor); len(from) > 0 {
-				// note: a singular to plural (if needed ) gets handled by the dependency resolver's kindFinder and GetPluralKind()
+			// note: a singular to plural (if needed ) gets handled by the dependency resolver's kindFinder and GetPluralKind()
 				if parentKind, ok := UniformString(from); !ok {
 					err = InvalidString(ancestor)
 				} else {
-					// we can only add requirements to the kind in the same domain that it was declared
-					if kid.domain == d {
+			// we can only add requirements to the kind in the same domain that it was declared
+			if kid.domain == d {
 						kid.AddRequirement(parentKind) // fix? maybe it'd make sense for requirements to have origin at?
-					} else {
-						// if in a different domain: the kinds have to match up
+			} else {
+				// if in a different domain: the kinds have to match up
 						if pk, ok := d.GetPluralKind(parentKind); !ok {
-							err = errutil.New("unknown parent kind", ancestor)
-						} else if !kid.Requires.HasAncestor(pk.name) {
-							err = KindError{kind, errutil.Fmt("can't redefine parent as %q", ancestor)}
-						} else {
-							LogWarning(KindError{kind, errutil.New("duplicate parent definition at", at)})
-						}
+					err = errutil.New("unknown parent kind", ancestor)
+				} else if !kid.Requires.HasAncestor(pk.name) {
+					err = KindError{kind, errutil.Fmt("can't redefine parent as %q", ancestor)}
+				} else {
+					LogWarning(KindError{kind, errutil.New("duplicate parent definition at", at)})
+				}
 					}
 				}
 			}

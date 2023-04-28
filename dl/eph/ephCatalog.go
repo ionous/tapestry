@@ -26,6 +26,13 @@ type Catalog struct {
 	qx     query.Queryx
 }
 
+type Context struct {
+	c     *Catalog
+	d     *Domain
+	at    string
+	phase assert.Phase
+}
+
 func NewCatalog(db *sql.DB) *Catalog {
 	var c Catalog
 	qx, e := qdb.NewQueryx(db)
@@ -82,7 +89,7 @@ func (c *Catalog) writeEphemera(ep Ephemera) {
 	var err error
 	at := c.cursor
 	if phase := ep.Phase(); phase == assert.DomainPhase {
-		err = ep.Assemble(c, nil, at)
+		err = ep.Assemble(&Context{c, nil, at, phase})
 	} else {
 		if d, ok := c.processing.Top(); !ok {
 			err = errutil.New("no top domain")

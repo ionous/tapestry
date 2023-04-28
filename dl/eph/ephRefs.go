@@ -9,7 +9,7 @@ func (op *EphRefs) Weave(k assert.Assertions) (err error) {
 	return
 }
 
-func (op *EphRefs) Assemble(c *Catalog, d *Domain, at string) (err error) {
+func (op *EphRefs) Assemble(ctx *Context) (err error) {
 	refsNotImplemented.PrintOnce()
 	return
 }
