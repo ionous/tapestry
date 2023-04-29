@@ -29,13 +29,13 @@ func TestDetermineNum(t *testing.T) {
 			// disabling refs for now....
 			// maybe instead could just request from the db that something exists in a scheduled post-weave check.
 			// refs := story.ImportCall(call)
-			// if diff := pretty.Diff(refs, &eph.EphRefs{
+			// if diff := pretty.Diff(refs, &eph.Refs{
 			// 	Refs: []eph.Ephemera{
-			// 		&eph.EphKinds{
+			// 		&eph.Kinds{
 			// 			Kind: "factorial",
 			// 			// From:  kindsOf.Pattern.String() -- see note in ImportCall
-			// 			Contain: []eph.EphParams{{
-			// 				Affinity: eph.Affinity{eph.Affinity_Number},
+			// 			Contain: []eph.Params{{
+			// 				Affinity: eph.affine.Number},
 			// 				Name:     "num",
 			// 			}},
 			// 		}},

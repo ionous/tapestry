@@ -1,31 +1,40 @@
 package debug
 
 import (
-	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/weave"
+	"github.com/ionous/errutil"
 )
-
-func (op *Test) PreImport(k *imp.Importer) (ret interface{}, err error) {
-	ret = op // provisionally
-	var req []string
-	if n := op.DependsOn.String(); len(n) > 0 {
-		req = []string{n}
-	}
-	// everything between this and "EndDomain" in the Post/PostImport will be in this test domain.
-	err = k.BeginDomain(op.TestName.String(), req)
-	return
-}
 
 // Execute - called by the macro runtime during weave.
 func (op *Test) Execute(macro rt.Runtime) error {
-	return imp.StoryStatement(macro, op)
+	return weave.StoryStatement(macro, op)
 }
 
-func (op *Test) PostImport(k *imp.Importer) (err error) {
-	if e := k.EndDomain(); e != nil {
-		err = e
-	} else if e := k.AssertCheck(op.TestName.String(), op.Do, nil); e != nil {
-		err = e
+func (op *Test) Schedule(cat *weave.Catalog) (err error) {
+	if name := op.TestName.String(); len(name) == 0 {
+		errutil.New("test has empty  name")
+	} else {
+		var req []string
+		if n := op.DependsOn.String(); len(n) > 0 {
+			req = []string{n}
+		}
+		if e := cat.BeginDomain(name, req); e != nil {
+			err = e
+		} else {
+			if e := story.ScheduleStatements(cat, op.TestStatements); e != nil {
+				err = e
+			} else if len(op.Do) > 0 {
+				if e := cat.AssertCheck(name, op.Do, nil); e != nil {
+					err = e
+				}
+			}
+
+			if err == nil {
+				err = cat.EndDomain()
+			}
+		}
 	}
 	return
 }

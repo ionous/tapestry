@@ -15,7 +15,7 @@ func TestNounFormation(t *testing.T) {
 	unwarn := warnings.catch(t)
 	defer unwarn()
 
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
@@ -26,7 +26,9 @@ func TestNounFormation(t *testing.T) {
 		&eph.Nouns{Noun: "toy boat", Kind: "k"},
 	)
 	nouns, names := testOut{mdl.Noun}, testOut{mdl.Name}
-	if e := writeNouns(&dt, &nouns, &names); e != nil {
+	if cat, e := dt.Assemble(); e != nil {
+		t.Fatal(e)
+	} else if e := writeNouns(cat, &nouns, &names); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(nouns[1:], testOut{
 		"a:apple:k:x",
@@ -49,12 +51,12 @@ func TestNounFormation(t *testing.T) {
 }
 
 func TestNounFailure(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Nouns{Noun: "bad apple", Kind: "t"},
 	)
-	if e := writeNouns(&dt, nil, nil); e == nil ||
+	if _, e := dt.Assemble(); e == nil ||
 		e.Error() != `unknown kind t` {
 		t.Fatal("unexpected failure", e)
 	} else {
@@ -63,7 +65,7 @@ func TestNounFailure(t *testing.T) {
 }
 
 func TestNounHierarchy(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: "t"},
@@ -77,7 +79,9 @@ func TestNounHierarchy(t *testing.T) {
 		&eph.Nouns{Noun: "bandanna", Kind: "c"},
 	)
 	nouns, names := testOut{mdl.Noun}, testOut{mdl.Name}
-	if e := writeNouns(&dt, &nouns, &names); e != nil {
+	if cat, e := dt.Assemble(); e != nil {
+		t.Fatal(e)
+	} else if e := writeNouns(cat, &nouns, &names); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(nouns[1:], testOut{
 		// note: the new assembler takes the most specific type
@@ -99,7 +103,7 @@ func TestNounHierarchy(t *testing.T) {
 }
 
 func TestNounHierarchyFailure(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: "t"},
@@ -108,7 +112,7 @@ func TestNounHierarchyFailure(t *testing.T) {
 		&eph.Nouns{Noun: "apple", Kind: "c"},
 		&eph.Nouns{Noun: "apple", Kind: "d"},
 	)
-	if e := writeNouns(&dt, nil, nil); e == nil ||
+	if _, e := dt.Assemble(); e == nil ||
 		e.Error() != `"apple" has more than one parent` {
 		t.Fatal("unexpected failure", e)
 	} else {
@@ -117,14 +121,16 @@ func TestNounHierarchyFailure(t *testing.T) {
 }
 
 func TestNounParts(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: "t"},
 		&eph.Nouns{Noun: "collection of words", Kind: "t"},
 	)
 	nouns, names := testOut{mdl.Noun}, testOut{mdl.Name}
-	if e := writeNouns(&dt, &nouns, &names); e != nil {
+	if cat, e := dt.Assemble(); e != nil {
+		t.Fatal(e)
+	} else if e := writeNouns(cat, &nouns, &names); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(nouns[1:], testOut{
 		"a:collection_of_words:t:x",
@@ -144,7 +150,7 @@ func TestNounParts(t *testing.T) {
 }
 
 func TestNounAliases(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("b"),
 		&eph.Kinds{Kind: "k"},
@@ -155,7 +161,9 @@ func TestNounAliases(t *testing.T) {
 		&eph.Aliases{ShortName: "apple", Aliases: dd("delicious", "fruit")},
 	)
 	names := testOut{mdl.Name}
-	if e := writeNouns(&dt, nil, &names); e != nil {
+	if cat, e := dt.Assemble(); e != nil {
+		t.Fatal(e)
+	} else if e := writeNouns(cat, nil, &names); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(names[1:], testOut{
 		"b:apple:delicious:-1:x", // aliases first
@@ -179,17 +187,15 @@ func TestNounDistance(t *testing.T) {
 	unwarn := warnings.catch(t)
 	defer unwarn()
 
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
 		&eph.Nouns{Noun: "toy boat", Kind: "k"},
 		&eph.Nouns{Noun: "boat", Kind: "k"},
 	)
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e != nil {
+
+	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else if _, e := cat.ResolveNouns(); e != nil {
 		t.Fatal(e)
@@ -213,22 +219,15 @@ func TestNounDistance(t *testing.T) {
 	}
 }
 
-func writeNouns(dt *domainTest, nouns, names *testOut) (err error) {
-	cat := NewCatalog(dt.Open("nouns"))
-	if e := dt.addToCat(cat); e != nil {
-		err = e
-	} else if e := cat.AssembleCatalog(); e != nil {
-		err = e
-	} else {
-		if nouns != nil && err == nil {
-			if e := cat.WriteNouns(nouns); e != nil {
-				err = errutil.New("error writing nouns:", e)
-			}
+func writeNouns(cat *Catalog, nouns, names *testOut) (err error) {
+	if nouns != nil && err == nil {
+		if e := cat.WriteNouns(nouns); e != nil {
+			err = errutil.New("error writing nouns:", e)
 		}
-		if names != nil && err == nil {
-			if e := cat.WriteNames(names); e != nil {
-				err = errutil.New("error writing names:", e)
-			}
+	}
+	if names != nil && err == nil {
+		if e := cat.WriteNames(names); e != nil {
+			err = errutil.New("error writing names:", e)
 		}
 	}
 	return

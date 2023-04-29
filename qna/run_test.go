@@ -13,7 +13,7 @@ package qna
 // 	if e := tables.CreateAll(db); e != nil {
 // 		t.Fatal("couldn't create tables", e)
 // 	} else {
-// 		k := imp.NewImporter(dbwriter(db))
+// 		k := weave.NewCatalog(dbwriter(db))
 // 		if e := story.ImportStory(k, t.Name(), debug.FactorialStory); e != nil {
 // 			t.Fatal("couldn't import story", e)
 // 		} else if e := asm.AssembleStory(db, "kinds", ds.Add); e != nil {
@@ -35,4 +35,10 @@ package qna
 // 	return func(q string, args ...interface{}) {
 // 		cache.Must(q, args...)
 // 	}
+// }
+
+// type WriterFun func(eph Ephemera)
+
+// func (w WriterFun) WriteEphemera(op Ephemera) {
+// 	w(op)
 // }

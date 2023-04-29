@@ -2,27 +2,41 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/weave"
 	"github.com/ionous/errutil"
 )
 
 // StoryStatement - a marker interface for commands which produce facts about the game world.
 type StoryStatement interface {
-	PostImport(k *imp.Importer) error
+	Schedule(k *weave.Catalog) error
 }
 
-func ImportStory(k *imp.Importer, path string, tgt *StoryFile) error {
-	k.SetSource(path)
-	return importStory(k, tgt)
+func ImportStory(cat *weave.Catalog, path string, tgt *StoryFile) (err error) {
+	cat.SetSource(path)
+	if e := importStory(cat, tgt); e != nil {
+		err = e
+	} else {
+		err = ScheduleStatements(cat, tgt.StoryStatements)
+	}
+	return err
+}
+
+func ScheduleStatements(cat *weave.Catalog, all []StoryStatement) (err error) {
+	for _, el := range all {
+		if e := el.Schedule(cat); e != nil {
+			err = e
+			break
+		}
+	}
+	return
 }
 
 // post-processing hooks
-func importStory(k *imp.Importer, tgt jsn.Marshalee) error {
+func importStory(k *weave.Catalog, tgt jsn.Marshalee) error {
 	ts := chart.MakeEncoder()
-	macroDepth := 0
 	return ts.Marshal(tgt, chart.Map(&ts, chart.BlockMap{
 		rt.Execute_Type: chart.KeyMap{
 			chart.BlockStart: func(b jsn.Block, _ interface{}) (err error) {
@@ -31,16 +45,6 @@ func importStory(k *imp.Importer, tgt jsn.Marshalee) error {
 			},
 			chart.BlockEnd: func(b jsn.Block, _ interface{}) (err error) {
 				k.Env().ActivityDepth--
-				return
-			},
-		},
-		DefineMacro_Type: chart.KeyMap{
-			chart.BlockStart: func(b jsn.Block, _ interface{}) (err error) {
-				macroDepth++
-				return
-			},
-			chart.BlockEnd: func(b jsn.Block, _ interface{}) (err error) {
-				macroDepth--
 				return
 			},
 		},
@@ -61,27 +65,11 @@ func importStory(k *imp.Importer, tgt jsn.Marshalee) error {
 				if slot, ok := b.(jsn.SlotBlock); ok {
 					if slat, ok := slot.GetSlot(); !ok {
 						err = jsn.Missing
-					} else if tgt, ok := slat.(imp.PreImport); ok {
+					} else if tgt, ok := slat.(weave.PreImport); ok {
 						if rep, e := tgt.PreImport(k); e != nil {
 							err = errutil.New(e, "failed to create replacement")
-						} else if rep != tgt && !slot.SetSlot(rep) {
+						} else if rep != nil && !slot.SetSlot(rep) {
 							err = errutil.New("failed to set replacement")
-						}
-					}
-				}
-				return
-			},
-			chart.BlockEnd: func(b jsn.Block, v interface{}) (err error) {
-				// ignore the contents of macros, because those will get executed by the macro
-				// tbd: macros in macros, and macros containing pre-import statements.
-				if macroDepth == 0 {
-					// sometimes we also get slice blocks...
-					if slot, ok := b.(jsn.SlotBlock); ok {
-						// sometimes we get empty slots...
-						if val, ok := slot.GetSlot(); ok {
-							if stmt, ok := val.(imp.PostImport); ok {
-								err = stmt.PostImport(k)
-							}
 						}
 					}
 				}

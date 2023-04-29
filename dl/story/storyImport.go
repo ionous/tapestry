@@ -3,9 +3,9 @@ package story
 import (
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/imp"
-	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
@@ -14,187 +14,200 @@ import (
 
 // Execute - called by the macro runtime during weave.
 func (op *DefineTraits) Execute(macro rt.Runtime) error {
-	return imp.StoryStatement(macro, op)
+	return weave.StoryStatement(macro, op)
 }
 
 // (the) colors are red, blue, or green.
-func (op *DefineTraits) PostImport(k *imp.Importer) (err error) {
-	if traits, e := safe.GetTextList(k, op.Traits); e != nil {
-		err = e
-	} else if aspect, e := safe.GetText(k, op.Aspect); e != nil {
-		err = e
-	} else {
-		err = k.AssertAspectTraits(aspect.String(), traits.Strings())
-	}
-	return
+func (op *DefineTraits) Schedule(cat *weave.Catalog) error {
+	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+		if traits, e := safe.GetTextList(w, op.Traits); e != nil {
+			err = e
+		} else if aspect, e := safe.GetText(w, op.Aspect); e != nil {
+			err = e
+		} else {
+			err = cat.AssertAspectTraits(aspect.String(), traits.Strings())
+		}
+		return
+	})
 }
 
 // Execute - called by the macro runtime during weave.
 func (op *GrammarDecl) Execute(macro rt.Runtime) error {
-	return imp.StoryStatement(macro, op)
+	return weave.StoryStatement(macro, op)
 }
 
-func (op *GrammarDecl) PostImport(k *imp.Importer) (err error) {
+func (op *GrammarDecl) Schedule(cat *weave.Catalog) (err error) {
 	switch el := op.Grammar.(type) {
 	case *grammar.Alias:
-		err = k.AssertAlias(el.AsNoun, el.Names...)
+		err = cat.AssertAlias(el.AsNoun, el.Names...)
 	case *grammar.Directive:
 		name := strings.Join(el.Lede, "/")
-		err = k.AssertGrammar(name, el)
+		err = cat.AssertGrammar(name, el)
 	}
 	return
 }
 
 // Execute - called by the macro runtime during weave.
 func (op *DefineNounTraits) Execute(macro rt.Runtime) error {
-	return imp.StoryStatement(macro, op)
+	return weave.StoryStatement(macro, op)
 }
 
-func (op *DefineNounTraits) PostImport(k *imp.Importer) (err error) {
-	if nouns, e := safe.GetTextList(k, op.Nouns); e != nil {
-		err = e
-	} else if kind, e := safe.GetOptionalText(k, op.Kind, ""); e != nil {
-		err = e
-	} else if traits, e := safe.GetTextList(k, op.Traits); e != nil {
-		err = e
-	} else if bareNames, e := ImportNounProperties(k, nouns.Strings()); e != nil {
-		err = e
-	} else {
-		if kind := kind.String(); len(kind) > 0 {
-			for _, n := range bareNames {
-				if e := k.AssertNounKind(n, kind); e != nil {
-					err = errutil.Append(err, e)
-				}
-			}
-		}
-		if traits := traits.Strings(); len(traits) > 0 {
-			for _, t := range traits {
+func (op *DefineNounTraits) Schedule(cat *weave.Catalog) error {
+	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
+			err = e
+		} else if kind, e := safe.GetOptionalText(w, op.Kind, ""); e != nil {
+			err = e
+		} else if traits, e := safe.GetTextList(w, op.Traits); e != nil {
+			err = e
+		} else if bareNames, e := ImportNounProperties(cat, nouns.Strings()); e != nil {
+			err = e
+		} else {
+			if kind := kind.String(); len(kind) > 0 {
 				for _, n := range bareNames {
-					if e := assert.AssertNounValue(k, B(true), n, t); e != nil {
+					if e := cat.AssertNounKind(n, kind); e != nil {
 						err = errutil.Append(err, e)
-						break // out of the traits to the next noun
 					}
 				}
 			}
-		}
+			if traits := traits.Strings(); len(traits) > 0 {
+				for _, t := range traits {
+					for _, n := range bareNames {
+						if e := assert.AssertNounValue(cat, B(true), n, t); e != nil {
+							err = errutil.Append(err, e)
+							break // out of the traits to the next noun
+						}
+					}
+				}
+			}
 
-	}
-	return
+		}
+		return
+	})
 }
 
 // Execute - called by the macro runtime during weave.
 func (op *DefineNouns) Execute(macro rt.Runtime) error {
-	return imp.StoryStatement(macro, op)
+	return weave.StoryStatement(macro, op)
 }
 
-func (op *DefineNouns) PostImport(k *imp.Importer) (err error) {
-	if nouns, e := safe.GetTextList(k, op.Nouns); e != nil {
-		err = e
-	} else if kind, e := safe.GetText(k, op.Kind); e != nil {
-		err = e
-	} else if bareNames, e := ImportNounProperties(k, nouns.Strings()); e != nil {
-		err = e
-	} else {
-		if kind := kind.String(); len(kind) > 0 {
-			for _, n := range bareNames {
-				if e := k.AssertNounKind(n, kind); e != nil {
-					err = errutil.Append(err, e)
+func (op *DefineNouns) Schedule(cat *weave.Catalog) error {
+	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
+			err = e
+		} else if kind, e := safe.GetText(w, op.Kind); e != nil {
+			err = e
+		} else if bareNames, e := ImportNounProperties(cat, nouns.Strings()); e != nil {
+			err = e
+		} else {
+			if kind := kind.String(); len(kind) > 0 {
+				for _, n := range bareNames {
+					if e := cat.AssertNounKind(n, kind); e != nil {
+						err = errutil.Append(err, e)
+					}
 				}
 			}
 		}
-	}
-	return
+		return
+	})
 }
 
 // Execute - called by the macro runtime during weave.
 func (op *NounAssignment) Execute(macro rt.Runtime) error {
-	return imp.StoryStatement(macro, op)
+	return weave.StoryStatement(macro, op)
 }
 
 // ex. The description of the nets is xxx
-func (op *NounAssignment) PostImport(k *imp.Importer) (err error) {
-	if nouns, e := safe.GetTextList(k, op.Nouns); e != nil {
-		err = e
-	} else if field, e := safe.GetText(k, op.FieldName); e != nil {
-		err = e
-	} else if lines, e := ConvertText(k, op.Lines.String()); e != nil {
-		err = e
-	} else if subjects, e := ReadNouns(k, nouns.Strings()); e != nil {
-		err = e
-	} else {
-		field, lines := field.String(), T(lines)
-		for _, noun := range subjects {
-			if e := assert.AssertNounValue(k, lines, noun, field); e != nil {
-				err = errutil.Append(err, e)
+func (op *NounAssignment) Schedule(cat *weave.Catalog) error {
+	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
+			err = e
+		} else if field, e := safe.GetText(w, op.FieldName); e != nil {
+			err = e
+		} else if lines, e := ConvertText(op.Lines.String()); e != nil {
+			err = e
+		} else if subjects, e := ReadNouns(cat, nouns.Strings()); e != nil {
+			err = e
+		} else {
+			field, lines := field.String(), T(lines)
+			for _, noun := range subjects {
+				if e := assert.AssertNounValue(cat, lines, noun, field); e != nil {
+					err = errutil.Append(err, e)
+				}
 			}
 		}
-	}
-	return
+		return
+	})
 }
 
 // Execute - called by the macro runtime during weave.
 func (op *DefineRelatives) Execute(macro rt.Runtime) error {
-	return imp.StoryStatement(macro, op)
+	return weave.StoryStatement(macro, op)
 }
 
-func (op *DefineRelatives) PostImport(k *imp.Importer) (err error) {
-	if nouns, e := safe.GetTextList(k, op.Nouns); e != nil {
-		err = e
-	} else if kind, e := safe.GetOptionalText(k, op.Kind, ""); e != nil {
-		err = e
-	} else if relation, e := safe.GetText(k, op.Relation); e != nil {
-		err = e
-	} else if otherNouns, e := safe.GetTextList(k, op.OtherNouns); e != nil {
-		err = e
-	} else if a, e := ReadNouns(k, nouns.Strings()); e != nil {
-		err = e
-	} else if b, e := ReadNouns(k, otherNouns.Strings()); e != nil {
-		err = e
-	} else {
-		for _, subject := range a {
-			if kind := kind.String(); len(kind) > 0 {
-				if e := k.AssertNounKind(subject, kind); e != nil {
-					err = errutil.New(err, e)
-				}
-			}
-			if rel := relation.String(); len(rel) > 0 {
-				for _, object := range b {
-					if e := k.AssertRelative(rel, object, subject); e != nil {
+func (op *DefineRelatives) Schedule(cat *weave.Catalog) error {
+	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
+			err = e
+		} else if kind, e := safe.GetOptionalText(w, op.Kind, ""); e != nil {
+			err = e
+		} else if relation, e := safe.GetText(w, op.Relation); e != nil {
+			err = e
+		} else if otherNouns, e := safe.GetTextList(w, op.OtherNouns); e != nil {
+			err = e
+		} else if a, e := ReadNouns(cat, nouns.Strings()); e != nil {
+			err = e
+		} else if b, e := ReadNouns(cat, otherNouns.Strings()); e != nil {
+			err = e
+		} else {
+			for _, subject := range a {
+				if kind := kind.String(); len(kind) > 0 {
+					if e := cat.AssertNounKind(subject, kind); e != nil {
 						err = errutil.New(err, e)
+					}
+				}
+				if rel := relation.String(); len(rel) > 0 {
+					for _, object := range b {
+						if e := cat.AssertRelative(rel, object, subject); e != nil {
+							err = errutil.New(err, e)
+						}
 					}
 				}
 			}
 		}
-	}
-	return
+
+		return
+	})
 }
 
 // Execute - called by the macro runtime during weave.
 func (op *DefineOtherRelatives) Execute(macro rt.Runtime) error {
-	return imp.StoryStatement(macro, op)
+	return weave.StoryStatement(macro, op)
 }
 
-func (op *DefineOtherRelatives) PostImport(k *imp.Importer) (err error) {
-	if nouns, e := safe.GetTextList(k, op.Nouns); e != nil {
-		err = e
-	} else if relation, e := safe.GetText(k, op.Relation); e != nil {
-		err = e
-	} else if otherNouns, e := safe.GetTextList(k, op.OtherNouns); e != nil {
-		err = e
-	} else if a, e := ReadNouns(k, nouns.Strings()); e != nil {
-		err = e
-	} else if b, e := ReadNouns(k, otherNouns.Strings()); e != nil {
-		err = e
-	} else {
-		if rel := relation.String(); len(rel) > 0 {
-			for _, subject := range a {
-				for _, object := range b {
-					if e := k.AssertRelative(rel, object, subject); e != nil {
-						err = errutil.New(err, e)
+func (op *DefineOtherRelatives) Schedule(cat *weave.Catalog) error {
+	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
+			err = e
+		} else if relation, e := safe.GetText(w, op.Relation); e != nil {
+			err = e
+		} else if otherNouns, e := safe.GetTextList(w, op.OtherNouns); e != nil {
+			err = e
+		} else if a, e := ReadNouns(cat, nouns.Strings()); e != nil {
+			err = e
+		} else if b, e := ReadNouns(cat, otherNouns.Strings()); e != nil {
+			err = e
+		} else {
+			if rel := relation.String(); len(rel) > 0 {
+				for _, subject := range a {
+					for _, object := range b {
+						if e := cat.AssertRelative(rel, object, subject); e != nil {
+							err = errutil.New(err, e)
+						}
 					}
 				}
 			}
 		}
-	}
-	return
+		return
+	})
 }

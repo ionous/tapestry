@@ -5,8 +5,7 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/imp/assert"
-	"git.sr.ht/~ionous/tapestry/weave/eph"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
@@ -33,31 +32,31 @@ func (c *Catalog) WritePatterns(w Writer) (err error) {
 	}
 	return
 }
-func (ctx *Context) AssertLocal(patternName, fieldName, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-	d, at := ctx.d, ctx.at
-	if name, ok := UniformString(patternName); !ok {
-		err = InvalidString(patternName)
-	} else {
-		k := d.EnsureKind(name, at)
-		k.AddRequirement(kindsOf.Pattern.String())
-
-		if p, e := MakeUniformField(aff, fieldName, class, at); e != nil {
-			err = e
-		} else if e := p.setAssignment(init); e != nil {
-			err = e
+func (cat *Catalog) AssertLocal(patternName, fieldName, class string, aff affine.Affinity, init assign.Assignment) error {
+	return cat.Schedule(assert.AncestryPhase, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		if name, ok := UniformString(patternName); !ok {
+			err = InvalidString(patternName)
 		} else {
-			var locals []UniformField
-			locals = append(locals, p)
-			//
-			err = d.QueueEphemera(at, eph.PhaseFunction{assert.PropertyPhase,
-				func(assert.World, assert.Assertions) (err error) {
+			k := d.EnsureKind(name, at)
+			k.AddRequirement(kindsOf.Pattern.String())
+			if p, e := MakeUniformField(aff, fieldName, class, at); e != nil {
+				err = e
+			} else if e := p.setAssignment(init); e != nil {
+				err = e
+			} else {
+				var locals []UniformField
+				locals = append(locals, p)
+				// schedule locals later than parameters for the sake of sorting
+				err = d.Schedule(at, assert.PropertyPhase, func(ctx *Weaver) (_ error) {
 					k.pendingFields = append(k.pendingFields, k.patternHeader.flush()...)
 					k.pendingFields = append(k.pendingFields, locals...)
 					return
-				}})
+				})
+			}
 		}
-	}
-	return
+		return
+	})
 }
 
 // accumulate the various bits of pattern data
@@ -86,53 +85,60 @@ func (pd *patternHeader) flush() (ret []UniformField) {
 	return ret
 }
 
-func (ctx *Context) AssertResult(patternName, fieldName, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-	d, at := ctx.d, ctx.at
-	if name, ok := UniformString(patternName); !ok {
-		err = InvalidString(patternName)
-	} else {
-		k := d.EnsureKind(name, at)
-		k.AddRequirement(kindsOf.Pattern.String())
-
-		if k.domain != d {
-			err = errutil.New("can only declare results in the original domain")
-		} else if init != nil {
-			err = errutil.New("return values dont currently support initial values")
-		} else if res, e := MakeUniformField(aff, fieldName, class, at); e != nil {
-			err = e
-		} else if e := addPatternDef(d, k, "res", at, res.Name); e != nil {
-			err = e
+func (cat *Catalog) AssertResult(patternName, fieldName, class string, aff affine.Affinity, init assign.Assignment) error {
+	return cat.Schedule(assert.AncestryPhase, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		if name, ok := UniformString(patternName); !ok {
+			err = InvalidString(patternName)
 		} else {
-			k.patternHeader.res = []UniformField{res}
+			k := d.EnsureKind(name, at)
+			k.AddRequirement(kindsOf.Pattern.String())
+			// schedule locals later than parameters for the sake of sorting
+			err = d.Schedule(at, assert.PropertyPhase, func(ctx *Weaver) (err error) {
+				if k.domain != d {
+					err = errutil.New("can only declare results in the original domain")
+				} else if init != nil {
+					err = errutil.New("return values dont currently support initial values")
+				} else if res, e := MakeUniformField(aff, fieldName, class, at); e != nil {
+					err = e
+				} else if e := addPatternDef(d, k, "res", at, res.Name); e != nil {
+					err = e
+				} else {
+					k.patternHeader.res = []UniformField{res}
+				}
+				return
+			})
 		}
-	}
-	return
+		return
+	})
 }
 
 // writes a definition of patternName?args=arg1,arg2,arg3
-func (ctx *Context) AssertParam(patternName, fieldName, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-	d, at := ctx.d, ctx.at
-	if name, ok := UniformString(patternName); !ok {
-		err = InvalidString(patternName)
-	} else {
-		k := d.EnsureKind(name, at)
-		k.AddRequirement(kindsOf.Pattern.String())
-		if k.domain != d {
-			err = errutil.New("can only declare args in the original domain")
-		} else if init != nil {
-			err = errutil.New("return values dont currently support initial values")
-		} else if arg, e := MakeUniformField(aff, fieldName, class, at); e != nil {
-			err = e
+func (cat *Catalog) AssertParam(patternName, fieldName, class string, aff affine.Affinity, init assign.Assignment) error {
+	return cat.Schedule(assert.AncestryPhase, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		if name, ok := UniformString(patternName); !ok {
+			err = InvalidString(patternName)
 		} else {
-			// there used to be one set of args, now there are individual args
-			// if e := addPatternDef(d, k, "args", at, patlabels); e != nil {
-			// else...
-			// fix: this should probably check that no locals have been written yet
-			// and/or use the "result" to seal in the args.
-			k.patternHeader.args = append(k.patternHeader.args, arg)
+			k := d.EnsureKind(name, at)
+			k.AddRequirement(kindsOf.Pattern.String())
+			if k.domain != d {
+				err = errutil.New("can only declare args in the original domain")
+			} else if init != nil {
+				err = errutil.New("return values dont currently support initial values")
+			} else if arg, e := MakeUniformField(aff, fieldName, class, at); e != nil {
+				err = e
+			} else {
+				// there used to be one set of args, now there are individual args
+				// if e := addPatternDef(d, k, "args", at, patlabels); e != nil {
+				// else...
+				// fix: this should probably check that no locals have been written yet
+				// and/or use the "result" to seal in the args.
+				k.patternHeader.args = append(k.patternHeader.args, arg)
+			}
 		}
-	}
-	return
+		return
+	})
 }
 
 func addPatternDef(d *Domain, k *ScopedKind, key, at, v string) (err error) {

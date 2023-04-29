@@ -3,7 +3,6 @@ package qdb_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
@@ -20,7 +19,7 @@ func TestActivate(t *testing.T) {
 	defer db.Close()
 	const at = ""
 	if e := createTable(db,
-		func(w eph.Writer) (err error) {
+		func(w mdl.Writer) (err error) {
 			return write(w,
 				// name, path, at
 				// -------------------------

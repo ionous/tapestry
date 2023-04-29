@@ -77,9 +77,13 @@ func (w *Warnings) shift() (err error) {
 }
 
 type domainTest struct {
-	out       []eph.Ephemera
+	name string
+	// queues the commands so we can makeDomain without worrying about error handling
+	// also allows shuffling the declarations (within a single domain)
+	queue     []eph.Ephemera
 	noShuffle bool
 	db        *sql.DB
+	cat       *Catalog
 }
 
 func (dt *domainTest) Open(name string) *sql.DB {
@@ -108,27 +112,35 @@ func (dt *domainTest) makeDomain(names []string, add ...eph.Ephemera) {
 		// shuffle the order of domain dependencies
 		rand.Shuffle(len(req), func(i, j int) { req[i], req[j] = req[j], req[i] })
 	}
-	dt.out = append(dt.out, &eph.BeginDomain{
+	dt.queue = append(dt.queue, &eph.BeginDomain{
 		Name:     n,
 		Requires: req,
 	})
-	dt.out = append(dt.out, add...)
-	dt.out = append(dt.out, &eph.EndDomain{
+	dt.queue = append(dt.queue, add...)
+	dt.queue = append(dt.queue, &eph.EndDomain{
 		Name: n,
 	})
 }
 
-func (dt *domainTest) addToCat(cat *Catalog) (err error) {
-	for _, el := range dt.out {
-		if e := el.Weave(cat); e != nil {
+func (dt *domainTest) Dequeue() (err error) {
+	for _, el := range dt.queue {
+		if e := el.Assert(dt.cat); e != nil {
 			err = e
 			break
 		}
 	}
-	if errs := cat.Errors; len(errs) > 0 {
+	return
+}
+
+func (dt *domainTest) Assemble() (ret *Catalog, err error) {
+	err = dt.Dequeue()
+	if err == nil {
+		err = dt.cat.AssembleCatalog()
+	}
+	if errs := dt.cat.Errors; len(errs) > 0 {
 		err = errutil.New(err, errs)
 	}
-	return
+	return dt.cat, err
 }
 
 // relation, kind, cardinality, otherKinds

@@ -8,6 +8,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
 
@@ -49,35 +50,41 @@ func oneOrAny(out *strings.Builder, s string) (ret string) {
 	return
 }
 
-func (ctx *Context) AssertRelation(opRel, a, b string, amany, bmany bool) (err error) {
-	d, at := ctx.d, ctx.at
-	// like aspects, we dont try to singularize these.
-	if rel, ok := UniformString(opRel); !ok {
-		err = InvalidString(opRel)
-	} else if a, b, card := makeKind(a, b, amany, bmany); len(card) == 0 {
-		err = errutil.New("unknown cardinality")
-	} else if len(a.class) == 0 {
-		err = errutil.New("invalid lhs")
-	} else if len(b.class) == 0 {
-		err = errutil.New("invalid rhs")
-	} else {
-		// add the cardinality as a definition
-		// ( used by eph.Relatives to determine the cardinality )
-		var conflict *Conflict
-		if e := d.AddDefinition(MakeKey("rel", rel, "card"), at, card); e != nil && !errors.As(e, &conflict) && conflict.Reason != Duplicated {
-			err = e
+func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error {
+	// uses ancestry because it defines kinds for each relation
+	return cat.Schedule(assert.AncestryPhase, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		// like aspects, we dont try to singularize these.
+		if rel, ok := UniformString(opRel); !ok {
+			err = InvalidString(opRel)
+		} else if a, b, card := makeKind(a, b, amany, bmany); len(card) == 0 {
+			err = errutil.New("unknown cardinality")
+		} else if len(a.class) == 0 {
+			err = errutil.New("invalid lhs")
+		} else if len(b.class) == 0 {
+			err = errutil.New("invalid rhs")
 		} else {
-			kid := d.EnsureKind(rel, at)
-			kid.AddRequirement(kindsOf.Relation.String())
-			//
-			if e := ctx.AssertField(rel, a.short(false), a.class, a.affinity(), nil); e != nil {
+			// add the cardinality as a definition
+			// ( used by eph.Relatives to determine the cardinality )
+			var conflict *Conflict
+			if e := d.AddDefinition(MakeKey("rel", rel, "card"), at, card); e != nil && !errors.As(e, &conflict) && conflict.Reason != Duplicated {
 				err = e
-			} else if e := ctx.AssertField(rel, b.short(true), b.class, b.affinity(), nil); e != nil {
-				err = e
+			} else {
+				kid := d.EnsureKind(rel, at)
+				kid.AddRequirement(kindsOf.Relation.String())
+
+				if ua, e := MakeUniformField(a.affinity(), a.short(false), a.class, at); e != nil {
+					err = e
+				} else if ub, e := MakeUniformField(b.affinity(), b.short(true), b.class, at); e != nil {
+					err = e
+				} else {
+					kid.pendingFields = append(kid.pendingFields, ua, ub)
+
+				}
 			}
 		}
-	}
-	return
+		return
+	})
 }
 
 type relKind struct {

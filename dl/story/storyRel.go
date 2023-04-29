@@ -1,19 +1,19 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/imp"
-	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
 
 // Execute - called by the macro runtime during weave.
 func (op *KindOfRelation) Execute(macro rt.Runtime) error {
-	return imp.StoryStatement(macro, op)
+	return weave.StoryStatement(macro, op)
 }
 
-func (op *KindOfRelation) PostImport(k *imp.Importer) error {
-	return op.Cardinality.DefineRelation(k, op.Relation.String())
+func (op *KindOfRelation) Schedule(cat *weave.Catalog) error {
+	return op.Cardinality.DefineRelation(cat, op.Relation.String())
 }
 
 type DefineRelation interface {

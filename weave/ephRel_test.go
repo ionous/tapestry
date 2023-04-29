@@ -17,7 +17,7 @@ func TestRelAssembly(t *testing.T) {
 	unwarn := warnings.catch(t)
 	defer unwarn()
 
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Relation.String()}, // declare the relation table
@@ -32,10 +32,8 @@ func TestRelAssembly(t *testing.T) {
 		&eph.Relations{Rel: "t", Cardinality: &eph.OneMany{Kind: "p", OtherKinds: "p"}},
 		&eph.Relations{Rel: "u", Cardinality: &eph.ManyMany{Kinds: "q", OtherKinds: "p"}},
 	)
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e != nil {
+
+	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl.Rel}

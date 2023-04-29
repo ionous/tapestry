@@ -2,6 +2,7 @@ package weave
 
 import (
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
 
@@ -29,38 +30,40 @@ func (d *Domain) Singularize(plural string) (ret string, err error) {
 // not more than one singular per plural ( but the other way around is fine. )
 //
 // tbd: consider appending the origin (at) to store the location of each definition?
-func (ctx *Context) AssertPlural(opSingular, opPlural string) (err error) {
-	c, d, at := ctx.c, ctx.d, ctx.at
-	if plural, ok := UniformString(opPlural); !ok {
-		err = InvalidString(opPlural)
-	} else if singular, ok := UniformString(opSingular); !ok {
-		err = InvalidString(opSingular)
-	} else {
-		duplicated := false
-		if e := c.qx.FindPluralDefinitions(plural, func(domain, one, at string) (err error) {
-			why := Redefined
-			if one == singular {
-				why = Duplicated
-				duplicated = true
-			}
-			key := MakeKey("plurals", plural)
-			e := domainError{Domain: d.name, Err: newConflict(key, why,
-				Definition{key, at, one},
-				singular,
-			)}
-			if one == singular {
-				LogWarning(e)
-			} else {
+func (cat *Catalog) AssertPlural(opSingular, opPlural string) error {
+	return cat.Schedule(assert.PluralPhase, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		if plural, ok := UniformString(opPlural); !ok {
+			err = InvalidString(opPlural)
+		} else if singular, ok := UniformString(opSingular); !ok {
+			err = InvalidString(opSingular)
+		} else {
+			duplicated := false
+			if e := cat.qx.FindPluralDefinitions(plural, func(domain, one, at string) (err error) {
+				why := Redefined
+				if one == singular {
+					why = Duplicated
+					duplicated = true
+				}
+				key := MakeKey("plurals", plural)
+				e := domainError{Domain: d.name, Err: newConflict(key, why,
+					Definition{key, at, one},
+					singular,
+				)}
+				if one == singular {
+					LogWarning(e)
+				} else {
+					err = e
+				}
+				return err
+			}); e != nil {
 				err = e
-			}
-			return err
-		}); e != nil {
-			err = e
-		} else if !duplicated {
-			if e := c.writer.Write(mdl.Plural, d.name, plural, singular, at); e != nil {
-				err = errutil.New("error writing plurals", e)
+			} else if !duplicated {
+				if e := cat.writer.Write(mdl.Plural, d.name, plural, singular, at); e != nil {
+					err = errutil.New("error writing plurals", e)
+				}
 			}
 		}
-	}
-	return
+		return
+	})
 }

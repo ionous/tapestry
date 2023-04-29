@@ -3,9 +3,9 @@ package eph
 import (
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 )
 
 type Aliases struct {
@@ -13,7 +13,7 @@ type Aliases struct {
 	Aliases   []string `if:"label=as,type=text"`
 }
 
-func (op *Aliases) Weave(k assert.Assertions) (err error) {
+func (op *Aliases) Assert(k assert.Assertions) (err error) {
 	return k.AssertAlias(op.ShortName, op.Aliases...)
 }
 
@@ -24,7 +24,7 @@ type Aspects struct {
 	Traits  []string `if:"label=traits,type=text"`
 }
 
-func (op *Aspects) Weave(k assert.Assertions) (err error) {
+func (op *Aspects) Assert(k assert.Assertions) (err error) {
 	return k.AssertAspectTraits(op.Aspects, op.Traits)
 }
 
@@ -33,7 +33,7 @@ type BeginDomain struct {
 	Requires []string `if:"label=requires,type=text"`
 }
 
-func (op *BeginDomain) Weave(k assert.Assertions) (err error) {
+func (op *BeginDomain) Assert(k assert.Assertions) (err error) {
 	return k.BeginDomain(op.Name, op.Requires)
 }
 
@@ -44,8 +44,18 @@ type Checks struct {
 	Exe    []rt.Execute         `if:"label=does"`
 }
 
-func (op *Checks) Weave(k assert.Assertions) (err error) {
+func (op *Checks) Assert(k assert.Assertions) (err error) {
 	return k.AssertCheck(op.Name, op.Exe, op.Expect)
+}
+
+type Definition struct {
+	Path  []string
+	Value string
+}
+
+func (op *Definition) Assert(k assert.Assertions) (err error) {
+	path := append(op.Path, op.Value)
+	return k.AssertDefinition(path...)
 }
 
 // Directives
@@ -54,7 +64,7 @@ type Directives struct {
 	Directive grammar.Directive `if:"label=parse"`
 }
 
-func (op *Directives) Weave(k assert.Assertions) (err error) {
+func (op *Directives) Assert(k assert.Assertions) (err error) {
 	return k.AssertGrammar(op.Name, &op.Directive)
 }
 
@@ -63,7 +73,7 @@ type EndDomain struct {
 	Name string `if:"label=domain,type=text"`
 }
 
-func (op *EndDomain) Weave(k assert.Assertions) (err error) {
+func (op *EndDomain) Assert(k assert.Assertions) (err error) {
 	return k.EndDomain()
 }
 
@@ -77,13 +87,19 @@ type Kinds struct {
 	Contain  []Params `if:"label=contain"`
 }
 
-func (op *Kinds) Weave(k assert.Assertions) (err error) {
+func (op *Kinds) Assert(k assert.Assertions) (err error) {
 	err = k.AssertAncestor(op.Kind, op.Ancestor)
 	//
 	if ps := op.Contain; err == nil && len(ps) > 0 {
-		err = weaveFields(op.Kind, ps, k.AssertField)
+		err = assertFields(op.Kind, ps, k.AssertField)
 	}
 	return
+}
+
+// EphMacro - hijacks pattern registration for use with macros
+type Macro struct {
+	Patterns
+	MacroStatements []rt.Execute
 }
 
 // Nouns
@@ -92,7 +108,7 @@ type Nouns struct {
 	Kind string `if:"label=kind,type=text"`
 }
 
-func (op *Nouns) Weave(k assert.Assertions) (err error) {
+func (op *Nouns) Assert(k assert.Assertions) (err error) {
 	return k.AssertNounKind(op.Noun, op.Kind)
 }
 
@@ -104,7 +120,7 @@ type Opposites struct {
 	Word     string `if:"label=word,type=text"`
 }
 
-func (op *Opposites) Weave(k assert.Assertions) (err error) {
+func (op *Opposites) Assert(k assert.Assertions) (err error) {
 	return k.AssertOpposite(op.Opposite, op.Word)
 }
 
@@ -121,19 +137,19 @@ type Patterns struct {
 	Result      *Params  `if:"label=result,optional"`
 }
 
-func (op *Patterns) Weave(k assert.Assertions) (err error) {
-	name := op.PatternName
-	if e := k.AssertAncestor(name, kindsOf.Pattern.String()); e != nil {
+func (op *Patterns) Assert(k assert.Assertions) (err error) {
+	kind := op.PatternName
+	if e := k.AssertAncestor(kind, kindsOf.Pattern.String()); e != nil {
 		err = e
 	} else {
 		if ps := op.Params; err == nil && len(ps) > 0 {
-			err = weaveFields(name, ps, k.AssertParam)
+			err = assertFields(kind, ps, k.AssertParam)
 		}
-		if ps := op.Result; err == nil && ps != nil {
-			err = weaveField(name, *ps, k.AssertResult)
+		if p := op.Result; err == nil && p != nil {
+			err = k.AssertResult(kind, p.Name, p.Class, p.Affinity, p.Initially)
 		}
 		if ps := op.Locals; err == nil {
-			err = weaveFields(name, ps, k.AssertLocal)
+			err = assertFields(kind, ps, k.AssertLocal)
 		}
 	}
 	return
@@ -147,7 +163,7 @@ type Plurals struct {
 	Singular string `if:"label=singular,type=text"`
 }
 
-func (op *Plurals) Weave(k assert.Assertions) (err error) {
+func (op *Plurals) Assert(k assert.Assertions) (err error) {
 	return k.AssertPlural(op.Singular, op.Plural)
 }
 
@@ -157,7 +173,7 @@ type Refs struct {
 	Refs []Ephemera `if:"label=refs"`
 }
 
-func (op *Refs) Weave(k assert.Assertions) (err error) {
+func (op *Refs) Assert(k assert.Assertions) (err error) {
 	refsNotImplemented.PrintOnce()
 	return
 }
@@ -172,7 +188,7 @@ type Relations struct {
 	Cardinality Cardinality `if:"label=relate"`
 }
 
-func (op *Relations) Weave(k assert.Assertions) (err error) {
+func (op *Relations) Assert(k assert.Assertions) (err error) {
 	switch c := op.Cardinality.(type) {
 	case *OneOne:
 		err = k.AssertRelation(op.Rel, c.Kind, c.OtherKind, false, false)
@@ -193,7 +209,7 @@ type Relatives struct {
 	OtherNoun string `if:"label=to,type=text"`
 }
 
-func (op *Relatives) Weave(k assert.Assertions) (err error) {
+func (op *Relatives) Assert(k assert.Assertions) (err error) {
 	return k.AssertRelative(op.Rel, op.Noun, op.OtherNoun)
 }
 
@@ -207,7 +223,7 @@ type Rules struct {
 	Touch       Always       `if:"label=touch,optional"`
 }
 
-func (op *Rules) Weave(k assert.Assertions) (err error) {
+func (op *Rules) Assert(k assert.Assertions) (err error) {
 	flags := toTiming(op.When, op.Touch)
 	return k.AssertRule(op.PatternName, op.Target, op.Filter, flags, op.Exe)
 }
@@ -224,6 +240,6 @@ type Values struct {
 	Value literal.LiteralValue `if:"label=value"`
 }
 
-func (op *Values) Weave(k assert.Assertions) (err error) {
+func (op *Values) Assert(k assert.Assertions) (err error) {
 	return k.AssertNounValue(op.Noun, op.Field, op.Path, op.Value)
 }

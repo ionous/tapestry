@@ -5,18 +5,19 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/debug"
+	"git.sr.ht/~ionous/tapestry/test/testdb"
+	"git.sr.ht/~ionous/tapestry/weave"
 
-	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/kr/pretty"
 )
 
 // test that importing cycling text transforms to the proper runtime command
 func TestImportSequence(t *testing.T) {
-	var els []eph.Ephemera
-	k := imp.NewImporter(eph.NewCommandQueue(&els))
+	db := testdb.Open(t.Name(), testdb.Memory, "")
+	defer db.Close()
+	cat := weave.NewCatalog(db)
 
 	// create a statement that uses CycleText
 	printText := &core.PrintText{Text: &story.CycleText{Parts: []rt.TextEval{
@@ -25,9 +26,10 @@ func TestImportSequence(t *testing.T) {
 		core.T("c"),
 	}}}
 	// import that statement
-	if e := story.ImportStory(k, t.Name(), &story.StoryFile{
+	if e := story.ImportStory(cat, t.Name(), &story.StoryFile{
 		StoryStatements: []story.StoryStatement{
 			&debug.Test{
+				TestName: debug.TestName{t.Name()},
 				Do: []rt.Execute{
 					printText,
 				},

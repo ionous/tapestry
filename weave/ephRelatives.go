@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
 
@@ -79,54 +80,56 @@ func (rs *Relatives) AddPair(a, b, at string) {
 
 // validate that the pattern for the rule exists then add the rule to the *current* domain
 // ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
-func (ctx *Context) AssertRelative(opRel, opNoun, opOtherNoun string) (err error) {
-	d, at := ctx.d, ctx.at
-	if name, ok := UniformString(opRel); !ok {
-		err = InvalidString(opRel)
-	} else if rel, ok := d.GetPluralKind(name); !ok || !rel.HasAncestor(kindsOf.Relation) {
-		err = errutil.Fmt("unknown or invalid relation %q", opRel)
-	} else if card := rel.domain.GetDefinition(MakeKey("rel", rel.name, "card")); len(card.value) == 0 {
-		err = errutil.Fmt("unknown or invalid cardinality for %q", opRel)
-	} else if first, e := getClosestNoun(d, opNoun); e != nil {
-		err = e
-	} else if second, e := getClosestNoun(d, opOtherNoun); e != nil {
-		err = e
-	} else {
-		var addPair bool
-		switch card.value {
-		case tables.ONE_TO_ONE:
-			// when one-to-one, the meaning of the two columns is the same
-			// and sorting the names so that first is less than second simplifies testing for uniqueness
-			if first.name > second.name {
-				first, second = second, first
+func (cat *Catalog) AssertRelative(opRel, opNoun, opOtherNoun string) error {
+	return cat.Schedule(assert.RelativePhase, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		if name, ok := UniformString(opRel); !ok {
+			err = InvalidString(opRel)
+		} else if rel, ok := d.GetPluralKind(name); !ok || !rel.HasAncestor(kindsOf.Relation) {
+			err = errutil.Fmt("unknown or invalid relation %q", opRel)
+		} else if card := rel.domain.GetDefinition(MakeKey("rel", rel.name, "card")); len(card.value) == 0 {
+			err = errutil.Fmt("unknown or invalid cardinality for %q", opRel)
+		} else if first, e := getClosestNoun(d, opNoun); e != nil {
+			err = e
+		} else if second, e := getClosestNoun(d, opOtherNoun); e != nil {
+			err = e
+		} else {
+			var addPair bool
+			switch card.value {
+			case tables.ONE_TO_ONE:
+				// when one-to-one, the meaning of the two columns is the same
+				// and sorting the names so that first is less than second simplifies testing for uniqueness
+				if first.name > second.name {
+					first, second = second, first
+				}
+				addPair, err = relate(d, rel, first.name, at, second.name)
+
+			case tables.ONE_TO_MANY:
+				// one parent to many children; so given second noun ( a child ) there is only one valid first noun ( a parent )
+				addPair, err = relate(d, rel, second.name, at, first.name)
+
+			case tables.MANY_TO_ONE:
+				// many children to one parent; so given first noun ( a child ) there is only one valid second noun( a parent )
+				addPair, err = relate(d, rel, first.name, at, second.name)
+
+			case tables.MANY_TO_MANY:
+				uniquePair := first.name + second.name
+				addPair, err = relate(d, rel, uniquePair, at, uniquePair)
+			default:
+				err = errutil.Fmt("unknown or invalid cardinality %q for %q", card.value, opRel)
 			}
-			addPair, err = relate(d, rel, first.name, at, second.name)
-
-		case tables.ONE_TO_MANY:
-			// one parent to many children; so given second noun ( a child ) there is only one valid first noun ( a parent )
-			addPair, err = relate(d, rel, second.name, at, first.name)
-
-		case tables.MANY_TO_ONE:
-			// many children to one parent; so given first noun ( a child ) there is only one valid second noun( a parent )
-			addPair, err = relate(d, rel, first.name, at, second.name)
-
-		case tables.MANY_TO_MANY:
-			uniquePair := first.name + second.name
-			addPair, err = relate(d, rel, uniquePair, at, uniquePair)
-		default:
-			err = errutil.Fmt("unknown or invalid cardinality %q for %q", card.value, opRel)
-		}
-		//
-		if err == nil && addPair {
-			if d.relatives == nil {
-				d.relatives = make(map[string]Relatives)
+			//
+			if err == nil && addPair {
+				if d.relatives == nil {
+					d.relatives = make(map[string]Relatives)
+				}
+				pairs := d.relatives[rel.name]
+				pairs.AddPair(first.name, second.name, at)
+				d.relatives[rel.name] = pairs
 			}
-			pairs := d.relatives[rel.name]
-			pairs.AddPair(first.name, second.name, at)
-			d.relatives[rel.name] = pairs
 		}
-	}
-	return
+		return
+	})
 }
 
 func relate(d *Domain, rel *ScopedKind, key, at, other string) (okay bool, err error) {

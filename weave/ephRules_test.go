@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -14,7 +15,7 @@ import (
 )
 
 func TestPatternRules(t *testing.T) {
-	dt := domainTest{noShuffle: true}
+	dt := newTestShuffle(t.Name(), false)
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		append(append([]eph.Ephemera{
@@ -23,7 +24,7 @@ func TestPatternRules(t *testing.T) {
 				PatternName: "p",
 				Result: &eph.Params{
 					Name:     "success",
-					Affinity: Affinity{eph.Affinity_Bool},
+					Affinity: affine.Bool,
 				}},
 		}, makeRules("p", "d", eph.Timing_During, 3)...),
 			makeRules("p", "b", eph.Timing_Before, 2)...)...,
@@ -32,10 +33,8 @@ func TestPatternRules(t *testing.T) {
 		makeRules("p", "a", eph.Timing_After, 3)...,
 	)
 	//
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e != nil {
+
+	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl.Rule}

@@ -3,7 +3,7 @@ package weave
 import (
 	"sort"
 
-	"git.sr.ht/~ionous/tapestry/imp/assert"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -86,35 +86,37 @@ func fromTiming(t assert.EventTiming) (ret int, always bool) {
 
 // validate that the pattern for the rule exists then add the rule to the *current* domain
 // ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
-func (ctx *Context) AssertRule(opPatternName string, opTarget string, opGuard rt.BoolEval, opFlags assert.EventTiming, do []rt.Execute) (err error) {
-	d, at := ctx.d, ctx.at
-	part, always := fromTiming(opFlags)
-	if name, ok := UniformString(opPatternName); !ok {
-		err = InvalidString(opPatternName)
-	} else if k, ok := d.GetKind(name); !ok || !k.HasAncestor(kindsOf.Pattern) {
-		err = errutil.Fmt("unknown or invalid pattern %q(%s)", opPatternName, name)
-	} else if tgt, ok := getTargetName(d, opTarget); !ok {
-		err = errutil.Fmt("unknown or invalid target %q for pattern %q", opTarget, opPatternName)
-	} else {
-		if d.rules == nil {
-			d.rules = make(map[string]Rulesets)
-		}
-		rules := d.rules[name]
-		slice := rt.Execute_Slice(do)
-		if filter, e := marshalout(opGuard); e != nil {
-			err = e
-		} else if prog, e := marshalout(&slice); e != nil {
-			err = e
+func (cat *Catalog) AssertRule(opPatternName string, opTarget string, opGuard rt.BoolEval, opFlags assert.EventTiming, do []rt.Execute) error {
+	return cat.Schedule(assert.PatternPhase, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		part, always := fromTiming(opFlags)
+		if name, ok := UniformString(opPatternName); !ok {
+			err = InvalidString(opPatternName)
+		} else if k, ok := d.GetKind(name); !ok || !k.HasAncestor(kindsOf.Pattern) {
+			err = errutil.Fmt("unknown or invalid pattern %q(%s)", opPatternName, name)
+		} else if tgt, ok := getTargetName(d, opTarget); !ok {
+			err = errutil.Fmt("unknown or invalid target %q for pattern %q", opTarget, opPatternName)
 		} else {
-			p := &rules.partitions[part]
-			p.els = append(p.els, ephRules{
-				Target: tgt, Filter: filter, Prog: prog, Touch: always,
-			})
-			p.at = append(p.at, at)
-			d.rules[name] = rules
+			if d.rules == nil {
+				d.rules = make(map[string]Rulesets)
+			}
+			rules := d.rules[name]
+			slice := rt.Execute_Slice(do)
+			if filter, e := marshalout(opGuard); e != nil {
+				err = e
+			} else if prog, e := marshalout(&slice); e != nil {
+				err = e
+			} else {
+				p := &rules.partitions[part]
+				p.els = append(p.els, ephRules{
+					Target: tgt, Filter: filter, Prog: prog, Touch: always,
+				})
+				p.at = append(p.at, at)
+				d.rules[name] = rules
+			}
 		}
-	}
-	return
+		return
+	})
 }
 
 func getTargetName(d *Domain, opTarget string) (ret string, okay bool) {

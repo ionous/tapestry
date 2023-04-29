@@ -24,20 +24,20 @@ type Phase int
 
 //go:generate stringer -type=Phase
 const (
-	DomainPhase Phase = iota
+	DomainStart Phase = iota
 	PluralPhase
 	AncestryPhase
 	PropertyPhase // collect the properties of kinds
 	AspectPhase   // traits of kinds
 	FieldPhase    // actually assemble those fields
-	MacroPhase    // tbd: could this be DomainPhase?
+	MacroPhase    // tbd: could this be PostDomain?
 	NounPhase     // instances ( of kinds )
 	ValuePhase
 	RelativePhase // initial relations between nouns
 	PatternPhase
 	AliasPhase
 	DirectivePhase // more grammar
-	RefPhase
+	PostDomain
 	NumPhases
 )
 
@@ -78,10 +78,6 @@ type Assertions interface {
 	AssertRule(name string, target string, guard rt.BoolEval, flags EventTiming, do []rt.Execute) error
 
 	AssertDefinition(path ...string) error
-
-	// fix: this is i think the only reason Phase is in assert instead of ... say... weave
-	// is schedule necessary? [ can it be supplanted by commands, even faux ones? ]
-	Schedule(Phase, func(World, Assertions) error) error
 }
 
 // fix: this should eventually be a runtime if at all possible

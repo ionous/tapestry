@@ -3,6 +3,7 @@ package weave
 import (
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
 
@@ -36,13 +37,15 @@ func (d *Domain) WriteDirectives(w Writer) (err error) {
 }
 
 // jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
-func (ctx *Context) AssertGrammar(opName string, opDirective *grammar.Directive) (err error) {
-	d, at := ctx.d, ctx.at
-	// fix: definitions probably need to be smarter.
-	if str, e := marshalout(opDirective); e != nil {
-		err = e
-	} else {
-		err = d.AddDefinition(MakeKey("prog", opName), at, str)
-	}
-	return
+func (cat *Catalog) AssertGrammar(opName string, opDirective *grammar.Directive) error {
+	return cat.Schedule(assert.DirectivePhase, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		// fix: definitions probably need to be smarter.
+		if str, e := marshalout(opDirective); e != nil {
+			err = e
+		} else {
+			err = d.AddDefinition(MakeKey("prog", opName), at, str)
+		}
+		return
+	})
 }

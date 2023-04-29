@@ -3,92 +3,96 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/imp"
-	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
 
 // Execute - called by the macro runtime during weave.
 func (op *ExtendPattern) Execute(macro rt.Runtime) error {
-	return imp.StoryStatement(macro, op)
+	return weave.StoryStatement(macro, op)
 }
 
-func (op *ExtendPattern) PostImport(k *imp.Importer) (err error) {
-	if name, e := safe.GetText(k, op.PatternName); e != nil {
-		err = e
-	} else {
-		// tbd: assert declares it into existence
-		// how do we instead simply say it should exist?
-		pattern := name.String()
-		if e := k.AssertAncestor(pattern, kindsOf.Pattern.String()); e != nil {
-			err = e
-		} else if e := declareFields(op.Locals, func(name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-			return k.AssertLocal(pattern, name, class, aff, init)
-		}); e != nil {
+func (op *ExtendPattern) Schedule(cat *weave.Catalog) error {
+	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+		if name, e := safe.GetText(w, op.PatternName); e != nil {
 			err = e
 		} else {
-			// write the rules last to help with test output consistency
-			err = ImportRules(k, pattern, "", op.Rules, assert.DefaultTiming)
+			// tbd: assert declares it into existence
+			// how do we instead simply say it should exist?
+			pattern := name.String()
+			if e := cat.AssertAncestor(pattern, kindsOf.Pattern.String()); e != nil {
+				err = e
+			} else if e := declareFields(op.Locals, func(name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
+				return cat.AssertLocal(pattern, name, class, aff, init)
+			}); e != nil {
+				err = e
+			} else {
+				// write the rules last to help with test output consistency
+				err = ImportRules(cat, pattern, "", op.Rules, assert.DefaultTiming)
+			}
 		}
-	}
-	return
+		return
+	})
 }
 
 // Execute - called by the macro runtime during weave.
 func (op *DefinePattern) Execute(macro rt.Runtime) error {
-	return imp.StoryStatement(macro, op)
+	return weave.StoryStatement(macro, op)
 }
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
-func (op *DefinePattern) PostImport(k *imp.Importer) (err error) {
-	if name, e := safe.GetText(k, op.PatternName); e != nil {
-		err = e
-	} else {
-		pattern := name.String()
-		if e := k.AssertAncestor(pattern, kindsOf.Pattern.String()); e != nil {
+func (op *DefinePattern) Schedule(cat *weave.Catalog) (err error) {
+	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+		if name, e := safe.GetText(w, op.PatternName); e != nil {
 			err = e
 		} else {
-			// fix: probably always want to declare a result; even if its "nothing".
-			if res := op.Result; res != nil {
-				err = res.DeclareField(func(name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-					return k.AssertResult(pattern, name, class, aff, init)
-				})
-			}
-			if err == nil {
-				if e := declareFields(op.Params, func(name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-					return k.AssertParam(pattern, name, class, aff, init)
-				}); e != nil {
-					err = e
-				} else if e := declareFields(op.Locals, func(name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-					return k.AssertLocal(pattern, name, class, aff, init)
-				}); e != nil {
-					err = e
-				} else {
-					// write the rules last to help with test output consistency
-					err = ImportRules(k, pattern, "", op.Rules, assert.DefaultTiming)
+			pattern := name.String()
+			if e := cat.AssertAncestor(pattern, kindsOf.Pattern.String()); e != nil {
+				err = e
+			} else {
+				// fix: probably always want to declare a result; even if its "nothing".
+				if res := op.Result; res != nil {
+					err = res.DeclareField(func(name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
+						return cat.AssertResult(pattern, name, class, aff, init)
+					})
+				}
+				if err == nil {
+					if e := declareFields(op.Params, func(name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
+						return cat.AssertParam(pattern, name, class, aff, init)
+					}); e != nil {
+						err = e
+					} else if e := declareFields(op.Locals, func(name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
+						return cat.AssertLocal(pattern, name, class, aff, init)
+					}); e != nil {
+						err = e
+					} else {
+						// write the rules last to help with test output consistency
+						err = ImportRules(cat, pattern, "", op.Rules, assert.DefaultTiming)
+					}
 				}
 			}
 		}
-	}
-	return
+		return
+	})
 }
 
 // note:  statements can set flags for a bunch of rules at once or within each rule separately, but not both.
-func ImportRules(k *imp.Importer, pattern, target string, els []PatternRule, flags assert.EventTiming) (err error) {
+func ImportRules(cat *weave.Catalog, pattern, target string, els []PatternRule, flags assert.EventTiming) (err error) {
 	// write in reverse order because within a given pattern, earlier rules take precedence.
 	for i := len(els) - 1; i >= 0; i-- {
-		if e := els[i].importRule(k, pattern, target, flags); e != nil {
+		if e := els[i].importRule(cat, pattern, target, flags); e != nil {
 			err = errutil.Append(err, e)
 		}
 	}
 	return
 }
 
-func (op *PatternRule) importRule(k *imp.Importer, pattern, target string, tgtFlags assert.EventTiming) (err error) {
+func (op *PatternRule) importRule(cat *weave.Catalog, pattern, target string, tgtFlags assert.EventTiming) (err error) {
 	act := op.Does
 	if flags, e := op.Flags.ReadFlags(); e != nil {
 		err = e
@@ -118,7 +122,7 @@ func (op *PatternRule) importRule(k *imp.Importer, pattern, target string, tgtFl
 			// 		&core.HasDominion{domain.String()},
 			// 		guard,
 			// 	}}
-			err = k.AssertRule(pattern, target, op.Guard, flags, act)
+			err = cat.AssertRule(pattern, target, op.Guard, flags, act)
 		}
 	}
 	return

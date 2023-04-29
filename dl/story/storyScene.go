@@ -1,23 +1,26 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 )
 
-func (op *DefineScene) PreImport(k *imp.Importer) (ret interface{}, err error) {
-	if name, e := safe.GetOptionalText(k, op.Scene, ""); e != nil {
-		err = e
-	} else if dependsOn, e := safe.GetOptionalTexts(k, op.DependsOn, nil); e != nil {
-		err = e
-	} else if e := k.BeginDomain(name.String(), dependsOn.Strings()); e != nil {
-		err = e
-	} else {
-		ret = op
-	}
-	return
-}
-
-func (op *DefineScene) PostImport(k *imp.Importer) (err error) {
-	return k.EndDomain() // note: could cache the name in op.Markup at a special key if need be.
+func (op *DefineScene) Schedule(cat *weave.Catalog) error {
+	return cat.Schedule(assert.PostDomain, func(w *weave.Weaver) (err error) {
+		if name, e := safe.GetOptionalText(w, op.Scene, ""); e != nil {
+			err = e
+		} else if dependsOn, e := safe.GetOptionalTexts(w, op.DependsOn, nil); e != nil {
+			err = e
+		} else {
+			if e := cat.BeginDomain(name.String(), dependsOn.Strings()); e != nil {
+				err = e
+			} else if e := ScheduleStatements(cat, op.With); e != nil {
+				err = e
+			} else {
+				err = cat.EndDomain()
+			}
+		}
+		return
+	})
 }

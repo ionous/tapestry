@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/eph"
@@ -11,13 +12,11 @@ import (
 )
 
 // ensure fields which reference aspects use the necessary formatting
-func AspectParam(aspectName string) eph.Params {
-	return eph.Params{Name: aspectName, Affinity: Affinity{eph.Affinity_Text}, Class: aspectName}
-}
+var AspectParam = eph.AspectParam
 
 // generate a kind of aspect containing a few traits.
 func TestAspectFormation(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("d"),
 		&eph.Kinds{Kind: kindsOf.Aspect.String()},                // say that aspects exist
@@ -27,10 +26,7 @@ func TestAspectFormation(t *testing.T) {
 		}},
 	)
 	out := testOut{mdl.Field}
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e != nil {
+	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
@@ -47,7 +43,7 @@ func TestAspectFormation(t *testing.T) {
 // generate a some other kind that has a field of using that aspect.
 // ( not a very exciting test )
 func TestAspectUsage(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Aspect.String()},                // say that aspects exist
@@ -61,10 +57,7 @@ func TestAspectUsage(t *testing.T) {
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{AspectParam("a")}},
 	)
 	out := testOut{mdl.Field}
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e != nil {
+	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else if e := cat.WriteFields(&out); e != nil {
 		t.Fatal(e)
@@ -81,7 +74,7 @@ func TestAspectUsage(t *testing.T) {
 
 // fail to generate a kind that has a field named the same as a trait.
 func TestAspectConflictingFields(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Aspect.String()},                // say that aspects exist
@@ -93,12 +86,9 @@ func TestAspectConflictingFields(t *testing.T) {
 	dt.makeDomain(dd("b", "a"),
 		&eph.Kinds{Kind: "k"},
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{AspectParam("a")}},
-		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "one", Affinity: Affinity{eph.Affinity_Text}}}},
+		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "one", Affinity: affine.Text}}},
 	)
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e == nil {
+	if _, e := dt.Assemble(); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)
@@ -106,7 +96,7 @@ func TestAspectConflictingFields(t *testing.T) {
 }
 
 func TestAspectConflictingTraits(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Aspect.String()},                // say that aspects exist
@@ -125,10 +115,8 @@ func TestAspectConflictingTraits(t *testing.T) {
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{AspectParam("b")}},
 	)
 	var conflict *Conflict
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
+	_, e := dt.Assemble()
+	if e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)

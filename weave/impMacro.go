@@ -1,9 +1,8 @@
-package imp
+package weave
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -37,7 +36,7 @@ func (k macroKind) initializeRecord(run rt.Runtime, rec *g.Record) (err error) {
 
 type macroReg map[string]macroKind
 
-func (k *Importer) GetKindByName(n string) (ret *g.Kind, err error) {
+func (k *Catalog) GetKindByName(n string) (ret *g.Kind, err error) {
 	if a, ok := k.macros[n]; !ok {
 		err = errutil.New("no such kind", n)
 	} else {
@@ -47,7 +46,7 @@ func (k *Importer) GetKindByName(n string) (ret *g.Kind, err error) {
 }
 
 // ugh. see register macro notes.
-func (k *Importer) Call(rec *g.Record, expectedReturn affine.Affinity) (ret g.Value, err error) {
+func (k *Catalog) Call(rec *g.Record, expectedReturn affine.Affinity) (ret g.Value, err error) {
 	// kind := rec.Kind()
 	// if macro, ok := k.macros[kind.Name()]; !ok {
 	// 	err = errutil.New("unknown macro", kind.Name())
@@ -73,64 +72,58 @@ func (k *Importer) Call(rec *g.Record, expectedReturn affine.Affinity) (ret g.Va
 	return
 }
 
-// EphMacro - hijacks pattern registration for use with macros
-type EphMacro struct {
-	eph.EphPatterns
-	MacroStatements []rt.Execute
-}
-
 // oh, the tangled webs we weave.
 // normally we distill fields into ephParams,
 // and then build up kinds, finally storing the results in the db.
 // fix: ideally would flush to the db after each domain ( or phase ) so that the weave can see it.
 // right now, only the play time's runtime reads from the db.
-func (k *Importer) registerMacro(op *EphMacro) (err error) {
-	// check not already registered.
-	if name := op.PatternName; len(name) == 0 {
-		err = errutil.Fmt("no macro name specified")
-	} else if _, ok := k.macros[name]; ok {
-		err = errutil.Fmt("macro %q already registered", name)
-	} else {
-		cnt := 1 + len(op.Params) + len(op.Locals)
-		init := make([]assign.Assignment, 0, cnt)
-		fields := make([]g.Field, 0, cnt)
-		addParam := func(p eph.EphParams) (err error) {
-			if len(p.Name) > 0 { // for now, silent skip nothing fields
-				if u, e := p.Unify(op.PatternName); e != nil {
-					err = e
-				} else {
-					init = append(init, u.Initially)
-					fields = append(fields, g.Field{
-						Name:     u.Name,
-						Affinity: u.Affinity,
-						Type:     u.Type,
-					})
-				}
-			}
-			return
-		}
-		addParams := func(ps []eph.EphParams) (err error) {
-			for _, el := range ps {
-				if e := addParam(el); e != nil {
-					err = e
-					break
-				}
-			}
-			return
-		}
-		if e := addParams(op.Params); e != nil {
-			err = e
-		} else if e := addParams(op.Locals); e != nil {
-			err = e
-		} else if e := addParam(*op.Result); e != nil {
-			err = e // ^ to match patterns, result (if any) is last.
-		} else {
-			k.macros[name] = macroKind{
-				Kind: g.NewKind(k, name, nil, fields),
-				init: init,
-				do:   op.MacroStatements,
-			}
-		}
-	}
-	return
-}
+// func (k *Catalog) registerMacro(op *EphMacro) (err error) {
+// 	// check not already registered.
+// 	if name := op.PatternName; len(name) == 0 {
+// 		err = errutil.Fmt("no macro name specified")
+// 	} else if _, ok := k.macros[name]; ok {
+// 		err = errutil.Fmt("macro %q already registered", name)
+// 	} else {
+// 		cnt := 1 + len(op.Params) + len(op.Locals)
+// 		init := make([]assign.Assignment, 0, cnt)
+// 		fields := make([]g.Field, 0, cnt)
+// 		addParam := func(p eph.Params) (err error) {
+// 			if len(p.Name) > 0 { // for now, silent skip nothing fields
+// 				if u, e := p.Unify(op.PatternName); e != nil {
+// 					err = e
+// 				} else {
+// 					init = append(init, u.Initially)
+// 					fields = append(fields, g.Field{
+// 						Name:     u.Name,
+// 						Affinity: u.Affinity,
+// 						Type:     u.Type,
+// 					})
+// 				}
+// 			}
+// 			return
+// 		}
+// 		addParams := func(ps []eph.Params) (err error) {
+// 			for _, el := range ps {
+// 				if e := addParam(el); e != nil {
+// 					err = e
+// 					break
+// 				}
+// 			}
+// 			return
+// 		}
+// 		if e := addParams(op.Params); e != nil {
+// 			err = e
+// 		} else if e := addParams(op.Locals); e != nil {
+// 			err = e
+// 		} else if e := addParam(*op.Result); e != nil {
+// 			err = e // ^ to match patterns, result (if any) is last.
+// 		} else {
+// 			k.macros[name] = macroKind{
+// 				Kind: g.NewKind(k, name, nil, fields),
+// 				init: init,
+// 				do:   op.MacroStatements,
+// 			}
+// 		}
+// 	}
+// 	return
+// }

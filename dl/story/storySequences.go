@@ -2,7 +2,7 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/imp"
+	"git.sr.ht/~ionous/tapestry/weave"
 )
 
 // fix? are these primports stubs really needed anymore?
@@ -14,25 +14,25 @@ import (
 // all of these things you think are type X are actually type y during import [ even if its a type alias ]
 
 // ensure that a valid counter exists
-func (op *CycleText) PreImport(k *imp.Importer) (ret interface{}, err error) {
+func (op *CycleText) PreImport(k *weave.Catalog) (ret interface{}, err error) {
 	ret = &core.CallCycle{Parts: op.Parts, Name: k.NewCounter("seq", op.Markup)}
 	return
 }
 
 // ensure that a valid counter exists
-func (op *ShuffleText) PreImport(k *imp.Importer) (ret interface{}, err error) {
+func (op *ShuffleText) PreImport(k *weave.Catalog) (ret interface{}, err error) {
 	ret = &core.CallShuffle{Parts: op.Parts, Name: k.NewCounter("seq", op.Markup)}
 	return
 }
 
 // ensure that a valid counter exists
-func (op *StoppingText) PreImport(k *imp.Importer) (ret interface{}, err error) {
+func (op *StoppingText) PreImport(k *weave.Catalog) (ret interface{}, err error) {
 	ret = &core.CallTerminal{Parts: op.Parts, Name: k.NewCounter("seq", op.Markup)}
 	return
 }
 
 // ensure that a valid counter exists
-func (op *CountOf) PreImport(k *imp.Importer) (ret interface{}, err error) {
+func (op *CountOf) PreImport(k *weave.Catalog) (ret interface{}, err error) {
 	ret = &core.CallTrigger{Num: op.Num, Trigger: op.Trigger, Name: k.NewCounter("seq", op.Markup)}
 	return
 }

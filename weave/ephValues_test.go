@@ -3,6 +3,7 @@ package weave
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/eph"
@@ -10,7 +11,7 @@ import (
 )
 
 func TestValueFieldAssignment(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		// some random set of kinds
@@ -20,8 +21,8 @@ func TestValueFieldAssignment(t *testing.T) {
 		// some simple fields
 		// the name of the field has to match the name of the aspect
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{
-			{Name: "t", Affinity: Affinity{eph.Affinity_Text}},
-			{Name: "d", Affinity: Affinity{eph.Affinity_Number}},
+			{Name: "t", Affinity: affine.Text},
+			{Name: "d", Affinity: affine.Number},
 		}},
 		// nouns with those fields
 		&eph.Nouns{Noun: "apple", Kind: "k"},
@@ -34,10 +35,7 @@ func TestValueFieldAssignment(t *testing.T) {
 		&eph.Values{Noun: "toy", Field: "d", Value: I(321)},
 		&eph.Values{Noun: "boat", Field: "t", Value: T("more text")},
 	)
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e != nil {
+	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl.Value}
@@ -56,22 +54,20 @@ func TestValueFieldAssignment(t *testing.T) {
 }
 
 func TestMissingField(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		// some random set of kinds
 		&eph.Kinds{Kind: "k"},
 		// a field
-		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "d", Affinity: Affinity{eph.Affinity_Number}}}},
+		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "d", Affinity: affine.Number}}},
 		// a noun
 		&eph.Nouns{Noun: "n", Kind: "k"},
 		// and not that field
 		&eph.Values{Noun: "n", Field: "t", Value: T("no such field")},
 	)
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e == nil || e.Error() != `field not found 'k.t'` {
+
+	if _, e := dt.Assemble(); e == nil || e.Error() != `field not found 'k.t'` {
 		t.Fatal("expected error", e)
 	} else {
 		t.Log("ok", e)
@@ -79,7 +75,7 @@ func TestMissingField(t *testing.T) {
 }
 
 func TestValueTraitAssignment(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		// some random set of kinds
@@ -107,10 +103,8 @@ func TestValueTraitAssignment(t *testing.T) {
 		&eph.Values{Noun: "toy", Field: "w", Value: B(true)},
 		&eph.Values{Noun: "boat", Field: "z", Value: B(true)},
 	)
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e != nil {
+
+	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl.Value}
@@ -129,24 +123,24 @@ func TestValueTraitAssignment(t *testing.T) {
 }
 
 func TestValuePaths(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		// declare the existence of records
 		&eph.Kinds{Kind: kindsOf.Record.String()},
 		// a record with some fields
 		&eph.Kinds{Kind: "inner", Ancestor: kindsOf.Record.String(), Contain: []eph.Params{
-			{Name: "num", Affinity: Affinity{eph.Affinity_Number}},
-			{Name: "text", Affinity: Affinity{eph.Affinity_Text}},
+			{Name: "num", Affinity: affine.Number},
+			{Name: "text", Affinity: affine.Text},
 		}},
 		// a record holding that record
 		&eph.Kinds{Kind: "outer", Ancestor: kindsOf.Record.String(), Contain: []eph.Params{
 			// we use the shortcut: a field named _ of type record will (attempt) to be a kind of that record.
-			{Name: "inner", Affinity: Affinity{eph.Affinity_Record}},
+			{Name: "inner", Affinity: affine.Record},
 		}},
 		//  a proper kind holding the record of records
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{
-			{Name: "outer", Affinity: Affinity{eph.Affinity_Record}},
+			{Name: "outer", Affinity: affine.Record},
 		}},
 		// a noun of that kind, with the record of records.
 		&eph.Nouns{Noun: "test", Kind: "k"},
@@ -155,10 +149,8 @@ func TestValuePaths(t *testing.T) {
 			"outer", "inner",
 		}},
 	)
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e != nil {
+
+	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl.Value}

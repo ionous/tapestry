@@ -8,9 +8,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 )
 
 // generate ephemera for macros
@@ -18,7 +18,7 @@ func xTestMacros(t *testing.T) {
 	// errutil.Panic = true
 	// //
 	// var cat eph.Catalog
-	// k := imp.NewImporter(cat)
+	// k := weave.NewCatalog(cat)
 	// if e := k.BeginDomain("tapestry", nil); e != nil {
 	// 	t.Fatal(e)
 	// } else if e := addDefaultKinds(k); e != nil {
@@ -29,20 +29,20 @@ func xTestMacros(t *testing.T) {
 	// 	t.Fatal(e)
 	// } else {
 	// 	// expect := []eph.Ephemera{
-	// 	// 	&eph.EphValues{
+	// 	// 	&eph.Values{
 	// 	// 		Noun:  "Hershel",
 	// 	// 		Field: "proper_named",
 	// 	// 		Value: literal.B(true),
 	// 	// 	},
-	// 	// 	&eph.EphNouns{
+	// 	// 	&eph.Nouns{
 	// 	// 		Noun: "Hershel",
 	// 	// 		Kind: "an actor",
 	// 	// 	},
-	// 	// 	&eph.EphNouns{
+	// 	// 	&eph.Nouns{
 	// 	// 		Noun: "scissors",
 	// 	// 		Kind: "things",
 	// 	// 	},
-	// 	// 	&eph.EphRelatives{
+	// 	// 	&eph.Relatives{
 	// 	// 		Rel:       "whereabouts",
 	// 	// 		Noun:      "Hershel",
 	// 	// 		OtherNoun: "scissors",

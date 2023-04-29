@@ -2,13 +2,13 @@ package qdb_test
 
 import (
 	"database/sql"
-	"git.sr.ht/~ionous/tapestry/qna/query"
 	"reflect"
 	"strings"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/qna/query"
+
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -23,7 +23,6 @@ import (
 // and the various runtime queries we need.
 func TestQueries(t *testing.T) {
 	db := testdb.Open(t.Name(), testdb.Memory, "")
-	// db := testdb.Open(t.Name(), "", "") // write to file
 	defer db.Close()
 
 	const at = ""
@@ -38,7 +37,7 @@ func TestQueries(t *testing.T) {
 	const subKind = "j"
 	const aspect = "a"
 	if e := createTable(db,
-		func(w eph.Writer) (err error) {
+		func(w mdl.Writer) (err error) {
 			if e := write(w,
 				// name, path, at
 				// -------------------------
@@ -283,7 +282,7 @@ func defaultKinds(domain, at string) (out []interface{}) {
 	return
 }
 
-func write(w eph.Writer, q string, els ...interface{}) (err error) {
+func write(w mdl.Writer, q string, els ...interface{}) (err error) {
 	width, cnt := strings.Count(q, "?"), len(els)
 	if div := cnt / width; div*width != cnt {
 		err = errutil.New("mismatched width", q)
@@ -300,7 +299,7 @@ func write(w eph.Writer, q string, els ...interface{}) (err error) {
 	return
 }
 
-func createTable(db *sql.DB, cb func(eph.Writer) error) (err error) {
+func createTable(db *sql.DB, cb func(mdl.Writer) error) (err error) {
 	if e := tables.CreateAll(db); e != nil {
 		err = errutil.New("couldnt create model", e)
 	} else if tx, e := db.Begin(); e != nil {

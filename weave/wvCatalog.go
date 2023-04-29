@@ -4,13 +4,12 @@ import (
 	"database/sql"
 	"log"
 
-	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
-	"git.sr.ht/~ionous/tapestry/weave/eph"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
 
@@ -20,40 +19,44 @@ type Catalog struct {
 	processing      DomainStack
 	resolvedDomains cachedTable
 	Errors          []error
-	eph.CommandBuilder
-	cursor string
-	writer Writer
-	run    *qna.Runner
-	qx     query.Queryx
+	cursor          string
+	writer          Writer
+	run             *qna.Runner
+	qx              query.Queryx
+
+	// sometimes the importer needs to define a singleton like type or instance
+	oneTime     map[string]bool
+	macros      macroReg
+	autoCounter Counters
+	env         Environ
 }
 
 func NewCatalog(db *sql.DB) *Catalog {
-	var c Catalog
 	qx, e := qdb.NewQueryx(db)
 	if e != nil {
 		panic(e)
 	}
+	c := &Catalog{
+		macros:      make(macroReg),
+		oneTime:     make(map[string]bool),
+		autoCounter: make(Counters),
+		run: qna.NewRuntimeOptions(
+			log.Writer(),
+			qx,
+			qna.DecodeNone("unsupported decoder"),
+			qna.NewOptions()),
+	}
+
 	c.cursor = "x"
-	c.run = qna.NewRuntimeOptions(
-		log.Writer(),
-		qx,
-		qna.DecodeNone("unsupported decoder"),
-		qna.NewOptions())
 	// set command builder
-	c.Queue = eph.WriterFun(c.writeEphemera)
 	c.qx = qx
 	c.writer = mdl.Writer(ExecWriter(db).Write)
 
-	return &c
+	return c
 }
 
 func (c *Catalog) Runtime() rt.Runtime {
 	return c.run
-}
-
-// initializes and returns itself
-func (c *Catalog) Weaver(db *sql.DB) *Catalog {
-	return c
 }
 
 func (c *Catalog) BeginDomain(name string, requires []string) (err error) {
@@ -75,19 +78,6 @@ func (c *Catalog) EndDomain() (err error) {
 		err = errutil.New("unexpected domain ending when there's no domain")
 	} else {
 		c.processing.Pop()
-	}
-	return
-}
-
-func (c *Catalog) writeEphemera(ep eph.Ephemera) {
-	var err error
-	if d, ok := c.processing.Top(); !ok {
-		err = errutil.New("no top domain")
-	} else {
-		err = d.QueueEphemera(c.cursor, ep)
-	}
-	if err != nil {
-		c.Errors = append(c.Errors, err)
 	}
 	return
 }
@@ -144,11 +134,11 @@ func (c *Catalog) AssembleCatalog() (err error) {
 			for _, deps := range ds {
 				d := deps.Leaf().(*Domain) // panics if it fails
 				if e := d.WriteDomain(c.writer); e != nil {
-					err = errutil.New("failed to write domain", d.name)
+					err = e
 					return // FIX
 				}
 				if _, e := c.run.ActivateDomain(d.name); e != nil {
-					err = errutil.New("error activating domain", d.name)
+					err = e
 					return
 				}
 				// every phase inside this domain:
@@ -157,14 +147,14 @@ func (c *Catalog) AssembleCatalog() (err error) {
 					case assert.PluralPhase:
 						if e := c.qx.FindActiveConflicts(func(domain, key, value, at string) error {
 							// fix: accumulate all conflicts
-							return errutil.New("error checking plural conflicts")
+							return e
 						}); e != nil {
 							err = e
 							return
 						}
 					}
 					if e := d.AssembleDomain(p, PhaseFlags{}); e != nil {
-						err = errutil.New("error assembling phase", p, e)
+						err = e
 						return // FIX
 					}
 				}
@@ -242,7 +232,7 @@ func (c *Catalog) WritePhase(p assert.Phase, w Writer) (err error) {
 		// grammar
 		err = c.WriteDirectives(w)
 
-	case assert.RefPhase:
+	case assert.PostDomain:
 		// when to write these?
 		err = c.WriteChecks(w)
 	}

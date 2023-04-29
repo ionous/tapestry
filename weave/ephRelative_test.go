@@ -12,7 +12,7 @@ import (
 
 // follow along with relative test except add list of ephemera
 func TestRelativeFormation(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		newRelativeTest(
@@ -52,10 +52,7 @@ func TestRelativeFormation(t *testing.T) {
 		)...,
 	)
 
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e != nil {
+	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl.Pair}
@@ -96,7 +93,7 @@ func TestRelativeFormation(t *testing.T) {
 
 // follow along with relative test except add list of ephemera
 func TestRelativeOneOneViolation(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		newRelativeTest(
@@ -105,10 +102,7 @@ func TestRelativeOneOneViolation(t *testing.T) {
 		)...,
 	)
 
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e == nil {
+	if _, e := dt.Assemble(); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)
@@ -116,7 +110,7 @@ func TestRelativeOneOneViolation(t *testing.T) {
 }
 
 func TestRelativeOneManyViolation(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		newRelativeTest(
@@ -125,10 +119,8 @@ func TestRelativeOneManyViolation(t *testing.T) {
 			"c", "r_1_x", "e",
 		)...,
 	)
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e == nil {
+
+	if _, e := dt.Assemble(); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)
@@ -136,7 +128,7 @@ func TestRelativeOneManyViolation(t *testing.T) {
 }
 
 func TestRelativeManyOneViolation(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		newRelativeTest(
@@ -145,10 +137,8 @@ func TestRelativeManyOneViolation(t *testing.T) {
 			"e", "r_x_1", "c",
 		)...,
 	)
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e == nil {
+
+	if _, e := dt.Assemble(); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok", e)

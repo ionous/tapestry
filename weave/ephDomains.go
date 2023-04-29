@@ -3,8 +3,7 @@ package weave
 import (
 	"errors"
 
-	"git.sr.ht/~ionous/tapestry/imp/assert"
-	"git.sr.ht/~ionous/tapestry/weave/eph"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
@@ -17,9 +16,7 @@ type DomainFinder interface {
 type Domain struct {
 	Requires      // other domains this needs ( can have multiple direct parents )
 	catalog       *Catalog
-	currPhase     assert.Phase // lift into some "ProcessingDomain" structure?
 	defs          Artifacts
-	phases        [assert.NumPhases]PhaseData
 	kinds         ScopedKinds
 	nouns         ScopedNouns
 	checks        asmChecks
@@ -28,16 +25,41 @@ type Domain struct {
 	opposites     OppositePairs
 	rules         map[string]Rulesets  // pattern name to rules for that pattern
 	relatives     map[string]Relatives // relation name to pairs of nouns
+
+	//
+	currPhase assert.Phase
+
+	scheduling [assert.NumPhases][]memento
 }
 
-type PhaseData struct {
-	eph []ephAt
+type memento struct {
+	cb func(*Weaver) error
+	at string
 }
 
-// At
-type ephAt struct {
-	At  string       `if:"label=at,type=text"`
-	Eph eph.Ephemera `if:"label=eph"`
+func (op *memento) call(ctx *Weaver) error {
+	ctx.at = op.at
+	return op.cb(ctx)
+}
+
+func (cat *Catalog) Schedule(when assert.Phase, what func(*Weaver) error) (err error) {
+	if d, ok := cat.processing.Top(); !ok {
+		err = errutil.New("no top domain")
+	} else {
+		err = d.Schedule(cat.cursor, when, what)
+	}
+	return
+}
+
+func (d *Domain) Schedule(at string, when assert.Phase, what func(*Weaver) error) (err error) {
+	if currPhase, phase := d.currPhase, when; currPhase > phase {
+		err = errutil.New("unexpected phase")
+	} else {
+		d.scheduling[when] = append(d.scheduling[when], memento{
+			what, at,
+		})
+	}
+	return
 }
 
 func (d *Domain) Resolve() (ret Dependencies, err error) {
@@ -47,22 +69,6 @@ func (d *Domain) Resolve() (ret Dependencies, err error) {
 		err = domainError{d.name, e}
 	} else {
 		ret = ds
-	}
-	return
-}
-
-func (d *Domain) QueueEphemera(at string, ep eph.Ephemera) (err error) {
-	if currPhase, phase := d.currPhase, assert.AliasPhase; /* FIIIIIIIIIXS ep.Phase()*/ currPhase > phase {
-		err = errutil.New("unexpected phase")
-	} else {
-		// fix? consider all ephemera in a flat slice ( again ) scanning by phase instead of partitioning.
-		// that way we dont need all the separate lists and we can append....
-		els := d.phases[phase]
-		els.eph = append(els.eph, ephAt{
-			At:  at,
-			Eph: ep,
-		})
-		d.phases[phase] = els
 	}
 	return
 }
@@ -132,25 +138,23 @@ func (d *Domain) RefineDefinition(key keyType, at, value string) (okay bool, err
 	return
 }
 
-// the domain is resolved already.
+// the domain should have been resolved already.
 func (d *Domain) AssembleDomain(w assert.Phase, flags PhaseFlags) (err error) {
 	if ds, e := d.GetDependencies(); e != nil {
 		err = e
 	} else {
+		d.currPhase = w // hrmm
 		// note: even if there are no ephemera... in a given phase..
 		// there can still be rivals and other results to process
-		d.currPhase = w // hrmmm...
 		if e := d.checkRivals(ds, !flags.NoDuplicates); e != nil {
 			err = e
 		} else {
-			ctx := Context{c: d.catalog, d: d, phase: w}
+			ctx := Weaver{d: d, phase: w, Runtime: d.catalog.run}
 			// don't "range" over the phase data since the contents can change during traversal.
 			// fix: if we were merging in the definitions we wouldnt have to walk upwards...
 			// what's best? see note in checkRivals()
-			for i := 0; i < len(d.phases[w].eph); i++ {
-				op := d.phases[w].eph[i]
-				ctx.at = op.At
-				if e := op.Eph.Weave(&ctx); e != nil {
+			for i := 0; i < len(d.scheduling[w]); i++ {
+				if e := d.scheduling[w][i].call(&ctx); e != nil {
 					err = errutil.Append(err, e)
 				}
 			}

@@ -5,23 +5,23 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/render"
 	"git.sr.ht/~ionous/tapestry/express"
-	"git.sr.ht/~ionous/tapestry/imp"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/template"
 	"git.sr.ht/~ionous/tapestry/template/types"
+	"git.sr.ht/~ionous/tapestry/weave"
 	"github.com/ionous/errutil"
 )
 
 // transform SayTemplate into a RenderResponse
-func (op *SayTemplate) PreImport(k *imp.Importer) (interface{}, error) {
+func (op *SayTemplate) PreImport(k *weave.Catalog) (interface{}, error) {
 	return convertTemplate("", op.Template.Str)
 }
 
 // transform SayResponse into a RenderResponse
-func (op *SayResponse) PreImport(k *imp.Importer) (ret interface{}, err error) {
-	if e := k.AssertField(kindsOf.Response.String(), op.Name, "", affine.Text, &assign.FromText{Value: op.Text}); e != nil {
+func (op *SayResponse) PreImport(cat *weave.Catalog) (ret interface{}, err error) {
+	if e := cat.AssertField(kindsOf.Response.String(), op.Name, "", affine.Text, &assign.FromText{Value: op.Text}); e != nil {
 		err = e
 	} else {
 		ret = &render.RenderResponse{Name: op.Name, Text: op.Text}
@@ -43,7 +43,7 @@ func convertTemplate(name, tmpl string) (ret *render.RenderResponse, err error) 
 }
 
 // returns a string or a FromText assignment as a slice of bytes
-func ConvertText(k *imp.Importer, str string) (ret string, err error) {
+func ConvertText(str string) (ret string, err error) {
 	// FIX: it would make more sense if the ephemera stored this as an rt.Assignment
 	// upgrade to include Affinity() for literal value, and all would be well.
 	if xs, e := template.Parse(str); e != nil {

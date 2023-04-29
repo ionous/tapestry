@@ -2,6 +2,7 @@ package weave
 
 import (
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
 
@@ -45,16 +46,18 @@ func (c *Catalog) WriteOpposites(w Writer) (err error) {
 	return
 }
 
-func (ctx *Context) AssertOpposite(opOpposite, opWord string) (err error) {
-	d, at := ctx.d, ctx.at
-	if oneWord, ok := UniformString(opOpposite); !ok {
-		err = InvalidString(opOpposite)
-	} else if otherWord, ok := UniformString(opWord); !ok {
-		err = InvalidString(opWord)
-	} else if ok, e := d.RefineDefinition(MakeKey("opposite", oneWord), at, otherWord); e != nil {
-		err = e
-	} else if ok {
-		err = d.AddOpposite(oneWord, otherWord)
-	}
-	return
+func (cat *Catalog) AssertOpposite(opOpposite, opWord string) error {
+	return cat.Schedule(assert.PluralPhase, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		if oneWord, ok := UniformString(opOpposite); !ok {
+			err = InvalidString(opOpposite)
+		} else if otherWord, ok := UniformString(opWord); !ok {
+			err = InvalidString(opWord)
+		} else if ok, e := d.RefineDefinition(MakeKey("opposite", oneWord), at, otherWord); e != nil {
+			err = e
+		} else if ok {
+			err = d.AddOpposite(oneWord, otherWord)
+		}
+		return
+	})
 }

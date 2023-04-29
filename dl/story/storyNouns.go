@@ -5,18 +5,18 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"git.sr.ht/~ionous/tapestry/imp"
-	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 )
 
 // ImportNounProperties -
 // reads ancillary information about nouns from their names and declares properties for them.
 // ex. proper or plural names, etc.
-func ImportNounProperties(k *imp.Importer, nouns []string) (ret []string, err error) {
+func ImportNounProperties(cat *weave.Catalog, nouns []string) (ret []string, err error) {
 	ret = make([]string, 0, len(nouns))
 	for _, noun := range nouns {
-		if next, e := importNoun(k, noun, ret); e != nil {
+		if next, e := importNoun(cat, noun, ret); e != nil {
 			err = e
 			break
 		} else {
@@ -28,12 +28,12 @@ func ImportNounProperties(k *imp.Importer, nouns []string) (ret []string, err er
 
 // ReadNouns - reads noun names without declaring any properties....
 // fix? unless they are counted nouns ( for backwards compatibility of "two cats whereabouts the kitchen" )
-func ReadNouns(k *imp.Importer, nouns []string) (ret []string, err error) {
+func ReadNouns(cat *weave.Catalog, nouns []string) (ret []string, err error) {
 	ret = make([]string, 0, len(nouns))
 	for _, noun := range nouns {
 		if a := makeArticleName(noun); a.count == 0 {
 			ret = append(ret, a.name)
-		} else if ns, e := importCountedNoun(k, a.count, a.name); e == nil {
+		} else if ns, e := importCountedNoun(cat, a.count, a.name); e == nil {
 			ret = append(ret, ns...)
 		} else {
 			err = e
@@ -43,18 +43,18 @@ func ReadNouns(k *imp.Importer, nouns []string) (ret []string, err error) {
 	return
 }
 
-func importNoun(k *imp.Importer, noun string, nouns []string) (ret []string, err error) {
+func importNoun(cat *weave.Catalog, noun string, nouns []string) (ret []string, err error) {
 	if a := makeArticleName(noun); a.count > 0 {
-		if ns, e := importCountedNoun(k, a.count, a.name); e != nil {
+		if ns, e := importCountedNoun(cat, a.count, a.name); e != nil {
 			err = e
 		} else {
 			ret = append(nouns, ns...)
 		}
 	} else {
 		if a.isProper() {
-			err = assert.AssertNounValue(k, B(true), a.name, "proper_named")
+			err = assert.AssertNounValue(cat, B(true), a.name, "proper_named")
 		} else if customDet, ok := a.customArticle(); ok && len(customDet) > 0 {
-			err = assert.AssertNounValue(k, T(customDet), a.name, "indefinite_article")
+			err = assert.AssertNounValue(cat, T(customDet), a.name, "indefinite_article")
 		}
 		ret = append(nouns, a.name)
 	}
@@ -120,40 +120,40 @@ func (an *articleName) customArticle() (ret string, okay bool) {
 // ex. "two triangles" -> triangle is a kind of thing
 // fix? consider a specific counted noun phrase; the noun phrase needs more work.
 // also, we probably want noun stacks not individually duplicated names
-func importCountedNoun(k *imp.Importer, cnt int, kindOrKinds string) (ret []string, err error) {
+func importCountedNoun(cat *weave.Catalog, cnt int, kindOrKinds string) (ret []string, err error) {
 	if cnt > 0 {
 		// note: kind is phrased in the singular here when count is 1, plural otherwise.
 		// but, because of "Recent.Nouns" processing we have to generate some sort of noun name *immediately*
 		// ( itd be nice to have a more start and stop importer, where we could delay processing of branches of the tree. )
 		names := make([]string, cnt)
 		for i := 0; i < cnt; i++ {
-			noun := k.NewCounter(kindOrKinds, nil)
-			if e := assert.AssertNounValue(k, B(true), noun, "counted"); e != nil {
+			noun := cat.NewCounter(kindOrKinds, nil)
+			if e := assert.AssertNounValue(cat, B(true), noun, "counted"); e != nil {
 				err = e
 				break
 			}
 			names[i] = noun
 		}
-		if e := k.Schedule(assert.AncestryPhase, func(m assert.World, k assert.Assertions) (err error) {
+		if e := cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
 			// by now, plurals will be determined, so we can determine which is which.
 			var kind, kinds string
 			if cnt == 1 {
 				kind = kindOrKinds
-				kinds = m.PluralOf(kindOrKinds)
+				kinds = w.PluralOf(kindOrKinds)
 			} else {
 				kinds = kindOrKinds
-				kind = m.SingularOf(kindOrKinds)
+				kind = w.SingularOf(kindOrKinds)
 			}
-			if e := k.AssertAncestor(kinds, "thing"); e != nil {
+			if e := cat.AssertAncestor(kinds, "thing"); e != nil {
 				err = e
 			} else {
 				for _, n := range names {
-					if e := k.AssertNounKind(n, kindOrKinds); e != nil {
+					if e := cat.AssertNounKind(n, kindOrKinds); e != nil {
 						err = e
-					} else if e := k.AssertAlias(n, kind); e != nil {
+					} else if e := cat.AssertAlias(n, kind); e != nil {
 						err = e // ^ so that typing "triangle" means "triangles_1"
 						break
-					} else if e := assert.AssertNounValue(k, T(kind), n, "printed name"); e != nil {
+					} else if e := assert.AssertNounValue(cat, T(kind), n, "printed name"); e != nil {
 						err = e // so that printing "triangles_1" yields "triangle"
 						break   // FIX: itd make a lot more sense to have a default value for the kind
 					}

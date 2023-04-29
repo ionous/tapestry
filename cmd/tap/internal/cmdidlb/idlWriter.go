@@ -3,7 +3,6 @@ package cmdidlb
 import (
 	"strconv"
 
-	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/tables/idl"
 )
 
@@ -11,7 +10,7 @@ import (
 // remapping the simple table definitions from mdl.go ( package tables/mdl )
 // to ones that can look up and store ids.
 // ex. so a caller can Write(mdl.Check, raw args) and have the args remapped to ids.
-func NewSpecWriter(fn writerFn) eph.Writer {
+func NewSpecWriter(fn writerFn) mdl.Writer {
 	return modelWriter{fn}
 }
 

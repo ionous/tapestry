@@ -12,7 +12,7 @@ import (
 // there's not much to test for directives right now
 // just verify some text comes out?
 func TestGrammarDirectives(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("b"),
 		&eph.Directives{
@@ -25,10 +25,8 @@ func TestGrammarDirectives(t *testing.T) {
 			},
 		},
 	)
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e != nil {
+
+	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{mdl.Grammar}

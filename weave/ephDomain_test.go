@@ -4,20 +4,19 @@ import (
 	"errors"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/tables"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
 func TestDomainSimplest(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a", "b"))
 	dt.makeDomain(dd("b"))
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
+	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else if a, e := cat.resolveDomain("a"); e != nil {
 		t.Fatal(e) // test getting just the domains related to "a"
@@ -31,15 +30,15 @@ func TestDomainSimplest(t *testing.T) {
 }
 
 func TestDomainSimpleTest(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a", "b", "d"))
 	dt.makeDomain(dd("b", "c", "d"))
 	dt.makeDomain(dd("c", "d", "e"))
 	dt.makeDomain(dd("e", "d"))
 	dt.makeDomain(dd("d"))
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
+
+	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else if a, e := cat.resolveDomain("a"); e != nil {
 		t.Fatal(e) // test getting just the domains related to "a"
@@ -63,16 +62,16 @@ func TestDomainSimpleTest(t *testing.T) {
 }
 
 func TestDomainCatchCycles(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a", "b", "d"))
 	dt.makeDomain(dd("b", "c", "d"))
 	dt.makeDomain(dd("c", "d", "e"))
 	dt.makeDomain(dd("d", "a"))
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
+
+	if e := dt.Dequeue(); e != nil {
 		t.Fatal(e)
-	} else if got, e := cat.resolveDomain(
+	} else if got, e := dt.cat.resolveDomain(
 		"a"); e == nil {
 		t.Fatal(got) // we expected failure
 	} else {
@@ -83,15 +82,14 @@ func TestDomainCatchCycles(t *testing.T) {
 // domains should be in "most" core to least order
 // each line should have all the dependencies it needs
 func TestDomainTable(t *testing.T) {
-	dt := domainTest{noShuffle: true} // because of ids
+	dt := newTestShuffle(t.Name(), false) // because of ids
 	defer dt.Close()
 	dt.makeDomain(dd("a", "b", "d"))
 	dt.makeDomain(dd("b", "c", "d"))
 	dt.makeDomain(dd("c", "e"))
 	dt.makeDomain(dd("d"))
 	dt.makeDomain(dd("e"))
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
+	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else if ds, e := cat.ResolveDomains(); e != nil {
 		t.Fatal(e)
@@ -109,9 +107,7 @@ func TestDomainTable(t *testing.T) {
 			t.Log("parents:", pretty.Sprint(out))
 			t.Fatal(diff)
 		} else {
-			if e := cat.AssembleCatalog(); e != nil {
-				t.Fatal(e)
-			} else if out, e := tables.ScanStrings(dt.db,
+			if out, e := tables.ScanStrings(dt.db,
 				`select rowid || ':' || path from mdl_domain`); e != nil {
 				t.Fatal(e)
 			} else if diff := pretty.Diff(out, []string{
@@ -127,17 +123,18 @@ func TestDomainTable(t *testing.T) {
 		}
 	}
 }
+
 func TestDomainWhenUndeclared(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	// while we say "b" is a dependency of "a",
 	// we never explicitly declare "b" --
 	// and this should result in an error.
 	dt.makeDomain(dd("a", "b"))
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
+
+	if e := dt.Dequeue(); e != nil {
 		t.Fatal(e)
-	} else if ds, e := cat.ResolveDomains(); e == nil {
+	} else if ds, e := dt.cat.ResolveDomains(); e == nil {
 		t.Fatal("expected failure", ds)
 	} else {
 		t.Log("okay:", e)
@@ -146,12 +143,12 @@ func TestDomainWhenUndeclared(t *testing.T) {
 
 // various white spacing and casing should become more friendly underscore case
 func TestDomainCase(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("alpha   domain", "beta domain"))
 	dt.makeDomain(dd("BetaDomain"))
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
+
+	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else if ds, e := cat.resolveDomain("alpha_domain"); e != nil {
 		t.Fatal(e)
@@ -165,36 +162,30 @@ func TestDomainCase(t *testing.T) {
 }
 
 func TestRivalStandalone(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"), rivalFact("secret"))
 	dt.makeDomain(dd("b"), rivalFact("mongoose"))
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e != nil {
+
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	}
 }
 
 func TestRivalConflict(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"), rivalFact("secret"))
 	dt.makeDomain(dd("b"), rivalFact("mongoose"))
 	dt.makeDomain(dd("c", "a", "b"))
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
+
+	var conflict *Conflict
+	if _, e := dt.Assemble(); !errors.As(e, &conflict) {
+		t.Fatal("expected a conflict", e)
+	} else if conflict.Reason != Redefined {
+		t.Fatal("expected a redefinition error", e)
 	} else {
-		var conflict *Conflict
-		if e := cat.AssembleCatalog(); !errors.As(e, &conflict) {
-			t.Fatal("expected a conflict", e)
-		} else if conflict.Reason != Redefined {
-			t.Fatal("expected a redefinition error", e)
-		} else {
-			t.Log("ok", e)
-		}
+		t.Log("ok", e)
 	}
 }
 
@@ -211,8 +202,8 @@ type rivalFact string
 
 func (el rivalFact) Phase() assert.Phase { return assert.ValuePhase }
 
-func (el rivalFact) Weave(k assert.Assertions) error {
-	return k.AssertDefinition("rivalFact", string(el))
+func (el rivalFact) Assert(cat assert.Assertions) error {
+	return cat.AssertDefinition("rivalFact", string(el))
 }
 
 func (c *Catalog) resolveDomain(n string) (ret Dependencies, err error) {

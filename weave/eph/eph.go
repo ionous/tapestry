@@ -1,10 +1,10 @@
 package eph
 
-import "git.sr.ht/~ionous/tapestry/imp/assert"
+import "git.sr.ht/~ionous/tapestry/weave/assert"
 
 // implemented by individual commands
 type Ephemera interface {
-	Weave(assert.Assertions) error
+	Assert(assert.Assertions) error
 }
 
 type PrintOnce string

@@ -8,14 +8,13 @@ import (
 	"path/filepath"
 
 	"git.sr.ht/~ionous/tapestry"
-	"git.sr.ht/~ionous/tapestry/dl/eph"
 	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/imp"
-	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/tables"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
+	"git.sr.ht/~ionous/tapestry/weave/eph"
 	"github.com/ionous/errutil"
 )
 
@@ -40,7 +39,7 @@ func WeavePath(srcPath, outFile string) (err error) {
 		} else {
 			defer db.Close()
 			cat := eph.NewCatalog(db) // fix: capture "Dilemmas" and LogWarning?
-			k := imp.NewImporterRuntime(cat, cat.Runtime())
+			k := weave.NewCatalogRuntime(cat, cat.Runtime())
 			if e := k.BeginDomain("tapestry", nil); e != nil {
 				err = e
 			} else if e := addDefaultKinds(k); e != nil {
@@ -68,7 +67,7 @@ func addDefaultKinds(n assert.Assertions) (err error) {
 }
 
 // read a comma-separated list of files and directories
-func importStoryFiles(k *imp.Importer, srcPath string) (err error) {
+func importStoryFiles(k *weave.Catalog, srcPath string) (err error) {
 	recurse := true
 	if e := files.ReadPaths(srcPath, recurse,
 		[]string{CompactExt, DetailedExt}, func(p string) error {
@@ -79,7 +78,7 @@ func importStoryFiles(k *imp.Importer, srcPath string) (err error) {
 	return
 }
 
-func readOne(k *imp.Importer, path string) (err error) {
+func readOne(k *weave.Catalog, path string) (err error) {
 	log.Println("reading", path)
 	if b, e := files.ReadFile(path); e != nil {
 		err = e

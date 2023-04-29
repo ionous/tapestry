@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
@@ -11,11 +12,9 @@ import (
 	"github.com/kr/pretty"
 )
 
-type Affinity = eph.Affinity
-
 // a single pattern declaration containing all its parts
 func TestPatternSingle(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
@@ -25,31 +24,31 @@ func TestPatternSingle(t *testing.T) {
 			PatternName: "p",
 			Params: []eph.Params{{
 				Name:     "p1",
-				Affinity: Affinity{eph.Affinity_Text},
+				Affinity: affine.Text,
 				Class:    "k",
 			}},
 			Locals: []eph.Params{{
 				Name:     "l1",
-				Affinity: Affinity{eph.Affinity_NumList},
+				Affinity: affine.NumList,
 			}, {
 				Name:      "l2",
-				Affinity:  Affinity{eph.Affinity_Number},
+				Affinity:  affine.Number,
 				Initially: &assign.FromNumber{Value: I(10)},
 			}},
 			Result: &eph.Params{
 				Name:     "success",
-				Affinity: Affinity{eph.Affinity_Bool},
+				Affinity: affine.Bool,
 			},
 		},
 	)
-	expectFullResults(t, &dt)
+	expectFullResults(t, dt)
 }
 
 // redeclare the same pattern as in single, but with multiple commands
 func TestPatternSeparateLocals(t *testing.T) {
 	// not sure yet if order of fields in the pattern be sorted at create time...
 	// ( ex. return value first, last, always? )
-	dt := domainTest{noShuffle: true}
+	dt := newTestShuffle(t.Name(), false)
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
@@ -59,13 +58,13 @@ func TestPatternSeparateLocals(t *testing.T) {
 			PatternName: "p",
 			Result: &eph.Params{
 				Name:     "success",
-				Affinity: Affinity{eph.Affinity_Bool},
+				Affinity: affine.Bool,
 			}},
 		&eph.Patterns{
 			PatternName: "p",
 			Params: []eph.Params{{
 				Name:     "p1",
-				Affinity: Affinity{eph.Affinity_Text},
+				Affinity: affine.Text,
 				Class:    "k",
 			}}},
 		&eph.Patterns{
@@ -74,24 +73,24 @@ func TestPatternSeparateLocals(t *testing.T) {
 				Name: "l1",
 				// FIX: rather than give an affinity
 				// assign an empty assignment of the right type
-				Affinity: Affinity{eph.Affinity_NumList},
+				Affinity: affine.NumList,
 			}}},
 		&eph.Patterns{
 			PatternName: "p",
 			Locals: []eph.Params{{
 				Name:      "l2",
-				Affinity:  Affinity{eph.Affinity_Number},
+				Affinity:  affine.Number,
 				Initially: &assign.FromNumber{Value: I(10)},
 			}}},
 	)
-	expectFullResults(t, &dt)
+	expectFullResults(t, dt)
 }
 
 // kinds should allow fields across domains, and so should locals.
 func TestPatternSeparateDomains(t *testing.T) {
 	// not sure yet if order of fields in the pattern be sorted at create time...
 	// ( ex. return value first, last, always? )
-	dt := domainTest{noShuffle: true}
+	dt := newTestShuffle(t.Name(), false)
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
@@ -101,20 +100,20 @@ func TestPatternSeparateDomains(t *testing.T) {
 			PatternName: "p",
 			Params: []eph.Params{{
 				Name:     "p1",
-				Affinity: Affinity{eph.Affinity_Text},
+				Affinity: affine.Text,
 				Class:    "k",
 			}}},
 		&eph.Patterns{
 			PatternName: "p",
 			Result: &eph.Params{
 				Name:     "success",
-				Affinity: Affinity{eph.Affinity_Bool},
+				Affinity: affine.Bool,
 			}},
 		&eph.Patterns{
 			PatternName: "p",
 			Locals: []eph.Params{{
 				Name:     "l1",
-				Affinity: Affinity{eph.Affinity_NumList},
+				Affinity: affine.NumList,
 			}}},
 	)
 	dt.makeDomain(dd("b", "a"),
@@ -122,18 +121,15 @@ func TestPatternSeparateDomains(t *testing.T) {
 			PatternName: "p",
 			Locals: []eph.Params{{
 				Name:      "l2",
-				Affinity:  Affinity{eph.Affinity_Number},
+				Affinity:  affine.Number,
 				Initially: &assign.FromNumber{Value: I(10)},
 			}}},
 	)
-	expectFullResults(t, &dt)
+	expectFullResults(t, dt)
 }
 
 func expectFullResults(t *testing.T, dt *domainTest) {
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e != nil {
+	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else {
 		outkind := testOut{mdl.Kind}
@@ -183,7 +179,7 @@ func expectFullResults(t *testing.T, dt *domainTest) {
 
 // fail splitting the args or returns across domains.
 func TestPatternSplitDomain(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
@@ -191,7 +187,7 @@ func TestPatternSplitDomain(t *testing.T) {
 			PatternName: "p",
 			Result: &eph.Params{
 				Name:     "success",
-				Affinity: Affinity{eph.Affinity_Bool},
+				Affinity: affine.Bool,
 			}},
 	)
 	dt.makeDomain(dd("b", "a"),
@@ -199,13 +195,11 @@ func TestPatternSplitDomain(t *testing.T) {
 			PatternName: "p",
 			Params: []eph.Params{{
 				Name:     "p1",
-				Affinity: Affinity{eph.Affinity_Text},
+				Affinity: affine.Text,
 			}}},
 	)
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e == nil {
+
+	if _, e := dt.Assemble(); e == nil {
 		t.Fatal("expected an error")
 	} else {
 		t.Log("okay", e)
@@ -214,7 +208,7 @@ func TestPatternSplitDomain(t *testing.T) {
 
 // fail multiple returns
 func TestPatternMultipleReturn(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()},
@@ -223,22 +217,21 @@ func TestPatternMultipleReturn(t *testing.T) {
 			PatternName: "p",
 			Result: &eph.Params{
 				Name:     "success",
-				Affinity: Affinity{eph.Affinity_Bool},
+				Affinity: affine.Bool,
 			},
 		},
 		&eph.Patterns{
 			PatternName: "p",
 			Result: &eph.Params{
 				Name:     "more success",
-				Affinity: Affinity{eph.Affinity_Bool},
+				Affinity: affine.Bool,
 			},
 		},
 	)
 	var conflict *Conflict
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
+
+	_, e := dt.Assemble()
+	if e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
 		t.Fatal("expected an redefined conflict; got", e)
 	} else {
 		t.Log("okay", e)
@@ -248,7 +241,7 @@ func TestPatternMultipleReturn(t *testing.T) {
 // fail multiple arg sets: args are now written individually so this is allowed.
 // fix: stop args after writing locals or returns?
 // func TestPatternMultipleArgSets(t *testing.T) {
-// 	var dt domainTest
+// 	dt:= newTest(t.Name())
 // defer dt.Close()
 // 	dt.makeDomain(dd("a"),
 // 		&eph.Kinds{Kind: kindsOf.Pattern.String()},
@@ -256,22 +249,20 @@ func TestPatternMultipleReturn(t *testing.T) {
 // 			PatternName: "p",
 // 			Params: []eph.Params{{
 // 				Name:     "p1",
-// 				Affinity: Affinity{eph.Affinity_Text},
+// 				Affinity: affine.Text},
 // 			}},
 // 		},
 // 		&eph.Patterns{
 // 			PatternName: "p",
 // 			Params: []eph.Params{{
 // 				Name:     "p2",
-// 				Affinity: Affinity{eph.Affinity_Text},
+// 				Affinity: affine.Text},
 // 			}},
 // 		},
 // 	)
 // 	var conflict *Conflict
-// 	cat := NewCatalog(dt.Open(t.Name()))
-// if e := dt.addToCat(cat); e != nil {
-// 	t.Fatal(e)
-// } else if e := cat.AssembleCatalog();  e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
+//
+// if cat, e := dt.Assemble();  e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
 // 		t.Fatal("expected an redefined conflict; got", e)
 // 	} else {
 // 		t.Log("okay", e)
@@ -280,7 +271,7 @@ func TestPatternMultipleReturn(t *testing.T) {
 
 // fail conflicting assignment
 func TestPatternConflictingInit(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
@@ -288,13 +279,12 @@ func TestPatternConflictingInit(t *testing.T) {
 			PatternName: "p",
 			Locals: []eph.Params{{
 				Name:      "n",
-				Affinity:  Affinity{eph.Affinity_Number},
+				Affinity:  affine.Number,
 				Initially: &assign.FromText{Value: T("mismatched")},
 			}},
 		},
 	)
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e == nil || e.Error() != `mismatched affinity of initial value (a text) for field "n" (a number)` {
+	if _, e := dt.Assemble(); e == nil || e.Error() != `mismatched affinity of initial value (a text) for field "n" (a number)` {
 		t.Fatal("expected an error; got:", e)
 	} else {
 		t.Log("ok", e)
@@ -303,16 +293,13 @@ func TestPatternConflictingInit(t *testing.T) {
 
 // a simple pattern with no return
 func TestPatternNoResults(t *testing.T) {
-	var dt domainTest
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
 		&eph.Patterns{PatternName: "p"},
 	)
-	cat := NewCatalog(dt.Open(t.Name()))
-	if e := dt.addToCat(cat); e != nil {
-		t.Fatal(e)
-	} else if e := cat.AssembleCatalog(); e != nil {
+	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else {
 		outkind := testOut{mdl.Kind}

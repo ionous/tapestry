@@ -3,57 +3,59 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/imp"
-	"git.sr.ht/~ionous/tapestry/imp/assert"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 )
 
 // Execute - called by the macro runtime during weave.
 func (op *DefineMacro) Execute(macro rt.Runtime) error {
-	return imp.StoryStatement(macro, op)
+	return weave.StoryStatement(macro, op)
 }
 
-// PostImport - register the macro with the importer;
+// Schedule - register the macro with the importer;
 // subsequent CallMacro(s) will be able to run it.
-func (op *DefineMacro) PostImport(k *imp.Importer) (err error) {
-	if name, e := safe.GetText(k, op.MacroName); e != nil {
-		err = e
-	} else {
-		macro := name.String()
-		if e := k.AssertAncestor(macro, kindsOf.Macro.String()); e != nil {
+func (op *DefineMacro) Schedule(cat *weave.Catalog) (err error) {
+	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+		if name, e := safe.GetText(w, op.MacroName); e != nil {
 			err = e
 		} else {
-			if res := op.Result; res != nil {
-				err = res.DeclareField(func(name, class string, aff affine.Affinity, init assign.Assignment) error {
-					return k.AssertResult(macro, name, class, aff, init)
-				})
-			}
-			if err == nil {
-				if e := declareFields(op.Params, func(name, class string, aff affine.Affinity, init assign.Assignment) error {
-					return k.AssertLocal(macro, name, class, aff, init)
-				}); e != nil {
-					err = e
-				} else if e := declareFields(op.Locals, func(name, class string, aff affine.Affinity, init assign.Assignment) error {
-					return k.AssertLocal(macro, name, class, aff, init)
-				}); e != nil {
-					err = e
-				} else {
-					err = k.AssertRule(macro, "", nil, 0, op.MacroStatements)
+			macro := name.String()
+			if e := cat.AssertAncestor(macro, kindsOf.Macro.String()); e != nil {
+				err = e
+			} else {
+				if res := op.Result; res != nil {
+					err = res.DeclareField(func(name, class string, aff affine.Affinity, init assign.Assignment) error {
+						return cat.AssertResult(macro, name, class, aff, init)
+					})
+				}
+				if err == nil {
+					if e := declareFields(op.Params, func(name, class string, aff affine.Affinity, init assign.Assignment) error {
+						return cat.AssertLocal(macro, name, class, aff, init)
+					}); e != nil {
+						err = e
+					} else if e := declareFields(op.Locals, func(name, class string, aff affine.Affinity, init assign.Assignment) error {
+						return cat.AssertLocal(macro, name, class, aff, init)
+					}); e != nil {
+						err = e
+					} else {
+						err = cat.AssertRule(macro, "", nil, 0, op.MacroStatements)
+					}
 				}
 			}
 		}
-	}
-	return
+		return
+	})
 }
 
-// PostImport for macros calls Execute... eventually... to generate dynamic assertions.
-func (op *CallMacro) PostImport(k *imp.Importer) error {
-	return k.Schedule(assert.MacroPhase, func(assert.World, assert.Assertions) error {
-		return op.Execute(k)
+// Schedule for macros calls Execute... eventually... to generate dynamic assertions.
+func (op *CallMacro) Schedule(k *weave.Catalog) error {
+	return k.Schedule(assert.MacroPhase, func(w *weave.Weaver) error {
+		return op.Execute(w)
 	})
 }
 

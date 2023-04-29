@@ -11,7 +11,7 @@ type FieldDefinition interface {
 	DeclareField(fieldType) error
 }
 
-func (op *NothingField) DeclareField(fn fieldType) (none error) {
+func (op *NothingField) DeclareField(fn fieldType) (_ error) {
 	return
 }
 

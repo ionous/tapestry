@@ -1,22 +1,22 @@
 package story
 
-// func Refs(refs ...eph.Ephemera) *eph.EphRefs {
-// 	return &eph.EphRefs{Refs: refs}
+// func Refs(refs ...eph.Ephemera) *eph.Refs {
+// 	return &eph.Refs{Refs: refs}
 // }
 
-// func ImportCall(op *assign.CallPattern) *eph.EphRefs {
+// func ImportCall(op *assign.CallPattern) *eph.Refs {
 // 	return refArgs(op.PatternName, kindsOf.Pattern, op.Arguments)
 // }
 
-// func refArgs(k string, parentKind kindsOf.Kinds, args []assign.Arg) (ret *eph.EphRefs) {
-// 	var refs []eph.EphParams
+// func refArgs(k string, parentKind kindsOf.Kinds, args []assign.Arg) (ret *eph.Refs) {
+// 	var refs []eph.Params
 // 	for _, arg := range args {
-// 		refs = append(refs, eph.EphParams{
+// 		refs = append(refs, eph.Params{
 // 			Name:     arg.Name,
 // 			Affinity: affineToAffinity(assign.GetAffinity(arg.Value)),
 // 		})
 // 	}
-// 	ret = Refs(&eph.EphKinds{
+// 	ret = Refs(&eph.Kinds{
 // 		Kind: k,
 // 		// we dont actually know.
 // 		// its probably a pattern, but it could be a record just as well....

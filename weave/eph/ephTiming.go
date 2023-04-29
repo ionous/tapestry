@@ -2,7 +2,7 @@ package eph
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
-	"git.sr.ht/~ionous/tapestry/imp/assert"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 )
 
 func toTiming(t Timing, always Always) (ret assert.EventTiming) {

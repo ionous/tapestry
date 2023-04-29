@@ -2,6 +2,7 @@ package weave
 
 import (
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
 
@@ -78,28 +79,29 @@ func (n NounError) Unwrap() error {
 	return n.Err
 }
 
-// noun, kind
-func (ctx *Context) AssertNounKind(opNoun, opKind string) (err error) {
-	d, at := ctx.d, ctx.at
-	_, noun := d.StripDeterminer(opNoun)
-	_, kind := d.StripDeterminer(opKind)
+func (cat *Catalog) AssertNounKind(opNoun, opKind string) error {
+	return cat.Schedule(assert.NounPhase, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		_, noun := d.StripDeterminer(opNoun)
+		_, kind := d.StripDeterminer(opKind)
 
-	if name, ok := UniformString(noun); !ok {
-		err = InvalidString(opNoun)
-	} else if kn, ok := UniformString(kind); !ok {
-		err = InvalidString(opKind)
-	} else if k, ok := d.GetPluralKind(kn); !ok {
-		err = errutil.New("unknown kind", opKind)
-	} else if noun := d.EnsureNoun(name, at); noun.domain == d {
-		// we can only add requirements to the noun in the same domain that it was declared
-		// if in a different domain: the nouns have to match up
-		noun.UpdateFriendlyName(opNoun)
-		noun.AddRequirement(k.name)
-	} else if !noun.HasAncestor(k.name) {
-		err = NounError{name, errutil.Fmt("can't redefine parent as %q", opKind)}
-	} else {
-		// is this in anyway useful?
-		LogWarning(errutil.Sprintf("duplicate noun %s definition at %v", name, at))
-	}
-	return
+		if name, ok := UniformString(noun); !ok {
+			err = InvalidString(opNoun)
+		} else if kn, ok := UniformString(kind); !ok {
+			err = InvalidString(opKind)
+		} else if k, ok := d.GetPluralKind(kn); !ok {
+			err = errutil.New("unknown kind", opKind)
+		} else if noun := d.EnsureNoun(name, at); noun.domain == d {
+			// we can only add requirements to the noun in the same domain that it was declared
+			// if in a different domain: the nouns have to match up
+			noun.UpdateFriendlyName(opNoun)
+			noun.AddRequirement(k.name)
+		} else if !noun.HasAncestor(k.name) {
+			err = NounError{name, errutil.Fmt("can't redefine parent as %q", opKind)}
+		} else {
+			// is this in anyway useful?
+			LogWarning(errutil.Sprintf("duplicate noun %s definition at %v", name, at))
+		}
+		return
+	})
 }
