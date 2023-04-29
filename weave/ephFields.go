@@ -64,36 +64,12 @@ func (c *Catalog) WriteLocals(w Writer) (err error) {
 	return
 }
 
-// after queuing up all the fields, assemble them; parent kinds first.
-var FieldActions = PhaseAction{
-	Do: func(d *Domain) (err error) {
-		if deps, e := d.ResolveKinds(); e != nil {
-			err = e
-		} else {
-			for _, dep := range deps {
-				k := dep.Leaf().(*ScopedKind)
-				for _, p := range k.pendingFields {
-					if e := p.assembleField(k); e != nil {
-						err = e
-						break
-					}
-				}
-			}
-		}
-		return
-	},
-}
-
 type UniformField struct {
 	Name, Type string
 	Affinity   affine.Affinity
 	Initially  assign.Assignment
 	At         string
 }
-
-// func (ep *Params) Unify(at string) (UniformField, error) {
-// 	return MakeUniformField(ep.Affinity, ep.Name, ep.Class, at)
-// }
 
 // normalize the values of the field
 func MakeUniformField(aff affine.Affinity, fieldName, fieldClass, at string) (ret UniformField, err error) {

@@ -88,9 +88,7 @@ func TestPatternSeparateLocals(t *testing.T) {
 
 // kinds should allow fields across domains, and so should locals.
 func TestPatternSeparateDomains(t *testing.T) {
-	// not sure yet if order of fields in the pattern be sorted at create time...
-	// ( ex. return value first, last, always? )
-	dt := newTestShuffle(t.Name(), false)
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table

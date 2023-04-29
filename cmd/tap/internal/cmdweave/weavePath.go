@@ -13,8 +13,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/tables"
+	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
-	"git.sr.ht/~ionous/tapestry/weave/eph"
 	"github.com/ionous/errutil"
 )
 
@@ -38,13 +38,12 @@ func WeavePath(srcPath, outFile string) (err error) {
 			err = errutil.New("couldn't create output file", outFile, e)
 		} else {
 			defer db.Close()
-			cat := eph.NewCatalog(db) // fix: capture "Dilemmas" and LogWarning?
-			k := weave.NewCatalogRuntime(cat, cat.Runtime())
-			if e := k.BeginDomain("tapestry", nil); e != nil {
+			cat := weave.NewCatalog(db)
+			if e := cat.BeginDomain("tapestry", nil); e != nil {
 				err = e
-			} else if e := addDefaultKinds(k); e != nil {
+			} else if e := addDefaultKinds(cat); e != nil {
 				err = e
-			} else if e := importStoryFiles(k, srcPath); e != nil {
+			} else if e := importStoryFiles(cat, srcPath); e != nil {
 				err = e
 			} else if len(cat.Errors) > 0 {
 				err = errutil.New(cat.Errors)

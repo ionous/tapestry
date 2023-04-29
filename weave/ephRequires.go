@@ -32,7 +32,7 @@ func (d *Requires) OriginAt() string {
 // clears any previous cached resolution data or internal errors
 func (d *Requires) AddRequirement(name string) {
 	if d.reqs.AddName(name) >= 0 && d.status != nil {
-		// println("clearing dependencies for", d.name, "while adding", name)
+		println("clearing dependencies for", d.name, "while adding", name)
 		d.status = nil // not seen before, then clear any cache.
 	}
 }

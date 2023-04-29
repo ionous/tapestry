@@ -28,7 +28,7 @@ func (op *ExtendPattern) Schedule(cat *weave.Catalog) error {
 			if e := cat.AssertAncestor(pattern, kindsOf.Pattern.String()); e != nil {
 				err = e
 			} else if e := declareFields(op.Locals, func(name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-				return cat.AssertLocal(pattern, name, class, aff, init)
+				return cat.AssertField(pattern, name, class, aff, init)
 			}); e != nil {
 				err = e
 			} else {
@@ -56,25 +56,27 @@ func (op *DefinePattern) Schedule(cat *weave.Catalog) (err error) {
 				err = e
 			} else {
 				// fix: probably always want to declare a result; even if its "nothing".
+				var resList []FieldDefinition
 				if res := op.Result; res != nil {
-					err = res.DeclareField(func(name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-						return cat.AssertResult(pattern, name, class, aff, init)
-					})
+					resList = []FieldDefinition{res}
 				}
-				if err == nil {
-					if e := declareFields(op.Params, func(name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-						return cat.AssertParam(pattern, name, class, aff, init)
-					}); e != nil {
-						err = e
-					} else if e := declareFields(op.Locals, func(name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-						return cat.AssertLocal(pattern, name, class, aff, init)
-					}); e != nil {
-						err = e
-					} else {
-						// write the rules last to help with test output consistency
-						err = ImportRules(cat, pattern, "", op.Rules, assert.DefaultTiming)
-					}
+				if e := declareFields(resList, func(name, class string, aff affine.Affinity, init assign.Assignment) error {
+					return cat.AssertResult(pattern, name, class, aff, init)
+				}); e != nil {
+					err = e
+				} else if e := declareFields(op.Params, func(name, class string, aff affine.Affinity, init assign.Assignment) error {
+					return cat.AssertParam(pattern, name, class, aff, init)
+				}); e != nil {
+					err = e
+				} else if e := declareFields(op.Locals, func(name, class string, aff affine.Affinity, init assign.Assignment) error {
+					return cat.AssertField(pattern, name, class, aff, init)
+				}); e != nil {
+					err = e
+				} else {
+					// write the rules last to help with test output consistency
+					err = ImportRules(cat, pattern, "", op.Rules, assert.DefaultTiming)
 				}
+
 			}
 		}
 		return

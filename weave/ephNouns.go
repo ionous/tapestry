@@ -6,14 +6,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// after assembling all the nouns, make sure they can be resolved.
-var NounActions = PhaseAction{
-	Do: func(d *Domain) error {
-		_, e := d.ResolveNouns()
-		return e
-	},
-}
-
 func (c *Catalog) WriteNouns(w Writer) error {
 	return forEachNoun(c, func(n *ScopedNoun) (err error) {
 		if k, e := n.Kind(); e != nil {
@@ -90,7 +82,7 @@ func (cat *Catalog) AssertNounKind(opNoun, opKind string) error {
 		} else if kn, ok := UniformString(kind); !ok {
 			err = InvalidString(opKind)
 		} else if k, ok := d.GetPluralKind(kn); !ok {
-			err = errutil.New("unknown kind", opKind)
+			return KindError{opKind, errutil.Fmt("unknown kind at while generating noun %q at %q", opNoun, at)}
 		} else if noun := d.EnsureNoun(name, at); noun.domain == d {
 			// we can only add requirements to the noun in the same domain that it was declared
 			// if in a different domain: the nouns have to match up

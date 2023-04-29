@@ -44,20 +44,20 @@ func (op *memento) call(ctx *Weaver) error {
 
 func (cat *Catalog) Schedule(when assert.Phase, what func(*Weaver) error) (err error) {
 	if d, ok := cat.processing.Top(); !ok {
-		err = errutil.New("no top domain")
+		err = errutil.New("unknown top level domain")
 	} else {
-		err = d.Schedule(cat.cursor, when, what)
+		err = d.schedule(cat.cursor, when, what)
 	}
 	return
 }
 
-func (d *Domain) Schedule(at string, when assert.Phase, what func(*Weaver) error) (err error) {
-	if currPhase, phase := d.currPhase, when; currPhase > phase {
-		err = errutil.New("unexpected phase")
-	} else {
-		d.scheduling[when] = append(d.scheduling[when], memento{
-			what, at,
-		})
+func (d *Domain) schedule(at string, when assert.Phase, what func(*Weaver) error) (err error) {
+	if d.currPhase > when {
+		err = errutil.Fmt("unexpected phase(%s) for %q", when, d.name)
+	} else /*if when == d.currPhase {
+		err = what(&ctx)
+	} else */{
+		d.scheduling[when] = append(d.scheduling[when], memento{what, at})
 	}
 	return
 }
@@ -139,25 +139,29 @@ func (d *Domain) RefineDefinition(key keyType, at, value string) (okay bool, err
 }
 
 // the domain should have been resolved already.
-func (d *Domain) AssembleDomain(w assert.Phase, flags PhaseFlags) (err error) {
-	if ds, e := d.GetDependencies(); e != nil {
+func (d *Domain) runPhase(ctx *Weaver) (err error) {
+	if ds, e := d.Resolve(); e != nil {
 		err = e
 	} else {
+		w := ctx.phase
 		d.currPhase = w // hrmm
 		// note: even if there are no ephemera... in a given phase..
 		// there can still be rivals and other results to process
-		if e := d.checkRivals(ds, !flags.NoDuplicates); e != nil {
+		allowDupes := w != assert.AncestryPhase
+		if e := d.checkRivals(ds, allowDupes); e != nil {
 			err = e
 		} else {
-			ctx := Weaver{d: d, phase: w, Runtime: d.catalog.run}
 			// don't "range" over the phase data since the contents can change during traversal.
-			// fix: if we were merging in the definitions we wouldnt have to walk upwards...
-			// what's best? see note in checkRivals()
-			for i := 0; i < len(d.scheduling[w]); i++ {
-				if e := d.scheduling[w][i].call(&ctx); e != nil {
+			// tbd: have "Schedule" immediately execute the statement if in the correct phase?
+			for len(d.scheduling[w]) > 0 {
+				els := d.scheduling[w]
+				next := els[0]
+				d.scheduling[w] = els[1:]
+				if e := next.call(ctx); e != nil {
 					err = errutil.Append(err, e)
 				}
 			}
+			d.currPhase++
 		}
 	}
 	return

@@ -11,9 +11,9 @@ func _() {
 	_ = x[DomainStart-0]
 	_ = x[PluralPhase-1]
 	_ = x[AncestryPhase-2]
-	_ = x[PropertyPhase-3]
-	_ = x[AspectPhase-4]
-	_ = x[FieldPhase-5]
+	_ = x[FieldPhase-3]
+	_ = x[ParamPhase-4]
+	_ = x[ResultPhase-5]
 	_ = x[MacroPhase-6]
 	_ = x[NounPhase-7]
 	_ = x[ValuePhase-8]
@@ -25,9 +25,9 @@ func _() {
 	_ = x[NumPhases-14]
 }
 
-const _Phase_name = "DomainStartPluralPhaseAncestryPhasePropertyPhaseAspectPhaseFieldPhaseMacroPhaseNounPhaseValuePhaseRelativePhasePatternPhaseAliasPhaseDirectivePhasePostDomainNumPhases"
+const _Phase_name = "DomainStartPluralPhaseAncestryPhaseFieldPhaseParamPhaseResultPhaseMacroPhaseNounPhaseValuePhaseRelativePhasePatternPhaseAliasPhaseDirectivePhasePostDomainNumPhases"
 
-var _Phase_index = [...]uint8{0, 11, 22, 35, 48, 59, 69, 79, 88, 98, 111, 123, 133, 147, 156, 165}
+var _Phase_index = [...]uint8{0, 11, 22, 35, 45, 55, 66, 76, 85, 95, 108, 120, 130, 144, 154, 163}
 
 func (i Phase) String() string {
 	if i < 0 || i >= Phase(len(_Phase_index)-1) {

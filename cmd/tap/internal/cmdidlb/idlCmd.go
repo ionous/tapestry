@@ -69,7 +69,7 @@ func runGenerate(ctx context.Context, cmd *base.Command, args []string) (err err
 					} else if tx, e := db.Begin(); e != nil {
 						err = errutil.New("couldnt create transaction", e)
 					} else {
-						w := NewSpecWriter(func(q string, args ...interface{}) (err error) {
+						w := newSpecWriter(func(q string, args ...interface{}) (err error) {
 							if _, e := tx.Exec(q, args...); e != nil {
 								err = e
 							}

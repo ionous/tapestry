@@ -79,7 +79,6 @@ func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error 
 					err = e
 				} else {
 					kid.pendingFields = append(kid.pendingFields, ua, ub)
-
 				}
 			}
 		}

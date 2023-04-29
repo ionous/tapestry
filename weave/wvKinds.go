@@ -24,14 +24,6 @@ func (c *Catalog) WriteKinds(w Writer) (err error) {
 	return
 }
 
-var AncestryActions = PhaseAction{
-	PhaseFlags{NoDuplicates: true},
-	func(d *Domain) error {
-		_, e := d.ResolveKinds()
-		return e
-	},
-}
-
 type KindError struct {
 	Kind string
 	Err  error
@@ -84,14 +76,16 @@ func (cat *Catalog) AssertAncestor(opKind, opAncestor string) error {
 // generated (for instance) from DefineFields...
 // these make new ephemera which are processed during the PropertyPhase.
 func (cat *Catalog) AssertField(kind, fieldName, class string, aff affine.Affinity, init assign.Assignment) error {
-	return cat.Schedule(assert.AncestryPhase, func(ctx *Weaver) (err error) {
+	return cat.Schedule(assert.FieldPhase, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
 		_, newName := d.StripDeterminer(kind)
 		if newName, ok := UniformString(newName); !ok {
 			err = InvalidString(kind)
 		} else if kid, ok := d.GetPluralKind(newName); !ok {
-			err = KindError{kind, errutil.New("unknown kind at", at)}
+			err = KindError{kind, errutil.New("unknown kind at while generating fields", at)}
 		} else if uf, e := MakeUniformField(aff, fieldName, class, at); e != nil {
+			err = e
+		} else if e := uf.setAssignment(init); e != nil {
 			err = e
 		} else {
 			kid.pendingFields = append(kid.pendingFields, uf)

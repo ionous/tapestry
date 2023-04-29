@@ -46,7 +46,7 @@ func (cat *Catalog) AssertAspectTraits(opAspects string, opTraits []string) erro
 			kid := d.EnsureKind(aspect, at)
 			kid.AddRequirement(kindsOf.Aspect.String())
 			if len(traits) > 0 {
-				err = d.Schedule(at, assert.AspectPhase, func(ctx *Weaver) (err error) {
+				err = d.schedule(at, assert.FieldPhase, func(ctx *Weaver) (err error) {
 					var conflict *Conflict // checks for conflicts, allows duplicates.
 					if e := kid.AddField(&traitDef{at, aspect, traits}); errors.As(e, &conflict) && conflict.Reason == Duplicated {
 						LogWarning(e) // warn if it was a duplicated definition
@@ -63,28 +63,17 @@ func (cat *Catalog) AssertAspectTraits(opAspects string, opTraits []string) erro
 
 func (cat *Catalog) AssertCheck(opName string, opExe []rt.Execute, opExpect literal.LiteralValue) error {
 	// uses domain phase, because it needs to ensure a domain exists
-	return cat.Schedule(assert.AncestryPhase, func(ctx *Weaver) (err error) {
-		at := ctx.at
-		// fix. todo: this isnt very well thought out right now --
-		// what if a check is part of a story scene? shouldnt it have access to those objects?
-		// if checks always establish their own domain, why do they have a duplicate name?
-		// there are some checks that have their own scenes, some that have expressions to run, some that have things to check.
-		// and others that have just one of those things. ( are there expectations that can simply verify the existence of objects in a model? )
-		// etc.
+	return cat.Schedule(assert.PostDomain, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
 		if name, ok := UniformString(opName); !ok {
 			err = InvalidString(opName)
-		} else if d, e := cat.EnsureDomain(name, at); e != nil {
-			err = e
 		} else {
-			err = d.Schedule(at, assert.PostDomain, func(ctx *Weaver) (err error) {
-				check := d.EnsureCheck(name, at)
-				if e := check.setExpectation(opExpect); e != nil {
-					err = e
-				} else if e := check.setProg(opExe); e != nil {
-					err = e
-				}
-				return
-			})
+			check := d.EnsureCheck(name, at)
+			if e := check.setExpectation(opExpect); e != nil {
+				err = e
+			} else if e := check.setProg(opExe); e != nil {
+				err = e
+			}
 		}
 		return
 	})

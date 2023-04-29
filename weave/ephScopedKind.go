@@ -1,6 +1,8 @@
 package weave
 
 import (
+	"strings"
+
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"github.com/ionous/errutil"
@@ -11,8 +13,25 @@ type ScopedKind struct {
 	domain        *Domain
 	aspects       []traitDef  // used for kinds of aspects *and* for fields which use those aspects.
 	fields        []*fieldDef // otherwise, everything is a field
-	patternHeader patternHeader
+	header        patternHeader
 	pendingFields []UniformField
+}
+
+// accumulate the various bits of pattern data
+// ensure they get written correctly, and in a good order.
+type patternHeader struct {
+	paramList, resList []UniformField
+}
+
+func (pd *patternHeader) labels() (ret string) {
+	var b strings.Builder
+	for _, el := range pd.paramList {
+		if b.Len() > 0 {
+			b.WriteRune(',')
+		}
+		b.WriteString(el.Name)
+	}
+	return b.String()
 }
 
 func (k *ScopedKind) HasParent(other kindsOf.Kinds) bool {

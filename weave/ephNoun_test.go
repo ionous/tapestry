@@ -57,7 +57,7 @@ func TestNounFailure(t *testing.T) {
 		&eph.Nouns{Noun: "bad apple", Kind: "t"},
 	)
 	if _, e := dt.Assemble(); e == nil ||
-		e.Error() != `unknown kind t` {
+		e.Error() != `unknown kind at while generating noun "bad apple" at "x" for kind "t"` {
 		t.Fatal("unexpected failure", e)
 	} else {
 		t.Log("ok", e)

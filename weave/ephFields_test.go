@@ -35,7 +35,7 @@ func TestFields(t *testing.T) {
 // we can define a kind in one domain, and its fields in another
 func TestFieldsCrossDomain(t *testing.T) {
 	dt := newTest(t.Name())
-	defer dt.Close() // fields arent sorted, but are probably added in domain order so...
+	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Number}}},

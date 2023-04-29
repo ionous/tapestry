@@ -61,49 +61,36 @@ func (op *MapHeading) Schedule(cat *weave.Catalog) error {
 
 			// write a fact stating the general direction from one room to the other has been established.
 			// ( used to detect conflicts in (the reverse directional) implications of some other statement )
-			if e := cat.Schedule(assert.PropertyPhase, func(w *weave.Weaver) (err error) {
-				if dir := lang.Underscore(op.Dir.Str); len(dir) == 0 {
-					err = errutil.New("missing map direction")
-				} else {
-					err = cat.AssertDefinition("dir", room.uniform, dir, otherRoom.uniform)
-				}
-				return
-			}); e != nil {
+			if dir := lang.Underscore(op.Dir.Str); len(dir) == 0 {
+				err = errutil.New("missing map direction")
+			} else if e := cat.AssertDefinition("dir", room.uniform, dir, otherRoom.uniform); e != nil {
 				err = e
 			} else {
 				// reverse connect
 				if op.MapConnection.isTwoWay() {
-					// fix? maybe one way to sort out the ephemera phases would be to give/let
-					// the the StoryStatements have a Phase() implementation directly?
-					// (also maybe the functions should be allowed to be after or before a named phase?)
-					if e := cat.Schedule(assert.FieldPhase, func(w *weave.Weaver) (err error) {
-						if dir := lang.Underscore(op.Dir.Str); len(dir) == 0 {
-							err = errutil.New("missing map direction")
+					if dir := lang.Underscore(op.Dir.Str); len(dir) == 0 {
+						err = errutil.New("missing map direction")
+					} else {
+						otherDir := w.OppositeOf(dir)
+						// to prioritize some other potentially more explicit definition of a door:
+						// if the directional connection is newly established, lets connect these two rooms.
+						// it's possible that the only way to handle all the potential conflicts
+						// ( ex. an author manually specifying a door and settings its directions )
+						// and explicit "assemble directions" phases would be needed.
+						var missingDoor helperNoun
+						if e := cat.AssertDefinition("dir", otherRoom.uniform, otherDir, room.uniform); e == nil {
+							// create the reverse door, etc.
+							err = mapDirect(cat, otherRoom, room, missingDoor, MapDirection{otherDir})
 						} else {
-							otherDir := w.OppositeOf(dir)
-							// to prioritize some other potentially more explicit definition of a door:
-							// if the directional connection is newly established, lets connect these two rooms.
-							// it's possible that the only way to handle all the potential conflicts
-							// ( ex. an author manually specifying a door and settings its directions )
-							// and explicit "assemble directions" phases would be needed.
-							var missingDoor helperNoun
-							if e := cat.AssertDefinition("dir", otherRoom.uniform, otherDir, room.uniform); e == nil {
-								// create the reverse door, etc.
-								err = mapDirect(cat, otherRoom, room, missingDoor, MapDirection{otherDir})
-							} else {
-								if conflict, ok := e.(*weave.Conflict); !ok || conflict.Redefined() {
-									err = e
-								}
-								// FIX FIX FIX: this compiles with "go build" but not with "go test"?!?!?
-								// var conflict eph.Conflict
-								// if !errors.As(e, &conflict) || conflict.Redefined() {
-								// 	err = e
-								// }
+							if conflict, ok := e.(*weave.Conflict); !ok || conflict.Redefined() {
+								err = e
 							}
+							// FIX FIX FIX: this compiles with "go build" but not with "go test"?!?!?
+							// var conflict eph.Conflict
+							// if !errors.As(e, &conflict) || conflict.Redefined() {
+							// 	err = e
+							// }
 						}
-						return
-					}); e != nil {
-						err = e
 					}
 				}
 			}

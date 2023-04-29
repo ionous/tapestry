@@ -149,7 +149,7 @@ func (op *Patterns) Assert(k assert.Assertions) (err error) {
 			err = k.AssertResult(kind, p.Name, p.Class, p.Affinity, p.Initially)
 		}
 		if ps := op.Locals; err == nil {
-			err = assertFields(kind, ps, k.AssertLocal)
+			err = assertFields(kind, ps, k.AssertField)
 		}
 	}
 	return

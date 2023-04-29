@@ -38,7 +38,7 @@ func (op *EventBlock) Schedule(cat *weave.Catalog) (err error) {
 			} else {
 				// and these are locals used by those rules
 				err = declareFields(h.Locals, func(name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-					return cat.AssertLocal(evt, name, class, aff, init)
+					return cat.AssertField(evt, name, class, aff, init)
 				})
 			}
 		}

@@ -27,14 +27,16 @@ const (
 	DomainStart Phase = iota
 	PluralPhase
 	AncestryPhase
-	PropertyPhase // collect the properties of kinds
-	AspectPhase   // traits of kinds
-	FieldPhase    // actually assemble those fields
-	MacroPhase    // tbd: could this be PostDomain?
-	NounPhase     // instances ( of kinds )
+	//
+	FieldPhase
+	ParamPhase
+	ResultPhase
+
+	MacroPhase // tbd: could this be PostDomain?
+	NounPhase  // instances ( of kinds )
 	ValuePhase
 	RelativePhase // initial relations between nouns
-	PatternPhase
+	PatternPhase  // assembles rules
 	AliasPhase
 	DirectivePhase // more grammar
 	PostDomain
@@ -55,9 +57,9 @@ type Assertions interface {
 	AssertAspectTraits(aspect string, traits []string) error
 
 	AssertField(kind, name, class string, aff affine.Affinity, init assign.Assignment) error
-	AssertLocal(kind, name, class string, aff affine.Affinity, init assign.Assignment) error
 	AssertParam(kind, name, class string, aff affine.Affinity, init assign.Assignment) error
 	AssertResult(kind, name, class string, aff affine.Affinity, init assign.Assignment) error
+	// AssertLocal(kind, name, class string, aff affine.Affinity, init assign.Assignment) error
 
 	AssertGrammar(name string, directive *grammar.Directive) error
 	// AssertMacro(a, b string) error

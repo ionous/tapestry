@@ -107,8 +107,8 @@ func (p *Parser) Step(words string) (ret *Result, err error) {
 	return
 } // end func
 
-type argList []assign.Arg
+type paramList []assign.Arg
 
-func (l *argList) add(a assign.Assignment) {
+func (l *paramList) add(a assign.Assignment) {
 	(*l) = append((*l), assign.Arg{Value: a})
 }

@@ -35,11 +35,11 @@ func (op *DefineMacro) Schedule(cat *weave.Catalog) (err error) {
 				}
 				if err == nil {
 					if e := declareFields(op.Params, func(name, class string, aff affine.Affinity, init assign.Assignment) error {
-						return cat.AssertLocal(macro, name, class, aff, init)
+						return cat.AssertParam(macro, name, class, aff, init)
 					}); e != nil {
 						err = e
 					} else if e := declareFields(op.Locals, func(name, class string, aff affine.Affinity, init assign.Assignment) error {
-						return cat.AssertLocal(macro, name, class, aff, init)
+						return cat.AssertField(macro, name, class, aff, init)
 					}); e != nil {
 						err = e
 					} else {

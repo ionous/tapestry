@@ -21,7 +21,7 @@ type Catalog struct {
 	Errors          []error
 	cursor          string
 	writer          Writer
-	run             *qna.Runner
+	run             rt.Runtime
 	qx              query.Queryx
 
 	// sometimes the importer needs to define a singleton like type or instance
@@ -36,27 +36,24 @@ func NewCatalog(db *sql.DB) *Catalog {
 	if e != nil {
 		panic(e)
 	}
-	c := &Catalog{
+	// fix: this needs cleanup
+	// why are use "writer" when db is the only output?
+	// qx should be separated from q ( maybe put into Mdl? )
+	// initial cursor should be set externally or passed in
+	// what should be public for Catalog?
+	return &Catalog{
 		macros:      make(macroReg),
 		oneTime:     make(map[string]bool),
 		autoCounter: make(Counters),
+		cursor:      "x", // fix
+		qx:          qx,
+		writer:      mdl.Writer(ExecWriter(db).Write),
 		run: qna.NewRuntimeOptions(
 			log.Writer(),
 			qx,
 			qna.DecodeNone("unsupported decoder"),
 			qna.NewOptions()),
 	}
-
-	c.cursor = "x"
-	// set command builder
-	c.qx = qx
-	c.writer = mdl.Writer(ExecWriter(db).Write)
-
-	return c
-}
-
-func (c *Catalog) Runtime() rt.Runtime {
-	return c.run
 }
 
 func (c *Catalog) BeginDomain(name string, requires []string) (err error) {
@@ -88,6 +85,7 @@ func (c *Catalog) GetDomain(n string) (*Domain, bool) {
 	return d, ok
 }
 
+// fix: this should be private; need to fix check first
 // return the uniformly named domain ( creating it if necessary )
 func (c *Catalog) EnsureDomain(n, at string, reqs ...string) (ret *Domain, err error) {
 	// find or create the domain
@@ -105,12 +103,22 @@ func (c *Catalog) EnsureDomain(n, at string, reqs ...string) (ret *Domain, err e
 	// add the passed requirements
 	// ( it filters for uniqueness )
 	for _, req := range reqs {
-		ret.AddRequirement(req)
+		if ret.name == req {
+			err = errutil.New("domain depends on itself", ret.name)
+			return // fix: early return
+		} else {
+			ret.AddRequirement(req)
+		}
 	}
 	// we are dependent on the parent domain too
 	// ( adding it last keeps it closer to the right side of the parent list )
 	if p, ok := c.processing.Top(); ok {
-		ret.AddRequirement(p.name)
+		if ret.name == p.name {
+			err = errutil.New("domain depends on itself", ret.name)
+			return // fix: early return
+		} else {
+			ret.AddRequirement(p.name)
+		}
 	}
 	return
 }
@@ -119,11 +127,6 @@ var TempSplit = assert.PluralPhase + 1
 
 // walk the domains and run the commands remaining in their queues
 func (c *Catalog) AssembleCatalog() (err error) {
-	phaseActions := PhaseActions{
-		assert.AncestryPhase: AncestryActions,
-		assert.FieldPhase:    FieldActions,
-		assert.NounPhase:     NounActions,
-	}
 	// ds has the "shallowest" domains first, and the most derived ( "deepest" ) domains last.
 	if ds, e := c.ResolveDomains(); e != nil {
 		err = e
@@ -153,10 +156,13 @@ func (c *Catalog) AssembleCatalog() (err error) {
 							return
 						}
 					}
-					if e := d.AssembleDomain(p, PhaseFlags{}); e != nil {
+					c.processing.Push(d)
+					ctx := Weaver{d: d, phase: p, Runtime: c.run}
+					if e := d.runPhase(&ctx); e != nil {
 						err = e
 						return // FIX
 					}
+					c.processing.Pop()
 				}
 			}
 		}
@@ -167,18 +173,18 @@ func (c *Catalog) AssembleCatalog() (err error) {
 		// which exist per kind but which can be added to by multiple domains.
 	Loop:
 		for p := TempSplit; p < assert.NumPhases; p++ {
-			act := phaseActions[p]
 			for _, deps := range ds {
 				d := deps.Leaf().(*Domain) // panics if it fails
-				if e := d.AssembleDomain(p, act.Flags); e != nil {
+				c.processing.Push(d)
+				ctx := Weaver{d: d, phase: p, Runtime: c.run}
+				if e := d.runPhase(&ctx); e != nil {
 					err = e
 					break Loop
-				} else if do := act.Do; do != nil {
-					if e := do(d); e != nil {
-						err = e
-						break Loop
-					}
+				} else if e := c.postPhase(p, d); e != nil {
+					err = e
+					break Loop
 				}
+				c.processing.Pop()
 			}
 		}
 		if err == nil && c.writer != nil {
@@ -193,6 +199,41 @@ func (c *Catalog) AssembleCatalog() (err error) {
 	return
 }
 
+func (c *Catalog) postPhase(p assert.Phase, d *Domain) (err error) {
+	switch p {
+	case assert.AncestryPhase:
+		_, err = d.ResolveKinds()
+
+	// PostFields: with the current domain looping pattern
+	// we have to hit all locals from all domains before writing
+	// and macro is after locals...
+	case assert.MacroPhase:
+		if deps, e := d.ResolveKinds(); e != nil {
+			err = e
+		} else {
+			for _, dep := range deps {
+				kind := dep.Leaf().(*ScopedKind)
+				fields := [][]UniformField{
+					kind.header.paramList,
+					kind.header.resList,
+					kind.pendingFields,
+				}
+				for _, list := range fields {
+					for _, field := range list {
+						if e := field.assembleField(kind); e != nil {
+							err = e
+							break
+						}
+					}
+				}
+			}
+		}
+	case assert.NounPhase:
+		_, err = d.ResolveNouns()
+	}
+	return
+}
+
 func (c *Catalog) WritePhase(p assert.Phase, w Writer) (err error) {
 	// switch or map better?
 	switch p {
@@ -202,11 +243,8 @@ func (c *Catalog) WritePhase(p assert.Phase, w Writer) (err error) {
 		}
 	case assert.AncestryPhase:
 		err = c.WriteKinds(w)
-	case assert.PropertyPhase:
-	case assert.AspectPhase:
 	case assert.FieldPhase:
 		err = c.WriteFields(w)
-	case assert.MacroPhase:
 	case assert.NounPhase:
 		err = c.WriteNouns(w)
 	case assert.ValuePhase:

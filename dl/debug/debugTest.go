@@ -14,7 +14,7 @@ func (op *Test) Execute(macro rt.Runtime) error {
 
 func (op *Test) Schedule(cat *weave.Catalog) (err error) {
 	if name := op.TestName.String(); len(name) == 0 {
-		errutil.New("test has empty  name")
+		errutil.New("test has empty name")
 	} else {
 		var req []string
 		if n := op.DependsOn.String(); len(n) > 0 {

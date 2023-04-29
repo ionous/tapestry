@@ -75,7 +75,7 @@ func (op *RenderPattern) render(run rt.Runtime, hint affine.Affinity) (ret g.Val
 	} else {
 		k := rec.Kind()
 		if have, want := len(op.Render), k.NumField(); have > want {
-			err = errutil.New("too many arguments for", name, "have", have, "want", want)
+			err = errutil.Fmt("too many arguments for %s have %d want %d", name, have, want)
 		} else {
 			for i, el := range op.Render {
 				field := k.Field(i) // use render value to ask for the right type of value
