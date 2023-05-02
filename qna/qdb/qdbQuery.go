@@ -14,7 +14,6 @@ import (
 // Read various data from the play database.
 type Query struct {
 	db *sql.DB
-	activeConflicts,
 	domainActivation,
 	domainScope,
 	domainDelete,
@@ -26,6 +25,7 @@ type Query struct {
 	nounValue,
 	nounIsNamed,
 	nounsByKind,
+	oppositeOf,
 	patternOf,
 	pluralMatches,
 	pluralToSingular,
@@ -168,38 +168,16 @@ func (q *Query) NounsByKind(kind string) ([]string, error) {
 	return scanStrings(q.nounsByKind, kind)
 }
 
-func (q *Query) FindActiveConflicts(cb func(domain, key, value, at string) error) (err error) {
-	var domain, many, one string
-	var at sql.NullString
-	if rows, e := q.activeConflicts.Query(); e != nil {
-		err = e
-	} else if e := tables.ScanAll(rows, func() error {
-		return cb(domain, many, one, at.String)
-	}, &domain, &many, &one, &at); e != nil {
-		err = e
-	}
-	return
-}
-
-func (q *Query) FindPluralDefinitions(many string, cb func(domain, one, at string) error) (err error) {
-	var domain, one string
-	var at sql.NullString
-	if rows, e := q.pluralMatches.Query(many); e != nil {
-		err = e
-	} else if e := tables.ScanAll(rows, func() error {
-		return cb(domain, one, at.String)
-	}, &domain, &one, &at); e != nil {
-		err = e
-	}
-	return
-}
-
-func (q *Query) PluralToSingular(plural string) (ret string, err error) {
+func (q *Query) PluralToSingular(plural string) (string, error) {
 	return scanString(q.pluralToSingular, plural)
 }
 
-func (q *Query) PluralFromSingular(singular string) (ret string, err error) {
+func (q *Query) PluralFromSingular(singular string) (string, error) {
 	return scanString(q.pluralFromSingular, singular)
+}
+
+func (q *Query) OppositeOf(word string) (string, error) {
+	return scanString(q.oppositeOf, word)
 }
 
 // the last value is always the result, blank for execute statements
@@ -285,14 +263,6 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 	q := &Query{
 		db:         db,
 		activation: 1,
-		activeConflicts: ps.Prep(db,
-			`select a.domain, a.many, a.one, a.at
-			from active_plurals as a 
-			join active_plurals as b 
-			where a.domain != b.domain 
-			and a.many == b.many 
-			and a.one != b.one`,
-		),
 		checks: ps.Prep(db,
 			`select mc.name, md.domain, mc.value, mc.affinity, mc.prog
 			from mdl_check mc
@@ -401,6 +371,12 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 				using(kind)
 			where ks.name=?1`, // order?
 		),
+		oppositeOf: ps.Prep(db,
+			`select otherWord
+			from active_rev
+			where oneWord = ?1
+			limit 1`,
+		),
 		// find the names of a given pattern ( kind's ) args and results
 		patternOf: ps.Prep(db,
 			`select mp.labels, mp.result
@@ -412,9 +388,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		),
 		pluralMatches: ps.Prep(db,
 			`select domain, one, at 
-			from mdl_plural
-			join active_domains
-				using (domain)
+			from active_plurals
 			where many = ?1`,
 		),
 		pluralToSingular: ps.Prep(db,

@@ -1,9 +1,8 @@
-package weave_test
+package weave
 
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"github.com/kr/pretty"
@@ -30,28 +29,15 @@ func TestRivals(t *testing.T) {
 	(1, 1),
 	(2, 1)`); e != nil {
 		t.Fatal(e)
+	} else if conflicts, e := findConflicts(db); e != nil {
+		t.Fatal(e)
 	} else {
-		if q, e := qdb.NewQueries(db, false); e != nil {
-			t.Fatal(e)
-		} else {
-			type conflict struct {
-				Domain, Many, One string
-			}
-			var conflicts []conflict
-			if e := q.FindActiveConflicts(func(domain, key, value, at string) (_ error) {
-				conflicts = append(conflicts, conflict{domain, key, value})
-				return
-			}); e != nil {
-				t.Fatal(e)
-			} else {
-				expect := []conflict{
-					{Domain: "p1", Many: "people", One: "human"},
-					{Domain: "p2", Many: "people", One: "person"},
-				}
-				if diff := pretty.Diff(expect, conflicts); len(diff) > 0 {
-					t.Fatal("unexpected conflicts", diff)
-				}
-			}
+		expect := []conflict{
+			{Category: "plural", Domain: "p1", Key: "people", Value: "human"},
+			{Category: "plural", Domain: "p2", Key: "people", Value: "person"},
+		}
+		if diff := pretty.Diff(expect, conflicts); len(diff) > 0 {
+			t.Fatal("unexpected conflicts", diff)
 		}
 	}
 }

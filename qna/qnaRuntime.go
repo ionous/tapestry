@@ -85,6 +85,17 @@ func (run *Runner) PluralOf(singular string) (ret string) {
 	return
 }
 
+func (run *Runner) OppositeOf(word string) (ret string) {
+	if n, e := run.query.OppositeOf(word); e != nil {
+		run.reportError(e)
+	} else if len(n) > 0 {
+		ret = n
+	} else {
+		ret = word
+	}
+	return
+}
+
 // the last value is the results; blank if need be
 func (run *Runner) getPatternLabels(pat string) (ret []string, err error) {
 	if c, e := run.values.cache(func() (ret interface{}, err error) {

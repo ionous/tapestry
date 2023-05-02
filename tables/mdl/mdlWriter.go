@@ -191,6 +191,12 @@ var idWriter = map[string]string{
 		"kind", derivedScope("kind", 1, 3),
 		"at", unchanged,
 	),
+	Opposite: insert("mdl_rev",
+		"domain", idOf("domain", 1),
+		"oneWord", unchanged,
+		"otherWord", unchanged,
+		"at", unchanged,
+	),
 	Pair: insert("mdl_pair",
 		"domain", idOf("domain", 1), // domain where the pair was declared
 		"relKind", derivedScope("kind", 1, 2), // we point to the kind table not the relation table.

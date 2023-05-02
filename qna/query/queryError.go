@@ -55,6 +55,10 @@ func (q QueryNone) NounsByKind(kind string) (ret []string, err error) {
 	return
 }
 
+func (q QueryNone) OppositeOf(kind string) (ret string, err error) {
+	return
+}
+
 func (q QueryNone) PluralToSingular(plural string) (ret string, err error) {
 	return
 }

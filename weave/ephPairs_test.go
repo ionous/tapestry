@@ -1,24 +1,74 @@
 package weave
 
-import "testing"
+import (
+	"strings"
+	"testing"
 
-func TestOppositePairs(t *testing.T) {
-	var ps OppositePairs
-	if e := ps.AddPair("east", "west"); e != nil {
+	"git.sr.ht/~ionous/tapestry/tables"
+	"git.sr.ht/~ionous/tapestry/weave/eph"
+	"github.com/kr/pretty"
+)
+
+// allow creating both sides of the opposites
+func TestOppositeAllowed(t *testing.T) {
+	dt := newTest(t.Name())
+	defer dt.Close()
+	dt.makeDomain(dd("a"),
+		&eph.Opposites{Word: "east", Opposite: "west"},
+		&eph.Opposites{Word: "west", Opposite: "east"},
+	)
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if e := ps.AddPair("east", "west"); e != nil {
-		t.Fatal(e) // add the duplicate pairing should be fine
-	} else if e := ps.AddPair("west", "east"); e != nil {
-		t.Fatal(e) // add the inverse pairing should be fine
-	} else if e := ps.AddPair("north", "south"); e != nil {
-		t.Fatal(e) // add more should be fine
-	} else if e := ps.AddPair("north", "inside"); e == nil {
-		t.Fatal("left conflict") // conflicting words should fail
-	} else if e := ps.AddPair("outside", "south"); e == nil {
-		t.Fatal("right conflict") // conflicting words should fail
-	} else if p, ok := ps.FindOpposite("west"); !ok || p != "east" {
-		t.Fatal(p)
-	} else if p, ok := ps.FindOpposite("east"); !ok || p != "west" {
-		t.Fatal(p)
+	}
+}
+
+// disallow mismatched opposites
+func TestOppositeConflict(t *testing.T) {
+	dt := newTest(t.Name())
+	defer dt.Close()
+	dt.makeDomain(dd("a"),
+		&eph.Opposites{Word: "east", Opposite: "west"},
+		&eph.Opposites{Word: "unkindness", Opposite: "east"},
+	)
+	if _, e := dt.Assemble(); e == nil {
+		t.Fatal("expected failure")
+	} else if !strings.Contains(e.Error(), "conflict") {
+		t.Fatal(e)
+	} else {
+		// "east" had opposite "west" wanted "east" as "unkindness"
+		t.Log("ok", e)
+	}
+}
+
+func TestOppositeAssembly(t *testing.T) {
+	dt := newTest(t.Name())
+	defer dt.Close()
+	dt.makeDomain(dd("a"),
+		&eph.Opposites{Word: "east", Opposite: "west"},
+	)
+	dt.makeDomain(dd("b", "a"),
+		&eph.Opposites{Word: "west", Opposite: "east"},
+		&eph.Opposites{Word: "north", Opposite: "south"},
+	)
+	if _, e := dt.Assemble(); e != nil {
+		t.Fatal(e)
+	} else if out, e := tables.ScanStrings(dt.db, `
+select md.domain ||':'|| mp.oneWord ||':'|| mp.otherWord
+from mdl_rev mp 
+join mdl_domain md 
+where md.rowid == mp.domain
+order by md.domain, mp.oneWord`,
+	); e != nil {
+		t.Fatal(e)
+	} else {
+		if diff := pretty.Diff(out, []string{
+			"a:east:west",
+			"a:west:east",
+			"b:north:south",
+			"b:south:north",
+		}); len(diff) > 0 {
+			t.Log("got", len(out), out)
+			t.Fatal(diff)
+		}
 	}
 }

@@ -16,16 +16,28 @@ var _ rt.Runtime = (*PanicRuntime)(nil)
 func (PanicRuntime) ActivateDomain(name string) (string, error) {
 	panic("Runtime panic")
 }
+func (PanicRuntime) Call(*g.Record, affine.Affinity) (ret g.Value, err error) {
+	panic("Runtime panic")
+}
+func (PanicRuntime) GetField(target, field string) (g.Value, error) {
+	panic("Runtime panic")
+}
 func (PanicRuntime) GetKindByName(string) (*g.Kind, error) {
 	panic("Runtime panic")
 }
 func (PanicRuntime) GetRules(pattern, target string, pflags *rt.Flags) (ret []rt.Rule, err error) {
 	panic("Runtime panic")
 }
-func (PanicRuntime) Call(*g.Record, affine.Affinity) (ret g.Value, err error) {
+func (PanicRuntime) OppositeOf(string) string {
 	panic("Runtime panic")
 }
-func (PanicRuntime) Send(*g.Record, []string) (ret g.Value, err error) {
+func (PanicRuntime) PluralOf(single string) string {
+	panic("Runtime panic")
+}
+func (PanicRuntime) PopScope() {
+	panic("Runtime panic")
+}
+func (PanicRuntime) PushScope(rt.Scope) {
 	panic("Runtime panic")
 }
 func (PanicRuntime) RelateTo(a, b, relation string) error {
@@ -37,30 +49,21 @@ func (PanicRuntime) RelativesOf(a, relation string) (g.Value, error) {
 func (PanicRuntime) ReciprocalsOf(a, relation string) (g.Value, error) {
 	panic("Runtime panic")
 }
-func (PanicRuntime) GetField(target, field string) (g.Value, error) {
+func (PanicRuntime) Send(*g.Record, []string) (ret g.Value, err error) {
 	panic("Runtime panic")
 }
 func (PanicRuntime) SetField(target, field string, v g.Value) error {
 	panic("Runtime panic")
 }
-func (PanicRuntime) Writer() io.Writer {
-	panic("Runtime panic")
-}
 func (PanicRuntime) SetWriter(io.Writer) io.Writer {
 	panic("Runtime panic")
 }
-func (PanicRuntime) PushScope(rt.Scope) {
+func (PanicRuntime) SingularOf(plural string) string {
 	panic("Runtime panic")
 }
-func (PanicRuntime) PopScope() {
+func (PanicRuntime) Writer() io.Writer {
 	panic("Runtime panic")
 }
 func (PanicRuntime) Random(inclusiveMin, exclusiveMax int) int {
-	panic("Runtime panic")
-}
-func (PanicRuntime) PluralOf(single string) string {
-	panic("Runtime panic")
-}
-func (PanicRuntime) SingularOf(plural string) string {
 	panic("Runtime panic")
 }

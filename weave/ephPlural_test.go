@@ -2,6 +2,7 @@ package weave
 
 import (
 	"errors"
+	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -22,9 +23,12 @@ func TestPluralConflict(t *testing.T) {
 		&eph.Plurals{Singular: "raven", Plural: "unkindness"},
 		&eph.Plurals{Singular: "witch", Plural: "unkindness"},
 	)
-	_, err := dt.Assemble()
-	if e := okDomainConflict("a", Redefined, err); e != nil {
+	if _, e := dt.Assemble(); e == nil {
+		t.Fatal("expected error")
+	} else if !strings.Contains(e.Error(), "conflict") {
 		t.Fatal(e)
+	} else {
+		t.Log("ok", e)
 	}
 }
 
@@ -57,12 +61,12 @@ func TestPluralAssembly(t *testing.T) {
 		&eph.Plurals{Singular: "witch", Plural: "unkindness"},
 	)
 	//
-	_, err := dt.Assemble()
-	if e := okDomainConflict("c", Redefined, err); e != nil {
-		t.Fatal(e)
-	} else if e := okDomainConflict("b", Duplicated, warnings.shift()); e != nil {
+	if _, e := dt.Assemble(); e == nil {
+		t.Fatal("expected error")
+	} else if !strings.Contains(e.Error(), "conflict") {
 		t.Fatal(e)
 	} else {
+		t.Log("ok", e)
 		if out, e := tables.ScanStrings(dt.db, readPlurals); e != nil {
 			t.Fatal(e)
 		} else {

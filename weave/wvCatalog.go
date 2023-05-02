@@ -6,8 +6,8 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
-	"git.sr.ht/~ionous/tapestry/qna/query"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
@@ -22,7 +22,7 @@ type Catalog struct {
 	cursor          string
 	writer          Writer
 	run             rt.Runtime
-	qx              query.Queryx
+	db              *sql.DB
 
 	// sometimes the importer needs to define a singleton like type or instance
 	oneTime     map[string]bool
@@ -38,15 +38,18 @@ func NewCatalog(db *sql.DB) *Catalog {
 	}
 	// fix: this needs cleanup
 	// why are use "writer" when db is the only output?
+	// -- why does that .Insert statement produce a type
+
 	// qx should be separated from q ( maybe put into Mdl? )
 	// initial cursor should be set externally or passed in
 	// what should be public for Catalog?
+	// or...
 	return &Catalog{
 		macros:      make(macroReg),
 		oneTime:     make(map[string]bool),
 		autoCounter: make(Counters),
 		cursor:      "x", // fix
-		qx:          qx,
+		db:          db,
 		writer:      mdl.Writer(ExecWriter(db).Write),
 		run: qna.NewRuntimeOptions(
 			log.Writer(),
@@ -147,11 +150,9 @@ func (c *Catalog) AssembleCatalog() (err error) {
 				// every phase inside this domain:
 				for p := assert.Phase(0); p < TempSplit; p++ {
 					switch p {
+					// fix: this isnt supposed to be tied particularly to the plural phase.
 					case assert.PluralPhase:
-						if e := c.qx.FindActiveConflicts(func(domain, key, value, at string) error {
-							// fix: accumulate all conflicts
-							return e
-						}); e != nil {
+						if e := c.findConflicts(); e != nil {
 							err = e
 							return
 						}
@@ -199,6 +200,62 @@ func (c *Catalog) AssembleCatalog() (err error) {
 	return
 }
 
+type conflict struct {
+	Category, Domain, At, Key, Value string
+}
+
+func (c conflict) Error() string {
+	return errutil.Sprint("unexpected conflict in domain %q at %q for %s %q",
+		c.Domain, c.At, c.Category, c.Value)
+}
+
+func (c *Catalog) findConflicts() (err error) {
+	if res, e := findConflicts(c.db); e != nil {
+		err = e
+	} else {
+		for _, e := range res {
+			err = errutil.Append(err, e)
+		}
+	}
+	return
+}
+
+func findConflicts(db *sql.DB) (ret []conflict, err error) {
+	if rows, e := db.Query(
+		`select 'plural', a.domain, a.at, a.many, a.one
+			from active_plurals as a 
+			join active_plurals as b 
+			where a.domain != b.domain 
+			and a.many == b.many 
+			and a.one != b.one
+		union all
+		select 'opposite', a.domain, a.at, a.oneWord, a.otherWord 
+			from active_rev as a 
+			join active_rev as b 
+			where a.domain != b.domain 
+			and a.oneWord == b.oneWord 
+			and a.otherWord != b.otherWord
+			`); e != nil {
+		err = e
+	} else {
+		var cat, domain, key, value string
+		var at sql.NullString
+		if e := tables.ScanAll(rows, func() (_ error) {
+			ret = append(ret, conflict{
+				Category: cat,
+				Domain:   domain,
+				At:       at.String,
+				Key:      key,
+				Value:    value,
+			})
+			return
+		}, &cat, &domain, &at, &key, &value); e != nil {
+			err = e
+		}
+	}
+	return
+}
+
 func (c *Catalog) postPhase(p assert.Phase, d *Domain) (err error) {
 	switch p {
 	case assert.AncestryPhase:
@@ -237,10 +294,6 @@ func (c *Catalog) postPhase(p assert.Phase, d *Domain) (err error) {
 func (c *Catalog) WritePhase(p assert.Phase, w Writer) (err error) {
 	// switch or map better?
 	switch p {
-	case assert.PluralPhase:
-		if e := c.WriteOpposites(w); e != nil {
-			err = e
-		}
 	case assert.AncestryPhase:
 		err = c.WriteKinds(w)
 	case assert.FieldPhase:

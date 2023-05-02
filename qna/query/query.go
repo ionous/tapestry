@@ -44,6 +44,7 @@ type Query interface {
 	NounsByKind(kind string) ([]string, error)
 	PluralToSingular(plural string) (ret string, err error)
 	PluralFromSingular(singular string) (ret string, err error)
+	OppositeOf(word string) (ret string, err error)
 	PatternLabels(pat string) (ret []string, err error)
 	RulesFor(pat, target string) (ret []Rules, err error)
 	ReciprocalsOf(rel, id string) ([]string, error)

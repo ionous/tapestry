@@ -10,7 +10,7 @@ type ScopedKinds map[string]*ScopedKind
 func (d *Domain) GetPluralKind(name string) (ret *ScopedKind, okay bool) {
 	if a, ok := d.GetKind(name); ok {
 		ret, okay = a, true
-	} else if p, e := d.Pluralize(name); e == nil {
+	} else if p := d.catalog.run.PluralOf(name); p != name {
 		ret, okay = d.GetKind(p)
 	}
 	return
