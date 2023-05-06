@@ -134,6 +134,7 @@ func (q *Query) FieldsOf(kind string) (ret []query.FieldData, err error) {
 }
 
 // returns the ancestor hierarchy, not including the kind itself
+// ex. for doors that might be: kinds, objects, things, props, openers.
 func (q *Query) KindOfAncestors(kind string) ([]string, error) {
 	return scanStrings(q.kindOfAncestors, kind)
 }

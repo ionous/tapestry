@@ -167,14 +167,11 @@ func findConflicts(db tables.Querier) (ret []conflict, err error) {
 
 func (c *Catalog) postPhase(p assert.Phase, d *Domain) (err error) {
 	switch p {
-	case assert.AncestryPhase:
-		_, err = d.ResolveKinds()
-
 	// PostFields: with the current domain looping pattern
 	// we have to hit all locals from all domains before writing
 	// and macro is after locals...
 	case assert.MacroPhase:
-		if deps, e := d.ResolveKinds(); e != nil {
+		if deps, e := d.ResolveDomainKinds(); e != nil {
 			err = e
 		} else {
 			for _, dep := range deps {
@@ -195,16 +192,15 @@ func (c *Catalog) postPhase(p assert.Phase, d *Domain) (err error) {
 			}
 		}
 	case assert.NounPhase:
-		_, err = d.ResolveNouns()
+		_, err = d.ResolveDomainNouns()
 	}
 	return
 }
 
-func (c *Catalog) WritePhase(p assert.Phase, w Writer) (err error) {
+func (c *Catalog) writePhase(p assert.Phase) (err error) {
+	w := c.writer
 	// switch or map better?
 	switch p {
-	case assert.AncestryPhase:
-		err = c.WriteKinds(w)
 	case assert.FieldPhase:
 		err = c.WriteFields(w)
 	case assert.NounPhase:
@@ -262,13 +258,14 @@ func (c *Catalog) ResolveDomains() (ret []*Domain, err error) {
 	return
 }
 
+// FIX -- its a goal to remove this function
 func (c *Catalog) ResolveKinds() (ret DependencyTable, err error) {
 	var out DependencyTable
 	if ds, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
 		for _, d := range ds {
-			if ks, e := d.ResolveKinds(); e != nil {
+			if ks, e := d.ResolveDomainKinds(); e != nil {
 				err = errutil.Append(err, e)
 			} else {
 				out = append(out, ks...)
@@ -281,6 +278,7 @@ func (c *Catalog) ResolveKinds() (ret DependencyTable, err error) {
 	return
 }
 
+// FIX -- its a goal to remove this function
 func (c *Catalog) ResolveNouns() (ret DependencyTable, err error) {
 	// fix? is there anyway to make this more "automatically" resolve domains and kinds?
 	var out DependencyTable
@@ -288,7 +286,7 @@ func (c *Catalog) ResolveNouns() (ret DependencyTable, err error) {
 		err = e
 	} else {
 		for _, d := range ds {
-			if ns, e := d.ResolveNouns(); e != nil {
+			if ns, e := d.ResolveDomainNouns(); e != nil {
 				err = e
 				break
 			} else {

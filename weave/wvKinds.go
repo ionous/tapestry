@@ -3,26 +3,9 @@ package weave
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
-
-// write the kinds in a reasonable order
-func (c *Catalog) WriteKinds(w Writer) (err error) {
-	if deps, e := c.ResolveKinds(); e != nil {
-		err = e
-	} else {
-		for _, dep := range deps {
-			k, ancestors := dep.Leaf().(*ScopedKind), dep.Strings(true)
-			if e := w.Write(mdl.Kind, k.domain.name, k.name, ancestors, k.at); e != nil {
-				err = e
-				break
-			}
-		}
-	}
-	return
-}
 
 type KindError struct {
 	Kind string

@@ -45,12 +45,13 @@ func (d *Domain) EnsureKind(name, at string) (ret *ScopedKind) {
 	return
 }
 
-// distill a tree of kinds into a set of names and their hierarchy
-func (d *Domain) ResolveKinds() (DependencyTable, error) {
+// distill a set of kinds into a set of names and their hierarchy
+func (d *Domain) ResolveDomainKinds() (DependencyTable, error) {
 	return d.resolvedKinds.resolve(func() (ret DependencyTable, err error) {
 		m := TableMaker(len(d.kinds))
 		for _, k := range d.kinds {
 			if parentName, ok := m.ResolveParent(k); ok {
+				// FIX: USE TABLE CONFLICTS INSTEAD.
 				if e := d.AddDefinition(MakeKey("kinds", k.name), k.at, parentName); e != nil {
 					err = errutil.Append(err, e)
 				}

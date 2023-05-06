@@ -75,8 +75,8 @@ func (d *Domain) EnsureNoun(name, at string) (ret *ScopedNoun) {
 }
 
 // distill the nouns from this domain into a table sorted by kind.
-func (d *Domain) ResolveNouns() (ret DependencyTable, err error) {
-	if _, e := d.ResolveKinds(); e != nil {
+func (d *Domain) ResolveDomainNouns() (ret DependencyTable, err error) {
+	if _, e := d.ResolveDomainKinds(); e != nil {
 		err = errutil.Append(err, e)
 	} else {
 		ret, err = d.resolvedNouns.resolve(func() (ret DependencyTable, err error) {

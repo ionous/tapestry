@@ -16,7 +16,7 @@ type Domain struct {
 	Requires      // other domains this needs ( can have multiple direct parents )
 	catalog       *Catalog
 	defs          Artifacts
-	kinds         ScopedKinds
+	kinds         ScopedKinds // the kinds declared in this domain
 	nouns         ScopedNouns
 	checks        asmChecks
 	resolvedKinds cachedTable

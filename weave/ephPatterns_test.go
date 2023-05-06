@@ -129,18 +129,16 @@ func TestPatternSeparateDomains(t *testing.T) {
 func expectFullResults(t *testing.T, dt *domainTest) {
 	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
+	} else if outkind, e := readKinds(cat.db); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(outkind, []string{
+		"a:k:",
+		"a:patterns:",
+		"a:p:patterns",
+	}); len(diff) > 0 {
+		t.Log("got:", pretty.Sprint(outkind))
+		t.Fatal(diff)
 	} else {
-		outkind := testOut{mdl.Kind}
-		if e := cat.WriteKinds(&outkind); e != nil {
-			t.Fatal(e)
-		} else if diff := pretty.Diff(outkind[1:], testOut{
-			"a:k::x",
-			"a:patterns::x",
-			"a:p:patterns:x",
-		}); len(diff) > 0 {
-			t.Log("got:", pretty.Sprint(outkind))
-			t.Fatal(diff)
-		}
 		outfields := testOut{mdl.Field}
 		if e := cat.WriteFields(&outfields); e != nil {
 			t.Fatal(e)
@@ -299,17 +297,15 @@ func TestPatternNoResults(t *testing.T) {
 	)
 	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
+	} else if outkind, e := readKinds(cat.db); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(outkind, []string{
+		"a:patterns:",
+		"a:p:patterns",
+	}); len(diff) > 0 {
+		t.Log("got:", pretty.Sprint(outkind))
+		t.Fatal(diff)
 	} else {
-		outkind := testOut{mdl.Kind}
-		if e := cat.WriteKinds(&outkind); e != nil {
-			t.Fatal(e)
-		} else if diff := pretty.Diff(outkind[1:], testOut{
-			"a:patterns::x",
-			"a:p:patterns:x",
-		}); len(diff) > 0 {
-			t.Log("got:", pretty.Sprint(outkind))
-			t.Fatal(diff)
-		}
 		outfields := testOut{mdl.Field}
 		if e := cat.WriteFields(&outfields); e != nil {
 			t.Fatal(e)
