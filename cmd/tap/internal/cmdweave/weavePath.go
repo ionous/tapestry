@@ -45,6 +45,8 @@ func WeavePath(srcPath, outFile string) (err error) {
 				err = e
 			} else if e := importStoryFiles(cat, srcPath); e != nil {
 				err = e
+			} else if e := cat.EndDomain(); e != nil {
+				err = e
 			} else if len(cat.Errors) > 0 {
 				err = errutil.New(cat.Errors)
 			} else {

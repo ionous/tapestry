@@ -3,21 +3,25 @@ package weave
 import (
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/weave/eph"
 	"github.com/kr/pretty"
 )
 
 // test the kind mapping to kind list resolution
-// probably didnt have to be exhaustive because its built on the dependency system which is already tested
 func TestKindTree(t *testing.T) {
-	ks := makeKinds(t,
+	dt := newTest(t.Name())
+	defer dt.Close()
+	dt.makeDomain(dd("a"), makeKinds(
 		"a", "",
 		"b", "a",
 		"c", "b",
 		"e", "b",
 		"f", "e",
 		"d", "c",
-	)
-	if ks, e := ks.ResolveKinds(); e != nil {
+	)...)
+	if cat, e := dt.Assemble(); e != nil {
+		t.Fatal(e)
+	} else if ks, e := cat.ResolveKinds(); e != nil {
 		t.Fatal(e)
 	} else {
 		out := testOut{""}
@@ -39,18 +43,22 @@ func TestKindTree(t *testing.T) {
 
 // this is considered okay - it's in the same tree
 func TestKindDescendants(t *testing.T) {
-	ks := makeKinds(t,
+	dt := newTest(t.Name())
+	defer dt.Close()
+	dt.makeDomain(dd("a"), makeKinds(
 		"a", "",
 		"b", "a",
 		"c", "a",
 		"c", "b",
-	)
-	if res, e := ks.ResolveKinds(); e != nil {
-		t.Log(res)
+	)...)
+	if cat, e := dt.Assemble(); e != nil {
+		t.Fatal(e)
+	} else if ks, e := cat.ResolveKinds(); e != nil {
 		t.Fatal(e)
 	} else {
+
 		out := testOut{""}
-		if e := res.WriteTable(&out, "", true); e != nil {
+		if e := ks.WriteTable(&out, "", true); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out[1:], testOut{
 			"a::x",
@@ -66,12 +74,14 @@ func TestKindDescendants(t *testing.T) {
 // FIX: disabled; uses the catalog runtime now when finding plural fallbacks
 // ( which doesnt exist here, causing a panic )
 func xTestKindMissing(t *testing.T) {
-	ks := makeKinds(t,
+	dt := newTest(t.Name())
+	defer dt.Close()
+	dt.makeDomain(dd("a"), makeKinds(
 		"c", "d",
 		"b", "a",
 		"a", "",
-	)
-	if _, e := ks.ResolveKinds(); e == nil {
+	)...)
+	if _, e := dt.Assemble(); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok:", e)
@@ -79,31 +89,29 @@ func xTestKindMissing(t *testing.T) {
 }
 
 func TestKindSingleParent(t *testing.T) {
-	ks := makeKinds(t,
+	dt := newTest(t.Name())
+	defer dt.Close()
+	dt.makeDomain(dd("a"), makeKinds(
 		"a", "",
 		"b", "a",
 		"c", "a",
 		"d", "b",
 		"d", "c",
-	)
-	if _, e := ks.ResolveKinds(); e == nil {
+	)...)
+	if _, e := dt.Assemble(); e == nil {
 		t.Fatal("expected error")
 	} else {
 		t.Log("ok:", e)
 	}
 }
 
-func makeKinds(t *testing.T, strs ...string) *Domain {
-	// fake a domain to hold the kinds...
-	d := Domain{Requires: Requires{name: "kinds", at: t.Name()}}
-	if _, e := d.Resolve(); e != nil { // resolve the domain
-		panic(e)
-	}
-	for i, cnt := 0, len(strs); i < cnt; i += 2 {
-		a := d.EnsureKind(strs[i], "x")
-		if b := strs[i+1]; len(b) > 0 {
-			a.AddRequirement(b)
+func makeKinds(strs ...string) []eph.Ephemera {
+	kinds := make([]eph.Ephemera, len(strs)/2)
+	for i := range kinds {
+		kinds[i] = &eph.Kinds{
+			Kind:     strs[i*2+0],
+			Ancestor: strs[i*2+1],
 		}
 	}
-	return &d
+	return kinds
 }

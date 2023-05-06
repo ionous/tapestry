@@ -17,12 +17,13 @@ import (
 type Catalog struct {
 	domains         map[string]*Domain
 	processing      DomainStack
+	pendingDomains  []*Domain
 	resolvedDomains cachedTable
 	Errors          []error
 	cursor          string
 	writer          Writer
 	run             rt.Runtime
-	db              *sql.DB
+	db              *tables.Cache
 
 	// sometimes the importer needs to define a singleton like type or instance
 	oneTime     map[string]bool
@@ -49,7 +50,8 @@ func NewCatalog(db *sql.DB) *Catalog {
 		oneTime:     make(map[string]bool),
 		autoCounter: make(Counters),
 		cursor:      "x", // fix
-		db:          db,
+		db:          tables.NewCache(db),
+		domains:     make(map[string]*Domain),
 		writer:      mdl.Writer(ExecWriter(db).Write),
 		run: qna.NewRuntimeOptions(
 			log.Writer(),
@@ -59,18 +61,10 @@ func NewCatalog(db *sql.DB) *Catalog {
 	}
 }
 
-func (c *Catalog) BeginDomain(name string, requires []string) (err error) {
-	at := c.cursor
-	if n, ok := UniformString(name); !ok {
-		err = InvalidString(name)
-	} else if reqs, e := UniformStrings(requires); e != nil {
-		err = e // transform all the names first to determine any errors
-	} else if d, e := c.EnsureDomain(n, at, reqs...); e != nil {
-		err = e
-	} else {
-		c.processing.Push(d)
-	}
-	return
+// return the uniformly named domain ( if it exists )
+func (c *Catalog) GetDomain(n string) (*Domain, bool) {
+	d, ok := c.domains[n]
+	return d, ok
 }
 
 func (c *Catalog) EndDomain() (err error) {
@@ -82,120 +76,35 @@ func (c *Catalog) EndDomain() (err error) {
 	return
 }
 
-// return the uniformly named domain ( if it exists )
-func (c *Catalog) GetDomain(n string) (*Domain, bool) {
-	d, ok := c.domains[n]
-	return d, ok
-}
-
-// fix: this should be private; need to fix check first
-// return the uniformly named domain ( creating it if necessary )
-func (c *Catalog) EnsureDomain(n, at string, reqs ...string) (ret *Domain, err error) {
-	// find or create the domain
-	if d, ok := c.domains[n]; ok {
-		ret = d
+// calls to schedule() between begin/end domain write to this newly declared domain.
+func (c *Catalog) BeginDomain(name string, requires []string) (err error) {
+	if n, ok := UniformString(name); !ok {
+		err = InvalidString(name)
+	} else if reqs, e := UniformStrings(requires); e != nil {
+		err = e // transform all the names first to determine any errors
 	} else {
-		d = &Domain{Requires: Requires{name: n, at: at}, catalog: c}
-		if c.domains == nil {
-			c.domains = map[string]*Domain{n: d}
-		} else {
-			c.domains[n] = d
+		d := c.ensureDomain(n, c.cursor)
+		if d, ok := c.processing.Top(); ok {
+			reqs = append(reqs, d.name) // domains implicitly depend on the current domain
 		}
-		ret = d
-	}
-	// add the passed requirements
-	// ( it filters for uniqueness )
-	for _, req := range reqs {
-		if ret.name == req {
-			err = errutil.New("domain depends on itself", ret.name)
-			return // fix: early return
+		if e := d.addDependencies(reqs); e != nil {
+			err = e
 		} else {
-			ret.AddRequirement(req)
-		}
-	}
-	// we are dependent on the parent domain too
-	// ( adding it last keeps it closer to the right side of the parent list )
-	if p, ok := c.processing.Top(); ok {
-		if ret.name == p.name {
-			err = errutil.New("domain depends on itself", ret.name)
-			return // fix: early return
-		} else {
-			ret.AddRequirement(p.name)
+			c.processing.Push(d)
 		}
 	}
 	return
 }
 
-var TempSplit = assert.PluralPhase + 1
-
-// walk the domains and run the commands remaining in their queues
-func (c *Catalog) AssembleCatalog() (err error) {
-	// ds has the "shallowest" domains first, and the most derived ( "deepest" ) domains last.
-	if ds, e := c.ResolveDomains(); e != nil {
-		err = e
+// find or create the domain
+func (c *Catalog) ensureDomain(n, at string) (ret *Domain) {
+	if d, ok := c.domains[n]; ok {
+		ret = d
 	} else {
-		// fix? create a dev/null writer instead of testing for nil?
-		if c.writer != nil {
-			// wip: trying to unwind the writes so that we write one domain at a time
-			for _, deps := range ds {
-				d := deps.Leaf().(*Domain) // panics if it fails
-				if e := d.WriteDomain(c.writer); e != nil {
-					err = e
-					return // FIX
-				}
-				if _, e := c.run.ActivateDomain(d.name); e != nil {
-					err = e
-					return
-				}
-				// every phase inside this domain:
-				for p := assert.Phase(0); p < TempSplit; p++ {
-					switch p {
-					// fix: this isnt supposed to be tied particularly to the plural phase.
-					case assert.PluralPhase:
-						if e := c.findConflicts(); e != nil {
-							err = e
-							return
-						}
-					}
-					c.processing.Push(d)
-					ctx := Weaver{d: d, phase: p, Runtime: c.run}
-					if e := d.runPhase(&ctx); e != nil {
-						err = e
-						return // FIX
-					}
-					c.processing.Pop()
-				}
-			}
-		}
-
-		// FIX: want to add extensions to the db ( fields of kinds, etc. ) as we go.
-		// DONT want to walk across all domains first.
-		// walks across all domains for each phase to support things like fields:
-		// which exist per kind but which can be added to by multiple domains.
-	Loop:
-		for p := TempSplit; p < assert.NumPhases; p++ {
-			for _, deps := range ds {
-				d := deps.Leaf().(*Domain) // panics if it fails
-				c.processing.Push(d)
-				ctx := Weaver{d: d, phase: p, Runtime: c.run}
-				if e := d.runPhase(&ctx); e != nil {
-					err = e
-					break Loop
-				} else if e := c.postPhase(p, d); e != nil {
-					err = e
-					break Loop
-				}
-				c.processing.Pop()
-			}
-		}
-		if err == nil && c.writer != nil {
-			for p := assert.Phase(0); p < assert.NumPhases; p++ {
-				if e := c.WritePhase(p, c.writer); e != nil {
-					err = e
-					break
-				}
-			}
-		}
+		d = &Domain{Requires: Requires{name: n, at: at}, catalog: c}
+		c.domains[n] = d
+		c.pendingDomains = append(c.pendingDomains, d)
+		ret = d
 	}
 	return
 }
@@ -220,7 +129,7 @@ func (c *Catalog) findConflicts() (err error) {
 	return
 }
 
-func findConflicts(db *sql.DB) (ret []conflict, err error) {
+func findConflicts(db tables.Querier) (ret []conflict, err error) {
 	if rows, e := db.Query(
 		`select 'plural', a.domain, a.at, a.many, a.one
 			from active_plurals as a 
@@ -236,7 +145,7 @@ func findConflicts(db *sql.DB) (ret []conflict, err error) {
 			and a.oneWord == b.oneWord 
 			and a.otherWord != b.otherWord
 			`); e != nil {
-		err = e
+		err = errutil.New("find conflicts", e)
 	} else {
 		var cat, domain, key, value string
 		var at sql.NullString
@@ -330,16 +239,27 @@ func (c *Catalog) WritePhase(p assert.Phase, w Writer) (err error) {
 	return
 }
 
+// FIX -- its a goal to remove this function
+// in theory the assembly should walk all domains in the proper order
+// and assemble them one at a time, so nobody else needs to know the domain order.
+//
 // work out the hierarchy of all the domains, and return them in a list.
 // the list has the "shallowest" domains first, and the most derived ( "deepest" ) domains last.
-func (c *Catalog) ResolveDomains() (DependencyTable, error) {
-	return c.resolvedDomains.resolve(func() (ret DependencyTable, err error) {
-		m := TableMaker(len(c.domains))
-		for _, d := range c.domains {
-			m.ResolveDep(d) // accumulates any errors
-		}
-		return m.GetSortedTable()
-	})
+func (c *Catalog) ResolveDomains() (ret []*Domain, err error) {
+	if rows, e := c.db.Query(`select domain from mdl_domain order by path`); e != nil {
+		err = errutil.New("resolve domains", e)
+	} else {
+		var name string
+		err = tables.ScanAll(rows, func() (err error) {
+			if d, ok := c.GetDomain(name); !ok {
+				err = errutil.New("no such domain", name)
+			} else {
+				ret = append(ret, d)
+			}
+			return
+		}, &name)
+	}
+	return
 }
 
 func (c *Catalog) ResolveKinds() (ret DependencyTable, err error) {
@@ -347,8 +267,7 @@ func (c *Catalog) ResolveKinds() (ret DependencyTable, err error) {
 	if ds, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
-		for _, dep := range ds {
-			d := dep.Leaf().(*Domain)
+		for _, d := range ds {
 			if ks, e := d.ResolveKinds(); e != nil {
 				err = errutil.Append(err, e)
 			} else {
@@ -368,8 +287,7 @@ func (c *Catalog) ResolveNouns() (ret DependencyTable, err error) {
 	if ds, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
-		for _, dep := range ds {
-			d := dep.Leaf().(*Domain)
+		for _, d := range ds {
 			if ns, e := d.ResolveNouns(); e != nil {
 				err = e
 				break

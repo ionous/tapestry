@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -25,9 +24,10 @@ type Domain struct {
 	rules         map[string]Rulesets  // pattern name to rules for that pattern
 	relatives     map[string]Relatives // relation name to pairs of nouns
 
-	//
+	// a domain that's fully processed will be in some final state
 	currPhase assert.Phase
 
+	// scheduled assertions
 	scheduling [assert.NumPhases][]memento
 }
 
@@ -61,6 +61,8 @@ func (d *Domain) schedule(at string, when assert.Phase, what func(*Weaver) error
 	return
 }
 
+// return the domain hierarchy: the ancestors ending just before the domain itself.
+// direct parents may not be contiguous ( depending on whether their ancestors overlap. )
 func (d *Domain) Resolve() (ret Dependencies, err error) {
 	if len(d.at) == 0 {
 		err = domainError{d.name, errutil.New("never defined", d.name)}
@@ -188,13 +190,18 @@ func (d *Domain) checkRivals(ds Dependencies, allowDupes bool) (err error) {
 	return
 }
 
-// for each domain in the passed list, output its full ancestry tree ( or just its parents )
-func (d *Domain) WriteDomain(w Writer) (err error) {
-	if dep, e := d.Resolve(); e != nil {
-		err = e
+func (d *Domain) addDependencies(reqs []string) (err error) {
+	if d.status == xResolved {
+		err = errutil.Fmt("domain %q already resolved, can't add new dependencies", d.name)
 	} else {
-		name, row, at := d.Name(), dep.Strings(true), d.OriginAt()
-		err = w.Write(mdl.Domain, name, row, at)
+		for _, req := range reqs {
+			if d.name == req {
+				err = errutil.Fmt("circular reference: %s can't depend on itself", req)
+				break
+			} else {
+				d.Requires.AddRequirement(req)
+			}
+		}
 	}
 	return
 }

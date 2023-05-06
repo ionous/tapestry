@@ -19,8 +19,7 @@ func (c *Catalog) WriteRules(w Writer) (err error) {
 		// the rules for latter domains are more important than earlier domains so we put them first.
 		// ( although sorting by the app, using materialized path or runtime domain sorting might be better )
 		for rev := len(ds) - 1; rev >= 0; rev-- {
-			deps := ds[rev]
-			d := deps.Leaf().(*Domain)
+			d := ds[rev]
 			// rules are stored by pattern name
 			// we sort to give some consistency, although the order shouldnt really matter.
 			names := make([]string, 0, len(d.rules))

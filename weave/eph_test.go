@@ -122,18 +122,13 @@ func (dt *domainTest) makeDomain(names []string, add ...eph.Ephemera) {
 	})
 }
 
-func (dt *domainTest) Dequeue() (err error) {
+func (dt *domainTest) Assemble() (ret *Catalog, err error) {
 	for _, el := range dt.queue {
 		if e := el.Assert(dt.cat); e != nil {
 			err = e
 			break
 		}
 	}
-	return
-}
-
-func (dt *domainTest) Assemble() (ret *Catalog, err error) {
-	err = dt.Dequeue()
 	if err == nil {
 		err = dt.cat.AssembleCatalog()
 	}

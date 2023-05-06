@@ -13,8 +13,7 @@ func (c *Catalog) WriteDirectives(w Writer) (err error) {
 	if deps, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
-		for _, dep := range deps {
-			d := dep.Leaf().(*Domain)
+		for _, d := range deps {
 			if e := d.WriteDirectives(w); e != nil {
 				err = e
 				break

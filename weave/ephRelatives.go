@@ -16,8 +16,7 @@ func (c *Catalog) WritePairs(w Writer) (err error) {
 	} else if ds, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
-		for _, deps := range ds {
-			d := deps.Leaf().(*Domain)
+		for _, d := range ds {
 			// pairs are stored by relation name
 			// we sort to give some consistency, the order shouldnt really matter.
 			names := make([]string, 0, len(d.relatives))

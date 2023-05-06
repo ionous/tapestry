@@ -1,7 +1,6 @@
 package weave
 
-// DomainStack - keep track of the current block while marshaling.
-// ( so that end block can be called. )
+// DomainStack - tracks the current target of calls to schedule().
 type DomainStack []*Domain
 
 func (k *DomainStack) Push(b *Domain) {
