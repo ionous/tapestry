@@ -1,6 +1,9 @@
 package weave
 
-import "git.sr.ht/~ionous/tapestry/tables"
+import (
+	"git.sr.ht/~ionous/tapestry/tables"
+	"github.com/ionous/errutil"
+)
 
 // database/sql like interface
 type Writer interface {
@@ -10,15 +13,18 @@ type Writer interface {
 // turn a function into a writer
 type WrappedWriter func(q string, args ...interface{}) error
 
-func (w WrappedWriter) Write(q string, args ...interface{}) error {
-	return w(q, args...)
+func (w WrappedWriter) Write(q string, args ...interface{}) (err error) {
+	if e := w(q, args...); e != nil {
+		err = errutil.New("writing", q, e)
+	}
+	return
 }
 
 // turn a transaction, etc into a writer.
 func ExecWriter(db tables.Executer) WrappedWriter {
 	return func(q string, args ...interface{}) (err error) {
 		if _, e := db.Exec(q, args...); e != nil {
-			err = e
+			err = errutil.New("exec", q, e)
 		}
 		return
 	}

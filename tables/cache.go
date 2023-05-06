@@ -50,25 +50,28 @@ func (c *Cache) Must(q string, args ...interface{}) {
 
 func (c *Cache) Exec(q string, args ...interface{}) (ret sql.Result, err error) {
 	if stmt, e := c.prep(q); e != nil {
-		err = e
+		err = errutil.New("Prep error", q, e)
+	} else if res, e := stmt.Exec(args...); e != nil {
+		err = errutil.New("Query error", q, e)
 	} else {
-		ret, err = stmt.Exec(args...)
+		ret = res
 	}
 	return
 }
 
 func (c *Cache) Query(q string, args ...interface{}) (ret *sql.Rows, err error) {
 	if stmt, e := c.prep(q); e != nil {
-		err = e
+		err = errutil.New("Prep error", q, e)
 	} else if rows, e := stmt.Query(args...); e != nil {
-		err = errutil.New("Query error", e)
+		err = errutil.New("Query error", q, e)
 	} else {
 		ret = rows
 	}
 	return
 }
 
-// QueryRow mimics db.QueryRow but returns Scanner instead of Row
+// QueryRow assumes a single result row.
+// It mimics db.QueryRow but returns Scanner instead of Row
 // so that we can defer any errors encountered while preparing the cached statement.
 func (c *Cache) QueryRow(q string, args ...interface{}) (ret RowScanner) {
 	if stmt, e := c.prep(q); e != nil {
@@ -81,11 +84,11 @@ func (c *Cache) QueryRow(q string, args ...interface{}) (ret RowScanner) {
 
 func (c *Cache) prep(q string) (ret *sql.Stmt, err error) {
 	if c.db == nil {
-		err = errutil.New("cache not initialized")
+		err = errutil.New("Cache not initialized")
 	} else if stmt := c.cache[q]; stmt != nil {
 		ret = stmt
 	} else if stmt, e := c.db.Prepare(q); e != nil {
-		err = errutil.New("Prepare error:", e)
+		err = errutil.New("Prep error", e)
 	} else {
 		c.cache[q] = stmt
 		ret = stmt
