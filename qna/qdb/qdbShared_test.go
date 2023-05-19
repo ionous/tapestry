@@ -15,11 +15,9 @@ func NewQueryTest(db *sql.DB) (ret *QueryTest, err error) {
 	if q, e := NewQueries(db, false); e != nil {
 		err = e
 	} else if scan, e := db.Prepare(
-		`select md.domain || ':' || rd.active
-		from run_domain rd
-		join mdl_domain md
-			on (rd.domain=md.rowid)
-		where rd.active > 0
+		`select domain || ':' || active
+		from run_domain
+		where active > 0
 		`); e != nil {
 		err = e
 	} else {
@@ -28,9 +26,9 @@ func NewQueryTest(db *sql.DB) (ret *QueryTest, err error) {
 	return
 }
 
-// For testing: activate without deleting
-func (q *QueryTest) InnerActivate(name string, act int) (ret []string, err error) {
-	if _, e := q.domainActivation.Exec(name, act); e != nil {
+// For testing: returns a list of active domains and their activation count.
+func (q *QueryTest) InnerActivate(name string) (ret []string, err error) {
+	if _, e := q.ActivateDomain(name); e != nil {
 		err = e
 	} else if els, e := scanStrings(q.scan); e != nil {
 		err = errutil.New("couldnt scan", name, e)

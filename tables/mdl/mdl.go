@@ -12,8 +12,8 @@ var Assign = tables.Insert("mdl_assign", "domain", "kind", "field", "value")
 // author tests of stories
 var Check = tables.Insert("mdl_check", "domain", "name", "value", "affinity", "prog", "at")
 
-// domain name and materialized parents separated by commas
-var Domain = tables.Insert("mdl_domain", "domain", "path", "at")
+// pairs of domain name and (domain) dependencies
+var Domain = tables.Insert("mdl_domain", "domain", "requires", "at")
 
 // fix? the domain exists to uniquely identify the kind,
 // it's not the (sub)domain in which the field was declared.

@@ -46,11 +46,6 @@ limit 23) `, key, arg)
 // select the id where all of the parts have been consumed, or if there were no parts (the root) select the empty string.
 const materialized = `(select ids from parts where length(str) == 0 union all select '' limit 1)`
 
-// selects from mdl_<key> where <key>=?<arg>
-func idOf(key string, arg int) string {
-	return fmt.Sprintf("(select rowid from mdl_%[1]s where %[1]s = ?%[2]d)", key, arg)
-}
-
 func insert(name string, args ...string) string {
 	var ins strings.Builder
 	ins.WriteString("insert into ")
@@ -81,33 +76,31 @@ func insert(name string, args ...string) string {
 	return ins.String()
 }
 
-// select the id of a key ( ex. mdl_kind.kind ) indexed by domain name d and key name n
-func simpleScope(key string, d, n int) string {
+// from a table called mdl_<name>
+// with primary keys in column <name>,
+// select the rowid of the primary key specified by argument n
+// and the domain name matching the argument specified by d.
+func simpleScope(name string, d, n int) string {
 	return fmt.Sprintf(
-		`(select key.rowid 
-		from mdl_%[1]s key
-		join mdl_domain md
-		on (key.domain=md.rowid)
-		where (md.domain=?%[2]d) and (key.%[1]s=?%[3]d))`, key, d, n)
+		`(select table.rowid 
+		from mdl_%[1]s table
+		where table.domain = ?%[2]d
+		and table.%[1]s = ?%[3]d)`,
+		name, d, n)
 }
 
-// same as simple scope, but the domain d can be a child of the key's domain
-// so to find the correct key, we have to look through all domains
-// where its materialized path contains the key's domain
-//
-//	ex. does path ( ",3,2,1," ) contain ( ",3," )
-//	or, at the root ( ",1,," ) contain ( ",1," ).
-//
-// the prefixed and suffix commas are to avoid partial matches:
-//
-//	ex. "21," against "1," or ",12" against ",1"
-func derivedScope(key string, d, n int) string {
+// same as simple scope, but the domain d can be a parent of the key's domain.
+// so starting with domain d, we look upwards through its parents
+// to find where the key ( ex. kind ) was actually declared
+// and then we can record that kind's id.
+func derivedScope(name string, d, n int) string {
 	return fmt.Sprintf(
-		`(select key.rowid
-		from mdl_%[1]s key
+		`(select table.rowid
+		from mdl_%[1]s table
 		join mdl_domain md
-		where (key.%[1]s = ?%[3]d)
-		and instr(',' || md.rowid || ',' || md.path, ',' || key.domain || ','))`, key, d, n)
+		where (table.%[1]s = ?%[3]d)
+		and instr(',' || md.rowid || ',' || md.path, ',' || table.domain || ','))`,
+		name, d, n)
 }
 
 // if i have something defined in domain 2 it should be visible in 3
@@ -125,24 +118,9 @@ func arg(i int) string { return "?" + strconv.Itoa(i) }
 // the key of the table is the original, simplified insert statement
 // the value is a more complex statement usually involving selects
 var idWriter = map[string]string{
-	// turn domain name into an id
-	Check: insert("mdl_check",
-		"domain", idOf("domain", 1),
-		"name", unchanged,
-		"value", unchanged,
-		"affinity", unchanged,
-		"prog", unchanged,
-		"at", unchanged,
-	),
-	// turn the materialized path of domain ancestor names into ancestor idOfs
-	Domain: materialize("domain", 2) +
-		insert("mdl_domain",
-			"domain", unchanged,
-			"path", materialized,
-			"at", unchanged,
-		),
-	// domain name + kind name select a specific kind entry.
-	// domain is not written b/c fields exist per kind, not per domain.
+
+	// domain name + kind name selects a specific kind entry.
+	// mdl_field( kind int, field text, affinity text, type int, at text )
 	Field: insert("mdl_field",
 		"kind", simpleScope("kind", 1, 2),
 		"field", arg(3),
@@ -150,55 +128,47 @@ var idWriter = map[string]string{
 		"type", derivedScope("kind", 1, 5),
 		"at", arg(6),
 	),
-	// turn domain name into an id
-	Grammar: insert("mdl_grammar",
-		"domain", idOf("domain", 1),
-		"name", unchanged,
-		"prog", unchanged,
-		"at", unchanged,
-	),
+
 	// turn domain name into an id, and materialize the ancestor path
 	Kind: materialize("kind", 3) +
 		insert("mdl_kind",
-			"domain", idOf("domain", 1),
+			"domain", unchanged,
 			"kind", unchanged,
 			"path", materialized,
 			"at", unchanged,
 		),
 	// turn domain, kind, field into ids, associated with the local var's initial assignment.
 	// domain and kind become redundant b/c fields exist at the scope of the kind.
-	Assign: string(`with parts(did, domain, kid, kind, fid, field) as (
-		select md.rowid, md.domain, mk.rowid, mk.kind, mf.rowid, mf.field
+	Assign: string(`with parts(domain, kid, kind, fid, field) as (
+		select mk.domain, mk.rowid, mk.kind, mf.rowid, mf.field
 		from mdl_field mf
 		join mdl_kind mk
-			on (mk.rowid = mf.kind)
-		join mdl_domain md
-			on (mk.domain = md.rowid))
+			on (mk.rowid = mf.kind))
 		insert into mdl_assign(field, value)
 		select fid, ?4
 		from parts where domain=?1 and kind=?2 and field=?3`,
 	),
 	Name: insert("mdl_name",
-		"domain", idOf("domain", 1), // currently redundant, names have the same scope as their noun.
+		"domain", unchanged, // currently redundant, names have the same scope as their noun.
 		"noun", simpleScope("noun", 1, 2),
 		"name", unchanged,
 		"rank", unchanged,
 		"at", unchanged,
 	),
 	Noun: insert("mdl_noun",
-		"domain", idOf("domain", 1), // domain where the noun was declared
+		"domain", unchanged, // the domain of the noun can differ from the kind
 		"noun", unchanged,
 		"kind", derivedScope("kind", 1, 3),
 		"at", unchanged,
 	),
 	Opposite: insert("mdl_rev",
-		"domain", idOf("domain", 1),
+		"domain", unchanged,
 		"oneWord", unchanged,
 		"otherWord", unchanged,
 		"at", unchanged,
 	),
 	Pair: insert("mdl_pair",
-		"domain", idOf("domain", 1), // domain where the pair was declared
+		"domain", unchanged, // domain where the pair was declared
 		"relKind", derivedScope("kind", 1, 2), // we point to the kind table not the relation table.
 		"oneNoun", derivedScope("noun", 1, 3),
 		"otherNoun", derivedScope("noun", 1, 4),
@@ -211,12 +181,6 @@ var idWriter = map[string]string{
 		"labels", arg(3), // fix? this are comma-separated field names, should it be field ids?
 		"result", arg(4), // fix? this is a field, should it be a field id?
 	),
-	Plural: insert("mdl_plural",
-		"domain", idOf("domain", 1),
-		"many", unchanged,
-		"one", unchanged,
-		"at", unchanged,
-	),
 	Rel: insert("mdl_rel",
 		"relKind", simpleScope("kind", 1, 2),
 		"oneKind", derivedScope("kind", 1, 3),
@@ -225,7 +189,7 @@ var idWriter = map[string]string{
 		"at", arg(6),
 	),
 	Rule: insert("mdl_rule",
-		"domain", idOf("domain", 1), // domain where the rule was declared
+		"domain", unchanged, // domain where the rule was declared
 		"kind", derivedScope("kind", 1, 2),
 		"target", derivedScope("kind", 1, 3),
 		"phase", unchanged,
@@ -238,11 +202,9 @@ var idWriter = map[string]string{
 	// to get to the field id, we have to look at all possible fields for the noun.
 	// given the kind of the noun, accept all fields who's kind is in its materialized path.
 	// fix? some values are references to objects in the form "#domain::noun" -- should the be changed to ids?
-	Value: string(`with parts(did, domain, nin, noun, fid, field) as (
-			select md.rowid, md.domain, mn.rowid, mn.noun, mf.rowid, mf.field
+	Value: string(`with parts(domain, nin, noun, fid, field) as (
+			select mk.domain, mn.rowid, mn.noun, mf.rowid, mf.field
 			from mdl_noun mn
-			join mdl_domain md
-				on (mn.domain = md.rowid)
 			join mdl_kind mk
 				on (mn.kind = mk.rowid)
 			left join mdl_field mf

@@ -171,10 +171,7 @@ func TestQueries(t *testing.T) {
 	} else if domainPoke, e := db.Prepare(
 		// turn on / off a domain regardless of hierarchy
 		`insert or replace into run_domain(domain, active)
-			select md.rowid as domain, ?2
-			from mdl_domain md 
-			where md.domain = ?1 
-			limit 1`,
+			values( ?1, ?2 )`,
 	); e != nil {
 		t.Fatal(e)
 	} else if _, e := domainPoke.Exec(domain, true); e != nil {
@@ -252,8 +249,8 @@ func TestQueries(t *testing.T) {
 		kind, kind, tables.ONE_TO_MANY,
 	}); len(diff) > 0 {
 		t.Fatal(got, diff)
-	} else */if prev, e := q.ActivateDomain(subDomain); e != nil || len(prev) > 0 {
-		t.Fatal("ActivateDomain", prev, e) // enable the sub domain again to get reasonable pairs
+	} else */if _, e := q.ActivateDomain(subDomain); e != nil {
+		t.Fatal("ActivateDomain", e) // enable the sub domain again to get reasonable pairs
 		// note: we never previously fully activated a domain, so prev is empty.
 	} else if rel, e := q.RelativesOf(relation, "table"); e != nil ||
 		len(rel) != 2 || rel[0] != "empire_apple" || rel[1] != "apple" {

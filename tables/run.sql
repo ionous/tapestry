@@ -1,25 +1,38 @@
-/* for saving, restoring a player's game session. */
+/* 
+ * for saving, restoring a player's game session. 
+ * a global application active count increases monotonically 
+ * for every request to activate any domain.
+ * a particular domain is in scope when its own active value is non-zero; 
+ * its value gets reset to zero when the domain falls out of scope.
+ */
 create table if not exists 
-	run_domain( domain int, active int, primary key( domain )); 
+	run_domain( domain text, active int, primary key( domain )); 
 
 /* we dont need an "active" -- we can join against run_domain, or write 0 to domain to disable a pair. */
 create table if not exists 
-	run_pair( domain int, relKind int, oneNoun int, otherNoun int, unique( relKind, oneNoun, otherNoun ) ); 
+	run_pair( domain text, relKind int, oneNoun int, otherNoun int, unique( relKind, oneNoun, otherNoun ) ); 
 
 /**
- * find the id and name of all active domains
- * path isnt really needed because any parts of an activated domain are themselves individually active.
+ * the set of active domain names
  */
 create view if not exists
 active_domains as 
-select md.rowid as domain, md.domain as name
+select * 
 from run_domain rd 
-join mdl_domain md 
-	on rd.active > 0 and rd.domain = md.rowid;
+where rd.active > 0;
+
+/**
+ * the set of active domain names
+ */
+create view if not exists
+active_domains as 
+select * 
+from run_domain rd 
+where rd.active > 0;
 
 create view if not exists
 active_kinds as 
-select ds.name as domain, mk.rowid as kind, mk.kind as name, mk.path
+select ds.domain, mk.rowid as kind, mk.kind as name, mk.path
 from active_domains ds
 join mdl_kind mk 
 	using (domain);
@@ -28,21 +41,21 @@ join mdl_kind mk
 * the domain name is a nod towards needing the domain name to fully scope the noun */ 
 create view if not exists
 active_nouns as 
-select ds.name as domain, mn.rowid as noun, mn.noun as name, mn.kind
+select ds.domain, mn.rowid as noun, mn.noun as name, mn.kind
 from active_domains ds
 join mdl_noun mn 
 	using (domain);
 
 create view if not exists
 active_plurals as 
-select ds.name as domain, mp.many, mp.one, mp.at
+select ds.domain, mp.many, mp.one, mp.at
 from active_domains ds
 join mdl_plural mp 
 	using (domain);	
 
 create view if not exists
 active_rev as 
-select ds.name as domain, mp.oneWord, mp.otherWord, mp.at
+select ds.domain, mp.oneWord, mp.otherWord, mp.at
 from active_domains ds
 join mdl_rev mp 
 	using (domain);	

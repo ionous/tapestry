@@ -14,9 +14,11 @@ import (
 // Read various data from the play database.
 type Query struct {
 	db *sql.DB
-	domainActivation,
-	domainScope,
+	domainActivate,
+	domainChange,
+	domainDeactivate,
 	domainDelete,
+	domainScope,
 	checks,
 	fieldsOf,
 	kindOfAncestors,
@@ -38,8 +40,8 @@ type Query struct {
 	relativesOf,
 	rulesFor *sql.Stmt
 	//
-	domain     string // name of the most recently activated domain ( for scoping new run_pair entries )
-	activation int    // number of domain activation requests ( to find new domains in run_domain )
+	domain     string
+	activation int // number of domain activation requests ( to find new domains in run_domain )
 }
 
 func (q *Query) IsDomainActive(name string) (okay bool, err error) {
@@ -53,54 +55,75 @@ func (q *Query) IsDomainActive(name string) (okay bool, err error) {
 
 // changing domains can establish new relations ( abandoning now conflicting ones )
 // and cause nouns to fall out of scope
+// returns the previous domain name
 func (q *Query) ActivateDomain(name string) (ret string, err error) {
 	if name == q.domain {
 		ret = q.domain
 	} else if tx, e := q.db.Begin(); e != nil {
 		err = e
 	} else if len(name) == 0 {
+		was := q.domain
 		q.domain = ""
-		q.activation = q.activation + 1
-		err = resetDomain(q.db, true)
-	} else {
-		// register the new scope(s)
-		act := q.activation + 1
-		if res, e := q.domainActivation.Exec(name, act); e != nil {
-			err = e
-		} else if cnt, e := res.RowsAffected(); e != nil {
-			err = e
-		} else if cnt == 0 {
-			err = errutil.New("failed to activate domain", name)
-		} else if _, e := q.domainDelete.Exec(); e != nil {
-			// optional, delete pairs of nouns that fell out of scope
-			// alt: join run_pair requests with domain_activate
-			// ( would mean that "relate changes" is probably doing more work clearing old relations )
+		q.activation += 1
+		if e := resetDomain(q.db, true); e != nil {
 			err = e
 		} else {
-			// if _, e := q.relateChanges.Exec(name, act); e != nil {
-			// 	err = e // add pairs that were just activated.
-			// }
-
-			// fix: relateChanges doesnt handle the case where,
-			// if multiple domains are being activated at once,
-			// that the more derived domain should clear conflicting pairs
-			// instead: every listed pair in the all the new domains get set.
-			if ds, e := scanStrings(q.activeDomains); e != nil {
-				err = e
-			} else {
-				for _, d := range ds {
-					if _, e := q.relatePairs.Exec(d); e != nil {
-						err = errutil.Append(err, e)
-					}
-				}
-			}
+			ret = was
 		}
+	} else {
+		act := q.activation + 1
+		if de, e := scanStrings(q.domainDeactivate, name); e != nil {
+			err = e
+		} else if e := q.deactive(de); e != nil {
+			err = e
+		} else if re, e := scanStrings(q.domainActivate, name); e != nil {
+			err = e
+		} else if e := q.activate(act, re); e != nil {
+			err = e
+		}
+
 		// so we can rollback on any error.
 		if err == nil {
 			q.domain, q.activation, ret = name, act, q.domain
 			err = tx.Commit()
 		} else if e := tx.Rollback(); e != nil {
 			err = errutil.Append(err, e)
+		}
+	}
+	return
+}
+
+// tbd: what if certain kinds of changes could happen automatically
+// while others would need to be in an "on enter/exit" style event handlers
+func (q *Query) deactive(domains []string) (err error) {
+	for i, cnt := 0, len(domains); i < cnt; i++ {
+		d := domains[cnt-i-1] // work backwards from leaf to root
+		if _, e := q.domainChange.Exec(d, 0); e != nil {
+			err = e
+			break
+		} else if _, e := q.domainDelete.Exec(d); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
+
+// tbd: what if certain kinds of changes could happen automatically
+// while others would need to be in an "on enter/exit" style event handlers
+func (q *Query) activate(act int, domains []string) (err error) {
+	for i, cnt := 0, len(domains); i < cnt; i++ {
+		d := domains[i]
+		if _, e := q.domainChange.Exec(d, act); e != nil {
+			err = e
+			break
+		} else if _, e := q.relatePairs.Exec(d); e != nil {
+			// fix: relateChanges doesnt handle the case where,
+			// if multiple domains are being activated at once,
+			// that the more derived domain should clear conflicting pairs
+			// instead: every listed pair in the all the new domains get set.
+			err = e
+			break
 		}
 	}
 	return
@@ -220,7 +243,7 @@ func (q *Query) RelativesOf(rel, id string) ([]string, error) {
 }
 
 func (q *Query) Relate(rel, noun, otherNoun string) (err error) {
-	if res, e := q.relateNames.Exec(q.domain, rel, noun, otherNoun); e != nil {
+	if res, e := q.relateNames.Exec(rel, noun, otherNoun); e != nil {
 		err = e
 	} else if rows, e := res.RowsAffected(); e != nil {
 		err = e
@@ -262,50 +285,58 @@ func NewQueryx(db *sql.DB) (ret *Query, err error) {
 func newQueries(db *sql.DB) (ret *Query, err error) {
 	var ps tables.Prep
 	q := &Query{
-		db:         db,
-		activation: 1,
+		db: db,
 		checks: ps.Prep(db,
-			`select mc.name, md.domain, mc.value, mc.affinity, mc.prog
+			`select mc.name, mc.domain, mc.value, mc.affinity, mc.prog
 			from mdl_check mc
-			join mdl_domain md
-				on (mc.domain=md.rowid) 
 			where mc.name = ?1 or length(?1) == 0
 			order by mc.domain, mc.name`,
 		),
-		domainActivation: ps.Prep(db,
-			// build a table of nxn domains indicating "wants" active and "was" active.
-			// if activating the first domain activates the second, "want" is set;
-			// if the second is *currently* active ( in run_domain ), "was" is set.
-			// filter to *changes* for our requested domain and insert the requested value.
-			`with shouldExist as (
-				select
-						  pd.domain as parent, pd.rowid as parentId,
-						  cd.domain as child, cd.rowid as childId,
-						  -- is Y (the complete path of something else) within X (our own path)
-							-- then it's active when we are.
-						  instr(',' ||pd.rowid || ',' || pd.path,   ',' ||cd.rowid || ',' || cd.path) and 1 as want,
-						  ifnull(rd.active, 0) as was
-				from mdl_domain pd
-				join mdl_domain cd
-				left join run_domain rd
-					on (rd.domain=cd.rowid)
+		// return domains which should be active and are not
+		// ( in order of increasing depth. )
+		domainActivate: ps.Prep(db,
+			`select domain from ( 
+				select parent as domain
+				from domain_tree 
+				where base = ?1
+				and parent != ''
+				union all 
+				select ?1
 			)
-			insert or replace into run_domain(domain, active)
-			select childId, iif(want, ?2, 0) from shouldExist
-			where parent = ?1
-			and (want>0) != (was>0)`,
+			left join run_domain
+			    using(domain)
+			where not coalesce(active, 0)`,
+		),
+		domainChange: ps.Prep(db,
+			`insert or replace 
+			into run_domain(domain, active) 
+			values( ?1, ?2 )`,
+		),
+		// return domains which are active and should not be
+		// ( in order of increasing depth. )
+		domainDeactivate: ps.Prep(db,
+			`select domain from 
+			domain_order
+			join run_domain
+				using(domain)
+			where domain not in (
+				select parent
+				from domain_tree 
+				where base = ?1
+				and parent != ''
+				union all 
+				select ?1
+			)`,
 		),
 		domainDelete: ps.Prep(db,
-			`delete from run_pair
-			where domain not in ( 
-				select domain from active_domains 
-			)`,
+			`delete from run_pair 
+			where domain = ?`,
 		),
 		// determine if the named domain is currently in scope.
 		domainScope: ps.Prep(db,
 			`select 1 
-			from active_domains ds 
-			where name = ?1`,
+			from active_domains
+			where domain = ?1`,
 		),
 		// every field of a given kind, and its initial assignment if any.
 		// ( interestingly the order by seems to generate a shorter query than without )
@@ -429,30 +460,6 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		relatePairs: ps.Prep(db,
 			newPairsFromDomain+relatePair,
 		),
-		// type Relation struct {
-		// 	Kind, OtherKind, Cardinality string
-		// }
-		// create view if not exists
-		// rel_scope as
-		// select ds.name as domain, mk.rowid as relKind, mk.kind as name, mr.oneKind, mr.otherKind, mr.cardinality
-		// from active_domains ds
-		// join mdl_kind mk
-		// 	using (domain)
-		// join mdl_rel mr
-		// 	on (mk.rowid = mr.relKind);
-		//
-		// find kinds and cardinality for the named relation.
-		// relativeKinds: ps.Prep(db,
-		// 	`select mk.kind as kind,
-		// 		ok.kind as otherKind,
-		// 		rs.cardinality
-		// 	from rel_scope rs
-		// 	join mdl_kind mk
-		// 		on (mk.rowid = rs.oneKind)
-		// 	join mdl_kind ok
-		// 		on (ok.rowid = rs.otherKind)
-		// 	where rs.name = ?1`,
-		// ),
 		// given the "left side" of some related nouns, return the right side noun(s).
 		relativesOf: ps.Prep(db,
 			`select otherName 
