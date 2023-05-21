@@ -47,7 +47,7 @@ create table mdl_plural( domain text not null, many text, one text, at text, pri
 create table mdl_rel( relKind int not null, oneKind int not null, otherKind int not null, cardinality text, at text, primary key( relKind ));
 /* opposites */
 create table mdl_rev( domain text not null, oneWord text, otherWord text, at text );
-/* the scope of a rule can be narrower than its parent kind ( or target )
+/* the scope of a rule can be narrower than its uses kind ( or target )
  * fix? can target (kind of nouns the rule applies to) be moved to filter? */
 create table mdl_rule( domain text not null, kind int not null, target int, phase int, filter blob, prog blob, at text );
 /* initial values for various nouns.
@@ -63,44 +63,44 @@ create table mdl_value( noun int not null, field int not null, value blob, at te
  * larger distances are most root-like.
  */
 create view domain_tree as 
--- distinct because authors can specify redundant pairs
--- fix insertion to prevent that?
-select distinct base, parent, dist from
+-- note: insertion doesnt allow exactly redundant pairs
+-- so we shouldnt need distinct here.
+select base, uses, dist from
 ( 
-  with recursive paths(base, child, parent, dist) as (
+  with recursive paths(base, child, uses, dist) as (
     -- seed the recursion with matching parents 
-    select domain, domain, requires, 0
+    select domain, domain, requires, 1
     from mdl_domain 
+    -- tbd: if we're filtering this so frequently, maybe it never should have been added
+    -- but then how to declare a domain?
+    -- (maybe, depending on itself; and avoid the ugly join below )
+    where requires  != ""
     union all
-
     -- search upwards until there are no more parents
-  select base, domain, requires, dist+1
-    from paths 
-    join mdl_domain d
-      on (parent = domain)
-  where requires  != ""
+    select base, domain, requires, dist+1
+      from paths 
+      join mdl_domain d
+      on (uses = domain)
+    where requires  != ""
   )
   -- if there are two different routes to reach a dependency
   -- we want the route with the most number of steps
   -- this matters for 
-  select *, max(dist) over (partition by base, parent) as maxdist
+  select *, max(dist) over (partition by base, uses) as maxdist
   from paths 
 )
-where dist = maxdist;
+where dist = maxdist
+-- ugly, join with itself.
+union all 
+select distinct domain, domain, 0 
+from mdl_domain;
 
 /**
  * list domains so they appear before they are needed as a requirement of another domain. 
  */
 create view domain_order as 
-select distinct parent as domain from (
-  select parent,dist from 
-  domain_tree
-  where parent !=''
-  union all 
-  -- ugly, at the end plugin any leaves
-  -- ( they arent parents of any other domain
-  --   so they wont appear in the first query. )
-  select domain, null 
-  from mdl_domain
+select distinct uses as domain from (
+  select uses, dist 
+  from domain_tree
   order by dist desc
-)
+);

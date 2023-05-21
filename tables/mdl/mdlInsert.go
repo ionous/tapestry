@@ -1,8 +1,6 @@
 package mdl
 
-import (
-  "git.sr.ht/~ionous/tapestry/tables"
-)
+import "git.sr.ht/~ionous/tapestry/tables"
 
 // see sql table definitions and additional notes in "tapestry/tables/model.sql"
 
@@ -15,8 +13,8 @@ var Check = tables.Insert("mdl_check", "domain", "name", "value", "affinity", "p
 // pairs of domain name and (domain) dependencies
 var Domain = tables.Insert("mdl_domain", "domain", "requires", "at")
 
-// fix? the domain exists to uniquely identify the kind,
-// it's not the (sub)domain in which the field was declared.
+// note: the domain exists to uniquely identify the kind;
+// it's not actually stored in the field table and requires the write to transform it properly.
 var Field = tables.Insert("mdl_field", "domain", "kind", "field", "affinity", "type", "at")
 
 var Grammar = tables.Insert("mdl_grammar", "domain", "name", "prog", "at")

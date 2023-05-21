@@ -24,19 +24,21 @@ func scanPairs(q *sql.Stmt, args ...interface{}) (ret []PairData, err error) {
 	return
 }
 
-var newPairsFromChanges = `
-with newPairs as (
-	select dn.rowid as domain, relKind, oneNoun, otherNoun, cardinality
-	from mdl_pair mp
-	join run_domain rd   -- run_domain instead of active_domains is a little faster.
-	  on (mp.domain=rd.domain) 
-	join mdl_rel 
-	 using (relKind)
-	join mdl_domain dn
-	where rd.active = ?2 -- select all newly activated domains with rd
-	and dn.domain = ?1   -- select just the current named domain with dn
-)`
+// var newPairsFromChanges = `
+// with newPairs as (
+// 	select dn.rowid as domain, relKind, oneNoun, otherNoun, cardinality
+// 	from mdl_pair mp
+// 	join run_domain rd   -- run_domain instead of active_domains is a little faster.
+// 	  on (mp.domain=rd.domain)
+// 	join mdl_rel
+// 	 using (relKind)
+// 	join mdl_domain dn
+// 	where rd.active = ?2 -- select all newly activated domains with rd
+// 	and dn.domain = ?1   -- select just the current named domain with dn
+// )`+relatePair
 
+// used for changes due to domain changes
+// only the domain name is passed.
 var newPairsFromDomain = `
 with newPairs as (
 select domain, relKind, oneNoun, otherNoun, cardinality
@@ -44,30 +46,29 @@ select domain, relKind, oneNoun, otherNoun, cardinality
 	join mdl_rel 
 	 using (relKind)
 	where mp.domain = ?1
-)`
+)` + relatePair
 
+// used for dynamic changes to relationships between nouns
 // fix? this doesnt change to see whether the nouns are compatible with the relation
 // ex. if oneNoun is compatible with mdl_rel.oneKind; for now, the caller does that instead...
 // ( see also: Runner.RelateTo )
 var newPairsFromNames = `
 with newPairs as (
-	select md.rowid as domain, rel.relKind, one.rowid as oneNoun, other.rowid as otherNoun, rel.cardinality
+	select ?1 as domain, rel.relKind, one.rowid as oneNoun, other.rowid as otherNoun, rel.cardinality
 	from mdl_rel rel 
 	join active_kinds ks
 		on (ks.kind = rel.relKind)
 	join mdl_noun one
 	join mdl_noun other
-	join mdl_domain md
 	where ks.name = ?2
 	and one.noun = ?3
 	and other.noun = ?4
-	and md.domain= ?1
-)`
+)` + relatePair
 
 // zero out and mismatched pairs, and then write the new pairs
 var relatePair = string(`
 insert or replace into run_pair
-	select 0, prev.relKind, prev.oneNoun, prev.otherNoun
+	select null, prev.relKind, prev.oneNoun, prev.otherNoun
 	from newPairs
 	join run_pair prev
 		using (relKind)

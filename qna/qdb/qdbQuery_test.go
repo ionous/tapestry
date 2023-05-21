@@ -37,7 +37,7 @@ func TestQueries(t *testing.T) {
 	const subKind = "j"
 	const aspect = "a"
 	if e := createTable(db,
-		func(w mdl.Writer) (err error) {
+		func(w mdl.Modeler) (err error) {
 			if e := write(w,
 				// name, path, at
 				// -------------------------
@@ -74,9 +74,9 @@ func TestQueries(t *testing.T) {
 				// domain, kind, field, affinity, type, at
 				// ---------------------------------------
 				// traits of an aspect
-				domain, aspect, "brief", affine.Bool, nil, at,
-				domain, aspect, "verbose", affine.Bool, nil, at,
-				domain, aspect, "superbrief", affine.Bool, nil, at,
+				domain, aspect, "brief", affine.Bool, "", at,
+				domain, aspect, "verbose", affine.Bool, "", at,
+				domain, aspect, "superbrief", affine.Bool, "", at,
 				// kind that uses that aspect
 				domain, kind, aspect, affine.Text, aspect, at,
 				// patterns
@@ -271,7 +271,7 @@ func TestQueries(t *testing.T) {
 
 var run_domain = tables.Insert("run_domain", "domain", "active")
 
-func defaultKinds(domain, at string) (out []interface{}) {
+func defaultKinds(domain, at string) (out []any) {
 	for _, k := range kindsOf.DefaultKinds {
 		pk := k.Parent()
 		out = append(out, domain, k.String(), pk.String(), at)
@@ -279,14 +279,15 @@ func defaultKinds(domain, at string) (out []interface{}) {
 	return
 }
 
-func write(w mdl.Writer, q string, els ...interface{}) (err error) {
+// helper to write one or more rows using the passed query
+func write(m mdl.Modeler, q string, els ...any) (err error) {
 	width, cnt := strings.Count(q, "?"), len(els)
 	if div := cnt / width; div*width != cnt {
 		err = errutil.New("mismatched width", q)
 	} else {
 		for i, cnt := 0, len(els); i < cnt; i += width {
 			row := els[i : i+width]
-			if e := w.Write(q, row...); e != nil {
+			if e := call(m, q, row); e != nil {
 				onrow := pretty.Sprint("row:", i, row)
 				err = errutil.New(q, onrow, e)
 				break
@@ -296,21 +297,138 @@ func write(w mdl.Writer, q string, els ...interface{}) (err error) {
 	return
 }
 
-func createTable(db *sql.DB, cb func(mdl.Writer) error) (err error) {
+// adapt old style tests to new interface
+func call(m mdl.Modeler, q string, els []any) (err error) {
+	switch q {
+	case mdl.Assign:
+		domain, kind, field, value := els[0].(string),
+			els[1].(string),
+			els[2].(string),
+			els[3].(string)
+		err = m.Assign(domain, kind, field, value)
+
+	case mdl.Check:
+		domain, name, value, affinity, prog, at := els[0].(string),
+			els[1].(string),
+			els[2].(string),
+			els[3].(affine.Affinity),
+			els[4].(string),
+			els[5].(string)
+		err = m.Check(domain, name, value, affinity, prog, at)
+
+	case mdl.Domain:
+		domain, requires, at := els[0].(string),
+			els[1].(string),
+			els[2].(string)
+		err = m.Domain(domain, requires, at)
+
+	case mdl.Field:
+		domain, kind, field, affinity, typeName, at := els[0].(string),
+			els[1].(string),
+			els[2].(string),
+			els[3].(affine.Affinity),
+			els[4].(string),
+			els[5].(string)
+		err = m.Field(domain, kind, field, affinity, typeName, at)
+
+	case mdl.Grammar:
+		domain, name, prog, at := els[0].(string),
+			els[1].(string),
+			els[2].(string),
+			els[3].(string)
+		err = m.Grammar(domain, name, prog, at)
+
+	case mdl.Kind:
+		domain, kind, path, at := els[0].(string),
+			els[1].(string),
+			els[2].(string),
+			els[3].(string)
+		err = m.Kind(domain, kind, path, at)
+
+	case mdl.Name:
+		domain, noun, name, rank, at := els[0].(string),
+			els[1].(string),
+			els[2].(string),
+			els[3].(int),
+			els[4].(string)
+		err = m.Name(domain, noun, name, rank, at)
+
+	case mdl.Noun:
+		domain, noun, kind, at := els[0].(string),
+			els[1].(string),
+			els[2].(string),
+			els[3].(string)
+		err = m.Noun(domain, noun, kind, at)
+
+	case mdl.Opposite:
+		domain, oneWord, otherWord, at := els[0].(string),
+			els[1].(string),
+			els[2].(string),
+			els[3].(string)
+		err = m.Opposite(domain, oneWord, otherWord, at)
+
+	case mdl.Pair:
+		domain, relKind, oneNoun, otherNoun, at := els[0].(string),
+			els[1].(string),
+			els[2].(string),
+			els[3].(string),
+			els[4].(string)
+		err = m.Pair(domain, relKind, oneNoun, otherNoun, at)
+
+	case mdl.Pat:
+		domain, kind, labels, result := els[0].(string),
+			els[1].(string),
+			els[2].(string),
+			els[3].(string)
+		err = m.Pat(domain, kind, labels, result)
+
+	case mdl.Plural:
+		domain, many, one, at := els[0].(string),
+			els[1].(string),
+			els[2].(string),
+			els[3].(string)
+		err = m.Plural(domain, many, one, at)
+
+	case mdl.Rel:
+		domain, relKind, oneKind, otherKind, cardinality, at := els[0].(string),
+			els[1].(string),
+			els[2].(string),
+			els[3].(string),
+			els[4].(string),
+			els[5].(string)
+		err = m.Rel(domain, relKind, oneKind, otherKind, cardinality, at)
+
+	case mdl.Rule:
+		domain, pattern, target, phase, filter, prog, at := els[0].(string),
+			els[1].(string),
+			els[2].(string),
+			els[3].(int),
+			els[4].(string),
+			els[5].(string),
+			els[6].(string)
+		err = m.Rule(domain, pattern, target, phase, filter, prog, at)
+
+	case mdl.Value:
+		domain, noun, field, value, at := els[0].(string),
+			els[1].(string),
+			els[2].(string),
+			els[3].(string),
+			els[4].(string)
+		err = m.Value(domain, noun, field, value, at)
+	}
+	return
+}
+
+// fix: the old setup was able to handle transactions for bulk insert
+// anyway to do that with the interface version?
+// ( prepared statements seem to be locked to the db or tx )
+func createTable(db *sql.DB, cb func(mdl.Modeler) error) (err error) {
 	if e := tables.CreateAll(db); e != nil {
 		err = errutil.New("couldnt create model", e)
-	} else if tx, e := db.Begin(); e != nil {
-		err = errutil.New("couldnt create transaction", e)
-	} else if e := cb(mdl.Writer(func(q string, args ...interface{}) (err error) {
-		// nothing is confusing about these many layered functions... nothing at all...
-		if _, e := tx.Exec(q, args...); e != nil {
-			err = e
-		}
-		return
-	})); e != nil {
-		err = e
+	} else if m, e := mdl.NewModeler(db); e != nil {
+		err = errutil.New("couldnt create modeler", e)
 	} else {
-		err = tx.Commit()
+		err = cb(m)
 	}
 	return
 }

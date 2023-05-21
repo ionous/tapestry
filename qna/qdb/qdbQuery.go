@@ -14,6 +14,7 @@ import (
 // Read various data from the play database.
 type Query struct {
 	db *sql.DB
+	activeDomains,
 	domainActivate,
 	domainChange,
 	domainDeactivate,
@@ -29,14 +30,12 @@ type Query struct {
 	nounsByKind,
 	oppositeOf,
 	patternOf,
+	newPairsFromDomain,
+	newPairsFromNames,
 	pluralMatches,
 	pluralToSingular,
 	pluralFromSingular,
 	reciprocalOf,
-	relateChanges,
-	relateNames,
-	activeDomains,
-	relatePairs,
 	relativesOf,
 	rulesFor *sql.Stmt
 	//
@@ -117,8 +116,8 @@ func (q *Query) activate(act int, domains []string) (err error) {
 		if _, e := q.domainChange.Exec(d, act); e != nil {
 			err = e
 			break
-		} else if _, e := q.relatePairs.Exec(d); e != nil {
-			// fix: relateChanges doesnt handle the case where,
+		} else if _, e := q.newPairsFromDomain.Exec(d); e != nil {
+			// fix: this replaced newPairsFromChanges b/c it didnt handle the case where,
 			// if multiple domains are being activated at once,
 			// that the more derived domain should clear conflicting pairs
 			// instead: every listed pair in the all the new domains get set.
@@ -243,7 +242,7 @@ func (q *Query) RelativesOf(rel, id string) ([]string, error) {
 }
 
 func (q *Query) Relate(rel, noun, otherNoun string) (err error) {
-	if res, e := q.relateNames.Exec(rel, noun, otherNoun); e != nil {
+	if res, e := q.newPairsFromNames.Exec(q.domain, rel, noun, otherNoun); e != nil {
 		err = e
 	} else if rows, e := res.RowsAffected(); e != nil {
 		err = e
@@ -286,6 +285,11 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 	var ps tables.Prep
 	q := &Query{
 		db: db,
+		activeDomains: ps.Prep(db,
+			`select domain 
+			from active_domains
+			order by domain`,
+		),
 		checks: ps.Prep(db,
 			`select mc.name, mc.domain, mc.value, mc.affinity, mc.prog
 			from mdl_check mc
@@ -296,15 +300,12 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		// ( in order of increasing depth. )
 		domainActivate: ps.Prep(db,
 			`select domain from ( 
-				select parent as domain
+				select uses as domain
 				from domain_tree 
 				where base = ?1
-				and parent != ''
-				union all 
-				select ?1
 			)
 			left join run_domain
-			    using(domain)
+				using (domain)
 			where not coalesce(active, 0)`,
 		),
 		domainChange: ps.Prep(db,
@@ -318,14 +319,11 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 			`select domain from 
 			domain_order
 			join run_domain
-				using(domain)
+				using (domain)
 			where domain not in (
-				select parent
+				select uses
 				from domain_tree 
 				where base = ?1
-				and parent != ''
-				union all 
-				select ?1
 			)`,
 		),
 		domainDelete: ps.Prep(db,
@@ -400,7 +398,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 			`select ns.name
 			from active_kinds ks
 			join active_nouns ns 
-				using(kind)
+				using (kind)
 			where ks.name=?1`, // order?
 		),
 		oppositeOf: ps.Prep(db,
@@ -427,7 +425,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 			`select one 
 			from mdl_plural
 			join active_domains
-				using(domain)
+				using (domain)
 			where many=?
 			limit 1`,
 		),
@@ -435,9 +433,19 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 			`select many 
 			from mdl_plural
 			join active_domains
-				using(domain)
+				using (domain)
 			where one=?
 			limit 1`,
+		),
+		// maybe unneeded now that domains are activated one by one?
+		// newPairsFromChanges: ps.Prep(db,
+		// 	newPairsFromChanges,
+		// ),
+		newPairsFromNames: ps.Prep(db,
+			newPairsFromNames,
+		),
+		newPairsFromDomain: ps.Prep(db,
+			newPairsFromDomain,
 		),
 		// given the "right side" of some related nouns, return the left side noun(s).
 		reciprocalOf: ps.Prep(db,
@@ -445,20 +453,6 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 			from rp_names
 			where relName=?1
 			and otherName=?2`, // order?
-		),
-		relateChanges: ps.Prep(db,
-			newPairsFromChanges+relatePair,
-		),
-		relateNames: ps.Prep(db,
-			newPairsFromNames+relatePair,
-		),
-		activeDomains: ps.Prep(db,
-			`select domain 
-			from active_domains
-			order by domain`,
-		),
-		relatePairs: ps.Prep(db,
-			newPairsFromDomain+relatePair,
 		),
 		// given the "left side" of some related nouns, return the right side noun(s).
 		relativesOf: ps.Prep(db,
