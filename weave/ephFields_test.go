@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/eph"
 	"github.com/kr/pretty"
 )
@@ -18,14 +17,14 @@ func TestFields(t *testing.T) {
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "t", Affinity: affine.Text, Class: "k"}}},
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Number}}},
 	)
-	out := testOut{mdl.Field}
-	if cat, e := dt.Assemble(); e != nil {
+
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if e := cat.WriteFields(&out); e != nil {
+	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(out[1:], testOut{
-		"a:k:t:text:k:x",
-		"a:k:n:number::x",
+	} else if diff := pretty.Diff(out, []string{
+		"a:k:t:text:k",
+		"a:k:n:number:",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -43,14 +42,14 @@ func TestFieldsCrossDomain(t *testing.T) {
 	dt.makeDomain(dd("b", "a"),
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "b", Affinity: affine.Bool}}},
 	)
-	out := testOut{mdl.Field}
-	if cat, e := dt.Assemble(); e != nil {
+
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if e := cat.WriteFields(&out); e != nil {
+	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(out[1:], testOut{
-		"a:k:n:number::x",
-		"a:k:b:bool::x",
+	} else if diff := pretty.Diff(out, []string{
+		"a:k:n:number:",
+		"a:k:b:bool:",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -73,17 +72,17 @@ func TestFieldsRedefine(t *testing.T) {
 	dt.makeDomain(dd("b", "a"),
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Number}}},
 	)
-	out := testOut{mdl.Field}
-	if cat, e := dt.Assemble(); e != nil {
+
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
 		t.Fatal(e)
 	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
 		t.Fatal(e)
-	} else if e := cat.WriteFields(&out); e != nil {
+	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(out[1:], testOut{
-		"a:k:n:number::x",
+	} else if diff := pretty.Diff(out, []string{
+		"a:k:n:number:",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -129,15 +128,15 @@ func TestFieldsMatchingRivals(t *testing.T) {
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "t", Affinity: affine.Text}}},
 	)
 	dt.makeDomain(dd("z", "c", "d"))
-	out := testOut{mdl.Field}
-	if cat, e := dt.Assemble(); e != nil {
+
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
 		t.Fatal(e)
-	} else if e := cat.WriteFields(&out); e != nil {
+	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(out[1:], testOut{
-		"a:k:t:text::x",
+	} else if diff := pretty.Diff(out, []string{
+		"a:k:t:text:",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -202,15 +201,14 @@ func TestFieldLca(t *testing.T) {
 		&eph.Kinds{Kind: "p", Contain: []eph.Params{{Name: "t", Affinity: affine.Text}}},
 		&eph.Kinds{Kind: "q", Contain: []eph.Params{{Name: "t", Affinity: affine.Text}}},
 	)
-	out := testOut{mdl.Field}
 
-	if cat, e := dt.Assemble(); e != nil {
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if e := cat.WriteFields(&out); e != nil {
+	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(out[1:], testOut{
-		"a:p:t:text::x",
-		"a:q:t:text::x",
+	} else if diff := pretty.Diff(out, []string{
+		"a:p:t:text:",
+		"a:q:t:text:",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)

@@ -157,13 +157,13 @@ func (ds DependencyTable) SortTable() {
 }
 
 // for each domain in the passed list, output its full ancestry tree ( or just its parents )
-func (ds DependencyTable) WriteTable(w Writer, target string, fullTree bool) (err error) {
-	for _, dep := range ds {
-		name, row, at := dep.Leaf().Name(), dep.Strings(fullTree), dep.Leaf().OriginAt()
-		if e := w.Write(target, name, row, at); e != nil {
-			err = e
-			break
-		}
-	}
-	return
-}
+// func (ds DependencyTable) WriteTable(m mdl.Modeler, target string, fullTree bool) (err error) {
+// 	for _, dep := range ds {
+// 		name, row, at := dep.Leaf().Name(), dep.Strings(fullTree), dep.Leaf().OriginAt()
+// 		if e := w.Write(target, name, row, at); e != nil {
+// 			err = e
+// 			break
+// 		}
+// 	}
+// 	return
+// }

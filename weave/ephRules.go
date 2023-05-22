@@ -11,7 +11,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func (c *Catalog) WriteRules(w Writer) (err error) {
+func (c *Catalog) WriteRules(m mdl.Modeler) (err error) {
 	if ds, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
@@ -38,7 +38,7 @@ func (c *Catalog) WriteRules(w Writer) (err error) {
 						if el.Touch {
 							flags = -flags // marker for rules that need to always run (ex. counters "every third try" )
 						}
-						if e := w.Write(mdl.Rule, d.name, patternName, el.Target, flags, el.Filter, el.Prog, at); e != nil {
+						if e := m.Rule(d.name, patternName, el.Target, flags, el.Filter, el.Prog, at); e != nil {
 							err = e
 							break Done
 						}

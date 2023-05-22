@@ -39,6 +39,6 @@ package qna
 
 // type WriterFun func(eph Ephemera)
 
-// func (w WriterFun) WriteEphemera(op Ephemera) {
+// func (m mdl.Modeler Fun) WriteEphemera(op Ephemera) {
 // 	w(op)
 // }

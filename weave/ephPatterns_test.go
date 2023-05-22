@@ -7,7 +7,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/eph"
 	"github.com/kr/pretty"
 )
@@ -127,9 +126,9 @@ func TestPatternSeparateDomains(t *testing.T) {
 }
 
 func expectFullResults(t *testing.T, dt *domainTest) {
-	if cat, e := dt.Assemble(); e != nil {
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if outkind, e := readKinds(cat.db); e != nil {
+	} else if outkind, e := dt.readKinds(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outkind, []string{
 		"a:k:",
@@ -138,38 +137,31 @@ func expectFullResults(t *testing.T, dt *domainTest) {
 	}); len(diff) > 0 {
 		t.Log("got:", pretty.Sprint(outkind))
 		t.Fatal(diff)
-	} else {
-		outfields := testOut{mdl.Field}
-		if e := cat.WriteFields(&outfields); e != nil {
-			t.Fatal(e)
-		} else if diff := pretty.Diff(outfields[1:], testOut{
-			"a:p:p_1:text:k:x",
-			"a:p:success:bool::x",
-			"a:p:l_1:num_list::x",
-			"a:p:l_2:number::x",
-		}); len(diff) > 0 {
-			t.Log("got:", pretty.Sprint(outfields))
-			t.Fatal(diff)
-		}
-		outpat := testOut{mdl.Pat}
-		if e := cat.WritePatterns(&outpat); e != nil {
-			t.Fatal(e)
-		} else if diff := pretty.Diff(outpat[1:], testOut{
-			// fix? run-in number suffixes?
-			"a:p:p_1:success",
-		}); len(diff) > 0 {
-			t.Log("got:", pretty.Sprint(outpat))
-			t.Fatal(diff)
-		}
-		outlocals := testOut{mdl.Assign}
-		if e := cat.WriteLocals(&outlocals); e != nil {
-			t.Fatal(e)
-		} else if diff := pretty.Diff(outlocals[1:], testOut{
-			`a:p:l_2:{"FromNumber:":10}`,
-		}); len(diff) > 0 {
-			t.Log("got:", pretty.Sprint(outlocals))
-			t.Fatal(diff)
-		}
+	} else if outfields, e := dt.readFields(); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(outfields, []string{
+		"a:p:p_1:text:k",
+		"a:p:success:bool:",
+		"a:p:l_1:num_list:",
+		"a:p:l_2:number:",
+	}); len(diff) > 0 {
+		t.Log("got:", pretty.Sprint(outfields))
+		t.Fatal(diff)
+	} else if outpat, e := dt.readPatterns(); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(outpat, []string{
+		// fix? run-in number suffixes?
+		"a:p:p_1:success",
+	}); len(diff) > 0 {
+		t.Log("got:", pretty.Sprint(outpat))
+		t.Fatal(diff)
+	} else if outlocals, e := dt.readLocals(); e != nil {
+		t.Fatal(diff)
+	} else if diff := pretty.Diff(outlocals, []string{
+		`a:p:l_2:{"FromNumber:":10}`,
+	}); len(diff) > 0 {
+		t.Log("got:", pretty.Sprint(outlocals))
+		t.Fatal(diff)
 	}
 }
 
@@ -258,7 +250,7 @@ func TestPatternMultipleReturn(t *testing.T) {
 // 	)
 // 	var conflict *Conflict
 //
-// if cat, e := dt.Assemble();  e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
+// if _, e := dt.Assemble();  e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
 // 		t.Fatal("expected an redefined conflict; got", e)
 // 	} else {
 // 		t.Log("okay", e)
@@ -295,9 +287,9 @@ func TestPatternNoResults(t *testing.T) {
 		&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
 		&eph.Patterns{PatternName: "p"},
 	)
-	if cat, e := dt.Assemble(); e != nil {
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if outkind, e := readKinds(cat.db); e != nil {
+	} else if outkind, e := dt.readKinds(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outkind, []string{
 		"a:patterns:",
@@ -305,35 +297,28 @@ func TestPatternNoResults(t *testing.T) {
 	}); len(diff) > 0 {
 		t.Log("got:", pretty.Sprint(outkind))
 		t.Fatal(diff)
-	} else {
-		outfields := testOut{mdl.Field}
-		if e := cat.WriteFields(&outfields); e != nil {
-			t.Fatal(e)
-		} else if diff := pretty.Diff(outfields[1:], testOut{
-			// this might be nice, but would requiring changing pattern calls
-			// *and* pattern tests ( which dont have first blank elements )
-			//"a:p::bool::x",
-		}); len(diff) > 0 {
-			t.Log("got:", pretty.Sprint(outfields))
-			t.Fatal(diff)
-		}
-		outpat := testOut{mdl.Pat}
-		if e := cat.WritePatterns(&outpat); e != nil {
-			t.Fatal(e)
-		} else if diff := pretty.Diff(outpat[1:], testOut{
-			"a:p::",
-		}); len(diff) > 0 {
-			t.Log("got:", pretty.Sprint(outpat))
-			t.Fatal(diff)
-		}
-		outlocals := testOut{mdl.Assign}
-		if e := cat.WriteLocals(&outlocals); e != nil {
-			t.Fatal(e)
-		} else if diff := pretty.Diff(outlocals[1:], testOut{
-			/**/
-		}); len(diff) > 0 {
-			t.Log("got:", pretty.Sprint(outlocals))
-			t.Fatal(diff)
-		}
+	} else if outfields, e := dt.readFields(); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(outfields, []string{
+		// this might be nice, but would requiring changing pattern calls
+		// *and* pattern tests ( which dont have first blank elements )
+		//"a:p::bool:",
+	}); len(diff) > 0 {
+		t.Log("got:", pretty.Sprint(outfields))
+		t.Fatal(diff)
+	} else if outpat, e := dt.readPatterns(); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(outpat, []string{
+		"a:p::",
+	}); len(diff) > 0 {
+		t.Log("got:", pretty.Sprint(outpat))
+		t.Fatal(diff)
+	} else if outlocals, e := dt.readLocals(); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(outlocals, []string{
+		/**/
+	}); len(diff) > 0 {
+		t.Log("got:", pretty.Sprint(outlocals))
+		t.Fatal(diff)
 	}
 }

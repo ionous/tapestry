@@ -4,7 +4,6 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave/eph"
 	"github.com/kr/pretty"
 )
@@ -52,13 +51,7 @@ func TestOppositeAssembly(t *testing.T) {
 	)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if out, e := tables.ScanStrings(dt.db, `
-select md.domain ||':'|| mp.oneWord ||':'|| mp.otherWord
-from mdl_rev mp 
-join mdl_domain md 
-where md.rowid == mp.domain
-order by md.domain, mp.oneWord`,
-	); e != nil {
+	} else if out, e := dt.readOpposites(); e != nil {
 		t.Fatal(e)
 	} else {
 		if diff := pretty.Diff(out, []string{

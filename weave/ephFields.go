@@ -11,7 +11,7 @@ import (
 )
 
 // write the fields of each kind in kind order
-func (c *Catalog) WriteFields(w Writer) (err error) {
+func (c *Catalog) WriteFields(m mdl.Modeler) (err error) {
 	if deps, e := c.ResolveKinds(); e != nil {
 		err = e
 	} else {
@@ -19,11 +19,10 @@ func (c *Catalog) WriteFields(w Writer) (err error) {
 		for _, dep := range deps {
 			k := dep.Leaf().(*ScopedKind)
 			d := k.domain // for simplicity, fields exist at the scope of the kind: regardless of the scope of the field's declaration.
-			p := &partialWriter{w: w, fields: []interface{}{d.Name(), k.Name()}}
 			if len(k.fields) > 0 {
 				// note: fields might include an aspect field which is capable of storing the active trait ( the trait name text )
 				for _, f := range k.fields {
-					if e := f.Write(p); e != nil {
+					if e := f.Write(m, d.name, k.Name()); e != nil {
 						err = e
 						break Out
 					}
@@ -31,7 +30,7 @@ func (c *Catalog) WriteFields(w Writer) (err error) {
 			} else if len(k.aspects) == 1 {
 				// if there are no explicit fields; we might be a kind of aspect
 				// and all we have are the traits for our aspect.
-				if e := k.aspects[0].Write(p); e != nil {
+				if e := k.aspects[0].Write(m, d.name, k.Name()); e != nil {
 					err = e
 					break Out
 				}
@@ -42,7 +41,7 @@ func (c *Catalog) WriteFields(w Writer) (err error) {
 }
 
 // write the field initializers in kind order
-func (c *Catalog) WriteLocals(w Writer) (err error) {
+func (c *Catalog) WriteLocals(m mdl.Modeler) (err error) {
 	if deps, e := c.ResolveKinds(); e != nil {
 		err = e
 	} else {
@@ -53,7 +52,7 @@ func (c *Catalog) WriteLocals(w Writer) (err error) {
 					if value, e := marshalout(init); e != nil {
 						err = e
 						break
-					} else if e := w.Write(mdl.Assign, k.domain.name, k.name, fd.name, value); e != nil {
+					} else if e := m.Assign(k.domain.name, k.name, fd.name, value); e != nil {
 						err = e
 						break
 					}
@@ -115,7 +114,7 @@ func (uf *UniformField) assembleField(kind *ScopedKind) (err error) {
 		if e := kind.AddField(&fieldDef{
 			at:        uf.At,
 			name:      uf.Name, // fieldName; already "uniform"
-			affinity:  aff.String(),
+			affinity:  aff,
 			class:     clsName,
 			initially: uf.Initially,
 		}); errors.As(e, &conflict) && conflict.Reason == Duplicated {

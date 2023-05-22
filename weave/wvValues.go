@@ -35,7 +35,7 @@ func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, opV
 	})
 }
 
-func (c *Catalog) WriteValues(w Writer) error {
+func (c *Catalog) WriteValues(m mdl.Modeler) error {
 	// FIX: nouns should be able to store EVALS too
 	// example: an object with a counter in its description.
 	return forEachNoun(c, func(n *ScopedNoun) (err error) {
@@ -43,7 +43,7 @@ func (c *Catalog) WriteValues(w Writer) error {
 			for _, fv := range rv.rec.Fields {
 				if value, e := marshalout(fv.Value); e != nil {
 					err = errutil.Append(err, e)
-				} else if e := w.Write(mdl.Value, n.domain.name, n.name, fv.Field, value, rv.at); e != nil {
+				} else if e := m.Value(n.domain.name, n.name, fv.Field, value, rv.at); e != nil {
 					err = e
 					break
 				}

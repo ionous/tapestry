@@ -1,6 +1,7 @@
 package weave
 
 import (
+	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
@@ -10,16 +11,19 @@ import (
 type FieldDefinition interface {
 	CheckConflict(*ScopedKind) error
 	AddToKind(*ScopedKind)
-	Write(w Writer) error
+	Write(m mdl.Modeler, domain, kind string) error
 }
 
 type fieldDef struct {
-	name, affinity, class, at string
-	initially                 assign.Assignment
+	name      string
+	affinity  affine.Affinity
+	class     string
+	at        string
+	initially assign.Assignment
 }
 
-func (fd *fieldDef) Write(w Writer) error {
-	return w.Write(mdl.Field, fd.name, fd.affinity, fd.class, fd.at)
+func (fd *fieldDef) Write(m mdl.Modeler, domain, kind string) error {
+	return m.Field(domain, kind, fd.name, fd.affinity, fd.class, fd.at)
 }
 
 func (fd *fieldDef) AddToKind(k *ScopedKind) {

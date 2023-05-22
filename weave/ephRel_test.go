@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/eph"
 	"github.com/kr/pretty"
 )
@@ -33,20 +32,17 @@ func TestRelAssembly(t *testing.T) {
 		&eph.Relations{Rel: "u", Cardinality: &eph.ManyMany{Kinds: "q", OtherKinds: "p"}},
 	)
 
-	if cat, e := dt.Assemble(); e != nil {
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else {
-		out := testOut{mdl.Rel}
-		if e := cat.WriteRelations(&out); e != nil {
-			t.Fatal(e)
-		} else if diff := pretty.Diff(out[1:], testOut{
-			"b:r:p:q:one_one:x",
-			"b:s:p:q:any_one:x",
-			"c:t:p:p:one_any:x",
-			"c:u:q:p:any_any:x",
-		}); len(diff) > 0 {
-			t.Log(pretty.Sprint(out))
-			t.Fatal(diff)
-		}
+	} else if out, e := dt.readRelations(); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(out, []string{
+		"b:r:p:q:one_one",
+		"b:s:p:q:any_one",
+		"c:t:p:p:one_any",
+		"c:u:q:p:any_any",
+	}); len(diff) > 0 {
+		t.Log(pretty.Sprint(out))
+		t.Fatal(diff)
 	}
 }

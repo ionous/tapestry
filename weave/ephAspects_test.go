@@ -6,7 +6,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/eph"
 	"github.com/kr/pretty"
 )
@@ -25,15 +24,15 @@ func TestAspectFormation(t *testing.T) {
 			"one", "several", "oh so many", //
 		}},
 	)
-	out := testOut{mdl.Field}
-	if cat, e := dt.Assemble(); e != nil {
+
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if e := cat.WriteFields(&out); e != nil {
+	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(out[1:], testOut{
-		"d:a:one:bool::x",
-		"d:a:several:bool::x",
-		"d:a:oh_so_many:bool::x",
+	} else if diff := pretty.Diff(out, []string{
+		"d:a:one:bool:",
+		"d:a:several:bool:",
+		"d:a:oh_so_many:bool:",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -56,16 +55,16 @@ func TestAspectUsage(t *testing.T) {
 		&eph.Kinds{Kind: "k"},
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{AspectParam("a")}},
 	)
-	out := testOut{mdl.Field}
-	if cat, e := dt.Assemble(); e != nil {
+
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if e := cat.WriteFields(&out); e != nil {
+	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(out[1:], testOut{
-		"a:a:one:bool::x",
-		"a:a:several:bool::x",
-		"a:a:oh_so_many:bool::x",
-		"b:k:a:text:a:x", // MISSING THIS.... fields for the aspect
+	} else if diff := pretty.Diff(out, []string{
+		"a:a:one:bool:",
+		"a:a:several:bool:",
+		"a:a:oh_so_many:bool:",
+		"b:k:a:text:a", // MISSING THIS.... fields for the aspect
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)

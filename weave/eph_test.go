@@ -14,32 +14,10 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type testOut []string
-
-func (log *testOut) Results() []string {
-	return (*log)[1:]
-}
-
-// ignores the category for simpler testing
-func (log *testOut) Write(cat string, args ...interface{}) (err error) {
-	if len(*log) == 0 {
-		err = errutil.New("testOut not initialized")
-	} else if (*log)[0] == cat {
-		if argcnt, catcnt := len(args), strings.Count(cat, "?"); cat != "" && catcnt != argcnt {
-			err = errutil.Fmt("not enough parameters. want %d have %d", catcnt, argcnt)
-		} else {
-			var b strings.Builder
-			for i, arg := range args {
-				if i > 0 {
-					b.WriteRune(':')
-				}
-				b.WriteString(fmt.Sprint(arg))
-			}
-			(*log) = append((*log), b.String())
-		}
-	}
-	return
-}
+func B(b bool) *literal.BoolValue   { return &literal.BoolValue{Value: b} }
+func I(n int) *literal.NumValue     { return &literal.NumValue{Value: float64(n)} }
+func F(n float64) *literal.NumValue { return &literal.NumValue{Value: n} }
+func T(s string) *literal.TextValue { return &literal.TextValue{Value: s} }
 
 type Warnings []error
 
@@ -159,7 +137,144 @@ func newRelation(r, k, c, o string) *eph.Relations {
 	}
 }
 
-func B(b bool) *literal.BoolValue   { return &literal.BoolValue{Value: b} }
-func I(n int) *literal.NumValue     { return &literal.NumValue{Value: float64(n)} }
-func F(n float64) *literal.NumValue { return &literal.NumValue{Value: n} }
-func T(s string) *literal.TextValue { return &literal.TextValue{Value: s} }
+func (dt *domainTest) readAssignments() ([]string, error) {
+	return tables.QueryStrings(dt.db, `
+    select domain ||':'|| many ||':'|| one
+from mdl_plural`)
+}
+
+// an array of dependencies
+func (dt *domainTest) readDomain(n string) ([]string, error) {
+	return tables.QueryStrings(dt.db,
+		`select uses from domain_tree where base = ?1 order by dist desc`,
+		n)
+}
+
+func (dt *domainTest) readDomains() ([]string, error) {
+	return tables.QueryStrings(dt.db,
+		`select domain from domain_order`)
+}
+
+// domain, kind, field name, affinity, subtype
+func (dt *domainTest) readFields() ([]string, error) {
+	return tables.QueryStrings(dt.db, `
+    select domain ||':'|| many ||':'|| one
+from mdl_plural`)
+}
+
+// domain, input, serialized program
+func (dt *domainTest) readGrammar() ([]string, error) {
+	return tables.QueryStrings(dt.db, `
+    select domain ||':'|| many ||':'|| one
+from mdl_plural`)
+}
+
+// domain, kind, materialized path
+func (dt *domainTest) readKinds() (ret []string, err error) {
+	type kind struct {
+		id           int
+		domain, kind string
+	}
+	var kinds []kind
+	var k kind
+	if e := tables.QueryAll(dt.db,
+		`select rowid, domain, kind 
+		from mdl_kind mk`, func() (_ error) {
+			kinds = append(kinds, k)
+			return
+		}, &k.id, &k.domain, &k.kind); e != nil {
+		err = e
+	} else {
+		for _, k := range kinds {
+			// just to be confusing, this is the opposite order of KindOfAncestors
+			// root is on the right here.
+			if path, e := tables.QueryStrings(dt.db,
+				`select mk.kind 
+				from mdl_kind ks 
+				join mdl_kind mk
+					-- is Y (is their name) a part of X (our path)
+					on instr(',' || ks.path, 
+									 ',' || mk.rowid || ',' )
+				where ks.rowid = ?1
+				order by mk.rowid desc`, k.id); e != nil {
+				err = e
+				break
+			} else {
+				row := fmt.Sprintf("%s:%s:%s", k.domain, k.kind, strings.Join(path, ","))
+				ret = append(ret, row)
+			}
+		}
+	}
+	return
+}
+
+// domain, kind, name, serialized initialization
+func (dt *domainTest) readLocals() ([]string, error) {
+	return tables.QueryStrings(dt.db, `
+    select domain ||':'|| many ||':'|| one
+from mdl_plural`)
+}
+
+// domain, noun, name, rank
+func (dt *domainTest) readNames() ([]string, error) {
+	return tables.QueryStrings(dt.db, `
+    select domain ||':'|| many ||':'|| one
+from mdl_plural`)
+}
+
+// domain, noun, kind
+func (dt *domainTest) readNouns() ([]string, error) {
+	return tables.QueryStrings(dt.db, `
+    select domain ||':'|| many ||':'|| one
+from mdl_plural`)
+}
+
+// domain, oneWord, otherWord
+func (dt *domainTest) readOpposites() ([]string, error) {
+	return tables.QueryStrings(dt.db, `
+    select domain ||':'|| oneWord ||':'|| otherWord
+from mdl_rev mp 
+order by domain, oneWord`)
+}
+
+// domain, relation, noun, other noun
+func (dt *domainTest) readPairs() ([]string, error) {
+	return tables.QueryStrings(dt.db, `
+    select domain ||':'|| many ||':'|| one
+from mdl_plural`)
+}
+
+// domain, pattern, labels
+func (dt *domainTest) readPatterns() ([]string, error) {
+	return tables.QueryStrings(dt.db, `
+    select domain ||':'|| many ||':'|| one
+from mdl_plural`)
+}
+
+// domain, many, one
+func (dt *domainTest) readPlurals() ([]string, error) {
+	return tables.QueryStrings(dt.db, `
+    select domain ||':'|| many ||':'|| one
+from mdl_plural`)
+}
+
+// domain, relation, one kind, other kind, cardinality
+func (dt *domainTest) readRelations() ([]string, error) {
+	return tables.QueryStrings(dt.db, `
+    select domain ||':'|| many ||':'|| one
+from mdl_plural`)
+}
+
+// domain, pattern, target, phase, filter, prog
+func (dt *domainTest) readRules() ([]string, error) {
+	return tables.QueryStrings(dt.db, `
+    select domain ||':'|| many ||':'|| one
+from mdl_plural`)
+}
+
+// domain, noun, field, value
+func (dt *domainTest) readValues() ([]string, error) {
+	return tables.QueryStrings(dt.db, `
+    select domain ||':'|| many ||':'|| one
+from mdl_plural`)
+}

@@ -2,7 +2,6 @@ package weave
 
 import (
 	"git.sr.ht/~ionous/tapestry/tables"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
@@ -33,7 +32,7 @@ func (cat *Catalog) AssertPlural(opSingular, opPlural string) error {
 			}, &prev); e != nil {
 				err = e
 			} else if dupe == 0 {
-				err = cat.writer.Write(mdl.Plural, ctx.d.name, plural, singular, cat.cursor)
+				err = cat.writer.Plural(ctx.d.name, plural, singular, cat.cursor)
 			}
 		}
 		return // from schedule
@@ -64,11 +63,11 @@ func (cat *Catalog) AssertOpposite(opOpposite, opWord string) error {
 			}, &x, &y); e != nil {
 				err = e
 			} else if dupe == 0 {
-				if e := cat.writer.Write(mdl.Opposite, ctx.d.name, a, b, cat.cursor); e != nil {
+				if e := cat.writer.Opposite(ctx.d.name, a, b, cat.cursor); e != nil {
 					err = e
 				} else if a != b {
 					// write the opposite pairing to; helps simplify queries.
-					if e := cat.writer.Write(mdl.Opposite, ctx.d.name, b, a, cat.cursor); e != nil {
+					if e := cat.writer.Opposite(ctx.d.name, b, a, cat.cursor); e != nil {
 						err = e
 					}
 				}

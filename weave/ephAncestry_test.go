@@ -1,11 +1,9 @@
 package weave
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"git.sr.ht/~ionous/tapestry/weave/eph"
 	"github.com/kr/pretty"
@@ -27,9 +25,9 @@ func TestAncestry(t *testing.T) {
 		&eph.Kinds{Kind: "n", Ancestor: "k"}, // root domain
 		&eph.Kinds{Kind: "j", Ancestor: "m"}, // parent domain
 	)
-	if cat, e := dt.Assemble(); e != nil {
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if out, e := readKinds(cat.db); e != nil {
+	} else if out, e := dt.readKinds(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		"a:k:", "b:m:k", "c:j:m,k", "c:q:j,m,k", "c:n:k",
@@ -90,9 +88,9 @@ func TestAncestryRedundancy(t *testing.T) {
 		&eph.Kinds{Kind: "n", Ancestor: "m"}, // more specific
 		&eph.Kinds{Kind: "n", Ancestor: "k"}, // duped
 	)
-	if cat, e := dt.Assemble(); e != nil {
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if out, e := readKinds(cat.db); e != nil {
+	} else if out, e := dt.readKinds(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		"a:k:", "b:m:k", "c:n:m,k",
@@ -165,16 +163,15 @@ func TestAncestryRivalsOkay(t *testing.T) {
 		&eph.Kinds{Kind: "m", Ancestor: "k"}, // second in a parallel domain should be fine
 	)
 
-	if cat, e := dt.Assemble(); e != nil {
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if out, e := readKinds(cat.db); e != nil {
+	} else if out, e := dt.readKinds(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		"a:k:", "b:m:k", "d:m:k",
 	}); len(diff) > 0 {
 		t.Fatal(diff)
 	}
-
 }
 
 // two different kinds named in two different parent trees should fail
@@ -214,45 +211,4 @@ func newTestShuffle(name string, shuffle bool) *domainTest {
 		cat:       NewCatalog(db),
 		noShuffle: !shuffle,
 	}
-}
-
-func readKinds(db tables.Querier) (ret []string, err error) {
-	type kind struct {
-		id           int
-		domain, kind string
-	}
-	var kinds []kind
-	var k kind
-	if e := tables.QueryAll(db,
-		`select mk.rowid, md.domain, mk.kind 
-		from mdl_kind mk 
-		join mdl_domain md
-		on md.rowid = mk.domain
-		order by mk.rowid`, func() (_ error) {
-			kinds = append(kinds, k)
-			return
-		}, &k.id, &k.domain, &k.kind); e != nil {
-		err = e
-	} else {
-		for _, k := range kinds {
-			// just to be confusing, this is the opposite order of KindOfAncestors
-			// root is on the right here.
-			if path, e := tables.ScanStrings(db,
-				`select mk.kind 
-				from mdl_kind ks 
-				join mdl_kind mk
-					-- is Y (is their name) a part of X (our path)
-					on instr(',' || ks.path, 
-									 ',' || mk.rowid || ',' )
-				where ks.rowid = ?1
-				order by mk.rowid desc`, k.id); e != nil {
-				err = e
-				break
-			} else {
-				row := fmt.Sprintf("%s:%s:%s", k.domain, k.kind, strings.Join(path, ","))
-				ret = append(ret, row)
-			}
-		}
-	}
-	return
 }

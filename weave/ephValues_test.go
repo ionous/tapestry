@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/eph"
 	"github.com/kr/pretty"
 )
@@ -35,21 +34,18 @@ func TestValueFieldAssignment(t *testing.T) {
 		&eph.Values{Noun: "toy", Field: "d", Value: I(321)},
 		&eph.Values{Noun: "boat", Field: "t", Value: T("more text")},
 	)
-	if cat, e := dt.Assemble(); e != nil {
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else {
-		out := testOut{mdl.Value}
-		if e := cat.WriteValues(&out); e != nil {
-			t.Fatal(e)
-		} else if diff := pretty.Diff(out[1:], testOut{
-			`a:apple:t:"some text":x`,
-			`a:boat:t:"more text":x`,
-			`a:toy_boat:d:321:x`,
-			`a:pear:d:123:x`,
-		}); len(diff) > 0 {
-			t.Log(pretty.Sprint(out))
-			t.Fatal(diff)
-		}
+	} else if out, e := dt.readValues(); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(out, []string{
+		`a:apple:t:"some text"`,
+		`a:boat:t:"more text"`,
+		`a:toy_boat:d:321`,
+		`a:pear:d:123`,
+	}); len(diff) > 0 {
+		t.Log(pretty.Sprint(out))
+		t.Fatal(diff)
 	}
 }
 
@@ -104,21 +100,18 @@ func TestValueTraitAssignment(t *testing.T) {
 		&eph.Values{Noun: "boat", Field: "z", Value: B(true)},
 	)
 
-	if cat, e := dt.Assemble(); e != nil {
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else {
-		out := testOut{mdl.Value}
-		if e := cat.WriteValues(&out); e != nil {
-			t.Fatal(e)
-		} else if diff := pretty.Diff(out[1:], testOut{
-			`a:apple:a:"y":x`,
-			`a:boat:b:"z":x`,
-			`a:toy_boat:a:"w":x`,
-			`a:pear:a:"x":x`,
-		}); len(diff) > 0 {
-			t.Log(pretty.Sprint(out))
-			t.Fatal(diff)
-		}
+	} else if out, e := dt.readValues(); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(out, []string{
+		`a:apple:a:"y"`,
+		`a:boat:b:"z"`,
+		`a:toy_boat:a:"w"`,
+		`a:pear:a:"x"`,
+	}); len(diff) > 0 {
+		t.Log(pretty.Sprint(out))
+		t.Fatal(diff)
 	}
 }
 
@@ -150,18 +143,15 @@ func TestValuePaths(t *testing.T) {
 		}},
 	)
 
-	if cat, e := dt.Assemble(); e != nil {
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else {
-		out := testOut{mdl.Value}
-		if e := cat.WriteValues(&out); e != nil {
-			t.Fatal(e)
-		} else if diff := pretty.Diff(out[1:], testOut{
-			// `a:test:outer:{"Fields:":[{"Field field:value:":["inner",{"Fields:":[{"Field field:value:":["text","some text"]}]}]}]}:x`,
-			`a:test:outer:{"inner":{"text":"some text"}}:x`,
-		}); len(diff) > 0 {
-			t.Log(pretty.Sprint(out))
-			t.Fatal(diff)
-		}
+	} else if out, e := dt.readValues(); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(out, []string{
+		// `a:test:outer:{"Fields:":[{"Field field:value:":["inner",{"Fields:":[{"Field field:value:":["text","some text"]}]}]}]}`,
+		`a:test:outer:{"inner":{"text":"some text"}}`,
+	}); len(diff) > 0 {
+		t.Log(pretty.Sprint(out))
+		t.Fatal(diff)
 	}
 }

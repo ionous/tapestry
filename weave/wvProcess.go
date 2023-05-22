@@ -1,7 +1,6 @@
 package weave
 
 import (
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
@@ -69,13 +68,7 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 	// without resolving, have we resolved our parents?
 	for i := 0; i < len(cat.pendingDomains); i++ {
 		next := cat.pendingDomains[i]
-		ready := true // provisionally
-		for _, otherName := range next.reqs {
-			if d, exists := cat.domains[otherName]; !exists || d.currPhase < TempSplit {
-				ready = false // fix: improve error status
-			}
-		}
-		if ready {
+		if next.isReadyForProcessing() {
 			found = i
 			break
 		}
@@ -97,49 +90,37 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 }
 
 func (cat *Catalog) processDomain(d *Domain) (err error) {
-	if dep, e := d.Resolve(); e != nil {
+	// name, row, at := d.name, dep.Strings(true), d.OriginAt()
+	if _, e := cat.run.ActivateDomain(d.name); e != nil {
+		err = e
+	} else if e := cat.findConflicts(); e != nil {
 		err = e
 	} else {
-		name, row, at := d.Name(), dep.Strings(true), d.OriginAt()
-		if e := cat.writer.Write(mdl.Domain, name, row, at); e != nil {
-			err = e
-		} else if _, e := cat.run.ActivateDomain(d.name); e != nil {
-			err = e
-		} else {
-		Loop:
-			for p := assert.Phase(0); p < TempSplit; p++ {
-				switch p {
-				// fix: this isnt supposed to be tied particularly to the plural phase.
-				case assert.PluralPhase:
-					if e := cat.findConflicts(); e != nil {
+		cat.processing.Push(d)
+	Loop:
+		for p := assert.Phase(0); p < TempSplit; p++ {
+			ctx := Weaver{d: d, phase: p, Runtime: cat.run}
+			if e := d.runPhase(&ctx); e != nil {
+				err = e
+				break Loop
+			} else {
+				if p == assert.AncestryPhase {
+					if ks, e := d.resolveKinds(); e != nil {
 						err = e
 						break Loop
-					}
-				}
-				cat.processing.Push(d)
-				ctx := Weaver{d: d, phase: p, Runtime: cat.run}
-				if e := d.runPhase(&ctx); e != nil {
-					err = e
-					break Loop
-				} else {
-					if p == assert.AncestryPhase {
-						if ks, e := d.ResolveDomainKinds(); e != nil {
-							err = e
-							break Loop
-						} else {
-							for _, dep := range ks {
-								k, ancestors := dep.Leaf().(*ScopedKind), dep.Strings(true)
-								if e := cat.writer.Write(mdl.Kind, d.name, k.name, ancestors, k.at); e != nil {
-									err = e
-									break Loop
-								}
+					} else {
+						for _, dep := range ks {
+							k, ancestors := dep.Leaf().(*ScopedKind), dep.Strings(true)
+							if e := cat.writer.Kind(d.name, k.name, ancestors, k.at); e != nil {
+								err = e
+								break Loop
 							}
 						}
 					}
 				}
-				cat.processing.Pop()
 			}
 		}
+		cat.processing.Pop()
 	}
 	return
 }

@@ -10,7 +10,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func (c *Catalog) WritePairs(w Writer) (err error) {
+func (c *Catalog) WritePairs(m mdl.Modeler) (err error) {
 	if _, e := c.ResolveNouns(); e != nil {
 		err = e
 	} else if ds, e := c.ResolveDomains(); e != nil {
@@ -25,7 +25,7 @@ func (c *Catalog) WritePairs(w Writer) (err error) {
 			}
 			sort.Strings(names)
 			for _, relName := range names {
-				if e := writePairs(w, d, relName, d.relatives[relName].pairs); e != nil {
+				if e := writePairs(m, d, relName, d.relatives[relName].pairs); e != nil {
 					err = e
 					break
 				}
@@ -35,7 +35,7 @@ func (c *Catalog) WritePairs(w Writer) (err error) {
 	return
 }
 
-func writePairs(w Writer, d *Domain, relName string, rs []Relative) (err error) {
+func writePairs(m mdl.Modeler, d *Domain, relName string, rs []Relative) (err error) {
 	// note: we dont have to test the existence of the kinds and nouns, assembly has already done that
 	// sometimes, though... its helpful for testing.
 	/*if rel, ok := d.GetKind(relName); !ok {
@@ -57,7 +57,7 @@ func writePairs(w Writer, d *Domain, relName string, rs []Relative) (err error) 
 		} else if n1, ok := d.GetNoun(p.secondNoun); !ok {
 			err = errutil.New("couldnt find second noun", p.secondNoun)
 			break
-		} else*/if e := w.Write(mdl.Pair, d.name, relName, p.firstNoun, p.secondNoun, p.at); e != nil {
+		} else*/if e := m.Pair(d.name, relName, p.firstNoun, p.secondNoun, p.at); e != nil {
 			err = e
 			break
 		}

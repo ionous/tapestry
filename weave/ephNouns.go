@@ -6,24 +6,24 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func (c *Catalog) WriteNouns(w Writer) error {
+func (c *Catalog) WriteNouns(m mdl.Modeler) error {
 	return forEachNoun(c, func(n *ScopedNoun) (err error) {
 		if k, e := n.Kind(); e != nil {
 			err = errutil.Append(err, e)
 		} else {
-			err = w.Write(mdl.Noun, n.domain.name, n.name, k.name, n.at)
+			err = m.Noun(n.domain.name, n.name, k.name, n.at)
 		}
 		return
 	})
 }
 
-func (c *Catalog) WriteNames(w Writer) error {
+func (c *Catalog) WriteNames(m mdl.Modeler) error {
 	return forEachNoun(c, func(n *ScopedNoun) (err error) {
 		{
 			const ofs = -1 // aliases are forced first, in order of declaration.
 			for i, a := range n.aliases {
 				at := n.aliasat[i]
-				if e := w.Write(mdl.Name, n.domain.name, n.name, a, ofs, at); e != nil {
+				if e := m.Name(n.domain.name, n.name, a, ofs, at); e != nil {
 					err = e
 					break
 				}
@@ -31,7 +31,7 @@ func (c *Catalog) WriteNames(w Writer) error {
 		}
 		if err == nil {
 			for ofs, name := range n.Names() {
-				if e := w.Write(mdl.Name, n.domain.name, n.name, name, ofs, n.at); e != nil {
+				if e := m.Name(n.domain.name, n.name, name, ofs, n.at); e != nil {
 					err = e
 					break
 				}

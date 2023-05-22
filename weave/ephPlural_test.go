@@ -5,7 +5,6 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave/eph"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
@@ -67,7 +66,7 @@ func TestPluralAssembly(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		t.Log("ok", e)
-		if out, e := tables.ScanStrings(dt.db, readPlurals); e != nil {
+		if out, e := dt.readPlurals(); e != nil {
 			t.Fatal(e)
 		} else {
 			if diff := pretty.Diff(out, []string{
@@ -77,10 +76,10 @@ func TestPluralAssembly(t *testing.T) {
 				"b:school:fish",
 				// plural redefinition is (no longer) allowed.
 				// ( wicca good and love the earth: and i'll be over here. )
-				// "c:unkindness:witch:x",
+				// "c:unkindness:witch",
 				// we dont expect to see our duplicated definition of cauldron of bat(s)
 				// c is dependent on a: so the definition would be redundant.
-				// "c:cauldron:bat:x",
+				// "c:cauldron:bat",
 			}); len(diff) > 0 {
 				t.Log("got", len(out), out)
 				t.Fatal(diff)
@@ -98,9 +97,3 @@ func okDomainConflict(d string, y ReasonForConflict, e error) (err error) {
 	}
 	return
 }
-
-var readPlurals = `
-select md.domain ||':'|| mp.many ||':'|| mp.one
-from mdl_plural mp 
-join mdl_domain md 
-where md.rowid == mp.domain`

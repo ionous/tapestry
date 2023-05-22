@@ -14,8 +14,7 @@ type ScopedNouns map[string]*ScopedNoun
 
 // find the noun with the ( exact ) name in this scope
 func (d *Domain) GetNoun(name string) (ret *ScopedNoun, okay bool) {
-	if e := VisitTree(d, func(dep Dependency) (err error) {
-		scope := dep.(*Domain)
+	if e := d.visit(func(scope *Domain) (err error) {
 		if n, ok := scope.nouns[name]; ok {
 			ret, okay, err = n, true, Visited
 		}
@@ -29,8 +28,8 @@ func (d *Domain) GetNoun(name string) (ret *ScopedNoun, okay bool) {
 // find the noun with the closest name in this scope
 func (d *Domain) GetClosestNoun(name string) (ret *ScopedNoun, okay bool) {
 	bestRank, bestNoun := math.MaxInt, ret
-	if e := VisitTree(d, func(dep Dependency) (err error) {
-		scope := dep.(*Domain) // used the resolved nouns to generate a consistent ordering
+	if e := d.visit(func(scope *Domain) (err error) {
+		// used the resolved nouns to generate a consistent ordering
 		if nouns, e := scope.resolvedNouns.GetTable(); e != nil {
 			err = e
 		} else {
@@ -76,7 +75,7 @@ func (d *Domain) EnsureNoun(name, at string) (ret *ScopedNoun) {
 
 // distill the nouns from this domain into a table sorted by kind.
 func (d *Domain) ResolveDomainNouns() (ret DependencyTable, err error) {
-	if _, e := d.ResolveDomainKinds(); e != nil {
+	if _, e := d.resolveKinds(); e != nil {
 		err = errutil.Append(err, e)
 	} else {
 		ret, err = d.resolvedNouns.resolve(func() (ret DependencyTable, err error) {

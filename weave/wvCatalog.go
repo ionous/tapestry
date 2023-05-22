@@ -21,7 +21,7 @@ type Catalog struct {
 	resolvedDomains cachedTable
 	Errors          []error
 	cursor          string
-	writer          Writer
+	writer          mdl.Modeler
 	run             rt.Runtime
 	db              *tables.Cache
 
@@ -37,14 +37,15 @@ func NewCatalog(db *sql.DB) *Catalog {
 	if e != nil {
 		panic(e)
 	}
+	m, e := mdl.NewModeler(db)
+	if e != nil {
+		panic(e)
+	}
 	// fix: this needs cleanup
-	// why are use "writer" when db is the only output?
-	// -- why does that .Insert statement produce a type
-
-	// qx should be separated from q ( maybe put into Mdl? )
+	// write should be called modeler
 	// initial cursor should be set externally or passed in
 	// what should be public for Catalog?
-	// or...
+	// no panics on creation... etc.
 	return &Catalog{
 		macros:      make(macroReg),
 		oneTime:     make(map[string]bool),
@@ -52,7 +53,7 @@ func NewCatalog(db *sql.DB) *Catalog {
 		cursor:      "x", // fix
 		db:          tables.NewCache(db),
 		domains:     make(map[string]*Domain),
-		writer:      mdl.Writer(ExecWriter(db).Write),
+		writer:      m,
 		run: qna.NewRuntimeOptions(
 			log.Writer(),
 			qx,
@@ -82,29 +83,65 @@ func (c *Catalog) BeginDomain(name string, requires []string) (err error) {
 		err = InvalidString(name)
 	} else if reqs, e := UniformStrings(requires); e != nil {
 		err = e // transform all the names first to determine any errors
+	} else if d, e := c.addDomain(n, c.cursor, reqs...); e != nil {
+		err = e
 	} else {
-		d := c.ensureDomain(n, c.cursor)
-		if d, ok := c.processing.Top(); ok {
-			reqs = append(reqs, d.name) // domains implicitly depend on the current domain
-		}
-		if e := d.addDependencies(reqs); e != nil {
-			err = e
-		} else {
-			c.processing.Push(d)
-		}
+		c.processing.Push(d)
 	}
 	return
 }
 
-// find or create the domain
-func (c *Catalog) ensureDomain(n, at string) (ret *Domain) {
+func (c *Catalog) ensureDomain(n string) (ret *Domain) {
+	// find or create the domain
 	if d, ok := c.domains[n]; ok {
 		ret = d
 	} else {
-		d = &Domain{Requires: Requires{name: n, at: at}, catalog: c}
+		d = &Domain{name: n, catalog: c}
 		c.domains[n] = d
-		c.pendingDomains = append(c.pendingDomains, d)
 		ret = d
+	}
+	return
+}
+
+// return the uniformly named domain ( creating it if necessary )
+func (c *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err error) {
+	d := c.ensureDomain(n)
+	if d.currPhase > assert.DomainStart {
+		err = errutil.New("can't add new dependencies to parent domains", d.name)
+	} else {
+		// domains are implicitly dependent on their parent domain
+		if p, ok := c.processing.Top(); ok {
+			reqs = append(reqs, p.name)
+		}
+		for _, req := range reqs {
+			if e := c.findDomainCycles(n, req); e != nil {
+				err = e
+				break
+			}
+		}
+	}
+	if err == nil {
+		ret = d
+	}
+	return
+}
+
+// check before inserting a reference to avoid circularity;
+// errors if one was detected.
+func (c *Catalog) findDomainCycles(n, req string) (err error) {
+	if n == req {
+		err = errutil.Fmt("circular reference: %q can't depend on itself", n)
+	} else {
+		var exists bool
+		if e := c.db.QueryRow(
+			`select 1 
+		from domain_tree 
+		where base = ?1
+		and uses = ?2`, req, n).Scan(&exists); e != nil && e != sql.ErrNoRows {
+			err = e
+		} else if exists {
+			err = errutil.Fmt("circular reference: %q requires %q", req, n)
+		}
 	}
 	return
 }
@@ -129,6 +166,7 @@ func (c *Catalog) findConflicts() (err error) {
 	return
 }
 
+// tbd: maybe this could pull in the relevant domains directly rather than relying on active domains?
 func findConflicts(db tables.Querier) (ret []conflict, err error) {
 	if rows, e := db.Query(
 		`select 'plural', a.domain, a.at, a.many, a.one
@@ -144,6 +182,12 @@ func findConflicts(db tables.Querier) (ret []conflict, err error) {
 			where a.domain != b.domain 
 			and a.oneWord == b.oneWord 
 			and a.otherWord != b.otherWord
+		union all 
+		select 'kind', a.domain, a.at, a.kind, ''
+			from active_kinds as a 
+			join active_kinds as b 
+			where a.kind == b.kind
+			and a.domain != b.domain 
 			`); e != nil {
 		err = errutil.New("find conflicts", e)
 	} else {
@@ -171,7 +215,7 @@ func (c *Catalog) postPhase(p assert.Phase, d *Domain) (err error) {
 	// we have to hit all locals from all domains before writing
 	// and macro is after locals...
 	case assert.MacroPhase:
-		if deps, e := d.ResolveDomainKinds(); e != nil {
+		if deps, e := d.resolveKinds(); e != nil {
 			err = e
 		} else {
 			for _, dep := range deps {
@@ -242,7 +286,7 @@ func (c *Catalog) writePhase(p assert.Phase) (err error) {
 // work out the hierarchy of all the domains, and return them in a list.
 // the list has the "shallowest" domains first, and the most derived ( "deepest" ) domains last.
 func (c *Catalog) ResolveDomains() (ret []*Domain, err error) {
-	if rows, e := c.db.Query(`select domain from mdl_domain order by path`); e != nil {
+	if rows, e := c.db.Query(`select domain from domain_order`); e != nil {
 		err = errutil.New("resolve domains", e)
 	} else {
 		var name string
@@ -265,7 +309,7 @@ func (c *Catalog) ResolveKinds() (ret DependencyTable, err error) {
 		err = e
 	} else {
 		for _, d := range ds {
-			if ks, e := d.ResolveDomainKinds(); e != nil {
+			if ks, e := d.resolveKinds(); e != nil {
 				err = errutil.Append(err, e)
 			} else {
 				out = append(out, ks...)
@@ -296,25 +340,6 @@ func (c *Catalog) ResolveNouns() (ret DependencyTable, err error) {
 	}
 	if err == nil {
 		ret = out
-	}
-	return
-}
-
-type partialWriter struct {
-	w      Writer
-	fields []interface{}
-}
-
-func (p *partialWriter) Write(q string, args ...interface{}) error {
-	return p.w.Write(q, append(p.fields, args...)...)
-}
-
-// private helper to make the catalog compatible with the DependencyFinder ( for domains )
-type catDependencyFinder Catalog
-
-func (c *catDependencyFinder) FindDependency(name string) (ret Dependency, okay bool) {
-	if d, ok := c.domains[name]; ok {
-		ret, okay = d, true
 	}
 	return
 }

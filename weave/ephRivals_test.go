@@ -15,19 +15,19 @@ func TestRivals(t *testing.T) {
 	defer db.Close()
 	if e := tables.CreateAll(db); e != nil {
 		t.Fatal(e)
-	} else if _, e := db.Exec(`insert into mdl_domain(rowid, domain, path) values
-	(1, 'p1', ''),
-	(2, 'p2', '')`); e != nil {
+	} else if _, e := db.Exec(`insert into mdl_domain(domain, path) values
+	('p1', ''),
+	('p2', '')`); e != nil {
 		t.Fatal(e)
 	} else if _, e := db.Exec(`insert into mdl_plural(domain, many, one) values
-	(1, 'people', 'human'),
-	(1, 'bats', 'bat'),
-	(2, 'people', 'person'),
-	(2, 'rabbits', 'rabbit')`); e != nil {
+	('people', 'human'),
+	('bats', 'bat'),
+	('people', 'person'),
+	('rabbits', 'rabbit')`); e != nil {
 		t.Fatal(e)
 	} else if _, e := db.Exec(`insert into run_domain(domain, active) values
-	(1, 1),
-	(2, 1)`); e != nil {
+	('p1', 1),
+	('p2', 1)`); e != nil {
 		t.Fatal(e)
 	} else if conflicts, e := findConflicts(db); e != nil {
 		t.Fatal(e)

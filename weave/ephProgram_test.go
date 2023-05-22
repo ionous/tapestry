@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/eph"
 	"github.com/kr/pretty"
 )
@@ -25,18 +24,14 @@ func TestGrammarDirectives(t *testing.T) {
 			},
 		},
 	)
-
-	if cat, e := dt.Assemble(); e != nil {
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else {
-		out := testOut{mdl.Grammar}
-		if e := cat.WriteDirectives(&out); e != nil {
-			t.Fatal(e)
-		} else if diff := pretty.Diff(out[1:], testOut{
-			`b:jump/skip/hop:{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}:x`,
-		}); len(diff) > 0 {
-			t.Log(pretty.Sprint(out))
-			t.Fatal(diff)
-		}
+	} else if out, e := dt.readGrammar(); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(out, []string{
+		`b:jump/skip/hop:{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}`,
+	}); len(diff) > 0 {
+		t.Log(pretty.Sprint(out))
+		t.Fatal(diff)
 	}
 }

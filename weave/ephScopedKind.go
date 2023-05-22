@@ -111,7 +111,7 @@ func (k *ScopedKind) findScopedField(field string, aff affine.Affinity) (ret *fi
 		search := dep.(*ScopedKind)
 		for _, def := range search.fields {
 			if def.name == field {
-				if def.affinity == aff.String() {
+				if def.affinity == aff {
 					ret, err = def, Visited
 				} else {
 					err = errutil.Fmt("affinity %s incompatible with '%s.%s:%s'",
@@ -140,7 +140,7 @@ func (k *ScopedKind) findScopedTrait(field string) (ret *fieldDef, err error) {
 				if a, ok := k.domain.GetKind(cls); ok && a.HasParent(kindsOf.Aspect) {
 					// when the name of the field is the same as the name of the aspect
 					// that is our special "acts as trait" field.
-					if a.name == def.name && def.affinity == affine.Text.String() {
+					if a.name == def.name && def.affinity == affine.Text {
 						// and search through its traits
 						if _, ok := a.FindTrait(field); ok {
 							ret, err = def, Visited // to exit hierarchy search

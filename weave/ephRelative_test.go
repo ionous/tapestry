@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/eph"
 	"github.com/kr/pretty"
 )
@@ -52,42 +51,39 @@ func TestRelativeFormation(t *testing.T) {
 		)...,
 	)
 
-	if cat, e := dt.Assemble(); e != nil {
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else {
-		out := testOut{mdl.Pair}
-		if e := cat.WritePairs(&out); e != nil {
-			t.Fatal(e)
-		} else if diff := pretty.Diff(out[1:], testOut{
-			"a:r_1_1:a:a:x",
-			"a:r_1_1:b:c:x",
-			"a:r_1_1:e:z:x",
-			//
-			"a:r_1_x:b:e:x",
-			"a:r_1_x:c:a:x",
-			"a:r_1_x:c:b:x",
-			"a:r_1_x:c:c:x",
-			"a:r_1_x:z:d:x",
-			"a:r_1_x:z:f:x",
-			//
-			"a:r_x_1:b:a:x",
-			"a:r_x_1:c:d:x",
-			"a:r_x_1:d:b:x",
-			"a:r_x_1:e:f:x",
-			"a:r_x_1:f:f:x",
-			"a:r_x_1:l:b:x",
-			"a:r_x_1:z:b:x",
-			//
-			"a:r_x_x:a:a:x",
-			"a:r_x_x:a:b:x",
-			"a:r_x_x:a:c:x",
-			"a:r_x_x:e:d:x",
-			"a:r_x_x:f:d:x",
-			"a:r_x_x:l:d:x",
-		}); len(diff) > 0 {
-			t.Log(pretty.Sprint(out))
-			t.Fatal(diff)
-		}
+	} else if out, e := dt.readPairs(); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(out, []string{
+		"a:r_1_1:a:a",
+		"a:r_1_1:b:c",
+		"a:r_1_1:e:z",
+		//
+		"a:r_1_x:b:e",
+		"a:r_1_x:c:a",
+		"a:r_1_x:c:b",
+		"a:r_1_x:c:c",
+		"a:r_1_x:z:d",
+		"a:r_1_x:z:f",
+		//
+		"a:r_x_1:b:a",
+		"a:r_x_1:c:d",
+		"a:r_x_1:d:b",
+		"a:r_x_1:e:f",
+		"a:r_x_1:f:f",
+		"a:r_x_1:l:b",
+		"a:r_x_1:z:b",
+		//
+		"a:r_x_x:a:a",
+		"a:r_x_x:a:b",
+		"a:r_x_x:a:c",
+		"a:r_x_x:e:d",
+		"a:r_x_x:f:d",
+		"a:r_x_x:l:d",
+	}); len(diff) > 0 {
+		t.Log(pretty.Sprint(out))
+		t.Fatal(diff)
 	}
 }
 

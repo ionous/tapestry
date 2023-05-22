@@ -17,7 +17,7 @@ type asmCheck struct {
 	// we dont consider than error -- though possible we should warn about it.
 	name      string
 	domain    *Domain
-	expectVal interface{}
+	expectVal string // marshel'd value; fix: consider leaving marshal to modeler?
 	expectAff affine.Affinity
 	prog      string
 	at        string
@@ -54,8 +54,8 @@ func (c *asmCheck) setProg(exe []rt.Execute) (err error) {
 
 // return the uniformly named domain ( if it exists )
 func (d *Domain) GetCheck(name string) (ret *asmCheck, okay bool) {
-	if e := VisitTree(d, func(dep Dependency) (err error) {
-		if n, ok := dep.(*Domain).checks[name]; ok {
+	if e := d.visit(func(dep *Domain) (err error) {
+		if n, ok := dep.checks[name]; ok {
 			ret, okay, err = n, true, Visited
 		}
 		return
@@ -81,7 +81,7 @@ func (d *Domain) EnsureCheck(name, at string) (ret *asmCheck) {
 	return
 }
 
-func (c *Catalog) WriteChecks(w Writer) (err error) {
+func (c *Catalog) WriteChecks(m mdl.Modeler) (err error) {
 	if ds, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
@@ -100,7 +100,7 @@ func (c *Catalog) WriteChecks(w Writer) (err error) {
 			sort.Strings(names)
 			for _, n := range names {
 				t := d.checks[n]
-				if e := w.Write(mdl.Check, d.name, t.name, t.expectVal, t.expectAff, t.prog, t.at); e != nil {
+				if e := m.Check(d.name, t.name, t.expectVal, t.expectAff, t.prog, t.at); e != nil {
 					err = e
 					break
 				}

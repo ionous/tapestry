@@ -3,9 +3,7 @@ package weave
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/eph"
-	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
@@ -25,25 +23,26 @@ func TestNounFormation(t *testing.T) {
 	dt.makeDomain(dd("b", "a"),
 		&eph.Nouns{Noun: "toy boat", Kind: "k"},
 	)
-	nouns, names := testOut{mdl.Noun}, testOut{mdl.Name}
-	if cat, e := dt.Assemble(); e != nil {
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if e := writeNouns(cat, &nouns, &names); e != nil {
+	} else if nouns, e := dt.readNouns(); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(nouns[1:], testOut{
-		"a:apple:k:x",
-		"a:pear:k:x",
-		"b:toy_boat:k:x",
+	} else if diff := pretty.Diff(nouns, []string{
+		"a:apple:k",
+		"a:pear:k",
+		"b:toy_boat:k",
 	}); len(diff) > 0 {
 		t.Log("nouns:", pretty.Sprint(nouns))
 		t.Fatal(diff)
-	} else if diff := pretty.Diff(names[1:], testOut{
-		"a:apple:apple:0:x",
-		"a:pear:pear:0:x",
-		"b:toy_boat:toy boat:0:x",
-		"b:toy_boat:toy_boat:1:x",
-		"b:toy_boat:boat:2:x",
-		"b:toy_boat:toy:3:x",
+	} else if names, e := dt.readNames(); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(names, []string{
+		"a:apple:apple:0",
+		"a:pear:pear:0",
+		"b:toy_boat:toy boat:0",
+		"b:toy_boat:toy_boat:1",
+		"b:toy_boat:boat:2",
+		"b:toy_boat:toy:3",
 	}); len(diff) > 0 {
 		t.Log("names:", pretty.Sprint(names))
 		t.Fatal(diff)
@@ -78,24 +77,25 @@ func TestNounHierarchy(t *testing.T) {
 		&eph.Nouns{Noun: "pear", Kind: "t"},
 		&eph.Nouns{Noun: "bandanna", Kind: "c"},
 	)
-	nouns, names := testOut{mdl.Noun}, testOut{mdl.Name}
-	if cat, e := dt.Assemble(); e != nil {
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if e := writeNouns(cat, &nouns, &names); e != nil {
+	} else if nouns, e := dt.readNouns(); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(nouns[1:], testOut{
+	} else if diff := pretty.Diff(nouns, []string{
 		// note: the new assembler takes the most specific type
 		// the old one took the least specific type
-		"a:apple:c:x",
-		"a:bandanna:c:x",
-		"a:pear:d:x",
+		"a:apple:c",
+		"a:bandanna:c",
+		"a:pear:d",
 	}); len(diff) > 0 {
 		t.Log("nouns:", pretty.Sprint(nouns))
 		t.Fatal(diff)
-	} else if diff := pretty.Diff(names[1:], testOut{
-		"a:apple:apple:0:x",
-		"a:bandanna:bandanna:0:x",
-		"a:pear:pear:0:x",
+	} else if names, e := dt.readNames(); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(names, []string{
+		"a:apple:apple:0",
+		"a:bandanna:bandanna:0",
+		"a:pear:pear:0",
 	}); len(diff) > 0 {
 		t.Log("names:", pretty.Sprint(names))
 		t.Fatal(diff)
@@ -127,22 +127,23 @@ func TestNounParts(t *testing.T) {
 		&eph.Kinds{Kind: "t"},
 		&eph.Nouns{Noun: "collection of words", Kind: "t"},
 	)
-	nouns, names := testOut{mdl.Noun}, testOut{mdl.Name}
-	if cat, e := dt.Assemble(); e != nil {
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if e := writeNouns(cat, &nouns, &names); e != nil {
+	} else if nouns, e := dt.readNouns(); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(nouns[1:], testOut{
-		"a:collection_of_words:t:x",
+	} else if diff := pretty.Diff(nouns, []string{
+		"a:collection_of_words:t",
 	}); len(diff) > 0 {
 		t.Log("nouns:", pretty.Sprint(nouns))
 		t.Fatal(diff)
-	} else if diff := pretty.Diff(names[1:], testOut{
-		"a:collection_of_words:collection of words:0:x",
-		"a:collection_of_words:collection_of_words:1:x",
-		"a:collection_of_words:words:2:x",
-		"a:collection_of_words:of:3:x",
-		"a:collection_of_words:collection:4:x",
+	} else if names, e := dt.readNames(); e != nil {
+		t.Fatal(e)
+	} else if diff := pretty.Diff(names, []string{
+		"a:collection_of_words:collection of words:0",
+		"a:collection_of_words:collection_of_words:1",
+		"a:collection_of_words:words:2",
+		"a:collection_of_words:of:3",
+		"a:collection_of_words:collection:4",
 	}); len(diff) > 0 {
 		t.Log("names:", pretty.Sprint(names))
 		t.Fatal(diff)
@@ -160,21 +161,20 @@ func TestNounAliases(t *testing.T) {
 		&eph.Aliases{ShortName: "boat", Aliases: dd("ship")},
 		&eph.Aliases{ShortName: "apple", Aliases: dd("delicious", "fruit")},
 	)
-	names := testOut{mdl.Name}
-	if cat, e := dt.Assemble(); e != nil {
+	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if e := writeNouns(cat, nil, &names); e != nil {
+	} else if names, e := dt.readNames(); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(names[1:], testOut{
-		"b:apple:delicious:-1:x", // aliases first
-		"b:apple:fruit:-1:x",
-		"b:apple:apple:0:x",
-		"b:toy_boat:model:-1:x", // aliases first
-		"b:toy_boat:ship:-1:x",
-		"b:toy_boat:toy boat:0:x", // spaces
-		"b:toy_boat:toy_boat:1:x", // breaks
-		"b:toy_boat:boat:2:x",     // left word
-		"b:toy_boat:toy:3:x",      // right word
+	} else if diff := pretty.Diff(names, []string{
+		"b:apple:delicious:-1", // aliases first
+		"b:apple:fruit:-1",
+		"b:apple:apple:0",
+		"b:toy_boat:model:-1", // aliases first
+		"b:toy_boat:ship:-1",
+		"b:toy_boat:toy boat:0", // spaces
+		"b:toy_boat:toy_boat:1", // breaks
+		"b:toy_boat:boat:2",     // left word
+		"b:toy_boat:toy:3",      // right word
 	}); len(diff) > 0 {
 		t.Log("names:", pretty.Sprint(names))
 		t.Fatal(diff)
@@ -197,8 +197,6 @@ func TestNounDistance(t *testing.T) {
 
 	if cat, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if _, e := cat.ResolveNouns(); e != nil {
-		t.Fatal(e)
 	} else if d, ok := cat.GetDomain("a"); !ok {
 		t.Fatal("unknown domain")
 	} else {
@@ -217,18 +215,4 @@ func TestNounDistance(t *testing.T) {
 			}
 		}
 	}
-}
-
-func writeNouns(cat *Catalog, nouns, names *testOut) (err error) {
-	if nouns != nil && err == nil {
-		if e := cat.WriteNouns(nouns); e != nil {
-			err = errutil.New("error writing nouns:", e)
-		}
-	}
-	if names != nil && err == nil {
-		if e := cat.WriteNames(names); e != nil {
-			err = errutil.New("error writing names:", e)
-		}
-	}
-	return
 }

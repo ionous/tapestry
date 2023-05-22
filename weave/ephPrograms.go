@@ -9,12 +9,12 @@ import (
 
 // mdl.Prog, lede, "Directive", str
 // fix? each phase seems to be getting its own writer.... should that be formalized?
-func (c *Catalog) WriteDirectives(w Writer) (err error) {
+func (c *Catalog) WriteDirectives(m mdl.Modeler) (err error) {
 	if deps, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
 		for _, d := range deps {
-			if e := d.WriteDirectives(w); e != nil {
+			if e := d.WriteDirectives(m); e != nil {
 				err = e
 				break
 			}
@@ -23,11 +23,11 @@ func (c *Catalog) WriteDirectives(w Writer) (err error) {
 	return
 }
 
-func (d *Domain) WriteDirectives(w Writer) (err error) {
+func (d *Domain) WriteDirectives(m mdl.Modeler) (err error) {
 	for _, def := range d.defs {
 		if vs := def.key.vals; vs[0] == "prog" {
 			name := vs[1]
-			if e := w.Write(mdl.Grammar, d.name, name, def.value, def.at); e != nil {
+			if e := m.Grammar(d.name, name, def.value, def.at); e != nil {
 				err = errutil.Append(err, e)
 			}
 		}

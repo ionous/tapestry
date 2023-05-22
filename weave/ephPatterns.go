@@ -11,7 +11,7 @@ import (
 )
 
 // write the pattern table in a reasonable order
-func (c *Catalog) WritePatterns(w Writer) (err error) {
+func (c *Catalog) WritePatterns(m mdl.Modeler) (err error) {
 	if deps, e := c.ResolveKinds(); e != nil {
 		err = e
 	} else {
@@ -21,7 +21,7 @@ func (c *Catalog) WritePatterns(w Writer) (err error) {
 				result := k.domain.GetDefinition(MakeKey("pat", pat, "res"))
 				labels := k.header.labels()
 				//
-				if e := w.Write(mdl.Pat, k.domain.name, k.name, labels, result.value); e != nil {
+				if e := m.Pat(k.domain.name, k.name, labels, result.value); e != nil {
 					err = e
 					break
 				}

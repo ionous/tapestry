@@ -18,8 +18,8 @@ func (d *Domain) GetPluralKind(name string) (ret *ScopedKind, okay bool) {
 
 // return the uniformly named domain ( if it exists )
 func (d *Domain) GetKind(name string) (ret *ScopedKind, okay bool) {
-	if e := VisitTree(d, func(dep Dependency) (err error) {
-		if n, ok := dep.(*Domain).kinds[name]; ok {
+	if e := d.visit(func(dep *Domain) (err error) {
+		if n, ok := dep.kinds[name]; ok {
 			ret, okay, err = n, true, Visited
 		}
 		return
@@ -46,7 +46,7 @@ func (d *Domain) EnsureKind(name, at string) (ret *ScopedKind) {
 }
 
 // distill a set of kinds into a set of names and their hierarchy
-func (d *Domain) ResolveDomainKinds() (DependencyTable, error) {
+func (d *Domain) resolveKinds() (DependencyTable, error) {
 	return d.resolvedKinds.resolve(func() (ret DependencyTable, err error) {
 		m := TableMaker(len(d.kinds))
 		for _, k := range d.kinds {
