@@ -10,21 +10,17 @@ var TempSplit = assert.AncestryPhase + 1
 // walk the domains and run the commands remaining in their queues
 func (cat *Catalog) AssembleCatalog() (err error) {
 	var ds []*Domain
-	if cat.writer == nil {
-		ds = cat.pendingDomains // hrm.... supporting old things probably wont work anymore
-	} else {
-		for {
-			if len(cat.processing) > 0 {
-				err = errutil.New("mismatched begin/end domain")
-				break
-			} else if len(cat.pendingDomains) == 0 {
-				break
-			} else if was, e := cat.assembleNext(); e != nil {
-				err = e
-				break
-			} else {
-				ds = append(ds, was)
-			}
+	for {
+		if len(cat.processing) > 0 {
+			err = errutil.New("mismatched begin/end domain")
+			break
+		} else if len(cat.pendingDomains) == 0 {
+			break
+		} else if was, e := cat.assembleNext(); e != nil {
+			err = e
+			break
+		} else {
+			ds = append(ds, was)
 		}
 	}
 	if err == nil {

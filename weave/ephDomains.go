@@ -97,7 +97,7 @@ func (d *Domain) visit(visit func(d *Domain) error) (err error) {
 	} else {
 		for _, el := range tree {
 			if p, ok := cat.GetDomain(el); !ok {
-				err = errutil.New("no such domain", el)
+				err = errutil.Fmt("unknown domain %q", el)
 				break
 			} else if e := visit(p); e != nil {
 				err = e

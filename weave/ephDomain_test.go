@@ -119,7 +119,7 @@ func TestDomainWhenUndeclared(t *testing.T) {
 	if _, e := dt.Assemble(); e == nil {
 		t.Fatal("expected error")
 	} else if !strings.Contains(e.Error(), "unknown domain") {
-		t.Fatal("expected unknown domain error", e)
+		t.Fatalf("expected unknown domain error; got: %q", e)
 	} else {
 		t.Log("ok:", e)
 	}

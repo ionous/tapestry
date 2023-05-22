@@ -144,10 +144,19 @@ from mdl_plural`)
 }
 
 // an array of dependencies
-func (dt *domainTest) readDomain(n string) ([]string, error) {
-	return tables.QueryStrings(dt.db,
-		`select uses from domain_tree where base = ?1 order by dist desc`,
-		n)
+func (dt *domainTest) readDomain(n string) (ret []string, err error) {
+	if ds, e := tables.QueryStrings(dt.db,
+		`select uses from domain_tree 
+		where base = ?1 
+		order by dist desc`,
+		n); e != nil {
+		err = e
+	} else {
+		// the domain tree includes the domain itself
+		// the tests dont expect that.
+		ret = ds[:len(ds)-1]
+	}
+	return
 }
 
 func (dt *domainTest) readDomains() ([]string, error) {

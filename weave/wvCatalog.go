@@ -114,7 +114,13 @@ func (c *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err erro
 			reqs = append(reqs, p.name)
 		}
 		for _, req := range reqs {
-			if e := c.findDomainCycles(n, req); e != nil {
+			if dep, ok := UniformString(req); !ok {
+				err = errutil.New("invalid name", req)
+				break
+			} else if e := c.findDomainCycles(d.name, dep); e != nil {
+				err = e
+				break
+			} else if e := c.writer.Domain(d.name, dep, at); e != nil {
 				err = e
 				break
 			}
@@ -292,7 +298,7 @@ func (c *Catalog) ResolveDomains() (ret []*Domain, err error) {
 		var name string
 		err = tables.ScanAll(rows, func() (err error) {
 			if d, ok := c.GetDomain(name); !ok {
-				err = errutil.New("no such domain", name)
+				err = errutil.Fmt("unknown domain %q", name)
 			} else {
 				ret = append(ret, d)
 			}
