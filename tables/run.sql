@@ -21,29 +21,18 @@ select *
 from run_domain rd 
 where rd.active > 0;
 
-/**
- * the set of active domain names
- */
 create view if not exists
-active_domains as 
-select * 
-from run_domain rd 
-where rd.active > 0;
+active_grammar as 
+select mg.*
+from mdl_grammar mg 
+join active_domains
+	using (domain);	
 
 create view if not exists
 active_kinds as 
-select ds.domain, mk.rowid as kind, mk.kind as name, mk.path
+select ds.domain, mk.rowid as kind, mk.kind as name, mk.path, mk.at
 from active_domains ds
 join mdl_kind mk 
-	using (domain);
-
-/* domain name, noun id, noun name, and kind id
-* the domain name is a nod towards needing the domain name to fully scope the noun */ 
-create view if not exists
-active_nouns as 
-select ds.domain, mn.rowid as noun, mn.noun as name, mn.kind
-from active_domains ds
-join mdl_noun mn 
 	using (domain);
 
 create view if not exists
@@ -52,6 +41,16 @@ select ds.domain, mp.many, mp.one, mp.at
 from active_domains ds
 join mdl_plural mp 
 	using (domain);	
+
+/* domain name, noun id, noun name, and kind id
+* the domain name is a nod towards needing the domain name to fully scope the noun */ 
+create view if not exists
+active_nouns as 
+select ds.domain, mn.rowid as noun, mn.noun as name, mn.kind, mn.at
+from active_domains ds
+join mdl_noun mn 
+	using (domain);
+
 
 create view if not exists
 active_rev as 

@@ -174,8 +174,8 @@ from mdl_plural`)
 // domain, input, serialized program
 func (dt *domainTest) readGrammar() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
-    select domain ||':'|| many ||':'|| one
-from mdl_plural`)
+    select domain ||':'|| name ||':'|| prog
+from mdl_grammar`)
 }
 
 // domain, kind, materialized path

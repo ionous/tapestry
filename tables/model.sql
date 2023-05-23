@@ -20,7 +20,9 @@ create table mdl_domain( domain text, requires text, at text, primary key( domai
  * type is most often used for affinities of type "text", and usually indicates a kind ( from mdl_kind )
  * the scope of a field is the same as its kind. */
 create table mdl_field( kind int not null, field text, affinity text, type int, at text, primary key( kind, field ));
-/* statements for user input parsing */
+/* statements for user input parsing. this is pretty low-bar right now;
+ * typed commands are not separated into unique rows, so conflicts between words and phrases can't be detected.
+ */
 create table mdl_grammar( domain text not null, name text, prog blob, at text, primary key( domain, name ));
 /* a class of objects with shared characteristics */
 create table mdl_kind( domain text not null, kind text, path text, at text, primary key( domain, kind ));

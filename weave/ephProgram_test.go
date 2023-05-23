@@ -8,9 +8,9 @@ import (
 	"github.com/kr/pretty"
 )
 
-// there's not much to test for directives right now
-// just verify some text comes out?
-func TestGrammarDirectives(t *testing.T) {
+// grammar parsing doesn't do very many useful things modelling wise;
+// so this just tests that it gets into the database.
+func TestGrammar(t *testing.T) {
 	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("b"),

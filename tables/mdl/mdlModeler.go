@@ -1,6 +1,9 @@
 package mdl
 
-import "git.sr.ht/~ionous/tapestry/affine"
+import (
+  "git.sr.ht/~ionous/tapestry/affine"
+  "git.sr.ht/~ionous/tapestry/dl/grammar"
+)
 
 // Modeler wraps writing to the model table
 // so the implementation can handle verifying dependent names when needed.
@@ -16,7 +19,7 @@ type Modeler interface {
   // note: the domain exists to uniquely identify the kind;
   // it's not actually stored in the field table and requires the write to transform it properly.
   Field(domain, kind, field string, affinity affine.Affinity, typeName, at string) (err error)
-  Grammar(domain, name, prog, at string) (err error)
+  Grammar(domain, name string, d *grammar.Directive, at string) (err error)
   // singular name of kind and materialized hierarchy of ancestors separated by commas
   Kind(domain, kind, path, at string) (err error)
   // words for authors and game players refer to nouns

@@ -97,6 +97,7 @@ func (c *Catalog) ensureDomain(n string) (ret *Domain) {
 		ret = d
 	} else {
 		d = &Domain{name: n, catalog: c}
+		c.pendingDomains = append(c.pendingDomains, d)
 		c.domains[n] = d
 		ret = d
 	}
@@ -113,16 +114,23 @@ func (c *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err erro
 		if p, ok := c.processing.Top(); ok {
 			reqs = append(reqs, p.name)
 		}
-		for _, req := range reqs {
-			if dep, ok := UniformString(req); !ok {
-				err = errutil.New("invalid name", req)
-				break
-			} else if e := c.findDomainCycles(d.name, dep); e != nil {
-				err = e
-				break
-			} else if e := c.writer.Domain(d.name, dep, at); e != nil {
-				err = e
-				break
+		// probably asking for  trouble:
+		// the tests have no top level domain (tapesrty) the way weave does
+		// we still need them to wind up in the table eventually...
+		if len(reqs) == 0 {
+			err = c.writer.Domain(d.name, "", at)
+		} else {
+			for _, req := range reqs {
+				if dep, ok := UniformString(req); !ok {
+					err = errutil.New("invalid name", req)
+					break
+				} else if e := c.findDomainCycles(d.name, dep); e != nil {
+					err = e
+					break
+				} else if e := c.writer.Domain(d.name, dep, at); e != nil {
+					err = e
+					break
+				}
 			}
 		}
 	}
@@ -143,7 +151,8 @@ func (c *Catalog) findDomainCycles(n, req string) (err error) {
 			`select 1 
 		from domain_tree 
 		where base = ?1
-		and uses = ?2`, req, n).Scan(&exists); e != nil && e != sql.ErrNoRows {
+		and uses = ?2
+		and base != uses`, req, n).Scan(&exists); e != nil && e != sql.ErrNoRows {
 			err = e
 		} else if exists {
 			err = errutil.Fmt("circular reference: %q requires %q", req, n)
@@ -172,28 +181,37 @@ func (c *Catalog) findConflicts() (err error) {
 	return
 }
 
-// tbd: maybe this could pull in the relevant domains directly rather than relying on active domains?
+// tbd: maybe this could pull in the relevant domains;
+// currently it happens after the domains have been activated
+// and therefore compares everything to everything each time.
 func findConflicts(db tables.Querier) (ret []conflict, err error) {
 	if rows, e := db.Query(
 		`select 'plural', a.domain, a.at, a.many, a.one
 			from active_plurals as a 
 			join active_plurals as b 
-			where a.domain != b.domain 
-			and a.many == b.many 
+				using(many)
+			where a.domain < b.domain 
 			and a.one != b.one
 		union all
 		select 'opposite', a.domain, a.at, a.oneWord, a.otherWord 
 			from active_rev as a 
 			join active_rev as b 
-			where a.domain != b.domain 
-			and a.oneWord == b.oneWord 
+				using(oneWord)
+			where a.domain < b.domain 
 			and a.otherWord != b.otherWord
 		union all 
 		select 'kind', a.domain, a.at, a.kind, ''
 			from active_kinds as a 
 			join active_kinds as b 
-			where a.kind == b.kind
-			and a.domain != b.domain 
+				using(kind)
+			where a.domain < b.domain
+		union all 
+		select 'grammar', a.domain, a.at, a.name, ''
+			from active_grammar as a 
+			join active_grammar as b 
+				using(name)
+			where a.domain < b.domain 
+			and a.prog != b.prog
 			`); e != nil {
 		err = errutil.New("find conflicts", e)
 	} else {
@@ -274,10 +292,6 @@ func (c *Catalog) writePhase(p assert.Phase) (err error) {
 	case assert.AliasPhase:
 		err = c.WriteNames(w)
 
-	case assert.DirectivePhase:
-		// grammar
-		err = c.WriteDirectives(w)
-
 	case assert.PostDomain:
 		// when to write these?
 		err = c.WriteChecks(w)
@@ -298,7 +312,7 @@ func (c *Catalog) ResolveDomains() (ret []*Domain, err error) {
 		var name string
 		err = tables.ScanAll(rows, func() (err error) {
 			if d, ok := c.GetDomain(name); !ok {
-				err = errutil.Fmt("unknown domain %q", name)
+				err = errutil.Fmt("unexpected domain %q", name)
 			} else {
 				ret = append(ret, d)
 			}
