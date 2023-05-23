@@ -150,13 +150,12 @@ func expectFullResults(t *testing.T, dt *domainTest) {
 	} else if outpat, e := dt.readPatterns(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outpat, []string{
-		// fix? run-in number suffixes?
 		"a:p:p_1:success",
 	}); len(diff) > 0 {
 		t.Log("got:", pretty.Sprint(outpat))
 		t.Fatal(diff)
 	} else if outlocals, e := dt.readLocals(); e != nil {
-		t.Fatal(diff)
+		t.Fatal(e)
 	} else if diff := pretty.Diff(outlocals, []string{
 		`a:p:l_2:{"FromNumber:":10}`,
 	}); len(diff) > 0 {

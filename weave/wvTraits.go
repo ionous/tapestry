@@ -17,7 +17,7 @@ type traitDef struct {
 	traits []string
 }
 
-func (td *traitDef) Write(m mdl.Modeler, domain, kind string) (err error) {
+func (td *traitDef) WriteField(m mdl.Modeler, domain, kind string) (err error) {
 	for _, t := range td.traits {
 		if e := m.Field(domain, kind, t, affine.Bool, "", td.at); e != nil {
 			err = e

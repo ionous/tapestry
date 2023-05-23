@@ -181,7 +181,8 @@ func (c *Catalog) findConflicts() (err error) {
 	return
 }
 
-// tbd: maybe this could pull in the relevant domains;
+// tbd: maybe this could pull in the newly relevant domains;
+// ( ex. use domain = active count )
 // currently it happens after the domains have been activated
 // and therefore compares everything to everything each time.
 func findConflicts(db tables.Querier) (ret []conflict, err error) {
@@ -190,27 +191,27 @@ func findConflicts(db tables.Querier) (ret []conflict, err error) {
 			from active_plurals as a 
 			join active_plurals as b 
 				using(many)
-			where a.domain < b.domain 
+			where a.domain != b.domain
 			and a.one != b.one
 		union all
 		select 'opposite', a.domain, a.at, a.oneWord, a.otherWord 
 			from active_rev as a 
 			join active_rev as b 
 				using(oneWord)
-			where a.domain < b.domain 
+			where a.domain != b.domain 
 			and a.otherWord != b.otherWord
 		union all 
 		select 'kind', a.domain, a.at, a.kind, ''
 			from active_kinds as a 
 			join active_kinds as b 
 				using(kind)
-			where a.domain < b.domain
+			where a.domain != b.domain
 		union all 
 		select 'grammar', a.domain, a.at, a.name, ''
 			from active_grammar as a 
 			join active_grammar as b 
 				using(name)
-			where a.domain < b.domain 
+			where a.domain != b.domain 
 			and a.prog != b.prog
 			`); e != nil {
 		err = errutil.New("find conflicts", e)
@@ -235,7 +236,7 @@ func findConflicts(db tables.Querier) (ret []conflict, err error) {
 
 func (c *Catalog) postPhase(p assert.Phase, d *Domain) (err error) {
 	switch p {
-	// PostFields: with the current domain looping pattern
+	// PostFields: with the current domain loop order
 	// we have to hit all locals from all domains before writing
 	// and macro is after locals...
 	case assert.MacroPhase:
@@ -249,11 +250,12 @@ func (c *Catalog) postPhase(p assert.Phase, d *Domain) (err error) {
 					kind.header.resList,
 					kind.pendingFields,
 				}
+			Loop:
 				for _, list := range fields {
 					for _, field := range list {
 						if e := field.assembleField(kind); e != nil {
 							err = e
-							break
+							break Loop
 						}
 					}
 				}

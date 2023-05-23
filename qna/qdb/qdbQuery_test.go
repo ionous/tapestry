@@ -298,23 +298,24 @@ func write(m mdl.Modeler, q string, els ...any) (err error) {
 }
 
 // adapt old style tests to new interface
+// cases which arent used in the tests are commented out
 func call(m mdl.Modeler, q string, els []any) (err error) {
 	switch q {
-	case mdl.Assign:
-		domain, kind, field, value := els[0].(string),
-			els[1].(string),
-			els[2].(string),
-			els[3].(string)
-		err = m.Assign(domain, kind, field, value)
+	// case mdl.Assign:
+	// 	domain, kind, field, value := els[0].(string),
+	// 		els[1].(string),
+	// 		els[2].(string),
+	// 		els[3].(string)
+	// 	err = m.Assign(domain, kind, field, value)
 
-	case mdl.Check:
-		domain, name, value, affinity, prog, at := els[0].(string),
-			els[1].(string),
-			els[2].(string),
-			els[3].(affine.Affinity),
-			els[4].(string),
-			els[5].(string)
-		err = m.Check(domain, name, value, affinity, prog, at)
+	// case mdl.Check:
+	// 	domain, name, value, affinity, prog, at := els[0].(string),
+	// 		els[1].(string),
+	// 		els[2].(string),
+	// 		els[3].(affine.Affinity),
+	// 		els[4].(string),
+	// 		els[5].(string)
+	// 	err = m.Check(domain, name, value, affinity, prog, at)
 
 	case mdl.Domain:
 		domain, requires, at := els[0].(string),
@@ -331,12 +332,12 @@ func call(m mdl.Modeler, q string, els []any) (err error) {
 			els[5].(string)
 		err = m.Field(domain, kind, field, affinity, typeName, at)
 
-	case mdl.Grammar:
-		domain, name, prog, at := els[0].(string),
-			els[1].(string),
-			els[2].(string),
-			els[3].(string)
-		err = m.Grammar(domain, name, prog, at)
+	// case mdl.Grammar:
+	// 	domain, name, prog, at := els[0].(string),
+	// 		els[1].(string),
+	// 		els[2].(string),
+	// 		els[3].(string)
+	// 	err = m.Grammar(domain, name, prog, at)
 
 	case mdl.Kind:
 		domain, kind, path, at := els[0].(string),
@@ -360,12 +361,12 @@ func call(m mdl.Modeler, q string, els []any) (err error) {
 			els[3].(string)
 		err = m.Noun(domain, noun, kind, at)
 
-	case mdl.Opposite:
-		domain, oneWord, otherWord, at := els[0].(string),
-			els[1].(string),
-			els[2].(string),
-			els[3].(string)
-		err = m.Opposite(domain, oneWord, otherWord, at)
+	// case mdl.Opposite:
+	// 	domain, oneWord, otherWord, at := els[0].(string),
+	// 		els[1].(string),
+	// 		els[2].(string),
+	// 		els[3].(string)
+	// 	err = m.Opposite(domain, oneWord, otherWord, at)
 
 	case mdl.Pair:
 		domain, relKind, oneNoun, otherNoun, at := els[0].(string),
@@ -415,6 +416,9 @@ func call(m mdl.Modeler, q string, els []any) (err error) {
 			els[3].(string),
 			els[4].(string)
 		err = m.Value(domain, noun, field, value, at)
+
+	default:
+		err = errutil.New("unhandled write", q)
 	}
 	return
 }

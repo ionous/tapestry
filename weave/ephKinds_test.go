@@ -24,17 +24,16 @@ func TestKindTree(t *testing.T) {
 	} else if out, e := dt.readKinds(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
-		"a:",
-		"b:a",
-		"c:b,a",
-		"d:c,b,a",
-		"e:b,a",
-		"f:e,b,a",
+		"a:a:",
+		"a:b:a",
+		"a:c:b,a",
+		"a:d:c,b,a",
+		"a:e:b,a",
+		"a:f:e,b,a",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
 	}
-
 }
 
 // this is considered okay - it's in the same tree
@@ -53,9 +52,9 @@ func TestKindDescendants(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		if diff := pretty.Diff(out, []string{
-			"a:",
-			"b:a",
-			"c:b,a",
+			"a:a:",
+			"a:b:a",
+			"a:c:b,a",
 		}); len(diff) > 0 {
 			t.Log(pretty.Sprint(out))
 			t.Fatal(diff)

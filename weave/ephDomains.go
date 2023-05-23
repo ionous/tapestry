@@ -202,7 +202,9 @@ func (d *Domain) checkRivals(allowDupes bool) (err error) {
 	return d.visit(func(scope *Domain) (err error) {
 		if scope != d {
 			if defs := scope.defs; len(defs) > 0 {
-				if e := a.Merge(defs, allowDupes); e != nil {
+				if e := a.Merge(defs, allowDupes, func(warn error) {
+					LogWarning(domainError{scope.name, warn})
+				}); e != nil {
 					err = domainError{scope.name, e}
 				}
 			}

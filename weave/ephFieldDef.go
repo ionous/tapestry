@@ -11,7 +11,7 @@ import (
 type FieldDefinition interface {
 	CheckConflict(*ScopedKind) error
 	AddToKind(*ScopedKind)
-	Write(m mdl.Modeler, domain, kind string) error
+	WriteField(m mdl.Modeler, domain, kind string) error
 }
 
 type fieldDef struct {
@@ -22,7 +22,7 @@ type fieldDef struct {
 	initially assign.Assignment
 }
 
-func (fd *fieldDef) Write(m mdl.Modeler, domain, kind string) error {
+func (fd *fieldDef) WriteField(m mdl.Modeler, domain, kind string) error {
 	return m.Field(domain, kind, fd.name, fd.affinity, fd.class, fd.at)
 }
 

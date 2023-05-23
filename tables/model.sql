@@ -34,7 +34,7 @@ create table mdl_name( domain text not null, noun int not null, name text, rank 
  * domain tells the scope in which the noun was defined.
  * ( the same as - or a child of - the domain of the kind ) */
 create table mdl_noun( domain text not null, noun text, kind int not null, at text, primary key( domain, noun ));
-/* relation between two specific  nnouns. these change over the course of a game.
+/* relation between two specific nouns. these change over the course of a game.
  * similar to mdl_rule, points back to the relation's kind rather than the entry in the mdl_rel table */
 create table mdl_pair( domain text not null, relKind int not null, oneNoun int not null, otherNoun int not null, at text );
 /* pattern, the field ( in md_field ) used for a return value ( if any ) and comma separated labels for calling/processing fields 
@@ -101,7 +101,8 @@ from mdl_domain;
  * list domains so they appear before they are needed as a requirement of another domain. 
  */
 create view domain_order as 
-select distinct uses as domain from (
+select distinct uses as domain 
+from (
   select uses, dist 
   from domain_tree
   order by dist desc

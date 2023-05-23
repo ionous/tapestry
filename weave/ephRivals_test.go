@@ -15,15 +15,15 @@ func TestRivals(t *testing.T) {
 	defer db.Close()
 	if e := tables.CreateAll(db); e != nil {
 		t.Fatal(e)
-	} else if _, e := db.Exec(`insert into mdl_domain(domain, path) values
+	} else if _, e := db.Exec(`insert into mdl_domain(domain, requires) values
 	('p1', ''),
 	('p2', '')`); e != nil {
 		t.Fatal(e)
 	} else if _, e := db.Exec(`insert into mdl_plural(domain, many, one) values
-	('people', 'human'),
-	('bats', 'bat'),
-	('people', 'person'),
-	('rabbits', 'rabbit')`); e != nil {
+	('p1', 'people', 'human'),
+	('p1', 'bats', 'bat'),
+	('p2', 'people', 'person'),
+	('p2', 'rabbits', 'rabbit')`); e != nil {
 		t.Fatal(e)
 	} else if _, e := db.Exec(`insert into run_domain(domain, active) values
 	('p1', 1),
@@ -37,6 +37,7 @@ func TestRivals(t *testing.T) {
 			{Category: "plural", Domain: "p2", Key: "people", Value: "person"},
 		}
 		if diff := pretty.Diff(expect, conflicts); len(diff) > 0 {
+			t.Log("got", pretty.Sprint(conflicts))
 			t.Fatal("unexpected conflicts", diff)
 		}
 	}

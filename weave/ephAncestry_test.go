@@ -11,7 +11,7 @@ import (
 
 // the basic TestKind(s) test kinds in a single domain
 // so we want to to make sure we can handle multiple domains too
-func TestAncestry(t *testing.T) {
+func TestAncestryFormation(t *testing.T) {
 	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
@@ -30,7 +30,11 @@ func TestAncestry(t *testing.T) {
 	} else if out, e := dt.readKinds(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
-		"a:k:", "b:m:k", "c:j:m,k", "c:q:j,m,k", "c:n:k",
+		"a:k:",
+		"b:m:k",
+		"c:j:m,k",
+		"c:q:j,m,k",
+		"c:n:k",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -195,12 +199,7 @@ func TestAncestryRivalConflict(t *testing.T) {
 }
 
 func newTest(name string) *domainTest {
-	db := testdb.Open(name, testdb.Memory, "")
-	return &domainTest{
-		name: name,
-		db:   db,
-		cat:  NewCatalog(db),
-	}
+	return newTestShuffle(name, true)
 }
 
 func newTestShuffle(name string, shuffle bool) *domainTest {

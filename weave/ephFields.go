@@ -22,7 +22,7 @@ func (c *Catalog) WriteFields(m mdl.Modeler) (err error) {
 			if len(k.fields) > 0 {
 				// note: fields might include an aspect field which is capable of storing the active trait ( the trait name text )
 				for _, f := range k.fields {
-					if e := f.Write(m, d.name, k.Name()); e != nil {
+					if e := f.WriteField(m, d.name, k.Name()); e != nil {
 						err = e
 						break Out
 					}
@@ -30,7 +30,7 @@ func (c *Catalog) WriteFields(m mdl.Modeler) (err error) {
 			} else if len(k.aspects) == 1 {
 				// if there are no explicit fields; we might be a kind of aspect
 				// and all we have are the traits for our aspect.
-				if e := k.aspects[0].Write(m, d.name, k.Name()); e != nil {
+				if e := k.aspects[0].WriteField(m, d.name, k.Name()); e != nil {
 					err = e
 					break Out
 				}

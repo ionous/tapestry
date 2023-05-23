@@ -87,13 +87,13 @@ func (defs Artifacts) CheckConflict(key keyType, value string) (err error) {
 }
 
 // add the passed artifacts looking for and rejecting conflicts
-func (defs Artifacts) Merge(from Artifacts, allowDupes bool) (err error) {
+func (defs Artifacts) Merge(from Artifacts, allowDupes bool, warn func(error)) (err error) {
 	for k, def := range from {
 		var conflict *Conflict
 		if e := defs.CheckConflict(def.key, def.value); e == nil {
 			defs[k] = def // store if there was no conflict
 		} else if allowDupes && errors.As(e, &conflict) && conflict.Reason == Duplicated {
-			LogWarning(e) // warn if it was a duplicated definition
+			warn(e) // warn if it was a duplicated definition
 		} else {
 			err = errutil.Append(err, e)
 		}
