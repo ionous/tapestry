@@ -1,6 +1,7 @@
 package weave
 
 import (
+	"os"
 	"strings"
 	"testing"
 
@@ -203,7 +204,13 @@ func newTest(name string) *domainTest {
 }
 
 func newTestShuffle(name string, shuffle bool) *domainTest {
-	db := testdb.Open(name, testdb.Memory, "")
+	path, driver := testdb.Memory, ""
+	// if you run the test as go test ... -args write
+	// it'll write the db out in your user directory
+	if os.Args[len(os.Args)-1] == "write" {
+		path = ""
+	}
+	db := testdb.Open(name, path, driver)
 	return &domainTest{
 		name:      name,
 		db:        db,

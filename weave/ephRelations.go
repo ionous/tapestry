@@ -79,6 +79,16 @@ func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error 
 					err = e
 				} else {
 					kid.pendingFields = append(kid.pendingFields, ua, ub)
+
+					err = cat.Schedule(assert.FieldPhase, func(ctx *Weaver) (err error) {
+						if e := cat.writeField(d.name, kid.name, ua); e != nil {
+							err = e
+						} else if e := cat.writeField(d.name, kid.name, ub); e != nil {
+							err = e
+						}
+						return
+					})
+
 				}
 			}
 		}

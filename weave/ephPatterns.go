@@ -3,10 +3,10 @@ package weave
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -51,6 +51,9 @@ func (cat *Catalog) AssertResult(patternName, fieldName, class string, aff affin
 					err = e
 				} else {
 					pat.header.resList = []UniformField{res}
+					err = cat.Schedule(assert.ResultPhase, func(ctx *Weaver) error {
+						return cat.writeField(d.name, pat.name, res)
+					})
 				}
 				return
 			})
@@ -76,6 +79,9 @@ func (cat *Catalog) AssertParam(patternName, fieldName, class string, aff affine
 				err = e
 			} else {
 				pat.header.paramList = append(pat.header.paramList, arg)
+				err = cat.Schedule(assert.ParamPhase, func(ctx *Weaver) error {
+					return cat.writeField(d.name, pat.name, arg)
+				})
 			}
 		}
 		return
@@ -89,4 +95,8 @@ func addPatternDef(d *Domain, k *ScopedKind, key, at, v string) (err error) {
 		err = e // use definition to block the pattern from defining different args
 	}
 	return
+}
+
+func (cat *Catalog) writeField(d, k string, uf UniformField) (err error) {
+	return cat.writer.Field(d, k, uf.Name, uf.Affinity, uf.Type, uf.At)
 }

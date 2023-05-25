@@ -28,9 +28,9 @@ const (
 	PluralPhase
 	AncestryPhase
 	//
-	FieldPhase
-	ParamPhase
-	ResultPhase
+	ParamPhase  // parameters precede results
+	ResultPhase // results precede normal fields
+	FieldPhase  //
 
 	MacroPhase // tbd: could this be PostDomain?
 	NounPhase  // instances ( of kinds )

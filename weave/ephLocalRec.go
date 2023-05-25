@@ -17,8 +17,8 @@ type localRecord struct {
 
 // inside the record we store slightly narrower info
 type innerRecord struct {
-	k      *ScopedKind           // our kind, containing all the field definitions
-	fields *[]literal.FieldValue // a sparse list of values
+	k           *ScopedKind           // our kind, containing all the field definitions
+	fieldValues *[]literal.FieldValue // a sparse list of values
 }
 
 func (rp *localRecord) isValid() bool {
@@ -85,7 +85,7 @@ func (rp *localRecord) ensureRecords(at string, path []string) (ret innerRecord,
 }
 
 func (in *innerRecord) appendField(name string, newVal literal.LiteralValue) {
-	*in.fields = append(*in.fields, literal.FieldValue{
+	*in.fieldValues = append(*in.fieldValues, literal.FieldValue{
 		Field: name,
 		Value: newVal,
 	})
@@ -93,7 +93,7 @@ func (in *innerRecord) appendField(name string, newVal literal.LiteralValue) {
 
 // find the value of the named field within the passed (sparse) record.
 func (in *innerRecord) findField(field string) (ret literal.LiteralValue, okay bool) {
-	for _, ft := range *in.fields {
+	for _, ft := range *in.fieldValues {
 		if ft.Field == field {
 			ret, okay = ft.Value, true
 			break

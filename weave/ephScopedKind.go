@@ -139,7 +139,7 @@ func (k *ScopedKind) findScopedTrait(field string) (ret *fieldDef, err error) {
 				// see if that kind is an aspect
 				if a, ok := k.domain.GetKind(cls); ok && a.HasParent(kindsOf.Aspect) {
 					// when the name of the field is the same as the name of the aspect
-					// that is our special "acts as trait" field.
+					// that is our special "acts as a set of traits" field.
 					if a.name == def.name && def.affinity == affine.Text {
 						// and search through its traits
 						if _, ok := a.FindTrait(field); ok {

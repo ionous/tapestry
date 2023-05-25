@@ -64,7 +64,7 @@ func TestAspectUsage(t *testing.T) {
 		"a:a:one:bool:",
 		"a:a:several:bool:",
 		"a:a:oh_so_many:bool:",
-		"b:k:a:text:a", // MISSING THIS.... fields for the aspect
+		"b:k:a:text:a",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)

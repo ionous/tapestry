@@ -10,36 +10,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// write the fields of each kind in kind order
-func (c *Catalog) WriteFields(m mdl.Modeler) (err error) {
-	if deps, e := c.ResolveKinds(); e != nil {
-		err = e
-	} else {
-	Out:
-		for _, dep := range deps {
-			k := dep.Leaf().(*ScopedKind)
-			d := k.domain // for simplicity, fields exist at the scope of the kind: regardless of the scope of the field's declaration.
-			if len(k.fields) > 0 {
-				// note: fields might include an aspect field which is capable of storing the active trait ( the trait name text )
-				for _, f := range k.fields {
-					if e := f.WriteField(m, d.name, k.Name()); e != nil {
-						err = e
-						break Out
-					}
-				}
-			} else if len(k.aspects) == 1 {
-				// if there are no explicit fields; we might be a kind of aspect
-				// and all we have are the traits for our aspect.
-				if e := k.aspects[0].WriteField(m, d.name, k.Name()); e != nil {
-					err = e
-					break Out
-				}
-			}
-		}
-	}
-	return
-}
-
 // write the field initializers in kind order
 func (c *Catalog) WriteLocals(m mdl.Modeler) (err error) {
 	if deps, e := c.ResolveKinds(); e != nil {
@@ -119,7 +89,6 @@ func (uf *UniformField) assembleField(kind *ScopedKind) (err error) {
 			initially: uf.Initially,
 		}); errors.As(e, &conflict) && conflict.Reason == Duplicated {
 			// handle conflicting inits...
-			// -- AddField needs refactoring to put this in there easily.
 			for i, was := range kind.fields {
 				if was.name == uf.Name {
 					hadInit := was.initially != nil
@@ -140,10 +109,11 @@ func (uf *UniformField) assembleField(kind *ScopedKind) (err error) {
 		} else if e != nil {
 			err = e // some other error
 		} else {
-			// if the field is a kind of aspect
+			// if the field being added is a kind of aspect
 			isAspect := cls != nil && cls.HasParent(kindsOf.Aspect) && len(cls.aspects) > 0
 			// when the name of the field is the same as the name of the aspect
-			// that is our special "acts as trait" field, so add the set of traits ( to check for conflicts )
+			// it "acts as set of traits" field, so add the set of traits ( to check for conflicts )
+			// the field was written to the db when the field was asserted
 			if isAspect && uf.Name == clsName && aff == affine.Text {
 				err = kind.AddField(&cls.aspects[0])
 			}

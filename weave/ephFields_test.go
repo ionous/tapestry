@@ -179,13 +179,15 @@ func TestFieldsUnknownClass(t *testing.T) {
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
-		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "t", Affinity: affine.Text, Class: "m"}}},
+		&eph.Kinds{Kind: "k", Contain: []eph.Params{
+			// m doesnt exist in this domain, so the test will fail.
+			{Name: "t", Affinity: affine.Text, Class: "m"}}},
 	)
 	dt.makeDomain(dd("c", "a"),
 		&eph.Kinds{Kind: "m"},
 	)
 	_, e := dt.Assemble()
-	if e == nil || e.Error() != `unknown class "m" for field "t" for kind "k"` {
+	if e == nil || e.Error() != `no such kind "m" in domain "a" trying to write field "t"` {
 		t.Fatal("expected error", e)
 	} else {
 		t.Log("ok:", e)

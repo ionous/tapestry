@@ -3,6 +3,7 @@ package weave
 import (
 	"errors"
 
+	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
@@ -47,11 +48,22 @@ func (cat *Catalog) AssertAspectTraits(opAspects string, opTraits []string) erro
 			kid.AddRequirement(kindsOf.Aspect.String())
 			if len(traits) > 0 {
 				err = d.schedule(at, assert.FieldPhase, func(ctx *Weaver) (err error) {
+
 					var conflict *Conflict // checks for conflicts, allows duplicates.
-					if e := kid.AddField(&traitDef{at, aspect, traits}); errors.As(e, &conflict) && conflict.Reason == Duplicated {
+					td := &traitDef{at, aspect, traits}
+					if e := kid.AddField(td); errors.As(e, &conflict) && conflict.Reason == Duplicated {
 						LogWarning(e) // warn if it was a duplicated definition
-					} else {
+					} else if e != nil {
 						err = e // some other error ( or nil )
+					} else {
+
+						// tbd: perhaps writing the aspect would be best, then join to get the synthesized fields
+						for _, t := range traits {
+							if e := cat.writer.Field(d.name, kid.name, t, affine.Bool, "", td.at); e != nil {
+								err = e
+								break
+							}
+						}
 					}
 					return
 				})

@@ -269,10 +269,7 @@ func (c *Catalog) postPhase(p assert.Phase, d *Domain) (err error) {
 
 func (c *Catalog) writePhase(p assert.Phase) (err error) {
 	w := c.writer
-	// switch or map better?
 	switch p {
-	case assert.FieldPhase:
-		err = c.WriteFields(w)
 	case assert.NounPhase:
 		err = c.WriteNouns(w)
 	case assert.ValuePhase:

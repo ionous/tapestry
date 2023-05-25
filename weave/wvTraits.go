@@ -1,9 +1,7 @@
 package weave
 
 import (
-	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -15,16 +13,6 @@ type traitDef struct {
 	at     string
 	aspect string
 	traits []string
-}
-
-func (td *traitDef) WriteField(m mdl.Modeler, domain, kind string) (err error) {
-	for _, t := range td.traits {
-		if e := m.Field(domain, kind, t, affine.Bool, "", td.at); e != nil {
-			err = e
-			break
-		}
-	}
-	return
 }
 
 func (td *traitDef) AddToKind(k *ScopedKind) {

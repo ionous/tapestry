@@ -4,14 +4,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
 type FieldDefinition interface {
 	CheckConflict(*ScopedKind) error
 	AddToKind(*ScopedKind)
-	WriteField(m mdl.Modeler, domain, kind string) error
 }
 
 type fieldDef struct {
@@ -20,10 +18,6 @@ type fieldDef struct {
 	class     string
 	at        string
 	initially assign.Assignment
-}
-
-func (fd *fieldDef) WriteField(m mdl.Modeler, domain, kind string) error {
-	return m.Field(domain, kind, fd.name, fd.affinity, fd.class, fd.at)
 }
 
 func (fd *fieldDef) AddToKind(k *ScopedKind) {

@@ -86,7 +86,6 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 }
 
 func (cat *Catalog) processDomain(d *Domain) (err error) {
-	// name, row, at := d.name, dep.Strings(true), d.OriginAt()
 	if _, e := cat.run.ActivateDomain(d.name); e != nil {
 		err = e
 	} else if e := cat.findConflicts(); e != nil {

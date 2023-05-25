@@ -146,11 +146,11 @@ func (m *Writer) Domain(domain, requires, at string) (err error) {
 
 func (m *Writer) Field(domain, kind, field string, affinity affine.Affinity, typeName, at string) (err error) {
 	if _, k, e := m.findKind(domain, kind); e != nil {
-		err = e
+		err = errutil.Fmt("%w trying to add field %q", e, field)
 	} else if _, t, e := m.findOptionalKind(domain, typeName); e != nil {
-		err = e
-	} else {
-		_, err = m.field.Exec(k, field, affinity, t, at)
+		err = errutil.Fmt("%w trying to write field %q", e, field)
+	} else if _, e := m.field.Exec(k, field, affinity, t, at); e != nil {
+		err = errutil.Fmt("%w for (%s.%s.%s)", e, domain, kind, field)
 	}
 	return
 }

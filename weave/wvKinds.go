@@ -70,6 +70,8 @@ func (cat *Catalog) AssertField(kind, fieldName, class string, aff affine.Affini
 			err = e
 		} else if e := uf.setAssignment(init); e != nil {
 			err = e
+		} else if e := cat.writeField(d.name, kid.name, uf); e != nil {
+			err = e
 		} else {
 			kid.pendingFields = append(kid.pendingFields, uf)
 		}
