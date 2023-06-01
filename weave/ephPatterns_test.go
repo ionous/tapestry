@@ -140,10 +140,10 @@ func expectFullResults(t *testing.T, dt *domainTest) {
 	} else if outfields, e := dt.readFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outfields, []string{
+		"a:p:l_1:num_list:", // field output gets sorted by name
+		"a:p:l_2:number:",
 		"a:p:p_1:text:k",
 		"a:p:success:bool:",
-		"a:p:l_1:num_list:",
-		"a:p:l_2:number:",
 	}); len(diff) > 0 {
 		t.Log("got:", pretty.Sprint(outfields))
 		t.Fatal(diff)
@@ -271,10 +271,9 @@ func TestPatternConflictingInit(t *testing.T) {
 			}},
 		},
 	)
-	if _, e := dt.Assemble(); e == nil || e.Error() != `mismatched affinity of initial value (a text) for field "n" (a number)` {
-		t.Fatal("expected an error; got:", e)
-	} else {
-		t.Log("ok", e)
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `mismatched affinity of initial value (a text) for field "n" (a number)`); !ok {
+		t.Fatal("expected error; got:", e)
 	}
 }
 
