@@ -33,11 +33,15 @@ type Catalog struct {
 }
 
 func NewCatalog(db *sql.DB) *Catalog {
+	return NewCatalogWithWarnings(db, nil)
+}
+
+func NewCatalogWithWarnings(db *sql.DB, warn func(error)) *Catalog {
 	qx, e := qdb.NewQueryx(db)
 	if e != nil {
 		panic(e)
 	}
-	m, e := mdl.NewModeler(db)
+	m, e := mdl.NewModeler(db, warn)
 	if e != nil {
 		panic(e)
 	}
@@ -170,8 +174,8 @@ func (c conflict) Error() string {
 		c.Domain, c.At, c.Category, c.Value)
 }
 
-func (c *Catalog) findConflicts() (err error) {
-	if res, e := findConflicts(c.db); e != nil {
+func (c *Catalog) findRivals() (err error) {
+	if res, e := findRivals(c.db); e != nil {
 		err = e
 	} else {
 		for _, e := range res {
@@ -185,7 +189,8 @@ func (c *Catalog) findConflicts() (err error) {
 // ( ex. use domain = active count )
 // currently it happens after the domains have been activated
 // and therefore compares everything to everything each time.
-func findConflicts(db tables.Querier) (ret []conflict, err error) {
+// note: fields don't have rivals because they all exist in the same domain as their owner kind.
+func findRivals(db tables.Querier) (ret []conflict, err error) {
 	if rows, e := db.Query(
 		`select 'plural', a.domain, a.at, a.many, a.one
 			from active_plurals as a 
@@ -236,31 +241,6 @@ func findConflicts(db tables.Querier) (ret []conflict, err error) {
 
 func (c *Catalog) postPhase(p assert.Phase, d *Domain) (err error) {
 	switch p {
-	// PostFields: with the current domain loop order
-	// we have to hit all locals from all domains before writing
-	// and macro is after locals...
-	case assert.MacroPhase:
-		if deps, e := d.resolveKinds(); e != nil {
-			err = e
-		} else {
-			for _, dep := range deps {
-				kind := dep.Leaf().(*ScopedKind)
-				fields := [][]UniformField{
-					kind.header.paramList,
-					kind.header.resList,
-					kind.pendingFields,
-				}
-			Loop:
-				for _, list := range fields {
-					for _, field := range list {
-						if e := field.assembleField(kind); e != nil {
-							err = e
-							break Loop
-						}
-					}
-				}
-			}
-		}
 	case assert.NounPhase:
 		_, err = d.ResolveDomainNouns()
 	}
@@ -280,10 +260,8 @@ func (c *Catalog) writePhase(p assert.Phase) (err error) {
 		} else {
 			err = c.WritePairs(w)
 		}
-	case assert.PatternPhase:
+	case assert.RulePhase:
 		if e := c.WritePatterns(w); e != nil {
-			err = e
-		} else if e := c.WriteLocals(w); e != nil {
 			err = e
 		} else if e := c.WriteRules(w); e != nil {
 			err = e

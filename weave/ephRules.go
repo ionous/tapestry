@@ -86,7 +86,7 @@ func fromTiming(t assert.EventTiming) (ret int, always bool) {
 // validate that the pattern for the rule exists then add the rule to the *current* domain
 // ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
 func (cat *Catalog) AssertRule(opPatternName string, opTarget string, opGuard rt.BoolEval, opFlags assert.EventTiming, do []rt.Execute) error {
-	return cat.Schedule(assert.PatternPhase, func(ctx *Weaver) (err error) {
+	return cat.Schedule(assert.RulePhase, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
 		part, always := fromTiming(opFlags)
 		if name, ok := UniformString(opPatternName); !ok {

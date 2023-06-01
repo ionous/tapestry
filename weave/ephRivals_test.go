@@ -29,7 +29,7 @@ func TestRivals(t *testing.T) {
 	('p1', 1),
 	('p2', 1)`); e != nil {
 		t.Fatal(e)
-	} else if conflicts, e := findConflicts(db); e != nil {
+	} else if conflicts, e := findRivals(db); e != nil {
 		t.Fatal(e)
 	} else {
 		expect := []conflict{

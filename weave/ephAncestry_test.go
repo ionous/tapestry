@@ -2,7 +2,6 @@ package weave
 
 import (
 	"os"
-	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/test/testdb"
@@ -52,10 +51,8 @@ func TestAncestryCycle(t *testing.T) {
 		&eph.Kinds{Kind: "t", Ancestor: "p"},
 	)
 	_, e := dt.Assemble()
-	if e == nil || !strings.HasPrefix(e.Error(), "circular reference detected") {
-		t.Fatal("expected failure", e)
-	} else {
-		t.Log("ok", e)
+	if ok, e := okError(t, e, "circular reference detected"); !ok {
+		t.Fatal("expected error; got:", e)
 	}
 }
 
@@ -214,7 +211,7 @@ func newTestShuffle(name string, shuffle bool) *domainTest {
 	return &domainTest{
 		name:      name,
 		db:        db,
-		cat:       NewCatalog(db),
+		cat:       NewCatalogWithWarnings(db, LogWarning),
 		noShuffle: !shuffle,
 	}
 }

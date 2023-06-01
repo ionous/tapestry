@@ -92,7 +92,7 @@ func (cat *Catalog) AssertNounKind(opNoun, opKind string) error {
 			err = NounError{name, errutil.Fmt("can't redefine parent as %q", opKind)}
 		} else {
 			// is this in anyway useful?
-			LogWarning(errutil.Sprintf("duplicate noun %s definition at %v", name, at))
+			LogWarning(errutil.Fmt("duplicate noun %s definition at %v", name, at))
 		}
 		return
 	})

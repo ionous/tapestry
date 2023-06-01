@@ -96,7 +96,3 @@ func addPatternDef(d *Domain, k *ScopedKind, key, at, v string) (err error) {
 	}
 	return
 }
-
-func (cat *Catalog) writeField(d, k string, uf UniformField) (err error) {
-	return cat.writer.Field(d, k, uf.Name, uf.Affinity, uf.Type, uf.At)
-}

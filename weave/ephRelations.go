@@ -78,8 +78,6 @@ func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error 
 				} else if ub, e := MakeUniformField(b.affinity(), b.short(true), b.class, at); e != nil {
 					err = e
 				} else {
-					kid.pendingFields = append(kid.pendingFields, ua, ub)
-
 					err = cat.Schedule(assert.FieldPhase, func(ctx *Weaver) (err error) {
 						if e := cat.writeField(d.name, kid.name, ua); e != nil {
 							err = e

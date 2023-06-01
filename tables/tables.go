@@ -14,12 +14,17 @@ const DefaultDriver = "sqlite3"
 func CreateModel(db *sql.DB) (err error) {
 	if _, e := db.Exec(modelSql); e != nil {
 		err = errutil.New("Couldn't create model tables", e)
+	} else if _, e := db.Exec(modelViewSql); e != nil {
+		err = errutil.New("Couldn't create model views", e)
 	}
 	return
 }
 
 //go:embed model.sql
 var modelSql string
+
+//go:embed modelView.sql
+var modelViewSql string
 
 // CreateRun creates the tables listed in run.sql
 func CreateRun(db *sql.DB) (err error) {

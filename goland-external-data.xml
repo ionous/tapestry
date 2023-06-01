@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
   <object-set>
-    <table path="main.mdl_assign">
+    <table path="main.mdl_default">
       <column name="rowid" expr="ROWID"/>
     </table>
     <table path="main.mdl_check">

@@ -86,9 +86,10 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 }
 
 func (cat *Catalog) processDomain(d *Domain) (err error) {
+
 	if _, e := cat.run.ActivateDomain(d.name); e != nil {
 		err = e
-	} else if e := cat.findConflicts(); e != nil {
+	} else if e := cat.findRivals(); e != nil {
 		err = e
 	} else {
 		cat.processing.Push(d)

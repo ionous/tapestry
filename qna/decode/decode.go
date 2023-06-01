@@ -31,7 +31,7 @@ func (d *Decoder) DecodeField(b []byte, a affine.Affinity, fieldType string) (re
 }
 
 func (d *Decoder) DecodeAssignment(b []byte, a affine.Affinity) (ret rt.Assignment, err error) {
-	// fix? mdl_assign technically has redundant info --
+	// fix? mdl_default technically has redundant info --
 	// because it implicitly stores the assignment type ( FromBool, etc. ) even though the field wont allow anything else
 	// storing the evals ( re: readEval below ) would eliminate that.
 	var out assign.Assignment

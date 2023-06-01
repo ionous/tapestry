@@ -33,14 +33,20 @@ func (m *Writer) findOptionalKind(domain, kind string) (retDomain string, retKin
 }
 
 func (m *Writer) findKind(domain, kind string) (retDomain string, retKind int, err error) {
+	retDomain, _, retKind, err = m.pathOfKind(domain, kind)
+	return
+}
+
+// where the returned comma separated path includes the id of the kind ",kid,...,"
+func (m *Writer) pathOfKind(domain, kind string) (retDomain, retPath string, retKind int, err error) {
 	if e := m.db.QueryRow(`
-	select domain, mk.rowid
+	select domain, mk.rowid, ',' || mk.rowid || ',' || mk.path
 	from mdl_kind mk
 	join domain_tree
 		on (uses = domain)
 	where base = ?1
 	and kind = ?2
-	limit 1`, domain, kind).Scan(&retDomain, &retKind); e == sql.ErrNoRows {
+	limit 1`, domain, kind).Scan(&retDomain, &retKind, &retPath); e == sql.ErrNoRows {
 		err = errutil.Fmt("no such kind %q in domain %q", kind, domain)
 	} else {
 		err = e
@@ -67,17 +73,19 @@ func (m *Writer) findNoun(domain, noun string) (retDomain string, retKind int, e
 // turn domain, kind, field into ids, associated with the local var's initial assignment.
 // domain and kind become redundant b/c fields exist at the scope of the kind.
 
-func (m *Writer) findField(domain, kind, field string) (ret int, err error) {
-	if _, kid, e := m.findKind(domain, kind); e != nil {
+func (m *Writer) findField(domain, kind, field string) (retDomain string, retField int, err error) {
+	if declaringDomain, kid, e := m.findKind(domain, kind); e != nil {
 		err = e
 	} else if e := m.db.QueryRow(`
 		select rowid
 		from mdl_field mf
 		where kind = ?1
-		and field = ?2`, kid, field).Scan(&ret); e == sql.ErrNoRows {
+		and field = ?2`, kid, field).Scan(&retField); e == sql.ErrNoRows {
 		err = errutil.Fmt("no such field %q in kind %q in domain %q", field, kind, domain)
-	} else {
+	} else if e != nil {
 		err = e
+	} else {
+		retDomain = declaringDomain
 	}
 	return
 }

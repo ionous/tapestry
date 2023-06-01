@@ -9,12 +9,11 @@ import (
 )
 
 type ScopedKind struct {
-	Requires      // references to ancestors ( at most it can have one direct parent )
-	domain        *Domain
-	aspects       []traitDef  // used for kinds of aspects *and* for fields which use those aspects.
-	fields        []*fieldDef // otherwise, everything is a field
-	header        patternHeader
-	pendingFields []UniformField
+	Requires // references to ancestors ( at most it can have one direct parent )
+	domain   *Domain
+	aspects  []traitDef  // used for kinds of aspects *and* for fields which use those aspects.
+	fields   []*fieldDef // otherwise, everything is a field
+	header   patternHeader
 }
 
 // accumulate the various bits of pattern data
@@ -49,22 +48,6 @@ func (k *ScopedKind) Resolve() (ret Dependencies, err error) {
 		err = KindError{k.name, e}
 	} else {
 		ret = ks
-	}
-	return
-}
-
-// the kind must have been resolved for this to work
-func (k *ScopedKind) AddField(field FieldDefinition) (err error) {
-	if e := VisitTree(k, func(dep Dependency) (err error) {
-		kind := dep.(*ScopedKind)
-		if e := field.CheckConflict(kind); e != nil {
-			err = domainError{kind.domain.name, KindError{kind.name, e}}
-		}
-		return
-	}); e != nil {
-		err = e
-	} else {
-		field.AddToKind(k) // if everything worked out store definition locally
 	}
 	return
 }

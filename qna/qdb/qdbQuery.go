@@ -345,7 +345,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 				using (kind)
 			left join mdl_kind mk  -- search for the kind of type 
 				on (mk.rowid = mf.type)
-			left join mdl_assign ma
+			left join mdl_default ma
 				on (ma.field = mf.rowid)
 			where ks.name = ?1
 			order by mf.rowid`,

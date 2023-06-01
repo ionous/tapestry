@@ -56,34 +56,33 @@ func TestPluralAssembly(t *testing.T) {
 		&eph.Plurals{Singular: "bat", Plural: "cauldron"},
 	)
 	dt.makeDomain(dd("c", "a"),
-		// redefine:
+		// redefine; this isnt allowed; but everything else should have worked.
 		&eph.Plurals{Singular: "witch", Plural: "unkindness"},
 	)
 	//
 	if _, e := dt.Assemble(); e == nil {
 		t.Fatal("expected error")
-	} else if !strings.Contains(e.Error(), "conflict") {
+	} else if ok, e := okError(t, e, "conflict:"); !ok {
+		t.Fatal(e)
+	} else if ok, e := okError(t, warnings.shift(), `duplicate plurals: "cauldron"`); !ok {
+		t.Fatal(e)
+	} else if out, e := dt.readPlurals(); e != nil {
 		t.Fatal(e)
 	} else {
-		t.Log("ok", e)
-		if out, e := dt.readPlurals(); e != nil {
-			t.Fatal(e)
-		} else {
-			if diff := pretty.Diff(out, []string{
-				"a:unkindness:raven",
-				"a:cloud:bat",
-				"a:cauldron:bat",
-				"b:school:fish",
-				// plural redefinition is (no longer) allowed.
-				// ( wicca good and love the earth: and i'll be over here. )
-				// "c:unkindness:witch",
-				// we dont expect to see our duplicated definition of cauldron of bat(s)
-				// c is dependent on a: so the definition would be redundant.
-				// "c:cauldron:bat",
-			}); len(diff) > 0 {
-				t.Log("got", len(out), out)
-				t.Fatal(diff)
-			}
+		if diff := pretty.Diff(out, []string{
+			"a:unkindness:raven",
+			"a:cloud:bat",
+			"a:cauldron:bat",
+			"b:school:fish",
+			// plural redefinition is (no longer) allowed.
+			// ( wicca good and love the earth: and i'll be over here. )
+			// "c:unkindness:witch",
+			// we dont expect to see our duplicated definition of cauldron of bat(s)
+			// c is dependent on a: so the definition would be redundant.
+			// "c:cauldron:bat",
+		}); len(diff) > 0 {
+			t.Log("got", len(out), out)
+			t.Fatal(diff)
 		}
 	}
 }
@@ -94,6 +93,15 @@ func okDomainConflict(d string, y ReasonForConflict, e error) (err error) {
 	if !errors.As(e, &de) || de.Domain != d ||
 		!errors.As(de.Err, &conflict) || conflict.Reason != y {
 		err = errutil.New("unexpected conflict in", de.Domain, e)
+	}
+	return
+}
+
+func okError(t *testing.T, e error, prefix string) (okay bool, err error) {
+	if okay = e != nil && strings.HasPrefix(e.Error(), prefix); okay {
+		t.Log("ok:", e)
+	} else {
+		err = e
 	}
 	return
 }

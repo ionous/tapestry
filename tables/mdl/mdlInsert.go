@@ -5,7 +5,7 @@ import "git.sr.ht/~ionous/tapestry/tables"
 // see sql table definitions and additional notes in "tapestry/tables/model.sql"
 
 // the pattern half of Start; "domain, kind, field" are a pointer into Field
-var Assign = tables.Insert("mdl_assign", "domain", "kind", "field", "value")
+var Assign = tables.Insert("mdl_default", "domain", "kind", "field", "value")
 
 // author tests of stories
 var Check = tables.Insert("mdl_check", "domain", "name", "value", "affinity", "prog", "at")

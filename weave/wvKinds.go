@@ -68,13 +68,21 @@ func (cat *Catalog) AssertField(kind, fieldName, class string, aff affine.Affini
 			err = KindError{kind, errutil.New("unknown kind at while generating fields", at)}
 		} else if uf, e := MakeUniformField(aff, fieldName, class, at); e != nil {
 			err = e
-		} else if e := uf.setAssignment(init); e != nil {
-			err = e
 		} else if e := cat.writeField(d.name, kid.name, uf); e != nil {
 			err = e
-		} else {
-			kid.pendingFields = append(kid.pendingFields, uf)
+		} else if init != nil {
+			return cat.Schedule(assert.DefaultsPhase, func(ctx *Weaver) (err error) {
+				return cat.writeDefault(d.name, kid.name, uf, init)
+			})
 		}
 		return
 	})
+}
+
+func (cat *Catalog) writeField(d, k string, uf UniformField) error {
+	return cat.writer.Field(d, k, uf.Name, uf.Affinity, uf.Type, uf.At)
+}
+
+func (cat *Catalog) writeDefault(d, k string, uf UniformField, init assign.Assignment) error {
+	return cat.writer.Default(d, k, uf.Name, init)
 }

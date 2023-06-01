@@ -9,21 +9,21 @@ import (
 )
 
 // add some fields to a kind
-func TestFields(t *testing.T) {
+func TestFieldAssembly(t *testing.T) {
 	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
-		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "t", Affinity: affine.Text, Class: "k"}}},
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Number}}},
+		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "t", Affinity: affine.Text, Class: "k"}}},
 	)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
+		"a:k:n:number:", // field output gets sorted by name
 		"a:k:t:text:k",
-		"a:k:n:number:",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -41,14 +41,13 @@ func TestFieldsCrossDomain(t *testing.T) {
 	dt.makeDomain(dd("b", "a"),
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "b", Affinity: affine.Bool}}},
 	)
-
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
+		"a:k:b:bool:", // field output gets sorted by name
 		"a:k:n:number:",
-		"a:k:b:bool:",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -74,10 +73,10 @@ func TestFieldsRedefine(t *testing.T) {
 
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
-		t.Fatal(e)
-	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
-		t.Fatal(e)
+	} else if ok, e := okError(t, warnings.shift(), `duplicate field "n" for kind "k"`); !ok {
+		t.Fatal("expected warning; got:", e)
+	} else if ok, e := okError(t, warnings.shift(), `duplicate field "n" for kind "k"`); !ok {
+		t.Fatal("expected warning; got:", e)
 	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
@@ -101,10 +100,8 @@ func TestFieldsConflict(t *testing.T) {
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Text}}},
 	)
 	_, e := dt.Assemble()
-	if e := okDomainConflict("a", Redefined, e); e != nil {
-		t.Fatal(e)
-	} else {
-		t.Log("ok:", e)
+	if ok, e := okError(t, e, `conflict: field "k.n"`); !ok {
+		t.Fatal("expected error; got:", e)
 	}
 }
 
@@ -146,8 +143,7 @@ func xxxTestFieldsMatchingRivals(t *testing.T) {
 	}
 }
 
-// fields in kinds exist all at once --
-// there's not really "rival" fields
+// fields in a given kind exist all at once; there's really not "rival" fields
 func TestFieldsMismatchingRivals(t *testing.T) {
 	var warnings Warnings
 	unwarn := warnings.catch(t)
@@ -164,12 +160,9 @@ func TestFieldsMismatchingRivals(t *testing.T) {
 	dt.makeDomain(dd("d", "a"),
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "t", Affinity: affine.Bool}}},
 	)
-	// dt.makeDomain(dd("z", "c", "d")) <-- fails even without this.
-	_, e := dt.Assemble()
-	if e := okDomainConflict("a", Redefined, e); e != nil {
+	_, err := dt.Assemble()
+	if ok, e := okError(t, err, `conflict: field "k.t"`); !ok {
 		t.Fatal(e)
-	} else {
-		t.Log("ok:", e)
 	}
 }
 
@@ -196,7 +189,7 @@ func TestFieldsUnknownClass(t *testing.T) {
 
 // note: the original code would push shared fields upwards; the new code doesnt
 func TestFieldLca(t *testing.T) {
-	dt := newTestShuffle(t.Name(), false) // fields arent sorted
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		&eph.Kinds{Kind: "t"},

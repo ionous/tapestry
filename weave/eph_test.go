@@ -27,8 +27,8 @@ type Warnings []error
 // 2. raises a Fatal error if there are any unhandled warnings.
 func (w *Warnings) catch(t *testing.T) func() {
 	was := LogWarning
-	LogWarning = func(e any) {
-		(*w) = append((*w), e.(error))
+	LogWarning = func(e error) {
+		(*w) = append((*w), e)
 	}
 	return func() {
 		if len(*w) > 0 {
@@ -165,6 +165,7 @@ func (dt *domainTest) readDomains() ([]string, error) {
 }
 
 // domain, kind, field name, affinity, subtype
+// sorted by kind and within each kind, the field name
 func (dt *domainTest) readFields() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select mk.domain ||':'|| mk.kind ||':'|| mf.field  ||':'|| 
@@ -173,7 +174,8 @@ func (dt *domainTest) readFields() ([]string, error) {
 	join mdl_kind mk 
 		on(mf.kind = mk.rowid)
 	left join mdl_kind mt 
-		on(mf.type = mt.rowid)`)
+		on(mf.type = mt.rowid)
+	order by mk.rowid, mf.field`)
 }
 
 // domain, input, serialized program
@@ -231,7 +233,7 @@ func (dt *domainTest) readLocals() ([]string, error) {
 	//  wonder if itd be enough to simply go by kind id since the order of writing should follow
 	return tables.QueryStrings(dt.db, `
 	select mk.domain ||':'|| mk.kind ||':'|| mf.field ||':'|| ma.value
-	from mdl_assign ma
+	from mdl_default ma
 	join mdl_field mf 
 		on(ma.field = mf.rowid)
 	join mdl_kind mk 

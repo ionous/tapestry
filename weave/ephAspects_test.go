@@ -1,7 +1,6 @@
 package weave
 
 import (
-	"errors"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/affine"
@@ -30,9 +29,10 @@ func TestAspectFormation(t *testing.T) {
 	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
+		// names are sorted
+		"d:a:oh_so_many:bool:",
 		"d:a:one:bool:",
 		"d:a:several:bool:",
-		"d:a:oh_so_many:bool:",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -61,9 +61,9 @@ func TestAspectUsage(t *testing.T) {
 	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
+		"a:a:oh_so_many:bool:",
 		"a:a:one:bool:",
 		"a:a:several:bool:",
-		"a:a:oh_so_many:bool:",
 		"b:k:a:text:a",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
@@ -89,11 +89,12 @@ func TestAspectConflictingFields(t *testing.T) {
 	)
 	if _, e := dt.Assemble(); e == nil {
 		t.Fatal("expected error")
-	} else {
-		t.Log("ok", e)
+	} else if ok, e := okError(t, e, "conflict:"); !ok {
+		t.Fatal(e)
 	}
 }
 
+// try to add two aspects with conflicting traits to a single kind.
 func TestAspectConflictingTraits(t *testing.T) {
 	dt := newTest(t.Name())
 	defer dt.Close()
@@ -104,7 +105,7 @@ func TestAspectConflictingTraits(t *testing.T) {
 			"one", "several", "oh so many", //
 		}},
 		&eph.Kinds{Kind: "b", Ancestor: kindsOf.Aspect.String()}, // make an aspect
-		&eph.Aspects{Aspects: "b", Traits: []string{ // add some traits
+		&eph.Aspects{Aspects: "b", Traits: []string{ // add some different traits
 			"one", "two", "blue", //
 		}},
 	)
@@ -113,11 +114,9 @@ func TestAspectConflictingTraits(t *testing.T) {
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{AspectParam("a")}},
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{AspectParam("b")}},
 	)
-	var conflict *Conflict
-	_, e := dt.Assemble()
-	if e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
+	if _, e := dt.Assemble(); e == nil {
 		t.Fatal("expected error")
-	} else {
-		t.Log("ok", e)
+	} else if ok, e := okError(t, e, "conflict:"); !ok {
+		t.Fatal(e)
 	}
 }
