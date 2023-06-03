@@ -63,10 +63,11 @@ func TestMissingField(t *testing.T) {
 		&eph.Values{Noun: "n", Field: "t", Value: T("no such field")},
 	)
 
-	if _, e := dt.Assemble(); e == nil || e.Error() != `field not found 'k.t'` {
-		t.Fatal("expected error", e)
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `field "t" not found in kind "k"`); !ok {
+		t.Fatal("expected error; got:", e)
 	} else {
-		t.Log("ok", e)
+		t.Log("ok:", e)
 	}
 }
 

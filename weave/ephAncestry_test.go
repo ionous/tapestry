@@ -2,6 +2,7 @@ package weave
 
 import (
 	"os"
+	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/test/testdb"
@@ -68,10 +69,10 @@ func TestAncestryMultipleParents(t *testing.T) {
 		&eph.Kinds{Kind: "k", Ancestor: "q"},
 	)
 	_, e := dt.Assemble()
-	if e == nil || e.Error() != `"k" has more than one parent` {
-		t.Fatal("expected failure", e)
+	if ok, e := okError(t, e, `"k" has more than one parent`); !ok {
+		t.Fatal("expected error; got:", e)
 	} else {
-		t.Log("ok", e)
+		t.Log("ok:", e)
 	}
 }
 
@@ -113,10 +114,10 @@ func TestAncestryMissing(t *testing.T) {
 		&eph.Kinds{Kind: "m", Ancestor: "x"},
 	)
 	_, e := dt.Assemble()
-	if e == nil || e.Error() != `unknown dependency "x" for kind "m"` {
-		t.Fatal("expected error", e)
+	if ok, e := okError(t, e, `unknown dependency "x" for kind "m"`); !ok {
+		t.Fatal("expected error; got:", e)
 	} else {
-		t.Log("ok", e)
+		t.Log("ok:", e)
 	}
 }
 
@@ -139,12 +140,13 @@ func TestAncestryRedefined(t *testing.T) {
 	dt.makeDomain(dd("c", "b"),
 		&eph.Kinds{Kind: "m", Ancestor: "n"}, // should fail.
 	)
-	if _, e := dt.Assemble(); e == nil || e.Error() != `can't redefine parent as "n" for kind "m"` {
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `can't redefine parent as "n" for kind "m"`); !ok {
 		t.Fatal("expected error; got:", e)
 	} else if warned := warnings.all(); len(warned) != 1 {
 		t.Fatal("expected one warning", warned)
 	} else {
-		t.Log("ok", e, warned)
+		t.Log("ok:", e, warned)
 	}
 }
 
@@ -214,4 +216,13 @@ func newTestShuffle(name string, shuffle bool) *domainTest {
 		cat:       NewCatalogWithWarnings(db, LogWarning),
 		noShuffle: !shuffle,
 	}
+}
+
+func okError(t *testing.T, e error, prefix string) (okay bool, err error) {
+	if okay = e != nil && strings.HasPrefix(e.Error(), prefix); okay {
+		t.Log("ok:", e)
+	} else {
+		err = e
+	}
+	return
 }

@@ -101,7 +101,7 @@ func TestRelativeOneOneViolation(t *testing.T) {
 	if _, e := dt.Assemble(); e == nil {
 		t.Fatal("expected error")
 	} else {
-		t.Log("ok", e)
+		t.Log("ok:", e)
 	}
 }
 
@@ -119,7 +119,7 @@ func TestRelativeOneManyViolation(t *testing.T) {
 	if _, e := dt.Assemble(); e == nil {
 		t.Fatal("expected error")
 	} else {
-		t.Log("ok", e)
+		t.Log("ok:", e)
 	}
 }
 
@@ -137,7 +137,7 @@ func TestRelativeManyOneViolation(t *testing.T) {
 	if _, e := dt.Assemble(); e == nil {
 		t.Fatal("expected error")
 	} else {
-		t.Log("ok", e)
+		t.Log("ok:", e)
 	}
 }
 

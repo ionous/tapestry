@@ -71,7 +71,7 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 	}
 	if found < 0 {
 		first := cat.pendingDomains[0]
-		err = errutil.New("circular reference or unknown domain in", first.name)
+		err = errutil.New("circular or unknown domain %q", first.name)
 	} else {
 		// chop this one out, then process
 		at := cat.pendingDomains[found]

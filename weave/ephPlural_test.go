@@ -1,12 +1,9 @@
 package weave
 
 import (
-	"errors"
-	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/weave/eph"
-	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
 
@@ -22,12 +19,11 @@ func TestPluralConflict(t *testing.T) {
 		&eph.Plurals{Singular: "raven", Plural: "unkindness"},
 		&eph.Plurals{Singular: "witch", Plural: "unkindness"},
 	)
-	if _, e := dt.Assemble(); e == nil {
-		t.Fatal("expected error")
-	} else if !strings.Contains(e.Error(), "conflict") {
-		t.Fatal(e)
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `conflict`); !ok {
+		t.Fatal("expected error; got:", e)
 	} else {
-		t.Log("ok", e)
+		t.Log("ok:", e)
 	}
 }
 
@@ -85,23 +81,4 @@ func TestPluralAssembly(t *testing.T) {
 			t.Fatal(diff)
 		}
 	}
-}
-
-func okDomainConflict(d string, y ReasonForConflict, e error) (err error) {
-	var de domainError
-	var conflict *Conflict
-	if !errors.As(e, &de) || de.Domain != d ||
-		!errors.As(de.Err, &conflict) || conflict.Reason != y {
-		err = errutil.New("unexpected conflict in", de.Domain, e)
-	}
-	return
-}
-
-func okError(t *testing.T, e error, prefix string) (okay bool, err error) {
-	if okay = e != nil && strings.HasPrefix(e.Error(), prefix); okay {
-		t.Log("ok:", e)
-	} else {
-		err = e
-	}
-	return
 }

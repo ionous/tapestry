@@ -2,7 +2,6 @@ package weave
 
 import (
 	"errors"
-	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/weave/assert"
@@ -58,11 +57,9 @@ func TestDomainCatchCycles(t *testing.T) {
 	dt.makeDomain(dd("b", "c", "d"))
 	dt.makeDomain(dd("c", "d", "e"))
 	dt.makeDomain(dd("d", "a"))
-
-	if _, e := dt.Assemble(); e == nil {
-		t.Fatal("expected error")
-	} else if !strings.Contains(e.Error(), "circular reference") {
-		t.Fatal("expected circular error", e)
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `circular reference`); !ok {
+		t.Fatal("expected error; got:", e)
 	} else {
 		t.Log("ok:", e)
 	}
@@ -115,11 +112,9 @@ func TestDomainWhenUndeclared(t *testing.T) {
 	// we never explicitly declare "b" --
 	// and this should result in an error.
 	dt.makeDomain(dd("a", "b"))
-
-	if _, e := dt.Assemble(); e == nil {
-		t.Fatal("expected error")
-	} else if !strings.Contains(e.Error(), "unknown domain") {
-		t.Fatalf("expected unknown domain error; got: %q", e)
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `circular or unknown domain`); !ok {
+		t.Fatal("expected error; got:", e)
 	} else {
 		t.Log("ok:", e)
 	}
@@ -168,7 +163,7 @@ func TestRivalConflict(t *testing.T) {
 	} else if conflict.Reason != Redefined {
 		t.Fatal("expected a redefinition error", e)
 	} else {
-		t.Log("ok", e)
+		t.Log("ok:", e)
 	}
 }
 

@@ -55,11 +55,11 @@ func TestNounFailure(t *testing.T) {
 	dt.makeDomain(dd("a"),
 		&eph.Nouns{Noun: "bad apple", Kind: "t"},
 	)
-	if _, e := dt.Assemble(); e == nil ||
-		e.Error() != `unknown kind at while generating noun "bad apple" at "x" for kind "t"` {
-		t.Fatal("unexpected failure", e)
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `unknown kind at while generating noun "bad apple" at "x" for kind "t"`); !ok {
+		t.Fatal("expected error; got:", e)
 	} else {
-		t.Log("ok", e)
+		t.Log("ok:", e)
 	}
 }
 
@@ -112,11 +112,11 @@ func TestNounHierarchyFailure(t *testing.T) {
 		&eph.Nouns{Noun: "apple", Kind: "c"},
 		&eph.Nouns{Noun: "apple", Kind: "d"},
 	)
-	if _, e := dt.Assemble(); e == nil ||
-		e.Error() != `"apple" has more than one parent` {
-		t.Fatal("unexpected failure", e)
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `"apple" has more than one parent`); !ok {
+		t.Fatal("expected error; got:", e)
 	} else {
-		t.Log("ok", e)
+		t.Log("ok:", e)
 	}
 }
 

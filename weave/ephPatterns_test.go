@@ -256,7 +256,8 @@ func TestPatternMultipleReturn(t *testing.T) {
 // 	}
 // }
 
-// fail conflicting assignment
+// fail conflicting assignment:
+// shouldnt be able to write text data into a number field
 func TestPatternConflictingInit(t *testing.T) {
 	dt := newTest(t.Name())
 	defer dt.Close()
@@ -272,7 +273,7 @@ func TestPatternConflictingInit(t *testing.T) {
 		},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `mismatched affinity of initial value (a text) for field "n" (a number)`); !ok {
+	if ok, e := okError(t, e, `conflict: mismatched assignment for field "n" of kind "p"`); !ok {
 		t.Fatal("expected error; got:", e)
 	}
 }

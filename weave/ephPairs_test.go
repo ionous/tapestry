@@ -1,7 +1,6 @@
 package weave
 
 import (
-	"strings"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/weave/eph"
@@ -29,13 +28,12 @@ func TestOppositeConflict(t *testing.T) {
 		&eph.Opposites{Word: "east", Opposite: "west"},
 		&eph.Opposites{Word: "unkindness", Opposite: "east"},
 	)
-	if _, e := dt.Assemble(); e == nil {
-		t.Fatal("expected failure")
-	} else if !strings.Contains(e.Error(), "conflict") {
-		t.Fatal(e)
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `conflict`); !ok {
+		t.Fatal("expected error; got:", e)
 	} else {
 		// "east" had opposite "west" wanted "east" as "unkindness"
-		t.Log("ok", e)
+		t.Log("ok:", e)
 	}
 }
 
