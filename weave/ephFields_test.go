@@ -100,17 +100,14 @@ func TestFieldsConflict(t *testing.T) {
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Text}}},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `conflict: field "k.n"`); !ok {
+	if ok, e := okError(t, e, `conflict: field "n" for kind "k"`); !ok {
 		t.Fatal("expected error; got:", e)
 	}
 }
 
 // rival fields are fine so long as they match
 // ( really the fields exist all at the same time )
-//
-// fix: this is failing -- checkRivals is allowDupes false for ancestry phase
-// and its conflicting on kinds, k, parent name: "" -- from resolveKinds()
-// not 100% why that worked before
+
 func xxxTestFieldsMatchingRivals(t *testing.T) {
 	var warnings Warnings
 	unwarn := warnings.catch(t)
@@ -128,11 +125,10 @@ func xxxTestFieldsMatchingRivals(t *testing.T) {
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "t", Affinity: affine.Text}}},
 	)
 	dt.makeDomain(dd("z", "c", "d"))
-
-	if _, e := dt.Assemble(); e != nil {
-		t.Fatal(e)
-	} else if e := okDomainConflict("a", Duplicated, warnings.shift()); e != nil {
-		t.Fatal(e)
+	// fix: is this supposed to be an error?
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `Duplicated kinds`); !ok {
+		t.Fatal("expected warning; got:", e)
 	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
@@ -143,7 +139,8 @@ func xxxTestFieldsMatchingRivals(t *testing.T) {
 	}
 }
 
-// fields in a given kind exist all at once; there's really not "rival" fields
+// fields in a given kind exist all at once; there's really not "rival" fields.
+// this is really a name conflict.
 func TestFieldsMismatchingRivals(t *testing.T) {
 	var warnings Warnings
 	unwarn := warnings.catch(t)
@@ -161,8 +158,8 @@ func TestFieldsMismatchingRivals(t *testing.T) {
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "t", Affinity: affine.Bool}}},
 	)
 	_, err := dt.Assemble()
-	if ok, e := okError(t, err, `conflict: field "k.t"`); !ok {
-		t.Fatal(e)
+	if ok, e := okError(t, err, `conflict: field "t" for kind "k"`); !ok {
+		t.Fatal("expected error; got:", e)
 	}
 }
 

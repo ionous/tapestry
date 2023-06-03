@@ -38,21 +38,18 @@ func TestQueries(t *testing.T) {
 	const aspect = "a"
 	if e := createTable(db,
 		func(w mdl.Modeler) (err error) {
-			if e := write(w,
+			if e := mdlDomain(w,
 				// name, path, at
 				// -------------------------
-				mdl.Domain,
 				domain, "", at,
 				subDomain, domain, at); e != nil {
 				err = e
-			} else if e := write(w,
+			} else if e := mdlPlural(w,
 				// name, path, at
 				// -------------------------
-				mdl.Plural,
 				domain, plural, singular, at); e != nil {
 				err = e
-			} else if e := write(w,
-				mdl.Kind,
+			} else if e := mdlKind(w,
 				append(defaultKinds(domain, at),
 					// "domain", "kind", "path", "at"
 					// ---------------------------
@@ -69,8 +66,7 @@ func TestQueries(t *testing.T) {
 				)...,
 			); e != nil {
 				err = e
-			} else if e := write(w,
-				mdl.Field,
+			} else if e := mdlField(w,
 				// domain, kind, field, affinity, type, at
 				// ---------------------------------------
 				// traits of an aspect
@@ -91,8 +87,7 @@ func TestQueries(t *testing.T) {
 				subDomain, otherRelation, "other_kind", affine.Text, aspect, at,
 			); e != nil {
 				err = e
-			} else if e := write(w,
-				mdl.Noun,
+			} else if e := mdlNoun(w,
 				// domain, noun, kind, at
 				// ---------------------------------------
 				domain, "apple", kind, at,
@@ -101,8 +96,7 @@ func TestQueries(t *testing.T) {
 			); e != nil {
 				err = e
 				t.Fatal(e)
-			} else if e := write(w,
-				mdl.Value,
+			} else if e := mdlValue(w,
 				// "domain", "noun", "field", "value", "at"
 				// ---------------------------------------
 				domain, "apple", aspect, "brief", at,
@@ -111,8 +105,7 @@ func TestQueries(t *testing.T) {
 			); e != nil {
 				err = e
 				t.Fatal(e)
-			} else if e := write(w,
-				mdl.Name,
+			} else if e := mdlName(w,
 				// domain, noun, name, rank, at
 				// ---------------------------------------
 				domain, "empire_apple", "empire apple", 0, at,
@@ -123,16 +116,14 @@ func TestQueries(t *testing.T) {
 			); e != nil {
 				err = e
 				t.Fatal(e)
-			} else if e := write(w,
-				mdl.Pat,
+			} else if e := mdlPat(w,
 				// domain, kind, labels, result
 				// ---------------------------------------
 				domain, pattern, "object,other_object", "ancestor",
 			); e != nil {
 				err = e
 				t.Fatal(e)
-			} else if e := write(w,
-				mdl.Rule,
+			} else if e := mdlRule(w,
 				// "domain", "kind", "target", "phase", "filter", "prog", "at"
 				// ---------------------------------------
 				domain, pattern, "" /**/, 1, "filter1", "prog1", at,
@@ -141,8 +132,7 @@ func TestQueries(t *testing.T) {
 			); e != nil {
 				err = e
 				t.Fatal(e)
-			} else if e := write(w,
-				mdl.Rel,
+			} else if e := mdlRel(w,
 				// domain, rel, kind, cardinality, subKind, at
 				// ---------------------------------------------
 				domain, relation, kind, kind, tables.ONE_TO_MANY, at,
@@ -150,8 +140,7 @@ func TestQueries(t *testing.T) {
 			); e != nil {
 				err = e
 				t.Fatal(e)
-			} else if e := write(w,
-				mdl.Pair,
+			} else if e := mdlPair(w,
 				// "domain", "relKind", "oneNoun", "otherNoun", "at"
 				// ---------------------------------------------
 				subDomain, relation, "table", "empire_apple", at,
@@ -279,146 +268,185 @@ func defaultKinds(domain, at string) (out []any) {
 	return
 }
 
-// helper to write one or more rows using the passed query
-func write(m mdl.Modeler, q string, els ...any) (err error) {
-	width, cnt := strings.Count(q, "?"), len(els)
-	if div := cnt / width; div*width != cnt {
-		err = errutil.New("mismatched width", q)
-	} else {
-		for i, cnt := 0, len(els); i < cnt; i += width {
-			row := els[i : i+width]
-			if e := call(m, q, row); e != nil {
-				onrow := pretty.Sprint("row:", i, row)
-				err = errutil.New(q, onrow, e)
-				break
-			}
+// adapt old style tests to new interface
+func mdlDomain(m mdl.Modeler, els ...any) (err error) {
+	for i, cnt := 0, len(els); i < cnt; i += 3 {
+		row := els[i:]
+		domain, requires, at :=
+			row[0].(string),
+			row[1].(string),
+			row[2].(string)
+		if e := m.Domain(domain, requires, at); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
+func mdlField(m mdl.Modeler, els ...any) (err error) {
+	for i, cnt := 0, len(els); i < cnt; i += 6 {
+		row := els[i:]
+		domain, kind, field, affinity, typeName, at :=
+			row[0].(string),
+			row[1].(string),
+			row[2].(string),
+			row[3].(affine.Affinity),
+			row[4].(string),
+			row[5].(string)
+		if e := m.Field(domain, kind, field, affinity, typeName, at); e != nil {
+			err = e
+			break
 		}
 	}
 	return
 }
 
-// adapt old style tests to new interface
-// cases which arent used in the tests are commented out
-func call(m mdl.Modeler, q string, els []any) (err error) {
-	switch q {
-	// case mdl.Assign:
-	// 	domain, kind, field, value := els[0].(string),
-	// 		els[1].(string),
-	// 		els[2].(string),
-	// 		els[3].(string)
-	// 	err = m.Assign(domain, kind, field, value)
+func mdlKind(m mdl.Modeler, els ...any) (err error) {
+	for i, cnt := 0, len(els); i < cnt; i += 4 {
+		row := els[i:]
+		domain, kind, path, at :=
+			row[0].(string),
+			row[1].(string),
+			row[2].(string),
+			row[3].(string)
+		if e := m.Kind(domain, kind, path, at); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
 
-	// case mdl.Check:
-	// 	domain, name, value, affinity, prog, at := els[0].(string),
-	// 		els[1].(string),
-	// 		els[2].(string),
-	// 		els[3].(affine.Affinity),
-	// 		els[4].(string),
-	// 		els[5].(string)
-	// 	err = m.Check(domain, name, value, affinity, prog, at)
+func mdlName(m mdl.Modeler, els ...any) (err error) {
+	for i, cnt := 0, len(els); i < cnt; i += 5 {
+		row := els[i:]
+		domain, noun, name, rank, at :=
+			row[0].(string),
+			row[1].(string),
+			row[2].(string),
+			row[3].(int),
+			row[4].(string)
+		if e := m.Name(domain, noun, name, rank, at); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
 
-	case mdl.Domain:
-		domain, requires, at := els[0].(string),
-			els[1].(string),
-			els[2].(string)
-		err = m.Domain(domain, requires, at)
+func mdlNoun(m mdl.Modeler, els ...any) (err error) {
+	for i, cnt := 0, len(els); i < cnt; i += 4 {
+		row := els[i:]
+		domain, noun, kind, at :=
+			row[0].(string),
+			row[1].(string),
+			row[2].(string),
+			row[3].(string)
+		if e := m.Noun(domain, noun, kind, at); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
 
-	case mdl.Field:
-		domain, kind, field, affinity, typeName, at := els[0].(string),
-			els[1].(string),
-			els[2].(string),
-			els[3].(affine.Affinity),
-			els[4].(string),
-			els[5].(string)
-		err = m.Field(domain, kind, field, affinity, typeName, at)
+func mdlPair(m mdl.Modeler, els ...any) (err error) {
+	for i, cnt := 0, len(els); i < cnt; i += 5 {
+		row := els[i:]
+		domain, relKind, oneNoun, otherNoun, at :=
+			row[0].(string),
+			row[1].(string),
+			row[2].(string),
+			row[3].(string),
+			row[4].(string)
+		if e := m.Pair(domain, relKind, oneNoun, otherNoun, at); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
 
-	// case mdl.Grammar:
-	// 	domain, name, prog, at := els[0].(string),
-	// 		els[1].(string),
-	// 		els[2].(string),
-	// 		els[3].(string)
-	// 	err = m.Grammar(domain, name, prog, at)
+func mdlPat(m mdl.Modeler, els ...any) (err error) {
+	for i, cnt := 0, len(els); i < cnt; i += 4 {
+		row := els[i:]
+		domain, kind, labels, result :=
+			row[0].(string),
+			row[1].(string),
+			row[2].(string),
+			row[3].(string)
+		if e := m.Pat(domain, kind, labels, result); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
 
-	case mdl.Kind:
-		domain, kind, path, at := els[0].(string),
-			els[1].(string),
-			els[2].(string),
-			els[3].(string)
-		err = m.Kind(domain, kind, path, at)
+func mdlPlural(m mdl.Modeler, els ...any) (err error) {
+	for i, cnt := 0, len(els); i < cnt; i += 4 {
+		row := els[i:]
+		domain, many, one, at :=
+			row[0].(string),
+			row[1].(string),
+			row[2].(string),
+			row[3].(string)
+		if e := m.Plural(domain, many, one, at); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
 
-	case mdl.Name:
-		domain, noun, name, rank, at := els[0].(string),
-			els[1].(string),
-			els[2].(string),
-			els[3].(int),
-			els[4].(string)
-		err = m.Name(domain, noun, name, rank, at)
-
-	case mdl.Noun:
-		domain, noun, kind, at := els[0].(string),
-			els[1].(string),
-			els[2].(string),
-			els[3].(string)
-		err = m.Noun(domain, noun, kind, at)
-
-	// case mdl.Opposite:
-	// 	domain, oneWord, otherWord, at := els[0].(string),
-	// 		els[1].(string),
-	// 		els[2].(string),
-	// 		els[3].(string)
-	// 	err = m.Opposite(domain, oneWord, otherWord, at)
-
-	case mdl.Pair:
-		domain, relKind, oneNoun, otherNoun, at := els[0].(string),
-			els[1].(string),
-			els[2].(string),
-			els[3].(string),
-			els[4].(string)
-		err = m.Pair(domain, relKind, oneNoun, otherNoun, at)
-
-	case mdl.Pat:
-		domain, kind, labels, result := els[0].(string),
-			els[1].(string),
-			els[2].(string),
-			els[3].(string)
-		err = m.Pat(domain, kind, labels, result)
-
-	case mdl.Plural:
-		domain, many, one, at := els[0].(string),
-			els[1].(string),
-			els[2].(string),
-			els[3].(string)
-		err = m.Plural(domain, many, one, at)
-
-	case mdl.Rel:
-		domain, relKind, oneKind, otherKind, cardinality, at := els[0].(string),
-			els[1].(string),
-			els[2].(string),
-			els[3].(string),
-			els[4].(string),
-			els[5].(string)
-		err = m.Rel(domain, relKind, oneKind, otherKind, cardinality, at)
-
-	case mdl.Rule:
-		domain, pattern, target, phase, filter, prog, at := els[0].(string),
-			els[1].(string),
-			els[2].(string),
-			els[3].(int),
-			els[4].(string),
-			els[5].(string),
-			els[6].(string)
-		err = m.Rule(domain, pattern, target, phase, filter, prog, at)
-
-	case mdl.Value:
-		domain, noun, field, value, at := els[0].(string),
-			els[1].(string),
-			els[2].(string),
-			els[3].(string),
-			els[4].(string)
-		err = m.Value(domain, noun, field, value, at)
-
-	default:
-		err = errutil.New("unhandled write", q)
+func mdlRel(m mdl.Modeler, els ...any) (err error) {
+	for i, cnt := 0, len(els); i < cnt; i += 6 {
+		row := els[i:]
+		domain, relKind, oneKind, otherKind, cardinality, at :=
+			row[0].(string),
+			row[1].(string),
+			row[2].(string),
+			row[3].(string),
+			row[4].(string),
+			row[5].(string)
+		if e := m.Rel(domain, relKind, oneKind, otherKind, cardinality, at); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
+func mdlRule(m mdl.Modeler, els ...any) (err error) {
+	for i, cnt := 0, len(els); i < cnt; i += 7 {
+		row := els[i:]
+		domain, pattern, target, phase, filter, prog, at :=
+			row[0].(string),
+			row[1].(string),
+			row[2].(string),
+			row[3].(int),
+			row[4].(string),
+			row[5].(string),
+			row[6].(string)
+		if e := m.Rule(domain, pattern, target, phase, filter, prog, at); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
+func mdlValue(m mdl.Modeler, els ...any) (err error) {
+	for i, cnt := 0, len(els); i < cnt; i += 5 {
+		row := els[i:]
+		domain, noun, field, value, at :=
+			row[0].(string),
+			row[1].(string),
+			row[2].(string),
+			row[3].(string),
+			row[4].(string)
+		if e := m.Value(domain, noun, field, value, at); e != nil {
+			err = e
+			break
+		}
 	}
 	return
 }
@@ -429,7 +457,7 @@ func call(m mdl.Modeler, q string, els []any) (err error) {
 func createTable(db *sql.DB, cb func(mdl.Modeler) error) (err error) {
 	if e := tables.CreateAll(db); e != nil {
 		err = errutil.New("couldnt create model", e)
-	} else if m, e := mdl.NewModeler(db); e != nil {
+	} else if m, e := mdl.NewModeler(db, nil); e != nil {
 		err = errutil.New("couldnt create modeler", e)
 	} else {
 		err = cb(m)

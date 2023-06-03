@@ -17,10 +17,9 @@ func TestActivate(t *testing.T) {
 	const at = ""
 	if e := createTable(db,
 		func(w mdl.Modeler) (err error) {
-			return write(w,
+			return mdlDomain(w,
 				// name, dependency, at
 				// -------------------------
-				mdl.Domain,
 				"main", "", at,
 				"sub", "main", at,
 				"beep", "", at,
