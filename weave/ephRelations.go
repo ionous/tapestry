@@ -13,22 +13,23 @@ import (
 )
 
 func (c *Catalog) WriteRelations(m mdl.Modeler) (err error) {
-	if ks, e := c.ResolveKinds(); e != nil {
-		err = e
-	} else {
-		for _, kdep := range ks {
-			if k := kdep.Leaf().(*ScopedKind); k.HasParent(kindsOf.Relation) && len(k.fields) > 0 {
-				one := k.fields[0]   // a field of affinity text referencing some other kind.
-				other := k.fields[1] // the name is the cardinality, and the class is the kind.
-				card := makeCard(one.name, other.name)
-				if e := m.Rel(k.domain.name, k.name, one.class, other.class, card, k.at); e != nil {
-					err = e
-					break
-				}
-			}
-		}
-	}
-	return
+	return // FIX: fields array doesnt exist
+	// if ks, e := c.ResolveKinds(); e != nil {
+	// 	err = e
+	// } else {
+	// 	for _, kdep := range ks {
+	// 		if k := kdep.Leaf().(*ScopedKind); k.HasParent(kindsOf.Relation) && len(k.fields) > 0 {
+	// 			one := k.fields[0]   // a field of affinity text referencing some other kind.
+	// 			other := k.fields[1] // the name is the cardinality, and the class is the kind.
+	// 			card := makeCard(one.name, other.name)
+	// 			if e := m.Rel(k.domain.name, k.name, one.class, other.class, card, k.at); e != nil {
+	// 				err = e
+	// 				break
+	// 			}
+	// 		}
+	// 	}
+	// }
+	// return
 }
 
 // return a string compatible with package table's cardinality

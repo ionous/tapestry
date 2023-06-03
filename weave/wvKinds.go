@@ -72,7 +72,7 @@ func (cat *Catalog) AssertField(kind, fieldName, class string, aff affine.Affini
 			err = e
 		} else if init != nil {
 			return cat.Schedule(assert.DefaultsPhase, func(ctx *Weaver) (err error) {
-				return cat.writeDefault(d.name, kid.name, uf, init)
+				return cat.writer.Default(d.name, kid.name, uf.Name, init)
 			})
 		}
 		return
@@ -81,8 +81,4 @@ func (cat *Catalog) AssertField(kind, fieldName, class string, aff affine.Affini
 
 func (cat *Catalog) writeField(d, k string, uf UniformField) error {
 	return cat.writer.Field(d, k, uf.Name, uf.Affinity, uf.Type, uf.At)
-}
-
-func (cat *Catalog) writeDefault(d, k string, uf UniformField, init assign.Assignment) error {
-	return cat.writer.Default(d, k, uf.Name, init)
 }

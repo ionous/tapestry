@@ -2,9 +2,11 @@
  * tables describing the world and its rules.
  */
 
-/* initialization for fields of kinds.
- * the value ( an Assignment ) is defined when the field is defined, 
- * meaning there's no separate domain or origin(at). */ 
+/* 
+ * initialization for fields of kinds.
+ * the value ( an Assignment ) is defined when the field is defined; 
+ * meaning there's no separate domain or origin(at). 
+ */ 
 create table mdl_default( field int not null, value blob, primary key( field ) );
 /* stored tests, which run a program to verify it produces the expected value. 
  * fix: shouldnt we also be writing class of the value ? */ 
@@ -15,14 +17,15 @@ create table mdl_check( domain text not null, name text, value blob, affinity te
  * a domain can have multiple direct parents; 
  * the application is responsible for ensuring no cyclic dependencies.
  */
-create table mdl_domain( domain text, requires text, at text, primary key( domain, requires ));
+create table mdl_domain( domain text not null, requires text, at text, primary key( domain, requires ));
 /* 
  * properties for a kind. 
  * type is most often used for affinities of type "text", and usually indicates a kind ( from mdl_kind )
- * the scope of a field is currently considered the same as its kind
- * ( ie. all possible fields for a kind exist at once )
- + */
-create table mdl_field( kind int not null, field text, affinity text, type int, at text, primary key( kind, field ));
+ * currently, the name of the field must be unique withing the kind across all domains.
+ * ( at runtime, the scope of the field is is considered the same as its kind;
+ *   ie. all possible fields for a kind exist at once. )
+ */
+create table mdl_field( domain text not null, kind int not null, field text, affinity text, type int, at text, primary key( kind, field ));
 /* statements for user input parsing. this is pretty low-bar right now;
  * typed commands are not separated into unique rows, so conflicts between words and phrases can't be detected.
  */

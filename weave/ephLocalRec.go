@@ -39,19 +39,19 @@ func (rp *localRecord) writeValue(noun, at, field string, path []string, val lit
 }
 
 func (in *innerRecord) nestedWrite(noun, field, at string, val literal.LiteralValue) (err error) {
-	if fd, e := in.k.findCompatibleField(field, val.Affinity()); e != nil {
+	if name, _, e := in.k.findCompatibleField(field, val.Affinity()); e != nil {
 		err = e
 	} else {
-		// redo the field and value if setting a trait
-		if aspect := fd.name; aspect != field {
-			field, val = aspect, &literal.TextValue{Value: field}
+		// redo the value if setting a trait
+		if name != field {
+			val = &literal.TextValue{Value: field}
 		}
 		// if an old field exists, compare.
-		if oldVal, ok := in.findField(fd.name); ok {
-			err = compareValue(noun, field, at, oldVal, val)
+		if oldVal, ok := in.findField(name); ok {
+			err = compareValue(noun, name, at, oldVal, val)
 		} else {
 			// otherwise add the new field
-			in.appendField(fd.name, val)
+			in.appendField(name, val)
 		}
 	}
 	return
@@ -61,15 +61,15 @@ func (in *innerRecord) nestedWrite(noun, field, at string, val literal.LiteralVa
 func (rp *localRecord) ensureRecords(at string, path []string) (ret innerRecord, err error) {
 	it := innerRecord{rp.k, &rp.rec.Fields}
 	for _, field := range path {
-		if fd, e := it.k.findCompatibleField(field, affine.Record); e != nil {
+		if name, cls, e := it.k.findCompatibleField(field, affine.Record); e != nil {
 			err = e
 			break
-		} else if nextKind, ok := it.k.domain.GetKind(fd.class); !ok {
-			err = errutil.Fmt("couldnt find record of %q", fd.class)
+		} else if nextKind, ok := it.k.domain.GetKind(cls); !ok {
+			err = errutil.Fmt("couldnt find record of %q", cls)
 			break
-		} else if oldVal, ok := it.findField(fd.name); !ok {
+		} else if oldVal, ok := it.findField(name); !ok {
 			nextRec := new(literal.FieldList)
-			it.appendField(fd.name, nextRec)
+			it.appendField(name, nextRec)
 			it = innerRecord{nextKind, &nextRec.Fields}
 		} else if nextRec, ok := oldVal.(*literal.FieldList); !ok {
 			err = errutil.New("field value isnt a record")

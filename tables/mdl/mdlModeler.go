@@ -50,4 +50,7 @@ type Modeler interface {
   // the noun half of what was Start.
   // domain, noun, field reference a join of Noun and Kind to get a filtered Field.
   Value(domain, noun, field, value, at string) error
+
+  //
+  FindCompatibleField(domain, noun, field string, aff affine.Affinity) (retName string, retClass string, err error)
 }

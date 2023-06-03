@@ -30,12 +30,18 @@ func NewModeler(db *sql.DB, duplicateWarnings func(error)) (ret Modeler, err err
 		assign: ps.Prep(db,
 			tables.Insert("mdl_default", "field", "value"),
 		),
-		check:  ps.Prep(db, Check),
-		domain: ps.Prep(db, Domain),
-		field: ps.Prep(db,
-			tables.Insert("mdl_field", "kind", "field", "affinity", "type", "at"),
+		check: ps.Prep(db,
+			tables.Insert("mdl_check", "domain", "name", "value", "affinity", "prog", "at"),
 		),
-		grammar: ps.Prep(db, Grammar),
+		domain: ps.Prep(db,
+			tables.Insert("mdl_domain", "domain", "requires", "at"),
+		),
+		field: ps.Prep(db,
+			tables.Insert("mdl_field", "domain", "kind", "field", "affinity", "type", "at"),
+		),
+		grammar: ps.Prep(db,
+			tables.Insert("mdl_grammar", "domain", "name", "prog", "at"),
+		),
 
 		// create a virtual table consisting of the paths part names turned into comma separated ids:
 		// NOTE: this winds up flipping the order of the paths: root is towards the end.
@@ -65,23 +71,39 @@ func NewModeler(db *sql.DB, duplicateWarnings func(error)) (ret Modeler, err err
 				(select ids from parts where length(str) == 0 union all select '' limit 1), 
 				?4 
 			)`),
-		name: ps.Prep(db, Name),
+		name: ps.Prep(db,
+			tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at"),
+		),
 		noun: ps.Prep(db,
+			// the domain tells the scope in which the noun was defined
+			// ( the same as - or a child of - the domain of the kind )
+
 			// kind is transformed, but the number of parameters remains the same.
-			Noun,
+			tables.Insert("mdl_noun", "domain", "noun", "kind", "at"),
 		),
 		opposite: ps.Prep(db,
 			`insert into mdl_rev(domain, oneWord, otherWord, at) 
 				values(?1, ?2, ?3, ?4), (?1, ?3, ?2, ?4)`,
 		),
 		pair: ps.Prep(db,
+			// domain captures the scope in which the pairing was defined.
+			// within that scope: the noun, relation, and otherNoun are all unique names --
+			// even if they are not unique globally, and even if they a broader/different scope than the pair's domain.
 			tables.Insert("mdl_pair", "domain", "relKind", "oneNoun", "otherNoun", "at"),
 		),
 		pat: ps.Prep(db,
 			tables.Insert("mdl_pat", "kind", "labels", "result"),
 		),
-		plural: ps.Prep(db, Plural),
+		plural: ps.Prep(db,
+			// a plural word ("many") can have at most one singular definition per domain
+			// ie. "people" and "persons" are valid plurals of "person",
+			// but "people" as a singular can only be defined as "person" ( not also "human" )
+			tables.Insert("mdl_plural", "domain", "many", "one", "at"),
+		),
 		rel: ps.Prep(db,
+			// relation and constraint between two kinds of nouns
+			//  fix? the data is duplicated in kinds and fields... should this be removed?
+			// might also consider adding a "cardinality" field to the relation kind, and then use init for individual relations
 			tables.Insert("mdl_rel", "relKind", "oneKind", "otherKind", "cardinality", "at"),
 		),
 		rule: ps.Prep(db,
@@ -139,31 +161,30 @@ type Writer struct {
 // join at runtime to synthesize fields.
 // ( could potentially write both as a bridge )
 func (m *Writer) Aspect(domain, aspect, at string, traits []string) (err error) {
-	if _, ancestry, kid, e := m.pathOfKind(domain, aspect); e != nil {
+	var existingTraits int
+	if declaringDomain, ancestry, kid, e := m.pathOfKind(domain, aspect); e != nil {
 		err = e
 	} else if !strings.HasSuffix(ancestry, m.aspectPath) {
 		err = errutil.Fmt("kind %q from %q is not an aspect", aspect, domain)
 	} else if strings.Count(ancestry, ",") != 3 {
 		// tbd: could loosen this; for now it simplifies writing the aspects;
 		// no need to check for conflicting traits.
-		err = errutil.Fmt("can't create aspect of %q; kinds of aspects can't be inherited", aspect, domain)
-	} else {
-		// has the aspect already been assigned traits?
-		var existingTraits int
-		if e := m.db.QueryRow(`
+		err = errutil.Fmt("can't create aspect of %q; kinds of aspects can't be inherited", aspect)
+	} else if e := m.db.QueryRow(`
 				select count(*) 
 				from mdl_field mf 
 				where mf.kind = ?1
 				`, kid).Scan(&existingTraits); e != nil {
-			err = errutil.New(e, "failed to count existing traits")
-		} else if existingTraits > 0 {
-			err = errutil.Fmt("aspect %q from %q already has traits", aspect, domain)
-		} else {
-			for _, t := range traits {
-				if _, e := m.field.Exec(kid, t, affine.Bool, nil, at); e != nil {
-					err = errutil.Fmt("%w for (%s.%s.%s)", e, domain, aspect, t)
-					break
-				}
+		err = errutil.New("database error", e)
+	} else if existingTraits > 0 {
+		err = errutil.Fmt("aspect %q from %q already has traits", aspect, domain)
+	} else if declaringDomain != domain {
+		err = errutil.Fmt("cant add traits to aspect %q; traits are expected to exist in the same domain as the aspect. was %q now %q", aspect, declaringDomain, domain)
+	} else {
+		for _, t := range traits {
+			if _, e := m.field.Exec(domain, kid, t, affine.Bool, nil, at); e != nil {
+				err = errutil.New("database error", e)
+				break
 			}
 		}
 	}
@@ -180,35 +201,49 @@ func (m *Writer) Check(domain, name, value string, affinity affine.Affinity, pro
 }
 
 func (m *Writer) Default(domain, kind, field string, value assign.Assignment) (err error) {
-	if value, e := marshalout(value); e != nil {
+	if val, e := marshalout(value); e != nil {
 		err = e
-	} else if declaringDomain, f, e := m.findField(domain, kind, field); e != nil {
-		err = e
-	} else if rows, e := m.db.Query(
-		`select affinity, type
-			from mdl_field
-			where kind = ?1
-			and field = ?2`, f, field); e != nil {
+	} else if _, kid, e := m.findKind(domain, kind); e != nil {
 		err = e
 	} else {
-		var prevValue string
-		var dupe int
-		if e := tables.ScanAll(rows, func() (err error) {
-			if value == prevValue {
-				m.warn(errutil.Fmt("duplicate default assignments \"%s.%s\" in %q and %q",
-					kind, field,
-					declaringDomain, domain))
-				dupe++
-			} else {
-				err = errutil.Fmt("conflict: default assignment \"%s.%s\" in %q changed in %q",
-					kind, field,
-					declaringDomain, domain)
-			}
-			return
-		}, &prevValue); e != nil {
+		var prev struct {
+			id     int
+			domain string
+			aff    affine.Affinity
+			val    *string
+		}
+		if e := m.db.QueryRow(`
+		select mf.rowid, domain, affinity, value
+		from mdl_field mf
+		left join mdl_default md
+			on(md.field = mf.rowid)
+		where mf.kind = ?1
+		and mf.field = ?2`, kid, field).Scan(&prev.id, &prev.domain, &prev.aff, &prev.val); e == sql.ErrNoRows {
+			err = errutil.Fmt("assignment requested for unknown field %q of kind %q in domain %q", field, kind, domain)
+		} else if e != nil {
 			err = e
-		} else if dupe == 0 {
-			_, err = m.assign.Exec(f, value)
+		} else {
+			if domain != prev.domain {
+				// currently assuming that fields are initialized in the same domain as they are declared
+				// that wont always be true... ex. derived classes or constraints
+				err = errutil.Fmt("conflict: new assignment for field %q of kind %q differs in domain; was %q now %q.",
+					field, kind, prev.domain, domain)
+			} else if prev.val != nil {
+				if val == *prev.val {
+					m.warn(errutil.Fmt("duplicate assignment for field %q of kind %q in domain %q",
+						field, kind, domain))
+				} else {
+					err = errutil.Fmt("conflict: new assignment for field %q of kind %q differs",
+						field, kind)
+				}
+			} else if aff := assign.GetAffinity(value); aff != prev.aff {
+				err = errutil.Fmt("conflict: mismatched assignment for field %q of kind %q; field is %s, assignment was %s",
+					field, kind,
+					prev.aff, aff)
+			} else {
+				_, err = m.assign.Exec(prev.id, val)
+			}
+
 		}
 	}
 	return
@@ -226,7 +261,7 @@ func (m *Writer) Field(domain, kind, field string, aff affine.Affinity, cls, at 
 		err = errutil.Fmt("%w trying to add field %q", e, field)
 	} else if _, typeId, e := m.findOptionalKind(domain, cls); e != nil {
 		err = errutil.Fmt("%w trying to write field %q", e, field)
-	} else if rows, e := m.db.Query(`
+	} else if rows, e := m.db.Query(` 
 -- all possible traits:
 with allTraits as (	
 	select mk.rowid as kind,    -- id of the aspect,
@@ -238,9 +273,9 @@ with allTraits as (
 		on(mf.kind = mk.rowid)
 	-- where the field's kind (X) contains the aspect kind (Y)
 	where instr(',' || mk.path, ?4 )
-),
+)
 -- all fields of the targeted kind:
-fieldsInKind as (
+, fieldsInKind as (
 	select mk.domain, field as name, affinity, mf.type as typeId, mt.kind as typeName
 	from mdl_field mf 
 	join mdl_kind mk 
@@ -248,11 +283,10 @@ fieldsInKind as (
 		on ((mf.kind = mk.rowid) and instr(?1, ',' || mk.rowid || ',' ))
 	left join mdl_kind mt 
 		on (mt.rowid = mf.type)
-
-),
+)
 -- fields and traits in the target kind
 -- ( all of them, because we dont know what might conflict with a pending aspect )
-existingNames( origin, name, affinity, typeName ) as (
+, existingFields( origin, name, affinity, typeName ) as (
 	-- fields in the target kind
 	select format('domain "%z"', domain), name, affinity, typeName
 	from fieldsInKind
@@ -267,8 +301,8 @@ existingNames( origin, name, affinity, typeName ) as (
 	from fieldsInKind fk
 	join allTraits ma
 		on (fk.typeId = ma.kind)
-),
-pendingNames(name, aspect) as ( 
+)
+, pendingFields(name, aspect) as ( 
 	-- the name of the field we're adding;
 	select ?2, null
 	union all 
@@ -279,13 +313,13 @@ pendingNames(name, aspect) as (
 	where (?3 = ma.kind)
 )
 select origin, name, affinity, typeName, aspect
-from existingNames
-join pendingNames
+from existingFields
+join pendingFields
 using(name)
 `, ancestry, field, typeId, m.aspectPath); e != nil {
-		err = e
+		err = errutil.New("database error", e)
 	} else {
-		var con struct {
+		var prev struct {
 			name   string          // trait or field causing a conflict
 			aspect sql.NullString  // aspect if any of the pending name
 			origin string          // aspect or kind of the existing field
@@ -295,47 +329,47 @@ using(name)
 		var dupe error
 		if e := tables.ScanAll(rows, func() (err error) {
 			// if the names differ, then the conflict is due to a trait ( being added or already existing )
-			if con.name != field {
+			if prev.name != field {
 				// adding an aspect: the conflict reports the pending aspect so this case can be detected
-				if con.aspect.String == cls {
+				if prev.aspect.String == cls {
 					// is there a way to determine whether the origin is a domain or aspect
 					err = errutil.Fmt("conflict: new field for kind %q of aspect %q conflicts with existing field %q from %s",
-						kind, field, con.name, con.origin)
-				} else if con.aspect.Valid {
+						kind, field, prev.name, prev.origin)
+				} else if prev.aspect.Valid {
 					err = errutil.Fmt("conflict: new field for kind %q of aspect %q conflicts with trait %q from aspect %q",
 						kind, field,
-						con.name, con.aspect.String)
+						prev.name, prev.aspect.String)
 				} else {
 					// when does this show up?
 					err = errutil.Fmt("conflict: field %q for kind %q was %s(%s) from %s, now %s(%s) in %q",
 						field, kind,
-						con.aff, con.cls.String, con.origin,
+						prev.aff, prev.cls.String, prev.origin,
 						aff, cls, domain)
 				}
-			} else if aff == con.aff && cls == con.cls.String {
+			} else if aff == prev.aff && cls == prev.cls.String {
 				// if the affinity and typeName are the same, then its a duplicate
-				dupe = errutil.Fmt("duplicate field %q for kind %q  of %s(%s) from %s and now domain %q",
+				dupe = errutil.Fmt("duplicate field %q for kind %q of %s(%s) from %s and now domain %q",
 					field, kind,
 					aff, cls,
-					con.origin, domain)
+					prev.origin, domain)
 				err = dupe
 			} else {
 				// otherwise, its a conflict
-				err = errutil.Fmt("conflict: field \"%s.%s\" was %s(%s) from %s, now %s(%s) in domain %q",
-					kind, field,
-					con.aff, con.cls.String, con.origin,
+				err = errutil.Fmt("conflict: field %q for kind %q of %s(%s) from %s was redefined as %s(%s) in domain %q",
+					field, kind,
+					prev.aff, prev.cls.String, prev.origin,
 					aff, cls, domain)
 			}
 			return
-		}, &con.origin, &con.name, &con.aff, &con.cls, &con.aspect); e != nil {
+		}, &prev.origin, &prev.name, &prev.aff, &prev.cls, &prev.aspect); e != nil {
 			if e == dupe {
 				m.warn(e)
 			} else {
-				err = e // a conflict or sql error
+				err = e
 			}
 		} else {
 			// err was nil, we can write the field:
-			if _, e := m.field.Exec(kid, field, aff, typeId, at); e != nil {
+			if _, e := m.field.Exec(domain, kid, field, aff, typeId, at); e != nil {
 				err = errutil.Fmt("%w for (%s.%s.%s)", e, domain, kind, field)
 			}
 		}
@@ -358,10 +392,10 @@ func (m *Writer) Kind(domain, kind, path, at string) (err error) {
 	if d, e := m.findDomain(domain); e != nil {
 		err = e
 	} else if res, e := m.kind.Exec(d, kind, path, at); e != nil {
-		err = e
+		err = errutil.New("database error", e)
 	} else if kind == "aspects" {
 		if i, e := res.LastInsertId(); e != nil {
-			err = e
+			err = errutil.New("database error", e)
 		} else {
 			// fix? it would probably be better to have a separate table of: domain, aspect, trait
 			// currently, the runtime expects that aspects are a kind, and its traits are fields.
@@ -400,7 +434,7 @@ func (m *Writer) Opposite(domain, a, b, at string) (err error) {
 			join domain_tree
 				on(uses=domain)
 			where base = ?1`, d); e != nil {
-		err = e
+		err = errutil.New("database error", e)
 	} else {
 		var x, y, from string
 		var dupe int
@@ -467,7 +501,7 @@ func (m *Writer) Plural(domain, many, one, at string) (err error) {
 				on(uses=domain)
 			where base = ?1
 			and many = ?2`, d, many); e != nil {
-		err = e
+		err = errutil.New("database error", e)
 	} else {
 		var prev, from string
 		var dupe int // log duplicates?

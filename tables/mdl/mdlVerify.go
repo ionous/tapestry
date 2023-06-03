@@ -3,6 +3,7 @@ package mdl
 import (
 	"database/sql"
 
+	"git.sr.ht/~ionous/tapestry/affine"
 	"github.com/ionous/errutil"
 )
 
@@ -72,7 +73,6 @@ func (m *Writer) findNoun(domain, noun string) (retDomain string, retKind int, e
 
 // turn domain, kind, field into ids, associated with the local var's initial assignment.
 // domain and kind become redundant b/c fields exist at the scope of the kind.
-
 func (m *Writer) findField(domain, kind, field string) (retDomain string, retField int, err error) {
 	if declaringDomain, kid, e := m.findKind(domain, kind); e != nil {
 		err = e
@@ -86,6 +86,77 @@ func (m *Writer) findField(domain, kind, field string) (retDomain string, retFie
 		err = e
 	} else {
 		retDomain = declaringDomain
+	}
+	return
+}
+
+// check that the kind can store the requested value at the passed field
+// returns the name of the field ( in case the originally specified field was a trait )
+// FIX: i think this would work better using the runtime kind cache.
+func (m *Writer) FindCompatibleField(domain, kind, field string, aff affine.Affinity) (retName, retClass string, err error) {
+	var prev struct {
+		name string
+		aff  affine.Affinity
+		cls  *string
+	}
+	if _, ancestry, _, e := m.pathOfKind(domain, kind); e != nil {
+		err = errutil.Fmt("%w trying to add field %q", e, field)
+	} else if e := m.db.QueryRow(` 
+-- all possible traits:
+with allTraits as (	
+	select mk.rowid as kind,    -- id of the aspect,
+				 field as name,      -- name of trait 
+	       mk.kind as aspect,  -- name of aspect
+	       mk.domain          -- name of originating domain
+	from mdl_field mf 
+	join mdl_kind mk
+		on(mf.kind = mk.rowid)
+	-- where the field's kind (X) contains the aspect kind (Y)
+	where instr(',' || mk.path, @aspects)
+)
+-- all fields of the targeted kind:
+, fieldsInKind as (
+	select mk.domain, field as name, affinity, mf.type as typeId, mt.kind as typeName
+	from mdl_field mf 
+	join mdl_kind mk 
+		-- does our ancestry (X) contain any of these kinds (Y)
+		on ((mf.kind = mk.rowid) and instr(@ancestry, ',' || mk.rowid || ',' ))
+	left join mdl_kind mt 
+		on (mt.rowid = mf.type)
+)
+-- fields in the target kind
+select name, affinity, typeName
+from fieldsInKind
+where name = @fieldName 
+union all
+
+-- traits in the target kind: return the aspect
+select ma.name, 'bool', null
+from allTraits ma
+join fieldsInKind fk
+where ma.name = @fieldName
+and ma.kind = fk.typeId`,
+		sql.Named("aspects", m.aspectPath),
+		sql.Named("ancestry", ancestry),
+		sql.Named("fieldName", field)).
+		Scan(&prev.name, &prev.aff, &prev.cls); e != nil {
+		if e == sql.ErrNoRows {
+			err = errutil.Fmt("field %q not found in kind %q domain %q", field, kind, domain)
+		} else {
+			err = errutil.New("database error", e)
+		}
+	} else if prev.aff != aff {
+		err = errutil.Fmt("affinity %s is incompatible with %s field %q in kind %q",
+			aff, prev.aff, field, kind)
+	} else if prev.name != field {
+		// if they weren't asking for a trait, error:
+		// the return name is the aspect; no subclass to speak of.
+		retName = prev.name
+	} else {
+		retName = prev.name
+		if prev.cls != nil {
+			retClass = *prev.cls
+		}
 	}
 	return
 }
