@@ -3,7 +3,6 @@ package weave
 import (
 	"sort"
 
-	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
@@ -17,20 +16,17 @@ type asmCheck struct {
 	// we dont consider than error -- though possible we should warn about it.
 	name      string
 	domain    *Domain
-	expectVal string // marshel'd value; fix: consider leaving marshal to modeler?
-	expectAff affine.Affinity
-	prog      string
+	expectVal literal.LiteralValue
+	prog      []rt.Execute
 	at        string
 }
 
 func (c *asmCheck) setExpectation(v literal.LiteralValue) (err error) {
 	if v != nil {
-		if len(c.expectAff) > 0 {
+		if c.expectVal != nil {
 			err = errutil.Fmt("check %q cant have multiple expectations", c.name)
-		} else if res, e := marshalout(v); e != nil {
-			err = e
 		} else {
-			c.expectVal, c.expectAff = res, v.Affinity()
+			c.expectVal = v
 		}
 	}
 	return
@@ -41,12 +37,7 @@ func (c *asmCheck) setProg(exe []rt.Execute) (err error) {
 		if len(c.prog) > 0 {
 			err = errutil.Fmt("check %q cant have multiple programs to check", c.name)
 		} else {
-			slice := rt.Execute_Slice(exe)
-			if str, e := marshalout(&slice); e != nil {
-				err = e
-			} else if len(str) > 0 {
-				c.prog = str
-			}
+			c.prog = exe
 		}
 	}
 	return
@@ -100,7 +91,7 @@ func (c *Catalog) WriteChecks(m mdl.Modeler) (err error) {
 			sort.Strings(names)
 			for _, n := range names {
 				t := d.checks[n]
-				if e := m.Check(d.name, t.name, t.expectVal, t.expectAff, t.prog, t.at); e != nil {
+				if e := m.Check(d.name, t.name, t.expectVal, t.prog, t.at); e != nil {
 					err = e
 					break
 				}

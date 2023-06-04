@@ -41,9 +41,7 @@ func (c *Catalog) WriteValues(m mdl.Modeler) error {
 	return forEachNoun(c, func(n *ScopedNoun) (err error) {
 		if rv := n.localRecord; rv.isValid() {
 			for _, fv := range rv.rec.Fields {
-				if value, e := marshalout(fv.Value); e != nil {
-					err = errutil.Append(err, e)
-				} else if e := m.Value(n.domain.name, n.name, fv.Field, value, rv.at); e != nil {
+				if e := m.Value(n.domain.name, n.name, fv.Field, fv.Value, rv.at); e != nil {
 					err = e
 					break
 				}

@@ -61,8 +61,8 @@ type Partition struct {
 
 type ephRules struct {
 	Target string
-	Filter string
-	Prog   string
+	Filter rt.BoolEval
+	Prog   []rt.Execute
 	Touch  bool
 }
 
@@ -100,19 +100,12 @@ func (cat *Catalog) AssertRule(opPatternName string, opTarget string, opGuard rt
 				d.rules = make(map[string]Rulesets)
 			}
 			rules := d.rules[name]
-			slice := rt.Execute_Slice(do)
-			if filter, e := marshalout(opGuard); e != nil {
-				err = e
-			} else if prog, e := marshalout(&slice); e != nil {
-				err = e
-			} else {
-				p := &rules.partitions[part]
-				p.els = append(p.els, ephRules{
-					Target: tgt, Filter: filter, Prog: prog, Touch: always,
-				})
-				p.at = append(p.at, at)
-				d.rules[name] = rules
-			}
+			p := &rules.partitions[part]
+			p.els = append(p.els, ephRules{
+				Target: tgt, Filter: opGuard, Prog: do, Touch: always,
+			})
+			p.at = append(p.at, at)
+			d.rules[name] = rules
 		}
 		return
 	})

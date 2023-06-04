@@ -11,6 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
@@ -191,17 +192,25 @@ func (m *Writer) Aspect(domain, aspect, at string, traits []string) (err error) 
 	return
 }
 
-func (m *Writer) Check(domain, name, value string, affinity affine.Affinity, prog, at string) (err error) {
+func (m *Writer) Check(domain, name string, v literal.LiteralValue, exe []rt.Execute, at string) (err error) {
 	if d, e := m.findDomain(domain); e != nil {
 		err = e
+	} else if out, e := marshalout(v); e != nil {
+		err = e
 	} else {
-		_, err = m.check.Exec(d, name, value, affinity, prog, at)
+		slice := rt.Execute_Slice(exe)
+		if prog, e := marshalout(&slice); e != nil {
+			err = e
+		} else {
+			aff := v.Affinity()
+			_, err = m.check.Exec(d, name, out, aff, prog, at)
+		}
 	}
 	return
 }
 
-func (m *Writer) Default(domain, kind, field string, value assign.Assignment) (err error) {
-	if val, e := marshalout(value); e != nil {
+func (m *Writer) Default(domain, kind, field string, v assign.Assignment) (err error) {
+	if out, e := marshalout(v); e != nil {
 		err = e
 	} else if _, kid, e := m.findKind(domain, kind); e != nil {
 		err = e
@@ -210,7 +219,7 @@ func (m *Writer) Default(domain, kind, field string, value assign.Assignment) (e
 			id     int
 			domain string
 			aff    affine.Affinity
-			val    *string
+			out    *string
 		}
 		if e := m.db.QueryRow(`
 		select mf.rowid, domain, affinity, value
@@ -218,7 +227,7 @@ func (m *Writer) Default(domain, kind, field string, value assign.Assignment) (e
 		left join mdl_default md
 			on(md.field = mf.rowid)
 		where mf.kind = ?1
-		and mf.field = ?2`, kid, field).Scan(&prev.id, &prev.domain, &prev.aff, &prev.val); e == sql.ErrNoRows {
+		and mf.field = ?2`, kid, field).Scan(&prev.id, &prev.domain, &prev.aff, &prev.out); e == sql.ErrNoRows {
 			err = errutil.Fmt("assignment requested for unknown field %q of kind %q in domain %q", field, kind, domain)
 		} else if e != nil {
 			err = e
@@ -228,20 +237,20 @@ func (m *Writer) Default(domain, kind, field string, value assign.Assignment) (e
 				// that wont always be true... ex. derived classes or constraints
 				err = errutil.Fmt("conflict: new assignment for field %q of kind %q differs in domain; was %q now %q.",
 					field, kind, prev.domain, domain)
-			} else if prev.val != nil {
-				if val == *prev.val {
+			} else if prev.out != nil {
+				if out == *prev.out {
 					m.warn(errutil.Fmt("duplicate assignment for field %q of kind %q in domain %q",
 						field, kind, domain))
 				} else {
 					err = errutil.Fmt("conflict: new assignment for field %q of kind %q differs",
 						field, kind)
 				}
-			} else if aff := assign.GetAffinity(value); aff != prev.aff {
+			} else if aff := assign.GetAffinity(v); aff != prev.aff {
 				err = errutil.Fmt("conflict: mismatched assignment for field %q of kind %q; field is %s, assignment was %s",
 					field, kind,
 					prev.aff, aff)
 			} else {
-				_, err = m.assign.Exec(prev.id, val)
+				_, err = m.assign.Exec(prev.id, out)
 			}
 
 		}
@@ -537,19 +546,30 @@ func (m *Writer) Rel(domain, relKind, oneKind, otherKind, cardinality, at string
 	return
 }
 
-func (m *Writer) Rule(domain, pattern, target string, phase int, filter, prog, at string) (err error) {
+func (m *Writer) Rule(domain, pattern, target string, phase int, filter rt.BoolEval, exe []rt.Execute, at string) (err error) {
 	if _, k, e := m.findKind(domain, pattern); e != nil {
 		err = e
 	} else if _, t, e := m.findOptionalKind(domain, target); e != nil {
 		err = e
 	} else {
-		_, err = m.rule.Exec(domain, k, t, phase, filter, prog, at)
+		slice := rt.Execute_Slice(exe)
+		if filter, e := marshalout(filter); e != nil {
+			err = e
+		} else if prog, e := marshalout(&slice); e != nil {
+			err = e
+		} else {
+			_, err = m.rule.Exec(domain, k, t, phase, filter, prog, at)
+		}
 	}
 	return
 }
 
-func (m *Writer) Value(domain, noun, field, value, at string) (err error) {
-	_, err = m.value.Exec(domain, noun, field, value, at)
+func (m *Writer) Value(domain, noun, field string, value literal.LiteralValue, at string) (err error) {
+	if out, e := marshalout(value); e != nil {
+		err = errutil.Append(err, e)
+	} else {
+		_, err = m.value.Exec(domain, noun, field, out, at)
+	}
 	return
 }
 

@@ -4,6 +4,8 @@ import (
   "git.sr.ht/~ionous/tapestry/affine"
   "git.sr.ht/~ionous/tapestry/dl/assign"
   "git.sr.ht/~ionous/tapestry/dl/grammar"
+  "git.sr.ht/~ionous/tapestry/dl/literal"
+  "git.sr.ht/~ionous/tapestry/rt"
 )
 
 // Modeler wraps writing to the model table
@@ -11,7 +13,7 @@ import (
 type Modeler interface {
   Aspect(domain, aspect, at string, traits []string) error
   // author tests of stories
-  Check(domain, name, value string, affinity affine.Affinity, prog, at string) error
+  Check(domain, name string, value literal.LiteralValue, exe []rt.Execute, at string) error
   // the pattern half of Start; domain, kind, field are a pointer into Field
   // value should be a marshaled compact value
   Default(domain, kind, field string, value assign.Assignment) error
@@ -46,10 +48,10 @@ type Modeler interface {
   // might also consider adding a cardinality field to the relation kind, and then use init for individual relations
   Rel(domain, relKind, oneKind, otherKind, cardinality, at string) error
   //
-  Rule(domain, pattern, target string, phase int, filter, prog, at string) error
+  Rule(domain, pattern, target string, phase int, filter rt.BoolEval, exe []rt.Execute, at string) error
   // the noun half of what was Start.
   // domain, noun, field reference a join of Noun and Kind to get a filtered Field.
-  Value(domain, noun, field, value, at string) error
+  Value(domain, noun, field string, value literal.LiteralValue, at string) error
 
   //
   FindCompatibleField(domain, noun, field string, aff affine.Affinity) (retName string, retClass string, err error)
