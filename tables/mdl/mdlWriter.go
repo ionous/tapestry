@@ -19,14 +19,10 @@ import (
 /**
  *
  */
-func NewModeler(db *sql.DB, duplicateWarnings func(error)) (ret Modeler, err error) {
+func NewModeler(db *sql.DB) (ret Modeler, err error) {
 	var ps tables.Prep
-	if duplicateWarnings == nil {
-		duplicateWarnings = func(error) {}
-	}
 	m := &Writer{
 		db:         db,
-		warn:       duplicateWarnings,
 		aspectPath: "XXX", // set to something that wont match until its set properly.
 		assign: ps.Prep(db,
 			tables.Insert("mdl_default", "field", "value"),
@@ -92,9 +88,6 @@ func NewModeler(db *sql.DB, duplicateWarnings func(error)) (ret Modeler, err err
 			// even if they are not unique globally, and even if they a broader/different scope than the pair's domain.
 			tables.Insert("mdl_pair", "domain", "relKind", "oneNoun", "otherNoun", "at"),
 		),
-		pat: ps.Prep(db,
-			tables.Insert("mdl_pat", "kind", "labels", "result"),
-		),
 		plural: ps.Prep(db,
 			// a plural word ("many") can have at most one singular definition per domain
 			// ie. "people" and "persons" are valid plurals of "person",
@@ -137,8 +130,7 @@ func NewModeler(db *sql.DB, duplicateWarnings func(error)) (ret Modeler, err err
 }
 
 type Writer struct {
-	db   *sql.DB
-	warn func(error)
+	db *sql.DB
 	assign,
 	check,
 	domain,
@@ -155,6 +147,7 @@ type Writer struct {
 	rev,
 	rule,
 	value *sql.Stmt
+	// some ugly caching:
 	aspectPath string // ex. ',4,'
 }
 
@@ -239,8 +232,8 @@ func (m *Writer) Default(domain, kind, field string, v assign.Assignment) (err e
 					field, kind, prev.domain, domain)
 			} else if prev.out != nil {
 				if out == *prev.out {
-					m.warn(errutil.Fmt("duplicate assignment for field %q of kind %q in domain %q",
-						field, kind, domain))
+					err = errutil.Fmt("%w assignment for field %q of kind %q in domain %q",
+						Duplicate, field, kind, domain)
 				} else {
 					err = errutil.Fmt("conflict: new assignment for field %q of kind %q differs",
 						field, kind)
@@ -265,7 +258,52 @@ func (m *Writer) Domain(domain, requires, at string) (err error) {
 	return
 }
 
-func (m *Writer) Field(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
+func (m *Writer) Member(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
+	_, err = m.Field(domain, kind, field, aff, cls, at)
+	return
+}
+
+func (m *Writer) Parameter(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
+	if k, e := m.Field(domain, kind, field, aff, cls, at); e != nil {
+		err = e
+	} else if res, e := m.db.Exec(`
+		insert into mdl_pat(kind, labels, result)
+		values(?1, ?2, null)
+		on conflict do update 
+		set labels = labels ||','|| ?2
+		where result is null
+		`, k, field); e != nil {
+		err = e
+	} else if rows, e := res.RowsAffected(); e != nil {
+		err = e
+	} else if rows == 0 {
+		err = errutil.Fmt("unexpected parameter %q for kind %q in domain %q",
+			field, kind, domain)
+	}
+	return
+}
+
+func (m *Writer) Result(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
+	if k, e := m.Field(domain, kind, field, aff, cls, at); e != nil {
+		err = e
+	} else if res, e := m.db.Exec(`
+		insert into mdl_pat(kind, labels, result)
+		values(?1, null, ?2)
+		on conflict do update 
+		set result=?2
+		where result is null
+		`, k, field); e != nil {
+		err = e
+	} else if rows, e := res.RowsAffected(); e != nil {
+		err = e
+	} else if rows == 0 {
+		err = errutil.Fmt("unexpected result %q for kind %q in domain %q",
+			field, kind, domain)
+	}
+	return
+}
+
+func (m *Writer) Field(domain, kind, field string, aff affine.Affinity, cls, at string) (retKind int, err error) {
 	if _, ancestry, kid, e := m.pathOfKind(domain, kind); e != nil {
 		err = errutil.Fmt("%w trying to add field %q", e, field)
 	} else if _, typeId, e := m.findOptionalKind(domain, cls); e != nil {
@@ -335,7 +373,6 @@ using(name)
 			aff    affine.Affinity // affinity of the existing field ( ex. 'bool' for aspects )
 			cls    sql.NullString  // type name ( or null ) of existing field
 		}
-		var dupe error
 		if e := tables.ScanAll(rows, func() (err error) {
 			// if the names differ, then the conflict is due to a trait ( being added or already existing )
 			if prev.name != field {
@@ -357,11 +394,10 @@ using(name)
 				}
 			} else if aff == prev.aff && cls == prev.cls.String {
 				// if the affinity and typeName are the same, then its a duplicate
-				dupe = errutil.Fmt("duplicate field %q for kind %q of %s(%s) from %s and now domain %q",
-					field, kind,
+				err = errutil.Fmt("%w field %q for kind %q of %s(%s) from %s and now domain %q",
+					Duplicate, field, kind,
 					aff, cls,
 					prev.origin, domain)
-				err = dupe
 			} else {
 				// otherwise, its a conflict
 				err = errutil.Fmt("conflict: field %q for kind %q of %s(%s) from %s was redefined as %s(%s) in domain %q",
@@ -371,15 +407,13 @@ using(name)
 			}
 			return
 		}, &prev.origin, &prev.name, &prev.aff, &prev.cls, &prev.aspect); e != nil {
-			if e == dupe {
-				m.warn(e)
-			} else {
-				err = e
-			}
+			err = e
 		} else {
 			// err was nil, we can write the field:
 			if _, e := m.field.Exec(domain, kid, field, aff, typeId, at); e != nil {
 				err = errutil.Fmt("%w for (%s.%s.%s)", e, domain, kind, field)
+			} else {
+				retKind = kid
 			}
 		}
 	}
@@ -446,14 +480,13 @@ func (m *Writer) Opposite(domain, a, b, at string) (err error) {
 		err = errutil.New("database error", e)
 	} else {
 		var x, y, from string
-		var dupe int
+		// opposites can generate multiple duplicates; so keep them all.
+		var dupe error = Duplicate
 		if e := tables.ScanAll(rows, func() (err error) {
 			// the testing is a bit weird so we handle it all app side
 			if (x == a && y == b) || (x == b && y == a) {
-				m.warn(errutil.Fmt(
-					"duplicate opposites: %q <=> %q in %q and %q",
-					a, b, from, domain))
-				dupe++
+				e := errutil.Fmt("opposite %q <=> %q in %q and %q", a, b, from, domain)
+				dupe = errutil.Append(dupe, e)
 			} else if x == a || y == a || x == b || y == b {
 				err = errutil.Fmt(
 					"conflict: %q <=> %q defined as opposites in %q now %q <=> %q in %q",
@@ -462,11 +495,11 @@ func (m *Writer) Opposite(domain, a, b, at string) (err error) {
 			return
 		}, &x, &y, &from); e != nil {
 			err = e
+		} else if dupe != Duplicate {
+			err = dupe
 		} else {
-			if dupe == 0 {
-				// writes the opposite paring as well
-				_, err = m.opposite.Exec(d, a, b, at)
-			}
+			// writes the opposite paring as well
+			_, err = m.opposite.Exec(d, a, b, at)
 		}
 	}
 	return
@@ -513,18 +546,17 @@ func (m *Writer) Plural(domain, many, one, at string) (err error) {
 		err = errutil.New("database error", e)
 	} else {
 		var prev, from string
-		var dupe int // log duplicates?
 		if e := tables.ScanAll(rows, func() (err error) {
 			if prev == one {
-				m.warn(errutil.Fmt("duplicate plurals: %q was %q in %q and %q", many, one, from, domain))
-				dupe++
+				err = errutil.Fmt("%w plural %q was %q in %q and %q",
+					Duplicate, many, one, from, domain)
 			} else {
 				err = errutil.Fmt("conflict: plural %q had singular %q (in %q) wants %q (in %q)", many, prev, from, one, domain)
 			}
 			return
 		}, &prev, &from); e != nil {
 			err = e
-		} else if dupe == 0 {
+		} else {
 			_, err = m.plural.Exec(d, many, one, at)
 		}
 	}

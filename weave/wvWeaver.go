@@ -44,7 +44,7 @@ func (cat *Catalog) AssertAspectTraits(opAspects string, opTraits []string) erro
 			kid := d.EnsureKind(aspect, at)
 			kid.AddRequirement(kindsOf.Aspect.String())
 			if len(traits) > 0 {
-				err = d.schedule(at, assert.FieldPhase, func(ctx *Weaver) error {
+				err = d.schedule(at, assert.MemberPhase, func(ctx *Weaver) error {
 					return cat.writer.Aspect(d.name, kid.name, at, traits)
 				})
 			}

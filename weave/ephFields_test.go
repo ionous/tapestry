@@ -73,9 +73,9 @@ func TestFieldsRedefine(t *testing.T) {
 
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if ok, e := okError(t, warnings.shift(), `duplicate field "n" for kind "k"`); !ok {
+	} else if ok, e := okError(t, warnings.shift(), `Duplicate field "n" for kind "k"`); !ok {
 		t.Fatal("expected warning; got:", e)
-	} else if ok, e := okError(t, warnings.shift(), `duplicate field "n" for kind "k"`); !ok {
+	} else if ok, e := okError(t, warnings.shift(), `Duplicate field "n" for kind "k"`); !ok {
 		t.Fatal("expected warning; got:", e)
 	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)

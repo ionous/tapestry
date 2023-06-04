@@ -60,7 +60,7 @@ func TestPluralAssembly(t *testing.T) {
 		t.Fatal("expected error")
 	} else if ok, e := okError(t, e, "conflict:"); !ok {
 		t.Fatal(e)
-	} else if ok, e := okError(t, warnings.shift(), `duplicate plurals: "cauldron"`); !ok {
+	} else if ok, e := okError(t, warnings.shift(), `Duplicate plural "cauldron"`); !ok {
 		t.Fatal(e)
 	} else if out, e := dt.readPlurals(); e != nil {
 		t.Fatal(e)

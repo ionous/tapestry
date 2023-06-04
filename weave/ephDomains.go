@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"git.sr.ht/~ionous/tapestry/tables"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
@@ -182,8 +183,13 @@ func (d *Domain) runPhase(ctx *Weaver) (err error) {
 			els := d.scheduling[w]
 			next := els[0]
 			d.scheduling[w] = els[1:]
+
 			if e := next.call(ctx); e != nil {
-				err = errutil.Append(err, e)
+				if !errors.Is(e, mdl.Duplicate) {
+					err = errutil.Append(err, e)
+				} else if d.catalog.warn != nil {
+					d.catalog.warn(e)
+				}
 			}
 		}
 		d.currPhase++

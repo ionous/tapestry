@@ -24,6 +24,7 @@ type Catalog struct {
 	writer          mdl.Modeler
 	run             rt.Runtime
 	db              *tables.Cache
+	warn            func(error)
 
 	// sometimes the importer needs to define a singleton like type or instance
 	oneTime     map[string]bool
@@ -41,7 +42,7 @@ func NewCatalogWithWarnings(db *sql.DB, warn func(error)) *Catalog {
 	if e != nil {
 		panic(e)
 	}
-	m, e := mdl.NewModeler(db, warn)
+	m, e := mdl.NewModeler(db)
 	if e != nil {
 		panic(e)
 	}
@@ -51,6 +52,7 @@ func NewCatalogWithWarnings(db *sql.DB, warn func(error)) *Catalog {
 	// what should be public for Catalog?
 	// no panics on creation... etc.
 	return &Catalog{
+		warn:        warn,
 		macros:      make(macroReg),
 		oneTime:     make(map[string]bool),
 		autoCounter: make(Counters),
@@ -261,11 +263,8 @@ func (c *Catalog) writePhase(p assert.Phase) (err error) {
 			err = c.WritePairs(w)
 		}
 	case assert.RulePhase:
-		if e := c.WritePatterns(w); e != nil {
-			err = e
-		} else if e := c.WriteRules(w); e != nil {
-			err = e
-		}
+		err = c.WriteRules(w)
+
 	case assert.AliasPhase:
 		err = c.WriteNames(w)
 

@@ -30,7 +30,7 @@ const (
 	//
 	ParamPhase    // parameters precede results
 	ResultPhase   // results precede normal fields
-	FieldPhase    // properties of kinds and records
+	MemberPhase   // properties of kinds and records
 	DefaultsPhase // initial values of fields
 
 	MacroPhase    // tbd: when is best?

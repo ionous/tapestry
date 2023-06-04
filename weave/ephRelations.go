@@ -79,10 +79,10 @@ func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error 
 				} else if ub, e := MakeUniformField(b.affinity(), b.short(true), b.class, at); e != nil {
 					err = e
 				} else {
-					err = cat.Schedule(assert.FieldPhase, func(ctx *Weaver) (err error) {
-						if e := cat.writeField(d.name, kid.name, ua); e != nil {
+					err = cat.Schedule(assert.MemberPhase, func(ctx *Weaver) (err error) {
+						if e := cat.writer.Member(d.name, kid.name, ua.Name, ua.Affinity, ua.Type, at); e != nil {
 							err = e
-						} else if e := cat.writeField(d.name, kid.name, ub); e != nil {
+						} else if e := cat.writer.Member(d.name, kid.name, ub.Name, ub.Affinity, ub.Type, at); e != nil {
 							err = e
 						}
 						return

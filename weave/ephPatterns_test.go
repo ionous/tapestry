@@ -1,7 +1,6 @@
 package weave
 
 import (
-	"errors"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/affine"
@@ -215,11 +214,9 @@ func TestPatternMultipleReturn(t *testing.T) {
 			},
 		},
 	)
-	var conflict *Conflict
-
 	_, e := dt.Assemble()
-	if e == nil || !errors.As(e, &conflict) || conflict.Reason != Redefined {
-		t.Fatal("expected an redefined conflict; got", e)
+	if ok, e := okError(t, e, `unexpected result`); !ok {
+		t.Fatal("expected error; got:", e)
 	} else {
 		t.Log("okay", e)
 	}
@@ -278,7 +275,7 @@ func TestPatternConflictingInit(t *testing.T) {
 	}
 }
 
-// a simple pattern with no return
+// a simple pattern with no parameters and no return
 func TestPatternNoResults(t *testing.T) {
 	dt := newTest(t.Name())
 	defer dt.Close()
@@ -307,11 +304,8 @@ func TestPatternNoResults(t *testing.T) {
 		t.Fatal(diff)
 	} else if outpat, e := dt.readPatterns(); e != nil {
 		t.Fatal(e)
-	} else if diff := pretty.Diff(outpat, []string{
-		"a:p::",
-	}); len(diff) > 0 {
-		t.Log("got:", pretty.Sprint(outpat))
-		t.Fatal(diff)
+	} else if len(outpat) > 0 {
+		t.Fatal("expected no labels; got:", pretty.Sprint(outpat))
 	} else if outlocals, e := dt.readLocals(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outlocals, []string{

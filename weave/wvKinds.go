@@ -59,7 +59,7 @@ func (cat *Catalog) AssertAncestor(opKind, opAncestor string) error {
 // generated (for instance) from DefineFields...
 // these make new ephemera which are processed during the PropertyPhase.
 func (cat *Catalog) AssertField(kind, fieldName, class string, aff affine.Affinity, init assign.Assignment) error {
-	return cat.Schedule(assert.FieldPhase, func(ctx *Weaver) (err error) {
+	return cat.Schedule(assert.MemberPhase, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
 		_, newName := d.StripDeterminer(kind)
 		if newName, ok := UniformString(newName); !ok {
@@ -68,7 +68,7 @@ func (cat *Catalog) AssertField(kind, fieldName, class string, aff affine.Affini
 			err = KindError{kind, errutil.New("unknown kind at while generating fields", at)}
 		} else if uf, e := MakeUniformField(aff, fieldName, class, at); e != nil {
 			err = e
-		} else if e := cat.writeField(d.name, kid.name, uf); e != nil {
+		} else if e := cat.writer.Member(d.name, kid.name, uf.Name, uf.Affinity, uf.Type, at); e != nil {
 			err = e
 		} else if init != nil {
 			return cat.Schedule(assert.DefaultsPhase, func(ctx *Weaver) (err error) {
@@ -77,8 +77,4 @@ func (cat *Catalog) AssertField(kind, fieldName, class string, aff affine.Affini
 		}
 		return
 	})
-}
-
-func (cat *Catalog) writeField(d, k string, uf UniformField) error {
-	return cat.writer.Field(d, k, uf.Name, uf.Affinity, uf.Type, uf.At)
 }

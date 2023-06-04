@@ -43,8 +43,10 @@ create table mdl_noun( domain text not null, noun text, kind int not null, at te
 /* relation between two specific nouns. these change over the course of a game.
  * similar to mdl_rule, points back to the relation's kind rather than the entry in the mdl_rel table */
 create table mdl_pair( domain text not null, relKind int not null, oneNoun int not null, otherNoun int not null, at text );
-/* pattern, the field ( in md_field ) used for a return value ( if any ) and comma separated labels for calling/processing fields 
- * the scope of the pattern is the same as its kind */
+/* 
+ * pattern, the field ( in md_field ) used for a return value ( if any ) and comma separated labels for calling/processing fields 
+ * the scope of the pattern is the same as its kind 
+ */
 create table mdl_pat( kind int not null, labels text, result text, primary key( kind ) );
 /* maps common and uncommon words to their plurals. 
  * within a particular domain, a plural word produces a unique singular word;
