@@ -257,11 +257,8 @@ func (c *Catalog) writePhase(p assert.Phase) (err error) {
 	case assert.ValuePhase:
 		err = c.WriteValues(w)
 	case assert.RelativePhase:
-		if e := c.WriteRelations(w); e != nil {
-			err = e
-		} else {
-			err = c.WritePairs(w)
-		}
+		err = c.WritePairs(w)
+
 	case assert.RulePhase:
 		err = c.WriteRules(w)
 

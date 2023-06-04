@@ -307,6 +307,7 @@ func (dt *domainTest) readPlurals() ([]string, error) {
 }
 
 // domain, relation, one kind, other kind, cardinality
+// ordered by name of the relation for test consistency.
 func (dt *domainTest) readRelations() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select mk.domain ||':'|| mk.kind ||':'|| one.kind ||':'|| other.kind ||':'|| mr.cardinality
@@ -316,7 +317,8 @@ func (dt *domainTest) readRelations() ([]string, error) {
 	join mdl_kind one
 		on(oneKind = one.rowid)
 	join mdl_kind other
-		on(otherKind = other.rowid)`)
+		on(otherKind = other.rowid)
+	order by mk.kind`)
 }
 
 // domain, pattern, target, phase, filter, prog

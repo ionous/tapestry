@@ -1,9 +1,9 @@
 package weave
 
 import (
+	"database/sql"
 	"sort"
 
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
@@ -77,6 +77,26 @@ func (rs *Relatives) AddPair(a, b, at string) {
 	rs.pairs = append(rs.pairs, Relative{a, b, at})
 }
 
+func (d *Domain) findCardinality(rel string) (ret string, err error) {
+	q := d.catalog.db
+	if e := q.QueryRow(`
+	select cardinality
+	from mdl_rel mr 
+	join mdl_kind mk
+		on (mr.relKind = mk.rowid)
+	join domain_tree
+		on (uses = domain)
+	where base = ?1
+	and kind = ?2
+	limit 1
+	`, d.name, rel).Scan(&ret); e == sql.ErrNoRows {
+		err = errutil.Fmt("unknown or invalid cardinality for %q", rel)
+	} else {
+		err = e
+	}
+	return
+}
+
 // validate that the pattern for the rule exists then add the rule to the *current* domain
 // ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
 func (cat *Catalog) AssertRelative(opRel, opNoun, opOtherNoun string) error {
@@ -84,17 +104,17 @@ func (cat *Catalog) AssertRelative(opRel, opNoun, opOtherNoun string) error {
 		d, at := ctx.d, ctx.at
 		if name, ok := UniformString(opRel); !ok {
 			err = InvalidString(opRel)
-		} else if rel, ok := d.GetPluralKind(name); !ok || !rel.HasAncestor(kindsOf.Relation) {
+		} else if rel, ok := d.GetPluralKind(name); !ok {
 			err = errutil.Fmt("unknown or invalid relation %q", opRel)
-		} else if card := rel.domain.GetDefinition(MakeKey("rel", rel.name, "card")); len(card.value) == 0 {
-			err = errutil.Fmt("unknown or invalid cardinality for %q", opRel)
+		} else if card, e := d.findCardinality(rel.name); e != nil {
+			err = e
 		} else if first, e := getClosestNoun(d, opNoun); e != nil {
 			err = e
 		} else if second, e := getClosestNoun(d, opOtherNoun); e != nil {
 			err = e
 		} else {
 			var addPair bool
-			switch card.value {
+			switch card {
 			case tables.ONE_TO_ONE:
 				// when one-to-one, the meaning of the two columns is the same
 				// and sorting the names so that first is less than second simplifies testing for uniqueness
@@ -115,7 +135,7 @@ func (cat *Catalog) AssertRelative(opRel, opNoun, opOtherNoun string) error {
 				uniquePair := first.name + second.name
 				addPair, err = relate(d, rel, uniquePair, at, uniquePair)
 			default:
-				err = errutil.Fmt("unknown or invalid cardinality %q for %q", card.value, opRel)
+				err = errutil.Fmt("invalid cardinality %q for %q", card, opRel)
 			}
 			//
 			if err == nil && addPair {

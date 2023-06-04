@@ -1,55 +1,14 @@
 package weave
 
 import (
-	"errors"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
-
-func (c *Catalog) WriteRelations(m mdl.Modeler) (err error) {
-	return // FIX: fields array doesnt exist
-	// if ks, e := c.ResolveKinds(); e != nil {
-	// 	err = e
-	// } else {
-	// 	for _, kdep := range ks {
-	// 		if k := kdep.Leaf().(*ScopedKind); k.HasParent(kindsOf.Relation) && len(k.fields) > 0 {
-	// 			one := k.fields[0]   // a field of affinity text referencing some other kind.
-	// 			other := k.fields[1] // the name is the cardinality, and the class is the kind.
-	// 			card := makeCard(one.name, other.name)
-	// 			if e := m.Rel(k.domain.name, k.name, one.class, other.class, card, k.at); e != nil {
-	// 				err = e
-	// 				break
-	// 			}
-	// 		}
-	// 	}
-	// }
-	// return
-}
-
-// return a string compatible with package table's cardinality
-// see also: relKind.short() for how it specifies fields
-func makeCard(one, other string) string {
-	var s strings.Builder
-	oneOrAny(&s, one)
-	s.WriteRune('_')
-	oneOrAny(&s, other)
-	return s.String()
-}
-
-func oneOrAny(out *strings.Builder, s string) (ret string) {
-	if s[len(s)-1] == 's' {
-		out.WriteString("any")
-	} else {
-		out.WriteString("one")
-	}
-	return
-}
 
 func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error {
 	// uses ancestry because it defines kinds for each relation
@@ -65,30 +24,24 @@ func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error 
 		} else if len(b.class) == 0 {
 			err = errutil.New("invalid rhs")
 		} else {
-			// add the cardinality as a definition
-			// ( used by eph.Relatives to determine the cardinality )
-			var conflict *Conflict
-			if e := d.AddDefinition(MakeKey("rel", rel, "card"), at, card); e != nil && !errors.As(e, &conflict) && conflict.Reason != Duplicated {
+			kid := d.EnsureKind(rel, at)
+			kid.AddRequirement(kindsOf.Relation.String())
+			//
+			if ua, e := MakeUniformField(a.affinity(), a.short(false), a.class, at); e != nil {
+				err = e
+			} else if ub, e := MakeUniformField(b.affinity(), b.short(true), b.class, at); e != nil {
 				err = e
 			} else {
-				kid := d.EnsureKind(rel, at)
-				kid.AddRequirement(kindsOf.Relation.String())
-
-				if ua, e := MakeUniformField(a.affinity(), a.short(false), a.class, at); e != nil {
-					err = e
-				} else if ub, e := MakeUniformField(b.affinity(), b.short(true), b.class, at); e != nil {
-					err = e
-				} else {
-					err = cat.Schedule(assert.MemberPhase, func(ctx *Weaver) (err error) {
-						if e := cat.writer.Member(d.name, kid.name, ua.Name, ua.Affinity, ua.Type, at); e != nil {
-							err = e
-						} else if e := cat.writer.Member(d.name, kid.name, ub.Name, ub.Affinity, ub.Type, at); e != nil {
-							err = e
-						}
-						return
-					})
-
-				}
+				err = cat.Schedule(assert.MemberPhase, func(ctx *Weaver) (err error) {
+					if e := cat.writer.Member(d.name, kid.name, ua.Name, ua.Affinity, ua.Type, at); e != nil {
+						err = e
+					} else if e := cat.writer.Member(d.name, kid.name, ub.Name, ub.Affinity, ub.Type, at); e != nil {
+						err = e
+					} else if e := cat.writer.Rel(d.name, kid.name, ua.Type, ub.Type, card, at); e != nil {
+						err = e // ^ not sure the best time to write this....
+					}
+					return
+				})
 			}
 		}
 		return
