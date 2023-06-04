@@ -100,7 +100,7 @@ func TestFieldsConflict(t *testing.T) {
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Text}}},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `conflict: field "n" for kind "k"`); !ok {
+	if ok, e := okError(t, e, `Conflict field "n" for kind "k"`); !ok {
 		t.Fatal("expected error; got:", e)
 	}
 }
@@ -158,7 +158,7 @@ func TestFieldsMismatchingRivals(t *testing.T) {
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "t", Affinity: affine.Bool}}},
 	)
 	_, err := dt.Assemble()
-	if ok, e := okError(t, err, `conflict: field "t" for kind "k"`); !ok {
+	if ok, e := okError(t, err, `Conflict field "t" for kind "k"`); !ok {
 		t.Fatal("expected error; got:", e)
 	}
 }

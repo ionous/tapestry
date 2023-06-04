@@ -228,19 +228,19 @@ func (m *Writer) Default(domain, kind, field string, v assign.Assignment) (err e
 			if domain != prev.domain {
 				// currently assuming that fields are initialized in the same domain as they are declared
 				// that wont always be true... ex. derived classes or constraints
-				err = errutil.Fmt("conflict: new assignment for field %q of kind %q differs in domain; was %q now %q.",
-					field, kind, prev.domain, domain)
+				err = errutil.Fmt("%w new assignment for field %q of kind %q differs in domain; was %q now %q.",
+					Conflict, field, kind, prev.domain, domain)
 			} else if prev.out != nil {
 				if out == *prev.out {
 					err = errutil.Fmt("%w assignment for field %q of kind %q in domain %q",
 						Duplicate, field, kind, domain)
 				} else {
-					err = errutil.Fmt("conflict: new assignment for field %q of kind %q differs",
-						field, kind)
+					err = errutil.Fmt("%w new assignment for field %q of kind %q differs",
+						Conflict, field, kind)
 				}
 			} else if aff := assign.GetAffinity(v); aff != prev.aff {
-				err = errutil.Fmt("conflict: mismatched assignment for field %q of kind %q; field is %s, assignment was %s",
-					field, kind,
+				err = errutil.Fmt("%w mismatched assignment for field %q of kind %q; field is %s, assignment was %s",
+					Conflict, field, kind,
 					prev.aff, aff)
 			} else {
 				_, err = m.assign.Exec(prev.id, out)
@@ -379,16 +379,16 @@ using(name)
 				// adding an aspect: the conflict reports the pending aspect so this case can be detected
 				if prev.aspect.String == cls {
 					// is there a way to determine whether the origin is a domain or aspect
-					err = errutil.Fmt("conflict: new field for kind %q of aspect %q conflicts with existing field %q from %s",
-						kind, field, prev.name, prev.origin)
+					err = errutil.Fmt("%w new field for kind %q of aspect %q conflicts with existing field %q from %s",
+						Conflict, kind, field, prev.name, prev.origin)
 				} else if prev.aspect.Valid {
-					err = errutil.Fmt("conflict: new field for kind %q of aspect %q conflicts with trait %q from aspect %q",
-						kind, field,
+					err = errutil.Fmt("%w new field for kind %q of aspect %q conflicts with trait %q from aspect %q",
+						Conflict, kind, field,
 						prev.name, prev.aspect.String)
 				} else {
 					// when does this show up?
-					err = errutil.Fmt("conflict: field %q for kind %q was %s(%s) from %s, now %s(%s) in %q",
-						field, kind,
+					err = errutil.Fmt("%w field %q for kind %q was %s(%s) from %s, now %s(%s) in %q",
+						Conflict, field, kind,
 						prev.aff, prev.cls.String, prev.origin,
 						aff, cls, domain)
 				}
@@ -400,8 +400,8 @@ using(name)
 					prev.origin, domain)
 			} else {
 				// otherwise, its a conflict
-				err = errutil.Fmt("conflict: field %q for kind %q of %s(%s) from %s was redefined as %s(%s) in domain %q",
-					field, kind,
+				err = errutil.Fmt("%w field %q for kind %q of %s(%s) from %s was redefined as %s(%s) in domain %q",
+					Conflict, field, kind,
 					prev.aff, prev.cls.String, prev.origin,
 					aff, cls, domain)
 			}
@@ -458,12 +458,41 @@ func (m *Writer) Name(domain, noun, name string, rank int, at string) (err error
 	return
 }
 
+// create table mdl_noun( domain text not null, noun text, kind int not null, at text )
 func (m *Writer) Noun(domain, noun, kind, at string) (err error) {
-	if _, k, e := m.findKind(domain, kind); e != nil {
+	if _, newAncestry, kid, e := m.pathOfKind(domain, kind); e != nil {
 		err = e
+	} else if d, id, existingAncestry, e := m.pathOfOptionalNoun(domain, noun); e != nil {
+		err = e
+	} else if id == 0 {
+		// easiest is if the noun has never been mentioned before;
+		// we verified the kind first thing, so just go ahead and insert:
+		_, err = m.noun.Exec(domain, noun, kid, at)
+	} else if d != domain {
+		// if it has been declared, and in a different domain: that's an error.
+		err = errutil.Fmt("%w kind %q of noun %q expected in the same domain as the noun declaration; was %q now %q",
+			Conflict, kind, noun, d, domain)
 	} else {
-		// uses the domain of the declaration
-		_, err = m.noun.Exec(domain, noun, k, at)
+		// does the newly specified kind contain the existing kind?
+		// then we are ratcheting down. (ex. new: ,c,b,a,)  ( existing: ,a, )
+		if strings.HasSuffix(newAncestry, existingAncestry) {
+			if res, e := m.db.Exec(`update mdl_noun set kind = ?2 where rowid = ?1`, id, kid); e != nil {
+				err = e
+			} else if cnt, e := res.RowsAffected(); cnt != 1 {
+				err = errutil.New("unexpected error updating noun hierarchy %d rows affected", cnt)
+			} else if e != nil {
+				err = e
+			}
+		} else if strings.HasSuffix(existingAncestry, newAncestry) {
+			// does the existing kind fully contain the new kind?
+			// then its a duplicate request (ex. existing: ,c,b,a,)  ( new: ,a, )
+			err = errutil.Fmt("%w noun %q already declared as %q",
+				Duplicate, noun, kind)
+		} else {
+			// unrelated completely? then its an error
+			err = errutil.Fmt("%w can't redefine kind of noun %q as %q",
+				Conflict, noun, kind)
+		}
 	}
 	return
 }
@@ -486,8 +515,8 @@ func (m *Writer) Opposite(domain, a, b, at string) (err error) {
 				err = errutil.Fmt("%w opposite %q <=> %q in %q and %q", Duplicate, a, b, from, domain)
 			} else if x == a || y == a || x == b || y == b {
 				err = errutil.Fmt(
-					"conflict: %q <=> %q defined as opposites in %q now %q <=> %q in %q",
-					x, y, from, a, b, domain)
+					"%w %q <=> %q defined as opposites in %q now %q <=> %q in %q",
+					Conflict, x, y, from, a, b, domain)
 			}
 			return
 		}, &x, &y, &from); e != nil {
@@ -521,7 +550,8 @@ func (m *Writer) Pat(domain, kind, labels, result string) (err error) {
 	if d, k, e := m.findKind(domain, kind); e != nil {
 		err = e
 	} else if d != domain {
-		err = errutil.New("pattern signature expected in the same domain as the pattern declaration")
+		err = errutil.Fmt("%w pattern %q signature expected in the same domain as the pattern declaration; was %q now %q",
+			Conflict, kind, d, domain)
 	} else {
 		_, err = m.pat.Exec(k, labels, result)
 	}
@@ -546,7 +576,8 @@ func (m *Writer) Plural(domain, many, one, at string) (err error) {
 				err = errutil.Fmt("%w plural %q was %q in %q and %q",
 					Duplicate, many, one, from, domain)
 			} else {
-				err = errutil.Fmt("conflict: plural %q had singular %q (in %q) wants %q (in %q)", many, prev, from, one, domain)
+				err = errutil.Fmt("%w plural %q had singular %q (in %q) wants %q (in %q)",
+					Conflict, many, prev, from, one, domain)
 			}
 			return
 		}, &prev, &from); e != nil {

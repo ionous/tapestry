@@ -6,17 +6,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func (c *Catalog) WriteNouns(m mdl.Modeler) error {
-	return forEachNoun(c, func(n *ScopedNoun) (err error) {
-		if k, e := n.Kind(); e != nil {
-			err = errutil.Append(err, e)
-		} else {
-			err = m.Noun(n.domain.name, n.name, k.name, n.at)
-		}
-		return
-	})
-}
-
 func (c *Catalog) WriteNames(m mdl.Modeler) error {
 	return forEachNoun(c, func(n *ScopedNoun) (err error) {
 		{
@@ -59,18 +48,6 @@ func forEachNoun(c nounResolver, it func(*ScopedNoun) error) (err error) {
 	return
 }
 
-type NounError struct {
-	Noun string
-	Err  error
-}
-
-func (n NounError) Error() string {
-	return errutil.Sprintf("%v for noun %q", n.Err, n.Noun)
-}
-func (n NounError) Unwrap() error {
-	return n.Err
-}
-
 func (cat *Catalog) AssertNounKind(opNoun, opKind string) error {
 	return cat.Schedule(assert.NounPhase, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
@@ -82,18 +59,15 @@ func (cat *Catalog) AssertNounKind(opNoun, opKind string) error {
 		} else if kn, ok := UniformString(kind); !ok {
 			err = InvalidString(opKind)
 		} else if k, ok := d.findPluralKind(kn); !ok {
-			return KindError{opKind, errutil.Fmt("unknown kind at while generating noun %q at %q", opNoun, at)}
-		} else if noun := d.EnsureNoun(name, at); noun.domain == d {
-			// we can only add requirements to the noun in the same domain that it was declared
-			// if in a different domain: the nouns have to match up
-			noun.UpdateFriendlyName(opNoun)
-			noun.AddRequirement(k)
-
-		} else if !noun.HasAncestor(k) {
-			err = NounError{name, errutil.Fmt("can't redefine parent as %q", opKind)}
+			return errutil.Fmt("unknown kind %q for noun %q at %q", opKind, opNoun, at)
 		} else {
-			// is this in anyway useful?
-			LogWarning(errutil.Fmt("duplicate noun %s definition at %v", name, at))
+			if e := cat.writer.Noun(d.name, name, k, at); e != nil {
+				err = e
+			} else {
+				noun := d.EnsureNoun(name, at)
+				noun.AddRequirement(k)
+				noun.UpdateFriendlyName(opNoun)
+			}
 		}
 		return
 	})

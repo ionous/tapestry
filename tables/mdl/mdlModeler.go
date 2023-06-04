@@ -12,6 +12,7 @@ import (
 // when nothing was written because the definition would repeat existing information,
 // the returned error wraps this tag. errors.Is can be used to detect it.
 const Duplicate = errutil.Error("Duplicate")
+const Conflict = errutil.Error("Conflict")
 
 // Modeler wraps writing to the model table
 // so the implementation can handle verifying dependent names when needed.

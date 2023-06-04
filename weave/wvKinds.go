@@ -7,18 +7,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-type KindError struct {
-	Kind string
-	Err  error
-}
-
-func (n KindError) Error() string {
-	return errutil.Sprintf("%v for kind %q", n.Err, n.Kind)
-}
-func (n KindError) Unwrap() error {
-	return n.Err
-}
-
 // Kinds, From string, Contain []eph.Params
 func (cat *Catalog) AssertAncestor(opKind, opAncestor string) error {
 	return cat.Schedule(assert.AncestryPhase, func(ctx *Weaver) (err error) {
@@ -44,9 +32,10 @@ func (cat *Catalog) AssertAncestor(opKind, opAncestor string) error {
 						if pk, ok := d.findPluralKind(ancestor); !ok {
 							err = errutil.New("unknown parent kind", opAncestor)
 						} else if !kid.Requires.HasAncestor(pk) {
-							err = KindError{kind, errutil.Fmt("can't redefine parent as %q", opAncestor)}
+							err = errutil.Fmt("kind %q can't redefine parent as %q", kind, opAncestor)
 						} else {
-							LogWarning(KindError{kind, errutil.New("duplicate parent definition at", at)})
+							e := errutil.Fmt("kind %q duplicate parent definition at %v", kind, at)
+							LogWarning(e)
 						}
 					}
 				}
@@ -65,7 +54,7 @@ func (cat *Catalog) AssertField(kind, fieldName, class string, aff affine.Affini
 		if newName, ok := UniformString(newName); !ok {
 			err = InvalidString(kind)
 		} else if kid, ok := d.findPluralKind(newName); !ok {
-			err = KindError{kind, errutil.New("unknown kind at while generating fields", at)}
+			err = errutil.Fmt("unknown kind %q at %v", kind, at)
 		} else if uf, e := MakeUniformField(aff, fieldName, class, at); e != nil {
 			err = e
 		} else if e := cat.writer.Member(d.name, kid, uf.Name, uf.Affinity, uf.Type, at); e != nil {

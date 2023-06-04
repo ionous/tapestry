@@ -141,7 +141,7 @@ func TestAncestryRedefined(t *testing.T) {
 		&eph.Kinds{Kind: "m", Ancestor: "n"}, // should fail.
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `can't redefine parent as "n" for kind "m"`); !ok {
+	if ok, e := okError(t, e, `kind "m" can't redefine parent as "n"`); !ok {
 		t.Fatal("expected error; got:", e)
 	} else if warned := warnings.all(); len(warned) != 1 {
 		t.Fatal("expected one warning", warned)

@@ -11,9 +11,9 @@ type ScopedKind struct {
 
 func (k *ScopedKind) Resolve() (ret Dependencies, err error) {
 	if len(k.at) == 0 {
-		err = KindError{k.name, errutil.New("never defined")}
+		err = errutil.Fmt("kind %q never defined", k.name)
 	} else if ks, e := k.resolve(k, (*kindFinder)(k.domain)); e != nil {
-		err = KindError{k.name, e}
+		err = errutil.Fmt("%s for kind %q ", e, k.name)
 	} else {
 		ret = ks
 	}

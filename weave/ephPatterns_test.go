@@ -270,7 +270,7 @@ func TestPatternConflictingInit(t *testing.T) {
 		},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `conflict: mismatched assignment for field "n" of kind "p"`); !ok {
+	if ok, e := okError(t, e, `Conflict mismatched assignment for field "n" of kind "p"`); !ok {
 		t.Fatal("expected error; got:", e)
 	}
 }

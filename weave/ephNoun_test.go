@@ -56,7 +56,7 @@ func TestNounFailure(t *testing.T) {
 		&eph.Nouns{Noun: "bad apple", Kind: "t"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `unknown kind at while generating noun "bad apple" at "x" for kind "t"`); !ok {
+	if ok, e := okError(t, e, `unknown kind "t"`); !ok {
 		t.Fatal("expected error; got:", e)
 	} else {
 		t.Log("ok:", e)
@@ -113,7 +113,7 @@ func TestNounHierarchyFailure(t *testing.T) {
 		&eph.Nouns{Noun: "apple", Kind: "d"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `"apple" has more than one parent`); !ok {
+	if ok, e := okError(t, e, `Conflict can't redefine kind of noun "apple"`); !ok {
 		t.Fatal("expected error; got:", e)
 	} else {
 		t.Log("ok:", e)

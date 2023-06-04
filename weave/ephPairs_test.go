@@ -29,7 +29,7 @@ func TestOppositeConflict(t *testing.T) {
 		&eph.Opposites{Word: "unkindness", Opposite: "east"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `conflict`); !ok {
+	if ok, e := okError(t, e, `Conflict`); !ok {
 		t.Fatal("expected error; got:", e)
 	} else {
 		// "east" had opposite "west" wanted "east" as "unkindness"

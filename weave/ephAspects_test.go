@@ -89,7 +89,7 @@ func TestAspectConflictingFields(t *testing.T) {
 	)
 	if _, e := dt.Assemble(); e == nil {
 		t.Fatal("expected error")
-	} else if ok, e := okError(t, e, "conflict:"); !ok {
+	} else if ok, e := okError(t, e, "Conflict"); !ok {
 		t.Fatal(e)
 	}
 }
@@ -116,7 +116,7 @@ func TestAspectConflictingTraits(t *testing.T) {
 	)
 	if _, e := dt.Assemble(); e == nil {
 		t.Fatal("expected error")
-	} else if ok, e := okError(t, e, "conflict:"); !ok {
+	} else if ok, e := okError(t, e, "Conflict"); !ok {
 		t.Fatal(e)
 	}
 }

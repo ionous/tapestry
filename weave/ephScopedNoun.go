@@ -20,9 +20,9 @@ type ScopedNoun struct {
 
 func (n *ScopedNoun) Resolve() (ret Dependencies, err error) {
 	if len(n.at) == 0 {
-		err = NounError{n.name, errutil.New("never defined")}
+		err = errutil.New("noun %q never defined", n.name)
 	} else if ks, e := n.resolve(n, (*kindFinder)(n.domain)); e != nil {
-		err = NounError{n.name, e}
+		err = errutil.New("%s resolving noun %q", e, n.name)
 	} else {
 		ret = ks
 	}

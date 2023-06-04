@@ -71,6 +71,22 @@ func (m *Writer) findNoun(domain, noun string) (retDomain string, retKind int, e
 	return
 }
 
+func (m *Writer) pathOfOptionalNoun(domain, noun string) (retDomain string, retNoun int, retPath string, err error) {
+	if e := m.db.QueryRow(`
+	select mn.domain, mn.rowid, ',' || mk.rowid || ',' || mk.path
+	from mdl_noun mn
+	join mdl_kind mk 
+		on (mn.kind = mk.rowid)
+	join domain_tree dt
+		on (dt.uses = mn.domain)
+	where base = ?1
+	and noun = ?2
+	limit 1`, domain, noun).Scan(&retDomain, &retNoun, &retPath); e != sql.ErrNoRows {
+		err = e
+	}
+	return
+}
+
 // turn domain, kind, field into ids, associated with the local var's initial assignment.
 // domain and kind become redundant b/c fields exist at the scope of the kind.
 func (m *Writer) findField(domain, kind, field string) (retDomain string, retField int, err error) {
