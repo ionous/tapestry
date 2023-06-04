@@ -480,13 +480,10 @@ func (m *Writer) Opposite(domain, a, b, at string) (err error) {
 		err = errutil.New("database error", e)
 	} else {
 		var x, y, from string
-		// opposites can generate multiple duplicates; so keep them all.
-		var dupe error = Duplicate
 		if e := tables.ScanAll(rows, func() (err error) {
 			// the testing is a bit weird so we handle it all app side
 			if (x == a && y == b) || (x == b && y == a) {
-				e := errutil.Fmt("opposite %q <=> %q in %q and %q", a, b, from, domain)
-				dupe = errutil.Append(dupe, e)
+				err = errutil.Fmt("%w opposite %q <=> %q in %q and %q", Duplicate, a, b, from, domain)
 			} else if x == a || y == a || x == b || y == b {
 				err = errutil.Fmt(
 					"conflict: %q <=> %q defined as opposites in %q now %q <=> %q in %q",
@@ -495,8 +492,6 @@ func (m *Writer) Opposite(domain, a, b, at string) (err error) {
 			return
 		}, &x, &y, &from); e != nil {
 			err = e
-		} else if dupe != Duplicate {
-			err = dupe
 		} else {
 			// writes the opposite paring as well
 			_, err = m.opposite.Exec(d, a, b, at)
