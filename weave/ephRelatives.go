@@ -36,11 +36,7 @@ func (c *Catalog) WritePairs(m mdl.Modeler) (err error) {
 }
 
 func writePairs(m mdl.Modeler, d *Domain, relName string, rs []Relative) (err error) {
-	// note: we dont have to test the existence of the kinds and nouns, assembly has already done that
-	// sometimes, though... its helpful for testing.
-	/*if rel, ok := d.GetKind(relName); !ok {
-		err = errutil.New("couldnt find relation", relName)
-	} else */sort.Slice(rs, func(i, j int) (less bool) {
+	sort.Slice(rs, func(i, j int) (less bool) {
 		a, b := rs[i], rs[j]
 		switch {
 		case a.firstNoun < b.firstNoun:
@@ -51,13 +47,7 @@ func writePairs(m mdl.Modeler, d *Domain, relName string, rs []Relative) (err er
 		return
 	})
 	for _, p := range rs {
-		/*if n1, ok := d.GetNoun(p.firstNoun); !ok {
-			err = errutil.New("couldnt find first noun", p.firstNoun)
-			break
-		} else if n1, ok := d.GetNoun(p.secondNoun); !ok {
-			err = errutil.New("couldnt find second noun", p.secondNoun)
-			break
-		} else*/if e := m.Pair(d.name, relName, p.firstNoun, p.secondNoun, p.at); e != nil {
+		if e := m.Pair(d.name, relName, p.firstNoun, p.secondNoun, p.at); e != nil {
 			err = e
 			break
 		}
@@ -104,9 +94,9 @@ func (cat *Catalog) AssertRelative(opRel, opNoun, opOtherNoun string) error {
 		d, at := ctx.d, ctx.at
 		if name, ok := UniformString(opRel); !ok {
 			err = InvalidString(opRel)
-		} else if rel, ok := d.GetPluralKind(name); !ok {
+		} else if rel, ok := d.findPluralKind(name); !ok {
 			err = errutil.Fmt("unknown or invalid relation %q", opRel)
-		} else if card, e := d.findCardinality(rel.name); e != nil {
+		} else if card, e := d.findCardinality(rel); e != nil {
 			err = e
 		} else if first, e := getClosestNoun(d, opNoun); e != nil {
 			err = e
@@ -142,15 +132,15 @@ func (cat *Catalog) AssertRelative(opRel, opNoun, opOtherNoun string) error {
 				if d.relatives == nil {
 					d.relatives = make(map[string]Relatives)
 				}
-				pairs := d.relatives[rel.name]
+				pairs := d.relatives[rel]
 				pairs.AddPair(first.name, second.name, at)
-				d.relatives[rel.name] = pairs
+				d.relatives[rel] = pairs
 			}
 		}
 		return
 	})
 }
 
-func relate(d *Domain, rel *ScopedKind, key, at, other string) (okay bool, err error) {
-	return d.RefineDefinition(MakeKey("rel", rel.name, key), at, other)
+func relate(d *Domain, rel, key, at, other string) (okay bool, err error) {
+	return d.RefineDefinition(MakeKey("rel", rel, key), at, other)
 }

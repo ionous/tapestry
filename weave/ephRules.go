@@ -91,7 +91,7 @@ func (cat *Catalog) AssertRule(opPatternName string, opTarget string, opGuard rt
 		part, always := fromTiming(opFlags)
 		if name, ok := UniformString(opPatternName); !ok {
 			err = InvalidString(opPatternName)
-		} else if k, ok := d.GetKind(name); !ok || !k.HasAncestor(kindsOf.Pattern) {
+		} else if !d.hasAncestor(name, kindsOf.Pattern.String()) {
 			err = errutil.Fmt("unknown or invalid pattern %q(%s)", opPatternName, name)
 		} else if tgt, ok := getTargetName(d, opTarget); !ok {
 			err = errutil.Fmt("unknown or invalid target %q for pattern %q", opTarget, opPatternName)
@@ -114,9 +114,9 @@ func (cat *Catalog) AssertRule(opPatternName string, opTarget string, opGuard rt
 func getTargetName(d *Domain, opTarget string) (ret string, okay bool) {
 	if tgt := opTarget; len(tgt) == 0 {
 		okay = true
-	} else if x, ok := UniformString(opTarget); ok {
-		if k, ok := d.GetKind(x); ok {
-			ret, okay = k.name, true
+	} else if k, ok := UniformString(opTarget); ok {
+		if ok := d.findKind(k); ok {
+			ret, okay = k, true
 		}
 	}
 	return

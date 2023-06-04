@@ -81,14 +81,15 @@ func (cat *Catalog) AssertNounKind(opNoun, opKind string) error {
 			err = InvalidString(opNoun)
 		} else if kn, ok := UniformString(kind); !ok {
 			err = InvalidString(opKind)
-		} else if k, ok := d.GetPluralKind(kn); !ok {
+		} else if k, ok := d.findPluralKind(kn); !ok {
 			return KindError{opKind, errutil.Fmt("unknown kind at while generating noun %q at %q", opNoun, at)}
 		} else if noun := d.EnsureNoun(name, at); noun.domain == d {
 			// we can only add requirements to the noun in the same domain that it was declared
 			// if in a different domain: the nouns have to match up
 			noun.UpdateFriendlyName(opNoun)
-			noun.AddRequirement(k.name)
-		} else if !noun.HasAncestor(k.name) {
+			noun.AddRequirement(k)
+
+		} else if !noun.HasAncestor(k) {
 			err = NounError{name, errutil.Fmt("can't redefine parent as %q", opKind)}
 		} else {
 			// is this in anyway useful?

@@ -6,9 +6,15 @@ import (
 	"github.com/ionous/errutil"
 )
 
+type kindCat struct {
+	domain *Domain
+	kind   string
+}
+
 // a record literal is defined by a kind, and a sparse set of named values
 type localRecord struct {
-	k   *ScopedKind          // our kind, containing all the field definitions
+	k kindCat
+
 	rec *literal.RecordValue // our record, containing a sparse list of values
 	at  string               // fix? the at here is not very useful b/c it doesnt tell us where the individual values came from
 	// but where would we store that in the db, unless we either allowed a table of multiple at values ( maybe with path )
@@ -17,12 +23,19 @@ type localRecord struct {
 
 // inside the record we store slightly narrower info
 type innerRecord struct {
-	k           *ScopedKind           // our kind, containing all the field definitions
+	k kindCat
+
 	fieldValues *[]literal.FieldValue // a sparse list of values
 }
 
+func (in *innerRecord) findCompatibleField(field string, affinity affine.Affinity) (retName, retCls string, err error) {
+	k := in.k
+	w := k.domain.catalog.writer
+	return w.FindCompatibleField(k.domain.name, k.kind, field, affinity)
+}
+
 func (rp *localRecord) isValid() bool {
-	return rp.k != nil
+	return rp.k.domain != nil
 }
 
 // store the passed value at the passed path ( which points to some field nested within this record pair. )
@@ -39,7 +52,7 @@ func (rp *localRecord) writeValue(noun, at, field string, path []string, val lit
 }
 
 func (in *innerRecord) nestedWrite(noun, field, at string, val literal.LiteralValue) (err error) {
-	if name, _, e := in.k.findCompatibleField(field, val.Affinity()); e != nil {
+	if name, _, e := in.findCompatibleField(field, val.Affinity()); e != nil {
 		err = e
 	} else {
 		// redo the value if setting a trait
@@ -61,21 +74,24 @@ func (in *innerRecord) nestedWrite(noun, field, at string, val literal.LiteralVa
 func (rp *localRecord) ensureRecords(at string, path []string) (ret innerRecord, err error) {
 	it := innerRecord{rp.k, &rp.rec.Fields}
 	for _, field := range path {
-		if name, cls, e := it.k.findCompatibleField(field, affine.Record); e != nil {
+		if name, cls, e := it.findCompatibleField(field, affine.Record); e != nil {
 			err = e
 			break
-		} else if nextKind, ok := it.k.domain.GetKind(cls); !ok {
+		} else if !it.k.domain.findKind(cls) {
 			err = errutil.Fmt("couldnt find record of %q", cls)
 			break
-		} else if oldVal, ok := it.findField(name); !ok {
-			nextRec := new(literal.FieldList)
-			it.appendField(name, nextRec)
-			it = innerRecord{nextKind, &nextRec.Fields}
-		} else if nextRec, ok := oldVal.(*literal.FieldList); !ok {
-			err = errutil.New("field value isnt a record")
-			break
 		} else {
-			it = innerRecord{nextKind, &nextRec.Fields}
+			nextKind := kindCat{it.k.domain, cls}
+			if oldVal, ok := it.findField(name); !ok {
+				nextRec := new(literal.FieldList)
+				it.appendField(name, nextRec)
+				it = innerRecord{nextKind, &nextRec.Fields}
+			} else if nextRec, ok := oldVal.(*literal.FieldList); !ok {
+				err = errutil.New("field value isnt a record")
+				break
+			} else {
+				it = innerRecord{nextKind, &nextRec.Fields}
+			}
 		}
 	}
 	if err == nil {

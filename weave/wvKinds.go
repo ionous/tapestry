@@ -41,9 +41,9 @@ func (cat *Catalog) AssertAncestor(opKind, opAncestor string) error {
 						kid.AddRequirement(ancestor) // fix? maybe it'd make sense for requirements to have origin at?
 					} else {
 						// otherwise, if in a different domain: the kinds have to match up
-						if pk, ok := d.GetPluralKind(ancestor); !ok {
+						if pk, ok := d.findPluralKind(ancestor); !ok {
 							err = errutil.New("unknown parent kind", opAncestor)
-						} else if !kid.Requires.HasAncestor(pk.name) {
+						} else if !kid.Requires.HasAncestor(pk) {
 							err = KindError{kind, errutil.Fmt("can't redefine parent as %q", opAncestor)}
 						} else {
 							LogWarning(KindError{kind, errutil.New("duplicate parent definition at", at)})
@@ -64,15 +64,15 @@ func (cat *Catalog) AssertField(kind, fieldName, class string, aff affine.Affini
 		_, newName := d.StripDeterminer(kind)
 		if newName, ok := UniformString(newName); !ok {
 			err = InvalidString(kind)
-		} else if kid, ok := d.GetPluralKind(newName); !ok {
+		} else if kid, ok := d.findPluralKind(newName); !ok {
 			err = KindError{kind, errutil.New("unknown kind at while generating fields", at)}
 		} else if uf, e := MakeUniformField(aff, fieldName, class, at); e != nil {
 			err = e
-		} else if e := cat.writer.Member(d.name, kid.name, uf.Name, uf.Affinity, uf.Type, at); e != nil {
+		} else if e := cat.writer.Member(d.name, kid, uf.Name, uf.Affinity, uf.Type, at); e != nil {
 			err = e
 		} else if init != nil {
 			return cat.Schedule(assert.DefaultsPhase, func(ctx *Weaver) (err error) {
-				return cat.writer.Default(d.name, kid.name, uf.Name, init)
+				return cat.writer.Default(d.name, kid, uf.Name, init)
 			})
 		}
 		return

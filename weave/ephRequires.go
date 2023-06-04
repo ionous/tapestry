@@ -50,16 +50,6 @@ func (d *Requires) GetDependencies() (ret Dependencies, err error) {
 }
 
 // ( must be previously resolved to work properly )
-func (d *Requires) HasParent(name string) (okay bool) {
-	if dep, e := d.GetDependencies(); e == nil {
-		if as := dep.Parents(); len(as) > 0 && as[0].Name() == name {
-			okay = true
-		}
-	}
-	return
-}
-
-// ( must be previously resolved to work properly )
 func (d *Requires) HasAncestor(name string) (okay bool) {
 	if dep, e := d.GetDependencies(); e == nil {
 		if as := dep.Ancestors(); len(name) == 0 && len(as) == 0 {
