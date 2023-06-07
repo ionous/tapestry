@@ -18,7 +18,7 @@ func (m *Writer) findField(domain, kind, field string) (retDomain string, retFie
 		from mdl_field mf
 		where kind = ?1
 		and field = ?2`, kid.id, field).Scan(&retField); e == sql.ErrNoRows {
-		err = errutil.Fmt("%w field %q in kind %q in domain %q", Unknown, field, kind, domain)
+		err = errutil.Fmt("%w field %q in kind %q in domain %q", Missing, field, kind, domain)
 	} else if e != nil {
 		err = e
 	} else {
@@ -84,12 +84,12 @@ func (m *Writer) addField(domain string, kid, cls kindInfo, field string, aff af
 	// if existing, e := tables.QueryStrings(m.db, fieldSource+`
 	// 	select origin|| ', ' || name || ', '|| affinity|| ', ' || typeName
 	// 	from existingFields`,
-	// 	kid.fullpath, field, cls.id, m.aspectPath); e != nil {
+	// 	kid.fullpath(), field, cls.id, m.aspectPath); e != nil {
 	// 	panic(e)
 	// } else if pending, e := tables.QueryStrings(m.db, fieldSource+`
 	// 	select '-' || name || ', ' || coalesce(aspect, 'nil')
 	// 	from pendingFields`,
-	// 	kid.fullpath, field, cls.id, m.aspectPath); e != nil {
+	// 	kid.fullpath(), field, cls.id, m.aspectPath); e != nil {
 	// 	panic(e)
 	// } else {
 	// 	println("existing", strings.Join(existing, ";\n "))
@@ -101,7 +101,7 @@ select origin, name, affinity, typeName, aspect
 from existingFields
 join pendingFields
 using(name)
-`, kid.fullpath, field, cls.id, m.aspectPath); e != nil {
+`, kid.fullpath(), field, cls.id, m.aspectPath); e != nil {
 		err = errutil.New("database error", e)
 	} else {
 		var prev struct {
@@ -200,7 +200,7 @@ join fieldsInKind fk
 where ma.name = @fieldName
 and ma.kind = fk.typeId`,
 		sql.Named("aspects", m.aspectPath),
-		sql.Named("ancestry", kid.fullpath),
+		sql.Named("ancestry", kid.fullpath()),
 		sql.Named("fieldName", field)).
 		Scan(&prev.name, &prev.aff, &prev.cls); e != nil {
 		if e == sql.ErrNoRows {

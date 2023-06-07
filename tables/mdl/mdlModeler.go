@@ -19,7 +19,7 @@ const Conflict = errutil.Error("Conflict")
 
 // when the definition can't find some required information:
 // the returned error wraps this tag. errors.Is can be used to detect it.
-const Unknown = errutil.Error("Unknown")
+const Missing = errutil.Error("Missing")
 
 // Modeler wraps writing to the model table
 // so the implementation can handle verifying dependent names when needed.

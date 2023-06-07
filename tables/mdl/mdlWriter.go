@@ -131,9 +131,9 @@ func (m *Writer) Aspect(domain, aspect, at string, traits []string) (err error) 
 	var existingTraits int
 	if kid, e := m.findRequiredKind(domain, aspect); e != nil {
 		err = e
-	} else if !strings.HasSuffix(kid.fullpath, m.aspectPath) {
-		err = errutil.Fmt("kind %q from %q is not an aspect", aspect, domain)
-	} else if strings.Count(kid.fullpath, ",") != 3 {
+	} else if !strings.HasSuffix(kid.fullpath(), m.aspectPath) {
+		err = errutil.Fmt("kind %q in domain %q is not an aspect", aspect, domain)
+	} else if strings.Count(kid.fullpath(), ",") != 3 {
 		// tbd: could loosen this; for now it simplifies writing the aspects;
 		// no need to check for conflicting traits.
 		err = errutil.Fmt("can't create aspect of %q; kinds of aspects can't be inherited", aspect)
@@ -196,7 +196,7 @@ func (m *Writer) Default(domain, kind, field string, v assign.Assignment) (err e
 		where mf.kind = ?1
 		and mf.field = ?2`, kid.id, field).Scan(&prev.id, &prev.domain, &prev.aff, &prev.out); e == sql.ErrNoRows {
 			err = errutil.Fmt("%w field in assignment %q of kind %q in domain %q",
-				Unknown, field, kind, domain)
+				Missing, field, kind, domain)
 		} else if e != nil {
 			err = e
 		} else {
@@ -310,19 +310,20 @@ func (m *Writer) Grammar(domain, name string, prog *grammar.Directive, at string
 }
 
 // this duplicates the algorithm used by Noun()
-func (m *Writer) Kind(domain, name, ancestor, at string) (err error) {
-	if parent, e := m.findOptionalKind(domain, ancestor); e != nil {
+func (m *Writer) Kind(domain, kind, parent, at string) (err error) {
+	if parent, e := m.findOptionalKind(domain, parent); e != nil {
 		err = e
-	} else if len(ancestor) > 0 && parent.id == 0 {
-		err = errutil.Fmt("%w ancestor %q", Unknown, ancestor)
-	} else if prev, e := m.findKind(domain, name); e != nil {
+	} else if len(parent.name) > 0 && parent.id == 0 {
+		err = errutil.Fmt("%w ancestor %q",
+			Missing, parent.name)
+	} else if kind, e := m.findKind(domain, kind); e != nil {
 		err = e
-	} else if prev.id == 0 {
+	} else if kind.id == 0 {
 		// easiest is if the name has never been mentioned before;
-		// we verified the other inputs already, so just go ahead and insert:
-		if res, e := m.kind.Exec(domain, name, trimPath(parent.fullpath), at); e != nil {
+		// we verified the other inputs already, so insert:
+		if res, e := m.kind.Exec(domain, kind.name, trimPath(parent.fullpath()), at); e != nil {
 			err = errutil.New("database error", e)
-		} else if name == kindsOf.Aspect.String() {
+		} else if kind.name == kindsOf.Aspect.String() {
 			// fix? it would probably be better to have a separate table of: domain, aspect, trait
 			// currently, the runtime expects that aspects are a kind, and its traits are fields.
 			if i, e := res.LastInsertId(); e != nil {
@@ -331,32 +332,36 @@ func (m *Writer) Kind(domain, name, ancestor, at string) (err error) {
 				m.aspectPath = "," + strconv.FormatInt(i, 10) + ","
 			}
 		}
-	} else {
+	} else if parent.id != 0 { // note: if the kind exists, ignore nil parents.
 		// does the newly specified ancestor contain the existing parent?
 		// then we are ratcheting down. (ex. new: ,c,b,a,)  ( existing: ,a, )
-		if strings.HasSuffix(parent.fullpath, prev.fullpath) {
-			if prev.domain != domain {
+		if strings.HasSuffix(kind.path, parent.fullpath()) {
+			// does the existing parent fully contain the new ancestor?
+			// then its a duplicate request (ex. existing: ,c,b,a,)  ( new: ,a, )
+			err = errutil.Fmt("%w %q already declared as an ancestor of %q.",
+				Duplicate, kind.name, parent.name)
+		} else if strings.HasSuffix(parent.fullpath(), kind.path) {
+			if kind.domain != domain {
 				// if it was declared in a different domain: we can't change it now.
-				err = errutil.Fmt("%w can't redefine parent of %q as %q. the domains differ: was %q, now %q",
-					Conflict, ancestor, name, prev.domain, domain)
+				err = errutil.Fmt("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q.",
+					Conflict, kind.name, parent.name, kind.domain, domain)
 			} else if res, e := m.db.Exec(`update mdl_kind set path = ?2 where rowid = ?1`,
-				prev.id, trimPath(parent.fullpath)); e != nil {
+				kind.id, trimPath(parent.fullpath())); e != nil {
 				err = e
 			} else if cnt, e := res.RowsAffected(); cnt != 1 {
-				err = errutil.New("unexpected error updating hierarchy of %q; %d rows affected",
-					name, cnt)
+				err = errutil.New("unexpected error updating hierarchy of %q; %d rows affected.",
+					kind.name, cnt)
 			} else if e != nil {
 				err = e
 			}
-		} else if strings.HasSuffix(prev.fullpath, parent.fullpath) {
-			// does the existing parent fully contain the new ancestor?
-			// then its a duplicate request (ex. existing: ,c,b,a,)  ( new: ,a, )
-			err = errutil.Fmt("%w %q already declared as a parent of %q",
-				Duplicate, name, ancestor)
-		} else {
+		} else if kind.domain != domain {
 			// unrelated completely? then its an error
-			err = errutil.Fmt("%w can't redefine parent of %q as %q",
-				Conflict, name, ancestor)
+			err = errutil.Fmt("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q.",
+				Conflict, kind.name, parent.name, kind.domain, domain)
+		} else {
+			// its possible some future definition might allow this to happen.
+			err = errutil.Fmt("%w a definition in domain %q that would allow %q to have the ancestor %q; the hierarchies differ.",
+				Missing, domain, kind.name, parent.name)
 		}
 	}
 	return
@@ -389,7 +394,7 @@ func (m *Writer) Noun(domain, name, ancestor, at string) (err error) {
 	} else {
 		// does the newly specified ancestor contain the existing parent?
 		// then we are ratcheting down. (ex. new: ,c,b,a,)  ( existing: ,a, )
-		if strings.HasSuffix(parent.fullpath, prev.fullpath) {
+		if strings.HasSuffix(parent.fullpath(), prev.fullpath) {
 			if res, e := m.db.Exec(`update mdl_noun set kind = ?2 where rowid = ?1`,
 				prev.id, parent.id); e != nil {
 				err = e
@@ -399,7 +404,7 @@ func (m *Writer) Noun(domain, name, ancestor, at string) (err error) {
 			} else if e != nil {
 				err = e
 			}
-		} else if strings.HasSuffix(prev.fullpath, parent.fullpath) {
+		} else if strings.HasSuffix(prev.fullpath, parent.fullpath()) {
 			// does the existing kind fully contain the new kind?
 			// then its a duplicate request (ex. existing: ,c,b,a,)  ( new: ,a, )
 			err = errutil.Fmt("%w %q already declared as a kind of %q",

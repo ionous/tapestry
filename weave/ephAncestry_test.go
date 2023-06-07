@@ -69,7 +69,7 @@ func TestAncestryMultipleParents(t *testing.T) {
 		&eph.Kinds{Kind: "k", Ancestor: "q"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Conflict can't redefine parent of "k"`); !ok {
+	if ok, e := okError(t, e, `Missing a definition in domain "a" that would allow "k" to have the ancestor "q"`); !ok {
 		t.Fatal("expected error; got:", e)
 	} else {
 		t.Log("ok:", e)
@@ -118,7 +118,7 @@ func TestAncestryMissing(t *testing.T) {
 		&eph.Kinds{Kind: "m", Ancestor: "x"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Unknown kind "x" in domain "b"`); !ok {
+	if ok, e := okError(t, e, `Missing kind "x" in domain "b"`); !ok {
 		t.Fatal("expected error; got:", e)
 	} else if ok, e := okError(t, warnings.shift(), `AncestryPhase didn't finish`); !ok {
 		t.Fatal("expected warning; got:", e)
@@ -145,12 +145,10 @@ func TestAncestryRedefined(t *testing.T) {
 		&eph.Kinds{Kind: "m", Ancestor: "n"}, // should fail.
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Conflict can't redefine parent of "m" as "n"`); !ok {
+	if ok, e := okError(t, e, `Conflict can't redefine the ancestor of "m" as "n"`); !ok {
 		t.Fatal("expected error; got:", e)
-	} else if warned := warnings.all(); len(warned) != 1 {
-		t.Fatal("expected one warning", warned)
-	} else {
-		t.Log("ok:", e, warned)
+	} else if ok, e := okError(t, warnings.shift(), `Duplicate "q" already declared as an ancestor of "k"`); !ok {
+		t.Fatal("expected warning; got:", e)
 	}
 }
 

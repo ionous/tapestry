@@ -193,7 +193,7 @@ func (d *Domain) runPhase(ctx *Weaver) (err error) {
 			switch e := next.call(ctx); {
 			case e == nil:
 				redo.cnt, redo.err = 0, nil
-			case errors.Is(e, mdl.Unknown):
+			case errors.Is(e, mdl.Missing):
 				redo.err = errutil.Append(redo.err, e)
 				if redo.cnt < len((*els)) {
 					// add redo elements back into the list

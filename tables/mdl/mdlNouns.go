@@ -24,7 +24,7 @@ func (m *Writer) findNoun(domain, noun string) (retDomain string, retKind int, e
 	where base = ?1
 	and noun = ?2
 	limit 1`, domain, noun).Scan(&retDomain, &retKind); e == sql.ErrNoRows {
-		err = errutil.Fmt("%w noun %q in domain %q", Unknown, noun, domain)
+		err = errutil.Fmt("%w noun %q in domain %q", Missing, noun, domain)
 	} else {
 		err = e
 	}

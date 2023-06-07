@@ -36,24 +36,16 @@ func TestKindTree(t *testing.T) {
 	}
 }
 
-// this is considered okay - it's in the same tree
-func TestKindDescendants(t *testing.T) {
-	dt := newTestShuffle(t.Name(), false)
+// within a single domain,
+// should be able to define a kind as being *more* specific than another definition.
+func TestKindRefining(t *testing.T) {
+	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"), makeKinds(
 		"a", "",
 		"b", "a",
 		"c", "a",
-		"c", "b", // <-- currently failing here
-		// we should be able to allow a ratcheting down
-		// but worse: what if we know about b but havent said its whole hiearchry yet?
-		// is there a case where once we do, it should succeed?
-		// ( so we have to keep putting off conflicts similar to missing )
-		// ex.
-		// b | a
-		// c is of b
-		// c is of a  <-- would fail.
-		// a is of b
+		"c", "b",
 	)...)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
@@ -71,9 +63,34 @@ func TestKindDescendants(t *testing.T) {
 	}
 }
 
-// FIX: disabled; uses the catalog runtime now when finding plural fallbacks
-// ( which doesnt exist here, causing a panic )
-func xTestKindMissing(t *testing.T) {
+// this is considered okay - it's in the same tree
+func TestKindDelayedRefining(t *testing.T) {
+	dt := newTestShuffle(t.Name(), false)
+	defer dt.Close()
+	dt.makeDomain(dd("d"), makeKinds(
+		"a", "",
+		"b", "",
+		"c", "b",
+		"c", "a", // <-- if delayed refining weren't allowed this would fail
+		"a", "b", // with "Conflict can't redefine the ancestor of "c" as "a""
+	)...)
+	if _, e := dt.Assemble(); e != nil {
+		t.Fatal(e)
+	} else if out, e := dt.readKinds(); e != nil {
+		t.Fatal(e)
+	} else {
+		if diff := pretty.Diff(out, []string{
+			"d:b:",
+			"d:a:b",
+			"d:c:b,a",
+		}); len(diff) > 0 {
+			t.Log(pretty.Sprint(out))
+			t.Fatal(diff)
+		}
+	}
+}
+
+func TestKindMissing(t *testing.T) {
 	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"), makeKinds(
@@ -81,10 +98,9 @@ func xTestKindMissing(t *testing.T) {
 		"b", "a",
 		"a", "",
 	)...)
-	if _, e := dt.Assemble(); e == nil {
-		t.Fatal("expected error")
-	} else {
-		t.Log("ok:", e)
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `Missing kind "d" in domain "a"`); !ok {
+		t.Fatal("expected error; got:", e)
 	}
 }
 
@@ -98,10 +114,9 @@ func TestKindSingleParent(t *testing.T) {
 		"d", "b",
 		"d", "c",
 	)...)
-	if _, e := dt.Assemble(); e == nil {
-		t.Fatal("expected error")
-	} else {
-		t.Log("ok:", e)
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `Missing a definition in domain "a" that would allow "d" to have the ancestor`); !ok {
+		t.Fatal("expected error; got", e)
 	}
 }
 

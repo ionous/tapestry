@@ -19,13 +19,3 @@ func (m *Writer) findDomain(domain string) (ret string, err error) {
 	}
 	return
 }
-
-// fullpaths start and end with commas;
-// for backwards compat this strips the leading comma;
-// fix? the trailing comma is also redundant.
-func trimPath(fullpath string) (ret string) {
-	if len(fullpath) > 0 {
-		ret = fullpath[1:]
-	}
-	return
-}
