@@ -21,18 +21,18 @@ func _() {
 }
 
 const (
-	_Kinds_name_0 = "aspectskinds"
-	_Kinds_name_1 = "macros"
-	_Kinds_name_2 = "patterns"
-	_Kinds_name_3 = "records"
-	_Kinds_name_4 = "relations"
-	_Kinds_name_5 = "responses"
-	_Kinds_name_6 = "actions"
-	_Kinds_name_7 = "events"
+	_Kinds_name_0 = "aspectkind"
+	_Kinds_name_1 = "macro"
+	_Kinds_name_2 = "pattern"
+	_Kinds_name_3 = "record"
+	_Kinds_name_4 = "relation"
+	_Kinds_name_5 = "response"
+	_Kinds_name_6 = "action"
+	_Kinds_name_7 = "event"
 )
 
 var (
-	_Kinds_index_0 = [...]uint8{0, 0, 7, 12}
+	_Kinds_index_0 = [...]uint8{0, 0, 6, 10}
 )
 
 func (i Kinds) String() string {

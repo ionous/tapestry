@@ -177,19 +177,42 @@ func (d *Domain) runPhase(ctx *Weaver) (err error) {
 	if e := d.checkRivals(allowDupes); e != nil {
 		err = e
 	} else {
-		// don't "range" over the phase data since the contents can change during traversal.
+		redo := struct {
+			cnt int
+			err error
+		}{}
+		// don't range over the slice since the contents can change during traversal.
 		// tbd: have "Schedule" immediately execute the statement if in the correct phase?
-		for len(d.scheduling[w]) > 0 {
-			els := d.scheduling[w]
-			next := els[0]
-			d.scheduling[w] = els[1:]
+		els := &d.scheduling[w]
+	Loop:
+		for len(*els) > 0 {
+			// slice the next element out of the list
+			next := (*els)[0]
+			(*els) = (*els)[1:]
 
-			if e := next.call(ctx); e != nil {
-				if !errors.Is(e, mdl.Duplicate) {
-					err = errutil.Append(err, e)
-				} else if d.catalog.warn != nil {
+			switch e := next.call(ctx); {
+			case e == nil:
+				redo.cnt, redo.err = 0, nil
+			case errors.Is(e, mdl.Unknown):
+				redo.err = errutil.Append(redo.err, e)
+				if redo.cnt < len((*els)) {
+					// add redo elements back into the list
+					(*els) = append((*els), next)
+					redo.cnt++
+				} else {
+					if d.catalog.warn != nil {
+						e := errutil.New(w, "didn't finish")
+						d.catalog.warn(e)
+					}
+					err = errutil.Append(err, redo.err)
+					break Loop
+				}
+			case errors.Is(e, mdl.Duplicate):
+				if d.catalog.warn != nil {
 					d.catalog.warn(e)
 				}
+			default:
+				err = errutil.Append(err, e)
 			}
 		}
 		d.currPhase++

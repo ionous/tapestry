@@ -1,9 +1,14 @@
 package weave
 
 import (
+	"database/sql"
+	"errors"
+
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
@@ -41,16 +46,57 @@ func (cat *Catalog) AssertAspectTraits(opAspects string, opTraits []string) erro
 		} else if traits, e := UniformStrings(opTraits); e != nil {
 			err = e
 		} else {
-			kid := d.EnsureKind(aspect, at)
-			kid.AddRequirement(kindsOf.Aspect.String())
-			if len(traits) > 0 {
+			aspect := d.singularize(aspect)
+			if e := d.addRequirement(aspect, kindsOf.Aspect.String(), at); e != nil {
+				err = e
+			} else if len(traits) > 0 {
 				err = d.schedule(at, assert.MemberPhase, func(ctx *Weaver) error {
-					return cat.writer.Aspect(d.name, kid.name, at, traits)
+					return cat.writer.Aspect(d.name, aspect, at, traits)
 				})
 			}
 		}
 		return
 	})
+}
+
+//
+func (d *Domain) singularize(name string) (ret string) {
+	if d.currPhase <= assert.PluralPhase {
+		panic("singularizing before plurals are known")
+	}
+	if len(name) < 2 {
+		ret = name //
+	} else if e := d.catalog.db.QueryRow(`
+	select one
+	from mdl_plural
+	join domain_tree
+		on (uses = domain)
+	where base = ?1 and many = ?2
+	limit 1`, d.name, name).Scan(&ret); e != nil {
+		if e != sql.ErrNoRows && d.catalog.warn != nil {
+			err := errutil.Fmt("%v while singularizing %q", e, name)
+			d.catalog.warn(err)
+		}
+		ret = lang.Singularize(name)
+	}
+	return
+}
+
+func (d *Domain) addRequirement(name, parent, at string) (err error) {
+	if e := d.catalog.writer.Kind(d.name, name, parent, at); e != nil {
+		if !errors.Is(e, mdl.Duplicate) {
+			err = e
+		} else if d.catalog.warn != nil {
+			d.catalog.warn(e)
+		}
+	} else {
+		// fix: remove after removing get closest noun
+		kid := d.EnsureKind(name, at)
+		if len(parent) > 0 {
+			kid.AddRequirement(parent)
+		}
+	}
+	return
 }
 
 func (cat *Catalog) AssertCheck(opName string, opExe []rt.Execute, opExpect literal.LiteralValue) error {

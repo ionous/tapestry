@@ -17,13 +17,11 @@ func TestAspectFormation(t *testing.T) {
 	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("d"),
-		&eph.Kinds{Kind: kindsOf.Aspect.String()},                // say that aspects exist
-		&eph.Kinds{Kind: "a", Ancestor: kindsOf.Aspect.String()}, // make an aspect
+		&eph.Kinds{Kind: kindsOf.Aspect.String()}, // say that aspects exist
 		&eph.Aspects{Aspects: "a", Traits: []string{
 			"one", "several", "oh so many", //
 		}},
 	)
-
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else if out, e := dt.readFields(); e != nil {
@@ -45,8 +43,7 @@ func TestAspectUsage(t *testing.T) {
 	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
-		&eph.Kinds{Kind: kindsOf.Aspect.String()},                // say that aspects exist
-		&eph.Kinds{Kind: "a", Ancestor: kindsOf.Aspect.String()}, // make an aspect
+		&eph.Kinds{Kind: kindsOf.Aspect.String()}, // say that aspects exist
 		&eph.Aspects{Aspects: "a", Traits: []string{
 			"one", "several", "oh so many", //
 		}},
@@ -76,8 +73,7 @@ func TestAspectConflictingFields(t *testing.T) {
 	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
-		&eph.Kinds{Kind: kindsOf.Aspect.String()},                // say that aspects exist
-		&eph.Kinds{Kind: "a", Ancestor: kindsOf.Aspect.String()}, // make an aspect
+		&eph.Kinds{Kind: kindsOf.Aspect.String()}, // say that aspects exist
 		&eph.Aspects{Aspects: "a", Traits: []string{
 			"one", "several", "oh so many", //
 		}},
@@ -99,12 +95,10 @@ func TestAspectConflictingTraits(t *testing.T) {
 	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
-		&eph.Kinds{Kind: kindsOf.Aspect.String()},                // say that aspects exist
-		&eph.Kinds{Kind: "a", Ancestor: kindsOf.Aspect.String()}, // make an aspect
+		&eph.Kinds{Kind: kindsOf.Aspect.String()}, // say that aspects exist
 		&eph.Aspects{Aspects: "a", Traits: []string{ // add some traits
 			"one", "several", "oh so many", //
 		}},
-		&eph.Kinds{Kind: "b", Ancestor: kindsOf.Aspect.String()}, // make an aspect
 		&eph.Aspects{Aspects: "b", Traits: []string{ // add some different traits
 			"one", "two", "blue", //
 		}},

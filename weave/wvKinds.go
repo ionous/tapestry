@@ -7,39 +7,25 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// Kinds, From string, Contain []eph.Params
+// if a parent kind was specified, make the kid dependent on it.
+// note: a singular to plural (if needed ) gets handled by the dependency resolver's kindFinder and GetPluralKind()
+
 func (cat *Catalog) AssertAncestor(opKind, opAncestor string) error {
-	return cat.Schedule(assert.AncestryPhase, func(ctx *Weaver) (err error) {
+	return cat.Schedule(assert.DeterminerPhase, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
 		// tbd: are the determiners of kinds useful for anything?
 		_, kind := d.StripDeterminer(opKind)
+		_, ancestor := d.StripDeterminer(opAncestor)
+		//
 		if kind, ok := UniformString(kind); !ok {
 			err = InvalidString(kind)
+		} else if ua, ok := UniformString(ancestor); !ok && len(ancestor) > 0 {
+			err = InvalidString(opAncestor)
 		} else {
-			// ensure the kind into existence
-			kid := d.EnsureKind(kind, at)
-			// if a parent kind is specified, make the kid dependent on it.
-			if _, ancestor := d.StripDeterminer(opAncestor); len(ancestor) > 0 {
-				// note: a singular to plural (if needed ) gets handled by the dependency resolver's kindFinder and GetPluralKind()
-				if ancestor, ok := UniformString(ancestor); !ok {
-					err = InvalidString(opAncestor)
-				} else {
-					// we can only add requirements to the kind in the same domain that it was declared
-					if kid.domain == d {
-						kid.AddRequirement(ancestor) // fix? maybe it'd make sense for requirements to have origin at?
-					} else {
-						// otherwise, if in a different domain: the kinds have to match up
-						if pk, ok := d.findPluralKind(ancestor); !ok {
-							err = errutil.New("unknown parent kind", opAncestor)
-						} else if !kid.Requires.HasAncestor(pk) {
-							err = errutil.Fmt("kind %q can't redefine parent as %q", kind, opAncestor)
-						} else {
-							e := errutil.Fmt("kind %q duplicate parent definition at %v", kind, at)
-							LogWarning(e)
-						}
-					}
-				}
-			}
+			kind, ancestor := d.singularize(kind), d.singularize(ua)
+			err = cat.Schedule(assert.AncestryPhase, func(ctx *Weaver) error {
+				return d.addRequirement(kind, ancestor, at)
+			})
 		}
 		return
 	})

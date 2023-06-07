@@ -113,7 +113,7 @@ func TestNounHierarchyFailure(t *testing.T) {
 		&eph.Nouns{Noun: "apple", Kind: "d"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Conflict can't redefine kind of noun "apple"`); !ok {
+	if ok, e := okError(t, e, `Conflict can't redefine kind of "apple"`); !ok {
 		t.Fatal("expected error; got:", e)
 	} else {
 		t.Log("ok:", e)

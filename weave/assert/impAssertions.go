@@ -26,6 +26,7 @@ type Phase int
 const (
 	DomainStart Phase = iota // domain hierarchy
 	PluralPhase
+	DeterminerPhase
 	AncestryPhase // kinds and kinds of kinds
 	//
 	ParamPhase    // parameters precede results

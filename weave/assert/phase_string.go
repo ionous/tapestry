@@ -10,25 +10,26 @@ func _() {
 	var x [1]struct{}
 	_ = x[DomainStart-0]
 	_ = x[PluralPhase-1]
-	_ = x[AncestryPhase-2]
-	_ = x[ParamPhase-3]
-	_ = x[ResultPhase-4]
-	_ = x[MemberPhase-5]
-	_ = x[DefaultsPhase-6]
-	_ = x[MacroPhase-7]
-	_ = x[NounPhase-8]
-	_ = x[ValuePhase-9]
-	_ = x[RelativePhase-10]
-	_ = x[RulePhase-11]
-	_ = x[AliasPhase-12]
-	_ = x[DirectivePhase-13]
-	_ = x[PostDomain-14]
-	_ = x[NumPhases-15]
+	_ = x[DeterminerPhase-2]
+	_ = x[AncestryPhase-3]
+	_ = x[ParamPhase-4]
+	_ = x[ResultPhase-5]
+	_ = x[MemberPhase-6]
+	_ = x[DefaultsPhase-7]
+	_ = x[MacroPhase-8]
+	_ = x[NounPhase-9]
+	_ = x[ValuePhase-10]
+	_ = x[RelativePhase-11]
+	_ = x[RulePhase-12]
+	_ = x[AliasPhase-13]
+	_ = x[DirectivePhase-14]
+	_ = x[PostDomain-15]
+	_ = x[NumPhases-16]
 }
 
-const _Phase_name = "DomainStartPluralPhaseAncestryPhaseParamPhaseResultPhaseMemberPhaseDefaultsPhaseMacroPhaseNounPhaseValuePhaseRelativePhaseRulePhaseAliasPhaseDirectivePhasePostDomainNumPhases"
+const _Phase_name = "DomainStartPluralPhaseDeterminerPhaseAncestryPhaseParamPhaseResultPhaseMemberPhaseDefaultsPhaseMacroPhaseNounPhaseValuePhaseRelativePhaseRulePhaseAliasPhaseDirectivePhasePostDomainNumPhases"
 
-var _Phase_index = [...]uint8{0, 11, 22, 35, 45, 56, 67, 80, 90, 99, 109, 122, 131, 141, 155, 165, 174}
+var _Phase_index = [...]uint8{0, 11, 22, 37, 50, 60, 71, 82, 95, 105, 114, 124, 137, 146, 156, 170, 180, 189}
 
 func (i Phase) String() string {
 	if i < 0 || i >= Phase(len(_Phase_index)-1) {

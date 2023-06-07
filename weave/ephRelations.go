@@ -24,20 +24,20 @@ func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error 
 		} else if len(b.class) == 0 {
 			err = errutil.New("invalid rhs")
 		} else {
-			kid := d.EnsureKind(rel, at)
-			kid.AddRequirement(kindsOf.Relation.String())
-			//
-			if ua, e := MakeUniformField(a.affinity(), a.short(false), a.class, at); e != nil {
+			rel := d.singularize(rel)
+			if e := d.addRequirement(rel, kindsOf.Relation.String(), at); e != nil {
+				err = e
+			} else if ua, e := MakeUniformField(a.affinity(), a.short(false), a.class, at); e != nil {
 				err = e
 			} else if ub, e := MakeUniformField(b.affinity(), b.short(true), b.class, at); e != nil {
 				err = e
 			} else {
 				err = cat.Schedule(assert.MemberPhase, func(ctx *Weaver) (err error) {
-					if e := cat.writer.Member(d.name, kid.name, ua.Name, ua.Affinity, ua.Type, at); e != nil {
+					if e := cat.writer.Member(d.name, rel, ua.Name, ua.Affinity, ua.Type, at); e != nil {
 						err = e
-					} else if e := cat.writer.Member(d.name, kid.name, ub.Name, ub.Affinity, ub.Type, at); e != nil {
+					} else if e := cat.writer.Member(d.name, rel, ub.Name, ub.Affinity, ub.Type, at); e != nil {
 						err = e
-					} else if e := cat.writer.Rel(d.name, kid.name, ua.Type, ub.Type, card, at); e != nil {
+					} else if e := cat.writer.Rel(d.name, rel, ua.Type, ub.Type, card, at); e != nil {
 						err = e // ^ not sure the best time to write this....
 					}
 					return

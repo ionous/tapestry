@@ -211,7 +211,7 @@ func findRivals(db tables.Querier) (ret []conflict, err error) {
 		select 'kind', a.domain, a.at, a.kind, ''
 			from active_kinds as a 
 			join active_kinds as b 
-				using(kind)
+				using(name)
 			where a.domain != b.domain
 		union all 
 		select 'grammar', a.domain, a.at, a.name, ''
@@ -289,26 +289,6 @@ func (c *Catalog) ResolveDomains() (ret []*Domain, err error) {
 			}
 			return
 		}, &name)
-	}
-	return
-}
-
-// FIX -- its a goal to remove this function
-func (c *Catalog) ResolveKinds() (ret DependencyTable, err error) {
-	var out DependencyTable
-	if ds, e := c.ResolveDomains(); e != nil {
-		err = e
-	} else {
-		for _, d := range ds {
-			if ks, e := d.resolveKinds(); e != nil {
-				err = errutil.Append(err, e)
-			} else {
-				out = append(out, ks...)
-			}
-		}
-	}
-	if err == nil {
-		ret = out
 	}
 	return
 }

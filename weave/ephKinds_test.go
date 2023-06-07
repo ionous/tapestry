@@ -27,8 +27,8 @@ func TestKindTree(t *testing.T) {
 		"a:a:",
 		"a:b:a",
 		"a:c:b,a",
-		"a:d:c,b,a",
 		"a:e:b,a",
+		"a:d:c,b,a",
 		"a:f:e,b,a",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
@@ -38,13 +38,22 @@ func TestKindTree(t *testing.T) {
 
 // this is considered okay - it's in the same tree
 func TestKindDescendants(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := newTestShuffle(t.Name(), false)
 	defer dt.Close()
 	dt.makeDomain(dd("a"), makeKinds(
 		"a", "",
 		"b", "a",
 		"c", "a",
-		"c", "b",
+		"c", "b", // <-- currently failing here
+		// we should be able to allow a ratcheting down
+		// but worse: what if we know about b but havent said its whole hiearchry yet?
+		// is there a case where once we do, it should succeed?
+		// ( so we have to keep putting off conflicts similar to missing )
+		// ex.
+		// b | a
+		// c is of b
+		// c is of a  <-- would fail.
+		// a is of b
 	)...)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)

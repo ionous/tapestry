@@ -131,8 +131,8 @@ func expectFullResults(t *testing.T, dt *domainTest) {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outkind, []string{
 		"a:k:",
-		"a:patterns:",
-		"a:p:patterns",
+		"a:pattern:",
+		"a:p:pattern",
 	}); len(diff) > 0 {
 		t.Log("got:", pretty.Sprint(outkind))
 		t.Fatal(diff)
@@ -288,8 +288,8 @@ func TestPatternNoResults(t *testing.T) {
 	} else if outkind, e := dt.readKinds(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outkind, []string{
-		"a:patterns:",
-		"a:p:patterns",
+		"a:pattern:",
+		"a:p:pattern",
 	}); len(diff) > 0 {
 		t.Log("got:", pretty.Sprint(outkind))
 		t.Fatal(diff)

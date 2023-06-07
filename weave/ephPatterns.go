@@ -15,21 +15,18 @@ func (cat *Catalog) AssertResult(patternName, fieldName, class string, aff affin
 		if name, ok := UniformString(patternName); !ok {
 			err = InvalidString(patternName)
 		} else {
-			pat := d.EnsureKind(name, at)
-			pat.AddRequirement(kindsOf.Pattern.String())
-			// schedule results after than parameters for the sake of sorting
-			err = d.schedule(at, assert.ResultPhase, func(ctx *Weaver) (err error) {
-				if pat.domain != d {
-					err = errutil.New("can only declare results in the original domain")
-				} else if init != nil {
-					err = errutil.New("return values don't currently support initial values")
-				} else if res, e := MakeUniformField(aff, fieldName, class, at); e != nil {
-					err = e
-				} else {
-					err = cat.writer.Result(d.name, pat.name, res.Name, res.Affinity, res.Type, at)
-				}
-				return
-			})
+			name := d.singularize(name)
+			if e := d.addRequirement(name, kindsOf.Pattern.String(), at); e != nil {
+				err = e
+			} else if init != nil {
+				err = errutil.New("return values don't currently support initial values")
+			} else if res, e := MakeUniformField(aff, fieldName, class, at); e != nil {
+				err = e
+			} else {
+				err = d.schedule(at, assert.ResultPhase, func(ctx *Weaver) error {
+					return cat.writer.Result(d.name, name, res.Name, res.Affinity, res.Type, at)
+				})
+			}
 		}
 		return
 	})
@@ -42,17 +39,16 @@ func (cat *Catalog) AssertParam(patternName, fieldName, class string, aff affine
 		if name, ok := UniformString(patternName); !ok {
 			err = InvalidString(patternName)
 		} else {
-			pat := d.EnsureKind(name, at)
-			pat.AddRequirement(kindsOf.Pattern.String())
-			if pat.domain != d {
-				err = errutil.New("can only declare args in the original domain")
+			name := d.singularize(name)
+			if e := d.addRequirement(name, kindsOf.Pattern.String(), at); e != nil {
+				err = e
 			} else if init != nil {
-				err = errutil.New("return values dont currently support initial values")
+				err = errutil.New("parameters values don't currently support initial values")
 			} else if arg, e := MakeUniformField(aff, fieldName, class, at); e != nil {
 				err = e
 			} else {
 				err = cat.Schedule(assert.ParamPhase, func(ctx *Weaver) error {
-					return cat.writer.Parameter(d.name, pat.name, arg.Name, arg.Affinity, arg.Type, at)
+					return cat.writer.Parameter(d.name, name, arg.Name, arg.Affinity, arg.Type, at)
 				})
 			}
 		}

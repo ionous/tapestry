@@ -48,9 +48,12 @@ create table mdl_pair( domain text not null, relKind int not null, oneNoun int n
  * the scope of the pattern is the same as its kind 
  */
 create table mdl_pat( kind int not null, labels text, result text, primary key( kind ) );
-/* maps common and uncommon words to their plurals. 
+/* 
+ * maps common and uncommon words to their plurals. 
  * within a particular domain, a plural word produces a unique singular word;
  * however the same singular word can be used by various plurals.
+ * ex. "person" can have the plural "people" or "persons".
+ * but the *singular* of "people" must always be "person".
  */
 create table mdl_plural( domain text not null, many text, one text, at text, primary key( domain, many ) );
 /* relation and constraint between two kinds of nouns */

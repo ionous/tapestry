@@ -5,7 +5,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-var TempSplit = assert.AncestryPhase + 1
+var TempSplit = assert.MacroPhase
 
 // walk the domains and run the commands remaining in their queues
 func (cat *Catalog) AssembleCatalog() (err error) {
@@ -86,34 +86,17 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 }
 
 func (cat *Catalog) processDomain(d *Domain) (err error) {
-
 	if _, e := cat.run.ActivateDomain(d.name); e != nil {
 		err = e
 	} else if e := cat.findRivals(); e != nil {
 		err = e
 	} else {
 		cat.processing.Push(d)
-	Loop:
 		for p := assert.Phase(0); p < TempSplit; p++ {
 			ctx := Weaver{d: d, phase: p, Runtime: cat.run}
 			if e := d.runPhase(&ctx); e != nil {
 				err = e
-				break Loop
-			} else {
-				if p == assert.AncestryPhase {
-					if ks, e := d.resolveKinds(); e != nil {
-						err = e
-						break Loop
-					} else {
-						for _, dep := range ks {
-							k, ancestors := dep.Leaf().(*ScopedKind), dep.Strings(true)
-							if e := cat.writer.Kind(d.name, k.name, ancestors, k.at); e != nil {
-								err = e
-								break Loop
-							}
-						}
-					}
-				}
+				break
 			}
 		}
 		cat.processing.Pop()

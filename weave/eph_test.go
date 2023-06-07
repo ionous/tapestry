@@ -173,9 +173,11 @@ func (dt *domainTest) readFields() ([]string, error) {
 	from mdl_field mf 
 	join mdl_kind mk 
 		on(mf.kind = mk.rowid)
+	join mdl_domain md 
+		on(md.domain = mk.domain)
 	left join mdl_kind mt 
 		on(mf.type = mt.rowid)
-	order by mk.rowid, mf.field`)
+	order by md.rowid, mk.kind, mf.field`)
 }
 
 // domain, input, serialized program
@@ -185,7 +187,10 @@ func (dt *domainTest) readGrammar() ([]string, error) {
 	from mdl_grammar`)
 }
 
-// domain, kind, materialized path
+// domain, kind, expanded materialized path
+// ordered by domain, length of path, and name
+// ( that erases their natural, dependency order --
+//   but independent siblings dont otherwise have a consistent order for testing )
 func (dt *domainTest) readKinds() (ret []string, err error) {
 	type kind struct {
 		id           int
@@ -194,15 +199,19 @@ func (dt *domainTest) readKinds() (ret []string, err error) {
 	var kinds []kind
 	var k kind
 	if e := tables.QueryAll(dt.db,
-		`select rowid, domain, kind
-		from mdl_kind
-		order by rowid
+		`select mk.rowid, domain, kind
+		from mdl_kind mk
+		join mdl_domain md
+			using(domain)
+		order by md.rowid, length(mk.path), mk.kind
 		`, func() (_ error) {
 			kinds = append(kinds, k)
 			return
 		}, &k.id, &k.domain, &k.kind); e != nil {
 		err = e
 	} else {
+		// do this the manual way for now because its easier
+		// fix? use a recursive query to expand the path.
 		for _, k := range kinds {
 			// just to be confusing, this is the opposite order of KindOfAncestors
 			// root is on the right here.

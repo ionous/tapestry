@@ -88,10 +88,17 @@ type Kinds struct {
 }
 
 func (op *Kinds) Assert(k assert.Assertions) (err error) {
-	err = k.AssertAncestor(op.Kind, op.Ancestor)
-	//
-	if ps := op.Contain; err == nil && len(ps) > 0 {
+	ps := op.Contain
+	if len(ps) > 0 {
 		err = assertFields(op.Kind, ps, k.AssertField)
+	}
+	// tbd: are we supposed to be able to declare a kind and its fields in one fell swoop?
+	// the tests seem to indicate no.
+	// except for TestValuePaths which seemed to indicate yes:
+	// ( i had to add an explicit Kind )
+	// doesn't really matter since eph is only used for testing.
+	if len(ps) == 0 || len(op.Ancestor) > 0 {
+		err = k.AssertAncestor(op.Kind, op.Ancestor)
 	}
 	return
 }

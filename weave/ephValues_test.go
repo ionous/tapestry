@@ -133,6 +133,7 @@ func TestValuePaths(t *testing.T) {
 			{Name: "inner", Affinity: affine.Record},
 		}},
 		//  a proper kind holding the record of records
+		&eph.Kinds{Kind: "k"},
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{
 			{Name: "outer", Affinity: affine.Record},
 		}},

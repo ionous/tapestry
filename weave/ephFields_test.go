@@ -177,7 +177,7 @@ func TestFieldsUnknownClass(t *testing.T) {
 		&eph.Kinds{Kind: "m"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `no such kind "m" in domain "a" trying to write field "t"`); !ok {
+	if ok, e := okError(t, e, `Unknown kind "m" in domain "a" trying to write field "t"`); !ok {
 		t.Fatal("expected error; got:", e)
 	} else {
 		t.Log("ok:", e)

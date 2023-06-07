@@ -33,9 +33,9 @@ func TestAncestryFormation(t *testing.T) {
 	} else if diff := pretty.Diff(out, []string{
 		"a:k:",
 		"b:m:k",
+		"c:n:k",
 		"c:j:m,k",
 		"c:q:j,m,k",
-		"c:n:k",
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -69,7 +69,7 @@ func TestAncestryMultipleParents(t *testing.T) {
 		&eph.Kinds{Kind: "k", Ancestor: "q"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `"k" has more than one parent`); !ok {
+	if ok, e := okError(t, e, `Conflict can't redefine parent of "k"`); !ok {
 		t.Fatal("expected error; got:", e)
 	} else {
 		t.Log("ok:", e)
@@ -105,6 +105,10 @@ func TestAncestryRedundancy(t *testing.T) {
 }
 
 func TestAncestryMissing(t *testing.T) {
+	var warnings Warnings
+	unwarn := warnings.catch(t)
+	defer unwarn()
+	//
 	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
@@ -114,10 +118,10 @@ func TestAncestryMissing(t *testing.T) {
 		&eph.Kinds{Kind: "m", Ancestor: "x"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `unknown dependency "x" for kind "m"`); !ok {
+	if ok, e := okError(t, e, `Unknown kind "x" in domain "b"`); !ok {
 		t.Fatal("expected error; got:", e)
-	} else {
-		t.Log("ok:", e)
+	} else if ok, e := okError(t, warnings.shift(), `AncestryPhase didn't finish`); !ok {
+		t.Fatal("expected warning; got:", e)
 	}
 }
 
@@ -135,13 +139,13 @@ func TestAncestryRedefined(t *testing.T) {
 	dt.makeDomain(dd("b", "a"),
 		&eph.Kinds{Kind: "m", Ancestor: "k"},
 		&eph.Kinds{Kind: "n", Ancestor: "k"},
-		&eph.Kinds{Kind: "q", Ancestor: "k"}, // should be okay. << --- failing here
+		&eph.Kinds{Kind: "q", Ancestor: "k"}, // should be okay; even though the domains differ, they're still compatible.
 	)
 	dt.makeDomain(dd("c", "b"),
 		&eph.Kinds{Kind: "m", Ancestor: "n"}, // should fail.
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `kind "m" can't redefine parent as "n"`); !ok {
+	if ok, e := okError(t, e, `Conflict can't redefine parent of "m" as "n"`); !ok {
 		t.Fatal("expected error; got:", e)
 	} else if warned := warnings.all(); len(warned) != 1 {
 		t.Fatal("expected one warning", warned)
