@@ -259,7 +259,7 @@ func (dt *domainTest) readNames() ([]string, error) {
 		on(my.noun = mn.rowid)
 	join mdl_domain md
 		on(mn.domain = md.domain)
-	order by md.domain, mn.noun, my.rank`)
+	order by md.domain, mn.noun, my.rank, my.name`)
 }
 
 // domain, noun, kind
