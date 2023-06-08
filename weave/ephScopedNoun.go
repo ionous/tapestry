@@ -13,8 +13,6 @@ type ScopedNoun struct {
 	domain       *Domain
 	names        UniqueNames
 	friendlyName string
-	aliases      UniqueNames
-	aliasat      []string    // origin of each alias
 	localRecord  localRecord // store the values of the noun as a record.
 }
 
@@ -36,17 +34,6 @@ func (n *ScopedNoun) Kind() (ret *ScopedKind, err error) {
 		err = errutil.Fmt("noun %q has unexpected %d parents", n.name, len(ks))
 	} else {
 		ret = ks[0].(*ScopedKind)
-	}
-	return
-}
-
-// returns false if the alias already existed
-func (n *ScopedNoun) AddAlias(a, at string) (okay bool) {
-	if i := n.aliases.AddName(a); i >= 0 {
-		s := append(n.aliasat, "")
-		copy(s[i+1:], s[i:])
-		n.aliasat, s[i] = s, at
-		okay = true
 	}
 	return
 }

@@ -16,17 +16,14 @@ import (
 func (cat *Catalog) AssertAlias(opShortName string, opAliases ...string) error {
 	return cat.Schedule(assert.AliasPhase, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
-		if noun, e := getClosestNoun(d, opShortName); e != nil {
+		if n, e := getClosestNoun(d, opShortName); e != nil {
 			err = e
 		} else {
 			for _, a := range opAliases {
 				if a, ok := UniformString(a); !ok {
 					err = errutil.Append(err, InvalidString(a))
 				} else {
-					if !noun.AddAlias(a, at) {
-						LogWarning(errutil.Fmt("duplicate alias %q for %q at %s",
-							a, noun.name, at))
-					}
+					err = cat.writer.Name(d.name, n.name, a, -1, at)
 				}
 			}
 		}

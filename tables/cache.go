@@ -18,11 +18,11 @@ type prepError struct {
 
 // RowScanner because sql.Row.Scan doesnt have the sql.Scanner.Scan interface.
 type RowScanner interface {
-	Scan(...interface{}) error
+	Scan(...any) error
 }
 
 // implements RowScanner
-func (e *prepError) Scan(...interface{}) error {
+func (e *prepError) Scan(...any) error {
 	return e.err
 
 }
@@ -42,13 +42,13 @@ func (c *Cache) Close() {
 	c.cache = make(map[string]*sql.Stmt)
 }
 
-func (c *Cache) Must(q string, args ...interface{}) {
+func (c *Cache) Must(q string, args ...any) {
 	if _, e := c.Exec(q, args...); e != nil {
 		panic(e)
 	}
 }
 
-func (c *Cache) Exec(q string, args ...interface{}) (ret sql.Result, err error) {
+func (c *Cache) Exec(q string, args ...any) (ret sql.Result, err error) {
 	if stmt, e := c.prep(q); e != nil {
 		err = errutil.New("Prep error", q, e)
 	} else if res, e := stmt.Exec(args...); e != nil {
@@ -59,7 +59,7 @@ func (c *Cache) Exec(q string, args ...interface{}) (ret sql.Result, err error) 
 	return
 }
 
-func (c *Cache) Query(q string, args ...interface{}) (ret *sql.Rows, err error) {
+func (c *Cache) Query(q string, args ...any) (ret *sql.Rows, err error) {
 	if stmt, e := c.prep(q); e != nil {
 		err = errutil.New("Prep error", q, e)
 	} else if rows, e := stmt.Query(args...); e != nil {
@@ -73,7 +73,7 @@ func (c *Cache) Query(q string, args ...interface{}) (ret *sql.Rows, err error) 
 // QueryRow assumes a single result row.
 // It mimics db.QueryRow but returns Scanner instead of Row
 // so that we can defer any errors encountered while preparing the cached statement.
-func (c *Cache) QueryRow(q string, args ...interface{}) (ret RowScanner) {
+func (c *Cache) QueryRow(q string, args ...any) (ret RowScanner) {
 	if stmt, e := c.prep(q); e != nil {
 		ret = &prepError{e}
 	} else {

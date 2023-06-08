@@ -13,7 +13,7 @@ func WriteCsv(db Querier, w io.Writer, q string, cols int) (err error) {
 		err = e
 	} else {
 		c := make([]sql.NullString, cols)
-		cp := make([]interface{}, cols)
+		cp := make([]any, cols)
 		for i := 0; i < cols; i++ {
 			cp[i] = &c[i]
 		}

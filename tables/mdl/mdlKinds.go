@@ -33,6 +33,14 @@ func (ki *kindInfo) fullpath() string {
 	return ki._fullpath
 }
 
+// if specified, must exist.
+func (m *Writer) findOptionalKind(domain, kind string) (ret kindInfo, err error) {
+	if len(kind) > 0 {
+		ret, err = m.findRequiredKind(domain, kind)
+	}
+	return
+}
+
 // if not specified errors, also errors if not found.
 func (m *Writer) findRequiredKind(domain, kind string) (ret kindInfo, err error) {
 	if out, e := m.findKind(domain, kind); e != nil {
@@ -45,18 +53,10 @@ func (m *Writer) findRequiredKind(domain, kind string) (ret kindInfo, err error)
 	return
 }
 
-// if specified, must exist.
-func (m *Writer) findOptionalKind(domain, kind string) (ret kindInfo, err error) {
-	if len(kind) > 0 {
-		ret, err = m.findRequiredKind(domain, kind)
-	}
-	return
-}
-
 // if not specified errors, makes no assumptions about the results
 func (m *Writer) findKind(domain, kind string) (ret kindInfo, err error) {
 	if len(kind) == 0 {
-		err = errutil.New("missing a name for a kind")
+		err = errutil.New("empty name for kind")
 	} else if e := m.db.QueryRow(`
 	select domain, mk.rowid, ',' || mk.path
 	from mdl_kind mk

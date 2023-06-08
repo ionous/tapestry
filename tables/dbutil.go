@@ -9,21 +9,26 @@ import (
 
 // Query used for QueryAll to hide differences b/t tables.Cache and sql.DB
 type Querier interface {
-	Query(query string, args ...interface{}) (*sql.Rows, error)
+	Query(query string, args ...any) (*sql.Rows, error)
+}
+
+// Query used for QueryAll to hide differences b/t tables.Cache and sql.DB
+type QueryRow interface {
+	QueryRow(query string, args ...any) *sql.Row
 }
 
 // compatible with sql.DB for use with caches, etc.
 type Executer interface {
-	Exec(q string, args ...interface{}) (sql.Result, error)
+	Exec(q string, args ...any) (sql.Result, error)
 }
 
-func Must(db *sql.DB, q string, args ...interface{}) {
+func Must(db *sql.DB, q string, args ...any) {
 	if _, e := db.Exec(q, args...); e != nil {
 		panic(e)
 	}
 }
 
-// func MustGetId(db *sql.DB, q string, args ...interface{}) (ret int64) {
+// func MustGetId(db *sql.DB, q string, args ...any) (ret int64) {
 // 	if res, e := db.Exec(q, args...); e != nil {
 // 		panic(e)
 // 	} else if id, e := res.LastInsertId(); e != nil {
@@ -45,7 +50,7 @@ func RowsAffected(res sql.Result) (ret int) {
 
 // QueryAll queries the db ( or statement cache ) for one or more rows.
 // For each row, it writes the row to the 'dest' args and calls 'cb' for processing.
-func QueryAll(db Querier, q string, cb func() error, dest ...interface{}) (err error) {
+func QueryAll(db Querier, q string, cb func() error, dest ...any) (err error) {
 	if rows, e := db.Query(q); e != nil {
 		err = errutil.New("QueryAll error:", e, "for", q)
 	} else {
@@ -56,7 +61,7 @@ func QueryAll(db Querier, q string, cb func() error, dest ...interface{}) (err e
 
 // ScanAll writes each row to the 'dest' args and calls 'cb' for processing.
 // It closes rows before returning.
-func ScanAll(rows *sql.Rows, cb func() error, dest ...interface{}) (err error) {
+func ScanAll(rows *sql.Rows, cb func() error, dest ...any) (err error) {
 	for rows.Next() {
 		if e := rows.Scan(dest...); e != nil {
 			err = errutil.New("ScanAll error:", e)

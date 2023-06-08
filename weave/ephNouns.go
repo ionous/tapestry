@@ -8,22 +8,10 @@ import (
 
 func (c *Catalog) WriteNames(m mdl.Modeler) error {
 	return forEachNoun(c, func(n *ScopedNoun) (err error) {
-		{
-			const ofs = -1 // aliases are forced first, in order of declaration.
-			for i, a := range n.aliases {
-				at := n.aliasat[i]
-				if e := m.Name(n.domain.name, n.name, a, ofs, at); e != nil {
-					err = e
-					break
-				}
-			}
-		}
-		if err == nil {
-			for ofs, name := range n.Names() {
-				if e := m.Name(n.domain.name, n.name, name, ofs, n.at); e != nil {
-					err = e
-					break
-				}
+		for ofs, name := range n.Names() {
+			if e := m.Name(n.domain.name, n.name, name, ofs, n.at); e != nil {
+				err = e
+				break
 			}
 		}
 		return
