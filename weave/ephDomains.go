@@ -14,16 +14,12 @@ type DomainFinder interface {
 }
 
 type Domain struct {
-	name          string
-	catalog       *Catalog
-	defs          Artifacts
-	kinds         ScopedKinds // the kinds declared in this domain
-	nouns         ScopedNouns
-	checks        asmChecks
-	resolvedKinds cachedTable
-	resolvedNouns cachedTable
-	rules         map[string]Rulesets  // pattern name to rules for that pattern
-	relatives     map[string]Relatives // relation name to pairs of nouns
+	name      string
+	catalog   *Catalog
+	defs      Artifacts
+	checks    asmChecks
+	rules     map[string]Rulesets  // pattern name to rules for that pattern
+	relatives map[string]Relatives // relation name to pairs of nouns
 
 	// a domain that's fully processed will be in some final state
 	currPhase assert.Phase

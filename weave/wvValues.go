@@ -21,19 +21,18 @@ func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, opV
 			err = e
 		} else if noun, e := d.GetClosestNoun(noun); e != nil {
 			err = e
+		} else if n, ok := cat.domainNouns[domainNoun{noun.domain, noun.name}]; !ok {
+			err = errutil.Fmt("unexpected noun %q in domain %q", noun.name, noun.domain)
+		} else if rv, e := n.recordValues(at); e != nil {
+			err = e
+		} else if value := opValue; value == nil {
+			err = errutil.New("null value", opNoun, opField)
 		} else {
-			noun := d.EnsureNoun(noun.name, at)
-			if rv, e := noun.recordValues(at); e != nil {
-				err = e
-			} else if value := opValue; value == nil {
-				err = errutil.New("null value", opNoun, opField)
+			var conflict *Conflict
+			if e := rv.writeValue(noun.name, at, field, path, value); errors.As(e, &conflict) && conflict.Reason == Duplicated {
+				LogWarning(e)
 			} else {
-				var conflict *Conflict
-				if e := rv.writeValue(noun.name, at, field, path, value); errors.As(e, &conflict) && conflict.Reason == Duplicated {
-					LogWarning(e)
-				} else {
-					err = e // might be nil
-				}
+				err = e // might be nil
 			}
 		}
 		return

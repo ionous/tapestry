@@ -25,7 +25,7 @@ func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error 
 			err = errutil.New("invalid rhs")
 		} else {
 			rel := d.singularize(rel)
-			if e := d.addRequirement(rel, kindsOf.Relation.String(), at); e != nil {
+			if e := d.addKind(rel, kindsOf.Relation.String(), at); e != nil {
 				err = e
 			} else if ua, e := MakeUniformField(a.affinity(), a.short(false), a.class, at); e != nil {
 				err = e

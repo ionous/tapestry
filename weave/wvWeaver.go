@@ -46,7 +46,7 @@ func (cat *Catalog) AssertAspectTraits(opAspects string, opTraits []string) erro
 			err = e
 		} else {
 			aspect := d.singularize(aspect)
-			if e := d.addRequirement(aspect, kindsOf.Aspect.String(), at); e != nil {
+			if e := d.addKind(aspect, kindsOf.Aspect.String(), at); e != nil {
 				err = e
 			} else if len(traits) > 0 {
 				err = d.schedule(at, assert.MemberPhase, func(ctx *Weaver) error {
@@ -81,18 +81,12 @@ func (d *Domain) singularize(name string) (ret string) {
 	return
 }
 
-func (d *Domain) addRequirement(name, parent, at string) (err error) {
+func (d *Domain) addKind(name, parent, at string) (err error) {
 	if e := d.catalog.writer.Kind(d.name, name, parent, at); e != nil {
 		if !errors.Is(e, mdl.Duplicate) {
 			err = e
 		} else if d.catalog.warn != nil {
 			d.catalog.warn(e)
-		}
-	} else {
-		// fix: remove after removing get closest noun
-		kid := d.EnsureKind(name, at)
-		if len(parent) > 0 {
-			kid.AddRequirement(parent)
 		}
 	}
 	return

@@ -41,8 +41,8 @@ func TestValueFieldAssignment(t *testing.T) {
 	} else if diff := pretty.Diff(out, []string{
 		`a:apple:t:"some text"`,
 		`a:boat:t:"more text"`,
-		`a:toy_boat:d:321`,
 		`a:pear:d:123`,
+		`a:toy_boat:d:321`,
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)

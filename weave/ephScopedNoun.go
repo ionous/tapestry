@@ -1,39 +1,28 @@
 package weave
 
 import (
-	"strings"
-
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/lang"
-	"github.com/ionous/errutil"
 )
 
 type ScopedNoun struct {
-	Requires    // kinds ( when resolved, can have one direct parent )
+	// Requires    // kinds ( when resolved, can have one direct parent )
+	name        string
 	domain      *Domain
-	names       UniqueNames
 	localRecord localRecord // store the values of the noun as a record.
 }
 
-func (n *ScopedNoun) Resolve() (ret Dependencies, err error) {
-	if len(n.at) == 0 {
-		err = errutil.New("noun %q never defined", n.name)
-	} else if ks, e := n.resolve(n, (*kindFinder)(n.domain)); e != nil {
-		err = errutil.New("%s resolving noun %q", e, n.name)
-	} else {
-		ret = ks
-	}
-	return
-}
-
-func (n *ScopedNoun) Kind() (ret *ScopedKind, err error) {
-	if dep, e := n.GetDependencies(); e != nil {
-		err = e
-	} else if ks := dep.Parents(); len(ks) != 1 {
-		err = errutil.Fmt("noun %q has unexpected %d parents", n.name, len(ks))
-	} else {
-		ret = ks[0].(*ScopedKind)
-	}
+func (n *ScopedNoun) Kind() (ret string, err error) {
+	d := n.domain
+	err = d.catalog.db.QueryRow(`
+		select mk.kind
+	from mdl_kind mk 
+	join mdl_noun mn
+		on (mn.kind = mk.rowid)
+	join domain_tree dt
+		on (dt.uses = mn.domain)
+	where base = ?1
+	and noun = ?2
+	limit 1`, d.name, n.name).Scan(&ret)
 	return
 }
 
@@ -42,39 +31,12 @@ func (n *ScopedNoun) Kind() (ret *ScopedKind, err error) {
 func (n *ScopedNoun) recordValues(at string) (ret localRecord, err error) {
 	if n.localRecord.isValid() {
 		ret = n.localRecord
-	} else if k, e := n.Kind(); e != nil {
+	} else if kind, e := n.Kind(); e != nil {
 		err = e
 	} else {
-		k := kindCat{domain: n.domain, kind: k.name}
+		k := kindCat{domain: n.domain, kind: kind}
 		rv := localRecord{k, new(literal.RecordValue), at}
 		ret, n.localRecord = rv, rv
 	}
 	return
-}
-
-func (n *ScopedNoun) Names() []string {
-	if len(n.names) == 0 {
-		n.names = n.makeNames()
-	}
-	return n.names
-}
-
-func (n *ScopedNoun) makeNames() []string {
-	var out []string
-	// generate additional names by splitting the lowercase uniform name on the underscores:
-	split := strings.FieldsFunc(n.name, lang.IsBreak)
-	if cnt := len(split); cnt > 1 {
-		// in case the name was reduced due to multiple separators
-		if breaks := strings.Join(split, "_"); breaks != n.name {
-			out = append(out, breaks)
-		}
-		// write individual words in increasing rank ( ex. "boat", then "toy" )
-		// note: trailing words are considered "stronger"
-		// because adjectives in noun names tend to be first ( ie. "toy boat" )
-		for i := len(split) - 1; i >= 0; i-- {
-			word := split[i]
-			out = append(out, word)
-		}
-	}
-	return out
 }

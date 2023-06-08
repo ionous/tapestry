@@ -11,9 +11,7 @@ import (
 )
 
 func (c *Catalog) WritePairs(m mdl.Modeler) (err error) {
-	if _, e := c.ResolveNouns(); e != nil {
-		err = e
-	} else if ds, e := c.ResolveDomains(); e != nil {
+	if ds, e := c.ResolveDomains(); e != nil {
 		err = e
 	} else {
 		for _, d := range ds {

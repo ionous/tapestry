@@ -167,14 +167,6 @@ func TestRivalConflict(t *testing.T) {
 	}
 }
 
-func namesOf(ds []Dependency) []string {
-	out := make([]string, len(ds))
-	for i, d := range ds {
-		out[i] = d.Name()
-	}
-	return out
-}
-
 // ephemera for testing which enters a definition
 type rivalFact string
 

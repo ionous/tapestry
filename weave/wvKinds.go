@@ -24,7 +24,7 @@ func (cat *Catalog) AssertAncestor(opKind, opAncestor string) error {
 		} else {
 			kind, ancestor := d.singularize(kind), d.singularize(ua)
 			err = cat.Schedule(assert.AncestryPhase, func(ctx *Weaver) error {
-				return d.addRequirement(kind, ancestor, at)
+				return d.addKind(kind, ancestor, at)
 			})
 		}
 		return

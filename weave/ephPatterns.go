@@ -16,7 +16,7 @@ func (cat *Catalog) AssertResult(patternName, fieldName, class string, aff affin
 			err = InvalidString(patternName)
 		} else {
 			name := d.singularize(name)
-			if e := d.addRequirement(name, kindsOf.Pattern.String(), at); e != nil {
+			if e := d.addKind(name, kindsOf.Pattern.String(), at); e != nil {
 				err = e
 			} else if init != nil {
 				err = errutil.New("return values don't currently support initial values")
@@ -40,7 +40,7 @@ func (cat *Catalog) AssertParam(patternName, fieldName, class string, aff affine
 			err = InvalidString(patternName)
 		} else {
 			name := d.singularize(name)
-			if e := d.addRequirement(name, kindsOf.Pattern.String(), at); e != nil {
+			if e := d.addKind(name, kindsOf.Pattern.String(), at); e != nil {
 				err = e
 			} else if init != nil {
 				err = errutil.New("parameters values don't currently support initial values")

@@ -5,25 +5,31 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
 
-type nounResolver interface {
-	ResolveNouns() (DependencyTable, error)
-}
-
-func forEachNoun(c nounResolver, it func(*ScopedNoun) error) (err error) {
-	if ns, e := c.ResolveNouns(); e != nil {
-		err = e
+func forEachNoun(c *Catalog, it func(*ScopedNoun) error) (err error) {
+	if rows, e := c.db.Query(
+		`select domain, noun
+		from mdl_noun
+	 	join domain_tree
+  		on(uses = domain)
+		order by dist desc
+		`); e != nil {
+		err = errutil.New("resolve domains", e)
 	} else {
-		for _, ndep := range ns {
-			n := ndep.Leaf().(*ScopedNoun)
-			if e := it(n); e != nil {
-				err = errutil.Append(err, e)
+		var domain, noun string
+		err = tables.ScanAll(rows, func() (err error) {
+			if n, ok := c.domainNouns[domainNoun{domain, noun}]; !ok {
+				err = errutil.Fmt("unexpected noun %q in domain %q", noun, domain)
+			} else {
+				err = it(n)
 			}
-		}
+			return
+		}, &domain, &noun)
 	}
 	return
 }
@@ -43,8 +49,7 @@ func (cat *Catalog) AssertNounKind(opNoun, opKind string) error {
 		} else if e := cat.writer.Noun(d.name, noun, k, at); e != nil {
 			err = e
 		} else {
-			n := d.EnsureNoun(noun, at)
-			n.AddRequirement(k)
+			cat.domainNouns[domainNoun{d.name, noun}] = &ScopedNoun{domain: d, name: noun}
 			err = d.makeNames(noun, name, at)
 		}
 		return

@@ -15,23 +15,26 @@ import (
 
 // Catalog - receives ephemera from the importer.
 type Catalog struct {
-	domains         map[string]*Domain
-	processing      DomainStack
-	pendingDomains  []*Domain
-	resolvedDomains cachedTable
-	Errors          []error
-	cursor          string
-	writer          mdl.Modeler
-	run             rt.Runtime
-	db              *tables.Cache
-	warn            func(error)
+	domains        map[string]*Domain
+	processing     DomainStack
+	pendingDomains []*Domain
+	Errors         []error
+	cursor         string
+	writer         mdl.Modeler
+	run            rt.Runtime
+	db             *tables.Cache
+	warn           func(error)
 
 	// sometimes the importer needs to define a singleton like type or instance
 	oneTime     map[string]bool
 	macros      macroReg
 	autoCounter Counters
 	env         Environ
+
+	domainNouns map[domainNoun]*ScopedNoun
 }
+
+type domainNoun struct{ domain, noun string }
 
 func NewCatalog(db *sql.DB) *Catalog {
 	return NewCatalogWithWarnings(db, nil)
@@ -55,6 +58,7 @@ func NewCatalogWithWarnings(db *sql.DB, warn func(error)) *Catalog {
 		warn:        warn,
 		macros:      make(macroReg),
 		oneTime:     make(map[string]bool),
+		domainNouns: make(map[domainNoun]*ScopedNoun),
 		autoCounter: make(Counters),
 		cursor:      "x", // fix
 		db:          tables.NewCache(db),
@@ -241,14 +245,6 @@ func findRivals(db tables.Querier) (ret []conflict, err error) {
 	return
 }
 
-func (c *Catalog) postPhase(p assert.Phase, d *Domain) (err error) {
-	switch p {
-	case assert.NounPhase:
-		_, err = d.ResolveDomainNouns()
-	}
-	return
-}
-
 func (c *Catalog) writePhase(p assert.Phase) (err error) {
 	w := c.writer
 	switch p {
@@ -287,28 +283,6 @@ func (c *Catalog) ResolveDomains() (ret []*Domain, err error) {
 			}
 			return
 		}, &name)
-	}
-	return
-}
-
-// FIX -- its a goal to remove this function
-func (c *Catalog) ResolveNouns() (ret DependencyTable, err error) {
-	// fix? is there anyway to make this more "automatically" resolve domains and kinds?
-	var out DependencyTable
-	if ds, e := c.ResolveDomains(); e != nil {
-		err = e
-	} else {
-		for _, d := range ds {
-			if ns, e := d.ResolveDomainNouns(); e != nil {
-				err = e
-				break
-			} else {
-				out = append(out, ns...)
-			}
-		}
-	}
-	if err == nil {
-		ret = out
 	}
 	return
 }

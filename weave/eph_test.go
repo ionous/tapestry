@@ -353,5 +353,9 @@ func (dt *domainTest) readValues() ([]string, error) {
 	join mdl_noun mn 
 		on(mv.noun = mn.rowid)
 	join mdl_field mf	
-		on(mv.field = mf.rowid)`)
+		on(mv.field = mf.rowid)
+	join mdl_domain md 
+		on(md.domain = mn.domain)
+	order by md.rowid, mn.noun, mf.field
+		`)
 }

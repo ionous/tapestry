@@ -41,9 +41,6 @@ Loop:
 			if e := d.runPhase(&ctx); e != nil {
 				err = e
 				break Loop
-			} else if e := cat.postPhase(p, d); e != nil {
-				err = e
-				break Loop
 			}
 			cat.processing.Pop()
 		}

@@ -45,6 +45,7 @@ func (c *asmCheck) setProg(exe []rt.Execute) (err error) {
 
 // return the uniformly named domain ( if it exists )
 func (d *Domain) GetCheck(name string) (ret *asmCheck, okay bool) {
+	var Visited errutil.Error = "Visited" // forces an early exit
 	if e := d.visit(func(dep *Domain) (err error) {
 		if n, ok := dep.checks[name]; ok {
 			ret, okay, err = n, true, Visited
