@@ -333,14 +333,19 @@ func (m *Writer) Kind(domain, kind, parent, at string) (err error) {
 			}
 		}
 	} else if parent.id != 0 { // note: if the kind exists, ignore nil parents.
-		// does the newly specified ancestor contain the existing parent?
-		// then we are ratcheting down. (ex. new: ,c,b,a,)  ( existing: ,a, )
-		if strings.HasSuffix(kind.path, parent.fullpath()) {
-			// does the existing parent fully contain the new ancestor?
-			// then its a duplicate request (ex. existing: ,c,b,a,)  ( new: ,a, )
+
+		if strings.HasSuffix(parent.fullpath(), kind.fullpath()) {
+			err = errutil.Fmt("%w circular reference detected %q already declared as an ancestor of %q.",
+				Conflict, kind.name, parent.name)
+		} else if strings.HasSuffix(kind.path, parent.fullpath()) {
+			// did the existing path fully contain the new ancestor?
+			// then its a duplicate request (ex. `,c,b,a,` `,b,a,` )
 			err = errutil.Fmt("%w %q already declared as an ancestor of %q.",
 				Duplicate, kind.name, parent.name)
 		} else if strings.HasSuffix(parent.fullpath(), kind.path) {
+			// is the newly specified ancestor more specific than the existing path?
+			// then we are ratcheting down. (ex. `,c,b,a,` `,b,a,` )
+
 			if kind.domain != domain {
 				// if it was declared in a different domain: we can't change it now.
 				err = errutil.Fmt("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q.",

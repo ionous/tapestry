@@ -52,7 +52,7 @@ func TestAncestryCycle(t *testing.T) {
 		&eph.Kinds{Kind: "t", Ancestor: "p"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, "circular reference detected"); !ok {
+	if ok, e := okError(t, e, `Conflict circular reference detected`); !ok {
 		t.Fatal("expected error; got:", e)
 	}
 }
@@ -69,7 +69,7 @@ func TestAncestryMultipleParents(t *testing.T) {
 		&eph.Kinds{Kind: "k", Ancestor: "q"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Missing a definition in domain "a" that would allow "k" to have the ancestor "q"`); !ok {
+	if ok, e := okError(t, e, `Missing a definition in domain "a" that would allow "k"`); !ok {
 		t.Fatal("expected error; got:", e)
 	} else {
 		t.Log("ok:", e)
