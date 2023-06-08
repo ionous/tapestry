@@ -6,7 +6,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 )
@@ -91,9 +90,7 @@ func (cat *Catalog) AssertRule(opPatternName string, opTarget string, opGuard rt
 		part, always := fromTiming(opFlags)
 		if name, ok := UniformString(opPatternName); !ok {
 			err = InvalidString(opPatternName)
-		} else if !d.hasAncestor(name, kindsOf.Pattern.String()) {
-			err = errutil.Fmt("unknown or invalid pattern %q(%s)", opPatternName, name)
-		} else if tgt, ok := getTargetName(d, opTarget); !ok {
+		} else if tgt, ok := UniformString(opTarget); len(opTarget) > 0 && !ok {
 			err = errutil.Fmt("unknown or invalid target %q for pattern %q", opTarget, opPatternName)
 		} else {
 			if d.rules == nil {
@@ -109,15 +106,4 @@ func (cat *Catalog) AssertRule(opPatternName string, opTarget string, opGuard rt
 		}
 		return
 	})
-}
-
-func getTargetName(d *Domain, opTarget string) (ret string, okay bool) {
-	if tgt := opTarget; len(tgt) == 0 {
-		okay = true
-	} else if k, ok := UniformString(opTarget); ok {
-		if ok := d.findKind(k); ok {
-			ret, okay = k, true
-		}
-	}
-	return
 }

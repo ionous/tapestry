@@ -44,9 +44,7 @@ func (cat *Catalog) AssertNounKind(opNoun, opKind string) error {
 			err = InvalidString(opNoun)
 		} else if kn, ok := UniformString(kind); !ok {
 			err = InvalidString(opKind)
-		} else if k, ok := d.findPluralKind(kn); !ok {
-			return errutil.Fmt("unknown kind %q for noun %q at %q", opKind, opNoun, at)
-		} else if e := cat.writer.Noun(d.name, noun, k, at); e != nil {
+		} else if e := cat.writer.Noun(d.name, noun, d.singularize(kn), at); e != nil {
 			err = e
 		} else {
 			cat.domainNouns[domainNoun{d.name, noun}] = &ScopedNoun{domain: d, name: noun}

@@ -2,7 +2,6 @@ package mdl
 
 import (
 	"database/sql"
-	"strconv"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
@@ -23,8 +22,9 @@ import (
 func NewModeler(db *sql.DB) (ret Modeler, err error) {
 	var ps tables.Prep
 	m := &Writer{
-		db:         db,
-		aspectPath: "XXX", // set to something that wont match until its set properly.
+		db:          db,
+		aspectPath:  "XXX", // set to something that wont match until its set properly.
+		patternPath: "XXX",
 		assign: ps.Prep(db,
 			tables.Insert("mdl_default", "field", "value"),
 		),
@@ -121,6 +121,7 @@ type Writer struct {
 	rule,
 	value *sql.Stmt
 	// some ugly caching:
+	patternPath,
 	aspectPath string // ex. ',4,'
 }
 
@@ -323,13 +324,13 @@ func (m *Writer) Kind(domain, kind, parent, at string) (err error) {
 		// we verified the other inputs already, so insert:
 		if res, e := m.kind.Exec(domain, kind.name, trimPath(parent.fullpath()), at); e != nil {
 			err = errutil.New("database error", e)
-		} else if kind.name == kindsOf.Aspect.String() {
-			// fix? it would probably be better to have a separate table of: domain, aspect, trait
-			// currently, the runtime expects that aspects are a kind, and its traits are fields.
-			if i, e := res.LastInsertId(); e != nil {
-				err = e
-			} else {
-				m.aspectPath = "," + strconv.FormatInt(i, 10) + ","
+		} else {
+			// cache result... sometimes
+			switch kind.name {
+			case kindsOf.Aspect.String():
+				err = updatePath(res, &m.aspectPath)
+			case kindsOf.Pattern.String():
+				err = updatePath(res, &m.patternPath)
 			}
 		}
 	} else if parent.id != 0 { // note: if the kind exists, ignore nil parents.
@@ -345,7 +346,6 @@ func (m *Writer) Kind(domain, kind, parent, at string) (err error) {
 		} else if strings.HasSuffix(parent.fullpath(), kind.path) {
 			// is the newly specified ancestor more specific than the existing path?
 			// then we are ratcheting down. (ex. `,c,b,a,` `,b,a,` )
-
 			if kind.domain != domain {
 				// if it was declared in a different domain: we can't change it now.
 				err = errutil.Fmt("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q.",
@@ -546,6 +546,8 @@ func (m *Writer) Rel(domain, relKind, oneKind, otherKind, cardinality, at string
 func (m *Writer) Rule(domain, pattern, target string, phase int, filter rt.BoolEval, exe []rt.Execute, at string) (err error) {
 	if kid, e := m.findRequiredKind(domain, pattern); e != nil {
 		err = e
+	} else if !strings.HasSuffix(kid.fullpath(), m.patternPath) {
+		err = errutil.Fmt("kind %q in domain %q is not a pattern", pattern, domain)
 	} else if tgt, e := m.findOptionalKind(domain, target); e != nil {
 		err = e
 	} else {

@@ -77,9 +77,6 @@ func (rp *localRecord) ensureRecords(at string, path []string) (ret innerRecord,
 		if name, cls, e := it.findCompatibleField(field, affine.Record); e != nil {
 			err = e
 			break
-		} else if !it.k.domain.findKind(cls) {
-			err = errutil.Fmt("couldnt find record of %q", cls)
-			break
 		} else {
 			nextKind := kindCat{it.k.domain, cls}
 			if oldVal, ok := it.findField(name); !ok {

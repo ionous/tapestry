@@ -17,6 +17,17 @@ func trimPath(fullpath string) (ret string) {
 	return
 }
 
+// fix? it would probably be better to have a separate table of: domain, aspect, trait
+// currently, the runtime expects that aspects are a kind, and its traits are fields.
+func updatePath(res sql.Result, path *string) (err error) {
+	if i, e := res.LastInsertId(); e != nil {
+		err = e
+	} else {
+		*path = "," + strconv.FormatInt(i, 10) + ","
+	}
+	return
+}
+
 type kindInfo struct {
 	id        int    // unique id of the kind
 	name      string // validated name of the kind

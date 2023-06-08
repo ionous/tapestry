@@ -56,7 +56,7 @@ func TestNounFailure(t *testing.T) {
 		&eph.Nouns{Noun: "bad apple", Kind: "t"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `unknown kind "t"`); !ok {
+	if ok, e := okError(t, e, `Missing kind "t" in domain "a"`); !ok {
 		t.Fatal("expected error; got:", e)
 	} else {
 		t.Log("ok:", e)

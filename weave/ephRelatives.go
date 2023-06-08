@@ -96,47 +96,48 @@ func (cat *Catalog) AssertRelative(opRel, opNoun, opOtherNoun string) error {
 			err = InvalidString(opOtherNoun)
 		} else if name, ok := UniformString(opRel); !ok {
 			err = InvalidString(opRel)
-		} else if rel, ok := d.findPluralKind(name); !ok {
-			err = errutil.Fmt("unknown or invalid relation %q", opRel)
-		} else if card, e := d.findCardinality(rel); e != nil {
-			err = e
-		} else if first, e := d.GetClosestNoun(noun); e != nil {
-			err = e
-		} else if second, e := d.GetClosestNoun(otherNoun); e != nil {
-			err = e
 		} else {
-			var addPair bool
-			switch card {
-			case tables.ONE_TO_ONE:
-				// when one-to-one, the meaning of the two columns is the same
-				// and sorting the names so that first is less than second simplifies testing for uniqueness
-				if first.name > second.name {
-					first, second = second, first
+			rel := d.singularize(name)
+			if card, e := d.findCardinality(rel); e != nil {
+				err = e
+			} else if first, e := d.GetClosestNoun(noun); e != nil {
+				err = e
+			} else if second, e := d.GetClosestNoun(otherNoun); e != nil {
+				err = e
+			} else {
+				var addPair bool
+				switch card {
+				case tables.ONE_TO_ONE:
+					// when one-to-one, the meaning of the two columns is the same
+					// and sorting the names so that first is less than second simplifies testing for uniqueness
+					if first.name > second.name {
+						first, second = second, first
+					}
+					addPair, err = relate(d, rel, first.name, at, second.name)
+
+				case tables.ONE_TO_MANY:
+					// one parent to many children; so given second noun ( a child ) there is only one valid first noun ( a parent )
+					addPair, err = relate(d, rel, second.name, at, first.name)
+
+				case tables.MANY_TO_ONE:
+					// many children to one parent; so given first noun ( a child ) there is only one valid second noun( a parent )
+					addPair, err = relate(d, rel, first.name, at, second.name)
+
+				case tables.MANY_TO_MANY:
+					uniquePair := first.name + second.name
+					addPair, err = relate(d, rel, uniquePair, at, uniquePair)
+				default:
+					err = errutil.Fmt("invalid cardinality %q for %q", card, opRel)
 				}
-				addPair, err = relate(d, rel, first.name, at, second.name)
-
-			case tables.ONE_TO_MANY:
-				// one parent to many children; so given second noun ( a child ) there is only one valid first noun ( a parent )
-				addPair, err = relate(d, rel, second.name, at, first.name)
-
-			case tables.MANY_TO_ONE:
-				// many children to one parent; so given first noun ( a child ) there is only one valid second noun( a parent )
-				addPair, err = relate(d, rel, first.name, at, second.name)
-
-			case tables.MANY_TO_MANY:
-				uniquePair := first.name + second.name
-				addPair, err = relate(d, rel, uniquePair, at, uniquePair)
-			default:
-				err = errutil.Fmt("invalid cardinality %q for %q", card, opRel)
-			}
-			//
-			if err == nil && addPair {
-				if d.relatives == nil {
-					d.relatives = make(map[string]Relatives)
+				//
+				if err == nil && addPair {
+					if d.relatives == nil {
+						d.relatives = make(map[string]Relatives)
+					}
+					pairs := d.relatives[rel]
+					pairs.AddPair(first.name, second.name, at)
+					d.relatives[rel] = pairs
 				}
-				pairs := d.relatives[rel]
-				pairs.AddPair(first.name, second.name, at)
-				d.relatives[rel] = pairs
 			}
 		}
 		return

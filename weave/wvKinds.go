@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
-	"github.com/ionous/errutil"
 )
 
 // if a parent kind was specified, make the kid dependent on it.
@@ -36,19 +35,20 @@ func (cat *Catalog) AssertAncestor(opKind, opAncestor string) error {
 func (cat *Catalog) AssertField(kind, fieldName, class string, aff affine.Affinity, init assign.Assignment) error {
 	return cat.Schedule(assert.MemberPhase, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
-		_, newName := d.StripDeterminer(kind)
-		if newName, ok := UniformString(newName); !ok {
+		_, name := d.StripDeterminer(kind)
+		if name, ok := UniformString(name); !ok {
 			err = InvalidString(kind)
-		} else if kid, ok := d.findPluralKind(newName); !ok {
-			err = errutil.Fmt("unknown kind %q at %v", kind, at)
-		} else if uf, e := MakeUniformField(aff, fieldName, class, at); e != nil {
-			err = e
-		} else if e := cat.writer.Member(d.name, kid, uf.Name, uf.Affinity, uf.Type, at); e != nil {
-			err = e
-		} else if init != nil {
-			return cat.Schedule(assert.DefaultsPhase, func(ctx *Weaver) (err error) {
-				return cat.writer.Default(d.name, kid, uf.Name, init)
-			})
+		} else {
+			kid := d.singularize(name)
+			if uf, e := MakeUniformField(aff, fieldName, class, at); e != nil {
+				err = e
+			} else if e := cat.writer.Member(d.name, kid, uf.Name, uf.Affinity, uf.Type, at); e != nil {
+				err = e
+			} else if init != nil {
+				return cat.Schedule(assert.DefaultsPhase, func(ctx *Weaver) (err error) {
+					return cat.writer.Default(d.name, kid, uf.Name, init)
+				})
+			}
 		}
 		return
 	})
