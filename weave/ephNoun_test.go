@@ -208,9 +208,9 @@ func TestNounDistance(t *testing.T) {
 		}
 		for i, cnt := 0, len(tests); i < cnt; i += 2 {
 			name, want := tests[i], tests[i+1]
-			if n, ok := d.GetClosestNoun(name); !ok {
-				t.Error("couldnt get noun for name", name)
-			} else if got := n.Name(); want != got {
+			if n, e := d.GetClosestNoun(name); e != nil {
+				t.Error("couldnt get noun for name", name, e)
+			} else if got := n.name; want != got {
 				t.Errorf("wanted %q got %q", want, got)
 			}
 		}

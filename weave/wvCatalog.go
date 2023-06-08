@@ -254,14 +254,12 @@ func (c *Catalog) writePhase(p assert.Phase) (err error) {
 	switch p {
 	case assert.ValuePhase:
 		err = c.WriteValues(w)
+
 	case assert.RelativePhase:
 		err = c.WritePairs(w)
 
 	case assert.RulePhase:
 		err = c.WriteRules(w)
-
-	case assert.AliasPhase:
-		err = c.WriteNames(w)
 
 	case assert.PostDomain:
 		// when to write these?

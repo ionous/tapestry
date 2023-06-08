@@ -13,22 +13,27 @@ import (
 func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, opValue literal.LiteralValue) error {
 	return cat.Schedule(assert.ValuePhase, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
-		if noun, e := getClosestNoun(d, opNoun); e != nil {
-			err = e
-		} else if rv, e := noun.recordValues(at); e != nil {
-			err = e
+		if noun, ok := UniformString(opNoun); !ok {
+			err = InvalidString(opNoun)
 		} else if field, ok := UniformString(opField); !ok {
 			err = InvalidString(opField)
 		} else if path, e := UniformStrings(opPath); e != nil {
 			err = e
-		} else if value := opValue; value == nil {
-			err = errutil.New("null value", opNoun, opField)
+		} else if noun, e := d.GetClosestNoun(noun); e != nil {
+			err = e
 		} else {
-			var conflict *Conflict
-			if e := rv.writeValue(noun.name, at, field, path, value); errors.As(e, &conflict) && conflict.Reason == Duplicated {
-				LogWarning(e)
+			noun := d.EnsureNoun(noun.name, at)
+			if rv, e := noun.recordValues(at); e != nil {
+				err = e
+			} else if value := opValue; value == nil {
+				err = errutil.New("null value", opNoun, opField)
 			} else {
-				err = e // might be nil
+				var conflict *Conflict
+				if e := rv.writeValue(noun.name, at, field, path, value); errors.As(e, &conflict) && conflict.Reason == Duplicated {
+					LogWarning(e)
+				} else {
+					err = e // might be nil
+				}
 			}
 		}
 		return

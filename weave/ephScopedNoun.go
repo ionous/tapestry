@@ -9,11 +9,10 @@ import (
 )
 
 type ScopedNoun struct {
-	Requires     // kinds ( when resolved, can have one direct parent )
-	domain       *Domain
-	names        UniqueNames
-	friendlyName string
-	localRecord  localRecord // store the values of the noun as a record.
+	Requires    // kinds ( when resolved, can have one direct parent )
+	domain      *Domain
+	names       UniqueNames
+	localRecord localRecord // store the values of the noun as a record.
 }
 
 func (n *ScopedNoun) Resolve() (ret Dependencies, err error) {
@@ -60,28 +59,9 @@ func (n *ScopedNoun) Names() []string {
 	return n.names
 }
 
-func (n *ScopedNoun) UpdateFriendlyName(name string) {
-	if len(n.friendlyName) == 0 {
-		if clip := strings.TrimSpace(name); clip != n.name {
-			n.friendlyName = name
-		}
-	}
-}
-
 func (n *ScopedNoun) makeNames() []string {
 	var out []string
-	// the ranked 0 name is used for default display when printing nouns
-	// (ex. "toy boat")
-	defaultName := n.name
-	if alt := n.friendlyName; len(alt) > 0 {
-		defaultName = alt
-	}
-	out = append(out, defaultName)
-	// write the normalized name if it was different
-	if defaultName != n.name {
-		out = append(out, n.name)
-	}
-	// now generate additional names by splitting the lowercase uniform name on the underscores:
+	// generate additional names by splitting the lowercase uniform name on the underscores:
 	split := strings.FieldsFunc(n.name, lang.IsBreak)
 	if cnt := len(split); cnt > 1 {
 		// in case the name was reduced due to multiple separators

@@ -16,7 +16,9 @@ import (
 func (cat *Catalog) AssertAlias(opShortName string, opAliases ...string) error {
 	return cat.Schedule(assert.AliasPhase, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
-		if n, e := getClosestNoun(d, opShortName); e != nil {
+		if shortName, ok := UniformString(opShortName); !ok {
+			err = errutil.New("invalid name", opShortName)
+		} else if n, e := d.GetClosestNoun(shortName); e != nil {
 			err = e
 		} else {
 			for _, a := range opAliases {
@@ -125,15 +127,4 @@ func (cat *Catalog) AssertDefinition(path ...string) error {
 		}
 		return
 	})
-}
-
-func getClosestNoun(d *Domain, rawName string) (ret *ScopedNoun, err error) {
-	if short, ok := UniformString(rawName); !ok {
-		err = InvalidString(rawName)
-	} else if noun, ok := d.GetClosestNoun(short); !ok {
-		err = errutil.New("unknown noun", rawName)
-	} else {
-		ret = noun
-	}
-	return
 }

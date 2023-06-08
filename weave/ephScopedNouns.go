@@ -1,8 +1,9 @@
 package weave
 
 import (
-	"math"
+	"database/sql"
 
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -26,33 +27,21 @@ func (d *Domain) GetNoun(name string) (ret *ScopedNoun, okay bool) {
 }
 
 // find the noun with the closest name in this scope
-func (d *Domain) GetClosestNoun(name string) (ret *ScopedNoun, okay bool) {
-	bestRank, bestNoun := math.MaxInt, ret
-	if e := d.visit(func(scope *Domain) (err error) {
-		// used the resolved nouns to generate a consistent ordering
-		if nouns, e := scope.resolvedNouns.GetTable(); e != nil {
-			err = e
-		} else {
-			for _, el := range nouns {
-				noun := el.Leaf().(*ScopedNoun)
-				names := noun.Names()
-				for i, cnt := 0, len(names); i < cnt && i < bestRank; i++ {
-					if name == names[i] {
-						bestRank, bestNoun = i, noun
-						// cant do better than the best
-						if i == 0 {
-							err = Visited
-							break
-						}
-					}
-				}
-			}
-		}
-		return
-	}); e != nil && e != Visited {
-		LogWarning(e)
-	} else if bestRank < math.MaxInt {
-		ret, okay = bestNoun, true
+func (d *Domain) GetClosestNoun(name string) (ret struct{ name string }, err error) {
+	if e := d.catalog.db.QueryRow(`
+	select mn.noun 
+	from mdl_name my 
+	join mdl_noun mn
+		on (mn.rowid = my.noun)
+	join domain_tree dt
+		on (dt.uses = my.domain)
+	where base = ?1
+	and my.name = ?2
+	order by my.rank, my.rowid asc
+	limit 1`, d.name, name).Scan(&ret.name); e == sql.ErrNoRows {
+		err = errutil.Fmt("%w couldn't find a noun named %s", mdl.Missing, name)
+	} else if e != nil {
+		err = errutil.New("database error", e)
 	}
 	return
 }

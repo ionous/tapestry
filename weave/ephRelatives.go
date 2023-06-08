@@ -92,15 +92,19 @@ func (d *Domain) findCardinality(rel string) (ret string, err error) {
 func (cat *Catalog) AssertRelative(opRel, opNoun, opOtherNoun string) error {
 	return cat.Schedule(assert.RelativePhase, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
-		if name, ok := UniformString(opRel); !ok {
+		if noun, ok := UniformString(opNoun); !ok {
+			err = InvalidString(opNoun)
+		} else if otherNoun, ok := UniformString(opOtherNoun); !ok {
+			err = InvalidString(opOtherNoun)
+		} else if name, ok := UniformString(opRel); !ok {
 			err = InvalidString(opRel)
 		} else if rel, ok := d.findPluralKind(name); !ok {
 			err = errutil.Fmt("unknown or invalid relation %q", opRel)
 		} else if card, e := d.findCardinality(rel); e != nil {
 			err = e
-		} else if first, e := getClosestNoun(d, opNoun); e != nil {
+		} else if first, e := d.GetClosestNoun(noun); e != nil {
 			err = e
-		} else if second, e := getClosestNoun(d, opOtherNoun); e != nil {
+		} else if second, e := d.GetClosestNoun(otherNoun); e != nil {
 			err = e
 		} else {
 			var addPair bool
