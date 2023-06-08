@@ -5,10 +5,9 @@ import (
 )
 
 type ScopedNoun struct {
-	// Requires    // kinds ( when resolved, can have one direct parent )
 	name        string
 	domain      *Domain
-	localRecord localRecord // store the values of the noun as a record.
+	localRecord localRecord // cache for a literal.RecordValue
 }
 
 func (n *ScopedNoun) Kind() (ret string, err error) {
@@ -26,8 +25,7 @@ func (n *ScopedNoun) Kind() (ret string, err error) {
 	return
 }
 
-// stores literal values because they are serializable
-// ( as opposed to generic values which aren't. )
+//
 func (n *ScopedNoun) recordValues(at string) (ret localRecord, err error) {
 	if n.localRecord.isValid() {
 		ret = n.localRecord

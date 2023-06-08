@@ -66,6 +66,9 @@ type Modeler interface {
   Rule(domain, pattern, target string, phase int, filter rt.BoolEval, exe []rt.Execute, at string) error
   // the noun half of what was Start.
   // domain, noun, field reference a join of Noun and Kind to get a filtered Field.
+
+  // FIX: nouns should be able to store EVALS too
+  // example: an object with a counter in its description.
   Value(domain, noun, field string, value literal.LiteralValue, at string) error
 
   //
