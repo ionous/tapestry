@@ -34,6 +34,9 @@ func NewModeler(db *sql.DB) (ret Modeler, err error) {
 		domain: ps.Prep(db,
 			tables.Insert("mdl_domain", "domain", "requires", "at"),
 		),
+		fact: ps.Prep(db,
+			tables.Insert("mdl_fact", "domain", "fact", "value", "at"),
+		),
 		field: ps.Prep(db,
 			tables.Insert("mdl_field", "domain", "kind", "field", "affinity", "type", "at"),
 		),
@@ -107,6 +110,7 @@ type Writer struct {
 	assign,
 	check,
 	domain,
+	fact,
 	field,
 	grammar,
 	kind,
@@ -286,67 +290,38 @@ func (m *Writer) Domain(domain, requires, at string) (err error) {
 	return
 }
 
-func (m *Writer) Member(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
-	if kid, e := m.findRequiredKind(domain, kind); e != nil {
-		err = errutil.Fmt("%w trying to add field %q", e, field)
-	} else if cls, e := m.findOptionalKind(domain, cls); e != nil {
-		err = errutil.Fmt("%w trying to write field %q", e, field)
+func (m *Writer) Fact(domain, fact, value, at string) (err error) {
+	if domain, e := m.findDomain(domain); e != nil {
+		err = e
 	} else {
-		err = m.addField(domain, kid, cls, field, aff, at)
-	}
-	return
-}
-
-func (m *Writer) Parameter(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
-	if kid, e := m.findRequiredKind(domain, kind); e != nil {
-		err = errutil.Fmt("%w trying to add parameter %q", e, field)
-	} else if cls, e := m.findOptionalKind(domain, cls); e != nil {
-		err = errutil.Fmt("%w trying to write parameter %q", e, field)
-	} else if kid.domain != domain {
-		err = errutil.Fmt("%w new parameter %q of %q expected in the same domain as the original declaration; was %q now %q",
-			Conflict, field, kind, kid.domain, domain)
-	} else if e := m.addField(domain, kid, cls, field, aff, at); e != nil {
-		err = e
-	} else if res, e := m.db.Exec(`
-		insert into mdl_pat(kind, labels, result)
-		values(?1, ?2, null)
-		on conflict do update 
-		set labels = labels ||','|| ?2
-		where result is null
-		`, kid.id, field); e != nil {
-		err = e
-	} else if rows, e := res.RowsAffected(); e != nil {
-		err = e
-	} else if rows == 0 {
-		err = errutil.Fmt("unexpected parameter %q for kind %q in domain %q",
-			field, kind, domain)
-	}
-	return
-}
-
-func (m *Writer) Result(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
-	if kid, e := m.findRequiredKind(domain, kind); e != nil {
-		err = errutil.Fmt("%w trying to add result %q", e, field)
-	} else if cls, e := m.findOptionalKind(domain, cls); e != nil {
-		err = errutil.Fmt("%w trying to write result %q", e, field)
-	} else if kid.domain != domain {
-		err = errutil.Fmt("%w new result %q of %q expected in the same domain as the original declaration; was %q now %q",
-			Conflict, field, kind, kid.domain, domain)
-	} else if e := m.addField(domain, kid, cls, field, aff, at); e != nil {
-		err = e
-	} else if res, e := m.db.Exec(`
-		insert into mdl_pat(kind, labels, result)
-		values(?1, null, ?2)
-		on conflict do update 
-		set result=?2
-		where result is null
-		`, kid.id, field); e != nil {
-		err = e
-	} else if rows, e := res.RowsAffected(); e != nil {
-		err = e
-	} else if rows == 0 {
-		err = errutil.Fmt("unexpected result %q for kind %q in domain %q",
-			field, kind, domain)
+		var prev struct {
+			domain, value string
+		}
+		q := m.db.QueryRow(`
+		select mx.domain, mx.value
+		from mdl_fact mx
+		join domain_tree
+			on (uses = domain)
+		where base = ?1
+		and fact = ?2`, domain, fact)
+		switch e := q.Scan(&prev.domain, &prev.value); e {
+		case sql.ErrNoRows:
+			if _, e := m.fact.Exec(domain, fact, value, at); e != nil {
+				err = errutil.Fmt("database error", e)
+			}
+		case nil:
+			if prev.value != value {
+				err = errutil.Fmt("%w fact %q was %q in domain %q and now %q in domain %q",
+					Conflict, fact, value, prev.domain, value, domain)
+			} else {
+				// do we want to warn about duplicate facts? isnt that kind of the point of them?
+				// maybe eat at the weave level?
+				err = errutil.Fmt("%w fact %q already declared in domain %q and now domain %q",
+					Duplicate, fact, prev.domain, domain)
+			}
+		default:
+			err = errutil.New("database error", e)
+		}
 	}
 	return
 }
@@ -424,6 +399,17 @@ func (m *Writer) Kind(domain, kind, parent, at string) (err error) {
 	return
 }
 
+func (m *Writer) Member(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
+	if kid, e := m.findRequiredKind(domain, kind); e != nil {
+		err = errutil.Fmt("%w trying to add field %q", e, field)
+	} else if cls, e := m.findOptionalKind(domain, cls); e != nil {
+		err = errutil.Fmt("%w trying to write field %q", e, field)
+	} else {
+		err = m.addField(domain, kid, cls, field, aff, at)
+	}
+	return
+}
+
 func (m *Writer) Name(domain, noun, name string, rank int, at string) (err error) {
 	if noun, e := m.findRequiredNoun(domain, noun, nounSansKind); e != nil {
 		err = e // ^ for now, this can be a derived domain
@@ -441,7 +427,7 @@ func (m *Writer) Name(domain, noun, name string, rank int, at string) (err error
 		} else if exists {
 			err = errutil.Fmt("%w %q already an alias of %q", Duplicate, name, noun.name)
 		} else if _, e := m.name.Exec(domain, noun.id, name, rank, at); e != nil {
-			err = errutil.Fmt("database error writing name %q for noun %q in domain %q, %v", name, noun.name, domain, e)
+			err = errutil.Fmt("database error", e)
 		}
 	}
 	return
@@ -565,6 +551,32 @@ func (m *Writer) Pair(domain, rel, oneNoun, otherNoun, at string) (err error) {
 	}
 	return
 }
+func (m *Writer) Parameter(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
+	if kid, e := m.findRequiredKind(domain, kind); e != nil {
+		err = errutil.Fmt("%w trying to add parameter %q", e, field)
+	} else if cls, e := m.findOptionalKind(domain, cls); e != nil {
+		err = errutil.Fmt("%w trying to write parameter %q", e, field)
+	} else if kid.domain != domain {
+		err = errutil.Fmt("%w new parameter %q of %q expected in the same domain as the original declaration; was %q now %q",
+			Conflict, field, kind, kid.domain, domain)
+	} else if e := m.addField(domain, kid, cls, field, aff, at); e != nil {
+		err = e
+	} else if res, e := m.db.Exec(`
+		insert into mdl_pat(kind, labels, result)
+		values(?1, ?2, null)
+		on conflict do update 
+		set labels = labels ||','|| ?2
+		where result is null
+		`, kid.id, field); e != nil {
+		err = e
+	} else if rows, e := res.RowsAffected(); e != nil {
+		err = e
+	} else if rows == 0 {
+		err = errutil.Fmt("unexpected parameter %q for kind %q in domain %q",
+			field, kind, domain)
+	}
+	return
+}
 
 func (m *Writer) Pat(domain, kind, labels, result string) (err error) {
 	// tbd: labels are are comma-separated field names, should it be field ids?
@@ -623,6 +635,33 @@ func (m *Writer) Rel(domain, relKind, oneKind, otherKind, cardinality, at string
 		err = e
 	} else {
 		_, err = m.rel.Exec(rel.id, one.id, other.id, cardinality, at)
+	}
+	return
+}
+
+func (m *Writer) Result(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
+	if kid, e := m.findRequiredKind(domain, kind); e != nil {
+		err = errutil.Fmt("%w trying to add result %q", e, field)
+	} else if cls, e := m.findOptionalKind(domain, cls); e != nil {
+		err = errutil.Fmt("%w trying to write result %q", e, field)
+	} else if kid.domain != domain {
+		err = errutil.Fmt("%w new result %q of %q expected in the same domain as the original declaration; was %q now %q",
+			Conflict, field, kind, kid.domain, domain)
+	} else if e := m.addField(domain, kid, cls, field, aff, at); e != nil {
+		err = e
+	} else if res, e := m.db.Exec(`
+		insert into mdl_pat(kind, labels, result)
+		values(?1, null, ?2)
+		on conflict do update 
+		set result=?2
+		where result is null
+		`, kid.id, field); e != nil {
+		err = e
+	} else if rows, e := res.RowsAffected(); e != nil {
+		err = e
+	} else if rows == 0 {
+		err = errutil.Fmt("unexpected result %q for kind %q in domain %q",
+			field, kind, domain)
 	}
 	return
 }

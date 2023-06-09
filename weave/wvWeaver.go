@@ -3,6 +3,7 @@ package weave
 import (
 	"database/sql"
 	"errors"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang"
@@ -111,8 +112,8 @@ func (cat *Catalog) AssertDefinition(path ...string) error {
 		if end := len(path) - 1; end <= 0 {
 			err = errutil.New("path too short", path)
 		} else {
-			path, value := path[:end], path[end]
-			err = d.AddDefinition(MakeKey(path...), at, value)
+			key, value := strings.Join(path[:end], "/"), path[end]
+			err = cat.writer.Fact(d.name, key, value, at)
 		}
 		return
 	})

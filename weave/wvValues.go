@@ -1,8 +1,6 @@
 package weave
 
 import (
-	"errors"
-
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
@@ -28,12 +26,7 @@ func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, opV
 		} else if value := opValue; value == nil {
 			err = errutil.New("null value", opNoun, opField)
 		} else {
-			var conflict *Conflict
-			if e := rv.writeValue(noun.name, at, field, path, value); errors.As(e, &conflict) && conflict.Reason == Duplicated {
-				LogWarning(e)
-			} else {
-				err = e // might be nil
-			}
+			return rv.writeValue(noun.name, at, field, path, value)
 		}
 		return
 	})

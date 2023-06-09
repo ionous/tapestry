@@ -3,16 +3,16 @@
  */
 
 /* 
+ * stored tests, which run a program to verify it produces the expected value. 
+ * fix: shouldnt we also be writing class of the value ? 
+ */ 
+create table mdl_check( domain text not null, name text, value blob, affinity text, prog blob, at text, primary key( domain, name ));
+/* 
  * initialization for fields of kinds.
  * the value ( an Assignment ) is defined when the field is defined; 
  * meaning there's no separate domain or origin(at). 
  */ 
 create table mdl_default( field int not null, value blob, primary key( field ) );
-/* 
- * stored tests, which run a program to verify it produces the expected value. 
- * fix: shouldnt we also be writing class of the value ? 
- */ 
-create table mdl_check( domain text not null, name text, value blob, affinity text, prog blob, at text, primary key( domain, name ));
 /* 
  * pairs of domain name and (domain) dependencies. 
  * domain names are considered globally unique.
@@ -20,6 +20,14 @@ create table mdl_check( domain text not null, name text, value blob, affinity te
  * the application is responsible for ensuring no cyclic dependencies.
  */
 create table mdl_domain( domain text not null, requires text, at text, primary key( domain, requires ));
+/* 
+ * arbitrary key-value information about the game world.
+ * theoretically, they could be used by macros to affect the weave, or by the runtime to affect gameplay;
+ * currently, they exist to detect "semantic" conflicts:
+ * ex. an in-game password specified as "secret" in one place, and "mongoose" some place else.
+ * the value is always a string right now, potentially could be expanded to a literal or assignment.
+ */ 
+create table mdl_fact( domain text not null, fact text, value text, at text, primary key( domain, fact ));
 /* 
  * properties for a kind. 
  * type is most often used for affinities of type "text", and usually indicates a kind ( from mdl_kind )

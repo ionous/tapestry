@@ -22,13 +22,6 @@ from run_domain rd
 where rd.active > 0;
 
 create view if not exists
-active_grammar as 
-select mg.*
-from mdl_grammar mg 
-join active_domains
-	using (domain);	
-
-create view if not exists
 active_kinds as 
 select ds.domain, mk.rowid as kind, mk.kind as name, mk.path, mk.at
 from active_domains ds
@@ -50,7 +43,6 @@ select ds.domain, mn.rowid as noun, mn.noun as name, mn.kind, mn.at
 from active_domains ds
 join mdl_noun mn 
 	using (domain);
-
 
 create view if not exists
 active_rev as 

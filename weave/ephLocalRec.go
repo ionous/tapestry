@@ -3,6 +3,7 @@ package weave
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -120,21 +121,15 @@ func (in *innerRecord) findField(field string) (ret literal.LiteralValue, okay b
 // uses stringer ( of all things :/ ) to compare potentially conflicting values.
 // FIX: if you have to do it this way... why not serialize it to compact format?
 // you could even store the whole literal that way -- saving some duplication of effort during write.
-func compareValue(noun, field, at string, oldValue, newValue literal.LiteralValue) error {
-	why, was, wants := Redefined, field, field
+func compareValue(noun, field, at string, oldValue, newValue literal.LiteralValue) (err error) {
+	why, was, wants := mdl.Conflict, field, field
 	type stringer interface{ String() string }
 	if try, ok := newValue.(stringer); ok {
 		if curr, ok := oldValue.(stringer); ok {
 			if try, curr := try.String(), curr.String(); try == curr {
-				was, wants, why = curr, try, Duplicated
+				was, wants, why = curr, try, mdl.Duplicate
 			}
 		}
 	}
-	key := MakeKey(noun, field)
-	return newConflict(
-		key,
-		why,
-		Definition{key, at, was},
-		wants,
-	)
+	return errutil.New("%w in field %q of noun %q was %v wants %v", why, noun, field, was, wants)
 }

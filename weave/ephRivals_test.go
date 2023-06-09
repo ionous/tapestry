@@ -10,7 +10,7 @@ import (
 
 // using the plurals as an example,
 // verify the basic algorithm behind rival testing.
-func TestRivals(t *testing.T) {
+func TestRivalDB(t *testing.T) {
 	db := testdb.Open(t.Name(), testdb.Memory, "")
 	defer db.Close()
 	if e := tables.CreateAll(db); e != nil {
@@ -29,16 +29,25 @@ func TestRivals(t *testing.T) {
 	('p1', 1),
 	('p2', 1)`); e != nil {
 		t.Fatal(e)
-	} else if conflicts, e := findRivals(db); e != nil {
-		t.Fatal(e)
 	} else {
-		expect := []conflict{
-			{Category: "plural", Domain: "p1", Key: "people", Value: "human"},
-			{Category: "plural", Domain: "p2", Key: "people", Value: "person"},
+		type conflict struct {
+			Category, Domain, Key, Value, At string
 		}
-		if diff := pretty.Diff(expect, conflicts); len(diff) > 0 {
-			t.Log("got", pretty.Sprint(conflicts))
-			t.Fatal("unexpected conflicts", diff)
+		var conflicts []conflict
+		if e := findRivals(db, func(group, domain, key, value, at string) (_ error) {
+			conflicts = append(conflicts, conflict{group, domain, key, value, at})
+			return
+		}); e != nil {
+			t.Fatal(e)
+		} else {
+			expect := []conflict{
+				{Category: "plural", Domain: "p1", Key: "people", Value: "human"},
+				{Category: "plural", Domain: "p2", Key: "people", Value: "person"},
+			}
+			if diff := pretty.Diff(expect, conflicts); len(diff) > 0 {
+				t.Log("got", pretty.Sprint(conflicts))
+				t.Fatal("unexpected conflicts", diff)
+			}
 		}
 	}
 }

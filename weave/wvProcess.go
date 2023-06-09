@@ -5,8 +5,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-var TempSplit = assert.MacroPhase
-
 // walk the domains and run the commands remaining in their queues
 func (cat *Catalog) AssembleCatalog() (err error) {
 	var ds []*Domain
@@ -24,33 +22,11 @@ func (cat *Catalog) AssembleCatalog() (err error) {
 		}
 	}
 	if err == nil {
-		err = cat.oldProcess(ds)
-	}
-	return
-}
-
-// FIX: DONT want to walk across all domains first.
-// currently: walks across all domains for each phase to support things like fields:
-// which exist per kind but which can be added to by multiple domains.
-func (cat *Catalog) oldProcess(ds []*Domain) (err error) {
-Loop:
-	for p := TempSplit; p < assert.NumPhases; p++ {
-		for _, d := range ds {
-			cat.processing.Push(d)
-			ctx := Weaver{d: d, phase: p, Runtime: cat.run}
-			if e := d.runPhase(&ctx); e != nil {
-				err = e
-				break Loop
-			}
-			cat.processing.Pop()
-		}
-	}
-	if err == nil && cat.writer != nil {
-		for p := assert.Phase(0); p < assert.NumPhases; p++ {
-			if e := cat.writePhase(p); e != nil {
-				err = e
-				break
-			}
+		// REMOVE:
+		if e := cat.WriteValues(cat.writer); e != nil {
+			err = e
+		} else {
+			err = cat.WriteRules(cat.writer)
 		}
 	}
 	return
@@ -89,7 +65,7 @@ func (cat *Catalog) processDomain(d *Domain) (err error) {
 		err = e
 	} else {
 		cat.processing.Push(d)
-		for p := assert.Phase(0); p < TempSplit; p++ {
+		for p := assert.Phase(0); p < assert.NumPhases; p++ {
 			ctx := Weaver{d: d, phase: p, Runtime: cat.run}
 			if e := d.runPhase(&ctx); e != nil {
 				err = e
