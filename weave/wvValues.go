@@ -32,16 +32,23 @@ func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, opV
 	})
 }
 
-func (c *Catalog) WriteValues(m mdl.Modeler) error {
-	return forEachNoun(c, func(n *ScopedNoun) (err error) {
+// fix: at some point it'd be nice to write values as they are generated
+// the basic idea i think would be to write each field AND sub-record path individually
+// and, on write, do a test to ensure the path is meaningful,
+// and that no "directory value" value exists for any sub path
+// ex. "a.b.c" is okay, so long as there's no record stored at "a.b" directly.
+// the runtime would change the way it reconstitutes values to handle all that.
+func (cat *Catalog) WriteValues(m mdl.Modeler) (err error) {
+Loop:
+	for _, n := range cat.domainNouns {
 		if rv := n.localRecord; rv.isValid() {
 			for _, fv := range rv.rec.Fields {
 				if e := m.Value(n.domain.name, n.name, fv.Field, fv.Value, rv.at); e != nil {
 					err = e
-					break
+					break Loop
 				}
 			}
 		}
-		return
-	})
+	}
+	return
 }
