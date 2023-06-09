@@ -92,19 +92,14 @@ func (d *Domain) addKind(name, parent, at string) (err error) {
 	return
 }
 
-func (cat *Catalog) AssertCheck(opName string, opExe []rt.Execute, opExpect literal.LiteralValue) error {
+func (cat *Catalog) AssertCheck(opName string, prog []rt.Execute, expect literal.LiteralValue) error {
 	// uses domain phase, because it needs to ensure a domain exists
 	return cat.Schedule(assert.PostDomain, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
 		if name, ok := UniformString(opName); !ok {
 			err = InvalidString(opName)
 		} else {
-			check := d.EnsureCheck(name, at)
-			if e := check.setExpectation(opExpect); e != nil {
-				err = e
-			} else if e := check.setProg(opExe); e != nil {
-				err = e
-			}
+			err = cat.writer.Check(d.name, name, expect, prog, at)
 		}
 		return
 	})

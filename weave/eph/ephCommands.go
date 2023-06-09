@@ -38,25 +38,25 @@ func (op *BeginDomain) Assert(k assert.Assertions) (err error) {
 }
 
 // Checks
-type Checks struct {
-	Name   string               `if:"label=check,type=text"`
-	Expect literal.LiteralValue `if:"label=expect,optional"`
-	Exe    []rt.Execute         `if:"label=does"`
-}
+// type Checks struct {
+// 	Name   string               `if:"label=check,type=text"`
+// 	Expect literal.LiteralValue `if:"label=expect,optional"`
+// 	Exe    []rt.Execute         `if:"label=does"`
+// }
 
-func (op *Checks) Assert(k assert.Assertions) (err error) {
-	return k.AssertCheck(op.Name, op.Exe, op.Expect)
-}
+// func (op *Checks) Assert(k assert.Assertions) (err error) {
+// 	return k.AssertCheck(op.Name, op.Exe, op.Expect)
+// }
 
-type Definition struct {
-	Path  []string
-	Value string
-}
+// type Definition struct {
+// 	Path  []string
+// 	Value string
+// }
 
-func (op *Definition) Assert(k assert.Assertions) (err error) {
-	path := append(op.Path, op.Value)
-	return k.AssertDefinition(path...)
-}
+// func (op *Definition) Assert(k assert.Assertions) (err error) {
+// 	path := append(op.Path, op.Value)
+// 	return k.AssertDefinition(path...)
+// }
 
 // Directives
 type Directives struct {
@@ -104,10 +104,10 @@ func (op *Kinds) Assert(k assert.Assertions) (err error) {
 }
 
 // EphMacro - hijacks pattern registration for use with macros
-type Macro struct {
-	Patterns
-	MacroStatements []rt.Execute
-}
+// type Macro struct {
+// 	Patterns
+// 	MacroStatements []rt.Execute
+// }
 
 // Nouns
 type Nouns struct {
@@ -176,18 +176,18 @@ func (op *Plurals) Assert(k assert.Assertions) (err error) {
 
 // Refs Implies some fact about the world that will be defined elsewhere.
 // Reuses the set of ephemera to limit redefinition. Not all are valid.
-type Refs struct {
-	Refs []Ephemera `if:"label=refs"`
-}
+// type Refs struct {
+// 	Refs []Ephemera `if:"label=refs"`
+// }
 
-func (op *Refs) Assert(k assert.Assertions) (err error) {
-	refsNotImplemented.PrintOnce()
-	return
-}
+// func (op *Refs) Assert(k assert.Assertions) (err error) {
+// 	refsNotImplemented.PrintOnce()
+// 	return
+// }
 
-// refs imply some fact about the world that will be defined elsewhere.
-// assembly would verify that the referenced thing really exists
-var refsNotImplemented PrintOnce = "refs not implemented"
+// // refs imply some fact about the world that will be defined elsewhere.
+// // assembly would verify that the referenced thing really exists
+// var refsNotImplemented PrintOnce = "refs not implemented"
 
 // Relations
 type Relations struct {

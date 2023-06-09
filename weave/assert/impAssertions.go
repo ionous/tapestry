@@ -80,7 +80,8 @@ type Assertions interface {
 	// fix: target should become part of the guard.
 	// and/or rule should be wrapped up more like "grammar.Directive"
 	AssertRule(name string, target string, guard rt.BoolEval, flags EventTiming, do []rt.Execute) error
-
+	// any application defined key-value pair
+	// ( the last element is the value, the prefix is the key )
 	AssertDefinition(path ...string) error
 }
 

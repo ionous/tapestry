@@ -254,9 +254,6 @@ func (c *Catalog) writePhase(p assert.Phase) (err error) {
 	case assert.RulePhase:
 		err = c.WriteRules(w)
 
-	case assert.PostDomain:
-		// when to write these?
-		err = c.WriteChecks(w)
 	}
 	return
 }

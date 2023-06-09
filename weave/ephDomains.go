@@ -17,8 +17,8 @@ type Domain struct {
 	name    string
 	catalog *Catalog
 	defs    Artifacts
-	checks  asmChecks
-	rules   map[string]Rulesets // pattern name to rules for that pattern
+
+	rules map[string]Rulesets // pattern name to rules for that pattern
 
 	// a domain that's fully processed will be in some final state
 	currPhase assert.Phase

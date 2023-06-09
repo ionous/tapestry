@@ -134,7 +134,6 @@ func TestRelativeManyOneViolation(t *testing.T) {
 			"e", "r_x_1", "c",
 		)...,
 	)
-
 	_, e := dt.Assemble()
 	if ok, e := okError(t, e, `Conflict`); !ok {
 		t.Fatal(e)
