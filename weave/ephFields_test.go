@@ -107,8 +107,7 @@ func TestFieldsConflict(t *testing.T) {
 
 // rival fields are fine so long as they match
 // ( really the fields exist all at the same time )
-
-func xxxTestFieldsMatchingRivals(t *testing.T) {
+func TestFieldsMatchingRivals(t *testing.T) {
 	var warnings Warnings
 	unwarn := warnings.catch(t)
 	defer unwarn()
@@ -126,8 +125,9 @@ func xxxTestFieldsMatchingRivals(t *testing.T) {
 	)
 	dt.makeDomain(dd("z", "c", "d"))
 	// fix: is this supposed to be an error?
-	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Duplicated kinds`); !ok {
+	if _, e := dt.Assemble(); e != nil {
+		t.Fatal(e)
+	} else if ok, e := okError(t, warnings.shift(), `Duplicate field "t" for kind "k"`); !ok {
 		t.Fatal("unexpected warning:", e)
 	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)

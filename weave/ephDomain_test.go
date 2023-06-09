@@ -64,46 +64,6 @@ func TestDomainCatchCycles(t *testing.T) {
 	}
 }
 
-// domains should be in "most" core to least order
-// each line should have all the dependencies it needs
-func xxxxxTestDomainTable(t *testing.T) {
-	// dt := newTestShuffle(t.Name(), false) // because of ids
-	// defer dt.Close()
-	// dt.makeDomain(dd("a", "b", "d"))
-	// dt.makeDomain(dd("b", "c", "d"))
-	// dt.makeDomain(dd("c", "e"))
-	// dt.makeDomain(dd("d"))
-	// dt.makeDomain(dd("e"))
-	// if cat, e := dt.Assemble(); e != nil {
-	// 	t.Fatal(e)
-	// } else if out, e := dt.readDomains(); e != nil {
-	// 	t.Fatal(e)
-	// } else if diff := pretty.Diff(out, []string{
-	// 		"d:",
-	// 		"e:",
-	// 		"c:e",
-	// 		"b:d,c", // fix? why does d wind up being listed before c? ( and in ancestors too )
-	// 		"a:b",
-	// 	}); len(diff) > 0 {
-	// 		t.Log("parents:", pretty.Sprint(out))
-	// 		t.Fatal(diff)
-	// 	} else {
-	// 		if out, e := tables.QueryStrings(dt.db,
-	// 			`select domain  || rowid || ':' || path from mdl_domain`); e != nil {
-	// 			t.Fatal(e)
-	// 		} else if diff := pretty.Diff(out, []string{
-	// 			"a1:",
-	// 			"b2:",
-	// 			"c3:b2,",
-	// 			"d4:a1,c3,b2,",
-	// 			"e5:d4,a1,c3,b2,",
-	// 		}); len(diff) > 0 {
-	// 			t.Log("ancestors:", pretty.Sprint(out))
-	// 			t.Fatal(diff)
-	// 		}
-	// 	}
-}
-
 func TestDomainWhenUndeclared(t *testing.T) {
 	dt := newTest(t.Name())
 	defer dt.Close()

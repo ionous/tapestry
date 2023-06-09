@@ -14,7 +14,7 @@ func TestPluralConflict(t *testing.T) {
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		// one singular can have several plurals:
-		// exTestAncestryMultipleParents. "person" can be "people" or "persons".
+		// ex. "person" can be "people" or "persons".
 		// but the same plural "persons" cant have multiple singular definitions
 		&eph.Plurals{Singular: "raven", Plural: "unkindness"},
 		&eph.Plurals{Singular: "witch", Plural: "unkindness"},
