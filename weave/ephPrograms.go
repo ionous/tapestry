@@ -7,7 +7,7 @@ import (
 
 // jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
 func (cat *Catalog) AssertGrammar(opName string, prog *grammar.Directive) error {
-	return cat.Schedule(assert.DirectivePhase, func(ctx *Weaver) error {
+	return cat.Schedule(assert.GrammarPhase, func(ctx *Weaver) error {
 		d, at := ctx.d, ctx.at
 		return cat.writer.Grammar(d.name, opName, prog, at)
 	})

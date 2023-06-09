@@ -40,7 +40,7 @@ const (
 	RelativePhase // initial relations between nouns
 	RulePhase     // assembles for patterns
 	AliasPhase
-	DirectivePhase // more grammar
+	GrammarPhase // more grammar
 	PostDomain
 	NumPhases
 )
