@@ -633,8 +633,15 @@ func (m *Writer) Rel(domain, relKind, oneKind, otherKind, cardinality, at string
 		err = e
 	} else if other, e := m.findRequiredKind(domain, otherKind); e != nil {
 		err = e
+	} else if _, e := m.rel.Exec(rel.id, one.id, other.id, cardinality, at); e != nil {
+		err = e // improve the error result if the relation existed vefore?
 	} else {
-		_, err = m.rel.Exec(rel.id, one.id, other.id, cardinality, at)
+		a, b := makeRel(oneKind, otherKind, cardinality)
+		if e := m.addField(domain, rel, one, a.lhs(), a.affinity(), at); e != nil {
+			err = e
+		} else if e := m.addField(domain, rel, other, b.rhs(), b.affinity(), at); e != nil {
+			err = e
+		}
 	}
 	return
 }
