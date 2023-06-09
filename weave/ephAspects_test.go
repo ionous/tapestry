@@ -83,9 +83,8 @@ func TestAspectConflictingFields(t *testing.T) {
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{AspectParam("a")}},
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "one", Affinity: affine.Text}}},
 	)
-	if _, e := dt.Assemble(); e == nil {
-		t.Fatal("expected error")
-	} else if ok, e := okError(t, e, "Conflict"); !ok {
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `Conflict`); !ok {
 		t.Fatal(e)
 	}
 }
@@ -108,9 +107,8 @@ func TestAspectConflictingTraits(t *testing.T) {
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{AspectParam("a")}},
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{AspectParam("b")}},
 	)
-	if _, e := dt.Assemble(); e == nil {
-		t.Fatal("expected error")
-	} else if ok, e := okError(t, e, "Conflict"); !ok {
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `Conflict`); !ok {
 		t.Fatal(e)
 	}
 }

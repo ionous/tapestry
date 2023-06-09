@@ -40,8 +40,6 @@ func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, opV
 }
 
 func (c *Catalog) WriteValues(m mdl.Modeler) error {
-	// FIX: nouns should be able to store EVALS too
-	// example: an object with a counter in its description.
 	return forEachNoun(c, func(n *ScopedNoun) (err error) {
 		if rv := n.localRecord; rv.isValid() {
 			for _, fv := range rv.rec.Fields {

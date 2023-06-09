@@ -468,16 +468,48 @@ func (m *Writer) Opposite(domain, a, b, at string) (err error) {
 	return
 }
 
-func (m *Writer) Pair(domain, relKind, oneNoun, otherNoun, at string) (err error) {
-	if kid, e := m.findRequiredKind(domain, relKind); e != nil {
+func (m *Writer) Pair(domain, rel, oneNoun, otherNoun, at string) (err error) {
+	if rel, e := m.findRequiredKind(domain, rel); e != nil {
 		err = e
 	} else if one, e := m.findRequiredNoun(domain, oneNoun, nounSansKind); e != nil {
 		err = e
 	} else if other, e := m.findRequiredNoun(domain, otherNoun, nounSansKind); e != nil {
 		err = e
+	} else if card, e := m.findCardinality(rel); e != nil {
+		err = e
 	} else {
-		// uses the domain of the declaration
-		_, err = m.pair.Exec(domain, kid.id, one.id, other.id, at)
+		var reverse, multi bool
+		switch card {
+		case tables.ONE_TO_ONE:
+			// sort the names so that the left column is always less than the second
+			// simplifies testing of the conflicts for one-to-one
+			reverse = true
+			if one.name > other.name {
+				one, other = other, one
+			}
+		case tables.ONE_TO_MANY:
+			// for a given rhs, there can be only one lhs
+			reverse = false
+
+		case tables.MANY_TO_ONE:
+			// for a given lhs, there can be only one rhs
+			reverse = true
+
+		case tables.MANY_TO_MANY:
+			multi = true
+
+		default:
+			// well, it should have been one of those.
+			err = errutil.Fmt("invalid cardinality %q for %q", card, rel.name)
+		}
+		if err == nil {
+			if e := m.checkPair(domain, rel, one, other, reverse, multi); e != nil {
+				err = e
+			} else {
+				err = m.addPair(domain, rel, one, other, at)
+			}
+		}
+
 	}
 	return
 }

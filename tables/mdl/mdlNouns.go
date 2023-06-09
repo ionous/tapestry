@@ -8,7 +8,7 @@ import (
 )
 
 type nounInfo struct {
-	id     int    // unique id of the noun
+	id     int64  // unique id of the noun
 	name   string // validated name of the noun
 	domain string // validated domain name
 

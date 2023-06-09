@@ -29,7 +29,7 @@ func updatePath(res sql.Result, path *string) (err error) {
 }
 
 type kindInfo struct {
-	id        int    // unique id of the kind
+	id        int64  // unique id of the kind
 	name      string // validated name of the kind
 	domain    string // validated domain name
 	path      string // comma separated ids of ancestors: ,2,1,
@@ -39,7 +39,7 @@ type kindInfo struct {
 // path starting with the kind's own id. ",id,...,"
 func (ki *kindInfo) fullpath() string {
 	if ki.id > 0 && len(ki._fullpath) == 0 {
-		ki._fullpath = "," + strconv.Itoa(ki.id) + ki.path
+		ki._fullpath = "," + strconv.FormatInt(ki.id, 10) + ki.path
 	}
 	return ki._fullpath
 }

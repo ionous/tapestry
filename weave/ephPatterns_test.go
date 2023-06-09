@@ -184,11 +184,9 @@ func TestPatternSplitDomain(t *testing.T) {
 				Affinity: affine.Text,
 			}}},
 	)
-
-	if _, e := dt.Assemble(); e == nil {
-		t.Fatal("expected an error")
-	} else {
-		t.Log("okay", e)
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `Conflict`); !ok {
+		t.Fatal(e)
 	}
 }
 

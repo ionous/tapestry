@@ -14,12 +14,11 @@ type DomainFinder interface {
 }
 
 type Domain struct {
-	name      string
-	catalog   *Catalog
-	defs      Artifacts
-	checks    asmChecks
-	rules     map[string]Rulesets  // pattern name to rules for that pattern
-	relatives map[string]Relatives // relation name to pairs of nouns
+	name    string
+	catalog *Catalog
+	defs    Artifacts
+	checks  asmChecks
+	rules   map[string]Rulesets // pattern name to rules for that pattern
 
 	// a domain that's fully processed will be in some final state
 	currPhase assert.Phase
@@ -120,46 +119,6 @@ func (d *Domain) AddDefinition(key keyType, at, value string) (err error) {
 			d.defs = make(Artifacts)
 		}
 		d.defs[key.hash] = Definition{key: key, at: at, value: value}
-	}
-	return
-}
-
-// add a definition that can be overridden in subsequent domains.
-// returns "okay" if the refinement was added ( ex. not duplicated )
-func (d *Domain) RefineDefinition(key keyType, at, value string) (okay bool, err error) {
-	var de domainError
-	var conflict *Conflict
-	if e := d.AddDefinition(key, at, value); e == nil {
-		okay = true
-	} else if !errors.As(e, &de) || !errors.As(de.Err, &conflict) {
-		err = e // some unknown error?
-	} else {
-		switch conflict.Reason {
-		case Redefined:
-			// redefined definitions are only a problem in the same domain.
-			// ( ie. we allow subdomains to reset / override the plurals )
-			if d.name == de.Domain {
-				err = e
-			} else {
-				okay = true
-				// FIX! see Domain.AddDefinition
-				// the earlier "AddDefinition" doesnt actually add it because this is a redefinition
-				// *but* we actually do want that information....
-				if d.defs == nil {
-					d.defs = make(Artifacts)
-				}
-				d.defs[key.hash] = Definition{key: key, at: at, value: value}
-				LogWarning(e) // even though its okay, let the user know.
-			}
-		case Duplicated:
-			// duplicated definitions are all okay;
-			// but if its in a derived domain: let the user know.
-			if de.Domain != d.name {
-				LogWarning(e)
-			}
-		default:
-			err = e // some unknown conflict?
-		}
 	}
 	return
 }

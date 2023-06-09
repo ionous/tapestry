@@ -176,7 +176,7 @@ type conflict struct {
 }
 
 func (c conflict) Error() string {
-	return errutil.Sprint("unexpected conflict in domain %q at %q for %s %q",
+	return errutil.Sprintf("Conflict in domain %q at %q for %s %q",
 		c.Domain, c.At, c.Category, c.Value)
 }
 
@@ -250,9 +250,6 @@ func (c *Catalog) writePhase(p assert.Phase) (err error) {
 	switch p {
 	case assert.ValuePhase:
 		err = c.WriteValues(w)
-
-	case assert.RelativePhase:
-		err = c.WritePairs(w)
 
 	case assert.RulePhase:
 		err = c.WriteRules(w)

@@ -300,7 +300,7 @@ func (dt *domainTest) readPairs() ([]string, error) {
 		on(oneNoun = one.rowid)
 	join mdl_noun other
 		on(otherNoun = other.rowid)
-	order by dr.rank, mk.kind`)
+	order by dr.rank, mk.kind, one.noun, other.noun `)
 }
 
 // domain, pattern, labels, result field

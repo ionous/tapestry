@@ -11,26 +11,25 @@ import (
 
 // follow along with relative test except add list of ephemera
 func TestRelativeFormation(t *testing.T) {
+	var warnings Warnings
+	unwarn := warnings.catch(t)
+	defer unwarn()
 	dt := newTest(t.Name())
 	defer dt.Close()
 	dt.makeDomain(dd("a"),
 		newRelativeTest(
 			"a", "r_1_1", "a",
 			"b", "r_1_1", "c",
-			"c", "r_1_1", "b",
+			"c", "r_1_1", "b", // duplicates the relation
 			"z", "r_1_1", "e",
-			// these pass the original test, but are in fact failures.
-			//	"b", "r_1_1", "d",
-			//	"c", "r_1_1", "a",
-			//	"z", "r_1_1", "f",
 			//
 			"z", "r_1_x", "f",
 			"c", "r_1_x", "a",
 			"b", "r_1_x", "e",
-			"c", "r_1_x", "c",
+			"c", "r_1_x", "c", // totally okay, one lhs can have multiple rhs
 			"c", "r_1_x", "b",
 			"z", "r_1_x", "d",
-			"z", "r_1_x", "f",
+			"z", "r_1_x", "f", // a duplicate
 			//
 			"z", "r_x_1", "b",
 			"f", "r_x_1", "f",
@@ -38,7 +37,7 @@ func TestRelativeFormation(t *testing.T) {
 			"b", "r_x_1", "a",
 			"d", "r_x_1", "b",
 			"c", "r_x_1", "d",
-			"f", "r_x_1", "f",
+			"f", "r_x_1", "f", // duplicates the earlier f-f
 			"e", "r_x_1", "f",
 			//
 			"a", "r_x_x", "a",
@@ -47,10 +46,9 @@ func TestRelativeFormation(t *testing.T) {
 			"a", "r_x_x", "c",
 			"f", "r_x_x", "d",
 			"l", "r_x_x", "d",
-			"a", "r_x_x", "b",
+			"a", "r_x_x", "b", // duplicates a, b
 		)...,
 	)
-
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else if out, e := dt.readPairs(); e != nil {
@@ -85,6 +83,12 @@ func TestRelativeFormation(t *testing.T) {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
 	}
+	// expects 4 warnings, one from each group
+	for i := 0; i < 4; i++ {
+		if ok, e := okError(t, warnings.shift(), `Duplicate relation`); !ok {
+			t.Fatal(e)
+		}
+	}
 }
 
 // follow along with relative test except add list of ephemera
@@ -97,11 +101,9 @@ func TestRelativeOneOneViolation(t *testing.T) {
 			"b", "r_1_1", "d",
 		)...,
 	)
-
-	if _, e := dt.Assemble(); e == nil {
-		t.Fatal("expected error")
-	} else {
-		t.Log("ok:", e)
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `Conflict`); !ok {
+		t.Fatal(e)
 	}
 }
 
@@ -116,10 +118,9 @@ func TestRelativeOneManyViolation(t *testing.T) {
 		)...,
 	)
 
-	if _, e := dt.Assemble(); e == nil {
-		t.Fatal("expected error")
-	} else {
-		t.Log("ok:", e)
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `Conflict`); !ok {
+		t.Fatal(e)
 	}
 }
 
@@ -134,10 +135,9 @@ func TestRelativeManyOneViolation(t *testing.T) {
 		)...,
 	)
 
-	if _, e := dt.Assemble(); e == nil {
-		t.Fatal("expected error")
-	} else {
-		t.Log("ok:", e)
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `Conflict`); !ok {
+		t.Fatal(e)
 	}
 }
 

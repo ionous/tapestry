@@ -195,8 +195,9 @@ func TestAncestryRivalConflict(t *testing.T) {
 	)
 	dt.makeDomain(dd("z", "b", "d")) // trying to include both should be a problem; they are two unique kinds...
 	//
-	if _, e := dt.Assemble(); e == nil {
-		t.Fatal("expected an error")
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `Conflict in domain`); !ok {
+		t.Fatal(e)
 	}
 }
 

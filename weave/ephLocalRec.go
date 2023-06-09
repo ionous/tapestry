@@ -12,6 +12,8 @@ type kindCat struct {
 }
 
 // a record literal is defined by a kind, and a sparse set of named values
+// stores literal values because they are serializable
+// ( as opposed to generic values which aren't. )
 type localRecord struct {
 	k kindCat
 

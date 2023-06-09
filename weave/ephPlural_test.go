@@ -56,9 +56,8 @@ func TestPluralAssembly(t *testing.T) {
 		&eph.Plurals{Singular: "witch", Plural: "unkindness"},
 	)
 	//
-	if _, e := dt.Assemble(); e == nil {
-		t.Fatal("expected error")
-	} else if ok, e := okError(t, e, "Conflict"); !ok {
+	_, e := dt.Assemble()
+	if ok, e := okError(t, e, `Conflict`); !ok {
 		t.Fatal(e)
 	} else if ok, e := okError(t, warnings.shift(), `Duplicate plural "cauldron"`); !ok {
 		t.Fatal(e)
