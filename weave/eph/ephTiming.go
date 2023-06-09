@@ -22,24 +22,6 @@ func toTiming(t Timing, always Always) (ret assert.EventTiming) {
 	return
 }
 
-func fromTiming(t assert.EventTiming) (ret Timing, always Always) {
-	if t&assert.RunAlways != 0 {
-		always.Str = Always_Always
-		t ^= assert.RunAlways
-	}
-	switch t {
-	case assert.Before:
-		ret.Str = Timing_Before
-	case assert.During:
-		ret.Str = Timing_During
-	case assert.After:
-		ret.Str = Timing_After
-	case assert.Later:
-		ret.Str = Timing_Later
-	}
-	return
-}
-
 // Always requires a predefined string.
 type Always struct {
 	Str string

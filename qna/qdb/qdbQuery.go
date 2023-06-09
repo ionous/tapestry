@@ -473,7 +473,7 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 			  on (mt.rowid = mu.target)
 			where mk.kind = ?1
 			and ifnull(mt.kind,'') = ?2
-			order by abs(mu.phase), mu.rowid`,
+			order by abs(mu.phase), mu.rowid desc`,
 		),
 		// query the db for the value of a given field for a given noun
 		// fix: future, we will want to save values to a "run_value" table and union those in here.

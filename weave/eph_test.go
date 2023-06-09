@@ -371,8 +371,12 @@ func (dt *domainTest) readRules() ([]string, error) {
   from mdl_rule mr 
   join mdl_kind mk
   	on(mr.kind = mk.rowid)
+  join mdl_domain md 
+  	on(md.domain = mr.domain)
   left join mdl_kind mt 
-  	on(mr.target = mt.rowid)`)
+  	on(mr.target = mt.rowid)
+  order by md.rowid desc, mk.kind, abs(mr.phase), mr.rowid desc
+  `)
 }
 
 // domain, noun, field, value

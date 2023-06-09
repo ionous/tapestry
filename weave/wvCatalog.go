@@ -257,26 +257,3 @@ func findRivals(db tables.Querier, onConflict func(group, domain, key, value, at
 	}
 	return
 }
-
-// FIX -- its a goal to remove this function
-// in theory the assembly should walk all domains in the proper order
-// and assemble them one at a time, so nobody else needs to know the domain order.
-//
-// work out the hierarchy of all the domains, and return them in a list.
-// the list has the "shallowest" domains first, and the most derived ( "deepest" ) domains last.
-func (c *Catalog) ResolveDomains() (ret []*Domain, err error) {
-	if rows, e := c.db.Query(`select domain from domain_order`); e != nil {
-		err = errutil.New("resolve domains", e)
-	} else {
-		var name string
-		err = tables.ScanAll(rows, func() (err error) {
-			if d, ok := c.GetDomain(name); !ok {
-				err = errutil.Fmt("unexpected domain %q", name)
-			} else {
-				ret = append(ret, d)
-			}
-			return
-		}, &name)
-	}
-	return
-}

@@ -23,11 +23,7 @@ func (cat *Catalog) AssembleCatalog() (err error) {
 	}
 	if err == nil {
 		// REMOVE:
-		if e := cat.WriteValues(cat.writer); e != nil {
-			err = e
-		} else {
-			err = cat.WriteRules(cat.writer)
-		}
+		err = cat.WriteValues(cat.writer)
 	}
 	return
 }

@@ -10,13 +10,10 @@ import (
 )
 
 type Domain struct {
-	name    string
-	catalog *Catalog
-	rules   map[string]Rulesets // pattern name to rules for that pattern
-	// a domain that's fully processed will be in some final state
-	currPhase assert.Phase
-	// scheduled assertions
-	scheduling [assert.NumPhases][]memento
+	name       string
+	catalog    *Catalog
+	currPhase  assert.Phase                // updated during weave, ends at NumPhases
+	scheduling [assert.NumPhases][]memento // separates commands into phases
 }
 
 type memento struct {
