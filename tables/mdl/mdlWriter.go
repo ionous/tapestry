@@ -143,10 +143,10 @@ func (m *Writer) Aspect(domain, aspect, at string, traits []string) (err error) 
 		// no need to check for conflicting traits.
 		err = errutil.Fmt("can't create aspect of %q; kinds of aspects can't be inherited", aspect)
 	} else if e := m.db.QueryRow(`
-				select count(*) 
-				from mdl_field mf 
-				where mf.kind = ?1
-				`, kid.id).Scan(&existingTraits); e != nil {
+			select count(*) 
+			from mdl_field mf 
+			where mf.kind = ?1
+			`, kid.id).Scan(&existingTraits); e != nil {
 		err = errutil.New("database error", e)
 	} else if existingTraits > 0 {
 		err = errutil.Fmt("aspect %q from %q already has traits", aspect, domain)
@@ -327,12 +327,38 @@ func (m *Writer) Fact(domain, fact, value, at string) (err error) {
 }
 
 func (m *Writer) Grammar(domain, name string, prog *grammar.Directive, at string) (err error) {
-	if str, e := marshalout(prog); e != nil {
+	if prog, e := marshalout(prog); e != nil {
 		err = e
 	} else if d, e := m.findDomain(domain); e != nil {
 		err = e
 	} else {
-		_, err = m.grammar.Exec(d, name, str, at)
+		var prev struct {
+			domain, prog string
+		}
+		e := m.db.QueryRow(
+			`select mg.domain, mg.prog
+			from mdl_grammar mg
+			join domain_tree dt
+				on (dt.uses = mg.domain)
+			where base = ?1
+			and name = ?2
+		`, domain, name).Scan(&prev.domain, &prev.prog)
+		switch e {
+		case sql.ErrNoRows:
+			_, err = m.grammar.Exec(d, name, prog, at)
+
+		case nil:
+			if prev.prog != prog {
+				err = errutil.Fmt("%w grammar %q was %q in domain %q and now %q in domain %q",
+					Conflict, name, prev.prog, prev.domain, prog, domain)
+			} else {
+				err = errutil.Fmt("%w grammar %q already declared in domain %q and now domain %q",
+					Duplicate, name, prev.domain, domain)
+			}
+
+		default:
+			err = errutil.New("database error", e)
+		}
 	}
 	return
 }
