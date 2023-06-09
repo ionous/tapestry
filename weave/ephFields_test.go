@@ -74,9 +74,9 @@ func TestFieldsRedefine(t *testing.T) {
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else if ok, e := okError(t, warnings.shift(), `Duplicate field "n" for kind "k"`); !ok {
-		t.Fatal("expected warning; got:", e)
+		t.Fatal("unexpected warning:", e)
 	} else if ok, e := okError(t, warnings.shift(), `Duplicate field "n" for kind "k"`); !ok {
-		t.Fatal("expected warning; got:", e)
+		t.Fatal("unexpected warning:", e)
 	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
@@ -101,7 +101,7 @@ func TestFieldsConflict(t *testing.T) {
 	)
 	_, e := dt.Assemble()
 	if ok, e := okError(t, e, `Conflict field "n" for kind "k"`); !ok {
-		t.Fatal("expected error; got:", e)
+		t.Fatal("unexpected error:", e)
 	}
 }
 
@@ -128,7 +128,7 @@ func xxxTestFieldsMatchingRivals(t *testing.T) {
 	// fix: is this supposed to be an error?
 	_, e := dt.Assemble()
 	if ok, e := okError(t, e, `Duplicated kinds`); !ok {
-		t.Fatal("expected warning; got:", e)
+		t.Fatal("unexpected warning:", e)
 	} else if out, e := dt.readFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
@@ -159,7 +159,7 @@ func TestFieldsMismatchingRivals(t *testing.T) {
 	)
 	_, err := dt.Assemble()
 	if ok, e := okError(t, err, `Conflict field "t" for kind "k"`); !ok {
-		t.Fatal("expected error; got:", e)
+		t.Fatal("unexpected error:", e)
 	}
 }
 
@@ -178,7 +178,7 @@ func TestFieldsUnknownClass(t *testing.T) {
 	)
 	_, e := dt.Assemble()
 	if ok, e := okError(t, e, `Missing kind "m" in domain "a" trying to write field "t"`); !ok {
-		t.Fatal("expected error; got:", e)
+		t.Fatal("unexpected error:", e)
 	} else {
 		t.Log("ok:", e)
 	}

@@ -100,7 +100,7 @@ func TestKindMissing(t *testing.T) {
 	)...)
 	_, e := dt.Assemble()
 	if ok, e := okError(t, e, `Missing kind "d" in domain "a"`); !ok {
-		t.Fatal("expected error; got:", e)
+		t.Fatal("unexpected error:", e)
 	}
 }
 
@@ -116,7 +116,7 @@ func TestKindSingleParent(t *testing.T) {
 	)...)
 	_, e := dt.Assemble()
 	if ok, e := okError(t, e, `Missing a definition in domain "a" that would allow "d" to have the ancestor`); !ok {
-		t.Fatal("expected error; got", e)
+		t.Fatal("unexpected error:", e)
 	}
 }
 

@@ -1,11 +1,8 @@
 package weave
 
 import (
-	"os"
-	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"git.sr.ht/~ionous/tapestry/weave/eph"
 	"github.com/kr/pretty"
 )
@@ -53,7 +50,7 @@ func TestAncestryCycle(t *testing.T) {
 	)
 	_, e := dt.Assemble()
 	if ok, e := okError(t, e, `Conflict circular reference detected`); !ok {
-		t.Fatal("expected error; got:", e)
+		t.Fatal("unexpected error:", e)
 	}
 }
 
@@ -70,7 +67,7 @@ func TestAncestryMultipleParents(t *testing.T) {
 	)
 	_, e := dt.Assemble()
 	if ok, e := okError(t, e, `Missing a definition in domain "a" that would allow "k"`); !ok {
-		t.Fatal("expected error; got:", e)
+		t.Fatal("unexpected error:", e)
 	} else {
 		t.Log("ok:", e)
 	}
@@ -119,9 +116,9 @@ func TestAncestryMissing(t *testing.T) {
 	)
 	_, e := dt.Assemble()
 	if ok, e := okError(t, e, `Missing kind "x" in domain "b"`); !ok {
-		t.Fatal("expected error; got:", e)
+		t.Fatal("unexpected error:", e)
 	} else if ok, e := okError(t, warnings.shift(), `AncestryPhase didn't finish`); !ok {
-		t.Fatal("expected warning; got:", e)
+		t.Fatal("unexpected warning:", e)
 	}
 }
 
@@ -146,9 +143,9 @@ func TestAncestryRedefined(t *testing.T) {
 	)
 	_, e := dt.Assemble()
 	if ok, e := okError(t, e, `Conflict can't redefine the ancestor of "m" as "n"`); !ok {
-		t.Fatal("expected error; got:", e)
+		t.Fatal("unexpected error:", e)
 	} else if ok, e := okError(t, warnings.shift(), `Duplicate "q" already declared as an ancestor of "k"`); !ok {
-		t.Fatal("expected warning; got:", e)
+		t.Fatal("unexpected warning:", e)
 	}
 }
 
@@ -199,33 +196,4 @@ func TestAncestryRivalConflict(t *testing.T) {
 	if ok, e := okError(t, e, `Conflict in domain`); !ok {
 		t.Fatal(e)
 	}
-}
-
-func newTest(name string) *domainTest {
-	return newTestShuffle(name, true)
-}
-
-func newTestShuffle(name string, shuffle bool) *domainTest {
-	path, driver := testdb.Memory, ""
-	// if you run the test as go test ... -args write
-	// it'll write the db out in your user directory
-	if os.Args[len(os.Args)-1] == "write" {
-		path = ""
-	}
-	db := testdb.Open(name, path, driver)
-	return &domainTest{
-		name:      name,
-		db:        db,
-		cat:       NewCatalogWithWarnings(db, LogWarning),
-		noShuffle: !shuffle,
-	}
-}
-
-func okError(t *testing.T, e error, prefix string) (okay bool, err error) {
-	if okay = e != nil && strings.HasPrefix(e.Error(), prefix); okay {
-		t.Log("ok:", e)
-	} else {
-		err = e
-	}
-	return
 }

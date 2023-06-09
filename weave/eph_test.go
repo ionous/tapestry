@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"math/rand"
+	"os"
 	"strings"
 	"testing"
 
@@ -50,6 +51,35 @@ func (w *Warnings) shift() (err error) {
 		err = errutil.New("out of warnings")
 	} else {
 		err, (*w) = (*w)[0], (*w)[1:]
+	}
+	return
+}
+
+func newTest(name string) *domainTest {
+	return newTestShuffle(name, true)
+}
+
+func newTestShuffle(name string, shuffle bool) *domainTest {
+	path, driver := testdb.Memory, ""
+	// if you run the test as go test ... -args write
+	// it'll write the db out in your user directory
+	if os.Args[len(os.Args)-1] == "write" {
+		path = ""
+	}
+	db := testdb.Open(name, path, driver)
+	return &domainTest{
+		name:      name,
+		db:        db,
+		cat:       NewCatalogWithWarnings(db, LogWarning),
+		noShuffle: !shuffle,
+	}
+}
+
+func okError(t *testing.T, e error, prefix string) (okay bool, err error) {
+	if okay = e != nil && strings.HasPrefix(e.Error(), prefix); okay {
+		t.Log("ok:", e)
+	} else {
+		err = e
 	}
 	return
 }

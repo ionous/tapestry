@@ -57,7 +57,7 @@ func TestNounFailure(t *testing.T) {
 	)
 	_, e := dt.Assemble()
 	if ok, e := okError(t, e, `Missing kind "t" in domain "a"`); !ok {
-		t.Fatal("expected error; got:", e)
+		t.Fatal("unexpected error:", e)
 	} else {
 		t.Log("ok:", e)
 	}
@@ -114,7 +114,7 @@ func TestNounHierarchyFailure(t *testing.T) {
 	)
 	_, e := dt.Assemble()
 	if ok, e := okError(t, e, `Conflict can't redefine kind of "apple"`); !ok {
-		t.Fatal("expected error; got:", e)
+		t.Fatal("unexpected error:", e)
 	} else {
 		t.Log("ok:", e)
 	}

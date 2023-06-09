@@ -21,7 +21,7 @@ func TestPluralConflict(t *testing.T) {
 	)
 	_, e := dt.Assemble()
 	if ok, e := okError(t, e, `Conflict`); !ok {
-		t.Fatal("expected error; got:", e)
+		t.Fatal("unexpected error:", e)
 	} else {
 		t.Log("ok:", e)
 	}

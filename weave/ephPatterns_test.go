@@ -214,7 +214,7 @@ func TestPatternMultipleReturn(t *testing.T) {
 	)
 	_, e := dt.Assemble()
 	if ok, e := okError(t, e, `unexpected result`); !ok {
-		t.Fatal("expected error; got:", e)
+		t.Fatal("unexpected error:", e)
 	} else {
 		t.Log("okay", e)
 	}
@@ -269,7 +269,7 @@ func TestPatternConflictingInit(t *testing.T) {
 	)
 	_, e := dt.Assemble()
 	if ok, e := okError(t, e, `Conflict mismatched assignment for field "n" of kind "p"`); !ok {
-		t.Fatal("expected error; got:", e)
+		t.Fatal("unexpected error:", e)
 	}
 }
 
