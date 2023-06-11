@@ -194,7 +194,7 @@ where name = @fieldName
 union all
 
 -- traits in the target kind: return the aspect
-select ma.name, 'bool', null
+select ma.aspect, 'text', null
 from allTraits ma
 join fieldsInKind fk
 where ma.name = @fieldName
@@ -208,17 +208,26 @@ and ma.kind = fk.typeId`,
 		} else {
 			err = errutil.New("database error", e)
 		}
-	} else if prev.aff != aff {
-		err = errutil.Fmt("affinity %s is incompatible with %s field %q in kind %q",
-			aff, prev.aff, field, kind)
-	} else if prev.name != field {
-		// if they weren't asking for a trait, error:
-		// the return name is the aspect; no subclass to speak of.
-		retName = prev.name
 	} else {
-		retName = prev.name
-		if prev.cls != nil {
-			retClass = *prev.cls
+		// if the names don't match, than the search found a trait of an aspect:
+		if prev.name != field {
+			if aff != affine.Bool {
+				err = errutil.Fmt("affinity %s is incompatible with trait %q of aspect %q in kind %q",
+					aff, field, prev.name, kind)
+			} else {
+				retName = prev.name
+			}
+		} else {
+			// otherwise the search returned a normal field:
+			if prev.aff != aff {
+				err = errutil.Fmt("affinity %s is incompatible with %s field %q in kind %q",
+					aff, prev.aff, field, kind)
+			} else {
+				retName = prev.name
+				if prev.cls != nil {
+					retClass = *prev.cls
+				}
+			}
 		}
 	}
 	return

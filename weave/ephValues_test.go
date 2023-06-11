@@ -108,8 +108,8 @@ func TestValueTraitAssignment(t *testing.T) {
 	} else if diff := pretty.Diff(out, []string{
 		`a:apple:a:"y"`,
 		`a:boat:b:"z"`,
-		`a:toy_boat:a:"w"`,
 		`a:pear:a:"x"`,
+		`a:toy_boat:a:"w"`,
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)

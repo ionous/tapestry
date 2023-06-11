@@ -76,6 +76,7 @@ func (in *innerRecord) nestedWrite(noun, field, at string, val literal.LiteralVa
 // find or create each record, and return the innermost one.
 func (rp *localRecord) ensureRecords(at string, path []string) (ret innerRecord, err error) {
 	it := innerRecord{rp.k, &rp.rec.Fields}
+	// drill inward, creating sub records if needed.
 	for _, field := range path {
 		if name, cls, e := it.findCompatibleField(field, affine.Record); e != nil {
 			err = e
