@@ -19,9 +19,9 @@ import (
 /**
  *
  */
-func NewModeler(db *sql.DB) (ret Modeler, err error) {
+func NewModeler(db *sql.DB) (ret *Modeler, err error) {
 	var ps tables.Prep
-	m := &Writer{
+	m := &Modeler{
 		db:          db,
 		aspectPath:  "XXX", // set to something that wont match until its set properly.
 		patternPath: "XXX",
@@ -79,22 +79,10 @@ func NewModeler(db *sql.DB) (ret Modeler, err error) {
 		rule: ps.Prep(db,
 			tables.Insert("mdl_rule", "domain", "kind", "target", "phase", "filter", "prog", "at"),
 		),
-		// first: build a virtual [domain, noun, field] table
-		// note: values are written per noun, not per domain; so the domain column is redundant once the noun id is known.
-		// to get to the field id, we have to look at all possible fields for the noun.
-		// given the kind of the noun, accept all fields who's kind is in its materialized path.
+		// note: values are written per noun, not per domain
 		// fix? some values are references to objects in the form "#domain::noun" -- should the be changed to ids?
 		value: ps.Prep(db,
-			`with parts(domain, nin, noun, fid, field) as (
-			select mk.domain, mn.rowid, mn.noun, mf.rowid, mf.field
-			from mdl_noun mn
-			join mdl_kind mk
-				on (mn.kind = mk.rowid)
-			left join mdl_field mf
-				where instr(',' || mk.rowid || ',' || mk.path, ',' || mf.kind || ','))
-			insert into mdl_value(noun, field, value, at)
-			select nin, fid, ?4, ?5
-			from parts where domain=?1 and noun=?2 and field=?3`,
+			tables.Insert("mdl_value", "noun", "field", "value", "at"),
 		),
 	}
 	if e := ps.Err(); e != nil {
@@ -105,7 +93,9 @@ func NewModeler(db *sql.DB) (ret Modeler, err error) {
 	return
 }
 
-type Writer struct {
+// Modeler wraps writing to the model table
+// so the implementation can handle verifying dependent names when needed.
+type Modeler struct {
 	db *sql.DB
 	assign,
 	check,
@@ -118,10 +108,8 @@ type Writer struct {
 	noun,
 	opposite,
 	pair,
-	pat,
 	plural,
 	rel,
-	rev,
 	rule,
 	value *sql.Stmt
 	// some ugly caching:
@@ -132,7 +120,7 @@ type Writer struct {
 // tbd: perhaps writing the aspect to its own table would be best
 // join at runtime to synthesize fields.
 // ( could potentially write both as a bridge )
-func (m *Writer) Aspect(domain, aspect, at string, traits []string) (err error) {
+func (m *Modeler) Aspect(domain, aspect, at string, traits []string) (err error) {
 	var existingTraits int
 	if kid, e := m.findRequiredKind(domain, aspect); e != nil {
 		err = e
@@ -164,7 +152,8 @@ func (m *Writer) Aspect(domain, aspect, at string, traits []string) (err error) 
 	return
 }
 
-func (m *Writer) Check(domain, name string, value literal.LiteralValue, prog []rt.Execute, at string) (err error) {
+// author tests of stories
+func (m *Modeler) Check(domain, name string, value literal.LiteralValue, prog []rt.Execute, at string) (err error) {
 	if d, e := m.findDomain(domain); e != nil {
 		err = e
 	} else {
@@ -233,7 +222,9 @@ func (m *Writer) Check(domain, name string, value literal.LiteralValue, prog []r
 	return
 }
 
-func (m *Writer) Default(domain, kind, field string, v assign.Assignment) (err error) {
+// the pattern half of Start; domain, kind, field are a pointer into Field
+// value should be a marshaled compact value
+func (m *Modeler) Default(domain, kind, field string, v assign.Assignment) (err error) {
 	if out, e := marshalout(v); e != nil {
 		err = e
 	} else if kid, e := m.findRequiredKind(domain, kind); e != nil {
@@ -283,14 +274,16 @@ func (m *Writer) Default(domain, kind, field string, v assign.Assignment) (err e
 	return
 }
 
+// pairs of domain name and (domain) dependencies
 // fix: are we forcing/checking parent domains to exist before writing?
 // that might be cool .... but maybe this is the wrong level?
-func (m *Writer) Domain(domain, requires, at string) (err error) {
+func (m *Modeler) Domain(domain, requires, at string) (err error) {
 	_, err = m.domain.Exec(domain, requires, at)
 	return
 }
 
-func (m *Writer) Fact(domain, fact, value, at string) (err error) {
+// arbitrary key-value storage
+func (m *Modeler) Fact(domain, fact, value, at string) (err error) {
 	if domain, e := m.findDomain(domain); e != nil {
 		err = e
 	} else {
@@ -307,7 +300,7 @@ func (m *Writer) Fact(domain, fact, value, at string) (err error) {
 		switch e := q.Scan(&prev.domain, &prev.value); e {
 		case sql.ErrNoRows:
 			if _, e := m.fact.Exec(domain, fact, value, at); e != nil {
-				err = errutil.Fmt("database error", e)
+				err = errutil.New("database error", e)
 			}
 		case nil:
 			if prev.value != value {
@@ -326,7 +319,8 @@ func (m *Writer) Fact(domain, fact, value, at string) (err error) {
 	return
 }
 
-func (m *Writer) Grammar(domain, name string, prog *grammar.Directive, at string) (err error) {
+// player input parsing
+func (m *Modeler) Grammar(domain, name string, prog *grammar.Directive, at string) (err error) {
 	if prog, e := marshalout(prog); e != nil {
 		err = e
 	} else if d, e := m.findDomain(domain); e != nil {
@@ -363,8 +357,9 @@ func (m *Writer) Grammar(domain, name string, prog *grammar.Directive, at string
 	return
 }
 
+// singular name of kind and materialized hierarchy of ancestors separated by commas
 // this duplicates the algorithm used by Noun()
-func (m *Writer) Kind(domain, kind, parent, at string) (err error) {
+func (m *Modeler) Kind(domain, kind, parent, at string) (err error) {
 	if parent, e := m.findOptionalKind(domain, parent); e != nil {
 		err = e
 	} else if len(parent.name) > 0 && parent.id == 0 {
@@ -425,7 +420,8 @@ func (m *Writer) Kind(domain, kind, parent, at string) (err error) {
 	return
 }
 
-func (m *Writer) Member(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
+// a generic field of the kind
+func (m *Modeler) Member(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
 	if kid, e := m.findRequiredKind(domain, kind); e != nil {
 		err = errutil.Fmt("%w trying to add field %q", e, field)
 	} else if cls, e := m.findOptionalKind(domain, cls); e != nil {
@@ -436,7 +432,9 @@ func (m *Writer) Member(domain, kind, field string, aff affine.Affinity, cls, at
 	return
 }
 
-func (m *Writer) Name(domain, noun, name string, rank int, at string) (err error) {
+// words for authors and game players refer to nouns
+// follows the domain rules of Noun.
+func (m *Modeler) Name(domain, noun, name string, rank int, at string) (err error) {
 	if noun, e := m.findRequiredNoun(domain, noun, nounSansKind); e != nil {
 		err = e // ^ for now, this can be a derived domain
 	} else {
@@ -453,14 +451,16 @@ func (m *Writer) Name(domain, noun, name string, rank int, at string) (err error
 		} else if exists {
 			err = errutil.Fmt("%w %q already an alias of %q", Duplicate, name, noun.name)
 		} else if _, e := m.name.Exec(domain, noun.id, name, rank, at); e != nil {
-			err = errutil.Fmt("database error", e)
+			err = errutil.New("database error", e)
 		}
 	}
 	return
 }
 
+// the domain tells the scope in which the noun was defined
+// ( the same as - or a child of - the domain of the kind ) error
 // this duplicates the algorithm used by Kind()
-func (m *Writer) Noun(domain, name, ancestor, at string) (err error) {
+func (m *Modeler) Noun(domain, name, ancestor, at string) (err error) {
 	if parent, e := m.findRequiredKind(domain, ancestor); e != nil {
 		err = e
 	} else if prev, e := m.findNoun(domain, name, nounWithKind); e != nil {
@@ -500,7 +500,10 @@ func (m *Writer) Noun(domain, name, ancestor, at string) (err error) {
 	return
 }
 
-func (m *Writer) Opposite(domain, a, b, at string) (err error) {
+// domain captures the scope in which the pairing was defined.
+// within that scope: the noun, relation, and otherNoun are all unique names --
+// even if they are not unique globally, and even if they a broader/different scope than the pair's domain.
+func (m *Modeler) Opposite(domain, a, b, at string) (err error) {
 	if d, e := m.findDomain(domain); e != nil {
 		err = e
 	} else if rows, e := m.db.Query(
@@ -532,7 +535,7 @@ func (m *Writer) Opposite(domain, a, b, at string) (err error) {
 	return
 }
 
-func (m *Writer) Pair(domain, rel, oneNoun, otherNoun, at string) (err error) {
+func (m *Modeler) Pair(domain, rel, oneNoun, otherNoun, at string) (err error) {
 	if rel, e := m.findRequiredKind(domain, rel); e != nil {
 		err = e
 	} else if one, e := m.findRequiredNoun(domain, oneNoun, nounSansKind); e != nil {
@@ -577,7 +580,9 @@ func (m *Writer) Pair(domain, rel, oneNoun, otherNoun, at string) (err error) {
 	}
 	return
 }
-func (m *Writer) Parameter(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
+
+// a field used for patterns as a calling parameter
+func (m *Modeler) Parameter(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
 	if kid, e := m.findRequiredKind(domain, kind); e != nil {
 		err = errutil.Fmt("%w trying to add parameter %q", e, field)
 	} else if cls, e := m.findOptionalKind(domain, cls); e != nil {
@@ -604,22 +609,25 @@ func (m *Writer) Parameter(domain, kind, field string, aff affine.Affinity, cls,
 	return
 }
 
-func (m *Writer) Pat(domain, kind, labels, result string) (err error) {
-	// tbd: labels are are comma-separated field names, should it be field ids?
-	// similarly, result is a field, should it be a field id?
-	// and... either way... should they be validated
-	if kid, e := m.findRequiredKind(domain, kind); e != nil {
-		err = e
-	} else if kid.domain != domain {
-		err = errutil.Fmt("%w pattern %q signature expected in the same domain as the pattern declaration; was %q now %q",
-			Conflict, kind, kid.domain, domain)
-	} else {
-		_, err = m.pat.Exec(kid.id, labels, result)
-	}
-	return
-}
+// func (m *Modeler) Pat(domain, kind, labels, result string) (err error) {
+// 	// tbd: labels are are comma-separated field names, should it be field ids?
+// 	// similarly, result is a field, should it be a field id?
+// 	// and... either way... should they be validated
+// 	if kid, e := m.findRequiredKind(domain, kind); e != nil {
+// 		err = e
+// 	} else if kid.domain != domain {
+// 		err = errutil.Fmt("%w pattern %q signature expected in the same domain as the pattern declaration; was %q now %q",
+// 			Conflict, kind, kid.domain, domain)
+// 	} else {
+// 		_, err = m.pat.Exec(kid.id, labels, result)
+// 	}
+// 	return
+// }
 
-func (m *Writer) Plural(domain, many, one, at string) (err error) {
+// a plural word (many) can have at most one singular definition per domain
+// ie. people and persons are valid plurals of person,
+// but people as a singular can only be defined as person ( not also human ) error
+func (m *Modeler) Plural(domain, many, one, at string) (err error) {
 	if d, e := m.findDomain(domain); e != nil {
 		err = e
 	} else if rows, e := m.db.Query(
@@ -650,7 +658,11 @@ func (m *Writer) Plural(domain, many, one, at string) (err error) {
 	return
 }
 
-func (m *Writer) Rel(domain, relKind, oneKind, otherKind, cardinality, at string) (err error) {
+// relation and constraint between two kinds of nouns
+//  fix? the data is duplicated in kinds and fields... should this be removed?
+// might also consider adding a cardinality field to the relation kind, and then use init for individual relations
+
+func (m *Modeler) Rel(domain, relKind, oneKind, otherKind, cardinality, at string) (err error) {
 	if rel, e := m.findRequiredKind(domain, relKind); e != nil {
 		err = e
 	} else if rel.domain != domain {
@@ -672,7 +684,9 @@ func (m *Writer) Rel(domain, relKind, oneKind, otherKind, cardinality, at string
 	return
 }
 
-func (m *Writer) Result(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
+// a field used for patterns as a returned value
+
+func (m *Modeler) Result(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
 	if kid, e := m.findRequiredKind(domain, kind); e != nil {
 		err = errutil.Fmt("%w trying to add result %q", e, field)
 	} else if cls, e := m.findOptionalKind(domain, cls); e != nil {
@@ -699,16 +713,24 @@ func (m *Writer) Result(domain, kind, field string, aff affine.Affinity, cls, at
 	return
 }
 
-func (m *Writer) Rule(domain, pattern, target string, phase int, filter rt.BoolEval, prog []rt.Execute, at string) (err error) {
+func (m *Modeler) Rule(domain, pattern, target string, phase int, filter rt.BoolEval, prog []rt.Execute, at string) (err error) {
+	if filter, e := marshalout(filter); e != nil {
+		err = e
+	} else if prog, e := marshalprog(prog); e != nil {
+		err = e
+	} else {
+		err = m.UnmarshaledRule(domain, pattern, target, phase, filter, prog, at)
+	}
+	return
+}
+
+// public for tests:
+func (m *Modeler) UnmarshaledRule(domain, pattern, target string, phase int, filter, prog, at string) (err error) {
 	if kid, e := m.findRequiredKind(domain, pattern); e != nil {
 		err = e
 	} else if !strings.HasSuffix(kid.fullpath(), m.patternPath) {
 		err = errutil.Fmt("kind %q in domain %q is not a pattern", pattern, domain)
 	} else if tgt, e := m.findOptionalKind(domain, target); e != nil {
-		err = e
-	} else if filter, e := marshalout(filter); e != nil {
-		err = e
-	} else if prog, e := marshalprog(prog); e != nil {
 		err = e
 	} else {
 		_, err = m.rule.Exec(domain, kid.id, tgt.id, phase, filter, prog, at)
@@ -716,11 +738,39 @@ func (m *Writer) Rule(domain, pattern, target string, phase int, filter rt.BoolE
 	return
 }
 
-func (m *Writer) Value(domain, noun, field string, value literal.LiteralValue, at string) (err error) {
-	if out, e := marshalout(value); e != nil {
-		err = errutil.Append(err, e)
+// public for tests:
+func (m *Modeler) UnmarshaledValue(domain, noun, field, value, at string) (err error) {
+	if noun, e := m.findRequiredNoun(domain, noun, nounWithKind); e != nil {
+		err = e
 	} else {
-		_, err = m.value.Exec(domain, noun, field, out, at)
+		var fieldId int
+		if e := m.db.QueryRow(`
+		select mf.rowid
+		from mdl_field mf
+		join mdl_kind mk 
+			on(mf.kind = mk.rowid)
+		where field = ?2
+		and instr(?1, ','||mk.rowid||',')`,
+			noun.fullpath, field).Scan(&fieldId); e == sql.ErrNoRows {
+			err = errutil.Fmt("%w field %q in noun %q in domain %q", Missing, field, noun.name, noun.domain)
+		} else if e != nil {
+			err = errutil.New("database error", e)
+		} else {
+			_, err = m.value.Exec(noun.id, fieldId, value, at)
+		}
+	}
+	return
+}
+
+// the noun half of what was Start.
+// domain, noun, field reference a join of Noun and Kind to get a filtered Field.
+// FIX: nouns should be able to store EVALS too
+// example: an object with a counter in its description.
+func (m *Modeler) Value(domain, noun, field string, value literal.LiteralValue, at string) (err error) {
+	if value, e := marshalout(value); e != nil {
+		err = e
+	} else {
+		err = m.UnmarshaledValue(domain, noun, field, value, at)
 	}
 	return
 }

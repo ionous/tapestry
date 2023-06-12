@@ -1,9 +1,12 @@
 package story
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
@@ -81,15 +84,8 @@ func (op *MapHeading) Schedule(cat *weave.Catalog) error {
 						if e := cat.AssertDefinition("dir", otherRoom.uniform, otherDir, room.uniform); e == nil {
 							// create the reverse door, etc.
 							err = mapDirect(cat, otherRoom, room, missingDoor, MapDirection{otherDir})
-						} else {
-							if conflict, ok := e.(*weave.Conflict); !ok || conflict.Redefined() {
-								err = e
-							}
-							// FIX FIX FIX: this compiles with "go build" but not with "go test"?!?!?
-							// var conflict eph.Conflict
-							// if !errors.As(e, &conflict) || conflict.Redefined() {
-							// 	err = e
-							// }
+						} else if !errors.Is(e, mdl.Duplicate) {
+							err = e
 						}
 					}
 				}

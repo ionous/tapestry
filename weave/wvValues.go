@@ -38,7 +38,7 @@ func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, opV
 // and that no "directory value" value exists for any sub path
 // ex. "a.b.c" is okay, so long as there's no record stored at "a.b" directly.
 // the runtime would change the way it reconstitutes values to handle all that.
-func (cat *Catalog) WriteValues(m mdl.Modeler) (err error) {
+func (cat *Catalog) WriteValues(m *mdl.Modeler) (err error) {
 Loop:
 	for _, n := range cat.domainNouns {
 		if rv := n.localRecord; rv.isValid() {

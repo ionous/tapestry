@@ -16,7 +16,7 @@ func TestActivate(t *testing.T) {
 	defer db.Close()
 	const at = ""
 	if e := createTable(db,
-		func(w mdl.Modeler) (err error) {
+		func(w *mdl.Modeler) (err error) {
 			return mdlDomain(w,
 				// name, dependency, at
 				// -------------------------

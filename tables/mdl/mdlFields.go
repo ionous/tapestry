@@ -8,25 +8,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// turn domain, kind, field into ids, associated with the local var's initial assignment.
-// domain and kind become redundant b/c fields exist at the scope of the kind.
-func (m *Writer) findField(domain, kind, field string) (retDomain string, retField int, err error) {
-	if kid, e := m.findRequiredKind(domain, kind); e != nil {
-		err = e
-	} else if e := m.db.QueryRow(`
-		select rowid
-		from mdl_field mf
-		where kind = ?1
-		and field = ?2`, kid.id, field).Scan(&retField); e == sql.ErrNoRows {
-		err = errutil.Fmt("%w field %q in kind %q in domain %q", Missing, field, kind, domain)
-	} else if e != nil {
-		err = e
-	} else {
-		retDomain = kid.domain
-	}
-	return
-}
-
 var fieldSource = ` 
 -- all possible traits:
 with allTraits as (	
@@ -79,7 +60,7 @@ with allTraits as (
 	where (?3 = ma.kind)
 )`
 
-func (m *Writer) addField(domain string, kid, cls kindInfo, field string, aff affine.Affinity, at string) (err error) {
+func (m *Modeler) addField(domain string, kid, cls kindInfo, field string, aff affine.Affinity, at string) (err error) {
 	// println("=== adding field", domain, kid.name, field, cls.name)
 	// if existing, e := tables.QueryStrings(m.db, fieldSource+`
 	// 	select origin|| ', ' || name || ', '|| affinity|| ', ' || typeName
@@ -156,7 +137,7 @@ using(name)
 // check that the kind can store the requested value at the passed field
 // returns the name of the field ( in case the originally specified field was a trait )
 // FIX: i think this would work better using the runtime kind cache.
-func (m *Writer) FindCompatibleField(domain, kind, field string, aff affine.Affinity) (retName, retClass string, err error) {
+func (m *Modeler) FindCompatibleField(domain, kind, field string, aff affine.Affinity) (retName, retClass string, err error) {
 	var prev struct {
 		name string
 		aff  affine.Affinity

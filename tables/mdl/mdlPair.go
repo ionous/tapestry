@@ -6,7 +6,7 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func (m *Writer) checkPair(domain string, rel kindInfo, one, other nounInfo, reverse, multi bool) (err error) {
+func (m *Modeler) checkPair(domain string, rel kindInfo, one, other nounInfo, reverse, multi bool) (err error) {
 	var prevId sql.NullInt64
 	var prevString sql.NullString
 	var search, match nounInfo
@@ -32,7 +32,7 @@ func (m *Writer) checkPair(domain string, rel kindInfo, one, other nounInfo, rev
 	}
 	return
 }
-func (m *Writer) addPair(domain string, kind kindInfo, one, other nounInfo, at string) (err error) {
+func (m *Modeler) addPair(domain string, kind kindInfo, one, other nounInfo, at string) (err error) {
 	_, err = m.pair.Exec(domain, kind.id, one.id, other.id, at)
 	return
 }

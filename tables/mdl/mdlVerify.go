@@ -8,7 +8,7 @@ import (
 
 // findDomain validates that the named domain exists
 // the returned name is the same as the passed name.
-func (m *Writer) findDomain(domain string) (ret string, err error) {
+func (m *Modeler) findDomain(domain string) (ret string, err error) {
 	if e := m.db.QueryRow(`
 	select domain 
 	from mdl_domain 

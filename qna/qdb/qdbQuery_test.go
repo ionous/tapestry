@@ -2,6 +2,7 @@ package qdb_test
 
 import (
 	"database/sql"
+	"os"
 	"reflect"
 	"strings"
 	"testing"
@@ -22,7 +23,13 @@ import (
 // this exercises the asm.writer ( xforming from strings to ids )
 // and the various runtime queries we need.
 func TestQueries(t *testing.T) {
-	db := testdb.Open(t.Name(), testdb.Memory, "")
+	path, driver := testdb.Memory, ""
+	// if you run the test as go test ... -args write
+	// it'll write the db out in your user directory
+	if os.Args[len(os.Args)-1] == "write" {
+		path = ""
+	}
+	db := testdb.Open(t.Name(), path, driver)
 	defer db.Close()
 
 	const at = ""
@@ -37,19 +44,19 @@ func TestQueries(t *testing.T) {
 	const subKind = "j"
 	const aspect = "a"
 	if e := createTable(db,
-		func(w mdl.Modeler) (err error) {
-			if e := mdlDomain(w,
+		func(m *mdl.Modeler) (err error) {
+			if e := mdlDomain(m,
 				// name, path, at
 				// -------------------------
 				domain, "", at,
 				subDomain, domain, at); e != nil {
 				err = e
-			} else if e := mdlPlural(w,
+			} else if e := mdlPlural(m,
 				// name, path, at
 				// -------------------------
 				domain, plural, singular, at); e != nil {
 				err = e
-			} else if e := mdlKind(w,
+			} else if e := mdlKind(m,
 				append(defaultKinds(domain, at),
 					// "domain", "kind", "path", "at"
 					// ---------------------------
@@ -57,7 +64,7 @@ func TestQueries(t *testing.T) {
 					domain, aspect, kindsOf.Aspect.String(), at,
 					// super confusing, in the db: root is towards end of the path; the row id is at the start.
 					// when read: root is hit first ( its in earlier *rows* ) so it becomes first.
-					subDomain, subKind, strings.Join([]string{kind, kindsOf.Kind.String()}, ","), at,
+					subDomain, subKind, kind, at,
 					// patterns:
 					domain, pattern, kindsOf.Pattern.String(), at,
 					// relations:
@@ -66,28 +73,22 @@ func TestQueries(t *testing.T) {
 				)...,
 			); e != nil {
 				err = e
-			} else if e := mdlField(w,
+			} else if e := mdlField(m,
 				// domain, kind, field, affinity, type, at
 				// ---------------------------------------
 				// traits of an aspect
-				domain, aspect, "brief", affine.Bool, "", at,
-				domain, aspect, "verbose", affine.Bool, "", at,
-				domain, aspect, "superbrief", affine.Bool, "", at,
+				m.Member, domain, aspect, "brief", affine.Bool, "", at,
+				m.Member, domain, aspect, "verbose", affine.Bool, "", at,
+				m.Member, domain, aspect, "superbrief", affine.Bool, "", at,
 				// kind that uses that aspect
-				domain, kind, aspect, affine.Text, aspect, at,
+				m.Member, domain, kind, aspect, affine.Text, aspect, at,
 				// patterns
-				domain, pattern, "object", affine.Text, kind, at,
-				domain, pattern, "other_object", affine.Text, kind, at,
-				domain, pattern, "ancestor", affine.Text, kind, at,
-				// relations
-				domain, relation, "kind", affine.Text, kind, at,
-				domain, relation, "other_kinds", affine.Text, kind, at,
-				// ( something random )
-				subDomain, otherRelation, "kind", affine.Text, kind, at,
-				subDomain, otherRelation, "other_kind", affine.Text, aspect, at,
+				m.Parameter, domain, pattern, "object", affine.Text, kind, at,
+				m.Parameter, domain, pattern, "other_object", affine.Text, kind, at,
+				m.Result, domain, pattern, "ancestor", affine.Text, kind, at,
 			); e != nil {
 				err = e
-			} else if e := mdlNoun(w,
+			} else if e := mdlNoun(m,
 				// domain, noun, kind, at
 				// ---------------------------------------
 				domain, "apple", kind, at,
@@ -96,7 +97,7 @@ func TestQueries(t *testing.T) {
 			); e != nil {
 				err = e
 				t.Fatal(e)
-			} else if e := mdlValue(w,
+			} else if e := mdlValue(m,
 				// "domain", "noun", "field", "value", "at"
 				// ---------------------------------------
 				domain, "apple", aspect, "brief", at,
@@ -105,7 +106,7 @@ func TestQueries(t *testing.T) {
 			); e != nil {
 				err = e
 				t.Fatal(e)
-			} else if e := mdlName(w,
+			} else if e := mdlName(m,
 				// domain, noun, name, rank, at
 				// ---------------------------------------
 				domain, "empire_apple", "empire apple", 0, at,
@@ -116,14 +117,7 @@ func TestQueries(t *testing.T) {
 			); e != nil {
 				err = e
 				t.Fatal(e)
-			} else if e := mdlPat(w,
-				// domain, kind, labels, result
-				// ---------------------------------------
-				domain, pattern, "object,other_object", "ancestor",
-			); e != nil {
-				err = e
-				t.Fatal(e)
-			} else if e := mdlRule(w,
+			} else if e := mdlRule(m,
 				// "domain", "kind", "target", "phase", "filter", "prog", "at"
 				// ---------------------------------------
 				domain, pattern, "" /**/, 1, "filter1", "prog1", at,
@@ -132,15 +126,16 @@ func TestQueries(t *testing.T) {
 			); e != nil {
 				err = e
 				t.Fatal(e)
-			} else if e := mdlRel(w,
-				// domain, rel, kind, cardinality, subKind, at
+			} else if e := mdlRel(m,
+				// domain, rel, kind, otherKind, cardinality, at
 				// ---------------------------------------------
 				domain, relation, kind, kind, tables.ONE_TO_MANY, at,
+				// ( something random )
 				subDomain, otherRelation, kind, aspect, tables.ONE_TO_ONE, at,
 			); e != nil {
 				err = e
 				t.Fatal(e)
-			} else if e := mdlPair(w,
+			} else if e := mdlPair(m,
 				// "domain", "relKind", "oneNoun", "otherNoun", "at"
 				// ---------------------------------------------
 				subDomain, relation, "table", "empire_apple", at,
@@ -191,8 +186,9 @@ func TestQueries(t *testing.T) {
 		t.Fatal("KindOfAncestors", path, e)
 	} else if _, e := domainPoke.Exec(subDomain, true); e != nil {
 		t.Fatal(e)
-	} else if path, e := q.KindOfAncestors("j"); e != nil || strings.Join(path, ",") != "kinds,k" {
-		t.Fatal("KindOfAncestors", path, e)
+	} else if path, e := q.KindOfAncestors("j"); e != nil || strings.Join(path, ",") != "kind,k" {
+		got := strings.Join(path, ",")
+		t.Fatal("KindOfAncestors", got, e)
 	} else if _, e := domainPoke.Exec(subDomain, false); e != nil {
 		t.Fatal(e)
 	} else /*if ok, e := q.NounActive("apple"); e != nil || ok != true {
@@ -269,7 +265,7 @@ func defaultKinds(domain, at string) (out []any) {
 }
 
 // adapt old style tests to new interface
-func mdlDomain(m mdl.Modeler, els ...any) (err error) {
+func mdlDomain(m *mdl.Modeler, els ...any) (err error) {
 	for i, cnt := 0, len(els); i < cnt; i += 3 {
 		row := els[i:]
 		domain, requires, at :=
@@ -283,17 +279,18 @@ func mdlDomain(m mdl.Modeler, els ...any) (err error) {
 	}
 	return
 }
-func mdlField(m mdl.Modeler, els ...any) (err error) {
-	for i, cnt := 0, len(els); i < cnt; i += 6 {
+func mdlField(m *mdl.Modeler, els ...any) (err error) {
+	for i, cnt := 0, len(els); i < cnt; i += 7 {
 		row := els[i:]
-		domain, kind, field, affinity, typeName, at :=
-			row[0].(string),
+		fn, domain, kind, field, affinity, typeName, at :=
+			row[0].(func(domain, kind, field string, affinity affine.Affinity, typeName, at string) error),
 			row[1].(string),
 			row[2].(string),
-			row[3].(affine.Affinity),
-			row[4].(string),
-			row[5].(string)
-		if e := m.Field(domain, kind, field, affinity, typeName, at); e != nil {
+			row[3].(string),
+			row[4].(affine.Affinity),
+			row[5].(string),
+			row[6].(string)
+		if e := fn(domain, kind, field, affinity, typeName, at); e != nil {
 			err = e
 			break
 		}
@@ -301,7 +298,7 @@ func mdlField(m mdl.Modeler, els ...any) (err error) {
 	return
 }
 
-func mdlKind(m mdl.Modeler, els ...any) (err error) {
+func mdlKind(m *mdl.Modeler, els ...any) (err error) {
 	for i, cnt := 0, len(els); i < cnt; i += 4 {
 		row := els[i:]
 		domain, kind, path, at :=
@@ -317,7 +314,7 @@ func mdlKind(m mdl.Modeler, els ...any) (err error) {
 	return
 }
 
-func mdlName(m mdl.Modeler, els ...any) (err error) {
+func mdlName(m *mdl.Modeler, els ...any) (err error) {
 	for i, cnt := 0, len(els); i < cnt; i += 5 {
 		row := els[i:]
 		domain, noun, name, rank, at :=
@@ -334,7 +331,7 @@ func mdlName(m mdl.Modeler, els ...any) (err error) {
 	return
 }
 
-func mdlNoun(m mdl.Modeler, els ...any) (err error) {
+func mdlNoun(m *mdl.Modeler, els ...any) (err error) {
 	for i, cnt := 0, len(els); i < cnt; i += 4 {
 		row := els[i:]
 		domain, noun, kind, at :=
@@ -350,7 +347,7 @@ func mdlNoun(m mdl.Modeler, els ...any) (err error) {
 	return
 }
 
-func mdlPair(m mdl.Modeler, els ...any) (err error) {
+func mdlPair(m *mdl.Modeler, els ...any) (err error) {
 	for i, cnt := 0, len(els); i < cnt; i += 5 {
 		row := els[i:]
 		domain, relKind, oneNoun, otherNoun, at :=
@@ -367,23 +364,23 @@ func mdlPair(m mdl.Modeler, els ...any) (err error) {
 	return
 }
 
-func mdlPat(m mdl.Modeler, els ...any) (err error) {
-	for i, cnt := 0, len(els); i < cnt; i += 4 {
-		row := els[i:]
-		domain, kind, labels, result :=
-			row[0].(string),
-			row[1].(string),
-			row[2].(string),
-			row[3].(string)
-		if e := m.Pat(domain, kind, labels, result); e != nil {
-			err = e
-			break
-		}
-	}
-	return
-}
+// func mdlPat(m *mdl.Modeler, els ...any) (err error) {
+// 	for i, cnt := 0, len(els); i < cnt; i += 4 {
+// 		row := els[i:]
+// 		domain, kind, labels, result :=
+// 			row[0].(string),
+// 			row[1].(string),
+// 			row[2].(string),
+// 			row[3].(string)
+// 		if e := m.Pat(domain, kind, labels, result); e != nil {
+// 			err = e
+// 			break
+// 		}
+// 	}
+// 	return
+// }
 
-func mdlPlural(m mdl.Modeler, els ...any) (err error) {
+func mdlPlural(m *mdl.Modeler, els ...any) (err error) {
 	for i, cnt := 0, len(els); i < cnt; i += 4 {
 		row := els[i:]
 		domain, many, one, at :=
@@ -399,7 +396,7 @@ func mdlPlural(m mdl.Modeler, els ...any) (err error) {
 	return
 }
 
-func mdlRel(m mdl.Modeler, els ...any) (err error) {
+func mdlRel(m *mdl.Modeler, els ...any) (err error) {
 	for i, cnt := 0, len(els); i < cnt; i += 6 {
 		row := els[i:]
 		domain, relKind, oneKind, otherKind, cardinality, at :=
@@ -416,7 +413,7 @@ func mdlRel(m mdl.Modeler, els ...any) (err error) {
 	}
 	return
 }
-func mdlRule(m mdl.Modeler, els ...any) (err error) {
+func mdlRule(m *mdl.Modeler, els ...any) (err error) {
 	for i, cnt := 0, len(els); i < cnt; i += 7 {
 		row := els[i:]
 		domain, pattern, target, phase, filter, prog, at :=
@@ -427,14 +424,14 @@ func mdlRule(m mdl.Modeler, els ...any) (err error) {
 			row[4].(string),
 			row[5].(string),
 			row[6].(string)
-		if e := m.Rule(domain, pattern, target, phase, filter, prog, at); e != nil {
+		if e := m.UnmarshaledRule(domain, pattern, target, phase, filter, prog, at); e != nil {
 			err = e
 			break
 		}
 	}
 	return
 }
-func mdlValue(m mdl.Modeler, els ...any) (err error) {
+func mdlValue(m *mdl.Modeler, els ...any) (err error) {
 	for i, cnt := 0, len(els); i < cnt; i += 5 {
 		row := els[i:]
 		domain, noun, field, value, at :=
@@ -443,7 +440,7 @@ func mdlValue(m mdl.Modeler, els ...any) (err error) {
 			row[2].(string),
 			row[3].(string),
 			row[4].(string)
-		if e := m.Value(domain, noun, field, value, at); e != nil {
+		if e := m.UnmarshaledValue(domain, noun, field, value, at); e != nil {
 			err = e
 			break
 		}
@@ -454,10 +451,10 @@ func mdlValue(m mdl.Modeler, els ...any) (err error) {
 // fix: the old setup was able to handle transactions for bulk insert
 // anyway to do that with the interface version?
 // ( prepared statements seem to be locked to the db or tx )
-func createTable(db *sql.DB, cb func(mdl.Modeler) error) (err error) {
+func createTable(db *sql.DB, cb func(*mdl.Modeler) error) (err error) {
 	if e := tables.CreateAll(db); e != nil {
 		err = errutil.New("couldnt create model", e)
-	} else if m, e := mdl.NewModeler(db, nil); e != nil {
+	} else if m, e := mdl.NewModeler(db); e != nil {
 		err = errutil.New("couldnt create modeler", e)
 	} else {
 		err = cb(m)

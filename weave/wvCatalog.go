@@ -20,7 +20,7 @@ type Catalog struct {
 	pendingDomains []*Domain
 	Errors         []error
 	cursor         string
-	writer         mdl.Modeler
+	writer         *mdl.Modeler
 	run            rt.Runtime
 	db             *tables.Cache
 	warn           func(error)
