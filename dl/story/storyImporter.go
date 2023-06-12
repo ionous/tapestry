@@ -65,7 +65,7 @@ func importStory(k *weave.Catalog, tgt jsn.Marshalee) error {
 				if slot, ok := b.(jsn.SlotBlock); ok {
 					if slat, ok := slot.GetSlot(); !ok {
 						err = jsn.Missing
-					} else if tgt, ok := slat.(weave.PreImport); ok {
+					} else if tgt, ok := slat.(PreImport); ok {
 						if rep, e := tgt.PreImport(k); e != nil {
 							err = errutil.New(e, "failed to create replacement")
 						} else if rep != nil && !slot.SetSlot(rep) {

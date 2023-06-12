@@ -34,6 +34,11 @@ type Catalog struct {
 	domainNouns map[domainNoun]*ScopedNoun
 }
 
+// request future processing from the catalog's importer.
+type Schedule interface {
+	Schedule(*Catalog) error
+}
+
 type domainNoun struct{ domain, noun string }
 
 func NewCatalog(db *sql.DB) *Catalog {
@@ -70,6 +75,10 @@ func NewCatalogWithWarnings(db *sql.DB, warn func(error)) *Catalog {
 			qna.DecodeNone("unsupported decoder"),
 			qna.NewOptions()),
 	}
+}
+
+func (k *Catalog) SetSource(x string) {
+	k.cursor = x
 }
 
 // return the uniformly named domain ( if it exists )
