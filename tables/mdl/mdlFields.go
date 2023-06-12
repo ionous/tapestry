@@ -60,6 +60,8 @@ with allTraits as (
 	where (?3 = ma.kind)
 )`
 
+var mdl_field = tables.Insert("mdl_field", "domain", "kind", "field", "affinity", "type", "at")
+
 func (m *Modeler) addField(domain string, kid, cls kindInfo, field string, aff affine.Affinity, at string) (err error) {
 	// println("=== adding field", domain, kid.name, field, cls.name)
 	// if existing, e := tables.QueryStrings(m.db, fieldSource+`
@@ -127,7 +129,7 @@ using(name)
 			return
 		}, &prev.origin, &prev.name, &prev.aff, &prev.cls, &prev.aspect); e != nil {
 			err = e
-		} else if _, e := m.field.Exec(domain, kid.id, field, aff, cls.id, at); e != nil {
+		} else if _, e := m.db.Exec(mdl_field, domain, kid.id, field, aff, cls.id, at); e != nil {
 			err = errutil.New("database error", e)
 		}
 	}

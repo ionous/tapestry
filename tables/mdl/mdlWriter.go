@@ -20,75 +20,10 @@ import (
  *
  */
 func NewModeler(db *sql.DB) (ret *Modeler, err error) {
-	var ps tables.Prep
-	m := &Modeler{
-		db:          db,
+	ret = &Modeler{
+		db:          tables.NewCache(db),
 		aspectPath:  "XXX", // set to something that wont match until its set properly.
 		patternPath: "XXX",
-		assign: ps.Prep(db,
-			tables.Insert("mdl_default", "field", "value"),
-		),
-		check: ps.Prep(db,
-			tables.Insert("mdl_check", "domain", "name", "value", "affinity", "prog", "at"),
-		),
-		domain: ps.Prep(db,
-			tables.Insert("mdl_domain", "domain", "requires", "at"),
-		),
-		fact: ps.Prep(db,
-			tables.Insert("mdl_fact", "domain", "fact", "value", "at"),
-		),
-		field: ps.Prep(db,
-			tables.Insert("mdl_field", "domain", "kind", "field", "affinity", "type", "at"),
-		),
-		grammar: ps.Prep(db,
-			tables.Insert("mdl_grammar", "domain", "name", "prog", "at"),
-		),
-		kind: ps.Prep(db,
-			tables.Insert("mdl_kind", "domain", "kind", "path", "at"),
-		),
-		name: ps.Prep(db,
-			tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at"),
-		),
-		noun: ps.Prep(db,
-			// the domain tells the scope in which the noun was defined
-			// ( the same as - or a child of - the domain of the kind )
-			tables.Insert("mdl_noun", "domain", "noun", "kind", "at"),
-		),
-		opposite: ps.Prep(db,
-			`insert into mdl_rev(domain, oneWord, otherWord, at) 
-				values(?1, ?2, ?3, ?4), (?1, ?3, ?2, ?4)`,
-		),
-		pair: ps.Prep(db,
-			// domain captures the scope in which the pairing was defined.
-			// within that scope: the noun, relation, and otherNoun are all unique names --
-			// even if they are not unique globally, and even if they a broader/different scope than the pair's domain.
-			tables.Insert("mdl_pair", "domain", "relKind", "oneNoun", "otherNoun", "at"),
-		),
-		plural: ps.Prep(db,
-			// a plural word ("many") can have at most one singular definition per domain
-			// ie. "people" and "persons" are valid plurals of "person",
-			// but "people" as a singular can only be defined as "person" ( not also "human" )
-			tables.Insert("mdl_plural", "domain", "many", "one", "at"),
-		),
-		rel: ps.Prep(db,
-			// relation and constraint between two kinds of nouns
-			//  fix? the data is duplicated in kinds and fields... should this be removed?
-			// might also consider adding a "cardinality" field to the relation kind, and then use init for individual relations
-			tables.Insert("mdl_rel", "relKind", "oneKind", "otherKind", "cardinality", "at"),
-		),
-		rule: ps.Prep(db,
-			tables.Insert("mdl_rule", "domain", "kind", "target", "phase", "filter", "prog", "at"),
-		),
-		// note: values are written per noun, not per domain
-		// fix? some values are references to objects in the form "#domain::noun" -- should the be changed to ids?
-		value: ps.Prep(db,
-			tables.Insert("mdl_value", "noun", "field", "value", "at"),
-		),
-	}
-	if e := ps.Err(); e != nil {
-		err = e
-	} else {
-		ret = m
 	}
 	return
 }
@@ -96,22 +31,7 @@ func NewModeler(db *sql.DB) (ret *Modeler, err error) {
 // Modeler wraps writing to the model table
 // so the implementation can handle verifying dependent names when needed.
 type Modeler struct {
-	db *sql.DB
-	assign,
-	check,
-	domain,
-	fact,
-	field,
-	grammar,
-	kind,
-	name,
-	noun,
-	opposite,
-	pair,
-	plural,
-	rel,
-	rule,
-	value *sql.Stmt
+	db *tables.Cache
 	// some ugly caching:
 	patternPath,
 	aspectPath string // ex. ',4,'
@@ -143,7 +63,7 @@ func (m *Modeler) Aspect(domain, aspect, at string, traits []string) (err error)
 			aspect, kid.domain, domain)
 	} else {
 		for _, t := range traits {
-			if _, e := m.field.Exec(domain, kid.id, t, affine.Bool, nil, at); e != nil {
+			if _, e := m.db.Exec(mdl_field, domain, kid.id, t, affine.Bool, nil, at); e != nil {
 				err = errutil.New("database error", e)
 				break
 			}
@@ -151,6 +71,8 @@ func (m *Modeler) Aspect(domain, aspect, at string, traits []string) (err error)
 	}
 	return
 }
+
+var mdl_check = tables.Insert("mdl_check", "domain", "name", "value", "affinity", "prog", "at")
 
 // author tests of stories
 func (m *Modeler) Check(domain, name string, value literal.LiteralValue, prog []rt.Execute, at string) (err error) {
@@ -200,7 +122,7 @@ func (m *Modeler) Check(domain, name string, value literal.LiteralValue, prog []
 						aff = value.Affinity()
 					}
 					if prev.id == 0 {
-						_, err = m.check.Exec(d, name, out, aff, prog, at)
+						_, err = m.db.Exec(mdl_check, d, name, out, aff, prog, at)
 					} else {
 						if res, e := m.db.Exec(`update mdl_check 
 						set prog = (case when ?2 then ?2 else prog end),
@@ -221,6 +143,8 @@ func (m *Modeler) Check(domain, name string, value literal.LiteralValue, prog []
 	}
 	return
 }
+
+var mdl_default = tables.Insert("mdl_default", "field", "value")
 
 // the pattern half of Start; domain, kind, field are a pointer into Field
 // value should be a marshaled compact value
@@ -266,7 +190,7 @@ func (m *Modeler) Default(domain, kind, field string, v assign.Assignment) (err 
 					Conflict, field, kind,
 					prev.aff, aff)
 			} else {
-				_, err = m.assign.Exec(prev.id, out)
+				_, err = m.db.Exec(mdl_default, prev.id, out)
 			}
 
 		}
@@ -274,13 +198,17 @@ func (m *Modeler) Default(domain, kind, field string, v assign.Assignment) (err 
 	return
 }
 
+var mdl_domain = tables.Insert("mdl_domain", "domain", "requires", "at")
+
 // pairs of domain name and (domain) dependencies
 // fix: are we forcing/checking parent domains to exist before writing?
 // that might be cool .... but maybe this is the wrong level?
 func (m *Modeler) Domain(domain, requires, at string) (err error) {
-	_, err = m.domain.Exec(domain, requires, at)
+	_, err = m.db.Exec(mdl_domain, domain, requires, at)
 	return
 }
+
+var mdl_fact = tables.Insert("mdl_fact", "domain", "fact", "value", "at")
 
 // arbitrary key-value storage
 func (m *Modeler) Fact(domain, fact, value, at string) (err error) {
@@ -299,7 +227,7 @@ func (m *Modeler) Fact(domain, fact, value, at string) (err error) {
 		and fact = ?2`, domain, fact)
 		switch e := q.Scan(&prev.domain, &prev.value); e {
 		case sql.ErrNoRows:
-			if _, e := m.fact.Exec(domain, fact, value, at); e != nil {
+			if _, e := m.db.Exec(mdl_fact, domain, fact, value, at); e != nil {
 				err = errutil.New("database error", e)
 			}
 		case nil:
@@ -318,6 +246,8 @@ func (m *Modeler) Fact(domain, fact, value, at string) (err error) {
 	}
 	return
 }
+
+var mdl_grammar = tables.Insert("mdl_grammar", "domain", "name", "prog", "at")
 
 // player input parsing
 func (m *Modeler) Grammar(domain, name string, prog *grammar.Directive, at string) (err error) {
@@ -339,7 +269,7 @@ func (m *Modeler) Grammar(domain, name string, prog *grammar.Directive, at strin
 		`, domain, name).Scan(&prev.domain, &prev.prog)
 		switch e {
 		case sql.ErrNoRows:
-			_, err = m.grammar.Exec(d, name, prog, at)
+			_, err = m.db.Exec(mdl_grammar, d, name, prog, at)
 
 		case nil:
 			if prev.prog != prog {
@@ -357,6 +287,8 @@ func (m *Modeler) Grammar(domain, name string, prog *grammar.Directive, at strin
 	return
 }
 
+var mdl_kind = tables.Insert("mdl_kind", "domain", "kind", "path", "at")
+
 // singular name of kind and materialized hierarchy of ancestors separated by commas
 // this duplicates the algorithm used by Noun()
 func (m *Modeler) Kind(domain, kind, parent, at string) (err error) {
@@ -370,7 +302,7 @@ func (m *Modeler) Kind(domain, kind, parent, at string) (err error) {
 	} else if kind.id == 0 {
 		// easiest is if the name has never been mentioned before;
 		// we verified the other inputs already, so insert:
-		if res, e := m.kind.Exec(domain, kind.name, trimPath(parent.fullpath()), at); e != nil {
+		if res, e := m.db.Exec(mdl_kind, domain, kind.name, trimPath(parent.fullpath()), at); e != nil {
 			err = errutil.New("database error", e)
 		} else {
 			// cache result... sometimes
@@ -432,6 +364,8 @@ func (m *Modeler) Member(domain, kind, field string, aff affine.Affinity, cls, a
 	return
 }
 
+var mdl_name = tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at")
+
 // words for authors and game players refer to nouns
 // follows the domain rules of Noun.
 func (m *Modeler) Name(domain, noun, name string, rank int, at string) (err error) {
@@ -450,12 +384,16 @@ func (m *Modeler) Name(domain, noun, name string, rank int, at string) (err erro
 			err = errutil.New("database error", e)
 		} else if exists {
 			err = errutil.Fmt("%w %q already an alias of %q", Duplicate, name, noun.name)
-		} else if _, e := m.name.Exec(domain, noun.id, name, rank, at); e != nil {
+		} else if _, e := m.db.Exec(mdl_name, domain, noun.id, name, rank, at); e != nil {
 			err = errutil.New("database error", e)
 		}
 	}
 	return
 }
+
+// the domain tells the scope in which the noun was defined
+// ( the same as - or a child of - the domain of the kind )
+var mdl_noun = tables.Insert("mdl_noun", "domain", "noun", "kind", "at")
 
 // the domain tells the scope in which the noun was defined
 // ( the same as - or a child of - the domain of the kind ) error
@@ -468,7 +406,7 @@ func (m *Modeler) Noun(domain, name, ancestor, at string) (err error) {
 	} else if prev.id == 0 {
 		// easiest is if the name has never been mentioned before;
 		// we verified the other inputs already, so just go ahead and insert:
-		_, err = m.noun.Exec(domain, name, parent.id, at)
+		_, err = m.db.Exec(mdl_noun, domain, name, parent.id, at)
 	} else if prev.domain != domain {
 		// if it was declared in a different domain: we can't change it now.
 		err = errutil.Fmt("%w new ancestor %q of %q expected in the same domain as the original declaration; was %q now %q",
@@ -500,6 +438,9 @@ func (m *Modeler) Noun(domain, name, ancestor, at string) (err error) {
 	return
 }
 
+var mdl_opposite = `insert into mdl_rev(domain, oneWord, otherWord, at) 
+				values(?1, ?2, ?3, ?4), (?1, ?3, ?2, ?4)`
+
 // domain captures the scope in which the pairing was defined.
 // within that scope: the noun, relation, and otherNoun are all unique names --
 // even if they are not unique globally, and even if they a broader/different scope than the pair's domain.
@@ -529,11 +470,16 @@ func (m *Modeler) Opposite(domain, a, b, at string) (err error) {
 			err = e
 		} else {
 			// writes the opposite paring as well
-			_, err = m.opposite.Exec(d, a, b, at)
+			_, err = m.db.Exec(mdl_opposite, d, a, b, at)
 		}
 	}
 	return
 }
+
+// domain captures the scope in which the pairing was defined.
+// within that scope: the noun, relation, and otherNoun are all unique names --
+// even if they are not unique globally, and even if they a broader/different scope than the pair's domain.
+var mdl_pair = tables.Insert("mdl_pair", "domain", "relKind", "oneNoun", "otherNoun", "at")
 
 func (m *Modeler) Pair(domain, rel, oneNoun, otherNoun, at string) (err error) {
 	if rel, e := m.findRequiredKind(domain, rel); e != nil {
@@ -609,20 +555,10 @@ func (m *Modeler) Parameter(domain, kind, field string, aff affine.Affinity, cls
 	return
 }
 
-// func (m *Modeler) Pat(domain, kind, labels, result string) (err error) {
-// 	// tbd: labels are are comma-separated field names, should it be field ids?
-// 	// similarly, result is a field, should it be a field id?
-// 	// and... either way... should they be validated
-// 	if kid, e := m.findRequiredKind(domain, kind); e != nil {
-// 		err = e
-// 	} else if kid.domain != domain {
-// 		err = errutil.Fmt("%w pattern %q signature expected in the same domain as the pattern declaration; was %q now %q",
-// 			Conflict, kind, kid.domain, domain)
-// 	} else {
-// 		_, err = m.pat.Exec(kid.id, labels, result)
-// 	}
-// 	return
-// }
+// a plural word ("many") can have at most one singular definition per domain
+// ie. "people" and "persons" are valid plurals of "person",
+// but "people" as a singular can only be defined as "person" ( not also "human" )
+var mdl_plural = tables.Insert("mdl_plural", "domain", "many", "one", "at")
 
 // a plural word (many) can have at most one singular definition per domain
 // ie. people and persons are valid plurals of person,
@@ -652,16 +588,21 @@ func (m *Modeler) Plural(domain, many, one, at string) (err error) {
 		}, &prev, &from); e != nil {
 			err = e
 		} else {
-			_, err = m.plural.Exec(d, many, one, at)
+			_, err = m.db.Exec(mdl_plural, d, many, one, at)
 		}
 	}
 	return
 }
 
+//  fix? the data is duplicated in kinds and fields... should this be removed?
+// might also consider adding a "cardinality" field to the relation kind, and then use init for individual relations
+var mdl_rel = tables.Insert("mdl_rel", "relKind", "oneKind", "otherKind", "cardinality", "at")
+
+// relation and constraint between two kinds of nouns
+
 // relation and constraint between two kinds of nouns
 //  fix? the data is duplicated in kinds and fields... should this be removed?
 // might also consider adding a cardinality field to the relation kind, and then use init for individual relations
-
 func (m *Modeler) Rel(domain, relKind, oneKind, otherKind, cardinality, at string) (err error) {
 	if rel, e := m.findRequiredKind(domain, relKind); e != nil {
 		err = e
@@ -671,7 +612,7 @@ func (m *Modeler) Rel(domain, relKind, oneKind, otherKind, cardinality, at strin
 		err = e
 	} else if other, e := m.findRequiredKind(domain, otherKind); e != nil {
 		err = e
-	} else if _, e := m.rel.Exec(rel.id, one.id, other.id, cardinality, at); e != nil {
+	} else if _, e := m.db.Exec(mdl_rel, rel.id, one.id, other.id, cardinality, at); e != nil {
 		err = e // improve the error result if the relation existed vefore?
 	} else {
 		a, b := makeRel(oneKind, otherKind, cardinality)
@@ -713,6 +654,8 @@ func (m *Modeler) Result(domain, kind, field string, aff affine.Affinity, cls, a
 	return
 }
 
+var mdl_rule = tables.Insert("mdl_rule", "domain", "kind", "target", "phase", "filter", "prog", "at")
+
 func (m *Modeler) Rule(domain, pattern, target string, phase int, filter rt.BoolEval, prog []rt.Execute, at string) (err error) {
 	if filter, e := marshalout(filter); e != nil {
 		err = e
@@ -733,10 +676,14 @@ func (m *Modeler) UnmarshaledRule(domain, pattern, target string, phase int, fil
 	} else if tgt, e := m.findOptionalKind(domain, target); e != nil {
 		err = e
 	} else {
-		_, err = m.rule.Exec(domain, kid.id, tgt.id, phase, filter, prog, at)
+		_, err = m.db.Exec(mdl_rule, domain, kid.id, tgt.id, phase, filter, prog, at)
 	}
 	return
 }
+
+// note: values are written per noun, not per domain
+// fix? some values are references to objects in the form "#domain::noun" -- should the be changed to ids?
+var mdl_value = tables.Insert("mdl_value", "noun", "field", "value", "at")
 
 // public for tests:
 func (m *Modeler) UnmarshaledValue(domain, noun, field, value, at string) (err error) {
@@ -756,7 +703,7 @@ func (m *Modeler) UnmarshaledValue(domain, noun, field, value, at string) (err e
 		} else if e != nil {
 			err = errutil.New("database error", e)
 		} else {
-			_, err = m.value.Exec(noun.id, fieldId, value, at)
+			_, err = m.db.Exec(mdl_value, noun.id, fieldId, value, at)
 		}
 	}
 	return

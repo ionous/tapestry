@@ -49,9 +49,9 @@ func (m *Modeler) findNoun(domain, noun string, q nounFinder) (ret nounInfo, err
 	return
 }
 
-type nounFinder func(db tables.QueryRow, domain, noun string) (ret nounInfo, err error)
+type nounFinder func(db *tables.Cache, domain, noun string) (ret nounInfo, err error)
 
-func nounWithKind(db tables.QueryRow, domain, noun string) (ret nounInfo, err error) {
+func nounWithKind(db *tables.Cache, domain, noun string) (ret nounInfo, err error) {
 	err = db.QueryRow(`
 	select mn.domain, mn.rowid, mk.rowid, ',' || mk.rowid || ',' || mk.path
 	from mdl_noun mn
@@ -65,7 +65,7 @@ func nounWithKind(db tables.QueryRow, domain, noun string) (ret nounInfo, err er
 	return
 }
 
-func nounSansKind(db tables.QueryRow, domain, noun string) (ret nounInfo, err error) {
+func nounSansKind(db *tables.Cache, domain, noun string) (ret nounInfo, err error) {
 	err = db.QueryRow(`
 	select domain, mn.rowid
 	from mdl_noun mn

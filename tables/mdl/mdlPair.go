@@ -33,7 +33,7 @@ func (m *Modeler) checkPair(domain string, rel kindInfo, one, other nounInfo, re
 	return
 }
 func (m *Modeler) addPair(domain string, kind kindInfo, one, other nounInfo, at string) (err error) {
-	_, err = m.pair.Exec(domain, kind.id, one.id, other.id, at)
+	_, err = m.db.Exec(mdl_pair, domain, kind.id, one.id, other.id, at)
 	return
 }
 
