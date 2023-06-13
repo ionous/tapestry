@@ -19,7 +19,7 @@ func (op *DefineTraits) Execute(macro rt.Runtime) error {
 
 // (the) colors are red, blue, or green.
 func (op *DefineTraits) Schedule(cat *weave.Catalog) error {
-	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if traits, e := safe.GetTextList(w, op.Traits); e != nil {
 			err = e
 		} else if aspect, e := safe.GetText(w, op.Aspect); e != nil {
@@ -53,7 +53,7 @@ func (op *DefineNounTraits) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineNounTraits) Schedule(cat *weave.Catalog) error {
-	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
 		} else if kind, e := safe.GetOptionalText(w, op.Kind, ""); e != nil {
@@ -92,7 +92,7 @@ func (op *DefineNouns) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineNouns) Schedule(cat *weave.Catalog) error {
-	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
 		} else if kind, e := safe.GetText(w, op.Kind); e != nil {
@@ -119,7 +119,7 @@ func (op *NounAssignment) Execute(macro rt.Runtime) error {
 
 // ex. The description of the nets is xxx
 func (op *NounAssignment) Schedule(cat *weave.Catalog) error {
-	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
 		} else if field, e := safe.GetText(w, op.FieldName); e != nil {
@@ -146,7 +146,7 @@ func (op *DefineRelatives) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineRelatives) Schedule(cat *weave.Catalog) error {
-	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
 		} else if kind, e := safe.GetOptionalText(w, op.Kind, ""); e != nil {
@@ -186,7 +186,7 @@ func (op *DefineOtherRelatives) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineOtherRelatives) Schedule(cat *weave.Catalog) error {
-	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
 		} else if relation, e := safe.GetText(w, op.Relation); e != nil {

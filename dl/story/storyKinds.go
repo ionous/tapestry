@@ -17,7 +17,7 @@ func (op *DefineKinds) Execute(macro rt.Runtime) error {
 
 // ex. "cats are a kind of animal"
 func (op *DefineKinds) Schedule(cat *weave.Catalog) error {
-	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(assert.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if kinds, e := safe.GetTextList(w, op.Kinds); e != nil {
 			err = e
 		} else if ancestor, e := safe.GetText(w, op.Ancestor); e != nil {
@@ -41,7 +41,7 @@ func (op *DefineFields) Execute(macro rt.Runtime) error {
 // ex. cats have some text called breed.
 // ex. horses have an aspect called speed.
 func (op *DefineFields) Schedule(cat *weave.Catalog) error {
-	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if len(op.Fields) == 0 {
 			// log or something?
 		} else if kind, e := safe.GetText(w, op.Kind); e != nil {

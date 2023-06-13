@@ -47,7 +47,7 @@ func (op *MapHeading) Execute(macro rt.Runtime) error {
 
 // departing from the current room in a direction
 func (op *MapHeading) Schedule(cat *weave.Catalog) error {
-	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if room, e := makeNoun(w, op.RoomName); e != nil {
 			err = e
 		} else if len(room.name) == 0 {
@@ -102,7 +102,7 @@ func (op *MapDeparting) Execute(macro rt.Runtime) error {
 
 // departing from the current room via a door
 func (op *MapDeparting) Schedule(cat *weave.Catalog) error {
-	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if room, e := makeNoun(w, op.RoomName); e != nil {
 			err = e // ^ todo: ensure the room exists without declaring it
 		} else if door, e := makeNoun(w, op.DoorName); e != nil {

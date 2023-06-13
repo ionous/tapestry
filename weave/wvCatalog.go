@@ -126,7 +126,7 @@ func (c *Catalog) ensureDomain(n string) (ret *Domain) {
 // return the uniformly named domain ( creating it if necessary )
 func (c *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err error) {
 	d := c.ensureDomain(n)
-	if d.currPhase > assert.DomainStart {
+	if d.currPhase >= assert.RequireDependencies {
 		err = errutil.New("can't add new dependencies to parent domains", d.name)
 	} else {
 		// domains are implicitly dependent on their parent domain

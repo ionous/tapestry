@@ -10,7 +10,7 @@ import (
 // validate that the pattern for the rule exists then add the rule to the *current* domain
 // ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
 func (cat *Catalog) AssertRule(pattern string, target string, filter rt.BoolEval, flags assert.EventTiming, prog []rt.Execute) error {
-	return cat.Schedule(assert.RulePhase, func(ctx *Weaver) (err error) {
+	return cat.Schedule(assert.RequireRelatives, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
 		if name, ok := UniformString(pattern); !ok {
 			err = InvalidString(pattern)

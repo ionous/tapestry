@@ -9,7 +9,7 @@ import (
 
 func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error {
 	// uses ancestry because it defines kinds for each relation
-	return cat.Schedule(assert.AncestryPhase, func(ctx *Weaver) (err error) {
+	return cat.Schedule(assert.RequireDeterminers, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
 		// like aspects, we dont try to singularize these.
 		if rel, ok := UniformString(opRel); !ok {
@@ -25,7 +25,7 @@ func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error 
 			if e := d.addKind(rel, kindsOf.Relation.String(), at); e != nil {
 				err = e
 			} else {
-				err = cat.Schedule(assert.MemberPhase, func(ctx *Weaver) (err error) {
+				err = cat.Schedule(assert.RequireResults, func(ctx *Weaver) (err error) {
 					if e := cat.writer.Rel(d.name, rel, acls, bcls, card, at); e != nil {
 						err = e
 					}

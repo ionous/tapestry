@@ -18,7 +18,7 @@ func (op *ExtendPattern) Execute(macro rt.Runtime) error {
 }
 
 func (op *ExtendPattern) Schedule(cat *weave.Catalog) error {
-	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetText(w, op.PatternName); e != nil {
 			err = e
 		} else {
@@ -47,7 +47,7 @@ func (op *DefinePattern) Execute(macro rt.Runtime) error {
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
 func (op *DefinePattern) Schedule(cat *weave.Catalog) (err error) {
-	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetText(w, op.PatternName); e != nil {
 			err = e
 		} else {

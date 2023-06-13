@@ -61,7 +61,7 @@ func (cat *Catalog) processDomain(d *Domain) (err error) {
 		err = e
 	} else {
 		cat.processing.Push(d)
-		for p := assert.Phase(0); p < assert.NumPhases; p++ {
+		for p := assert.Phase(0); p <= assert.RequireAll; p++ {
 			ctx := Weaver{d: d, phase: p, Runtime: cat.run}
 			if e := d.runPhase(&ctx); e != nil {
 				err = e

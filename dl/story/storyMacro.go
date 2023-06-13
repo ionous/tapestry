@@ -20,7 +20,7 @@ func (op *DefineMacro) Execute(macro rt.Runtime) error {
 // Schedule - register the macro with the importer;
 // subsequent CallMacro(s) will be able to run it.
 func (op *DefineMacro) Schedule(cat *weave.Catalog) (err error) {
-	return cat.Schedule(assert.AncestryPhase, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(assert.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetText(w, op.MacroName); e != nil {
 			err = e
 		} else {
@@ -54,7 +54,7 @@ func (op *DefineMacro) Schedule(cat *weave.Catalog) (err error) {
 
 // Schedule for macros calls Execute... eventually... to generate dynamic assertions.
 func (op *CallMacro) Schedule(k *weave.Catalog) error {
-	return k.Schedule(assert.MacroPhase, func(w *weave.Weaver) error {
+	return k.Schedule(assert.RequireNouns /*assert.MacroPhase*/, func(w *weave.Weaver) error {
 		return op.Execute(w)
 	})
 }

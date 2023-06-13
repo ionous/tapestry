@@ -7,7 +7,7 @@ import (
 )
 
 func (op *DefineScene) Schedule(cat *weave.Catalog) error {
-	return cat.Schedule(assert.PostDomain, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(assert.RequireAll, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetOptionalText(w, op.Scene, ""); e != nil {
 			err = e
 		} else if dependsOn, e := safe.GetOptionalTexts(w, op.DependsOn, nil); e != nil {

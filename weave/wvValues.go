@@ -9,7 +9,7 @@ import (
 
 // note: values are written per *noun* not per domain....
 func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, opValue literal.LiteralValue) error {
-	return cat.Schedule(assert.ValuePhase, func(ctx *Weaver) (err error) {
+	return cat.Schedule(assert.RequireNames, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
 		if noun, ok := UniformString(opNoun); !ok {
 			err = InvalidString(opNoun)

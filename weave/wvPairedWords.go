@@ -7,7 +7,7 @@ import (
 // add to the plurals to the database and ( maybe ) remember the plural for the current domain's set of rules
 // not more than one singular per plural ( but the other way around is fine. )
 func (cat *Catalog) AssertPlural(opSingular, opPlural string) error {
-	return cat.Schedule(assert.PluralPhase, func(ctx *Weaver) (err error) {
+	return cat.Schedule(assert.RequireDependencies, func(ctx *Weaver) (err error) {
 		if plural, ok := UniformString(opPlural); !ok {
 			err = InvalidString(opPlural)
 		} else if singular, ok := UniformString(opSingular); !ok {
@@ -20,7 +20,7 @@ func (cat *Catalog) AssertPlural(opSingular, opPlural string) error {
 }
 
 func (cat *Catalog) AssertOpposite(opOpposite, opWord string) error {
-	return cat.Schedule(assert.PluralPhase, func(ctx *Weaver) (err error) {
+	return cat.Schedule(assert.RequireDependencies, func(ctx *Weaver) (err error) {
 		if a, ok := UniformString(opOpposite); !ok {
 			err = InvalidString(opOpposite)
 		} else if b, ok := UniformString(opWord); !ok {

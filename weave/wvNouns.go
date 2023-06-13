@@ -10,16 +10,14 @@ import (
 )
 
 func (cat *Catalog) AssertNounKind(opNoun, opKind string) error {
-	return cat.Schedule(assert.NounPhase, func(ctx *Weaver) (err error) {
+	return cat.Schedule(assert.RequireDefaults, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
 		_, name := d.StripDeterminer(opNoun)
-		_, kind := d.StripDeterminer(opKind)
-
 		if noun, ok := UniformString(name); !ok {
 			err = InvalidString(opNoun)
-		} else if kn, ok := UniformString(kind); !ok {
+		} else if _, kind := d.UniformDeterminer(opKind); len(kind) == 0 {
 			err = InvalidString(opKind)
-		} else if e := cat.writer.Noun(d.name, noun, d.singularize(kn), at); e != nil {
+		} else if e := cat.writer.Noun(d.name, noun, d.singularize(kind), at); e != nil {
 			err = e
 		} else {
 			cat.domainNouns[domainNoun{d.name, noun}] = &ScopedNoun{domain: d, name: noun}

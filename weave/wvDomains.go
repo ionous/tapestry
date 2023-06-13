@@ -12,8 +12,8 @@ import (
 type Domain struct {
 	name       string
 	catalog    *Catalog
-	currPhase  assert.Phase                // updated during weave, ends at NumPhases
-	scheduling [assert.NumPhases][]memento // separates commands into phases
+	currPhase  assert.Phase                     // updated during weave, ends at NumPhases
+	scheduling [assert.RequireAll + 1][]memento // separates commands into phases
 }
 
 type memento struct {
@@ -38,7 +38,7 @@ func (cat *Catalog) Schedule(when assert.Phase, what func(*Weaver) error) (err e
 // have all parent domains been processed?
 func (d *Domain) isReadyForProcessing() bool {
 	return nil == d.visit(func(uses *Domain) (err error) {
-		if d != uses && uses.currPhase < assert.NumPhases {
+		if d != uses && uses.currPhase <= assert.RequireAll {
 			err = errutil.New("break")
 		}
 		return
@@ -47,7 +47,8 @@ func (d *Domain) isReadyForProcessing() bool {
 
 func (d *Domain) schedule(at string, when assert.Phase, what func(*Weaver) error) (err error) {
 	if d.currPhase > when {
-		err = errutil.Fmt("unexpected phase(%s) for %q", when, d.name)
+		err = errutil.Fmt("scheduling error for %q: currently in %s asking, for %s.",
+			d.name, d.currPhase, when)
 	} else /*if when == d.currPhase {
 		err = what(&ctx)
 	} else */{

@@ -125,7 +125,7 @@ func TestRivalConflict(t *testing.T) {
 // ephemera for testing which enters a definition
 type rivalFact string
 
-func (el rivalFact) Phase() assert.Phase { return assert.ValuePhase }
+func (el rivalFact) Phase() assert.Phase { return assert.RequireNouns /*ValuePhase*/ }
 
 func (el rivalFact) Assert(cat assert.Assertions) error {
 	return cat.AssertDefinition("rivalFact", string(el))

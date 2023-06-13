@@ -27,7 +27,7 @@ func StoryStatement(run rt.Runtime, op Schedule) (err error) {
 }
 
 func (cat *Catalog) AssertAlias(opShortName string, opAliases ...string) error {
-	return cat.Schedule(assert.AliasPhase, func(ctx *Weaver) (err error) {
+	return cat.Schedule(assert.RequireNouns, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
 		if shortName, ok := UniformString(opShortName); !ok {
 			err = errutil.New("invalid name", opShortName)
@@ -49,7 +49,7 @@ func (cat *Catalog) AssertAlias(opShortName string, opAliases ...string) error {
 // generates traits and adds them to a custom aspect kind.
 func (cat *Catalog) AssertAspectTraits(opAspects string, opTraits []string) error {
 	// uses the ancestry phase because it generates kinds ( one per aspect. )
-	return cat.Schedule(assert.AncestryPhase, func(ctx *Weaver) (err error) {
+	return cat.Schedule(assert.RequireDeterminers, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
 		// we dont singularize aspects even thought its a kind;
 		// most are really singularizable anyway, and some common things like "darkness" dont singularize correctly.
@@ -62,7 +62,7 @@ func (cat *Catalog) AssertAspectTraits(opAspects string, opTraits []string) erro
 			if e := d.addKind(aspect, kindsOf.Aspect.String(), at); e != nil {
 				err = e
 			} else if len(traits) > 0 {
-				err = d.schedule(at, assert.MemberPhase, func(ctx *Weaver) error {
+				err = d.schedule(at, assert.RequireResults, func(ctx *Weaver) error {
 					return cat.writer.Aspect(d.name, aspect, at, traits)
 				})
 			}
@@ -73,7 +73,7 @@ func (cat *Catalog) AssertAspectTraits(opAspects string, opTraits []string) erro
 
 //
 func (d *Domain) singularize(name string) (ret string) {
-	if d.currPhase <= assert.PluralPhase {
+	if d.currPhase <= assert.RequireDependencies {
 		panic("singularizing before plurals are known")
 	}
 	if len(name) < 2 {
@@ -107,7 +107,7 @@ func (d *Domain) addKind(name, parent, at string) (err error) {
 
 func (cat *Catalog) AssertCheck(opName string, prog []rt.Execute, expect literal.LiteralValue) error {
 	// uses domain phase, because it needs to ensure a domain exists
-	return cat.Schedule(assert.PostDomain, func(ctx *Weaver) (err error) {
+	return cat.Schedule(assert.RequireAll, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
 		if name, ok := UniformString(opName); !ok {
 			err = InvalidString(opName)
@@ -119,7 +119,7 @@ func (cat *Catalog) AssertCheck(opName string, prog []rt.Execute, expect literal
 }
 
 func (cat *Catalog) AssertDefinition(path ...string) error {
-	return cat.Schedule(assert.PostDomain, func(ctx *Weaver) (err error) {
+	return cat.Schedule(assert.RequireAll, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
 		if end := len(path) - 1; end <= 0 {
 			err = errutil.New("path too short", path)

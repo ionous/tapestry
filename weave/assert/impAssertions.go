@@ -24,25 +24,19 @@ type Phase int
 
 //go:generate stringer -type=Phase
 const (
-	DomainStart Phase = iota // domain hierarchy
-	PluralPhase
-	DeterminerPhase
-	AncestryPhase // kinds and kinds of kinds
-	//
-	ParamPhase    // parameters precede results
-	ResultPhase   // results precede normal fields
-	MemberPhase   // properties of kinds and records
-	DefaultsPhase // initial values of fields
-
-	MacroPhase    // tbd: when is best?
-	NounPhase     // instances ( of kinds )
-	ValuePhase    // initial values for fields of nouns
-	RelativePhase // initial relations between nouns
-	RulePhase     // assembles for patterns
-	AliasPhase
-	GrammarPhase // more grammar
-	PostDomain
-	NumPhases
+	RequireDependencies Phase = iota + 1
+	RequirePlurals
+	RequireDeterminers // kinds and kinds of kinds
+	RequireAncestry    // parameters precede results
+	RequireParameters  // results precede normal fields
+	RequireResults     // properties of kinds and records
+	RequireFields      // initial values of fields
+	RequireDefaults
+	RequireNouns
+	RequireNames
+	RequireRelatives
+	RequireRules
+	RequireAll
 )
 
 // assert.Facts?

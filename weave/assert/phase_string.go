@@ -8,32 +8,29 @@ func _() {
 	// An "invalid array index" compiler error signifies that the constant values have changed.
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
-	_ = x[DomainStart-0]
-	_ = x[PluralPhase-1]
-	_ = x[DeterminerPhase-2]
-	_ = x[AncestryPhase-3]
-	_ = x[ParamPhase-4]
-	_ = x[ResultPhase-5]
-	_ = x[MemberPhase-6]
-	_ = x[DefaultsPhase-7]
-	_ = x[MacroPhase-8]
-	_ = x[NounPhase-9]
-	_ = x[ValuePhase-10]
-	_ = x[RelativePhase-11]
-	_ = x[RulePhase-12]
-	_ = x[AliasPhase-13]
-	_ = x[GrammarPhase-14]
-	_ = x[PostDomain-15]
-	_ = x[NumPhases-16]
+	_ = x[RequireDependencies-1]
+	_ = x[RequirePlurals-2]
+	_ = x[RequireDeterminers-3]
+	_ = x[RequireAncestry-4]
+	_ = x[RequireParameters-5]
+	_ = x[RequireResults-6]
+	_ = x[RequireFields-7]
+	_ = x[RequireDefaults-8]
+	_ = x[RequireNouns-9]
+	_ = x[RequireNames-10]
+	_ = x[RequireRelatives-11]
+	_ = x[RequireRules-12]
+	_ = x[RequireAll-13]
 }
 
-const _Phase_name = "DomainStartPluralPhaseDeterminerPhaseAncestryPhaseParamPhaseResultPhaseMemberPhaseDefaultsPhaseMacroPhaseNounPhaseValuePhaseRelativePhaseRulePhaseAliasPhaseGrammarPhasePostDomainNumPhases"
+const _Phase_name = "RequireDependenciesRequirePluralsRequireDeterminersRequireAncestryRequireParametersRequireResultsRequireFieldsRequireDefaultsRequireNounsRequireNamesRequireRelativesRequireRulesRequireAll"
 
-var _Phase_index = [...]uint8{0, 11, 22, 37, 50, 60, 71, 82, 95, 105, 114, 124, 137, 146, 156, 168, 178, 187}
+var _Phase_index = [...]uint8{0, 19, 33, 51, 66, 83, 97, 110, 125, 137, 149, 165, 177, 187}
 
 func (i Phase) String() string {
+	i -= 1
 	if i < 0 || i >= Phase(len(_Phase_index)-1) {
-		return "Phase(" + strconv.FormatInt(int64(i), 10) + ")"
+		return "Phase(" + strconv.FormatInt(int64(i+1), 10) + ")"
 	}
 	return _Phase_name[_Phase_index[i]:_Phase_index[i+1]]
 }

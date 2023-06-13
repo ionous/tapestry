@@ -7,7 +7,7 @@ import (
 // validate that the pattern for the rule exists then add the rule to the *current* domain
 // ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
 func (cat *Catalog) AssertRelative(opRel, opNoun, opOtherNoun string) error {
-	return cat.Schedule(assert.RelativePhase, func(ctx *Weaver) (err error) {
+	return cat.Schedule(assert.RequireNames, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
 		if noun, ok := UniformString(opNoun); !ok {
 			err = InvalidString(opNoun)
