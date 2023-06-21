@@ -23,6 +23,6 @@ func buildFlags() (flags flag.FlagSet) {
 	flags.StringVar(&weaveFlags.srcPath, "in", inPath, `input file or directory name.`)
 	flags.StringVar(&weaveFlags.outFile, "out", outPath, "optional output filename (sqlite3)")
 	flags.BoolVar(&weaveFlags.checkAll, "check", false, "run check after importing?")
-	flags.StringVar(&weaveFlags.checkOne, "run", "", "run check on one test after importing?")
+	flags.StringVar(&weaveFlags.checkOne, "run", "", "run check on a particular test")
 	return
 }

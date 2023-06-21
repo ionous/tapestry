@@ -19,7 +19,7 @@ func buildFlags() (flags flag.FlagSet) {
 		inPath = filepath.Join(home, "Documents", "Tapestry", "build", "play.db")
 	}
 	flags.StringVar(&checkFlags.srcPath, "in", inPath, `input file or directory name.`)
-	flags.StringVar(&checkFlags.checkOne, "run", "", "run check on one test after importing?")
+	flags.StringVar(&checkFlags.checkOne, "run", "", "run check on a particular test")
 	flags.BoolVar(&checkFlags.responses, "responses", false, "print response names instead of values")
 	return
 }
