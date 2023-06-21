@@ -134,8 +134,7 @@ func importCountedNoun(cat *weave.Catalog, cnt int, kindOrKinds string) (ret []s
 			}
 			names[i] = noun
 		}
-		if e := cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
-			// by now, plurals will be determined, so we can determine which is which.
+		if e := cat.Schedule(assert.RequirePlurals, func(w *weave.Weaver) (err error) {
 			var kind, kinds string
 			if cnt == 1 {
 				kind = kindOrKinds

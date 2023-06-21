@@ -20,7 +20,6 @@ func (cat *Catalog) AssertRelative(opRel, opNoun, opOtherNoun string) error {
 		} else if second, e := d.GetClosestNoun(otherNoun); e != nil {
 			err = e
 		} else {
-			rel := d.singularize(rel)
 			err = cat.writer.Pair(d.name, rel, first.name, second.name, at)
 		}
 		return

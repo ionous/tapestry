@@ -8,16 +8,16 @@ type Kinds int
 const None Kinds = 0 //
 
 const (
-	Aspect   Kinds = 1 << iota // aspect
-	Kind                       // kind
-	Macro                      // macro
-	Pattern                    // pattern
-	Record                     // record
-	Relation                   // relation
-	Response                   // response
+	Aspect   Kinds = 1 << iota // aspects
+	Kind                       // kinds
+	Macro                      // macros
+	Pattern                    // patterns
+	Record                     // records
+	Relation                   // relations
+	Response                   // responses
 	// subtypes of pattern:
-	Action Kinds = Pattern | 1<<iota //action
-	Event                            //event
+	Action Kinds = Pattern | 1<<iota //actions
+	Event                            //events
 )
 
 var DefaultKinds = []Kinds{

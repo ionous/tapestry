@@ -17,7 +17,7 @@ func (cat *Catalog) AssertNounKind(opNoun, opKind string) error {
 			err = InvalidString(opNoun)
 		} else if _, kind := d.UniformDeterminer(opKind); len(kind) == 0 {
 			err = InvalidString(opKind)
-		} else if e := cat.writer.Noun(d.name, noun, d.singularize(kind), at); e != nil {
+		} else if e := cat.writer.Noun(d.name, noun, kind, at); e != nil {
 			err = e
 		} else {
 			cat.domainNouns[domainNoun{d.name, noun}] = &ScopedNoun{domain: d, name: noun}

@@ -1,12 +1,10 @@
 package weave
 
 import (
-	"database/sql"
 	"errors"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
@@ -51,14 +49,11 @@ func (cat *Catalog) AssertAspectTraits(opAspects string, opTraits []string) erro
 	// uses the ancestry phase because it generates kinds ( one per aspect. )
 	return cat.Schedule(assert.RequireDeterminers, func(ctx *Weaver) (err error) {
 		d, at := ctx.d, ctx.at
-		// we dont singularize aspects even thought its a kind;
-		// most are really singularizable anyway, and some common things like "darkness" dont singularize correctly.
 		if aspect, ok := UniformString(opAspects); !ok {
 			err = InvalidString(opAspects)
 		} else if traits, e := UniformStrings(opTraits); e != nil {
 			err = e
 		} else {
-			aspect := d.singularize(aspect)
 			if e := d.addKind(aspect, kindsOf.Aspect.String(), at); e != nil {
 				err = e
 			} else if len(traits) > 0 {
@@ -72,28 +67,6 @@ func (cat *Catalog) AssertAspectTraits(opAspects string, opTraits []string) erro
 }
 
 //
-func (d *Domain) singularize(name string) (ret string) {
-	if d.currPhase <= assert.RequireDependencies {
-		panic("singularizing before plurals are known")
-	}
-	if len(name) < 2 {
-		ret = name //
-	} else if e := d.catalog.db.QueryRow(`
-	select one
-	from mdl_plural
-	join domain_tree
-		on (uses = domain)
-	where base = ?1 and many = ?2
-	limit 1`, d.name, name).Scan(&ret); e != nil {
-		if e != sql.ErrNoRows && d.catalog.warn != nil {
-			err := errutil.Fmt("%v while singularizing %q", e, name)
-			d.catalog.warn(err)
-		}
-		ret = lang.Singularize(name)
-	}
-	return
-}
-
 func (d *Domain) addKind(name, parent, at string) (err error) {
 	if e := d.catalog.writer.Kind(d.name, name, parent, at); e != nil {
 		if !errors.Is(e, mdl.Duplicate) {

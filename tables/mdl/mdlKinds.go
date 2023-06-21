@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"strconv"
 
+	"git.sr.ht/~ionous/tapestry/lang"
 	"github.com/ionous/errutil"
 )
 
@@ -68,17 +69,53 @@ func (m *Modeler) findRequiredKind(domain, kind string) (ret kindInfo, err error
 func (m *Modeler) findKind(domain, kind string) (ret kindInfo, err error) {
 	if len(kind) == 0 {
 		err = errutil.New("empty name for kind")
-	} else if e := m.db.QueryRow(`
-	select domain, mk.rowid, ',' || mk.path
+	} else if singular, e := m.singularize(domain, kind); e != nil {
+		err = e
+	} else {
+		var ignore int
+		if e := m.db.QueryRow(`
+	select domain, 
+		mk.rowid, 
+		mk.kind,
+		',' || mk.path, 
+		case when ?2 = kind then 1 
+		     when ?3 = kind then 2 
+		     when ?2 = singular then 3
+		     when ?3 = singular then 4 
+		else 0 
+		end as rank
 	from mdl_kind mk
 	join domain_tree
 		on (uses = domain)
 	where base = ?1
-	and kind = ?2
-	limit 1`, domain, kind).Scan(&ret.domain, &ret.id, &ret.path); e != nil && e != sql.ErrNoRows {
-		err = e
+	and rank > 0
+	order by rank
+	limit 1`,
+			domain, kind, singular).Scan(
+			&ret.domain, &ret.id, &ret.name, &ret.path, &ignore); e == sql.ErrNoRows {
+			// nothing found? still set the name for easier logging;
+			// the empty id can disambiguate success from not found
+			ret.name = kind
+		} else {
+			err = e // possibly error or nil
+		}
+	}
+	return
+}
+
+func (m *Modeler) singularize(domain, kind string) (ret string, err error) {
+	if len(kind) < 2 {
+		ret = kind //
+	} else if e := m.db.QueryRow(`
+	select one
+	from mdl_plural
+	join domain_tree
+		on (uses = domain)
+	where base = ?1 and many = ?2
+	limit 1`, domain, kind).Scan(&ret); e == sql.ErrNoRows {
+		ret = lang.Singularize(kind)
 	} else {
-		ret.name = kind
+		err = e // other error or nil.
 	}
 	return
 }

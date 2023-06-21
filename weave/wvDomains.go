@@ -47,11 +47,9 @@ func (d *Domain) isReadyForProcessing() bool {
 
 func (d *Domain) schedule(at string, when assert.Phase, what func(*Weaver) error) (err error) {
 	if d.currPhase > when {
-		err = errutil.Fmt("scheduling error for %q: currently in %s asking, for %s.",
-			d.name, d.currPhase, when)
-	} else /*if when == d.currPhase {
+		ctx := Weaver{d: d, phase: d.currPhase, Runtime: d.catalog.run}
 		err = what(&ctx)
-	} else */{
+	} else {
 		d.scheduling[when] = append(d.scheduling[when], memento{what, at})
 	}
 	return

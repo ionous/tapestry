@@ -70,7 +70,6 @@ func addField(ctx *Weaver, kindName, fieldName, fieldClass string,
 	} else if class, ok := UniformString(fieldClass); !ok && len(fieldClass) > 0 {
 		err = InvalidString(fieldClass)
 	} else {
-		kind, class := d.singularize(kind), d.singularize(class)
 		err = addField(kind, field, class)
 	}
 	return

@@ -86,9 +86,9 @@ func (m *Modeler) Check(domain, name string, value literal.LiteralValue, prog []
 		}
 		if e := m.db.QueryRow(
 			`select mc.rowid, 
-						dt.domain, 
-						length(coalesce(mc.prog,''),
-						length(coalesce(mc.value,'') 
+					mc.domain,
+					length(coalesce(mc.prog,'')),
+					length(coalesce(mc.value,'')) 
 			from mdl_check mc
 			join domain_tree dt
 				on (dt.uses = mc.domain)
@@ -287,10 +287,10 @@ func (m *Modeler) Grammar(domain, name string, prog *grammar.Directive, at strin
 	return
 }
 
-var mdl_kind = tables.Insert("mdl_kind", "domain", "kind", "path", "at")
+var mdl_kind = tables.Insert("mdl_kind", "domain", "kind", "singular", "path", "at")
 
 // singular name of kind and materialized hierarchy of ancestors separated by commas
-// this duplicates the algorithm used by Noun()
+// this (somewhat) duplicates the algorithm used by Noun()
 func (m *Modeler) Kind(domain, kind, parent, at string) (err error) {
 	if parent, e := m.findOptionalKind(domain, parent); e != nil {
 		err = e
@@ -300,17 +300,29 @@ func (m *Modeler) Kind(domain, kind, parent, at string) (err error) {
 	} else if kind, e := m.findKind(domain, kind); e != nil {
 		err = e
 	} else if kind.id == 0 {
-		// easiest is if the name has never been mentioned before;
-		// we verified the other inputs already, so insert:
-		if res, e := m.db.Exec(mdl_kind, domain, kind.name, trimPath(parent.fullpath()), at); e != nil {
-			err = errutil.New("database error", e)
+		// manage singular and plural kinds
+		// i dont like this much; especially be cause it depends so much on the first declaration
+		// maybe better would be a name/names table that any named concept can use.
+		// or just force everyone to use the right names.
+		if singular, e := m.singularize(domain, kind.name); e != nil {
+			err = e
 		} else {
-			// cache result... sometimes
-			switch kind.name {
-			case kindsOf.Aspect.String():
-				err = updatePath(res, &m.aspectPath)
-			case kindsOf.Pattern.String():
-				err = updatePath(res, &m.patternPath)
+			var optionalOne *string
+			if singular != kind.name {
+				optionalOne = &singular
+			}
+			// easiest is if the name has never been mentioned before;
+			// we verified the other inputs already, so insert:
+			if res, e := m.db.Exec(mdl_kind, domain, kind.name, optionalOne, trimPath(parent.fullpath()), at); e != nil {
+				err = errutil.New("database error", e)
+			} else {
+				// cache result... sometimes
+				switch kind.name {
+				case kindsOf.Aspect.String():
+					err = updatePath(res, &m.aspectPath)
+				case kindsOf.Pattern.String():
+					err = updatePath(res, &m.patternPath)
+				}
 			}
 		}
 	} else if parent.id != 0 { // note: if the kind exists, ignore nil parents.
@@ -407,14 +419,23 @@ func (m *Modeler) Noun(domain, name, ancestor, at string) (err error) {
 		// easiest is if the name has never been mentioned before;
 		// we verified the other inputs already, so just go ahead and insert:
 		_, err = m.db.Exec(mdl_noun, domain, name, parent.id, at)
-	} else if prev.domain != domain {
-		// if it was declared in a different domain: we can't change it now.
-		err = errutil.Fmt("%w new ancestor %q of %q expected in the same domain as the original declaration; was %q now %q",
-			Conflict, ancestor, name, prev.domain, domain)
 	} else {
 		// does the newly specified ancestor contain the existing parent?
 		// then we are ratcheting down. (ex. new: ,c,b,a,)  ( existing: ,a, )
-		if strings.HasSuffix(parent.fullpath(), prev.fullpath) {
+		if strings.HasSuffix(prev.fullpath, parent.fullpath()) {
+			// does the existing kind fully contain the new kind?
+			// then its a duplicate request (ex. existing: ,c,b,a,)  ( new: ,a, )
+			err = errutil.Fmt("%w %q already declared as a kind of %q",
+				Duplicate, name, ancestor)
+		} else if !strings.HasSuffix(parent.fullpath(), prev.fullpath) {
+			// unrelated completely? then its an error
+			err = errutil.Fmt("%w can't redefine kind of %q as %q",
+				Conflict, name, ancestor)
+		} else if prev.domain != domain {
+			// if it was declared in a different domain: we can't change it now.
+			err = errutil.Fmt("%w new ancestor %q of %q expected in the same domain as the original declaration; was %q now %q",
+				Conflict, ancestor, name, prev.domain, domain)
+		} else {
 			if res, e := m.db.Exec(`update mdl_noun set kind = ?2 where rowid = ?1`,
 				prev.id, parent.id); e != nil {
 				err = e
@@ -424,15 +445,6 @@ func (m *Modeler) Noun(domain, name, ancestor, at string) (err error) {
 			} else if e != nil {
 				err = e
 			}
-		} else if strings.HasSuffix(prev.fullpath, parent.fullpath()) {
-			// does the existing kind fully contain the new kind?
-			// then its a duplicate request (ex. existing: ,c,b,a,)  ( new: ,a, )
-			err = errutil.Fmt("%w %q already declared as a kind of %q",
-				Duplicate, name, ancestor)
-		} else {
-			// unrelated completely? then its an error
-			err = errutil.Fmt("%w can't redefine kind of %q as %q",
-				Conflict, name, ancestor)
 		}
 	}
 	return
@@ -594,14 +606,17 @@ func (m *Modeler) Plural(domain, many, one, at string) (err error) {
 	return
 }
 
-//  fix? the data is duplicated in kinds and fields... should this be removed?
+//	fix? the data is duplicated in kinds and fields... should this be removed?
+//
 // might also consider adding a "cardinality" field to the relation kind, and then use init for individual relations
 var mdl_rel = tables.Insert("mdl_rel", "relKind", "oneKind", "otherKind", "cardinality", "at")
 
 // relation and constraint between two kinds of nouns
 
 // relation and constraint between two kinds of nouns
-//  fix? the data is duplicated in kinds and fields... should this be removed?
+//
+//	fix? the data is duplicated in kinds and fields... should this be removed?
+//
 // might also consider adding a cardinality field to the relation kind, and then use init for individual relations
 func (m *Modeler) Rel(domain, relKind, oneKind, otherKind, cardinality, at string) (err error) {
 	if rel, e := m.findRequiredKind(domain, relKind); e != nil {

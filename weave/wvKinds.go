@@ -15,7 +15,6 @@ func (cat *Catalog) AssertAncestor(opKind, opAncestor string) error {
 		} else if _, ancestor := d.UniformDeterminer(opAncestor); len(ancestor) == 0 && len(opAncestor) > 0 {
 			err = InvalidString(opAncestor)
 		} else {
-			kind, ancestor := d.singularize(kind), d.singularize(ancestor)
 			err = cat.Schedule(assert.RequireDeterminers, func(ctx *Weaver) error {
 				return d.addKind(kind, ancestor, at)
 			})

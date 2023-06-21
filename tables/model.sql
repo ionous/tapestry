@@ -44,7 +44,7 @@ create table mdl_grammar( domain text not null, name text, prog blob, at text, p
 /* 
  * a class of objects with shared characteristics 
  */
-create table mdl_kind( domain text not null, kind text, path text, at text, primary key( domain, kind ));
+create table mdl_kind( domain text not null, kind text, singular text, path text, at text, primary key( domain, kind ));
 /* 
  * words which refer to nouns. in cases where two words may refer to the same noun, 
  * the lower rank of the association wins. 

@@ -21,7 +21,6 @@ func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error 
 		} else if card := makeCard(amany, bmany); len(card) == 0 {
 			err = errutil.New("unknown cardinality")
 		} else {
-			rel := d.singularize(rel)
 			if e := d.addKind(rel, kindsOf.Relation.String(), at); e != nil {
 				err = e
 			} else {
