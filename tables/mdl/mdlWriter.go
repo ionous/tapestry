@@ -322,6 +322,17 @@ func (m *Modeler) Kind(domain, kind, parent, at string) (err error) {
 					err = updatePath(res, &m.aspectPath)
 				case kindsOf.Pattern.String():
 					err = updatePath(res, &m.patternPath)
+				default:
+					// super hacky..... hmmm...
+					// if we've declared a new kind of a pattern:
+					// write blanks into the mdl_pat; parameters and results use update only.
+					if strings.HasSuffix(parent.fullpath(), m.patternPath) {
+						if newid, e := res.LastInsertId(); e != nil {
+							err = e
+						} else {
+							_, err = m.db.Exec(`insert into mdl_pat(kind) values(?1)`, newid)
+						}
+					}
 				}
 			}
 		}
@@ -551,11 +562,9 @@ func (m *Modeler) Parameter(domain, kind, field string, aff affine.Affinity, cls
 	} else if e := m.addField(domain, kid, cls, field, aff, at); e != nil {
 		err = e
 	} else if res, e := m.db.Exec(`
-		insert into mdl_pat(kind, labels, result)
-		values(?1, ?2, null)
-		on conflict do update 
-		set labels = labels ||','|| ?2
-		where result is null
+		update mdl_pat
+		set labels = case when labels is null then (?2) else (labels ||','|| ?2) end
+		where kind = ?1 and result is null
 		`, kid.id, field); e != nil {
 		err = e
 	} else if rows, e := res.RowsAffected(); e != nil {
@@ -641,7 +650,6 @@ func (m *Modeler) Rel(domain, relKind, oneKind, otherKind, cardinality, at strin
 }
 
 // a field used for patterns as a returned value
-
 func (m *Modeler) Result(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
 	if kid, e := m.findRequiredKind(domain, kind); e != nil {
 		err = errutil.Fmt("%w trying to add result %q", e, field)
@@ -653,11 +661,9 @@ func (m *Modeler) Result(domain, kind, field string, aff affine.Affinity, cls, a
 	} else if e := m.addField(domain, kid, cls, field, aff, at); e != nil {
 		err = e
 	} else if res, e := m.db.Exec(`
-		insert into mdl_pat(kind, labels, result)
-		values(?1, null, ?2)
-		on conflict do update 
+		update mdl_pat
 		set result=?2
-		where result is null
+		where kind = ?1 and result is null
 		`, kid.id, field); e != nil {
 		err = e
 	} else if rows, e := res.RowsAffected(); e != nil {

@@ -302,8 +302,13 @@ func TestPatternNoResults(t *testing.T) {
 		t.Fatal(diff)
 	} else if outpat, e := dt.readPatterns(); e != nil {
 		t.Fatal(e)
-	} else if len(outpat) > 0 {
-		t.Fatal("expected no labels; got:", pretty.Sprint(outpat))
+	} else if diff := pretty.Diff(outpat, []string{
+		// a previous version of this test generated no results
+		// but that seems to conflict with the runtime.
+		"a:p::",
+	}); len(diff) > 0 {
+		t.Log("got:", pretty.Sprint(outpat))
+		t.Fatal(diff)
 	} else if outlocals, e := dt.readLocals(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outlocals, []string{

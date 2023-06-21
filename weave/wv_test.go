@@ -336,7 +336,7 @@ func (dt *domainTest) readPairs() ([]string, error) {
 // domain, pattern, labels, result field
 func (dt *domainTest) readPatterns() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
-  select mk.domain ||':'|| mk.kind ||':'|| labels ||':'|| result
+  select mk.domain ||':'|| mk.kind ||':'|| coalesce(labels,'') ||':'|| coalesce(result,'')
 	from mdl_pat mp
 	join mdl_kind mk 
 		on(mp.kind = mk.rowid)`)

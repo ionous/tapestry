@@ -205,13 +205,14 @@ func (q *Query) OppositeOf(word string) (string, error) {
 
 // the last value is always the result, blank for execute statements
 func (q *Query) PatternLabels(pat string) (ret []string, err error) {
-	var labels, result string
+	var labels sql.NullString
+	var result sql.NullString
 	switch e := q.patternOf.QueryRow(pat).Scan(&labels, &result); e {
 	case sql.ErrNoRows:
 		// returns blank with no error
 	case nil:
-		parts := strings.Split(labels, ",")
-		ret = append(parts, result)
+		parts := strings.Split(labels.String, ",")
+		ret = append(parts, result.String)
 	default:
 		err = e
 	}
@@ -299,14 +300,13 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 		// return domains which should be active and are not
 		// ( in order of increasing depth. )
 		domainActivate: ps.Prep(db,
-			`select domain from ( 
-				select uses as domain
-				from domain_tree 
+			`select uses
+				from domain_tree
+				left join run_domain
+					on (domain=uses)
 				where base = ?1
-			)
-			left join run_domain
-				using (domain)
-			where not coalesce(active, 0)`,
+				and not coalesce(active, 0)
+				order by dist desc`,
 		),
 		domainChange: ps.Prep(db,
 			`insert or replace 
