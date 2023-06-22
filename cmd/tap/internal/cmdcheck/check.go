@@ -2,6 +2,10 @@ package cmdcheck
 
 import (
 	"database/sql"
+	"log"
+	"os"
+	"strings"
+
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/qna"
@@ -12,15 +16,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/print"
 	"git.sr.ht/~ionous/tapestry/web/markup"
 	"github.com/ionous/errutil"
-	"log"
-	"os"
-	"strings"
 )
 
 // CheckAll tests stored in the passed db.
 // It logs the results of running the checks, and only returns error on critical errors.
 func CheckAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signatures []map[uint64]interface{}) (ret int, err error) {
-	if qdb, e := qdb.NewQueries(db, false); e != nil {
+	if qdb, e := qdb.NewQueries(db, true); e != nil {
 		err = e
 	} else if checks, e := qdb.ReadChecks(actuallyJustThisOne); e != nil {
 		err = e
