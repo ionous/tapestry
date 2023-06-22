@@ -5,30 +5,37 @@ package cmdcheck
 import (
 	"context"
 	"database/sql"
+	"log"
+	"path/filepath"
+
 	"git.sr.ht/~ionous/tapestry"
+	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/meta"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
-	"log"
-	"path/filepath"
 
 	"git.sr.ht/~ionous/tapestry/cmd/tap/internal/base"
 )
 
 func runCheck(ctx context.Context, cmd *base.Command, args []string) (err error) {
 	log.Println("Checking", checkFlags.srcPath)
-	opt := qna.NewOptions()
-	opt.SetOption(meta.PrintResponseNames, generic.BoolOf(checkFlags.responses))
-	if cnt, e := checkFile(checkFlags.srcPath, lang.Underscore(checkFlags.checkOne), opt); e != nil {
-		errutil.PrintErrors(e, func(s string) { log.Println(s) })
-		if errutil.Panic {
-			log.Panic("mismatched")
-		}
+	if lvl, e := getLogLevel(checkFlags.logLevel); e != nil {
+		err = e
 	} else {
-		log.Println("Checked", cnt, checkFlags.srcPath)
+		debug.LogLevel = lvl
+		opt := qna.NewOptions()
+		opt.SetOption(meta.PrintResponseNames, generic.BoolOf(checkFlags.responses))
+		if cnt, e := checkFile(checkFlags.srcPath, lang.Underscore(checkFlags.checkOne), opt); e != nil {
+			errutil.PrintErrors(e, func(s string) { log.Println(s) })
+			if errutil.Panic {
+				log.Panic("mismatched")
+			}
+		} else {
+			log.Println("Checked", cnt, checkFlags.srcPath)
+		}
 	}
 	return
 }
