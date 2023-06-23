@@ -548,8 +548,8 @@
                 },
                 {
                   "Comment:": [
-                    "haven't found a matching group?",
-                    "pack the object and its settings into a group, and add it into the groups."
+                    "if there wasn't an existing group matching the object's settings:",
+                    "create a new group."
                   ]
                 },
                 {

@@ -76,7 +76,6 @@ func (op *DefinePattern) Schedule(cat *weave.Catalog) (err error) {
 					// write the rules last to help with test output consistency
 					err = ImportRules(cat, pattern, "", op.Rules, assert.DefaultTiming)
 				}
-
 			}
 		}
 		return

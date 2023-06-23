@@ -21,6 +21,8 @@ func (rs *recordScope) SetFieldByName(field string, val g.Value) error {
 	return rec.SetNamedField(field, val)
 }
 
+// todo: example, flag object or db for save.
+// for now, simply verify that the field exists.
 func (rs *recordScope) SetFieldDirty(field string) (err error) {
 	rec := (*g.Record)(rs)
 	_, err = rec.GetNamedField(field)
