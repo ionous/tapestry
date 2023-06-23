@@ -49,10 +49,11 @@ func (cat *Catalog) AssertField(kind, field, class string, aff affine.Affinity, 
 			if len(class) == 0 && isRecordAffinity(aff) {
 				class = field
 			}
-			if e := cat.writer.Member(d.name, kind, field, aff, class, at); e != nil {
+			e := cat.writer.Member(d.name, kind, field, aff, class, at)
+			if e := cat.eatDuplicates(e); e != nil {
 				err = e
 			} else if init != nil {
-				return cat.writer.Default(d.name, kind, field, init)
+				err = cat.writer.Default(d.name, kind, field, init)
 			}
 			return
 		})

@@ -2,6 +2,7 @@ package weave
 
 import (
 	"database/sql"
+	"errors"
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/qna"
@@ -123,6 +124,17 @@ func (c *Catalog) ensureDomain(n string) (ret *Domain) {
 	return
 }
 
+// log if the error is a duplicate;
+// only return non-duplicate, non-nil errors
+func (c *Catalog) eatDuplicates(e error) (err error) {
+	if !errors.Is(e, mdl.Duplicate) {
+		err = e
+	} else if c.warn != nil {
+		c.warn(e)
+	}
+	return
+}
+
 // return the uniformly named domain ( creating it if necessary )
 func (c *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err error) {
 	d := c.ensureDomain(n)
@@ -134,7 +146,7 @@ func (c *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err erro
 			reqs = append(reqs, p.name)
 		}
 		// probably asking for  trouble:
-		// the tests have no top level domain (tapesrty) the way weave does
+		// the tests have no top level domain (tapestry) the way weave does
 		// we still need them to wind up in the table eventually...
 		if len(reqs) == 0 {
 			err = c.writer.Domain(d.name, "", at)
@@ -146,9 +158,12 @@ func (c *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err erro
 				} else if e := c.findDomainCycles(d.name, dep); e != nil {
 					err = e
 					break
-				} else if e := c.writer.Domain(d.name, dep, at); e != nil {
-					err = e
-					break
+				} else {
+					e := c.writer.Domain(d.name, dep, at)
+					if e := c.eatDuplicates(e); e != nil {
+						err = e
+						break
+					}
 				}
 			}
 		}

@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	git.sr.ht/~ionous/tapestry v0.0.0-20220223221837-b25bd82d20fe
-	github.com/ionous/errutil v0.0.0-20230227195626-6de478250a3b
+	github.com/ionous/errutil v0.0.0-20230623203941-0f293e66840e
 	github.com/wailsapp/wails/v2 v2.4.0
 	golang.org/x/sys v0.6.0
 	golang.org/x/tools v0.7.0
@@ -45,7 +45,6 @@ require (
 
 // so that it will use the local source tree, and not the currently released version.
 replace git.sr.ht/~ionous/tapestry => ../../../tapestry
-
 
 // for local debugging:
 // replace github.com/wailsapp/wails/v2 v2.0.0-beta.42 => C:\Dev\Go\pkg\mod\github.com\wailsapp\wails\v2@v2.0.0-beta.42

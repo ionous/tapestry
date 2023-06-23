@@ -25,10 +25,7 @@ func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error 
 				err = e
 			} else {
 				err = cat.Schedule(assert.RequireResults, func(ctx *Weaver) (err error) {
-					if e := cat.writer.Rel(d.name, rel, acls, bcls, card, at); e != nil {
-						err = e
-					}
-					return
+					return cat.writer.Rel(d.name, rel, acls, bcls, card, at)
 				})
 			}
 		}

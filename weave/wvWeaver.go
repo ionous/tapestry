@@ -1,13 +1,11 @@
 package weave
 
 import (
-	"errors"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
@@ -66,16 +64,10 @@ func (cat *Catalog) AssertAspectTraits(opAspects string, opTraits []string) erro
 	})
 }
 
-//
+// logs duplicate errors, but does not return them.
 func (d *Domain) addKind(name, parent, at string) (err error) {
-	if e := d.catalog.writer.Kind(d.name, name, parent, at); e != nil {
-		if !errors.Is(e, mdl.Duplicate) {
-			err = e
-		} else if d.catalog.warn != nil {
-			d.catalog.warn(e)
-		}
-	}
-	return
+	e := d.catalog.writer.Kind(d.name, name, parent, at)
+	return d.catalog.eatDuplicates(e)
 }
 
 func (cat *Catalog) AssertCheck(opName string, prog []rt.Execute, expect literal.LiteralValue) error {
