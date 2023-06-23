@@ -21,10 +21,11 @@ func (run *Runner) Call(rec *g.Record, aff affine.Affinity) (ret g.Value, err er
 		if cached, e := run.getKindOf(name, kindsOf.Pattern.String()); e != nil {
 			err = e
 		} else {
-			run.currentPatterns.startedPattern(name)
-			cached.initializeRecord(run, rec)
 			var flags rt.Flags
-			if rules, e := run.GetRules(name, "", &flags); e != nil {
+			run.currentPatterns.startedPattern(name)
+			if e := cached.initializeRecord(run, rec); e != nil {
+				err = e
+			} else if rules, e := run.GetRules(name, "", &flags); e != nil {
 				err = e
 			} else if e := res.ApplyRules(run, rules, flags); e != nil {
 				err = e
@@ -36,7 +37,7 @@ func (run *Runner) Call(rec *g.Record, aff affine.Affinity) (ret g.Value, err er
 				// can return both a valid value and an error
 				ret = v
 				if !res.ComputedResult() {
-					err = rt.NoResult{}
+					err = errutil.Fmt("%w calling %s pattern %q", rt.NoResult, aff, name)
 				}
 			}
 			run.currentPatterns.stoppedPattern(name)

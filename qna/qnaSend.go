@@ -23,8 +23,9 @@ func (run *Runner) Send(rec *g.Record, up []string) (ret g.Value, err error) {
 		oldScope := run.Stack.ReplaceScope(res)
 		if cached, e := run.getKindOf(name, kindsOf.Pattern.String()); e != nil {
 			err = e
+		} else if e := cached.initializeRecord(run, rec); e != nil {
+			err = e
 		} else {
-			cached.initializeRecord(run, rec)
 			// fix: nobody is using "current_noun" currently... so what does that say?
 			// ( and what type should the current noun be here? )
 			currentNoun := scope.NewSingleValue("current_noun", g.Empty)

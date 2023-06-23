@@ -91,7 +91,7 @@ func (op *RenderPattern) render(run rt.Runtime, hint affine.Affinity) (ret g.Val
 				}
 			}
 			if err == nil {
-				if v, e := run.Call(rec, hint); e != nil && !errors.Is(e, rt.NoResult{}) {
+				if v, e := run.Call(rec, hint); e != nil && !errors.Is(e, rt.NoResult) {
 					err = errutil.New("calling", name, e)
 				} else {
 					ret = v

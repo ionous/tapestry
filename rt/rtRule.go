@@ -1,5 +1,7 @@
 package rt
 
+import "github.com/ionous/errutil"
+
 // Flags tweak the ordering of rules.
 // Prefix rules get a chance to run before Infix rules, Infix run before Postfix.
 // If a prefix rule decides to end the pattern, nothing else runs.
@@ -7,13 +9,7 @@ package rt
 // The postfix rules run until one decides to end the pattern.
 type Flags int
 
-type NoResult struct{}
-
-func (e NoResult) Error() string { return "no result" }
-
-func (e NoResult) Is(target error) bool { return target == e }
-
-func (e NoResult) NoPanic() {}
+const NoResult errutil.NoPanicError = "no result"
 
 //go:generate stringer -type=Flags
 const (

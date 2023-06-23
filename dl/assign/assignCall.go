@@ -52,7 +52,7 @@ func (op *CallPattern) determine(run rt.Runtime, aff affine.Affinity) (ret g.Val
 		// note: this doesnt positively affirm kindsOf.Pattern:
 		// some tests use golang structs as faux patterns.
 		// ( instead the internals verify there are labels )
-		if v, e := run.Call(rec, aff); e != nil && !errors.Is(e, rt.NoResult{}) {
+		if v, e := run.Call(rec, aff); e != nil && !errors.Is(e, rt.NoResult) {
 			err = cmdError(op, e)
 		} else {
 			ret = v

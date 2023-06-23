@@ -61,7 +61,7 @@ func (k *Catalog) Call(rec *g.Record, expectedReturn affine.Affinity) (ret g.Val
 	// 	} else if e := safe.RunAll(k, macro.do); e != nil {
 	// 		err = e
 	// 	} else if !res.ComputedResult() && expectedReturn != affine.None {
-	// 		err = rt.NoResult{}
+	// 		err = errutil.Fmt("%w calling %s pattern %q", rt.NoResult, aff, rec.Kind().Name())
 	// 	} else if v, e := res.GetResult(); e != nil {
 	// 		err = e
 	// 	} else {

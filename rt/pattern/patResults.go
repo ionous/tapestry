@@ -81,6 +81,8 @@ func (rw *Results) SetFieldDirty(field string) (err error) {
 	if field == rw.resultField {
 		rw.resultCount++
 	} else {
+		// todo: example, flag object or db for save.
+		// for now, simply verify that the field exists.
 		_, err = rw.rec.GetNamedField(field)
 	}
 	return
@@ -137,7 +139,7 @@ func (rw *Results) GetResult() (ret g.Value, err error) {
 			// probably always using a return flag would be best.
 			ret = g.BoolOf(rw.currFlags&rt.Infix != 0)
 		} else if len(aff) != 0 {
-			err = errutil.New("caller expected", aff, "returned nothing")
+			err = errutil.Fmt("%w; caller expected %s", rt.NoResult, aff)
 		}
 	} else {
 		// get the value and check its result

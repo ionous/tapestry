@@ -2,6 +2,7 @@ package list
 
 import (
 	"errors"
+
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 
 	"git.sr.ht/~ionous/tapestry/affine"
@@ -46,7 +47,7 @@ func (op *ListReduce) reduce(run rt.Runtime) (err error) {
 				if newVal, e := run.Call(rec, outAff); e == nil {
 					// update the accumulating value for next time
 					outVal = newVal
-				} else if !errors.Is(e, rt.NoResult{}) {
+				} else if !errors.Is(e, rt.NoResult) {
 					// if there was no result, just keep going with what we had
 					// for other errors, break.
 					err = e

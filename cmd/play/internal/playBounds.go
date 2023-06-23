@@ -29,7 +29,7 @@ func (pt *Playtime) locationBounded(enc string) parser.Bounds {
 		rec := pt.bounds.NewRecord() // tbd: should obj be translated through labels? and/or should this use positional args
 		if e := rec.SetNamedField("obj", g.StringOf(enc)); e != nil {
 			log.Println(e)
-		} else if kids, e := pt.Call(rec, affine.TextList); e != nil && !errors.Is(e, rt.NoResult{}) {
+		} else if kids, e := pt.Call(rec, affine.TextList); e != nil && !errors.Is(e, rt.NoResult) {
 			log.Println(e)
 		} else {
 			for _, k := range kids.Strings() {

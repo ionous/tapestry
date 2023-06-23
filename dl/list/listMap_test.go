@@ -1,10 +1,12 @@
 package list_test
 
 import (
-	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/rt/scope"
+
 	"errors"
+
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/list"
@@ -98,7 +100,7 @@ func TestMapRecords(t *testing.T) {
 			},
 		},
 	}
-	if e := remapRecords.Execute(&lt); e != nil && !errors.Is(e, rt.NoResult{}) {
+	if e := remapRecords.Execute(&lt); e != nil && !errors.Is(e, rt.NoResult) {
 		t.Fatal(e)
 	} else if val, e := locals.GetNamedField("results"); e != nil {
 		t.Fatal(e)

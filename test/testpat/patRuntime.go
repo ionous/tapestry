@@ -46,7 +46,7 @@ func (run *Runtime) Call(rec *g.Record, aff affine.Affinity) (ret g.Value, err e
 		} else {
 			ret, err = res.GetResult()
 			if !res.ComputedResult() {
-				err = rt.NoResult{}
+				err = errutil.Fmt("%w calling %s test pattern %q", rt.NoResult, aff, rec.Kind().Name())
 			}
 		}
 		run.ReplaceScope(oldScope)
