@@ -12,7 +12,7 @@ type ScopedNoun struct {
 
 func (n *ScopedNoun) Kind() (ret string, err error) {
 	d := n.domain
-	err = d.catalog.db.QueryRow(`
+	err = d.cat.db.QueryRow(`
 		select mk.kind
 	from mdl_kind mk 
 	join mdl_noun mn

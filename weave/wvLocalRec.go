@@ -33,7 +33,7 @@ type innerRecord struct {
 
 func (in *innerRecord) findCompatibleField(field string, affinity affine.Affinity) (retName, retCls string, err error) {
 	k := in.k
-	w := k.domain.catalog.writer
+	w := k.domain.cat.writer
 	return w.FindCompatibleField(k.domain.name, k.kind, field, affinity)
 }
 

@@ -83,42 +83,42 @@ func (k *Catalog) SetSource(x string) {
 }
 
 // return the uniformly named domain ( if it exists )
-func (c *Catalog) GetDomain(n string) (*Domain, bool) {
-	d, ok := c.domains[n]
+func (cat *Catalog) GetDomain(n string) (*Domain, bool) {
+	d, ok := cat.domains[n]
 	return d, ok
 }
 
-func (c *Catalog) EndDomain() (err error) {
-	if _, ok := c.processing.Top(); !ok {
+func (cat *Catalog) EndDomain() (err error) {
+	if _, ok := cat.processing.Top(); !ok {
 		err = errutil.New("unexpected domain ending when there's no domain")
 	} else {
-		c.processing.Pop()
+		cat.processing.Pop()
 	}
 	return
 }
 
 // calls to schedule() between begin/end domain write to this newly declared domain.
-func (c *Catalog) BeginDomain(name string, requires []string) (err error) {
+func (cat *Catalog) BeginDomain(name string, requires []string) (err error) {
 	if n, ok := UniformString(name); !ok {
 		err = InvalidString(name)
 	} else if reqs, e := UniformStrings(requires); e != nil {
 		err = e // transform all the names first to determine any errors
-	} else if d, e := c.addDomain(n, c.cursor, reqs...); e != nil {
+	} else if d, e := cat.addDomain(n, cat.cursor, reqs...); e != nil {
 		err = e
 	} else {
-		c.processing.Push(d)
+		cat.processing.Push(d)
 	}
 	return
 }
 
-func (c *Catalog) ensureDomain(n string) (ret *Domain) {
+func (cat *Catalog) ensureDomain(n string) (ret *Domain) {
 	// find or create the domain
-	if d, ok := c.domains[n]; ok {
+	if d, ok := cat.domains[n]; ok {
 		ret = d
 	} else {
-		d = &Domain{name: n, catalog: c}
-		c.pendingDomains = append(c.pendingDomains, d)
-		c.domains[n] = d
+		d = &Domain{name: n, cat: cat}
+		cat.pendingDomains = append(cat.pendingDomains, d)
+		cat.domains[n] = d
 		ret = d
 	}
 	return
@@ -126,41 +126,41 @@ func (c *Catalog) ensureDomain(n string) (ret *Domain) {
 
 // log if the error is a duplicate;
 // only return non-duplicate, non-nil errors
-func (c *Catalog) eatDuplicates(e error) (err error) {
+func (cat *Catalog) eatDuplicates(e error) (err error) {
 	if !errors.Is(e, mdl.Duplicate) {
 		err = e
-	} else if c.warn != nil {
-		c.warn(e)
+	} else if cat.warn != nil {
+		cat.warn(e)
 	}
 	return
 }
 
 // return the uniformly named domain ( creating it if necessary )
-func (c *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err error) {
-	d := c.ensureDomain(n)
+func (cat *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err error) {
+	d := cat.ensureDomain(n)
 	if d.currPhase >= assert.RequireDependencies {
 		err = errutil.New("can't add new dependencies to parent domains", d.name)
 	} else {
 		// domains are implicitly dependent on their parent domain
-		if p, ok := c.processing.Top(); ok {
+		if p, ok := cat.processing.Top(); ok {
 			reqs = append(reqs, p.name)
 		}
 		// probably asking for  trouble:
 		// the tests have no top level domain (tapestry) the way weave does
 		// we still need them to wind up in the table eventually...
 		if len(reqs) == 0 {
-			err = c.writer.Domain(d.name, "", at)
+			err = cat.writer.Domain(d.name, "", at)
 		} else {
 			for _, req := range reqs {
 				if dep, ok := UniformString(req); !ok {
 					err = errutil.New("invalid name", req)
 					break
-				} else if e := c.findDomainCycles(d.name, dep); e != nil {
+				} else if e := cat.findDomainCycles(d.name, dep); e != nil {
 					err = e
 					break
 				} else {
-					e := c.writer.Domain(d.name, dep, at)
-					if e := c.eatDuplicates(e); e != nil {
+					e := cat.writer.Domain(d.name, dep, at)
+					if e := cat.eatDuplicates(e); e != nil {
 						err = e
 						break
 					}
@@ -176,12 +176,12 @@ func (c *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err erro
 
 // check before inserting a reference to avoid circularity;
 // errors if one was detected.
-func (c *Catalog) findDomainCycles(n, req string) (err error) {
+func (cat *Catalog) findDomainCycles(n, req string) (err error) {
 	if n == req {
 		err = errutil.Fmt("circular reference: %q can't depend on itself", n)
 	} else {
 		var exists bool
-		if e := c.db.QueryRow(
+		if e := cat.db.QueryRow(
 			`select 1 
 		from domain_tree 
 		where base = ?1
@@ -195,9 +195,9 @@ func (c *Catalog) findDomainCycles(n, req string) (err error) {
 	return
 }
 
-func (c *Catalog) findRivals() (err error) {
+func (cat *Catalog) findRivals() (err error) {
 	var rivals error
-	if e := findRivals(c.db, func(group, domain, key, value, at string) (_ error) {
+	if e := findRivals(cat.db, func(group, domain, key, value, at string) (_ error) {
 		rivals = errutil.Append(rivals, errutil.Fmt("%w in domain %q at %q for %s %q",
 			mdl.Conflict, domain, at, group, value))
 		return

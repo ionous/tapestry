@@ -11,7 +11,7 @@ import (
 
 type Domain struct {
 	name       string
-	catalog    *Catalog
+	cat        *Catalog
 	currPhase  assert.Phase                     // updated during weave, ends at NumPhases
 	scheduling [assert.RequireAll + 1][]memento // separates commands into phases
 }
@@ -47,7 +47,7 @@ func (d *Domain) isReadyForProcessing() bool {
 
 func (d *Domain) schedule(at string, when assert.Phase, what func(*Weaver) error) (err error) {
 	if d.currPhase > when {
-		ctx := Weaver{d: d, phase: d.currPhase, Runtime: d.catalog.run}
+		ctx := Weaver{d: d, phase: d.currPhase, Runtime: d.cat.run}
 		err = what(&ctx)
 	} else {
 		d.scheduling[when] = append(d.scheduling[when], memento{what, at})
@@ -58,7 +58,7 @@ func (d *Domain) schedule(at string, when assert.Phase, what func(*Weaver) error
 // return the domain hierarchy: the ancestors ending just before the domain itself.
 // direct parents may not be contiguous ( depending on whether their ancestors overlap. )
 func (d *Domain) Resolve() (ret []string, err error) {
-	c := d.catalog // we shouldnt have to worry about dupes, because in theory we didnt add them.
+	c := d.cat // we shouldnt have to worry about dupes, because in theory we didnt add them.
 	if rows, e := c.db.Query(`select uses from domain_tree 
 		where base = ?1 order by dist desc`, d.name); e != nil {
 		err = e
@@ -70,7 +70,7 @@ func (d *Domain) Resolve() (ret []string, err error) {
 
 // fix? used by "isReadyForProcessing" -- is there a better way.
 func (d *Domain) visit(visit func(d *Domain) error) (err error) {
-	cat := d.catalog
+	cat := d.cat
 	if tree, e := d.Resolve(); e != nil {
 		err = e
 	} else {
@@ -113,16 +113,16 @@ Loop:
 				(*els) = append((*els), next)
 				redo.cnt++
 			} else {
-				if d.catalog.warn != nil {
+				if d.cat.warn != nil {
 					e := errutil.New(w, "didn't finish")
-					d.catalog.warn(e)
+					d.cat.warn(e)
 				}
 				err = errutil.Append(err, redo.err)
 				break Loop
 			}
 		case errors.Is(e, mdl.Duplicate):
-			if d.catalog.warn != nil {
-				d.catalog.warn(e)
+			if d.cat.warn != nil {
+				d.cat.warn(e)
 			}
 		default:
 			err = errutil.Append(err, e)

@@ -12,7 +12,7 @@ import (
 // there should be a difference between "a noun is known as"
 // and "understand this word by the player as" -- and currently there's not.
 func (d *Domain) GetClosestNoun(name string) (ret struct{ name, domain string }, err error) {
-	if e := d.catalog.db.QueryRow(`
+	if e := d.cat.db.QueryRow(`
 	select mn.noun, mn.domain  
 	from mdl_name my 
 	join mdl_noun mn

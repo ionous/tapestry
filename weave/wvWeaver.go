@@ -17,7 +17,7 @@ func StoryStatement(run rt.Runtime, op Schedule) (err error) {
 	if k, ok := run.(*Weaver); !ok {
 		err = errutil.Fmt("runtime %T doesn't support story statements", run)
 	} else {
-		err = op.Schedule(k.d.catalog)
+		err = op.Schedule(k.d.cat)
 	}
 	return
 }
@@ -66,8 +66,8 @@ func (cat *Catalog) AssertAspectTraits(opAspects string, opTraits []string) erro
 
 // logs duplicate errors, but does not return them.
 func (d *Domain) addKind(name, parent, at string) (err error) {
-	e := d.catalog.writer.Kind(d.name, name, parent, at)
-	return d.catalog.eatDuplicates(e)
+	e := d.cat.writer.Kind(d.name, name, parent, at)
+	return d.cat.eatDuplicates(e)
 }
 
 func (cat *Catalog) AssertCheck(opName string, prog []rt.Execute, expect literal.LiteralValue) error {

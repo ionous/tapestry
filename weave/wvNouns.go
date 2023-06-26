@@ -28,7 +28,7 @@ func (cat *Catalog) AssertNounKind(opNoun, opKind string) error {
 }
 
 func (d *Domain) makeNames(noun, name, at string) (err error) {
-	q := d.catalog.writer
+	q := d.cat.writer
 	// if the original got transformed into underscores
 	// write the original name (ex. "toy boat" vs "toy_boat" )
 	var out []string
