@@ -238,7 +238,7 @@ func TestQueries(t *testing.T) {
 		t.Fatal("ActivateDomain", e) // enable the sub domain again to get reasonable pairs
 		// note: we never previously fully activated a domain, so prev is empty.
 	} else if rel, e := q.RelativesOf(relation, "table"); e != nil ||
-		len(rel) != 2 || rel[0] != "empire_apple" || rel[1] != "apple" {
+		len(rel) != 2 || rel[1] != "empire_apple" || rel[0] != "apple" {
 		t.Fatal("RelativesOf: table", e, rel)
 	} else if rel, e := q.ReciprocalsOf(relation, "apple"); e != nil ||
 		len(rel) != 1 || rel[0] != "table" {

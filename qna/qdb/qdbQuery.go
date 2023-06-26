@@ -448,18 +448,24 @@ func newQueries(db *sql.DB) (ret *Query, err error) {
 			newPairsFromDomain,
 		),
 		// given the "right side" of some related nouns, return the left side noun(s).
+		// for the sake of backwards compat with printing, names are returned in alphabetical order.
+		// might be better to move that into an explicit sort in script
 		reciprocalOf: ps.Prep(db,
 			`select oneName 
 			from rp_names
 			where relName=?1
-			and otherName=?2`, // order?
+			and otherName=?2
+			order by oneName`,
 		),
 		// given the "left side" of some related nouns, return the right side noun(s).
+		// for the sake of backwards compat with printing, names are returned in alphabetical order.
+		// might be better to move that into an explicit sort in script
 		relativesOf: ps.Prep(db,
 			`select otherName 
 			from rp_names
 			where relName=?1
-			and oneName=?2`, // order?
+			and oneName=?2
+			order by otherName`,
 		),
 		// returns the executable rules for a given kind and target
 		rulesFor: ps.Prep(db,
