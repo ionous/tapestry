@@ -43,7 +43,7 @@ package story
 // },
 
 // // horses are usually fast.
-// func (op *Certainties) Schedule(k *weave.Catalog) (err error) {
+// func (op *Certainties) Schedule(cat *weave.Catalog) (err error) {
 // 	certaintiesNotImplemented.PrintOnce()
 // 	// if certainty, e := op.Certainty.ImportString(k); e != nil {
 // 	// 	err = e
@@ -59,7 +59,7 @@ package story
 
 // var certaintiesNotImplemented eph.PrintOnce = "certainties not implemented"
 
-//func (op *Certainty) ImportString(k *weave.Catalog) (ret string, err error) {
+//func (op *Certainty) ImportString(cat *weave.Catalog) (ret string, err error) {
 // 	if str, ok := composer.FindChoice(op, op.Str); !ok {
 // 		err = ImportError(op, errutil.Fmt("%w %q", InvalidValue, op.Str))
 // 	} else {

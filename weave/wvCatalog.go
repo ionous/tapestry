@@ -37,7 +37,7 @@ type Catalog struct {
 	oneTime     map[string]bool
 	macros      macroReg
 	autoCounter Counters
-	env         Environ
+	Env         Environ
 
 	domainNouns map[domainNoun]*ScopedNoun
 }
@@ -95,15 +95,6 @@ func (cat *Catalog) GetDomain(n string) (*Domain, bool) {
 	return d, ok
 }
 
-func (k *Catalog) GetKindByName(n string) (ret *g.Kind, err error) {
-	if a, ok := k.macros[n]; !ok {
-		err = errutil.New("no such kind", n)
-	} else {
-		ret = a.Kind
-	}
-	return
-}
-
 // walk the domains and run the commands remaining in their queues
 func (cat *Catalog) AssembleCatalog() (err error) {
 	var ds []*Domain
@@ -127,46 +118,44 @@ func (cat *Catalog) AssembleCatalog() (err error) {
 }
 
 func (cat *Catalog) assembleNext() (ret *Domain, err error) {
-	found := -1
-	// without resolving, have we resolved our parents?
+	found := -1 // tbd: a better way?
 	for i := 0; i < len(cat.pendingDomains); i++ {
 		next := cat.pendingDomains[i]
-		if next.isReadyForProcessing() {
+		if ok, e := next.isReadyForProcessing(); e != nil {
+			err = e
+			break
+		} else if ok {
 			found = i
 			break
 		}
 	}
-	if found < 0 {
+	if found < 0 && err == nil {
 		first := cat.pendingDomains[0]
 		err = errutil.New("circular or unknown domain %q", first.name)
-	} else {
+	}
+	if err == nil {
 		// chop this one out, then process
-		at := cat.pendingDomains[found]
+		d := cat.pendingDomains[found]
 		cat.pendingDomains = append(cat.pendingDomains[:found], cat.pendingDomains[found+1:]...)
-		if e := cat.processDomain(at); e != nil {
+
+		if _, e := cat.run.ActivateDomain(d.name); e != nil {
+			err = e
+		} else if e := cat.findRivals(); e != nil {
 			err = e
 		} else {
-			ret = at
-		}
-	}
-	return
-}
-
-func (cat *Catalog) processDomain(d *Domain) (err error) {
-	if _, e := cat.run.ActivateDomain(d.name); e != nil {
-		err = e
-	} else if e := cat.findRivals(); e != nil {
-		err = e
-	} else {
-		cat.processing.Push(d)
-		for p := assert.Phase(0); p <= assert.RequireAll; p++ {
-			ctx := Weaver{d: d, phase: p, Runtime: cat.run}
-			if e := d.runPhase(&ctx); e != nil {
-				err = e
-				break
+			cat.processing.Push(d)
+			for p := assert.Phase(0); p <= assert.RequireAll; p++ {
+				ctx := Weaver{d: d, phase: p, Runtime: cat.run}
+				if e := d.runPhase(&ctx); e != nil {
+					err = e
+					break
+				}
+			}
+			cat.processing.Pop()
+			if err == nil {
+				ret = d
 			}
 		}
-		cat.processing.Pop()
 	}
 	return
 }
@@ -259,7 +248,8 @@ func (cat *Catalog) AssertAncestor(opKind, opAncestor string) error {
 			err = InvalidString(opAncestor)
 		} else {
 			err = cat.Schedule(assert.RequireDeterminers, func(ctx *Weaver) error {
-				return d.addKind(kind, ancestor, at)
+				e := cat.writer.Kind(d.name, kind, ancestor, at)
+				return cat.eatDuplicates(e)
 			})
 		}
 		return
@@ -276,7 +266,8 @@ func (cat *Catalog) AssertAspectTraits(opAspects string, opTraits []string) erro
 		} else if traits, e := UniformStrings(opTraits); e != nil {
 			err = e
 		} else {
-			if e := d.addKind(aspect, kindsOf.Aspect.String(), at); e != nil {
+			e := cat.writer.Kind(d.name, aspect, kindsOf.Aspect.String(), at)
+			if e := cat.eatDuplicates(e); e != nil {
 				err = e
 			} else if len(traits) > 0 {
 				err = d.schedule(at, assert.RequireResults, func(ctx *Weaver) error {
@@ -312,6 +303,29 @@ func (cat *Catalog) AssertDefinition(path ...string) error {
 		}
 		return
 	})
+}
+
+// calls to schedule() between begin/end domain write to this newly declared domain.
+func (cat *Catalog) AssertDomainStart(name string, requires []string) (err error) {
+	if n, ok := UniformString(name); !ok {
+		err = InvalidString(name)
+	} else if reqs, e := UniformStrings(requires); e != nil {
+		err = e // transform all the names first to determine any errors
+	} else if d, e := cat.addDomain(n, cat.cursor, reqs...); e != nil {
+		err = e
+	} else {
+		cat.processing.Push(d)
+	}
+	return
+}
+
+func (cat *Catalog) AssertDomainEnd() (err error) {
+	if _, ok := cat.processing.Top(); !ok {
+		err = errutil.New("unexpected domain ending when there's no domain")
+	} else {
+		cat.processing.Pop()
+	}
+	return
 }
 
 func (cat *Catalog) AssertField(kind, field, class string, aff affine.Affinity, init assign.Assignment) error {
@@ -425,10 +439,13 @@ func (cat *Catalog) AssertParam(kind, field, class string, aff affine.Affinity, 
 		return addField(ctx, kind, field, class, func(kind, field, class string) (err error) {
 			if init != nil {
 				err = errutil.New("parameters don't currently support initial values")
-			} else if e := ctx.d.addKind(kind, kindsOf.Pattern.String(), at); e != nil {
-				err = e
 			} else {
-				err = cat.writer.Parameter(d.name, kind, field, aff, class, at)
+				e := cat.writer.Kind(d.name, kind, kindsOf.Pattern.String(), at)
+				if e := cat.eatDuplicates(e); e != nil {
+					err = e
+				} else {
+					err = cat.writer.Parameter(d.name, kind, field, aff, class, at)
+				}
 			}
 			return
 		})
@@ -456,10 +473,13 @@ func (cat *Catalog) AssertResult(kind, field, class string, aff affine.Affinity,
 		return addField(ctx, kind, field, class, func(kind, field, class string) (err error) {
 			if init != nil {
 				err = errutil.New("return values don't currently support initial values")
-			} else if e := ctx.d.addKind(kind, kindsOf.Pattern.String(), at); e != nil {
-				err = e
 			} else {
-				err = cat.writer.Result(d.name, kind, field, aff, class, at)
+				e := cat.writer.Kind(d.name, kind, kindsOf.Pattern.String(), at)
+				if e := cat.eatDuplicates(e); e != nil {
+					err = e
+				} else {
+					err = cat.writer.Result(d.name, kind, field, aff, class, at)
+				}
 			}
 			return
 		})
@@ -480,7 +500,8 @@ func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error 
 		} else if card := makeCard(amany, bmany); len(card) == 0 {
 			err = errutil.New("unknown cardinality")
 		} else {
-			if e := d.addKind(rel, kindsOf.Relation.String(), at); e != nil {
+			e := cat.writer.Kind(d.name, rel, kindsOf.Relation.String(), at)
+			if e := cat.eatDuplicates(e); e != nil {
 				err = e
 			} else {
 				err = cat.Schedule(assert.RequireResults, func(ctx *Weaver) (err error) {
@@ -531,20 +552,6 @@ func (cat *Catalog) AssertRule(pattern string, target string, filter rt.BoolEval
 	})
 }
 
-// calls to schedule() between begin/end domain write to this newly declared domain.
-func (cat *Catalog) BeginDomain(name string, requires []string) (err error) {
-	if n, ok := UniformString(name); !ok {
-		err = InvalidString(name)
-	} else if reqs, e := UniformStrings(requires); e != nil {
-		err = e // transform all the names first to determine any errors
-	} else if d, e := cat.addDomain(n, cat.cursor, reqs...); e != nil {
-		err = e
-	} else {
-		cat.processing.Push(d)
-	}
-	return
-}
-
 // ugh. see register macro notes.
 func (k *Catalog) Call(rec *g.Record, expectedReturn affine.Affinity) (ret g.Value, err error) {
 	// kind := rec.Kind()
@@ -572,21 +579,6 @@ func (k *Catalog) Call(rec *g.Record, expectedReturn affine.Affinity) (ret g.Val
 	return
 }
 
-func (cat *Catalog) EndDomain() (err error) {
-	if _, ok := cat.processing.Top(); !ok {
-		err = errutil.New("unexpected domain ending when there's no domain")
-	} else {
-		cat.processing.Pop()
-	}
-	return
-}
-
-// Env - used for comments to determine if they should turn into log statements.
-// todo: remove?
-func (k *Catalog) Env() *Environ {
-	return &k.env
-}
-
 // NewCounter generates a unique string, and uses local markup to try to create a stable one.
 // instead consider  "PreImport" could be used to write a key into the markup if one doesnt already exist.
 // and a free function could also extract what it needs from any op's markup.
@@ -610,19 +602,6 @@ func (cat *Catalog) Schedule(when assert.Phase, what func(*Weaver) error) (err e
 	return
 }
 
-func (cat *Catalog) ensureDomain(n string) (ret *Domain) {
-	// find or create the domain
-	if d, ok := cat.domains[n]; ok {
-		ret = d
-	} else {
-		d = &Domain{name: n, cat: cat}
-		cat.pendingDomains = append(cat.pendingDomains, d)
-		cat.domains[n] = d
-		ret = d
-	}
-	return
-}
-
 // log if the error is a duplicate;
 // only return non-duplicate, non-nil errors
 func (cat *Catalog) eatDuplicates(e error) (err error) {
@@ -636,7 +615,14 @@ func (cat *Catalog) eatDuplicates(e error) (err error) {
 
 // return the uniformly named domain ( creating it if necessary )
 func (cat *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err error) {
-	d := cat.ensureDomain(n)
+	// find or create the domain
+	d, ok := cat.domains[n]
+	if !ok {
+		d = &Domain{name: n, cat: cat}
+		cat.pendingDomains = append(cat.pendingDomains, d)
+		cat.domains[n] = d
+	}
+
 	if d.currPhase >= assert.RequireDependencies {
 		err = errutil.New("can't add new dependencies to parent domains", d.name)
 	} else {

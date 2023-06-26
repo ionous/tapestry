@@ -11,7 +11,7 @@ import (
 
 // StoryStatement - a marker interface for commands which produce facts about the game world.
 type StoryStatement interface {
-	Schedule(k *weave.Catalog) error
+	Schedule(cat *weave.Catalog) error
 }
 
 func ImportStory(cat *weave.Catalog, path string, tgt *StoryFile) (err error) {
@@ -35,16 +35,16 @@ func ScheduleStatements(cat *weave.Catalog, all []StoryStatement) (err error) {
 }
 
 // post-processing hooks
-func importStory(k *weave.Catalog, tgt jsn.Marshalee) error {
+func importStory(cat *weave.Catalog, tgt jsn.Marshalee) error {
 	ts := chart.MakeEncoder()
 	return ts.Marshal(tgt, chart.Map(&ts, chart.BlockMap{
 		rt.Execute_Type: chart.KeyMap{
 			chart.BlockStart: func(b jsn.Block, _ interface{}) (err error) {
-				k.Env().ActivityDepth++
+				cat.Env.ActivityDepth++
 				return
 			},
 			chart.BlockEnd: func(b jsn.Block, _ interface{}) (err error) {
-				k.Env().ActivityDepth--
+				cat.Env.ActivityDepth--
 				return
 			},
 		},
@@ -66,7 +66,7 @@ func importStory(k *weave.Catalog, tgt jsn.Marshalee) error {
 					if slat, ok := slot.GetSlot(); !ok {
 						err = jsn.Missing
 					} else if tgt, ok := slat.(PreImport); ok {
-						if rep, e := tgt.PreImport(k); e != nil {
+						if rep, e := tgt.PreImport(cat); e != nil {
 							err = errutil.New(e, "failed to create replacement")
 						} else if rep != nil && !slot.SetSlot(rep) {
 							err = errutil.New("failed to set replacement")

@@ -53,8 +53,8 @@ func (op *DefineMacro) Schedule(cat *weave.Catalog) (err error) {
 }
 
 // Schedule for macros calls Execute... eventually... to generate dynamic assertions.
-func (op *CallMacro) Schedule(k *weave.Catalog) error {
-	return k.Schedule(assert.RequireNouns /*assert.MacroPhase*/, func(w *weave.Weaver) error {
+func (op *CallMacro) Schedule(cat *weave.Catalog) error {
+	return cat.Schedule(assert.RequireNouns /*assert.MacroPhase*/, func(w *weave.Weaver) error {
 		return op.Execute(w)
 	})
 }

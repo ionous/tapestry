@@ -20,7 +20,7 @@ func (op *Test) Schedule(cat *weave.Catalog) (err error) {
 		if n := op.DependsOn.String(); len(n) > 0 {
 			req = []string{n}
 		}
-		if e := cat.BeginDomain(name, req); e != nil {
+		if e := cat.AssertDomainStart(name, req); e != nil {
 			err = e
 		} else {
 			if e := story.ScheduleStatements(cat, op.TestStatements); e != nil {
@@ -32,7 +32,7 @@ func (op *Test) Schedule(cat *weave.Catalog) (err error) {
 			}
 
 			if err == nil {
-				err = cat.EndDomain()
+				err = cat.AssertDomainEnd()
 			}
 		}
 	}

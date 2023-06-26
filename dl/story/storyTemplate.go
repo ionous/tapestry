@@ -15,7 +15,7 @@ import (
 )
 
 // transform SayTemplate into a RenderResponse
-func (op *SayTemplate) PreImport(k *weave.Catalog) (interface{}, error) {
+func (op *SayTemplate) PreImport(cat *weave.Catalog) (interface{}, error) {
 	return convertTemplate("", op.Template.Str)
 }
 

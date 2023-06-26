@@ -14,25 +14,25 @@ import (
 // all of these things you think are type X are actually type y during import [ even if its a type alias ]
 
 // ensure that a valid counter exists
-func (op *CycleText) PreImport(k *weave.Catalog) (ret interface{}, err error) {
-	ret = &core.CallCycle{Parts: op.Parts, Name: k.NewCounter("seq", op.Markup)}
+func (op *CycleText) PreImport(cat *weave.Catalog) (ret interface{}, err error) {
+	ret = &core.CallCycle{Parts: op.Parts, Name: cat.NewCounter("seq", op.Markup)}
 	return
 }
 
 // ensure that a valid counter exists
-func (op *ShuffleText) PreImport(k *weave.Catalog) (ret interface{}, err error) {
-	ret = &core.CallShuffle{Parts: op.Parts, Name: k.NewCounter("seq", op.Markup)}
+func (op *ShuffleText) PreImport(cat *weave.Catalog) (ret interface{}, err error) {
+	ret = &core.CallShuffle{Parts: op.Parts, Name: cat.NewCounter("seq", op.Markup)}
 	return
 }
 
 // ensure that a valid counter exists
-func (op *StoppingText) PreImport(k *weave.Catalog) (ret interface{}, err error) {
-	ret = &core.CallTerminal{Parts: op.Parts, Name: k.NewCounter("seq", op.Markup)}
+func (op *StoppingText) PreImport(cat *weave.Catalog) (ret interface{}, err error) {
+	ret = &core.CallTerminal{Parts: op.Parts, Name: cat.NewCounter("seq", op.Markup)}
 	return
 }
 
 // ensure that a valid counter exists
-func (op *CountOf) PreImport(k *weave.Catalog) (ret interface{}, err error) {
-	ret = &core.CallTrigger{Num: op.Num, Trigger: op.Trigger, Name: k.NewCounter("seq", op.Markup)}
+func (op *CountOf) PreImport(cat *weave.Catalog) (ret interface{}, err error) {
+	ret = &core.CallTrigger{Num: op.Num, Trigger: op.Trigger, Name: cat.NewCounter("seq", op.Markup)}
 	return
 }

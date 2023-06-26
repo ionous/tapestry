@@ -18,11 +18,11 @@ func TestImportStory(t *testing.T) {
 		db := testdb.Open(t.Name(), testdb.Memory, "")
 		defer db.Close()
 		k := weave.NewCatalog(db)
-		if e := k.BeginDomain("tapestry", nil); e != nil {
+		if e := k.AssertDomainStart("tapestry", nil); e != nil {
 			t.Fatal("import", e)
 		} else if e := story.ImportStory(k, t.Name(), &curr); e != nil {
 			t.Fatal("import", e)
-		} else if e := k.EndDomain(); e != nil {
+		} else if e := k.AssertDomainEnd(); e != nil {
 			t.Fatal("import", e)
 		} else {
 			t.Log("ok")

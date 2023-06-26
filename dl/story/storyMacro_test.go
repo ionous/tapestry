@@ -19,7 +19,7 @@ func xTestMacros(t *testing.T) {
 	// //
 	// var cat eph.Catalog
 	// k := weave.NewCatalog(cat)
-	// if e := k.BeginDomain("tapestry", nil); e != nil {
+	// if e := k.AssertDomainStart("tapestry", nil); e != nil {
 	// 	t.Fatal(e)
 	// } else if e := addDefaultKinds(k); e != nil {
 	// 	t.Fatal(e)

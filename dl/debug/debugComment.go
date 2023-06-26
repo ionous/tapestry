@@ -13,8 +13,8 @@ func (*Comment) Schedule(*weave.Catalog) (_ error) {
 }
 
 // PreImport turns a comment statement into a debug log.
-func (op *Comment) PreImport(k *weave.Catalog) (ret interface{}, err error) {
-	if !k.Env().InProgram() {
+func (op *Comment) PreImport(cat *weave.Catalog) (ret interface{}, err error) {
+	if !cat.Env.InProgram() {
 		ret = op
 	} else {
 		ret = &DebugLog{

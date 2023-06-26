@@ -45,8 +45,8 @@ const (
 // field might work  nicer that way... beginLocals, beginParams, etc.
 // the init and noun value could maybe be a write value
 type Assertions interface {
-	BeginDomain(name string, requires []string) error
-	EndDomain() error
+	AssertDomainStart(name string, requires []string) error
+	AssertDomainEnd() error
 
 	AssertAlias(short string, names ...string) error
 	AssertAncestor(kind, ancestor string) error

@@ -39,13 +39,13 @@ func WeavePath(srcPath, outFile string) (err error) {
 		} else {
 			defer db.Close()
 			cat := weave.NewCatalog(db)
-			if e := cat.BeginDomain("tapestry", nil); e != nil {
+			if e := cat.AssertDomainStart("tapestry", nil); e != nil {
 				err = e
 			} else if e := addDefaultKinds(cat); e != nil {
 				err = e
 			} else if e := importStoryFiles(cat, srcPath); e != nil {
 				err = e
-			} else if e := cat.EndDomain(); e != nil {
+			} else if e := cat.AssertDomainEnd(); e != nil {
 				err = e
 			} else if len(cat.Errors) > 0 {
 				err = errutil.New(cat.Errors)
@@ -68,24 +68,24 @@ func addDefaultKinds(n assert.Assertions) (err error) {
 }
 
 // read a comma-separated list of files and directories
-func importStoryFiles(k *weave.Catalog, srcPath string) (err error) {
+func importStoryFiles(cat *weave.Catalog, srcPath string) (err error) {
 	recurse := true
 	if e := files.ReadPaths(srcPath, recurse,
 		[]string{CompactExt, DetailedExt}, func(p string) error {
-			return readOne(k, p)
+			return readOne(cat, p)
 		}); e != nil {
 		err = errutil.New("couldn't read file", srcPath, e)
 	}
 	return
 }
 
-func readOne(k *weave.Catalog, path string) (err error) {
+func readOne(cat *weave.Catalog, path string) (err error) {
 	log.Println("reading", path)
 	if b, e := files.ReadFile(path); e != nil {
 		err = e
 	} else if script, e := decodeStory(path, b); e != nil {
 		err = errutil.New("couldn't decode", path, "b/c", e)
-	} else if e := story.ImportStory(k, path, script); e != nil {
+	} else if e := story.ImportStory(cat, path, script); e != nil {
 		err = errutil.New("couldn't import", path, "b/c", e)
 	}
 	return

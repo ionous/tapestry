@@ -34,7 +34,7 @@ type BeginDomain struct {
 }
 
 func (op *BeginDomain) Assert(k assert.Assertions) (err error) {
-	return k.BeginDomain(op.Name, op.Requires)
+	return k.AssertDomainStart(op.Name, op.Requires)
 }
 
 // Checks
@@ -74,7 +74,7 @@ type EndDomain struct {
 }
 
 func (op *EndDomain) Assert(k assert.Assertions) (err error) {
-	return k.EndDomain()
+	return k.AssertDomainEnd()
 }
 
 // Kinds A new type deriving from another existing type.

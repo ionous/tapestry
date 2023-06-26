@@ -29,20 +29,29 @@ func (op *memento) call(ctx *Weaver) error {
 	return op.cb(ctx)
 }
 
-// logs duplicate errors, but does not return them.
-func (d *Domain) addKind(name, parent, at string) (err error) {
-	e := d.cat.writer.Kind(d.name, name, parent, at)
-	return d.cat.eatDuplicates(e)
-}
-
 // have all parent domains been processed?
-func (d *Domain) isReadyForProcessing() bool {
-	return nil == d.visit(func(uses *Domain) (err error) {
-		if d != uses && uses.currPhase <= assert.RequireAll {
-			err = errutil.New("break")
+func (d *Domain) isReadyForProcessing() (okay bool, err error) {
+	cat := d.cat
+	// get the domain hierarchy: the ancestors ending just before the domain itself.
+	// direct parents may not be contiguous ( depending on whether their ancestors overlap. )
+	if rows, e := cat.db.Query(`select uses from domain_tree 
+		where base = ?1 order by dist desc`, d.name); e != nil {
+		err = e
+	} else if tree, e := tables.ScanStrings(rows); e != nil {
+		err = e
+	} else {
+		okay = true // provisionally
+		for _, name := range tree {
+			if uses, ok := cat.domains[name]; !ok {
+				okay = false
+				break
+			} else if d != uses && uses.currPhase <= assert.RequireAll {
+				okay = false
+				break
+			}
 		}
-		return
-	})
+	}
+	return
 }
 
 func (d *Domain) schedule(at string, when assert.Phase, what func(*Weaver) error) (err error) {
@@ -51,19 +60,6 @@ func (d *Domain) schedule(at string, when assert.Phase, what func(*Weaver) error
 		err = what(&ctx)
 	} else {
 		d.scheduling[when] = append(d.scheduling[when], memento{what, at})
-	}
-	return
-}
-
-// return the domain hierarchy: the ancestors ending just before the domain itself.
-// direct parents may not be contiguous ( depending on whether their ancestors overlap. )
-func (d *Domain) Resolve() (ret []string, err error) {
-	c := d.cat // we shouldnt have to worry about dupes, because in theory we didnt add them.
-	if rows, e := c.db.Query(`select uses from domain_tree 
-		where base = ?1 order by dist desc`, d.name); e != nil {
-		err = e
-	} else {
-		ret, err = tables.ScanStrings(rows)
 	}
 	return
 }
@@ -139,25 +135,6 @@ func (d *Domain) makeNames(noun, name, at string) (err error) {
 		if e := q.Name(d.name, noun, name, i, at); e != nil && !errors.Is(e, mdl.Duplicate) {
 			err = e
 			break
-		}
-	}
-	return
-}
-
-// fix? used by "isReadyForProcessing" -- is there a better way.
-func (d *Domain) visit(visit func(d *Domain) error) (err error) {
-	cat := d.cat
-	if tree, e := d.Resolve(); e != nil {
-		err = e
-	} else {
-		for _, el := range tree {
-			if p, ok := cat.GetDomain(el); !ok {
-				err = errutil.Fmt("unexpected domain %q", el)
-				break
-			} else if e := visit(p); e != nil {
-				err = e
-				break
-			}
 		}
 	}
 	return
