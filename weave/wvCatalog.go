@@ -4,10 +4,17 @@ import (
 	"database/sql"
 	"errors"
 	"log"
+	"strings"
 
+	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/grammar"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
@@ -78,8 +85,8 @@ func NewCatalogWithWarnings(db *sql.DB, warn func(error)) *Catalog {
 	}
 }
 
-func (k *Catalog) SetSource(x string) {
-	k.cursor = x
+func (cat *Catalog) SetSource(x string) {
+	cat.cursor = x
 }
 
 // return the uniformly named domain ( if it exists )
@@ -88,13 +95,440 @@ func (cat *Catalog) GetDomain(n string) (*Domain, bool) {
 	return d, ok
 }
 
-func (cat *Catalog) EndDomain() (err error) {
-	if _, ok := cat.processing.Top(); !ok {
-		err = errutil.New("unexpected domain ending when there's no domain")
+func (k *Catalog) GetKindByName(n string) (ret *g.Kind, err error) {
+	if a, ok := k.macros[n]; !ok {
+		err = errutil.New("no such kind", n)
 	} else {
+		ret = a.Kind
+	}
+	return
+}
+
+// walk the domains and run the commands remaining in their queues
+func (cat *Catalog) AssembleCatalog() (err error) {
+	var ds []*Domain
+	for {
+		if len(cat.processing) > 0 {
+			err = errutil.New("mismatched begin/end domain")
+			break
+		} else if len(cat.pendingDomains) == 0 {
+			break
+		} else if was, e := cat.assembleNext(); e != nil {
+			err = e
+			break
+		} else {
+			ds = append(ds, was)
+		}
+	}
+	if err == nil {
+		err = cat.writeValues(cat.writer)
+	}
+	return
+}
+
+func (cat *Catalog) assembleNext() (ret *Domain, err error) {
+	found := -1
+	// without resolving, have we resolved our parents?
+	for i := 0; i < len(cat.pendingDomains); i++ {
+		next := cat.pendingDomains[i]
+		if next.isReadyForProcessing() {
+			found = i
+			break
+		}
+	}
+	if found < 0 {
+		first := cat.pendingDomains[0]
+		err = errutil.New("circular or unknown domain %q", first.name)
+	} else {
+		// chop this one out, then process
+		at := cat.pendingDomains[found]
+		cat.pendingDomains = append(cat.pendingDomains[:found], cat.pendingDomains[found+1:]...)
+		if e := cat.processDomain(at); e != nil {
+			err = e
+		} else {
+			ret = at
+		}
+	}
+	return
+}
+
+func (cat *Catalog) processDomain(d *Domain) (err error) {
+	if _, e := cat.run.ActivateDomain(d.name); e != nil {
+		err = e
+	} else if e := cat.findRivals(); e != nil {
+		err = e
+	} else {
+		cat.processing.Push(d)
+		for p := assert.Phase(0); p <= assert.RequireAll; p++ {
+			ctx := Weaver{d: d, phase: p, Runtime: cat.run}
+			if e := d.runPhase(&ctx); e != nil {
+				err = e
+				break
+			}
+		}
 		cat.processing.Pop()
 	}
 	return
+}
+
+// oh, the tangled webs we weave.
+// normally we distill fields into ephParams,
+// and then build up kinds, finally storing the results in the db.
+// fix: ideally would flush to the db after each domain ( or phase ) so that the weave can see it.
+// right now, only the play time's runtime reads from the db.
+// func (k *Catalog) registerMacro(op *EphMacro) (err error) {
+// 	// check not already registered.
+// 	if name := op.PatternName; len(name) == 0 {
+// 		err = errutil.Fmt("no macro name specified")
+// 	} else if _, ok := k.macros[name]; ok {
+// 		err = errutil.Fmt("macro %q already registered", name)
+// 	} else {
+// 		cnt := 1 + len(op.Params) + len(op.Locals)
+// 		init := make([]assign.Assignment, 0, cnt)
+// 		fields := make([]g.Field, 0, cnt)
+// 		addParam := func(p eph.Params) (err error) {
+// 			if len(p.Name) > 0 { // for now, silent skip nothing fields
+// 				if u, e := p.Unify(op.PatternName); e != nil {
+// 					err = e
+// 				} else {
+// 					init = append(init, u.Initially)
+// 					fields = append(fields, g.Field{
+// 						Name:     u.Name,
+// 						Affinity: u.Affinity,
+// 						Type:     u.Type,
+// 					})
+// 				}
+// 			}
+// 			return
+// 		}
+// 		addParams := func(ps []eph.Params) (err error) {
+// 			for _, el := range ps {
+// 				if e := addParam(el); e != nil {
+// 					err = e
+// 					break
+// 				}
+// 			}
+// 			return
+// 		}
+// 		if e := addParams(op.Params); e != nil {
+// 			err = e
+// 		} else if e := addParams(op.Locals); e != nil {
+// 			err = e
+// 		} else if e := addParam(*op.Result); e != nil {
+// 			err = e // ^ to match patterns, result (if any) is last.
+// 		} else {
+// 			k.macros[name] = macroKind{
+// 				Kind: g.NewKind(k, name, nil, fields),
+// 				init: init,
+// 				do:   op.MacroStatements,
+// 			}
+// 		}
+// 	}
+// 	return
+// }
+
+func (cat *Catalog) AssertAlias(opShortName string, opAliases ...string) error {
+	return cat.Schedule(assert.RequireNouns, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		if shortName, ok := UniformString(opShortName); !ok {
+			err = errutil.New("invalid name", opShortName)
+		} else if n, e := d.GetClosestNoun(shortName); e != nil {
+			err = e
+		} else {
+			for _, a := range opAliases {
+				if a, ok := UniformString(a); !ok {
+					err = errutil.Append(err, InvalidString(a))
+				} else {
+					err = cat.writer.Name(d.name, n.name, a, -1, at)
+				}
+			}
+		}
+		return
+	})
+}
+
+// if a parent kind was specified, make the kid dependent on it.
+// note: a singular to plural (if needed ) gets handled by the dependency resolver's kindFinder and GetPluralKind()
+func (cat *Catalog) AssertAncestor(opKind, opAncestor string) error {
+	return cat.Schedule(assert.RequirePlurals, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		// tbd: are the determiners of kinds useful for anything?
+		if _, kind := d.UniformDeterminer(opKind); len(kind) == 0 {
+			err = InvalidString(kind)
+		} else if _, ancestor := d.UniformDeterminer(opAncestor); len(ancestor) == 0 && len(opAncestor) > 0 {
+			err = InvalidString(opAncestor)
+		} else {
+			err = cat.Schedule(assert.RequireDeterminers, func(ctx *Weaver) error {
+				return d.addKind(kind, ancestor, at)
+			})
+		}
+		return
+	})
+}
+
+// generates traits and adds them to a custom aspect kind.
+func (cat *Catalog) AssertAspectTraits(opAspects string, opTraits []string) error {
+	// uses the ancestry phase because it generates kinds ( one per aspect. )
+	return cat.Schedule(assert.RequireDeterminers, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		if aspect, ok := UniformString(opAspects); !ok {
+			err = InvalidString(opAspects)
+		} else if traits, e := UniformStrings(opTraits); e != nil {
+			err = e
+		} else {
+			if e := d.addKind(aspect, kindsOf.Aspect.String(), at); e != nil {
+				err = e
+			} else if len(traits) > 0 {
+				err = d.schedule(at, assert.RequireResults, func(ctx *Weaver) error {
+					return cat.writer.Aspect(d.name, aspect, at, traits)
+				})
+			}
+		}
+		return
+	})
+}
+
+func (cat *Catalog) AssertCheck(opName string, prog []rt.Execute, expect literal.LiteralValue) error {
+	// uses domain phase, because it needs to ensure a domain exists
+	return cat.Schedule(assert.RequireAll, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		if name, ok := UniformString(opName); !ok {
+			err = InvalidString(opName)
+		} else {
+			err = cat.writer.Check(d.name, name, expect, prog, at)
+		}
+		return
+	})
+}
+
+func (cat *Catalog) AssertDefinition(path ...string) error {
+	return cat.Schedule(assert.RequireAll, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		if end := len(path) - 1; end <= 0 {
+			err = errutil.New("path too short", path)
+		} else {
+			key, value := strings.Join(path[:end], "/"), path[end]
+			err = cat.writer.Fact(d.name, key, value, at)
+		}
+		return
+	})
+}
+
+func (cat *Catalog) AssertField(kind, field, class string, aff affine.Affinity, init assign.Assignment) error {
+	return cat.Schedule(assert.RequireResults, func(ctx *Weaver) error {
+		d, at := ctx.d, ctx.at
+		return addField(ctx, kind, field, class, func(kind, field, class string) (err error) {
+			// shortcut: if we specify a field name for a record and no class, we'll expect the class to be the name.
+			if len(class) == 0 && isRecordAffinity(aff) {
+				class = field
+			}
+			e := cat.writer.Member(d.name, kind, field, aff, class, at)
+			if e := cat.eatDuplicates(e); e != nil {
+				err = e
+			} else if init != nil {
+				err = cat.writer.Default(d.name, kind, field, init)
+			}
+			return
+		})
+	})
+}
+
+// jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
+func (cat *Catalog) AssertGrammar(opName string, prog *grammar.Directive) error {
+	return cat.Schedule(assert.RequireRules /*GrammarPhase*/, func(ctx *Weaver) error {
+		d, at := ctx.d, ctx.at
+		return cat.writer.Grammar(d.name, opName, prog, at)
+	})
+}
+
+func (cat *Catalog) AssertNounKind(opNoun, opKind string) error {
+	return cat.Schedule(assert.RequireDefaults, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		_, name := d.StripDeterminer(opNoun)
+		if noun, ok := UniformString(name); !ok {
+			err = InvalidString(opNoun)
+		} else if _, kind := d.UniformDeterminer(opKind); len(kind) == 0 {
+			err = InvalidString(opKind)
+		} else if e := cat.writer.Noun(d.name, noun, kind, at); e != nil {
+			err = e
+		} else {
+			cat.domainNouns[domainNoun{d.name, noun}] = &ScopedNoun{domain: d, name: noun}
+			err = d.makeNames(noun, name, at)
+		}
+		return
+	})
+}
+
+// note: values are written per *noun* not per domain....
+func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, opValue literal.LiteralValue) error {
+	return cat.Schedule(assert.RequireNames, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		if noun, ok := UniformString(opNoun); !ok {
+			err = InvalidString(opNoun)
+		} else if field, ok := UniformString(opField); !ok {
+			err = InvalidString(opField)
+		} else if path, e := UniformStrings(opPath); e != nil {
+			err = e
+		} else if noun, e := d.GetClosestNoun(noun); e != nil {
+			err = e
+		} else if n, ok := cat.domainNouns[domainNoun{noun.domain, noun.name}]; !ok {
+			err = errutil.Fmt("unexpected noun %q in domain %q", noun.name, noun.domain)
+		} else if rv, e := n.recordValues(at); e != nil {
+			err = e
+		} else if value := opValue; value == nil {
+			err = errutil.New("null value", opNoun, opField)
+		} else {
+			return rv.writeValue(noun.name, at, field, path, value)
+		}
+		return
+	})
+}
+
+// fix: at some point it'd be nice to write values as they are generated
+// the basic idea i think would be to write each field AND sub-record path individually
+// and, on write, do a test to ensure the path is meaningful,
+// and that no "directory value" value exists for any sub path
+// ex. "a.b.c" is okay, so long as there's no record stored at "a.b" directly.
+// the runtime would change the way it reconstitutes values to handle all that.
+func (cat *Catalog) writeValues(m *mdl.Modeler) (err error) {
+Loop:
+	for _, n := range cat.domainNouns {
+		if rv := n.localRecord; rv.isValid() {
+			for _, fv := range rv.rec.Fields {
+				if e := m.Value(n.domain.name, n.name, fv.Field, fv.Value, rv.at); e != nil {
+					err = e
+					break Loop
+				}
+			}
+		}
+	}
+	return
+}
+
+func (cat *Catalog) AssertOpposite(opOpposite, opWord string) error {
+	return cat.Schedule(assert.RequireDependencies, func(ctx *Weaver) (err error) {
+		if a, ok := UniformString(opOpposite); !ok {
+			err = InvalidString(opOpposite)
+		} else if b, ok := UniformString(opWord); !ok {
+			err = InvalidString(opWord)
+		} else {
+			err = cat.writer.Opposite(ctx.d.name, a, b, cat.cursor)
+		}
+		return
+	})
+}
+
+// writes a definition of kindName?args=arg1,arg2,arg3
+func (cat *Catalog) AssertParam(kind, field, class string, aff affine.Affinity, init assign.Assignment) error {
+	return cat.Schedule(assert.RequireAncestry, func(ctx *Weaver) error {
+		d, at := ctx.d, ctx.at
+		return addField(ctx, kind, field, class, func(kind, field, class string) (err error) {
+			if init != nil {
+				err = errutil.New("parameters don't currently support initial values")
+			} else if e := ctx.d.addKind(kind, kindsOf.Pattern.String(), at); e != nil {
+				err = e
+			} else {
+				err = cat.writer.Parameter(d.name, kind, field, aff, class, at)
+			}
+			return
+		})
+	})
+}
+
+// add to the plurals to the database and ( maybe ) remember the plural for the current domain's set of rules
+// not more than one singular per plural ( but the other way around is fine. )
+func (cat *Catalog) AssertPlural(opSingular, opPlural string) error {
+	return cat.Schedule(assert.RequireDependencies, func(ctx *Weaver) (err error) {
+		if plural, ok := UniformString(opPlural); !ok {
+			err = InvalidString(opPlural)
+		} else if singular, ok := UniformString(opSingular); !ok {
+			err = InvalidString(opSingular)
+		} else {
+			err = cat.writer.Plural(ctx.d.name, plural, singular, cat.cursor)
+		}
+		return
+	})
+}
+
+func (cat *Catalog) AssertResult(kind, field, class string, aff affine.Affinity, init assign.Assignment) error {
+	return cat.Schedule(assert.RequireParameters, func(ctx *Weaver) error {
+		d, at := ctx.d, ctx.at
+		return addField(ctx, kind, field, class, func(kind, field, class string) (err error) {
+			if init != nil {
+				err = errutil.New("return values don't currently support initial values")
+			} else if e := ctx.d.addKind(kind, kindsOf.Pattern.String(), at); e != nil {
+				err = e
+			} else {
+				err = cat.writer.Result(d.name, kind, field, aff, class, at)
+			}
+			return
+		})
+	})
+}
+
+func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error {
+	// uses ancestry because it defines kinds for each relation
+	return cat.Schedule(assert.RequireDeterminers, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		// like aspects, we dont try to singularize these.
+		if rel, ok := UniformString(opRel); !ok {
+			err = InvalidString(opRel)
+		} else if acls, ok := UniformString(a); !ok {
+			err = InvalidString(a)
+		} else if bcls, ok := UniformString(b); !ok {
+			err = InvalidString(b)
+		} else if card := makeCard(amany, bmany); len(card) == 0 {
+			err = errutil.New("unknown cardinality")
+		} else {
+			if e := d.addKind(rel, kindsOf.Relation.String(), at); e != nil {
+				err = e
+			} else {
+				err = cat.Schedule(assert.RequireResults, func(ctx *Weaver) (err error) {
+					return cat.writer.Rel(d.name, rel, acls, bcls, card, at)
+				})
+			}
+		}
+		return
+	})
+}
+
+// validate that the pattern for the rule exists then add the rule to the *current* domain
+// ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
+func (cat *Catalog) AssertRelative(opRel, opNoun, opOtherNoun string) error {
+	return cat.Schedule(assert.RequireNames, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		if noun, ok := UniformString(opNoun); !ok {
+			err = InvalidString(opNoun)
+		} else if otherNoun, ok := UniformString(opOtherNoun); !ok {
+			err = InvalidString(opOtherNoun)
+		} else if rel, ok := UniformString(opRel); !ok {
+			err = InvalidString(opRel)
+		} else if first, e := d.GetClosestNoun(noun); e != nil {
+			err = e
+		} else if second, e := d.GetClosestNoun(otherNoun); e != nil {
+			err = e
+		} else {
+			err = cat.writer.Pair(d.name, rel, first.name, second.name, at)
+		}
+		return
+	})
+}
+
+// validate that the pattern for the rule exists then add the rule to the *current* domain
+// ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
+func (cat *Catalog) AssertRule(pattern string, target string, filter rt.BoolEval, flags assert.EventTiming, prog []rt.Execute) error {
+	return cat.Schedule(assert.RequireRelatives, func(ctx *Weaver) (err error) {
+		d, at := ctx.d, ctx.at
+		if name, ok := UniformString(pattern); !ok {
+			err = InvalidString(pattern)
+		} else if tgt, ok := UniformString(target); len(target) > 0 && !ok {
+			err = errutil.Fmt("unknown or invalid target %q for pattern %q", target, pattern)
+		} else {
+			flags := fromTiming(flags)
+			err = cat.writer.Rule(d.name, name, tgt, flags, filter, prog, at)
+		}
+		return
+	})
 }
 
 // calls to schedule() between begin/end domain write to this newly declared domain.
@@ -107,6 +541,71 @@ func (cat *Catalog) BeginDomain(name string, requires []string) (err error) {
 		err = e
 	} else {
 		cat.processing.Push(d)
+	}
+	return
+}
+
+// ugh. see register macro notes.
+func (k *Catalog) Call(rec *g.Record, expectedReturn affine.Affinity) (ret g.Value, err error) {
+	// kind := rec.Kind()
+	// if macro, ok := k.macros[kind.Name()]; !ok {
+	// 	err = errutil.New("unknown macro", kind.Name())
+	// } else if res, e := pattern.NewMacroResults(k, rec, expectedReturn); e != nil {
+	// 	err = e
+	// } else if e := macro.initializeRecord(k, rec); e != nil {
+	// 	err = e
+	// } else {
+	// 	oldScope := k.Stack.ReplaceScope(res)
+	// 	if e := macro.initializeRecord(k, rec); e != nil {
+	// 		err = e
+	// 	} else if e := safe.RunAll(k, macro.do); e != nil {
+	// 		err = e
+	// 	} else if !res.ComputedResult() && expectedReturn != affine.None {
+	// 		err = errutil.Fmt("%w calling %s pattern %q", rt.NoResult, aff, rec.Kind().Name())
+	// 	} else if v, e := res.GetResult(); e != nil {
+	// 		err = e
+	// 	} else {
+	// 		ret = v
+	// 	}
+	// 	k.Stack.ReplaceScope(oldScope)
+	// }
+	return
+}
+
+func (cat *Catalog) EndDomain() (err error) {
+	if _, ok := cat.processing.Top(); !ok {
+		err = errutil.New("unexpected domain ending when there's no domain")
+	} else {
+		cat.processing.Pop()
+	}
+	return
+}
+
+// Env - used for comments to determine if they should turn into log statements.
+// todo: remove?
+func (k *Catalog) Env() *Environ {
+	return &k.env
+}
+
+// NewCounter generates a unique string, and uses local markup to try to create a stable one.
+// instead consider  "PreImport" could be used to write a key into the markup if one doesnt already exist.
+// and a free function could also extract what it needs from any op's markup.
+// ( then Schedule wouldn't need Catalog for counters )
+func (cat *Catalog) NewCounter(name string, markup map[string]any) (ret string) {
+	// fix: use a special "id" marker instead?
+	if at, ok := markup["comment"].(string); ok && len(at) > 0 {
+		ret = at
+	} else {
+		ret = cat.autoCounter.Next(name)
+	}
+	return
+}
+
+func (cat *Catalog) Schedule(when assert.Phase, what func(*Weaver) error) (err error) {
+	if d, ok := cat.processing.Top(); !ok {
+		err = errutil.New("unknown top level domain")
+	} else {
+		err = d.schedule(cat.cursor, when, what)
 	}
 	return
 }
@@ -205,79 +704,6 @@ func (cat *Catalog) findRivals() (err error) {
 		err = e
 	} else {
 		err = rivals
-	}
-	return
-}
-
-// exposed for testing:
-// tbd: maybe this could pull in the newly relevant domains;
-// ( ex. use domain = active count )
-// currently it happens after the domains have been activated
-// and therefore compares everything to everything each time.
-// note: fields don't have rivals because they all exist in the same domain as their owner kind.
-func findRivals(db tables.Querier, onConflict func(group, domain, key, value, at string) error) (err error) {
-	if rows, e := db.Query(`
-	with active_grammar as (
-		select mg.*
-		from mdl_grammar mg 
-		join active_domains
-		using (domain)
-	),
-
-	active_facts as (
-		select mx.*
-		from mdl_fact mx
-		join active_domains
-		using (domain)
-	)
-	
-	select 'fact', a.domain, a.at, a.fact, a.value
-		from active_facts as a 
-		join active_facts as b 
-			using(fact)
-		where a.domain != b.domain 
-		and a.value != b.value
-	union all
-
-	select 'kind', a.domain, a.at, a.kind, ''
-		from active_kinds as a 
-		join active_kinds as b 
-			using(name)
-		where a.domain != b.domain
-	union all
-
-	select 'grammar', a.domain, a.at, a.name, ''
-		from active_grammar as a 
-		join active_grammar as b 
-			using(name)
-		where a.domain != b.domain 
-		and a.prog != b.prog
-	union all
-
-	select 'opposite', a.domain, a.at, a.oneWord, a.otherWord 
-		from active_rev as a 
-		join active_rev as b 
-			using(oneWord)
-		where a.domain != b.domain 
-		and a.otherWord != b.otherWord
-	union all
-
-	select 'plural', a.domain, a.at, a.many, a.one
-		from active_plurals as a 
-		join active_plurals as b 
-			using(many)
-		where a.domain != b.domain
-		and a.one != b.one
-	`); e != nil {
-		err = errutil.New("database error", e)
-	} else {
-		var group, domain, key, value string
-		var at sql.NullString
-		if e := tables.ScanAll(rows, func() error {
-			return onConflict(group, domain, key, value, at.String)
-		}, &group, &domain, &at, &key, &value); e != nil && e != sql.ErrNoRows {
-			err = e
-		}
 	}
 	return
 }

@@ -8,9 +8,3 @@ type Environ struct {
 func (env *Environ) InProgram() bool {
 	return env.ActivityDepth > 0
 }
-
-// Env - used for comments to determine if they should turn into log statements.
-// todo: remove?
-func (k *Catalog) Env() *Environ {
-	return &k.env
-}

@@ -1,8 +1,11 @@
 package weave
 
 import (
+	"database/sql"
 	"errors"
+	"strings"
 
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
@@ -26,13 +29,10 @@ func (op *memento) call(ctx *Weaver) error {
 	return op.cb(ctx)
 }
 
-func (cat *Catalog) Schedule(when assert.Phase, what func(*Weaver) error) (err error) {
-	if d, ok := cat.processing.Top(); !ok {
-		err = errutil.New("unknown top level domain")
-	} else {
-		err = d.schedule(cat.cursor, when, what)
-	}
-	return
+// logs duplicate errors, but does not return them.
+func (d *Domain) addKind(name, parent, at string) (err error) {
+	e := d.cat.writer.Kind(d.name, name, parent, at)
+	return d.cat.eatDuplicates(e)
 }
 
 // have all parent domains been processed?
@@ -64,6 +64,82 @@ func (d *Domain) Resolve() (ret []string, err error) {
 		err = e
 	} else {
 		ret, err = tables.ScanStrings(rows)
+	}
+	return
+}
+
+// find the noun with the closest name in this scope
+// skips aliases for the sake of backwards compatibility:
+// there should be a difference between "a noun is known as"
+// and "understand this word by the player as" -- and currently there's not.
+func (d *Domain) GetClosestNoun(name string) (ret struct{ name, domain string }, err error) {
+	if e := d.cat.db.QueryRow(`
+	select mn.noun, mn.domain  
+	from mdl_name my 
+	join mdl_noun mn
+		on (mn.rowid = my.noun)
+	join domain_tree dt
+		on (dt.uses = my.domain)
+	where base = ?1
+	and my.name = ?2
+	and my.rank >= 0
+	order by my.rank, my.rowid asc
+	limit 1`, d.name, name).Scan(&ret.name, &ret.domain); e == sql.ErrNoRows {
+		err = errutil.Fmt("%w couldn't find a noun named %s", mdl.Missing, name)
+	} else if e != nil {
+		err = errutil.New("database error", e)
+	}
+	return
+}
+
+// use the domain rules ( and hierarchy ) to strip determiners off of the passed word
+func (d *Domain) StripDeterminer(word string) (retDet, retWord string) {
+	// fix: determiners should be specified by the author ( and libraries )
+	return lang.SliceArticle(word)
+}
+
+// use the domain rules ( and hierarchy ) to strip determiners off of the passed word
+func (d *Domain) UniformDeterminer(word string) (retDet, retWord string) {
+	// fix: determiners should be specified by the author ( and libraries )
+	det, name := lang.SliceArticle(word)
+	if name, ok := UniformString(name); ok {
+		retDet, retWord = det, name
+	}
+	return
+}
+
+func (d *Domain) makeNames(noun, name, at string) (err error) {
+	q := d.cat.writer
+	// if the original got transformed into underscores
+	// write the original name (ex. "toy boat" vs "toy_boat" )
+	var out []string
+	if clip := strings.TrimSpace(name); clip != noun {
+		out = append(out, clip)
+	}
+	out = append(out, noun)
+
+	// generate additional names by splitting the lowercase uniform name on the underscores:
+	split := strings.FieldsFunc(noun, lang.IsBreak)
+	if cnt := len(split); cnt > 1 {
+		// in case the name was reduced due to multiple separators
+		if breaks := strings.Join(split, "_"); breaks != noun {
+			out = append(out, breaks)
+		}
+		// write individual words in increasing rank ( ex. "boat", then "toy" )
+		// note: trailing words are considered "stronger"
+		// because adjectives in noun names tend to be first ( ie. "toy boat" )
+		for i := len(split) - 1; i >= 0; i-- {
+			word := split[i]
+			out = append(out, word)
+		}
+	}
+	for i, name := range out {
+		// ignore duplicate errors here.
+		// since these are generated, there's probably very little the user could do about them.
+		if e := q.Name(d.name, noun, name, i, at); e != nil && !errors.Is(e, mdl.Duplicate) {
+			err = e
+			break
+		}
 	}
 	return
 }
