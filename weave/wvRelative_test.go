@@ -1,22 +1,23 @@
-package weave
+package weave_test
 
 import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"git.sr.ht/~ionous/tapestry/weave/eph"
+	"git.sr.ht/~ionous/tapestry/test/eph"
+	"git.sr.ht/~ionous/tapestry/test/testweave"
 	"github.com/kr/pretty"
 )
 
 // follow along with relative test except add list of ephemera
 func TestRelativeFormation(t *testing.T) {
-	var warnings Warnings
-	unwarn := warnings.catch(t)
+	var warnings testweave.Warnings
+	unwarn := warnings.Catch(t)
 	defer unwarn()
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		newRelativeTest(
 			"a", "r_1_1", "a",
 			"b", "r_1_1", "c",
@@ -51,7 +52,7 @@ func TestRelativeFormation(t *testing.T) {
 	)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if out, e := dt.readPairs(); e != nil {
+	} else if out, e := dt.ReadPairs(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		"a:r_1_1:a:a",
@@ -85,7 +86,7 @@ func TestRelativeFormation(t *testing.T) {
 	}
 	// expects 4 warnings, one from each group
 	for i := 0; i < 4; i++ {
-		if ok, e := okError(t, warnings.shift(), `Duplicate relation`); !ok {
+		if ok, e := testweave.OkayError(t, warnings.Shift(), `Duplicate relation`); !ok {
 			t.Fatal(e)
 		}
 	}
@@ -93,24 +94,24 @@ func TestRelativeFormation(t *testing.T) {
 
 // follow along with relative test except add list of ephemera
 func TestRelativeOneOneViolation(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		newRelativeTest(
 			"b", "r_1_1", "c",
 			"b", "r_1_1", "d",
 		)...,
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Conflict`); !ok {
+	if ok, e := testweave.OkayError(t, e, `Conflict`); !ok {
 		t.Fatal(e)
 	}
 }
 
 func TestRelativeOneManyViolation(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		newRelativeTest(
 			// ex. one parent to many children
 			"b", "r_1_x", "e",
@@ -119,15 +120,15 @@ func TestRelativeOneManyViolation(t *testing.T) {
 	)
 
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Conflict`); !ok {
+	if ok, e := testweave.OkayError(t, e, `Conflict`); !ok {
 		t.Fatal(e)
 	}
 }
 
 func TestRelativeManyOneViolation(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		newRelativeTest(
 			// ex. many children to one parent
 			"e", "r_x_1", "b",
@@ -135,7 +136,7 @@ func TestRelativeManyOneViolation(t *testing.T) {
 		)...,
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Conflict`); !ok {
+	if ok, e := testweave.OkayError(t, e, `Conflict`); !ok {
 		t.Fatal(e)
 	}
 }

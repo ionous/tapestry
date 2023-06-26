@@ -14,45 +14,51 @@ import (
 )
 
 // generate ephemera for macros
-func xTestMacros(t *testing.T) {
-	// errutil.Panic = true
-	// //
-	// var cat eph.Catalog
-	// k := weave.NewCatalog(cat)
-	// if e := k.AssertDomainStart("tapestry", nil); e != nil {
-	// 	t.Fatal(e)
-	// } else if e := addDefaultKinds(k); e != nil {
-	// 	t.Fatal(e)
-	// } else if e := story.ImportStory(k, t.Name(), macroStory); e != nil {
-	// 	t.Fatal(e)
-	// } else if e := cat.AssembleCatalog(); e != nil {
-	// 	t.Fatal(e)
-	// } else {
-	// 	// expect := []eph.Ephemera{
-	// 	// 	&eph.Values{
-	// 	// 		Noun:  "Hershel",
-	// 	// 		Field: "proper_named",
-	// 	// 		Value: literal.B(true),
-	// 	// 	},
-	// 	// 	&eph.Nouns{
-	// 	// 		Noun: "Hershel",
-	// 	// 		Kind: "an actor",
-	// 	// 	},
-	// 	// 	&eph.Nouns{
-	// 	// 		Noun: "scissors",
-	// 	// 		Kind: "things",
-	// 	// 	},
-	// 	// 	&eph.Relatives{
-	// 	// 		Rel:       "whereabouts",
-	// 	// 		Noun:      "Hershel",
-	// 	// 		OtherNoun: "scissors",
-	// 	// 	},
-	// 	// }
-	// 	// if diff := pretty.Diff(els, expect); len(diff) != 0 {
-	// 	// 	t.Log(pretty.Sprint(els))
-	// 	// 	t.Fatal(diff)
-	// 	// }
-	// }
+func TestMacros(t *testing.T) {
+	//
+	var cat eph.Catalog
+	k := weave.NewCatalog(cat)
+
+	err = dt.cat.AssembleCatalog()
+	}
+	if errs := dt.cat.Errors; len(errs) > 0 {
+		err = errutil.New(err, errs)
+	}
+	
+	if e := k.AssertDomainStart("tapestry", nil); e != nil {
+		t.Fatal(e)
+	} else if e := addDefaultKinds(k); e != nil {
+		t.Fatal(e)
+	} else if e := story.ImportStory(k, t.Name(), macroStory); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e != nil {
+		t.Fatal(e)
+	} else {
+		// expect := []eph.Ephemera{
+		// 	&eph.Values{
+		// 		Noun:  "Hershel",
+		// 		Field: "proper_named",
+		// 		Value: literal.B(true),
+		// 	},
+		// 	&eph.Nouns{
+		// 		Noun: "Hershel",
+		// 		Kind: "an actor",
+		// 	},
+		// 	&eph.Nouns{
+		// 		Noun: "scissors",
+		// 		Kind: "things",
+		// 	},
+		// 	&eph.Relatives{
+		// 		Rel:       "whereabouts",
+		// 		Noun:      "Hershel",
+		// 		OtherNoun: "scissors",
+		// 	},
+		// }
+		// if diff := pretty.Diff(els, expect); len(diff) != 0 {
+		// 	t.Log(pretty.Sprint(els))
+		// 	t.Fatal(diff)
+		// }
+	}
 }
 
 func addDefaultKinds(n assert.Assertions) (err error) {

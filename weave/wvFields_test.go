@@ -1,25 +1,26 @@
-package weave
+package weave_test
 
 import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/weave/eph"
+	"git.sr.ht/~ionous/tapestry/test/eph"
+	"git.sr.ht/~ionous/tapestry/test/testweave"
 	"github.com/kr/pretty"
 )
 
 // add some fields to a kind
 func TestFieldAssembly(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Number}}},
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "t", Affinity: affine.Text, Class: "k"}}},
 	)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if out, e := dt.readFields(); e != nil {
+	} else if out, e := dt.ReadFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		"a:k:n:number:", // field output gets sorted by name
@@ -32,18 +33,18 @@ func TestFieldAssembly(t *testing.T) {
 
 // we can define a kind in one domain, and its fields in another
 func TestFieldsCrossDomain(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Number}}},
 	)
-	dt.makeDomain(dd("b", "a"),
+	dt.MakeDomain(dd("b", "a"),
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "b", Affinity: affine.Bool}}},
 	)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if out, e := dt.readFields(); e != nil {
+	} else if out, e := dt.ReadFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		"a:k:b:bool:", // field output gets sorted by name
@@ -56,28 +57,28 @@ func TestFieldsCrossDomain(t *testing.T) {
 
 // we can redefine fields in the same domain, and in another
 func TestFieldsRedefine(t *testing.T) {
-	var warnings Warnings
-	unwarn := warnings.catch(t)
+	var warnings testweave.Warnings
+	unwarn := warnings.Catch(t)
 	defer unwarn()
 	//
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Number}}},
 		&eph.Kinds{Kind: "k"},
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Number}}},
 	)
-	dt.makeDomain(dd("b", "a"),
+	dt.MakeDomain(dd("b", "a"),
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Number}}},
 	)
 
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if ok, e := okError(t, warnings.shift(), `Duplicate field "n" for kind "k"`); !ok {
+	} else if ok, e := testweave.OkayError(t, warnings.Shift(), `Duplicate field "n" for kind "k"`); !ok {
 		t.Fatal("unexpected warning:", e)
-	} else if ok, e := okError(t, warnings.shift(), `Duplicate field "n" for kind "k"`); !ok {
+	} else if ok, e := testweave.OkayError(t, warnings.Shift(), `Duplicate field "n" for kind "k"`); !ok {
 		t.Fatal("unexpected warning:", e)
-	} else if out, e := dt.readFields(); e != nil {
+	} else if out, e := dt.ReadFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		"a:k:n:number:",
@@ -90,17 +91,17 @@ func TestFieldsRedefine(t *testing.T) {
 // fields conflict in sub-domains
 // we can redefine fields in the same domain, and in another
 func TestFieldsConflict(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Number}}},
 	)
-	dt.makeDomain(dd("b", "a"),
+	dt.MakeDomain(dd("b", "a"),
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "n", Affinity: affine.Text}}},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Conflict field "n" for kind "k"`); !ok {
+	if ok, e := testweave.OkayError(t, e, `Conflict field "n" for kind "k"`); !ok {
 		t.Fatal("unexpected error:", e)
 	}
 }
@@ -108,28 +109,28 @@ func TestFieldsConflict(t *testing.T) {
 // rival fields are fine so long as they match
 // ( really the fields exist all at the same time )
 func TestFieldsMatchingRivals(t *testing.T) {
-	var warnings Warnings
-	unwarn := warnings.catch(t)
+	var warnings testweave.Warnings
+	unwarn := warnings.Catch(t)
 	defer unwarn()
 
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
 	)
-	dt.makeDomain(dd("c", "a"),
+	dt.MakeDomain(dd("c", "a"),
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "t", Affinity: affine.Text}}},
 	)
-	dt.makeDomain(dd("d", "a"),
+	dt.MakeDomain(dd("d", "a"),
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "t", Affinity: affine.Text}}},
 	)
-	dt.makeDomain(dd("z", "c", "d"))
+	dt.MakeDomain(dd("z", "c", "d"))
 	// fix: is this supposed to be an error?
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if ok, e := okError(t, warnings.shift(), `Duplicate field "t" for kind "k"`); !ok {
+	} else if ok, e := testweave.OkayError(t, warnings.Shift(), `Duplicate field "t" for kind "k"`); !ok {
 		t.Fatal("unexpected warning:", e)
-	} else if out, e := dt.readFields(); e != nil {
+	} else if out, e := dt.ReadFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		"a:k:t:text:",
@@ -142,42 +143,42 @@ func TestFieldsMatchingRivals(t *testing.T) {
 // fields in a given kind exist all at once; there's really not "rival" fields.
 // this is really a name conflict.
 func TestFieldsMismatchingRivals(t *testing.T) {
-	var warnings Warnings
-	unwarn := warnings.catch(t)
+	var warnings testweave.Warnings
+	unwarn := warnings.Catch(t)
 	defer unwarn()
 
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
 	)
-	dt.makeDomain(dd("c", "a"),
+	dt.MakeDomain(dd("c", "a"),
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "t", Affinity: affine.Text}}},
 	)
-	dt.makeDomain(dd("d", "a"),
+	dt.MakeDomain(dd("d", "a"),
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{{Name: "t", Affinity: affine.Bool}}},
 	)
 	_, err := dt.Assemble()
-	if ok, e := okError(t, err, `Conflict field "t" for kind "k"`); !ok {
+	if ok, e := testweave.OkayError(t, err, `Conflict field "t" for kind "k"`); !ok {
 		t.Fatal("unexpected error:", e)
 	}
 }
 
 // classes cant refer to kinds that dont exist.
 func TestFieldsUnknownClass(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
 		&eph.Kinds{Kind: "k", Contain: []eph.Params{
 			// m doesnt exist in this domain, so the test will fail.
 			{Name: "t", Affinity: affine.Text, Class: "m"}}},
 	)
-	dt.makeDomain(dd("c", "a"),
+	dt.MakeDomain(dd("c", "a"),
 		&eph.Kinds{Kind: "m"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Missing kind "m" in domain "a" trying to write field "t"`); !ok {
+	if ok, e := testweave.OkayError(t, e, `Missing kind "m" in domain "a" trying to write field "t"`); !ok {
 		t.Fatal("unexpected error:", e)
 	} else {
 		t.Log("ok:", e)
@@ -186,9 +187,9 @@ func TestFieldsUnknownClass(t *testing.T) {
 
 // note: the original code would push shared fields upwards; the new code doesnt
 func TestFieldLca(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "t"},
 		&eph.Kinds{Kind: "p", Ancestor: "t"},
 		&eph.Kinds{Kind: "q", Ancestor: "t"},
@@ -199,7 +200,7 @@ func TestFieldLca(t *testing.T) {
 
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if out, e := dt.readFields(); e != nil {
+	} else if out, e := dt.ReadFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		"a:p:t:text:",

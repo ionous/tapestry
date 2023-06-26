@@ -1,17 +1,18 @@
-package weave
+package weave_test
 
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/weave/eph"
+	"git.sr.ht/~ionous/tapestry/test/eph"
+	"git.sr.ht/~ionous/tapestry/test/testweave"
 	"github.com/kr/pretty"
 )
 
 // test the kind mapping to kind list resolution
 func TestKindTree(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"), makeKinds(
+	dt.MakeDomain(dd("a"), makeKinds(
 		"a", "",
 		"b", "a",
 		"c", "b",
@@ -21,7 +22,7 @@ func TestKindTree(t *testing.T) {
 	)...)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if out, e := dt.readKinds(); e != nil {
+	} else if out, e := dt.ReadKinds(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		"a:a:",
@@ -39,9 +40,9 @@ func TestKindTree(t *testing.T) {
 // within a single domain,
 // should be able to define a kind as being *more* specific than another definition.
 func TestKindRefining(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"), makeKinds(
+	dt.MakeDomain(dd("a"), makeKinds(
 		"a", "",
 		"b", "a",
 		"c", "a",
@@ -49,7 +50,7 @@ func TestKindRefining(t *testing.T) {
 	)...)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if out, e := dt.readKinds(); e != nil {
+	} else if out, e := dt.ReadKinds(); e != nil {
 		t.Fatal(e)
 	} else {
 		if diff := pretty.Diff(out, []string{
@@ -65,9 +66,9 @@ func TestKindRefining(t *testing.T) {
 
 // this is considered okay - it's in the same tree
 func TestKindDelayedRefining(t *testing.T) {
-	dt := newTestShuffle(t.Name(), false)
+	dt := testweave.NewWeaverShuffle(t.Name(), false)
 	defer dt.Close()
-	dt.makeDomain(dd("d"), makeKinds(
+	dt.MakeDomain(dd("d"), makeKinds(
 		"a", "",
 		"b", "",
 		"c", "b",
@@ -76,7 +77,7 @@ func TestKindDelayedRefining(t *testing.T) {
 	)...)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if out, e := dt.readKinds(); e != nil {
+	} else if out, e := dt.ReadKinds(); e != nil {
 		t.Fatal(e)
 	} else {
 		if diff := pretty.Diff(out, []string{
@@ -91,23 +92,23 @@ func TestKindDelayedRefining(t *testing.T) {
 }
 
 func TestKindMissing(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"), makeKinds(
+	dt.MakeDomain(dd("a"), makeKinds(
 		"c", "d",
 		"b", "a",
 		"a", "",
 	)...)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Missing kind "d" in domain "a"`); !ok {
+	if ok, e := testweave.OkayError(t, e, `Missing kind "d" in domain "a"`); !ok {
 		t.Fatal("unexpected error:", e)
 	}
 }
 
 func TestKindSingleParent(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"), makeKinds(
+	dt.MakeDomain(dd("a"), makeKinds(
 		"a", "",
 		"b", "a",
 		"c", "a",
@@ -115,7 +116,7 @@ func TestKindSingleParent(t *testing.T) {
 		"d", "c",
 	)...)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Missing a definition in domain "a" that would allow "d" to have the ancestor`); !ok {
+	if ok, e := testweave.OkayError(t, e, `Missing a definition in domain "a" that would allow "d" to have the ancestor`); !ok {
 		t.Fatal("unexpected error:", e)
 	}
 }

@@ -1,18 +1,19 @@
-package weave
+package weave_test
 
 import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/weave/eph"
+	"git.sr.ht/~ionous/tapestry/test/eph"
+	"git.sr.ht/~ionous/tapestry/test/testweave"
 	"github.com/kr/pretty"
 )
 
 func TestValueFieldAssignment(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		// some random set of kinds
 		&eph.Kinds{Kind: "k"},
 		&eph.Kinds{Kind: "l", Ancestor: "k"},
@@ -36,7 +37,7 @@ func TestValueFieldAssignment(t *testing.T) {
 	)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if out, e := dt.readValues(); e != nil {
+	} else if out, e := dt.ReadValues(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		`a:apple:t:"some text"`,
@@ -50,9 +51,9 @@ func TestValueFieldAssignment(t *testing.T) {
 }
 
 func TestMissingField(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		// some random set of kinds
 		&eph.Kinds{Kind: "k"},
 		// a field
@@ -64,7 +65,7 @@ func TestMissingField(t *testing.T) {
 	)
 
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `field "t" not found in kind "k"`); !ok {
+	if ok, e := testweave.OkayError(t, e, `field "t" not found in kind "k"`); !ok {
 		t.Fatal("unexpected error:", e)
 	} else {
 		t.Log("ok:", e)
@@ -72,9 +73,9 @@ func TestMissingField(t *testing.T) {
 }
 
 func TestValueTraitAssignment(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		// some random set of kinds
 		&eph.Kinds{Kind: "k"},
 		&eph.Kinds{Kind: "l", Ancestor: "k"},
@@ -103,7 +104,7 @@ func TestValueTraitAssignment(t *testing.T) {
 
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if out, e := dt.readValues(); e != nil {
+	} else if out, e := dt.ReadValues(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		`a:apple:a:"y"`,
@@ -117,9 +118,9 @@ func TestValueTraitAssignment(t *testing.T) {
 }
 
 func TestValuePaths(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		// declare the existence of records
 		&eph.Kinds{Kind: kindsOf.Record.String()},
 		// a record with some fields
@@ -147,7 +148,7 @@ func TestValuePaths(t *testing.T) {
 
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if out, e := dt.readValues(); e != nil {
+	} else if out, e := dt.ReadValues(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		// `a:test:outer:{"Fields:":[{"Field field:value:":["inner",{"Fields:":[{"Field field:value:":["text","some text"]}]}]}]}`,

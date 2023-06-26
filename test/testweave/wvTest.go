@@ -1,4 +1,4 @@
-package weave
+package testweave
 
 import (
 	"database/sql"
@@ -8,58 +8,18 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/tables"
+	"git.sr.ht/~ionous/tapestry/test/eph"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
-	"git.sr.ht/~ionous/tapestry/weave/eph"
+	"git.sr.ht/~ionous/tapestry/weave"
 	"github.com/ionous/errutil"
 )
 
-func B(b bool) *literal.BoolValue   { return &literal.BoolValue{Value: b} }
-func I(n int) *literal.NumValue     { return &literal.NumValue{Value: float64(n)} }
-func F(n float64) *literal.NumValue { return &literal.NumValue{Value: n} }
-func T(s string) *literal.TextValue { return &literal.TextValue{Value: s} }
-
-type Warnings []error
-
-// override the global eph warning function
-// returns a defer-able function which:
-// 1. restores the warning function; and,
-// 2. raises a Fatal error if there are any unhandled warnings.
-func (w *Warnings) catch(t *testing.T) func() {
-	was := LogWarning
-	LogWarning = func(e error) {
-		(*w) = append((*w), e)
-	}
-	return func() {
-		if len(*w) > 0 {
-			t.Fatal("unhandled warnings", *w)
-		}
-		LogWarning = was
-	}
+func NewWeaver(name string) *Weaver {
+	return NewWeaverShuffle(name, true)
 }
 
-// return the warnings as a raw list, clear all stored errors.
-func (w *Warnings) all() (ret []error) {
-	ret, (*w) = (*w), nil
-	return ret
-}
-
-// remove and return the first warning, or error if there are none left.
-func (w *Warnings) shift() (err error) {
-	if cnt := len(*w); cnt == 0 {
-		err = errutil.New("out of warnings")
-	} else {
-		err, (*w) = (*w)[0], (*w)[1:]
-	}
-	return
-}
-
-func newTest(name string) *domainTest {
-	return newTestShuffle(name, true)
-}
-
-func newTestShuffle(name string, shuffle bool) *domainTest {
+func NewWeaverShuffle(name string, shuffle bool) *Weaver {
 	path, driver := testdb.Memory, ""
 	// if you run the test as go test ... -args write
 	// it'll write the db out in your user directory
@@ -67,15 +27,15 @@ func newTestShuffle(name string, shuffle bool) *domainTest {
 		path = ""
 	}
 	db := testdb.Open(name, path, driver)
-	return &domainTest{
+	return &Weaver{
 		name:      name,
 		db:        db,
-		cat:       NewCatalogWithWarnings(db, LogWarning),
+		cat:       weave.NewCatalogWithWarnings(db, LogWarning),
 		noShuffle: !shuffle,
 	}
 }
 
-func okError(t *testing.T, e error, prefix string) (okay bool, err error) {
+func OkayError(t *testing.T, e error, prefix string) (okay bool, err error) {
 	if okay = e != nil && strings.HasPrefix(e.Error(), prefix); okay {
 		t.Log("ok:", e)
 	} else {
@@ -84,35 +44,31 @@ func okError(t *testing.T, e error, prefix string) (okay bool, err error) {
 	return
 }
 
-type domainTest struct {
+type Weaver struct {
 	name string
-	// queues the commands so we can makeDomain without worrying about error handling
+	// queues the commands so we can MakeDomain without worrying about error handling
 	// also allows shuffling the declarations (within a single domain)
 	queue     []eph.Ephemera
 	noShuffle bool
 	db        *sql.DB
-	cat       *Catalog
+	cat       *weave.Catalog
 }
 
-func (dt *domainTest) Open(name string) *sql.DB {
+func (dt *Weaver) Open(name string) *sql.DB {
 	if dt.db == nil {
 		dt.db = testdb.Open(name, testdb.Memory, "")
 	}
 	return dt.db
 }
 
-func (dt *domainTest) Close() {
+func (dt *Weaver) Close() {
 	if dt.db != nil {
 		dt.db.Close()
 		dt.db = nil
 	}
 }
 
-func dd(names ...string) []string {
-	return names
-}
-
-func (dt *domainTest) makeDomain(names []string, add ...eph.Ephemera) {
+func (dt *Weaver) MakeDomain(names []string, add ...eph.Ephemera) {
 	n, req := names[0], names[1:]
 	if !dt.noShuffle {
 		// shuffle the incoming ephemera
@@ -130,7 +86,7 @@ func (dt *domainTest) makeDomain(names []string, add ...eph.Ephemera) {
 	})
 }
 
-func (dt *domainTest) Assemble() (ret *Catalog, err error) {
+func (dt *Weaver) Assemble() (ret *weave.Catalog, err error) {
 	for _, el := range dt.queue {
 		if e := el.Assert(dt.cat); e != nil {
 			err = e
@@ -146,35 +102,14 @@ func (dt *domainTest) Assemble() (ret *Catalog, err error) {
 	return dt.cat, err
 }
 
-// relation, kind, cardinality, otherKinds
-func newRelation(r, k, c, o string) *eph.Relations {
-	var card eph.Cardinality
-	switch c {
-	case tables.ONE_TO_ONE:
-		card = &eph.OneOne{Kind: k, OtherKind: o}
-	case tables.ONE_TO_MANY:
-		card = &eph.OneMany{Kind: k, OtherKinds: o}
-	case tables.MANY_TO_ONE:
-		card = &eph.ManyOne{Kinds: k, OtherKind: o}
-	case tables.MANY_TO_MANY:
-		card = &eph.ManyMany{Kinds: k, OtherKinds: o}
-	default:
-		panic("unknown cardinality")
-	}
-	return &eph.Relations{
-		Rel:         r,
-		Cardinality: card,
-	}
-}
-
-func (dt *domainTest) readAssignments() ([]string, error) {
+func (dt *Weaver) ReadAssignments() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
     select domain ||':'|| many ||':'|| one
 from mdl_plural`)
 }
 
 // an array of dependencies
-func (dt *domainTest) readDomain(n string) (ret []string, err error) {
+func (dt *Weaver) ReadDomain(n string) (ret []string, err error) {
 	if ds, e := tables.QueryStrings(dt.db,
 		`select uses from domain_tree 
 		where base = ?1 
@@ -189,14 +124,14 @@ func (dt *domainTest) readDomain(n string) (ret []string, err error) {
 	return
 }
 
-func (dt *domainTest) readDomains() ([]string, error) {
+func (dt *Weaver) ReadDomains() ([]string, error) {
 	return tables.QueryStrings(dt.db,
 		`select domain from domain_order`)
 }
 
 // domain, kind, field name, affinity, subtype
 // sorted by kind and within each kind, the field name
-func (dt *domainTest) readFields() ([]string, error) {
+func (dt *Weaver) ReadFields() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select mk.domain ||':'|| mk.kind ||':'|| mf.field  ||':'|| 
          mf.affinity  ||':'|| coalesce(mt.kind, '') 
@@ -211,7 +146,7 @@ func (dt *domainTest) readFields() ([]string, error) {
 }
 
 // domain, input, serialized program
-func (dt *domainTest) readGrammar() ([]string, error) {
+func (dt *Weaver) ReadGrammar() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select domain ||':'|| name ||':'|| prog
 	from mdl_grammar`)
@@ -221,7 +156,7 @@ func (dt *domainTest) readGrammar() ([]string, error) {
 // ordered by domain, length of path, and name
 // ( that erases their natural, dependency order --
 //   but independent siblings dont otherwise have a consistent order for testing )
-func (dt *domainTest) readKinds() (ret []string, err error) {
+func (dt *Weaver) ReadKinds() (ret []string, err error) {
 	type kind struct {
 		id           int
 		domain, kind string
@@ -266,7 +201,7 @@ func (dt *domainTest) readKinds() (ret []string, err error) {
 }
 
 // domain, kind, name, serialized initialization
-func (dt *domainTest) readLocals() ([]string, error) {
+func (dt *Weaver) ReadLocals() ([]string, error) {
 	// read kind assignments for those that have initializers
 	// the original order was per domain, and then in dependency order withing that domain
 	//  wonder if itd be enough to simply go by kind id since the order of writing should follow
@@ -281,7 +216,7 @@ func (dt *domainTest) readLocals() ([]string, error) {
 }
 
 // domain, noun, name, rank
-func (dt *domainTest) readNames() ([]string, error) {
+func (dt *Weaver) ReadNames() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
 	select my.domain ||':'|| mn.noun ||':'|| my.name ||':'|| my.rank
 	from mdl_name my
@@ -293,7 +228,7 @@ func (dt *domainTest) readNames() ([]string, error) {
 }
 
 // domain, noun, kind
-func (dt *domainTest) readNouns() ([]string, error) {
+func (dt *Weaver) ReadNouns() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select mn.domain ||':'|| mn.noun ||':'|| mk.kind
 	from mdl_noun mn
@@ -305,7 +240,7 @@ func (dt *domainTest) readNouns() ([]string, error) {
 }
 
 // domain, oneWord, otherWord
-func (dt *domainTest) readOpposites() ([]string, error) {
+func (dt *Weaver) ReadOpposites() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select domain ||':'|| oneWord ||':'|| otherWord
 	from mdl_rev mp 
@@ -314,7 +249,7 @@ func (dt *domainTest) readOpposites() ([]string, error) {
 
 // domain, relation, noun, other noun
 // original order was domain, and alpha relation name
-func (dt *domainTest) readPairs() ([]string, error) {
+func (dt *Weaver) ReadPairs() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
 	with domain_rank(domain, rank) as (
 		select *, row_number() over (order by 1) 
@@ -334,7 +269,7 @@ func (dt *domainTest) readPairs() ([]string, error) {
 }
 
 // domain, pattern, labels, result field
-func (dt *domainTest) readPatterns() ([]string, error) {
+func (dt *Weaver) ReadPatterns() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select mk.domain ||':'|| mk.kind ||':'|| coalesce(labels,'') ||':'|| coalesce(result,'')
 	from mdl_pat mp
@@ -343,7 +278,7 @@ func (dt *domainTest) readPatterns() ([]string, error) {
 }
 
 // domain, many, one
-func (dt *domainTest) readPlurals() ([]string, error) {
+func (dt *Weaver) ReadPlurals() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select domain ||':'|| many ||':'|| one
 	from mdl_plural`)
@@ -351,7 +286,7 @@ func (dt *domainTest) readPlurals() ([]string, error) {
 
 // domain, relation, one kind, other kind, cardinality
 // ordered by name of the relation for test consistency.
-func (dt *domainTest) readRelations() ([]string, error) {
+func (dt *Weaver) ReadRelations() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select mk.domain ||':'|| mk.kind ||':'|| one.kind ||':'|| other.kind ||':'|| mr.cardinality
   from mdl_rel mr 
@@ -365,7 +300,7 @@ func (dt *domainTest) readRelations() ([]string, error) {
 }
 
 // domain, pattern, target, phase, filter, prog
-func (dt *domainTest) readRules() ([]string, error) {
+func (dt *Weaver) ReadRules() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select mr.domain ||':'|| mk.kind ||':'|| coalesce(mt.kind, '') ||':'|| phase ||':'|| filter ||':'|| prog
   from mdl_rule mr 
@@ -380,7 +315,7 @@ func (dt *domainTest) readRules() ([]string, error) {
 }
 
 // domain, noun, field, value
-func (dt *domainTest) readValues() ([]string, error) {
+func (dt *Weaver) ReadValues() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
 	select mn.domain ||':'|| mn.noun ||':'|| mf.field ||':'|| mv.value
 	from mdl_value mv 

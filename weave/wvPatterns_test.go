@@ -1,4 +1,4 @@
-package weave
+package weave_test
 
 import (
 	"testing"
@@ -6,15 +6,16 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/weave/eph"
+	"git.sr.ht/~ionous/tapestry/test/eph"
+	"git.sr.ht/~ionous/tapestry/test/testweave"
 	"github.com/kr/pretty"
 )
 
 // a single pattern declaration containing all its parts
 func TestPatternSingle(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
 		&eph.Kinds{Kind: "k"},                      // a base for a parameter of k
 		//
@@ -46,9 +47,9 @@ func TestPatternSingle(t *testing.T) {
 func TestPatternSeparateLocals(t *testing.T) {
 	// not sure yet if order of fields in the pattern be sorted at create time...
 	// ( ex. return value first, last, always? )
-	dt := newTestShuffle(t.Name(), false)
+	dt := testweave.NewWeaverShuffle(t.Name(), false)
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
 		&eph.Kinds{Kind: "k"},                      // a base for a parameter of k
 		//
@@ -86,9 +87,9 @@ func TestPatternSeparateLocals(t *testing.T) {
 
 // kinds should allow fields across domains, and so should locals.
 func TestPatternSeparateDomains(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
 		&eph.Kinds{Kind: "k"},                      // a base for a parameter of k
 		//
@@ -112,7 +113,7 @@ func TestPatternSeparateDomains(t *testing.T) {
 				Affinity: affine.NumList,
 			}}},
 	)
-	dt.makeDomain(dd("b", "a"),
+	dt.MakeDomain(dd("b", "a"),
 		&eph.Patterns{
 			PatternName: "p",
 			Locals: []eph.Params{{
@@ -124,10 +125,10 @@ func TestPatternSeparateDomains(t *testing.T) {
 	expectFullResults(t, dt)
 }
 
-func expectFullResults(t *testing.T, dt *domainTest) {
+func expectFullResults(t *testing.T, dt *testweave.Weaver) {
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if outkind, e := dt.readKinds(); e != nil {
+	} else if outkind, e := dt.ReadKinds(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outkind, []string{
 		"a:k:",
@@ -136,7 +137,7 @@ func expectFullResults(t *testing.T, dt *domainTest) {
 	}); len(diff) > 0 {
 		t.Log("got:", pretty.Sprint(outkind))
 		t.Fatal(diff)
-	} else if outfields, e := dt.readFields(); e != nil {
+	} else if outfields, e := dt.ReadFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outfields, []string{
 		"a:p:l_1:num_list:", // field output gets sorted by name
@@ -146,14 +147,14 @@ func expectFullResults(t *testing.T, dt *domainTest) {
 	}); len(diff) > 0 {
 		t.Log("got:", pretty.Sprint(outfields))
 		t.Fatal(diff)
-	} else if outpat, e := dt.readPatterns(); e != nil {
+	} else if outpat, e := dt.ReadPatterns(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outpat, []string{
 		"a:p:p_1:success",
 	}); len(diff) > 0 {
 		t.Log("got:", pretty.Sprint(outpat))
 		t.Fatal(diff)
-	} else if outlocals, e := dt.readLocals(); e != nil {
+	} else if outlocals, e := dt.ReadLocals(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outlocals, []string{
 		`a:p:l_2:{"FromNumber:":10}`,
@@ -165,9 +166,9 @@ func expectFullResults(t *testing.T, dt *domainTest) {
 
 // fail splitting the args or returns across domains.
 func TestPatternSplitDomain(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
 		&eph.Patterns{
 			PatternName: "p",
@@ -176,7 +177,7 @@ func TestPatternSplitDomain(t *testing.T) {
 				Affinity: affine.Bool,
 			}},
 	)
-	dt.makeDomain(dd("b", "a"),
+	dt.MakeDomain(dd("b", "a"),
 		&eph.Patterns{
 			PatternName: "p",
 			Params: []eph.Params{{
@@ -185,16 +186,16 @@ func TestPatternSplitDomain(t *testing.T) {
 			}}},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Conflict`); !ok {
+	if ok, e := testweave.OkayError(t, e, `Conflict`); !ok {
 		t.Fatal(e)
 	}
 }
 
 // fail multiple returns
 func TestPatternMultipleReturn(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()},
 		//
 		&eph.Patterns{
@@ -213,7 +214,7 @@ func TestPatternMultipleReturn(t *testing.T) {
 		},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `unexpected result`); !ok {
+	if ok, e := testweave.OkayError(t, e, `unexpected result`); !ok {
 		t.Fatal("unexpected error:", e)
 	} else {
 		t.Log("okay", e)
@@ -223,9 +224,9 @@ func TestPatternMultipleReturn(t *testing.T) {
 // fail multiple arg sets: args are now written individually so this is allowed.
 // fix: stop args after writing locals or returns?
 // func TestPatternMultipleArgSets(t *testing.T) {
-// 	dt:= newTest(t.Name())
+// 	dt:= NewWeaver(t.Name())
 // defer dt.Close()
-// 	dt.makeDomain(dd("a"),
+// 	dt.MakeDomain(dd("a"),
 // 		&eph.Kinds{Kind: kindsOf.Pattern.String()},
 // 		&eph.Patterns{
 // 			PatternName: "p",
@@ -254,9 +255,9 @@ func TestPatternMultipleReturn(t *testing.T) {
 // fail conflicting assignment:
 // shouldnt be able to write text data into a number field
 func TestPatternConflictingInit(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
 		&eph.Patterns{
 			PatternName: "p",
@@ -268,22 +269,22 @@ func TestPatternConflictingInit(t *testing.T) {
 		},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Conflict mismatched assignment for field "n" of kind "p"`); !ok {
+	if ok, e := testweave.OkayError(t, e, `Conflict mismatched assignment for field "n" of kind "p"`); !ok {
 		t.Fatal("unexpected error:", e)
 	}
 }
 
 // a simple pattern with no parameters and no return
 func TestPatternNoResults(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
 		&eph.Patterns{PatternName: "p"},
 	)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if outkind, e := dt.readKinds(); e != nil {
+	} else if outkind, e := dt.ReadKinds(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outkind, []string{
 		"a:patterns:",
@@ -291,7 +292,7 @@ func TestPatternNoResults(t *testing.T) {
 	}); len(diff) > 0 {
 		t.Log("got:", pretty.Sprint(outkind))
 		t.Fatal(diff)
-	} else if outfields, e := dt.readFields(); e != nil {
+	} else if outfields, e := dt.ReadFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outfields, []string{
 		// this might be nice, but would requiring changing pattern calls
@@ -300,7 +301,7 @@ func TestPatternNoResults(t *testing.T) {
 	}); len(diff) > 0 {
 		t.Log("got:", pretty.Sprint(outfields))
 		t.Fatal(diff)
-	} else if outpat, e := dt.readPatterns(); e != nil {
+	} else if outpat, e := dt.ReadPatterns(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outpat, []string{
 		// a previous version of this test generated no results
@@ -309,7 +310,7 @@ func TestPatternNoResults(t *testing.T) {
 	}); len(diff) > 0 {
 		t.Log("got:", pretty.Sprint(outpat))
 		t.Fatal(diff)
-	} else if outlocals, e := dt.readLocals(); e != nil {
+	} else if outlocals, e := dt.ReadLocals(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outlocals, []string{
 		/**/

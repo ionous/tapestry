@@ -221,7 +221,7 @@ func (cat *Catalog) AssertAlias(opShortName string, opAliases ...string) error {
 		d, at := ctx.d, ctx.at
 		if shortName, ok := UniformString(opShortName); !ok {
 			err = errutil.New("invalid name", opShortName)
-		} else if n, e := d.GetClosestNoun(shortName); e != nil {
+		} else if n, e := d.getClosestNoun(shortName); e != nil {
 			err = e
 		} else {
 			for _, a := range opAliases {
@@ -383,7 +383,7 @@ func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, opV
 			err = InvalidString(opField)
 		} else if path, e := UniformStrings(opPath); e != nil {
 			err = e
-		} else if noun, e := d.GetClosestNoun(noun); e != nil {
+		} else if noun, e := d.getClosestNoun(noun); e != nil {
 			err = e
 		} else if n, ok := cat.domainNouns[domainNoun{noun.domain, noun.name}]; !ok {
 			err = errutil.Fmt("unexpected noun %q in domain %q", noun.name, noun.domain)
@@ -524,9 +524,9 @@ func (cat *Catalog) AssertRelative(opRel, opNoun, opOtherNoun string) error {
 			err = InvalidString(opOtherNoun)
 		} else if rel, ok := UniformString(opRel); !ok {
 			err = InvalidString(opRel)
-		} else if first, e := d.GetClosestNoun(noun); e != nil {
+		} else if first, e := d.getClosestNoun(noun); e != nil {
 			err = e
-		} else if second, e := d.GetClosestNoun(otherNoun); e != nil {
+		} else if second, e := d.getClosestNoun(otherNoun); e != nil {
 			err = e
 		} else {
 			err = cat.writer.Pair(d.name, rel, first.name, second.name, at)

@@ -1,7 +1,7 @@
 package weave
 
-import "log"
+// import "log"
 
-var LogWarning = func(e error) {
-	log.Println("Warning:", e) // for now good enough
-}
+// var LogWarning = func(e error) {
+// 	log.Println("Warning:", e) // for now good enough
+// }

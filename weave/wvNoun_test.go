@@ -1,31 +1,32 @@
-package weave
+package weave_test
 
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/weave/eph"
+	"git.sr.ht/~ionous/tapestry/test/eph"
+	"git.sr.ht/~ionous/tapestry/test/testweave"
 	"github.com/kr/pretty"
 )
 
 // test nouns and their names
 func TestNounFormation(t *testing.T) {
-	var warnings Warnings
-	unwarn := warnings.catch(t)
+	var warnings testweave.Warnings
+	unwarn := warnings.Catch(t)
 	defer unwarn()
 
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
 		&eph.Nouns{Noun: "apple", Kind: "k"},
 		&eph.Nouns{Noun: "pear", Kind: "k"},
 	)
-	dt.makeDomain(dd("b", "a"),
+	dt.MakeDomain(dd("b", "a"),
 		&eph.Nouns{Noun: "toy boat", Kind: "k"},
 	)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if nouns, e := dt.readNouns(); e != nil {
+	} else if nouns, e := dt.ReadNouns(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(nouns, []string{
 		"a:apple:k",
@@ -34,7 +35,7 @@ func TestNounFormation(t *testing.T) {
 	}); len(diff) > 0 {
 		t.Log("nouns:", pretty.Sprint(nouns))
 		t.Fatal(diff)
-	} else if names, e := dt.readNames(); e != nil {
+	} else if names, e := dt.ReadNames(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(names, []string{
 		"a:apple:apple:0",
@@ -50,13 +51,13 @@ func TestNounFormation(t *testing.T) {
 }
 
 func TestNounFailure(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Nouns{Noun: "bad apple", Kind: "t"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Missing kind "t" in domain "a"`); !ok {
+	if ok, e := testweave.OkayError(t, e, `Missing kind "t" in domain "a"`); !ok {
 		t.Fatal("unexpected error:", e)
 	} else {
 		t.Log("ok:", e)
@@ -64,9 +65,9 @@ func TestNounFailure(t *testing.T) {
 }
 
 func TestNounHierarchy(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "t"},
 		&eph.Kinds{Kind: "p", Ancestor: "t"},
 		&eph.Kinds{Kind: "c", Ancestor: "p"},
@@ -79,7 +80,7 @@ func TestNounHierarchy(t *testing.T) {
 	)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if nouns, e := dt.readNouns(); e != nil {
+	} else if nouns, e := dt.ReadNouns(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(nouns, []string{
 		// note: the new assembler takes the most specific type
@@ -90,7 +91,7 @@ func TestNounHierarchy(t *testing.T) {
 	}); len(diff) > 0 {
 		t.Log("nouns:", pretty.Sprint(nouns))
 		t.Fatal(diff)
-	} else if names, e := dt.readNames(); e != nil {
+	} else if names, e := dt.ReadNames(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(names, []string{
 		"a:apple:apple:0",
@@ -103,9 +104,9 @@ func TestNounHierarchy(t *testing.T) {
 }
 
 func TestNounHierarchyFailure(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "t"},
 		&eph.Kinds{Kind: "c", Ancestor: "t"},
 		&eph.Kinds{Kind: "d", Ancestor: "t"},
@@ -113,7 +114,7 @@ func TestNounHierarchyFailure(t *testing.T) {
 		&eph.Nouns{Noun: "apple", Kind: "d"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Conflict can't redefine kind of "apple"`); !ok {
+	if ok, e := testweave.OkayError(t, e, `Conflict can't redefine kind of "apple"`); !ok {
 		t.Fatal("unexpected error:", e)
 	} else {
 		t.Log("ok:", e)
@@ -121,22 +122,22 @@ func TestNounHierarchyFailure(t *testing.T) {
 }
 
 func TestNounParts(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "t"},
 		&eph.Nouns{Noun: "collection of words", Kind: "t"},
 	)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if nouns, e := dt.readNouns(); e != nil {
+	} else if nouns, e := dt.ReadNouns(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(nouns, []string{
 		"a:collection_of_words:t",
 	}); len(diff) > 0 {
 		t.Log("nouns:", pretty.Sprint(nouns))
 		t.Fatal(diff)
-	} else if names, e := dt.readNames(); e != nil {
+	} else if names, e := dt.ReadNames(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(names, []string{
 		"a:collection_of_words:collection of words:0",
@@ -151,9 +152,9 @@ func TestNounParts(t *testing.T) {
 }
 
 func TestNounAliases(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("b"),
+	dt.MakeDomain(dd("b"),
 		&eph.Kinds{Kind: "k"},
 		&eph.Nouns{Noun: "toy boat", Kind: "k"},
 		&eph.Nouns{Noun: "apple", Kind: "k"},
@@ -163,7 +164,7 @@ func TestNounAliases(t *testing.T) {
 	)
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if names, e := dt.readNames(); e != nil {
+	} else if names, e := dt.ReadNames(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(names, []string{
 		"b:apple:delicious:-1", // aliases first
@@ -183,13 +184,13 @@ func TestNounAliases(t *testing.T) {
 
 // simple words should pick out reasonable nouns
 func TestNounDistance(t *testing.T) {
-	var warnings Warnings
-	unwarn := warnings.catch(t)
+	var warnings testweave.Warnings
+	unwarn := warnings.Catch(t)
 	defer unwarn()
 
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: "k"},
 		&eph.Nouns{Noun: "toy boat", Kind: "k"},
 		&eph.Nouns{Noun: "boat", Kind: "k"},
@@ -208,9 +209,9 @@ func TestNounDistance(t *testing.T) {
 		}
 		for i, cnt := 0, len(tests); i < cnt; i += 2 {
 			name, want := tests[i], tests[i+1]
-			if n, e := d.GetClosestNoun(name); e != nil {
+			if got, e := d.GetClosestNoun(name); e != nil {
 				t.Error("couldnt get noun for name", name, e)
-			} else if got := n.name; want != got {
+			} else if want != got {
 				t.Errorf("wanted %q got %q", want, got)
 			}
 		}

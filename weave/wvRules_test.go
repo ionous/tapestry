@@ -1,4 +1,4 @@
-package weave
+package weave_test
 
 import (
 	"strconv"
@@ -9,14 +9,15 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/weave/eph"
+	"git.sr.ht/~ionous/tapestry/test/eph"
+	"git.sr.ht/~ionous/tapestry/test/testweave"
 	"github.com/kr/pretty"
 )
 
 func TestPatternRules(t *testing.T) {
-	dt := newTestShuffle(t.Name(), false)
+	dt := testweave.NewWeaverShuffle(t.Name(), false)
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		append(append([]eph.Ephemera{
 			&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table
 			&eph.Patterns{
@@ -28,13 +29,13 @@ func TestPatternRules(t *testing.T) {
 		}, makeRules("p", "d", eph.Timing_During, 3)...),
 			makeRules("p", "b", eph.Timing_Before, 2)...)...,
 	)
-	dt.makeDomain(dd("b", "a"),
+	dt.MakeDomain(dd("b", "a"),
 		makeRules("p", "a", eph.Timing_After, 3)...,
 	)
 	//
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if out, e := dt.readRules(); e != nil {
+	} else if out, e := dt.ReadRules(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		// domain, pattern, target, phase, filter, prog, at

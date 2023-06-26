@@ -1,18 +1,19 @@
-package weave
+package weave_test
 
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/weave/eph"
+	"git.sr.ht/~ionous/tapestry/test/eph"
+	"git.sr.ht/~ionous/tapestry/test/testweave"
 	"github.com/kr/pretty"
 )
 
 // catalog some plural ephemera from different domain levels
 // and verify things wind up in the right place
 func TestPluralConflict(t *testing.T) {
-	dt := newTest(t.Name())
+	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		// one singular can have several plurals:
 		// ex. "person" can be "people" or "persons".
 		// but the same plural "persons" cant have multiple singular definitions
@@ -20,7 +21,7 @@ func TestPluralConflict(t *testing.T) {
 		&eph.Plurals{Singular: "witch", Plural: "unkindness"},
 	)
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Conflict`); !ok {
+	if ok, e := testweave.OkayError(t, e, `Conflict`); !ok {
 		t.Fatal("unexpected error:", e)
 	} else {
 		t.Log("ok:", e)
@@ -30,38 +31,38 @@ func TestPluralConflict(t *testing.T) {
 // catalog some plural ephemera from different domain levels
 // and verify things wind up in the right place
 func TestPluralAssembly(t *testing.T) {
-	var warnings Warnings
-	unwarn := warnings.catch(t)
+	var warnings testweave.Warnings
+	unwarn := warnings.Catch(t)
 	defer unwarn()
 	// because this test picks out two warnings, one by one...
 	// we cant shuffle the statements...
-	dt := newTestShuffle(t.Name(), false)
+	dt := testweave.NewWeaverShuffle(t.Name(), false)
 	defer dt.Close()
 	// yes, these are collective nouns not plurals... shhh...
-	dt.makeDomain(dd("a"),
+	dt.MakeDomain(dd("a"),
 		&eph.Plurals{Singular: "raven", Plural: "unkindness"},
 		// one singular can have several plurals:
 		// ex. "person" can be "people" or "persons".
 		&eph.Plurals{Singular: "bat", Plural: "cloud"},
 		&eph.Plurals{Singular: "bat", Plural: "cauldron"},
 	)
-	dt.makeDomain(dd("b", "a"),
+	dt.MakeDomain(dd("b", "a"),
 		// add something new:
 		&eph.Plurals{Singular: "fish", Plural: "school"},
 		// collapse:
 		&eph.Plurals{Singular: "bat", Plural: "cauldron"},
 	)
-	dt.makeDomain(dd("c", "a"),
+	dt.MakeDomain(dd("c", "a"),
 		// redefine; this isnt allowed; but everything else should have worked.
 		&eph.Plurals{Singular: "witch", Plural: "unkindness"},
 	)
 	//
 	_, e := dt.Assemble()
-	if ok, e := okError(t, e, `Conflict`); !ok {
+	if ok, e := testweave.OkayError(t, e, `Conflict`); !ok {
 		t.Fatal(e)
-	} else if ok, e := okError(t, warnings.shift(), `Duplicate plural "cauldron"`); !ok {
+	} else if ok, e := testweave.OkayError(t, warnings.Shift(), `Duplicate plural "cauldron"`); !ok {
 		t.Fatal(e)
-	} else if out, e := dt.readPlurals(); e != nil {
+	} else if out, e := dt.ReadPlurals(); e != nil {
 		t.Fatal(e)
 	} else {
 		if diff := pretty.Diff(out, []string{
