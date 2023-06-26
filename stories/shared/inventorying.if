@@ -150,7 +150,7 @@
                   ]
                 },
                 {
-                  "PrintBlocks objs:": {
+                  "PrintBlockList objs:": {
                     "FromTextList:": "@kids"
                   }
                 }

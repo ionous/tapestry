@@ -291,33 +291,33 @@ var mdl_kind = tables.Insert("mdl_kind", "domain", "kind", "singular", "path", "
 
 // singular name of kind and materialized hierarchy of ancestors separated by commas
 // this (somewhat) duplicates the algorithm used by Noun()
-func (m *Modeler) Kind(domain, kind, parent, at string) (err error) {
+func (m *Modeler) Kind(domain, name, parent, at string) (err error) {
 	if parent, e := m.findOptionalKind(domain, parent); e != nil {
 		err = e
 	} else if len(parent.name) > 0 && parent.id == 0 {
-		err = errutil.Fmt("%w ancestor %q",
-			Missing, parent.name)
-	} else if kind, e := m.findKind(domain, kind); e != nil {
+		// a specified ancestor doesn't exist.
+		err = errutil.Fmt("%w ancestor %q", Missing, parent.name)
+	} else if kind, e := m.findKind(domain, name); e != nil {
 		err = e
 	} else if kind.id == 0 {
 		// manage singular and plural kinds
-		// i dont like this much; especially be cause it depends so much on the first declaration
+		// i don't like this much; especially be cause it depends so much on the first declaration
 		// maybe better would be a name/names table that any named concept can use.
 		// or just force everyone to use the right names.
-		if singular, e := m.singularize(domain, kind.name); e != nil {
+		if singular, e := m.singularize(domain, name); e != nil {
 			err = e
 		} else {
 			var optionalOne *string
-			if singular != kind.name {
+			if singular != name {
 				optionalOne = &singular
 			}
 			// easiest is if the name has never been mentioned before;
 			// we verified the other inputs already, so insert:
-			if res, e := m.db.Exec(mdl_kind, domain, kind.name, optionalOne, trimPath(parent.fullpath()), at); e != nil {
+			if res, e := m.db.Exec(mdl_kind, domain, name, optionalOne, trimPath(parent.fullpath()), at); e != nil {
 				err = errutil.New("database error", e)
 			} else {
 				// cache result... sometimes
-				switch kind.name {
+				switch name {
 				case kindsOf.Aspect.String():
 					err = updatePath(res, &m.aspectPath)
 				case kindsOf.Pattern.String():
@@ -336,40 +336,44 @@ func (m *Modeler) Kind(domain, kind, parent, at string) (err error) {
 				}
 			}
 		}
-	} else if parent.id != 0 { // note: if the kind exists, ignore nil parents.
+	} else if parent.id != 0 { // this ignore empty ancestors if the kind already existed.
 
-		if strings.HasSuffix(parent.fullpath(), kind.fullpath()) {
+		if !kind.exact && parent.numAncestors() < 2 {
+			// we allow plural named kinds for nouns, etc. not for patterns and built in kinds.
+			err = errutil.Fmt("%w ambiguously named kinds: %q (in domain %q) and %q (in %q)",
+				Conflict, name, domain, kind.name, kind.domain)
+		} else if strings.HasSuffix(parent.fullpath(), kind.fullpath()) {
 			err = errutil.Fmt("%w circular reference detected %q already declared as an ancestor of %q.",
-				Conflict, kind.name, parent.name)
+				Conflict, name, parent.name)
 		} else if strings.HasSuffix(kind.path, parent.fullpath()) {
 			// did the existing path fully contain the new ancestor?
 			// then its a duplicate request (ex. `,c,b,a,` `,b,a,` )
 			err = errutil.Fmt("%w %q already declared as an ancestor of %q.",
-				Duplicate, kind.name, parent.name)
+				Duplicate, name, parent.name)
 		} else if strings.HasSuffix(parent.fullpath(), kind.path) {
 			// is the newly specified ancestor more specific than the existing path?
 			// then we are ratcheting down. (ex. `,c,b,a,` `,b,a,` )
 			if kind.domain != domain {
 				// if it was declared in a different domain: we can't change it now.
 				err = errutil.Fmt("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q.",
-					Conflict, kind.name, parent.name, kind.domain, domain)
+					Conflict, name, parent.name, kind.domain, domain)
 			} else if res, e := m.db.Exec(`update mdl_kind set path = ?2 where rowid = ?1`,
 				kind.id, trimPath(parent.fullpath())); e != nil {
 				err = e
 			} else if cnt, e := res.RowsAffected(); cnt != 1 {
 				err = errutil.New("unexpected error updating hierarchy of %q; %d rows affected.",
-					kind.name, cnt)
+					name, cnt)
 			} else if e != nil {
 				err = e
 			}
 		} else if kind.domain != domain {
 			// unrelated completely? then its an error
 			err = errutil.Fmt("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q.",
-				Conflict, kind.name, parent.name, kind.domain, domain)
+				Conflict, name, parent.name, kind.domain, domain)
 		} else {
 			// its possible some future definition might allow this to happen.
 			err = errutil.Fmt("%w a definition in domain %q that would allow %q to have the ancestor %q; the hierarchies differ.",
-				Missing, domain, kind.name, parent.name)
+				Missing, domain, name, parent.name)
 		}
 	}
 	return

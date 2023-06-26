@@ -73,7 +73,7 @@
     },
     {
       "Define pattern:requires:result:withRules:": [
-        "print blocks",
+        "print block list",
         [
           {
             "TextList:": "objs"
@@ -87,7 +87,7 @@
     },
     {
       "Extend pattern:provides:withRules:": [
-        "print blocks",
+        "print block list",
         [
           {
             "RecordList:kind:initially:": [
@@ -178,7 +178,7 @@
             "Number:initially:": [
               "block depth",
               {
-                "During:": "print blocks"
+                "During:": "print block list"
               }
             ]
           }
@@ -206,7 +206,7 @@
               },
               [
                 {
-                  "PrintBlock obj:": {
+                  "PrintOneBlock obj:": {
                     "FromText:": "@obj"
                   }
                 }
@@ -277,7 +277,7 @@
     },
     {
       "Define pattern:requires:result:withRules:": [
-        "print block",
+        "print one block",
         [
           {
             "Text:kind:": [
@@ -294,7 +294,7 @@
     },
     {
       "Extend pattern:provides:withRules:": [
-        "print block",
+        "print one block",
         [
           {
             "TextList:initially:": [
@@ -356,7 +356,7 @@
                     "@hasKids",
                     [
                       {
-                        "PrintBlocks objs:": {
+                        "PrintBlockList objs:": {
                           "FromTextList:": "@kids"
                         }
                       }

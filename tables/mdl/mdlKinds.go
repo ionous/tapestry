@@ -3,6 +3,7 @@ package mdl
 import (
 	"database/sql"
 	"strconv"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/lang"
 	"github.com/ionous/errutil"
@@ -34,7 +35,14 @@ type kindInfo struct {
 	name      string // validated name of the kind
 	domain    string // validated domain name
 	path      string // comma separated ids of ancestors: ,2,1,
+	exact     bool
 	_fullpath string
+}
+
+func (ki *kindInfo) numAncestors() int {
+	// ,   = no ancestors
+	// ,2, = 1 ancestor
+	return strings.Count(ki.path, ",") - 1
 }
 
 // path starting with the kind's own id. ",id,...,"
@@ -72,8 +80,8 @@ func (m *Modeler) findKind(domain, kind string) (ret kindInfo, err error) {
 	} else if singular, e := m.singularize(domain, kind); e != nil {
 		err = e
 	} else {
-		var ignore int
-		if e := m.db.QueryRow(`
+		var rank int
+		e := m.db.QueryRow(`
 	select domain, 
 		mk.rowid, 
 		mk.kind,
@@ -90,14 +98,18 @@ func (m *Modeler) findKind(domain, kind string) (ret kindInfo, err error) {
 	where base = ?1
 	and rank > 0
 	order by rank
-	limit 1`,
+	limit 1`, // order by rank means the lowest number is first
 			domain, kind, singular).Scan(
-			&ret.domain, &ret.id, &ret.name, &ret.path, &ignore); e == sql.ErrNoRows {
+			&ret.domain, &ret.id, &ret.name, &ret.path, &rank)
+		switch e {
+		case nil:
+			ret.exact = rank == 1
+		case sql.ErrNoRows:
 			// nothing found? still set the name for easier logging;
 			// the empty id can disambiguate success from not found
 			ret.name = kind
-		} else {
-			err = e // possibly error or nil
+		default:
+			err = e
 		}
 	}
 	return
