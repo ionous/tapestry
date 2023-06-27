@@ -4,8 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry"
-
+	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/print"
@@ -20,7 +19,7 @@ func TestStoryActivity(t *testing.T) {
 	var prog rt.Execute
 	if b, e := json.Marshal(_say_exec); e != nil {
 		t.Fatal(e)
-	} else if e := din.Decode(rt.Execute_Slot{&prog}, tapestry.Registry(), b); e != nil {
+	} else if e := din.Decode(rt.Execute_Slot{&prog}, story.Registry(), b); e != nil {
 		t.Fatal(e)
 	} else {
 		var run testRuntime

@@ -5,11 +5,9 @@ import (
 	"encoding/json"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn/cout"
-	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/test/debug"
 	"github.com/ionous/errutil"
@@ -25,15 +23,12 @@ func TestDetailsEncodeDecode(t *testing.T) {
 		t.Fatal(e)
 	} else if b, e := json.Marshal(d); e != nil {
 		t.Fatal(e)
+	} else if in, e := story.DetailedDecode(b); e != nil {
+		t.Fatal(e)
 	} else {
-		var in story.StoryFile
-		if e := din.Decode(&in, tapestry.Registry(), b); e != nil {
-			t.Fatal(e)
-		} else {
-			if diff := pretty.Diff(debug.FactorialStory, &in); len(diff) != 0 {
-				pretty.Print(in)
-				t.Fatal(diff)
-			}
+		if diff := pretty.Diff(debug.FactorialStory, &in); len(diff) != 0 {
+			pretty.Print(in)
+			t.Fatal(diff)
 		}
 	}
 }
@@ -50,8 +45,7 @@ func TestCompactEncoder(t *testing.T) {
 // test the compact decoder can read from the "golden image" and get the hardwired factorial story.
 func TestCompactDecode(t *testing.T) {
 	errutil.Panic = true
-	var file story.StoryFile
-	if e := story.Decode(&file, []byte(jsnTestIf), tapestry.AllSignatures); e != nil {
+	if file, e := story.CompactDecode([]byte(jsnTestIf)); e != nil {
 		pretty.Println(file)
 		t.Fatal(e)
 	} else {
@@ -79,7 +73,7 @@ func TestAnonymousSwap(t *testing.T) {
 	}
 	//
 	var have story.EventBlock
-	if e := story.Decode(&have, []byte(jsnTestIf), tapestry.AllSignatures); e != nil {
+	if e := story.Decode(&have, []byte(jsnTestIf), story.AllSignatures); e != nil {
 		pretty.Println(have)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
@@ -94,7 +88,7 @@ func TestMissingSlot(t *testing.T) {
 		core.T("one"), core.T("two"), core.T("three"),
 	}}
 	var have core.Join
-	if e := story.Decode(&have, []byte(in), tapestry.AllSignatures); e != nil {
+	if e := story.Decode(&have, []byte(in), story.AllSignatures); e != nil {
 		pretty.Println("got:", have)
 		t.Fatal(e)
 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {

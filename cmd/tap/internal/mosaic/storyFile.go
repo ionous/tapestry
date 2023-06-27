@@ -3,14 +3,14 @@ package mosaic
 import (
 	"context"
 	"encoding/json"
-	"git.sr.ht/~ionous/tapestry"
+	"io"
+	"net/http"
+
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/jsn/dout"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/web"
 	"github.com/ionous/errutil"
-	"io"
-	"net/http"
 )
 
 // endpoint containing a local .if file.
@@ -47,10 +47,9 @@ func (sf storyFile) Find(sub string) (ret web.Resource) {
 // files are stored in compact format
 // we check that the file is valid ( by loading it ) before returning it.
 func (sf storyFile) Get(ctx context.Context, w http.ResponseWriter) (err error) {
-	var file story.StoryFile
 	if b, e := files.ReadFile(sf.path); e != nil {
 		err = e
-	} else if e := story.Decode(&file, b, tapestry.AllSignatures); e != nil {
+	} else if file, e := story.CompactDecode(b); e != nil {
 		err = e
 	} else if data, e := dout.Encode(&file); e != nil {
 		err = e

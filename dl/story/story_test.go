@@ -3,7 +3,6 @@ package story_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/test/debug"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
@@ -11,8 +10,7 @@ import (
 )
 
 func TestImportStory(t *testing.T) {
-	var curr story.StoryFile
-	if e := story.Decode(&curr, debug.Blob, tapestry.AllSignatures); e != nil {
+	if curr, e := story.CompactDecode(debug.Blob); e != nil {
 		t.Fatal(e)
 	} else {
 		db := testdb.Open(t.Name(), testdb.Memory, "")

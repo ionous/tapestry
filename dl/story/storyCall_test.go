@@ -3,7 +3,6 @@ package story_test
 import (
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/rt"
@@ -14,7 +13,9 @@ import (
 // verifies this expands a pattern call and that it generates a pattern reference.
 func TestDetermineNum(t *testing.T) {
 	var call rt.NumberEval
-	if e := story.Decode(rt.NumberEval_Slot{&call}, []byte(`{"Factorial num:":{"FromNumber:": 3}}`), tapestry.AllSignatures); e != nil {
+	if e := story.Decode(rt.NumberEval_Slot{&call},
+		[]byte(`{"Factorial num:":{"FromNumber:": 3}}`),
+		story.AllSignatures); e != nil {
 		t.Fatal(e)
 	} else {
 		call := call.(*assign.CallPattern)

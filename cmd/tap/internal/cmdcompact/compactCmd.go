@@ -135,7 +135,7 @@ func decodeEncodeSpec(in, out string, pretty bool) (err error) {
 	var dst spec.TypeSpec
 	if b, e := files.ReadFile(in); e != nil {
 		err = e
-	} else if e := cin.Decode(&dst, b, cin.Signatures(tapestry.AllSignatures)); e != nil {
+	} else if e := cin.Decode(&dst, b, cin.Signatures(story.AllSignatures)); e != nil {
 		err = e
 	} else if data, e := cout.Encode(&dst, customSpecEncoder); e != nil {
 		err = e
@@ -147,7 +147,7 @@ func decodeEncodeSpec(in, out string, pretty bool) (err error) {
 
 var compact = xform{
 	func(dst jsn.Marshalee, b []byte) error {
-		return story.Decode(dst, b, tapestry.AllSignatures)
+		return story.Decode(dst, b, story.AllSignatures)
 	},
 	func(src jsn.Marshalee) (interface{}, error) {
 		return cout.CustomEncode(src, cout.Handlers{
@@ -158,7 +158,7 @@ var compact = xform{
 }
 var detailed = xform{
 	func(dst jsn.Marshalee, b []byte) error {
-		return din.Decode(dst, tapestry.Registry(), b)
+		return din.Decode(dst, story.Registry(), b)
 	},
 	func(src jsn.Marshalee) (interface{}, error) {
 		return dout.Encode(src)

@@ -7,9 +7,7 @@ import (
 	"path"
 	"path/filepath"
 
-	"git.sr.ht/~ionous/tapestry"
 	"git.sr.ht/~ionous/tapestry/dl/story"
-	"git.sr.ht/~ionous/tapestry/jsn/din"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -85,28 +83,18 @@ func readOne(cat *weave.Catalog, path string) (err error) {
 		err = e
 	} else if script, e := decodeStory(path, b); e != nil {
 		err = errutil.New("couldn't decode", path, "b/c", e)
-	} else if e := story.ImportStory(cat, path, script); e != nil {
+	} else if e := story.ImportStory(cat, path, &script); e != nil {
 		err = errutil.New("couldn't import", path, "b/c", e)
 	}
 	return
 }
 
-func decodeStory(path string, b []byte) (ret *story.StoryFile, err error) {
+func decodeStory(path string, b []byte) (ret story.StoryFile, err error) {
 	switch ext := filepath.Ext(path); ext {
 	case CompactExt:
-		var curr story.StoryFile
-		if e := story.Decode(&curr, b, tapestry.AllSignatures); e != nil {
-			err = e
-		} else {
-			ret = &curr
-		}
+		ret, err = story.CompactDecode(b)
 	case DetailedExt:
-		var curr story.StoryFile
-		if e := din.Decode(&curr, tapestry.Registry(), b); e != nil {
-			err = e
-		} else {
-			ret = &curr
-		}
+		ret, err = story.DetailedDecode(b)
 	default:
 		err = errutil.Fmt("unknown file type %q", ext)
 	}
