@@ -11,11 +11,11 @@ import (
 
 // Execute - called by the macro runtime during weave.
 func (op *ActionDecl) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
 // Execute - actions generate pattern ephemera.
-func (op *ActionDecl) Schedule(cat *weave.Catalog) (err error) {
+func (op *ActionDecl) Weave(cat *weave.Catalog) (err error) {
 	patterns := []string{op.Action.Str, op.Event.Str}
 	targets := []string{"agent", "actor"}
 	ancestors := []kindsOf.Kinds{kindsOf.Action, kindsOf.Event}

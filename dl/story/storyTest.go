@@ -6,18 +6,12 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// import (
-// 	"git.sr.ht/~ionous/tapestry/rt"
-// 	"git.sr.ht/~ionous/tapestry/weave"
-// 	"github.com/ionous/errutil"
-// )
-
 // Execute - called by the macro runtime during weave.
 func (op *Test) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
-func (op *Test) Schedule(cat *weave.Catalog) (err error) {
+func (op *Test) Weave(cat *weave.Catalog) (err error) {
 	if name := op.TestName.String(); len(name) == 0 {
 		errutil.New("test has empty name")
 	} else {
@@ -28,7 +22,7 @@ func (op *Test) Schedule(cat *weave.Catalog) (err error) {
 		if e := cat.AssertDomainStart(name, req); e != nil {
 			err = e
 		} else {
-			if e := ScheduleStatements(cat, op.TestStatements); e != nil {
+			if e := WeaveStatements(cat, op.TestStatements); e != nil {
 				err = e
 			} else if len(op.Do) > 0 {
 				if e := cat.AssertCheck(name, op.Do, nil); e != nil {

@@ -10,50 +10,47 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/test/testweave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 )
 
 // generate ephemera for macros
 func TestMacros(t *testing.T) {
-	// //
-	// var cat eph.Catalog
-	// k := weave.NewCatalog(cat)
-
-	// err = dt.cat.AssembleCatalog()
-	// }
-	// if errs := dt.cat.Errors; len(errs) > 0 {
-	// 	err = errutil.New(err, errs)
-	// }
-
-	// if e := k.AssertDomainStart("tapestry", nil); e != nil {
-	// 	t.Fatal(e)
-	// } else if e := addDefaultKinds(k); e != nil {
-	// 	t.Fatal(e)
-	// } else if e := story.ImportStory(k, t.Name(), macroStory); e != nil {
-	// 	t.Fatal(e)
-	// } else if e := cat.AssembleCatalog(); e != nil {
-	// 	t.Fatal(e)
-	// } else {
-	// expect := []eph.Ephemera{
-	// 	&eph.Values{
-	// 		Noun:  "Hershel",
-	// 		Field: "proper_named",
-	// 		Value: literal.B(true),
-	// 	},
-	// 	&eph.Nouns{
-	// 		Noun: "Hershel",
-	// 		Kind: "an actor",
-	// 	},
-	// 	&eph.Nouns{
-	// 		Noun: "scissors",
-	// 		Kind: "things",
-	// 	},
-	// 	&eph.Relatives{
-	// 		Rel:       "whereabouts",
-	// 		Noun:      "Hershel",
-	// 		OtherNoun: "scissors",
-	// 	},
-	// }
+	dt := testweave.NewWeaver(t.Name())
+	defer dt.Close()
+	cat := dt.Catalog()
+	//
+	if e := cat.AssertDomainStart("tapestry", nil); e != nil {
+		t.Fatal(e)
+	} else if e := addDefaultKinds(cat); e != nil {
+		t.Fatal(e)
+	} else if e := story.ImportStory(cat, t.Name(), macroStory); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssertDomainEnd(); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssembleCatalog(); e != nil {
+		t.Fatal(e)
+	} else {
+		// expect := []eph.Ephemera{
+		// 	&eph.Values{
+		// 		Noun:  "Hershel",
+		// 		Field: "proper_named",
+		// 		Value: literal.B(true),
+		// 	},
+		// 	&eph.Nouns{
+		// 		Noun: "Hershel",
+		// 		Kind: "an actor",
+		// 	},
+		// 	&eph.Nouns{
+		// 		Noun: "scissors",
+		// 		Kind: "things",
+		// 	},
+		// 	&eph.Relatives{
+		// 		Rel:       "whereabouts",
+		// 		Noun:      "Hershel",
+		// 		OtherNoun: "scissors",
+		// 	},
+	}
 	// if diff := pretty.Diff(els, expect); len(diff) != 0 {
 	// 	t.Log(pretty.Sprint(els))
 	// 	t.Fatal(diff)

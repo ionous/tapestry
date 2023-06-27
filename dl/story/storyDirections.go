@@ -42,11 +42,11 @@ func makeNoun(run rt.Runtime, name rt.TextEval) (ret helperNoun, err error) {
 
 // Execute - called by the macro runtime during weave.
 func (op *MapHeading) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
 // departing from the current room in a direction
-func (op *MapHeading) Schedule(cat *weave.Catalog) error {
+func (op *MapHeading) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if room, e := makeNoun(w, op.RoomName); e != nil {
 			err = e
@@ -97,11 +97,11 @@ func (op *MapHeading) Schedule(cat *weave.Catalog) error {
 
 // Execute - called by the macro runtime during weave.
 func (op *MapDeparting) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
 // departing from the current room via a door
-func (op *MapDeparting) Schedule(cat *weave.Catalog) error {
+func (op *MapDeparting) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if room, e := makeNoun(w, op.RoomName); e != nil {
 			err = e // ^ todo: ensure the room exists without declaring it

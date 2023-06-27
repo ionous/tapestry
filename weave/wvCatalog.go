@@ -42,11 +42,6 @@ type Catalog struct {
 	domainNouns map[domainNoun]*ScopedNoun
 }
 
-// request future processing from the catalog's importer.
-type Schedule interface {
-	Schedule(*Catalog) error
-}
-
 type domainNoun struct{ domain, noun string }
 
 func NewCatalog(db *sql.DB) *Catalog {
@@ -87,6 +82,10 @@ func NewCatalogWithWarnings(db *sql.DB, warn func(error)) *Catalog {
 
 func (cat *Catalog) SetSource(x string) {
 	cat.cursor = x
+}
+
+func (cat *Catalog) Runtime() rt.Runtime {
+	return cat.run
 }
 
 // return the uniformly named domain ( if it exists )

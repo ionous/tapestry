@@ -9,7 +9,7 @@ import (
 )
 
 // Schedule - comment does nothing when imported.
-func (*Comment) Schedule(*weave.Catalog) (_ error) {
+func (*Comment) Weave(*weave.Catalog) (_ error) {
 	return
 }
 

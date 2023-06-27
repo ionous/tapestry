@@ -4,20 +4,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
-	"github.com/ionous/errutil"
 )
-
-// StoryStatement - import a single story statement.
-// used during weave, and expects that the runtime is the importer's own runtime.
-// ( as opposed to the story's playtime. )
-func StoryStatement(run rt.Runtime, op Schedule) (err error) {
-	if k, ok := run.(*Weaver); !ok {
-		err = errutil.Fmt("runtime %T doesn't support story statements", run)
-	} else {
-		err = op.Schedule(k.d.cat)
-	}
-	return
-}
 
 func makeCard(amany, bmany bool) (ret string) {
 	switch {

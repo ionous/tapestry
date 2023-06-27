@@ -9,10 +9,10 @@ import (
 
 // Execute - called by the macro runtime during weave.
 func (op *KindOfRelation) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
-func (op *KindOfRelation) Schedule(cat *weave.Catalog) error {
+func (op *KindOfRelation) Weave(cat *weave.Catalog) error {
 	return op.Cardinality.DefineRelation(cat, op.Relation.String())
 }
 

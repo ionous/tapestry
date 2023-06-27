@@ -14,11 +14,11 @@ import (
 
 // Execute - called by the macro runtime during weave.
 func (op *DefineTraits) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
 // (the) colors are red, blue, or green.
-func (op *DefineTraits) Schedule(cat *weave.Catalog) error {
+func (op *DefineTraits) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if traits, e := safe.GetTextList(w, op.Traits); e != nil {
 			err = e
@@ -33,10 +33,10 @@ func (op *DefineTraits) Schedule(cat *weave.Catalog) error {
 
 // Execute - called by the macro runtime during weave.
 func (op *GrammarDecl) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
-func (op *GrammarDecl) Schedule(cat *weave.Catalog) (err error) {
+func (op *GrammarDecl) Weave(cat *weave.Catalog) (err error) {
 	switch el := op.Grammar.(type) {
 	case *grammar.Alias:
 		err = cat.AssertAlias(el.AsNoun, el.Names...)
@@ -49,10 +49,10 @@ func (op *GrammarDecl) Schedule(cat *weave.Catalog) (err error) {
 
 // Execute - called by the macro runtime during weave.
 func (op *DefineNounTraits) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
-func (op *DefineNounTraits) Schedule(cat *weave.Catalog) error {
+func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
@@ -88,10 +88,10 @@ func (op *DefineNounTraits) Schedule(cat *weave.Catalog) error {
 
 // Execute - called by the macro runtime during weave.
 func (op *DefineNouns) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
-func (op *DefineNouns) Schedule(cat *weave.Catalog) error {
+func (op *DefineNouns) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
@@ -114,11 +114,11 @@ func (op *DefineNouns) Schedule(cat *weave.Catalog) error {
 
 // Execute - called by the macro runtime during weave.
 func (op *NounAssignment) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
 // ex. The description of the nets is xxx
-func (op *NounAssignment) Schedule(cat *weave.Catalog) error {
+func (op *NounAssignment) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
@@ -142,10 +142,10 @@ func (op *NounAssignment) Schedule(cat *weave.Catalog) error {
 
 // Execute - called by the macro runtime during weave.
 func (op *DefineRelatives) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
-func (op *DefineRelatives) Schedule(cat *weave.Catalog) error {
+func (op *DefineRelatives) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
@@ -182,10 +182,10 @@ func (op *DefineRelatives) Schedule(cat *weave.Catalog) error {
 
 // Execute - called by the macro runtime during weave.
 func (op *DefineOtherRelatives) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
-func (op *DefineOtherRelatives) Schedule(cat *weave.Catalog) error {
+func (op *DefineOtherRelatives) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e

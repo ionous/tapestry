@@ -6,7 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 )
 
-func (op *DefineScene) Schedule(cat *weave.Catalog) error {
+func (op *DefineScene) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequireAll, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetOptionalText(w, op.Scene, ""); e != nil {
 			err = e
@@ -15,7 +15,7 @@ func (op *DefineScene) Schedule(cat *weave.Catalog) error {
 		} else {
 			if e := cat.AssertDomainStart(name.String(), dependsOn.Strings()); e != nil {
 				err = e
-			} else if e := ScheduleStatements(cat, op.With); e != nil {
+			} else if e := WeaveStatements(cat, op.With); e != nil {
 				err = e
 			} else {
 				err = cat.AssertDomainEnd()

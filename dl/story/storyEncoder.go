@@ -16,9 +16,9 @@ func Encode(src *StoryFile) (interface{}, error) {
 var CompactEncoder = core.CompactEncoder
 
 // story break is an empty do nothing statement, used as a paragraph marker.
-func (op *StoryBreak) Schedule(cat *weave.Catalog) error { return nil }
+func (op *StoryBreak) Weave(cat *weave.Catalog) error { return nil }
 
 // Execute - called by the macro runtime during weave.
 func (op *StoryBreak) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }

@@ -54,12 +54,16 @@ type Weaver struct {
 	cat       *weave.Catalog
 }
 
-func (dt *Weaver) Open(name string) *sql.DB {
-	if dt.db == nil {
-		dt.db = testdb.Open(name, testdb.Memory, "")
-	}
-	return dt.db
+func (dt *Weaver) Catalog() *weave.Catalog {
+	return dt.cat
 }
+
+// func (dt *Weaver) Open(name string) *sql.DB {
+// 	if dt.db == nil {
+// 		dt.db = testdb.Open(name, testdb.Memory, "")
+// 	}
+// 	return dt.db
+// }
 
 func (dt *Weaver) Close() {
 	if dt.db != nil {

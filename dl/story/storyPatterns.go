@@ -14,10 +14,10 @@ import (
 
 // Execute - called by the macro runtime during weave.
 func (op *ExtendPattern) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
-func (op *ExtendPattern) Schedule(cat *weave.Catalog) error {
+func (op *ExtendPattern) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetText(w, op.PatternName); e != nil {
 			err = e
@@ -42,11 +42,11 @@ func (op *ExtendPattern) Schedule(cat *weave.Catalog) error {
 
 // Execute - called by the macro runtime during weave.
 func (op *DefinePattern) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
-func (op *DefinePattern) Schedule(cat *weave.Catalog) (err error) {
+func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetText(w, op.PatternName); e != nil {
 			err = e

@@ -19,10 +19,10 @@ func (op *SingularNoun) GetName() string {
 
 // Execute - called by the macro runtime during weave.
 func (op *EventBlock) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
-func (op *EventBlock) Schedule(cat *weave.Catalog) (err error) {
+func (op *EventBlock) Weave(cat *weave.Catalog) (err error) {
 	if opt, ok := op.Target.Value.(interface{ GetName() string }); !ok {
 		err = errutil.Fmt("unknown event block target %T", opt)
 	} else {

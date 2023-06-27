@@ -14,12 +14,12 @@ import (
 
 // Execute - called by the macro runtime during weave.
 func (op *DefineMacro) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
 // Schedule - register the macro with the importer;
 // subsequent CallMacro(s) will be able to run it.
-func (op *DefineMacro) Schedule(cat *weave.Catalog) (err error) {
+func (op *DefineMacro) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(assert.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetText(w, op.MacroName); e != nil {
 			err = e
@@ -53,7 +53,7 @@ func (op *DefineMacro) Schedule(cat *weave.Catalog) (err error) {
 }
 
 // Schedule for macros calls Execute... eventually... to generate dynamic assertions.
-func (op *CallMacro) Schedule(cat *weave.Catalog) error {
+func (op *CallMacro) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequireNouns /*assert.MacroPhase*/, func(w *weave.Weaver) error {
 		return op.Execute(w)
 	})

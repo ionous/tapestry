@@ -12,11 +12,11 @@ import (
 
 // Execute - called by the macro runtime during weave.
 func (op *DefineKinds) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
 // ex. "cats are a kind of animal"
-func (op *DefineKinds) Schedule(cat *weave.Catalog) error {
+func (op *DefineKinds) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if kinds, e := safe.GetTextList(w, op.Kinds); e != nil {
 			err = e
@@ -35,12 +35,12 @@ func (op *DefineKinds) Schedule(cat *weave.Catalog) error {
 
 // Execute - called by the macro runtime during weave.
 func (op *DefineFields) Execute(macro rt.Runtime) error {
-	return weave.StoryStatement(macro, op)
+	return Weave(macro, op)
 }
 
 // ex. cats have some text called breed.
 // ex. horses have an aspect called speed.
-func (op *DefineFields) Schedule(cat *weave.Catalog) error {
+func (op *DefineFields) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
 		if len(op.Fields) == 0 {
 			// log or something?

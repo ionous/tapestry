@@ -11,25 +11,47 @@ import (
 
 // StoryStatement - a marker interface for commands which produce facts about the game world.
 type StoryStatement interface {
-	Schedule(cat *weave.Catalog) error
+	Weave(*weave.Catalog) error
 }
 
+// hacky: go interfaces arent vtables;
+// so when a runtime helper implements the rt interface:
+// it has no access to the full implementation of the interface.
+// meaning inside rule application the importer isnt accessible via casting.
+// we'd need a context maybe ( ex. pass an interface{} through Options );
+// a global is fine for now.
+var currentCatalog *weave.Catalog
+
 func ImportStory(cat *weave.Catalog, path string, tgt *StoryFile) (err error) {
+	currentCatalog = cat
 	cat.SetSource(path)
 	if e := importStory(cat, tgt); e != nil {
 		err = e
 	} else {
-		err = ScheduleStatements(cat, tgt.StoryStatements)
+		err = WeaveStatements(cat, tgt.StoryStatements)
 	}
 	return err
 }
 
-func ScheduleStatements(cat *weave.Catalog, all []StoryStatement) (err error) {
+func WeaveStatements(cat *weave.Catalog, all []StoryStatement) (err error) {
 	for _, el := range all {
-		if e := el.Schedule(cat); e != nil {
+		if e := el.Weave(cat); e != nil {
 			err = e
 			break
 		}
+	}
+	return
+}
+
+// transform a story statement's execution ( ex. during a macro )
+// into a weave so that it can generate facts for the database
+// expects that the runtime is the importer's own runtime.
+// ( as opposed to the story's playtime. )
+func Weave(run rt.Runtime, op StoryStatement) (err error) {
+	if currentCatalog.Runtime() != run {
+		err = errutil.Fmt("mismatched runtimes?")
+	} else {
+		err = op.Weave(currentCatalog)
 	}
 	return
 }

@@ -43,7 +43,7 @@ package story
 // },
 
 // // horses are usually fast.
-// func (op *Certainties) Schedule(cat *weave.Catalog) (err error) {
+// func (op *Certainties) Weave(cat *weave.Catalog) (err error) {
 // 	certaintiesNotImplemented.PrintOnce()
 // 	// if certainty, e := op.Certainty.ImportString(k); e != nil {
 // 	// 	err = e
