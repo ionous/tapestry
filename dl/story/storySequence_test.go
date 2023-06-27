@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/dl/debug"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"git.sr.ht/~ionous/tapestry/weave"
 
@@ -28,8 +27,8 @@ func TestImportSequence(t *testing.T) {
 	// import that statement
 	if e := story.ImportStory(cat, t.Name(), &story.StoryFile{
 		StoryStatements: []story.StoryStatement{
-			&debug.Test{
-				TestName: debug.TestName{t.Name()},
+			&story.Test{
+				TestName: story.TestName{t.Name()},
 				Do: []rt.Execute{
 					printText,
 				},

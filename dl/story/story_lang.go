@@ -843,6 +843,110 @@ func CallMacro_Marshal(m jsn.Marshaler, val *CallMacro) (err error) {
 	return
 }
 
+// Comment Add a note.
+// Information about the story for you and other authors.
+type Comment struct {
+	Lines  prim.Lines `if:"label=_"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*Comment)(nil)
+var _ rt.Execute = (*Comment)(nil)
+
+func (*Comment) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Comment_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const Comment_Type = "comment"
+const Comment_Field_Lines = "$LINES"
+
+func (op *Comment) Marshal(m jsn.Marshaler) error {
+	return Comment_Marshal(m, op)
+}
+
+type Comment_Slice []Comment
+
+func (op *Comment_Slice) GetType() string { return Comment_Type }
+
+func (op *Comment_Slice) Marshal(m jsn.Marshaler) error {
+	return Comment_Repeats_Marshal(m, (*[]Comment)(op))
+}
+
+func (op *Comment_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Comment_Slice) SetSize(cnt int) {
+	var els []Comment
+	if cnt >= 0 {
+		els = make(Comment_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Comment_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Comment_Marshal(m, &(*op)[i])
+}
+
+func Comment_Repeats_Marshal(m jsn.Marshaler, vals *[]Comment) error {
+	return jsn.RepeatBlock(m, (*Comment_Slice)(vals))
+}
+
+func Comment_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Comment) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = Comment_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type Comment_Flow struct{ ptr *Comment }
+
+func (n Comment_Flow) GetType() string      { return Comment_Type }
+func (n Comment_Flow) GetLede() string      { return Comment_Type }
+func (n Comment_Flow) GetFlow() interface{} { return n.ptr }
+func (n Comment_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Comment); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func Comment_Optional_Marshal(m jsn.Marshaler, pv **Comment) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = Comment_Marshal(m, *pv)
+	} else if !enc {
+		var v Comment
+		if err = Comment_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func Comment_Marshal(m jsn.Marshaler, val *Comment) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(Comment_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", Comment_Field_Lines)
+		if e0 == nil {
+			e0 = prim.Lines_Marshal(m, &val.Lines)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", Comment_Field_Lines))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // CommonAction
 type CommonAction struct {
 	Kind          SingularKind   `if:"label=_"`
@@ -6537,6 +6641,219 @@ func StoryStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]StoryStateme
 	return
 }
 
+// Test Create a scene
+type Test struct {
+	TestName       TestName         `if:"label=_"`
+	DependsOn      TestName         `if:"label=depends_on,optional"`
+	TestStatements []StoryStatement `if:"label=with_scene,optional"`
+	Do             []rt.Execute     `if:"label=do"`
+	Markup         map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*Test)(nil)
+var _ rt.Execute = (*Test)(nil)
+
+func (*Test) Compose() composer.Spec {
+	return composer.Spec{
+		Name: Test_Type,
+		Uses: composer.Type_Flow,
+	}
+}
+
+const Test_Type = "test"
+const Test_Field_TestName = "$TEST_NAME"
+const Test_Field_DependsOn = "$DEPENDS_ON"
+const Test_Field_TestStatements = "$TEST_STATEMENTS"
+const Test_Field_Do = "$DO"
+
+func (op *Test) Marshal(m jsn.Marshaler) error {
+	return Test_Marshal(m, op)
+}
+
+type Test_Slice []Test
+
+func (op *Test_Slice) GetType() string { return Test_Type }
+
+func (op *Test_Slice) Marshal(m jsn.Marshaler) error {
+	return Test_Repeats_Marshal(m, (*[]Test)(op))
+}
+
+func (op *Test_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *Test_Slice) SetSize(cnt int) {
+	var els []Test
+	if cnt >= 0 {
+		els = make(Test_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *Test_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return Test_Marshal(m, &(*op)[i])
+}
+
+func Test_Repeats_Marshal(m jsn.Marshaler, vals *[]Test) error {
+	return jsn.RepeatBlock(m, (*Test_Slice)(vals))
+}
+
+func Test_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]Test) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = Test_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type Test_Flow struct{ ptr *Test }
+
+func (n Test_Flow) GetType() string      { return Test_Type }
+func (n Test_Flow) GetLede() string      { return Test_Type }
+func (n Test_Flow) GetFlow() interface{} { return n.ptr }
+func (n Test_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*Test); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func Test_Optional_Marshal(m jsn.Marshaler, pv **Test) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = Test_Marshal(m, *pv)
+	} else if !enc {
+		var v Test
+		if err = Test_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func Test_Marshal(m jsn.Marshaler, val *Test) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(Test_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", Test_Field_TestName)
+		if e0 == nil {
+			e0 = TestName_Marshal(m, &val.TestName)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", Test_Field_TestName))
+		}
+		e1 := m.MarshalKey("depends_on", Test_Field_DependsOn)
+		if e1 == nil {
+			e1 = TestName_Optional_Marshal(m, &val.DependsOn)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", Test_Field_DependsOn))
+		}
+		e2 := m.MarshalKey("with_scene", Test_Field_TestStatements)
+		if e2 == nil {
+			e2 = StoryStatement_Optional_Repeats_Marshal(m, &val.TestStatements)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", Test_Field_TestStatements))
+		}
+		e3 := m.MarshalKey("do", Test_Field_Do)
+		if e3 == nil {
+			e3 = rt.Execute_Repeats_Marshal(m, &val.Do)
+		}
+		if e3 != nil && e3 != jsn.Missing {
+			m.Error(errutil.New(e3, "in flow at", Test_Field_Do))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// TestName requires a predefined or user-specified string.
+type TestName struct {
+	Str string
+}
+
+func (op *TestName) String() string {
+	return op.Str
+}
+
+const TestName_CurrentTest = "$CURRENT_TEST"
+
+func (*TestName) Compose() composer.Spec {
+	return composer.Spec{
+		Name:        TestName_Type,
+		Uses:        composer.Type_Str,
+		OpenStrings: true,
+		Choices: []string{
+			TestName_CurrentTest,
+		},
+		Strings: []string{
+			"current_test",
+		},
+	}
+}
+
+const TestName_Type = "test_name"
+
+func (op *TestName) Marshal(m jsn.Marshaler) error {
+	return TestName_Marshal(m, op)
+}
+
+func TestName_Optional_Marshal(m jsn.Marshaler, val *TestName) (err error) {
+	var zero TestName
+	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
+		err = TestName_Marshal(m, val)
+	}
+	return
+}
+
+func TestName_Marshal(m jsn.Marshaler, val *TestName) (err error) {
+	return m.MarshalValue(TestName_Type, jsn.MakeEnum(val, &val.Str))
+}
+
+type TestName_Slice []TestName
+
+func (op *TestName_Slice) GetType() string { return TestName_Type }
+
+func (op *TestName_Slice) Marshal(m jsn.Marshaler) error {
+	return TestName_Repeats_Marshal(m, (*[]TestName)(op))
+}
+
+func (op *TestName_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *TestName_Slice) SetSize(cnt int) {
+	var els []TestName
+	if cnt >= 0 {
+		els = make(TestName_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *TestName_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return TestName_Marshal(m, &(*op)[i])
+}
+
+func TestName_Repeats_Marshal(m jsn.Marshaler, vals *[]TestName) error {
+	return jsn.RepeatBlock(m, (*TestName_Slice)(vals))
+}
+
+func TestName_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]TestName) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = TestName_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
 // TextField
 type TextField struct {
 	Name      string      `if:"label=_,type=text"`
@@ -6793,6 +7110,7 @@ var Slats = []composer.Composer{
 	(*AspectField)(nil),
 	(*BoolField)(nil),
 	(*CallMacro)(nil),
+	(*Comment)(nil),
 	(*CommonAction)(nil),
 	(*CountOf)(nil),
 	(*CycleText)(nil),
@@ -6844,6 +7162,8 @@ var Slats = []composer.Composer{
 	(*StoppingText)(nil),
 	(*StoryBreak)(nil),
 	(*StoryFile)(nil),
+	(*Test)(nil),
+	(*TestName)(nil),
 	(*TextField)(nil),
 	(*TextListField)(nil),
 }
@@ -6880,6 +7200,7 @@ var Signatures = map[uint64]interface{}{
 	5587008972147064084:  (*RelationCardinality)(nil),  /* RelationCardinality oneToOne: */
 	12747929101973989672: (*SingularKind)(nil),         /* SingularKind: */
 	5991962903091297123:  (*StoryFile)(nil),            /* Tapestry: */
+	11670818074991137908: (*TestName)(nil),             /* TestName: */
 	8990910809673849454:  (*EventHandler)(nil),         /* With:event:provides:rules: */
 	3588173502446728488:  (*EventHandler)(nil),         /* With:event:rules: */
 	15882152812809098721: (*StoryBreak)(nil),           /* execute=-- */
@@ -6898,6 +7219,8 @@ var Signatures = map[uint64]interface{}{
 	15275988251373739424: (*CallMacro)(nil),            /* story_statement=Call macro:args: */
 	14675240953305539039: (*CallMacro)(nil),            /* text_eval=Call macro:args: */
 	7066713272892250094:  (*CallMacro)(nil),            /* text_list_eval=Call macro:args: */
+	3991849378064754806:  (*Comment)(nil),              /* execute=Comment: */
+	16586092333187989882: (*Comment)(nil),              /* story_statement=Comment: */
 	10143132576483224253: (*CountOf)(nil),              /* bool_eval=CountOf:num: */
 	231398832069830353:   (*CycleText)(nil),            /* text_eval=CycleText: */
 	2600953883978299185:  (*DefineFields)(nil),         /* execute=Define kind:fields: */
@@ -6987,6 +7310,14 @@ var Signatures = map[uint64]interface{}{
 	15989777734244204735: (*SayTemplate)(nil),          /* text_eval=Say: */
 	9910951906340888308:  (*ShuffleText)(nil),          /* text_eval=ShuffleText: */
 	13921723804355948971: (*StoppingText)(nil),         /* text_eval=StoppingText: */
+	2871145226608221260:  (*Test)(nil),                 /* execute=Test:dependsOn:do: */
+	9865864948070946448:  (*Test)(nil),                 /* story_statement=Test:dependsOn:do: */
+	5453259149853633814:  (*Test)(nil),                 /* execute=Test:dependsOn:withScene:do: */
+	12698818979331053506: (*Test)(nil),                 /* story_statement=Test:dependsOn:withScene:do: */
+	13063212444104265068: (*Test)(nil),                 /* execute=Test:do: */
+	9283516926116088792:  (*Test)(nil),                 /* story_statement=Test:do: */
+	11682383000525011702: (*Test)(nil),                 /* execute=Test:withScene:do: */
+	500333266696321514:   (*Test)(nil),                 /* story_statement=Test:withScene:do: */
 	9387832592330456403:  (*TextField)(nil),            /* field_definition=Text: */
 	16637694412733787472: (*TextField)(nil),            /* field_definition=Text:initially: */
 	15791809714384972761: (*TextField)(nil),            /* field_definition=Text:kind: */

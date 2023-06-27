@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/weave/eph"
+	"git.sr.ht/~ionous/tapestry/test/eph"
 )
 
 // test named nouns

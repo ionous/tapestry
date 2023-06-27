@@ -15,8 +15,8 @@ func UserComment(s string) map[string]any {
 // a program that can check factorials
 var FactorialStory = &story.StoryFile{
 	StoryStatements: []story.StoryStatement{
-		&debug.Test{
-			TestName: debug.TestName{
+		&story.Test{
+			TestName: story.TestName{
 				Str: "factorial",
 			},
 			Do: FactorialCheck,

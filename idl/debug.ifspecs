@@ -4,33 +4,7 @@
     "debug",
     {
       "Group contains:": [
-        {
-          "--": [
-            "Add a note.",
-            "Information about the story for you and other authors."
-          ],
-          "Spec:slots:groups:with flow:": [
-            "comment",
-            [
-              "story_statement",
-              "execute"
-            ],
-            "language",
-            {
-              "Flow phrase:uses:": [
-                "Note: {comment$lines}",
-                [
-                  {
-                    "Term:name:": [
-                      "_",
-                      "lines"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
+       
         {
           "Spec:slots:with flow:": [
             "expect_output",
@@ -165,65 +139,8 @@
               ]
             }
           ]
-        },
-        {
-          "--": "Create a scene",
-          "Spec:slots:with flow:": [
-            "test",
-            [
-              "story_statement",
-              "execute"
-            ],
-            {
-              "Flow uses:": [
-                {
-                  "Term:name:": [
-                    "_",
-                    "test_name"
-                  ]
-                },
-                {
-                  "Term:type:optional:": [
-                    "depends_on",
-                    "test_name",
-                    true
-                  ]
-                },
-                {
-                  "Term:name:type:optional:repeats:": [
-                    "with_scene",
-                    "test_statements",
-                    "story_statement",
-                    true,
-                    true
-                  ]
-                },
-                {
-                  "Term:type:repeats:": [
-                    "do",
-                    "execute",
-                    true
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "Spec:with str:": [
-            "test_name",
-            {
-              "Str uses:": [
-                {
-                  "Option:label:": [
-                    "current_test",
-                    "the test"
-                  ]
-                }
-              ]
-            }
-          ]
         }
+        
       ]
     }
   ]
