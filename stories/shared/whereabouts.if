@@ -5,7 +5,7 @@
         "The relative location of objects in the game world.",
         "One parent (ex. a room) can have many children (ex. a table and chairs)."
       ],
-      "KindOfRelation:cardinality oneToMany:": [
+      "Define relation:cardinality oneToMany:": [
         "whereabouts",
         {
           "OneToMany:kinds:": [

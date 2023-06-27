@@ -10,14 +10,14 @@
       "--": ""
     },
     {
-      "Define nouns:relation:otherNouns:": [
+      "Define nouns:relativeTo:otherNouns:": [
         "the cabin",
         "contains",
         "a glass case"
       ]
     },
     {
-      "Define relation:nouns:otherNouns:": [
+      "Define relativeTo:nouns:otherNouns:": [
         "In", "the glass case", "a collection of fishing rods"
       ]
     },
@@ -39,21 +39,21 @@
       ]
     },
     {
-      "Define nouns:relation:otherNouns:": [
+      "Define nouns:relativeTo:otherNouns:": [
         "the small silver key",
         "unlocks",
         "the case"
       ]
     },
     {
-      "Define nouns:relation:otherNouns:": [
+      "Define nouns:relativeTo:otherNouns:": [
         "the bench",
         "is in",
         "the cabin"
       ]
     },
     {
-      "Define relation:nouns:otherNouns:": [
+      "Define relativeTo:nouns:otherNouns:": [
         "On", "the beach", "some blue vinyl cushions"
       ]
     },

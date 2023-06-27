@@ -43,6 +43,8 @@ func (op *GrammarDecl) Weave(cat *weave.Catalog) (err error) {
 	case *grammar.Directive:
 		name := strings.Join(el.Lede, "/")
 		err = cat.AssertGrammar(name, el)
+	default:
+		err = errutil.New("unknown grammar %T", el)
 	}
 	return
 }

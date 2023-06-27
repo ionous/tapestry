@@ -7,7 +7,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/prim"
-	"git.sr.ht/~ionous/tapestry/dl/rel"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"github.com/ionous/errutil"
@@ -97,7 +96,7 @@ func AbstractAction_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]AbstractActi
 
 // ActionContext
 type ActionContext struct {
-	Kind   SingularKind `if:"label=_"`
+	Kind   rt.TextEval `if:"label=_"`
 	Markup map[string]any
 }
 
@@ -184,7 +183,7 @@ func ActionContext_Marshal(m jsn.Marshaler, val *ActionContext) (err error) {
 	if err = m.MarshalBlock(ActionContext_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ActionContext_Field_Kind)
 		if e0 == nil {
-			e0 = SingularKind_Marshal(m, &val.Kind)
+			e0 = rt.TextEval_Marshal(m, &val.Kind)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ActionContext_Field_Kind))
@@ -949,7 +948,7 @@ func Comment_Marshal(m jsn.Marshaler, val *Comment) (err error) {
 
 // CommonAction
 type CommonAction struct {
-	Kind          SingularKind   `if:"label=_"`
+	Kind          rt.TextEval    `if:"label=_"`
 	ActionContext *ActionContext `if:"label=action_context,optional"`
 	Markup        map[string]any
 }
@@ -1038,7 +1037,7 @@ func CommonAction_Marshal(m jsn.Marshaler, val *CommonAction) (err error) {
 	if err = m.MarshalBlock(CommonAction_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", CommonAction_Field_Kind)
 		if e0 == nil {
-			e0 = SingularKind_Marshal(m, &val.Kind)
+			e0 = rt.TextEval_Marshal(m, &val.Kind)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", CommonAction_Field_Kind))
@@ -1875,7 +1874,7 @@ func DefineNouns_Marshal(m jsn.Marshaler, val *DefineNouns) (err error) {
 
 // DefineOtherRelatives Relate nouns to each other
 type DefineOtherRelatives struct {
-	Relation   rt.TextEval     `if:"label=relation"`
+	Relation   rt.TextEval     `if:"label=relative_to"`
 	Nouns      rt.TextListEval `if:"label=nouns"`
 	OtherNouns rt.TextListEval `if:"label=other_nouns"`
 	Markup     map[string]any
@@ -1969,7 +1968,7 @@ func DefineOtherRelatives_Optional_Marshal(m jsn.Marshaler, pv **DefineOtherRela
 func DefineOtherRelatives_Marshal(m jsn.Marshaler, val *DefineOtherRelatives) (err error) {
 	m.SetMarkup(&val.Markup)
 	if err = m.MarshalBlock(DefineOtherRelatives_Flow{val}); err == nil {
-		e0 := m.MarshalKey("relation", DefineOtherRelatives_Field_Relation)
+		e0 := m.MarshalKey("relative_to", DefineOtherRelatives_Field_Relation)
 		if e0 == nil {
 			e0 = rt.TextEval_Marshal(m, &val.Relation)
 		}
@@ -2137,11 +2136,124 @@ func DefinePattern_Marshal(m jsn.Marshaler, val *DefinePattern) (err error) {
 	return
 }
 
+// DefineRelation
+type DefineRelation struct {
+	Relation    rt.TextEval         `if:"label=relation"`
+	Cardinality RelationCardinality `if:"label=cardinality"`
+	Markup      map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*DefineRelation)(nil)
+var _ rt.Execute = (*DefineRelation)(nil)
+
+func (*DefineRelation) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DefineRelation_Type,
+		Uses: composer.Type_Flow,
+		Lede: "define",
+	}
+}
+
+const DefineRelation_Type = "define_relation"
+const DefineRelation_Field_Relation = "$RELATION"
+const DefineRelation_Field_Cardinality = "$CARDINALITY"
+
+func (op *DefineRelation) Marshal(m jsn.Marshaler) error {
+	return DefineRelation_Marshal(m, op)
+}
+
+type DefineRelation_Slice []DefineRelation
+
+func (op *DefineRelation_Slice) GetType() string { return DefineRelation_Type }
+
+func (op *DefineRelation_Slice) Marshal(m jsn.Marshaler) error {
+	return DefineRelation_Repeats_Marshal(m, (*[]DefineRelation)(op))
+}
+
+func (op *DefineRelation_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DefineRelation_Slice) SetSize(cnt int) {
+	var els []DefineRelation
+	if cnt >= 0 {
+		els = make(DefineRelation_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DefineRelation_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DefineRelation_Marshal(m, &(*op)[i])
+}
+
+func DefineRelation_Repeats_Marshal(m jsn.Marshaler, vals *[]DefineRelation) error {
+	return jsn.RepeatBlock(m, (*DefineRelation_Slice)(vals))
+}
+
+func DefineRelation_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefineRelation) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DefineRelation_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DefineRelation_Flow struct{ ptr *DefineRelation }
+
+func (n DefineRelation_Flow) GetType() string      { return DefineRelation_Type }
+func (n DefineRelation_Flow) GetLede() string      { return "define" }
+func (n DefineRelation_Flow) GetFlow() interface{} { return n.ptr }
+func (n DefineRelation_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DefineRelation); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DefineRelation_Optional_Marshal(m jsn.Marshaler, pv **DefineRelation) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DefineRelation_Marshal(m, *pv)
+	} else if !enc {
+		var v DefineRelation
+		if err = DefineRelation_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DefineRelation_Marshal(m jsn.Marshaler, val *DefineRelation) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DefineRelation_Flow{val}); err == nil {
+		e0 := m.MarshalKey("relation", DefineRelation_Field_Relation)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Relation)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DefineRelation_Field_Relation))
+		}
+		e1 := m.MarshalKey("cardinality", DefineRelation_Field_Cardinality)
+		if e1 == nil {
+			e1 = RelationCardinality_Marshal(m, &val.Cardinality)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DefineRelation_Field_Cardinality))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // DefineRelatives Relate nouns to each other
 type DefineRelatives struct {
 	Nouns      rt.TextListEval `if:"label=nouns"`
 	Kind       rt.TextEval     `if:"label=as,optional"`
-	Relation   rt.TextEval     `if:"label=relation"`
+	Relation   rt.TextEval     `if:"label=relative_to"`
 	OtherNouns rt.TextListEval `if:"label=other_nouns"`
 	Markup     map[string]any
 }
@@ -2249,7 +2361,7 @@ func DefineRelatives_Marshal(m jsn.Marshaler, val *DefineRelatives) (err error) 
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", DefineRelatives_Field_Kind))
 		}
-		e2 := m.MarshalKey("relation", DefineRelatives_Field_Relation)
+		e2 := m.MarshalKey("relative_to", DefineRelatives_Field_Relation)
 		if e2 == nil {
 			e2 = rt.TextEval_Marshal(m, &val.Relation)
 		}
@@ -2505,7 +2617,7 @@ func DefineTraits_Marshal(m jsn.Marshaler, val *DefineTraits) (err error) {
 // EventBlock Declare event listeners.
 // Listeners let objects in the game world react to changes before, during, or after they happen.
 type EventBlock struct {
-	Target   EventTarget    `if:"label=_"`
+	Target   rt.TextEval    `if:"label=_"`
 	Handlers []EventHandler `if:"label=handlers"`
 	Markup   map[string]any
 }
@@ -2599,7 +2711,7 @@ func EventBlock_Marshal(m jsn.Marshaler, val *EventBlock) (err error) {
 	if err = m.MarshalBlock(EventBlock_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", EventBlock_Field_Target)
 		if e0 == nil {
-			e0 = EventTarget_Marshal(m, &val.Target)
+			e0 = rt.TextEval_Marshal(m, &val.Target)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", EventBlock_Field_Target))
@@ -2902,109 +3014,6 @@ func EventPhase_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EventPhase) (err
 	return
 }
 
-// EventTarget swaps between various options
-type EventTarget struct {
-	Choice string
-	Value  interface{}
-}
-
-var EventTarget_Optional_Marshal = EventTarget_Marshal
-
-const EventTarget_Kinds_Opt = "$KINDS"
-const EventTarget_Noun_Opt = "$NOUN"
-
-func (*EventTarget) Compose() composer.Spec {
-	return composer.Spec{
-		Name: EventTarget_Type,
-		Uses: composer.Type_Swap,
-		Choices: []string{
-			EventTarget_Kinds_Opt, EventTarget_Noun_Opt,
-		},
-		Swaps: []interface{}{
-			(*PluralKinds)(nil),
-			(*SingularNoun)(nil),
-		},
-	}
-}
-
-const EventTarget_Type = "event_target"
-
-func (op *EventTarget) GetType() string { return EventTarget_Type }
-
-func (op *EventTarget) GetSwap() (string, interface{}) {
-	return op.Choice, op.Value
-}
-
-func (op *EventTarget) SetSwap(c string) (okay bool) {
-	switch c {
-	case "":
-		op.Choice, op.Value = c, nil
-		okay = true
-	case EventTarget_Kinds_Opt:
-		op.Choice, op.Value = c, new(PluralKinds)
-		okay = true
-	case EventTarget_Noun_Opt:
-		op.Choice, op.Value = c, new(SingularNoun)
-		okay = true
-	}
-	return
-}
-
-func (op *EventTarget) Marshal(m jsn.Marshaler) error {
-	return EventTarget_Marshal(m, op)
-}
-func EventTarget_Marshal(m jsn.Marshaler, val *EventTarget) (err error) {
-	if err = m.MarshalBlock(val); err == nil {
-		if _, ptr := val.GetSwap(); ptr != nil {
-			if e := ptr.(jsn.Marshalee).Marshal(m); e != nil && e != jsn.Missing {
-				m.Error(e)
-			}
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-type EventTarget_Slice []EventTarget
-
-func (op *EventTarget_Slice) GetType() string { return EventTarget_Type }
-
-func (op *EventTarget_Slice) Marshal(m jsn.Marshaler) error {
-	return EventTarget_Repeats_Marshal(m, (*[]EventTarget)(op))
-}
-
-func (op *EventTarget_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *EventTarget_Slice) SetSize(cnt int) {
-	var els []EventTarget
-	if cnt >= 0 {
-		els = make(EventTarget_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *EventTarget_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return EventTarget_Marshal(m, &(*op)[i])
-}
-
-func EventTarget_Repeats_Marshal(m jsn.Marshaler, vals *[]EventTarget) error {
-	return jsn.RepeatBlock(m, (*EventTarget_Slice)(vals))
-}
-
-func EventTarget_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]EventTarget) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = EventTarget_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
 // ExtendPattern Change the behavior of an existing pattern.
 type ExtendPattern struct {
 	PatternName rt.TextEval       `if:"label=pattern"`
@@ -3299,118 +3308,6 @@ func GrammarDecl_Marshal(m jsn.Marshaler, val *GrammarDecl) (err error) {
 	return
 }
 
-// KindOfRelation
-type KindOfRelation struct {
-	Relation    rel.RelationName    `if:"label=_"`
-	Cardinality RelationCardinality `if:"label=cardinality"`
-	Markup      map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*KindOfRelation)(nil)
-var _ rt.Execute = (*KindOfRelation)(nil)
-
-func (*KindOfRelation) Compose() composer.Spec {
-	return composer.Spec{
-		Name: KindOfRelation_Type,
-		Uses: composer.Type_Flow,
-	}
-}
-
-const KindOfRelation_Type = "kind_of_relation"
-const KindOfRelation_Field_Relation = "$RELATION"
-const KindOfRelation_Field_Cardinality = "$CARDINALITY"
-
-func (op *KindOfRelation) Marshal(m jsn.Marshaler) error {
-	return KindOfRelation_Marshal(m, op)
-}
-
-type KindOfRelation_Slice []KindOfRelation
-
-func (op *KindOfRelation_Slice) GetType() string { return KindOfRelation_Type }
-
-func (op *KindOfRelation_Slice) Marshal(m jsn.Marshaler) error {
-	return KindOfRelation_Repeats_Marshal(m, (*[]KindOfRelation)(op))
-}
-
-func (op *KindOfRelation_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *KindOfRelation_Slice) SetSize(cnt int) {
-	var els []KindOfRelation
-	if cnt >= 0 {
-		els = make(KindOfRelation_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *KindOfRelation_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return KindOfRelation_Marshal(m, &(*op)[i])
-}
-
-func KindOfRelation_Repeats_Marshal(m jsn.Marshaler, vals *[]KindOfRelation) error {
-	return jsn.RepeatBlock(m, (*KindOfRelation_Slice)(vals))
-}
-
-func KindOfRelation_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]KindOfRelation) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = KindOfRelation_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type KindOfRelation_Flow struct{ ptr *KindOfRelation }
-
-func (n KindOfRelation_Flow) GetType() string      { return KindOfRelation_Type }
-func (n KindOfRelation_Flow) GetLede() string      { return KindOfRelation_Type }
-func (n KindOfRelation_Flow) GetFlow() interface{} { return n.ptr }
-func (n KindOfRelation_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*KindOfRelation); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func KindOfRelation_Optional_Marshal(m jsn.Marshaler, pv **KindOfRelation) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = KindOfRelation_Marshal(m, *pv)
-	} else if !enc {
-		var v KindOfRelation
-		if err = KindOfRelation_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func KindOfRelation_Marshal(m jsn.Marshaler, val *KindOfRelation) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(KindOfRelation_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", KindOfRelation_Field_Relation)
-		if e0 == nil {
-			e0 = rel.RelationName_Marshal(m, &val.Relation)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", KindOfRelation_Field_Relation))
-		}
-		e1 := m.MarshalKey("cardinality", KindOfRelation_Field_Cardinality)
-		if e1 == nil {
-			e1 = RelationCardinality_Marshal(m, &val.Cardinality)
-		}
-		if e1 != nil && e1 != jsn.Missing {
-			m.Error(errutil.New(e1, "in flow at", KindOfRelation_Field_Cardinality))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
 // MakeOpposite The opposite of east is west.
 type MakeOpposite struct {
 	Word     string `if:"label=_,type=text"`
@@ -3640,8 +3537,8 @@ func MakePlural_Marshal(m jsn.Marshaler, val *MakePlural) (err error) {
 
 // ManyToMany
 type ManyToMany struct {
-	Kinds      PluralKinds `if:"label=_"`
-	OtherKinds PluralKinds `if:"label=other_kinds"`
+	Kinds      rt.TextEval `if:"label=_"`
+	OtherKinds rt.TextEval `if:"label=other_kinds"`
 	Markup     map[string]any
 }
 
@@ -3729,14 +3626,14 @@ func ManyToMany_Marshal(m jsn.Marshaler, val *ManyToMany) (err error) {
 	if err = m.MarshalBlock(ManyToMany_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ManyToMany_Field_Kinds)
 		if e0 == nil {
-			e0 = PluralKinds_Marshal(m, &val.Kinds)
+			e0 = rt.TextEval_Marshal(m, &val.Kinds)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ManyToMany_Field_Kinds))
 		}
 		e1 := m.MarshalKey("other_kinds", ManyToMany_Field_OtherKinds)
 		if e1 == nil {
-			e1 = PluralKinds_Marshal(m, &val.OtherKinds)
+			e1 = rt.TextEval_Marshal(m, &val.OtherKinds)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ManyToMany_Field_OtherKinds))
@@ -3748,8 +3645,8 @@ func ManyToMany_Marshal(m jsn.Marshaler, val *ManyToMany) (err error) {
 
 // ManyToOne
 type ManyToOne struct {
-	Kinds  PluralKinds  `if:"label=_"`
-	Kind   SingularKind `if:"label=kind"`
+	Kinds  rt.TextEval `if:"label=_"`
+	Kind   rt.TextEval `if:"label=kind"`
 	Markup map[string]any
 }
 
@@ -3837,14 +3734,14 @@ func ManyToOne_Marshal(m jsn.Marshaler, val *ManyToOne) (err error) {
 	if err = m.MarshalBlock(ManyToOne_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", ManyToOne_Field_Kinds)
 		if e0 == nil {
-			e0 = PluralKinds_Marshal(m, &val.Kinds)
+			e0 = rt.TextEval_Marshal(m, &val.Kinds)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ManyToOne_Field_Kinds))
 		}
 		e1 := m.MarshalKey("kind", ManyToOne_Field_Kind)
 		if e1 == nil {
-			e1 = SingularKind_Marshal(m, &val.Kind)
+			e1 = rt.TextEval_Marshal(m, &val.Kind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", ManyToOne_Field_Kind))
@@ -4744,8 +4641,8 @@ func NumberField_Marshal(m jsn.Marshaler, val *NumberField) (err error) {
 
 // OneToMany
 type OneToMany struct {
-	Kind   SingularKind `if:"label=_"`
-	Kinds  PluralKinds  `if:"label=kinds"`
+	Kind   rt.TextEval `if:"label=_"`
+	Kinds  rt.TextEval `if:"label=kinds"`
 	Markup map[string]any
 }
 
@@ -4833,14 +4730,14 @@ func OneToMany_Marshal(m jsn.Marshaler, val *OneToMany) (err error) {
 	if err = m.MarshalBlock(OneToMany_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", OneToMany_Field_Kind)
 		if e0 == nil {
-			e0 = SingularKind_Marshal(m, &val.Kind)
+			e0 = rt.TextEval_Marshal(m, &val.Kind)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", OneToMany_Field_Kind))
 		}
 		e1 := m.MarshalKey("kinds", OneToMany_Field_Kinds)
 		if e1 == nil {
-			e1 = PluralKinds_Marshal(m, &val.Kinds)
+			e1 = rt.TextEval_Marshal(m, &val.Kinds)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", OneToMany_Field_Kinds))
@@ -4852,8 +4749,8 @@ func OneToMany_Marshal(m jsn.Marshaler, val *OneToMany) (err error) {
 
 // OneToOne
 type OneToOne struct {
-	Kind      SingularKind `if:"label=_"`
-	OtherKind SingularKind `if:"label=other_kind"`
+	Kind      rt.TextEval `if:"label=_"`
+	OtherKind rt.TextEval `if:"label=other_kind"`
 	Markup    map[string]any
 }
 
@@ -4941,14 +4838,14 @@ func OneToOne_Marshal(m jsn.Marshaler, val *OneToOne) (err error) {
 	if err = m.MarshalBlock(OneToOne_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", OneToOne_Field_Kind)
 		if e0 == nil {
-			e0 = SingularKind_Marshal(m, &val.Kind)
+			e0 = rt.TextEval_Marshal(m, &val.Kind)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", OneToOne_Field_Kind))
 		}
 		e1 := m.MarshalKey("other_kind", OneToOne_Field_OtherKind)
 		if e1 == nil {
-			e1 = SingularKind_Marshal(m, &val.OtherKind)
+			e1 = rt.TextEval_Marshal(m, &val.OtherKind)
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", OneToOne_Field_OtherKind))
@@ -4960,7 +4857,7 @@ func OneToOne_Marshal(m jsn.Marshaler, val *OneToOne) (err error) {
 
 // PairedAction
 type PairedAction struct {
-	Kinds  PluralKinds `if:"label=_"`
+	Kinds  rt.TextEval `if:"label=_"`
 	Markup map[string]any
 }
 
@@ -5047,7 +4944,7 @@ func PairedAction_Marshal(m jsn.Marshaler, val *PairedAction) (err error) {
 	if err = m.MarshalBlock(PairedAction_Flow{val}); err == nil {
 		e0 := m.MarshalKey("", PairedAction_Field_Kinds)
 		if e0 == nil {
-			e0 = PluralKinds_Marshal(m, &val.Kinds)
+			e0 = rt.TextEval_Marshal(m, &val.Kinds)
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", PairedAction_Field_Kinds))
@@ -5339,81 +5236,6 @@ func PatternType_Repeats_Marshal(m jsn.Marshaler, vals *[]PatternType) error {
 func PatternType_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PatternType) (err error) {
 	if len(*pv) > 0 || !m.IsEncoding() {
 		err = PatternType_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// PluralKinds requires a user-specified string.
-type PluralKinds struct {
-	Str string
-}
-
-func (op *PluralKinds) String() string {
-	return op.Str
-}
-
-func (*PluralKinds) Compose() composer.Spec {
-	return composer.Spec{
-		Name:        PluralKinds_Type,
-		Uses:        composer.Type_Str,
-		OpenStrings: true,
-	}
-}
-
-const PluralKinds_Type = "plural_kinds"
-
-func (op *PluralKinds) Marshal(m jsn.Marshaler) error {
-	return PluralKinds_Marshal(m, op)
-}
-
-func PluralKinds_Optional_Marshal(m jsn.Marshaler, val *PluralKinds) (err error) {
-	var zero PluralKinds
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = PluralKinds_Marshal(m, val)
-	}
-	return
-}
-
-func PluralKinds_Marshal(m jsn.Marshaler, val *PluralKinds) (err error) {
-	return m.MarshalValue(PluralKinds_Type, &val.Str)
-}
-
-type PluralKinds_Slice []PluralKinds
-
-func (op *PluralKinds_Slice) GetType() string { return PluralKinds_Type }
-
-func (op *PluralKinds_Slice) Marshal(m jsn.Marshaler) error {
-	return PluralKinds_Repeats_Marshal(m, (*[]PluralKinds)(op))
-}
-
-func (op *PluralKinds_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *PluralKinds_Slice) SetSize(cnt int) {
-	var els []PluralKinds
-	if cnt >= 0 {
-		els = make(PluralKinds_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *PluralKinds_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return PluralKinds_Marshal(m, &(*op)[i])
-}
-
-func PluralKinds_Repeats_Marshal(m jsn.Marshaler, vals *[]PluralKinds) error {
-	return jsn.RepeatBlock(m, (*PluralKinds_Slice)(vals))
-}
-
-func PluralKinds_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]PluralKinds) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = PluralKinds_Repeats_Marshal(m, pv)
 	}
 	return
 }
@@ -6091,183 +5913,6 @@ func ShuffleText_Marshal(m jsn.Marshaler, val *ShuffleText) (err error) {
 		}
 		if e0 != nil && e0 != jsn.Missing {
 			m.Error(errutil.New(e0, "in flow at", ShuffleText_Field_Parts))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// SingularKind requires a user-specified string.
-type SingularKind struct {
-	Str string
-}
-
-func (op *SingularKind) String() string {
-	return op.Str
-}
-
-func (*SingularKind) Compose() composer.Spec {
-	return composer.Spec{
-		Name:        SingularKind_Type,
-		Uses:        composer.Type_Str,
-		OpenStrings: true,
-	}
-}
-
-const SingularKind_Type = "singular_kind"
-
-func (op *SingularKind) Marshal(m jsn.Marshaler) error {
-	return SingularKind_Marshal(m, op)
-}
-
-func SingularKind_Optional_Marshal(m jsn.Marshaler, val *SingularKind) (err error) {
-	var zero SingularKind
-	if enc := m.IsEncoding(); !enc || val.Str != zero.Str {
-		err = SingularKind_Marshal(m, val)
-	}
-	return
-}
-
-func SingularKind_Marshal(m jsn.Marshaler, val *SingularKind) (err error) {
-	return m.MarshalValue(SingularKind_Type, &val.Str)
-}
-
-type SingularKind_Slice []SingularKind
-
-func (op *SingularKind_Slice) GetType() string { return SingularKind_Type }
-
-func (op *SingularKind_Slice) Marshal(m jsn.Marshaler) error {
-	return SingularKind_Repeats_Marshal(m, (*[]SingularKind)(op))
-}
-
-func (op *SingularKind_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *SingularKind_Slice) SetSize(cnt int) {
-	var els []SingularKind
-	if cnt >= 0 {
-		els = make(SingularKind_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *SingularKind_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return SingularKind_Marshal(m, &(*op)[i])
-}
-
-func SingularKind_Repeats_Marshal(m jsn.Marshaler, vals *[]SingularKind) error {
-	return jsn.RepeatBlock(m, (*SingularKind_Slice)(vals))
-}
-
-func SingularKind_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SingularKind) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = SingularKind_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-// SingularNoun A specific person, place or thing.
-// When used with a determiner typically implies a common noun ( 'the cat', 'some fish', 'a snack'. )
-// When used alone usually implies a proper noun ( 'Hikaru', 'Genesis', or 'Beta Regula One'. )
-type SingularNoun struct {
-	Name   string `if:"label=_,type=text"`
-	Markup map[string]any
-}
-
-func (*SingularNoun) Compose() composer.Spec {
-	return composer.Spec{
-		Name: SingularNoun_Type,
-		Uses: composer.Type_Flow,
-		Lede: "noun",
-	}
-}
-
-const SingularNoun_Type = "singular_noun"
-const SingularNoun_Field_Name = "$NAME"
-
-func (op *SingularNoun) Marshal(m jsn.Marshaler) error {
-	return SingularNoun_Marshal(m, op)
-}
-
-type SingularNoun_Slice []SingularNoun
-
-func (op *SingularNoun_Slice) GetType() string { return SingularNoun_Type }
-
-func (op *SingularNoun_Slice) Marshal(m jsn.Marshaler) error {
-	return SingularNoun_Repeats_Marshal(m, (*[]SingularNoun)(op))
-}
-
-func (op *SingularNoun_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *SingularNoun_Slice) SetSize(cnt int) {
-	var els []SingularNoun
-	if cnt >= 0 {
-		els = make(SingularNoun_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *SingularNoun_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return SingularNoun_Marshal(m, &(*op)[i])
-}
-
-func SingularNoun_Repeats_Marshal(m jsn.Marshaler, vals *[]SingularNoun) error {
-	return jsn.RepeatBlock(m, (*SingularNoun_Slice)(vals))
-}
-
-func SingularNoun_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]SingularNoun) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = SingularNoun_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type SingularNoun_Flow struct{ ptr *SingularNoun }
-
-func (n SingularNoun_Flow) GetType() string      { return SingularNoun_Type }
-func (n SingularNoun_Flow) GetLede() string      { return "noun" }
-func (n SingularNoun_Flow) GetFlow() interface{} { return n.ptr }
-func (n SingularNoun_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*SingularNoun); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func SingularNoun_Optional_Marshal(m jsn.Marshaler, pv **SingularNoun) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = SingularNoun_Marshal(m, *pv)
-	} else if !enc {
-		var v SingularNoun
-		if err = SingularNoun_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func SingularNoun_Marshal(m jsn.Marshaler, val *SingularNoun) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(SingularNoun_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", SingularNoun_Field_Name)
-		if e0 == nil {
-			e0 = prim.Text_Unboxed_Marshal(m, &val.Name)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", SingularNoun_Field_Name))
 		}
 		m.EndBlock()
 	}
@@ -7121,6 +6766,7 @@ var Slats = []composer.Composer{
 	(*DefineNouns)(nil),
 	(*DefineOtherRelatives)(nil),
 	(*DefinePattern)(nil),
+	(*DefineRelation)(nil),
 	(*DefineRelatives)(nil),
 	(*DefineScene)(nil),
 	(*DefineTraits)(nil),
@@ -7128,10 +6774,8 @@ var Slats = []composer.Composer{
 	(*EventHandler)(nil),
 	(*EventName)(nil),
 	(*EventPhase)(nil),
-	(*EventTarget)(nil),
 	(*ExtendPattern)(nil),
 	(*GrammarDecl)(nil),
-	(*KindOfRelation)(nil),
 	(*MakeOpposite)(nil),
 	(*MakePlural)(nil),
 	(*ManyToMany)(nil),
@@ -7150,15 +6794,12 @@ var Slats = []composer.Composer{
 	(*PatternFlags)(nil),
 	(*PatternRule)(nil),
 	(*PatternType)(nil),
-	(*PluralKinds)(nil),
 	(*RecordField)(nil),
 	(*RecordListField)(nil),
 	(*RelationCardinality)(nil),
 	(*SayResponse)(nil),
 	(*SayTemplate)(nil),
 	(*ShuffleText)(nil),
-	(*SingularKind)(nil),
-	(*SingularNoun)(nil),
 	(*StoppingText)(nil),
 	(*StoryBreak)(nil),
 	(*StoryFile)(nil),
@@ -7179,13 +6820,10 @@ var Signatures = map[uint64]interface{}{
 	11796688776587655409: (*CommonAction)(nil),         /* CommonAction:actionContext: */
 	9237333280207697554:  (*EventName)(nil),            /* EventName: */
 	10643959568823028160: (*EventPhase)(nil),           /* EventPhase: */
-	18010503397334720257: (*EventTarget)(nil),          /* EventTarget kinds: */
-	14691585264072030736: (*EventTarget)(nil),          /* EventTarget noun: */
 	17563761532337350103: (*ManyToMany)(nil),           /* ManyToMany:otherKinds: */
 	4129025779762507875:  (*ManyToOne)(nil),            /* ManyToOne:kind: */
 	13422667607848275221: (*MapConnection)(nil),        /* MapConnection: */
 	691606134106503892:   (*MapDirection)(nil),         /* MapDirection: */
-	571163134278291657:   (*SingularNoun)(nil),         /* Noun: */
 	17075866407822548206: (*OneToMany)(nil),            /* OneToMany:kinds: */
 	13766274136867271026: (*OneToOne)(nil),             /* OneToOne:otherKind: */
 	18143853777230560632: (*PairedAction)(nil),         /* PairedAction: */
@@ -7193,12 +6831,10 @@ var Signatures = map[uint64]interface{}{
 	10703761093736583840: (*PatternRule)(nil),          /* PatternRule:does: */
 	1493717172765332753:  (*PatternRule)(nil),          /* PatternRule:flags:does: */
 	8871095629143932769:  (*PatternType)(nil),          /* PatternType: */
-	6559594854670367592:  (*PluralKinds)(nil),          /* PluralKinds: */
 	14287924768394488954: (*RelationCardinality)(nil),  /* RelationCardinality manyToMany: */
 	10453256446593418889: (*RelationCardinality)(nil),  /* RelationCardinality manyToOne: */
 	18092929693239672593: (*RelationCardinality)(nil),  /* RelationCardinality oneToMany: */
 	5587008972147064084:  (*RelationCardinality)(nil),  /* RelationCardinality oneToOne: */
-	12747929101973989672: (*SingularKind)(nil),         /* SingularKind: */
 	5991962903091297123:  (*StoryFile)(nil),            /* Tapestry: */
 	11670818074991137908: (*TestName)(nil),             /* TestName: */
 	8990910809673849454:  (*EventHandler)(nil),         /* With:event:provides:rules: */
@@ -7233,20 +6869,28 @@ var Signatures = map[uint64]interface{}{
 	17317068367254309973: (*DefineMacro)(nil),          /* story_statement=Define macro:requires:result:with: */
 	4708575879451717005:  (*DefineNouns)(nil),          /* execute=Define nouns:as: */
 	7397461044941158073:  (*DefineNouns)(nil),          /* story_statement=Define nouns:as: */
-	5682348276020650768:  (*DefineRelatives)(nil),      /* execute=Define nouns:as:relation:otherNouns: */
-	15827986568629578700: (*DefineRelatives)(nil),      /* story_statement=Define nouns:as:relation:otherNouns: */
+	16220995888003687425: (*DefineRelatives)(nil),      /* execute=Define nouns:as:relativeTo:otherNouns: */
+	1103497420051368541:  (*DefineRelatives)(nil),      /* story_statement=Define nouns:as:relativeTo:otherNouns: */
 	11310404142062902510: (*DefineNounTraits)(nil),     /* execute=Define nouns:as:traits: */
 	15286672803702417298: (*DefineNounTraits)(nil),     /* story_statement=Define nouns:as:traits: */
-	1721080043439298752:  (*DefineRelatives)(nil),      /* execute=Define nouns:relation:otherNouns: */
-	3677325358342499188:  (*DefineRelatives)(nil),      /* story_statement=Define nouns:relation:otherNouns: */
+	9839172640820177073:  (*DefineRelatives)(nil),      /* execute=Define nouns:relativeTo:otherNouns: */
+	7383237871303366677:  (*DefineRelatives)(nil),      /* story_statement=Define nouns:relativeTo:otherNouns: */
 	9505217264701509662:  (*DefineNounTraits)(nil),     /* execute=Define nouns:traits: */
 	15794171433650329114: (*DefineNounTraits)(nil),     /* story_statement=Define nouns:traits: */
 	15358769559004192942: (*DefinePattern)(nil),        /* execute=Define pattern:requires:result:provides:withRules: */
 	2733154260078704538:  (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:result:provides:withRules: */
 	13567867628780565820: (*DefinePattern)(nil),        /* execute=Define pattern:requires:result:withRules: */
 	13056176094891343360: (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:result:withRules: */
-	17765432678319840138: (*DefineOtherRelatives)(nil), /* execute=Define relation:nouns:otherNouns: */
-	3057287383316085006:  (*DefineOtherRelatives)(nil), /* story_statement=Define relation:nouns:otherNouns: */
+	10321772035226997803: (*DefineRelation)(nil),       /* execute=Define relation:cardinality manyToMany: */
+	14085782312273513943: (*DefineRelation)(nil),       /* story_statement=Define relation:cardinality manyToMany: */
+	10263803882772415534: (*DefineRelation)(nil),       /* execute=Define relation:cardinality manyToOne: */
+	13547088785328938282: (*DefineRelation)(nil),       /* story_statement=Define relation:cardinality manyToOne: */
+	14579122932423107502: (*DefineRelation)(nil),       /* execute=Define relation:cardinality oneToMany: */
+	8378907640508804698:  (*DefineRelation)(nil),       /* story_statement=Define relation:cardinality oneToMany: */
+	7001459786598567501:  (*DefineRelation)(nil),       /* execute=Define relation:cardinality oneToOne: */
+	13361645062989794537: (*DefineRelation)(nil),       /* story_statement=Define relation:cardinality oneToOne: */
+	2570506749320892411:  (*DefineOtherRelatives)(nil), /* execute=Define relativeTo:nouns:otherNouns: */
+	16389453623741136831: (*DefineOtherRelatives)(nil), /* story_statement=Define relativeTo:nouns:otherNouns: */
 	5110919797933301972:  (*DefineScene)(nil),          /* story_statement=Define scene:dependsOn:with: */
 	13479298094295759568: (*DefineScene)(nil),          /* story_statement=Define scene:with: */
 	5891130802416685089:  (*DefineTraits)(nil),         /* execute=Define traits:as: */
@@ -7271,18 +6915,8 @@ var Signatures = map[uint64]interface{}{
 	2625420806444094675:  (*MapHeading)(nil),           /* story_statement=Heading:from:and:otherRoom: */
 	5055073108490323709:  (*MapHeading)(nil),           /* execute=Heading:from:via:and:otherRoom: */
 	9997819433665596617:  (*MapHeading)(nil),           /* story_statement=Heading:from:via:and:otherRoom: */
-	11298072733429272983: (*KindOfRelation)(nil),       /* execute=KindOfRelation:cardinality manyToMany: */
-	14551249057549655331: (*KindOfRelation)(nil),       /* story_statement=KindOfRelation:cardinality manyToMany: */
-	9035327882324048362:  (*KindOfRelation)(nil),       /* execute=KindOfRelation:cardinality manyToOne: */
-	3383078616901163718:  (*KindOfRelation)(nil),       /* story_statement=KindOfRelation:cardinality manyToOne: */
-	1519703789264796442:  (*KindOfRelation)(nil),       /* execute=KindOfRelation:cardinality oneToMany: */
-	5643087631915217830:  (*KindOfRelation)(nil),       /* story_statement=KindOfRelation:cardinality oneToMany: */
-	17039693765620696745: (*KindOfRelation)(nil),       /* execute=KindOfRelation:cardinality oneToOne: */
-	5160168163884592453:  (*KindOfRelation)(nil),       /* story_statement=KindOfRelation:cardinality oneToOne: */
-	6487553415967640760:  (*EventBlock)(nil),           /* execute=Listen kinds:handlers: */
-	17526933228095224780: (*EventBlock)(nil),           /* story_statement=Listen kinds:handlers: */
-	8021277241735277711:  (*EventBlock)(nil),           /* execute=Listen noun:handlers: */
-	12304970653546840411: (*EventBlock)(nil),           /* story_statement=Listen noun:handlers: */
+	8614414075732041311:  (*EventBlock)(nil),           /* execute=Listen:handlers: */
+	9724607381207436691:  (*EventBlock)(nil),           /* story_statement=Listen:handlers: */
 	6624124429048254998:  (*MakeOpposite)(nil),         /* execute=Make:opposite: */
 	12130342806058120266: (*MakeOpposite)(nil),         /* story_statement=Make:opposite: */
 	14758176820705861311: (*MakePlural)(nil),           /* execute=Make:plural: */

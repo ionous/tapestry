@@ -60,27 +60,28 @@ func TestCompactDecode(t *testing.T) {
 var jsnTestIf string
 
 // TestAnonymousSwap - unit test for broken parsing case
-func TestAnonymousSwap(t *testing.T) {
-	var jsnTestIf = `{"Listen kinds:handlers:": ["things",[]]}`
-	want := story.EventBlock{
-		Target: story.EventTarget{
-			Value: &story.PluralKinds{
-				Str: "things",
-			},
-			Choice: story.EventTarget_Kinds_Opt,
-		},
-		Handlers: make([]story.EventHandler, 0, 0),
-	}
-	//
-	var have story.EventBlock
-	if e := story.Decode(&have, []byte(jsnTestIf), story.AllSignatures); e != nil {
-		pretty.Println(have)
-		t.Fatal(e)
-	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
-		pretty.Println(have)
-		t.Fatal(diff)
-	}
-}
+// -- EventTarget no longer exists
+// func TestAnonymousSwap(t *testing.T) {
+// 	var jsnTestIf = `{"Listen kinds:handlers:": ["things",[]]}`
+// 	want := story.EventBlock{
+// 		Target: story.EventTarget{
+// 			Value: &story.PluralKinds{
+// 				Str: "things",
+// 			},
+// 			Choice: story.EventTarget_Kinds_Opt,
+// 		},
+// 		Handlers: make([]story.EventHandler, 0, 0),
+// 	}
+// 	//
+// 	var have story.EventBlock
+// 	if e := story.Decode(&have, []byte(jsnTestIf), story.AllSignatures); e != nil {
+// 		pretty.Println(have)
+// 		t.Fatal(e)
+// 	} else if diff := pretty.Diff(&want, &have); len(diff) != 0 {
+// 		pretty.Println(have)
+// 		t.Fatal(diff)
+// 	}
+// }
 
 func TestMissingSlot(t *testing.T) {
 	in := `{"Join parts:":["one","two","three"]}`

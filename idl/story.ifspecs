@@ -154,7 +154,7 @@
                     "Term:name:type:": [
                       "_",
                       "kind",
-                      "singular_kind"
+                      "text_eval"
                     ]
                   }
                 ]
@@ -342,7 +342,7 @@
                     "Term:name:type:": [
                       "_",
                       "kind",
-                      "singular_kind"
+                      "text_eval"
                     ]
                   },
                   {
@@ -409,31 +409,7 @@
             }
           ]
         },
-        {
-          "--": [
-            "A specific person, place or thing.",
-            "When used with a determiner typically implies a common noun ( 'the cat', 'some fish', 'a snack'. )",
-            "When used alone usually implies a proper noun ( 'Hikaru', 'Genesis', or 'Beta Regula One'. )"
-          ],
-          "Spec:groups:with flow:": [
-            "singular_noun",
-            "mosaic:inline_block",
-            {
-              "Flow:uses:": [
-                "noun",
-                [
-                  {
-                    "Term:name:type:": [
-                      "_",
-                      "name",
-                      "text"
-                    ]
-                  }
-                ]
-              ]
-            }
-          ]
-        },
+       
         {
           "--": [
             "Declare event listeners.",
@@ -455,7 +431,7 @@
                     "Term:name:type:": [
                       "_",
                       "target",
-                      "event_target"
+                      "text_eval"
                     ]
                   },
                   {
@@ -547,31 +523,6 @@
           ]
         },
         {
-          "--": [
-            "fix: it probably makes more sense to have a simple text field and have weave figure out whether a kind or a noun is being referenced."
-          ],
-          "Spec:groups:with swap:": [
-            "event_target",
-            "events",
-            {
-              "Swap between:": [
-                {
-                  "Pick:type:": [
-                    "kinds",
-                    "plural_kinds"
-                  ]
-                },
-                {
-                  "Pick:type:": [
-                    "noun",
-                    "singular_noun"
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
           "--": "Read what the player types and turn it into actions.",
           "Spec:slots:groups:with flow:": [
             "grammar_decl",
@@ -598,21 +549,20 @@
         },
         {
           "Spec:slots:groups:with flow:": [
-            "kind_of_relation",
+            "define_relation",
             [
               "story_statement",
               "execute"
             ],
             "relations",
             {
-              "Flow phrase:uses:": [
-                "{$relation} relates {$cardinality}",
+              "Flow:uses:": [
+              	"define",
                 [
                   {
-                    "Term:name:type:": [
-                      "_",
+                    "Term:type:": [
                       "relation",
-                      "relation_name"
+                      "text_eval"
                     ]
                   },
                   {
@@ -764,13 +714,13 @@
                     "Term:name:type:": [
                       "_",
                       "kinds",
-                      "plural_kinds"
+                      "text_eval"
                     ]
                   },
                   {
                     "Term:type:": [
                       "other_kinds",
-                      "plural_kinds"
+                      "text_eval"
                     ]
                   }
                 ]
@@ -790,13 +740,13 @@
                     "Term:name:type:": [
                       "_",
                       "kinds",
-                      "plural_kinds"
+                      "text_eval"
                     ]
                   },
                   {
                     "Term:type:": [
                       "kind",
-                      "singular_kind"
+                      "text_eval"
                     ]
                   }
                 ]
@@ -1135,13 +1085,13 @@
                     "Term:name:type:": [
                       "_",
                       "kind",
-                      "singular_kind"
+                      "text_eval"
                     ]
                   },
                   {
                     "Term:type:": [
                       "kinds",
-                      "plural_kinds"
+                      "text_eval"
                     ]
                   }
                 ]
@@ -1161,13 +1111,13 @@
                     "Term:name:type:": [
                       "_",
                       "kind",
-                      "singular_kind"
+                      "text_eval"
                     ]
                   },
                   {
                     "Term:type:": [
                       "other_kind",
-                      "singular_kind"
+                      "text_eval"
                     ]
                   }
                 ]
@@ -1187,7 +1137,7 @@
                     "Term:name:type:": [
                       "_",
                       "kinds",
-                      "plural_kinds"
+                      "text_eval"
                     ]
                   }
                 ]
@@ -1481,16 +1431,6 @@
           ]
         },
         {
-          "--": "The plural name of a type of similar nouns. For example: animals, containers, etc.",
-          "Spec:groups:with str:": [
-            "plural_kinds",
-            "kinds",
-            {
-              "Str uses:": []
-            }
-          ]
-        },
-        {
           "--": "Fields are used to define the members of kinds, records, patterns, and so on.",
           "Spec:with slot:": [
             "field_definition",
@@ -1620,7 +1560,8 @@
                     ]
                   },
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                    	"relative_to",
                       "relation",
                       "text_eval"
                     ]
@@ -1649,7 +1590,8 @@
                 "define",
                 [
                   {
-                    "Term:type:": [
+                    "Term:name:type:": [
+                    	"relative_to",
                       "relation",
                       "text_eval"
                     ]
@@ -1757,16 +1699,6 @@
                   }
                 ]
               ]
-            }
-          ]
-        },
-        {
-          "--": "Describes a type of similar nouns.  For example: an animal, a container, etc.",
-          "Spec:groups:with str:": [
-            "singular_kind",
-            "kinds",
-            {
-              "Str uses:": []
             }
           ]
         },

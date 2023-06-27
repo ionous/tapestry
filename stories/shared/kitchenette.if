@@ -6,7 +6,7 @@
         "Thingaverse",
         [
           {
-            "Define relation:nouns:otherNouns:": [
+            "Define relativeTo:nouns:otherNouns:": [
               "whereabouts",
               "self",
               "the kitchen"
@@ -42,7 +42,7 @@
             ]
           },
           {
-            "Define nouns:relation:otherNouns:": [
+            "Define nouns:relativeTo:otherNouns:": [
               [
                 "the broom",
                 "a hat",
@@ -95,14 +95,14 @@
             ]
           },
           {
-            "Define nouns:relation:otherNouns:": [
+            "Define nouns:relativeTo:otherNouns:": [
               "the cabinet",
               "whereabouts",
               "the kitchen"
             ]
           },
           {
-            "Define nouns:as:relation:otherNouns:": [
+            "Define nouns:as:relativeTo:otherNouns:": [
               [
                 "the book of matches",
                 "a bottle of descaling solution",
@@ -146,7 +146,7 @@
             ]
           },
           {
-            "Define nouns:as:relation:otherNouns:": [
+            "Define nouns:as:relativeTo:otherNouns:": [
               "the shelf",
               "supporter",
               "whereabouts",
@@ -154,7 +154,7 @@
             ]
           },
           {
-            "Define nouns:as:relation:otherNouns:": [
+            "Define nouns:as:relativeTo:otherNouns:": [
               [
                 "a can of tomatoes",
                 "a can of potato leek soup",
@@ -169,7 +169,7 @@
             "--": ""
           },
           {
-            "Define nouns:as:relation:otherNouns:": [
+            "Define nouns:as:relativeTo:otherNouns:": [
               "the counter",
               "supporter",
               "whereabouts",
@@ -187,14 +187,14 @@
             ]
           },
           {
-            "Define nouns:relation:otherNouns:": [
+            "Define nouns:relativeTo:otherNouns:": [
               "the espresso machine",
               "whereabouts",
               "the counter"
             ]
           },
           {
-            "Define nouns:as:relation:otherNouns:": [
+            "Define nouns:as:relativeTo:otherNouns:": [
               "some coffee beans",
               "thing",
               "whereabouts",
@@ -208,7 +208,7 @@
             ]
           },
           {
-            "Define nouns:as:relation:otherNouns:": [
+            "Define nouns:as:relativeTo:otherNouns:": [
               [
                 "a blender",
                 "a mortar"
@@ -219,7 +219,7 @@
             ]
           },
           {
-            "Define nouns:as:relation:otherNouns:": [
+            "Define nouns:as:relativeTo:otherNouns:": [
               "a pestle",
               "thing",
               "whereabouts",

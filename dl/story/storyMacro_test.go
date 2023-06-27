@@ -87,7 +87,7 @@ func addDefaultKinds(n assert.Assertions) (err error) {
 
 var macroStory = &story.StoryFile{
 	StoryStatements: []story.StoryStatement{
-		// &story.KindOfRelation{
+		// &story.DefineRelation{
 		// },
 		&story.DefineMacro{
 			MacroName: core.T("carrier"),

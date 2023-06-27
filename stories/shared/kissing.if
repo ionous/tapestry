@@ -245,7 +245,7 @@
       "--": ""
     },
     {
-      "Listen kinds:handlers:": [
+      "Listen:handlers:": [
         "actors",
         [
           {

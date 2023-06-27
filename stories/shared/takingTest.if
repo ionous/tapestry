@@ -6,7 +6,7 @@
         "Kitchenette",
         [
           {
-            "Define relation:nouns:otherNouns:": [
+            "Define relativeTo:nouns:otherNouns:": [
               "whereabouts",
               "self",
               "the purse"
@@ -16,7 +16,7 @@
             "--": ""
           },
           {
-            "Define relation:nouns:otherNouns:": [
+            "Define relativeTo:nouns:otherNouns:": [
               "whereabouts",
               [
                 "Mildred",
@@ -29,7 +29,7 @@
             "--": ""
           },
           {
-            "Define relation:nouns:otherNouns:": [
+            "Define relativeTo:nouns:otherNouns:": [
               "whereabouts",
               "the coin",
               "self"
@@ -39,7 +39,7 @@
             "--": ""
           },
           {
-            "Define relation:nouns:otherNouns:": [
+            "Define relativeTo:nouns:otherNouns:": [
               "whereabouts",
               "the empire apple",
               "Mildred"
@@ -49,7 +49,7 @@
             "--": ""
           },
           {
-            "Define relation:nouns:otherNouns:": [
+            "Define relativeTo:nouns:otherNouns:": [
               "whereabouts",
               "the coffee",
               "the machine"

@@ -39,11 +39,6 @@ const (
 	RequireAll
 )
 
-// assert.Facts?
-// fix: more gl like?
-// in that case would ancestor be primary or kind?
-// field might work  nicer that way... beginLocals, beginParams, etc.
-// the init and noun value could maybe be a write value
 type Assertions interface {
 	AssertDomainStart(name string, requires []string) error
 	AssertDomainEnd() error

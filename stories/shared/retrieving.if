@@ -297,7 +297,7 @@
       "--": ""
     },
     {
-      "Listen kinds:handlers:": [
+      "Listen:handlers:": [
         "things",
         [
           {

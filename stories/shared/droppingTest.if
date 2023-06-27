@@ -6,7 +6,7 @@
         "Kitchenette",
         [
           {
-            "Define relation:nouns:otherNouns:": [
+            "Define relativeTo:nouns:otherNouns:": [
               "whereabouts",
               "the knife",
               "self"

@@ -6,7 +6,7 @@
         "Kitchenette",
         [
           {
-            "Define relation:nouns:otherNouns:": [
+            "Define relativeTo:nouns:otherNouns:": [
               "whereabouts",
               [
                 "the coffee",
@@ -19,7 +19,7 @@
             ]
           },
           {
-            "Define relation:nouns:otherNouns:": [
+            "Define relativeTo:nouns:otherNouns:": [
               "whereabouts",
               "Mildred",
               "the kitchen"
