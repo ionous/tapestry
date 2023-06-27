@@ -45,13 +45,21 @@ type Catalog struct {
 type domainNoun struct{ domain, noun string }
 
 func NewCatalog(db *sql.DB) *Catalog {
-	return NewCatalogWithWarnings(db, nil)
+	return NewCatalogWithWarnings(db, nil, nil)
 }
 
-func NewCatalogWithWarnings(db *sql.DB, warn func(error)) *Catalog {
-	qx, e := qdb.NewQueryx(db)
-	if e != nil {
-		panic(e)
+func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catalog {
+	if run == nil {
+		qx, e := qdb.NewQueryx(db)
+		if e != nil {
+			panic(e)
+		}
+		run = qna.NewRuntimeOptions(
+			log.Writer(),
+			qx,
+			qna.DecodeNone("unsupported decoder"),
+			qna.NewOptions(),
+		)
 	}
 	m, e := mdl.NewModeler(db)
 	if e != nil {
@@ -72,11 +80,7 @@ func NewCatalogWithWarnings(db *sql.DB, warn func(error)) *Catalog {
 		db:          tables.NewCache(db),
 		domains:     make(map[string]*Domain),
 		writer:      m,
-		run: qna.NewRuntimeOptions(
-			log.Writer(),
-			qx,
-			qna.DecodeNone("unsupported decoder"),
-			qna.NewOptions()),
+		run:         run,
 	}
 }
 

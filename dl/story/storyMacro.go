@@ -3,6 +3,7 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/dl/core"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -43,7 +44,7 @@ func (op *DefineMacro) Weave(cat *weave.Catalog) (err error) {
 					}); e != nil {
 						err = e
 					} else {
-						err = cat.AssertRule(macro, "", nil, 0, op.MacroStatements)
+						err = cat.AssertRule(macro, "", &core.Always{}, 0, op.MacroStatements)
 					}
 				}
 			}

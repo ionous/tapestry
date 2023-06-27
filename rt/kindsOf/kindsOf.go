@@ -22,7 +22,7 @@ const (
 )
 
 var DefaultKinds = []Kinds{
-	Aspect, Kind, Macro, Pattern, Record, Relation, Response, Action, Event,
+	Aspect, Kind, Pattern, Record, Relation, Response, Action, Event, Macro,
 }
 
 func (k Kinds) Parent() (ret Kinds) {

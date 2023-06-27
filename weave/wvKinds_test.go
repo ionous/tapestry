@@ -66,7 +66,7 @@ func TestKindRefining(t *testing.T) {
 
 // this is considered okay - it's in the same tree
 func TestKindDelayedRefining(t *testing.T) {
-	dt := testweave.NewWeaverShuffle(t.Name(), false)
+	dt := testweave.NewWeaverOptions(t.Name(), nil, false)
 	defer dt.Close()
 	dt.MakeDomain(dd("d"), makeKinds(
 		"a", "",

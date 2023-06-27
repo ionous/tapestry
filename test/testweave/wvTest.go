@@ -8,6 +8,7 @@ import (
 	"strings"
 	"testing"
 
+	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/eph"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
@@ -16,10 +17,10 @@ import (
 )
 
 func NewWeaver(name string) *Weaver {
-	return NewWeaverShuffle(name, true)
+	return NewWeaverOptions(name, nil, true)
 }
 
-func NewWeaverShuffle(name string, shuffle bool) *Weaver {
+func NewWeaverOptions(name string, makeRun func(db *sql.DB) rt.Runtime, shuffle bool) *Weaver {
 	path, driver := testdb.Memory, ""
 	// if you run the test as go test ... -args write
 	// it'll write the db out in your user directory
@@ -27,10 +28,14 @@ func NewWeaverShuffle(name string, shuffle bool) *Weaver {
 		path = ""
 	}
 	db := testdb.Open(name, path, driver)
+	var run rt.Runtime
+	if makeRun != nil {
+		run = makeRun(db)
+	}
 	return &Weaver{
 		name:      name,
 		db:        db,
-		cat:       weave.NewCatalogWithWarnings(db, LogWarning),
+		cat:       weave.NewCatalogWithWarnings(db, run, LogWarning),
 		noShuffle: !shuffle,
 	}
 }

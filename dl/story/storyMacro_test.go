@@ -1,6 +1,8 @@
 package story_test
 
 import (
+	"database/sql"
+	"log"
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
@@ -8,6 +10,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/list"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/qna"
+	"git.sr.ht/~ionous/tapestry/qna/decode"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/test/testweave"
@@ -16,7 +21,19 @@ import (
 
 // generate ephemera for macros
 func TestMacros(t *testing.T) {
-	dt := testweave.NewWeaver(t.Name())
+	// ugh. this setup.
+	dt := testweave.NewWeaverOptions(t.Name(), func(db *sql.DB) rt.Runtime {
+		qx, e := qdb.NewQueryx(db)
+		if e != nil {
+			panic(e)
+		}
+		return qna.NewRuntimeOptions(
+			log.Writer(),
+			qx,
+			decode.NewDecoder(story.AllSignatures),
+			qna.NewOptions(),
+		)
+	}, false)
 	defer dt.Close()
 	cat := dt.Catalog()
 	//
@@ -70,6 +87,8 @@ func addDefaultKinds(n assert.Assertions) (err error) {
 
 var macroStory = &story.StoryFile{
 	StoryStatements: []story.StoryStatement{
+		// &story.KindOfRelation{
+		// },
 		&story.DefineMacro{
 			MacroName: core.T("carrier"),
 			Params: []story.FieldDefinition{
