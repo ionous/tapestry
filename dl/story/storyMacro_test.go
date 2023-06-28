@@ -17,6 +17,7 @@ import (
 	"github.com/kr/pretty"
 )
 
+// use a macro to define a relationship between nouns
 func TestMacros(t *testing.T) {
 	// ugh. this setup.
 	dt := testweave.NewWeaverOptions(t.Name(), func(db *sql.DB) rt.Runtime {
@@ -50,7 +51,7 @@ func TestMacros(t *testing.T) {
 		if out, e := dt.ReadPairs(); e != nil {
 			t.Fatal(e)
 		} else if diff := pretty.Diff(out, []string{
-			"testing:whereabouts:hershel:scissors"
+			"testing:whereabouts:hershel:scissors",
 		}); len(diff) > 0 {
 			t.Log(pretty.Sprint(out))
 			t.Fatal(diff)
