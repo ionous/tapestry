@@ -24,7 +24,7 @@ const (
 // however, trailing anonymous nouns are allowed. ( ex. "in the garage is a car" )
 func genNouns(out *[]Noun, ws []Word, flag genFlag) (err error) {
 	for nextName := ws; len(nextName) > 0; {
-		if _, skip := known.determiners.findPrefix(nextName); skip >= len(nextName) {
+		if skip := known.FindDeterminer(nextName); skip >= len(nextName) {
 			err = makeWordError(nextName[0], "expected some sort of name")
 		} else {
 			det, name := nextName[:skip], nextName[skip:]
@@ -90,7 +90,7 @@ func genNouns(out *[]Noun, ws []Word, flag genFlag) (err error) {
 func chopName(ws []Word) (retDet, retName []Word, err error) {
 	if cnt := len(ws); cnt == 0 {
 		err = errutil.New("empty name")
-	} else if _, skip := known.determiners.findPrefix(ws); skip >= len(ws) {
+	} else if skip := known.FindDeterminer(ws); skip >= len(ws) {
 		err = makeWordError(ws[0], "no name found")
 	} else {
 		retDet, retName = ws[:skip], ws[skip:]

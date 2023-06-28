@@ -1,7 +1,6 @@
 package grok
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/ionous/errutil"
@@ -413,7 +412,9 @@ func resultMap(in Results) map[string]any {
 	m := make(map[string]any)
 	nounsIntoMap(m, "sources", in.Sources)
 	nounsIntoMap(m, "targets", in.Targets)
-	wordsIntoMap(m, "macro", in.Macro)
+	if str := in.Macro.String(); len(str) > 0 {
+		m["macro"] = str
+	}
 	return m
 }
 
@@ -458,15 +459,4 @@ func wordsIntoMap(m map[string]any, field string, w []Word) {
 	if len(w) > 0 {
 		m[field] = wordsToString(w)
 	}
-}
-
-func wordsToString(w []Word) (ret string) {
-	var b strings.Builder
-	for i, w := range w {
-		if i > 0 {
-			b.WriteRune(' ')
-		}
-		b.WriteString(w.String())
-	}
-	return b.String()
 }

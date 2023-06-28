@@ -18,18 +18,17 @@ func beingPhrase(out *Results, lhs, rhs []Word) (err error) {
 	} else {
 		// try to find a macro after the traits:
 		afterRightLede := rhs[rightLede.wordCount:]
-		if macro, skipMacro := known.macros.findPrefix(afterRightLede); skipMacro == 0 {
+		if macro, ok := known.FindMacro(afterRightLede); !ok {
 			// case 1. doesn't have a macro:
 			if e := genNouns(&out.Sources, lhs, AllowMany|AllowAnonymous); e != nil {
 				err = errutil.New("parsing subjects", e)
 			}
 		} else {
 			// case 2: found a macro:
-			var macroType macroType
-			out.Macro, macroType = known.macros.get(macro)
-			postMacro := afterRightLede[skipMacro:]
+			out.Macro = macro
+			postMacro := afterRightLede[macro.Width():]
 			var lhsFlag, rhsFlag genFlag
-			switch macroType {
+			switch macro.Type() {
 			case OneToMany, ManyToOne:
 				lhsFlag, rhsFlag = AllowMany|OnlyNamed, OnlyOne|AllowAnonymous
 			case ManyToMany:
@@ -41,7 +40,7 @@ func beingPhrase(out *Results, lhs, rhs []Word) (err error) {
 				err = errutil.New("parsing subject", e)
 			} else {
 				// fix? this branching isnt satisfying
-				if macroType > ManyToOne {
+				if macro.Type() > ManyToOne {
 					if e := genNouns(&out.Targets, postMacro, rhsFlag); e != nil {
 						err = errutil.New("parsing target", e)
 					}

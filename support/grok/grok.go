@@ -1,10 +1,73 @@
 package grok
 
+import "strings"
+
 // fix: should be customizable
-var known = struct {
+
+type info struct {
 	determiners, kinds, traits spanList
 	macros                     macroList
-}{
+}
+
+func (n *info) FindDeterminer(words []Word) (skip int) {
+	_, skip = n.determiners.findPrefix(words)
+	return
+}
+
+func (n *info) FindKind(words []Word) (skip int) {
+	_, skip = n.kinds.findPrefix(words)
+	return
+}
+
+func (n *info) FindTrait(words []Word) (skip int) {
+	_, skip = n.traits.findPrefix(words)
+	return
+}
+
+type MacroInfo struct {
+	macroType MacroType
+	str       string
+	width     int
+}
+
+func (m *MacroInfo) Type() MacroType {
+	return m.macroType
+}
+
+func (m *MacroInfo) String() string {
+	return m.str
+}
+
+// number of words
+func (m *MacroInfo) Width() int {
+	return m.width
+}
+
+func (n *info) FindMacro(words []Word) (ret MacroInfo, okay bool) {
+	if at, skipped := n.macros.findPrefix(words); skipped > 0 {
+		w, t := n.macros.get(at)
+		ret = MacroInfo{
+			width:     skipped,
+			macroType: t,
+			str:       wordsToString(w),
+		}
+		okay = true
+	}
+	return
+}
+
+func wordsToString(w []Word) (ret string) {
+	var b strings.Builder
+	for i, w := range w {
+		if i > 0 {
+			b.WriteRune(' ')
+		}
+		b.WriteString(w.String())
+	}
+	return b.String()
+}
+
+var known = info{
 	determiners: panicSpans([]string{
 		"the", "a", "an", "some", "our",
 		// ex. kettle of fish
@@ -51,7 +114,7 @@ var keywords = struct {
 type Results struct {
 	Sources []Noun
 	Targets []Noun // usually just one, except for nxm relations
-	Macro   []Word
+	Macro   MacroInfo
 }
 
 type Noun struct {
@@ -74,9 +137,9 @@ func Grok(p string) (ret Results, err error) {
 				err = beingPhrase(out, words[:i], words[i+1:])
 				break
 			} else {
-				if at, skip := known.macros.findPrefix(words[i:]); skip > 0 {
-					out.Macro, _ = known.macros.get(at)
-					err = macroPhrase(out, words[i+skip:])
+				if macro, ok := known.FindMacro(words[i:]); ok {
+					out.Macro = macro
+					err = macroPhrase(out, words[i+macro.Width():])
 					break
 				}
 			}

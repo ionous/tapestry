@@ -35,11 +35,11 @@ Loop:
 		// although its a bit weird englishy-wise
 		// inform allows determiners before every trait:
 		// ex. The box is an openable and a closed.
-		if _, skipDet := known.determiners.findPrefix(rest); skipDet >= len(rest) {
+		if skipDet := known.FindDeterminer(rest); skipDet >= len(rest) {
 			err = makeWordError(rest[0], "expected some sort of name")
 		} else {
 			rest = rest[skipDet:]
-			if _, skipTrait := known.traits.findPrefix(rest); skipTrait > 0 {
+			if skipTrait := known.FindTrait(rest); skipTrait > 0 {
 				// eat any ands between traits
 				if skipAnd, andSep, e := countAnd(rest[skipTrait:]); e != nil {
 					err = e
@@ -54,7 +54,7 @@ Loop:
 			} else if prevSep&AndSep == 0 {
 				// if it wasn't a trait and some previous trait didnt end with "and",
 				// it might be a trailing kind:
-				if _, skipKind := known.kinds.findPrefix(rest); skipKind > 0 {
+				if skipKind := known.FindKind(rest); skipKind > 0 {
 					out.kind = rest[:skipKind]
 					scan += skipKind + skipDet
 					// done.
