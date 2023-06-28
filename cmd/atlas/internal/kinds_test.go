@@ -42,7 +42,7 @@ func ExampleKindData() {
 
 // FIX: database format changed
 func xExampleKindDB() {
-	db := testdb.Open("ExampleKindDB", testdb.Memory, "")
+	db := testdb.Create("ExampleKindDB")
 	defer db.Close()
 	if e := CreateTestData(db); e != nil {
 		panic(e)

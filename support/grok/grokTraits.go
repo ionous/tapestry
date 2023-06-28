@@ -27,7 +27,7 @@ func (ts *traitSet) applyTraits(out []Noun) {
 // ex. "[the] open container"
 // ex. "[the] open and openable container"
 // ex. "[is] open"
-func parseTraitSet(ws []Word) (out traitSet, err error) {
+func parseTraitSet(known Grokker, ws []Word) (out traitSet, err error) {
 	var scan int
 	var prevSep sepFlag
 Loop:

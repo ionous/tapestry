@@ -11,7 +11,7 @@ import (
 // using the plurals as an example,
 // verify the basic algorithm behind rival testing.
 func TestRivalDB(t *testing.T) {
-	db := testdb.Open(t.Name(), testdb.Memory, "")
+	db := testdb.Create(t.Name())
 	defer db.Close()
 	if e := tables.CreateAll(db); e != nil {
 		t.Fatal(e)

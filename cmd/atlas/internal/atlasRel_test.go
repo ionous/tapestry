@@ -27,7 +27,7 @@ func ExampleRelData() {
 
 // FIX: database format changed
 func xExampleRelDB() {
-	db := testdb.Open("ExampleRelDB", testdb.Memory, "")
+	db := testdb.Create("ExampleRelDB")
 	defer db.Close()
 	if e := CreateTestData(db); e != nil {
 		panic(e)

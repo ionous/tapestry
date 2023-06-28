@@ -12,7 +12,7 @@ import (
 
 // test hierarchical selection of domains and detection of changes
 func TestActivate(t *testing.T) {
-	db := testdb.Open(t.Name(), testdb.Memory, "")
+	db := testdb.Create(t.Name())
 	defer db.Close()
 	const at = ""
 	if e := createTable(db,

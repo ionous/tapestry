@@ -22,14 +22,14 @@ const (
 // note: inform doesn't support leading anonymous nouns ( ex. "the car is in the garage" )
 // they point out: it's not clear whether that indicates the most recent noun, or some new generic noun.
 // however, trailing anonymous nouns are allowed. ( ex. "in the garage is a car" )
-func genNouns(out *[]Noun, ws []Word, flag genFlag) (err error) {
+func genNouns(known Grokker, out *[]Noun, ws []Word, flag genFlag) (err error) {
 	for nextName := ws; len(nextName) > 0; {
 		if skip := known.FindDeterminer(nextName); skip >= len(nextName) {
 			err = makeWordError(nextName[0], "expected some sort of name")
 		} else {
 			det, name := nextName[:skip], nextName[skip:]
 			nextName = nil // by default nothing else after this.
-			if ts, e := parseTraitSet(name); e != nil {
+			if ts, e := parseTraitSet(known, name); e != nil {
 				err = e
 				break
 			} else {
@@ -48,7 +48,7 @@ func genNouns(out *[]Noun, ws []Word, flag genFlag) (err error) {
 				} else if called := len(postTraits) > 0 && postTraits[0].equals(keywords.called); !called {
 					// case 2: an anonymous kind.
 					name, det = nil, nil
-				} else if d, n, e := chopName(postTraits[1:]); e != nil {
+				} else if d, n, e := chopName(known, postTraits[1:]); e != nil {
 					err = e
 					break
 				} else {
@@ -87,7 +87,7 @@ func genNouns(out *[]Noun, ws []Word, flag genFlag) (err error) {
 
 // the entire passed text is a name ( possibly with a prefix to start )
 // errors only if the name is completely empty.
-func chopName(ws []Word) (retDet, retName []Word, err error) {
+func chopName(known Grokker, ws []Word) (retDet, retName []Word, err error) {
 	if cnt := len(ws); cnt == 0 {
 		err = errutil.New("empty name")
 	} else if skip := known.FindDeterminer(ws); skip >= len(ws) {

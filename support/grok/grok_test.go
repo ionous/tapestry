@@ -325,7 +325,7 @@ func TestPhrases(t *testing.T) {
 		if len(p.test) > 0 && p.result == nil {
 			skipped++
 		} else {
-			res, haveError := Grok(p.test)
+			res, haveError := Grok(&known, p.test)
 			if expectError, ok := p.result.(error); ok {
 				if haveError == nil {
 					t.Log(i, p.test, "expected an error", expectError, "but succeeded")
@@ -386,7 +386,7 @@ func TestTraits(t *testing.T) {
 	}}
 	var skipped int
 	for i, p := range phrases {
-		ts, haveError := parseTraitSet(panicHash(p.test))
+		ts, haveError := parseTraitSet(&known, panicHash(p.test))
 		if len(p.test) > 0 && p.result == nil {
 			skipped++
 		} else if expectError, ok := p.result.(error); ok {

@@ -10,17 +10,17 @@ import "github.com/ionous/errutil"
 // 2c. (lhs: The coffin) is (rhs: closed in the lobby.)  <-- not my favorite.
 //
 // tbd: parse the sources when looping over the words ( in the caller? )
-func beingPhrase(out *Results, lhs, rhs []Word) (err error) {
+func beingPhrase(known Grokker, out *Results, lhs, rhs []Word) (err error) {
 	// first, scan for leading traits on the rhs
 	// ex. [is] ( rhs: fixed in place .... in the lobby )
-	if rightLede, e := parseTraitSet(rhs); e != nil {
+	if rightLede, e := parseTraitSet(known, rhs); e != nil {
 		err = e
 	} else {
 		// try to find a macro after the traits:
 		afterRightLede := rhs[rightLede.wordCount:]
 		if macro, ok := known.FindMacro(afterRightLede); !ok {
 			// case 1. doesn't have a macro:
-			if e := genNouns(&out.Sources, lhs, AllowMany|AllowAnonymous); e != nil {
+			if e := genNouns(known, &out.Sources, lhs, AllowMany|AllowAnonymous); e != nil {
 				err = errutil.New("parsing subjects", e)
 			}
 		} else {
@@ -36,12 +36,12 @@ func beingPhrase(out *Results, lhs, rhs []Word) (err error) {
 			}
 
 			// [lhs: The coffin is] (rhs: (pre: a closed container) *in* (post: the antechamber.))
-			if e := genNouns(&out.Sources, lhs, lhsFlag); e != nil {
+			if e := genNouns(known, &out.Sources, lhs, lhsFlag); e != nil {
 				err = errutil.New("parsing subject", e)
 			} else {
 				// fix? this branching isnt satisfying
 				if macro.Type > ManyToOne {
-					if e := genNouns(&out.Targets, postMacro, rhsFlag); e != nil {
+					if e := genNouns(known, &out.Targets, postMacro, rhsFlag); e != nil {
 						err = errutil.New("parsing target", e)
 					}
 				} else {
@@ -49,7 +49,7 @@ func beingPhrase(out *Results, lhs, rhs []Word) (err error) {
 					// [The box is] (right lede: a closed container) kind of (post traits: closed container).
 					if rightLede.wordCount > 0 {
 						err = makeWordError(rhs[0], "some unexpected kind of properties")
-					} else if postMacroTraits, e := parseTraitSet(postMacro); e != nil {
+					} else if postMacroTraits, e := parseTraitSet(known, postMacro); e != nil {
 						err = e
 					} else {
 						postMacroTraits.applyTraits(out.Sources)

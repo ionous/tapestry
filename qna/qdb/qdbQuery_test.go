@@ -2,7 +2,6 @@ package qdb_test
 
 import (
 	"database/sql"
-	"os"
 	"reflect"
 	"strings"
 	"testing"
@@ -23,13 +22,7 @@ import (
 // this exercises the asm.writer ( xforming from strings to ids )
 // and the various runtime queries we need.
 func TestQueries(t *testing.T) {
-	path, driver := testdb.Memory, ""
-	// if you run the test as go test ... -args write
-	// it'll write the db out in your user directory
-	if os.Args[len(os.Args)-1] == "write" {
-		path = ""
-	}
-	db := testdb.Open(t.Name(), path, driver)
+	db := testdb.Create(t.Name())
 	defer db.Close()
 
 	const at = ""

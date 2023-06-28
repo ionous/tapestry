@@ -14,7 +14,7 @@ import (
 
 // test that importing cycling text transforms to the proper runtime command
 func TestImportSequence(t *testing.T) {
-	db := testdb.Open(t.Name(), testdb.Memory, "")
+	db := testdb.Create(t.Name())
 	defer db.Close()
 	cat := weave.NewCatalog(db)
 

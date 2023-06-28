@@ -45,7 +45,7 @@ func ExamplePairData() {
 
 // FIX: database format changed
 func xExamplePairDB() {
-	db := testdb.Open("ExampleNounDB", testdb.Memory, "")
+	db := testdb.Create("ExampleNounDB")
 	defer db.Close()
 	if e := CreateTestData(db); e != nil {
 		panic(e)

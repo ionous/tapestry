@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"math/rand"
-	"os"
 	"strings"
 	"testing"
 
@@ -21,13 +20,7 @@ func NewWeaver(name string) *Weaver {
 }
 
 func NewWeaverOptions(name string, makeRun func(db *sql.DB) rt.Runtime, shuffle bool) *Weaver {
-	path, driver := testdb.Memory, ""
-	// if you run the test as go test ... -args write
-	// it'll write the db out in your user directory
-	if os.Args[len(os.Args)-1] == "write" {
-		path = ""
-	}
-	db := testdb.Open(name, path, driver)
+	db := testdb.Create(name)
 	var run rt.Runtime
 	if makeRun != nil {
 		run = makeRun(db)
@@ -62,13 +55,6 @@ type Weaver struct {
 func (dt *Weaver) Catalog() *weave.Catalog {
 	return dt.cat
 }
-
-// func (dt *Weaver) Open(name string) *sql.DB {
-// 	if dt.db == nil {
-// 		dt.db = testdb.Open(name, testdb.Memory, "")
-// 	}
-// 	return dt.db
-// }
 
 func (dt *Weaver) Close() {
 	if dt.db != nil {

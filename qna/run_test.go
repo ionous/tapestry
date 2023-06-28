@@ -5,7 +5,7 @@ package qna
 // tests the importation, assembly, and execution of a factorial story.
 // doesn't test the *reading* of the story.
 // func TestFullFactorial(t *testing.T) {
-// 	db := testdb.Open(t.Name(), testdb.Memory, "")
+// 	db := testdb.Create(t.Name())
 // 	defer db.Close()
 
 // 	// read factorialStory, assemble and run.

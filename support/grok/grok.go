@@ -38,7 +38,7 @@ type Noun struct {
 	// ex. The container called the coffin is a closed openable thing.
 }
 
-func Grok(p string) (ret Results, err error) {
+func Grok(known Grokker, p string) (ret Results, err error) {
 	out := &Results{}
 	if words, e := hashWords(p); e != nil {
 		err = e
@@ -47,12 +47,12 @@ func Grok(p string) (ret Results, err error) {
 		// the order can reverse subjects and objects.
 		for i, w := range words {
 			if w.equals(keywords.is) || w.equals(keywords.are) {
-				err = beingPhrase(out, words[:i], words[i+1:])
+				err = beingPhrase(known, out, words[:i], words[i+1:])
 				break
 			} else {
 				if macro, ok := known.FindMacro(words[i:]); ok {
 					out.Macro = macro
-					err = macroPhrase(out, words[i+macro.Width:])
+					err = macroPhrase(known, out, words[i+macro.Width:])
 					break
 				}
 			}

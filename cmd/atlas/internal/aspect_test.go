@@ -59,7 +59,7 @@ func ExampleAspectData() {
 
 // FIX: database format changed
 func xExampleAspectDB() {
-	db := testdb.Open("ExampleAspectDB", testdb.Memory, "")
+	db := testdb.Create("ExampleAspectDB")
 	defer db.Close()
 	if e := CreateTestData(db); e != nil {
 		panic(e)

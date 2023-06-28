@@ -5,7 +5,7 @@ package qna
 // maybe change qdb to an interface and make a mock?
 //
 // func TestFieldAccess(t *testing.T) {
-// 	db := newFieldAccessTest(t, testdb.Memory)
+// 	db := newFieldAccessTest(t)
 // 	defer db.Close()
 // 	q := NewRuntime(db, tapestry.AllSignatures)
 
@@ -153,8 +153,8 @@ package qna
 // 	})
 // }
 
-// func newFieldAccessTest(t *testing.T, dbloc string) (ret *sql.DB) {
-// 	db := testdb.Open(t.Name(), dbloc, "")
+// func newFieldAccessTest(t *testing.T) (ret *sql.DB) {
+// 	db := testdb.Create(t.Name())
 // 	if e := tables.CreateModel(db); e != nil {
 // 		t.Fatal(e)
 // 	} else if e := tables.CreateRun(db); e != nil {

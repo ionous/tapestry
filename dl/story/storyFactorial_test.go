@@ -7,7 +7,7 @@ import (
 // read the factorial story
 // todo: verify that the db gets the expected elements
 func Fix_TestFactorialImport(t *testing.T) {
-	// db := testdb.Open(t.Name(), testdb.Memory, "")
+	// db := testdb.Create(t.Name())
 	// k := weave.NewCatalog(db)
 	// if e := story.ImportStory(k, t.Name(), debug.FactorialStory); e != nil {
 	// 	t.Fatal(e)

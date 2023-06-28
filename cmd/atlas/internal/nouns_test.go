@@ -44,7 +44,7 @@ func ExampleNounData() {
 
 // FIX: database format changed
 func xExampleNounDB() {
-	db := testdb.Open("ExampleNounDB", testdb.Memory, "")
+	db := testdb.Create("ExampleNounDB")
 	defer db.Close()
 	if e := CreateTestData(db); e != nil {
 		panic(e)

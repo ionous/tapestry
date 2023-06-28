@@ -13,7 +13,7 @@ func TestImportStory(t *testing.T) {
 	if curr, e := story.CompactDecode(debug.Blob); e != nil {
 		t.Fatal(e)
 	} else {
-		db := testdb.Open(t.Name(), testdb.Memory, "")
+		db := testdb.Create(t.Name())
 		defer db.Close()
 		k := weave.NewCatalog(db)
 		if e := k.AssertDomainStart("tapestry", nil); e != nil {

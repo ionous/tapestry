@@ -3,6 +3,7 @@ package testdb
 import (
 	"database/sql"
 	"io"
+	"os"
 	"os/user"
 	"path"
 	"strings"
@@ -29,6 +30,16 @@ func PathFromName(name string) (ret string, err error) {
 // ( used for Ins, and WriteCsv )
 func TableCols(table_cols ...string) []string {
 	return table_cols
+}
+
+// if you run the test as go test ... -args write
+// it'll write the db out in your user directory
+func Create(name string) (ret *sql.DB) {
+	path, driver := Memory, ""
+	if os.Args[len(os.Args)-1] == "write" {
+		path = ""
+	}
+	return Open(name, path, driver)
 }
 
 // Opens a (sqlite) database in memory or on disk, panicking on error.

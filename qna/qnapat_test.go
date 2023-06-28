@@ -3,7 +3,7 @@ package qna
 // manually add an assembled pattern to the database, test that it works as expected.
 // TBD: either create ephemera or expose some inner workings to write directly to the
 // func TestSayMe(t *testing.T) {
-// 	db := testdb.Open(t.Name(), testdb.Memory, "")
+// 	db := testdb.Create(t.Name())
 // 	defer db.Close()
 // 	if e := tables.CreateModel(db); e != nil {
 // 		t.Fatal(e)
