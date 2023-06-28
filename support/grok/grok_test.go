@@ -1,6 +1,7 @@
 package grok
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/ionous/errutil"
@@ -412,7 +413,7 @@ func resultMap(in Results) map[string]any {
 	m := make(map[string]any)
 	nounsIntoMap(m, "sources", in.Sources)
 	nounsIntoMap(m, "targets", in.Targets)
-	if str := in.Macro.String(); len(str) > 0 {
+	if str := in.Macro.Str; len(str) > 0 {
 		m["macro"] = str
 	}
 	return m
@@ -459,4 +460,79 @@ func wordsIntoMap(m map[string]any, field string, w []Word) {
 	if len(w) > 0 {
 		m[field] = wordsToString(w)
 	}
+}
+
+func wordsToString(w []Word) (ret string) {
+	var b strings.Builder
+	for i, w := range w {
+		if i > 0 {
+			b.WriteRune(' ')
+		}
+		b.WriteString(w.String())
+	}
+	return b.String()
+}
+
+type info struct {
+	determiners, kinds, traits spanList
+	macros                     macroList
+}
+
+func (n *info) FindDeterminer(words []Word) (skip int) {
+	_, skip = n.determiners.findPrefix(words)
+	return
+}
+
+func (n *info) FindKind(words []Word) (skip int) {
+	_, skip = n.kinds.findPrefix(words)
+	return
+}
+
+func (n *info) FindTrait(words []Word) (skip int) {
+	_, skip = n.traits.findPrefix(words)
+	return
+}
+
+func (n *info) FindMacro(words []Word) (ret MacroInfo, okay bool) {
+	if at, skipped := n.macros.findPrefix(words); skipped > 0 {
+		w, t := n.macros.get(at)
+		ret = MacroInfo{
+			Width: skipped,
+			Type:  t,
+			Str:   wordsToString(w),
+		}
+		okay = true
+	}
+	return
+}
+
+var known = info{
+	determiners: panicSpans([]string{
+		"the", "a", "an", "some", "our",
+		// ex. kettle of fish
+		"a kettle of",
+	}),
+	macros: panicMacros(
+		// tbd: flags need more thought.
+		ManyToOne, "kind of", // for "a closed kind of container"
+		ManyToOne, "kinds of", // for "are closed containers"
+		ManyToOne, "a kind of", // for "a kind of container"
+		// other macros
+		OneToMany, "on", // on the x are the w,y,z
+		OneToMany, "in",
+		//
+		ManyToMany, "suspicious of",
+	),
+	kinds: panicSpans([]string{
+		"thing", "things",
+		"container", "containers",
+		"supporter", "supporters",
+	}),
+	traits: panicSpans([]string{
+		"closed",
+		"open",
+		"openable",
+		"transparent",
+		"fixed in place",
+	}),
 }

@@ -1,116 +1,29 @@
 package grok
 
-import "strings"
+type Grokker interface {
+	// if the passed words starts with a determiner,
+	// return the number of words in  that match.
+	FindDeterminer([]Word) int
 
-// fix: should be customizable
+	// if the passed words starts with a kind,
+	// return the number of words in  that match.
+	FindKind([]Word) int
 
-type info struct {
-	determiners, kinds, traits spanList
-	macros                     macroList
-}
+	// if the passed words starts with a trait,
+	// return the number of words in  that match.
+	FindTrait([]Word) int
 
-func (n *info) FindDeterminer(words []Word) (skip int) {
-	_, skip = n.determiners.findPrefix(words)
-	return
-}
-
-func (n *info) FindKind(words []Word) (skip int) {
-	_, skip = n.kinds.findPrefix(words)
-	return
-}
-
-func (n *info) FindTrait(words []Word) (skip int) {
-	_, skip = n.traits.findPrefix(words)
-	return
+	// if the passed words starts with a macro,
+	// return information about that match
+	FindMacro([]Word) (ret MacroInfo, okay bool)
 }
 
 type MacroInfo struct {
-	macroType MacroType
-	str       string
-	width     int
+	Type  MacroType
+	Str   string
+	Width int // should match strings.Fields(Str)
 }
 
-func (m *MacroInfo) Type() MacroType {
-	return m.macroType
-}
-
-func (m *MacroInfo) String() string {
-	return m.str
-}
-
-// number of words
-func (m *MacroInfo) Width() int {
-	return m.width
-}
-
-func (n *info) FindMacro(words []Word) (ret MacroInfo, okay bool) {
-	if at, skipped := n.macros.findPrefix(words); skipped > 0 {
-		w, t := n.macros.get(at)
-		ret = MacroInfo{
-			width:     skipped,
-			macroType: t,
-			str:       wordsToString(w),
-		}
-		okay = true
-	}
-	return
-}
-
-func wordsToString(w []Word) (ret string) {
-	var b strings.Builder
-	for i, w := range w {
-		if i > 0 {
-			b.WriteRune(' ')
-		}
-		b.WriteString(w.String())
-	}
-	return b.String()
-}
-
-var known = info{
-	determiners: panicSpans([]string{
-		"the", "a", "an", "some", "our",
-		// ex. kettle of fish
-		"a kettle of",
-	}),
-	macros: panicMacros(
-		// tbd: flags need more thought.
-		ManyToOne, "kind of", // for "a closed kind of container"
-		ManyToOne, "kinds of", // for "are closed containers"
-		ManyToOne, "a kind of", // for "a kind of container"
-		// other macros
-		OneToMany, "on", // on the x are the w,y,z
-		OneToMany, "in",
-		//
-		ManyToMany, "suspicious of",
-	),
-	kinds: panicSpans([]string{
-		"thing", "things",
-		"container", "containers",
-		"supporter", "supporters",
-	}),
-	traits: panicSpans([]string{
-		"closed",
-		"open",
-		"openable",
-		"transparent",
-		"fixed in place",
-	}),
-}
-
-var keywords = struct {
-	and, are, called, comma, has, is uint64
-}{
-	and:    plainHash("and"),
-	are:    plainHash("are"),
-	called: plainHash("called"),
-	comma:  plainHash(","),
-	has:    plainHash("has"),
-	is:     plainHash("is"),
-}
-
-// fix: would be better to have a push interface so we can just add things as we go
-// this is easier for development though
 type Results struct {
 	Sources []Noun
 	Targets []Noun // usually just one, except for nxm relations
@@ -139,7 +52,7 @@ func Grok(p string) (ret Results, err error) {
 			} else {
 				if macro, ok := known.FindMacro(words[i:]); ok {
 					out.Macro = macro
-					err = macroPhrase(out, words[i+macro.Width():])
+					err = macroPhrase(out, words[i+macro.Width:])
 					break
 				}
 			}
@@ -149,4 +62,16 @@ func Grok(p string) (ret Results, err error) {
 		ret = *out
 	}
 	return
+}
+
+// make customizable?
+var keywords = struct {
+	and, are, called, comma, has, is uint64
+}{
+	and:    plainHash("and"),
+	are:    plainHash("are"),
+	called: plainHash("called"),
+	comma:  plainHash(","),
+	has:    plainHash("has"),
+	is:     plainHash("is"),
 }

@@ -26,9 +26,9 @@ func beingPhrase(out *Results, lhs, rhs []Word) (err error) {
 		} else {
 			// case 2: found a macro:
 			out.Macro = macro
-			postMacro := afterRightLede[macro.Width():]
+			postMacro := afterRightLede[macro.Width:]
 			var lhsFlag, rhsFlag genFlag
-			switch macro.Type() {
+			switch macro.Type {
 			case OneToMany, ManyToOne:
 				lhsFlag, rhsFlag = AllowMany|OnlyNamed, OnlyOne|AllowAnonymous
 			case ManyToMany:
@@ -40,7 +40,7 @@ func beingPhrase(out *Results, lhs, rhs []Word) (err error) {
 				err = errutil.New("parsing subject", e)
 			} else {
 				// fix? this branching isnt satisfying
-				if macro.Type() > ManyToOne {
+				if macro.Type > ManyToOne {
 					if e := genNouns(&out.Targets, postMacro, rhsFlag); e != nil {
 						err = errutil.New("parsing target", e)
 					}
