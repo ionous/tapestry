@@ -1,0 +1,162 @@
+{
+  "Tapestry:": [
+    {
+      "Test:withScene:do:": [
+        "testing",
+        [
+          {
+            "Define nouns:as:": [
+              "Hershel",
+              "an actor"
+            ]
+          },
+          {
+            "Define nouns:as:": [
+              "the scissors",
+              "things"
+            ]
+          },
+          {
+            "Call macro:args:": [
+              "carrier",
+              [
+                {
+                  "Arg:from:": [
+                    "actor",
+                    {
+                      "FromText:": "Hershel"
+                    }
+                  ]
+                },
+                {
+                  "Arg:from:": [
+                    "carries",
+                    {
+                      "FromTextList:": "the scissors"
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ],
+        []
+      ]
+    },
+    {
+      "Define macro:requires:result:with:": [
+        "carrier",
+        [
+          {
+            "Text:": "actor"
+          },
+          {
+            "TextList:": "carries"
+          }
+        ],
+        {
+          "Nothing": true
+        },
+        [
+          {
+            "Define nouns:as:": [
+              {
+                "List ofText:": [
+                  "@actor"
+                ]
+              },
+              "actor"
+            ]
+          },
+          {
+            "Define nouns:as:": [
+              "@carries",
+              "thing"
+            ]
+          },
+          {
+            "Define relativeTo:nouns:otherNouns:": [
+              "whereabouts",
+              "@carries",
+              {
+                "List ofText:": [
+                  "@actor"
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Define kinds:as:": [
+        "Objects",
+        "kind"
+      ]
+    },
+    {
+      "Define kinds:as:": [
+        "Actors",
+        "thing"
+      ]
+    },
+    {
+      "Define kinds:as:": [
+        "Things",
+        "object"
+      ]
+    },
+    {
+      "Define kind:fields:": [
+        "Objects",
+        [
+          {
+            "Text:": "description"
+          },
+          {
+            "Text:": "indefinite article"
+          },
+          {
+            "Aspect:": "noun types"
+          },
+          {
+            "Aspect:": "private names"
+          },
+          {
+            "Text:": "printed name"
+          }
+        ]
+      ]
+    },
+    {
+      "Define relation:cardinality oneToMany:": [
+        "whereabouts",
+        {
+          "OneToMany:kinds:": [
+            "object",
+            "objects"
+          ]
+        }
+      ]
+    },
+    {
+      "Define traits:as:": [
+        [
+          "common named",
+          "proper named",
+          "counted"
+        ],
+        "noun types"
+      ]
+    },
+    {
+      "Define traits:as:": [
+        [
+          "publicly named",
+          "privately named"
+        ],
+        "private names"
+      ]
+    }
+  ]
+}

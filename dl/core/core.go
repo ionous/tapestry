@@ -18,6 +18,7 @@ var (
 	F           = literal.F
 	I           = literal.I
 	T           = literal.T
+	Ts          = literal.Ts
 	CmdError    = assign.CmdError    // backwards compat
 	CmdErrorCtx = assign.CmdErrorCtx // backwards compat
 )

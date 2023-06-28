@@ -123,7 +123,8 @@ func (in *innerRecord) findField(field string) (ret literal.LiteralValue, okay b
 // FIX: if you have to do it this way... why not serialize it to compact format?
 // you could even store the whole literal that way -- saving some duplication of effort during write.
 func compareValue(noun, field, at string, oldValue, newValue literal.LiteralValue) (err error) {
-	why, was, wants := mdl.Conflict, field, field
+	var why error = mdl.Conflict
+	was, wants := field, field
 	type stringer interface{ String() string }
 	if try, ok := newValue.(stringer); ok {
 		if curr, ok := oldValue.(stringer); ok {

@@ -2,13 +2,10 @@ package story_test
 
 import (
 	"database/sql"
+	_ "embed"
 	"log"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/dl/list"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/dl/story"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/decode"
@@ -17,9 +14,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/test/testweave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
+	"github.com/kr/pretty"
 )
 
-// generate ephemera for macros
 func TestMacros(t *testing.T) {
 	// ugh. this setup.
 	dt := testweave.NewWeaverOptions(t.Name(), func(db *sql.DB) rt.Runtime {
@@ -37,43 +34,32 @@ func TestMacros(t *testing.T) {
 	defer dt.Close()
 	cat := dt.Catalog()
 	//
-	if e := cat.AssertDomainStart("tapestry", nil); e != nil {
+	if curr, e := story.CompactDecode(storyMacroData); e != nil {
+		t.Fatal(e)
+	} else if e := cat.AssertDomainStart("tapestry", nil); e != nil {
 		t.Fatal(e)
 	} else if e := addDefaultKinds(cat); e != nil {
 		t.Fatal(e)
-	} else if e := story.ImportStory(cat, t.Name(), macroStory); e != nil {
+	} else if e := story.ImportStory(cat, t.Name(), &curr); e != nil {
 		t.Fatal(e)
 	} else if e := cat.AssertDomainEnd(); e != nil {
 		t.Fatal(e)
 	} else if e := cat.AssembleCatalog(); e != nil {
 		t.Fatal(e)
 	} else {
-		// expect := []eph.Ephemera{
-		// 	&eph.Values{
-		// 		Noun:  "Hershel",
-		// 		Field: "proper_named",
-		// 		Value: literal.B(true),
-		// 	},
-		// 	&eph.Nouns{
-		// 		Noun: "Hershel",
-		// 		Kind: "an actor",
-		// 	},
-		// 	&eph.Nouns{
-		// 		Noun: "scissors",
-		// 		Kind: "things",
-		// 	},
-		// 	&eph.Relatives{
-		// 		Rel:       "whereabouts",
-		// 		Noun:      "Hershel",
-		// 		OtherNoun: "scissors",
-		// 	},
+		if out, e := dt.ReadPairs(); e != nil {
+			t.Fatal(e)
+		} else if diff := pretty.Diff(out, []string{
+			"testing:whereabouts:hershel:scissors"
+		}); len(diff) > 0 {
+			t.Log(pretty.Sprint(out))
+			t.Fatal(diff)
+		}
 	}
-	// if diff := pretty.Diff(els, expect); len(diff) != 0 {
-	// 	t.Log(pretty.Sprint(els))
-	// 	t.Fatal(diff)
-	// }
-	// }
 }
+
+//go:embed storyMacro_test.if
+var storyMacroData []byte
 
 func addDefaultKinds(n assert.Assertions) (err error) {
 	for _, k := range kindsOf.DefaultKinds {
@@ -83,65 +69,4 @@ func addDefaultKinds(n assert.Assertions) (err error) {
 		}
 	}
 	return
-}
-
-var macroStory = &story.StoryFile{
-	StoryStatements: []story.StoryStatement{
-		// &story.DefineRelation{
-		// },
-		&story.DefineMacro{
-			MacroName: core.T("carrier"),
-			Params: []story.FieldDefinition{
-				// todo: optional labels for fields so these can be "carrier", "nouns" internally
-				// ( and maybe that would allow the anonymous first parameter )
-				&story.TextField{
-					Name: "actor",
-				},
-				&story.TextListField{
-					Name: "carries",
-				},
-			},
-			Result: &story.NothingField{},
-			Locals: nil,
-			MacroStatements: []rt.Execute{
-				// assert:
-				// 1. the actor is an actor
-				&story.DefineNouns{
-					// fix: autoconversions of text to text list?
-					Nouns: &list.MakeTextList{
-						// tbd: allow variables to have determiners? (and strip them off during import or weave)
-						Values: []rt.TextEval{core.Variable("actor")},
-					},
-					Kind: literal.T("an actor"),
-				},
-				// 2. each thing is a thing ( the relation is any object so... )
-				&story.DefineNouns{
-					Nouns: core.Variable("carries"),
-					Kind:  literal.T("things"),
-				},
-				// 3. use whereabouts
-				&story.DefineRelatives{
-					Nouns:    core.Variable("carries"),
-					Relation: literal.T("whereabouts"),
-					OtherNouns: &list.MakeTextList{
-						Values: []rt.TextEval{core.Variable("actor")},
-					},
-				},
-			},
-		},
-		&story.DefineScene{
-			Scene: literal.T("testing"),
-			With: []story.StoryStatement{
-				&story.CallMacro{
-					MacroName: "carrier",
-					Arguments: []assign.Arg{{
-						Name:  "actor",
-						Value: &assign.FromText{Value: literal.T("Hershel")},
-					}, {
-						Name:  "carries",
-						Value: &assign.FromTextList{Value: literal.Ts("the scissors")},
-					}}},
-			},
-		},
-	},
 }

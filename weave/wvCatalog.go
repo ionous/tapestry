@@ -92,6 +92,12 @@ func (cat *Catalog) Runtime() rt.Runtime {
 	return cat.run
 }
 
+func (cat *Catalog) Warn(e error) {
+	if cat.warn != nil {
+		cat.warn(e)
+	}
+}
+
 // return the uniformly named domain ( if it exists )
 func (cat *Catalog) GetDomain(n string) (*Domain, bool) {
 	d, ok := cat.domains[n]

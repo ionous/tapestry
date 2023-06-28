@@ -1,10 +1,13 @@
 package story
 
 import (
+	"errors"
+
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/jsn/chart"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"github.com/ionous/errutil"
 )
@@ -48,10 +51,12 @@ func WeaveStatements(cat *weave.Catalog, all []StoryStatement) (err error) {
 // expects that the runtime is the importer's own runtime.
 // ( as opposed to the story's playtime. )
 func Weave(run rt.Runtime, op StoryStatement) (err error) {
-	if currentCatalog.Runtime() != run {
+	if cat := currentCatalog; cat.Runtime() != run {
 		err = errutil.Fmt("mismatched runtimes?")
+	} else if e := op.Weave(cat); e == nil || !errors.Is(e, mdl.Duplicate) {
+		err = e
 	} else {
-		err = op.Weave(currentCatalog)
+		cat.Warn(e) // log duplicate
 	}
 	return
 }
