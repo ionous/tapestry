@@ -5,6 +5,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
@@ -43,6 +44,13 @@ func ReadNouns(cat *weave.Catalog, nouns []string) (ret []string, err error) {
 	return
 }
 
+// helper to simplify setting the values of nouns
+func AssertNounValue(a assert.Assertions, val literal.LiteralValue, noun string, path ...string) error {
+	last := len(path) - 1
+	field, parts := path[last], path[:last]
+	return a.AssertNounValue(noun, field, parts, val)
+}
+
 func importNoun(cat *weave.Catalog, noun string, nouns []string) (ret []string, err error) {
 	if a := makeArticleName(noun); a.count > 0 {
 		if ns, e := importCountedNoun(cat, a.count, a.name); e != nil {
@@ -52,9 +60,9 @@ func importNoun(cat *weave.Catalog, noun string, nouns []string) (ret []string, 
 		}
 	} else {
 		if a.isProper() {
-			err = assert.AssertNounValue(cat, B(true), a.name, "proper_named")
+			err = AssertNounValue(cat, B(true), a.name, "proper_named")
 		} else if customDet, ok := a.customArticle(); ok && len(customDet) > 0 {
-			err = assert.AssertNounValue(cat, T(customDet), a.name, "indefinite_article")
+			err = AssertNounValue(cat, T(customDet), a.name, "indefinite_article")
 		}
 		ret = append(nouns, a.name)
 	}
@@ -128,7 +136,7 @@ func importCountedNoun(cat *weave.Catalog, cnt int, kindOrKinds string) (ret []s
 		names := make([]string, cnt)
 		for i := 0; i < cnt; i++ {
 			noun := cat.NewCounter(kindOrKinds, nil)
-			if e := assert.AssertNounValue(cat, B(true), noun, "counted"); e != nil {
+			if e := AssertNounValue(cat, B(true), noun, "counted"); e != nil {
 				err = e
 				break
 			}
@@ -152,7 +160,7 @@ func importCountedNoun(cat *weave.Catalog, cnt int, kindOrKinds string) (ret []s
 					} else if e := cat.AssertAlias(n, kind); e != nil {
 						err = e // ^ so that typing "triangle" means "triangles_1"
 						break
-					} else if e := assert.AssertNounValue(cat, T(kind), n, "printed name"); e != nil {
+					} else if e := AssertNounValue(cat, T(kind), n, "printed name"); e != nil {
 						err = e // so that printing "triangles_1" yields "triangle"
 						break   // FIX: itd make a lot more sense to have a default value for the kind
 					}

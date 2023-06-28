@@ -75,7 +75,7 @@ func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 			if traits := traits.Strings(); len(traits) > 0 {
 				for _, t := range traits {
 					for _, n := range bareNames {
-						if e := assert.AssertNounValue(cat, B(true), n, t); e != nil {
+						if e := AssertNounValue(cat, B(true), n, t); e != nil {
 							err = errutil.Append(err, e)
 							break // out of the traits to the next noun
 						}
@@ -133,7 +133,7 @@ func (op *NounAssignment) Weave(cat *weave.Catalog) error {
 		} else {
 			field, lines := field.String(), T(lines)
 			for _, noun := range subjects {
-				if e := assert.AssertNounValue(cat, lines, noun, field); e != nil {
+				if e := AssertNounValue(cat, lines, noun, field); e != nil {
 					err = errutil.Append(err, e)
 				}
 			}

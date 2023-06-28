@@ -13,7 +13,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
@@ -168,62 +167,6 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 	}
 	return
 }
-
-// oh, the tangled webs we weave.
-// normally we distill fields into ephParams,
-// and then build up kinds, finally storing the results in the db.
-// fix: ideally would flush to the db after each domain ( or phase ) so that the weave can see it.
-// right now, only the play time's runtime reads from the db.
-// func (k *Catalog) registerMacro(op *EphMacro) (err error) {
-// 	// check not already registered.
-// 	if name := op.PatternName; len(name) == 0 {
-// 		err = errutil.Fmt("no macro name specified")
-// 	} else if _, ok := k.macros[name]; ok {
-// 		err = errutil.Fmt("macro %q already registered", name)
-// 	} else {
-// 		cnt := 1 + len(op.Params) + len(op.Locals)
-// 		init := make([]assign.Assignment, 0, cnt)
-// 		fields := make([]g.Field, 0, cnt)
-// 		addParam := func(p eph.Params) (err error) {
-// 			if len(p.Name) > 0 { // for now, silent skip nothing fields
-// 				if u, e := p.Unify(op.PatternName); e != nil {
-// 					err = e
-// 				} else {
-// 					init = append(init, u.Initially)
-// 					fields = append(fields, g.Field{
-// 						Name:     u.Name,
-// 						Affinity: u.Affinity,
-// 						Type:     u.Type,
-// 					})
-// 				}
-// 			}
-// 			return
-// 		}
-// 		addParams := func(ps []eph.Params) (err error) {
-// 			for _, el := range ps {
-// 				if e := addParam(el); e != nil {
-// 					err = e
-// 					break
-// 				}
-// 			}
-// 			return
-// 		}
-// 		if e := addParams(op.Params); e != nil {
-// 			err = e
-// 		} else if e := addParams(op.Locals); e != nil {
-// 			err = e
-// 		} else if e := addParam(*op.Result); e != nil {
-// 			err = e // ^ to match patterns, result (if any) is last.
-// 		} else {
-// 			k.macros[name] = macroKind{
-// 				Kind: g.NewKind(k, name, nil, fields),
-// 				init: init,
-// 				do:   op.MacroStatements,
-// 			}
-// 		}
-// 	}
-// 	return
-// }
 
 func (cat *Catalog) AssertAlias(opShortName string, opAliases ...string) error {
 	return cat.Schedule(assert.RequireNouns, func(ctx *Weaver) (err error) {
@@ -561,33 +504,6 @@ func (cat *Catalog) AssertRule(pattern string, target string, filter rt.BoolEval
 	})
 }
 
-// ugh. see register macro notes.
-func (k *Catalog) Call(rec *g.Record, expectedReturn affine.Affinity) (ret g.Value, err error) {
-	// kind := rec.Kind()
-	// if macro, ok := k.macros[kind.Name()]; !ok {
-	// 	err = errutil.New("unknown macro", kind.Name())
-	// } else if res, e := pattern.NewMacroResults(k, rec, expectedReturn); e != nil {
-	// 	err = e
-	// } else if e := macro.initializeRecord(k, rec); e != nil {
-	// 	err = e
-	// } else {
-	// 	oldScope := k.Stack.ReplaceScope(res)
-	// 	if e := macro.initializeRecord(k, rec); e != nil {
-	// 		err = e
-	// 	} else if e := safe.RunAll(k, macro.do); e != nil {
-	// 		err = e
-	// 	} else if !res.ComputedResult() && expectedReturn != affine.None {
-	// 		err = errutil.Fmt("%w calling %s pattern %q", rt.NoResult, aff, rec.Kind().Name())
-	// 	} else if v, e := res.GetResult(); e != nil {
-	// 		err = e
-	// 	} else {
-	// 		ret = v
-	// 	}
-	// 	k.Stack.ReplaceScope(oldScope)
-	// }
-	return
-}
-
 // NewCounter generates a unique string, and uses local markup to try to create a stable one.
 // instead consider  "PreImport" could be used to write a key into the markup if one doesnt already exist.
 // and a free function could also extract what it needs from any op's markup.
@@ -649,14 +565,30 @@ func (cat *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err er
 				if dep, ok := UniformString(req); !ok {
 					err = errutil.New("invalid name", req)
 					break
-				} else if e := cat.findDomainCycles(d.name, dep); e != nil {
-					err = e
-					break
 				} else {
-					e := cat.writer.Domain(d.name, dep, at)
-					if e := cat.eatDuplicates(e); e != nil {
-						err = e
-						break
+					// check for circular references:
+					if n == req {
+						err = errutil.Fmt("circular reference: %q can't depend on itself", n)
+					} else {
+						var exists bool
+						if e := cat.db.QueryRow(
+							`select 1 
+						from domain_tree 
+						where base = ?1
+						and uses = ?2
+						and base != uses`, req, n).Scan(&exists); e != nil && e != sql.ErrNoRows {
+							err = e
+							break
+						} else if exists {
+							err = errutil.Fmt("circular reference: %q requires %q", req, n)
+							break
+						} else {
+							e := cat.writer.Domain(n, dep, at)
+							if e := cat.eatDuplicates(e); e != nil {
+								err = e
+								break
+							}
+						}
 					}
 				}
 			}
@@ -664,27 +596,6 @@ func (cat *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err er
 	}
 	if err == nil {
 		ret = d
-	}
-	return
-}
-
-// check before inserting a reference to avoid circularity;
-// errors if one was detected.
-func (cat *Catalog) findDomainCycles(n, req string) (err error) {
-	if n == req {
-		err = errutil.Fmt("circular reference: %q can't depend on itself", n)
-	} else {
-		var exists bool
-		if e := cat.db.QueryRow(
-			`select 1 
-		from domain_tree 
-		where base = ?1
-		and uses = ?2
-		and base != uses`, req, n).Scan(&exists); e != nil && e != sql.ErrNoRows {
-			err = e
-		} else if exists {
-			err = errutil.Fmt("circular reference: %q requires %q", req, n)
-		}
 	}
 	return
 }
