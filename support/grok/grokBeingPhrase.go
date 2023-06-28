@@ -20,13 +20,13 @@ func beingPhrase(out *Results, lhs, rhs []Word) (err error) {
 		afterRightLede := rhs[rightLede.wordCount:]
 		if macro, skipMacro := known.macros.findPrefix(afterRightLede); skipMacro == 0 {
 			// case 1. doesn't have a macro:
-			if e := genNouns(&out.sources, lhs, AllowMany|AllowAnonymous); e != nil {
+			if e := genNouns(&out.Sources, lhs, AllowMany|AllowAnonymous); e != nil {
 				err = errutil.New("parsing subjects", e)
 			}
 		} else {
 			// case 2: found a macro:
 			var macroType macroType
-			out.macro, macroType = known.macros.get(macro)
+			out.Macro, macroType = known.macros.get(macro)
 			postMacro := afterRightLede[skipMacro:]
 			var lhsFlag, rhsFlag genFlag
 			switch macroType {
@@ -37,12 +37,12 @@ func beingPhrase(out *Results, lhs, rhs []Word) (err error) {
 			}
 
 			// [lhs: The coffin is] (rhs: (pre: a closed container) *in* (post: the antechamber.))
-			if e := genNouns(&out.sources, lhs, lhsFlag); e != nil {
+			if e := genNouns(&out.Sources, lhs, lhsFlag); e != nil {
 				err = errutil.New("parsing subject", e)
 			} else {
 				// fix? this branching isnt satisfying
 				if macroType > ManyToOne {
-					if e := genNouns(&out.targets, postMacro, rhsFlag); e != nil {
+					if e := genNouns(&out.Targets, postMacro, rhsFlag); e != nil {
 						err = errutil.New("parsing target", e)
 					}
 				} else {
@@ -53,13 +53,13 @@ func beingPhrase(out *Results, lhs, rhs []Word) (err error) {
 					} else if postMacroTraits, e := parseTraitSet(postMacro); e != nil {
 						err = e
 					} else {
-						postMacroTraits.applyTraits(out.sources)
+						postMacroTraits.applyTraits(out.Sources)
 					}
 				}
 			}
 		}
 		if err == nil {
-			rightLede.applyTraits(out.sources)
+			rightLede.applyTraits(out.Sources)
 		}
 	}
 	return

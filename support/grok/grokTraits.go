@@ -17,9 +17,9 @@ func (ts *traitSet) applyTraits(out []Noun) {
 	if len(ts.kind) > 0 || len(ts.traits) > 0 {
 		for i := range out {
 			if len(ts.kind) > 0 {
-				out[i].kinds = append(out[i].kinds, ts.kind)
+				out[i].Kinds = append(out[i].Kinds, ts.kind)
 			}
-			out[i].traits = append(out[i].traits, ts.traits...)
+			out[i].Traits = append(out[i].Traits, ts.traits...)
 		}
 	}
 }

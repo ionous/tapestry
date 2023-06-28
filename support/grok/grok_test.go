@@ -411,9 +411,9 @@ func TestTraits(t *testing.T) {
 
 func resultMap(in Results) map[string]any {
 	m := make(map[string]any)
-	nounsIntoMap(m, "sources", in.sources)
-	nounsIntoMap(m, "targets", in.targets)
-	wordsIntoMap(m, "macro", in.macro)
+	nounsIntoMap(m, "sources", in.Sources)
+	nounsIntoMap(m, "targets", in.Targets)
+	wordsIntoMap(m, "macro", in.Macro)
 	return m
 }
 
@@ -436,10 +436,10 @@ func nounsIntoMap(m map[string]any, field string, ns []Noun) {
 
 func nounToMap(n Noun) map[string]any {
 	m := make(map[string]any)
-	wordsIntoMap(m, "name", n.name)
-	wordsIntoMap(m, "det", n.det)
-	wordListIntoMap(m, "traits", n.traits)
-	wordListIntoMap(m, "kinds", n.kinds)
+	wordsIntoMap(m, "name", n.Name)
+	wordsIntoMap(m, "det", n.Det)
+	wordListIntoMap(m, "traits", n.Traits)
+	wordListIntoMap(m, "kinds", n.Kinds)
 	return m
 }
 

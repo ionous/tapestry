@@ -8,9 +8,9 @@ func macroPhrase(out *Results, ws []Word) (err error) {
 	for ; at < cnt; at++ {
 		if w := ws[at]; w.equals(keywords.is) || w.equals(keywords.are) {
 			lhs, rhs := ws[:at], ws[at+1:]
-			if e := genNouns(&out.sources, rhs, AllowMany|AllowAnonymous); e != nil {
+			if e := genNouns(&out.Sources, rhs, AllowMany|AllowAnonymous); e != nil {
 				err = errutil.New("parsing right side nouns", e)
-			} else if e := genNouns(&out.targets, lhs, OnlyOne|OnlyNamed); e != nil {
+			} else if e := genNouns(&out.Targets, lhs, OnlyOne|OnlyNamed); e != nil {
 				err = errutil.New("parsing left side nouns", e)
 			}
 			break // either way, done.

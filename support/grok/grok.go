@@ -49,16 +49,16 @@ var keywords = struct {
 // fix: would be better to have a push interface so we can just add things as we go
 // this is easier for development though
 type Results struct {
-	sources []Noun
-	targets []Noun // usually just one, except for nxm relations
-	macro   []Word
+	Sources []Noun
+	Targets []Noun // usually just one, except for nxm relations
+	Macro   []Word
 }
 
 type Noun struct {
-	det    []Word
-	name   []Word
-	traits [][]Word
-	kinds  [][]Word // it's possible, if rare, to apply multiple kinds
+	Det    []Word
+	Name   []Word
+	Traits [][]Word
+	Kinds  [][]Word // it's possible, if rare, to apply multiple kinds
 	// ex. The container called the coffin is a closed openable thing.
 }
 
@@ -75,7 +75,7 @@ func Grok(p string) (ret Results, err error) {
 				break
 			} else {
 				if at, skip := known.macros.findPrefix(words[i:]); skip > 0 {
-					out.macro, _ = known.macros.get(at)
+					out.Macro, _ = known.macros.get(at)
 					err = macroPhrase(out, words[i+skip:])
 					break
 				}

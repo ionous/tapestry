@@ -73,10 +73,10 @@ func genNouns(out *[]Noun, ws []Word, flag genFlag) (err error) {
 				} else {
 					// turn the name into a noun:
 					*out = append(*out, Noun{
-						det:    det,
-						name:   name,
-						traits: ts.traits,
-						kinds:  ts.kinds(),
+						Det:    det,
+						Name:   name,
+						Traits: ts.traits,
+						Kinds:  ts.kinds(),
 					})
 				}
 			}
