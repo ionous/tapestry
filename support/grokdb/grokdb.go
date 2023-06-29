@@ -5,8 +5,10 @@ import (
 	"log"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/support/groktest"
+	"github.com/ionous/errutil"
 )
 
 // implements grok.Match; returned by dbg.
@@ -17,8 +19,9 @@ type dbMatch struct {
 
 // implements grok.Grokker; returned by dbg.
 type dbg struct {
-	db     *sql.DB
-	domain string
+	db         *sql.DB
+	domain     string
+	aspectPath string
 }
 
 func (d *dbg) FindDeterminer(ws []grok.Word) grok.Match {
@@ -73,18 +76,75 @@ func (d *dbg) FindKind(ws []grok.Word) (ret grok.Match) {
 	return
 }
 
-// if the passed words starts with a trait,
-// return the number of words in  that match.
-func (d *dbg) FindTrait(ws []grok.Word) (ret grok.Match) {
-	// FIX: should come from the db
-	return traits.FindMatch(ws)
+func (d *dbg) getAspectPath() (ret string, err error) {
+	if len(d.aspectPath) > 0 {
+		ret = d.aspectPath
+	} else {
+		var path string
+		e := d.db.QueryRow(`
+		select (','||rowid||',') 
+		from mdl_kind where kind = ?1
+		limit 1
+		`, kindsOf.Aspect.String()).Scan(&path)
+		switch e {
+		case nil:
+			d.aspectPath = path
+			ret = path
+		case sql.ErrNoRows:
+			err = errutil.New("couldn't determine", kindsOf.Aspect)
+		default:
+			err = e
+		}
+	}
+	return
 }
 
-var traits = groktest.PanicSpans("closed",
-	"open",
-	"openable",
-	"transparent",
-	"fixed in place")
+// if the passed words starts with a trait,
+// return the number of words in that match.
+// tbd: technically there's some possibility that there might be three traits:
+// "wood", "veneer", and "wood veneer" -- subset names
+// with the first two applying to one kind, and the third applying to a different kind;
+// all in scope.  this would always match the second -- even if its not applicable.
+// ( i guess that's where commas can be used by the user to separate things )
+func (d *dbg) FindTrait(ws []grok.Word) (ret grok.Match) {
+	if ap, e := d.getAspectPath(); e != nil {
+		panic(e) // maybe should be returning error
+	} else {
+		words := grok.WordsWithSep(ws, '_') + "_"
+		var found struct {
+			name string
+		}
+		e := d.db.QueryRow(`
+		with traits(name) as (
+		select mf.field
+		from mdl_kind mk
+		join domain_tree dt
+			on (dt.uses = mk.domain)
+		join mdl_field mf 
+			on(mf.kind = mk.rowid)	
+		where dt.base = ?1
+		and instr(',' || mk.path, ?2 )
+	)
+	select name from (
+		select name, substr(?3 ,0, length(name)+2) as words
+		from traits
+		where words = (name || '_')
+	)
+	order by length(name) desc
+	limit 1`,
+			d.domain, ap, words).Scan(&found.name)
+		switch e {
+		case nil:
+			width := strings.Count(found.name, "_") + 1
+			ret = grok.Span(ws[:width])
+		case sql.ErrNoRows:
+			// return nothing.
+		default:
+			panic(e)
+		}
+	}
+	return
+}
 
 // if the passed words starts with a macro,
 // return information about that match
