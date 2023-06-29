@@ -38,9 +38,13 @@ create table mdl_fact( domain text not null, fact text, value text, at text, pri
 create table mdl_field( domain text not null, kind int not null, field text, affinity text, type int, at text, primary key( kind, field ));
 /* 
  * statements for user input parsing. this is pretty low-bar right now;
- * typed commands are not separated into unique rows, so conflicts between words and phrases can't be detected.
+ * typed commands aren't separated into unique rows, so conflicts between words and phrases can't be detected.
  */
 create table mdl_grammar( domain text not null, name text, prog blob, at text, primary key( domain, name ));
+/* 
+ * statements for simplifying some kinds of story definitions.
+ */
+create table mdl_grok( domain text not null, kind int not null, phrase text, reversed bool, at text, primary key( domain, kind, phrase ));
 /* 
  * a class of objects with shared characteristics 
  */

@@ -10,14 +10,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func panicHash(s string) []Word {
-	out, e := hashWords(s)
-	if e != nil {
-		panic(e)
-	}
-	return out
-}
-
 // transform a string into a customized set of hash span.
 // . lowercases and trims the string ( using ToLower since grok depends on english span and phrasing anyway )
 // . considers commas their own words ( otherwise commas would wind up as part of span )
@@ -25,7 +17,7 @@ func panicHash(s string) []Word {
 // fix? quote escaping?
 // rationale: since trimming and separating by spaces would require string allocation (probably multiple)
 // we might as well generate some hashes instead.
-func hashWords(s string) (out []Word, err error) {
+func MakeSpan(s string) (out Span, err error) {
 	flushWord := func(start, end int, hash uint64) {
 		if start >= 0 {
 			if end > start {
@@ -104,7 +96,7 @@ func sumReset(w hash.Hash64) uint64 {
 	return out
 }
 
-func plainHash(s string) uint64 {
+func Hash(s string) uint64 {
 	w, rbs := fnv.New64a(), makeRuneWriter()
 	for _, r := range s {
 		rbs.writeRune(r, w)

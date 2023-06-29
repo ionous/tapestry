@@ -13,11 +13,11 @@ import "github.com/ionous/errutil"
 func beingPhrase(known Grokker, out *Results, lhs, rhs []Word) (err error) {
 	// first, scan for leading traits on the rhs
 	// ex. [is] ( rhs: fixed in place .... in the lobby )
-	if rightLede, e := parseTraitSet(known, rhs); e != nil {
+	if rightLede, e := ParseTraitSet(known, rhs); e != nil {
 		err = e
 	} else {
 		// try to find a macro after the traits:
-		afterRightLede := rhs[rightLede.wordCount:]
+		afterRightLede := rhs[rightLede.WordCount:]
 		if macro, ok := known.FindMacro(afterRightLede); !ok {
 			// case 1. doesn't have a macro:
 			if e := genNouns(known, &out.Sources, lhs, AllowMany|AllowAnonymous); e != nil {
@@ -26,7 +26,7 @@ func beingPhrase(known Grokker, out *Results, lhs, rhs []Word) (err error) {
 		} else {
 			// case 2: found a macro:
 			out.Macro = macro
-			postMacro := afterRightLede[macro.Width:]
+			postMacro := afterRightLede[macro.Match.NumWords():]
 			var lhsFlag, rhsFlag genFlag
 			switch macro.Type {
 			case OneToMany, ManyToOne:
@@ -47,9 +47,9 @@ func beingPhrase(known Grokker, out *Results, lhs, rhs []Word) (err error) {
 				} else {
 					// inform specifically denies these right leading traits in this case:
 					// [The box is] (right lede: a closed container) kind of (post traits: closed container).
-					if rightLede.wordCount > 0 {
+					if rightLede.WordCount > 0 {
 						err = makeWordError(rhs[0], "some unexpected kind of properties")
-					} else if postMacroTraits, e := parseTraitSet(known, postMacro); e != nil {
+					} else if postMacroTraits, e := ParseTraitSet(known, postMacro); e != nil {
 						err = e
 					} else {
 						postMacroTraits.applyTraits(out.Sources)

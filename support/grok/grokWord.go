@@ -1,6 +1,8 @@
 package grok
 
 import (
+	"strings"
+
 	"github.com/ionous/errutil"
 )
 
@@ -33,40 +35,21 @@ func (w *Word) equals(other uint64) bool {
 	return w.hash == other
 }
 
+func (w *Word) Hash() uint64 {
+	return w.hash
+}
+
 func (w *Word) String() string {
 	return w.slice
 }
 
-type spanList [][]Word
-
-func panicSpans(strs []string) (out spanList) {
-	out = make(spanList, len(strs))
-	for i, str := range strs {
-		out[i] = panicHash(str)
-	}
-	return
-}
-
-// find the index and length of a prefix matching the passed words
-func (ws spanList) findPrefix(words []Word) (retWhich int, retLen int) {
-	if wordCount := len(words); wordCount > 0 {
-		for prefixIndex, prefix := range ws {
-			// every Word in el has to exist in words for it to be a prefix
-			// and it has to be longer than any other previous match for it to be the best match
-			// ( tbd? try a sort search? my first attempt failed miserably )
-			if prefixLen := len(prefix); prefixLen <= wordCount && prefixLen > retLen {
-				var failed bool
-				for i, a := range prefix {
-					if a.hash != words[i].hash {
-						failed = true
-						break
-					}
-				}
-				if !failed {
-					retWhich, retLen = prefixIndex, prefixLen
-				}
-			}
+func WordsWithSep(ws []Word, sep rune) (ret string) {
+	var b strings.Builder
+	for i, w := range ws {
+		if i > 0 {
+			b.WriteRune(sep)
 		}
+		b.WriteString(w.String())
 	}
-	return
+	return b.String()
 }

@@ -1,8 +1,11 @@
-package grok
+package grok_test
 
 import (
 	"strings"
 	"testing"
+
+	"git.sr.ht/~ionous/tapestry/support/grok"
+	"git.sr.ht/~ionous/tapestry/support/groktest"
 )
 
 // Test that the hashing properly strips spaces, lowers phrases, and produces the right ranges.
@@ -45,7 +48,7 @@ func TestHashing(t *testing.T) {
 	for i, w := range phrases {
 		want := expect[i]
 		wantsError := len(want) > 0 && want[0] == expectsError
-		if have, e := hashWords(w); wantsError != (e != nil) {
+		if have, e := grok.MakeSpan(w); wantsError != (e != nil) {
 			t.Fatal("unexpected error", e)
 		} else if e == nil {
 			if len(have) != len(want) {
@@ -53,7 +56,7 @@ func TestHashing(t *testing.T) {
 			} else {
 				for j, s := range want {
 					el := have[j]
-					if el.hash != plainHash(s) {
+					if el.Hash() != grok.Hash(s) {
 						t.Fatal(i, "mismatch el")
 					}
 					// lastly: test that the recorded start and end indices are correct
@@ -95,10 +98,10 @@ func TestMatching(t *testing.T) {
 		2,
 		-1,
 	}
-	prefixList := panicSpans(prefixes)
+	prefixList := groktest.PanicSpans(prefixes...)
 	for i, w := range tests {
-		h := panicHash(w)
-		matched, skip := prefixList.findPrefix(h)
+		h := groktest.PanicSpan(w)
+		matched, skip := prefixList.FindPrefix(h)
 		if skip == 0 { // shh...
 			matched = -1
 		}

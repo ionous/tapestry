@@ -3,25 +3,24 @@ package grok
 type Grokker interface {
 	// if the passed words starts with a determiner,
 	// return the number of words in  that match.
-	FindDeterminer([]Word) int
+	FindDeterminer([]Word) Match
 
 	// if the passed words starts with a kind,
 	// return the number of words in  that match.
-	FindKind([]Word) int
+	FindKind([]Word) Match
 
 	// if the passed words starts with a trait,
 	// return the number of words in  that match.
-	FindTrait([]Word) int
+	FindTrait([]Word) Match
 
 	// if the passed words starts with a macro,
 	// return information about that match
-	FindMacro([]Word) (ret MacroInfo, okay bool)
+	FindMacro([]Word) (MacroInfo, bool)
 }
 
 type MacroInfo struct {
+	Match Match
 	Type  MacroType
-	Str   string
-	Width int // should match strings.Fields(Str)
 }
 
 type Results struct {
@@ -31,16 +30,34 @@ type Results struct {
 }
 
 type Noun struct {
-	Det    []Word
-	Name   []Word
-	Traits [][]Word
-	Kinds  [][]Word // it's possible, if rare, to apply multiple kinds
+	Det    Match
+	Name   Span
+	Traits []Match
+	Kinds  []Match // it's possible, if rare, to apply multiple kinds
 	// ex. The container called the coffin is a closed openable thing.
+}
+
+// Match - generic interface so Grokker implementations can track their own backchannel data.
+// ex. a row id for kinds.
+type Match interface {
+	String() string
+	NumWords() int // should match strings.Fields(Str)
+}
+
+// Span - implements Match for a chain of individual words.
+type Span []Word
+
+func (s Span) String() string {
+	return WordsWithSep(s, ' ')
+}
+
+func (s Span) NumWords() int {
+	return len(s)
 }
 
 func Grok(known Grokker, p string) (ret Results, err error) {
 	out := &Results{}
-	if words, e := hashWords(p); e != nil {
+	if words, e := MakeSpan(p); e != nil {
 		err = e
 	} else {
 		// scan for "is/are" or a macro verb, which ever comes first;
@@ -52,7 +69,7 @@ func Grok(known Grokker, p string) (ret Results, err error) {
 			} else {
 				if macro, ok := known.FindMacro(words[i:]); ok {
 					out.Macro = macro
-					err = macroPhrase(known, out, words[i+macro.Width:])
+					err = macroPhrase(known, out, words[i+macro.Match.NumWords():])
 					break
 				}
 			}
@@ -68,10 +85,10 @@ func Grok(known Grokker, p string) (ret Results, err error) {
 var keywords = struct {
 	and, are, called, comma, has, is uint64
 }{
-	and:    plainHash("and"),
-	are:    plainHash("are"),
-	called: plainHash("called"),
-	comma:  plainHash(","),
-	has:    plainHash("has"),
-	is:     plainHash("is"),
+	and:    Hash("and"),
+	are:    Hash("are"),
+	called: Hash("called"),
+	comma:  Hash(","),
+	has:    Hash("has"),
+	is:     Hash("is"),
 }

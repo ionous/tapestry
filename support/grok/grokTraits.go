@@ -1,33 +1,37 @@
 package grok
 
-type traitSet struct {
-	kind      []Word
-	traits    [][]Word
-	wordCount int // including any deleted ands
+type TraitSet struct {
+	Kind      Match
+	Traits    []Match
+	WordCount int // including any deleted ands
 }
 
-func (ts *traitSet) kinds() (ret [][]Word) {
-	if len(ts.kind) > 0 {
-		ret = [][]Word{ts.kind}
+func (ts *TraitSet) hasKind() bool {
+	return ts.Kind != nil
+}
+func (ts *TraitSet) kinds() (ret []Match) {
+	if ts.hasKind() {
+		ret = []Match{ts.Kind}
 	}
 	return ret
 }
 
-func (ts *traitSet) applyTraits(out []Noun) {
-	if len(ts.kind) > 0 || len(ts.traits) > 0 {
+func (ts *TraitSet) applyTraits(out []Noun) {
+	if hasKind := ts.hasKind(); hasKind || len(ts.Traits) > 0 {
 		for i := range out {
-			if len(ts.kind) > 0 {
-				out[i].Kinds = append(out[i].Kinds, ts.kind)
+			if hasKind {
+				out[i].Kinds = append(out[i].Kinds, ts.Kind)
 			}
-			out[i].Traits = append(out[i].Traits, ts.traits...)
+			out[i].Traits = append(out[i].Traits, ts.Traits...)
 		}
 	}
 }
 
+// public for testing
 // ex. "[the] open container"
 // ex. "[the] open and openable container"
 // ex. "[is] open"
-func parseTraitSet(known Grokker, ws []Word) (out traitSet, err error) {
+func ParseTraitSet(known Grokker, ws []Word) (out TraitSet, err error) {
 	var scan int
 	var prevSep sepFlag
 Loop:
@@ -35,18 +39,20 @@ Loop:
 		// although its a bit weird englishy-wise
 		// inform allows determiners before every trait:
 		// ex. The box is an openable and a closed.
-		if skipDet := known.FindDeterminer(rest); skipDet >= len(rest) {
+		det := known.FindDeterminer(rest)
+		if skipDet := numWords(det); skipDet >= len(rest) {
 			err = makeWordError(rest[0], "expected some sort of name")
 		} else {
 			rest = rest[skipDet:]
-			if skipTrait := known.FindTrait(rest); skipTrait > 0 {
+			trait := known.FindTrait(rest)
+			if skipTrait := numWords(trait); skipTrait > 0 {
 				// eat any ands between traits
 				if skipAnd, andSep, e := countAnd(rest[skipTrait:]); e != nil {
 					err = e
 				} else if skipRest := skipTrait + skipAnd; skipAnd > 0 && skipRest >= len(rest) {
 					err = makeWordError(rest[skipTrait], "unexpected trailing separator")
 				} else {
-					out.traits = append(out.traits, rest[:skipTrait])
+					out.Traits = append(out.Traits, trait)
 					prevSep = andSep
 					scan += skipRest + skipDet
 					goto Loop
@@ -54,8 +60,9 @@ Loop:
 			} else if prevSep&AndSep == 0 {
 				// if it wasn't a trait and some previous trait didnt end with "and",
 				// it might be a trailing kind:
-				if skipKind := known.FindKind(rest); skipKind > 0 {
-					out.kind = rest[:skipKind]
+				kind := known.FindKind(rest)
+				if skipKind := numWords(kind); skipKind > 0 {
+					out.Kind = kind
 					scan += skipKind + skipDet
 					// done.
 				}
@@ -64,7 +71,7 @@ Loop:
 	}
 	// after scanning
 	if err == nil {
-		out.wordCount = scan
+		out.WordCount = scan
 	}
 	return
 }
