@@ -23,51 +23,23 @@ func TestTraits(t *testing.T) {
 
 type info struct {
 	determiners, kinds, traits groktest.SpanList
-	macros                     macroList
+	macros                     groktest.MacroList
 }
 
-type macroList struct {
-	groktest.SpanList
-	types []MacroType
-}
-
-func (ml macroList) get(i int) ([]Word, MacroType) {
-	return ml.SpanList[i], ml.types[i]
-}
-
-func panicMacros(pairs ...any) (out macroList) {
-	cnt := len(pairs) / 2
-	out.SpanList = make(groktest.SpanList, cnt)
-	out.types = make([]MacroType, cnt)
-	for i := 0; i < cnt; i++ {
-		out.types[i] = pairs[i*2+0].(MacroType)
-		out.SpanList[i] = groktest.PanicSpan(pairs[i*2+1].(string))
-	}
-	return
-}
-
-func (n *info) FindDeterminer(ws []Word) (ret Match) {
+func (n *info) FindDeterminer(ws []Word) Match {
 	return n.determiners.FindMatch(ws)
 }
 
-func (n *info) FindKind(ws []Word) (ret Match) {
+func (n *info) FindKind(ws []Word) Match {
 	return n.kinds.FindMatch(ws)
 }
 
-func (n *info) FindTrait(ws []Word) (ret Match) {
+func (n *info) FindTrait(ws []Word) Match {
 	return n.traits.FindMatch(ws)
 }
 
-func (n *info) FindMacro(ws []Word) (ret MacroInfo, okay bool) {
-	if at, skip := n.macros.FindPrefix(ws); skip > 0 {
-		w, t := n.macros.get(at)
-		ret = MacroInfo{
-			Match: Span(w[:skip]),
-			Type:  t,
-		}
-		okay = true
-	}
-	return
+func (n *info) FindMacro(ws []Word) (MacroInfo, bool) {
+	return n.macros.FindMacro(ws)
 }
 
 var known = info{
@@ -76,7 +48,7 @@ var known = info{
 		// ex. kettle of fish
 		"a kettle of",
 	),
-	macros: panicMacros(
+	macros: groktest.PanicMacros(
 		// tbd: flags need more thought.
 		grok.ManyToOne, "kind of", // for "a closed kind of container"
 		grok.ManyToOne, "kinds of", // for "are closed containers"

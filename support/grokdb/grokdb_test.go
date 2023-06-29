@@ -10,7 +10,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/test/testdb"
 )
 
-func xTestPhrases(t *testing.T) {
+func TestPhrases(t *testing.T) {
 	if db, e := setupDB(t.Name()); e != nil {
 		t.Fatal(e)
 	} else {

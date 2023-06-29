@@ -28,8 +28,8 @@ func PanicSpans(strs ...string) (out SpanList) {
 }
 
 func (ws SpanList) FindMatch(words grok.Span) (ret grok.Match) {
-	if _, skip := ws.FindPrefix(words); skip > 0 {
-		ret = words[:skip]
+	if i, skip := ws.FindPrefix(words); skip > 0 {
+		ret = grok.Span(ws[i]) // ords[:skip]
 	}
 	return
 }
@@ -69,7 +69,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `The bottle is closed.`,
 			result: map[string]any{
 				"sources": []map[string]any{{
-					"det":    "The", // uppercase because its the real value from the original string.
+					"det":    "the",
 					"name":   "bottle",
 					"traits": []string{"closed"},
 				}},
@@ -80,7 +80,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `The tree is fixed in place.`,
 			result: map[string]any{
 				"sources": []map[string]any{{
-					"det":    "The",
+					"det":    "the",
 					"name":   "tree",
 					"traits": []string{"fixed in place"},
 				}},
@@ -91,7 +91,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `The bottle is a transparent, open, container.`,
 			result: map[string]any{
 				"sources": []map[string]any{{
-					"det":    "The",
+					"det":    "the",
 					"name":   "bottle",
 					"kinds":  []string{"container"},
 					"traits": []string{"transparent", "open"},
@@ -103,7 +103,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `The box and the top are closed containers.`,
 			result: map[string]any{
 				"sources": []map[string]any{{
-					"det":    "The",
+					"det":    "the",
 					"name":   "box",
 					"traits": []string{"closed"},
 					"kinds":  []string{"containers"},
@@ -120,7 +120,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `The container called the sarcophagus is open.`,
 			result: map[string]any{
 				"sources": []map[string]any{{
-					"det":    "the", // lowercase, its the bit closet to the noun
+					"det":    "the", // note: this is the bit closes to the noun
 					"name":   "sarcophagus",
 					"kinds":  []string{"container"},
 					"traits": []string{"open"},
@@ -134,7 +134,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			result: map[string]any{
 				"macro": "a kind of",
 				"sources": []map[string]any{{
-					"det":   "The",
+					"det":   "the",
 					"name":  "box",
 					"kinds": []string{"container"},
 				}},
@@ -147,7 +147,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			result: map[string]any{
 				"macro": "a kind of",
 				"sources": []map[string]any{{
-					"det":    "The",
+					"det":    "the",
 					"name":   "box",
 					"traits": []string{"closed"},
 					"kinds":  []string{"container"},
@@ -163,7 +163,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			result: map[string]any{
 				"macro": "a kind of",
 				"sources": []map[string]any{{
-					"det":   "The",
+					"det":   "the",
 					"name":  "closed box",
 					"kinds": []string{"container"},
 				}},
@@ -187,7 +187,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			result: map[string]any{
 				"macro": "in",
 				"sources": []map[string]any{{
-					"det":  "The",
+					"det":  "the",
 					"name": "unhappy man",
 				}},
 				"targets": []map[string]any{{
@@ -201,7 +201,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			result: map[string]any{
 				"macro": "in",
 				"sources": []map[string]any{{
-					"det":    "The",
+					"det":    "the",
 					"name":   "coffin",
 					"traits": []string{"closed"},
 					"kinds":  []string{"container"},
@@ -218,7 +218,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			result: map[string]any{
 				"macro": "in",
 				"sources": []map[string]any{{
-					"det":    "The",
+					"det":    "the",
 					"traits": []string{"openable"},
 					"name":   "bottle",
 				}},
@@ -252,11 +252,11 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		// slightly different parsing than "kind/s of":
 		// those expect only expect one set of nouns; these have two.
 		{
-			test: `The closed openable container called the trunk is in the lobby.`,
+			test: `A closed openable container called the trunk is in the lobby.`,
 			result: map[string]any{
 				"macro": "in",
 				"sources": []map[string]any{{
-					"det":    "the", // lowercase, the closest to the trunk
+					"det":    "the", // closest to the trunk
 					"name":   "trunk",
 					"traits": []string{"closed", "openable"},
 					"kinds":  []string{"container"},
@@ -274,11 +274,11 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			result: map[string]any{
 				"macro": "in",
 				"targets": []map[string]any{{
-					"det":  "the", // lowercase, the closest to the trunk
+					"det":  "the", // closest to the coffin
 					"name": "coffin",
 				}},
 				"sources": []map[string]any{{
-					"det":  "Some",
+					"det":  "some",
 					"name": "coins",
 				}, {
 					"det":  "a",
@@ -349,7 +349,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			skip: map[string]any{
 				"macro": "in",
 				"sources": []map[string]any{{
-					"det":    "The",
+					"det":    "the",
 					"traits": []string{"openable"},
 					"name":   "bottle",
 				}},

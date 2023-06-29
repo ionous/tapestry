@@ -89,5 +89,17 @@ var traits = groktest.PanicSpans("closed",
 // if the passed words starts with a macro,
 // return information about that match
 func (d *dbg) FindMacro(ws []grok.Word) (ret grok.MacroInfo, okay bool) {
-	return
+	return macros.FindMacro(ws)
 }
+
+var macros = groktest.PanicMacros(
+	// tbd: flags need more thought.
+	grok.ManyToOne, "kind of", // for "a closed kind of container"
+	grok.ManyToOne, "kinds of", // for "are closed containers"
+	grok.ManyToOne, "a kind of", // for "a kind of container"
+	// other macros
+	grok.OneToMany, "on", // on the x are the w,y,z
+	grok.OneToMany, "in",
+	//
+	grok.ManyToMany, "suspicious of",
+)
