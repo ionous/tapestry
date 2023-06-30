@@ -28,17 +28,6 @@ func Must(db *sql.DB, q string, args ...any) {
 	}
 }
 
-// func MustGetId(db *sql.DB, q string, args ...any) (ret int64) {
-// 	if res, e := db.Exec(q, args...); e != nil {
-// 		panic(e)
-// 	} else if id, e := res.LastInsertId(); e != nil {
-// 		panic(e)
-// 	} else {
-// 		ret = id
-// 	}
-// 	return
-// }
-
 func RowsAffected(res sql.Result) (ret int) {
 	if cnt, e := res.RowsAffected(); e != nil {
 		ret = -1

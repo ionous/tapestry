@@ -332,14 +332,14 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			result: map[string]any{
 				"macro": "suspicious of",
 				"sources": []map[string]any{{
-					"name": "Hector",
+					"name": "hector",
 				}, {
-					"name": "Maria",
+					"name": "maria",
 				}},
 				"targets": []map[string]any{{
-					"name": "Santa",
+					"name": "santa",
 				}, {
-					"name": "Santana",
+					"name": "santana",
 				}},
 			},
 		},

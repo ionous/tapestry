@@ -43,13 +43,14 @@ func (w *Word) String() string {
 	return w.slice
 }
 
+// tbd: find some way to improve this
 func WordsWithSep(ws []Word, sep rune) (ret string) {
 	var b strings.Builder
 	for i, w := range ws {
 		if i > 0 {
 			b.WriteRune(sep)
 		}
-		b.WriteString(w.String())
+		b.WriteString(strings.ToLower(w.String()))
 	}
 	return b.String()
 }

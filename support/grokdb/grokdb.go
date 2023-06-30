@@ -5,9 +5,11 @@ import (
 	"log"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/support/groktest"
+	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
 
@@ -35,7 +37,7 @@ var det = groktest.PanicSpans("the", "a", "an", "some", "our")
 // return the number of words in  that match.
 func (d *dbg) FindKind(ws []grok.Word) (ret grok.Match) {
 	// to ensure a whole word match, during query the names of the kinds are appended with blanks
-	// and so we also give the phrase a final blank in case the phrase is a single word.z1
+	// and so we also give the phrase a final blank in case the phrase is a single word.
 	words := grok.WordsWithSep(ws, '_') + "_"
 	var found struct {
 		id   int
@@ -88,8 +90,7 @@ func (d *dbg) getAspectPath() (ret string, err error) {
 		`, kindsOf.Aspect.String()).Scan(&path)
 		switch e {
 		case nil:
-			d.aspectPath = path
-			ret = path
+			ret, d.aspectPath = path, path
 		case sql.ErrNoRows:
 			err = errutil.New("couldn't determine", kindsOf.Aspect)
 		default:
@@ -149,17 +150,72 @@ func (d *dbg) FindTrait(ws []grok.Word) (ret grok.Match) {
 // if the passed words starts with a macro,
 // return information about that match
 func (d *dbg) FindMacro(ws []grok.Word) (ret grok.MacroInfo, okay bool) {
-	return macros.FindMacro(ws)
+	if m, e := d.findMacro(ws); e != nil && e != sql.ErrNoRows {
+		panic(e)
+	} else if e == nil {
+		ret, okay = m, true
+	}
+	return
 }
 
-var macros = groktest.PanicMacros(
-	// tbd: flags need more thought.
-	grok.ManyToOne, "kind of", // for "a closed kind of container"
-	grok.ManyToOne, "kinds of", // for "are closed containers"
-	grok.ManyToOne, "a kind of", // for "a kind of container"
-	// other macros
-	grok.OneToMany, "on", // on the x are the w,y,z
-	grok.OneToMany, "in",
-	//
-	grok.ManyToMany, "suspicious of",
-)
+func (d *dbg) findMacro(ws []grok.Word) (ret grok.MacroInfo, err error) {
+	// uses spaces instead of underscores...
+	words := grok.WordsWithSep(ws, ' ') + " "
+	var found struct {
+		id, kind int64
+		phrase   string
+		rev      bool
+	}
+	if e := d.db.QueryRow(`
+	select mg.rowid, mg.kind, phrase, reversed 
+	from mdl_grok mg
+	join domain_tree dt
+		on (dt.uses = mg.domain)
+	where base = ?1
+	and (phrase || ' ') = substr(?2 ,0, length(phrase)+2)
+	order by length(phrase) desc
+	limit 1`, d.domain, words).Scan(
+		&found.id, &found.kind, &found.phrase, &found.rev); e != nil {
+		err = e
+	} else if parts, e := tables.QueryStrings(d.db,
+		`select affinity 
+		from mdl_field 
+		where kind=?1`, found.kind); e != nil {
+		err = e
+	} else if numParts := len(parts); numParts != 2 {
+		err = errutil.New("invalid relation, should have two fields; has %d", numParts)
+	} else {
+		var flag grok.MacroType
+		a, b := affine.Affinity(parts[0]), affine.Affinity(parts[1])
+		if found.rev {
+			a, b = b, a
+		}
+		if a == affine.Text {
+			if b == affine.Text {
+				err = errutil.New("one one not supported?")
+			} else if b == affine.TextList {
+				flag = grok.OneToMany
+			} else {
+				err = errutil.New("unexpected aff", b)
+			}
+		} else if a == affine.TextList {
+			if b == affine.Text {
+				flag = grok.ManyToOne
+			} else if b == affine.TextList {
+				flag = grok.ManyToMany
+			} else {
+				err = errutil.New("unexpected aff", b)
+			}
+		} else {
+			err = errutil.New("unexpected aff", a)
+		}
+		if err == nil {
+			width := strings.Count(found.phrase, " ") + 1
+			ret = grok.MacroInfo{
+				Match: grok.Span(ws[:width]),
+				Type:  flag,
+			}
+		}
+	}
+	return
+}
