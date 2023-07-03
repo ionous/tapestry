@@ -1381,6 +1381,109 @@ func DefineFields_Marshal(m jsn.Marshaler, val *DefineFields) (err error) {
 	return
 }
 
+// DefineStatement Simple english like definitions of nouns, kinds, and their relatives.
+type DefineStatement struct {
+	Text   rt.TextEval `if:"label=_"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*DefineStatement)(nil)
+
+func (*DefineStatement) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DefineStatement_Type,
+		Uses: composer.Type_Flow,
+		Lede: "define",
+	}
+}
+
+const DefineStatement_Type = "define_generic"
+const DefineStatement_Field_Definition = "$DEFINITION"
+
+func (op *DefineStatement) Marshal(m jsn.Marshaler) error {
+	return DefineStatement_Marshal(m, op)
+}
+
+type DefineStatement_Slice []DefineStatement
+
+func (op *DefineStatement_Slice) GetType() string { return DefineStatement_Type }
+
+func (op *DefineStatement_Slice) Marshal(m jsn.Marshaler) error {
+	return DefineStatement_Repeats_Marshal(m, (*[]DefineStatement)(op))
+}
+
+func (op *DefineStatement_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DefineStatement_Slice) SetSize(cnt int) {
+	var els []DefineStatement
+	if cnt >= 0 {
+		els = make(DefineStatement_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DefineStatement_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DefineStatement_Marshal(m, &(*op)[i])
+}
+
+func DefineStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]DefineStatement) error {
+	return jsn.RepeatBlock(m, (*DefineStatement_Slice)(vals))
+}
+
+func DefineStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefineStatement) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DefineStatement_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DefineStatement_Flow struct{ ptr *DefineStatement }
+
+func (n DefineStatement_Flow) GetType() string      { return DefineStatement_Type }
+func (n DefineStatement_Flow) GetLede() string      { return "define" }
+func (n DefineStatement_Flow) GetFlow() interface{} { return n.ptr }
+func (n DefineStatement_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DefineStatement); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DefineStatement_Optional_Marshal(m jsn.Marshaler, pv **DefineStatement) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DefineStatement_Marshal(m, *pv)
+	} else if !enc {
+		var v DefineStatement
+		if err = DefineStatement_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DefineStatement_Marshal(m jsn.Marshaler, val *DefineStatement) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DefineStatement_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", DefineStatement_Field_Definition)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Text)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DefineStatement_Field_Definition))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // DefineKinds
 type DefineKinds struct {
 	Kinds    rt.TextListEval `if:"label=kinds"`
@@ -2130,6 +2233,127 @@ func DefinePattern_Marshal(m jsn.Marshaler, val *DefinePattern) (err error) {
 		}
 		if e4 != nil && e4 != jsn.Missing {
 			m.Error(errutil.New(e4, "in flow at", DefinePattern_Field_Rules))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
+// DefinePhrase Define a phrase that can be used with 'natural language' statements.
+type DefinePhrase struct {
+	Phrase   rt.TextEval `if:"label=phrase"`
+	Macro    rt.TextEval `if:"label=as_macro"`
+	Reversed rt.BoolEval `if:"label=reversed,optional"`
+	Markup   map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*DefinePhrase)(nil)
+
+func (*DefinePhrase) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DefinePhrase_Type,
+		Uses: composer.Type_Flow,
+		Lede: "define",
+	}
+}
+
+const DefinePhrase_Type = "define_phrase"
+const DefinePhrase_Field_Phrase = "$PHRASE"
+const DefinePhrase_Field_Macro = "$MACRO"
+const DefinePhrase_Field_Reversed = "$REVERSED"
+
+func (op *DefinePhrase) Marshal(m jsn.Marshaler) error {
+	return DefinePhrase_Marshal(m, op)
+}
+
+type DefinePhrase_Slice []DefinePhrase
+
+func (op *DefinePhrase_Slice) GetType() string { return DefinePhrase_Type }
+
+func (op *DefinePhrase_Slice) Marshal(m jsn.Marshaler) error {
+	return DefinePhrase_Repeats_Marshal(m, (*[]DefinePhrase)(op))
+}
+
+func (op *DefinePhrase_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DefinePhrase_Slice) SetSize(cnt int) {
+	var els []DefinePhrase
+	if cnt >= 0 {
+		els = make(DefinePhrase_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DefinePhrase_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DefinePhrase_Marshal(m, &(*op)[i])
+}
+
+func DefinePhrase_Repeats_Marshal(m jsn.Marshaler, vals *[]DefinePhrase) error {
+	return jsn.RepeatBlock(m, (*DefinePhrase_Slice)(vals))
+}
+
+func DefinePhrase_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefinePhrase) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DefinePhrase_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DefinePhrase_Flow struct{ ptr *DefinePhrase }
+
+func (n DefinePhrase_Flow) GetType() string      { return DefinePhrase_Type }
+func (n DefinePhrase_Flow) GetLede() string      { return "define" }
+func (n DefinePhrase_Flow) GetFlow() interface{} { return n.ptr }
+func (n DefinePhrase_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DefinePhrase); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DefinePhrase_Optional_Marshal(m jsn.Marshaler, pv **DefinePhrase) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DefinePhrase_Marshal(m, *pv)
+	} else if !enc {
+		var v DefinePhrase
+		if err = DefinePhrase_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DefinePhrase_Marshal(m jsn.Marshaler, val *DefinePhrase) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DefinePhrase_Flow{val}); err == nil {
+		e0 := m.MarshalKey("phrase", DefinePhrase_Field_Phrase)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Phrase)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DefinePhrase_Field_Phrase))
+		}
+		e1 := m.MarshalKey("as_macro", DefinePhrase_Field_Macro)
+		if e1 == nil {
+			e1 = rt.TextEval_Marshal(m, &val.Macro)
+		}
+		if e1 != nil && e1 != jsn.Missing {
+			m.Error(errutil.New(e1, "in flow at", DefinePhrase_Field_Macro))
+		}
+		e2 := m.MarshalKey("reversed", DefinePhrase_Field_Reversed)
+		if e2 == nil {
+			e2 = rt.BoolEval_Optional_Marshal(m, &val.Reversed)
+		}
+		if e2 != nil && e2 != jsn.Missing {
+			m.Error(errutil.New(e2, "in flow at", DefinePhrase_Field_Reversed))
 		}
 		m.EndBlock()
 	}
@@ -6760,12 +6984,14 @@ var Slats = []composer.Composer{
 	(*CountOf)(nil),
 	(*CycleText)(nil),
 	(*DefineFields)(nil),
+	(*DefineStatement)(nil),
 	(*DefineKinds)(nil),
 	(*DefineMacro)(nil),
 	(*DefineNounTraits)(nil),
 	(*DefineNouns)(nil),
 	(*DefineOtherRelatives)(nil),
 	(*DefinePattern)(nil),
+	(*DefinePhrase)(nil),
 	(*DefineRelation)(nil),
 	(*DefineRelatives)(nil),
 	(*DefineScene)(nil),
@@ -6881,6 +7107,8 @@ var Signatures = map[uint64]interface{}{
 	2733154260078704538:  (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:result:provides:withRules: */
 	13567867628780565820: (*DefinePattern)(nil),        /* execute=Define pattern:requires:result:withRules: */
 	13056176094891343360: (*DefinePattern)(nil),        /* story_statement=Define pattern:requires:result:withRules: */
+	4650767708903763835:  (*DefinePhrase)(nil),         /* story_statement=Define phrase:asMacro: */
+	89301097593785617:    (*DefinePhrase)(nil),         /* story_statement=Define phrase:asMacro:reversed: */
 	10321772035226997803: (*DefineRelation)(nil),       /* execute=Define relation:cardinality manyToMany: */
 	14085782312273513943: (*DefineRelation)(nil),       /* story_statement=Define relation:cardinality manyToMany: */
 	10263803882772415534: (*DefineRelation)(nil),       /* execute=Define relation:cardinality manyToOne: */
@@ -6897,6 +7125,7 @@ var Signatures = map[uint64]interface{}{
 	3652615969014829573:  (*DefineTraits)(nil),         /* story_statement=Define traits:as: */
 	13015531987120768169: (*NounAssignment)(nil),       /* execute=Define value:of:asLines: */
 	6282260507942600093:  (*NounAssignment)(nil),       /* story_statement=Define value:of:asLines: */
+	4405781038960927094:  (*DefineStatement)(nil),      /* story_statement=Define: */
 	5241959995092605683:  (*MapDeparting)(nil),         /* execute=Departing from:via:and:otherRoom: */
 	12862689211056047959: (*MapDeparting)(nil),         /* story_statement=Departing from:via:and:otherRoom: */
 	11410817647196565135: (*ActionDecl)(nil),           /* execute=Event:action:args common: */

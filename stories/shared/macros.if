@@ -1,0 +1,236 @@
+{
+  "Tapestry:": [
+    {
+      "Define macro:requires:result:with:": [
+        "inherits",
+        [
+          {
+            "Text:": "kind"
+          },
+          {
+            "TextList:": "things"
+          }
+        ],
+        {
+          "Text": "error"
+        },
+        [
+          {
+            "Define nouns:as:": [
+              "@things",
+              "@kind"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Define macro:requires:result:with:": [
+        "traits",
+        [
+          {
+            "TextList:": "things"
+          },
+          {
+            "TextList:": "traits"
+          }
+        ],
+        {
+          "Text": "error"
+        },
+        [
+          {
+            "Define nouns:traits:": [
+              "@things",
+              "@traits"
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Define macro:requires:result:with:": [
+        "carries",
+        [
+          {
+            "Text:": "actor"
+          },
+          {
+            "TextList:": "things"
+          }
+        ],
+        {
+          "Text": "error"
+        },
+        [
+          {
+            "Define nouns:as:": [
+              {
+                "List ofText:": [
+                  "@actor"
+                ]
+              },
+              "actor"
+            ]
+          },
+          {
+            "Define nouns:as:": [
+              "@things",
+              "things"
+            ]
+          },
+          {
+            "Define relativeTo:nouns:otherNouns:": [
+              "whereabouts",
+              "@things",
+              {
+                "List ofText:": [
+                  "@actor"
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Define macro:requires:result:with:": [
+        "wears",
+        [
+          {
+            "Text:": "actor"
+          },
+          {
+            "TextList:": "things"
+          }
+        ],
+        {
+          "Text": "error"
+        },
+        [
+          {
+            "Define nouns:as:": [
+              {
+                "List ofText:": [
+                  "@actor"
+                ]
+              },
+              "actor"
+            ]
+          },
+          {
+            "Define nouns:as:traits:": [
+              "@things",
+              "things",
+              [
+                "wearable",
+                "worn"
+              ]
+            ]
+          },
+          {
+            "Define relativeTo:nouns:otherNouns:": [
+              "whereabouts",
+              "@things",
+              {
+                "List ofText:": [
+                  "@actor"
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "--": "might be a room or a container",
+      "Define macro:requires:result:with:": [
+        "contains",
+        [
+          {
+            "Text:": "owner"
+          },
+          {
+            "TextList:": "things"
+          }
+        ],
+        {
+          "Text": "error"
+        },
+        [
+          {
+            "If:does:": [
+              {
+                "Not:": {
+                  "KindOf:is:": [
+                    "@owner",
+                    "room"
+                  ]
+                }
+              },
+              [
+                {
+              		"--": "if it's not a room, then its a container.",
+                  "Define nouns:as:": [
+                    "@owner",
+                    "container"
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "Define relativeTo:nouns:otherNouns:": [
+              "whereabouts",
+              "@things",
+              {
+                "List ofText:": [
+                  "@owner"
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Define macro:requires:result:with:": [
+        "supports",
+        [
+          {
+            "Text:": "supporter"
+          },
+          {
+            "TextList:": "things"
+          }
+        ],
+        {
+          "Text": "error"
+        },
+        [
+          {
+            "Define nouns:as:": [
+              {
+                "List ofText:": [
+                  "@supporter"
+                ]
+              },
+              "supporter"
+            ]
+          },
+          {
+            "Define relativeTo:nouns:otherNouns:": [
+              "whereabouts",
+              "@things",
+              {
+                "List ofText:": [
+                  "@supporter"
+                ]
+              }
+            ]
+          }
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "Tapestry:": [
+    {
+      "Define phrase:asMacro:": [
+        "kind of",
+        "inherits"
+      ]
+    },
+    {
+      "Define phrase:asMacro:": [
+        "kinds of",
+        "inherits"
+      ]
+    },
+    {
+      "Define phrase:asMacro:": [
+        "a kind of",
+        "inherits"
+      ]
+    },
+    {
+      "Define phrase:asMacro": [
+        "in",
+        "contains"
+      ]
+    },
+    {
+      "Define phrase:asMacro": [
+        "on",
+        "supports"
+      ]
+    },
+    {
+      "Define phrase:asMacro": [
+        "carries",
+        "carries"
+      ]
+    },
+    {
+      "Define phrase:asMacro": [
+        "wears",
+        "wears"
+      ]
+    },
+    {
+      "Define phrase:asMacro": [
+        "supports",
+        "supports"
+      ]
+    },
+    {
+      "Define phrase:asMacro": [
+        "contains",
+        "contains"
+      ]
+    }
+  ]
+}

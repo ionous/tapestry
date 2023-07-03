@@ -89,6 +89,48 @@ func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 }
 
 // Execute - called by the macro runtime during weave.
+func (op *DefinePhrase) Execute(macro rt.Runtime) error {
+	return Weave(macro, op)
+}
+
+//  add to the grok table,
+// mdl_phrase( domain text not null, kind int not null, phrase text, reversed bool )
+// should probably check rivals too --
+
+func (op *DefinePhrase) Weave(cat *weave.Catalog) error {
+	return cat.Schedule(assert.RequireAncestry, func(w *weave.Weaver) (err error) {
+		if phrase, e := safe.GetText(w, op.Phrase); e != nil {
+			err = e
+		} else if macro, e := safe.GetText(w, op.Macro); e != nil {
+			err = e
+		} else if rev, e := safe.GetBool(w, op.Reversed); e != nil {
+			err = e
+		} else {
+			d, at := w.Domain.Name(), w.At
+			err = cat.AddPhrase(d, macro.String(), phrase.String(), rev.Bool(), at)
+		}
+		return
+	})
+}
+
+// Execute - called by the macro runtime during weave.
+func (op *DefineStatement) Execute(macro rt.Runtime) error {
+	return Weave(macro, op)
+}
+
+func (op *DefineStatement) Weave(cat *weave.Catalog) error {
+	return nil
+	// return cat.Schedule(assert.RequireRules, func(w *weave.Weaver) (err error) {
+	// 	if text, e := safe.GetText(w, op.Text); e != nil {
+	// 		err = e
+	// 	} else {
+
+	// 	}
+	// 	return
+	// })
+}
+
+// Execute - called by the macro runtime during weave.
 func (op *DefineNouns) Execute(macro rt.Runtime) error {
 	return Weave(macro, op)
 }

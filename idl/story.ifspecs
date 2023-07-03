@@ -4,7 +4,7 @@
     "story",
     {
       "Group contains:": [
-      	 {
+        {
           "--": [
             "Add a note.",
             "Information about the story for you and other authors."
@@ -409,7 +409,6 @@
             }
           ]
         },
-       
         {
           "--": [
             "Declare event listeners.",
@@ -548,6 +547,65 @@
           ]
         },
         {
+          "--": "Define a phrase that can be used with 'natural language' statements.",
+          "Spec:slots:with flow:": [
+            "define_phrase",
+            [
+              "story_statement"
+            ],
+            {
+              "Flow:uses:": [
+                "define",
+                [
+                  {
+                    "Term:type:": [
+                      "phrase",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:name:type:": [
+                      "as_macro",
+                      "macro",
+                      "text_eval"
+                    ]
+                  },
+                  {
+                    "Term:type:optional:": [
+                      "reversed",
+                      "bool_eval",
+                      true
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "--": "Simple english like definitions of nouns, kinds, and their relatives.",
+          "Spec:slots:with flow:": [
+            "define_statement",
+            [
+              "story_statement"
+            ],
+            {
+              "Flow:uses:": [
+                "define",
+                [
+                  {
+                    "Term:name:type:": [
+                      "_",
+                      "text",
+                      "text_eval"
+                    ]
+                  }
+                ]
+              ]
+            }
+          ]
+        },
+        {
           "Spec:slots:groups:with flow:": [
             "define_relation",
             [
@@ -557,7 +615,7 @@
             "relations",
             {
               "Flow:uses:": [
-              	"define",
+                "define",
                 [
                   {
                     "Term:type:": [
@@ -1561,7 +1619,7 @@
                   },
                   {
                     "Term:name:type:": [
-                    	"relative_to",
+                      "relative_to",
                       "relation",
                       "text_eval"
                     ]
@@ -1591,7 +1649,7 @@
                 [
                   {
                     "Term:name:type:": [
-                    	"relative_to",
+                      "relative_to",
                       "relation",
                       "text_eval"
                     ]
