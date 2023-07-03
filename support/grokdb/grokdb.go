@@ -168,7 +168,7 @@ func (d *dbg) findMacro(ws []grok.Word) (ret grok.MacroInfo, err error) {
 	}
 	if e := d.db.QueryRow(`
 	select mg.rowid, mg.kind, phrase, reversed 
-	from mdl_grok mg
+	from mdl_phrase mg
 	join domain_tree dt
 		on (dt.uses = mg.domain)
 	where base = ?1
@@ -182,32 +182,34 @@ func (d *dbg) findMacro(ws []grok.Word) (ret grok.MacroInfo, err error) {
 		from mdl_field 
 		where kind=?1`, found.kind); e != nil {
 		err = e
-	} else if numParts := len(parts); numParts != 2 {
-		err = errutil.New("invalid relation, should have two fields; has %d", numParts)
+	} else if numParts := len(parts); numParts != 0 && numParts != 2 {
+		err = errutil.Fmt("invalid relation, should have two fields; has %d", numParts)
 	} else {
 		var flag grok.MacroType
-		a, b := affine.Affinity(parts[0]), affine.Affinity(parts[1])
-		if found.rev {
-			a, b = b, a
-		}
-		if a == affine.Text {
-			if b == affine.Text {
-				err = errutil.New("one one not supported?")
-			} else if b == affine.TextList {
-				flag = grok.OneToMany
-			} else {
-				err = errutil.New("unexpected aff", b)
+		if numParts > 0 {
+			a, b := affine.Affinity(parts[0]), affine.Affinity(parts[1])
+			if found.rev {
+				a, b = b, a
 			}
-		} else if a == affine.TextList {
-			if b == affine.Text {
-				flag = grok.ManyToOne
-			} else if b == affine.TextList {
-				flag = grok.ManyToMany
+			if a == affine.Text {
+				if b == affine.Text {
+					err = errutil.New("one one not supported?")
+				} else if b == affine.TextList {
+					flag = grok.OneToMany
+				} else {
+					err = errutil.New("unexpected aff", b)
+				}
+			} else if a == affine.TextList {
+				if b == affine.Text {
+					flag = grok.ManyToOne
+				} else if b == affine.TextList {
+					flag = grok.ManyToMany
+				} else {
+					err = errutil.New("unexpected aff", b)
+				}
 			} else {
-				err = errutil.New("unexpected aff", b)
+				err = errutil.New("unexpected aff", a)
 			}
-		} else {
-			err = errutil.New("unexpected aff", a)
 		}
 		if err == nil {
 			width := strings.Count(found.phrase, " ") + 1

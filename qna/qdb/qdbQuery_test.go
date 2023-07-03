@@ -19,7 +19,7 @@ import (
 )
 
 // write test data to the database, and ensure we can query it back.
-// this exercises the asm.writer ( xforming from strings to ids )
+// this exercises the asm.writer.Add( xforming from strings to ids )
 // and the various runtime queries we need.
 func TestQueries(t *testing.T) {
 	db := testdb.Create(t.Name())
@@ -70,15 +70,15 @@ func TestQueries(t *testing.T) {
 				// domain, kind, field, affinity, type, at
 				// ---------------------------------------
 				// traits of an aspect
-				m.Member, domain, aspect, "brief", affine.Bool, "", at,
-				m.Member, domain, aspect, "verbose", affine.Bool, "", at,
-				m.Member, domain, aspect, "superbrief", affine.Bool, "", at,
+				m.AddMember, domain, aspect, "brief", affine.Bool, "", at,
+				m.AddMember, domain, aspect, "verbose", affine.Bool, "", at,
+				m.AddMember, domain, aspect, "superbrief", affine.Bool, "", at,
 				// kind that uses that aspect
-				m.Member, domain, kind, aspect, affine.Text, aspect, at,
+				m.AddMember, domain, kind, aspect, affine.Text, aspect, at,
 				// patterns
-				m.Parameter, domain, pattern, "object", affine.Text, kind, at,
-				m.Parameter, domain, pattern, "other_object", affine.Text, kind, at,
-				m.Result, domain, pattern, "ancestor", affine.Text, kind, at,
+				m.AddParameter, domain, pattern, "object", affine.Text, kind, at,
+				m.AddParameter, domain, pattern, "other_object", affine.Text, kind, at,
+				m.AddResult, domain, pattern, "ancestor", affine.Text, kind, at,
 			); e != nil {
 				err = e
 			} else if e := mdlNoun(m,
@@ -265,7 +265,7 @@ func mdlDomain(m *mdl.Modeler, els ...any) (err error) {
 			row[0].(string),
 			row[1].(string),
 			row[2].(string)
-		if e := m.Domain(domain, requires, at); e != nil {
+		if e := m.AddDomain(domain, requires, at); e != nil {
 			err = e
 			break
 		}
@@ -299,7 +299,7 @@ func mdlKind(m *mdl.Modeler, els ...any) (err error) {
 			row[1].(string),
 			row[2].(string),
 			row[3].(string)
-		if e := m.Kind(domain, kind, path, at); e != nil {
+		if e := m.AddKind(domain, kind, path, at); e != nil {
 			err = e
 			break
 		}
@@ -316,7 +316,7 @@ func mdlName(m *mdl.Modeler, els ...any) (err error) {
 			row[2].(string),
 			row[3].(int),
 			row[4].(string)
-		if e := m.Name(domain, noun, name, rank, at); e != nil {
+		if e := m.AddName(domain, noun, name, rank, at); e != nil {
 			err = e
 			break
 		}
@@ -332,7 +332,7 @@ func mdlNoun(m *mdl.Modeler, els ...any) (err error) {
 			row[1].(string),
 			row[2].(string),
 			row[3].(string)
-		if e := m.Noun(domain, noun, kind, at); e != nil {
+		if e := m.AddNoun(domain, noun, kind, at); e != nil {
 			err = e
 			break
 		}
@@ -349,7 +349,7 @@ func mdlPair(m *mdl.Modeler, els ...any) (err error) {
 			row[2].(string),
 			row[3].(string),
 			row[4].(string)
-		if e := m.Pair(domain, relKind, oneNoun, otherNoun, at); e != nil {
+		if e := m.AddPair(domain, relKind, oneNoun, otherNoun, at); e != nil {
 			err = e
 			break
 		}
@@ -381,7 +381,7 @@ func mdlPlural(m *mdl.Modeler, els ...any) (err error) {
 			row[1].(string),
 			row[2].(string),
 			row[3].(string)
-		if e := m.Plural(domain, many, one, at); e != nil {
+		if e := m.AddPlural(domain, many, one, at); e != nil {
 			err = e
 			break
 		}
@@ -399,7 +399,7 @@ func mdlRel(m *mdl.Modeler, els ...any) (err error) {
 			row[3].(string),
 			row[4].(string),
 			row[5].(string)
-		if e := m.Rel(domain, relKind, oneKind, otherKind, cardinality, at); e != nil {
+		if e := m.AddRel(domain, relKind, oneKind, otherKind, cardinality, at); e != nil {
 			err = e
 			break
 		}
@@ -417,7 +417,7 @@ func mdlRule(m *mdl.Modeler, els ...any) (err error) {
 			row[4].(string),
 			row[5].(string),
 			row[6].(string)
-		if e := m.UnmarshaledRule(domain, pattern, target, phase, filter, prog, at); e != nil {
+		if e := m.AddPlainRule(domain, pattern, target, phase, filter, prog, at); e != nil {
 			err = e
 			break
 		}
@@ -433,7 +433,7 @@ func mdlValue(m *mdl.Modeler, els ...any) (err error) {
 			row[2].(string),
 			row[3].(string),
 			row[4].(string)
-		if e := m.UnmarshaledValue(domain, noun, field, value, at); e != nil {
+		if e := m.AddPlainValue(domain, noun, field, value, at); e != nil {
 			err = e
 			break
 		}

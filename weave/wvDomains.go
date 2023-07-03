@@ -24,8 +24,12 @@ type memento struct {
 	at string
 }
 
+func (d *Domain) Name() string {
+	return d.name
+}
+
 func (op *memento) call(ctx *Weaver) error {
-	ctx.at = op.at
+	ctx.At = op.at
 	return op.cb(ctx)
 }
 
@@ -56,7 +60,7 @@ func (d *Domain) isReadyForProcessing() (okay bool, err error) {
 
 func (d *Domain) schedule(at string, when assert.Phase, what func(*Weaver) error) (err error) {
 	if d.currPhase > when {
-		ctx := Weaver{d: d, phase: d.currPhase, Runtime: d.cat.run}
+		ctx := Weaver{Domain: d, Phase: d.currPhase, Runtime: d.cat.run}
 		err = what(&ctx)
 	} else {
 		d.scheduling[when] = append(d.scheduling[when], memento{what, at})
@@ -114,7 +118,7 @@ func (d *Domain) UniformDeterminer(word string) (retDet, retWord string) {
 }
 
 func (d *Domain) makeNames(noun, name, at string) (err error) {
-	q := d.cat.writer
+	cat := d.cat
 	// if the original got transformed into underscores
 	// write the original name (ex. "toy boat" vs "toy_boat" )
 	var out []string
@@ -141,7 +145,7 @@ func (d *Domain) makeNames(noun, name, at string) (err error) {
 	for i, name := range out {
 		// ignore duplicate errors here.
 		// since these are generated, there's probably very little the user could do about them.
-		if e := q.Name(d.name, noun, name, i, at); e != nil && !errors.Is(e, mdl.Duplicate) {
+		if e := cat.AddName(d.name, noun, name, i, at); e != nil && !errors.Is(e, mdl.Duplicate) {
 			err = e
 			break
 		}
@@ -150,7 +154,7 @@ func (d *Domain) makeNames(noun, name, at string) (err error) {
 }
 
 func (d *Domain) runPhase(ctx *Weaver) (err error) {
-	w := ctx.phase
+	w := ctx.Phase
 	d.currPhase = w // hrmm
 	redo := struct {
 		cnt int

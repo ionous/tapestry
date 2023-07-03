@@ -2,6 +2,7 @@ package mdl
 
 import (
 	"database/sql"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -72,4 +73,14 @@ func makeRel(a, b string, card string) (first, second relKind) {
 		panic("unknown cardinality")
 	}
 	return
+}
+
+// the reversed relation name
+func fmtMacro(name string, reversed bool) (ret string) {
+	ps := []string{"the"}
+	if reversed {
+		ps = append(ps, "reversed")
+	}
+	ps = append(ps, "macro", name)
+	return strings.Join(ps, " ")
 }

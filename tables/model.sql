@@ -42,10 +42,6 @@ create table mdl_field( domain text not null, kind int not null, field text, aff
  */
 create table mdl_grammar( domain text not null, name text, prog blob, at text, primary key( domain, name ));
 /* 
- * statements for simplifying some kinds of story definitions.
- */
-create table mdl_grok( domain text not null, kind int not null, phrase text, reversed bool, at text, primary key( domain, kind, phrase ));
-/* 
  * a class of objects with shared characteristics 
  */
 create table mdl_kind( domain text not null, kind text, singular text, path text, at text, primary key( domain, kind ));
@@ -79,6 +75,10 @@ create table mdl_pat( kind int not null, labels text, result text, primary key( 
  * but the *singular* of "people" must always be "person".
  */
 create table mdl_plural( domain text not null, many text, one text, at text, primary key( domain, many ) );
+/* 
+ * statements for simplifying some kinds of story definitions.
+ */
+create table mdl_phrase( domain text not null, kind int not null, phrase text, reversed bool, at text, primary key( domain, phrase ));
 /* 
  * relation and constraint between two kinds of nouns 
  */

@@ -23,7 +23,7 @@ func makeCard(amany, bmany bool) (ret string) {
 // ugly way to normalize field names
 func addField(ctx *Weaver, kindName, fieldName, fieldClass string,
 	addField func(k, f, c string) error) (err error) {
-	d := ctx.d
+	d := ctx.Domain
 	if _, kind := d.UniformDeterminer(kindName); len(kind) == 0 {
 		err = InvalidString(kindName)
 	} else if field, ok := UniformString(fieldName); !ok {

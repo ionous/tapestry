@@ -6,8 +6,8 @@ import (
 )
 
 type Weaver struct {
-	d     *Domain
-	at    string
-	phase assert.Phase
+	Domain *Domain
+	At     string
+	Phase  assert.Phase
 	rt.Runtime
 }
