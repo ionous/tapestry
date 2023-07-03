@@ -13,20 +13,20 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// implements grok.Match; returned by dbg.
+// implements grok.Match; returned by dbSource.
 type dbMatch struct {
 	Id int
 	grok.Span
 }
 
-// implements grok.Grokker; returned by dbg.
-type dbg struct {
-	db         *sql.DB
+// implements grok.Grokker; returned by dbSource.
+type dbSource struct {
+	db         *tables.Cache
 	domain     string
 	aspectPath string
 }
 
-func (d *dbg) FindDeterminer(ws []grok.Word) grok.Match {
+func (d *dbSource) FindDeterminer(ws []grok.Word) grok.Match {
 	// FIX: should come from the db
 	return det.FindMatch(ws)
 }
@@ -35,7 +35,7 @@ var det = groktest.PanicSpans("the", "a", "an", "some", "our")
 
 // if the passed words starts with a kind,
 // return the number of words in  that match.
-func (d *dbg) FindKind(ws []grok.Word) (ret grok.Match) {
+func (d *dbSource) FindKind(ws []grok.Word) (ret grok.Match) {
 	// to ensure a whole word match, during query the names of the kinds are appended with blanks
 	// and so we also give the phrase a final blank in case the phrase is a single word.
 	words := grok.WordsWithSep(ws, '_') + "_"
@@ -78,7 +78,7 @@ func (d *dbg) FindKind(ws []grok.Word) (ret grok.Match) {
 	return
 }
 
-func (d *dbg) getAspectPath() (ret string, err error) {
+func (d *dbSource) getAspectPath() (ret string, err error) {
 	if len(d.aspectPath) > 0 {
 		ret = d.aspectPath
 	} else {
@@ -107,7 +107,7 @@ func (d *dbg) getAspectPath() (ret string, err error) {
 // with the first two applying to one kind, and the third applying to a different kind;
 // all in scope.  this would always match the second -- even if its not applicable.
 // ( i guess that's where commas can be used by the user to separate things )
-func (d *dbg) FindTrait(ws []grok.Word) (ret grok.Match) {
+func (d *dbSource) FindTrait(ws []grok.Word) (ret grok.Match) {
 	if ap, e := d.getAspectPath(); e != nil {
 		panic(e) // maybe should be returning error
 	} else {
@@ -149,7 +149,7 @@ func (d *dbg) FindTrait(ws []grok.Word) (ret grok.Match) {
 
 // if the passed words starts with a macro,
 // return information about that match
-func (d *dbg) FindMacro(ws []grok.Word) (ret grok.MacroInfo, okay bool) {
+func (d *dbSource) FindMacro(ws []grok.Word) (ret grok.MacroInfo, okay bool) {
 	if m, e := d.findMacro(ws); e != nil && e != sql.ErrNoRows {
 		panic(e)
 	} else if e == nil {
@@ -158,7 +158,7 @@ func (d *dbg) FindMacro(ws []grok.Word) (ret grok.MacroInfo, okay bool) {
 	return
 }
 
-func (d *dbg) findMacro(ws []grok.Word) (ret grok.MacroInfo, err error) {
+func (d *dbSource) findMacro(ws []grok.Word) (ret grok.MacroInfo, err error) {
 	// uses spaces instead of underscores...
 	words := grok.WordsWithSep(ws, ' ') + " "
 	var found struct {

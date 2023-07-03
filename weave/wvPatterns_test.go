@@ -46,7 +46,7 @@ func TestPatternSingle(t *testing.T) {
 // redeclare the same pattern as in single, but with multiple commands
 func TestPatternSeparateLocals(t *testing.T) {
 	// not shuffling because the order of parameters matters for the test
-	dt := testweave.NewWeaverOptions(t.Name(), nil, false)
+	dt := testweave.NewWeaverOptions(t.Name(), false)
 	defer dt.Close()
 	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table

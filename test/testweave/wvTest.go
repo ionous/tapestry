@@ -7,7 +7,6 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/eph"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
@@ -16,19 +15,24 @@ import (
 )
 
 func NewWeaver(name string) *Weaver {
-	return NewWeaverOptions(name, nil, true)
+	return NewWeaverOptions(name, true)
 }
 
-func NewWeaverOptions(name string, makeRun func(db *sql.DB) rt.Runtime, shuffle bool) *Weaver {
+func NewWeaverOptions(name string, shuffle bool) *Weaver {
 	db := testdb.Create(name)
-	var run rt.Runtime
-	if makeRun != nil {
-		run = makeRun(db)
-	}
 	return &Weaver{
 		name:      name,
 		db:        db,
-		cat:       weave.NewCatalogWithWarnings(db, run, LogWarning),
+		cat:       weave.NewCatalogWithWarnings(db, nil, LogWarning),
+		noShuffle: !shuffle,
+	}
+}
+
+func NewWeaverCatalog(name string, db *sql.DB, cat *weave.Catalog, shuffle bool) *Weaver {
+	return &Weaver{
+		name:      name,
+		db:        db,
+		cat:       cat,
 		noShuffle: !shuffle,
 	}
 }
@@ -50,10 +54,6 @@ type Weaver struct {
 	noShuffle bool
 	db        *sql.DB
 	cat       *weave.Catalog
-}
-
-func (dt *Weaver) Catalog() *weave.Catalog {
-	return dt.cat
 }
 
 func (dt *Weaver) Close() {

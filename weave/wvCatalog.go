@@ -14,6 +14,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/support/grokdb"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
@@ -40,6 +41,8 @@ type Catalog struct {
 	Env         Environ
 
 	domainNouns map[domainNoun]*ScopedNoun
+
+	gdb grokdb.Source
 }
 
 type domainNoun struct{ domain, noun string }
@@ -65,6 +68,8 @@ func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catal
 	if e != nil {
 		panic(e)
 	}
+	cache := tables.NewCache(db)
+	gdb := grokdb.NewSource(cache)
 	// fix: this needs cleanup
 	// write should be called modeler
 	// initial cursor should be set externally or passed in
@@ -77,10 +82,11 @@ func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catal
 		domainNouns: make(map[domainNoun]*ScopedNoun),
 		autoCounter: make(Counters),
 		cursor:      "x", // fix
-		db:          tables.NewCache(db),
+		db:          cache,
 		domains:     make(map[string]*Domain),
 		Modeler:     m,
 		run:         run,
+		gdb:         gdb,
 	}
 }
 

@@ -36,7 +36,7 @@ func TestPluralAssembly(t *testing.T) {
 	defer unwarn()
 	// cant shuffle because the test picks out warnings one by one
 	// tbd: add some warnings.Includes()?
-	dt := testweave.NewWeaverOptions(t.Name(), nil, false)
+	dt := testweave.NewWeaverOptions(t.Name(), false)
 	defer dt.Close()
 	// yes, these are collective nouns not plurals... shhh...
 	dt.MakeDomain(dd("a"),

@@ -1,7 +1,6 @@
 package story_test
 
 import (
-	"database/sql"
 	_ "embed"
 	"log"
 	"testing"
@@ -10,9 +9,10 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/decode"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
-	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"git.sr.ht/~ionous/tapestry/test/testweave"
+	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/kr/pretty"
 )
@@ -20,20 +20,21 @@ import (
 // use a macro to define a relationship between nouns
 func TestMacros(t *testing.T) {
 	// ugh. this setup.
-	dt := testweave.NewWeaverOptions(t.Name(), func(db *sql.DB) rt.Runtime {
-		qx, e := qdb.NewQueryx(db)
-		if e != nil {
-			panic(e)
-		}
-		return qna.NewRuntimeOptions(
-			log.Writer(),
-			qx,
-			decode.NewDecoder(story.AllSignatures),
-			qna.NewOptions(),
-		)
-	}, false)
-	defer dt.Close()
-	cat := dt.Catalog()
+	name := t.Name()
+	db := testdb.Create(name)
+	defer db.Close()
+	qx, e := qdb.NewQueryx(db)
+	if e != nil {
+		panic(e)
+	}
+	run := qna.NewRuntimeOptions(
+		log.Writer(),
+		qx,
+		decode.NewDecoder(story.AllSignatures),
+		qna.NewOptions(),
+	)
+	cat := weave.NewCatalogWithWarnings(db, run, testweave.LogWarning)
+	dt := testweave.NewWeaverCatalog(name, db, cat, true)
 	//
 	if curr, e := story.CompactDecode(storyMacroData); e != nil {
 		t.Fatal(e)

@@ -119,15 +119,16 @@ func (op *DefineStatement) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineStatement) Weave(cat *weave.Catalog) error {
-	return nil
-	// return cat.Schedule(assert.RequireRules, func(w *weave.Weaver) (err error) {
-	// 	if text, e := safe.GetText(w, op.Text); e != nil {
-	// 		err = e
-	// 	} else {
+	return cat.Schedule(assert.RequireRules, func(w *weave.Weaver) (err error) {
+		if text, e := safe.GetText(w, op.Text); e != nil {
+			err = e
+		} else if _, e := w.Grok(text.String()); e != nil {
+			err = e
+		} else {
 
-	// 	}
-	// 	return
-	// })
+		}
+		return
+	})
 }
 
 // Execute - called by the macro runtime during weave.

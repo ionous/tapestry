@@ -17,7 +17,7 @@ func TestPhrases(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		defer db.Close()
-		x := dbg{domain: "a", db: db}
+		x := dbSource{domain: "a", db: tables.NewCache(db)}
 		groktest.Phrases(t, &x)
 	}
 }
@@ -27,7 +27,7 @@ func TestTraits(t *testing.T) {
 		t.Fatal(e)
 	} else {
 		defer db.Close()
-		x := dbg{domain: "a", db: db}
+		x := dbSource{domain: "a", db: tables.NewCache(db)}
 		groktest.Traits(t, &x)
 	}
 }

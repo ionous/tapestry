@@ -16,7 +16,7 @@ import (
 
 func TestPatternRules(t *testing.T) {
 	// doesn't shuffle, because rule order matters
-	dt := testweave.NewWeaverOptions(t.Name(), nil, false)
+	dt := testweave.NewWeaverOptions(t.Name(), false)
 	defer dt.Close()
 	dt.MakeDomain(dd("a"),
 		append(append([]eph.Ephemera{
