@@ -42,14 +42,14 @@ func NewResults(run rt.Runtime, rec *g.Record, aff affine.Affinity) (ret *Result
 				err = errutil.Fmt("record %q isn't a pattern", name)
 			} else {
 				resultField := labels[cnt-1]
-				if aff != affine.None && len(resultField) == 0 {
-					err = errutil.Fmt("expecting a %s result, but %q returns nothing", aff, name)
-				} else {
-					ret = &Results{
-						rec:         rec,
-						resultField: resultField,
-						expectedAff: aff,
-					}
+				// note: this is not considered an error right now.
+				// if aff != affine.None && len(resultField) == 0 {
+				// 	err = errutil.Fmt("expecting a %s result, but %q returns nothing", aff, name)
+				// }
+				ret = &Results{
+					rec:         rec,
+					resultField: resultField,
+					expectedAff: aff,
 				}
 			}
 		}

@@ -155,8 +155,10 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 				if err == nil {
 					if v, e := w.Call(rec, affine.Text); e != nil && !errors.Is(e, rt.NoResult) {
 						err = e
-					} else if msg := v.String(); len(msg) > 0 {
-						err = errutil.New("Declare statement: %s", msg)
+					} else if v != nil {
+						if msg := v.String(); len(msg) > 0 {
+							err = errutil.New("Declare statement: %s", msg)
+						}
 					}
 				}
 			}
