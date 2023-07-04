@@ -1268,6 +1268,109 @@ func CycleText_Marshal(m jsn.Marshaler, val *CycleText) (err error) {
 	return
 }
 
+// DeclareStatement Simple english like definitions of nouns, kinds, and their relatives.
+type DeclareStatement struct {
+	Text   rt.TextEval `if:"label=_"`
+	Markup map[string]any
+}
+
+// User implemented slots:
+var _ StoryStatement = (*DeclareStatement)(nil)
+
+func (*DeclareStatement) Compose() composer.Spec {
+	return composer.Spec{
+		Name: DeclareStatement_Type,
+		Uses: composer.Type_Flow,
+		Lede: "declare",
+	}
+}
+
+const DeclareStatement_Type = "declare_statement"
+const DeclareStatement_Field_Text = "$TEXT"
+
+func (op *DeclareStatement) Marshal(m jsn.Marshaler) error {
+	return DeclareStatement_Marshal(m, op)
+}
+
+type DeclareStatement_Slice []DeclareStatement
+
+func (op *DeclareStatement_Slice) GetType() string { return DeclareStatement_Type }
+
+func (op *DeclareStatement_Slice) Marshal(m jsn.Marshaler) error {
+	return DeclareStatement_Repeats_Marshal(m, (*[]DeclareStatement)(op))
+}
+
+func (op *DeclareStatement_Slice) GetSize() (ret int) {
+	if els := *op; els != nil {
+		ret = len(els)
+	} else {
+		ret = -1
+	}
+	return
+}
+
+func (op *DeclareStatement_Slice) SetSize(cnt int) {
+	var els []DeclareStatement
+	if cnt >= 0 {
+		els = make(DeclareStatement_Slice, cnt)
+	}
+	(*op) = els
+}
+
+func (op *DeclareStatement_Slice) MarshalEl(m jsn.Marshaler, i int) error {
+	return DeclareStatement_Marshal(m, &(*op)[i])
+}
+
+func DeclareStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]DeclareStatement) error {
+	return jsn.RepeatBlock(m, (*DeclareStatement_Slice)(vals))
+}
+
+func DeclareStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DeclareStatement) (err error) {
+	if len(*pv) > 0 || !m.IsEncoding() {
+		err = DeclareStatement_Repeats_Marshal(m, pv)
+	}
+	return
+}
+
+type DeclareStatement_Flow struct{ ptr *DeclareStatement }
+
+func (n DeclareStatement_Flow) GetType() string      { return DeclareStatement_Type }
+func (n DeclareStatement_Flow) GetLede() string      { return "declare" }
+func (n DeclareStatement_Flow) GetFlow() interface{} { return n.ptr }
+func (n DeclareStatement_Flow) SetFlow(i interface{}) (okay bool) {
+	if ptr, ok := i.(*DeclareStatement); ok {
+		*n.ptr, okay = *ptr, true
+	}
+	return
+}
+
+func DeclareStatement_Optional_Marshal(m jsn.Marshaler, pv **DeclareStatement) (err error) {
+	if enc := m.IsEncoding(); enc && *pv != nil {
+		err = DeclareStatement_Marshal(m, *pv)
+	} else if !enc {
+		var v DeclareStatement
+		if err = DeclareStatement_Marshal(m, &v); err == nil {
+			*pv = &v
+		}
+	}
+	return
+}
+
+func DeclareStatement_Marshal(m jsn.Marshaler, val *DeclareStatement) (err error) {
+	m.SetMarkup(&val.Markup)
+	if err = m.MarshalBlock(DeclareStatement_Flow{val}); err == nil {
+		e0 := m.MarshalKey("", DeclareStatement_Field_Text)
+		if e0 == nil {
+			e0 = rt.TextEval_Marshal(m, &val.Text)
+		}
+		if e0 != nil && e0 != jsn.Missing {
+			m.Error(errutil.New(e0, "in flow at", DeclareStatement_Field_Text))
+		}
+		m.EndBlock()
+	}
+	return
+}
+
 // DefineFields Add properties to a kind
 type DefineFields struct {
 	Kind   rt.TextEval       `if:"label=kind"`
@@ -1375,109 +1478,6 @@ func DefineFields_Marshal(m jsn.Marshaler, val *DefineFields) (err error) {
 		}
 		if e1 != nil && e1 != jsn.Missing {
 			m.Error(errutil.New(e1, "in flow at", DefineFields_Field_Fields))
-		}
-		m.EndBlock()
-	}
-	return
-}
-
-// DefineStatement Simple english like definitions of nouns, kinds, and their relatives.
-type DefineStatement struct {
-	Text   rt.TextEval `if:"label=_"`
-	Markup map[string]any
-}
-
-// User implemented slots:
-var _ StoryStatement = (*DefineStatement)(nil)
-
-func (*DefineStatement) Compose() composer.Spec {
-	return composer.Spec{
-		Name: DefineStatement_Type,
-		Uses: composer.Type_Flow,
-		Lede: "define",
-	}
-}
-
-const DefineStatement_Type = "define_generic"
-const DefineStatement_Field_Definition = "$DEFINITION"
-
-func (op *DefineStatement) Marshal(m jsn.Marshaler) error {
-	return DefineStatement_Marshal(m, op)
-}
-
-type DefineStatement_Slice []DefineStatement
-
-func (op *DefineStatement_Slice) GetType() string { return DefineStatement_Type }
-
-func (op *DefineStatement_Slice) Marshal(m jsn.Marshaler) error {
-	return DefineStatement_Repeats_Marshal(m, (*[]DefineStatement)(op))
-}
-
-func (op *DefineStatement_Slice) GetSize() (ret int) {
-	if els := *op; els != nil {
-		ret = len(els)
-	} else {
-		ret = -1
-	}
-	return
-}
-
-func (op *DefineStatement_Slice) SetSize(cnt int) {
-	var els []DefineStatement
-	if cnt >= 0 {
-		els = make(DefineStatement_Slice, cnt)
-	}
-	(*op) = els
-}
-
-func (op *DefineStatement_Slice) MarshalEl(m jsn.Marshaler, i int) error {
-	return DefineStatement_Marshal(m, &(*op)[i])
-}
-
-func DefineStatement_Repeats_Marshal(m jsn.Marshaler, vals *[]DefineStatement) error {
-	return jsn.RepeatBlock(m, (*DefineStatement_Slice)(vals))
-}
-
-func DefineStatement_Optional_Repeats_Marshal(m jsn.Marshaler, pv *[]DefineStatement) (err error) {
-	if len(*pv) > 0 || !m.IsEncoding() {
-		err = DefineStatement_Repeats_Marshal(m, pv)
-	}
-	return
-}
-
-type DefineStatement_Flow struct{ ptr *DefineStatement }
-
-func (n DefineStatement_Flow) GetType() string      { return DefineStatement_Type }
-func (n DefineStatement_Flow) GetLede() string      { return "define" }
-func (n DefineStatement_Flow) GetFlow() interface{} { return n.ptr }
-func (n DefineStatement_Flow) SetFlow(i interface{}) (okay bool) {
-	if ptr, ok := i.(*DefineStatement); ok {
-		*n.ptr, okay = *ptr, true
-	}
-	return
-}
-
-func DefineStatement_Optional_Marshal(m jsn.Marshaler, pv **DefineStatement) (err error) {
-	if enc := m.IsEncoding(); enc && *pv != nil {
-		err = DefineStatement_Marshal(m, *pv)
-	} else if !enc {
-		var v DefineStatement
-		if err = DefineStatement_Marshal(m, &v); err == nil {
-			*pv = &v
-		}
-	}
-	return
-}
-
-func DefineStatement_Marshal(m jsn.Marshaler, val *DefineStatement) (err error) {
-	m.SetMarkup(&val.Markup)
-	if err = m.MarshalBlock(DefineStatement_Flow{val}); err == nil {
-		e0 := m.MarshalKey("", DefineStatement_Field_Definition)
-		if e0 == nil {
-			e0 = rt.TextEval_Marshal(m, &val.Text)
-		}
-		if e0 != nil && e0 != jsn.Missing {
-			m.Error(errutil.New(e0, "in flow at", DefineStatement_Field_Definition))
 		}
 		m.EndBlock()
 	}
@@ -6983,8 +6983,8 @@ var Slats = []composer.Composer{
 	(*CommonAction)(nil),
 	(*CountOf)(nil),
 	(*CycleText)(nil),
+	(*DeclareStatement)(nil),
 	(*DefineFields)(nil),
-	(*DefineStatement)(nil),
 	(*DefineKinds)(nil),
 	(*DefineMacro)(nil),
 	(*DefineNounTraits)(nil),
@@ -7085,6 +7085,7 @@ var Signatures = map[uint64]interface{}{
 	16586092333187989882: (*Comment)(nil),              /* story_statement=Comment: */
 	10143132576483224253: (*CountOf)(nil),              /* bool_eval=CountOf:num: */
 	231398832069830353:   (*CycleText)(nil),            /* text_eval=CycleText: */
+	9796202271034753943:  (*DeclareStatement)(nil),     /* story_statement=Declare: */
 	2600953883978299185:  (*DefineFields)(nil),         /* execute=Define kind:fields: */
 	15268150405724581221: (*DefineFields)(nil),         /* story_statement=Define kind:fields: */
 	17025532743550436003: (*DefineKinds)(nil),          /* execute=Define kinds:as: */
@@ -7125,7 +7126,6 @@ var Signatures = map[uint64]interface{}{
 	3652615969014829573:  (*DefineTraits)(nil),         /* story_statement=Define traits:as: */
 	13015531987120768169: (*NounAssignment)(nil),       /* execute=Define value:of:asLines: */
 	6282260507942600093:  (*NounAssignment)(nil),       /* story_statement=Define value:of:asLines: */
-	4405781038960927094:  (*DefineStatement)(nil),      /* story_statement=Define: */
 	5241959995092605683:  (*MapDeparting)(nil),         /* execute=Departing from:via:and:otherRoom: */
 	12862689211056047959: (*MapDeparting)(nil),         /* story_statement=Departing from:via:and:otherRoom: */
 	11410817647196565135: (*ActionDecl)(nil),           /* execute=Event:action:args common: */

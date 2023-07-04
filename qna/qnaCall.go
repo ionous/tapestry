@@ -37,7 +37,7 @@ func (run *Runner) Call(rec *g.Record, aff affine.Affinity) (ret g.Value, err er
 				// can return both a valid value and an error
 				ret = v
 				if !res.ComputedResult() {
-					err = errutil.Fmt("%w calling %s pattern %q", rt.NoResult, aff, name)
+					err = errutil.Fmt("%w computing %s", rt.NoResult, aff)
 				}
 			}
 			run.currentPatterns.stoppedPattern(name)
@@ -45,8 +45,7 @@ func (run *Runner) Call(rec *g.Record, aff affine.Affinity) (ret g.Value, err er
 		run.Stack.ReplaceScope(oldScope)
 	}
 	if err != nil {
-		// err = errutil.Fmt("%w calling %s with %v", err, pat, g.RecordToValue(rec))
-		err = errutil.Fmt("%w calling %s", err, name)
+		err = errutil.Fmt("%w calling %q", err, name)
 	}
 	return
 }

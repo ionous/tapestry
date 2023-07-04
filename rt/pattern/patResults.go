@@ -41,28 +41,18 @@ func NewResults(run rt.Runtime, rec *g.Record, aff affine.Affinity) (ret *Result
 			if cnt := len(labels); cnt == 0 {
 				err = errutil.Fmt("record %q isn't a pattern", name)
 			} else {
-				ret = &Results{
-					rec:         rec,
-					resultField: labels[cnt-1],
-					expectedAff: aff,
+				resultField := labels[cnt-1]
+				if aff != affine.None && len(resultField) == 0 {
+					err = errutil.Fmt("expecting a %s result, but %q returns nothing", aff, name)
+				} else {
+					ret = &Results{
+						rec:         rec,
+						resultField: resultField,
+						expectedAff: aff,
+					}
 				}
 			}
 		}
-	}
-	return
-}
-
-func NewMacroResults(run rt.Runtime, rec *g.Record, aff affine.Affinity) (ret *Results, err error) {
-	var resultField string
-	if len(aff) != 0 {
-		k := rec.Kind()
-		f := k.Field(k.NumField() - 1)
-		resultField = f.Name
-	}
-	ret = &Results{
-		rec:         rec,
-		resultField: resultField,
-		expectedAff: aff,
 	}
 	return
 }

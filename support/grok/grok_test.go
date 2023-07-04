@@ -49,10 +49,11 @@ var known = info{
 		"a kettle of",
 	),
 	macros: groktest.PanicMacros(
-		// tbd: flags need more thought.
 		grok.ManyToOne, "kind of", // for "a closed kind of container"
 		grok.ManyToOne, "kinds of", // for "are closed containers"
 		grok.ManyToOne, "a kind of", // for "a kind of container"
+		// tbd: flags need more thought.
+		grok.OneToMany, "carrying", //
 		// other macros
 		grok.OneToMany, "on", // on the x are the w,y,z
 		grok.OneToMany, "in",

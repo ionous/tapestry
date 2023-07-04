@@ -1,14 +1,20 @@
 package story
 
 import (
+	"errors"
 	"strings"
 
+	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
+	"git.sr.ht/~ionous/tapestry/dl/literal"
+	g "git.sr.ht/~ionous/tapestry/rt/generic"
+	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
@@ -93,17 +99,13 @@ func (op *DefinePhrase) Execute(macro rt.Runtime) error {
 	return Weave(macro, op)
 }
 
-//  add to the grok table,
-// mdl_phrase( domain text not null, kind int not null, phrase text, reversed bool )
-// should probably check rivals too --
-
 func (op *DefinePhrase) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequireAncestry, func(w *weave.Weaver) (err error) {
 		if phrase, e := safe.GetText(w, op.Phrase); e != nil {
 			err = e
 		} else if macro, e := safe.GetText(w, op.Macro); e != nil {
 			err = e
-		} else if rev, e := safe.GetBool(w, op.Reversed); e != nil {
+		} else if rev, e := safe.GetOptionalBool(w, op.Reversed, false); e != nil {
 			err = e
 		} else {
 			d, at := w.Domain.Name(), w.At
@@ -114,21 +116,97 @@ func (op *DefinePhrase) Weave(cat *weave.Catalog) error {
 }
 
 // Execute - called by the macro runtime during weave.
-func (op *DefineStatement) Execute(macro rt.Runtime) error {
+func (op *DeclareStatement) Execute(macro rt.Runtime) error {
 	return Weave(macro, op)
 }
 
-func (op *DefineStatement) Weave(cat *weave.Catalog) error {
+func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequireRules, func(w *weave.Weaver) (err error) {
 		if text, e := safe.GetText(w, op.Text); e != nil {
 			err = e
-		} else if _, e := w.Grok(text.String()); e != nil {
+		} else if res, e := w.Grok(text.String()); e != nil {
+			err = e
+		} else if src, e := grokNouns(cat, res.Sources, res.Macro.Type == grok.OneToMany); e != nil {
+			err = e
+		} else if tgt, e := grokNouns(cat, res.Targets, res.Macro.Type == grok.ManyToOne); e != nil {
 			err = e
 		} else {
-
+			macro := res.Macro.Match.String()
+			if kind, e := w.GetKindByName(macro); e != nil {
+				err = e
+			} else if !kind.Implements(kindsOf.Macro.String()) {
+				err = errutil.Fmt("expected %q to be a macro", macro)
+			} else if fieldCnt := kind.NumField(); fieldCnt < 2 {
+				err = errutil.Fmt("expected macro %q to have at least two argument (not %d)", macro, fieldCnt)
+			} else {
+				rec := kind.NewRecord()
+				args := []g.Value{src, tgt}
+				for i := 0; i < 2; i++ {
+					if val, e := safe.AutoConvert(w, kind.Field(i), args[i]); e != nil {
+						err = e
+						break
+					} else if e := rec.SetIndexedField(i, val); e != nil {
+						// note: set indexed field assigns without copying
+						// but get value copies out, so this should be okay.
+						err = errutil.Fmt("%e while setting %q arg %v", e, macro, i)
+						break
+					}
+				}
+				if err == nil {
+					if v, e := w.Call(rec, affine.Text); e != nil && !errors.Is(e, rt.NoResult) {
+						err = e
+					} else if msg := v.String(); len(msg) > 0 {
+						err = errutil.New("Declare statement: %s", msg)
+					}
+				}
+			}
 		}
 		return
 	})
+}
+func unpackNouns(cat *weave.Catalog, ns []grok.Noun, wantOne bool) (ret g.Value, err error) {
+	if !wantOne {
+		var names []string
+		for _, n := range ns {
+			names = append(names, n.Name.String())
+		}
+		ret = g.StringsOf(names)
+	} else if cnt := len(ns); cnt != 1 {
+		err = errutil.New("expected exactly one noun")
+	} else {
+		name := ns[0].Name.String()
+		ret = g.StringOf(name)
+	}
+	return
+}
+
+// add nouns and values
+func grokNouns(cat *weave.Catalog, ns []grok.Noun, wantOne bool) (ret g.Value, err error) {
+	if res, e := unpackNouns(cat, ns, wantOne); e != nil {
+		err = e
+	} else {
+	Out:
+		for _, n := range ns {
+			name := n.Name.String()
+			for _, k := range n.Kinds {
+				if e := cat.AssertNounKind(name, k.String()); e != nil {
+					err = e
+					break Out
+				}
+			}
+			trueValue := literal.B(true)
+			for _, t := range n.Traits {
+				if e := cat.AssertNounValue(name, t.String(), nil, trueValue); e != nil {
+					err = e
+					break Out
+				}
+			}
+		}
+		if err == nil {
+			ret = res
+		}
+	}
+	return
 }
 
 // Execute - called by the macro runtime during weave.

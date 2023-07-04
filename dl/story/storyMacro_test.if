@@ -17,35 +17,21 @@
             ]
           },
           {
-            "Call macro:args:": [
-              "carrier",
-              [
-                {
-                  "Arg:from:": [
-                    "actor",
-                    {
-                      "FromText:": "Hershel"
-                    }
-                  ]
-                },
-                {
-                  "Arg:from:": [
-                    "carries",
-                    {
-                      "FromTextList:": "the scissors"
-                    }
-                  ]
-                }
-              ]
-            ]
+            "Declare:": "Hershel is carrying the scissors."
           }
         ],
         []
       ]
     },
     {
+      "Define phrase:asMacro:": [
+        "carrying",
+        "carrying"
+      ]
+    },
+    {
       "Define macro:requires:result:with:": [
-        "carrier",
+        "carrying",
         [
           {
             "Text:": "actor"
@@ -55,7 +41,7 @@
           }
         ],
         {
-          "Nothing": true
+          "Text:": "error"
         },
         [
           {

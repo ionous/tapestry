@@ -323,11 +323,11 @@ func (m *Modeler) AddKind(domain, name, parent, at string) (err error) {
 				// cache result...
 				switch name {
 				case kindsOf.Aspect.String():
-					err = updatePath(res, &m.aspectPath)
+					err = updatePath(res, parent.fullpath(), &m.aspectPath)
 				case kindsOf.Pattern.String():
-					err = updatePath(res, &m.patternPath)
+					err = updatePath(res, parent.fullpath(), &m.patternPath)
 				case kindsOf.Macro.String():
-					err = updatePath(res, &m.macroPath)
+					err = updatePath(res, parent.fullpath(), &m.macroPath)
 				default:
 					// super hacky..... hmmm...
 					// if we've declared a new kind of a pattern:
@@ -350,12 +350,12 @@ func (m *Modeler) AddKind(domain, name, parent, at string) (err error) {
 				Conflict, name, domain, kind.name, kind.domain)
 		} else if strings.HasSuffix(parent.fullpath(), kind.fullpath()) {
 			err = errutil.Fmt("%w circular reference detected %q already declared as an ancestor of %q.",
-				Conflict, name, parent.name)
+				Conflict, parent.name, name)
 		} else if strings.HasSuffix(kind.path, parent.fullpath()) {
 			// did the existing path fully contain the new ancestor?
 			// then its a duplicate request (ex. `,c,b,a,` `,b,a,` )
 			err = errutil.Fmt("%w %q already declared as an ancestor of %q.",
-				Duplicate, name, parent.name)
+				Duplicate, parent.name, name)
 		} else if strings.HasSuffix(parent.fullpath(), kind.path) {
 			// is the newly specified ancestor more specific than the existing path?
 			// then we are ratcheting down. (ex. `,c,b,a,` `,b,a,` )
@@ -592,8 +592,7 @@ var mdl_phrase = tables.Insert("mdl_phrase", "domain", "kind", "phrase", "revers
 func (m *Modeler) AddPhrase(domain, macro, phrase string, reversed bool, at string) (err error) {
 	if kind, e := m.findRequiredKind(domain, macro); e != nil {
 		err = e
-	} else if isRel, isKinds := strings.HasSuffix(kind.fullpath(), m.macroPath),
-		kind.fullpath() == m.kindPath; !isRel && !isKinds {
+	} else if isMacro := strings.HasSuffix(kind.fullpath(), m.macroPath); !isMacro {
 		err = errutil.Fmt("kind %q in domain %q is not a macro", macro, domain)
 	} else {
 		// search for conflicting phrases within this domain.
@@ -612,7 +611,7 @@ func (m *Modeler) AddPhrase(domain, macro, phrase string, reversed bool, at stri
 		`, domain, phrase).Scan(&prev.domain, &prev.kind, &prev.reversed)
 		switch e {
 		case sql.ErrNoRows:
-			_, err = m.db.Exec(mdl_phrase, domain, kind.id, phrase, at)
+			_, err = m.db.Exec(mdl_phrase, domain, kind.id, phrase, reversed, at)
 
 		case nil:
 			if prev.kind != kind.name || prev.reversed != reversed {

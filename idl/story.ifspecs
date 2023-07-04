@@ -585,13 +585,13 @@
         {
           "--": "Simple english like definitions of nouns, kinds, and their relatives.",
           "Spec:slots:with flow:": [
-            "define_statement",
+            "declare_statement",
             [
               "story_statement"
             ],
             {
               "Flow:uses:": [
-                "define",
+                "declare",
                 [
                   {
                     "Term:name:type:": [

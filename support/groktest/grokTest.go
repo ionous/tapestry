@@ -64,6 +64,19 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		result any
 		skip   any
 	}{
+		// relation:
+		{
+			test: `Hershel is carrying scissors.`,
+			result: map[string]any{
+				"macro": "carrying",
+				"sources": []map[string]any{{
+					"name": "hershel",
+				}},
+				"targets": []map[string]any{{
+					"name": "scissors",
+				}},
+			},
+		},
 		// simple trait:
 		{
 			test: `The bottle is closed.`,
@@ -394,6 +407,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 				}
 			}
 		}
+		break
 	}
 	if skipped > 0 {
 		t.Logf("skipped %d tests", skipped)

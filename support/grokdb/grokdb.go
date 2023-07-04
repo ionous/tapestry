@@ -21,9 +21,9 @@ type dbMatch struct {
 
 // implements grok.Grokker; returned by dbSource.
 type dbSource struct {
-	db         *tables.Cache
-	domain     string
-	aspectPath string
+	db                      *tables.Cache
+	domain                  string
+	aspectPath, patternPath string
 }
 
 func (d *dbSource) FindDeterminer(ws []grok.Word) grok.Match {
@@ -43,13 +43,18 @@ func (d *dbSource) FindKind(ws []grok.Word) (ret grok.Match) {
 		id   int
 		name string
 	}
-	e := d.db.QueryRow(`
+	// excludes patterns (and macros) from matching these physical kinds
+	if mp, e := d.getPatternPath(); e != nil {
+		log.Println(e)
+	} else {
+		e := d.db.QueryRow(`
 	with kinds(id, name, alt) as (
 		select mk.rowid, mk.kind, mk.singular
 		from mdl_kind mk
  		join domain_tree
  		on (uses = domain)
  		where base = ?1
+ 		and not instr(',' || mk.path, ?3 )
 	)
 	select id, name  from (
 		select id, name, substr(?2 ,0, length(name)+2) as words
@@ -62,37 +67,46 @@ func (d *dbSource) FindKind(ws []grok.Word) (ret grok.Match) {
 	)
 	order by length(name) desc
 	limit 1`,
-		d.domain, words).Scan(&found.id, &found.name)
-	switch e {
-	case nil:
-		width := strings.Count(found.name, "_") + 1
-		ret = dbMatch{
-			Id:   found.id,
-			Span: ws[:width],
+			d.domain, words, mp).Scan(&found.id, &found.name)
+		switch e {
+		case nil:
+			width := strings.Count(found.name, "_") + 1
+			ret = dbMatch{
+				Id:   found.id,
+				Span: ws[:width],
+			}
+		case sql.ErrNoRows:
+			// return nothing.
+		default:
+			log.Println(e)
 		}
-	case sql.ErrNoRows:
-		// return nothing.
-	default:
-		log.Println(e)
 	}
 	return
 }
 
+func (d *dbSource) getPatternPath() (ret string, err error) {
+	return getPath(d.db, kindsOf.Macro, &d.patternPath)
+}
+
 func (d *dbSource) getAspectPath() (ret string, err error) {
-	if len(d.aspectPath) > 0 {
-		ret = d.aspectPath
+	return getPath(d.db, kindsOf.Aspect, &d.aspectPath)
+}
+
+func getPath(db *tables.Cache, kind kindsOf.Kinds, out *string) (ret string, err error) {
+	if len(*out) > 0 {
+		ret = *out
 	} else {
 		var path string
-		e := d.db.QueryRow(`
+		e := db.QueryRow(`
 		select (','||rowid||',') 
 		from mdl_kind where kind = ?1
 		limit 1
-		`, kindsOf.Aspect.String()).Scan(&path)
+		`, kind.String()).Scan(&path)
 		switch e {
 		case nil:
-			ret, d.aspectPath = path, path
+			ret, *out = path, path
 		case sql.ErrNoRows:
-			err = errutil.New("couldn't determine", kindsOf.Aspect)
+			err = errutil.New("couldn't determine", kind)
 		default:
 			err = e
 		}
@@ -182,8 +196,8 @@ func (d *dbSource) findMacro(ws []grok.Word) (ret grok.MacroInfo, err error) {
 		from mdl_field 
 		where kind=?1`, found.kind); e != nil {
 		err = e
-	} else if numParts := len(parts); numParts != 0 && numParts != 2 {
-		err = errutil.Fmt("invalid relation, should have two fields; has %d", numParts)
+	} else if numParts := len(parts); numParts != 0 && numParts != 3 {
+		err = errutil.Fmt("invalid macro; should have two fields and one return; has %d", numParts)
 	} else {
 		var flag grok.MacroType
 		if numParts > 0 {

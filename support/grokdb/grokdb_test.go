@@ -44,14 +44,17 @@ func idPath(ids ...int) string {
 func setupDB(name string) (ret *sql.DB, err error) {
 	const (
 		aspects = iota + 1
-		rels
+		patterns
+		macros
 		kinds
 		where
+		carrying
 		suspicion
 		traits
 		things
 		containers
 		supporters
+		domain = "a"
 	)
 	db := testdb.Create(name)
 	if e := tables.CreateModel(db); e != nil {
@@ -59,42 +62,52 @@ func setupDB(name string) (ret *sql.DB, err error) {
 	} else if e := tables.CreateRun(db); e != nil {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_domain", "domain"},
-		"a"); e != nil {
+		domain); e != nil {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_kind", "ROWID", "domain", "kind", "singular", "path"},
-		aspects, "a", kindsOf.Aspect.String(), "", idPath(),
-		rels, "a", kindsOf.Relation.String(), "", idPath(),
-		kinds, "a", kindsOf.Kind.String(), "", idPath(),
-		where, "a", "whereabouts", "", idPath(rels),
-		suspicion, "a", "suspicion", "", idPath(rels),
-		traits, "a", "traits", "", idPath(aspects),
-		things, "a", "things", "thing", idPath(kinds),
-		containers, "a", "containers", "container", idPath(things, kinds),
-		supporters, "a", "supporters", "supporter", idPath(things, kinds),
+		aspects, domain, kindsOf.Aspect.String(), "", idPath(),
+		patterns, domain, kindsOf.Pattern.String(), "", idPath(),
+		macros, domain, kindsOf.Macro.String(), "", idPath(patterns),
+		kinds, domain, kindsOf.Kind.String(), "", idPath(),
+		where, domain, "whereabouts", "", idPath(macros),
+		carrying, domain, "carrying", "", idPath(macros),
+
+		suspicion, domain, "suspicion", "", idPath(macros),
+		traits, domain, "traits", "", idPath(aspects),
+		things, domain, "things", "thing", idPath(kinds),
+		containers, domain, "containers", "container", idPath(things, kinds),
+		supporters, domain, "supporters", "supporter", idPath(things, kinds),
 	); e != nil {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_field", "domain", "kind", "field", "affinity"},
-		"a", traits, "closed", "bool",
-		"a", traits, "open", "bool",
-		"a", traits, "openable", "bool",
-		"a", traits, "transparent", "bool",
-		"a", traits, "fixed_in_place", "bool",
+		domain, traits, "closed", "bool",
+		domain, traits, "open", "bool",
+		domain, traits, "openable", "bool",
+		domain, traits, "transparent", "bool",
+		domain, traits, "fixed_in_place", "bool",
+		// carrying: one-to-many
+		domain, carrying, "actor", "text",
+		domain, carrying, "carries", "text_list",
+		domain, carrying, "error", "text",
 		// whereabouts: one-to-many
-		"a", where, "kind", "text",
-		"a", where, "other_kinds", "text_list",
+		domain, where, "kind", "text",
+		domain, where, "other_kinds", "text_list",
+		domain, where, "error", "text",
 		// suspicion: many-to-many
-		"a", suspicion, "kinds", "text_list",
-		"a", suspicion, "other_kinds", "text_list",
+		domain, suspicion, "kinds", "text_list",
+		domain, suspicion, "other_kinds", "text_list",
+		domain, suspicion, "error", "text",
 	); e != nil {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_phrase", "domain", "kind", "phrase", "reversed"},
-		"a", kinds, "kind of", true, // ex. "a closed kind of container"
-		"a", kinds, "kinds of", true, // ex. "are closed containers"
-		"a", kinds, "a kind of", true, // ex. "a kind of container"
+		domain, kinds, "kind of", true, // ex. "a closed kind of container"
+		domain, kinds, "kinds of", true, // ex. "are closed containers"
+		domain, kinds, "a kind of", true, // ex. "a kind of container"
 		//
-		"a", where, "on", false, // on the x are the w,y,z
-		"a", where, "in", false,
-		"a", suspicion, "suspicious of", false,
+		domain, carrying, "carrying", false,
+		domain, where, "on", false, // on the x are the w,y,z
+		domain, where, "in", false,
+		domain, suspicion, "suspicious of", false,
 	); e != nil {
 		err = e
 	}

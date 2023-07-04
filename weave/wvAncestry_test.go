@@ -145,7 +145,7 @@ func TestAncestryRedefined(t *testing.T) {
 	_, e := dt.Assemble()
 	if ok, e := testweave.OkayError(t, e, `Conflict can't redefine the ancestor of "m" as "n"`); !ok {
 		t.Fatal("unexpected error:", e)
-	} else if ok, e := testweave.OkayError(t, warnings.Shift(), `Duplicate "q" already declared as an ancestor of "k"`); !ok {
+	} else if ok, e := testweave.OkayError(t, warnings.Shift(), `Duplicate "k" already declared as an ancestor of "q"`); !ok {
 		t.Fatal("unexpected warning:", e)
 	}
 }
