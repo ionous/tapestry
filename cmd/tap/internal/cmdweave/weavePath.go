@@ -8,6 +8,9 @@ import (
 	"path/filepath"
 
 	"git.sr.ht/~ionous/tapestry/dl/story"
+	"git.sr.ht/~ionous/tapestry/qna"
+	"git.sr.ht/~ionous/tapestry/qna/decode"
+	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/files"
 	"git.sr.ht/~ionous/tapestry/tables"
@@ -36,19 +39,30 @@ func WeavePath(srcPath, outFile string) (err error) {
 			err = errutil.New("couldn't create output file", outFile, e)
 		} else {
 			defer db.Close()
-			cat := weave.NewCatalog(db)
-			if e := cat.AssertDomainStart("tapestry", nil); e != nil {
+			// fix: why do we have to create qdb?
+			if qx, e := qdb.NewQueryx(db); e != nil {
 				err = e
-			} else if e := addDefaultKinds(cat); e != nil {
-				err = e
-			} else if e := importStoryFiles(cat, srcPath); e != nil {
-				err = e
-			} else if e := cat.AssertDomainEnd(); e != nil {
-				err = e
-			} else if len(cat.Errors) > 0 {
-				err = errutil.New(cat.Errors)
 			} else {
-				err = cat.AssembleCatalog()
+				run := qna.NewRuntimeOptions(
+					log.Writer(),
+					qx,
+					decode.NewDecoder(story.AllSignatures),
+					qna.NewOptions(),
+				)
+				cat := weave.NewCatalogWithWarnings(db, run, nil)
+				if e := cat.AssertDomainStart("tapestry", nil); e != nil {
+					err = e
+				} else if e := addDefaultKinds(cat); e != nil {
+					err = e
+				} else if e := importStoryFiles(cat, srcPath); e != nil {
+					err = e
+				} else if e := cat.AssertDomainEnd(); e != nil {
+					err = e
+				} else if len(cat.Errors) > 0 {
+					err = errutil.New(cat.Errors)
+				} else {
+					err = cat.AssembleCatalog()
+				}
 			}
 		}
 	}

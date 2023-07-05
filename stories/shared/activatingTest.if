@@ -15,13 +15,8 @@
           {
             "--": ""
           },
-          {
-            "Define nouns:as:relativeTo:otherNouns:": [
-              "the espresso controls",
-              "a device",
-              "whereabouts",
-              "the kitchen"
-            ]
+          { 
+          	"Declare:": "The espresso controls are a device in the kitchen."
           }
         ],
         [

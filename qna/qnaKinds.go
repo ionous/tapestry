@@ -65,7 +65,7 @@ func (run *Runner) buildKind(k string) (ret cachedKind, err error) {
 			}
 		}
 		if !okay {
-			err = errutil.New("no such kind", k)
+			err = errutil.Fmt("no such kind %q", k)
 		} else {
 			// fix? this is maybe a little odd... because when the domain changes, so will the kinds
 			// ( unless maybe we precache them all or change kind query to use a fixed (set of) domains

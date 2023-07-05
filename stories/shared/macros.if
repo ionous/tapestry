@@ -2,7 +2,7 @@
   "Tapestry:": [
     {
       "Define macro:requires:result:with:": [
-        "inherits",
+        "inheriting something",
         [
           {
             "Text:": "kind"
@@ -12,7 +12,7 @@
           }
         ],
         {
-          "Text": "error"
+          "Text:": "error"
         },
         [
           {
@@ -26,31 +26,7 @@
     },
     {
       "Define macro:requires:result:with:": [
-        "traits",
-        [
-          {
-            "TextList:": "things"
-          },
-          {
-            "TextList:": "traits"
-          }
-        ],
-        {
-          "Text": "error"
-        },
-        [
-          {
-            "Define nouns:traits:": [
-              "@things",
-              "@traits"
-            ]
-          }
-        ]
-      ]
-    },
-    {
-      "Define macro:requires:result:with:": [
-        "carries",
+        "carrying something",
         [
           {
             "Text:": "actor"
@@ -60,7 +36,7 @@
           }
         ],
         {
-          "Text": "error"
+          "Text:": "error"
         },
         [
           {
@@ -95,7 +71,7 @@
     },
     {
       "Define macro:requires:result:with:": [
-        "wears",
+        "wearing something",
         [
           {
             "Text:": "actor"
@@ -105,7 +81,7 @@
           }
         ],
         {
-          "Text": "error"
+          "Text:": "error"
         },
         [
           {
@@ -145,7 +121,7 @@
     {
       "--": "might be a room or a container",
       "Define macro:requires:result:with:": [
-        "contains",
+        "containing something",
         [
           {
             "Text:": "owner"
@@ -155,7 +131,7 @@
           }
         ],
         {
-          "Text": "error"
+          "Text:": "error"
         },
         [
           {
@@ -170,9 +146,13 @@
               },
               [
                 {
-              		"--": "if it's not a room, then its a container.",
+                  "--": "if it's not a room, then its a container.",
                   "Define nouns:as:": [
-                    "@owner",
+                    {
+                      "List ofText:": [
+                        "@owner"
+                      ]
+                    },
                     "container"
                   ]
                 }
@@ -195,7 +175,7 @@
     },
     {
       "Define macro:requires:result:with:": [
-        "supports",
+        "supporting something",
         [
           {
             "Text:": "supporter"
@@ -205,7 +185,7 @@
           }
         ],
         {
-          "Text": "error"
+          "Text:": "error"
         },
         [
           {

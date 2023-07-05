@@ -105,11 +105,13 @@ func (op *DefinePhrase) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if macro, e := safe.GetText(w, op.Macro); e != nil {
 			err = e
+		} else if macro, ok := weave.UniformString(macro.String()); !ok {
+			err = errutil.New("missing macro name")
 		} else if rev, e := safe.GetOptionalBool(w, op.Reversed, false); e != nil {
 			err = e
 		} else {
 			d, at := w.Domain.Name(), w.At
-			err = cat.AddPhrase(d, macro.String(), phrase.String(), rev.Bool(), at)
+			err = cat.AddPhrase(d, macro, phrase.String(), rev.Bool(), at)
 		}
 		return
 	})
@@ -131,7 +133,7 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 		} else if tgt, e := grokNouns(cat, res.Targets, res.Macro.Type == grok.ManyToOne); e != nil {
 			err = e
 		} else {
-			macro := res.Macro.Match.String()
+			macro := res.Macro.Name
 			if kind, e := w.GetKindByName(macro); e != nil {
 				err = e
 			} else if !kind.Implements(kindsOf.Macro.String()) {

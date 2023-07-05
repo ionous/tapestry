@@ -26,12 +26,12 @@
     {
       "Define phrase:asMacro:": [
         "carrying",
-        "carrying"
+        "carrying something"
       ]
     },
     {
       "Define macro:requires:result:with:": [
-        "carrying",
+        "carrying something",
         [
           {
             "Text:": "actor"

@@ -3,55 +3,55 @@
     {
       "Define phrase:asMacro:": [
         "kind of",
-        "inherits"
+        "inheriting something"
       ]
     },
     {
       "Define phrase:asMacro:": [
         "kinds of",
-        "inherits"
+        "inheriting something"
       ]
     },
     {
       "Define phrase:asMacro:": [
         "a kind of",
-        "inherits"
+        "inheriting something"
       ]
     },
     {
-      "Define phrase:asMacro": [
+      "Define phrase:asMacro:": [
         "in",
-        "contains"
+        "containing something"
       ]
     },
     {
-      "Define phrase:asMacro": [
+      "Define phrase:asMacro:": [
         "on",
-        "supports"
+        "supporting something"
       ]
     },
     {
-      "Define phrase:asMacro": [
-        "carries",
-        "carries"
+      "Define phrase:asMacro:": [
+        "carrying",
+        "carrying something"
       ]
     },
     {
-      "Define phrase:asMacro": [
-        "wears",
-        "wears"
+      "Define phrase:asMacro:": [
+        "wearing",
+        "wearing something"
       ]
     },
     {
-      "Define phrase:asMacro": [
-        "supports",
-        "supports"
+      "Define phrase:asMacro:": [
+        "supporting",
+        "supporting something"
       ]
     },
     {
-      "Define phrase:asMacro": [
-        "contains",
-        "contains"
+      "Define phrase:asMacro:": [
+        "containing",
+        "containing something"
       ]
     }
   ]
