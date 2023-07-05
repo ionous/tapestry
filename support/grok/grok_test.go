@@ -49,16 +49,16 @@ var known = info{
 		"a kettle of",
 	),
 	macros: groktest.PanicMacros(
-		grok.ManyToOne, "kind of", // for "a closed kind of container"
-		grok.ManyToOne, "kinds of", // for "are closed containers"
-		grok.ManyToOne, "a kind of", // for "a kind of container"
+		grok.ManyToOne, "kind of", "inherit", // for "a closed kind of container"
+		grok.ManyToOne, "kinds of", "inherit", // for "are closed containers"
+		grok.ManyToOne, "a kind of", "inherit", // for "a kind of container"
 		// tbd: flags need more thought.
-		grok.OneToMany, "carrying", //
+		grok.OneToMany, "carrying", "carry", //
 		// other macros
-		grok.OneToMany, "on", // on the x are the w,y,z
-		grok.OneToMany, "in",
+		grok.OneToMany, "on", "support", // on the x are the w,y,z
+		grok.OneToMany, "in", "contain",
 		//
-		grok.ManyToMany, "suspicious of",
+		grok.ManyToMany, "suspicious of", "suspect",
 	),
 	kinds: groktest.PanicSpans(
 		"thing", "things",

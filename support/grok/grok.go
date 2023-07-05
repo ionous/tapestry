@@ -19,6 +19,7 @@ type Grokker interface {
 }
 
 type MacroInfo struct {
+	Name  string
 	Match Match
 	Type  MacroType
 }

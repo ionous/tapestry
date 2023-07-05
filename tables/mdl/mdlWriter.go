@@ -586,7 +586,7 @@ func (m *Modeler) AddParameter(domain, kind, field string, aff affine.Affinity, 
 	return
 }
 
-var mdl_phrase = tables.Insert("mdl_phrase", "domain", "kind", "phrase", "reversed", "at")
+var mdl_phrase = tables.Insert("mdl_phrase", "domain", "macro", "phrase", "reversed", "at")
 
 // author text parsing
 func (m *Modeler) AddPhrase(domain, macro, phrase string, reversed bool, at string) (err error) {

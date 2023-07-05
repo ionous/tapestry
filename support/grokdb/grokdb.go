@@ -176,25 +176,29 @@ func (d *dbSource) findMacro(ws []grok.Word) (ret grok.MacroInfo, err error) {
 	// uses spaces instead of underscores...
 	words := grok.WordsWithSep(ws, ' ') + " "
 	var found struct {
-		id, kind int64
-		phrase   string
-		rev      bool
+		kid    int64  // id of the kind
+		name   string // name of the kind/macro
+		phrase string // string of the macro phrase
+		rev    bool
 	}
 	if e := d.db.QueryRow(`
-	select mg.rowid, mg.kind, phrase, reversed 
+	select mk.rowid, mk.kind, phrase, reversed 
 	from mdl_phrase mg
+	join mdl_kind mk 
+		on (mk.rowid = mg.macro)
 	join domain_tree dt
 		on (dt.uses = mg.domain)
 	where base = ?1
 	and (phrase || ' ') = substr(?2 ,0, length(phrase)+2)
 	order by length(phrase) desc
 	limit 1`, d.domain, words).Scan(
-		&found.id, &found.kind, &found.phrase, &found.rev); e != nil {
+		&found.kid, &found.name, &found.phrase, &found.rev); e != nil {
 		err = e
 	} else if parts, e := tables.QueryStrings(d.db,
 		`select affinity 
 		from mdl_field 
-		where kind=?1`, found.kind); e != nil {
+		where kind=?1
+		order by rowid`, found.kid); e != nil {
 		err = e
 	} else if numParts := len(parts); numParts != 0 && numParts != 3 {
 		err = errutil.Fmt("invalid macro; should have two fields and one return; has %d", numParts)
@@ -228,6 +232,7 @@ func (d *dbSource) findMacro(ws []grok.Word) (ret grok.MacroInfo, err error) {
 		if err == nil {
 			width := strings.Count(found.phrase, " ") + 1
 			ret = grok.MacroInfo{
+				Name:  found.name,
 				Match: grok.Span(ws[:width]),
 				Type:  flag,
 			}

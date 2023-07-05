@@ -78,7 +78,7 @@ create table mdl_plural( domain text not null, many text, one text, at text, pri
 /* 
  * statements for simplifying some kinds of story definitions.
  */
-create table mdl_phrase( domain text not null, kind int not null, phrase text, reversed bool, at text, primary key( domain, phrase ));
+create table mdl_phrase( domain text not null, macro int not null, phrase text, reversed bool, at text, primary key( domain, phrase ));
 /* 
  * relation and constraint between two kinds of nouns 
  */

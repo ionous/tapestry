@@ -43,17 +43,23 @@ func idPath(ids ...int) string {
 
 func setupDB(name string) (ret *sql.DB, err error) {
 	const (
+		// built in kinds
 		aspects = iota + 1
 		patterns
 		macros
 		kinds
-		where
-		carrying
-		suspicion
 		traits
+		// kinds of nouns
 		things
 		containers
 		supporters
+		// macros
+		carry
+		contain
+		inherit
+		support
+		suspect
+		// domain string
 		domain = "a"
 	)
 	db := testdb.Create(name)
@@ -64,50 +70,64 @@ func setupDB(name string) (ret *sql.DB, err error) {
 	} else if e := testdb.Ins(db, []string{"mdl_domain", "domain"},
 		domain); e != nil {
 		err = e
-	} else if e := testdb.Ins(db, []string{"mdl_kind", "ROWID", "domain", "kind", "singular", "path"},
+	} else if e := testdb.Ins(db, []string{"mdl_kind",
+		"ROWID", "domain", "kind", "singular", "path"},
 		aspects, domain, kindsOf.Aspect.String(), "", idPath(),
 		patterns, domain, kindsOf.Pattern.String(), "", idPath(),
 		macros, domain, kindsOf.Macro.String(), "", idPath(patterns),
 		kinds, domain, kindsOf.Kind.String(), "", idPath(),
-		where, domain, "whereabouts", "", idPath(macros),
-		carrying, domain, "carrying", "", idPath(macros),
-
-		suspicion, domain, "suspicion", "", idPath(macros),
 		traits, domain, "traits", "", idPath(aspects),
 		things, domain, "things", "thing", idPath(kinds),
 		containers, domain, "containers", "container", idPath(things, kinds),
 		supporters, domain, "supporters", "supporter", idPath(things, kinds),
+		// macros:
+		carry, domain, "carry", "", idPath(macros),
+		contain, domain, "contain", "", idPath(macros),
+		inherit, domain, "inherit", "", idPath(macros),
+		support, domain, "support", "", idPath(macros),
+		suspect, domain, "suspect", "", idPath(macros),
 	); e != nil {
 		err = e
-	} else if e := testdb.Ins(db, []string{"mdl_field", "domain", "kind", "field", "affinity"},
+	} else if e := testdb.Ins(db, []string{"mdl_field",
+		"domain", "kind", "field", "affinity"},
+		//
 		domain, traits, "closed", "bool",
 		domain, traits, "open", "bool",
 		domain, traits, "openable", "bool",
 		domain, traits, "transparent", "bool",
 		domain, traits, "fixed_in_place", "bool",
-		// carrying: one-to-many
-		domain, carrying, "actor", "text",
-		domain, carrying, "carries", "text_list",
-		domain, carrying, "error", "text",
-		// whereabouts: one-to-many
-		domain, where, "kind", "text",
-		domain, where, "other_kinds", "text_list",
-		domain, where, "error", "text",
+		// macros: one-to-many
+		domain, carry, "one", "text",
+		domain, carry, "many", "text_list",
+		domain, carry, "error", "text",
+		//
+		domain, contain, "one", "text",
+		domain, contain, "many", "text_list",
+		domain, contain, "error", "text",
+		//
+		domain, inherit, "one", "text",
+		domain, inherit, "many", "text_list",
+		domain, inherit, "error", "text",
+		//
+		domain, support, "one", "text",
+		domain, support, "many", "text_list",
+		domain, support, "error", "text",
 		// suspicion: many-to-many
-		domain, suspicion, "kinds", "text_list",
-		domain, suspicion, "other_kinds", "text_list",
-		domain, suspicion, "error", "text",
+		domain, suspect, "kinds", "text_list",
+		domain, suspect, "other_kinds", "text_list",
+		domain, suspect, "error", "text",
 	); e != nil {
 		err = e
-	} else if e := testdb.Ins(db, []string{"mdl_phrase", "domain", "kind", "phrase", "reversed"},
-		domain, kinds, "kind of", true, // ex. "a closed kind of container"
-		domain, kinds, "kinds of", true, // ex. "are closed containers"
-		domain, kinds, "a kind of", true, // ex. "a kind of container"
+	} else if e := testdb.Ins(db, []string{"mdl_phrase",
+		"domain", "macro", "phrase", "reversed"},
 		//
-		domain, carrying, "carrying", false,
-		domain, where, "on", false, // on the x are the w,y,z
-		domain, where, "in", false,
-		domain, suspicion, "suspicious of", false,
+		domain, carry, "carrying", false,
+		domain, contain, "in", false,
+		domain, inherit, "kind of", true, // ex. "a closed kind of container"
+		domain, inherit, "kinds of", true, // ex. "are closed containers"
+		domain, inherit, "a kind of", true, // ex. "a kind of container"
+		domain, support, "on", false, // on the x are the w,y,z
+		domain, suspect, "suspicious of", false,
 	); e != nil {
 		err = e
 	}

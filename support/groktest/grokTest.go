@@ -9,55 +9,6 @@ import (
 	"github.com/kr/pretty"
 )
 
-type SpanList [][]grok.Word
-
-func PanicSpan(s string) grok.Span {
-	out, e := grok.MakeSpan(s)
-	if e != nil {
-		panic(e)
-	}
-	return out
-}
-
-func PanicSpans(strs ...string) (out SpanList) {
-	out = make(SpanList, len(strs))
-	for i, str := range strs {
-		out[i] = PanicSpan(str)
-	}
-	return
-}
-
-func (ws SpanList) FindMatch(words grok.Span) (ret grok.Match) {
-	if i, skip := ws.FindPrefix(words); skip > 0 {
-		ret = grok.Span(ws[i]) // ords[:skip]
-	}
-	return
-}
-
-// find the index and length of a prefix matching the passed words
-func (ws SpanList) FindPrefix(words grok.Span) (retWhich int, retLen int) {
-	if wordCount := len(words); wordCount > 0 {
-		for prefixIndex, prefix := range ws {
-			// every Word in el has to exist in words for it to be a prefix
-			// and it has to be longer than any other previous match for it to be the best match
-			// ( tbd? try a sort search? my first attempt failed miserably )
-			if prefixLen := len(prefix); prefixLen <= wordCount && prefixLen > retLen {
-				var failed bool
-				for i, a := range prefix {
-					if a.Hash() != words[i].Hash() {
-						failed = true
-						break
-					}
-				}
-				if !failed {
-					retWhich, retLen = prefixIndex, prefixLen
-				}
-			}
-		}
-	}
-	return
-}
-
 func Phrases(t *testing.T, g grok.Grokker) {
 	var phrases = []struct {
 		test   string
@@ -68,7 +19,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `Hershel is carrying scissors.`,
 			result: map[string]any{
-				"macro": "carrying",
+				"macro": "carry",
 				"sources": []map[string]any{{
 					"name": "hershel",
 				}},
@@ -145,7 +96,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `The box is a kind of container.`,
 			result: map[string]any{
-				"macro": "a kind of",
+				"macro": "inherit",
 				"sources": []map[string]any{{
 					"det":   "the",
 					"name":  "box",
@@ -158,7 +109,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `The box is a kind of closed container.`,
 			result: map[string]any{
-				"macro": "a kind of",
+				"macro": "inherit",
 				"sources": []map[string]any{{
 					"det":    "the",
 					"name":   "box",
@@ -174,7 +125,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `The closed box is a kind of container.`,
 			result: map[string]any{
-				"macro": "a kind of",
+				"macro": "inherit",
 				"sources": []map[string]any{{
 					"det":   "the",
 					"name":  "closed box",
@@ -198,7 +149,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `The unhappy man is in the closed bottle.`,
 			result: map[string]any{
-				"macro": "in",
+				"macro": "contain",
 				"sources": []map[string]any{{
 					"det":  "the",
 					"name": "unhappy man",
@@ -212,7 +163,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `The coffin is a closed container in the antechamber.`,
 			result: map[string]any{
-				"macro": "in",
+				"macro": "contain",
 				"sources": []map[string]any{{
 					"det":    "the",
 					"name":   "coffin",
@@ -229,7 +180,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `The bottle is openable in the kitchen.`,
 			result: map[string]any{
-				"macro": "in",
+				"macro": "contain",
 				"sources": []map[string]any{{
 					"det":    "the",
 					"traits": []string{"openable"},
@@ -247,7 +198,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `The thing called the stake is on the supporter called the altar.`,
 			result: map[string]any{
-				"macro": "on",
+				"macro": "support",
 				"sources": []map[string]any{{
 					"det":   "the",
 					"name":  "stake",
@@ -267,7 +218,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `A closed openable container called the trunk is in the lobby.`,
 			result: map[string]any{
-				"macro": "in",
+				"macro": "contain",
 				"sources": []map[string]any{{
 					"det":    "the", // closest to the trunk
 					"name":   "trunk",
@@ -285,7 +236,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `Some coins, a notebook, and the gripping hand are in the coffin.`,
 			result: map[string]any{
-				"macro": "in",
+				"macro": "contain",
 				"targets": []map[string]any{{
 					"det":  "the", // closest to the coffin
 					"name": "coffin",
@@ -306,7 +257,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `In the coffin are some coins, a notebook, and the gripping hand.`,
 			result: map[string]any{
-				"macro": "in",
+				"macro": "contain",
 				"targets": []map[string]any{{
 					"det":  "the", // lowercase, the closest to the trunk
 					"name": "coffin",
@@ -327,7 +278,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `In the lobby are a supporter and a container.`,
 			result: map[string]any{
-				"macro": "in",
+				"macro": "contain",
 				"targets": []map[string]any{{
 					"det":  "the",
 					"name": "lobby",
@@ -343,7 +294,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `Hector and Maria are suspicious of Santa and Santana.`,
 			result: map[string]any{
-				"macro": "suspicious of",
+				"macro": "suspect",
 				"sources": []map[string]any{{
 					"name": "hector",
 				}, {
@@ -360,7 +311,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		{
 			test: `The bottle in the kitchen is openable.`,
 			skip: map[string]any{
-				"macro": "in",
+				"macro": "contain",
 				"sources": []map[string]any{{
 					"det":    "the",
 					"traits": []string{"openable"},
@@ -474,56 +425,5 @@ func Traits(t *testing.T, g grok.Grokker) {
 	}
 	if skipped > 0 {
 		t.Fatalf("skipped %d tests", skipped)
-	}
-}
-
-func resultMap(in grok.Results) map[string]any {
-	m := make(map[string]any)
-	nounsIntoMap(m, "sources", in.Sources)
-	nounsIntoMap(m, "targets", in.Targets)
-	matchIntoMap(m, "macro", in.Macro.Match)
-	return m
-}
-
-func traitSetMap(ts grok.TraitSet) map[string]any {
-	m := make(map[string]any)
-	matchesIntoMap(m, "traits", ts.Traits)
-	matchIntoMap(m, "kind", ts.Kind)
-	return m
-}
-
-func nounsIntoMap(m map[string]any, field string, ns []grok.Noun) {
-	if len(ns) > 0 {
-		out := make([]map[string]any, len(ns))
-		for i, n := range ns {
-			out[i] = nounToMap(n)
-		}
-		m[field] = out
-	}
-}
-
-func nounToMap(n grok.Noun) map[string]any {
-	m := make(map[string]any)
-	matchIntoMap(m, "name", n.Name)
-	matchIntoMap(m, "det", n.Det)
-	matchesIntoMap(m, "traits", n.Traits)
-	matchesIntoMap(m, "kinds", n.Kinds)
-	return m
-}
-
-func matchesIntoMap(m map[string]any, field string, ws []grok.Match) {
-	if cnt := len(ws); cnt > 0 {
-		out := make([]string, cnt)
-		for i, w := range ws {
-			out[i] = w.String()
-		}
-		m[field] = out
-	}
-	return
-}
-
-func matchIntoMap(m map[string]any, field string, match grok.Match) {
-	if match != nil && match.NumWords() > 0 {
-		m[field] = match.String()
 	}
 }
