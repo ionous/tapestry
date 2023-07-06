@@ -26,7 +26,7 @@ type info struct {
 	macros                     groktest.MacroList
 }
 
-func (n *info) FindDeterminer(ws []Word) Match {
+func (n *info) FindArticle(ws []Word) Match {
 	return n.determiners.FindMatch(ws)
 }
 
@@ -45,20 +45,27 @@ func (n *info) FindMacro(ws []Word) (MacroInfo, bool) {
 var known = info{
 	determiners: groktest.PanicSpans(
 		"the", "a", "an", "some", "our",
-		// ex. kettle of fish
-		"a kettle of",
+		// "a kettle of fish" ....
 	),
 	macros: groktest.PanicMacros(
-		grok.ManyToOne, "kind of", "inherit", // for "a closed kind of container"
-		grok.ManyToOne, "kinds of", "inherit", // for "are closed containers"
-		grok.ManyToOne, "a kind of", "inherit", // for "a kind of container"
-		// tbd: flags need more thought.
-		grok.OneToMany, "carrying", "carry", //
-		// other macros
-		grok.OneToMany, "on", "support", // on the x are the w,y,z
-		grok.OneToMany, "in", "contain",
+		// source carries/ is carrying the targets
+		// reverse would be: targets are carried by the source.
+		"carried by", "carry", grok.Macro_ManyTargets, true, //
+		"carrying", "carry", grok.Macro_ManyTargets, false, //
+		// source contains the targets
+		// the targets are in the source ( rhs macro )
+		// in the source are the targets ( lhs macro; re-reversed )
+		"in", "contain", grok.Macro_ManyTargets, true,
+		// kinds:
+		"kind of", "inherit", grok.Macro_SourcesOnly, false, // for "a closed kind of container"
+		"kinds of", "inherit", grok.Macro_SourcesOnly, false, // for "are closed containers"
+		"a kind of", "inherit", grok.Macro_SourcesOnly, false, // for "a kind of container"
+		// source supports/is supporting the targets
+		// so, "targets are on source" is reversed ( rhs macro )
+		// and, "on source are targets" ( lhs macro; re-reversed )
+		"on", "support", grok.Macro_ManyTargets, true,
 		//
-		grok.ManyToMany, "suspicious of", "suspect",
+		"suspicious of", "suspect", grok.Macro_ManyMany, false,
 	),
 	kinds: groktest.PanicSpans(
 		"thing", "things",

@@ -3,7 +3,7 @@ package grok
 type Grokker interface {
 	// if the passed words starts with a determiner,
 	// return the number of words in  that match.
-	FindDeterminer([]Word) Match
+	FindArticle([]Word) Match
 
 	// if the passed words starts with a kind,
 	// return the number of words in  that match.
@@ -19,9 +19,10 @@ type Grokker interface {
 }
 
 type MacroInfo struct {
-	Name  string
-	Match Match
-	Type  MacroType
+	Name     string
+	Match    Match
+	Type     MacroType
+	Reversed bool
 }
 
 type Results struct {
@@ -57,7 +58,6 @@ func (s Span) NumWords() int {
 }
 
 func Grok(known Grokker, p string) (ret Results, err error) {
-	out := &Results{}
 	if words, e := MakeSpan(p); e != nil {
 		err = e
 	} else {
@@ -65,19 +65,15 @@ func Grok(known Grokker, p string) (ret Results, err error) {
 		// the order can reverse subjects and objects.
 		for i, w := range words {
 			if w.equals(keywords.is) || w.equals(keywords.are) {
-				err = beingPhrase(known, out, words[:i], words[i+1:])
+				ret, err = beingPhrase(known, words[:i], words[i+1:])
 				break
 			} else {
 				if macro, ok := known.FindMacro(words[i:]); ok {
-					out.Macro = macro
-					err = macroPhrase(known, out, words[i+macro.Match.NumWords():])
+					ret, err = macroPhrase(known, macro, words[i+macro.Match.NumWords():])
 					break
 				}
 			}
 		}
-	}
-	if err == nil {
-		ret = *out
 	}
 	return
 }

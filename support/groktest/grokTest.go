@@ -15,9 +15,8 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		result any
 		skip   any
 	}{
-		// relation:
 		{
-			test: `Hershel is carrying scissors.`,
+			test: `Hershel is carrying scissors and a pen.`,
 			result: map[string]any{
 				"macro": "carry",
 				"sources": []map[string]any{{
@@ -25,9 +24,30 @@ func Phrases(t *testing.T, g grok.Grokker) {
 				}},
 				"targets": []map[string]any{{
 					"name": "scissors",
+				}, {
+					"det":  "a",
+					"name": "pen",
 				}},
 			},
 		},
+		// reverse carrying relation.
+		{
+			test: `The scissors and a pen are carried by Hershel.`,
+			result: map[string]any{
+				"macro": "carry",
+				"sources": []map[string]any{{
+					"name": "hershel",
+				}},
+				"targets": []map[string]any{{
+					"det":  "the",
+					"name": "scissors",
+				}, {
+					"det":  "a",
+					"name": "pen",
+				}},
+			},
+		},
+
 		// simple trait:
 		{
 			test: `The bottle is closed.`,
@@ -144,17 +164,18 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test:   `A container is in the lobby.`,
 			result: errutil.New("this is specifically disallowed, and should generate an error"),
 		},
-		// giving properties to the rhs and right targets isnt permitted:
-		// tbd: but it might be possible...
+		// rhs-contains; "in" is
 		{
 			test: `The unhappy man is in the closed bottle.`,
 			result: map[string]any{
 				"macro": "contain",
-				"sources": []map[string]any{{
-					"det":  "the",
+				"targets": []map[string]any{{
+					"det": "the",
+					// giving properties to the rhs and right targets isnt permitted:
+					// tbd: but it might be possible...
 					"name": "unhappy man",
 				}},
-				"targets": []map[string]any{{
+				"sources": []map[string]any{{
 					"det":  "the",
 					"name": "closed bottle",
 				}},
@@ -164,29 +185,29 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `The coffin is a closed container in the antechamber.`,
 			result: map[string]any{
 				"macro": "contain",
-				"sources": []map[string]any{{
+				"targets": []map[string]any{{
 					"det":    "the",
 					"name":   "coffin",
 					"traits": []string{"closed"},
 					"kinds":  []string{"container"},
 				}},
-				"targets": []map[string]any{{
+				"sources": []map[string]any{{
 					"det":  "the",
 					"name": "antechamber",
 				}},
 			},
 		},
-		// note, this is allowed even though it implise something different than what is written:
+		// note, this is allowed even though it implis something different than what is written:
 		{
 			test: `The bottle is openable in the kitchen.`,
 			result: map[string]any{
 				"macro": "contain",
-				"sources": []map[string]any{{
+				"targets": []map[string]any{{
 					"det":    "the",
 					"traits": []string{"openable"},
 					"name":   "bottle",
 				}},
-				"targets": []map[string]any{{
+				"sources": []map[string]any{{
 					"det":  "the",
 					"name": "kitchen",
 				}},
@@ -199,12 +220,12 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `The thing called the stake is on the supporter called the altar.`,
 			result: map[string]any{
 				"macro": "support",
-				"sources": []map[string]any{{
+				"targets": []map[string]any{{
 					"det":   "the",
 					"name":  "stake",
 					"kinds": []string{"thing"},
 				}},
-				"targets": []map[string]any{{
+				"sources": []map[string]any{{
 					"det":   "the",
 					"name":  "altar",
 					"kinds": []string{"supporter"},
@@ -220,14 +241,14 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			result: map[string]any{
 				"macro": "contain",
 				"sources": []map[string]any{{
+					"det":  "the",
+					"name": "lobby",
+				}},
+				"targets": []map[string]any{{
 					"det":    "the", // closest to the trunk
 					"name":   "trunk",
 					"traits": []string{"closed", "openable"},
 					"kinds":  []string{"container"},
-				}},
-				"targets": []map[string]any{{
-					"det":  "the",
-					"name": "lobby",
 				}},
 			},
 		},
@@ -237,11 +258,11 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			test: `Some coins, a notebook, and the gripping hand are in the coffin.`,
 			result: map[string]any{
 				"macro": "contain",
-				"targets": []map[string]any{{
+				"sources": []map[string]any{{
 					"det":  "the", // closest to the coffin
 					"name": "coffin",
 				}},
-				"sources": []map[string]any{{
+				"targets": []map[string]any{{
 					"det":  "some",
 					"name": "coins",
 				}, {
@@ -358,7 +379,6 @@ func Phrases(t *testing.T, g grok.Grokker) {
 				}
 			}
 		}
-		break
 	}
 	if skipped > 0 {
 		t.Logf("skipped %d tests", skipped)

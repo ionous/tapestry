@@ -10,17 +10,20 @@ import "github.com/ionous/errutil"
 // 2c. (lhs: The coffin) is (rhs: closed in the lobby.)  <-- not my favorite.
 //
 // tbd: parse the sources when looping over the words ( in the caller? )
-func beingPhrase(known Grokker, out *Results, lhs, rhs []Word) (err error) {
+func beingPhrase(known Grokker, lhs, rhs []Word) (ret Results, err error) {
+	var out Results
 	// first, scan for leading traits on the rhs
 	// ex. [is] ( rhs: fixed in place .... in the lobby )
 	if rightLede, e := ParseTraitSet(known, rhs); e != nil {
 		err = e
 	} else {
+		sources, targets := &out.Sources, &out.Targets
+
 		// try to find a macro after the traits:
 		afterRightLede := rhs[rightLede.WordCount:]
 		if macro, ok := known.FindMacro(afterRightLede); !ok {
 			// case 1. doesn't have a macro:
-			if e := genNouns(known, &out.Sources, lhs, AllowMany|AllowAnonymous); e != nil {
+			if e := grokNouns(known, &out.Sources, lhs, AllowMany|AllowAnonymous); e != nil {
 				err = errutil.New("parsing subjects", e)
 			}
 		} else {
@@ -29,19 +32,32 @@ func beingPhrase(known Grokker, out *Results, lhs, rhs []Word) (err error) {
 			postMacro := afterRightLede[macro.Match.NumWords():]
 			var lhsFlag, rhsFlag genFlag
 			switch macro.Type {
-			case OneToMany, ManyToOne:
-				lhsFlag, rhsFlag = AllowMany|OnlyNamed, OnlyOne|AllowAnonymous
-			case ManyToMany:
-				lhsFlag, rhsFlag = AllowMany|OnlyNamed, AllowMany|OnlyNamed
+			case Macro_SourcesOnly:
+				lhsFlag = AllowMany | OnlyNamed
+			case Macro_ManySources:
+				lhsFlag = AllowMany | OnlyNamed
+				rhsFlag = OnlyOne | AllowAnonymous
+			case Macro_ManyTargets:
+				lhsFlag = OnlyOne | AllowAnonymous
+				rhsFlag = AllowMany | OnlyNamed
+			case Macro_ManyMany:
+				lhsFlag = AllowMany | OnlyNamed
+				rhsFlag = AllowMany | OnlyNamed
+			}
+
+			if macro.Reversed {
+				sources, targets = targets, sources
+				lhsFlag, rhsFlag = rhsFlag, lhsFlag
 			}
 
 			// [lhs: The coffin is] (rhs: (pre: a closed container) *in* (post: the antechamber.))
-			if e := genNouns(known, &out.Sources, lhs, lhsFlag); e != nil {
+			if e := grokNouns(known, sources, lhs, lhsFlag); e != nil {
 				err = errutil.New("parsing subject", e)
 			} else {
-				// fix? this branching isnt satisfying
-				if macro.Type > ManyToOne {
-					if e := genNouns(known, &out.Targets, postMacro, rhsFlag); e != nil {
+				// no relation ( kinds of ) don't have secondary noun targets
+				// alt: might be to treat the names of kinds in this case as nouns ( and return them in targets )
+				if rhsFlag > 0 {
+					if e := grokNouns(known, targets, postMacro, rhsFlag); e != nil {
 						err = errutil.New("parsing target", e)
 					}
 				} else {
@@ -52,14 +68,17 @@ func beingPhrase(known Grokker, out *Results, lhs, rhs []Word) (err error) {
 					} else if postMacroTraits, e := ParseTraitSet(known, postMacro); e != nil {
 						err = e
 					} else {
-						postMacroTraits.applyTraits(out.Sources)
+						postMacroTraits.applyTraits(*sources)
 					}
 				}
 			}
 		}
 		if err == nil {
-			rightLede.applyTraits(out.Sources)
+			rightLede.applyTraits(*sources)
 		}
+	}
+	if err == nil {
+		ret = out
 	}
 	return
 }

@@ -96,37 +96,47 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		domain, traits, "openable", "bool",
 		domain, traits, "transparent", "bool",
 		domain, traits, "fixed_in_place", "bool",
-		// macros: one-to-many
-		domain, carry, "one", "text",
-		domain, carry, "many", "text_list",
+		// macros:
+		domain, carry, "source", "text",
+		domain, carry, "targets", "text_list",
 		domain, carry, "error", "text",
 		//
-		domain, contain, "one", "text",
-		domain, contain, "many", "text_list",
+		domain, contain, "source", "text",
+		domain, contain, "targets", "text_list",
 		domain, contain, "error", "text",
 		//
-		domain, inherit, "one", "text",
-		domain, inherit, "many", "text_list",
+		domain, inherit, "sources", "text_list",
 		domain, inherit, "error", "text",
 		//
-		domain, support, "one", "text",
-		domain, support, "many", "text_list",
+		domain, support, "source", "text",
+		domain, support, "targets", "text_list",
 		domain, support, "error", "text",
 		// suspicion: many-to-many
-		domain, suspect, "kinds", "text_list",
-		domain, suspect, "other_kinds", "text_list",
+		domain, suspect, "sources", "text_list",
+		domain, suspect, "targets", "text_list",
 		domain, suspect, "error", "text",
+	); e != nil {
+		err = e
+	} else if e := testdb.Ins(db, []string{"mdl_pat",
+		"kind", "result"},
+		//
+		carry, "error",
+		contain, "error",
+		inherit, "error",
+		support, "error",
+		suspect, "error",
 	); e != nil {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_phrase",
 		"domain", "macro", "phrase", "reversed"},
 		//
-		domain, carry, "carrying", false,
-		domain, contain, "in", false,
-		domain, inherit, "kind of", true, // ex. "a closed kind of container"
-		domain, inherit, "kinds of", true, // ex. "are closed containers"
-		domain, inherit, "a kind of", true, // ex. "a kind of container"
-		domain, support, "on", false, // on the x are the w,y,z
+		domain, carry, "carried by", true, // ex. source carrying targets
+		domain, carry, "carrying", false, // ex. source carrying targets
+		domain, contain, "in", true,
+		domain, inherit, "kind of", false, // ex. "a closed kind of container"
+		domain, inherit, "kinds of", false, // ex. "are closed containers"
+		domain, inherit, "a kind of", false, // ex. "a kind of container"
+		domain, support, "on", true, // on the x are the w,y,z
 		domain, suspect, "suspicious of", false,
 	); e != nil {
 		err = e

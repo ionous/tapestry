@@ -39,7 +39,7 @@ Loop:
 		// although its a bit weird englishy-wise
 		// inform allows determiners before every trait:
 		// ex. The box is an openable and a closed.
-		det := known.FindDeterminer(rest)
+		det := known.FindArticle(rest)
 		if skipDet := numWords(det); skipDet >= len(rest) {
 			err = makeWordError(rest[0], "expected some sort of name")
 		} else {

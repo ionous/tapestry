@@ -26,11 +26,16 @@ type dbSource struct {
 	aspectPath, patternPath string
 }
 
-func (d *dbSource) FindDeterminer(ws []grok.Word) grok.Match {
-	// FIX: should come from the db
+func (d *dbSource) FindArticle(ws []grok.Word) grok.Match {
 	return det.FindMatch(ws)
 }
 
+// for now, these are fixed.
+// when the author specifies some particular indefinite article for a noun
+// that article only gets used for printing the noun;
+// it doesn't enhance the parsing of the story.
+// it would take some work to lightly hold the relation between a name and an article
+// then parse a sentence matching names to nouns in the grok
 var det = groktest.PanicSpans("the", "a", "an", "some", "our")
 
 // if the passed words starts with a kind,
@@ -176,23 +181,26 @@ func (d *dbSource) findMacro(ws []grok.Word) (ret grok.MacroInfo, err error) {
 	// uses spaces instead of underscores...
 	words := grok.WordsWithSep(ws, ' ') + " "
 	var found struct {
-		kid    int64  // id of the kind
-		name   string // name of the kind/macro
-		phrase string // string of the macro phrase
-		rev    bool
+		kid      int64  // id of the kind
+		name     string // name of the kind/macro
+		phrase   string // string of the macro phrase
+		reversed bool
+		result   int // from mdl_pat, number of result fields ( 0 or 1 )
 	}
 	if e := d.db.QueryRow(`
-	select mk.rowid, mk.kind, phrase, reversed 
+	select mk.rowid, mk.kind, mg.phrase, mg.reversed, length(mp.result)>0
 	from mdl_phrase mg
 	join mdl_kind mk 
 		on (mk.rowid = mg.macro)
+	join mdl_pat mp 
+		on (mp.kind = mg.macro)
 	join domain_tree dt
 		on (dt.uses = mg.domain)
 	where base = ?1
 	and (phrase || ' ') = substr(?2 ,0, length(phrase)+2)
 	order by length(phrase) desc
 	limit 1`, d.domain, words).Scan(
-		&found.kid, &found.name, &found.phrase, &found.rev); e != nil {
+		&found.kid, &found.name, &found.phrase, &found.reversed, &found.result); e != nil {
 		err = e
 	} else if parts, e := tables.QueryStrings(d.db,
 		`select affinity 
@@ -200,28 +208,28 @@ func (d *dbSource) findMacro(ws []grok.Word) (ret grok.MacroInfo, err error) {
 		where kind=?1
 		order by rowid`, found.kid); e != nil {
 		err = e
-	} else if numParts := len(parts); numParts != 0 && numParts != 3 {
-		err = errutil.Fmt("invalid macro; should have two fields and one return; has %d", numParts)
+	} else if numFields := len(parts) - found.result; numFields <= 0 {
+		err = errutil.Fmt("most macros should have two fields and one result; has %d fields and %d returns",
+			numFields, found.result)
 	} else {
 		var flag grok.MacroType
-		if numParts > 0 {
+		if numFields == 1 {
+			flag = grok.Macro_SourcesOnly
+		} else {
 			a, b := affine.Affinity(parts[0]), affine.Affinity(parts[1])
-			if found.rev {
-				a, b = b, a
-			}
 			if a == affine.Text {
 				if b == affine.Text {
 					err = errutil.New("one one not supported?")
 				} else if b == affine.TextList {
-					flag = grok.OneToMany
+					flag = grok.Macro_ManyTargets
 				} else {
 					err = errutil.New("unexpected aff", b)
 				}
 			} else if a == affine.TextList {
 				if b == affine.Text {
-					flag = grok.ManyToOne
+					flag = grok.Macro_ManySources
 				} else if b == affine.TextList {
-					flag = grok.ManyToMany
+					flag = grok.Macro_ManyMany
 				} else {
 					err = errutil.New("unexpected aff", b)
 				}
@@ -232,9 +240,10 @@ func (d *dbSource) findMacro(ws []grok.Word) (ret grok.MacroInfo, err error) {
 		if err == nil {
 			width := strings.Count(found.phrase, " ") + 1
 			ret = grok.MacroInfo{
-				Name:  found.name,
-				Match: grok.Span(ws[:width]),
-				Type:  flag,
+				Name:     found.name,
+				Match:    grok.Span(ws[:width]),
+				Type:     flag,
+				Reversed: found.reversed,
 			}
 		}
 	}

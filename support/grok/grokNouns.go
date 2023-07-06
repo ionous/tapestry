@@ -22,9 +22,9 @@ const (
 // note: inform doesn't support leading anonymous nouns ( ex. "the car is in the garage" )
 // they point out: it's not clear whether that indicates the most recent noun, or some new generic noun.
 // however, trailing anonymous nouns are allowed. ( ex. "in the garage is a car" )
-func genNouns(known Grokker, out *[]Noun, ws []Word, flag genFlag) (err error) {
+func grokNouns(known Grokker, out *[]Noun, ws []Word, flag genFlag) (err error) {
 	for nextName := ws; len(nextName) > 0; {
-		det := known.FindDeterminer(nextName)
+		det := known.FindArticle(nextName)
 		if skip := numWords(det); skip >= len(nextName) {
 			err = makeWordError(nextName[0], "expected some sort of name")
 		} else {
@@ -93,7 +93,7 @@ func chopName(known Grokker, ws []Word) (retDet Match, retName []Word, err error
 	if cnt := len(ws); cnt == 0 {
 		err = errutil.New("empty name")
 	} else {
-		det := known.FindDeterminer(ws)
+		det := known.FindArticle(ws)
 		if skip := numWords(det); skip >= len(ws) {
 			err = makeWordError(ws[0], "no name found")
 		} else {
