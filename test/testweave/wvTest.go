@@ -14,13 +14,13 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func NewWeaver(name string) *Weaver {
+func NewWeaver(name string) *TestWeave {
 	return NewWeaverOptions(name, true)
 }
 
-func NewWeaverOptions(name string, shuffle bool) *Weaver {
+func NewWeaverOptions(name string, shuffle bool) *TestWeave {
 	db := testdb.Create(name)
-	return &Weaver{
+	return &TestWeave{
 		name:      name,
 		db:        db,
 		cat:       weave.NewCatalogWithWarnings(db, nil, LogWarning),
@@ -28,8 +28,8 @@ func NewWeaverOptions(name string, shuffle bool) *Weaver {
 	}
 }
 
-func NewWeaverCatalog(name string, db *sql.DB, cat *weave.Catalog, shuffle bool) *Weaver {
-	return &Weaver{
+func NewWeaverCatalog(name string, db *sql.DB, cat *weave.Catalog, shuffle bool) *TestWeave {
+	return &TestWeave{
 		name:      name,
 		db:        db,
 		cat:       cat,
@@ -46,7 +46,7 @@ func OkayError(t *testing.T, e error, prefix string) (okay bool, err error) {
 	return
 }
 
-type Weaver struct {
+type TestWeave struct {
 	name string
 	// queues the commands so we can MakeDomain without worrying about error handling
 	// also allows shuffling the declarations (within a single domain)
@@ -56,14 +56,14 @@ type Weaver struct {
 	cat       *weave.Catalog
 }
 
-func (dt *Weaver) Close() {
+func (dt *TestWeave) Close() {
 	if dt.db != nil {
 		dt.db.Close()
 		dt.db = nil
 	}
 }
 
-func (dt *Weaver) MakeDomain(names []string, add ...eph.Ephemera) {
+func (dt *TestWeave) MakeDomain(names []string, add ...eph.Ephemera) {
 	n, req := names[0], names[1:]
 	if !dt.noShuffle {
 		// shuffle the incoming ephemera
@@ -81,7 +81,7 @@ func (dt *Weaver) MakeDomain(names []string, add ...eph.Ephemera) {
 	})
 }
 
-func (dt *Weaver) Assemble() (ret *weave.Catalog, err error) {
+func (dt *TestWeave) Assemble() (ret *weave.Catalog, err error) {
 	for _, el := range dt.queue {
 		if e := el.Assert(dt.cat); e != nil {
 			err = e
@@ -97,14 +97,14 @@ func (dt *Weaver) Assemble() (ret *weave.Catalog, err error) {
 	return dt.cat, err
 }
 
-func (dt *Weaver) ReadAssignments() ([]string, error) {
+func (dt *TestWeave) ReadAssignments() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
     select domain ||':'|| many ||':'|| one
 from mdl_plural`)
 }
 
 // an array of dependencies
-func (dt *Weaver) ReadDomain(n string) (ret []string, err error) {
+func (dt *TestWeave) ReadDomain(n string) (ret []string, err error) {
 	if ds, e := tables.QueryStrings(dt.db,
 		`select uses from domain_tree 
 		where base = ?1 
@@ -119,14 +119,14 @@ func (dt *Weaver) ReadDomain(n string) (ret []string, err error) {
 	return
 }
 
-func (dt *Weaver) ReadDomains() ([]string, error) {
+func (dt *TestWeave) ReadDomains() ([]string, error) {
 	return tables.QueryStrings(dt.db,
 		`select domain from domain_order`)
 }
 
 // domain, kind, field name, affinity, subtype
 // sorted by kind and within each kind, the field name
-func (dt *Weaver) ReadFields() ([]string, error) {
+func (dt *TestWeave) ReadFields() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select mk.domain ||':'|| mk.kind ||':'|| mf.field  ||':'|| 
          mf.affinity  ||':'|| coalesce(mt.kind, '') 
@@ -141,7 +141,7 @@ func (dt *Weaver) ReadFields() ([]string, error) {
 }
 
 // domain, input, serialized program
-func (dt *Weaver) ReadGrammar() ([]string, error) {
+func (dt *TestWeave) ReadGrammar() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select domain ||':'|| name ||':'|| prog
 	from mdl_grammar`)
@@ -151,7 +151,7 @@ func (dt *Weaver) ReadGrammar() ([]string, error) {
 // ordered by domain, length of path, and name
 // ( that erases their natural, dependency order --
 //   but independent siblings dont otherwise have a consistent order for testing )
-func (dt *Weaver) ReadKinds() (ret []string, err error) {
+func (dt *TestWeave) ReadKinds() (ret []string, err error) {
 	type kind struct {
 		id           int
 		domain, kind string
@@ -196,7 +196,7 @@ func (dt *Weaver) ReadKinds() (ret []string, err error) {
 }
 
 // domain, kind, name, serialized initialization
-func (dt *Weaver) ReadLocals() ([]string, error) {
+func (dt *TestWeave) ReadLocals() ([]string, error) {
 	// read kind assignments for those that have initializers
 	// the original order was per domain, and then in dependency order withing that domain
 	//  wonder if itd be enough to simply go by kind id since the order of writing should follow
@@ -211,7 +211,7 @@ func (dt *Weaver) ReadLocals() ([]string, error) {
 }
 
 // domain, noun, name, rank
-func (dt *Weaver) ReadNames() ([]string, error) {
+func (dt *TestWeave) ReadNames() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
 	select my.domain ||':'|| mn.noun ||':'|| my.name ||':'|| my.rank
 	from mdl_name my
@@ -223,7 +223,7 @@ func (dt *Weaver) ReadNames() ([]string, error) {
 }
 
 // domain, noun, kind
-func (dt *Weaver) ReadNouns() ([]string, error) {
+func (dt *TestWeave) ReadNouns() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select mn.domain ||':'|| mn.noun ||':'|| mk.kind
 	from mdl_noun mn
@@ -235,7 +235,7 @@ func (dt *Weaver) ReadNouns() ([]string, error) {
 }
 
 // domain, oneWord, otherWord
-func (dt *Weaver) ReadOpposites() ([]string, error) {
+func (dt *TestWeave) ReadOpposites() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select domain ||':'|| oneWord ||':'|| otherWord
 	from mdl_rev mp 
@@ -244,7 +244,7 @@ func (dt *Weaver) ReadOpposites() ([]string, error) {
 
 // domain, relation, noun, other noun
 // original order was domain, and alpha relation name
-func (dt *Weaver) ReadPairs() ([]string, error) {
+func (dt *TestWeave) ReadPairs() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
 	with domain_rank(domain, rank) as (
 		select *, row_number() over (order by 1) 
@@ -264,7 +264,7 @@ func (dt *Weaver) ReadPairs() ([]string, error) {
 }
 
 // domain, pattern, labels, result field
-func (dt *Weaver) ReadPatterns() ([]string, error) {
+func (dt *TestWeave) ReadPatterns() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select mk.domain ||':'|| mk.kind ||':'|| coalesce(labels,'') ||':'|| coalesce(result,'')
 	from mdl_pat mp
@@ -273,7 +273,7 @@ func (dt *Weaver) ReadPatterns() ([]string, error) {
 }
 
 // domain, many, one
-func (dt *Weaver) ReadPlurals() ([]string, error) {
+func (dt *TestWeave) ReadPlurals() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select domain ||':'|| many ||':'|| one
 	from mdl_plural`)
@@ -281,7 +281,7 @@ func (dt *Weaver) ReadPlurals() ([]string, error) {
 
 // domain, relation, one kind, other kind, cardinality
 // ordered by name of the relation for test consistency.
-func (dt *Weaver) ReadRelations() ([]string, error) {
+func (dt *TestWeave) ReadRelations() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select mk.domain ||':'|| mk.kind ||':'|| one.kind ||':'|| other.kind ||':'|| mr.cardinality
   from mdl_rel mr 
@@ -295,7 +295,7 @@ func (dt *Weaver) ReadRelations() ([]string, error) {
 }
 
 // domain, pattern, target, phase, filter, prog
-func (dt *Weaver) ReadRules() ([]string, error) {
+func (dt *TestWeave) ReadRules() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
   select mr.domain ||':'|| mk.kind ||':'|| coalesce(mt.kind, '') ||':'|| phase ||':'|| filter ||':'|| prog
   from mdl_rule mr 
@@ -310,7 +310,7 @@ func (dt *Weaver) ReadRules() ([]string, error) {
 }
 
 // domain, noun, field, value
-func (dt *Weaver) ReadValues() ([]string, error) {
+func (dt *TestWeave) ReadValues() ([]string, error) {
 	return tables.QueryStrings(dt.db, `
 	select mn.domain ||':'|| mn.noun ||':'|| mf.field ||':'|| mv.value
 	from mdl_value mv 

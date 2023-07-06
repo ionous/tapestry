@@ -8,20 +8,13 @@
             "Text:": "kind"
           },
           {
-            "TextList:": "things"
+            "Nothing": true
           }
         ],
         {
           "Text:": "error"
         },
-        [
-          {
-            "Define nouns:as:": [
-              "@things",
-              "@kind"
-            ]
-          }
-        ]
+        []
       ]
     },
     {
@@ -140,7 +133,7 @@
                 "Not:": {
                   "KindOf:is:": [
                     "@owner",
-                    "room"
+                    "rooms"
                   ]
                 }
               },

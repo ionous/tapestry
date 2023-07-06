@@ -160,7 +160,7 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 		} else {
 			cat.processing.Push(d)
 			for p := assert.Phase(0); p <= assert.RequireAll; p++ {
-				ctx := Weaver{Domain: d, Phase: p, Runtime: cat.run}
+				ctx := Weaver{Catalog: cat, Domain: d, Phase: p, Runtime: cat.run}
 				if e := d.runPhase(&ctx); e != nil {
 					err = e
 					break

@@ -9,15 +9,16 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
+	"github.com/ionous/errutil"
 )
 
 // ImportNounProperties -
 // reads ancillary information about nouns from their names and declares properties for them.
 // ex. proper or plural names, etc.
-func ImportNounProperties(cat *weave.Catalog, nouns []string) (ret []string, err error) {
+func ImportNounProperties(w *weave.Weaver, nouns []string) (ret []string, err error) {
 	ret = make([]string, 0, len(nouns))
 	for _, noun := range nouns {
-		if next, e := importNoun(cat, noun, ret); e != nil {
+		if next, e := importNoun(w, noun, ret); e != nil {
 			err = e
 			break
 		} else {
@@ -29,12 +30,15 @@ func ImportNounProperties(cat *weave.Catalog, nouns []string) (ret []string, err
 
 // ReadNouns - reads noun names without declaring any properties....
 // fix? unless they are counted nouns ( for backwards compatibility of "two cats whereabouts the kitchen" )
-func ReadNouns(cat *weave.Catalog, nouns []string) (ret []string, err error) {
+func ReadNouns(w *weave.Weaver, nouns []string) (ret []string, err error) {
 	ret = make([]string, 0, len(nouns))
 	for _, noun := range nouns {
-		if a := makeArticleName(noun); a.count == 0 {
+		if a, e := makeArticleName(w, noun); e != nil {
+			err = e
+			break
+		} else if a.count == 0 {
 			ret = append(ret, a.name)
-		} else if ns, e := importCountedNoun(cat, a.count, a.name); e == nil {
+		} else if ns, e := importCountedNoun(w.Catalog, a.count, a.name); e == nil {
 			ret = append(ret, ns...)
 		} else {
 			err = e
@@ -51,18 +55,20 @@ func AssertNounValue(a assert.Assertions, val literal.LiteralValue, noun string,
 	return a.AssertNounValue(noun, field, parts, val)
 }
 
-func importNoun(cat *weave.Catalog, noun string, nouns []string) (ret []string, err error) {
-	if a := makeArticleName(noun); a.count > 0 {
-		if ns, e := importCountedNoun(cat, a.count, a.name); e != nil {
+func importNoun(w *weave.Weaver, noun string, nouns []string) (ret []string, err error) {
+	if a, e := makeArticleName(w, noun); e != nil {
+		err = e
+	} else if a.count > 0 {
+		if ns, e := importCountedNoun(w.Catalog, a.count, a.name); e != nil {
 			err = e
 		} else {
 			ret = append(nouns, ns...)
 		}
 	} else {
 		if a.isProper() {
-			err = AssertNounValue(cat, B(true), a.name, "proper_named")
+			err = AssertNounValue(w.Catalog, B(true), a.name, "proper_named")
 		} else if customDet, ok := a.customArticle(); ok && len(customDet) > 0 {
-			err = AssertNounValue(cat, T(customDet), a.name, "indefinite_article")
+			err = AssertNounValue(w.Catalog, T(customDet), a.name, "indefinite_article")
 		}
 		ret = append(nouns, a.name)
 	}
@@ -74,8 +80,7 @@ type articleName struct {
 	count         int
 }
 
-// fix: this will never be correct until the indefinite articles are driven by script, parsed first, and the noun munging is in weave.
-func makeArticleName(name string) (ret articleName) {
+func makeArticleName(w *weave.Weaver, name string) (ret articleName, err error) {
 	parts := strings.Fields(strings.TrimSpace(name))
 	if last := len(parts) - 1; last == 0 {
 		ret = articleName{
@@ -88,19 +93,14 @@ func makeArticleName(name string) (ret articleName) {
 				count: count,
 				name:  strings.Join(rest, " "),
 			}
+		} else if cnt, e := w.MatchArticle(parts); e != nil {
+			err = e
+		} else if cnt == len(parts) {
+			err = errutil.New("missing name from", name)
 		} else {
-			// tried using "of" to grab mass nouns; but it doesnt work well for "a can of soup"
-			//split := 1
-			//for i, s := range parts {
-			//	if s == "of" && i < len(parts)-1 {
-			//		first = strings.Join(parts[:i+1], " ")
-			//		split = i + 1
-			//		break
-			//	}
-			//}
 			ret = articleName{
-				article: first,
-				name:    strings.Join(parts[1:], " "),
+				article: strings.Join(parts[:cnt], " "),
+				name:    strings.Join(parts[cnt:], " "),
 			}
 		}
 	}

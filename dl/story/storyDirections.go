@@ -28,12 +28,13 @@ func (h *helperNoun) dependentNoun(name string) helperNoun {
 // fix: things that generate nouns should be be commands dependent on the generated noun names
 //
 //	its not valid to generate a noun name here.
-func makeNoun(run rt.Runtime, name rt.TextEval) (ret helperNoun, err error) {
-	if name, e := safe.GetOptionalText(run, name, ""); e != nil {
+func makeNoun(w *weave.Weaver, name rt.TextEval) (ret helperNoun, err error) {
+	if name, e := safe.GetOptionalText(w, name, ""); e != nil {
 		err = e
 	} else if name := name.String(); len(name) > 0 {
-		a := makeArticleName(name)
-		if u := lang.Underscore(a.name); len(u) > 0 {
+		if a, e := makeArticleName(w, name); e != nil {
+			err = e
+		} else if u := lang.Underscore(a.name); len(u) > 0 {
 			ret = helperNoun{name: a.name, uniform: u}
 		}
 	}

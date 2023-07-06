@@ -19,15 +19,17 @@
       ]
     },
     {
-      "Define phrase:asMacro:": [
+      "Define phrase:asMacro:reversed:": [
         "in",
-        "containing something"
+        "containing something",
+        true
       ]
     },
     {
-      "Define phrase:asMacro:": [
+      "Define phrase:asMacro:reversed:": [
         "on",
-        "supporting something"
+        "supporting something",
+        true
       ]
     },
     {

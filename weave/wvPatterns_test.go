@@ -124,7 +124,7 @@ func TestPatternSeparateDomains(t *testing.T) {
 	expectFullResults(t, dt)
 }
 
-func expectFullResults(t *testing.T, dt *testweave.Weaver) {
+func expectFullResults(t *testing.T, dt *testweave.TestWeave) {
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
 	} else if outkind, e := dt.ReadKinds(); e != nil {

@@ -68,7 +68,7 @@ func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if traits, e := safe.GetTextList(w, op.Traits); e != nil {
 			err = e
-		} else if bareNames, e := ImportNounProperties(cat, nouns.Strings()); e != nil {
+		} else if bareNames, e := ImportNounProperties(w, nouns.Strings()); e != nil {
 			err = e
 		} else {
 			if kind := kind.String(); len(kind) > 0 {
@@ -128,9 +128,10 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if res, e := w.Grok(text.String()); e != nil {
 			err = e
-		} else if src, e := grokNouns(cat, res.Sources, res.Macro.Type == grok.OneToMany); e != nil {
+		} else if src, e := genNouns(cat, res.Sources, res.Macro.Type == grok.Macro_ManyTargets); e != nil {
 			err = e
-		} else if tgt, e := grokNouns(cat, res.Targets, res.Macro.Type == grok.ManyToOne); e != nil {
+		} else if tgt, e := genNouns(cat, res.Targets, res.Macro.Type != grok.Macro_ManyTargets &&
+			res.Macro.Type != grok.Macro_ManyMany); e != nil {
 			err = e
 		} else {
 			macro := res.Macro.Name
@@ -150,7 +151,7 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 					} else if e := rec.SetIndexedField(i, val); e != nil {
 						// note: set indexed field assigns without copying
 						// but get value copies out, so this should be okay.
-						err = errutil.Fmt("%e while setting %q arg %v", e, macro, i)
+						err = errutil.Fmt("%w while setting %q arg %v", e, macro, i)
 						break
 					}
 				}
@@ -168,46 +169,39 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 		return
 	})
 }
-func unpackNouns(cat *weave.Catalog, ns []grok.Noun, wantOne bool) (ret g.Value, err error) {
-	if !wantOne {
-		var names []string
-		for _, n := range ns {
-			names = append(names, n.Name.String())
-		}
-		ret = g.StringsOf(names)
-	} else if cnt := len(ns); cnt != 1 {
-		err = errutil.New("expected exactly one noun")
-	} else {
-		name := ns[0].Name.String()
-		ret = g.StringOf(name)
-	}
-	return
-}
 
 // add nouns and values
-func grokNouns(cat *weave.Catalog, ns []grok.Noun, wantOne bool) (ret g.Value, err error) {
-	if res, e := unpackNouns(cat, ns, wantOne); e != nil {
-		err = e
+func genNouns(cat *weave.Catalog, ns []grok.Noun, wantOne bool) (ret g.Value, err error) {
+	if cnt := len(ns); wantOne && cnt != 1 {
+		err = errutil.New("expected exactly one noun")
 	} else {
+		names := make([]string, cnt)
 	Out:
-		for _, n := range ns {
+		for i := 0; i < cnt; i++ {
+			n := ns[i]
 			name := n.Name.String()
+			names[i] = name
+			//
 			for _, k := range n.Kinds {
 				if e := cat.AssertNounKind(name, k.String()); e != nil {
 					err = e
 					break Out
 				}
 			}
-			trueValue := literal.B(true)
 			for _, t := range n.Traits {
-				if e := cat.AssertNounValue(name, t.String(), nil, trueValue); e != nil {
+				if e := cat.AssertNounValue(name, t.String(), nil, literal.B(true)); e != nil {
 					err = e
 					break Out
 				}
 			}
 		}
+		// all done?
 		if err == nil {
-			ret = res
+			if wantOne {
+				ret = g.StringOf(names[0])
+			} else {
+				ret = g.StringsOf(names)
+			}
 		}
 	}
 	return
@@ -224,7 +218,7 @@ func (op *DefineNouns) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if kind, e := safe.GetText(w, op.Kind); e != nil {
 			err = e
-		} else if bareNames, e := ImportNounProperties(cat, nouns.Strings()); e != nil {
+		} else if bareNames, e := ImportNounProperties(w, nouns.Strings()); e != nil {
 			err = e
 		} else {
 			if kind := kind.String(); len(kind) > 0 {
@@ -253,7 +247,7 @@ func (op *NounAssignment) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if lines, e := ConvertText(op.Lines.String()); e != nil {
 			err = e
-		} else if subjects, e := ReadNouns(cat, nouns.Strings()); e != nil {
+		} else if subjects, e := ReadNouns(w, nouns.Strings()); e != nil {
 			err = e
 		} else {
 			field, lines := field.String(), T(lines)
@@ -282,9 +276,9 @@ func (op *DefineRelatives) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if otherNouns, e := safe.GetTextList(w, op.OtherNouns); e != nil {
 			err = e
-		} else if a, e := ReadNouns(cat, nouns.Strings()); e != nil {
+		} else if a, e := ReadNouns(w, nouns.Strings()); e != nil {
 			err = e
-		} else if b, e := ReadNouns(cat, otherNouns.Strings()); e != nil {
+		} else if b, e := ReadNouns(w, otherNouns.Strings()); e != nil {
 			err = e
 		} else {
 			for _, subject := range a {
@@ -320,9 +314,9 @@ func (op *DefineOtherRelatives) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if otherNouns, e := safe.GetTextList(w, op.OtherNouns); e != nil {
 			err = e
-		} else if a, e := ReadNouns(cat, nouns.Strings()); e != nil {
+		} else if a, e := ReadNouns(w, nouns.Strings()); e != nil {
 			err = e
-		} else if b, e := ReadNouns(cat, otherNouns.Strings()); e != nil {
+		} else if b, e := ReadNouns(w, otherNouns.Strings()); e != nil {
 			err = e
 		} else {
 			if rel := relation.String(); len(rel) > 0 {

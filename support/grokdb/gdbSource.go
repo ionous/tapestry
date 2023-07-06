@@ -19,3 +19,14 @@ func (x *Source) Grok(domain, phrase string) (grok.Results, error) {
 	x.inner.domain = domain
 	return grok.Grok(&x.inner, phrase)
 }
+
+func (x *Source) MatchArticle(ws []string) (ret int, err error) {
+	if len(ws) > 0 {
+		if s, e := grok.MakeSpan(ws[0]); e != nil {
+			err = e
+		} else if m := det.FindMatch(s); m != nil {
+			ret = m.NumWords()
+		}
+	}
+	return
+}

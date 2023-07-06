@@ -37,7 +37,7 @@ func MakeRecord(run rt.Runtime, kind string, args ...Arg) (ret *g.Record, err er
 			} else if e := rec.SetIndexedField(at, val); e != nil {
 				// note: set indexed field assigns without copying
 				// but get value copies out, so this should be okay.
-				err = errutil.Fmt("%e while setting arg %v(%d) at %d", e, a.Name, i, at)
+				err = errutil.Fmt("%w while setting arg %v(%d) at %d", e, a.Name, i, at)
 				break
 			}
 		}

@@ -60,7 +60,7 @@ func (d *Domain) isReadyForProcessing() (okay bool, err error) {
 
 func (d *Domain) schedule(at string, when assert.Phase, what func(*Weaver) error) (err error) {
 	if d.currPhase > when {
-		ctx := Weaver{Domain: d, Phase: d.currPhase, Runtime: d.cat.run}
+		ctx := Weaver{Catalog: d.cat, Domain: d, Phase: d.currPhase, Runtime: d.cat.run}
 		err = what(&ctx)
 	} else {
 		d.scheduling[when] = append(d.scheduling[when], memento{what, at})
