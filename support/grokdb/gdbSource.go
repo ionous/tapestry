@@ -24,7 +24,9 @@ func (x *Source) MatchArticle(ws []string) (ret int, err error) {
 	if len(ws) > 0 {
 		if s, e := grok.MakeSpan(ws[0]); e != nil {
 			err = e
-		} else if m := det.FindMatch(s); m != nil {
+		} else if m, e := det.FindMatch(s); e != nil {
+			err = e
+		} else if m != nil {
 			ret = m.NumWords()
 		}
 	}

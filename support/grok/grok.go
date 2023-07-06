@@ -3,19 +3,19 @@ package grok
 type Grokker interface {
 	// if the passed words starts with a determiner,
 	// return the number of words in  that match.
-	FindArticle([]Word) Match
+	FindArticle([]Word) (Match, error)
 
 	// if the passed words starts with a kind,
 	// return the number of words in  that match.
-	FindKind([]Word) Match
+	FindKind([]Word) (Match, error)
 
 	// if the passed words starts with a trait,
 	// return the number of words in  that match.
-	FindTrait([]Word) Match
+	FindTrait([]Word) (Match, error)
 
 	// if the passed words starts with a macro,
 	// return information about that match
-	FindMacro([]Word) (MacroInfo, bool)
+	FindMacro([]Word) (MacroInfo, error)
 }
 
 type MacroInfo struct {
@@ -67,11 +67,11 @@ func Grok(known Grokker, p string) (ret Results, err error) {
 			if w.equals(keywords.is) || w.equals(keywords.are) {
 				ret, err = beingPhrase(known, words[:i], words[i+1:])
 				break
-			} else {
-				if macro, ok := known.FindMacro(words[i:]); ok {
-					ret, err = macroPhrase(known, macro, words[i+macro.Match.NumWords():])
-					break
-				}
+			} else if macro, e := known.FindMacro(words[i:]); e != nil {
+				err = e
+			} else if len(macro.Name) > 0 {
+				ret, err = macroPhrase(known, macro, words[i+macro.Match.NumWords():])
+				break
 			}
 		}
 	}

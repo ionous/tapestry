@@ -20,9 +20,9 @@ func PanicSpans(strs ...string) (out SpanList) {
 	return
 }
 
-func (ws SpanList) FindMatch(words grok.Span) (ret grok.Match) {
+func (ws SpanList) FindMatch(words grok.Span) (ret grok.Match, none error) {
 	if i, skip := ws.FindPrefix(words); skip > 0 {
-		ret = grok.Span(ws[i]) // ords[:skip]
+		ret = grok.Span(ws[i])
 	}
 	return
 }

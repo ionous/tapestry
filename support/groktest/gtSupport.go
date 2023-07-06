@@ -13,7 +13,7 @@ type macroInfo struct {
 	reversed  bool
 }
 
-func (n MacroList) FindMacro(ws []grok.Word) (ret grok.MacroInfo, okay bool) {
+func (n MacroList) FindMacro(ws []grok.Word) (ret grok.MacroInfo, err error) {
 	if i, skip := n.FindPrefix(ws); skip > 0 {
 		var match grok.Span = n.SpanList[i]
 		info := n.info[i]
@@ -23,7 +23,6 @@ func (n MacroList) FindMacro(ws []grok.Word) (ret grok.MacroInfo, okay bool) {
 			Type:     info.macroType,
 			Reversed: info.reversed,
 		}
-		okay = true
 	}
 	return
 }

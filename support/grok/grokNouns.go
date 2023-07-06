@@ -24,8 +24,9 @@ const (
 // however, trailing anonymous nouns are allowed. ( ex. "in the garage is a car" )
 func grokNouns(known Grokker, out *[]Noun, ws []Word, flag genFlag) (err error) {
 	for nextName := ws; len(nextName) > 0; {
-		det := known.FindArticle(nextName)
-		if skip := numWords(det); skip >= len(nextName) {
+		if det, e := known.FindArticle(nextName); e != nil {
+			err = e
+		} else if skip := numWords(det); skip >= len(nextName) {
 			err = makeWordError(nextName[0], "expected some sort of name")
 		} else {
 			name := nextName[skip:]
@@ -92,13 +93,12 @@ func grokNouns(known Grokker, out *[]Noun, ws []Word, flag genFlag) (err error) 
 func chopName(known Grokker, ws []Word) (retDet Match, retName []Word, err error) {
 	if cnt := len(ws); cnt == 0 {
 		err = errutil.New("empty name")
+	} else if det, e := known.FindArticle(ws); e != nil {
+		err = e
+	} else if skip := numWords(det); skip >= len(ws) {
+		err = makeWordError(ws[0], "no name found")
 	} else {
-		det := known.FindArticle(ws)
-		if skip := numWords(det); skip >= len(ws) {
-			err = makeWordError(ws[0], "no name found")
-		} else {
-			retDet, retName = det, ws[skip:]
-		}
+		retDet, retName = det, ws[skip:]
 	}
 	return
 }

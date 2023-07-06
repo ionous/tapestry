@@ -21,7 +21,9 @@ func beingPhrase(known Grokker, lhs, rhs []Word) (ret Results, err error) {
 
 		// try to find a macro after the traits:
 		afterRightLede := rhs[rightLede.WordCount:]
-		if macro, ok := known.FindMacro(afterRightLede); !ok {
+		if macro, e := known.FindMacro(afterRightLede); e != nil {
+			err = e
+		} else if len(macro.Name) == 0 {
 			// case 1. doesn't have a macro:
 			if e := grokNouns(known, &out.Sources, lhs, AllowMany|AllowAnonymous); e != nil {
 				err = errutil.New("parsing subjects", e)
