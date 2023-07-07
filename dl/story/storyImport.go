@@ -130,39 +130,45 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if res, e := w.Grok(text.String()); e != nil {
 			err = e
-		} else if src, e := genNouns(w, res.Sources, res.Macro.Type == grok.Macro_ManyTargets); e != nil {
+		} else if multiSrc, e := validSources(res.Sources, res.Macro.Type); e != nil {
 			err = e
-		} else if tgt, e := genNouns(w, res.Targets, res.Macro.Type != grok.Macro_ManyTargets &&
-			res.Macro.Type != grok.Macro_ManyMany); e != nil {
+		} else if multiTgt, e := validTargets(res.Targets, res.Macro.Type); e != nil {
+			err = e
+		} else if src, e := genNouns(w, res.Sources, multiSrc); e != nil {
+			err = e
+		} else if tgt, e := genNouns(w, res.Targets, multiTgt); e != nil {
 			err = e
 		} else {
-			macro := res.Macro.Name
-			if kind, e := w.GetKindByName(macro); e != nil {
-				err = e
-			} else if !kind.Implements(kindsOf.Macro.String()) {
-				err = errutil.Fmt("expected %q to be a macro", macro)
-			} else if fieldCnt := kind.NumField(); fieldCnt < 2 {
-				err = errutil.Fmt("expected macro %q to have at least two argument (not %d)", macro, fieldCnt)
-			} else {
-				rec := kind.NewRecord()
-				args := []g.Value{src, tgt}
-				for i := 0; i < 2; i++ {
-					if val, e := safe.AutoConvert(w, kind.Field(i), args[i]); e != nil {
-						err = e
-						break
-					} else if e := rec.SetIndexedField(i, val); e != nil {
-						// note: set indexed field assigns without copying
-						// but get value copies out, so this should be okay.
-						err = errutil.Fmt("%w while setting %q arg %v", e, macro, i)
-						break
+			// note: some phrases "the box is open" dont have macros.
+			// in that case, genNouns does all the work.
+			if macro := res.Macro.Name; len(macro) > 0 {
+				if kind, e := w.GetKindByName(macro); e != nil {
+					err = e
+				} else if !kind.Implements(kindsOf.Macro.String()) {
+					err = errutil.Fmt("expected %q to be a macro", macro)
+				} else if fieldCnt := kind.NumField(); fieldCnt < 2 {
+					err = errutil.Fmt("expected macro %q to have at least two argument (not %d)", macro, fieldCnt)
+				} else {
+					rec := kind.NewRecord()
+					args := []g.Value{src, tgt}
+					for i := 0; i < 2; i++ {
+						if val, e := safe.AutoConvert(w, kind.Field(i), args[i]); e != nil {
+							err = e
+							break
+						} else if e := rec.SetIndexedField(i, val); e != nil {
+							// note: set indexed field assigns without copying
+							// but get value copies out, so this should be okay.
+							err = errutil.Fmt("%w while setting %q arg %v", e, macro, i)
+							break
+						}
 					}
-				}
-				if err == nil {
-					if v, e := w.Call(rec, affine.Text); e != nil && !errors.Is(e, rt.NoResult) {
-						err = e
-					} else if v != nil {
-						if msg := v.String(); len(msg) > 0 {
-							err = errutil.New("Declare statement: %s", msg)
+					if err == nil {
+						if v, e := w.Call(rec, affine.Text); e != nil && !errors.Is(e, rt.NoResult) {
+							err = e
+						} else if v != nil {
+							if msg := v.String(); len(msg) > 0 {
+								err = errutil.New("Declare statement: %s", msg)
+							}
 						}
 					}
 				}
@@ -172,53 +178,97 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 	})
 }
 
-// add nouns and values
-func genNouns(w *weave.Weaver, ns []grok.Noun, wantOne bool) (ret g.Value, err error) {
-	cat, domain := w.Catalog, w.Domain
-	if cnt := len(ns); wantOne && cnt != 1 {
-		err = errutil.New("expected exactly one noun")
-	} else {
-		names := make([]string, cnt)
-	Out:
-		for i := 0; i < cnt; i++ {
-			n := ns[i]
-			name := n.Name.String()
-			if name == "you" {
-				// tdb: the current thought is that "the player" should be a variable;
-				// currently its an "agent".
-				name = "self"
-			} else if !n.Exact {
-				if fold, e := domain.GetClosestNoun(name); e == nil {
-					name = fold
-				} else if !errors.Is(e, mdl.Missing) {
-					err = e
-					break Out
-				}
+func reduceNouns(ns []grok.Noun) (ret string) {
+	var s strings.Builder
+	for i, n := range ns {
+		if i > 1 {
+			s.WriteString(", ")
+		}
+		s.WriteString(n.Name.String())
 
+	}
+	return s.String()
+}
+
+func validSources(ns []grok.Noun, mtype grok.MacroType) (multi bool, err error) {
+	switch mtype {
+	case grok.Macro_SourcesOnly, grok.Macro_ManySources, grok.Macro_ManyMany:
+		if cnt := len(ns); cnt == 0 {
+			err = errutil.New("expected at least one source noun")
+		}
+		multi = true
+	case grok.Macro_ManyTargets:
+		if cnt := len(ns); cnt > 1 {
+			err = errutil.New("expected exactly one noun, have:", reduceNouns(ns))
+		}
+	default:
+		err = errutil.New("invalid macro type")
+	}
+	return
+}
+
+func validTargets(ns []grok.Noun, mtype grok.MacroType) (multi bool, err error) {
+	switch mtype {
+	case grok.Macro_SourcesOnly:
+		if cnt := len(ns); cnt != 0 {
+			err = errutil.New("didn't expect any target nouns")
+		}
+	case grok.Macro_ManySources:
+		if cnt := len(ns); cnt > 1 {
+			err = errutil.New("expected at most one target noun")
+		}
+	case grok.Macro_ManyTargets, grok.Macro_ManyMany:
+		// any number okay
+		multi = true
+	default:
+		err = errutil.New("invalid macro type")
+	}
+	return
+}
+
+// add nouns and values
+func genNouns(w *weave.Weaver, ns []grok.Noun, multi bool) (ret g.Value, err error) {
+	cat, domain := w.Catalog, w.Domain
+	names := make([]string, len(ns))
+Out:
+	for i, n := range ns {
+		name := n.Name.String()
+		if name == "you" {
+			// tdb: the current thought is that "the player" should be a variable;
+			// currently its an "agent".
+			name = "self"
+		} else if !n.Exact {
+			if fold, e := domain.GetClosestNoun(name); e == nil {
+				name = fold
+			} else if !errors.Is(e, mdl.Missing) {
+				err = e
+				break Out
 			}
-			names[i] = name
-			// tbd: might be some nicer, faster ways of handling all this
-			// instead of passing it through the highest level catalog interfaces
-			for _, k := range n.Kinds {
-				if e := cat.AssertNounKind(name, k.String()); e != nil {
-					err = e
-					break Out
-				}
+		}
+		names[i] = name
+		// tbd: might be some nicer, faster ways of handling all this
+		// instead of passing it through the highest level catalog interfaces
+		for _, k := range n.Kinds {
+			if e := cat.AssertNounKind(name, k.String()); e != nil {
+				err = e
+				break Out
 			}
-			for _, t := range n.Traits {
-				if e := cat.AssertNounValue(name, t.String(), nil, literal.B(true)); e != nil {
-					err = e
-					break Out
-				}
+		}
+		for _, t := range n.Traits {
+			if e := cat.AssertNounValue(name, t.String(), nil, literal.B(true)); e != nil {
+				err = e
+				break Out
 			}
-		} // end for loop
-		// all done?
-		if err == nil {
-			if wantOne {
-				ret = g.StringOf(names[0])
-			} else {
-				ret = g.StringsOf(names)
-			}
+		}
+	} // end for loop
+	// all done?
+	if err == nil {
+		if multi {
+			ret = g.StringsOf(names)
+		} else if len(names) > 0 {
+			ret = g.StringOf(names[0])
+		} else {
+			ret = g.Empty
 		}
 	}
 	return

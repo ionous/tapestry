@@ -6,13 +6,10 @@
         [
           {
             "Text:": "kind"
-          },
-          {
-            "Nothing": true
           }
         ],
         {
-          "Text:": "error"
+          "Nothing": true
         },
         []
       ]
@@ -128,6 +125,12 @@
         },
         [
           {
+            "Define nouns:as:": [
+              "@things",
+              "things"
+            ]
+          },
+          {
             "If:does:": [
               {
                 "Not:": {
@@ -181,6 +184,12 @@
           "Text:": "error"
         },
         [
+          {
+            "Define nouns:as:": [
+              "@things",
+              "things"
+            ]
+          },
           {
             "Define nouns:as:": [
               {
