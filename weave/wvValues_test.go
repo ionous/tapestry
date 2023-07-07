@@ -65,7 +65,7 @@ func TestMissingField(t *testing.T) {
 	)
 
 	_, e := dt.Assemble()
-	if ok, e := testweave.OkayError(t, e, `field "t" not found in kind "k"`); !ok {
+	if ok, e := testweave.OkayError(t, e, `Missing field "t" in kind "k"`); !ok {
 		t.Fatal("unexpected error:", e)
 	} else {
 		t.Log("ok:", e)
@@ -73,7 +73,7 @@ func TestMissingField(t *testing.T) {
 }
 
 func TestValueTraitAssignment(t *testing.T) {
-	dt := testweave.NewWeaver(t.Name())
+	dt := testweave.NewWeaverOptions(t.Name(), false)
 	defer dt.Close()
 	dt.MakeDomain(dd("a"),
 		// some random set of kinds
@@ -107,6 +107,7 @@ func TestValueTraitAssignment(t *testing.T) {
 	} else if out, e := dt.ReadValues(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
+		// domain, noun, field, value
 		`a:apple:a:"y"`,
 		`a:boat:b:"z"`,
 		`a:pear:a:"x"`,

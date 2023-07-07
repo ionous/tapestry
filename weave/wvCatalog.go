@@ -159,15 +159,25 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 			err = e
 		} else {
 			cat.processing.Push(d)
+			//
 			for p := assert.Phase(0); p <= assert.RequireAll; p++ {
 				ctx := Weaver{Catalog: cat, Domain: d, Phase: p, Runtime: cat.run}
 				if e := d.runPhase(&ctx); e != nil {
 					err = e
 					break
+				} else if e := d.flush(true); e != nil {
+					err = e
+					break
 				}
 			}
+			// play out suspended actions:
+			if err == nil && len(d.suspended) > 0 {
+				err = d.flush(false)
+			}
+			//
 			cat.processing.Pop()
 			if err == nil {
+				d.currPhase = -1 // all done.
 				ret = d
 			}
 		}
@@ -176,7 +186,7 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 }
 
 func (cat *Catalog) AssertAlias(opShortName string, opAliases ...string) error {
-	return cat.Schedule(assert.RequireNouns, func(ctx *Weaver) (err error) {
+	return cat.Schedule(assert.RequireAll, func(ctx *Weaver) (err error) {
 		d, at := ctx.Domain, ctx.At
 		if shortName, ok := UniformString(opShortName); !ok {
 			err = errutil.New("invalid name", opShortName)
@@ -351,7 +361,7 @@ func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, opV
 		} else if value := opValue; value == nil {
 			err = errutil.New("null value", opNoun, opField)
 		} else {
-			return rv.writeValue(noun.name, at, field, path, value)
+			err = rv.writeValue(noun.name, at, field, path, value)
 		}
 		return
 	})
@@ -555,7 +565,7 @@ func (cat *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err er
 		cat.domains[n] = d
 	}
 
-	if d.currPhase >= assert.RequireDependencies {
+	if d.currPhase < 0 || d.currPhase >= assert.RequireDependencies {
 		err = errutil.New("can't add new dependencies to parent domains", d.name)
 	} else {
 		// domains are implicitly dependent on their parent domain

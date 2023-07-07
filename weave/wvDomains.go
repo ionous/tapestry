@@ -17,11 +17,14 @@ type Domain struct {
 	cat        *Catalog
 	currPhase  assert.Phase                     // updated during weave, ends at NumPhases
 	scheduling [assert.RequireAll + 1][]memento // separates commands into phases
+	suspended  []memento                        // for missing definitions
 }
 
 type memento struct {
-	cb func(*Weaver) error
-	at string
+	cb    func(*Weaver) error
+	at    string
+	phase assert.Phase
+	err   error
 }
 
 func (d *Domain) Name() string {
@@ -49,7 +52,7 @@ func (d *Domain) isReadyForProcessing() (okay bool, err error) {
 			if uses, ok := cat.domains[name]; !ok {
 				okay = false
 				break
-			} else if d != uses && uses.currPhase <= assert.RequireAll {
+			} else if (d != uses) && (uses.currPhase != -1) {
 				okay = false
 				break
 			}
@@ -59,11 +62,17 @@ func (d *Domain) isReadyForProcessing() (okay bool, err error) {
 }
 
 func (d *Domain) schedule(at string, when assert.Phase, what func(*Weaver) error) (err error) {
-	if d.currPhase > when {
-		ctx := Weaver{Catalog: d.cat, Domain: d, Phase: d.currPhase, Runtime: d.cat.run}
-		err = what(&ctx)
+	if d.currPhase < 0 {
+		err = errutil.Fmt("domain %q already finished", d.name)
+	} else if d.currPhase <= when {
+		d.scheduling[when] = append(d.scheduling[when], memento{what, at, when, nil})
 	} else {
-		d.scheduling[when] = append(d.scheduling[when], memento{what, at})
+		ctx := Weaver{Catalog: d.cat, Domain: d, Phase: d.currPhase, Runtime: d.cat.run}
+		if e := what(&ctx); errors.Is(e, mdl.Missing) {
+			d.suspended = append(d.suspended, memento{what, at, when, e})
+		} else {
+			err = e
+		}
 	}
 	return
 }
@@ -154,46 +163,86 @@ func (d *Domain) makeNames(noun, name, at string) (err error) {
 }
 
 func (d *Domain) runPhase(ctx *Weaver) (err error) {
-	w := ctx.Phase
-	d.currPhase = w // hrmm
-	redo := struct {
-		cnt int
-		err error
-	}{}
+	phase := ctx.Phase
+	d.currPhase = phase // hrmm
 	// don't range over the slice since the contents can change during traversal.
-	// tbd: have "Schedule" immediately execute the statement if in the correct phase?
-	els := &d.scheduling[w]
-Loop:
+	// tbd; may no longer be true.
+	els := &d.scheduling[phase]
+
 	for len(*els) > 0 {
 		// slice the next element out of the list
 		next := (*els)[0]
 		(*els) = (*els)[1:]
 
 		switch e := next.call(ctx); {
-		case e == nil:
-			redo.cnt, redo.err = 0, nil
 		case errors.Is(e, mdl.Missing):
-			redo.err = errutil.Append(redo.err, e)
-			if redo.cnt < len((*els)) {
-				// add redo elements back into the list
-				(*els) = append((*els), next)
-				redo.cnt++
-			} else {
-				if d.cat.warn != nil {
-					e := errutil.New(w, "didn't finish")
-					d.cat.warn(e)
-				}
-				err = errutil.Append(err, redo.err)
-				break Loop
-			}
+			next.err = e
+			d.suspended = append(d.suspended, next)
+
 		case errors.Is(e, mdl.Duplicate):
 			if d.cat.warn != nil {
 				d.cat.warn(e)
 			}
-		default:
+
+		case e != nil:
 			err = errutil.Append(err, e)
 		}
 	}
 	d.currPhase++
+	return
+}
+
+// tbd: the suspended mnd flush model is a little low bar.
+// it'd be better to categorize individual statements -- even from macros
+// and trigger them as their needs are satisfied; how exactly? not sure.
+// the big mish mash are patterns,params,locals, and returns --
+// which need to be written in a specific order.
+func (d *Domain) flush(ignore bool) (err error) {
+	ctx := Weaver{Catalog: d.cat, Domain: d, Runtime: d.cat.run}
+	redo := struct {
+		cnt int
+		err error
+	}{}
+
+Loop:
+	for len(d.suspended) > 0 {
+		// slice the next element out of the list
+		next := d.suspended[0]
+		d.suspended = d.suspended[1:]
+		ctx.Phase = next.phase
+
+		switch e := next.call(&ctx); {
+		case e == nil:
+			// every success, abandon all old errors and try everything over again.
+			redo.cnt, redo.err = 0, nil
+
+		case errors.Is(e, mdl.Missing):
+			// append to rack all that are missing
+			redo.err = errutil.Append(redo.err, e)
+			// add redo elements back into the list
+			next.err = e
+			d.suspended = append(d.suspended, next)
+			// might still have statements to try?
+			// keep going
+			if redo.cnt = redo.cnt + 1; redo.cnt > len(d.suspended) {
+				// if we have visited every suspended element
+				// an haven't progressed; we're done.
+				// return all the errors.
+				if !ignore {
+					err = redo.err
+				}
+				break Loop
+			}
+
+		case errors.Is(e, mdl.Duplicate):
+			if d.cat.warn != nil {
+				d.cat.warn(e)
+			}
+
+		default:
+			// accumulate all errors
+			err = errutil.Append(err, e)
+		}
+	}
 	return
 }

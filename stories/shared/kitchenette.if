@@ -76,32 +76,8 @@
               ]
             ]
           },
-          {
-            "Define nouns:as:": [
-              "the cabinet",
-              "container"
-            ]
-          },
-          {
-            "Define nouns:relativeTo:otherNouns:": [
-              "the cabinet",
-              "whereabouts",
-              "the kitchen"
-            ]
-          },
-          {
-            "Define nouns:as:relativeTo:otherNouns:": [
-              [
-                "the book of matches",
-                "a bottle of descaling solution",
-                "a fish hook",
-                "a rusty knife"
-              ],
-              "things",
-              "whereabouts",
-              "the cabinet"
-            ]
-          },
+          { "Declare:": "The container called the cabinet is in the kitchen." },
+          { "Declare:": "The book of matches, a bottle of descaling solution, a fish hook, a rusty knife are things in the cabinet." },
           {
             "Define value:of:asLines:": [
               "initial appearance",

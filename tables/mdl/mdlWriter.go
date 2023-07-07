@@ -580,6 +580,7 @@ func (m *Modeler) AddParameter(domain, kind, field string, aff affine.Affinity, 
 	} else if rows, e := res.RowsAffected(); e != nil {
 		err = e
 	} else if rows == 0 {
+		// can happen if the result was already written.
 		err = errutil.Fmt("unexpected parameter %q for kind %q in domain %q",
 			field, kind, domain)
 	}

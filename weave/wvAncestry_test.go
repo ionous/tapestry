@@ -118,8 +118,6 @@ func TestAncestryMissing(t *testing.T) {
 	_, e := dt.Assemble()
 	if ok, e := testweave.OkayError(t, e, `Missing kind "x" in domain "b"`); !ok {
 		t.Fatal("unexpected error:", e)
-	} else if ok, e := testweave.OkayError(t, warnings.Shift(), `RequireDeterminers didn't finish`); !ok {
-		t.Fatal("unexpected warning:", e)
 	}
 }
 

@@ -187,7 +187,7 @@ and ma.kind = fk.typeId`,
 		sql.Named("fieldName", field)).
 		Scan(&prev.name, &prev.aff, &prev.cls); e != nil {
 		if e == sql.ErrNoRows {
-			err = errutil.Fmt("field %q not found in kind %q domain %q", field, kind, domain)
+			err = errutil.Fmt("%w field %q in kind %q domain %q", Missing, field, kind, domain)
 		} else {
 			err = errutil.New("database error", e)
 		}
