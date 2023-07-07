@@ -21,7 +21,7 @@ func RunAll(run rt.Runtime, exes []rt.Execute) (err error) {
 	for i, exe := range exes {
 		if exe != nil {
 			if e := exe.Execute(run); e != nil {
-				err = errutil.New("failed statement", i, e)
+				err = errutil.Fmt("failed statement %d %T %w", i, exe, e)
 				break
 			}
 		}

@@ -14,7 +14,7 @@ func xTestImportNamedNouns(t *testing.T) {
 	// var els []eph.Ephemera
 	// k := weave.NewCatalog(eph.NewCommandQueue(&els))
 	// // this is really import noun properties at this point...
-	// if _, e := story.ImportNounProperties(k, []string{
+	// if _, e := story.readNounsWithProperties(k, []string{
 	// 	"our Trevor",
 	// 	"an apple",
 	// 	// note: we cant really test counted nouns without weaving

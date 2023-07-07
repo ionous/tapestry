@@ -42,6 +42,10 @@
       ]
     },
     {
+      "--": [
+        "when objects are publicly named, their name can appear in the output text.",
+        "by default, the names of privately named objects will never be displayed to the player."
+      ],
       "Define traits:as:": [
         [
           "publicly named",

@@ -80,6 +80,10 @@
         "print name",
         [
           {
+            "--": [
+              "if the object doesn't exist, use 'print nothing'.",
+              "( by default, that will try to write: 'nowhere', 'nobody', or 'nothing'. )"
+            ],
             "PatternRule:does:": [
               {
                 "Not:": {
@@ -96,6 +100,7 @@
             ]
           },
           {
+            "--": "if the object was given an explicit 'printed name', print that.",
             "PatternRule:does:": [
               {
                 "Cmp:is:txt:": [
@@ -127,6 +132,10 @@
             ]
           },
           {
+            "--": [
+              "if the object is publicly named, print the original name of the object;",
+              "privately named objects skip this rule."
+            ],
             "PatternRule:does:": [
               {
                 "Object:field:": [
@@ -149,6 +158,7 @@
             ]
           },
           {
+            "--": "if nothing else was printed, print the singular name of the kind: 'room', 'container', etc.",
             "PatternRule:does:": [
               true,
               [

@@ -18,11 +18,7 @@
             "--": ""
           },
           {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              "self",
-              "the cabinet"
-            ]
+            "Declare:": "You are in the cabinet."
           }
         ],
         [

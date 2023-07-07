@@ -6,11 +6,7 @@
         "Thingaverse",
         [
           {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              "self",
-              "the kitchen"
-            ]
+            "Declare:": "You are in the kitchen."
           },
           {
             "Define nouns:as:": [
@@ -42,15 +38,7 @@
             ]
           },
           {
-            "Define nouns:relativeTo:otherNouns:": [
-              [
-                "the broom",
-                "a hat",
-                "two cats"
-              ],
-              "whereabouts",
-              "the kitchen"
-            ]
+            "Declare:": "The broom, a hat, and two cats are in the kitchen."
           },
           {
             "Define nouns:as:": [

@@ -6,11 +6,7 @@
         "Kitchenette",
         [
           {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              "the knife",
-              "self"
-            ]
+          	"Declare:": "You are carrying the knife"
           },
           {
             "--": ""

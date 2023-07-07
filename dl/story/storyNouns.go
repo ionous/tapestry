@@ -12,10 +12,10 @@ import (
 	"github.com/ionous/errutil"
 )
 
-// ImportNounProperties -
+// readNounsWithProperties -
 // reads ancillary information about nouns from their names and declares properties for them.
 // ex. proper or plural names, etc.
-func ImportNounProperties(w *weave.Weaver, nouns []string) (ret []string, err error) {
+func readNounsWithProperties(w *weave.Weaver, nouns []string) (ret []string, err error) {
 	ret = make([]string, 0, len(nouns))
 	for _, noun := range nouns {
 		if next, e := importNoun(w, noun, ret); e != nil {
@@ -28,9 +28,9 @@ func ImportNounProperties(w *weave.Weaver, nouns []string) (ret []string, err er
 	return
 }
 
-// ReadNouns - reads noun names without declaring any properties....
+// readNouns - reads noun names without declaring any properties....
 // fix? unless they are counted nouns ( for backwards compatibility of "two cats whereabouts the kitchen" )
-func ReadNouns(w *weave.Weaver, nouns []string) (ret []string, err error) {
+func readNouns(w *weave.Weaver, nouns []string) (ret []string, err error) {
 	ret = make([]string, 0, len(nouns))
 	for _, noun := range nouns {
 		if a, e := makeArticleName(w, noun); e != nil {
@@ -41,7 +41,7 @@ func ReadNouns(w *weave.Weaver, nouns []string) (ret []string, err error) {
 		} else if ns, e := importCountedNoun(w.Catalog, a.count, a.name); e == nil {
 			ret = append(ret, ns...)
 		} else {
-			err = e
+			err = errutil.New("couldn't import counted nouns", a.count, a.name, e)
 			break
 		}
 	}
@@ -49,7 +49,7 @@ func ReadNouns(w *weave.Weaver, nouns []string) (ret []string, err error) {
 }
 
 // helper to simplify setting the values of nouns
-func AssertNounValue(a assert.Assertions, val literal.LiteralValue, noun string, path ...string) error {
+func assertNounValue(a assert.Assertions, val literal.LiteralValue, noun string, path ...string) error {
 	last := len(path) - 1
 	field, parts := path[last], path[:last]
 	return a.AssertNounValue(noun, field, parts, val)
@@ -66,9 +66,9 @@ func importNoun(w *weave.Weaver, noun string, nouns []string) (ret []string, err
 		}
 	} else {
 		if a.isProper() {
-			err = AssertNounValue(w.Catalog, B(true), a.name, "proper_named")
+			err = assertNounValue(w.Catalog, B(true), a.name, "proper_named")
 		} else if customDet, ok := a.customArticle(); ok && len(customDet) > 0 {
-			err = AssertNounValue(w.Catalog, T(customDet), a.name, "indefinite_article")
+			err = assertNounValue(w.Catalog, T(customDet), a.name, "indefinite_article")
 		}
 		ret = append(nouns, a.name)
 	}
@@ -126,24 +126,20 @@ func (an *articleName) customArticle() (ret string, okay bool) {
 }
 
 // ex. "two triangles" -> triangle is a kind of thing
-// fix? consider a specific counted noun phrase; the noun phrase needs more work.
-// also, we probably want noun stacks not individually duplicated names
 func importCountedNoun(cat *weave.Catalog, cnt int, kindOrKinds string) (ret []string, err error) {
 	if cnt > 0 {
-		// note: kind is phrased in the singular here when count is 1, plural otherwise.
-		// but, because of "Recent.Nouns" processing we have to generate some sort of noun name *immediately*
-		// ( itd be nice to have a more start and stop importer, where we could delay processing of branches of the tree. )
+		// generate unique names for each of the counted nouns.
+		// fix: we probably want nouns to "stack", and be have individually duplicated objects.
+		// ie. a single stackable "cats" with a value of 5, rather than cat_1, cat_2, etc.
+		// and when you pick up one cat now you have two object stacks, both referring to the kind cats
+		// an empty stack acts like no object, and gets collected in some fashion.
 		names := make([]string, cnt)
 		for i := 0; i < cnt; i++ {
-			noun := cat.NewCounter(kindOrKinds, nil)
-			if e := AssertNounValue(cat, B(true), noun, "counted"); e != nil {
-				err = e
-				break
-			}
-			names[i] = noun
+			names[i] = cat.NewCounter(kindOrKinds, nil)
 		}
 		if e := cat.Schedule(assert.RequirePlurals, func(w *weave.Weaver) (err error) {
 			var kind, kinds string
+			// note: kind is phrased in the singular here when count is 1, plural otherwise.
 			if cnt == 1 {
 				kind = kindOrKinds
 				kinds = w.PluralOf(kindOrKinds)
@@ -160,7 +156,10 @@ func importCountedNoun(cat *weave.Catalog, cnt int, kindOrKinds string) (ret []s
 					} else if e := cat.AssertAlias(n, kind); e != nil {
 						err = e // ^ so that typing "triangle" means "triangles_1"
 						break
-					} else if e := AssertNounValue(cat, T(kind), n, "printed name"); e != nil {
+					} else if e := assertNounValue(cat, B(true), n, "counted"); e != nil {
+						err = e
+						break
+					} else if e := assertNounValue(cat, T(kind), n, "printed name"); e != nil {
 						err = e // so that printing "triangles_1" yields "triangle"
 						break   // FIX: itd make a lot more sense to have a default value for the kind
 					}

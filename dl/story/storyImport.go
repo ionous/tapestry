@@ -44,6 +44,8 @@ func (op *GrammarDecl) Execute(macro rt.Runtime) error {
 
 func (op *GrammarDecl) Weave(cat *weave.Catalog) (err error) {
 	switch el := op.Grammar.(type) {
+	// fix: why have a generic "grammar" decl, just to switch on two sub decls
+	// they should be top level.
 	case *grammar.Alias:
 		err = cat.AssertAlias(el.AsNoun, el.Names...)
 	case *grammar.Directive:
@@ -68,7 +70,7 @@ func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if traits, e := safe.GetTextList(w, op.Traits); e != nil {
 			err = e
-		} else if bareNames, e := ImportNounProperties(w, nouns.Strings()); e != nil {
+		} else if bareNames, e := readNounsWithProperties(w, nouns.Strings()); e != nil {
 			err = e
 		} else {
 			if kind := kind.String(); len(kind) > 0 {
@@ -81,14 +83,13 @@ func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 			if traits := traits.Strings(); len(traits) > 0 {
 				for _, t := range traits {
 					for _, n := range bareNames {
-						if e := AssertNounValue(cat, B(true), n, t); e != nil {
+						if e := assertNounValue(cat, B(true), n, t); e != nil {
 							err = errutil.Append(err, e)
 							break // out of the traits to the next noun
 						}
 					}
 				}
 			}
-
 		}
 		return
 	})
@@ -180,6 +181,11 @@ func genNouns(cat *weave.Catalog, ns []grok.Noun, wantOne bool) (ret g.Value, er
 		for i := 0; i < cnt; i++ {
 			n := ns[i]
 			name := n.Name.String()
+			if name == "you" {
+				// tdb: the current thought is that "the player" should be a variable;
+				// currently its an "agent".
+				name = "self"
+			}
 			names[i] = name
 			//
 			for _, k := range n.Kinds {
@@ -218,7 +224,7 @@ func (op *DefineNouns) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if kind, e := safe.GetText(w, op.Kind); e != nil {
 			err = e
-		} else if bareNames, e := ImportNounProperties(w, nouns.Strings()); e != nil {
+		} else if bareNames, e := readNounsWithProperties(w, nouns.Strings()); e != nil {
 			err = e
 		} else {
 			if kind := kind.String(); len(kind) > 0 {
@@ -247,12 +253,12 @@ func (op *NounAssignment) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if lines, e := ConvertText(op.Lines.String()); e != nil {
 			err = e
-		} else if subjects, e := ReadNouns(w, nouns.Strings()); e != nil {
+		} else if subjects, e := readNouns(w, nouns.Strings()); e != nil {
 			err = e
 		} else {
 			field, lines := field.String(), T(lines)
 			for _, noun := range subjects {
-				if e := AssertNounValue(cat, lines, noun, field); e != nil {
+				if e := assertNounValue(cat, lines, noun, field); e != nil {
 					err = errutil.Append(err, e)
 				}
 			}
@@ -276,9 +282,9 @@ func (op *DefineRelatives) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if otherNouns, e := safe.GetTextList(w, op.OtherNouns); e != nil {
 			err = e
-		} else if a, e := ReadNouns(w, nouns.Strings()); e != nil {
+		} else if a, e := readNouns(w, nouns.Strings()); e != nil {
 			err = e
-		} else if b, e := ReadNouns(w, otherNouns.Strings()); e != nil {
+		} else if b, e := readNouns(w, otherNouns.Strings()); e != nil {
 			err = e
 		} else {
 			for _, subject := range a {
@@ -314,9 +320,9 @@ func (op *DefineOtherRelatives) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if otherNouns, e := safe.GetTextList(w, op.OtherNouns); e != nil {
 			err = e
-		} else if a, e := ReadNouns(w, nouns.Strings()); e != nil {
+		} else if a, e := readNouns(w, nouns.Strings()); e != nil {
 			err = e
-		} else if b, e := ReadNouns(w, otherNouns.Strings()); e != nil {
+		} else if b, e := readNouns(w, otherNouns.Strings()); e != nil {
 			err = e
 		} else {
 			if rel := relation.String(); len(rel) > 0 {
