@@ -512,7 +512,7 @@ func (cat *Catalog) AssertRule(pattern string, target string, filter rt.BoolEval
 }
 
 // NewCounter generates a unique string, and uses local markup to try to create a stable one.
-// instead consider  "PreImport" could be used to write a key into the markup if one doesnt already exist.
+// instead consider "PreImport" could be used to write a key into the markup if one doesnt already exist.
 // and a free function could also extract what it needs from any op's markup.
 // ( then Schedule wouldn't need Catalog for counters )
 func (cat *Catalog) NewCounter(name string, markup map[string]any) (ret string) {
