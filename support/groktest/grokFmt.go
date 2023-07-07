@@ -33,6 +33,9 @@ func nounToMap(n grok.Noun) map[string]any {
 	matchIntoMap(m, "det", n.Det)
 	matchesIntoMap(m, "traits", n.Traits)
 	matchesIntoMap(m, "kinds", n.Kinds)
+	if n.Exact {
+		m["exact"] = true
+	}
 	return m
 }
 

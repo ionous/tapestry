@@ -34,6 +34,7 @@ type Results struct {
 type Noun struct {
 	Det    Match
 	Name   Span
+	Exact  bool // when the phrase contains "called", we shouldn't fold the noun into other similarly named nouns.
 	Traits []Match
 	Kinds  []Match // it's possible, if rare, to apply multiple kinds
 	// ex. The container called the coffin is a closed openable thing.

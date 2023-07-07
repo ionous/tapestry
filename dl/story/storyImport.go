@@ -7,6 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/grok"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
@@ -129,9 +130,9 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if res, e := w.Grok(text.String()); e != nil {
 			err = e
-		} else if src, e := genNouns(cat, res.Sources, res.Macro.Type == grok.Macro_ManyTargets); e != nil {
+		} else if src, e := genNouns(w, res.Sources, res.Macro.Type == grok.Macro_ManyTargets); e != nil {
 			err = e
-		} else if tgt, e := genNouns(cat, res.Targets, res.Macro.Type != grok.Macro_ManyTargets &&
+		} else if tgt, e := genNouns(w, res.Targets, res.Macro.Type != grok.Macro_ManyTargets &&
 			res.Macro.Type != grok.Macro_ManyMany); e != nil {
 			err = e
 		} else {
@@ -172,7 +173,8 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 }
 
 // add nouns and values
-func genNouns(cat *weave.Catalog, ns []grok.Noun, wantOne bool) (ret g.Value, err error) {
+func genNouns(w *weave.Weaver, ns []grok.Noun, wantOne bool) (ret g.Value, err error) {
+	cat, domain := w.Catalog, w.Domain
 	if cnt := len(ns); wantOne && cnt != 1 {
 		err = errutil.New("expected exactly one noun")
 	} else {
@@ -185,9 +187,18 @@ func genNouns(cat *weave.Catalog, ns []grok.Noun, wantOne bool) (ret g.Value, er
 				// tdb: the current thought is that "the player" should be a variable;
 				// currently its an "agent".
 				name = "self"
+			} else if !n.Exact {
+				if fold, e := domain.GetClosestNoun(name); e == nil {
+					name = fold
+				} else if !errors.Is(e, mdl.Missing) {
+					err = e
+					break Out
+				}
+
 			}
 			names[i] = name
-			//
+			// tbd: might be some nicer, faster ways of handling all this
+			// instead of passing it through the highest level catalog interfaces
 			for _, k := range n.Kinds {
 				if e := cat.AssertNounKind(name, k.String()); e != nil {
 					err = e
@@ -200,7 +211,7 @@ func genNouns(cat *weave.Catalog, ns []grok.Noun, wantOne bool) (ret g.Value, er
 					break Out
 				}
 			}
-		}
+		} // end for loop
 		// all done?
 		if err == nil {
 			if wantOne {

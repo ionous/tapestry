@@ -106,6 +106,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 				"sources": []map[string]any{{
 					"det":    "the", // note: this is the bit closes to the noun
 					"name":   "sarcophagus",
+					"exact":  true,
 					"kinds":  []string{"container"},
 					"traits": []string{"open"},
 				}},
@@ -223,11 +224,13 @@ func Phrases(t *testing.T, g grok.Grokker) {
 				"targets": []map[string]any{{
 					"det":   "the",
 					"name":  "stake",
+					"exact": true,
 					"kinds": []string{"thing"},
 				}},
 				"sources": []map[string]any{{
 					"det":   "the",
 					"name":  "altar",
+					"exact": true,
 					"kinds": []string{"supporter"},
 				}},
 			},
@@ -247,6 +250,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 				"targets": []map[string]any{{
 					"det":    "the", // closest to the trunk
 					"name":   "trunk",
+					"exact":  true,
 					"traits": []string{"closed", "openable"},
 					"kinds":  []string{"container"},
 				}},

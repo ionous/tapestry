@@ -35,6 +35,7 @@ func grokNouns(known Grokker, out *[]Noun, ws []Word, flag genFlag) (err error) 
 				err = e
 				break
 			} else {
+				var exact bool
 				postTraits := name[ts.WordCount:]
 				if !ts.hasKind() {
 					// case 3: no kindness detected; throw the traits out
@@ -58,6 +59,7 @@ func grokNouns(known Grokker, out *[]Noun, ws []Word, flag genFlag) (err error) 
 					// case 1: any bits after "called" become the determiner and name
 					det, name = d, n
 					flag = flag & ^AllowMany // tbd: why couldn't "called" couldn't be smarter to split on "and"?
+					exact = true
 				}
 
 				// more nouns may be allowed after "and"
@@ -80,6 +82,7 @@ func grokNouns(known Grokker, out *[]Noun, ws []Word, flag genFlag) (err error) 
 						Name:   name,
 						Traits: ts.Traits,
 						Kinds:  ts.kinds(),
+						Exact:  exact,
 					})
 				}
 			}
