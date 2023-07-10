@@ -238,10 +238,11 @@ func validTargets(ns []grok.Noun, mtype grok.MacroType) (multi bool, err error) 
 func genNouns(w *weave.Weaver, ns []grok.Noun, multi bool) (ret g.Value, err error) {
 	cat, domain := w.Catalog, w.Domain
 	names := make([]string, len(ns))
+	var you = grok.Hash("you")
 Out:
 	for i, n := range ns {
 		name := n.Name.String()
-		if name == "you" {
+		if n.Name.NumWords() == 1 && n.Name[0].Hash() == you {
 			// tdb: the current thought is that "the player" should be a variable;
 			// currently its an "agent".
 			name = "self"

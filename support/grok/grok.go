@@ -1,5 +1,7 @@
 package grok
 
+import "strings"
+
 type Grokker interface {
 	// if the passed words starts with a determiner,
 	// return the number of words in  that match.
@@ -51,7 +53,14 @@ type Match interface {
 type Span []Word
 
 func (s Span) String() string {
-	return WordsWithSep(s, ' ')
+	var b strings.Builder
+	for i, w := range s {
+		if i > 0 {
+			b.WriteRune(' ')
+		}
+		b.WriteString(w.String())
+	}
+	return b.String()
 }
 
 func (s Span) NumWords() int {

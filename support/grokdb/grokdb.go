@@ -43,7 +43,7 @@ var det = groktest.PanicSpans("the", "a", "an", "some", "our")
 func (d *dbSource) FindKind(ws grok.Span) (ret grok.Match, err error) {
 	// to ensure a whole word match, during query the names of the kinds are appended with blanks
 	// and so we also give the phrase a final blank in case the phrase is a single word.
-	words := ws.String() + blank
+	words := strings.ToLower(ws.String()) + blank
 	var found struct {
 		id   int
 		name string
@@ -133,7 +133,7 @@ func (d *dbSource) FindTrait(ws grok.Span) (ret grok.Match, err error) {
 	if ap, e := d.getAspectPath(); e != nil {
 		err = e
 	} else {
-		words := grok.WordsWithSep(ws, space) + blank
+		words := strings.ToLower(ws.String()) + blank
 		var found struct {
 			name string
 		}
@@ -182,7 +182,7 @@ func (d *dbSource) FindMacro(ws grok.Span) (ret grok.MacroInfo, err error) {
 
 func (d *dbSource) findMacro(ws grok.Span) (ret grok.MacroInfo, err error) {
 	// uses spaces instead of underscores...
-	words := grok.WordsWithSep(ws, ' ') + blank
+	words := strings.ToLower(ws.String()) + blank
 	var found struct {
 		kid      int64  // id of the kind
 		name     string // name of the kind/macro

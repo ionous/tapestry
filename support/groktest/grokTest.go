@@ -20,7 +20,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			result: map[string]any{
 				"macro": "carry",
 				"sources": []map[string]any{{
-					"name": "hershel",
+					"name": "Hershel",
 				}},
 				"targets": []map[string]any{{
 					"name": "scissors",
@@ -36,7 +36,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			result: map[string]any{
 				"macro": "carry",
 				"sources": []map[string]any{{
-					"name": "hershel",
+					"name": "Hershel",
 				}},
 				"targets": []map[string]any{{
 					"det":  "the",
@@ -321,14 +321,14 @@ func Phrases(t *testing.T, g grok.Grokker) {
 			result: map[string]any{
 				"macro": "suspect",
 				"sources": []map[string]any{{
-					"name": "hector",
+					"name": "Hector",
 				}, {
-					"name": "maria",
+					"name": "Maria",
 				}},
 				"targets": []map[string]any{{
-					"name": "santa",
+					"name": "Santa",
 				}, {
-					"name": "santana",
+					"name": "Santana",
 				}},
 			},
 		},
