@@ -3,19 +3,19 @@ package grok
 type Grokker interface {
 	// if the passed words starts with a determiner,
 	// return the number of words in  that match.
-	FindArticle([]Word) (Match, error)
+	FindArticle(Span) (Match, error)
 
 	// if the passed words starts with a kind,
 	// return the number of words in  that match.
-	FindKind([]Word) (Match, error)
+	FindKind(Span) (Match, error)
 
 	// if the passed words starts with a trait,
 	// return the number of words in  that match.
-	FindTrait([]Word) (Match, error)
+	FindTrait(Span) (Match, error)
 
 	// if the passed words starts with a macro,
 	// return information about that match
-	FindMacro([]Word) (MacroInfo, error)
+	FindMacro(Span) (MacroInfo, error)
 }
 
 type MacroInfo struct {

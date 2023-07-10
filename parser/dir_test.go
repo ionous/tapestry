@@ -1,13 +1,12 @@
 package parser_test
 
 import (
-	"git.sr.ht/~ionous/tapestry/parser/ident"
 	"github.com/ionous/sliceOf"
 )
 
 var Directions = func() (ret []*MyObject) {
 	for _, d := range directions {
-		obj := &MyObject{Id: ident.IdOf(d),
+		obj := &MyObject{Id: d,
 			Names:   sliceOf.String(d),
 			Classes: sliceOf.String("directions"),
 		}

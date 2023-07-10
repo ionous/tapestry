@@ -146,7 +146,7 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 	}
 	if found < 0 && err == nil {
 		first := cat.pendingDomains[0]
-		err = errutil.New("circular or unknown domain %q", first.name)
+		err = errutil.Fmt("circular or unknown domain %q", first.name)
 	}
 	if err == nil {
 		// chop this one out, then process

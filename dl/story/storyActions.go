@@ -45,7 +45,7 @@ func (op *ActionDecl) Weave(cat *weave.Catalog) (err error) {
 }
 
 const actionNoun = "noun"
-const actionOtherNoun = "other_noun"
+const actionOtherNoun = "other noun"
 
 func (op *ActionDecl) defineExtras(run rt.Runtime, k assert.Assertions, pattern string) (err error) {
 	extras := op.ActionParams.Value
@@ -67,7 +67,7 @@ func (op *ActionDecl) defineExtras(run rt.Runtime, k assert.Assertions, pattern 
 	case *AbstractAction:
 		// no extra parameters
 	default:
-		err = errutil.New("unknown action %T", extras)
+		err = errutil.Fmt("unknown action %T", extras)
 	}
 	return
 }

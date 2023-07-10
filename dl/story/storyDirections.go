@@ -34,7 +34,7 @@ func makeNoun(w *weave.Weaver, name rt.TextEval) (ret helperNoun, err error) {
 	} else if name := name.String(); len(name) > 0 {
 		if a, e := makeArticleName(w, name); e != nil {
 			err = e
-		} else if u := lang.Underscore(a.name); len(u) > 0 {
+		} else if u := lang.Normalize(a.name); len(u) > 0 {
 			ret = helperNoun{name: a.name, uniform: u}
 		}
 	}
@@ -65,14 +65,14 @@ func (op *MapHeading) Weave(cat *weave.Catalog) error {
 
 			// write a fact stating the general direction from one room to the other has been established.
 			// ( used to detect conflicts in (the reverse directional) implications of some other statement )
-			if dir := lang.Underscore(op.Dir.Str); len(dir) == 0 {
+			if dir := lang.Normalize(op.Dir.Str); len(dir) == 0 {
 				err = errutil.New("missing map direction")
 			} else if e := cat.AssertDefinition("dir", room.uniform, dir, otherRoom.uniform); e != nil {
 				err = e
 			} else {
 				// reverse connect
 				if op.MapConnection.isTwoWay() {
-					if dir := lang.Underscore(op.Dir.Str); len(dir) == 0 {
+					if dir := lang.Normalize(op.Dir.Str); len(dir) == 0 {
 						err = errutil.New("missing map direction")
 					} else {
 						otherDir := w.OppositeOf(dir)
@@ -123,7 +123,7 @@ func (op *MapDeparting) Weave(cat *weave.Catalog) error {
 
 // set the room's compass, creating an exit if needed to normalize directional travel to always involve a door.
 func mapDirect(cat *weave.Catalog, room, otherRoom, exitDoor helperNoun, mapDir MapDirection) (err error) {
-	if dir := lang.Underscore(mapDir.Str); len(dir) == 0 {
+	if dir := lang.Normalize(mapDir.Str); len(dir) == 0 {
 		err = errutil.New("missing map direction")
 	} else {
 		generateExit := len(exitDoor.name) == 0
@@ -148,7 +148,7 @@ func mapDirect(cat *weave.Catalog, room, otherRoom, exitDoor helperNoun, mapDir 
 				// ( keeps it unlisted, and stops the player from being able to refer to it )
 				if e := assertNounValue(cat, B(true), exitName, "scenery"); e != nil {
 					err = e
-				} else if e := assertNounValue(cat, B(true), exitName, "privately_named"); e != nil {
+				} else if e := assertNounValue(cat, B(true), exitName, "privately named"); e != nil {
 					err = e
 				}
 			}

@@ -84,7 +84,7 @@
                                     "FromText:": "@noun"
                                   },
                                   {
-                                    "FromText:": "@other noun"
+                                    "FromText:": "@other_noun"
                                   }
                                 ]
                               }
@@ -119,7 +119,7 @@
                                               "FromText:": "@noun"
                                             },
                                             {
-                                              "FromText:": "@other noun"
+                                              "FromText:": "@other_noun"
                                             }
                                           ]
                                         }
@@ -135,7 +135,7 @@
                                             "FromText:": "@noun"
                                           },
                                           {
-                                            "FromText:": "@other noun"
+                                            "FromText:": "@other_noun"
                                           }
                                         ]
                                       }
@@ -229,7 +229,7 @@
                         }
                       },
                       "other_than",
-                      "@other noun"
+                      "@other_noun"
                     ]
                   }
                 ]

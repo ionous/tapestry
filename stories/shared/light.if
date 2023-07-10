@@ -106,7 +106,7 @@
     },
     {
       "Define pattern:requires:result:withRules:": [
-        "transparentOf",
+        "transparent of",
         [
           {
             "Text:kind:": [
@@ -126,7 +126,7 @@
     },
     {
       "Extend pattern:provides:withRules:": [
-        "transparentOf",
+        "transparent of",
         [
           {
             "Text:kind:initially:": [
@@ -189,7 +189,7 @@
     },
     {
       "Define pattern:requires:result:withRules:": [
-        "transparentList",
+        "transparent list",
         [
           {
             "Text:kind:": [
@@ -209,7 +209,7 @@
     },
     {
       "Extend pattern:withRules:": [
-        "transparentList",
+        "transparent list",
         [
           {
             "PatternRule:does:": [

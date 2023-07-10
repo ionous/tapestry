@@ -48,9 +48,9 @@ func (k *relKind) lhs() (ret string) {
 
 func (k *relKind) rhs() (ret string) {
 	if k.plural {
-		ret = "other_kinds"
+		ret = "other kinds"
 	} else {
-		ret = "other_kind"
+		ret = "other kind"
 	}
 	return
 }

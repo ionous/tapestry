@@ -18,7 +18,7 @@ func (n Flow) GetType() string {
 }
 
 func (n Flow) GetLede() string {
-	return lang.Underscore(n.GetType())
+	return lang.Normalize(n.GetType())
 }
 
 func (n Flow) GetFlow() interface{} {

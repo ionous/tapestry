@@ -31,7 +31,7 @@ func TestNounFormation(t *testing.T) {
 	} else if diff := pretty.Diff(nouns, []string{
 		"a:apple:k",
 		"a:pear:k",
-		"b:toy_boat:k",
+		"b:toy boat:k",
 	}); len(diff) > 0 {
 		t.Log("nouns:", pretty.Sprint(nouns))
 		t.Fatal(diff)
@@ -40,10 +40,9 @@ func TestNounFormation(t *testing.T) {
 	} else if diff := pretty.Diff(names, []string{
 		"a:apple:apple:0",
 		"a:pear:pear:0",
-		"b:toy_boat:toy boat:0",
-		"b:toy_boat:toy_boat:1",
-		"b:toy_boat:boat:2",
-		"b:toy_boat:toy:3",
+		"b:toy boat:toy boat:0",
+		"b:toy boat:boat:1",
+		"b:toy boat:toy:2",
 	}); len(diff) > 0 {
 		t.Log("names:", pretty.Sprint(names))
 		t.Fatal(diff)
@@ -133,18 +132,17 @@ func TestNounParts(t *testing.T) {
 	} else if nouns, e := dt.ReadNouns(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(nouns, []string{
-		"a:collection_of_words:t",
+		"a:collection of words:t",
 	}); len(diff) > 0 {
 		t.Log("nouns:", pretty.Sprint(nouns))
 		t.Fatal(diff)
 	} else if names, e := dt.ReadNames(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(names, []string{
-		"a:collection_of_words:collection of words:0",
-		"a:collection_of_words:collection_of_words:1",
-		"a:collection_of_words:words:2",
-		"a:collection_of_words:of:3",
-		"a:collection_of_words:collection:4",
+		"a:collection of words:collection of words:0",
+		"a:collection of words:words:1",
+		"a:collection of words:of:2",
+		"a:collection of words:collection:3",
 	}); len(diff) > 0 {
 		t.Log("names:", pretty.Sprint(names))
 		t.Fatal(diff)
@@ -170,12 +168,11 @@ func TestNounAliases(t *testing.T) {
 		"b:apple:delicious:-1", // aliases first
 		"b:apple:fruit:-1",
 		"b:apple:apple:0",
-		"b:toy_boat:model:-1", // aliases first
-		"b:toy_boat:ship:-1",
-		"b:toy_boat:toy boat:0", // spaces
-		"b:toy_boat:toy_boat:1", // breaks
-		"b:toy_boat:boat:2",     // left word
-		"b:toy_boat:toy:3",      // right word
+		"b:toy boat:model:-1", // aliases first
+		"b:toy boat:ship:-1",
+		"b:toy boat:toy boat:0", // spaces
+		"b:toy boat:boat:1",     // left word
+		"b:toy boat:toy:2",      // right word
 	}); len(diff) > 0 {
 		t.Log("names:", pretty.Sprint(names))
 		t.Fatal(diff)
@@ -203,9 +200,9 @@ func TestNounDistance(t *testing.T) {
 	} else {
 		tests := []string{
 			// word(s), noun(s)
-			"toy", "toy_boat",
+			"toy", "toy boat",
 			"boat", "boat",
-			"toy boat", "toy_boat",
+			"toy boat", "toy boat",
 		}
 		for i, cnt := 0, len(tests); i < cnt; i += 2 {
 			name, want := tests[i], tests[i+1]

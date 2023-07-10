@@ -43,7 +43,7 @@ func TestValueFieldAssignment(t *testing.T) {
 		`a:apple:t:"some text"`,
 		`a:boat:t:"more text"`,
 		`a:pear:d:123`,
-		`a:toy_boat:d:321`,
+		`a:toy boat:d:321`,
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)
@@ -111,7 +111,7 @@ func TestValueTraitAssignment(t *testing.T) {
 		`a:apple:a:"y"`,
 		`a:boat:b:"z"`,
 		`a:pear:a:"x"`,
-		`a:toy_boat:a:"w"`,
+		`a:toy boat:a:"w"`,
 	}); len(diff) > 0 {
 		t.Log(pretty.Sprint(out))
 		t.Fatal(diff)

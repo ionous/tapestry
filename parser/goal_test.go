@@ -1,7 +1,5 @@
 package parser_test
 
-import "git.sr.ht/~ionous/tapestry/parser/ident"
-
 // Goal - tests the results of a parsed statement.
 type Goal interface {
 	Goal() Goal // marker: returns self
@@ -13,12 +11,9 @@ type ActionGoal struct {
 	Nouns  []string
 }
 
-// the returned objects are strings in the string id format
+// the returned object names should be normalized strings
 func (a *ActionGoal) Objects() (ret []string) {
-	for _, str := range a.Nouns {
-		ret = append(ret, ident.IdOf(str).String())
-	}
-	return
+	return a.Nouns
 }
 
 // ClarifyGoal - expects that the parser ended ambiguously.

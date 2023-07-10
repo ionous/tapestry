@@ -99,7 +99,7 @@ func (op *RootValue) GetList(run rt.Runtime) (ret g.Value, err error) {
 	if els, e := op.getValue(run); e != nil {
 		err = e
 	} else if aff := els.Affinity(); !affine.IsList(aff) {
-		err = errutil.New("expected %s was a list, but its a %v", op.RefValue, aff)
+		err = errutil.Fmt("expected %s was a list, but its a %v", op.RefValue, aff)
 	} else {
 		ret = els
 	}

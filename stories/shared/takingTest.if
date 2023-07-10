@@ -83,7 +83,7 @@
                   "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "The apple's parent: {the: {parentOf: .apple}}."
+                        "Say:": "The apple's parent: {the: {parent_of: .apple}}."
                       },
                       {
                         "Print:": "Fail to steal:<br>"
@@ -143,7 +143,7 @@
                   "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "The knife's parent was: {the: {parentOf: .knife}}."
+                        "Say:": "The knife's parent was: {the: {parent_of: .knife}}."
                       },
                       {
                         "Print:": "Okay, take something:<br>"
@@ -159,7 +159,7 @@
                         ]
                       },
                       {
-                        "Say:": "The knife's parent is: {the: {parentOf: .knife}}."
+                        "Say:": "The knife's parent is: {the: {parent_of: .knife}}."
                       }
                     ]
                   }

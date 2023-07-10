@@ -51,7 +51,7 @@ func (f ResolvedMulti) String() string {
 		if i > 0 {
 			b.WriteString(", ")
 		}
-		b.WriteString(res.Id().String())
+		b.WriteString(res.String())
 	}
 	return b.String()
 }
@@ -61,7 +61,7 @@ func (f ResolvedMulti) WordsMatched() int {
 
 //
 func (f ResolvedNoun) String() string {
-	return "Noun: " + f.NounInstance.Id().String()
+	return "Noun: " + f.NounInstance.String()
 }
 func (f ResolvedNoun) WordsMatched() int {
 	return len(f.Words)

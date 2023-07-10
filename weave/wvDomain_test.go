@@ -85,14 +85,14 @@ func TestDomainCase(t *testing.T) {
 	dt := testweave.NewWeaver(t.Name())
 	defer dt.Close()
 	dt.MakeDomain(dd("alpha   domain", "beta domain"))
-	dt.MakeDomain(dd("BetaDomain"))
+	dt.MakeDomain(dd("Beta Domain"))
 
 	if _, e := dt.Assemble(); e != nil {
 		t.Fatal(e)
-	} else if ds, e := dt.ReadDomain("alpha_domain"); e != nil {
+	} else if ds, e := dt.ReadDomain("alpha domain"); e != nil {
 		t.Fatal(e)
 	} else {
-		if diff := pretty.Diff(ds, []string{"beta_domain"}); len(diff) > 0 {
+		if diff := pretty.Diff(ds, []string{"beta domain"}); len(diff) > 0 {
 			t.Fatal(ds)
 			t.Fatal(ds, diff)
 		}

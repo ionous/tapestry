@@ -137,7 +137,7 @@ func (m *Modeler) AddCheck(domain, name string, value literal.LiteralValue, prog
 						} else if cnt, e := res.RowsAffected(); cnt != 1 {
 							err = e
 						} else {
-							err = errutil.New("unexpected error updating check %q; %d rows affected.",
+							err = errutil.Fmt("unexpected error updating check %q; %d rows affected.",
 								name, cnt)
 						}
 					}
@@ -367,7 +367,7 @@ func (m *Modeler) AddKind(domain, name, parent, at string) (err error) {
 				kind.id, trimPath(parent.fullpath())); e != nil {
 				err = e
 			} else if cnt, e := res.RowsAffected(); cnt != 1 {
-				err = errutil.New("unexpected error updating hierarchy of %q; %d rows affected.",
+				err = errutil.Fmt("unexpected error updating hierarchy of %q; %d rows affected.",
 					name, cnt)
 			} else if e != nil {
 				err = e
@@ -461,7 +461,7 @@ func (m *Modeler) AddNoun(domain, name, ancestor, at string) (err error) {
 				prev.id, parent.id); e != nil {
 				err = e
 			} else if cnt, e := res.RowsAffected(); cnt != 1 {
-				err = errutil.New("unexpected error updating hierarchy of %q; %d rows affected",
+				err = errutil.Fmt("unexpected error updating hierarchy of %q; %d rows affected",
 					name, cnt)
 			} else if e != nil {
 				err = e

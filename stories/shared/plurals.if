@@ -63,7 +63,7 @@
               true,
               [
                 {
-                  "Say:": "{printName:.obj|pluralize!}"
+                  "Say:": "{print_name:.obj|pluralize!}"
                 }
               ]
             ]

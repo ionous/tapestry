@@ -13,7 +13,7 @@ import (
 var runCollateGroups = list.ListReduce{
 	Target:      core.Variable("collation"),
 	List:        &assign.FromRecordList{Value: core.Variable("settings")},
-	PatternName: W("collate_groups")}
+	PatternName: W("collate groups")}
 
 // pattern:
 type CollateGroups struct {
@@ -28,16 +28,16 @@ type CollateGroups struct {
 
 // called multiple times: once for each "setting"
 var collateGroups = testpat.Pattern{
-	Name:   "collate_groups",
+	Name:   "collate groups",
 	Labels: []string{"settings", "collation"},
 	Return: "collation",
 	Fields: []g.Field{
 		// arguments:
-		{Name: "settings", Affinity: affine.Record, Type: "group_settings"},
-		{Name: "collation", Affinity: affine.Record, Type: "group_collation"},
+		{Name: "settings", Affinity: affine.Record, Type: "group settings"},
+		{Name: "collation", Affinity: affine.Record, Type: "group collation"},
 		// locals:
 		{Name: "found", Affinity: affine.Bool},
-		{Name: "group", Affinity: affine.Record, Type: "grouped_objects"},
+		{Name: "group", Affinity: affine.Record, Type: "grouped objects"},
 	},
 	Rules: []rt.Rule{{
 		Execute: core.MakeActivity(
@@ -49,7 +49,7 @@ var collateGroups = testpat.Pattern{
 				Does: core.MakeActivity(
 					&core.ChooseAction{
 						If: &assign.CallPattern{
-							PatternName: P("match_groups"),
+							PatternName: P("match groups"),
 							Arguments: core.MakeArgs(
 								&assign.FromRecord{Value: core.Variable("settings")},
 								// "el" is specified by us during ListEach

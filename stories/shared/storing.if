@@ -64,7 +64,7 @@
                             "FromText:": "@noun"
                           },
                           {
-                            "FromText:": "@other noun"
+                            "FromText:": "@other_noun"
                           }
                         ]
                       }
@@ -97,7 +97,7 @@
                                     "FromText:": "storing into"
                                   },
                                   {
-                                    "FromText:": "@other noun"
+                                    "FromText:": "@other_noun"
                                   }
                                 ]
                               }
@@ -130,7 +130,7 @@
                                             "FromText:": "@noun"
                                           },
                                           {
-                                            "FromText:": "@other noun"
+                                            "FromText:": "@other_noun"
                                           }
                                         ]
                                       }
@@ -165,7 +165,7 @@
                                                       "FromText:": "@noun"
                                                     },
                                                     {
-                                                      "FromText:": "@other noun"
+                                                      "FromText:": "@other_noun"
                                                     }
                                                   ]
                                                 }
@@ -181,7 +181,7 @@
                                                     "FromText:": "@noun"
                                                   },
                                                   {
-                                                    "FromText:": "@other noun"
+                                                    "FromText:": "@other_noun"
                                                   }
                                                 ]
                                               }
@@ -232,7 +232,7 @@
                                   "FromText:": "@noun"
                                 },
                                 {
-                                  "FromText:": "@other noun"
+                                  "FromText:": "@other_noun"
                                 }
                               ]
                             }
@@ -417,7 +417,7 @@
                   {
                     "AncestorOf obj:root:": [
                       {
-                        "FromText:": "@other noun"
+                        "FromText:": "@other_noun"
                       },
                       {
                         "FromText:": "@noun"
@@ -471,7 +471,7 @@
                   },
                   {
                     "KindOf:is:": [
-                      "@intoObj",
+                      "@into_obj",
                       "actors"
                     ]
                   }
@@ -489,7 +489,7 @@
                         "Print response:with:": [
                           "can't store people's possessions",
                           {
-                            "Say:": "{those: .noun|capitalize!} seems to belong to {the: .intoObj}."
+                            "Say:": "{those: .noun|capitalize!} seems to belong to {the: .into_obj}."
                           }
                         ]
                       }
@@ -512,7 +512,7 @@
                   },
                   {
                     "Cmp:is:txt:": [
-                      "@intoObj",
+                      "@into_obj",
                       "equal_to",
                       "@noun"
                     ]
@@ -520,7 +520,7 @@
                   {
                     "Not:": {
                       "ProvidesStorage obj:": {
-                        "FromText:": "@intoObj"
+                        "FromText:": "@into_obj"
                       }
                     }
                   }
@@ -538,7 +538,7 @@
                         "Print response:with:": [
                           "can only store to storage",
                           {
-                            "Say:": "{the: .fromObj|capitalize!} can't {contain:.fromObj} things."
+                            "Say:": "{the: .from_obj|capitalize!} can't {contain:.from_obj} things."
                           }
                         ]
                       }
@@ -562,7 +562,7 @@
                   },
                   {
                     "Cmp:is:txt:": [
-                      "@intoObj",
+                      "@into_obj",
                       "equal_to",
                       "@noun"
                     ]
@@ -570,7 +570,7 @@
                   {
                     "Not:": {
                       "AllowsStorage obj:": {
-                        "FromText:": "@intoObj"
+                        "FromText:": "@into_obj"
                       }
                     }
                   }
@@ -585,7 +585,7 @@
                         "Print response:with:": [
                           "can only store when allowed",
                           {
-                            "Say:": "{the: .fromObj|capitalize!} is closed."
+                            "Say:": "{the: .from_obj|capitalize!} is closed."
                           }
                         ]
                       }

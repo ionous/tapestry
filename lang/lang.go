@@ -53,11 +53,6 @@ func Pluralize(s string) (ret string) {
 	return
 }
 
-// IsPlural returns true if the passed string seems pluralized.
-func IsPlural(s string) bool {
-	return s != inflect.Singularize(s)
-}
-
 // Capitalize returns a new string, starting the first word with a capital.
 func Capitalize(s string) (ret string) {
 	if len(s) > 0 {
@@ -83,7 +78,7 @@ func SentenceCase(s string) string {
 	return strings.Join(sentences, ". ")
 }
 
-// IsCapitalized returns true if the passed string starts with an upper case letter
+// IsCapitalized returns true if the passed string starts with an upper case letter.
 func IsCapitalized(n string) (ret bool) {
 	for _, r := range n {
 		ret = unicode.IsUpper(r)
@@ -100,22 +95,8 @@ func Titlecase(s string) (ret string) {
 	return
 }
 
-// Lowerspace returns the passed string in lowercase with common word separators changed into spaces.
-func Lowerspace(s string) (ret string) {
-	if len(s) > 0 {
-		res := inflect.Humanize(s)
-		ret = Lowercase(res)
-	}
-	return
-}
-
-// Lowercase is an alias for strings.ToLower
-func Lowercase(s string) string {
-	return strings.ToLower(s)
-}
-
 // StartsWith returns true if the passed string starts with any one of the passed strings in set
-func StartsWith(s string, set ...string) (ok bool) {
+func xStartsWith(s string, set ...string) (ok bool) {
 	for _, x := range set {
 		if strings.HasPrefix(s, x) {
 			ok = true
@@ -125,7 +106,9 @@ func StartsWith(s string, set ...string) (ok bool) {
 	return ok
 }
 
-func Elide(s string, cutAfter int) (ret string) {
+// Elide cuts strings after a certain length replacing the rest with ...
+// todo: probably better to elide after words.
+func xElide(s string, cutAfter int) (ret string) {
 	const ellipse = "..."
 	if cnt := len(s); cnt > 0 && cnt <= cutAfter {
 		ret = s
@@ -139,19 +122,67 @@ func Elide(s string, cutAfter int) (ret string) {
 
 // StartsWithVowel returns true if the passed strings starts with a vowel or vowel sound.
 // http://www.mudconnect.com/SMF/index.php?topic=74725.0
-func StartsWithVowel(str string) (vowelSound bool) {
+func xStartsWithVowel(str string) (vowelSound bool) {
 	s := strings.ToUpper(str)
-	if StartsWith(s, "A", "E", "I", "O", "U") {
-		if !StartsWith(s, "EU", "EW", "ONCE", "ONE", "OUI", "UBI", "UGAND", "UKRAIN", "UKULELE", "ULYSS", "UNA", "UNESCO", "UNI", "UNUM", "URA", "URE", "URI", "URO", "URU", "USA", "USE", "USI", "USU", "UTA", "UTE", "UTI", "UTO") {
+	if xStartsWith(s, "A", "E", "I", "O", "U") {
+		if !xStartsWith(s, "EU", "EW", "ONCE", "ONE", "OUI", "UBI", "UGAND", "UKRAIN", "UKULELE", "ULYSS", "UNA", "UNESCO", "UNI", "UNUM", "URA", "URE", "URI", "URO", "URU", "USA", "USE", "USI", "USU", "UTA", "UTE", "UTI", "UTO") {
 			vowelSound = true
 		}
-	} else if StartsWith(s, "HEIR", "HERB", "HOMAGE", "HONEST", "HONOR", "HONOUR", "HORS", "HOUR") {
+	} else if xStartsWith(s, "HEIR", "HERB", "HOMAGE", "HONEST", "HONOR", "HONOUR", "HORS", "HOUR") {
 		vowelSound = true
 	}
 	return vowelSound
 }
 
-// ContainsPunct returns true if any rune of s returns true for unicode.IsPunct.
-func ContainsPunct(s string) bool {
-	return strings.IndexFunc(s, unicode.IsPunct) >= 0
+// IsSpace reports whether the rune is a space character as defined by lower ascii.
+// '\t', '\n', '\v', '\f', '\r', ' '
+// it specifically excludes non-breaking spaces.
+func IsSpace(r rune) (ret bool) {
+	switch r {
+	case '\t', '\n', '\v', '\f', '\r', ' ':
+		ret = true
+	}
+	return
+}
+
+// Fields is similar to strings.Fields except it follows the rules of lang.IsSpace
+func Fields(s string) []string {
+	return strings.FieldsFunc(s, IsSpace)
+}
+
+// Normalize lowercases the passed string, trims spaces, and eats some kinds of punctuation.
+// Ascii underscores (_) are treated as whitespace, ascii dashes (-) are kept; all other unicode punctuation gets removed.
+// Whitespace gets removed at the front and end of the strings;
+// any remaining groups of one or more ws characters get replaced by a single space.
+func Normalize(s string) string {
+	var out strings.Builder
+	var spaced bool
+	for _, r := range s {
+		if r == '_' || IsSpace(r) {
+			spaced = true
+		} else if r == '-' || !unicode.IsPunct(r) {
+			if out.Len() > 0 && spaced {
+				out.WriteRune(' ')
+			}
+			out.WriteRune(unicode.ToLower(r))
+			spaced = false
+		}
+	}
+	return out.String()
+}
+
+// MixedCaseToSpaces takes a MixedCaseWord and splits it into lowercase words ( ex. mixed case word )
+func MixedCaseToSpaces(s string) string {
+	var out strings.Builder
+	var prev bool
+	for _, r := range s {
+		l := unicode.ToLower(r)
+		cap := l != r
+		if !prev && cap && out.Len() > 0 {
+			out.WriteRune(' ')
+		}
+		out.WriteRune(l)
+		prev = cap
+	}
+	return out.String()
 }

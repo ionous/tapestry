@@ -28,7 +28,7 @@ func runCheck(ctx context.Context, cmd *base.Command, args []string) (err error)
 		debug.LogLevel = lvl
 		opt := qna.NewOptions()
 		opt.SetOption(meta.PrintResponseNames, generic.BoolOf(checkFlags.responses))
-		if cnt, e := checkFile(checkFlags.srcPath, lang.Underscore(checkFlags.checkOne), opt); e != nil {
+		if cnt, e := checkFile(checkFlags.srcPath, lang.Normalize(checkFlags.checkOne), opt); e != nil {
 			errutil.PrintErrors(e, func(s string) { log.Println(s) })
 			if errutil.Panic {
 				log.Panic("mismatched")

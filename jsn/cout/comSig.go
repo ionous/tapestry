@@ -58,7 +58,7 @@ func writeBreak(out *strings.Builder, s string, cap bool) {
 			lower = true
 			continue
 		}
-		if r == '_' {
+		if r == '_' || r == ' ' {
 			cap = true
 		} else {
 			if cap {

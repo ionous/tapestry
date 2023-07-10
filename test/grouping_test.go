@@ -1,8 +1,9 @@
 package test
 
 import (
-	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"testing"
+
+	"git.sr.ht/~ionous/tapestry/rt/scope"
 
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -33,9 +34,9 @@ func TestGrouping(t *testing.T) {
 			},
 		},
 		Map: testpat.Map{
-			"assign_grouping": &assignGrouping,
-			"collate_groups":  &collateGroups,
-			"match_groups":    &matchGroups,
+			"assign grouping": &assignGrouping,
+			"collate groups":  &collateGroups,
+			"match groups":    &matchGroups,
 		},
 	}
 	// generate one GroupSettings record for each object
@@ -60,8 +61,8 @@ func TestGrouping(t *testing.T) {
 						"settings": map[string]interface{}{
 							"name":          "apple",
 							"label":         "",
-							"innumerable":   "not_innumerable",
-							"group_options": "without_objects",
+							"innumerable":   "not innumerable",
+							"group options": "without objects",
 						},
 						"objects": []string{"apple", "mildred", "pen"},
 					},
@@ -69,8 +70,8 @@ func TestGrouping(t *testing.T) {
 						"settings": map[string]interface{}{
 							"name":          "thing_1", // COUNTER:#
 							"label":         "thingies",
-							"innumerable":   "not_innumerable",
-							"group_options": "without_objects",
+							"innumerable":   "not innumerable",
+							"group options": "without objects",
 						},
 						"objects": []string{"thing_1", "thing_2"}, // COUNTER:#
 					},

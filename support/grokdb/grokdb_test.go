@@ -95,7 +95,7 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		domain, traits, "open", "bool",
 		domain, traits, "openable", "bool",
 		domain, traits, "transparent", "bool",
-		domain, traits, "fixed_in_place", "bool",
+		domain, traits, "fixed in place", "bool",
 		// macros:
 		domain, carry, "source", "text",
 		domain, carry, "targets", "text_list",

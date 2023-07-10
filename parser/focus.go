@@ -45,7 +45,7 @@ func (a *Target) Scan(ctx Context, bounds Bounds, start Cursor) (ret Result, err
 		} else if obj, ok := last.(ResolvedNoun); !ok {
 			err = errutil.Fmt("expected an object, got %T", last)
 			break
-		} else if bounds, e := ctx.GetObjectBounds(obj.NounInstance.Id()); e != nil {
+		} else if bounds, e := ctx.GetObjectBounds(obj.NounInstance.String()); e != nil {
 			err = e
 			break
 		} else {

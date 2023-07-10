@@ -3,7 +3,6 @@ package express
 import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
 	"git.sr.ht/~ionous/tapestry/dl/core"
-	"git.sr.ht/~ionous/tapestry/lang"
 )
 
 // maps cmd spec name to a nil pointer to the cmd type in question
@@ -15,13 +14,11 @@ type nameCache struct {
 // the singleton cache of core commands
 var coreCache nameCache
 
-//
 func (k *nameCache) get(n string) (ret interface{}, okay bool) {
 	if len(k.els) == 0 {
 		els := make(map[string]interface{})
 		for _, v := range core.Slats {
-			spec := composer.SpecName(v)
-			n := lang.Underscore(spec)
+			n := composer.SpecName(v) // ex. all_true
 			els[n] = v
 		}
 		k.els = els

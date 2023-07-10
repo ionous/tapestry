@@ -129,7 +129,7 @@
           },
           {
             "--": "for testing, darkness gets passed in as a flag.",
-            "Bool:": "inDarkness"
+            "Bool:": "in darkness"
           }
         ],
         {
@@ -184,7 +184,7 @@
                 },
                 {
                   "If:does:else:": [
-                    "@inDarkness",
+                    "@in_darkness",
                     [
                       {
                         "PrintDarkHeader room:": {
@@ -325,7 +325,7 @@
                 },
                 {
                   "If:does:else:": [
-                    "@inDarkness",
+                    "@in_darkness",
                     [
                       {
                         "Set:from:": [
@@ -371,7 +371,7 @@
     },
     {
       "Define pattern:requires:result:withRules:": [
-        "PrintDarkHeader",
+        "print dark header",
         [
           {
             "Text:kind:": [
@@ -388,7 +388,7 @@
     },
     {
       "Extend pattern:withRules:": [
-        "PrintDarkHeader",
+        "Print dark header",
         [
           {
             "PatternRule:does:": [
@@ -413,7 +413,7 @@
     },
     {
       "Define pattern:requires:result:withRules:": [
-        "PrintDarkDescription",
+        "Print dark description",
         [
           {
             "Text:kind:": [
@@ -430,7 +430,7 @@
     },
     {
       "Extend pattern:withRules:": [
-        "PrintDarkDescription",
+        "Print dark description",
         [
           {
             "PatternRule:does:": [
@@ -455,7 +455,7 @@
     },
     {
       "Define pattern:requires:result:withRules:": [
-        "PrintLocaleTitle",
+        "Print locale title",
         [
           {
             "Text:kind:": [
@@ -475,7 +475,7 @@
     },
     {
       "Extend pattern:provides:withRules:": [
-        "PrintLocaleTitle",
+        "Print locale title",
         [
           {
             "Text:kind:initially:": [
@@ -537,7 +537,7 @@
     },
     {
       "Define pattern:requires:result:withRules:": [
-        "PrintLocaleSubtitle",
+        "Print locale subtitle",
         [
           {
             "TextList:": "enclosures"
@@ -551,7 +551,7 @@
     },
     {
       "Extend pattern:provides:withRules:": [
-        "PrintLocaleSubtitle",
+        "Print locale subtitle",
         [
           {
             "Text:kind:initially:": [
@@ -619,7 +619,7 @@
     },
     {
       "Define pattern:requires:result:withRules:": [
-        "PrintLocaleDescription",
+        "Print locale description",
         [
           {
             "Text:kind:": [
@@ -648,7 +648,7 @@
     },
     {
       "Extend pattern:provides:withRules:": [
-        "PrintLocaleDescription",
+        "Print locale description",
         [
           {
             "TextList:initially:": [
@@ -662,7 +662,7 @@
           },
           {
             "Number:initially:": [
-              "previousMentions",
+              "previous mentions",
               {
                 "Object:field:": [
                   "settings",
@@ -672,7 +672,7 @@
             ]
           },
           {
-            "TextList:": "remainingKids"
+            "TextList:": "remaining kids"
           }
         ],
         [
@@ -777,7 +777,7 @@
                                       {
                                         "FromText:": "@it"
                                       },
-                                      "@remainingKids"
+                                      "@remaining_kids"
                                     ]
                                   }
                                 ]
@@ -804,12 +804,12 @@
                       }
                     },
                     {
-                      "FromTextList:": "@remainingKids"
+                      "FromTextList:": "@remaining_kids"
                     },
                     {
                       "FromBool:": {
                         "Cmp:is:num:": [
-                          "@previousMentions",
+                          "@previous_mentions",
                           "equal_to",
                           {
                             "Object:field:": [
@@ -983,7 +983,7 @@
     },
     {
       "Define pattern:requires:result:withRules:": [
-        "PrintImpressionOf",
+        "Print impression of",
         [
           {
             "Text:kind:": [
@@ -1006,7 +1006,7 @@
     },
     {
       "Extend pattern:provides:withRules:": [
-        "PrintImpressionOf",
+        "Print impression of",
         [
           {
             "Bool:initially:": [
@@ -1094,7 +1094,7 @@
             "PatternRule:does:": [
               {
                 "AllTrue:": [
-                  "@first look",
+                  "@first_look",
                   {
                     "Object:field:": [
                       "@obj",
@@ -1131,7 +1131,7 @@
     },
     {
       "Define pattern:requires:result:withRules:": [
-        "CanAlsoSee",
+        "Can also see",
         [
           {
             "Text:kind:": [
@@ -1146,7 +1146,7 @@
             "TextList:": "children"
           },
           {
-            "Bool:": "firstMention"
+            "Bool:": "first mention"
           }
         ],
         {
@@ -1157,7 +1157,7 @@
     },
     {
       "Extend pattern:withRules:": [
-        "CanAlsoSee",
+        "Can also see",
         [
           {
             "PatternRule:does:": [
@@ -1167,7 +1167,7 @@
                   "Print response:with:": [
                     "you can also see",
                     {
-                      "Say:": "{unless .here}{On: .where|capitalize!} {the: .where} you{else}{We!|capitalize!}{end} can {unless .firstMention}also {end}see {print_inline_objects: .children}."
+                      "Say:": "{unless .here}{On: .where|capitalize!} {the: .where} you{else}{We!|capitalize!}{end} can {unless .first_mention}also {end}see {print_inline_objects: .children}."
                     }
                   ]
                 }

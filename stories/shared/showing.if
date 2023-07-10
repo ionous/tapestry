@@ -135,7 +135,7 @@
                             "FromText:": "@noun"
                           },
                           {
-                            "FromText:": "@other noun"
+                            "FromText:": "@other_noun"
                           }
                         ]
                       }
@@ -163,7 +163,7 @@
                                 "FromText:": "showing"
                               },
                               {
-                                "FromText:": "@other noun"
+                                "FromText:": "@other_noun"
                               }
                             ]
                           }
@@ -189,7 +189,7 @@
                                   "FromText:": "@noun"
                                 },
                                 {
-                                  "FromText:": "@other noun"
+                                  "FromText:": "@other_noun"
                                 }
                               ]
                             }

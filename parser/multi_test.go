@@ -21,10 +21,10 @@ func TestMulti(t *testing.T) {
 			Phrases("pick up "+strings.Join(AllWords, "/")),
 			&ActionGoal{"Take", sliceOf.String(
 				"something",
-				"red-apple",
-				"crab-apple",
-				"apple-cart",
-				"red-cart",
+				"red apple",
+				"crab apple",
+				"apple cart",
+				"red cart",
 				"torch")})
 		if e != nil {
 			t.Fatal(e)
@@ -34,8 +34,8 @@ func TestMulti(t *testing.T) {
 		e := parse(t, ctx, grammar,
 			pickup("all red"),
 			&ActionGoal{"Take", sliceOf.String(
-				"red-apple",
-				"red-cart")})
+				"red apple",
+				"red cart")})
 		if e != nil {
 			t.Fatal(e)
 		}
@@ -44,8 +44,8 @@ func TestMulti(t *testing.T) {
 		e := parse(t, ctx, grammar,
 			sliceOf.String("pick up apples"),
 			&ActionGoal{"Take", sliceOf.String(
-				"crab-apple",
-				"red-apple")})
+				"crab apple",
+				"red apple")})
 		if e != nil {
 			t.Fatal(e)
 		}
@@ -54,7 +54,7 @@ func TestMulti(t *testing.T) {
 		e := parse(t, ctx, grammar,
 			sliceOf.String("pick up red apples", "pick up apples red"),
 			&ActionGoal{"Take", sliceOf.String(
-				"red-apple")})
+				"red apple")})
 		if e != nil {
 			t.Fatal(e)
 		}
@@ -63,7 +63,7 @@ func TestMulti(t *testing.T) {
 		e := parse(t, ctx, grammar,
 			sliceOf.String("pick up red apple carts"),
 			&ActionGoal{"Take", sliceOf.String(
-				"red-apple")})
+				"red apple")})
 		if e != nil {
 			t.Fatal(e)
 		}

@@ -6,7 +6,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/parser"
-	"git.sr.ht/~ionous/tapestry/parser/ident"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 )
@@ -46,9 +45,8 @@ func (pt *Playtime) locationBounded(enc string) parser.Bounds {
 // return bounds which includes only the player agent and nothing else.
 // fix: why this is the agent and not the pawn?
 func (pt *Playtime) selfBounded() (ret parser.Bounds, err error) {
-	id := ident.IdOf(pt.player)
 	ret = func(cb parser.NounVisitor) (ret bool) {
-		return cb(&Noun{pt, id})
+		return cb(&Noun{pt, pt.player})
 	}
 	return
 }

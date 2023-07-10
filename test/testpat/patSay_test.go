@@ -18,14 +18,14 @@ func ExampleSayMe() {
 	kinds.AddKinds((*debug.SayMe)(nil))
 	run := testpat.Runtime{
 		testpat.Map{
-			"say_me": &debug.SayPattern,
+			"say me": &debug.SayPattern,
 		}, testutil.Runtime{
 			Kinds: &kinds,
 		},
 	}
 	// say 4 numbers
 	for i := 1; i <= 4; i++ {
-		fmt.Printf(`say_me %d = "`, i)
+		fmt.Printf(`say me %d = "`, i)
 		// creates a assign.CallPattern and runs it through the debug runtime
 		if e := debug.DetermineSay(i).Execute(&run); e != nil {
 			fmt.Println("Error:", e)
@@ -34,8 +34,8 @@ func ExampleSayMe() {
 	}
 
 	// Output:
-	// say_me 1 = "One!"
-	// say_me 2 = "Two!"
-	// say_me 3 = "Three!"
-	// say_me 4 = "Not between 1 and 3."
+	// say me 1 = "One!"
+	// say me 2 = "Two!"
+	// say me 3 = "Three!"
+	// say me 4 = "Not between 1 and 3."
 }

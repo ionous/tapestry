@@ -28,9 +28,9 @@ func TestQueries(t *testing.T) {
 	const at = ""
 	const domain = "main"
 	const subDomain = "sub"
-	const pattern = "common_ancestor"
+	const pattern = "common ancestor"
 	const relation = "whereabouts"
-	const otherRelation = "otherRel"
+	const otherRelation = "other rel"
 	const plural = "clutches"
 	const singular = "purse"
 	const kind = "k"
@@ -77,7 +77,7 @@ func TestQueries(t *testing.T) {
 				m.AddMember, domain, kind, aspect, affine.Text, aspect, at,
 				// patterns
 				m.AddParameter, domain, pattern, "object", affine.Text, kind, at,
-				m.AddParameter, domain, pattern, "other_object", affine.Text, kind, at,
+				m.AddParameter, domain, pattern, "other object", affine.Text, kind, at,
 				m.AddResult, domain, pattern, "ancestor", affine.Text, kind, at,
 			); e != nil {
 				err = e
@@ -85,7 +85,7 @@ func TestQueries(t *testing.T) {
 				// domain, noun, kind, at
 				// ---------------------------------------
 				domain, "apple", kind, at,
-				domain, "empire_apple", kind, at,
+				domain, "empire apple", kind, at,
 				subDomain, "table", subKind, at,
 			); e != nil {
 				err = e
@@ -94,7 +94,7 @@ func TestQueries(t *testing.T) {
 				// "domain", "noun", "field", "value", "at"
 				// ---------------------------------------
 				domain, "apple", aspect, "brief", at,
-				domain, "empire_apple", aspect, "verbose", at,
+				domain, "empire apple", aspect, "verbose", at,
 				subDomain, "table", aspect, "superbrief", at,
 			); e != nil {
 				err = e
@@ -102,10 +102,9 @@ func TestQueries(t *testing.T) {
 			} else if e := mdlName(m,
 				// domain, noun, name, rank, at
 				// ---------------------------------------
-				domain, "empire_apple", "empire apple", 0, at,
-				domain, "empire_apple", "empire_apple", 1, at,
-				domain, "empire_apple", "apple", 2, at,
-				domain, "empire_apple", "empire", 3, at,
+				domain, "empire apple", "empire apple", 0, at,
+				domain, "empire apple", "apple", 1, at,
+				domain, "empire apple", "empire", 2, at,
 				domain, "apple", "apple", 0, at, // a different noun with a similar name
 			); e != nil {
 				err = e
@@ -131,7 +130,7 @@ func TestQueries(t *testing.T) {
 			} else if e := mdlPair(m,
 				// "domain", "relKind", "oneNoun", "otherNoun", "at"
 				// ---------------------------------------------
-				subDomain, relation, "table", "empire_apple", at,
+				subDomain, relation, "table", "empire apple", at,
 				subDomain, relation, "table", "apple", at,
 			); e != nil {
 				err = e
@@ -196,17 +195,17 @@ func TestQueries(t *testing.T) {
 		t.Fatal(val, e)
 	} else if val, e := q.NounValue("table", aspect); e != nil || val != nil {
 		t.Fatal(e) // should be out of scope
-	} else if name, e := q.NounName("empire_apple"); e != nil || name != "empire apple" {
+	} else if name, e := q.NounName("empire apple"); e != nil || name != "empire apple" {
 		t.Fatal(name, e)
 	} else if id, e := q.NounInfo("apple"); e != nil || id != (query.NounInfo{Domain: domain, Id: "apple", Kind: kind}) {
 		t.Fatal(e, id)
-	} else if id, e := q.NounInfo("empire"); e != nil || id != (query.NounInfo{Domain: domain, Id: "empire_apple", Kind: kind}) {
+	} else if id, e := q.NounInfo("empire"); e != nil || id != (query.NounInfo{Domain: domain, Id: "empire apple", Kind: kind}) {
 		t.Fatal(e, id)
 	} else if id, e := q.NounInfo("table"); e != nil || id != (query.NounInfo{}) {
 		t.Fatal(id, e) // should be blank because the table is out of scope
 	} else if got, e := q.PatternLabels(pattern); e != nil {
 		t.Fatal("patternLabels:", e)
-	} else if diff := pretty.Diff(got, []string{"object", "other_object", "ancestor"}); len(diff) > 0 {
+	} else if diff := pretty.Diff(got, []string{"object", "other object", "ancestor"}); len(diff) > 0 {
 		t.Fatal(e, diff)
 	} else if got, e := q.RulesFor(pattern, ""); e != nil {
 		t.Fatal(e)
@@ -231,18 +230,18 @@ func TestQueries(t *testing.T) {
 		t.Fatal("ActivateDomain", e) // enable the sub domain again to get reasonable pairs
 		// note: we never previously fully activated a domain, so prev is empty.
 	} else if rel, e := q.RelativesOf(relation, "table"); e != nil ||
-		len(rel) != 2 || rel[1] != "empire_apple" || rel[0] != "apple" {
+		len(rel) != 2 || rel[1] != "empire apple" || rel[0] != "apple" {
 		t.Fatal("RelativesOf: table", e, rel)
 	} else if rel, e := q.ReciprocalsOf(relation, "apple"); e != nil ||
 		len(rel) != 1 || rel[0] != "table" {
 		t.Fatal("ReciprocalsOf: apple", e, rel)
-	} else if rel := q.Relate(relation, "apple", "empire_apple"); e != nil {
+	} else if rel := q.Relate(relation, "apple", "empire apple"); e != nil {
 		t.Fatal("Relate", e, rel)
 	} else if rel, e := q.RelativesOf(relation, "table"); e != nil ||
 		len(rel) != 1 || rel[0] != "apple" {
 		t.Fatal("RelativesOf: table", e, rel)
 	} else if rel, e := q.RelativesOf(relation, "apple"); e != nil ||
-		len(rel) != 1 || rel[0] != "empire_apple" {
+		len(rel) != 1 || rel[0] != "empire apple" {
 		t.Fatal("RelativesOf: apple", e, rel)
 	}
 }

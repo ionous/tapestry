@@ -78,7 +78,7 @@
     },
     {
       "Define pattern:requires:result:withRules:": [
-        "isPlayer",
+        "is player",
         [
           {
             "Text:kind:": [
@@ -95,7 +95,7 @@
     },
     {
       "Extend pattern:withRules:": [
-        "isPlayer",
+        "is player",
         [
           {
             "PatternRule:does:": [

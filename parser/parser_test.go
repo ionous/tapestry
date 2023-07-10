@@ -4,7 +4,6 @@ import (
 	"strings"
 
 	. "git.sr.ht/~ionous/tapestry/parser"
-	"git.sr.ht/~ionous/tapestry/parser/ident"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
@@ -95,7 +94,7 @@ func makeObject(name string, kinds ...string) *MyObject {
 	if kinds[0] != "actors" {
 		kinds = append(kinds, "things")
 	}
-	id := ident.IdOf(strings.Join(names, "-"))
+	id := strings.Join(names, " ")
 	return &MyObject{Id: id, Names: names, Classes: kinds}
 }
 

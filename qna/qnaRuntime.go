@@ -169,7 +169,7 @@ func (run *Runner) ReciprocalsOf(b, rel string) (ret g.Value, err error) {
 
 func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 	// fix: pre-transform field name
-	if field := lang.Underscore(rawField); len(field) == 0 {
+	if field := lang.Normalize(rawField); len(field) == 0 {
 		err = errutil.Fmt("invalid targeted field '%s.%s'", target, rawField)
 	} else if target[0] != meta.Prefix {
 		// an object from the author's story
@@ -219,7 +219,7 @@ func (run *Runner) SetField(target, rawField string, val g.Value) (err error) {
 
 func (run *Runner) GetField(target, rawField string) (ret g.Value, err error) {
 	// fix: pre-transform field
-	if field := lang.Underscore(rawField); len(field) == 0 {
+	if field := lang.Normalize(rawField); len(field) == 0 {
 		err = errutil.Fmt("requested an empty %q", target)
 	} else if target[0] != meta.Prefix {
 		// an object from the author's story

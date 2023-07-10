@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	. "git.sr.ht/~ionous/tapestry/parser"
-	"git.sr.ht/~ionous/tapestry/parser/ident"
 	"github.com/ionous/sliceOf"
 )
 
@@ -37,15 +36,15 @@ func TestTarget(t *testing.T) {
 	ctx := MyContext{
 		Log:      t,
 		MyBounds: bounds,
-		Other: map[ident.Id]Bounds{
-			ident.IdOf("apple-cart"): appleCart.SearchBounds,
-			ident.IdOf("red-cart"):   redCart.SearchBounds},
+		Other: map[string]Bounds{
+			"apple cart": appleCart.SearchBounds,
+			"red cart":   redCart.SearchBounds},
 	}
 
 	t.Run("take from cart", func(t *testing.T) {
 		e := parse(t, ctx, grammar,
 			Phrases("get apple from/off red cart"),
-			&ActionGoal{"Remove", sliceOf.String("red-cart", "yellow-apple")})
+			&ActionGoal{"Remove", sliceOf.String("red cart", "yellow apple")})
 		if e != nil {
 			t.Fatal(e)
 		}
@@ -56,7 +55,7 @@ func TestTarget(t *testing.T) {
 			Phrases("get apple from/off cart"),
 			&ClarifyGoal{"apple"},
 			&ClarifyGoal{"red"},
-			&ActionGoal{"Remove", sliceOf.String("apple-cart", "red-apple")})
+			&ActionGoal{"Remove", sliceOf.String("apple cart", "red apple")})
 		if e != nil {
 			t.Fatal(e)
 		}
@@ -65,7 +64,7 @@ func TestTarget(t *testing.T) {
 	t.Run("exact take", func(t *testing.T) {
 		e := parse(t, ctx, grammar,
 			Phrases("get green"),
-			&ActionGoal{"Take", sliceOf.String("green-apple")})
+			&ActionGoal{"Take", sliceOf.String("green apple")})
 		if e != nil {
 			t.Fatal(e)
 		}
@@ -75,7 +74,7 @@ func TestTarget(t *testing.T) {
 		e := parse(t, ctx, grammar,
 			Phrases("get apple"),
 			&ClarifyGoal{"cart"},
-			&ActionGoal{"Take", sliceOf.String("apple-cart")})
+			&ActionGoal{"Take", sliceOf.String("apple cart")})
 		if e != nil {
 			t.Fatal(e)
 		}

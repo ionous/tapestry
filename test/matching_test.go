@@ -1,8 +1,9 @@
 package test
 
 import (
-	"git.sr.ht/~ionous/tapestry/rt/scope"
 	"testing"
+
+	"git.sr.ht/~ionous/tapestry/rt/scope"
 
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/core"
@@ -20,12 +21,12 @@ func TestMatching(t *testing.T) {
 		A, B GroupSettings
 	}
 	kinds.AddKinds((*Things)(nil), (*GroupSettings)(nil), (*MatchGroups)(nil), (*Locals)(nil))
-	kargs := kinds.Kind("match_groups")
+	kargs := kinds.Kind("match groups")
 	locals := kinds.NewRecord("locals")
 	//
 	lt := testpat.Runtime{
 		testpat.Map{
-			"match_groups": &matchGroups,
+			"match groups": &matchGroups,
 		},
 		testutil.Runtime{
 			Kinds: &kinds,
@@ -77,13 +78,13 @@ func TestMatching(t *testing.T) {
 		}
 		// many fields should match
 		{
-			if e := testutil.SetRecord(a, "innumerable", "is_innumerable"); e != nil {
+			if e := testutil.SetRecord(a, "innumerable", "is innumerable"); e != nil {
 				t.Fatal(e)
-			} else if e := testutil.SetRecord(b, "is_innumerable", true); e != nil {
+			} else if e := testutil.SetRecord(b, "is innumerable", true); e != nil {
 				t.Fatal(e)
-			} else if e := testutil.SetRecord(a, "group_options", "objects_with_articles"); e != nil {
+			} else if e := testutil.SetRecord(a, "group options", "objects with articles"); e != nil {
 				t.Fatal(e)
-			} else if e := testutil.SetRecord(b, "group_options", "objects_with_articles"); e != nil {
+			} else if e := testutil.SetRecord(b, "group options", "objects with articles"); e != nil {
 				t.Fatal(e)
 			} else if ok, e := runMatching.GetBool(&lt); e != nil {
 				t.Fatal(e)

@@ -139,7 +139,7 @@ package qna
 // 			t.Fatal(e)
 // 		}
 // 		// toy boat.A has an initial value of y
-// 		if toyBoat, e := q.GetField(meta.ObjectId, "toy_boat"); e != nil {
+// 		if toyBoat, e := q.GetField(meta.ObjectId, "toy boat"); e != nil {
 // 			t.Fatal(e)
 // 		} else if e := q.SetField("w", g.BoolOf(true)); e != nil {
 // 			t.Fatal(e)

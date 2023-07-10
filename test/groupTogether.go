@@ -13,7 +13,7 @@ import (
 var runGroupTogther = list.ListMap{
 	Target:      core.Variable("settings"),
 	List:        &assign.FromTextList{Value: core.Variable("objects")},
-	PatternName: P("assign_grouping"),
+	PatternName: P("assign grouping"),
 }
 
 type AssignGrouping struct {
@@ -23,12 +23,12 @@ type AssignGrouping struct {
 
 // from a list of object names, build a list of group settings
 var assignGrouping = testpat.Pattern{
-	Name:   "assign_grouping",
+	Name:   "assign grouping",
 	Return: "out",
 	Labels: []string{"in"},
 	Fields: []g.Field{
 		{Name: "in", Affinity: affine.Text},
-		{Name: "out", Affinity: affine.Record, Type: "group_settings"},
+		{Name: "out", Affinity: affine.Record, Type: "group settings"},
 	},
 	Rules: []rt.Rule{
 		{Execute: []rt.Execute{

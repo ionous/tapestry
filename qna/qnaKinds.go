@@ -11,7 +11,7 @@ import (
 )
 
 func (run *Runner) GetKindByName(rawName string) (ret *g.Kind, err error) {
-	if name := lang.Underscore(rawName); len(name) == 0 {
+	if name := lang.Normalize(rawName); len(name) == 0 {
 		err = errutil.New("no kind of empty name")
 	} else if cached, e := run.getKind(name); e != nil {
 		err = e

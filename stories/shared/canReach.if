@@ -68,7 +68,7 @@
             "PatternRule:flags:does:": [
               {
                 "AllTrue:": [
-                  "@requires light",
+                  "@requires_light",
                   {
                     "Object:field:": [
                       "@actor",
@@ -146,7 +146,7 @@
                       {
                         "If:does:": [
                           {
-                            "Is empty:": "@reach response"
+                            "Is empty:": "@reach_response"
                           },
                           [
                             {
@@ -184,7 +184,7 @@
                                 [
                                   {
                                     "Set:from:": [
-                                      "@reach error",
+                                      "@reach_error",
                                       {
                                         "FromNumber:": {
                                           "Len:": {
@@ -196,7 +196,7 @@
                                   },
                                   {
                                     "Set:from:": [
-                                      "@reach response",
+                                      "@reach_response",
                                       {
                                         "FromText:": "@response"
                                       }
@@ -332,7 +332,7 @@
                           [
                             {
                               "Set:from:": [
-                                "@dig error",
+                                "@dig_error",
                                 {
                                   "FromText:": "@response"
                                 }
@@ -394,7 +394,7 @@
                       "ElseIf:does:else:": [
                         {
                           "Cmp:is:num:": [
-                            "@reach error",
+                            "@reach_error",
                             "less_than",
                             "@lca"
                           ]
@@ -407,7 +407,7 @@
                             "Set:from:": [
                               "@response",
                               {
-                                "FromText:": "@reach response"
+                                "FromText:": "@reach_response"
                               }
                             ]
                           }
@@ -416,7 +416,7 @@
                           "ElseIf:does:": [
                             {
                               "Not:": {
-                                "Is empty:": "@dig error"
+                                "Is empty:": "@dig_error"
                               }
                             },
                             [
@@ -427,7 +427,7 @@
                                 "Set:from:": [
                                   "@response",
                                   {
-                                    "FromText:": "@dig error"
+                                    "FromText:": "@dig_error"
                                   }
                                 ]
                               }
@@ -453,13 +453,13 @@
         [
           {
             "Text:kind:": [
-              "fromObj",
+              "from obj",
               "object"
             ]
           },
           {
             "Text:kind:": [
-              "intoObj",
+              "into obj",
               "object"
             ]
           },
@@ -498,7 +498,7 @@
                     "note",
                     {
                       "FromText:": {
-                        "Say:": "reach up: from:{.fromObj} -> into:{.intoObj}"
+                        "Say:": "reach up: from:{.from_obj} -> into:{.into_obj}"
                       }
                     }
                   ]
@@ -510,7 +510,7 @@
             "PatternRule:does:": [
               {
                 "KindOf:is:": [
-                  "@fromObj",
+                  "@from_obj",
                   "rooms"
                 ]
               },
@@ -539,13 +539,13 @@
                 "AllTrue:": [
                   {
                     "KindOf:is:": [
-                      "@fromObj",
+                      "@from_obj",
                       "containers"
                     ]
                   },
                   {
                     "Object:field:": [
-                      "@fromObj",
+                      "@from_obj",
                       "closed"
                     ]
                   }
@@ -560,7 +560,7 @@
                         "Print response:with:": [
                           "can't reach outside closed containers",
                           {
-                            "Say:": "{The: .fromObj|capitalize!} {arent: .fromObj} open."
+                            "Say:": "{The: .from_obj|capitalize!} {arent: .from_obj} open."
                           }
                         ]
                       }
@@ -582,13 +582,13 @@
         [
           {
             "Text:kind:": [
-              "fromObj",
+              "from obj",
               "object"
             ]
           },
           {
             "Text:kind:": [
-              "intoObj",
+              "into obj",
               "object"
             ]
           },
@@ -627,7 +627,7 @@
                     "note",
                     {
                       "FromText:": {
-                        "Say:": "reach down: from:{.fromObj} -> into:{.intoObj}"
+                        "Say:": "reach down: from:{.from_obj} -> into:{.into_obj}"
                       }
                     }
                   ]
@@ -639,7 +639,7 @@
             "PatternRule:does:": [
               {
                 "KindOf:is:": [
-                  "@intoObj",
+                  "@into_obj",
                   "rooms"
                 ]
               },
@@ -652,7 +652,7 @@
                         "Print response:with:": [
                           "can't reach inside rooms",
                           {
-                            "Say:": "{We:|capitalize!} can't reach into {the: .intoObj}."
+                            "Say:": "{We:|capitalize!} can't reach into {the: .into_obj}."
                           }
                         ]
                       }
@@ -668,20 +668,20 @@
                 "AllTrue:": [
                   {
                     "KindOf:is:": [
-                      "@intoObj",
+                      "@into_obj",
                       "containers"
                     ]
                   },
                   {
                     "Object:field:": [
-                      "@intoObj",
+                      "@into_obj",
                       "closed"
                     ]
                   },
                   {
                     "Not:": {
                       "Cmp:is:txt:": [
-                        "@intoObj",
+                        "@into_obj",
                         "equal_to",
                         "@noun"
                       ]
@@ -698,7 +698,7 @@
                         "Print response:with:": [
                           "can't reach inside closed containers",
                           {
-                            "Say:": "{The: .intoObj|capitalize!} {arent: .intoObj} open."
+                            "Say:": "{The: .into_obj|capitalize!} {arent: .into_obj} open."
                           }
                         ]
                       }

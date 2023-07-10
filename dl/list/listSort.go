@@ -37,7 +37,7 @@ func (op *ListSortNumbers) sortByNum(run rt.Runtime) (err error) {
 	} else if els, e := root.GetCheckedValue(run, affine.NumList); e != nil {
 		err = e
 	} else {
-		name := lang.Underscore(op.ByField)
+		name := lang.Normalize(op.ByField)
 		switch listAff := els.Affinity(); listAff {
 		case affine.RecordList:
 			err = sortRecords(run, els.Records(), name, affine.Number, op.numSorter)
@@ -62,7 +62,7 @@ func (op *ListSortText) sortByText(run rt.Runtime) (err error) {
 	} else if els, e := root.GetCheckedValue(run, affine.TextList); e != nil {
 		err = e
 	} else {
-		name := lang.Underscore(op.ByField)
+		name := lang.Normalize(op.ByField)
 		switch listAff := els.Affinity(); listAff {
 		case affine.RecordList:
 			// fix? would any of this be clearer/smaller if we used els.Index?

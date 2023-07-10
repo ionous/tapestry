@@ -18,11 +18,11 @@ type MatchGroups struct {
 // a pattern for matching groups --
 // we add rules that if things arent equal we return false
 var matchGroups = testpat.Pattern{
-	Name:   "match_groups",
+	Name:   "match groups",
 	Labels: []string{"a", "b"},
 	Fields: []g.Field{
-		{Name: "a", Affinity: affine.Record, Type: "group_settings"},
-		{Name: "b", Affinity: affine.Record, Type: "group_settings"},
+		{Name: "a", Affinity: affine.Record, Type: "group settings"},
+		{Name: "b", Affinity: affine.Record, Type: "group settings"},
 		{Name: "matches", Affinity: affine.Bool},
 	},
 	Return: "matches",
@@ -46,9 +46,9 @@ var matchGroups = testpat.Pattern{
 		Execute: matches(false),
 	}, {
 		Filter: &core.CompareText{
-			A:  core.Variable("a", "group_options"),
+			A:  core.Variable("a", "group options"),
 			Is: core.Unequal,
-			B:  core.Variable("b", "group_options"),
+			B:  core.Variable("b", "group options"),
 		},
 		Execute: matches(false),
 	}},

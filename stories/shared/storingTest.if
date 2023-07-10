@@ -50,7 +50,7 @@
                         ]
                       },
                       {
-                        "Say:": "clutch parent: {parentOf:.purse}."
+                        "Say:": "clutch parent: {parent_of:.purse}."
                       }
                     ]
                   }
@@ -75,7 +75,7 @@
                         ]
                       },
                       {
-                        "Say:": "coffee parent: {parentOf:.coffee}."
+                        "Say:": "coffee parent: {parent_of:.coffee}."
                       }
                     ]
                   }
@@ -100,7 +100,7 @@
                         ]
                       },
                       {
-                        "Say:": "clutch parent: {parentOf:.clutch}."
+                        "Say:": "clutch parent: {parent_of:.clutch}."
                       }
                     ]
                   }
@@ -125,7 +125,7 @@
                         ]
                       },
                       {
-                        "Say:": "coffee parent: {parentOf:.coffee}."
+                        "Say:": "coffee parent: {parent_of:.coffee}."
                       }
                     ]
                   }
@@ -150,7 +150,7 @@
                         ]
                       },
                       {
-                        "Say:": "coin parent: {parentOf:.coin}."
+                        "Say:": "coin parent: {parent_of:.coin}."
                       }
                     ]
                   }
@@ -175,7 +175,7 @@
                         ]
                       },
                       {
-                        "Say:": "flower parent: {parentOf:.flower}."
+                        "Say:": "flower parent: {parent_of:.flower}."
                       }
                     ]
                   }
@@ -200,7 +200,7 @@
                         ]
                       },
                       {
-                        "Say:": "broom parent: {parentOf:.broom}."
+                        "Say:": "broom parent: {parent_of:.broom}."
                       }
                     ]
                   }
@@ -225,7 +225,7 @@
                         ]
                       },
                       {
-                        "Say:": "knife parent: {parentOf:.knife}."
+                        "Say:": "knife parent: {parent_of:.knife}."
                       }
                     ]
                   }
@@ -250,7 +250,7 @@
                         ]
                       },
                       {
-                        "Say:": "purse parent: {parentOf:.purse}."
+                        "Say:": "purse parent: {parent_of:.purse}."
                       }
                     ]
                   }

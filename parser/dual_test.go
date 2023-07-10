@@ -19,7 +19,7 @@ func TestDual(t *testing.T) {
 		e := parse(t, ctx, grammar,
 			Phrases("burn/light cart"),
 			&ClarifyGoal{"red"},
-			&ActionGoal{"Burn", sliceOf.String("red-cart")})
+			&ActionGoal{"Burn", sliceOf.String("red cart")})
 		if e != nil {
 			t.Fatal(e)
 		}
@@ -27,7 +27,7 @@ func TestDual(t *testing.T) {
 	t.Run("two", func(t *testing.T) {
 		e := parse(t, ctx, grammar,
 			sliceOf.String("burn red cart with torch"),
-			&ActionGoal{"Burn", sliceOf.String("red-cart", "torch")})
+			&ActionGoal{"Burn", sliceOf.String("red cart", "torch")})
 		if e != nil {
 			t.Fatal(e)
 		}
@@ -37,7 +37,7 @@ func TestDual(t *testing.T) {
 			Phrases("light cart with"),
 			&ClarifyGoal{"red"},
 			&ClarifyGoal{"torch"},
-			&ActionGoal{"Burn", sliceOf.String("red-cart", "torch")})
+			&ActionGoal{"Burn", sliceOf.String("red cart", "torch")})
 		if e != nil {
 			t.Fatal(e)
 		}

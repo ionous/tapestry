@@ -1,8 +1,9 @@
 package parser_test
 
 import (
-	"github.com/ionous/sliceOf"
 	"testing"
+
+	"github.com/ionous/sliceOf"
 )
 
 func TestDisambiguation(t *testing.T) {
@@ -20,7 +21,7 @@ func TestDisambiguation(t *testing.T) {
 	t.Run("shared names", func(t *testing.T) {
 		e := parse(t, ctx, grammar,
 			Phrases("look at red cart"),
-			&ActionGoal{"Examine", sliceOf.String("red-cart")})
+			&ActionGoal{"Examine", sliceOf.String("red cart")})
 		if e != nil {
 			t.Fatal(e)
 		}
@@ -30,7 +31,7 @@ func TestDisambiguation(t *testing.T) {
 		e := parse(t, ctx, grammar,
 			Phrases("look at cart"),
 			&ClarifyGoal{"red"},
-			&ActionGoal{"Examine", sliceOf.String("red-cart")})
+			&ActionGoal{"Examine", sliceOf.String("red cart")})
 		if e != nil {
 			t.Fatal(e)
 		}
@@ -42,7 +43,7 @@ func TestDisambiguation(t *testing.T) {
 			&ClarifyGoal{"cart"},
 			&ClarifyGoal{"cart"},
 			&ClarifyGoal{"red"},
-			&ActionGoal{"Examine", sliceOf.String("red-cart")})
+			&ActionGoal{"Examine", sliceOf.String("red cart")})
 		if e != nil {
 			t.Fatal(e)
 		}
@@ -64,7 +65,7 @@ func TestDisambiguation(t *testing.T) {
 	t.Run("doubled names dont match incorrectly", func(t *testing.T) {
 		e := parse(t, ctx, grammar,
 			Phrases("look at apple apple apple cart"),
-			&ActionGoal{"Examine", sliceOf.String("apple-cart")})
+			&ActionGoal{"Examine", sliceOf.String("apple cart")})
 		if e != nil {
 			t.Fatal(e)
 		}

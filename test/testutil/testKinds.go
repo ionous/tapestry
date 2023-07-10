@@ -125,12 +125,12 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 				b.Aff, b.Type = affine.Bool, k.String()
 			} else {
 				// the name of the aspect is the name of the field and its class
-				aspect := lang.Underscore(f.Name)
+				aspect := lang.MixedCaseToSpaces(f.Name)
 				b.Aff, b.Type = affine.Text, aspect
 				kb.Fields[aspect] = &([]g.Field{
 					// false first.
-					{Name: "not_" + aspect, Affinity: affine.Bool /*, Type: "trait"*/},
-					{Name: "is_" + aspect, Affinity: affine.Bool /*, Type: "trait"*/},
+					{Name: "not " + aspect, Affinity: affine.Bool /*, Type: "trait"*/},
+					{Name: "is " + aspect, Affinity: affine.Bool /*, Type: "trait"*/},
 				})
 				kb.Aspects[aspect] = true
 			}
@@ -199,19 +199,19 @@ func (kb *KindBuilder) addType(ks *Kinds, t r.Type) {
 				if trait == end {
 					break
 				}
-				name := lang.Underscore(trait)
+				name := lang.MixedCaseToSpaces(trait)
 				traits = append(traits, g.Field{Name: name, Affinity: affine.Bool /*, Type: "trait"*/})
 			}
 			kb.Fields[aspect] = &traits
 			kb.Aspects[aspect] = true
 		}
 		if len(b.Aff) > 0 {
-			name := lang.Underscore(f.Name)
+			name := lang.MixedCaseToSpaces(f.Name)
 			(*pfields) = append((*pfields), g.Field{Name: name, Affinity: b.Aff, Type: b.Type})
 		}
 	}
 }
 
 func nameOfType(t r.Type) string {
-	return lang.Underscore(t.Name())
+	return lang.MixedCaseToSpaces(t.Name())
 }

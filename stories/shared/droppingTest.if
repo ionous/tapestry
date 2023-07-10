@@ -11,7 +11,7 @@
         ],
         [
           {
-            "Say:": "The knife's whereabouts: {the: {parentOf: .knife}}."
+            "Say:": "The knife's whereabouts: {the: {parent_of: .knife}}."
           },
           {
             "Expect output:": "The knife's whereabouts: you."
@@ -30,7 +30,7 @@
             "Expect output:": "Dropped."
           },
           {
-            "Say:": "The knife's new whereabouts: {the: {parentOf: .knife}}."
+            "Say:": "The knife's new whereabouts: {the: {parent_of: .knife}}."
           },
           {
             "Expect output:": "The knife's new whereabouts: the Kitchen."

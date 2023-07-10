@@ -4,26 +4,21 @@ import (
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/lang"
-	"git.sr.ht/~ionous/tapestry/parser/ident"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
 type Noun struct {
 	run *Playtime
-	id  ident.Id
+	id  string
 }
 
 func MakeNoun(run *Playtime, name string) *Noun {
-	return &Noun{run, ident.IdOf(name)}
+	return &Noun{run, lang.Normalize(name)}
 }
 
 // Id for the noun. Returned via ResultList.Objects() on a successful match.
-func (n *Noun) Id() ident.Id {
-	return n.id
-}
-
 func (n *Noun) String() string {
-	return n.id.String()
+	return n.id
 }
 
 func (n *Noun) HasPlural(s string) bool {
@@ -35,7 +30,7 @@ func (n *Noun) HasName(s string) bool {
 }
 
 func (n *Noun) HasClass(s string) (ret bool) {
-	if ok, e := safe.IsKindOf(n.run, n.String(), lang.Underscore(s)); e != nil {
+	if ok, e := safe.IsKindOf(n.run, n.String(), lang.Normalize(s)); e != nil {
 		log.Println("parser error", e)
 	} else {
 		ret = ok

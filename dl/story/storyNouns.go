@@ -66,9 +66,9 @@ func importNoun(w *weave.Weaver, noun string, nouns []string) (ret []string, err
 		}
 	} else {
 		if a.isProper() {
-			err = assertNounValue(w.Catalog, B(true), a.name, "proper_named")
+			err = assertNounValue(w.Catalog, B(true), a.name, "proper named")
 		} else if customDet, ok := a.customArticle(); ok && len(customDet) > 0 {
-			err = assertNounValue(w.Catalog, T(customDet), a.name, "indefinite_article")
+			err = assertNounValue(w.Catalog, T(customDet), a.name, "indefinite article")
 		}
 		ret = append(nouns, a.name)
 	}

@@ -52,7 +52,7 @@ func (op *NameOf) GetText(run rt.Runtime) (ret g.Value, err error) {
 
 // returns a list of all objects of the specified kind.
 func (op *KindsOf) GetTextList(run rt.Runtime) (g.Value, error) {
-	kind := lang.Underscore(op.Kind) // fix: at assembly time.
+	kind := lang.Normalize(op.Kind) // fix: at assembly time.
 	return run.GetField(meta.ObjectsOfKind, kind)
 }
 
@@ -76,7 +76,7 @@ func (op *IsKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	if k, e := objectKind(run, op.Object, op.Nothing); e != nil {
 		err = cmdError(op, e)
 	} else {
-		ok := k != nil && k.Implements(lang.Underscore(op.Kind))
+		ok := k != nil && k.Implements(lang.Normalize(op.Kind))
 		ret = g.BoolOf(ok)
 	}
 	return
@@ -89,7 +89,7 @@ func (op *IsExactKindOf) GetBool(run rt.Runtime) (ret g.Value, err error) {
 	if k, e := objectKind(run, op.Object, false); e != nil {
 		err = cmdError(op, e)
 	} else {
-		ok := k != nil && k.Name() == lang.Underscore(op.Kind)
+		ok := k != nil && k.Name() == lang.Normalize(op.Kind)
 		ret = g.BoolOf(ok)
 	}
 	return

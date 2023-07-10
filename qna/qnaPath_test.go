@@ -1,9 +1,10 @@
 package qna_test
 
 import (
+	"testing"
+
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/rt/scope"
-	"testing"
 
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/test/testpat"
@@ -27,7 +28,7 @@ func TestEventPath(t *testing.T) {
 	objects.AddObjects(kinds.Kind("things"), "table", "apple")
 	objects.AddObjects(kinds.Kind("devices"), "pen")
 	// create a "values" containing the field "objects" with a list of all object names
-	values := kinds.NewRecord("event_values", "objects", objects.Names())
+	values := kinds.NewRecord("event values", "objects", objects.Names())
 	//
 	run := &eventPathRt{
 		testpat.Runtime{

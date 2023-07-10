@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	. "git.sr.ht/~ionous/tapestry/parser"
-	"git.sr.ht/~ionous/tapestry/parser/ident"
 	"github.com/ionous/errutil"
 	"github.com/ionous/inflect"
 	"github.com/ionous/sliceOf"
@@ -13,14 +12,14 @@ import (
 
 // MyObject - along with MyNoun this provides an example of mapping some application defined object to a parser.NounInstance.
 type MyObject struct {
-	Id         ident.Id
+	Id         string
 	Names      []string
 	Classes    []string
 	Attributes []string
 }
 
 func (m *MyObject) String() string {
-	return m.Id.String()
+	return m.Id
 }
 
 type MyBounds []*MyObject
@@ -50,7 +49,7 @@ func (m MyBounds) GetPlayerBounds(n string) (ret Bounds, err error) {
 	return
 }
 
-func (m MyBounds) GetObjectBounds(ident.Id) (Bounds, error) {
+func (m MyBounds) GetObjectBounds(string) (Bounds, error) {
 	return m.SearchBounds, nil
 }
 
@@ -78,7 +77,7 @@ type MyNoun struct {
 	*MyObject
 }
 
-func (adapt MyNoun) Id() ident.Id {
+func (adapt MyNoun) Id() string {
 	return adapt.MyObject.Id
 }
 
@@ -113,24 +112,24 @@ func MatchAny(n string, l []string) (okay bool) {
 
 func TestBounds(t *testing.T) {
 	ctx := MyBounds{
-		&MyObject{Id: ident.IdOf("a"), Names: sliceOf.String("unique")},
+		&MyObject{Id: "a", Names: sliceOf.String("unique")},
 		//
-		&MyObject{Id: ident.IdOf("b"), Names: strings.Fields("exact")},
-		&MyObject{Id: ident.IdOf("c"), Names: strings.Fields("exact match")},
+		&MyObject{Id: "b", Names: strings.Fields("exact")},
+		&MyObject{Id: "c", Names: strings.Fields("exact match")},
 		//
-		&MyObject{Id: ident.IdOf("d"), Names: strings.Fields("inexact match")},
-		&MyObject{Id: ident.IdOf("e"), Names: strings.Fields("inexact conflict")},
+		&MyObject{Id: "d", Names: strings.Fields("inexact match")},
+		&MyObject{Id: "e", Names: strings.Fields("inexact conflict")},
 		//
-		&MyObject{Id: ident.IdOf("f"),
+		&MyObject{Id: "f",
 			Names:      strings.Fields("filter"),
 			Attributes: strings.Fields("attr"),
 			Classes:    strings.Fields("class"),
 		},
-		&MyObject{Id: ident.IdOf("g"),
+		&MyObject{Id: "g",
 			Names:      strings.Fields("filter"),
 			Attributes: strings.Fields("attr"),
 		},
-		&MyObject{Id: ident.IdOf("h"),
+		&MyObject{Id: "h",
 			Names:   strings.Fields("filter"),
 			Classes: strings.Fields("class"),
 		},

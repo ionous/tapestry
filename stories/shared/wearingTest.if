@@ -28,7 +28,7 @@
         ],
         [
           {
-            "Say:": "The flower's whereabouts: {the: {parentOf: .flower}}, {.flower.possessiveness}."
+            "Say:": "The flower's whereabouts: {the: {parent_of: .flower}}, {.flower.possessiveness}."
           },
           {
             "Expect output:": "The flower's whereabouts: you, worn."
@@ -66,10 +66,10 @@
             "Expect output:": "You take off the flower."
           },
           {
-            "Say:": "The flower's new whereabouts: {the: {parentOf: .flower}}, {.flower.possessiveness}."
+            "Say:": "The flower's new whereabouts: {the: {parent_of: .flower}}, {.flower.possessiveness}."
           },
           {
-            "Expect output:": "The flower's new whereabouts: you, not_worn."
+            "Expect output:": "The flower's new whereabouts: you, not worn."
           },
           {
             "Comment:": "Fail to re-remove the flower:"
@@ -104,16 +104,16 @@
             "Expect output:": "You put on the flower."
           },
           {
-            "Say:": "The flower's new whereabouts: {the: {parentOf: .flower}}, {.flower.possessiveness}."
+            "Say:": "The flower's new whereabouts: {the: {parent_of: .flower}}, {.flower.possessiveness}."
           },
           {
             "Expect output:": "The flower's new whereabouts: you, worn."
           },
           {
-            "Say:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
+            "Say:": "The knife's parent: {the: {parent_of: .knife}}, {.knife.possessiveness}."
           },
           {
-            "Expect output:": "The knife's parent: you, not_worn."
+            "Expect output:": "The knife's parent: you, not worn."
           },
           {
             "Comment:": "Fail to wear an unwearable:"
@@ -132,16 +132,16 @@
             "Expect output:": "It isn't something you can put on."
           },
           {
-            "Say:": "The knife's parent: {the: {parentOf: .knife}}, {.knife.possessiveness}."
+            "Say:": "The knife's parent: {the: {parent_of: .knife}}, {.knife.possessiveness}."
           },
           {
-            "Expect output:": "The knife's parent: you, not_worn."
+            "Expect output:": "The knife's parent: you, not worn."
           },
           {
-            "Say:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
+            "Say:": "The purse's parent: {the: {parent_of: .purse}}, {.purse.possessiveness}."
           },
           {
-            "Expect output:": "The purse's parent: the Kitchen, not_worn."
+            "Expect output:": "The purse's parent: the Kitchen, not worn."
           },
           {
             "Comment:": "Fail to wear something not held:"
@@ -192,10 +192,10 @@
             "Expect output:": "You haven't got that!"
           },
           {
-            "Say:": "The purse's parent: {the: {parentOf: .purse}}, {.purse.possessiveness}."
+            "Say:": "The purse's parent: {the: {parent_of: .purse}}, {.purse.possessiveness}."
           },
           {
-            "Expect output:": "The purse's parent: the Kitchen, not_worn."
+            "Expect output:": "The purse's parent: the Kitchen, not worn."
           }
         ]
       ]

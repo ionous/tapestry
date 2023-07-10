@@ -190,16 +190,16 @@
                 "AllTrue:": [
                   {
                     "Cmp:is:num:": [
-                      "@block depth",
+                      "@block_depth",
                       "greater_than",
                       0
                     ]
                   },
                   {
                     "Cmp:is:num:": [
-                      "@block depth",
+                      "@block_depth",
                       "greater_than",
-                      "@inline depth"
+                      "@inline_depth"
                     ]
                   }
                 ]
@@ -219,16 +219,16 @@
                 "AllTrue:": [
                   {
                     "Cmp:is:num:": [
-                      "@inline depth",
+                      "@inline_depth",
                       "greater_than",
                       0
                     ]
                   },
                   {
                     "Cmp:is:num:": [
-                      "@inline depth",
+                      "@inline_depth",
                       "greater_than",
-                      "@block depth"
+                      "@block_depth"
                     ]
                   }
                 ]
@@ -308,7 +308,7 @@
           },
           {
             "Bool:initially:": [
-              "hasKids",
+              "has kids",
               {
                 "Cmp:is:num:": [
                   {
@@ -343,7 +343,7 @@
                           },
                           {
                             "FromBool:": {
-                              "Not:": "@hasKids"
+                              "Not:": "@has_kids"
                             }
                           }
                         ]
@@ -353,7 +353,7 @@
                 },
                 {
                   "If:does:": [
-                    "@hasKids",
+                    "@has_kids",
                     [
                       {
                         "PrintBlockList objs:": {
@@ -580,7 +580,7 @@
             ]
           },
           {
-            "Bool:": "isEmpty"
+            "Bool:": "is empty"
           }
         ],
         {
@@ -615,7 +615,7 @@
                                         "FromText:": "@obj"
                                       },
                                       {
-                                        "FromBool:": "@isEmpty"
+                                        "FromBool:": "@is_empty"
                                       }
                                     ]
                                   }
@@ -648,7 +648,7 @@
             ]
           },
           {
-            "Bool:": "isEmpty"
+            "Bool:": "is empty"
           }
         ],
         {
@@ -717,7 +717,7 @@
                   "Print response:with:": [
                     "openable status",
                     {
-                      "Say:": "{if .obj.closed}closed{else}open{if .isEmpty} but empty{end}"
+                      "Say:": "{if .obj.closed}closed{else}open{if .is_empty} but empty{end}"
                     }
                   ]
                 }
@@ -747,7 +747,7 @@
                   "Print response:with:": [
                     "transparent status",
                     {
-                      "Say:": "{if .isEmpty}empty{end}"
+                      "Say:": "{if .is_empty}empty{end}"
                     }
                   ]
                 }

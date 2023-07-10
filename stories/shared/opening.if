@@ -395,7 +395,7 @@
                     [
                       {
                         "Set:from:": [
-                          "@concealed items",
+                          "@concealed_items",
                           {
                             "FromTextList:": {
                               "VisibleStorage obj:": {
@@ -411,7 +411,7 @@
                             "Cmp:is:num:": [
                               {
                                 "Len:": {
-                                  "FromTextList:": "@concealed items"
+                                  "FromTextList:": "@concealed_items"
                                 }
                               },
                               "greater_than",
@@ -436,7 +436,7 @@
                                           {
                                             "Repeating across:as:does:": [
                                               {
-                                                "FromTextList:": "@concealed items"
+                                                "FromTextList:": "@concealed_items"
                                               },
                                               "item",
                                               [

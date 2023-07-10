@@ -139,9 +139,9 @@ func expectFullResults(t *testing.T, dt *testweave.TestWeave) {
 	} else if outfields, e := dt.ReadFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outfields, []string{
-		"a:p:l_1:num_list:", // field output gets sorted by name
-		"a:p:l_2:number:",
-		"a:p:p_1:text:k",
+		"a:p:l1:num_list:", // field output gets sorted by name
+		"a:p:l2:number:",
+		"a:p:p1:text:k",
 		"a:p:success:bool:",
 	}); len(diff) > 0 {
 		t.Log("got:", pretty.Sprint(outfields))
@@ -149,14 +149,14 @@ func expectFullResults(t *testing.T, dt *testweave.TestWeave) {
 	} else if outpat, e := dt.ReadPatterns(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outpat, []string{
-		"a:p:p_1:success",
+		"a:p:p1:success",
 	}); len(diff) > 0 {
 		t.Log("got:", pretty.Sprint(outpat))
 		t.Fatal(diff)
 	} else if outlocals, e := dt.ReadLocals(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(outlocals, []string{
-		`a:p:l_2:{"FromNumber:":10}`,
+		`a:p:l2:{"FromNumber:":10}`,
 	}); len(diff) > 0 {
 		t.Log("got:", pretty.Sprint(outlocals))
 		t.Fatal(diff)

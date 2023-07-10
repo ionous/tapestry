@@ -320,7 +320,7 @@ func fillSlot(reg TypeCreator, slot jsn.SlotBlock, typeName string) (err error) 
 	if i, ok := reg.NewType(typeName); !ok {
 		err = errutil.New("couldn't create", typeName)
 	} else if !slot.SetSlot(i) {
-		err = errutil.New("couldn't set flow %T", i)
+		err = errutil.Fmt("couldn't set flow %T", i)
 	}
 	return
 }

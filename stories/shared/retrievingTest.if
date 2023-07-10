@@ -66,7 +66,7 @@
                   "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "The soup's parent was: {the: {parentOf: .soup}}."
+                        "Say:": "The soup's parent was: {the: {parent_of: .soup}}."
                       },
                       {
                         "Print:": "Okay, retrieve from supporter:<br>"
@@ -85,7 +85,7 @@
                         ]
                       },
                       {
-                        "Say:": "The soup's parent is: {the: {parentOf: .soup}}."
+                        "Say:": "The soup's parent is: {the: {parent_of: .soup}}."
                       }
                     ]
                   }
@@ -94,7 +94,7 @@
                   "Print:": {
                     "Row does:": [
                       {
-                        "Say:": "The hook's parent was: {the: {parentOf: .hook}}."
+                        "Say:": "The hook's parent was: {the: {parent_of: .hook}}."
                       },
                       {
                         "Print:": "Okay, retrieve from container:<br>"
@@ -113,7 +113,7 @@
                         ]
                       },
                       {
-                        "Say:": "The hook's parent is: {the: {parentOf: .hook}}."
+                        "Say:": "The hook's parent is: {the: {parent_of: .hook}}."
                       }
                     ]
                   }

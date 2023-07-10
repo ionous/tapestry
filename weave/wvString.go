@@ -10,7 +10,7 @@ import (
 // punctuation gets removed entirely.
 // letters are lowercased.
 func UniformString(s string) (ret string, okay bool) {
-	out := lang.Underscore(s)
+	out := lang.Normalize(s)
 	return out, len(out) > 0
 }
 

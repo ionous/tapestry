@@ -70,7 +70,7 @@
                       ]
                     },
                     {
-                      "FromBool:": "@now lit"
+                      "FromBool:": "@now_lit"
                     }
                   ]
                 }
@@ -81,9 +81,9 @@
             "PatternRule:does:": [
               {
                 "AllTrue:": [
-                  "@now lit",
+                  "@now_lit",
                   {
-                    "Not:": "@was lit"
+                    "Not:": "@was_lit"
                   }
                 ]
               },
@@ -98,9 +98,9 @@
             "PatternRule:does:": [
               {
                 "AllTrue:": [
-                  "@was lit",
+                  "@was_lit",
                   {
-                    "Not:": "@now lit"
+                    "Not:": "@now_lit"
                   }
                 ]
               },

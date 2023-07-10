@@ -446,7 +446,7 @@
                   {
                     "Not:": {
                       "KindOf:is:": [
-                        "@other noun",
+                        "@other_noun",
                         "rooms"
                       ]
                     }

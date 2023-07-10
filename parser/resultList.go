@@ -50,10 +50,10 @@ func (rs *ResultList) Objects() (ret []string) {
 		switch k := r.(type) {
 		case ResolvedNoun:
 			n := k.NounInstance
-			ret = append(ret, n.Id().String())
+			ret = append(ret, n.String())
 		case ResolvedMulti:
 			for _, n := range k.Nouns {
-				ret = append(ret, n.Id().String())
+				ret = append(ret, n.String())
 			}
 		}
 	}

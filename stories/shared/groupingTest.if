@@ -250,7 +250,7 @@
                               },
                               {
                                 "Cmp:is:num:": [
-                                  "@group size",
+                                  "@group_size",
                                   "greater_than",
                                   1
                                 ]

@@ -26,19 +26,19 @@ type info struct {
 	macros                     groktest.MacroList
 }
 
-func (n *info) FindArticle(ws []Word) (Match, error) {
+func (n *info) FindArticle(ws Span) (Match, error) {
 	return n.determiners.FindMatch(ws)
 }
 
-func (n *info) FindKind(ws []Word) (Match, error) {
+func (n *info) FindKind(ws Span) (Match, error) {
 	return n.kinds.FindMatch(ws)
 }
 
-func (n *info) FindTrait(ws []Word) (Match, error) {
+func (n *info) FindTrait(ws Span) (Match, error) {
 	return n.traits.FindMatch(ws)
 }
 
-func (n *info) FindMacro(ws []Word) (MacroInfo, error) {
+func (n *info) FindMacro(ws Span) (MacroInfo, error) {
 	return n.macros.FindMacro(ws)
 }
 

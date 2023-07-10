@@ -69,7 +69,7 @@ func (lf *labelFinder) findNext(run rt.Runtime, i int, a Arg) (ret int, err erro
 		if labels, e := lf.getLabels(run); e != nil {
 			err = e
 		} else {
-			n := lang.Underscore(n)
+			n := lang.Normalize(n)
 			// search in increasing order for the next label that matches the specified argument
 			// this is our soft way of allowing patterns to participate in fluid like specs with optional values.
 			if at := findLabel(labels, n, lf.next); at < 0 {

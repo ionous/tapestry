@@ -29,7 +29,7 @@ func TestAspectFormation(t *testing.T) {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
 		// names are sorted
-		"d:a:oh_so_many:bool:",
+		"d:a:oh so many:bool:",
 		"d:a:one:bool:",
 		"d:a:several:bool:",
 	}); len(diff) > 0 {
@@ -59,7 +59,7 @@ func TestAspectUsage(t *testing.T) {
 	} else if out, e := dt.ReadFields(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{
-		"a:a:oh_so_many:bool:",
+		"a:a:oh so many:bool:",
 		"a:a:one:bool:",
 		"a:a:several:bool:",
 		"b:k:a:text:a",

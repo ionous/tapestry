@@ -136,11 +136,11 @@ func (d *Domain) makeNames(noun, name, at string) (err error) {
 	}
 	out = append(out, noun)
 
-	// generate additional names by splitting the lowercase uniform name on the underscores:
-	split := strings.FieldsFunc(noun, lang.IsBreak)
+	// generate additional names by splitting the name into parts
+	split := lang.Fields(noun)
 	if cnt := len(split); cnt > 1 {
 		// in case the name was reduced due to multiple separators
-		if breaks := strings.Join(split, "_"); breaks != noun {
+		if breaks := strings.Join(split, " "); breaks != noun {
 			out = append(out, breaks)
 		}
 		// write individual words in increasing rank ( ex. "boat", then "toy" )

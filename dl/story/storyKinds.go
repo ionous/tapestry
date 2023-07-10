@@ -59,7 +59,7 @@ func (op *DefineFields) Weave(cat *weave.Catalog) error {
 					// ( vs. bool pattern vars which stay bools -- see reduceProps )
 					// first: add the aspect
 					aspect := aspect.Name
-					traits := []string{"not_" + aspect, "is_" + aspect}
+					traits := []string{"not " + aspect, "is " + aspect}
 
 					// fix: future: it'd be nicer to support single trait kinds
 					// not_aspect would instead be: Not{IsTrait{PositiveName}}

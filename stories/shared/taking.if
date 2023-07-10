@@ -487,7 +487,7 @@
                   },
                   {
                     "Cmp:is:txt:": [
-                      "@intoObj",
+                      "@into_obj",
                       "equal_to",
                       "@noun"
                     ]
@@ -539,14 +539,14 @@
                   },
                   {
                     "Cmp:is:txt:": [
-                      "@fromObj",
+                      "@from_obj",
                       "equal_to",
                       "@actor"
                     ]
                   },
                   {
                     "Cmp:is:txt:": [
-                      "@intoObj",
+                      "@into_obj",
                       "equal_to",
                       "@noun"
                     ]
@@ -586,7 +586,7 @@
                   },
                   {
                     "KindOf:is:": [
-                      "@fromObj",
+                      "@from_obj",
                       "actors"
                     ]
                   }
@@ -605,7 +605,7 @@
                         "Print response:with:": [
                           "can't take people's possessions",
                           {
-                            "Say:": "{those: .noun|capitalize!} seems to belong to {the: .fromObj}."
+                            "Say:": "{those: .noun|capitalize!} seems to belong to {the: .from_obj}."
                           }
                         ]
                       }

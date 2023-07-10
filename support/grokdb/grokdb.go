@@ -26,7 +26,7 @@ type dbSource struct {
 	aspectPath, patternPath string
 }
 
-func (d *dbSource) FindArticle(ws []grok.Word) (grok.Match, error) {
+func (d *dbSource) FindArticle(ws grok.Span) (grok.Match, error) {
 	return det.FindMatch(ws)
 }
 
@@ -40,10 +40,10 @@ var det = groktest.PanicSpans("the", "a", "an", "some", "our")
 
 // if the passed words starts with a kind,
 // return the number of words in  that match.
-func (d *dbSource) FindKind(ws []grok.Word) (ret grok.Match, err error) {
+func (d *dbSource) FindKind(ws grok.Span) (ret grok.Match, err error) {
 	// to ensure a whole word match, during query the names of the kinds are appended with blanks
 	// and so we also give the phrase a final blank in case the phrase is a single word.
-	words := grok.WordsWithSep(ws, '_') + "_"
+	words := ws.String() + blank
 	var found struct {
 		id   int
 		name string
@@ -64,18 +64,18 @@ func (d *dbSource) FindKind(ws []grok.Word) (ret grok.Match, err error) {
 	select id, name  from (
 		select id, name, substr(?2 ,0, length(name)+2) as words
 		from kinds
-		where words = (name || '_')
+		where words = (name || ' ')
 		union all 
 		select id, alt, substr(?2, 0, length(alt)+2) as words
 		from kinds
-		where alt is not null and words = (alt || '_')
+		where alt is not null and words = (alt || ' ')
 	)
 	order by length(name) desc
 	limit 1`,
 			d.domain, words, mp).Scan(&found.id, &found.name)
 		switch e {
 		case nil:
-			width := strings.Count(found.name, "_") + 1
+			width := strings.Count(found.name, blank) + 1
 			ret = dbMatch{
 				Id:   found.id,
 				Span: ws[:width],
@@ -88,6 +88,9 @@ func (d *dbSource) FindKind(ws []grok.Word) (ret grok.Match, err error) {
 	}
 	return
 }
+
+const blank = " "
+const space = ' '
 
 func (d *dbSource) getPatternPath() (ret string, err error) {
 	return getPath(d.db, kindsOf.Macro, &d.patternPath)
@@ -103,7 +106,7 @@ func getPath(db *tables.Cache, kind kindsOf.Kinds, out *string) (ret string, err
 	} else {
 		var path string
 		e := db.QueryRow(`
-		select (','||rowid||',') 
+		select (',' || rowid || ',') 
 		from mdl_kind where kind = ?1
 		limit 1
 		`, kind.String()).Scan(&path)
@@ -126,11 +129,11 @@ func getPath(db *tables.Cache, kind kindsOf.Kinds, out *string) (ret string, err
 // with the first two applying to one kind, and the third applying to a different kind;
 // all in scope.  this would always match the second -- even if its not applicable.
 // ( i guess that's where commas can be used by the user to separate things )
-func (d *dbSource) FindTrait(ws []grok.Word) (ret grok.Match, err error) {
+func (d *dbSource) FindTrait(ws grok.Span) (ret grok.Match, err error) {
 	if ap, e := d.getAspectPath(); e != nil {
 		err = e
 	} else {
-		words := grok.WordsWithSep(ws, '_') + "_"
+		words := grok.WordsWithSep(ws, space) + blank
 		var found struct {
 			name string
 		}
@@ -148,14 +151,14 @@ func (d *dbSource) FindTrait(ws []grok.Word) (ret grok.Match, err error) {
 	select name from (
 		select name, substr(?3 ,0, length(name)+2) as words
 		from traits
-		where words = (name || '_')
+		where words = (name || ' ')
 	)
 	order by length(name) desc
 	limit 1`,
 			d.domain, ap, words).Scan(&found.name)
 		switch e {
 		case nil:
-			width := strings.Count(found.name, "_") + 1
+			width := strings.Count(found.name, blank) + 1
 			ret = grok.Span(ws[:width])
 		case sql.ErrNoRows:
 			// return nothing.
@@ -168,7 +171,7 @@ func (d *dbSource) FindTrait(ws []grok.Word) (ret grok.Match, err error) {
 
 // if the passed words starts with a macro,
 // return information about that match
-func (d *dbSource) FindMacro(ws []grok.Word) (ret grok.MacroInfo, err error) {
+func (d *dbSource) FindMacro(ws grok.Span) (ret grok.MacroInfo, err error) {
 	if m, e := d.findMacro(ws); e != nil && e != sql.ErrNoRows {
 		err = e
 	} else if e == nil {
@@ -177,9 +180,9 @@ func (d *dbSource) FindMacro(ws []grok.Word) (ret grok.MacroInfo, err error) {
 	return
 }
 
-func (d *dbSource) findMacro(ws []grok.Word) (ret grok.MacroInfo, err error) {
+func (d *dbSource) findMacro(ws grok.Span) (ret grok.MacroInfo, err error) {
 	// uses spaces instead of underscores...
-	words := grok.WordsWithSep(ws, ' ') + " "
+	words := grok.WordsWithSep(ws, ' ') + blank
 	var found struct {
 		kid      int64  // id of the kind
 		name     string // name of the kind/macro
@@ -238,7 +241,7 @@ func (d *dbSource) findMacro(ws []grok.Word) (ret grok.MacroInfo, err error) {
 			}
 		}
 		if err == nil {
-			width := strings.Count(found.phrase, " ") + 1
+			width := strings.Count(found.phrase, blank) + 1
 			ret = grok.MacroInfo{
 				Name:     found.name,
 				Match:    grok.Span(ws[:width]),

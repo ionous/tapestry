@@ -29,7 +29,7 @@ func CheckAll(db *sql.DB, actuallyJustThisOne string, options qna.Options, signa
 		err = errutil.New("no matching checks found")
 	} else {
 		for _, check := range checks {
-			if strings.HasPrefix(check.Name, "x_") || len(check.Prog) == 0 {
+			if strings.HasPrefix(check.Name, "x ") || len(check.Prog) == 0 {
 				log.Println("ignoring", check.Name)
 			} else {
 				log.Println("-- Checking:", check.Name, check.Domain)

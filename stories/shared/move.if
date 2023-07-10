@@ -161,7 +161,7 @@
     },
     {
       "Define pattern:requires:result:withRules:": [
-        "RemoveFromPlay",
+        "Remove from play",
         [
           {
             "Text:kind:": [
@@ -178,7 +178,7 @@
     },
     {
       "Extend pattern:withRules:": [
-        "RemoveFromPlay",
+        "Remove from play",
         [
           {
             "PatternRule:does:": [
@@ -232,7 +232,7 @@
     },
     {
       "Define pattern:requires:result:withRules:": [
-        "WearObject",
+        "Wear object",
         [
           {
             "Text:kind:": [
@@ -258,7 +258,7 @@
     },
     {
       "Extend pattern:withRules:": [
-        "WearObject",
+        "Wear object",
         [
           {
             "PatternRule:does:": [

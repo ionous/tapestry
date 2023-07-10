@@ -5,7 +5,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/parser"
-	"git.sr.ht/~ionous/tapestry/parser/ident"
 	"git.sr.ht/~ionous/tapestry/qna"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"github.com/ionous/errutil"
@@ -120,7 +119,7 @@ func (pt *Playtime) GetPlayerLocale() (ret parser.Bounds, err error) {
 
 // fix: assumes all objects are empty
 // add containment, whatever...
-func (pt *Playtime) GetObjectBounds(obj ident.Id) (ret parser.Bounds, err error) {
+func (pt *Playtime) GetObjectBounds(obj string) (ret parser.Bounds, err error) {
 	ret = func(cb parser.NounVisitor) (ret bool) {
 		return
 	}

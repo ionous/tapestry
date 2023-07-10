@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	. "git.sr.ht/~ionous/tapestry/parser"
-	"git.sr.ht/~ionous/tapestry/parser/ident"
 	"github.com/ionous/errutil"
 	"github.com/ionous/sliceOf"
 )
@@ -16,7 +15,7 @@ var dropGrammar = allOf(words("drop"), anyOf(
 type MyContext struct {
 	MyBounds // world
 	Player   map[string]Bounds
-	Other    map[ident.Id]Bounds
+	Other    map[string]Bounds
 	Log
 }
 
@@ -30,7 +29,7 @@ func (m MyContext) GetPlayerBounds(n string) (ret Bounds, err error) {
 	return
 }
 
-func (m MyContext) GetObjectBounds(n ident.Id) (ret Bounds, err error) {
+func (m MyContext) GetObjectBounds(n string) (ret Bounds, err error) {
 	if s, ok := m.Other[n]; ok {
 		m.Log.Log("asking for bounds", n)
 		ret = s
@@ -61,7 +60,7 @@ func TestFocus(t *testing.T) {
 		e := parse(t, ctx, grammar,
 			Phrases("drop"),
 			&ClarifyGoal{"apple"},
-			&ActionGoal{"Drop", sliceOf.String("crab-apple")})
+			&ActionGoal{"Drop", sliceOf.String("crab apple")})
 		if e != nil {
 			t.Fatal(e)
 		}
@@ -69,7 +68,7 @@ func TestFocus(t *testing.T) {
 	t.Run("drop all", func(t *testing.T) {
 		e := parse(t, ctx, grammar,
 			Phrases("drop everything"),
-			&ActionGoal{"Drop", sliceOf.String("torch", "crab-apple")})
+			&ActionGoal{"Drop", sliceOf.String("torch", "crab apple")})
 		if e != nil {
 			t.Fatal(e)
 		}
