@@ -6,54 +6,19 @@
         "Kitchenette",
         [
           {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              "self",
-              "the purse"
-            ]
+            "Declare:": "You are in the purse."
           },
           {
-            "--": ""
+            "Declare:": "Mildred and the purse are in the kitchen."
           },
           {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              [
-                "Mildred",
-                "the purse"
-              ],
-              "the kitchen"
-            ]
+            "Declare:": "You are carrying the coin."
           },
           {
-            "--": ""
+            "Declare:": "Mildred is carrying the empire apple."
           },
           {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              "the coin",
-              "self"
-            ]
-          },
-          {
-            "--": ""
-          },
-          {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              "the empire apple",
-              "Mildred"
-            ]
-          },
-          {
-            "--": ""
-          },
-          {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              "the coffee",
-              "the machine"
-            ]
+            "Declare:": "The coffee is in the machine."
           }
         ],
         [

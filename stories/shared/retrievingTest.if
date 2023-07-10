@@ -5,35 +5,14 @@
         "retrieving test",
         "Kitchenette",
         [
-          {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              [
-                "self",
-                "Mildred"
-              ],
-              "the kitchen"
-            ]
+        	{
+            "Declare:": "You and Mildred are in the kitchen."
           },
           {
-            "--": ""
+            "Declare:": "The coffee is in the machine."
           },
           {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              "the coffee",
-              "the machine"
-            ]
-          },
-          {
-            "--": ""
-          },
-          {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              "the empire apple",
-              "Mildred"
-            ]
+            "Declare:": "Mildred is carrying the empire apple."
           }
         ],
         [

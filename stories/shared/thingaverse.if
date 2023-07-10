@@ -90,40 +90,16 @@
             ]
           },
           {
-            "Define nouns:as:": [
-              "the coin",
-              "a thing"
-            ]
+          	"Declare:": "The coin is a thing."
           },
           {
-            "--": ""
+            "Declare:": "Mildred is carrying the the flower, the headlamp, secrets and wisdom, and the clutch."
           },
           {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              [
-                "the flower",
-                "the headlamp",
-                "the secrets",
-                "the wisdom",
-                "the clutch"
-              ],
-              "Mildred"
-            ]
+            "Declare:": "The coin is in the purse."
           },
           {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              "the coin",
-              "the purse"
-            ]
-          },
-          {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              "the purse",
-              "the clutch"
-            ]
+            "Declare:": "The purse is in the clutch."
           }
         ],
         [

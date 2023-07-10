@@ -5,48 +5,17 @@
         "traversal",
         [
           {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              "self",
-              "the Lobby"
-            ]
+            "Declare:": "The Lobby, the Parapet, the Foyer, the Cloak Room, the Basement, and the Outside are rooms."
           },
           {
-            "Define nouns:as:": [
-              "the faux door",
-              "door"
-            ]
+            "Declare:": "You are in the Lobby."
           },
           {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              "the faux door",
-              "the Lobby"
-            ]
+            "Declare:": "The faux door is a door in the Lobby."
           },
           {
-            "--": "fix: we shouldnt have to flag these as plural named manually.",
-            "Define nouns:traits:": [
-              "the double doors",
-              [
-                "plural named",
-                "closed",
-                "openable"
-              ]
-            ]
-          },
-          {
-            "Define nouns:as:": [
-              [
-                "the Lobby",
-                "the Parapet",
-                "the Foyer",
-                "the Cloak Room",
-                "the Basement",
-                "the Outside"
-              ],
-              "rooms"
-            ]
+            "--": "fix: this should have made the doors 'plural named' automatically.",
+            "Declare:": "The double doors are plural named, closed, and openable."
           },
           {
             "Heading:from:via:and:otherRoom:": [

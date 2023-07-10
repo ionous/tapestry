@@ -5,25 +5,11 @@
         "storing test",
         "Kitchenette",
         [
-          {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              [
-                "the coffee",
-                "the coin",
-                "the clutch",
-                "the knife",
-                "the flower"
-              ],
-              "self"
-            ]
+        	{
+          	"Declare:": "You are carrying the coffee, the coin, the clutch, the knife, and the flower."
           },
           {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              "Mildred",
-              "the kitchen"
-            ]
+          	"Declare:": "Mildred is in the kitchen."
           }
         ],
         [

@@ -6,24 +6,10 @@
         "Kitchenette",
         [
           {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              [
-                "the flower",
-                "the knife"
-              ],
-              "self"
-            ]
+          	"Declare:": "You are carrying the flower and the knife."
           },
           {
-            "--": ""
-          },
-          {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              "the purse",
-              "the kitchen"
-            ]
+          	"Declare:": "The purse is in the kitchen."
           }
         ],
         [

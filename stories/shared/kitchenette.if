@@ -135,29 +135,10 @@
             "Declare:": "The beans are plural named."
           },
           {
-            "Define nouns:traits:": [
-              "the beans",
-              "plural named"
-            ]
+            "Declare:": "A blender and a mortar are containers on the counter."
           },
           {
-            "Define nouns:as:relativeTo:otherNouns:": [
-              [
-                "a blender",
-                "a mortar"
-              ],
-              "containers",
-              "whereabouts",
-              "the counter"
-            ]
-          },
-          {
-            "Define nouns:as:relativeTo:otherNouns:": [
-              "a pestle",
-              "thing",
-              "whereabouts",
-              "the mortar"
-            ]
+            "Declare:": "A pestle is in the mortar."
           },
           {
             "Define value:of:asLines:": [
