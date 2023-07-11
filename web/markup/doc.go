@@ -2,7 +2,7 @@
 //
 // If english text is a series characters in left-to-right columns and top-to-bottom rows, then:
 //
-// - Newlines: move to the the start of the next row.
+// - Newlines: move to the start of the next row.
 // - Paragraphs: act as a newline followed by an empty row.
 // - Soft-newlines: at the start of a row, these do nothing. Otherwise they act like a newline.
 // - Soft-paragraphs: after an empty row, these do nothing. Otherwise they act like a paragraph.

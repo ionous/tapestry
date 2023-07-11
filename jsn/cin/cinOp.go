@@ -36,7 +36,7 @@ func (op *Op) AddMarkup(k string, value any) {
 }
 
 // ReadMsg - given a valid Op, split out its call signature and associated parameters.
-// Errors if the number of separators in its sig differs from the the number of parameters in its msg.
+// Errors if the number of separators in its sig differs from the number of parameters in its msg.
 func (op *Op) ReadMsg() (retSig Signature, retArgs []json.RawMessage, err error) {
 	if sig, e := ReadSignature(op.Sig); e != nil {
 		err = e

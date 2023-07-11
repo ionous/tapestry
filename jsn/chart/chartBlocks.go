@@ -58,7 +58,7 @@ func (n *BlockScope) Commit(interface{}) {
 }
 
 func (n *BlockScope) MarshalBlock(newBlock jsn.Block) (err error) {
-	// the callbacks scope makes "newBlock" the the new top block *after* this function
+	// the callbacks scope makes "newBlock" the new top block *after* this function
 	if key := n.atKey; len(key) > 0 {
 		n.atKey = ""
 		// top here is the *parent* block still
