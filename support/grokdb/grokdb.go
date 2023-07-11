@@ -26,7 +26,7 @@ type dbSource struct {
 }
 
 func (d *dbSource) FindArticle(ws grok.Span) (grok.Article, error) {
-	return grok.FindCommonArticles()
+	return grok.FindArticle(ws)
 }
 
 // if the passed words starts with a kind,

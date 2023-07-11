@@ -25,6 +25,13 @@ type Article struct {
 	Count int
 }
 
+func (a Article) String() (ret string) {
+	if a.Match != nil {
+		ret = a.Match.String()
+	}
+	return
+}
+
 type Macro struct {
 	Name     string
 	Match    Match
@@ -52,6 +59,15 @@ type Noun struct {
 type Match interface {
 	String() string
 	NumWords() int // should match strings.Fields(Str)
+}
+
+// returns the size of a match;
+// 0 if the match is nil.
+func MatchLen(m Match) (ret int) {
+	if m != nil {
+		ret = m.NumWords()
+	}
+	return
 }
 
 // Span - implements Match for a chain of individual words.

@@ -41,13 +41,13 @@ Loop:
 		// ex. The box is an openable and a closed.
 		if det, e := known.FindArticle(rest); e != nil {
 			err = e
-		} else if skipDet := numWords(det.Match); skipDet >= len(rest) {
+		} else if skipDet := MatchLen(det.Match); skipDet >= len(rest) {
 			err = makeWordError(rest[0], "expected some sort of name")
 		} else {
 			rest = rest[skipDet:]
 			if trait, e := known.FindTrait(rest); e != nil {
 				err = e
-			} else if skipTrait := numWords(trait); skipTrait > 0 {
+			} else if skipTrait := MatchLen(trait); skipTrait > 0 {
 				// eat any ands between traits
 				if skipAnd, andSep, e := countAnd(rest[skipTrait:]); e != nil {
 					err = e
@@ -64,7 +64,7 @@ Loop:
 				// it might be a trailing kind:
 				if kind, e := known.FindKind(rest); e != nil {
 					err = e
-				} else if skipKind := numWords(kind); skipKind > 0 {
+				} else if skipKind := MatchLen(kind); skipKind > 0 {
 					out.Kind = kind
 					scan += skipKind + skipDet
 					// done.

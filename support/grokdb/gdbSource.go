@@ -22,9 +22,10 @@ func (x *Source) Grok(domain, phrase string) (grok.Results, error) {
 
 func (x *Source) MatchArticle(ws []string) (ret int, err error) {
 	if len(ws) > 0 {
+		// assumes all articles are one word.
 		if s, e := grok.MakeSpan(ws[0]); e != nil {
 			err = e
-		} else if m, e := det.FindMatch(s); e != nil {
+		} else if m, e := grok.FindCommonArticles(s); e != nil {
 			err = e
 		} else if m != nil {
 			ret = m.NumWords()

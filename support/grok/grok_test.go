@@ -27,7 +27,7 @@ type info struct {
 }
 
 func (n *info) FindArticle(ws Span) (ret grok.Article, err error) {
-	return grok.FindCommonArticles(ws)
+	return grok.FindArticle(ws)
 }
 
 func (n *info) FindKind(ws Span) (Match, error) {
