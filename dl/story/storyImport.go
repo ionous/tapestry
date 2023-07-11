@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
@@ -13,7 +14,6 @@ import (
 	"github.com/ionous/errutil"
 
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
-	"git.sr.ht/~ionous/tapestry/dl/literal"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -71,19 +71,22 @@ func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if traits, e := safe.GetTextList(w, op.Traits); e != nil {
 			err = e
-		} else if bareNames, e := readNounsWithProperties(w, nouns.Strings()); e != nil {
-			err = e
 		} else {
+			names := nouns.Strings()
 			if kind := kind.String(); len(kind) > 0 {
-				for _, n := range bareNames {
-					if e := cat.AssertNounKind(n, kind); e != nil {
+				kind := lang.StripArticle(lang.Normalize(kind))
+				for i, name := range names {
+					name := lang.StripArticle(lang.Normalize(name))
+					names[i] = name // replace for the traits loop
+					if e := cat.AssertNounKind(name, kind); e != nil {
 						err = errutil.Append(err, e)
 					}
 				}
 			}
 			if traits := traits.Strings(); len(traits) > 0 {
 				for _, t := range traits {
-					for _, n := range bareNames {
+					t := lang.Normalize(t)
+					for _, n := range names {
 						if e := assertNounValue(cat, B(true), n, t); e != nil {
 							err = errutil.Append(err, e)
 							break // out of the traits to the next noun
@@ -183,7 +186,6 @@ func (op *DeclareStatement) grok(w *weave.Weaver, text string) (err error) {
 		}
 	}
 	return
-
 }
 
 func reduceNouns(ns []grok.Noun) (ret string) {
@@ -236,37 +238,21 @@ func validTargets(ns []grok.Noun, mtype grok.MacroType) (multi bool, err error) 
 
 // add nouns and values
 func genNouns(w *weave.Weaver, ns []grok.Noun, multi bool) (ret g.Value, err error) {
-	cat, domain := w.Catalog, w.Domain
-	names := make([]string, len(ns))
-	var you = grok.Hash("you")
-Out:
-	for i, n := range ns {
-		name := n.Name.String()
-		if n.Name.NumWords() == 1 && n.Name[0].Hash() == you {
-			// tdb: the current thought is that "the player" should be a variable;
-			// currently its an "agent".
-			name = "self"
-		} else if !n.Exact {
-			if fold, e := domain.GetClosestNoun(name); e == nil {
-				name = fold
-			} else if !errors.Is(e, mdl.Missing) {
+	names := make([]string, 0, len(ns))
+	for _, n := range ns {
+		if n.Article.Count > 0 {
+			if ns, e := importCountedNoun(w.Catalog, n); e != nil {
 				err = e
-				break Out
+				break
+			} else {
+				names = append(names, ns...)
 			}
-		}
-		names[i] = name
-		// tbd: might be some nicer, faster ways of handling all this
-		// instead of passing it through the highest level catalog interfaces
-		for _, k := range n.Kinds {
-			if e := cat.AssertNounKind(name, k.String()); e != nil {
+		} else {
+			if name, e := importNamedNoun(w, n); e != nil && !errors.Is(e, mdl.Duplicate) {
 				err = e
-				break Out
-			}
-		}
-		for _, t := range n.Traits {
-			if e := cat.AssertNounValue(name, t.String(), nil, literal.B(true)); e != nil {
-				err = e
-				break Out
+				break
+			} else {
+				names = append(names, name)
 			}
 		}
 	} // end for loop
@@ -294,12 +280,13 @@ func (op *DefineNouns) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if kind, e := safe.GetText(w, op.Kind); e != nil {
 			err = e
-		} else if bareNames, e := readNounsWithProperties(w, nouns.Strings()); e != nil {
-			err = e
 		} else {
+			names := nouns.Strings()
 			if kind := kind.String(); len(kind) > 0 {
-				for _, n := range bareNames {
-					if e := cat.AssertNounKind(n, kind); e != nil {
+				kind := lang.StripArticle(lang.Normalize(kind))
+				for _, noun := range names {
+					noun := lang.StripArticle(lang.Normalize(noun))
+					if e := cat.AssertNounKind(noun, kind); e != nil {
 						err = errutil.Append(err, e)
 					}
 				}
@@ -323,11 +310,11 @@ func (op *NounAssignment) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if lines, e := ConvertText(op.Lines.String()); e != nil {
 			err = e
-		} else if subjects, e := readNouns(w, nouns.Strings()); e != nil {
-			err = e
 		} else {
+			subjects := nouns.Strings()
 			field, lines := field.String(), T(lines)
 			for _, noun := range subjects {
+				noun := lang.StripArticle(lang.Normalize(noun))
 				if e := assertNounValue(cat, lines, noun, field); e != nil {
 					err = errutil.Append(err, e)
 				}
@@ -352,12 +339,10 @@ func (op *DefineRelatives) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if otherNouns, e := safe.GetTextList(w, op.OtherNouns); e != nil {
 			err = e
-		} else if a, e := readNouns(w, nouns.Strings()); e != nil {
-			err = e
-		} else if b, e := readNouns(w, otherNouns.Strings()); e != nil {
-			err = e
 		} else {
+			a, b := nouns.Strings(), otherNouns.Strings()
 			for _, subject := range a {
+				subject := lang.StripArticle(lang.Normalize(subject))
 				if kind := kind.String(); len(kind) > 0 {
 					if e := cat.AssertNounKind(subject, kind); e != nil {
 						err = errutil.New(err, e)
@@ -365,6 +350,7 @@ func (op *DefineRelatives) Weave(cat *weave.Catalog) error {
 				}
 				if rel := relation.String(); len(rel) > 0 {
 					for _, object := range b {
+						object := lang.StripArticle(lang.Normalize(object))
 						if e := cat.AssertRelative(rel, object, subject); e != nil {
 							err = errutil.New(err, e)
 						}
@@ -390,14 +376,13 @@ func (op *DefineOtherRelatives) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if otherNouns, e := safe.GetTextList(w, op.OtherNouns); e != nil {
 			err = e
-		} else if a, e := readNouns(w, nouns.Strings()); e != nil {
-			err = e
-		} else if b, e := readNouns(w, otherNouns.Strings()); e != nil {
-			err = e
 		} else {
+			a, b := nouns.Strings(), otherNouns.Strings()
 			if rel := relation.String(); len(rel) > 0 {
 				for _, subject := range a {
+					subject := lang.StripArticle(lang.Normalize(subject))
 					for _, object := range b {
+						object := lang.StripArticle(lang.Normalize(object))
 						if e := cat.AssertRelative(rel, object, subject); e != nil {
 							err = errutil.New(err, e)
 						}

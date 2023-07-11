@@ -32,10 +32,10 @@ func makeNoun(w *weave.Weaver, name rt.TextEval) (ret helperNoun, err error) {
 	if name, e := safe.GetOptionalText(w, name, ""); e != nil {
 		err = e
 	} else if name := name.String(); len(name) > 0 {
-		if a, e := makeArticleName(w, name); e != nil {
+		if name, e := stripArticle(w, name); e != nil {
 			err = e
-		} else if u := lang.Normalize(a.name); len(u) > 0 {
-			ret = helperNoun{name: a.name, uniform: u}
+		} else if u := lang.Normalize(name); len(u) > 0 {
+			ret = helperNoun{name: name, uniform: u}
 		}
 	}
 	return

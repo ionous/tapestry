@@ -9,6 +9,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave"
 )
 
+// decode and import a story;
+// only checks that the process finishes; doesnt check the results.
 func TestImportStory(t *testing.T) {
 	if curr, e := story.CompactDecode(debug.Blob); e != nil {
 		t.Fatal(e)

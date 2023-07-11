@@ -18,7 +18,7 @@ func TestGrouping(t *testing.T) {
 	var kinds testutil.Kinds
 	var objs testutil.Objects
 	kinds.AddKinds((*Things)(nil), (*Locals)(nil), (*AssignGrouping)(nil), (*CollateGroups)(nil), (*MatchGroups)(nil))
-	numObjects := objs.AddObjects(kinds.Kind("things"), "mildred", "apple", "pen", "thing_1", "thing_2")
+	numObjects := objs.AddObjects(kinds.Kind("things"), "mildred", "apple", "pen", "thing-1", "thing-2")
 
 	// create a new value of type "locals" containing "Objects:objectNames"
 	// Objects   []string
@@ -68,12 +68,12 @@ func TestGrouping(t *testing.T) {
 					},
 					map[string]interface{}{
 						"settings": map[string]interface{}{
-							"name":          "thing_1", // COUNTER:#
+							"name":          "thing-1", // COUNTER:#
 							"label":         "thingies",
 							"innumerable":   "not innumerable",
 							"group options": "without objects",
 						},
-						"objects": []string{"thing_1", "thing_2"}, // COUNTER:#
+						"objects": []string{"thing-1", "thing-2"}, // COUNTER:#
 					},
 				}
 				got := g.RecordsToValue(groups.Records())

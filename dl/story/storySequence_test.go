@@ -39,7 +39,7 @@ func TestImportSequence(t *testing.T) {
 	} else {
 		// validate that it was transformed into this:
 		expect := core.CallCycle{
-			Name: "seq_1",
+			Name: "seq-1",
 			Parts: []rt.TextEval{
 				T("a"),
 				T("b"),

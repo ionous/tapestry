@@ -2,6 +2,8 @@ package weave
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/lang"
+	"github.com/ionous/errutil"
 )
 
 type ScopedNoun struct {
@@ -10,7 +12,15 @@ type ScopedNoun struct {
 	localRecord localRecord // cache for a literal.RecordValue
 }
 
-func (n *ScopedNoun) Kind() (ret string, err error) {
+func (n *ScopedNoun) Domain() (ret string) {
+	return n.domain.name
+}
+
+func (n *ScopedNoun) Name() (ret string) {
+	return n.name
+}
+
+func (n *ScopedNoun) FindKind() (ret string, err error) {
 	d := n.domain
 	err = d.cat.db.QueryRow(`
 		select mk.kind
@@ -25,11 +35,33 @@ func (n *ScopedNoun) Kind() (ret string, err error) {
 	return
 }
 
+func (n *ScopedNoun) AddAliases(at string, aliases []string) (err error) {
+	for _, a := range aliases {
+		a := lang.Normalize(a)
+		if e := n.domain.cat.AddName(n.domain.name, n.name, a, -1, at); e != nil {
+			err = e
+			break
+		}
+	}
+	return
+}
+
+func (n *ScopedNoun) WriteValue(at, field string, path []string, value literal.LiteralValue) (err error) {
+	if value == nil {
+		err = errutil.New("null value", n.name, field)
+	} else if rv, e := n.recordValues(at); e != nil {
+		err = e
+	} else {
+		err = rv.writeValue(n.name, at, field, path, value)
+	}
+	return
+}
+
 //
 func (n *ScopedNoun) recordValues(at string) (ret localRecord, err error) {
 	if n.localRecord.isValid() {
 		ret = n.localRecord
-	} else if kind, e := n.Kind(); e != nil {
+	} else if kind, e := n.FindKind(); e != nil {
 		err = e
 	} else {
 		k := kindCat{domain: n.domain, kind: kind}

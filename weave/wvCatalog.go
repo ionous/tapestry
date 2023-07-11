@@ -190,7 +190,7 @@ func (cat *Catalog) AssertAlias(opShortName string, opAliases ...string) error {
 		d, at := ctx.Domain, ctx.At
 		if shortName, ok := UniformString(opShortName); !ok {
 			err = errutil.New("invalid name", opShortName)
-		} else if n, e := d.getClosestNoun(shortName); e != nil {
+		} else if n, e := d.GetClosestNoun(shortName); e != nil {
 			err = e
 		} else {
 			for _, a := range opAliases {
@@ -332,18 +332,15 @@ func (cat *Catalog) AssertNounKind(opNoun, opKind string) error {
 			err = InvalidString(opNoun)
 		} else if _, kind := d.UniformDeterminer(opKind); len(kind) == 0 {
 			err = InvalidString(opKind)
-		} else if e := cat.AddNoun(d.name, noun, kind, at); e != nil {
-			err = e
 		} else {
-			cat.domainNouns[domainNoun{d.name, noun}] = &ScopedNoun{domain: d, name: noun}
-			err = d.makeNames(noun, name, at)
+			_, err = d.AddNoun(name, noun, kind, at)
 		}
 		return
 	})
 }
 
 // note: values are written per *noun* not per domain....
-func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, opValue literal.LiteralValue) error {
+func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, value literal.LiteralValue) error {
 	return cat.Schedule(assert.RequireNames, func(ctx *Weaver) (err error) {
 		d, at := ctx.Domain, ctx.At
 		if noun, ok := UniformString(opNoun); !ok {
@@ -352,16 +349,10 @@ func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, opV
 			err = InvalidString(opField)
 		} else if path, e := UniformStrings(opPath); e != nil {
 			err = e
-		} else if noun, e := d.getClosestNoun(noun); e != nil {
+		} else if n, e := d.GetClosestNoun(noun); e != nil {
 			err = e
-		} else if n, ok := cat.domainNouns[domainNoun{noun.domain, noun.name}]; !ok {
-			err = errutil.Fmt("unexpected noun %q in domain %q", noun.name, noun.domain)
-		} else if rv, e := n.recordValues(at); e != nil {
-			err = e
-		} else if value := opValue; value == nil {
-			err = errutil.New("null value", opNoun, opField)
 		} else {
-			err = rv.writeValue(noun.name, at, field, path, value)
+			err = n.WriteValue(at, field, path, value)
 		}
 		return
 	})
@@ -493,9 +484,9 @@ func (cat *Catalog) AssertRelative(opRel, opNoun, opOtherNoun string) error {
 			err = InvalidString(opOtherNoun)
 		} else if rel, ok := UniformString(opRel); !ok {
 			err = InvalidString(opRel)
-		} else if first, e := d.getClosestNoun(noun); e != nil {
+		} else if first, e := d.GetClosestNoun(noun); e != nil {
 			err = e
-		} else if second, e := d.getClosestNoun(otherNoun); e != nil {
+		} else if second, e := d.GetClosestNoun(otherNoun); e != nil {
 			err = e
 		} else {
 			err = cat.AddPair(d.name, rel, first.name, second.name, at)

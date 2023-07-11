@@ -1,52 +1,17 @@
 package story
 
 import (
-	"strings"
+	"errors"
 	"unicode"
 	"unicode/utf8"
 
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/support/grok"
+	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
-	"github.com/ionous/errutil"
 )
-
-// readNounsWithProperties -
-// reads ancillary information about nouns from their names and declares properties for them.
-// ex. proper or plural names, etc.
-func readNounsWithProperties(w *weave.Weaver, nouns []string) (ret []string, err error) {
-	ret = make([]string, 0, len(nouns))
-	for _, noun := range nouns {
-		if next, e := importNoun(w, noun, ret); e != nil {
-			err = e
-			break
-		} else {
-			ret = next
-		}
-	}
-	return
-}
-
-// readNouns - reads noun names without declaring any properties....
-// fix? unless they are counted nouns ( for backwards compatibility of "two cats whereabouts the kitchen" )
-func readNouns(w *weave.Weaver, nouns []string) (ret []string, err error) {
-	ret = make([]string, 0, len(nouns))
-	for _, noun := range nouns {
-		if a, e := makeArticleName(w, noun); e != nil {
-			err = e
-			break
-		} else if a.count == 0 {
-			ret = append(ret, a.name)
-		} else if ns, e := importCountedNoun(w.Catalog, a.count, a.name); e == nil {
-			ret = append(ret, ns...)
-		} else {
-			err = errutil.New("couldn't import counted nouns", a.count, a.name, e)
-			break
-		}
-	}
-	return
-}
 
 // helper to simplify setting the values of nouns
 func assertNounValue(a assert.Assertions, val literal.LiteralValue, noun string, path ...string) error {
@@ -55,79 +20,121 @@ func assertNounValue(a assert.Assertions, val literal.LiteralValue, noun string,
 	return a.AssertNounValue(noun, field, parts, val)
 }
 
-func importNoun(w *weave.Weaver, noun string, nouns []string) (ret []string, err error) {
-	if a, e := makeArticleName(w, noun); e != nil {
+func stripArticle(w *weave.Weaver, name string) (ret string, err error) {
+	if parts, e := grok.MakeSpan(name); e != nil {
 		err = e
-	} else if a.count > 0 {
-		if ns, e := importCountedNoun(w.Catalog, a.count, a.name); e != nil {
-			err = e
-		} else {
-			ret = append(nouns, ns...)
-		}
+	} else if len(parts) <= 1 {
+		ret = name
+	} else if a, e := grok.FindArticle(parts); e != nil {
+		err = e
 	} else {
-		if a.isProper() {
-			err = assertNounValue(w.Catalog, B(true), a.name, "proper named")
-		} else if customDet, ok := a.customArticle(); ok && len(customDet) > 0 {
-			err = assertNounValue(w.Catalog, T(customDet), a.name, "indefinite article")
-		}
-		ret = append(nouns, a.name)
-	}
-	return
-}
-
-type articleName struct {
-	article, name string
-	count         int
-}
-
-func makeArticleName(w *weave.Weaver, name string) (ret articleName, err error) {
-	parts := strings.Fields(strings.TrimSpace(name))
-	if last := len(parts) - 1; last == 0 {
-		ret = articleName{
-			name: parts[0],
-		}
-	} else if last > 0 {
-		first, rest := parts[0], parts[1:]
-		if count, counted := lang.WordsToNum(first); counted && count > 0 {
-			ret = articleName{
-				count: count,
-				name:  strings.Join(rest, " "),
-			}
-		} else if cnt, e := w.MatchArticle(parts); e != nil {
-			err = e
-		} else if cnt == len(parts) {
-			err = errutil.New("missing name from", name)
-		} else {
-			ret = articleName{
-				article: strings.Join(parts[:cnt], " "),
-				name:    strings.Join(parts[cnt:], " "),
-			}
-		}
+		words := parts[grok.MatchLen(a.Match):]
+		ret = words.String()
 	}
 	return
 }
 
 // this isn't a correct test... but it will work for now...
-func (an *articleName) isProper() (okay bool) {
-	if n := an.name; len(n) > 1 || an.article == "our" {
-		first, _ := utf8.DecodeRuneInString(n)
+func isProper(article grok.Article, name string) (okay bool) {
+	a := lang.Normalize(article.String())
+	if len(name) > 1 || a == "our" {
+		first, _ := utf8.DecodeRuneInString(name)
 		okay = unicode.ToUpper(first) == first
 	}
 	return
 }
 
-func (an *articleName) customArticle() (ret string, okay bool) {
-	switch an.article {
+func getCustomArticle(article grok.Article) (ret string) {
+	switch a := lang.Normalize(article.String()); a {
 	case "a", "an", "the":
 	default:
-		ret, okay = an.article, true
+		ret = a
 	}
 	return
 }
 
-// ex. "two triangles" -> triangle is a kind of thing
-func importCountedNoun(cat *weave.Catalog, cnt int, kindOrKinds string) (ret []string, err error) {
-	if cnt > 0 {
+func importNamedNoun(w *weave.Weaver, n grok.Noun) (ret string, err error) {
+	var noun *weave.ScopedNoun
+	og := n.Name.String()
+	if name := lang.Normalize(og); name == "you" {
+		// tdb: the current thought is that "the player" should be a variable;
+		// currently its an "agent".
+		noun, err = w.Domain.GetExactNoun("self")
+	} else {
+		if n.Exact { // ex. ".... called the spatula."
+			noun, err = w.Domain.GetExactNoun(name)
+		} else {
+			// if it doesnt exist; we create it.
+			if fold, e := w.Domain.GetClosestNoun(name); e != nil {
+				err = e
+			} else {
+				noun = fold
+			}
+		}
+		if errors.Is(err, mdl.Missing) {
+			// ugh
+			base := "things"
+			if len(n.Kinds) > 0 {
+				base = lang.Normalize(n.Kinds[0].String())
+			}
+			noun, err = w.Domain.AddNoun(og, name, base, w.At)
+		}
+	}
+	// assign kinds
+	if err == nil {
+		for _, k := range n.Kinds {
+			k := lang.Normalize(k.String())
+			if e := w.Catalog.AddNoun(noun.Domain(), noun.Name(), k, w.At); e != nil && !errors.Is(e, mdl.Duplicate) {
+				err = e
+				break
+			}
+		}
+	}
+	// add articles:
+	if err == nil {
+		if isProper(n.Article, og) {
+			if e := noun.WriteValue(w.At, "proper named", nil, B(true)); e != nil && !errors.Is(e, mdl.Duplicate) {
+				err = e
+			}
+		} else if a := getCustomArticle(n.Article); len(a) > 0 {
+			if e := noun.WriteValue(w.At, "indefinite article", nil, T(a)); e != nil && !errors.Is(e, mdl.Duplicate) {
+				err = e
+			}
+		}
+	}
+	// add traits:
+	if err == nil {
+		err = assignTraits(w, noun, n.Traits)
+	}
+	// return
+	if err == nil {
+		ret = noun.Name()
+	}
+	return
+}
+
+func assignTraits(w *weave.Weaver, noun *weave.ScopedNoun, traits []grok.Match) (err error) {
+	for _, t := range traits {
+		// FIX: this passes through "GetClosestNoun" which seems wrong here.
+		// the issue is the noun might not exist;
+		// so we'd have to break some of this open to handle it.
+		if e := noun.WriteValue(w.At, t.String(), nil, B(true)); e != nil && !errors.Is(e, mdl.Duplicate) {
+			err = e
+			break
+		}
+	}
+	return
+}
+
+// ex. "two triangles"
+// - adds ( and returns ) nouns: triangle_1, triangle_2, etc. of kind "triangle/s"
+// - uses "triangle" as an alias and printed name for each of the new nouns
+// - flags them all as "counted.
+// - ensures "triangle/s" are things
+func importCountedNoun(cat *weave.Catalog, noun grok.Noun) (ret []string, err error) {
+	// ..kindOrKinds string, article grok.Article, traits []grok.Match
+	if cnt := noun.Article.Count; cnt > 0 {
+		kindOrKinds := lang.Normalize(noun.Kinds[0].String())
 		// generate unique names for each of the counted nouns.
 		// fix: we probably want nouns to "stack", and be have individually duplicated objects.
 		// ie. a single stackable "cats" with a value of 5, rather than cat_1, cat_2, etc.
@@ -151,17 +158,20 @@ func importCountedNoun(cat *weave.Catalog, cnt int, kindOrKinds string) (ret []s
 				err = e
 			} else {
 				for _, n := range names {
-					if e := cat.AssertNounKind(n, kindOrKinds); e != nil {
+					if n, e := w.Domain.AddNoun(n, n, kindOrKinds, w.At); e != nil {
 						err = e
-					} else if e := cat.AssertAlias(n, kind); e != nil {
-						err = e // ^ so that typing "triangle" means "triangles_1"
+					} else if e := cat.AddName(n.Domain(), n.Name(), kind, -1, w.At); e != nil {
+						err = e // ^ so that typing "triangle" means "triangles-1"
 						break
-					} else if e := assertNounValue(cat, B(true), n, "counted"); e != nil {
+					} else if e := n.WriteValue(w.At, "counted", nil, B(true)); e != nil {
 						err = e
 						break
-					} else if e := assertNounValue(cat, T(kind), n, "printed name"); e != nil {
-						err = e // so that printing "triangles_1" yields "triangle"
+					} else if e := n.WriteValue(w.At, "printed name", nil, T(kind)); e != nil {
+						err = e // so that printing "triangles-1" yields "triangle"
 						break   // FIX: itd make a lot more sense to have a default value for the kind
+					} else if e := assignTraits(w, n, noun.Traits); e != nil {
+						err = e
+						break
 					}
 				}
 			}

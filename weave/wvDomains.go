@@ -77,21 +77,27 @@ func (d *Domain) schedule(at string, when assert.Phase, what func(*Weaver) error
 	return
 }
 
-func (d *Domain) GetClosestNoun(name string) (ret string, err error) {
-	if x, e := d.getClosestNoun(name); e != nil {
-		err = e
-	} else {
-		ret = x.name
-	}
-	return
+// find the noun with the closest name in this scope
+// skips aliases for the sake of backwards compatibility:
+// there should be a difference between "a noun is known as"
+// and "understand this word by the player as" -- and currently there's not.
+func (d *Domain) GetExactNoun(name string) (ret *ScopedNoun, err error) {
+	return d.findNoun(name, `
+	select mn.noun, mn.domain  
+	from mdl_noun mn
+	join domain_tree dt
+		on (dt.uses = mn.domain)
+	where base = ?1
+	and mn.noun = ?2
+	limit 1`)
 }
 
 // find the noun with the closest name in this scope
 // skips aliases for the sake of backwards compatibility:
 // there should be a difference between "a noun is known as"
 // and "understand this word by the player as" -- and currently there's not.
-func (d *Domain) getClosestNoun(name string) (ret struct{ name, domain string }, err error) {
-	if e := d.cat.db.QueryRow(`
+func (d *Domain) GetClosestNoun(name string) (ret *ScopedNoun, err error) {
+	return d.findNoun(name, `
 	select mn.noun, mn.domain  
 	from mdl_name my 
 	join mdl_noun mn
@@ -102,10 +108,19 @@ func (d *Domain) getClosestNoun(name string) (ret struct{ name, domain string },
 	and my.name = ?2
 	and my.rank >= 0
 	order by my.rank, my.rowid asc
-	limit 1`, d.name, name).Scan(&ret.name, &ret.domain); e == sql.ErrNoRows {
+	limit 1`)
+}
+
+func (d *Domain) findNoun(name, q string) (ret *ScopedNoun, err error) {
+	var noun struct{ name, domain string }
+	if e := d.cat.db.QueryRow(q, d.name, name).Scan(&noun.name, &noun.domain); e == sql.ErrNoRows {
 		err = errutil.Fmt("%w couldn't find a noun named %s", mdl.Missing, name)
 	} else if e != nil {
 		err = errutil.New("database error", e)
+	} else if n, ok := d.cat.domainNouns[domainNoun{noun.domain, noun.name}]; !ok {
+		err = errutil.Fmt("unexpected noun %q in domain %q", noun.name, noun.domain)
+	} else {
+		ret = n
 	}
 	return
 }
@@ -122,6 +137,19 @@ func (d *Domain) UniformDeterminer(word string) (retDet, retWord string) {
 	det, name := lang.SliceArticle(word)
 	if name, ok := UniformString(name); ok {
 		retDet, retWord = det, name
+	}
+	return
+}
+
+func (d *Domain) AddNoun(long, short, kind, at string) (ret *ScopedNoun, err error) {
+	if e := d.cat.AddNoun(d.name, short, kind, at); e != nil {
+		err = e
+	} else if e := d.makeNames(short, long, at); e != nil {
+		err = e
+	} else {
+		out := &ScopedNoun{domain: d, name: short}
+		d.cat.domainNouns[domainNoun{d.name, short}] = out
+		ret = out
 	}
 	return
 }

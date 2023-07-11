@@ -10,5 +10,5 @@ type Counters map[string]uint64
 func (m *Counters) Next(name string) string {
 	c := (*m)[name] + 1
 	(*m)[name] = c // COUNTER:#
-	return name + "_" + strconv.FormatUint(c, 36)
+	return name + "-" + strconv.FormatUint(c, 36)
 }

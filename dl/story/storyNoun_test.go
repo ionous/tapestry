@@ -101,7 +101,7 @@ func concat(els ...[]eph.Ephemera) (out []eph.Ephemera) {
 	return
 }
 
-// fix? previously the name would have been "triangle_1" now its "triangles_1"
+// fix? previously the name would have been "triangle_1" now its "triangles-1"
 func countedNouns(kind string, cnt int) (out []eph.Ephemera) {
 	out = append(out, &eph.Kinds{
 		Kind:     kind,
