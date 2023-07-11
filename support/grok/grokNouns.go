@@ -26,7 +26,7 @@ func grokNouns(known Grokker, out *[]Noun, ws []Word, flag genFlag) (err error) 
 	for nextName := ws; len(nextName) > 0; {
 		if det, e := known.FindArticle(nextName); e != nil {
 			err = e
-		} else if skip := numWords(det); skip >= len(nextName) {
+		} else if skip := numWords(det.Match); skip >= len(nextName) {
 			err = makeWordError(nextName[0], "expected some sort of name")
 		} else {
 			name := nextName[skip:]
@@ -50,7 +50,7 @@ func grokNouns(known Grokker, out *[]Noun, ws []Word, flag genFlag) (err error) 
 					}
 				} else if called := len(postTraits) > 0 && postTraits[0].equals(keywords.called); !called {
 					// case 2: an anonymous kind.
-					name, det = nil, nil
+					name, det = nil, Article{}
 
 				} else if d, n, e := chopName(known, postTraits[1:]); e != nil {
 					err = e
@@ -78,11 +78,11 @@ func grokNouns(known Grokker, out *[]Noun, ws []Word, flag genFlag) (err error) 
 				} else {
 					// turn the name into a noun:
 					*out = append(*out, Noun{
-						Det:    det,
-						Name:   name,
-						Traits: ts.Traits,
-						Kinds:  ts.kinds(),
-						Exact:  exact,
+						Article: det,
+						Name:    name,
+						Traits:  ts.Traits,
+						Kinds:   ts.kinds(),
+						Exact:   exact,
 					})
 				}
 			}
@@ -93,12 +93,12 @@ func grokNouns(known Grokker, out *[]Noun, ws []Word, flag genFlag) (err error) 
 
 // the entire passed text is a name ( possibly with a prefix to start )
 // errors only if the name is completely empty.
-func chopName(known Grokker, ws []Word) (retDet Match, retName []Word, err error) {
+func chopName(known Grokker, ws []Word) (retDet Article, retName []Word, err error) {
 	if cnt := len(ws); cnt == 0 {
 		err = errutil.New("empty name")
 	} else if det, e := known.FindArticle(ws); e != nil {
 		err = e
-	} else if skip := numWords(det); skip >= len(ws) {
+	} else if skip := numWords(det.Match); skip >= len(ws) {
 		err = makeWordError(ws[0], "no name found")
 	} else {
 		retDet, retName = det, ws[skip:]

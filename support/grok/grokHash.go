@@ -64,7 +64,8 @@ Loop:
 			flushWord(i, i+1, keywords.comma)
 			wordStart = -1
 
-		case unicode.IsPunct(r):
+		case r != '-' && unicode.IsPunct(r):
+			// alt: eat like normalize does?
 			err = errutil.New("unexpected punctuation at", i)
 			break Loop
 
@@ -99,9 +100,18 @@ func sumReset(w hash.Hash64) uint64 {
 func Hash(s string) uint64 {
 	w, rbs := fnv.New64a(), makeRuneWriter()
 	for _, r := range s {
+		r := unicode.ToLower(r)
 		rbs.writeRune(r, w)
 	}
 	return w.Sum64()
+}
+
+func Hashes(strs []string) []uint64 {
+	out := make([]uint64, len(strs))
+	for i, s := range strs {
+		out[i] = Hash(s)
+	}
+	return out
 }
 
 type runeWriter []byte

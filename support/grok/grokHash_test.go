@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/support/grok"
-	"git.sr.ht/~ionous/tapestry/support/groktest"
 )
 
 // Test that the hashing properly strips spaces, lowers phrases, and produces the right ranges.
@@ -98,9 +97,9 @@ func TestMatching(t *testing.T) {
 		2,
 		-1,
 	}
-	prefixList := groktest.PanicSpans(prefixes...)
+	prefixList := grok.PanicSpans(prefixes...)
 	for i, w := range tests {
-		h := groktest.PanicSpan(w)
+		h := grok.PanicSpan(w)
 		matched, skip := prefixList.FindPrefix(h)
 		if skip == 0 { // shh...
 			matched = -1

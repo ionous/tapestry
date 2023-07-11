@@ -5,7 +5,7 @@ import "strings"
 type Grokker interface {
 	// if the passed words starts with a determiner,
 	// return the number of words in  that match.
-	FindArticle(Span) (Match, error)
+	FindArticle(Span) (Article, error)
 
 	// if the passed words starts with a kind,
 	// return the number of words in  that match.
@@ -17,10 +17,15 @@ type Grokker interface {
 
 	// if the passed words starts with a macro,
 	// return information about that match
-	FindMacro(Span) (MacroInfo, error)
+	FindMacro(Span) (Macro, error)
 }
 
-type MacroInfo struct {
+type Article struct {
+	Match Match
+	Count int
+}
+
+type Macro struct {
 	Name     string
 	Match    Match
 	Type     MacroType
@@ -30,15 +35,15 @@ type MacroInfo struct {
 type Results struct {
 	Sources []Noun
 	Targets []Noun // usually just one, except for nxm relations
-	Macro   MacroInfo
+	Macro   Macro
 }
 
 type Noun struct {
-	Det    Match
-	Name   Span
-	Exact  bool // when the phrase contains "called", we shouldn't fold the noun into other similarly named nouns.
-	Traits []Match
-	Kinds  []Match // it's possible, if rare, to apply multiple kinds
+	Article Article
+	Name    Span
+	Exact   bool // when the phrase contains "called", we shouldn't fold the noun into other similarly named nouns.
+	Traits  []Match
+	Kinds   []Match // it's possible, if rare, to apply multiple kinds
 	// ex. The container called the coffin is a closed openable thing.
 }
 

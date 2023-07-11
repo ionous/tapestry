@@ -3,7 +3,7 @@ package grok
 import "github.com/ionous/errutil"
 
 // `In](ws: the coffin> are <some coins, a notebook, and a gripping hand.)`,
-func macroPhrase(known Grokker, macro MacroInfo, ws []Word) (ret Results, err error) {
+func macroPhrase(known Grokker, macro Macro, ws []Word) (ret Results, err error) {
 	out := Results{Macro: macro}
 	sources, targets := &out.Sources, &out.Targets
 	at, cnt := 0, len(ws)

@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/grok"
-	"git.sr.ht/~ionous/tapestry/support/groktest"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"github.com/ionous/errutil"
 )
@@ -26,17 +25,9 @@ type dbSource struct {
 	aspectPath, patternPath string
 }
 
-func (d *dbSource) FindArticle(ws grok.Span) (grok.Match, error) {
-	return det.FindMatch(ws)
+func (d *dbSource) FindArticle(ws grok.Span) (grok.Article, error) {
+	return grok.FindCommonArticles()
 }
-
-// for now, these are fixed.
-// when the author specifies some particular indefinite article for a noun
-// that article only gets used for printing the noun;
-// it doesn't enhance the parsing of the story.
-// it would take some work to lightly hold the relation between a name and an article
-// then parse a sentence matching names to nouns in the grok
-var det = groktest.PanicSpans("the", "a", "an", "some", "our")
 
 // if the passed words starts with a kind,
 // return the number of words in  that match.
@@ -93,7 +84,7 @@ const blank = " "
 const space = ' '
 
 func (d *dbSource) getPatternPath() (ret string, err error) {
-	return getPath(d.db, kindsOf.Macro, &d.patternPath)
+	return getPath(d.db, kindsOf.Pattern, &d.patternPath)
 }
 
 func (d *dbSource) getAspectPath() (ret string, err error) {
@@ -171,7 +162,7 @@ func (d *dbSource) FindTrait(ws grok.Span) (ret grok.Match, err error) {
 
 // if the passed words starts with a macro,
 // return information about that match
-func (d *dbSource) FindMacro(ws grok.Span) (ret grok.MacroInfo, err error) {
+func (d *dbSource) FindMacro(ws grok.Span) (ret grok.Macro, err error) {
 	if m, e := d.findMacro(ws); e != nil && e != sql.ErrNoRows {
 		err = e
 	} else if e == nil {
@@ -180,7 +171,7 @@ func (d *dbSource) FindMacro(ws grok.Span) (ret grok.MacroInfo, err error) {
 	return
 }
 
-func (d *dbSource) findMacro(ws grok.Span) (ret grok.MacroInfo, err error) {
+func (d *dbSource) findMacro(ws grok.Span) (ret grok.Macro, err error) {
 	// uses spaces instead of underscores...
 	words := strings.ToLower(ws.String()) + blank
 	var found struct {
@@ -242,7 +233,7 @@ func (d *dbSource) findMacro(ws grok.Span) (ret grok.MacroInfo, err error) {
 		}
 		if err == nil {
 			width := strings.Count(found.phrase, blank) + 1
-			ret = grok.MacroInfo{
+			ret = grok.Macro{
 				Name:     found.name,
 				Match:    grok.Span(ws[:width]),
 				Type:     flag,

@@ -41,7 +41,7 @@ Loop:
 		// ex. The box is an openable and a closed.
 		if det, e := known.FindArticle(rest); e != nil {
 			err = e
-		} else if skipDet := numWords(det); skipDet >= len(rest) {
+		} else if skipDet := numWords(det.Match); skipDet >= len(rest) {
 			err = makeWordError(rest[0], "expected some sort of name")
 		} else {
 			rest = rest[skipDet:]

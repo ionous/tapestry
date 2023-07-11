@@ -16,6 +16,21 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		skip   any
 	}{
 		{
+			test: `Two cats are in the kitchen.`,
+			result: map[string]any{
+				"macro": "contain",
+				"targets": []map[string]any{{
+					"det":   "Two",
+					"name":  "cats",
+					"count": 2,
+				}},
+				"sources": []map[string]any{{
+					"det":  "the",
+					"name": "kitchen",
+				}},
+			},
+		},
+		{
 			test: `Hershel is carrying scissors and a pen.`,
 			result: map[string]any{
 				"macro": "carry",
@@ -125,6 +140,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 				}},
 			},
 		},
+		// FIX -- "kind of" is meant for *kinds*
 		// kind of: adding trailing properties
 		// "is" left of macro
 		{

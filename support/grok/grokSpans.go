@@ -1,34 +1,16 @@
-package groktest
+package grok
 
-import "git.sr.ht/~ionous/tapestry/support/grok"
+type SpanList [][]Word
 
-type SpanList [][]grok.Word
-
-func PanicSpan(s string) grok.Span {
-	out, e := grok.MakeSpan(s)
-	if e != nil {
-		panic(e)
-	}
-	return out
-}
-
-func PanicSpans(strs ...string) (out SpanList) {
-	out = make(SpanList, len(strs))
-	for i, str := range strs {
-		out[i] = PanicSpan(str)
-	}
-	return
-}
-
-func (ws SpanList) FindMatch(words grok.Span) (ret grok.Match, none error) {
+func (ws SpanList) FindMatch(words Span) (ret Match, none error) {
 	if i, skip := ws.FindPrefix(words); skip > 0 {
-		ret = grok.Span(ws[i])
+		ret = Span(ws[i])
 	}
 	return
 }
 
 // find the index and length of a prefix matching the passed words
-func (ws SpanList) FindPrefix(words grok.Span) (retWhich int, retLen int) {
+func (ws SpanList) FindPrefix(words Span) (retWhich int, retLen int) {
 	if wordCount := len(words); wordCount > 0 {
 		for prefixIndex, prefix := range ws {
 			// every Word in el has to exist in words for it to be a prefix
@@ -47,6 +29,22 @@ func (ws SpanList) FindPrefix(words grok.Span) (retWhich int, retLen int) {
 				}
 			}
 		}
+	}
+	return
+}
+
+func PanicSpan(s string) Span {
+	out, e := MakeSpan(s)
+	if e != nil {
+		panic(e)
+	}
+	return out
+}
+
+func PanicSpans(strs ...string) (out SpanList) {
+	out = make(SpanList, len(strs))
+	for i, str := range strs {
+		out[i] = PanicSpan(str)
 	}
 	return
 }
