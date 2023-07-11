@@ -24,19 +24,10 @@
         "name of a kind",
         [
           {
-            "Define nouns:as:": [
-              [
-                "the named object",
-                "the unnamed object"
-              ],
-              "things"
-            ]
+            "Declare:": "The named object and the unnamed object are things."
           },
           {
-            "Define nouns:traits:": [
-              "the unnamed object",
-              "privately named"
-            ]
+            "Declare:": "The unnamed object is privately named."
           }
         ],
         [

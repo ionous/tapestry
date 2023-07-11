@@ -5,11 +5,8 @@
         "reach test",
         "Kitchenette",
         [
-          {
-            "Define nouns:as:": [
-              "an other worldly cloak",
-              "a thing"
-            ]
+        	{
+          	"Declare:" : "An other worldly cloak is a thing."
           },
           {
             "Comment:": "it is nowhere."

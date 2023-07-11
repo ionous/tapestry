@@ -4,27 +4,23 @@
       "Test:withScene:do:": [
         "grouping tests",
         [
-          {
-            "Define nouns:as:": [
-              "Clarence",
-              "an actor"
-            ]
+        	{
+            "Declare:": "The lab is a room."
           },
           {
-            "Define nouns:as:": [
-              "two cats",
+            "Declare:": "Clarence is an actor."
+          },
+          {
+            "Define kinds:as:": [
+              "cats",
               "animals"
             ]
           },
           {
-            "Define nouns:as:": [
-              [
-                "an empire apple",
-                "a pen",
-                "two triangles"
-              ],
-              "props"
-            ]
+            "Declare:": "Two cats are in the lab."
+          },
+          {
+            "Declare:": "An empire apple, a pen, and two triangles are props in the lab."
           },
           {
             "Define kinds:as:": [
@@ -39,22 +35,7 @@
             ]
           },
           {
-            "Define kinds:as:": [
-              "cats",
-              "animal"
-            ]
-          },
-          {
-            "Define nouns:as:": [
-              [
-                "an X",
-                "a W",
-                "an F",
-                "a Y",
-                "a Z"
-              ],
-              "scrabble tiles"
-            ]
+            "Declare:": "An X, a W, an F, a Y, and a Z are scrabble tiles in the lab."
           },
           {
             "Comment:": [
@@ -115,10 +96,10 @@
                       "Clarence",
                       "apple",
                       "pen",
-                      "triangles_1",
-                      "triangles_2",
-                      "cats_1",
-                      "cats_2"
+                      "triangles-1",
+                      "triangles-2",
+                      "cats-1",
+                      "cats-2"
                     ]
                   }
                 },
@@ -141,10 +122,10 @@
                       "Clarence",
                       "apple",
                       "pen",
-                      "triangles_1",
-                      "triangles_2",
-                      "cats_1",
-                      "cats_2"
+                      "triangles-1",
+                      "triangles-2",
+                      "cats-1",
+                      "cats-2"
                     ]
                   }
                 },
@@ -278,8 +259,8 @@
                             "Clarence",
                             "apple",
                             "pen",
-                            "triangles_1",
-                            "triangles_2"
+                            "triangles-1",
+                            "triangles-2"
                           ]
                         }
                       },
@@ -292,7 +273,7 @@
                             "Clarence",
                             "apple",
                             "pen",
-                            "triangles_1"
+                            "triangles-1"
                           ]
                         }
                       }
@@ -393,8 +374,8 @@
                             "Clarence",
                             "apple",
                             "pen",
-                            "triangles_1",
-                            "triangles_2"
+                            "triangles-1",
+                            "triangles-2"
                           ]
                         }
                       },
@@ -793,7 +774,7 @@
                             "Clarence",
                             "apple",
                             "pen",
-                            "triangles_1"
+                            "triangles-1"
                           ]
                         }
                       },
@@ -806,8 +787,8 @@
                             "Clarence",
                             "apple",
                             "pen",
-                            "triangles_1",
-                            "triangles_2"
+                            "triangles-1",
+                            "triangles-2"
                           ]
                         }
                       }

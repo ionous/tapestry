@@ -5,26 +5,12 @@
         "wearing test",
         "Kitchenette",
         [
-          {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              [
-                "the flower",
-                "the knife"
-              ],
-              "self"
-            ]
-          },
-          {
-            "--": ""
-          },
-          {
-            "Define relativeTo:nouns:otherNouns:": [
-              "whereabouts",
-              "the purse",
-              "the kitchen"
-            ]
-          }
+        	{
+        		"Declare:": "You are carrying the flower and the knife."
+        	},
+        	{
+        		"Declare:": "The purse is in the kitchen."
+        	}
         ],
         [
           {

@@ -79,11 +79,8 @@
       "Test:withScene:do:": [
         "print several",
         [
-          {
-            "Define nouns:as:": [
-              "the books",
-              "thing"
-            ]
+        	{
+            "Declare:": "The books are things."
           }
         ],
         [

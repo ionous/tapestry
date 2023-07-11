@@ -6,90 +6,34 @@
         "thingaverse",
         [
           {
-            "Define nouns:as:": [
-              "Mildred",
-              "an actor"
-            ]
+            "Declare:": "Mildred is an actor."
           },
           {
-            "Define nouns:as:": [
-              "the table",
-              "a supporter"
-            ]
+            "Declare:": "The table is a supporter."
           },
           {
-            "Define nouns:as:": [
-              "the lab",
-              "room"
-            ]
+            "Declare:": "The lab is a room."
           },
           {
-            "Define nouns:as:": [
-              "the basket",
-              "container"
-            ]
+            "Declare:": "The basket is a container."
           },
           {
-            "Define nouns:as:": [
-              [
-                "the scalpel",
-                "an empire apple",
-                "a pen"
-              ],
-              "props"
-            ]
+            "Declare:": "An scalpel, an empire apple, and a pen are props."
           },
           {
-            "Define nouns:relativeTo:otherNouns:": [
-              [
-                "the table",
-                "Mildred"
-              ],
-              "whereabouts",
-              "the lab"
-            ]
+            "Declare:": "Mildred is in the lab."
           },
           {
-            "--": ""
+            "Declare:": "The basket is on the table."
           },
           {
-            "Define nouns:relativeTo:otherNouns:": [
-              "the basket",
-              "whereabouts",
-              "the table"
-            ]
+            "Declare:": "Mildred is carrying the pen and the scalpel."
           },
           {
-            "--": ""
+            "Declare:": "The pen is worn."
           },
           {
-            "Define nouns:relativeTo:otherNouns:": [
-              [
-                "the scalpel",
-                "the pen"
-              ],
-              "whereabouts",
-              "Mildred"
-            ]
-          },
-          {
-            "--": ""
-          },
-          {
-            "Define nouns:traits:": [
-              "the pen",
-              "worn"
-            ]
-          },
-          {
-            "--": ""
-          },
-          {
-            "Define nouns:relativeTo:otherNouns:": [
-              "the apple",
-              "whereabouts",
-              "the basket"
-            ]
+            "Declare:": "The apple is in the basket."
           }
         ],
         [

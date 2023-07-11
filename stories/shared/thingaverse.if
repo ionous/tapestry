@@ -5,95 +5,37 @@
         "thingaverse",
         [
           {
-            "Define nouns:as:": [
-              "Mildred",
-              "an actor"
-            ]
+            "Declare:": "Mildred is an actor."
           },
           {
-            "Define nouns:as:": [
-              [
-                "an empire apple",
-                "a pen"
-              ],
-              "props"
-            ]
+            "Declare:": "An empire apple, and a pen are props."
           },
           {
-            "Define nouns:as:traits:": [
-              "the flower",
-              "a thing",
-              [
-                "wearable",
-                "worn"
-              ]
-            ]
+            "Declare:": "The flower is a wearable, worn thing."
           },
           {
-            "Define nouns:as:traits:": [
-              "the headlamp",
-              "a thing",
-              [
-                "lit",
-                "wearable",
-                "worn"
-              ]
-            ]
+            "Declare:": "The headlamp is a lit, wearable, worn thing."
           },
           {
-            "Define nouns:as:traits:": [
-              "the flashlight",
-              "a thing",
-              "lit"
-            ]
+            "Declare:": "The flashlight is a lit thing."
           },
           {
-            "Define nouns:as:traits:": [
-              "the book of wisdom",
-              "a container",
-              [
-                "openable",
-                "open"
-              ]
-            ]
+            "Declare:": "The book of wisdom is an openable, open container."
           },
           {
-            "Define nouns:as:traits:": [
-              "the book of secrets",
-              "a container",
-              [
-                "openable",
-                "closed",
-                "locked"
-              ]
-            ]
+            "Declare:": "The book of secrets is an openable, closed, locked container."
           },
           {
-            "Define nouns:as:traits:": [
-              "clutch",
-              "a container",
-              [
-                "openable",
-                "open"
-              ]
-            ]
+            "Declare:": "The clutch is an openable, open container."
           },
           {
-            "Define nouns:as:traits:": [
-              "purse",
-              "a container",
-              [
-                "wearable",
-                "openable",
-                "open"
-              ]
-            ]
+            "Declare:": "The purse is a wearable, openable, open container."
           },
           {
-          	"Declare:": "The coin is a thing."
+            "Declare:": "The coin is a thing."
           },
           {
-            "Declare:": "Mildred is carrying the the flower, the headlamp, secrets and wisdom, and the clutch."
+            "Declare:": "Mildred is carrying the flower, the headlamp, secrets and wisdom, and the clutch."
           },
           {
             "Declare:": "The coin is in the purse."

@@ -37,14 +37,7 @@
         "articles",
         [
           {
-            "Define nouns:as:": [
-              [
-                "the lamp-post",
-                "some soldiers",
-                "Trevor"
-              ],
-              "things"
-            ]
+          	"Declare:" : "The lamp-post, some soldiers, and Trevor are things."
           }
         ],
         [

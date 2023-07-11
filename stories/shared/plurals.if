@@ -79,14 +79,7 @@
         "plural name printing",
         [
           {
-            "Define nouns:as:": [
-              [
-                "the flowerpot",
-                "the dishes",
-                "the spoon"
-              ],
-              "things"
-            ]
+            "Declare:": "The flowerpot, the dishes, and the spoon are things."
           },
           {
             "Define value:of:asLines:": [

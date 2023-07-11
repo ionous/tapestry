@@ -5,14 +5,11 @@
         "Kitchenette",
         "Thingaverse",
         [
-          {
-            "Declare:": "You are in the kitchen."
+        	{
+            "Declare:": "The kitchen is a room."
           },
           {
-            "Define nouns:as:": [
-              "the kitchen",
-              "a room"
-            ]
+            "Declare:": "You are in the kitchen."
           },
           {
             "Define value:of:asLines:": [
@@ -41,13 +38,7 @@
             "Declare:": "The broom, a hat, and two cats are in the kitchen."
           },
           {
-            "Define nouns:as:": [
-              [
-                "the broom",
-                "a hat"
-              ],
-              "things"
-            ]
+            "Declare:": "The broom and the hat are things."
           },
           {
             "Define value:of:asLines:": [
@@ -67,17 +58,10 @@
             "--": ""
           },
           {
-            "Define nouns:traits:": [
-              "the cabinet",
-              [
-                "openable",
-                "enterable",
-                "scenery"
-              ]
-            ]
+            "Declare:": "The container called the cabinet is in the kitchen."
           },
           {
-            "Declare:": "The container called the cabinet is in the kitchen."
+            "Declare:": "The cabinet is openable, enterable, scenery."
           },
           {
             "Declare:": "The book of matches, a bottle of descaling solution, a fish hook, a rusty knife are things in the cabinet."
@@ -108,10 +92,7 @@
             "--": ""
           },
           {
-            "Define nouns:traits:": [
-              "the shelf",
-              "scenery"
-            ]
+            "Declare:": "The shelf is scenery."
           },
           {
             "Declare:": "The shelf is a supporter in the kitchen."
