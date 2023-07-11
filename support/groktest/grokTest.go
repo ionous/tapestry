@@ -16,13 +16,16 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		skip   any
 	}{
 		{
-			test: `Two cats are in the kitchen.`,
+			// note: in inform...	 §4.14. Duplicates
+			// "Two circles are in the Lab."
+			// it only works if "circles" is a known kind
+			// otherwise, it assumes "two circles" is a name.
+			test: `Two things are in the kitchen.`,
 			result: map[string]any{
 				"macro": "contain",
 				"targets": []map[string]any{{
-					"det":   "Two",
-					"name":  "cats",
 					"count": 2,
+					"kinds": []string{"things"},
 				}},
 				"sources": []map[string]any{{
 					"det":  "the",
@@ -30,6 +33,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 				}},
 			},
 		},
+
 		{
 			test: `Hershel is carrying scissors and a pen.`,
 			result: map[string]any{

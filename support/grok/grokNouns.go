@@ -48,20 +48,31 @@ func grokNouns(known Grokker, out *[]Noun, ws []Word, flag genFlag) (err error) 
 							name, nextName = name[:before], name[after:]
 						}
 					}
-				} else if called := len(postTraits) > 0 && postTraits[0].equals(keywords.called); !called {
-					// case 2: an anonymous kind.
-					name, det = nil, Article{}
-
-				} else if d, n, e := chopName(known, postTraits[1:]); e != nil {
-					err = e
-					break
 				} else {
-					// case 1: any bits after "called" become the determiner and name
-					det, name = d, n
-					flag = flag & ^AllowMany // tbd: why couldn't "called" couldn't be smarter to split on "and"?
-					exact = true
+					// does it have a "called ..." some name trailing phrase?
+					called := len(postTraits) > 0 && postTraits[0].equals(keywords.called)
+					if !called {
+						// case 2a: a counted kind: "two cats are on the bed."
+						// case 2b: an anonymous kind: "a container is in the lobby."
+						det.Match = nil // erases the article, leaves the count if any ( ex. 2 )
+						name = nil
+					} else {
+						if det.Count > 0 {
+							err = errutil.New("can't name counted nouns")
+							break
+						} else {
+							if d, n, e := chopArticle(known, postTraits[1:]); e != nil {
+								err = e
+								break
+							} else {
+								// case 1: any bits after "called" become the determiner and name
+								det, name = d, n
+								flag = flag & ^AllowMany // tbd: why couldn't "called" couldn't be smarter to split on "and"?
+								exact = true
+							}
+						}
+					}
 				}
-
 				// more nouns may be allowed after "and"
 				if flag&AllowMany != 0 {
 					if _, after, e := anyAnd(postTraits); e != nil {
@@ -72,7 +83,7 @@ func grokNouns(known Grokker, out *[]Noun, ws []Word, flag genFlag) (err error) 
 					}
 				}
 
-				if len(name) == 0 && flag&AllowAnonymous == 0 {
+				if len(name) == 0 && det.Count == 0 && (flag&AllowAnonymous == 0) {
 					err = errutil.New("anonymous nouns not allowed.")
 					break
 				} else {
@@ -93,7 +104,7 @@ func grokNouns(known Grokker, out *[]Noun, ws []Word, flag genFlag) (err error) 
 
 // the entire passed text is a name ( possibly with a prefix to start )
 // errors only if the name is completely empty.
-func chopName(known Grokker, ws []Word) (retDet Article, retName []Word, err error) {
+func chopArticle(known Grokker, ws []Word) (retDet Article, retName []Word, err error) {
 	if cnt := len(ws); cnt == 0 {
 		err = errutil.New("empty name")
 	} else if det, e := known.FindArticle(ws); e != nil {
