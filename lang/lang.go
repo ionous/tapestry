@@ -1,41 +1,11 @@
 package lang
 
 import (
-	"regexp"
 	"strings"
 	"unicode"
 
 	"github.com/ionous/inflect"
 )
-
-var Articles = []string{"the", "a", "an", "our", "some"}
-var articleBar = strings.Join(Articles, "|")
-var articles = regexp.MustCompile(`^((?i)` + articleBar + `)\s`)
-var articleBare = regexp.MustCompile("^(" + articleBar + ")$")
-
-// IsArticle returns true if the passed string starts with one of the common determiners.
-func IsArticle(s string) bool {
-	return articleBare.MatchString(s)
-}
-
-// SliceArticle splits the passed string into a common determiner (if any) and the remaining text.
-func SliceArticle(s string) (article, bare string) {
-	n := strings.TrimSpace(s)
-	if pair := articles.FindStringIndex(n); pair == nil {
-		bare = n
-	} else {
-		split := pair[1] - 1
-		article = n[:split]
-		bare = strings.TrimSpace(n[split:])
-	}
-	return article, bare
-}
-
-// StripArticle removes common determiners from the start of the passed string.
-func StripArticle(s string) string {
-	_, bare := SliceArticle(s)
-	return bare
-}
 
 // Singularize attempts to return the singular form of the passed assumed plural string.
 func Singularize(s string) (ret string) {

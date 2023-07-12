@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
+	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
@@ -32,7 +33,7 @@ func makeNoun(w *weave.Weaver, name rt.TextEval) (ret helperNoun, err error) {
 	if name, e := safe.GetOptionalText(w, name, ""); e != nil {
 		err = e
 	} else if name := name.String(); len(name) > 0 {
-		if name, e := stripArticle(w, name); e != nil {
+		if name, e := grok.StripArticle(name); e != nil {
 			err = e
 		} else if u := lang.Normalize(name); len(u) > 0 {
 			ret = helperNoun{name: name, uniform: u}

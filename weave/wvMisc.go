@@ -1,7 +1,9 @@
 package weave
 
 import (
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
+	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 )
@@ -23,14 +25,10 @@ func makeCard(amany, bmany bool) (ret string) {
 // ugly way to normalize field names
 func addField(ctx *Weaver, kindName, fieldName, fieldClass string,
 	addField func(k, f, c string) error) (err error) {
-	d := ctx.Domain
-	if _, kind := d.UniformDeterminer(kindName); len(kind) == 0 {
-		err = InvalidString(kindName)
-	} else if field, ok := UniformString(fieldName); !ok {
-		err = InvalidString(fieldName)
-	} else if class, ok := UniformString(fieldClass); !ok && len(fieldClass) > 0 {
-		err = InvalidString(fieldClass)
+	if kind, e := grok.StripArticle(kindName); e != nil {
+		err = e
 	} else {
+		kind, field, class := lang.Normalize(kind), lang.Normalize(fieldName), lang.Normalize(fieldClass)
 		err = addField(kind, field, class)
 	}
 	return

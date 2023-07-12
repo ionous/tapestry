@@ -20,20 +20,6 @@ func assertNounValue(a assert.Assertions, val literal.LiteralValue, noun string,
 	return a.AssertNounValue(noun, field, parts, val)
 }
 
-func stripArticle(w *weave.Weaver, name string) (ret string, err error) {
-	if parts, e := grok.MakeSpan(name); e != nil {
-		err = e
-	} else if len(parts) <= 1 {
-		ret = name
-	} else if a, e := grok.FindArticle(parts); e != nil {
-		err = e
-	} else {
-		words := parts[grok.MatchLen(a.Match):]
-		ret = words.String()
-	}
-	return
-}
-
 // this isn't a correct test... but it will work for now...
 func isProper(article grok.Article, name string) (okay bool) {
 	a := lang.Normalize(article.String())

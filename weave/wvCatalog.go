@@ -10,10 +10,12 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/support/grokdb"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/tables/mdl"
@@ -194,10 +196,11 @@ func (cat *Catalog) AssertAlias(opShortName string, opAliases ...string) error {
 			err = e
 		} else {
 			for _, a := range opAliases {
-				if a, ok := UniformString(a); !ok {
-					err = errutil.Append(err, InvalidString(a))
-				} else {
-					err = cat.AddName(d.name, n.name, a, -1, at)
+				if a := lang.Normalize(a); len(a) > 0 {
+					if e := cat.AddName(d.name, n.name, a, -1, at); e != nil {
+						err = e
+						break
+					}
 				}
 			}
 		}
@@ -207,15 +210,13 @@ func (cat *Catalog) AssertAlias(opShortName string, opAliases ...string) error {
 
 // if a parent kind was specified, make the kid dependent on it.
 // note: a singular to plural (if needed ) gets handled by the dependency resolver's kindFinder and GetPluralKind()
-func (cat *Catalog) AssertAncestor(opKind, opAncestor string) error {
+func (cat *Catalog) AssertAncestor(kind, ancestor string) error {
 	return cat.Schedule(assert.RequirePlurals, func(ctx *Weaver) (err error) {
 		d, at := ctx.Domain, ctx.At
-		// tbd: are the determiners of kinds useful for anything?
-		if _, kind := d.UniformDeterminer(opKind); len(kind) == 0 {
-			err = InvalidString(kind)
-		} else if _, ancestor := d.UniformDeterminer(opAncestor); len(ancestor) == 0 && len(opAncestor) > 0 {
-			err = InvalidString(opAncestor)
+		if kind, e := grok.StripArticle(kind); e != nil {
+			err = e // tbd: are the determiners of kinds useful for anything?
 		} else {
+			kind, ancestor := lang.Normalize(kind), lang.Normalize(ancestor)
 			err = cat.Schedule(assert.RequireDeterminers, func(ctx *Weaver) error {
 				e := cat.AddKind(d.name, kind, ancestor, at)
 				return cat.eatDuplicates(e)
@@ -226,12 +227,12 @@ func (cat *Catalog) AssertAncestor(opKind, opAncestor string) error {
 }
 
 // generates traits and adds them to a custom aspect kind.
-func (cat *Catalog) AssertAspectTraits(opAspects string, opTraits []string) error {
+func (cat *Catalog) AssertAspectTraits(aspect string, opTraits []string) error {
 	// uses the ancestry phase because it generates kinds ( one per aspect. )
 	return cat.Schedule(assert.RequireDeterminers, func(ctx *Weaver) (err error) {
 		d, at := ctx.Domain, ctx.At
-		if aspect, ok := UniformString(opAspects); !ok {
-			err = InvalidString(opAspects)
+		if aspect := lang.Normalize(aspect); len(aspect) == 0 {
+			err = InvalidString("aspect")
 		} else if traits, e := UniformStrings(opTraits); e != nil {
 			err = e
 		} else {
@@ -317,24 +318,17 @@ func (cat *Catalog) AssertField(kind, field, class string, aff affine.Affinity, 
 }
 
 // jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
-func (cat *Catalog) AssertGrammar(opName string, prog *grammar.Directive) error {
+func (cat *Catalog) AssertGrammar(name string, prog *grammar.Directive) error {
 	return cat.Schedule(assert.RequireRules /*GrammarPhase*/, func(ctx *Weaver) error {
 		d, at := ctx.Domain, ctx.At
-		return cat.AddGrammar(d.name, opName, prog, at)
+		return cat.AddGrammar(d.name, name, prog, at)
 	})
 }
 
-func (cat *Catalog) AssertNounKind(opNoun, opKind string) error {
+func (cat *Catalog) AssertNounKind(name, kind string) error {
 	return cat.Schedule(assert.RequireDefaults, func(ctx *Weaver) (err error) {
-		d, at := ctx.Domain, ctx.At
-		_, name := d.StripDeterminer(opNoun)
-		if noun, ok := UniformString(name); !ok {
-			err = InvalidString(opNoun)
-		} else if _, kind := d.UniformDeterminer(opKind); len(kind) == 0 {
-			err = InvalidString(opKind)
-		} else {
-			_, err = d.AddNoun(name, noun, kind, at)
-		}
+		noun, kind := lang.Normalize(name), lang.Normalize(kind)
+		_, err = ctx.Domain.AddNoun(name, noun, kind, ctx.At)
 		return
 	})
 }

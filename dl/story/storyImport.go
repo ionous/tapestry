@@ -73,13 +73,17 @@ func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 			err = e
 		} else {
 			names := nouns.Strings()
-			if kind := kind.String(); len(kind) > 0 {
-				kind := lang.StripArticle(lang.Normalize(kind))
+			if kind, e := grok.StripArticle(kind.String()); e != nil {
+				err = e
+			} else if len(kind) > 0 {
 				for i, name := range names {
-					name := lang.StripArticle(lang.Normalize(name))
-					names[i] = name // replace for the traits loop
-					if e := cat.AssertNounKind(name, kind); e != nil {
+					if name, e := grok.StripArticle(name); e != nil {
 						err = errutil.Append(err, e)
+					} else {
+						names[i] = name // replace for the traits loop
+						if e := cat.AssertNounKind(name, kind); e != nil {
+							err = errutil.Append(err, e)
+						}
 					}
 				}
 			}
@@ -110,10 +114,10 @@ func (op *DefinePhrase) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if macro, e := safe.GetText(w, op.Macro); e != nil {
 			err = e
-		} else if macro, ok := weave.UniformString(macro.String()); !ok {
-			err = errutil.New("missing macro name")
 		} else if rev, e := safe.GetOptionalBool(w, op.Reversed, false); e != nil {
 			err = e
+		} else if macro := lang.Normalize(macro.String()); len(macro) == 0 {
+			err = errutil.New("missing macro name")
 		} else {
 			d, at := w.Domain.Name(), w.At
 			err = cat.AddPhrase(d, macro, phrase.String(), rev.Bool(), at)
@@ -283,11 +287,15 @@ func (op *DefineNouns) Weave(cat *weave.Catalog) error {
 		} else {
 			names := nouns.Strings()
 			if kind := kind.String(); len(kind) > 0 {
-				kind := lang.StripArticle(lang.Normalize(kind))
-				for _, noun := range names {
-					noun := lang.StripArticle(lang.Normalize(noun))
-					if e := cat.AssertNounKind(noun, kind); e != nil {
-						err = errutil.Append(err, e)
+				if kind, e := grok.StripArticle(kind); e != nil {
+					err = e
+				} else {
+					for _, noun := range names {
+						if noun, e := grok.StripArticle(noun); e != nil {
+							err = errutil.Append(err, e)
+						} else if e := cat.AssertNounKind(noun, kind); e != nil {
+							err = errutil.Append(err, e)
+						}
 					}
 				}
 			}
@@ -314,8 +322,9 @@ func (op *NounAssignment) Weave(cat *weave.Catalog) error {
 			subjects := nouns.Strings()
 			field, lines := field.String(), T(lines)
 			for _, noun := range subjects {
-				noun := lang.StripArticle(lang.Normalize(noun))
-				if e := assertNounValue(cat, lines, noun, field); e != nil {
+				if noun, e := grok.StripArticle(noun); e != nil {
+					err = errutil.Append(err, e)
+				} else if e := assertNounValue(cat, lines, noun, field); e != nil {
 					err = errutil.Append(err, e)
 				}
 			}
@@ -342,16 +351,18 @@ func (op *DefineRelatives) Weave(cat *weave.Catalog) error {
 		} else {
 			a, b := nouns.Strings(), otherNouns.Strings()
 			for _, subject := range a {
-				subject := lang.StripArticle(lang.Normalize(subject))
-				if kind := kind.String(); len(kind) > 0 {
+				if subject, e := grok.StripArticle(subject); e != nil {
+					err = errutil.Append(err, e)
+				} else if kind := kind.String(); len(kind) > 0 {
 					if e := cat.AssertNounKind(subject, kind); e != nil {
 						err = errutil.New(err, e)
 					}
 				}
 				if rel := relation.String(); len(rel) > 0 {
 					for _, object := range b {
-						object := lang.StripArticle(lang.Normalize(object))
-						if e := cat.AssertRelative(rel, object, subject); e != nil {
+						if object, e := grok.StripArticle(object); e != nil {
+							err = errutil.Append(err, e)
+						} else if e := cat.AssertRelative(rel, object, subject); e != nil {
 							err = errutil.New(err, e)
 						}
 					}
@@ -380,11 +391,15 @@ func (op *DefineOtherRelatives) Weave(cat *weave.Catalog) error {
 			a, b := nouns.Strings(), otherNouns.Strings()
 			if rel := relation.String(); len(rel) > 0 {
 				for _, subject := range a {
-					subject := lang.StripArticle(lang.Normalize(subject))
-					for _, object := range b {
-						object := lang.StripArticle(lang.Normalize(object))
-						if e := cat.AssertRelative(rel, object, subject); e != nil {
-							err = errutil.New(err, e)
+					if subject, e := grok.StripArticle(subject); e != nil {
+						err = errutil.New(err, e)
+					} else {
+						for _, object := range b {
+							if object, e := grok.StripArticle(object); e != nil {
+								err = errutil.New(err, e)
+							} else if e := cat.AssertRelative(rel, object, subject); e != nil {
+								err = errutil.New(err, e)
+							}
 						}
 					}
 				}

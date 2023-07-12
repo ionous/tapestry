@@ -48,12 +48,6 @@
       ]
     },
     {
-      "Define nouns:traits:": [
-        "self",
-        "privately named"
-      ]
-    },
-    {
       "Define value:of:asLines:": [
         "pawn",
         "the player",
@@ -67,12 +61,7 @@
         "you"
       ]
     },
-    {
-      "Define nouns:traits:": [
-        "self",
-        "proper named"
-      ]
-    },
+    { "Declare:": "You are proper named and privately named."},
     {
       "--": ""
     },
