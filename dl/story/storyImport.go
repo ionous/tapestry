@@ -1,21 +1,16 @@
 package story
 
 import (
-	"errors"
 	"strings"
 
-	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/grok"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
-	g "git.sr.ht/~ionous/tapestry/rt/generic"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 )
 
@@ -124,153 +119,6 @@ func (op *DefinePhrase) Weave(cat *weave.Catalog) error {
 		}
 		return
 	})
-}
-
-// Execute - called by the macro runtime during weave.
-func (op *DeclareStatement) Execute(macro rt.Runtime) error {
-	return Weave(macro, op)
-}
-
-func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(assert.RequireRules, func(w *weave.Weaver) (err error) {
-		if text, e := safe.GetText(w, op.Text); e != nil {
-			err = e
-		} else if e := op.grok(w, text.String()); e != nil {
-			err = errutil.Fmt("%w grokking %q", e, text.String())
-		}
-		return
-	})
-}
-
-func (op *DeclareStatement) grok(w *weave.Weaver, text string) (err error) {
-	if res, e := w.Grok(text); e != nil {
-		err = e
-	} else if multiSrc, e := validSources(res.Sources, res.Macro.Type); e != nil {
-		err = e
-	} else if multiTgt, e := validTargets(res.Targets, res.Macro.Type); e != nil {
-		err = e
-	} else if src, e := genNouns(w, res.Sources, multiSrc); e != nil {
-		err = e
-	} else if tgt, e := genNouns(w, res.Targets, multiTgt); e != nil {
-		err = e
-	} else {
-		// note: some phrases "the box is open" dont have macros.
-		// in that case, genNouns does all the work.
-		if macro := res.Macro.Name; len(macro) > 0 {
-			if kind, e := w.GetKindByName(macro); e != nil {
-				err = e
-			} else if !kind.Implements(kindsOf.Macro.String()) {
-				err = errutil.Fmt("expected %q to be a macro", macro)
-			} else if fieldCnt := kind.NumField(); fieldCnt < 2 {
-				err = errutil.Fmt("expected macro %q to have at least two argument (not %d)", macro, fieldCnt)
-			} else {
-				rec := kind.NewRecord()
-				args := []g.Value{src, tgt}
-				for i := 0; i < 2; i++ {
-					if val, e := safe.AutoConvert(w, kind.Field(i), args[i]); e != nil {
-						err = e
-						break
-					} else if e := rec.SetIndexedField(i, val); e != nil {
-						// note: set indexed field assigns without copying
-						// but get value copies out, so this should be okay.
-						err = errutil.Fmt("%w while setting %q arg %v", e, macro, i)
-						break
-					}
-				}
-				if err == nil {
-					if v, e := w.Call(rec, affine.Text); e != nil && !errors.Is(e, rt.NoResult) {
-						err = e
-					} else if v != nil {
-						if msg := v.String(); len(msg) > 0 {
-							err = errutil.Fmt("Declare statement: %s", msg)
-						}
-					}
-				}
-			}
-		}
-	}
-	return
-}
-
-func reduceNouns(ns []grok.Noun) (ret string) {
-	var s strings.Builder
-	for i, n := range ns {
-		if i > 1 {
-			s.WriteString(", ")
-		}
-		s.WriteString(n.Name.String())
-
-	}
-	return s.String()
-}
-
-func validSources(ns []grok.Noun, mtype grok.MacroType) (multi bool, err error) {
-	switch mtype {
-	case grok.Macro_SourcesOnly, grok.Macro_ManySources, grok.Macro_ManyMany:
-		if cnt := len(ns); cnt == 0 {
-			err = errutil.New("expected at least one source noun")
-		}
-		multi = true
-	case grok.Macro_ManyTargets:
-		if cnt := len(ns); cnt > 1 {
-			err = errutil.New("expected exactly one noun, have:", reduceNouns(ns))
-		}
-	default:
-		err = errutil.New("invalid macro type")
-	}
-	return
-}
-
-func validTargets(ns []grok.Noun, mtype grok.MacroType) (multi bool, err error) {
-	switch mtype {
-	case grok.Macro_SourcesOnly:
-		if cnt := len(ns); cnt != 0 {
-			err = errutil.New("didn't expect any target nouns")
-		}
-	case grok.Macro_ManySources:
-		if cnt := len(ns); cnt > 1 {
-			err = errutil.New("expected at most one target noun")
-		}
-	case grok.Macro_ManyTargets, grok.Macro_ManyMany:
-		// any number okay
-		multi = true
-	default:
-		err = errutil.New("invalid macro type")
-	}
-	return
-}
-
-// add nouns and values
-func genNouns(w *weave.Weaver, ns []grok.Noun, multi bool) (ret g.Value, err error) {
-	names := make([]string, 0, len(ns))
-	for _, n := range ns {
-		if n.Article.Count > 0 {
-			if ns, e := importCountedNoun(w.Catalog, n); e != nil {
-				err = e
-				break
-			} else {
-				names = append(names, ns...)
-			}
-		} else {
-			if name, e := importNamedNoun(w, n); e != nil && !errors.Is(e, mdl.Duplicate) {
-				err = e
-				break
-			} else {
-				names = append(names, name)
-			}
-		}
-	} // end for loop
-	// all done?
-	if err == nil {
-		if multi {
-			ret = g.StringsOf(names)
-		} else if len(names) > 0 {
-			ret = g.StringOf(names[0])
-		} else {
-			ret = g.Empty
-		}
-	}
-	return
 }
 
 // Execute - called by the macro runtime during weave.
