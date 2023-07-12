@@ -20,9 +20,9 @@ type dbMatch struct {
 
 // implements grok.Grokker; returned by dbSource.
 type dbSource struct {
-	db                      *tables.Cache
-	domain                  string
-	aspectPath, patternPath string
+	db                   *tables.Cache
+	domain               string
+	aspectPath, kindPath string
 }
 
 func (d *dbSource) FindArticle(ws grok.Span) (grok.Article, error) {
@@ -39,8 +39,8 @@ func (d *dbSource) FindKind(ws grok.Span) (ret grok.Match, err error) {
 		id   int
 		name string
 	}
-	// excludes patterns (and macros) from matching these physical kinds
-	if mp, e := d.getPatternPath(); e != nil {
+	// includes only subclasses of kindsOf.Kind
+	if mp, e := d.getKindPath(); e != nil {
 		log.Println(e)
 	} else {
 		e := d.db.QueryRow(`
@@ -50,7 +50,7 @@ func (d *dbSource) FindKind(ws grok.Span) (ret grok.Match, err error) {
  		join domain_tree
  		on (uses = domain)
  		where base = ?1
- 		and not instr(',' || mk.path, ?3 )
+ 		and instr(',' || mk.path, ?3 )
 	)
 	select id, name  from (
 		select id, name, substr(?2 ,0, length(name)+2) as words
@@ -83,8 +83,8 @@ func (d *dbSource) FindKind(ws grok.Span) (ret grok.Match, err error) {
 const blank = " "
 const space = ' '
 
-func (d *dbSource) getPatternPath() (ret string, err error) {
-	return getPath(d.db, kindsOf.Pattern, &d.patternPath)
+func (d *dbSource) getKindPath() (ret string, err error) {
+	return getPath(d.db, kindsOf.Kind, &d.kindPath)
 }
 
 func (d *dbSource) getAspectPath() (ret string, err error) {

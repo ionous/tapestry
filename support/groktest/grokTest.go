@@ -101,7 +101,7 @@ func Phrases(t *testing.T, g grok.Grokker) {
 				}},
 			},
 		},
-		// multiple kinds of things
+		// multiple nouns of different kinds
 		{
 			test: `The box and the top are closed containers.`,
 			result: map[string]any{
@@ -134,42 +134,41 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		// a kind of declaration ( uses a 'macro' verb )
 		// "is" left of macro
 		{
-			test: `The box is a kind of container.`,
+			test: `A casket is a kind of container.`,
 			result: map[string]any{
 				"macro": "inherit",
 				"sources": []map[string]any{{
-					"det":   "the",
-					"name":  "box",
+					"det":   "a",
+					"name":  "casket",
 					"kinds": []string{"container"},
 				}},
 			},
 		},
-		// FIX -- "kind of" is meant for *kinds*
 		// kind of: adding trailing properties
 		// "is" left of macro
 		{
-			test: `The box is a kind of closed container.`,
+			test: `A casket is a kind of closed container.`,
 			result: map[string]any{
 				"macro": "inherit",
 				"sources": []map[string]any{{
-					"det":    "the",
-					"name":   "box",
+					"det":    "a",
+					"name":   "casket",
 					"traits": []string{"closed"},
 					"kinds":  []string{"container"},
 				}},
 			},
 		},
-		// kind of, "correctly" failing prefixed properties.
-		// note: in inform, this also yields a noun named the "closed box".
-		// similarly, The kind of the box is a container, yields a name "kind of the box".
+		// kind of, "correctly" producing incorrect results.
+		// note: in inform, this also yields a noun named the "closed casket".
+		// similarly, "The kind of the casket is a container", yields a name "kind of the casket".
 		// "is" left of macro.
 		{
-			test: `The closed box is a kind of container.`,
+			test: `The closed casket is a kind of container.`,
 			result: map[string]any{
 				"macro": "inherit",
 				"sources": []map[string]any{{
 					"det":   "the",
-					"name":  "closed box",
+					"name":  "closed casket",
 					"kinds": []string{"container"},
 				}},
 			},
@@ -178,8 +177,24 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		// tbd: not allowed, but maybe it should be....
 		// "is" left of macro
 		{
-			test:   `The box is a closed kind of container.`,
+			test:   `The casket is a closed kind of container.`,
 			result: errutil.New("not allowed"),
+		},
+		// in inform, these become the plural kind "Bucketss" and "basketss"
+		{
+			test: `Buckets and baskets are kinds of container.`,
+			result: map[string]any{
+				"macro": "inherit",
+				"sources": []map[string]any{
+					{
+						"kinds": []string{"container"},
+						"name":  "Buckets",
+					},
+					{
+						"kinds": []string{"container"},
+						"name":  "baskets",
+					},
+				}},
 		},
 		{
 			test:   `A container is in the lobby.`,
@@ -386,17 +401,19 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		} else {
 			res, haveError := grok.Grok(g, p.test)
 			if expectError, ok := p.result.(error); ok {
-				if haveError == nil {
-					t.Log(i, p.test, "expected an error", expectError, "but succeeded")
+				if haveError != nil {
+					t.Log("ok, test", i, p.test, haveError)
+				} else {
+					t.Log("ng, test", i, p.test, "expected an error", expectError, "but succeeded with", pretty.Sprint(resultMap(res)))
 					t.Fail()
 				}
 			} else if haveError != nil {
-				t.Log(i, p.test, haveError)
+				t.Log("ng, test", i, p.test, haveError)
 				t.Fail()
 			} else if expectMap, ok := p.result.(map[string]any); ok {
 				m := resultMap(res)
 				if d := pretty.Diff(expectMap, m); len(d) > 0 {
-					t.Log("test", i, p.test, "got:\n", pretty.Sprint(m))
+					t.Log("ng, test", i, p.test, "got:\n", pretty.Sprint(m))
 					//t.Log("want:", pretty.Sprint(p.result))
 					t.Log(d)
 					t.Fail()

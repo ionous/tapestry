@@ -53,7 +53,6 @@ var known = info{
 		// in the source are the targets ( lhs macro; re-reversed )
 		"in", "contain", grok.Macro_ManyTargets, true,
 		// kinds:
-		"kind of", "inherit", grok.Macro_SourcesOnly, false, // for "a closed kind of container"
 		"kinds of", "inherit", grok.Macro_SourcesOnly, false, // for "are closed containers"
 		"a kind of", "inherit", grok.Macro_SourcesOnly, false, // for "a kind of container"
 		// source supports/is supporting the targets

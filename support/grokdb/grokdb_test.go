@@ -133,7 +133,6 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		domain, carry, "carried by", true, // ex. source carrying targets
 		domain, carry, "carrying", false, // ex. source carrying targets
 		domain, contain, "in", true,
-		domain, inherit, "kind of", false, // ex. "a closed kind of container"
 		domain, inherit, "kinds of", false, // ex. "are closed containers"
 		domain, inherit, "a kind of", false, // ex. "a kind of container"
 		domain, support, "on", true, // on the x are the w,y,z

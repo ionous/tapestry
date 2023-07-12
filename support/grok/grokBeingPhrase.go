@@ -25,7 +25,9 @@ func beingPhrase(known Grokker, lhs, rhs []Word) (ret Results, err error) {
 			err = e
 		} else if len(macro.Name) == 0 {
 			// case 1. doesn't have a macro:
-			if e := grokNouns(known, &out.Sources, lhs, AllowMany|AllowAnonymous); e != nil {
+			if len(afterRightLede) > 0 {
+				err = errutil.Fmt("couldnt parse right hand side: %q", Span(afterRightLede).String())
+			} else if e := grokNouns(known, &out.Sources, lhs, AllowMany|AllowAnonymous); e != nil {
 				err = errutil.New("parsing subjects", e)
 			}
 		} else {
