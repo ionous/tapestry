@@ -281,10 +281,7 @@
       "--": ""
     },
     {
-      "Define kinds:as:": [
-        "Devices",
-        "prop"
-      ]
+      "Declare:": "Devices are a kind of prop."
     },
     {
       "Define kind:fields:": [
@@ -303,10 +300,7 @@
       "--": ""
     },
     {
-      "Define kinds:as:": [
-        "activatability",
-        "aspect"
-      ]
+      "Declare:": "Activatability is a kind of aspect."
     },
     {
       "Define traits:as:": [

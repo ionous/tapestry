@@ -6,7 +6,6 @@ import (
 	"strings"
 	"testing"
 
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/groktest"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
@@ -72,10 +71,10 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		err = e
 	} else if e := testdb.Ins(db, []string{"mdl_kind",
 		"ROWID", "domain", "kind", "singular", "path"},
-		aspects, domain, kindsOf.Aspect.String(), "", idPath(),
-		patterns, domain, kindsOf.Pattern.String(), "", idPath(),
-		macros, domain, kindsOf.Macro.String(), "", idPath(patterns),
-		kinds, domain, kindsOf.Kind.String(), "", idPath(),
+		aspects, domain, "aspects", "aspect", idPath(),
+		patterns, domain, "patterns", "pattern", idPath(),
+		macros, domain, "macros", "macro", idPath(patterns),
+		kinds, domain, "kinds", "kind", idPath(),
 		traits, domain, "traits", "", idPath(aspects),
 		things, domain, "things", "thing", idPath(kinds),
 		containers, domain, "containers", "container", idPath(things, kinds),
@@ -133,7 +132,7 @@ func setupDB(name string) (ret *sql.DB, err error) {
 		domain, carry, "carried by", true, // ex. source carrying targets
 		domain, carry, "carrying", false, // ex. source carrying targets
 		domain, contain, "in", true,
-		domain, inherit, "kinds of", false, // ex. "are closed containers"
+		domain, inherit, "kinds of", false, // for "are kinds of containers"
 		domain, inherit, "a kind of", false, // ex. "a kind of container"
 		domain, support, "on", true, // on the x are the w,y,z
 		domain, suspect, "suspicious of", false,

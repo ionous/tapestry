@@ -32,6 +32,10 @@ func (ts *TraitSet) applyTraits(out []Noun) {
 // ex. "[the] open and openable container"
 // ex. "[is] open"
 func ParseTraitSet(known Grokker, ws []Word) (out TraitSet, err error) {
+	return parseTraitSet(known, ws, false)
+}
+
+func parseTraitSet(known Grokker, ws []Word, noKinds bool) (out TraitSet, err error) {
 	var scan int
 	var prevSep sepFlag
 Loop:
@@ -59,7 +63,7 @@ Loop:
 					scan += skipRest + skipDet
 					goto Loop
 				}
-			} else if prevSep&AndSep == 0 {
+			} else if prevSep&AndSep == 0 && !noKinds {
 				// if it wasn't a trait and some previous trait didnt end with "and",
 				// it might be a trailing kind:
 				if kind, e := known.FindKind(rest); e != nil {

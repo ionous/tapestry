@@ -53,7 +53,7 @@ var known = info{
 		// in the source are the targets ( lhs macro; re-reversed )
 		"in", "contain", grok.Macro_ManyTargets, true,
 		// kinds:
-		"kinds of", "inherit", grok.Macro_SourcesOnly, false, // for "are closed containers"
+		"kinds of", "inherit", grok.Macro_SourcesOnly, false, // for "are kinds of containers"
 		"a kind of", "inherit", grok.Macro_SourcesOnly, false, // for "a kind of container"
 		// source supports/is supporting the targets
 		// so, "targets are on source" is reversed ( rhs macro )
@@ -63,6 +63,7 @@ var known = info{
 		"suspicious of", "suspect", grok.Macro_ManyMany, false,
 	),
 	kinds: grok.PanicSpans(
+		"kind", "kinds",
 		"thing", "things",
 		"container", "containers",
 		"supporter", "supporters",

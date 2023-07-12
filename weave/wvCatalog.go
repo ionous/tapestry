@@ -217,10 +217,8 @@ func (cat *Catalog) AssertAncestor(kind, ancestor string) error {
 			err = e // tbd: are the determiners of kinds useful for anything?
 		} else {
 			kind, ancestor := lang.Normalize(kind), lang.Normalize(ancestor)
-			err = cat.Schedule(assert.RequireDeterminers, func(ctx *Weaver) error {
-				e := cat.AddKind(d.name, kind, ancestor, at)
-				return cat.eatDuplicates(e)
-			})
+			e := cat.AddKind(d.name, kind, ancestor, at)
+			err = cat.eatDuplicates(e)
 		}
 		return
 	})

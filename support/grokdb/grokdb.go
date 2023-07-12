@@ -20,9 +20,9 @@ type dbMatch struct {
 
 // implements grok.Grokker; returned by dbSource.
 type dbSource struct {
-	db                   *tables.Cache
-	domain               string
-	aspectPath, kindPath string
+	db                      *tables.Cache
+	domain                  string
+	aspectPath, patternPath string
 }
 
 func (d *dbSource) FindArticle(ws grok.Span) (grok.Article, error) {
@@ -39,8 +39,8 @@ func (d *dbSource) FindKind(ws grok.Span) (ret grok.Match, err error) {
 		id   int
 		name string
 	}
-	// includes only subclasses of kindsOf.Kind
-	if mp, e := d.getKindPath(); e != nil {
+	// excludes patterns (and macros) from matching these physical kinds
+	if mp, e := d.getPatternPath(); e != nil {
 		log.Println(e)
 	} else {
 		e := d.db.QueryRow(`
@@ -50,7 +50,7 @@ func (d *dbSource) FindKind(ws grok.Span) (ret grok.Match, err error) {
  		join domain_tree
  		on (uses = domain)
  		where base = ?1
- 		and instr(',' || mk.path, ?3 )
+ 		and not instr(',' || mk.path, ?3 )
 	)
 	select id, name  from (
 		select id, name, substr(?2 ,0, length(name)+2) as words
@@ -83,8 +83,8 @@ func (d *dbSource) FindKind(ws grok.Span) (ret grok.Match, err error) {
 const blank = " "
 const space = ' '
 
-func (d *dbSource) getKindPath() (ret string, err error) {
-	return getPath(d.db, kindsOf.Kind, &d.kindPath)
+func (d *dbSource) getPatternPath() (ret string, err error) {
+	return getPath(d.db, kindsOf.Pattern, &d.patternPath)
 }
 
 func (d *dbSource) getAspectPath() (ret string, err error) {
@@ -179,7 +179,7 @@ func (d *dbSource) findMacro(ws grok.Span) (ret grok.Macro, err error) {
 		name     string // name of the kind/macro
 		phrase   string // string of the macro phrase
 		reversed bool
-		result   int // from mdl_pat, number of result fields ( 0 or 1 )
+		result   sql.NullInt32 // from mdl_pat, number of result fields ( 0 or 1 )
 	}
 	if e := d.db.QueryRow(`
 	select mk.rowid, mk.kind, mg.phrase, mg.reversed, length(mp.result)>0
@@ -202,9 +202,9 @@ func (d *dbSource) findMacro(ws grok.Span) (ret grok.Macro, err error) {
 		where kind=?1
 		order by rowid`, found.kid); e != nil {
 		err = e
-	} else if numFields := len(parts) - found.result; numFields <= 0 {
+	} else if numFields := len(parts) - int(found.result.Int32); numFields <= 0 {
 		err = errutil.Fmt("most macros should have two fields and one result; has %d fields and %d returns",
-			numFields, found.result)
+			numFields, found.result.Int32)
 	} else {
 		var flag grok.MacroType
 		if numFields == 1 {

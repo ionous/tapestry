@@ -12,20 +12,30 @@ import "github.com/ionous/errutil"
 // tbd: parse the sources when looping over the words ( in the caller? )
 func beingPhrase(known Grokker, lhs, rhs []Word) (ret Results, err error) {
 	var out Results
+	var hack bool
+Hack:
 	// first, scan for leading traits on the rhs
 	// ex. [is] ( rhs: fixed in place .... in the lobby )
-	if rightLede, e := ParseTraitSet(known, rhs); e != nil {
+	if rightLede, e := parseTraitSet(known, rhs, hack); e != nil {
 		err = e
 	} else {
+		// our nouns.
 		sources, targets := &out.Sources, &out.Targets
-
 		// try to find a macro after the traits:
 		afterRightLede := rhs[rightLede.WordCount:]
 		if macro, e := known.FindMacro(afterRightLede); e != nil {
 			err = e
 		} else if len(macro.Name) == 0 {
 			// case 1. doesn't have a macro:
+			// note: in phrases like "Xs are kinds of Ys"
+			// the word "kinds" can get matched to the built in kindsOf.Kind during parseTraitSet
+			// even when it should have matched the macro "a kind of"
+			// force trait parsing to skip matching any and all kinds, and try again.
 			if len(afterRightLede) > 0 {
+				if !hack {
+					hack = true
+					goto Hack
+				}
 				err = errutil.Fmt("couldnt parse right hand side: %q", Span(afterRightLede).String())
 			} else if e := grokNouns(known, &out.Sources, lhs, AllowMany|AllowAnonymous); e != nil {
 				err = errutil.New("parsing subjects", e)
@@ -37,7 +47,7 @@ func beingPhrase(known Grokker, lhs, rhs []Word) (ret Results, err error) {
 			var lhsFlag, rhsFlag genFlag
 			switch macro.Type {
 			case Macro_SourcesOnly:
-				lhsFlag = AllowMany | OnlyNamed
+				lhsFlag = AllowMany | AllowAnonymous
 			case Macro_ManySources:
 				lhsFlag = AllowMany | OnlyNamed
 				rhsFlag = OnlyOne | AllowAnonymous

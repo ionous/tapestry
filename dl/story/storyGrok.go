@@ -29,17 +29,62 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequireRules, func(w *weave.Weaver) (err error) {
 		if text, e := safe.GetText(w, op.Text); e != nil {
 			err = e
-		} else if e := op.grok(w, text.String()); e != nil {
-			err = errutil.Fmt("%w grokking %q", e, text.String())
+		} else {
+			if res, e := w.Grok(text.String()); e != nil {
+				err = e
+			} else if strings.HasPrefix(res.Macro.Name, "inherit") {
+				// hack for handling "kinds of"
+				// alt, could maybe look at the number of fields of the macro
+				// it'd be amazing to handle all of validate and genNouns in macros
+				// (so no decisions are needed here ) but dont think that's easily possible.
+				err = grokKindPhrase(w, res)
+			} else {
+				err = grokNounPhrase(w, res)
+			}
+			//
+			if err != nil {
+				err = errutil.Fmt("%w grokking %q", err, text.String())
+			}
 		}
 		return
 	})
 }
 
-func (op *DeclareStatement) grok(w *weave.Weaver, text string) (err error) {
-	if res, e := w.Grok(text); e != nil {
-		err = e
-	} else if multiSrc, e := validSources(res.Sources, res.Macro.Type); e != nil {
+func grokKindPhrase(w *weave.Weaver, res grok.Results) (err error) {
+	if len(res.Targets) != 0 {
+		err = errutil.Fmt("%s only expected sources", res.Macro.Name)
+	} else {
+		for _, src := range res.Sources {
+			// two forms: one where the kind is already known to be a kind;
+			// and one where its seen as a generic name.
+			if grok.MatchLen(src.Name) == 0 {
+				if len(src.Kinds) != 2 {
+					err = errutil.Fmt("%s expected a single kind per source", res.Macro.Name)
+				} else {
+					kind := lang.Normalize(src.Kinds[0].String())
+					ancestor := lang.Normalize(src.Kinds[1].String())
+					if e := w.Catalog.AddKind(w.Domain.Name(), kind, ancestor, w.At); e != nil && !errors.Is(e, mdl.Duplicate) {
+						err = e
+					}
+				}
+			} else {
+				if len(src.Kinds) != 1 {
+					err = errutil.Fmt("%s expected a single kind per source", res.Macro.Name)
+				} else {
+					kind := lang.Normalize(src.Name.String())
+					ancestor := lang.Normalize(src.Kinds[0].String())
+					if e := w.Catalog.AddKind(w.Domain.Name(), kind, ancestor, w.At); e != nil && !errors.Is(e, mdl.Duplicate) {
+						err = e
+					}
+				}
+			}
+		}
+	}
+	return
+}
+
+func grokNounPhrase(w *weave.Weaver, res grok.Results) (err error) {
+	if multiSrc, e := validSources(res.Sources, res.Macro.Type); e != nil {
 		err = e
 	} else if multiTgt, e := validTargets(res.Targets, res.Macro.Type); e != nil {
 		err = e
