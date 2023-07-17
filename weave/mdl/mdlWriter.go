@@ -16,39 +16,21 @@ import (
 	"github.com/ionous/errutil"
 )
 
-/**
- *
- */
-func NewModeler(db *sql.DB) (ret *Modeler, err error) {
-	ret = &Modeler{
-		db:          tables.NewCache(db),
-		aspectPath:  uncached,
-		kindPath:    uncached,
-		macroPath:   uncached,
-		patternPath: uncached,
-	}
-	return
-}
-
-// set to something that wont match until its set properly.
-const uncached = "$uncached"
-
-// Modeler wraps writing to the model table
-// so the implementation can handle verifying dependent names when needed.
-type Modeler struct {
-	db *tables.Cache
-	// some ugly caching:
-	aspectPath, kindPath, macroPath, patternPath string // ex. ',4,'
+type Pen struct {
+	db         *tables.Cache
+	paths      *paths
+	domain, at string
 }
 
 // tbd: perhaps writing the aspect to its own table would be best
 // join at runtime to synthesize fields.
 // ( could potentially write both as a bridge )
-func (m *Modeler) AddAspect(domain, aspect, at string, traits []string) (err error) {
+func (m *Pen) AddAspect(aspect string, traits []string) (err error) {
+	domain, at := m.domain, m.at
 	var existingTraits int
-	if kid, e := m.findRequiredKind(domain, aspect); e != nil {
+	if kid, e := m.findRequiredKind(aspect); e != nil {
 		err = e
-	} else if !strings.HasSuffix(kid.fullpath(), m.aspectPath) {
+	} else if !strings.HasSuffix(kid.fullpath(), m.paths.aspectPath) {
 		err = errutil.Fmt("kind %q in domain %q is not an aspect", aspect, domain)
 	} else if strings.Count(kid.fullpath(), ",") != 3 {
 		// tbd: could loosen this; for now it simplifies writing the aspects;
@@ -79,8 +61,9 @@ func (m *Modeler) AddAspect(domain, aspect, at string, traits []string) (err err
 var mdl_check = tables.Insert("mdl_check", "domain", "name", "value", "affinity", "prog", "at")
 
 // author tests of stories
-func (m *Modeler) AddCheck(domain, name string, value literal.LiteralValue, prog []rt.Execute, at string) (err error) {
-	if d, e := m.findDomain(domain); e != nil {
+func (m *Pen) AddCheck(name string, value literal.LiteralValue, prog []rt.Execute) (err error) {
+	domain, at := m.domain, m.at
+	if d, e := m.findDomain(); e != nil {
 		err = e
 	} else {
 		var prev struct {
@@ -152,12 +135,13 @@ var mdl_default = tables.Insert("mdl_default", "field", "value")
 
 // the pattern half of Start; domain, kind, field are a pointer into Field
 // value should be a marshaled compact value
-func (m *Modeler) AddDefault(domain, kind, field string, v assign.Assignment) (err error) {
+func (m *Pen) AddDefault(kind, field string, v assign.Assignment) (err error) {
 	if out, e := marshalout(v); e != nil {
 		err = e
-	} else if kid, e := m.findRequiredKind(domain, kind); e != nil {
+	} else if kid, e := m.findRequiredKind(kind); e != nil {
 		err = e
 	} else {
+		domain := m.domain
 		var prev struct {
 			id     int
 			domain string
@@ -207,7 +191,8 @@ var mdl_domain = tables.Insert("mdl_domain", "domain", "requires", "at")
 // pairs of domain name and (domain) dependencies
 // fix: are we forcing/checking parent domains to exist before writing?
 // that might be cool .... but maybe this is the wrong level?
-func (m *Modeler) AddDomain(domain, requires, at string) (err error) {
+func (m *Pen) AddDependency(requires string) (err error) {
+	domain, at := m.domain, m.at
 	_, err = m.db.Exec(mdl_domain, domain, requires, at)
 	return
 }
@@ -215,8 +200,9 @@ func (m *Modeler) AddDomain(domain, requires, at string) (err error) {
 var mdl_fact = tables.Insert("mdl_fact", "domain", "fact", "value", "at")
 
 // arbitrary key-value storage
-func (m *Modeler) AddFact(domain, fact, value, at string) (err error) {
-	if domain, e := m.findDomain(domain); e != nil {
+func (m *Pen) AddFact(fact, value string) (err error) {
+	at := m.at
+	if domain, e := m.findDomain(); e != nil {
 		err = e
 	} else {
 		var prev struct {
@@ -254,10 +240,11 @@ func (m *Modeler) AddFact(domain, fact, value, at string) (err error) {
 var mdl_grammar = tables.Insert("mdl_grammar", "domain", "name", "prog", "at")
 
 // player input parsing
-func (m *Modeler) AddGrammar(domain, name string, prog *grammar.Directive, at string) (err error) {
+func (m *Pen) AddGrammar(name string, prog *grammar.Directive) (err error) {
+	domain, at := m.domain, m.at
 	if prog, e := marshalout(prog); e != nil {
 		err = e
-	} else if d, e := m.findDomain(domain); e != nil {
+	} else if d, e := m.findDomain(); e != nil {
 		err = e
 	} else {
 		var prev struct {
@@ -295,20 +282,21 @@ var mdl_kind = tables.Insert("mdl_kind", "domain", "kind", "singular", "path", "
 
 // singular name of kind and materialized hierarchy of ancestors separated by commas
 // this (somewhat) duplicates the algorithm used by Noun()
-func (m *Modeler) AddKind(domain, name, parent, at string) (err error) {
-	if parent, e := m.findOptionalKind(domain, parent); e != nil {
+func (m *Pen) AddKind(name, parent string) (err error) {
+	domain, at := m.domain, m.at
+	if parent, e := m.findOptionalKind(parent); e != nil {
 		err = e
 	} else if len(parent.name) > 0 && parent.id == 0 {
 		// a specified ancestor doesn't exist.
 		err = errutil.Fmt("%w ancestor %q", Missing, parent.name)
-	} else if kind, e := m.findKind(domain, name); e != nil {
+	} else if kind, e := m.findKind(name); e != nil {
 		err = e
 	} else if kind.id == 0 {
 		// manage singular and plural kinds
 		// i don't like this much; especially be cause it depends so much on the first declaration
 		// maybe better would be a name/names table that any named concept can use.
 		// or just force everyone to use the right names.
-		if singular, e := m.singularize(domain, name); e != nil {
+		if singular, e := m.singularize(name); e != nil {
 			err = e
 		} else {
 			var optionalOne *string
@@ -323,16 +311,16 @@ func (m *Modeler) AddKind(domain, name, parent, at string) (err error) {
 				// cache result...
 				switch name {
 				case kindsOf.Aspect.String():
-					err = updatePath(res, parent.fullpath(), &m.aspectPath)
+					err = updatePath(res, parent.fullpath(), &m.paths.aspectPath)
 				case kindsOf.Pattern.String():
-					err = updatePath(res, parent.fullpath(), &m.patternPath)
+					err = updatePath(res, parent.fullpath(), &m.paths.patternPath)
 				case kindsOf.Macro.String():
-					err = updatePath(res, parent.fullpath(), &m.macroPath)
+					err = updatePath(res, parent.fullpath(), &m.paths.macroPath)
 				default:
 					// super hacky..... hmmm...
 					// if we've declared a new kind of a pattern:
 					// write blanks into the mdl_pat; parameters and results use update only.
-					if strings.HasSuffix(parent.fullpath(), m.patternPath) {
+					if strings.HasSuffix(parent.fullpath(), m.paths.patternPath) {
 						if newid, e := res.LastInsertId(); e != nil {
 							err = e
 						} else {
@@ -386,13 +374,13 @@ func (m *Modeler) AddKind(domain, name, parent, at string) (err error) {
 }
 
 // a generic field of the kind
-func (m *Modeler) AddMember(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
-	if kid, e := m.findRequiredKind(domain, kind); e != nil {
+func (m *Pen) AddMember(kind, field string, aff affine.Affinity, cls string) (err error) {
+	if kid, e := m.findRequiredKind(kind); e != nil {
 		err = errutil.Fmt("%w trying to add field %q", e, field)
-	} else if cls, e := m.findOptionalKind(domain, cls); e != nil {
+	} else if cls, e := m.findOptionalKind(cls); e != nil {
 		err = errutil.Fmt("%w trying to write field %q", e, field)
 	} else {
-		err = m.addField(domain, kid, cls, field, aff, at)
+		err = m.addField(kid, cls, field, aff)
 	}
 	return
 }
@@ -401,8 +389,9 @@ var mdl_name = tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at")
 
 // words for authors and game players refer to nouns
 // follows the domain rules of Noun.
-func (m *Modeler) AddName(domain, noun, name string, rank int, at string) (err error) {
-	if noun, e := m.findRequiredNoun(domain, noun, nounSansKind); e != nil {
+func (m *Pen) AddName(noun, name string, rank int) (err error) {
+	domain, at := m.domain, m.at
+	if noun, e := m.findRequiredNoun(noun, nounSansKind); e != nil {
 		err = e // ^ for now, this can be a derived domain
 	} else {
 		var exists bool
@@ -431,10 +420,11 @@ var mdl_noun = tables.Insert("mdl_noun", "domain", "noun", "kind", "at")
 // the domain tells the scope in which the noun was defined
 // ( the same as - or a child of - the domain of the kind ) error
 // this duplicates the algorithm used by Kind()
-func (m *Modeler) AddNoun(domain, name, ancestor, at string) (err error) {
-	if parent, e := m.findRequiredKind(domain, ancestor); e != nil {
+func (m *Pen) AddNoun(name, ancestor string) (err error) {
+	domain, at := m.domain, m.at
+	if parent, e := m.findRequiredKind(ancestor); e != nil {
 		err = e
-	} else if prev, e := m.findNoun(domain, name, nounWithKind); e != nil {
+	} else if prev, e := m.findNoun(name, nounWithKind); e != nil {
 		err = e
 	} else if prev.id == 0 {
 		// easiest is if the name has never been mentioned before;
@@ -477,8 +467,9 @@ var mdl_opposite = `insert into mdl_rev(domain, oneWord, otherWord, at)
 // domain captures the scope in which the pairing was defined.
 // within that scope: the noun, relation, and otherNoun are all unique names --
 // even if they are not unique globally, and even if they a broader/different scope than the pair's domain.
-func (m *Modeler) AddOpposite(domain, a, b, at string) (err error) {
-	if d, e := m.findDomain(domain); e != nil {
+func (m *Pen) AddOpposite(a, b string) (err error) {
+	domain, at := m.domain, m.at
+	if d, e := m.findDomain(); e != nil {
 		err = e
 	} else if rows, e := m.db.Query(
 		`select oneWord, otherWord, domain
@@ -514,12 +505,12 @@ func (m *Modeler) AddOpposite(domain, a, b, at string) (err error) {
 // even if they are not unique globally, and even if they a broader/different scope than the pair's domain.
 var mdl_pair = tables.Insert("mdl_pair", "domain", "relKind", "oneNoun", "otherNoun", "at")
 
-func (m *Modeler) AddPair(domain, rel, oneNoun, otherNoun, at string) (err error) {
-	if rel, e := m.findRequiredKind(domain, rel); e != nil {
+func (m *Pen) AddPair(rel, oneNoun, otherNoun string) (err error) {
+	if rel, e := m.findRequiredKind(rel); e != nil {
 		err = e
-	} else if one, e := m.findRequiredNoun(domain, oneNoun, nounSansKind); e != nil {
+	} else if one, e := m.findRequiredNoun(oneNoun, nounSansKind); e != nil {
 		err = e
-	} else if other, e := m.findRequiredNoun(domain, otherNoun, nounSansKind); e != nil {
+	} else if other, e := m.findRequiredNoun(otherNoun, nounSansKind); e != nil {
 		err = e
 	} else if card, e := m.findCardinality(rel); e != nil {
 		err = e
@@ -549,10 +540,10 @@ func (m *Modeler) AddPair(domain, rel, oneNoun, otherNoun, at string) (err error
 			err = errutil.Fmt("invalid cardinality %q for %q", card, rel.name)
 		}
 		if err == nil {
-			if e := m.checkPair(domain, rel, one, other, reverse, multi); e != nil {
+			if e := m.checkPair(rel, one, other, reverse, multi); e != nil {
 				err = e
 			} else {
-				err = m.addPair(domain, rel, one, other, at)
+				err = m.addPair(rel, one, other)
 			}
 		}
 
@@ -561,15 +552,16 @@ func (m *Modeler) AddPair(domain, rel, oneNoun, otherNoun, at string) (err error
 }
 
 // a field used for patterns as a calling parameter
-func (m *Modeler) AddParameter(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
-	if kid, e := m.findRequiredKind(domain, kind); e != nil {
+func (m *Pen) AddParameter(kind, field string, aff affine.Affinity, cls string) (err error) {
+	domain := m.domain
+	if kid, e := m.findRequiredKind(kind); e != nil {
 		err = errutil.Fmt("%w trying to add parameter %q", e, field)
-	} else if cls, e := m.findOptionalKind(domain, cls); e != nil {
+	} else if cls, e := m.findOptionalKind(cls); e != nil {
 		err = errutil.Fmt("%w trying to write parameter %q", e, field)
 	} else if kid.domain != domain {
 		err = errutil.Fmt("%w new parameter %q of %q expected in the same domain as the original declaration; was %q now %q",
 			Conflict, field, kind, kid.domain, domain)
-	} else if e := m.addField(domain, kid, cls, field, aff, at); e != nil {
+	} else if e := m.addField(kid, cls, field, aff); e != nil {
 		err = e
 	} else if res, e := m.db.Exec(`
 		update mdl_pat
@@ -590,10 +582,11 @@ func (m *Modeler) AddParameter(domain, kind, field string, aff affine.Affinity, 
 var mdl_phrase = tables.Insert("mdl_phrase", "domain", "macro", "phrase", "reversed", "at")
 
 // author text parsing
-func (m *Modeler) AddPhrase(domain, macro, phrase string, reversed bool, at string) (err error) {
-	if kind, e := m.findRequiredKind(domain, macro); e != nil {
+func (m *Pen) AddPhrase(macro, phrase string, reversed bool) (err error) {
+	domain, at := m.domain, m.at
+	if kind, e := m.findRequiredKind(macro); e != nil {
 		err = e
-	} else if isMacro := strings.HasSuffix(kind.fullpath(), m.macroPath); !isMacro {
+	} else if isMacro := strings.HasSuffix(kind.fullpath(), m.paths.macroPath); !isMacro {
 		err = errutil.Fmt("kind %q in domain %q is not a macro", macro, domain)
 	} else {
 		// search for conflicting phrases within this domain.
@@ -638,8 +631,8 @@ var mdl_plural = tables.Insert("mdl_plural", "domain", "many", "one", "at")
 // a plural word (many) can have at most one singular definition per domain
 // ie. people and persons are valid plurals of person,
 // but people as a singular can only be defined as person ( not also human ) error
-func (m *Modeler) AddPlural(domain, many, one, at string) (err error) {
-	if d, e := m.findDomain(domain); e != nil {
+func (m *Pen) AddPlural(many, one string) (err error) {
+	if domain, e := m.findDomain(); e != nil {
 		err = e
 	} else if rows, e := m.db.Query(
 		`select one, domain 
@@ -647,7 +640,7 @@ func (m *Modeler) AddPlural(domain, many, one, at string) (err error) {
 			join domain_tree
 				on(uses=domain)
 			where base = ?1
-			and many = ?2`, d, many); e != nil {
+			and many = ?2`, domain, many); e != nil {
 		err = errutil.New("database error", e)
 	} else {
 		var prev, from string
@@ -663,7 +656,7 @@ func (m *Modeler) AddPlural(domain, many, one, at string) (err error) {
 		}, &prev, &from); e != nil {
 			err = e
 		} else {
-			_, err = m.db.Exec(mdl_plural, d, many, one, at)
+			_, err = m.db.Exec(mdl_plural, domain, many, one, m.at)
 		}
 	}
 	return
@@ -681,22 +674,23 @@ var mdl_rel = tables.Insert("mdl_rel", "relKind", "oneKind", "otherKind", "cardi
 //	fix? the data is duplicated in kinds and fields... should this be removed?
 //
 // might also consider adding a cardinality field to the relation kind, and then use init for individual relations
-func (m *Modeler) AddRel(domain, relKind, oneKind, otherKind, cardinality, at string) (err error) {
-	if rel, e := m.findRequiredKind(domain, relKind); e != nil {
+func (m *Pen) AddRel(relKind, oneKind, otherKind, cardinality string) (err error) {
+	domain, at := m.domain, m.at
+	if rel, e := m.findRequiredKind(relKind); e != nil {
 		err = e
 	} else if rel.domain != domain {
 		err = errutil.New("relation signature expected in the same domain as relation declaration")
-	} else if one, e := m.findRequiredKind(domain, oneKind); e != nil {
+	} else if one, e := m.findRequiredKind(oneKind); e != nil {
 		err = e
-	} else if other, e := m.findRequiredKind(domain, otherKind); e != nil {
+	} else if other, e := m.findRequiredKind(otherKind); e != nil {
 		err = e
 	} else if _, e := m.db.Exec(mdl_rel, rel.id, one.id, other.id, cardinality, at); e != nil {
 		err = e // improve the error result if the relation existed vefore?
 	} else {
 		a, b := makeRel(oneKind, otherKind, cardinality)
-		if e := m.addField(domain, rel, one, a.lhs(), a.affinity(), at); e != nil {
+		if e := m.addField(rel, one, a.lhs(), a.affinity()); e != nil {
 			err = e
-		} else if e := m.addField(domain, rel, other, b.rhs(), b.affinity(), at); e != nil {
+		} else if e := m.addField(rel, other, b.rhs(), b.affinity()); e != nil {
 			err = e
 		}
 	}
@@ -704,15 +698,15 @@ func (m *Modeler) AddRel(domain, relKind, oneKind, otherKind, cardinality, at st
 }
 
 // a field used for patterns as a returned value
-func (m *Modeler) AddResult(domain, kind, field string, aff affine.Affinity, cls, at string) (err error) {
-	if kid, e := m.findRequiredKind(domain, kind); e != nil {
+func (m *Pen) AddResult(kind, field string, aff affine.Affinity, cls string) (err error) {
+	if kid, e := m.findRequiredKind(kind); e != nil {
 		err = errutil.Fmt("%w trying to add result %q", e, field)
-	} else if cls, e := m.findOptionalKind(domain, cls); e != nil {
+	} else if cls, e := m.findOptionalKind(cls); e != nil {
 		err = errutil.Fmt("%w trying to write result %q", e, field)
-	} else if kid.domain != domain {
+	} else if kid.domain != m.domain {
 		err = errutil.Fmt("%w new result %q of %q expected in the same domain as the original declaration; was %q now %q",
-			Conflict, field, kind, kid.domain, domain)
-	} else if e := m.addField(domain, kid, cls, field, aff, at); e != nil {
+			Conflict, field, kind, kid.domain, m.domain)
+	} else if e := m.addField(kid, cls, field, aff); e != nil {
 		err = e
 	} else if res, e := m.db.Exec(`
 		update mdl_pat
@@ -724,31 +718,32 @@ func (m *Modeler) AddResult(domain, kind, field string, aff affine.Affinity, cls
 		err = e
 	} else if rows == 0 {
 		err = errutil.Fmt("unexpected result %q for kind %q in domain %q",
-			field, kind, domain)
+			field, kind, m.domain)
 	}
 	return
 }
 
 var mdl_rule = tables.Insert("mdl_rule", "domain", "kind", "target", "phase", "filter", "prog", "at")
 
-func (m *Modeler) AddRule(domain, pattern, target string, phase int, filter rt.BoolEval, prog []rt.Execute, at string) (err error) {
+func (m *Pen) AddRule(pattern, target string, phase int, filter rt.BoolEval, prog []rt.Execute) (err error) {
 	if filter, e := marshalout(filter); e != nil {
 		err = e
 	} else if prog, e := marshalprog(prog); e != nil {
 		err = e
 	} else {
-		err = m.AddPlainRule(domain, pattern, target, phase, filter, prog, at)
+		err = m.AddPlainRule(pattern, target, phase, filter, prog)
 	}
 	return
 }
 
 // public for tests:
-func (m *Modeler) AddPlainRule(domain, pattern, target string, phase int, filter, prog, at string) (err error) {
-	if kid, e := m.findRequiredKind(domain, pattern); e != nil {
+func (m *Pen) AddPlainRule(pattern, target string, phase int, filter, prog string) (err error) {
+	domain, at := m.domain, m.at
+	if kid, e := m.findRequiredKind(pattern); e != nil {
 		err = e
-	} else if !strings.HasSuffix(kid.fullpath(), m.patternPath) {
+	} else if !strings.HasSuffix(kid.fullpath(), m.paths.patternPath) {
 		err = errutil.Fmt("kind %q in domain %q is not a pattern", pattern, domain)
-	} else if tgt, e := m.findOptionalKind(domain, target); e != nil {
+	} else if tgt, e := m.findOptionalKind(target); e != nil {
 		err = e
 	} else {
 		_, err = m.db.Exec(mdl_rule, domain, kid.id, tgt.id, phase, filter, prog, at)
@@ -761,8 +756,8 @@ func (m *Modeler) AddPlainRule(domain, pattern, target string, phase int, filter
 var mdl_value = tables.Insert("mdl_value", "noun", "field", "value", "at")
 
 // public for tests:
-func (m *Modeler) AddPlainValue(domain, noun, field, value, at string) (err error) {
-	if noun, e := m.findRequiredNoun(domain, noun, nounWithKind); e != nil {
+func (m *Pen) AddPlainValue(noun, field, value string) (err error) {
+	if noun, e := m.findRequiredNoun(noun, nounWithKind); e != nil {
 		err = e
 	} else {
 		var fieldId int
@@ -778,7 +773,7 @@ func (m *Modeler) AddPlainValue(domain, noun, field, value, at string) (err erro
 		} else if e != nil {
 			err = errutil.New("database error", e)
 		} else {
-			_, err = m.db.Exec(mdl_value, noun.id, fieldId, value, at)
+			_, err = m.db.Exec(mdl_value, noun.id, fieldId, value, m.at)
 		}
 	}
 	return
@@ -788,11 +783,11 @@ func (m *Modeler) AddPlainValue(domain, noun, field, value, at string) (err erro
 // domain, noun, field reference a join of Noun and Kind to get a filtered Field.
 // FIX: nouns should be able to store EVALS too
 // example: an object with a counter in its description.
-func (m *Modeler) AddValue(domain, noun, field string, value literal.LiteralValue, at string) (err error) {
+func (m *Pen) AddValue(noun, field string, value literal.LiteralValue) (err error) {
 	if value, e := marshalout(value); e != nil {
 		err = e
 	} else {
-		err = m.AddPlainValue(domain, noun, field, value, at)
+		err = m.AddPlainValue(noun, field, value)
 	}
 	return
 }

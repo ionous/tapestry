@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )

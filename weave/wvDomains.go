@@ -7,8 +7,8 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -126,7 +126,7 @@ func (d *Domain) findNoun(name, q string) (ret *ScopedNoun, err error) {
 }
 
 func (d *Domain) AddNoun(long, short, kind, at string) (ret *ScopedNoun, err error) {
-	if e := d.cat.AddNoun(d.name, short, kind, at); e != nil {
+	if e := d.cat.Pin(d.name, at).AddNoun(short, kind); e != nil {
 		err = e
 	} else if e := d.makeNames(short, long, at); e != nil {
 		err = e
@@ -166,7 +166,7 @@ func (d *Domain) makeNames(noun, name, at string) (err error) {
 	for i, name := range out {
 		// ignore duplicate errors here.
 		// since these are generated, there's probably very little the user could do about them.
-		if e := cat.AddName(d.name, noun, name, i, at); e != nil && !errors.Is(e, mdl.Duplicate) {
+		if e := cat.Pin(d.name, at).AddName(noun, name, i); e != nil && !errors.Is(e, mdl.Duplicate) {
 			err = e
 			break
 		}

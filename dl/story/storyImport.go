@@ -114,8 +114,7 @@ func (op *DefinePhrase) Weave(cat *weave.Catalog) error {
 		} else if macro := lang.Normalize(macro.String()); len(macro) == 0 {
 			err = errutil.New("missing macro name")
 		} else {
-			d, at := w.Domain.Name(), w.At
-			err = cat.AddPhrase(d, macro, phrase.String(), rev.Bool(), at)
+			err = w.Pin().AddPhrase(macro, phrase.String(), rev.Bool())
 		}
 		return
 	})

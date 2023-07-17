@@ -3,7 +3,7 @@ package weave
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -34,7 +34,7 @@ type innerRecord struct {
 func (in *innerRecord) findCompatibleField(field string, affinity affine.Affinity) (retName, retCls string, err error) {
 	k := in.k
 	cat := k.domain.cat
-	return cat.FindCompatibleField(k.domain.name, k.kind, field, affinity)
+	return cat.Pin(k.domain.name, "").FindCompatibleField(k.kind, field, affinity)
 }
 
 func (rp *localRecord) isValid() bool {

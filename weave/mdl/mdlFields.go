@@ -62,7 +62,7 @@ with allTraits as (
 
 var mdl_field = tables.Insert("mdl_field", "domain", "kind", "field", "affinity", "type", "at")
 
-func (m *Modeler) addField(domain string, kid, cls kindInfo, field string, aff affine.Affinity, at string) (err error) {
+func (m *Pen) addField(kid, cls KindInfo, field string, aff affine.Affinity) (err error) {
 	// println("=== adding field", domain, kid.name, field, cls.name)
 	// if existing, e := tables.QueryStrings(m.db, fieldSource+`
 	// 	select origin|| ', ' || name || ', '|| affinity|| ', ' || typeName
@@ -79,12 +79,13 @@ func (m *Modeler) addField(domain string, kid, cls kindInfo, field string, aff a
 	// 	println("pending", strings.Join(pending, ";\n "))
 	// }
 
+	domain, at := m.domain, m.at
 	if rows, e := m.db.Query(fieldSource+`
 select origin, name, affinity, typeName, aspect
 from existingFields
 join pendingFields
 using(name)
-`, kid.fullpath(), field, cls.id, m.aspectPath); e != nil {
+`, kid.fullpath(), field, cls.id, m.paths.aspectPath); e != nil {
 		err = errutil.New("database error", e)
 	} else {
 		var prev struct {
@@ -139,13 +140,13 @@ using(name)
 // check that the kind can store the requested value at the passed field
 // returns the name of the field ( in case the originally specified field was a trait )
 // FIX: i think this would work better using the runtime kind cache.
-func (m *Modeler) FindCompatibleField(domain, kind, field string, aff affine.Affinity) (retName, retClass string, err error) {
+func (m *Pen) FindCompatibleField(kind, field string, aff affine.Affinity) (retName, retClass string, err error) {
 	var prev struct {
 		name string
 		aff  affine.Affinity
 		cls  *string
 	}
-	if kid, e := m.findRequiredKind(domain, kind); e != nil {
+	if kid, e := m.findRequiredKind(kind); e != nil {
 		err = errutil.Fmt("%w trying to find field %q", e, field)
 	} else if e := m.db.QueryRow(` 
 -- all possible traits:
@@ -182,12 +183,12 @@ from allTraits ma
 join fieldsInKind fk
 where ma.name = @fieldName
 and ma.kind = fk.typeId`,
-		sql.Named("aspects", m.aspectPath),
+		sql.Named("aspects", m.paths.aspectPath),
 		sql.Named("ancestry", kid.fullpath()),
 		sql.Named("fieldName", field)).
 		Scan(&prev.name, &prev.aff, &prev.cls); e != nil {
 		if e == sql.ErrNoRows {
-			err = errutil.Fmt("%w field %q in kind %q domain %q", Missing, field, kind, domain)
+			err = errutil.Fmt("%w field %q in kind %q domain %q", Missing, field, kind, m.domain)
 		} else {
 			err = errutil.New("database error", e)
 		}

@@ -7,7 +7,7 @@ import (
 )
 
 // return an object implementing the eph catalog writer
-// remapping the simple table definitions from mdl.go ( package tables/mdl )
+// remapping the simple table definitions from mdl.go ( package weave/mdl )
 // to ones that can look up and store ids.
 // ex. so a caller can Write(mdl.Check, raw args) and have the args remapped to ids.
 func newSpecWriter(fn writerFn) modelWriter {

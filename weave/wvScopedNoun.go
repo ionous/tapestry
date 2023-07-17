@@ -36,9 +36,10 @@ func (n *ScopedNoun) FindKind() (ret string, err error) {
 }
 
 func (n *ScopedNoun) AddAliases(at string, aliases []string) (err error) {
+	pen := n.domain.cat.Pin(n.domain.name, at)
 	for _, a := range aliases {
 		a := lang.Normalize(a)
-		if e := n.domain.cat.AddName(n.domain.name, n.name, a, -1, at); e != nil {
+		if e := pen.AddName(n.name, a, -1); e != nil {
 			err = e
 			break
 		}

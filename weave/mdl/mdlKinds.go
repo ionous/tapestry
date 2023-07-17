@@ -36,7 +36,7 @@ func updatePath(res sql.Result, parent string, path *string) (err error) {
 	return
 }
 
-type kindInfo struct {
+type KindInfo struct {
 	id        int64  // unique id of the kind
 	name      string // validated name of the kind
 	domain    string // validated domain name
@@ -45,14 +45,14 @@ type kindInfo struct {
 	_fullpath string
 }
 
-func (ki *kindInfo) numAncestors() int {
+func (ki *KindInfo) numAncestors() int {
 	// ,   = no ancestors
 	// ,2, = 1 ancestor
 	return strings.Count(ki.path, ",") - 1
 }
 
 // path starting with the kind's own id. ",id,...,"
-func (ki *kindInfo) fullpath() string {
+func (ki *KindInfo) fullpath() string {
 	if ki.id > 0 && len(ki._fullpath) == 0 {
 		ki._fullpath = "," + strconv.FormatInt(ki.id, 10) + ki.path
 	}
@@ -60,19 +60,19 @@ func (ki *kindInfo) fullpath() string {
 }
 
 // if specified, must exist.
-func (m *Modeler) findOptionalKind(domain, kind string) (ret kindInfo, err error) {
+func (m *Pen) findOptionalKind(kind string) (ret KindInfo, err error) {
 	if len(kind) > 0 {
-		ret, err = m.findRequiredKind(domain, kind)
+		ret, err = m.findRequiredKind(kind)
 	}
 	return
 }
 
 // if not specified errors, also errors if not found.
-func (m *Modeler) findRequiredKind(domain, kind string) (ret kindInfo, err error) {
-	if out, e := m.findKind(domain, kind); e != nil {
+func (m *Pen) findRequiredKind(kind string) (ret KindInfo, err error) {
+	if out, e := m.findKind(kind); e != nil {
 		err = e
 	} else if out.id == 0 {
-		err = errutil.Fmt("%w kind %q in domain %q", Missing, kind, domain)
+		err = errutil.Fmt("%w kind %q in domain %q", Missing, kind, m.domain)
 	} else {
 		ret = out
 	}
@@ -80,10 +80,10 @@ func (m *Modeler) findRequiredKind(domain, kind string) (ret kindInfo, err error
 }
 
 // if not specified errors, makes no assumptions about the results
-func (m *Modeler) findKind(domain, kind string) (ret kindInfo, err error) {
+func (m *Pen) findKind(kind string) (ret KindInfo, err error) {
 	if len(kind) == 0 {
 		err = errutil.New("empty name for kind")
-	} else if singular, e := m.singularize(domain, kind); e != nil {
+	} else if singular, e := m.singularize(kind); e != nil {
 		err = e
 	} else {
 		var rank int
@@ -105,7 +105,7 @@ func (m *Modeler) findKind(domain, kind string) (ret kindInfo, err error) {
 	and rank > 0
 	order by rank
 	limit 1`, // order by rank means the lowest number is first
-			domain, kind, singular).Scan(
+			m.domain, kind, singular).Scan(
 			&ret.domain, &ret.id, &ret.name, &ret.path, &rank)
 		switch e {
 		case nil:
@@ -121,7 +121,7 @@ func (m *Modeler) findKind(domain, kind string) (ret kindInfo, err error) {
 	return
 }
 
-func (m *Modeler) singularize(domain, kind string) (ret string, err error) {
+func (m *Pen) singularize(kind string) (ret string, err error) {
 	if len(kind) < 2 {
 		ret = kind //
 	} else if e := m.db.QueryRow(`
@@ -130,7 +130,7 @@ func (m *Modeler) singularize(domain, kind string) (ret string, err error) {
 	join domain_tree
 		on (uses = domain)
 	where base = ?1 and many = ?2
-	limit 1`, domain, kind).Scan(&ret); e == sql.ErrNoRows {
+	limit 1`, m.domain, kind).Scan(&ret); e == sql.ErrNoRows {
 		ret = lang.Singularize(kind)
 	} else {
 		err = e // other error or nil.

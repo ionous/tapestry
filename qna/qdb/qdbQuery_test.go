@@ -12,8 +12,8 @@ import (
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/test/testdb"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 	"github.com/kr/pretty"
 )
@@ -70,15 +70,15 @@ func TestQueries(t *testing.T) {
 				// domain, kind, field, affinity, type, at
 				// ---------------------------------------
 				// traits of an aspect
-				m.AddMember, domain, aspect, "brief", affine.Bool, "", at,
-				m.AddMember, domain, aspect, "verbose", affine.Bool, "", at,
-				m.AddMember, domain, aspect, "superbrief", affine.Bool, "", at,
+				addMember, domain, aspect, "brief", affine.Bool, "", at,
+				addMember, domain, aspect, "verbose", affine.Bool, "", at,
+				addMember, domain, aspect, "superbrief", affine.Bool, "", at,
 				// kind that uses that aspect
-				m.AddMember, domain, kind, aspect, affine.Text, aspect, at,
+				addMember, domain, kind, aspect, affine.Text, aspect, at,
 				// patterns
-				m.AddParameter, domain, pattern, "object", affine.Text, kind, at,
-				m.AddParameter, domain, pattern, "other object", affine.Text, kind, at,
-				m.AddResult, domain, pattern, "ancestor", affine.Text, kind, at,
+				addParameter, domain, pattern, "object", affine.Text, kind, at,
+				addParameter, domain, pattern, "other object", affine.Text, kind, at,
+				addResult, domain, pattern, "ancestor", affine.Text, kind, at,
 			); e != nil {
 				err = e
 			} else if e := mdlNoun(m,
@@ -264,7 +264,7 @@ func mdlDomain(m *mdl.Modeler, els ...any) (err error) {
 			row[0].(string),
 			row[1].(string),
 			row[2].(string)
-		if e := m.AddDomain(domain, requires, at); e != nil {
+		if e := m.Pin(domain, at).AddDependency(requires); e != nil {
 			err = e
 			break
 		}
@@ -275,21 +275,30 @@ func mdlField(m *mdl.Modeler, els ...any) (err error) {
 	for i, cnt := 0, len(els); i < cnt; i += 7 {
 		row := els[i:]
 		fn, domain, kind, field, affinity, typeName, at :=
-			row[0].(func(domain, kind, field string, affinity affine.Affinity, typeName, at string) error),
+			row[0].(func(pen *mdl.Pen, kind, field string, affinity affine.Affinity, typeName string) error),
 			row[1].(string),
 			row[2].(string),
 			row[3].(string),
 			row[4].(affine.Affinity),
 			row[5].(string),
 			row[6].(string)
-		if e := fn(domain, kind, field, affinity, typeName, at); e != nil {
+		pen := m.Pin(domain, at)
+		if e := fn(pen, kind, field, affinity, typeName); e != nil {
 			err = e
 			break
 		}
 	}
 	return
 }
-
+func addMember(pen *mdl.Pen, kind, field string, aff affine.Affinity, cls string) (err error) {
+	return pen.AddMember(kind, field, aff, cls)
+}
+func addParameter(pen *mdl.Pen, kind, field string, aff affine.Affinity, cls string) (err error) {
+	return pen.AddParameter(kind, field, aff, cls)
+}
+func addResult(pen *mdl.Pen, kind, field string, aff affine.Affinity, cls string) (err error) {
+	return pen.AddResult(kind, field, aff, cls)
+}
 func mdlKind(m *mdl.Modeler, els ...any) (err error) {
 	for i, cnt := 0, len(els); i < cnt; i += 4 {
 		row := els[i:]
@@ -298,7 +307,7 @@ func mdlKind(m *mdl.Modeler, els ...any) (err error) {
 			row[1].(string),
 			row[2].(string),
 			row[3].(string)
-		if e := m.AddKind(domain, kind, path, at); e != nil {
+		if e := m.Pin(domain, at).AddKind(kind, path); e != nil {
 			err = e
 			break
 		}
@@ -315,7 +324,7 @@ func mdlName(m *mdl.Modeler, els ...any) (err error) {
 			row[2].(string),
 			row[3].(int),
 			row[4].(string)
-		if e := m.AddName(domain, noun, name, rank, at); e != nil {
+		if e := m.Pin(domain, at).AddName(noun, name, rank); e != nil {
 			err = e
 			break
 		}
@@ -331,7 +340,7 @@ func mdlNoun(m *mdl.Modeler, els ...any) (err error) {
 			row[1].(string),
 			row[2].(string),
 			row[3].(string)
-		if e := m.AddNoun(domain, noun, kind, at); e != nil {
+		if e := m.Pin(domain, at).AddNoun(noun, kind); e != nil {
 			err = e
 			break
 		}
@@ -348,7 +357,7 @@ func mdlPair(m *mdl.Modeler, els ...any) (err error) {
 			row[2].(string),
 			row[3].(string),
 			row[4].(string)
-		if e := m.AddPair(domain, relKind, oneNoun, otherNoun, at); e != nil {
+		if e := m.Pin(domain, at).AddPair(relKind, oneNoun, otherNoun); e != nil {
 			err = e
 			break
 		}
@@ -364,7 +373,7 @@ func mdlPair(m *mdl.Modeler, els ...any) (err error) {
 // 			row[1].(string),
 // 			row[2].(string),
 // 			row[3].(string)
-// 		if e := m.Pat(domain, kind, labels, result); e != nil {
+// 		if e := m.Pin(domain,at).Pat(kind, labels, result); e != nil {
 // 			err = e
 // 			break
 // 		}
@@ -380,7 +389,7 @@ func mdlPlural(m *mdl.Modeler, els ...any) (err error) {
 			row[1].(string),
 			row[2].(string),
 			row[3].(string)
-		if e := m.AddPlural(domain, many, one, at); e != nil {
+		if e := m.Pin(domain, at).AddPlural(many, one); e != nil {
 			err = e
 			break
 		}
@@ -398,7 +407,7 @@ func mdlRel(m *mdl.Modeler, els ...any) (err error) {
 			row[3].(string),
 			row[4].(string),
 			row[5].(string)
-		if e := m.AddRel(domain, relKind, oneKind, otherKind, cardinality, at); e != nil {
+		if e := m.Pin(domain, at).AddRel(relKind, oneKind, otherKind, cardinality); e != nil {
 			err = e
 			break
 		}
@@ -416,7 +425,7 @@ func mdlRule(m *mdl.Modeler, els ...any) (err error) {
 			row[4].(string),
 			row[5].(string),
 			row[6].(string)
-		if e := m.AddPlainRule(domain, pattern, target, phase, filter, prog, at); e != nil {
+		if e := m.Pin(domain, at).AddPlainRule(pattern, target, phase, filter, prog); e != nil {
 			err = e
 			break
 		}
@@ -432,7 +441,7 @@ func mdlValue(m *mdl.Modeler, els ...any) (err error) {
 			row[2].(string),
 			row[3].(string),
 			row[4].(string)
-		if e := m.AddPlainValue(domain, noun, field, value, at); e != nil {
+		if e := m.Pin(domain, at).AddPlainValue(noun, field, value); e != nil {
 			err = e
 			break
 		}

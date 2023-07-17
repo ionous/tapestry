@@ -10,9 +10,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/grok"
-	"git.sr.ht/~ionous/tapestry/tables/mdl"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -54,6 +54,7 @@ func grokKindPhrase(w *weave.Weaver, res grok.Results) (err error) {
 	if len(res.Targets) != 0 {
 		err = errutil.Fmt("%s only expected sources", res.Macro.Name)
 	} else {
+		pen := w.Pin()
 		for _, src := range res.Sources {
 			// two forms: one where the kind is already known to be a kind;
 			// and one where its seen as a generic name.
@@ -63,8 +64,9 @@ func grokKindPhrase(w *weave.Weaver, res grok.Results) (err error) {
 				} else {
 					kind := lang.Normalize(src.Kinds[0].String())
 					ancestor := lang.Normalize(src.Kinds[1].String())
-					if e := w.Catalog.AddKind(w.Domain.Name(), kind, ancestor, w.At); e != nil && !errors.Is(e, mdl.Duplicate) {
+					if e := pen.AddKind(kind, ancestor); e != nil && !errors.Is(e, mdl.Duplicate) {
 						err = e
+						break
 					}
 				}
 			} else {
@@ -73,8 +75,9 @@ func grokKindPhrase(w *weave.Weaver, res grok.Results) (err error) {
 				} else {
 					kind := lang.Normalize(src.Name.String())
 					ancestor := lang.Normalize(src.Kinds[0].String())
-					if e := w.Catalog.AddKind(w.Domain.Name(), kind, ancestor, w.At); e != nil && !errors.Is(e, mdl.Duplicate) {
+					if e := pen.AddKind(kind, ancestor); e != nil && !errors.Is(e, mdl.Duplicate) {
 						err = e
+						break
 					}
 				}
 			}
@@ -263,9 +266,10 @@ func importNamedNoun(w *weave.Weaver, n grok.Noun) (ret string, err error) {
 	}
 	// assign kinds
 	if err == nil {
+		pen := w.Pin()
 		for _, k := range n.Kinds {
 			k := lang.Normalize(k.String())
-			if e := w.Catalog.AddNoun(noun.Domain(), noun.Name(), k, w.At); e != nil && !errors.Is(e, mdl.Duplicate) {
+			if e := pen.AddNoun(noun.Name(), k); e != nil && !errors.Is(e, mdl.Duplicate) {
 				err = e
 				break
 			}
@@ -325,10 +329,11 @@ func importCountedNoun(cat *weave.Catalog, noun grok.Noun) (ret []string, err er
 			if e := cat.AssertAncestor(kinds, "thing"); e != nil {
 				err = e
 			} else {
+				pen := w.Pin()
 				for _, n := range names {
 					if n, e := w.Domain.AddNoun(n, n, kindOrKinds, w.At); e != nil {
 						err = e
-					} else if e := cat.AddName(n.Domain(), n.Name(), kind, -1, w.At); e != nil {
+					} else if e := pen.AddName(n.Name(), kind, -1); e != nil {
 						err = e // ^ so that typing "triangle" means "triangles-1"
 						break
 					} else if e := n.WriteValue(w.At, "counted", nil, B(true)); e != nil {
