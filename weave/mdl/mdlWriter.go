@@ -2,6 +2,7 @@ package mdl
 
 import (
 	"database/sql"
+	"errors"
 	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
@@ -20,6 +21,18 @@ type Pen struct {
 	db         *tables.Cache
 	paths      *paths
 	domain, at string
+	warn       Log
+}
+
+type Log func(fmt string, parts ...any)
+
+func eatDuplicates(l Log, e error) (err error) {
+	if !errors.Is(e, Duplicate) {
+		err = e
+	} else {
+		l(e.Error())
+	}
+	return
 }
 
 // tbd: perhaps writing the aspect to its own table would be best
@@ -167,7 +180,7 @@ func (m *Pen) AddDefault(kind, field string, v assign.Assignment) (err error) {
 					Conflict, field, kind, prev.domain, domain)
 			} else if prev.out != nil {
 				if out == *prev.out {
-					err = errutil.Fmt("%w assignment for field %q of kind %q in domain %q",
+					m.warn("%w assignment for field %q of kind %q in domain %q",
 						Duplicate, field, kind, domain)
 				} else {
 					err = errutil.Fmt("%w new assignment for field %q of kind %q differs",
@@ -180,7 +193,6 @@ func (m *Pen) AddDefault(kind, field string, v assign.Assignment) (err error) {
 			} else {
 				_, err = m.db.Exec(mdl_default, prev.id, out)
 			}
-
 		}
 	}
 	return
@@ -227,7 +239,7 @@ func (m *Pen) AddFact(fact, value string) (err error) {
 			} else {
 				// do we want to warn about duplicate facts? isnt that kind of the point of them?
 				// maybe eat at the weave level?
-				err = errutil.Fmt("%w fact %q already declared in domain %q and now domain %q",
+				m.warn("%w fact %q already declared in domain %q and now domain %q",
 					Duplicate, fact, prev.domain, domain)
 			}
 		default:
@@ -267,7 +279,7 @@ func (m *Pen) AddGrammar(name string, prog *grammar.Directive) (err error) {
 				err = errutil.Fmt("%w grammar %q was %q in domain %q and now %q in domain %q",
 					Conflict, name, prev.prog, prev.domain, prog, domain)
 			} else {
-				err = errutil.Fmt("%w grammar %q already declared in domain %q and now domain %q",
+				m.warn("%w grammar %q already declared in domain %q and now domain %q",
 					Duplicate, name, prev.domain, domain)
 			}
 
@@ -342,7 +354,7 @@ func (m *Pen) AddKind(name, parent string) (err error) {
 		} else if strings.HasSuffix(kind.path, parent.fullpath()) {
 			// did the existing path fully contain the new ancestor?
 			// then its a duplicate request (ex. `,c,b,a,` `,b,a,` )
-			err = errutil.Fmt("%w %q already declared as an ancestor of %q.",
+			m.warn("%w %q already declared as an ancestor of %q.",
 				Duplicate, parent.name, name)
 		} else if strings.HasSuffix(parent.fullpath(), kind.path) {
 			// is the newly specified ancestor more specific than the existing path?
@@ -380,7 +392,8 @@ func (m *Pen) AddMember(kind, field string, aff affine.Affinity, cls string) (er
 	} else if cls, e := m.findOptionalKind(cls); e != nil {
 		err = errutil.Fmt("%w trying to write field %q", e, field)
 	} else {
-		err = m.addField(kid, cls, field, aff)
+		e := m.addField(kid, cls, field, aff)
+		err = eatDuplicates(m.warn, e)
 	}
 	return
 }
@@ -405,7 +418,7 @@ func (m *Pen) AddName(noun, name string, rank int) (err error) {
 	and name = ?3`, domain, noun.id, name).Scan(&exists); e != nil && e != sql.ErrNoRows {
 			err = errutil.New("database error", e)
 		} else if exists {
-			err = errutil.Fmt("%w %q already an alias of %q", Duplicate, name, noun.name)
+			m.warn("%w %q already an alias of %q", Duplicate, name, noun.name)
 		} else if _, e := m.db.Exec(mdl_name, domain, noun.id, name, rank, at); e != nil {
 			err = errutil.New("database error", e)
 		}
@@ -436,7 +449,7 @@ func (m *Pen) AddNoun(name, ancestor string) (err error) {
 		if strings.HasSuffix(prev.fullpath, parent.fullpath()) {
 			// does the existing kind fully contain the new kind?
 			// then its a duplicate request (ex. existing: ,c,b,a,)  ( new: ,a, )
-			err = errutil.Fmt("%w %q already declared as a kind of %q",
+			m.warn("%w %q already declared as a kind of %q",
 				Duplicate, name, ancestor)
 		} else if !strings.HasSuffix(parent.fullpath(), prev.fullpath) {
 			// unrelated completely? then its an error
@@ -491,7 +504,7 @@ func (m *Pen) AddOpposite(a, b string) (err error) {
 			}
 			return
 		}, &x, &y, &from); e != nil {
-			err = e
+			err = eatDuplicates(m.warn, e)
 		} else {
 			// writes the opposite paring as well
 			_, err = m.db.Exec(mdl_opposite, d, a, b, at)
@@ -541,7 +554,7 @@ func (m *Pen) AddPair(rel, oneNoun, otherNoun string) (err error) {
 		}
 		if err == nil {
 			if e := m.checkPair(rel, one, other, reverse, multi); e != nil {
-				err = e
+				err = eatDuplicates(m.warn, e)
 			} else {
 				err = m.addPair(rel, one, other)
 			}
@@ -562,7 +575,7 @@ func (m *Pen) AddParameter(kind, field string, aff affine.Affinity, cls string) 
 		err = errutil.Fmt("%w new parameter %q of %q expected in the same domain as the original declaration; was %q now %q",
 			Conflict, field, kind, kid.domain, domain)
 	} else if e := m.addField(kid, cls, field, aff); e != nil {
-		err = e
+		err = eatDuplicates(m.warn, e)
 	} else if res, e := m.db.Exec(`
 		update mdl_pat
 		set labels = case when labels is null then (?2) else (labels ||','|| ?2) end
@@ -613,7 +626,7 @@ func (m *Pen) AddPhrase(macro, phrase string, reversed bool) (err error) {
 					Conflict, phrase, fmtMacro(prev.kind, prev.reversed), prev.domain,
 					fmtMacro(macro, reversed), domain)
 			} else {
-				err = errutil.Fmt("%w phrase %q already declared in domain %q and now domain %q",
+				m.warn("%w phrase %q already declared in domain %q and now domain %q",
 					Duplicate, phrase, prev.domain, domain)
 			}
 		default:
@@ -654,7 +667,7 @@ func (m *Pen) AddPlural(many, one string) (err error) {
 			}
 			return
 		}, &prev, &from); e != nil {
-			err = e
+			err = eatDuplicates(m.warn, e)
 		} else {
 			_, err = m.db.Exec(mdl_plural, domain, many, one, m.at)
 		}
@@ -689,9 +702,9 @@ func (m *Pen) AddRel(relKind, oneKind, otherKind, cardinality string) (err error
 	} else {
 		a, b := makeRel(oneKind, otherKind, cardinality)
 		if e := m.addField(rel, one, a.lhs(), a.affinity()); e != nil {
-			err = e
+			err = eatDuplicates(m.warn, e)
 		} else if e := m.addField(rel, other, b.rhs(), b.affinity()); e != nil {
-			err = e
+			err = eatDuplicates(m.warn, e)
 		}
 	}
 	return
@@ -707,7 +720,7 @@ func (m *Pen) AddResult(kind, field string, aff affine.Affinity, cls string) (er
 		err = errutil.Fmt("%w new result %q of %q expected in the same domain as the original declaration; was %q now %q",
 			Conflict, field, kind, kid.domain, m.domain)
 	} else if e := m.addField(kid, cls, field, aff); e != nil {
-		err = e
+		err = eatDuplicates(m.warn, e)
 	} else if res, e := m.db.Exec(`
 		update mdl_pat
 		set result=?2

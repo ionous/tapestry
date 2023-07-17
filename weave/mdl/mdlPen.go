@@ -10,8 +10,16 @@ import (
  *
  */
 func NewModeler(db *sql.DB) (ret *Modeler, err error) {
+	return NewModelerWithWarnings(db, nil)
+}
+
+func NewModelerWithWarnings(db *sql.DB, warn Log) (ret *Modeler, err error) {
+	if warn == nil {
+		warn = func(format string, parts ...any) {}
+	}
 	ret = &Modeler{
-		db: tables.NewCache(db),
+		db:   tables.NewCache(db),
+		warn: warn,
 		paths: &paths{
 			aspectPath:  uncached,
 			kindPath:    uncached,
@@ -27,6 +35,7 @@ func NewModeler(db *sql.DB) (ret *Modeler, err error) {
 type Modeler struct {
 	db    *tables.Cache
 	paths *paths
+	warn  Log
 }
 
 type paths struct {
@@ -38,5 +47,5 @@ type paths struct {
 const uncached = "$uncached"
 
 func (m *Modeler) Pin(domain, at string) *Pen {
-	return &Pen{db: m.db, paths: m.paths, domain: domain, at: at}
+	return &Pen{db: m.db, paths: m.paths, domain: domain, at: at, warn: m.warn}
 }

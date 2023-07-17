@@ -64,7 +64,7 @@ func grokKindPhrase(w *weave.Weaver, res grok.Results) (err error) {
 				} else {
 					kind := lang.Normalize(src.Kinds[0].String())
 					ancestor := lang.Normalize(src.Kinds[1].String())
-					if e := pen.AddKind(kind, ancestor); e != nil && !errors.Is(e, mdl.Duplicate) {
+					if e := pen.AddKind(kind, ancestor); e != nil {
 						err = e
 						break
 					}
@@ -75,7 +75,7 @@ func grokKindPhrase(w *weave.Weaver, res grok.Results) (err error) {
 				} else {
 					kind := lang.Normalize(src.Name.String())
 					ancestor := lang.Normalize(src.Kinds[0].String())
-					if e := pen.AddKind(kind, ancestor); e != nil && !errors.Is(e, mdl.Duplicate) {
+					if e := pen.AddKind(kind, ancestor); e != nil {
 						err = e
 						break
 					}
@@ -216,7 +216,7 @@ func genNouns(w *weave.Weaver, ns []grok.Noun, multi bool) (ret g.Value, err err
 				names = append(names, ns...)
 			}
 		} else {
-			if name, e := importNamedNoun(w, n); e != nil && !errors.Is(e, mdl.Duplicate) {
+			if name, e := importNamedNoun(w, n); e != nil {
 				err = e
 				break
 			} else {
@@ -269,7 +269,7 @@ func importNamedNoun(w *weave.Weaver, n grok.Noun) (ret string, err error) {
 		pen := w.Pin()
 		for _, k := range n.Kinds {
 			k := lang.Normalize(k.String())
-			if e := pen.AddNoun(noun.Name(), k); e != nil && !errors.Is(e, mdl.Duplicate) {
+			if e := pen.AddNoun(noun.Name(), k); e != nil {
 				err = e
 				break
 			}
@@ -278,11 +278,11 @@ func importNamedNoun(w *weave.Weaver, n grok.Noun) (ret string, err error) {
 	// add articles:
 	if err == nil {
 		if isProper(n.Article, og) {
-			if e := noun.WriteValue(w.At, "proper named", nil, B(true)); e != nil && !errors.Is(e, mdl.Duplicate) {
+			if e := noun.WriteValue(w.At, "proper named", nil, B(true)); e != nil {
 				err = e
 			}
 		} else if a := getCustomArticle(n.Article); len(a) > 0 {
-			if e := noun.WriteValue(w.At, "indefinite article", nil, T(a)); e != nil && !errors.Is(e, mdl.Duplicate) {
+			if e := noun.WriteValue(w.At, "indefinite article", nil, T(a)); e != nil {
 				err = e
 			}
 		}
@@ -363,7 +363,7 @@ func assignTraits(w *weave.Weaver, noun *weave.ScopedNoun, traits []grok.Match) 
 		// FIX: this passes through "GetClosestNoun" which seems wrong here.
 		// the issue is the noun might not exist;
 		// so we'd have to break some of this open to handle it.
-		if e := noun.WriteValue(w.At, t.String(), nil, B(true)); e != nil && !errors.Is(e, mdl.Duplicate) {
+		if e := noun.WriteValue(w.At, t.String(), nil, B(true)); e != nil {
 			err = e
 			break
 		}

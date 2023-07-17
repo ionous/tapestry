@@ -1,15 +1,12 @@
 package story
 
 import (
-	"errors"
-
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
-	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -83,11 +80,11 @@ func (op *MapHeading) Weave(cat *weave.Catalog) error {
 						// ( ex. an author manually specifying a door and settings its directions )
 						// and explicit "assemble directions" phases would be needed.
 						var missingDoor helperNoun
-						if e := cat.AssertDefinition("dir", otherRoom.uniform, otherDir, room.uniform); e == nil {
+						if e := cat.AssertDefinition("dir", otherRoom.uniform, otherDir, room.uniform); e != nil {
+							err = e
+						} else {
 							// create the reverse door, etc.
 							err = mapDirect(cat, otherRoom, room, missingDoor, MapDirection{otherDir})
-						} else if !errors.Is(e, mdl.Duplicate) {
-							err = e
 						}
 					}
 				}

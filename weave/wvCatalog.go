@@ -2,7 +2,6 @@ package weave
 
 import (
 	"database/sql"
-	"errors"
 	"log"
 	"strings"
 
@@ -32,7 +31,6 @@ type Catalog struct {
 	cursor         string
 	run            rt.Runtime
 	db             *tables.Cache
-	warn           func(error)
 
 	*mdl.Modeler
 
@@ -66,7 +64,13 @@ func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catal
 			qna.NewOptions(),
 		)
 	}
-	m, e := mdl.NewModeler(db)
+	var logerr mdl.Log
+	if warn != nil {
+		logerr = func(fmt string, parts ...any) {
+			warn(errutil.Fmt(fmt, parts...))
+		}
+	}
+	m, e := mdl.NewModelerWithWarnings(db, logerr)
 	if e != nil {
 		panic(e)
 	}
@@ -78,7 +82,6 @@ func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catal
 	// what should be public for Catalog?
 	// no panics on creation... etc.
 	return &Catalog{
-		warn:        warn,
 		macros:      make(macroReg),
 		oneTime:     make(map[string]bool),
 		domainNouns: make(map[domainNoun]*ScopedNoun),
@@ -98,12 +101,6 @@ func (cat *Catalog) SetSource(x string) {
 
 func (cat *Catalog) Runtime() rt.Runtime {
 	return cat.run
-}
-
-func (cat *Catalog) Warn(e error) {
-	if cat.warn != nil {
-		cat.warn(e)
-	}
 }
 
 // return the uniformly named domain ( if it exists )
@@ -217,8 +214,7 @@ func (cat *Catalog) AssertAncestor(kind, ancestor string) error {
 			err = e // tbd: are the determiners of kinds useful for anything?
 		} else {
 			kind, ancestor := lang.Normalize(kind), lang.Normalize(ancestor)
-			e := ctx.Pin().AddKind(kind, ancestor)
-			err = cat.eatDuplicates(e)
+			err = ctx.Pin().AddKind(kind, ancestor)
 		}
 		return
 	})
@@ -233,15 +229,12 @@ func (cat *Catalog) AssertAspectTraits(aspect string, opTraits []string) error {
 			err = InvalidString("aspect")
 		} else if traits, e := UniformStrings(opTraits); e != nil {
 			err = e
-		} else {
-			e := ctx.Pin().AddKind(aspect, kindsOf.Aspect.String())
-			if e := cat.eatDuplicates(e); e != nil {
-				err = e
-			} else if len(traits) > 0 {
-				err = d.schedule(at, assert.RequireResults, func(ctx *Weaver) error {
-					return ctx.Pin().AddAspect(aspect, traits)
-				})
-			}
+		} else if e := ctx.Pin().AddKind(aspect, kindsOf.Aspect.String()); e != nil {
+			err = e
+		} else if len(traits) > 0 {
+			err = d.schedule(at, assert.RequireResults, func(ctx *Weaver) error {
+				return ctx.Pin().AddAspect(aspect, traits)
+			})
 		}
 		return
 	})
@@ -301,8 +294,7 @@ func (cat *Catalog) AssertField(kind, field, class string, aff affine.Affinity, 
 			if len(class) == 0 && isRecordAffinity(aff) {
 				class = field
 			}
-			e := ctx.Pin().AddMember(kind, field, aff, class)
-			if e := cat.eatDuplicates(e); e != nil {
+			if e := ctx.Pin().AddMember(kind, field, aff, class); e != nil {
 				err = e
 			} else if init != nil {
 				err = ctx.Pin().AddDefault(kind, field, init)
@@ -389,8 +381,7 @@ func (cat *Catalog) AssertParam(kind, field, class string, aff affine.Affinity, 
 				err = errutil.New("parameters don't currently support initial values")
 			} else {
 				pen := ctx.Pin()
-				e := pen.AddKind(kind, kindsOf.Pattern.String())
-				if e := cat.eatDuplicates(e); e != nil {
+				if e := pen.AddKind(kind, kindsOf.Pattern.String()); e != nil {
 					err = e
 				} else {
 					err = pen.AddParameter(kind, field, aff, class)
@@ -423,8 +414,7 @@ func (cat *Catalog) AssertResult(kind, field, class string, aff affine.Affinity,
 				err = errutil.New("return values don't currently support initial values")
 			} else {
 				pen := ctx.Pin()
-				e := pen.AddKind(kind, kindsOf.Pattern.String())
-				if e := cat.eatDuplicates(e); e != nil {
+				if e := pen.AddKind(kind, kindsOf.Pattern.String()); e != nil {
 					err = e
 				} else {
 					err = pen.AddResult(kind, field, aff, class)
@@ -448,8 +438,7 @@ func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error 
 		} else if card := makeCard(amany, bmany); len(card) == 0 {
 			err = errutil.New("unknown cardinality")
 		} else {
-			e := ctx.Pin().AddKind(rel, kindsOf.Relation.String())
-			if e := cat.eatDuplicates(e); e != nil {
+			if e := ctx.Pin().AddKind(rel, kindsOf.Relation.String()); e != nil {
 				err = e
 			} else {
 				err = cat.Schedule(assert.RequireResults, func(ctx *Weaver) (err error) {
@@ -522,17 +511,6 @@ func (cat *Catalog) Schedule(when assert.Phase, what func(*Weaver) error) (err e
 	return
 }
 
-// log if the error is a duplicate;
-// only return non-duplicate, non-nil errors
-func (cat *Catalog) eatDuplicates(e error) (err error) {
-	if !errors.Is(e, mdl.Duplicate) {
-		err = e
-	} else if cat.warn != nil {
-		cat.warn(e)
-	}
-	return
-}
-
 // return the uniformly named domain ( creating it if necessary )
 func (cat *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err error) {
 	// find or create the domain
@@ -578,8 +556,7 @@ func (cat *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err er
 							err = errutil.Fmt("circular reference: %q requires %q", req, n)
 							break
 						} else {
-							e := cat.Modeler.Pin(n, at).AddDependency(dep)
-							if e := cat.eatDuplicates(e); e != nil {
+							if e := cat.Modeler.Pin(n, at).AddDependency(dep); e != nil {
 								err = e
 								break
 							}

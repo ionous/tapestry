@@ -191,11 +191,6 @@ func (d *Domain) runPhase(ctx *Weaver) (err error) {
 			next.err = e
 			d.suspended = append(d.suspended, next)
 
-		case errors.Is(e, mdl.Duplicate):
-			if d.cat.warn != nil {
-				d.cat.warn(e)
-			}
-
 		case e != nil:
 			err = errutil.Append(err, e)
 		}
@@ -244,11 +239,6 @@ Loop:
 					err = redo.err
 				}
 				break Loop
-			}
-
-		case errors.Is(e, mdl.Duplicate):
-			if d.cat.warn != nil {
-				d.cat.warn(e)
 			}
 
 		default:
