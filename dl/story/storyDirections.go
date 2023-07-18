@@ -1,6 +1,8 @@
 package story
 
 import (
+	"strings"
+
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
@@ -59,13 +61,14 @@ func (op *MapHeading) Weave(cat *weave.Catalog) error {
 			err = e // ^ note: door name is optional
 		} else {
 			// exit this room moving through the (optional) door
+			pen := w.Pin()
 			mapDirect(cat, room, otherRoom, door, op.Dir)
 
 			// write a fact stating the general direction from one room to the other has been established.
 			// ( used to detect conflicts in (the reverse directional) implications of some other statement )
 			if dir := lang.Normalize(op.Dir.Str); len(dir) == 0 {
 				err = errutil.New("missing map direction")
-			} else if e := cat.AssertDefinition("dir", room.uniform, dir, otherRoom.uniform); e != nil {
+			} else if e := pen.AddFact(makeKey("dir", room.uniform, dir), otherRoom.uniform); e != nil {
 				err = e
 			} else {
 				// reverse connect
@@ -80,7 +83,7 @@ func (op *MapHeading) Weave(cat *weave.Catalog) error {
 						// ( ex. an author manually specifying a door and settings its directions )
 						// and explicit "assemble directions" phases would be needed.
 						var missingDoor helperNoun
-						if e := cat.AssertDefinition("dir", otherRoom.uniform, otherDir, room.uniform); e != nil {
+						if e := pen.AddFact(makeKey("dir", otherRoom.uniform, otherDir), room.uniform); e != nil {
 							err = e
 						} else {
 							// create the reverse door, etc.
@@ -92,6 +95,10 @@ func (op *MapHeading) Weave(cat *weave.Catalog) error {
 		}
 		return
 	})
+}
+
+func makeKey(path ...string) (ret string) {
+	return strings.Join(path, "/")
 }
 
 // Execute - called by the macro runtime during weave.

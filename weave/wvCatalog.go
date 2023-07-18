@@ -3,18 +3,13 @@ package weave
 import (
 	"database/sql"
 	"log"
-	"strings"
 
-	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
-	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/support/grokdb"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
@@ -206,66 +201,8 @@ func (cat *Catalog) AssertAlias(opShortName string, opAliases ...string) error {
 	})
 }
 
-// if a parent kind was specified, make the kid dependent on it.
-// note: a singular to plural (if needed ) gets handled by the dependency resolver's kindFinder and GetPluralKind()
-func (cat *Catalog) AssertAncestor(kind, ancestor string) error {
-	return cat.Schedule(assert.RequirePlurals, func(ctx *Weaver) (err error) {
-		if kind, e := grok.StripArticle(kind); e != nil {
-			err = e // tbd: are the determiners of kinds useful for anything?
-		} else {
-			kind, ancestor := lang.Normalize(kind), lang.Normalize(ancestor)
-			err = ctx.Pin().AddKind(kind, ancestor)
-		}
-		return
-	})
-}
-
-// generates traits and adds them to a custom aspect kind.
-func (cat *Catalog) AssertAspectTraits(aspect string, opTraits []string) error {
-	// uses the ancestry phase because it generates kinds ( one per aspect. )
-	return cat.Schedule(assert.RequireDeterminers, func(ctx *Weaver) (err error) {
-		d, at := ctx.Domain, ctx.At
-		if aspect := lang.Normalize(aspect); len(aspect) == 0 {
-			err = InvalidString("aspect")
-		} else if traits, e := UniformStrings(opTraits); e != nil {
-			err = e
-		} else if e := ctx.Pin().AddKind(aspect, kindsOf.Aspect.String()); e != nil {
-			err = e
-		} else if len(traits) > 0 {
-			err = d.schedule(at, assert.RequireResults, func(ctx *Weaver) error {
-				return ctx.Pin().AddAspect(aspect, traits)
-			})
-		}
-		return
-	})
-}
-
-func (cat *Catalog) AssertCheck(opName string, prog []rt.Execute, expect literal.LiteralValue) error {
-	// uses domain phase, because it needs to ensure a domain exists
-	return cat.Schedule(assert.RequireAll, func(ctx *Weaver) (err error) {
-		if name, ok := UniformString(opName); !ok {
-			err = InvalidString(opName)
-		} else {
-			err = ctx.Pin().AddCheck(name, expect, prog)
-		}
-		return
-	})
-}
-
-func (cat *Catalog) AssertDefinition(path ...string) error {
-	return cat.Schedule(assert.RequireAll, func(ctx *Weaver) (err error) {
-		if end := len(path) - 1; end <= 0 {
-			err = errutil.New("path too short", path)
-		} else {
-			key, value := strings.Join(path[:end], "/"), path[end]
-			err = ctx.Pin().AddFact(key, value)
-		}
-		return
-	})
-}
-
 // calls to schedule() between begin/end domain write to this newly declared domain.
-func (cat *Catalog) AssertDomainStart(name string, requires []string) (err error) {
+func (cat *Catalog) DomainStart(name string, requires []string) (err error) {
 	if n, ok := UniformString(name); !ok {
 		err = InvalidString(name)
 	} else if reqs, e := UniformStrings(requires); e != nil {
@@ -278,7 +215,7 @@ func (cat *Catalog) AssertDomainStart(name string, requires []string) (err error
 	return
 }
 
-func (cat *Catalog) AssertDomainEnd() (err error) {
+func (cat *Catalog) DomainEnd() (err error) {
 	if _, ok := cat.processing.Top(); !ok {
 		err = errutil.New("unexpected domain ending when there's no domain")
 	} else {
@@ -287,34 +224,10 @@ func (cat *Catalog) AssertDomainEnd() (err error) {
 	return
 }
 
-func (cat *Catalog) AssertField(kind, field, class string, aff affine.Affinity, init assign.Assignment) error {
-	return cat.Schedule(assert.RequireResults, func(ctx *Weaver) error {
-		return addField(ctx, kind, field, class, func(kind, field, class string) (err error) {
-			// shortcut: if we specify a field name for a record and no class, we'll expect the class to be the name.
-			if len(class) == 0 && isRecordAffinity(aff) {
-				class = field
-			}
-			if e := ctx.Pin().AddMember(kind, field, aff, class); e != nil {
-				err = e
-			} else if init != nil {
-				err = ctx.Pin().AddDefault(kind, field, init)
-			}
-			return
-		})
-	})
-}
-
-// jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
-func (cat *Catalog) AssertGrammar(name string, prog *grammar.Directive) error {
-	return cat.Schedule(assert.RequireRules /*GrammarPhase*/, func(ctx *Weaver) error {
-		return ctx.Pin().AddGrammar(name, prog)
-	})
-}
-
 func (cat *Catalog) AssertNounKind(name, kind string) error {
 	return cat.Schedule(assert.RequireDefaults, func(ctx *Weaver) (err error) {
 		noun, kind := lang.Normalize(name), lang.Normalize(kind)
-		_, err = ctx.Domain.AddNoun(name, noun, kind, ctx.At)
+		_, err = ctx.Domain.AddNoun(name, noun, kind)
 		return
 	})
 }
@@ -343,7 +256,7 @@ func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, val
 // and, on write, do a test to ensure the path is meaningful,
 // and that no "directory value" value exists for any sub path
 // ex. "a.b.c" is okay, so long as there's no record stored at "a.b" directly.
-// the runtime would change the way it reconstitutes values to handle all that.
+// the runtime would change the way it reconstitutes values using multiple rows
 func (cat *Catalog) writeValues() (err error) {
 Loop:
 	for _, n := range cat.domainNouns {
@@ -358,71 +271,6 @@ Loop:
 		}
 	}
 	return
-}
-
-func (cat *Catalog) AssertOpposite(opOpposite, opWord string) error {
-	return cat.Schedule(assert.RequireDependencies, func(ctx *Weaver) (err error) {
-		if a, ok := UniformString(opOpposite); !ok {
-			err = InvalidString(opOpposite)
-		} else if b, ok := UniformString(opWord); !ok {
-			err = InvalidString(opWord)
-		} else {
-			err = ctx.Pin().AddOpposite(a, b)
-		}
-		return
-	})
-}
-
-// writes a definition of kindName?args=arg1,arg2,arg3
-func (cat *Catalog) AssertParam(kind, field, class string, aff affine.Affinity, init assign.Assignment) error {
-	return cat.Schedule(assert.RequireAncestry, func(ctx *Weaver) error {
-		return addField(ctx, kind, field, class, func(kind, field, class string) (err error) {
-			if init != nil {
-				err = errutil.New("parameters don't currently support initial values")
-			} else {
-				pen := ctx.Pin()
-				if e := pen.AddKind(kind, kindsOf.Pattern.String()); e != nil {
-					err = e
-				} else {
-					err = pen.AddParameter(kind, field, aff, class)
-				}
-			}
-			return
-		})
-	})
-}
-
-// add to the plurals to the database and ( maybe ) remember the plural for the current domain's set of rules
-// not more than one singular per plural ( but the other way around is fine. )
-func (cat *Catalog) AssertPlural(opSingular, opPlural string) error {
-	return cat.Schedule(assert.RequireDependencies, func(ctx *Weaver) (err error) {
-		if plural, ok := UniformString(opPlural); !ok {
-			err = InvalidString(opPlural)
-		} else if singular, ok := UniformString(opSingular); !ok {
-			err = InvalidString(opSingular)
-		} else {
-			err = ctx.Pin().AddPlural(plural, singular)
-		}
-		return
-	})
-}
-
-func (cat *Catalog) AssertResult(kind, field, class string, aff affine.Affinity, init assign.Assignment) error {
-	return cat.Schedule(assert.RequireParameters, func(ctx *Weaver) error {
-		return addField(ctx, kind, field, class, func(kind, field, class string) (err error) {
-			if init != nil {
-				err = errutil.New("return values don't currently support initial values")
-			} else {
-				pen := ctx.Pin()
-				if e := pen.AddKind(kind, kindsOf.Pattern.String()); e != nil {
-					err = e
-				} else {
-					err = pen.AddResult(kind, field, aff, class)
-				}
-			}
-			return
-		})
-	})
 }
 
 func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error {
@@ -467,22 +315,6 @@ func (cat *Catalog) AssertRelative(opRel, opNoun, opOtherNoun string) error {
 			err = e
 		} else {
 			err = ctx.Pin().AddPair(rel, first.name, second.name)
-		}
-		return
-	})
-}
-
-// validate that the pattern for the rule exists then add the rule to the *current* domain
-// ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
-func (cat *Catalog) AssertRule(pattern string, target string, filter rt.BoolEval, flags assert.EventTiming, prog []rt.Execute) error {
-	return cat.Schedule(assert.RequireRelatives, func(ctx *Weaver) (err error) {
-		if name, ok := UniformString(pattern); !ok {
-			err = InvalidString(pattern)
-		} else if tgt, ok := UniformString(target); len(target) > 0 && !ok {
-			err = errutil.Fmt("unknown or invalid target %q for pattern %q", target, pattern)
-		} else {
-			flags := fromTiming(flags)
-			err = ctx.Pin().AddRule(name, tgt, flags, filter, prog)
 		}
 		return
 	})

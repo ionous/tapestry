@@ -1,14 +1,12 @@
 package story
 
 import (
-	"git.sr.ht/~ionous/tapestry/affine"
-	"git.sr.ht/~ionous/tapestry/dl/assign"
 	"git.sr.ht/~ionous/tapestry/jsn"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -17,23 +15,18 @@ func (op *ExtendPattern) Execute(macro rt.Runtime) error {
 	return Weave(macro, op)
 }
 
-func (op *ExtendPattern) Weave(cat *weave.Catalog) error {
+func (op *ExtendPattern) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
-		if name, e := safe.GetText(w, op.PatternName); e != nil {
+		if name, e := safe.GetText(cat.Runtime(), op.PatternName); e != nil {
 			err = e
 		} else {
-			// tbd: assert declares it into existence
-			// how do we instead simply say it should exist?
-			pattern := name.String()
-			if e := cat.AssertAncestor(pattern, kindsOf.Pattern.String()); e != nil {
+			pb := mdl.NewPatternBuilder(name.String())
+			if e := addFields(pb, mdl.PatternLocals, op.Locals); e != nil {
 				err = e
-			} else if e := declareFields(op.Locals, func(name, class string, aff affine.Affinity, init assign.Assignment) (err error) {
-				return cat.AssertField(pattern, name, class, aff, init)
-			}); e != nil {
+			} else if e := addRules(pb, "", op.Rules, assert.DefaultTiming); e != nil {
 				err = e
 			} else {
-				// write the rules last to help with test output consistency
-				err = ImportRules(cat, pattern, "", op.Rules, assert.DefaultTiming)
+				err = w.Pin().AddPattern(pb.Pattern)
 			}
 		}
 		return
@@ -48,34 +41,20 @@ func (op *DefinePattern) Execute(macro rt.Runtime) error {
 // Adds a new pattern declaration and optionally some associated pattern parameters.
 func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
-		if name, e := safe.GetText(w, op.PatternName); e != nil {
+		if name, e := safe.GetText(cat.Runtime(), op.PatternName); e != nil {
 			err = e
 		} else {
-			pattern := name.String()
-			if e := cat.AssertAncestor(pattern, kindsOf.Pattern.String()); e != nil {
+			pb := mdl.NewPatternBuilder(name.String())
+			if e := addFields(pb, mdl.PatternLocals, op.Locals); e != nil {
+				err = e
+			} else if e := addFields(pb, mdl.PatternParameters, op.Params); e != nil {
+				err = e
+			} else if e := addOptionalField(pb, mdl.PatternResults, op.Result); e != nil {
+				err = e
+			} else if e := addRules(pb, "", op.Rules, assert.DefaultTiming); e != nil {
 				err = e
 			} else {
-				// fix: probably always want to declare a result; even if its "nothing".
-				var resList []FieldDefinition
-				if res := op.Result; res != nil {
-					resList = []FieldDefinition{res}
-				}
-				if e := declareFields(resList, func(name, class string, aff affine.Affinity, init assign.Assignment) error {
-					return cat.AssertResult(pattern, name, class, aff, init)
-				}); e != nil {
-					err = e
-				} else if e := declareFields(op.Params, func(name, class string, aff affine.Affinity, init assign.Assignment) error {
-					return cat.AssertParam(pattern, name, class, aff, init)
-				}); e != nil {
-					err = e
-				} else if e := declareFields(op.Locals, func(name, class string, aff affine.Affinity, init assign.Assignment) error {
-					return cat.AssertField(pattern, name, class, aff, init)
-				}); e != nil {
-					err = e
-				} else {
-					// write the rules last to help with test output consistency
-					err = ImportRules(cat, pattern, "", op.Rules, assert.DefaultTiming)
-				}
+				err = w.Pin().AddPattern(pb.Pattern)
 			}
 		}
 		return
@@ -83,23 +62,23 @@ func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 }
 
 // note:  statements can set flags for a bunch of rules at once or within each rule separately, but not both.
-func ImportRules(cat *weave.Catalog, pattern, target string, els []PatternRule, flags assert.EventTiming) (err error) {
+func ImportRules(pb *mdl.PatternBuilder, target string, els []PatternRule, flags assert.EventTiming) (err error) {
 	// write in reverse order because within a given pattern, earlier rules take precedence.
 	for i := len(els) - 1; i >= 0; i-- {
-		if e := els[i].importRule(cat, pattern, target, flags); e != nil {
+		if e := els[i].addRule(pb, target, flags); e != nil {
 			err = errutil.Append(err, e)
 		}
 	}
 	return
 }
 
-func (op *PatternRule) importRule(cat *weave.Catalog, pattern, target string, tgtFlags assert.EventTiming) (err error) {
+func (op *PatternRule) addRule(pb *mdl.PatternBuilder, target string, tgtFlags assert.EventTiming) (err error) {
 	act := op.Does
 	if flags, e := op.Flags.ReadFlags(); e != nil {
 		err = e
 	} else if flags > 0 && tgtFlags > 0 {
 		// ensure flags were only set via the rule or via the pattern
-		err = errutil.New("unexpected continuation flags in", pattern)
+		err = errutil.New("unexpected continuation flags", pb.Name())
 	} else {
 		if tgtFlags > 0 {
 			flags = tgtFlags
@@ -109,7 +88,7 @@ func (op *PatternRule) importRule(cat *weave.Catalog, pattern, target string, tg
 
 		// check if this rule is declared inside a specific domain
 		if guard, ok := op.Guard.(jsn.Marshalee); !ok {
-			err = errutil.New("missing guard in", pattern)
+			err = errutil.New("missing guard", pb.Name())
 		} else {
 			// fix? could we instead just strstr for countOf
 			// also might be cool to augment or replace the serialized type
@@ -123,7 +102,7 @@ func (op *PatternRule) importRule(cat *weave.Catalog, pattern, target string, tg
 			// 		&core.HasDominion{domain.String()},
 			// 		guard,
 			// 	}}
-			err = cat.AssertRule(pattern, target, op.Guard, flags, act)
+			pb.AddRule(target, op.Guard, flags, act)
 		}
 	}
 	return
@@ -145,11 +124,34 @@ func (op *PatternFlags) ReadFlags() (ret assert.EventTiming, err error) {
 	return
 }
 
-func declareFields(els []FieldDefinition, ft fieldType) (err error) {
-	for _, el := range els {
-		if e := el.DeclareField(ft); e != nil {
-			err = e
-			break
+func addOptionalField(pb *mdl.PatternBuilder, ft mdl.FieldType, field FieldDefinition) (_ error) {
+	if field != nil {
+		var empty mdl.FieldInfo // the Nothing type generates a blank field info
+		if f := field.FieldInfo(); f != empty {
+			pb.AddField(ft, f)
+		}
+	}
+	return
+}
+
+func addFields(pb *mdl.PatternBuilder, ft mdl.FieldType, fields []FieldDefinition) (_ error) {
+	// fix; should probably be an error if nothing is used for locals
+	// or if nothing exists in a list of more than one nothing parameter
+	for _, field := range fields {
+		var empty mdl.FieldInfo // the Nothing type generates a blank field info
+		if f := field.FieldInfo(); f != empty {
+			pb.AddField(ft, f)
+		}
+	}
+	return
+}
+
+// note:  statements can set flags for a bunch of rules at once or within each rule separately, but not both.
+func addRules(pb *mdl.PatternBuilder, target string, els []PatternRule, flags assert.EventTiming) (err error) {
+	// write in reverse order because within a given pattern, earlier rules take precedence.
+	for i := len(els) - 1; i >= 0; i-- {
+		if e := els[i].addRule(pb, target, flags); e != nil {
+			err = errutil.Append(err, e)
 		}
 	}
 	return

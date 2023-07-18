@@ -3,6 +3,8 @@ package eph
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
 // Params 'Affinity' designates the storage type of a given parameter
@@ -15,17 +17,16 @@ type Params struct {
 	Initially assign.Assignment `if:"label=initially,optional"`
 }
 
+func (p Params) FieldInfo() mdl.FieldInfo {
+	return mdl.FieldInfo{
+		Name:     lang.Normalize(p.Name),
+		Class:    lang.Normalize(p.Class),
+		Affinity: p.Affinity,
+		Init:     p.Initially,
+	}
+}
+
 // ensure fields which reference aspects use the necessary formatting
 func AspectParam(aspectName string) Params {
 	return Params{Name: aspectName, Affinity: affine.Text, Class: aspectName}
-}
-
-func assertFields(kind string, ps []Params, w func(kind, name, class string, aff affine.Affinity, init assign.Assignment) error) (err error) {
-	for _, p := range ps {
-		if e := w(kind, p.Name, p.Class, p.Affinity, p.Initially); e != nil {
-			err = e
-			break
-		}
-	}
-	return
 }

@@ -290,14 +290,14 @@ func mdlField(m *mdl.Modeler, els ...any) (err error) {
 	}
 	return
 }
-func addMember(pen *mdl.Pen, kind, field string, aff affine.Affinity, cls string) (err error) {
-	return pen.AddMember(kind, field, aff, cls)
+func addMember(pen *mdl.Pen, kind, field string, aff affine.Affinity, cls string) error {
+	return pen.AddTestField(kind, field, aff, cls)
 }
-func addParameter(pen *mdl.Pen, kind, field string, aff affine.Affinity, cls string) (err error) {
-	return pen.AddParameter(kind, field, aff, cls)
+func addParameter(pen *mdl.Pen, kind, field string, aff affine.Affinity, cls string) error {
+	return pen.AddTestParameter(kind, field, aff, cls)
 }
-func addResult(pen *mdl.Pen, kind, field string, aff affine.Affinity, cls string) (err error) {
-	return pen.AddResult(kind, field, aff, cls)
+func addResult(pen *mdl.Pen, kind, field string, aff affine.Affinity, cls string) error {
+	return pen.AddTestResult(kind, field, aff, cls)
 }
 func mdlKind(m *mdl.Modeler, els ...any) (err error) {
 	for i, cnt := 0, len(els); i < cnt; i += 4 {

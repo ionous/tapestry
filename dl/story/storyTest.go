@@ -1,8 +1,10 @@
 package story
 
 import (
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave"
+	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
 
@@ -12,26 +14,26 @@ func (op *Test) Execute(macro rt.Runtime) error {
 }
 
 func (op *Test) Weave(cat *weave.Catalog) (err error) {
-	if name := op.TestName.String(); len(name) == 0 {
+	if name := lang.Normalize(op.TestName.String()); len(name) == 0 {
 		errutil.New("test has empty name")
 	} else {
 		var req []string
 		if n := op.DependsOn.String(); len(n) > 0 {
 			req = []string{n}
 		}
-		if e := cat.AssertDomainStart(name, req); e != nil {
+		if e := cat.DomainStart(name, req); e != nil {
 			err = e
 		} else {
 			if e := WeaveStatements(cat, op.TestStatements); e != nil {
 				err = e
 			} else if len(op.Do) > 0 {
-				if e := cat.AssertCheck(name, op.Do, nil); e != nil {
-					err = e
-				}
+				err = cat.Schedule(assert.RequireAll, func(w *weave.Weaver) error {
+					return w.Pin().AddCheck(name, nil, op.Do)
+				})
 			}
 
 			if err == nil {
-				err = cat.AssertDomainEnd()
+				err = cat.DomainEnd()
 			}
 		}
 	}

@@ -9,8 +9,8 @@ import (
 	"github.com/ionous/errutil"
 )
 
-func (m *Pen) findCardinality(kind KindInfo) (ret string, err error) {
-	if e := m.db.QueryRow(`
+func (pen *Pen) findCardinality(kind kindInfo) (ret string, err error) {
+	if e := pen.db.QueryRow(`
 	select cardinality
 	from mdl_rel
 	where relKind = ?1 

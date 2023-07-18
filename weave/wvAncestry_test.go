@@ -25,7 +25,7 @@ func TestAncestryFormation(t *testing.T) {
 		&eph.Kinds{Kind: "j", Ancestor: "m"}, // parent domain
 	)
 	if _, e := dt.Assemble(); e != nil {
-		t.Fatal(e)
+		t.Fatal("failed assembly", e)
 	} else if out, e := dt.ReadKinds(); e != nil {
 		t.Fatal(e)
 	} else if diff := pretty.Diff(out, []string{

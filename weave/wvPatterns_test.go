@@ -43,7 +43,7 @@ func TestPatternSingle(t *testing.T) {
 	expectFullResults(t, dt)
 }
 
-// redeclare the same pattern as in single, but with multiple commands
+// redeclare the same pattern as in single, using multiple commands
 func TestPatternSeparateLocals(t *testing.T) {
 	// not shuffling because the order of parameters matters for the test
 	dt := testweave.NewWeaverOptions(t.Name(), false)
@@ -54,17 +54,17 @@ func TestPatternSeparateLocals(t *testing.T) {
 		//
 		&eph.Patterns{
 			PatternName: "p",
-			Result: &eph.Params{
-				Name:     "success",
-				Affinity: affine.Bool,
-			}},
-		&eph.Patterns{
-			PatternName: "p",
 			Params: []eph.Params{{
 				Name:     "p1",
 				Affinity: affine.Text,
 				Class:    "k",
 			}}},
+		&eph.Patterns{
+			PatternName: "p",
+			Result: &eph.Params{
+				Name:     "success",
+				Affinity: affine.Bool,
+			}},
 		&eph.Patterns{
 			PatternName: "p",
 			Locals: []eph.Params{{
@@ -86,7 +86,8 @@ func TestPatternSeparateLocals(t *testing.T) {
 
 // kinds should allow fields across domains, and so should locals.
 func TestPatternSeparateDomains(t *testing.T) {
-	dt := testweave.NewWeaver(t.Name())
+	// not shuffling because the order of parameters matters for the test
+	dt := testweave.NewWeaverOptions(t.Name(), false)
 	defer dt.Close()
 	dt.MakeDomain(dd("a"),
 		&eph.Kinds{Kind: kindsOf.Pattern.String()}, // declare the patterns table

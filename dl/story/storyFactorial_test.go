@@ -15,7 +15,7 @@ func Fix_TestFactorialImport(t *testing.T) {
 	// 	// the hierarchical story as a flat list of commands used by the assembler
 	// 	// fix, future: "get var" and "assign" in the scope of a pattern should be generating parameter refs
 	// 	expect := []eph.Ephemera{
-	// 		&eph.AssertDomainStart{
+	// 		&eph.DomainStart{
 	// 			Name: "factorial",
 	// 		},
 	// 		// fix? disabled refs for now.
@@ -30,7 +30,7 @@ func Fix_TestFactorialImport(t *testing.T) {
 	// 		// 		}},
 	// 		// 	},
 	// 		// }},
-	// 		&eph.AssertDomainEnd{
+	// 		&eph.DomainEnd{
 	// 			Name: "factorial",
 	// 		},
 	// 		// one test rule

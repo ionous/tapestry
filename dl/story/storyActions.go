@@ -2,11 +2,13 @@ package story
 
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
+	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
 
@@ -21,23 +23,23 @@ func (op *ActionDecl) Weave(cat *weave.Catalog) (err error) {
 		patterns := []string{op.Action.Str, op.Event.Str}
 		targets := []string{"agent", "actor"}
 		ancestors := []kindsOf.Kinds{kindsOf.Action, kindsOf.Event}
-		for i, ancestor := range ancestors {
-			tgt := targets[i]
-			pattern := patterns[i]
-			if e := cat.AssertAncestor(pattern, ancestor.String()); e != nil {
-				err = e
-				break
-			} else if e := cat.AssertParam(pattern, tgt, tgt, affine.Text, nil); e != nil {
-				err = e // ^ the first parameters is always (ex) "agent" of type "agent".
-				break
-			} else if e := op.defineExtras(w, cat, pattern); e != nil {
+		for i, target := range targets {
+			pb := mdl.NewPatternSubtype(patterns[i], ancestors[i])
+			// the first parameter is always (ex) "agent" of type "agent":
+			pb.AddField(mdl.PatternParameters, mdl.FieldInfo{
+				Name:     target,
+				Class:    target,
+				Affinity: affine.Text,
+			})
+			//
+			if e := op.defineExtras(cat.Runtime(), pb); e != nil {
 				err = e
 				break
 			} else if i == 1 {
-				if e := cat.AssertResult(pattern, "success", "", affine.Bool, nil); e != nil {
-					err = e
-					break
-				}
+				pb.AddField(mdl.PatternResults, mdl.FieldInfo{
+					Name:     "success",
+					Affinity: affine.Bool,
+				})
 			}
 		}
 		return
@@ -47,22 +49,35 @@ func (op *ActionDecl) Weave(cat *weave.Catalog) (err error) {
 const actionNoun = "noun"
 const actionOtherNoun = "other noun"
 
-func (op *ActionDecl) defineExtras(run rt.Runtime, k assert.Assertions, pattern string) (err error) {
+func (op *ActionDecl) defineExtras(run rt.Runtime, pb *mdl.PatternBuilder) (err error) {
 	extras := op.ActionParams.Value
 	switch p := extras.(type) {
 	case *CommonAction:
 		if kind, e := safe.GetText(run, p.Kind); e != nil {
 			err = e
 		} else {
-			err = k.AssertParam(pattern, actionNoun, kind.String(), affine.Text, nil)
+			cls := lang.Normalize(kind.String())
+			pb.AddField(mdl.PatternParameters, mdl.FieldInfo{
+				Name:     actionNoun,
+				Class:    cls,
+				Affinity: affine.Text,
+			})
 		}
 	case *PairedAction:
 		if kinds, e := safe.GetText(run, p.Kinds); e != nil {
 			err = e
-		} else if e := k.AssertParam(pattern, actionNoun, kinds.String(), affine.Text, nil); e != nil {
-			err = e
 		} else {
-			err = k.AssertParam(pattern, actionOtherNoun, kinds.String(), affine.Text, nil)
+			cls := lang.Normalize(kinds.String())
+			pb.AddField(mdl.PatternParameters, mdl.FieldInfo{
+				Name:     actionNoun,
+				Class:    cls,
+				Affinity: affine.Text,
+			})
+			pb.AddField(mdl.PatternParameters, mdl.FieldInfo{
+				Name:     actionOtherNoun,
+				Class:    cls,
+				Affinity: affine.Text,
+			})
 		}
 	case *AbstractAction:
 		// no extra parameters

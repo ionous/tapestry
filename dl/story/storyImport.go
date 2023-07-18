@@ -22,12 +22,16 @@ func (op *DefineTraits) Execute(macro rt.Runtime) error {
 // (the) colors are red, blue, or green.
 func (op *DefineTraits) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
-		if traits, e := safe.GetTextList(w, op.Traits); e != nil {
+		if aspect, e := safe.GetText(w, op.Aspect); e != nil {
 			err = e
-		} else if aspect, e := safe.GetText(w, op.Aspect); e != nil {
+		} else if traits, e := safe.GetTextList(w, op.Traits); e != nil {
 			err = e
 		} else {
-			err = cat.AssertAspectTraits(aspect.String(), traits.Strings())
+			aspect, traits := lang.Normalize(aspect.String()), traits.Strings()
+			for i, t := range traits {
+				traits[i] = lang.Normalize(t)
+			}
+			err = w.Pin().AddAspect(aspect, traits)
 		}
 		return
 	})
@@ -45,8 +49,11 @@ func (op *GrammarDecl) Weave(cat *weave.Catalog) (err error) {
 	case *grammar.Alias:
 		err = cat.AssertAlias(el.AsNoun, el.Names...)
 	case *grammar.Directive:
+		// jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
 		name := strings.Join(el.Lede, "/")
-		err = cat.AssertGrammar(name, el)
+		return cat.Schedule(assert.RequireRules, func(w *weave.Weaver) error {
+			return w.Pin().AddGrammar(name, el)
+		})
 	default:
 		err = errutil.Fmt("unknown grammar %T", el)
 	}

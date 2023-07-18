@@ -5,18 +5,17 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
-	"git.sr.ht/~ionous/tapestry/weave/res"
 )
 
 type PatternBuilder struct {
-	search GetRequiredKind
 	Pattern
 }
 
 type Pattern struct {
-	Kind
-	rules   []rule
-	ruleOfs int
+	name, parent string
+	fields       fieldSet
+	rules        []rule
+	ruleOfs      int
 }
 
 func (p *Pattern) Name() string {
@@ -28,7 +27,7 @@ func (p *Pattern) Parent() string {
 }
 
 func (p *Pattern) NumFields(ft FieldType) int {
-	return len(p.fs.fields[ft])
+	return len(p.fields.fields[ft])
 }
 
 type rule struct {
@@ -38,63 +37,52 @@ type rule struct {
 	prog   []rt.Execute
 }
 
-type classCache map[string]res.Result
-
-func (b *classCache) addClass(kinds GetRequiredKind, cls string) {
-	if len(cls) > 0 && (*b)[cls] == nil {
-		if (*b) == nil {
-			(*b) = make(map[string]res.Result)
-		}
-		(*b)[cls] = kinds.GetRequiredKind(cls)
-	}
+func NewPatternBuilder(name string) *PatternBuilder {
+	return NewPatternSubtype(name, kindsOf.Pattern)
 }
 
-func (b *classCache) getClass(cls string) (ret KindInfo, err error) {
-	if r, ok := (*b)[cls]; ok {
-		if v, e := r.Resolve(); e != nil {
-			err = e
-		} else {
-			ret = v.(KindInfo)
-		}
-	}
-	return
-}
-
-type GetRequiredKind interface {
-	GetRequiredKind(kind string) res.Result
-}
-
-func NewPatternBuilder(w GetRequiredKind, name string) *PatternBuilder {
-	return NewPatternSubtype(w, name, kindsOf.Pattern)
-}
-
-func NewPatternSubtype(w GetRequiredKind, name string, parent kindsOf.Kinds) *PatternBuilder {
+func NewPatternSubtype(name string, parent kindsOf.Kinds) *PatternBuilder {
 	if (parent & kindsOf.Pattern) == 0 {
 		panic("subtype not a pattern")
 	}
 	return &PatternBuilder{
-		search: w,
 		Pattern: Pattern{
-			Kind: Kind{
-				// tbd: feels like it'd be best to have spec flag names that need normalization,
-				// and convert all the names at load time ( probably storing the original somewhere )
-				// ( ex. store the normalized names in the meta data )
-				name:   lang.Normalize(name),
-				parent: parent.String(),
-			},
+			// tbd: feels like it'd be best to have spec flag names that need normalization,
+			// and convert all the names at load time ( probably storing the original somewhere )
+			// ( ex. store the normalized names in the meta data )
+			name:   lang.Normalize(name),
+			parent: parent.String(),
 		}}
 }
 
+//go:generate stringer -type=FieldType -linecomment
+const (
+	PatternParameters FieldType = iota // pattern parameters
+	PatternResults
+	PatternLocals
+	NumFieldTypes
+)
+
+type FieldType int
+
 // defers execution; so no return value.
 func (b *PatternBuilder) AddField(ft FieldType, fn FieldInfo) {
-	b.classes.addClass(b.search, fn.Class)
-	b.fs.fields[ft] = append(b.fs.fields[ft], fn)
+	b.fields.fields[ft] = append(b.fields.fields[ft], fn)
+}
+
+func (b *PatternBuilder) AddLocal(fn FieldInfo) {
+	b.AddField(PatternLocals, fn)
+}
+func (b *PatternBuilder) AddResult(fn FieldInfo) {
+	b.AddField(PatternResults, fn)
+}
+func (b *PatternBuilder) AddParam(fn FieldInfo) {
+	b.AddField(PatternParameters, fn)
 }
 
 // defers execution; so no return value.
 // expects target class name to be normalized.
 func (b *PatternBuilder) AddRule(target string, filter rt.BoolEval, flags assert.EventTiming, prog []rt.Execute) {
-	b.classes.addClass(b.search, target)
 	b.rules = append(b.rules, rule{
 		target: target,
 		filter: filter,
@@ -103,29 +91,33 @@ func (b *PatternBuilder) AddRule(target string, filter rt.BoolEval, flags assert
 	})
 }
 
-func (p *Pattern) write(m *Pen) (ret KindInfo, err error) {
-	// if kid, e := p.Kind.write(m); e != nil {
-	// 	err = e
-	// } else {
-	// 	for cnt := len(p.rules); p.ruleOfs < cnt; p.ruleOfs++ {
-	// 		rule := p.rules[p.ruleOfs]
-	// 		if tgt, e := p.classes.getClass(rule.target); e != nil {
-	// 			err = e
-	// 			break
-	// 		} else {
-	// 			flags := fromTiming(rule.flags)
-	// 			if e := m.AddRuleById(kid, tgt, flags, rule.filter, rule.prog); e != nil {
-	// 				err = e
-	// 				break
-	// 			}
-	// 		}
-	// 	}
-	// 	if err == nil {
-	// 		ret = kid
-	// 	}
-	// }
-	// return
-	panic("not implemented")
+func (p *Pattern) writePattern(pen *Pen) (err error) {
+	if kid, e := pen.addKind(p.name, p.parent); e != nil {
+		err = e
+	} else if e := p.fields.writeFieldSet(pen, kid); e != nil {
+		err = e
+	} else {
+		for cnt := len(p.rules); p.ruleOfs < cnt; p.ruleOfs++ {
+			rule := p.rules[p.ruleOfs]
+			if tgt, e := pen.findOptionalKind(rule.target); e != nil {
+				err = e
+				break
+			} else if filter, e := marshalout(rule.filter); e != nil {
+				err = e
+				break
+			} else if prog, e := marshalprog(rule.prog); e != nil {
+				err = e
+				break
+			} else {
+				flags := fromTiming(rule.flags)
+				if e := pen.addRule(kid, tgt, flags, filter, prog); e != nil {
+					err = e
+					break
+				}
+			}
+		}
+	}
+	return
 }
 
 func fromTiming(timing assert.EventTiming) int {

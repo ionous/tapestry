@@ -261,7 +261,7 @@ func importNamedNoun(w *weave.Weaver, n grok.Noun) (ret string, err error) {
 			if len(n.Kinds) > 0 {
 				base = lang.Normalize(n.Kinds[0].String())
 			}
-			noun, err = w.Domain.AddNoun(og, name, base, w.At)
+			noun, err = w.Domain.AddNoun(og, name, base)
 		}
 	}
 	// assign kinds
@@ -326,12 +326,12 @@ func importCountedNoun(cat *weave.Catalog, noun grok.Noun) (ret []string, err er
 				kinds = kindOrKinds
 				kind = w.SingularOf(kindOrKinds)
 			}
-			if e := cat.AssertAncestor(kinds, "thing"); e != nil {
+			if e := w.Pin().AddKind(kinds, "thing"); e != nil {
 				err = e
 			} else {
 				pen := w.Pin()
 				for _, n := range names {
-					if n, e := w.Domain.AddNoun(n, n, kindOrKinds, w.At); e != nil {
+					if n, e := w.Domain.AddNoun(n, n, kindOrKinds); e != nil {
 						err = e
 					} else if e := pen.AddName(n.Name(), kind, -1); e != nil {
 						err = e // ^ so that typing "triangle" means "triangles-1"

@@ -24,58 +24,58 @@ func (op *DefineRelation) Weave(cat *weave.Catalog) error {
 	})
 }
 
-func (op *RelationCardinality) DefineRelation(run rt.Runtime, k assert.Assertions, rel string) (err error) {
+func (op *RelationCardinality) DefineRelation(run rt.Runtime, cat *weave.Catalog, rel string) (err error) {
 	type RelationDefiner interface {
-		DefineRelation(rt.Runtime, assert.Assertions, string) error
+		DefineRelation(rt.Runtime, *weave.Catalog, string) error
 	}
 	if c, ok := op.Value.(RelationDefiner); !ok {
 		err = ImportError(op, errutil.Fmt("%w for %T", UnhandledSwap, op.Value))
 	} else {
-		err = c.DefineRelation(run, k, rel)
+		err = c.DefineRelation(run, cat, rel)
 	}
 	return
 }
 
-func (op *OneToOne) DefineRelation(run rt.Runtime, k assert.Assertions, rel string) (err error) {
+func (op *OneToOne) DefineRelation(run rt.Runtime, cat *weave.Catalog, rel string) (err error) {
 	if a, e := safe.GetText(run, op.Kind); e != nil {
 		err = e
 	} else if b, e := safe.GetText(run, op.OtherKind); e != nil {
 		err = e
 	} else {
-		err = k.AssertRelation(rel, a.String(), b.String(), false, false)
+		err = cat.AssertRelation(rel, a.String(), b.String(), false, false)
 	}
 	return
 }
 
-func (op *OneToMany) DefineRelation(run rt.Runtime, k assert.Assertions, rel string) (err error) {
+func (op *OneToMany) DefineRelation(run rt.Runtime, cat *weave.Catalog, rel string) (err error) {
 	if a, e := safe.GetText(run, op.Kind); e != nil {
 		err = e
 	} else if b, e := safe.GetText(run, op.Kinds); e != nil {
 		err = e
 	} else {
-		err = k.AssertRelation(rel, a.String(), b.String(), false, true)
+		err = cat.AssertRelation(rel, a.String(), b.String(), false, true)
 	}
 	return
 }
 
-func (op *ManyToOne) DefineRelation(run rt.Runtime, k assert.Assertions, rel string) (err error) {
+func (op *ManyToOne) DefineRelation(run rt.Runtime, cat *weave.Catalog, rel string) (err error) {
 	if a, e := safe.GetText(run, op.Kind); e != nil {
 		err = e
 	} else if b, e := safe.GetText(run, op.Kinds); e != nil {
 		err = e
 	} else {
-		err = k.AssertRelation(rel, a.String(), b.String(), true, false)
+		err = cat.AssertRelation(rel, a.String(), b.String(), true, false)
 	}
 	return
 }
 
-func (op *ManyToMany) DefineRelation(run rt.Runtime, k assert.Assertions, rel string) (err error) {
+func (op *ManyToMany) DefineRelation(run rt.Runtime, cat *weave.Catalog, rel string) (err error) {
 	if a, e := safe.GetText(run, op.Kinds); e != nil {
 		err = e
 	} else if b, e := safe.GetText(run, op.OtherKinds); e != nil {
 		err = e
 	} else {
-		err = k.AssertRelation(rel, a.String(), b.String(), true, true)
+		err = cat.AssertRelation(rel, a.String(), b.String(), true, true)
 	}
 	return
 }

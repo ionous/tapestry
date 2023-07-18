@@ -27,7 +27,7 @@ type Pen struct {
 type Log func(fmt string, parts ...any)
 
 func eatDuplicates(l Log, e error) (err error) {
-	if !errors.Is(e, Duplicate) {
+	if e == nil || !errors.Is(e, Duplicate) {
 		err = e
 	} else {
 		l(e.Error())
@@ -36,18 +36,17 @@ func eatDuplicates(l Log, e error) (err error) {
 }
 
 // tbd: perhaps writing the aspect to its own table would be best
-// join at runtime to synthesize fields.
+// join at runtime to synthesize fields; would fix the questions of adding bad traits ( see comments )
 // ( could potentially write both as a bridge )
 func (m *Pen) AddAspect(aspect string, traits []string) (err error) {
 	domain, at := m.domain, m.at
 	var existingTraits int
-	if kid, e := m.findRequiredKind(aspect); e != nil {
-		err = e
-	} else if !strings.HasSuffix(kid.fullpath(), m.paths.aspectPath) {
-		err = errutil.Fmt("kind %q in domain %q is not an aspect", aspect, domain)
+	if kid, e := m.addKind(aspect, kindsOf.Aspect.String()); e != nil {
+		err = e // ^ hrm.
 	} else if strings.Count(kid.fullpath(), ",") != 3 {
 		// tbd: could loosen this; for now it simplifies writing the aspects;
-		// no need to check for conflicting traits.
+		// no need to check for conflicting fields if there's no derivation
+		// doesn't stop someone from adding derivation later though ...
 		err = errutil.Fmt("can't create aspect of %q; kinds of aspects can't be inherited", aspect)
 	} else if e := m.db.QueryRow(`
 			select count(*) 
@@ -56,6 +55,8 @@ func (m *Pen) AddAspect(aspect string, traits []string) (err error) {
 			`, kid.id).Scan(&existingTraits); e != nil {
 		err = errutil.New("database error", e)
 	} else if existingTraits > 0 {
+		// fix? doesn't stop someone from adding new traits later though....
+		// field builder could check that it only builds kindsOf.Kind
 		err = errutil.Fmt("aspect %q from %q already has traits", aspect, domain)
 	} else if kid.domain != domain {
 		err = errutil.Fmt("cant add traits to aspect %q; traits are expected to exist in the same domain as the aspect. was %q now %q",
@@ -148,10 +149,8 @@ var mdl_default = tables.Insert("mdl_default", "field", "value")
 
 // the pattern half of Start; domain, kind, field are a pointer into Field
 // value should be a marshaled compact value
-func (m *Pen) AddDefault(kind, field string, v assign.Assignment) (err error) {
+func (m *Pen) addDefault(kid kindInfo, field string, v assign.Assignment) (err error) {
 	if out, e := marshalout(v); e != nil {
-		err = e
-	} else if kid, e := m.findRequiredKind(kind); e != nil {
 		err = e
 	} else {
 		domain := m.domain
@@ -169,7 +168,7 @@ func (m *Pen) AddDefault(kind, field string, v assign.Assignment) (err error) {
 		where mf.kind = ?1
 		and mf.field = ?2`, kid.id, field).Scan(&prev.id, &prev.domain, &prev.aff, &prev.out); e == sql.ErrNoRows {
 			err = errutil.Fmt("%w field in assignment %q of kind %q in domain %q",
-				Missing, field, kind, domain)
+				Missing, field, kid.name, domain)
 		} else if e != nil {
 			err = e
 		} else {
@@ -177,18 +176,18 @@ func (m *Pen) AddDefault(kind, field string, v assign.Assignment) (err error) {
 				// currently assuming that fields are initialized in the same domain as they are declared
 				// that wont always be true... ex. derived classes or constraints
 				err = errutil.Fmt("%w new assignment for field %q of kind %q differs in domain; was %q now %q.",
-					Conflict, field, kind, prev.domain, domain)
+					Conflict, field, kid.name, prev.domain, domain)
 			} else if prev.out != nil {
 				if out == *prev.out {
 					m.warn("%w assignment for field %q of kind %q in domain %q",
-						Duplicate, field, kind, domain)
+						Duplicate, field, kid.name, domain)
 				} else {
 					err = errutil.Fmt("%w new assignment for field %q of kind %q differs",
-						Conflict, field, kind)
+						Conflict, field, kid.name)
 				}
 			} else if aff := assign.GetAffinity(v); aff != prev.aff {
 				err = errutil.Fmt("%w mismatched assignment for field %q of kind %q; field is %s, assignment was %s",
-					Conflict, field, kind,
+					Conflict, field, kid.name,
 					prev.aff, aff)
 			} else {
 				_, err = m.db.Exec(mdl_default, prev.id, out)
@@ -249,6 +248,10 @@ func (m *Pen) AddFact(fact, value string) (err error) {
 	return
 }
 
+func (m *Pen) AddFields(fields Fields) error {
+	return fields.writeFields(m)
+}
+
 var mdl_grammar = tables.Insert("mdl_grammar", "domain", "name", "prog", "at")
 
 // player input parsing
@@ -295,6 +298,11 @@ var mdl_kind = tables.Insert("mdl_kind", "domain", "kind", "singular", "path", "
 // singular name of kind and materialized hierarchy of ancestors separated by commas
 // this (somewhat) duplicates the algorithm used by Noun()
 func (m *Pen) AddKind(name, parent string) (err error) {
+	_, err = m.addKind(name, parent)
+	return
+}
+
+func (m *Pen) addKind(name, parent string) (ret kindInfo, err error) {
 	domain, at := m.domain, m.at
 	if parent, e := m.findOptionalKind(parent); e != nil {
 		err = e
@@ -304,6 +312,7 @@ func (m *Pen) AddKind(name, parent string) (err error) {
 	} else if kind, e := m.findKind(name); e != nil {
 		err = e
 	} else if kind.id == 0 {
+
 		// manage singular and plural kinds
 		// i don't like this much; especially be cause it depends so much on the first declaration
 		// maybe better would be a name/names table that any named concept can use.
@@ -317,9 +326,19 @@ func (m *Pen) AddKind(name, parent string) (err error) {
 			}
 			// easiest is if the name has never been mentioned before;
 			// we verified the other inputs already, so insert:
-			if res, e := m.db.Exec(mdl_kind, domain, name, optionalOne, trimPath(parent.fullpath()), at); e != nil {
+			path := parent.fullpath()
+			if res, e := m.db.Exec(mdl_kind, domain, name, optionalOne, trimPath(path), at); e != nil {
 				err = errutil.New("database error", e)
+			} else if newid, e := res.LastInsertId(); e != nil {
+				err = e
 			} else {
+				ret = kindInfo{
+					id:     newid,
+					name:   name,
+					domain: domain,
+					path:   path,
+					exact:  true,
+				}
 				// cache result...
 				switch name {
 				case kindsOf.Aspect.String():
@@ -333,16 +352,13 @@ func (m *Pen) AddKind(name, parent string) (err error) {
 					// if we've declared a new kind of a pattern:
 					// write blanks into the mdl_pat; parameters and results use update only.
 					if strings.HasSuffix(parent.fullpath(), m.paths.patternPath) {
-						if newid, e := res.LastInsertId(); e != nil {
-							err = e
-						} else {
-							_, err = m.db.Exec(`insert into mdl_pat(kind) values(?1)`, newid)
-						}
+						_, err = m.db.Exec(`insert into mdl_pat(kind) values(?1)`, newid)
 					}
 				}
 			}
 		}
 	} else if parent.id != 0 { // this ignore empty ancestors if the kind already existed.
+		ret = kind // provisionally.
 
 		if !kind.exact && parent.numAncestors() < 2 {
 			// we allow plural named kinds for nouns, etc. not for patterns and built in kinds.
@@ -385,8 +401,10 @@ func (m *Pen) AddKind(name, parent string) (err error) {
 	return
 }
 
-// a generic field of the kind
-func (m *Pen) AddMember(kind, field string, aff affine.Affinity, cls string) (err error) {
+var mdl_name = tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at")
+
+// for testing: a generic field of the kind
+func (m *Pen) AddTestField(kind, field string, aff affine.Affinity, cls string) (err error) {
 	if kid, e := m.findRequiredKind(kind); e != nil {
 		err = errutil.Fmt("%w trying to add field %q", e, field)
 	} else if cls, e := m.findOptionalKind(cls); e != nil {
@@ -398,7 +416,27 @@ func (m *Pen) AddMember(kind, field string, aff affine.Affinity, cls string) (er
 	return
 }
 
-var mdl_name = tables.Insert("mdl_name", "domain", "noun", "name", "rank", "at")
+func (m *Pen) AddTestParameter(kind, field string, aff affine.Affinity, cls string) (err error) {
+	if kid, e := m.findRequiredKind(kind); e != nil {
+		err = errutil.Fmt("%w trying to add parameter %q", e, field)
+	} else if cls, e := m.findOptionalKind(cls); e != nil {
+		err = errutil.Fmt("%w trying to write parameter %q", e, field)
+	} else {
+		err = m.addParameter(kid, cls, field, aff)
+	}
+	return
+}
+
+func (m *Pen) AddTestResult(kind, field string, aff affine.Affinity, cls string) (err error) {
+	if kid, e := m.findRequiredKind(kind); e != nil {
+		err = errutil.Fmt("%w trying to add parameter %q", e, field)
+	} else if cls, e := m.findOptionalKind(cls); e != nil {
+		err = errutil.Fmt("%w trying to write parameter %q", e, field)
+	} else {
+		err = m.addResult(kid, cls, field, aff)
+	}
+	return
+}
 
 // words for authors and game players refer to nouns
 // follows the domain rules of Noun.
@@ -559,21 +597,20 @@ func (m *Pen) AddPair(rel, oneNoun, otherNoun string) (err error) {
 				err = m.addPair(rel, one, other)
 			}
 		}
-
 	}
 	return
 }
 
+func (m *Pen) AddPattern(pat Pattern) error {
+	return pat.writePattern(m)
+}
+
 // a field used for patterns as a calling parameter
-func (m *Pen) AddParameter(kind, field string, aff affine.Affinity, cls string) (err error) {
+func (m *Pen) addParameter(kid, cls kindInfo, field string, aff affine.Affinity) (err error) {
 	domain := m.domain
-	if kid, e := m.findRequiredKind(kind); e != nil {
-		err = errutil.Fmt("%w trying to add parameter %q", e, field)
-	} else if cls, e := m.findOptionalKind(cls); e != nil {
-		err = errutil.Fmt("%w trying to write parameter %q", e, field)
-	} else if kid.domain != domain {
+	if kid.domain != domain {
 		err = errutil.Fmt("%w new parameter %q of %q expected in the same domain as the original declaration; was %q now %q",
-			Conflict, field, kind, kid.domain, domain)
+			Conflict, field, kid.name, kid.domain, domain)
 	} else if e := m.addField(kid, cls, field, aff); e != nil {
 		err = eatDuplicates(m.warn, e)
 	} else if res, e := m.db.Exec(`
@@ -586,8 +623,7 @@ func (m *Pen) AddParameter(kind, field string, aff affine.Affinity, cls string) 
 		err = e
 	} else if rows == 0 {
 		// can happen if the result was already written.
-		err = errutil.Fmt("unexpected parameter %q for kind %q in domain %q",
-			field, kind, domain)
+		err = errutil.Fmt("pattern parameters should be written before results")
 	}
 	return
 }
@@ -711,14 +747,10 @@ func (m *Pen) AddRel(relKind, oneKind, otherKind, cardinality string) (err error
 }
 
 // a field used for patterns as a returned value
-func (m *Pen) AddResult(kind, field string, aff affine.Affinity, cls string) (err error) {
-	if kid, e := m.findRequiredKind(kind); e != nil {
-		err = errutil.Fmt("%w trying to add result %q", e, field)
-	} else if cls, e := m.findOptionalKind(cls); e != nil {
-		err = errutil.Fmt("%w trying to write result %q", e, field)
-	} else if kid.domain != m.domain {
+func (m *Pen) addResult(kid, cls kindInfo, field string, aff affine.Affinity) (err error) {
+	if kid.domain != m.domain {
 		err = errutil.Fmt("%w new result %q of %q expected in the same domain as the original declaration; was %q now %q",
-			Conflict, field, kind, kid.domain, m.domain)
+			Conflict, field, kid.name, kid.domain, m.domain)
 	} else if e := m.addField(kid, cls, field, aff); e != nil {
 		err = eatDuplicates(m.warn, e)
 	} else if res, e := m.db.Exec(`
@@ -731,21 +763,15 @@ func (m *Pen) AddResult(kind, field string, aff affine.Affinity, cls string) (er
 		err = e
 	} else if rows == 0 {
 		err = errutil.Fmt("unexpected result %q for kind %q in domain %q",
-			field, kind, m.domain)
+			field, kid.name, m.domain)
 	}
 	return
 }
 
 var mdl_rule = tables.Insert("mdl_rule", "domain", "kind", "target", "phase", "filter", "prog", "at")
 
-func (m *Pen) AddRule(pattern, target string, phase int, filter rt.BoolEval, prog []rt.Execute) (err error) {
-	if filter, e := marshalout(filter); e != nil {
-		err = e
-	} else if prog, e := marshalprog(prog); e != nil {
-		err = e
-	} else {
-		err = m.AddPlainRule(pattern, target, phase, filter, prog)
-	}
+func (m *Pen) addRule(pattern, target kindInfo, phase int, filter, prog string) (err error) {
+	_, err = m.db.Exec(mdl_rule, m.domain, pattern.id, target.id, phase, filter, prog, m.at)
 	return
 }
 

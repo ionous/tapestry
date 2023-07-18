@@ -26,8 +26,7 @@ type localRecord struct {
 
 // inside the record we store slightly narrower info
 type innerRecord struct {
-	k kindCat
-
+	k           kindCat
 	fieldValues *[]literal.FieldValue // a sparse list of values
 }
 

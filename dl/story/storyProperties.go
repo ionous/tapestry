@@ -3,79 +3,119 @@ package story
 import (
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/dl/assign"
+	"git.sr.ht/~ionous/tapestry/lang"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
-type fieldType func(name, class string, aff affine.Affinity, init assign.Assignment) error
-
 type FieldDefinition interface {
-	DeclareField(fieldType) error
+	FieldInfo() mdl.FieldInfo
 }
 
-func (op *NothingField) DeclareField(fn fieldType) (_ error) {
+func (op *NothingField) FieldInfo() (_ mdl.FieldInfo) {
 	return
 }
 
-func (op *AspectField) DeclareField(fn fieldType) error {
+func (op *AspectField) FieldInfo() mdl.FieldInfo {
 	// inform gives these the name "<noun> condition"
 	// while tapestry relies on the name and class of the aspect to be the same.
 	// we could only do that with an after the fact reduction, and with some additional mdl data.
 	// ( ex. in case the same aspect is assigned twice, or twice at difference depths )
-	name, class := op.Aspect, op.Aspect
-	return fn(name, class, affine.Text, nil)
+	return mdl.FieldInfo{
+		Name:     lang.Normalize(op.Aspect),
+		Class:    lang.Normalize(op.Aspect),
+		Affinity: affine.Text,
+	}
 }
 
-func (op *BoolField) DeclareField(fn fieldType) error {
+func (op *BoolField) FieldInfo() mdl.FieldInfo {
 	var init assign.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromBool{Value: i}
 	}
-	return fn(op.Name, op.Type, affine.Bool, init)
+	return mdl.FieldInfo{
+		Name:     lang.Normalize(op.Name),
+		Class:    lang.Normalize(op.Type),
+		Affinity: affine.Bool,
+		Init:     init,
+	}
 }
 
-func (op *NumberField) DeclareField(fn fieldType) error {
+func (op *NumberField) FieldInfo() mdl.FieldInfo {
 	var init assign.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromNumber{Value: i}
 	}
-	return fn(op.Name, op.Type, affine.Number, init)
+	return mdl.FieldInfo{
+		Name:     lang.Normalize(op.Name),
+		Class:    lang.Normalize(op.Type),
+		Affinity: affine.Number,
+		Init:     init,
+	}
 }
 
-func (op *TextField) DeclareField(fn fieldType) error {
+func (op *TextField) FieldInfo() mdl.FieldInfo {
 	var init assign.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromText{Value: i}
 	}
-	return fn(op.Name, op.Type, affine.Text, init)
+	return mdl.FieldInfo{
+		Name:  lang.Normalize(op.Name),
+		Class: lang.Normalize(op.Type),
+
+		Affinity: affine.Text,
+		Init:     init,
+	}
+
 }
 
-func (op *RecordField) DeclareField(fn fieldType) error {
+func (op *RecordField) FieldInfo() mdl.FieldInfo {
 	var init assign.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromRecord{Value: i}
 	}
-	return fn(op.Name, op.Type, affine.Record, init)
+	return mdl.FieldInfo{
+		Name:     lang.Normalize(op.Name),
+		Class:    lang.Normalize(op.Type),
+		Affinity: affine.Record,
+		Init:     init,
+	}
 }
 
-func (op *NumListField) DeclareField(fn fieldType) error {
+func (op *NumListField) FieldInfo() mdl.FieldInfo {
 	var init assign.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromNumList{Value: i}
 	}
-	return fn(op.Name, op.Type, affine.NumList, init)
+	return mdl.FieldInfo{
+		Name:     lang.Normalize(op.Name),
+		Class:    lang.Normalize(op.Type),
+		Affinity: affine.NumList,
+		Init:     init,
+	}
 }
 
-func (op *TextListField) DeclareField(fn fieldType) error {
+func (op *TextListField) FieldInfo() mdl.FieldInfo {
 	var init assign.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromTextList{Value: i}
 	}
-	return fn(op.Name, op.Type, affine.TextList, init)
+	return mdl.FieldInfo{
+		Name:     lang.Normalize(op.Name),
+		Class:    lang.Normalize(op.Type),
+		Affinity: affine.TextList,
+		Init:     init,
+	}
 }
 
-func (op *RecordListField) DeclareField(fn fieldType) error {
+func (op *RecordListField) FieldInfo() mdl.FieldInfo {
 	var init assign.Assignment
 	if i := op.Initially; i != nil {
 		init = &assign.FromRecordList{Value: i}
 	}
-	return fn(op.Name, op.Type, affine.RecordList, init)
+	return mdl.FieldInfo{
+		Name:     lang.Normalize(op.Name),
+		Class:    lang.Normalize(op.Type),
+		Affinity: affine.RecordList,
+		Init:     init,
+	}
 }

@@ -13,12 +13,12 @@ func (op *DefineScene) Weave(cat *weave.Catalog) error {
 		} else if dependsOn, e := safe.GetOptionalTexts(w, op.DependsOn, nil); e != nil {
 			err = e
 		} else {
-			if e := cat.AssertDomainStart(name.String(), dependsOn.Strings()); e != nil {
+			if e := cat.DomainStart(name.String(), dependsOn.Strings()); e != nil {
 				err = e
 			} else if e := WeaveStatements(cat, op.With); e != nil {
 				err = e
 			} else {
-				err = cat.AssertDomainEnd()
+				err = cat.DomainEnd()
 			}
 		}
 		return

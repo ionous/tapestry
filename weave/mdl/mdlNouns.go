@@ -17,19 +17,19 @@ type nounInfo struct {
 }
 
 // if specified, must exist.
-func (m *Pen) findOptionalNoun(noun string, q nounFinder) (ret nounInfo, err error) {
+func (pen *Pen) findOptionalNoun(noun string, q nounFinder) (ret nounInfo, err error) {
 	if len(noun) > 0 {
-		ret, err = m.findRequiredNoun(noun, q)
+		ret, err = pen.findRequiredNoun(noun, q)
 	}
 	return
 }
 
 // if not specified errors, also errors if not found.
-func (m *Pen) findRequiredNoun(noun string, q nounFinder) (ret nounInfo, err error) {
-	if out, e := m.findNoun(noun, q); e != nil {
+func (pen *Pen) findRequiredNoun(noun string, q nounFinder) (ret nounInfo, err error) {
+	if out, e := pen.findNoun(noun, q); e != nil {
 		err = e
 	} else if out.id == 0 {
-		err = errutil.Fmt("%w noun %q in domain %q", Missing, noun, m.domain)
+		err = errutil.Fmt("%w noun %q in domain %q", Missing, noun, pen.domain)
 	} else {
 		ret = out
 	}
@@ -37,10 +37,10 @@ func (m *Pen) findRequiredNoun(noun string, q nounFinder) (ret nounInfo, err err
 }
 
 // if not specified errors, makes no assumptions about the results
-func (m *Pen) findNoun(noun string, q nounFinder) (ret nounInfo, err error) {
+func (pen *Pen) findNoun(noun string, q nounFinder) (ret nounInfo, err error) {
 	if len(noun) == 0 {
 		err = errutil.New("empty name for noun")
-	} else if out, e := q(m.db, m.domain, noun); e != nil && e != sql.ErrNoRows {
+	} else if out, e := q(pen.db, pen.domain, noun); e != nil && e != sql.ErrNoRows {
 		err = e
 	} else {
 		out.name = noun

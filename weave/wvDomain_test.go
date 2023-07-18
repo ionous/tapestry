@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"git.sr.ht/~ionous/tapestry/test/testweave"
+	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
 
 	"github.com/kr/pretty"
@@ -128,6 +129,8 @@ type rivalFact string
 
 func (el rivalFact) Phase() assert.Phase { return assert.RequireNouns /*ValuePhase*/ }
 
-func (el rivalFact) Assert(cat assert.Assertions) error {
-	return cat.AssertDefinition("rivalFact", string(el))
+func (el rivalFact) Assert(cat *weave.Catalog) error {
+	return cat.Schedule(assert.RequireAll, func(w *weave.Weaver) error {
+		return w.Pin().AddFact("rivalFact", string(el))
+	})
 }

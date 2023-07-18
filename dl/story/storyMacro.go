@@ -11,6 +11,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
 // Execute - called by the macro runtime during weave.
@@ -22,31 +23,19 @@ func (op *DefineMacro) Execute(macro rt.Runtime) error {
 // subsequent CallMacro(s) will be able to run it.
 func (op *DefineMacro) Weave(cat *weave.Catalog) (err error) {
 	return cat.Schedule(assert.RequirePlurals, func(w *weave.Weaver) (err error) {
-		if name, e := safe.GetText(w, op.MacroName); e != nil {
+		if name, e := safe.GetText(cat.Runtime(), op.MacroName); e != nil {
 			err = e
 		} else {
-			macro := name.String()
-			if e := cat.AssertAncestor(macro, kindsOf.Macro.String()); e != nil {
+			pb := mdl.NewPatternSubtype(name.String(), kindsOf.Macro)
+			if e := addFields(pb, mdl.PatternLocals, op.Locals); e != nil {
+				err = e
+			} else if e := addFields(pb, mdl.PatternParameters, op.Params); e != nil {
+				err = e
+			} else if e := addOptionalField(pb, mdl.PatternResults, op.Result); e != nil {
 				err = e
 			} else {
-				if res := op.Result; res != nil {
-					err = res.DeclareField(func(name, class string, aff affine.Affinity, init assign.Assignment) error {
-						return cat.AssertResult(macro, name, class, aff, init)
-					})
-				}
-				if err == nil {
-					if e := declareFields(op.Params, func(name, class string, aff affine.Affinity, init assign.Assignment) error {
-						return cat.AssertParam(macro, name, class, aff, init)
-					}); e != nil {
-						err = e
-					} else if e := declareFields(op.Locals, func(name, class string, aff affine.Affinity, init assign.Assignment) error {
-						return cat.AssertField(macro, name, class, aff, init)
-					}); e != nil {
-						err = e
-					} else {
-						err = cat.AssertRule(macro, "", &core.Always{}, 0, op.MacroStatements)
-					}
-				}
+				/**/ pb.AddRule("", &core.Always{}, 0, op.MacroStatements)
+				err = w.Pin().AddPattern(pb.Pattern)
 			}
 		}
 		return

@@ -4,8 +4,9 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
+	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/assert"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
 type Aliases struct {
@@ -13,8 +14,8 @@ type Aliases struct {
 	Aliases   []string `if:"label=as,type=text"`
 }
 
-func (op *Aliases) Assert(k assert.Assertions) (err error) {
-	return k.AssertAlias(op.ShortName, op.Aliases...)
+func (op *Aliases) Assert(cat *weave.Catalog) (err error) {
+	return cat.AssertAlias(op.ShortName, op.Aliases...)
 }
 
 // Aspects A set of related object states such that exactly one member of the set is true for a given object at a single time.
@@ -24,8 +25,10 @@ type Aspects struct {
 	Traits  []string `if:"label=traits,type=text"`
 }
 
-func (op *Aspects) Assert(k assert.Assertions) (err error) {
-	return k.AssertAspectTraits(op.Aspects, op.Traits)
+func (op *Aspects) Assert(cat *weave.Catalog) (err error) {
+	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
+		return w.Pin().AddAspect(op.Aspects, op.Traits)
+	})
 }
 
 type BeginDomain struct {
@@ -33,30 +36,9 @@ type BeginDomain struct {
 	Requires []string `if:"label=requires,type=text"`
 }
 
-func (op *BeginDomain) Assert(k assert.Assertions) (err error) {
-	return k.AssertDomainStart(op.Name, op.Requires)
+func (op *BeginDomain) Assert(cat *weave.Catalog) (err error) {
+	return cat.DomainStart(op.Name, op.Requires)
 }
-
-// Checks
-// type Checks struct {
-// 	Name   string               `if:"label=check,type=text"`
-// 	Expect literal.LiteralValue `if:"label=expect,optional"`
-// 	Exe    []rt.Execute         `if:"label=does"`
-// }
-
-// func (op *Checks) Assert(k assert.Assertions) (err error) {
-// 	return k.AssertCheck(op.Name, op.Exe, op.Expect)
-// }
-
-// type Definition struct {
-// 	Path  []string
-// 	Value string
-// }
-
-// func (op *Definition) Assert(k assert.Assertions) (err error) {
-// 	path := append(op.Path, op.Value)
-// 	return k.AssertDefinition(path...)
-// }
 
 // Directives
 type Directives struct {
@@ -64,8 +46,10 @@ type Directives struct {
 	Directive grammar.Directive `if:"label=parse"`
 }
 
-func (op *Directives) Assert(k assert.Assertions) (err error) {
-	return k.AssertGrammar(op.Name, &op.Directive)
+func (op *Directives) Assert(cat *weave.Catalog) (err error) {
+	return cat.Schedule(assert.RequireRules, func(w *weave.Weaver) error {
+		return w.Pin().AddGrammar(op.Name, &op.Directive)
+	})
 }
 
 // EndDomain
@@ -73,8 +57,8 @@ type EndDomain struct {
 	Name string `if:"label=domain,type=text"`
 }
 
-func (op *EndDomain) Assert(k assert.Assertions) (err error) {
-	return k.AssertDomainEnd()
+func (op *EndDomain) Assert(cat *weave.Catalog) (err error) {
+	return cat.DomainEnd()
 }
 
 // Kinds A new type deriving from another existing type.
@@ -87,20 +71,20 @@ type Kinds struct {
 	Contain  []Params `if:"label=contain"`
 }
 
-func (op *Kinds) Assert(k assert.Assertions) (err error) {
-	ps := op.Contain
-	if len(ps) > 0 {
-		err = assertFields(op.Kind, ps, k.AssertField)
-	}
-	// tbd: are we supposed to be able to declare a kind and its fields in one fell swoop?
-	// the tests seem to indicate no.
-	// except for TestValuePaths which seemed to indicate yes:
-	// ( i had to add an explicit Kind )
-	// doesn't really matter since eph is only used for testing.
-	if len(ps) == 0 || len(op.Ancestor) > 0 {
-		err = k.AssertAncestor(op.Kind, op.Ancestor)
-	}
-	return
+func (op *Kinds) Assert(cat *weave.Catalog) (err error) {
+	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
+		pen := w.Pin()
+		if e := pen.AddKind(op.Kind, op.Ancestor); e != nil {
+			err = e
+		} else if ps := op.Contain; len(ps) > 0 {
+			fields := mdl.NewFieldBuilder(op.Kind)
+			for _, p := range ps {
+				fields.AddField(p.FieldInfo())
+			}
+			err = pen.AddFields(fields.Fields)
+		}
+		return
+	})
 }
 
 // EphMacro - hijacks pattern registration for use with macros
@@ -115,8 +99,8 @@ type Nouns struct {
 	Kind string `if:"label=kind,type=text"`
 }
 
-func (op *Nouns) Assert(k assert.Assertions) (err error) {
-	return k.AssertNounKind(op.Noun, op.Kind)
+func (op *Nouns) Assert(cat *weave.Catalog) (err error) {
+	return cat.AssertNounKind(op.Noun, op.Kind)
 }
 
 // Opposites Rules for transforming plural text to singular text and back again.
@@ -127,8 +111,10 @@ type Opposites struct {
 	Word     string `if:"label=word,type=text"`
 }
 
-func (op *Opposites) Assert(k assert.Assertions) (err error) {
-	return k.AssertOpposite(op.Opposite, op.Word)
+func (op *Opposites) Assert(cat *weave.Catalog) error {
+	return cat.Schedule(assert.RequireDependencies, func(ctx *weave.Weaver) error {
+		return ctx.Pin().AddOpposite(op.Opposite, op.Word)
+	})
 }
 
 // Patterns Patterns provide author reusable code.
@@ -144,22 +130,24 @@ type Patterns struct {
 	Result      *Params  `if:"label=result,optional"`
 }
 
-func (op *Patterns) Assert(k assert.Assertions) (err error) {
-	kind := op.PatternName
-	if e := k.AssertAncestor(kind, kindsOf.Pattern.String()); e != nil {
-		err = e
-	} else {
+func (op *Patterns) Assert(cat *weave.Catalog) (err error) {
+	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
+		kb := mdl.NewPatternBuilder(op.PatternName)
 		if ps := op.Params; err == nil && len(ps) > 0 {
-			err = assertFields(kind, ps, k.AssertParam)
+			for _, p := range ps {
+				kb.AddParam(p.FieldInfo())
+			}
 		}
 		if p := op.Result; err == nil && p != nil {
-			err = k.AssertResult(kind, p.Name, p.Class, p.Affinity, p.Initially)
+			kb.AddResult(p.FieldInfo())
 		}
 		if ps := op.Locals; err == nil {
-			err = assertFields(kind, ps, k.AssertField)
+			for _, p := range ps {
+				kb.AddLocal(p.FieldInfo())
+			}
 		}
-	}
-	return
+		return w.Pin().AddPattern(kb.Pattern)
+	})
 }
 
 // Plurals Rules for transforming plural text to singular text and back again.
@@ -170,8 +158,10 @@ type Plurals struct {
 	Singular string `if:"label=singular,type=text"`
 }
 
-func (op *Plurals) Assert(k assert.Assertions) (err error) {
-	return k.AssertPlural(op.Singular, op.Plural)
+func (op *Plurals) Assert(cat *weave.Catalog) error {
+	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) error {
+		return w.Pin().AddPlural(op.Plural, op.Singular)
+	})
 }
 
 // Refs Implies some fact about the world that will be defined elsewhere.
@@ -180,7 +170,7 @@ func (op *Plurals) Assert(k assert.Assertions) (err error) {
 // 	Refs []Ephemera `if:"label=refs"`
 // }
 
-// func (op *Refs) Assert(k assert.Assertions) (err error) {
+// func (op *Refs) Assert(cat*weave.Catalog) (err error) {
 // 	refsNotImplemented.PrintOnce()
 // 	return
 // }
@@ -195,16 +185,16 @@ type Relations struct {
 	Cardinality Cardinality `if:"label=relate"`
 }
 
-func (op *Relations) Assert(k assert.Assertions) (err error) {
+func (op *Relations) Assert(cat *weave.Catalog) (err error) {
 	switch c := op.Cardinality.(type) {
 	case *OneOne:
-		err = k.AssertRelation(op.Rel, c.Kind, c.OtherKind, false, false)
+		err = cat.AssertRelation(op.Rel, c.Kind, c.OtherKind, false, false)
 	case *OneMany:
-		err = k.AssertRelation(op.Rel, c.Kind, c.OtherKinds, false, true)
+		err = cat.AssertRelation(op.Rel, c.Kind, c.OtherKinds, false, true)
 	case *ManyOne:
-		err = k.AssertRelation(op.Rel, c.Kinds, c.OtherKind, true, false)
+		err = cat.AssertRelation(op.Rel, c.Kinds, c.OtherKind, true, false)
 	case *ManyMany:
-		err = k.AssertRelation(op.Rel, c.Kinds, c.OtherKinds, true, true)
+		err = cat.AssertRelation(op.Rel, c.Kinds, c.OtherKinds, true, true)
 	}
 	return
 }
@@ -216,8 +206,8 @@ type Relatives struct {
 	OtherNoun string `if:"label=to,type=text"`
 }
 
-func (op *Relatives) Assert(k assert.Assertions) (err error) {
-	return k.AssertRelative(op.Rel, op.Noun, op.OtherNoun)
+func (op *Relatives) Assert(cat *weave.Catalog) (err error) {
+	return cat.AssertRelative(op.Rel, op.Noun, op.OtherNoun)
 }
 
 // Rules
@@ -230,9 +220,13 @@ type Rules struct {
 	Touch       Always       `if:"label=touch,optional"`
 }
 
-func (op *Rules) Assert(k assert.Assertions) (err error) {
-	flags := toTiming(op.When, op.Touch)
-	return k.AssertRule(op.PatternName, op.Target, op.Filter, flags, op.Exe)
+func (op *Rules) Assert(cat *weave.Catalog) (err error) {
+	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
+		kb := mdl.NewPatternBuilder(op.PatternName)
+		flags := toTiming(op.When, op.Touch)
+		kb.AddRule(op.Target, op.Filter, flags, op.Exe)
+		return w.Pin().AddPattern(kb.Pattern)
+	})
 }
 
 // Values Give a noun a specific value at startup.
@@ -247,6 +241,6 @@ type Values struct {
 	Value literal.LiteralValue `if:"label=value"`
 }
 
-func (op *Values) Assert(k assert.Assertions) (err error) {
-	return k.AssertNounValue(op.Noun, op.Field, op.Path, op.Value)
+func (op *Values) Assert(cat *weave.Catalog) (err error) {
+	return cat.AssertNounValue(op.Noun, op.Field, op.Path, op.Value)
 }

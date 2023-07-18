@@ -13,7 +13,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/test/testdb"
 	"git.sr.ht/~ionous/tapestry/test/testweave"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/kr/pretty"
 )
 
@@ -38,13 +38,13 @@ func TestMacros(t *testing.T) {
 	//
 	if curr, e := story.CompactDecode(storyMacroData); e != nil {
 		t.Fatal(e)
-	} else if e := cat.AssertDomainStart("tapestry", nil); e != nil {
+	} else if e := cat.DomainStart("tapestry", nil); e != nil {
 		t.Fatal(e)
-	} else if e := addDefaultKinds(cat); e != nil {
+	} else if e := addDefaultKinds(cat.Pin("tapestry", "default kinds")); e != nil {
 		t.Fatal(e)
 	} else if e := story.ImportStory(cat, t.Name(), &curr); e != nil {
 		t.Fatal(e)
-	} else if e := cat.AssertDomainEnd(); e != nil {
+	} else if e := cat.DomainEnd(); e != nil {
 		t.Fatal(e)
 	} else if e := cat.AssembleCatalog(); e != nil {
 		t.Fatal(e)
@@ -63,9 +63,9 @@ func TestMacros(t *testing.T) {
 //go:embed storyMacro_test.if
 var storyMacroData []byte
 
-func addDefaultKinds(n assert.Assertions) (err error) {
+func addDefaultKinds(pen *mdl.Pen) (err error) {
 	for _, k := range kindsOf.DefaultKinds {
-		if e := n.AssertAncestor(k.String(), k.Parent().String()); e != nil {
+		if e := pen.AddKind(k.String(), k.Parent().String()); e != nil {
 			err = e
 			break
 		}

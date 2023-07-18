@@ -125,7 +125,8 @@ func (d *Domain) findNoun(name, q string) (ret *ScopedNoun, err error) {
 	return
 }
 
-func (d *Domain) AddNoun(long, short, kind, at string) (ret *ScopedNoun, err error) {
+func (d *Domain) AddNoun(long, short, kind string) (ret *ScopedNoun, err error) {
+	at := d.cat.cursor
 	if e := d.cat.Pin(d.name, at).AddNoun(short, kind); e != nil {
 		err = e
 	} else if e := d.makeNames(short, long, at); e != nil {
@@ -166,7 +167,7 @@ func (d *Domain) makeNames(noun, name, at string) (err error) {
 	for i, name := range out {
 		// ignore duplicate errors here.
 		// since these are generated, there's probably very little the user could do about them.
-		if e := cat.Pin(d.name, at).AddName(noun, name, i); e != nil && !errors.Is(e, mdl.Duplicate) {
+		if e := cat.Pin(d.name, at).AddName(noun, name, i); e != nil {
 			err = e
 			break
 		}
