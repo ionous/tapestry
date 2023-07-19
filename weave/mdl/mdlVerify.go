@@ -8,9 +8,9 @@ import (
 
 // findDomain validates that the named domain exists
 // the returned name is the same as the passed name.
-func (m *Pen) findDomain() (ret string, err error) {
-	domain := m.domain
-	if e := m.db.QueryRow(`
+func (pen *Pen) findDomain() (ret string, err error) {
+	domain := pen.domain
+	if e := pen.db.QueryRow(`
 	select domain 
 	from mdl_domain 
 	where domain = ?1`, domain).Scan(&ret); e == sql.ErrNoRows {
