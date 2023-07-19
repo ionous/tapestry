@@ -26,10 +26,6 @@ func (p *Pattern) Parent() string {
 	return p.parent
 }
 
-func (p *Pattern) NumFields(ft FieldType) int {
-	return len(p.fields.fields[ft])
-}
-
 type rule struct {
 	target string
 	filter rt.BoolEval
@@ -91,28 +87,38 @@ func (b *PatternBuilder) AddRule(target string, filter rt.BoolEval, flags assert
 	})
 }
 
-func (p *Pattern) writePattern(pen *Pen) (err error) {
-	if kid, e := pen.addKind(p.name, p.parent); e != nil {
-		err = e
-	} else if e := p.fields.writeFieldSet(pen, kid); e != nil {
+func (pat *Pattern) writePattern(pen *Pen, create bool) (err error) {
+	if cache, e := pat.fields.cache(pen); e != nil {
 		err = e
 	} else {
-		for cnt := len(p.rules); p.ruleOfs < cnt; p.ruleOfs++ {
-			rule := p.rules[p.ruleOfs]
-			if tgt, e := pen.findOptionalKind(rule.target); e != nil {
+		var kid kindInfo
+		if create {
+			kid, err = pen.addKind(pat.name, pat.parent)
+		} else {
+			kid, err = pen.findRequiredKind(pat.name)
+		}
+		if err == nil {
+			if e := pat.fields.writeFieldSet(pen, kid, cache); e != nil {
 				err = e
-				break
-			} else if filter, e := marshalout(rule.filter); e != nil {
-				err = e
-				break
-			} else if prog, e := marshalprog(rule.prog); e != nil {
-				err = e
-				break
 			} else {
-				flags := fromTiming(rule.flags)
-				if e := pen.addRule(kid, tgt, flags, filter, prog); e != nil {
-					err = e
-					break
+				for cnt := len(pat.rules); pat.ruleOfs < cnt; pat.ruleOfs++ {
+					rule := pat.rules[pat.ruleOfs]
+					if tgt, e := pen.findOptionalKind(rule.target); e != nil {
+						err = e
+						break
+					} else if filter, e := marshalout(rule.filter); e != nil {
+						err = e
+						break
+					} else if prog, e := marshalprog(rule.prog); e != nil {
+						err = e
+						break
+					} else {
+						flags := fromTiming(rule.flags)
+						if e := pen.addRule(kid, tgt, flags, filter, prog); e != nil {
+							err = e
+							break
+						}
+					}
 				}
 			}
 		}

@@ -41,6 +41,10 @@ func (op *ActionDecl) Weave(cat *weave.Catalog) (err error) {
 					Affinity: affine.Bool,
 				})
 			}
+			if e := w.Pin().AddPattern(pb.Pattern); e != nil {
+				err = e
+				break
+			}
 		}
 		return
 	})

@@ -63,9 +63,7 @@ with allTraits as (
 var mdl_field = tables.Insert("mdl_field", "domain", "kind", "field", "affinity", "type", "at")
 
 func (pen *Pen) addField(kid, cls kindInfo, field string, aff affine.Affinity) (err error) {
-	if len(field) == 0 {
-		panic("xx")
-	}
+
 	// println("=== adding field", domain, kid.name, field, cls.name)
 	// if existing, e := tables.QueryStrings(pen.db, fieldSource+`
 	// 	select origin|| ', ' || name || ', '|| affinity|| ', ' || typeName
@@ -135,9 +133,9 @@ using(name)
 			err = e
 		} else {
 			// keep null instead of zero ids
-			var clsid sql.NullInt64
+			var clsid *int64
 			if cls.id != 0 {
-				clsid.Int64 = cls.id
+				clsid = &cls.id
 			}
 			if _, e := pen.db.Exec(mdl_field, domain, kid.id, field, aff, clsid, at); e != nil {
 				err = errutil.New("database error", e)

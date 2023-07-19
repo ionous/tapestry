@@ -22,6 +22,7 @@ func (op *EventBlock) Weave(cat *weave.Catalog) (err error) {
 		if tgt, e := safe.GetText(cat.Runtime(), op.Target); e != nil {
 			err = e
 		} else {
+			pen := w.Pin()
 			tgt := lang.Normalize(tgt.String())
 			for _, h := range op.Handlers {
 				// each handler references a pattern
@@ -31,6 +32,8 @@ func (op *EventBlock) Weave(cat *weave.Catalog) (err error) {
 				} else if e := addFields(pb, mdl.PatternLocals, h.Locals); e != nil {
 					err = errutil.Append(e)
 				} else if e := addRules(pb, tgt, h.Rules, flags); e != nil {
+					err = errutil.Append(e)
+				} else if e := pen.ExtendPattern(pb.Pattern); e != nil {
 					err = errutil.Append(e)
 				}
 			}

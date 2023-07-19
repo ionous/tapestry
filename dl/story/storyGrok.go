@@ -261,6 +261,8 @@ func importNamedNoun(w *weave.Weaver, n grok.Noun) (ret string, err error) {
 			if len(n.Kinds) > 0 {
 				base = lang.Normalize(n.Kinds[0].String())
 			}
+			// note: this can return nil if it existed
+			// but since we just checked for it; things in single threading are fine.
 			noun, err = w.Domain.AddNoun(og, name, base)
 		}
 	}
@@ -268,11 +270,9 @@ func importNamedNoun(w *weave.Weaver, n grok.Noun) (ret string, err error) {
 	if err == nil {
 		pen := w.Pin()
 		for _, k := range n.Kinds {
+			// fix dont listen to any errors since we cant filter dupes here
 			k := lang.Normalize(k.String())
-			if e := pen.AddNoun(noun.Name(), k); e != nil {
-				err = e
-				break
-			}
+			pen.AddNoun(noun.Name(), k)
 		}
 	}
 	// add articles:

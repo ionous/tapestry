@@ -225,7 +225,7 @@ func (op *Rules) Assert(cat *weave.Catalog) (err error) {
 		kb := mdl.NewPatternBuilder(op.PatternName)
 		flags := toTiming(op.When, op.Touch)
 		kb.AddRule(op.Target, op.Filter, flags, op.Exe)
-		return w.Pin().AddPattern(kb.Pattern)
+		return w.Pin().ExtendPattern(kb.Pattern)
 	})
 }
 

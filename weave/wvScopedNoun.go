@@ -52,13 +52,14 @@ func (n *ScopedNoun) WriteValue(at, field string, path []string, value literal.L
 		err = errutil.New("null value", n.name, field)
 	} else if rv, e := n.recordValues(at); e != nil {
 		err = e
-	} else {
-		err = rv.writeValue(n.name, at, field, path, value)
+	} else if e := rv.writeValue(n.name, at, field, path, value); e != nil {
+		// check for dupes here because ScopedNoun is at the catalog level
+		// ( because values are at the catalog level )
+		err = n.domain.cat.eatDuplicates(e)
 	}
 	return
 }
 
-//
 func (n *ScopedNoun) recordValues(at string) (ret localRecord, err error) {
 	if n.localRecord.isValid() {
 		ret = n.localRecord

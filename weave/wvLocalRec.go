@@ -132,5 +132,5 @@ func compareValue(noun, field, at string, oldValue, newValue literal.LiteralValu
 			}
 		}
 	}
-	return errutil.Fmt("%w in field %q of noun %q was %v wants %v", why, noun, field, was, wants)
+	return errutil.Fmt("%w in field %q of noun %q was %v wants %v", why, field, noun, was, wants)
 }

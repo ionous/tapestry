@@ -26,7 +26,7 @@ func (op *ExtendPattern) Weave(cat *weave.Catalog) (err error) {
 			} else if e := addRules(pb, "", op.Rules, assert.DefaultTiming); e != nil {
 				err = e
 			} else {
-				err = w.Pin().AddPattern(pb.Pattern)
+				err = w.Pin().ExtendPattern(pb.Pattern)
 			}
 		}
 		return

@@ -311,8 +311,15 @@ func (m *Pen) addKind(name, parent string) (ret kindInfo, err error) {
 		err = errutil.Fmt("%w ancestor %q", Missing, parent.name)
 	} else if kind, e := m.findKind(name); e != nil {
 		err = e
-	} else if kind.id == 0 {
-
+	} else if kind.id != 0 {
+		if parent.id == 0 {
+			ret = kind
+		} else if e := m.addAncestor(kind, parent); e != nil {
+			err = e
+		} else {
+			ret = kind
+		}
+	} else {
 		// manage singular and plural kinds
 		// i don't like this much; especially be cause it depends so much on the first declaration
 		// maybe better would be a name/names table that any named concept can use.
@@ -357,46 +364,49 @@ func (m *Pen) addKind(name, parent string) (ret kindInfo, err error) {
 				}
 			}
 		}
-	} else if parent.id != 0 { // this ignore empty ancestors if the kind already existed.
-		ret = kind // provisionally.
+	}
+	return
+}
 
-		if !kind.exact && parent.numAncestors() < 2 {
-			// we allow plural named kinds for nouns, etc. not for patterns and built in kinds.
-			err = errutil.Fmt("%w ambiguously named kinds: %q (in domain %q) and %q (in %q)",
-				Conflict, name, domain, kind.name, kind.domain)
-		} else if strings.HasSuffix(parent.fullpath(), kind.fullpath()) {
-			err = errutil.Fmt("%w circular reference detected %q already declared as an ancestor of %q.",
-				Conflict, parent.name, name)
-		} else if strings.HasSuffix(kind.path, parent.fullpath()) {
-			// did the existing path fully contain the new ancestor?
-			// then its a duplicate request (ex. `,c,b,a,` `,b,a,` )
-			m.warn("%w %q already declared as an ancestor of %q.",
-				Duplicate, parent.name, name)
-		} else if strings.HasSuffix(parent.fullpath(), kind.path) {
-			// is the newly specified ancestor more specific than the existing path?
-			// then we are ratcheting down. (ex. `,c,b,a,` `,b,a,` )
-			if kind.domain != domain {
-				// if it was declared in a different domain: we can't change it now.
-				err = errutil.Fmt("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q.",
-					Conflict, name, parent.name, kind.domain, domain)
-			} else if res, e := m.db.Exec(`update mdl_kind set path = ?2 where rowid = ?1`,
-				kind.id, trimPath(parent.fullpath())); e != nil {
-				err = e
-			} else if cnt, e := res.RowsAffected(); cnt != 1 {
-				err = errutil.Fmt("unexpected error updating hierarchy of %q; %d rows affected.",
-					name, cnt)
-			} else if e != nil {
-				err = e
-			}
-		} else if kind.domain != domain {
-			// unrelated completely? then its an error
+func (m *Pen) addAncestor(kind, parent kindInfo) (err error) {
+	name := kind.name
+	domain := m.domain
+	if !kind.exact && parent.numAncestors() < 2 {
+		// we allow plural named kinds for nouns, etc. not for patterns and built in kinds.
+		err = errutil.Fmt("%w ambiguously named kinds: %q (in domain %q) and %q (in %q)",
+			Conflict, name, domain, kind.name, kind.domain)
+	} else if strings.HasSuffix(parent.fullpath(), kind.fullpath()) {
+		err = errutil.Fmt("%w circular reference detected %q already declared as an ancestor of %q.",
+			Conflict, parent.name, name)
+	} else if strings.HasSuffix(kind.path, parent.fullpath()) {
+		// did the existing path fully contain the new ancestor?
+		// then its a duplicate request (ex. `,c,b,a,` `,b,a,` )
+		m.warn("%w %q already declared as an ancestor of %q.",
+			Duplicate, parent.name, name)
+	} else if strings.HasSuffix(parent.fullpath(), kind.path) {
+		// is the newly specified ancestor more specific than the existing path?
+		// then we are ratcheting down. (ex. `,c,b,a,` `,b,a,` )
+		if kind.domain != domain {
+			// if it was declared in a different domain: we can't change it now.
 			err = errutil.Fmt("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q.",
 				Conflict, name, parent.name, kind.domain, domain)
-		} else {
-			// its possible some future definition might allow this to happen.
-			err = errutil.Fmt("%w a definition in domain %q that would allow %q to have the ancestor %q; the hierarchies differ.",
-				Missing, domain, name, parent.name)
+		} else if res, e := m.db.Exec(`update mdl_kind set path = ?2 where rowid = ?1`,
+			kind.id, trimPath(parent.fullpath())); e != nil {
+			err = e
+		} else if cnt, e := res.RowsAffected(); cnt != 1 {
+			err = errutil.Fmt("unexpected error updating hierarchy of %q; %d rows affected.",
+				name, cnt)
+		} else if e != nil {
+			err = e
 		}
+	} else if kind.domain != domain {
+		// unrelated completely? then its an error
+		err = errutil.Fmt("%w can't redefine the ancestor of %q as %q; the domains differ: was %q, now %q.",
+			Conflict, name, parent.name, kind.domain, domain)
+	} else {
+		// its possible some future definition might allow this to happen.
+		err = errutil.Fmt("%w a definition in domain %q that would allow %q to have the ancestor %q; the hierarchies differ.",
+			Missing, domain, name, parent.name)
 	}
 	return
 }
@@ -487,7 +497,7 @@ func (m *Pen) AddNoun(name, ancestor string) (err error) {
 		if strings.HasSuffix(prev.fullpath, parent.fullpath()) {
 			// does the existing kind fully contain the new kind?
 			// then its a duplicate request (ex. existing: ,c,b,a,)  ( new: ,a, )
-			m.warn("%w %q already declared as a kind of %q",
+			err = errutil.Fmt("%w %q already declared as a kind of %q",
 				Duplicate, name, ancestor)
 		} else if !strings.HasSuffix(parent.fullpath(), prev.fullpath) {
 			// unrelated completely? then its an error
@@ -601,8 +611,20 @@ func (m *Pen) AddPair(rel, oneNoun, otherNoun string) (err error) {
 	return
 }
 
-func (m *Pen) AddPattern(pat Pattern) error {
-	return pat.writePattern(m)
+func (m *Pen) AddPattern(pat Pattern) (err error) {
+	if e := pat.writePattern(m, true); e != nil {
+		err = errutil.Fmt("%w in pattern %q domain %q", e, pat.name, m.domain)
+	}
+	return
+}
+
+func (m *Pen) ExtendPattern(pat Pattern) (err error) {
+	if pat.parent != kindsOf.Pattern.String() {
+		err = errutil.Fmt("extend pattern %q didn't expect a newly defined parent %q", pat.name, pat.parent)
+	} else if e := pat.writePattern(m, false); e != nil {
+		err = errutil.Fmt("%w in pattern %q domain %q", e, pat.name, m.domain)
+	}
+	return
 }
 
 // a field used for patterns as a calling parameter

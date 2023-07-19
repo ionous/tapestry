@@ -2,6 +2,7 @@ package weave
 
 import (
 	"database/sql"
+	"errors"
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/dl/literal"
@@ -37,13 +38,23 @@ type Catalog struct {
 
 	domainNouns map[domainNoun]*ScopedNoun
 
-	gdb grokdb.Source
+	gdb  grokdb.Source
+	warn func(error)
 }
 
 type domainNoun struct{ domain, noun string }
 
 func NewCatalog(db *sql.DB) *Catalog {
 	return NewCatalogWithWarnings(db, nil, nil)
+}
+
+func (cat *Catalog) eatDuplicates(e error) (err error) {
+	if e == nil || !errors.Is(e, mdl.Duplicate) {
+		err = e
+	} else if cat.warn != nil {
+		cat.warn(e)
+	}
+	return
 }
 
 func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catalog {
@@ -87,6 +98,7 @@ func NewCatalogWithWarnings(db *sql.DB, run rt.Runtime, warn func(error)) *Catal
 		Modeler:     m,
 		run:         run,
 		gdb:         gdb,
+		warn:        warn, // compat for scoped noun
 	}
 }
 

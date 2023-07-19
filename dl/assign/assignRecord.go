@@ -1,6 +1,8 @@
 package assign
 
 import (
+	"strings"
+
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	g "git.sr.ht/~ionous/tapestry/rt/generic"
@@ -11,9 +13,9 @@ import (
 
 // args run in the scope of their parent context
 // they write to the record that will become the new context
-func MakeRecord(run rt.Runtime, kind string, args ...Arg) (ret *g.Record, err error) {
+func MakeRecord(run rt.Runtime, recordName string, args ...Arg) (ret *g.Record, err error) {
 	// create a container to hold results of args, locals, and the pending return value
-	if kind, e := run.GetKindByName(kind); e != nil {
+	if kind, e := run.GetKindByName(recordName); e != nil {
 		err = e
 	} else if rec := kind.NewRecord(); len(args) == 0 {
 		// no args specified? oh this is the easy way.
@@ -24,12 +26,12 @@ func MakeRecord(run rt.Runtime, kind string, args ...Arg) (ret *g.Record, err er
 			if i >= kind.NumField() {
 				err = errutil.New("too many args", i, "making record", kind)
 			} else if at, e := lf.findNext(run, i, a); e != nil {
-				err = e
+				err = errutil.Fmt("%w while reading arg %d(%s)", e, i, a.Name)
 				break
 			} else if at < 0 {
 				break
 			} else if src, e := safe.GetAssignment(run, a.Value); e != nil {
-				err = errutil.New(e, "while reading arg", i, a.Name)
+				err = errutil.Fmt("%w while reading arg %d(%s)", e, i, a.Name)
 				break
 			} else if val, e := safe.AutoConvert(run, kind.Field(at), src); e != nil {
 				err = e
@@ -37,12 +39,14 @@ func MakeRecord(run rt.Runtime, kind string, args ...Arg) (ret *g.Record, err er
 			} else if e := rec.SetIndexedField(at, val); e != nil {
 				// note: set indexed field assigns without copying
 				// but get value copies out, so this should be okay.
-				err = errutil.Fmt("%w while setting arg %v(%d) at %d", e, a.Name, i, at)
+				err = errutil.Fmt("%w while setting arg %d(%s)", e, i, a.Name)
 				break
 			}
 		}
 		if err == nil {
 			ret = rec
+		} else {
+			err = errutil.Fmt("%w for %q", err, recordName)
 		}
 	}
 	return
@@ -73,7 +77,7 @@ func (lf *labelFinder) findNext(run rt.Runtime, i int, a Arg) (ret int, err erro
 			// search in increasing order for the next label that matches the specified argument
 			// this is our soft way of allowing patterns to participate in fluid like specs with optional values.
 			if at := findLabel(labels, n, lf.next); at < 0 {
-				err = errutil.New("no matching label for arg", i, n, "in", lf.labels)
+				err = errutil.Fmt("no matching arg in labels %q", strings.Join(lf.labels, ","))
 			} else {
 				var fn string
 				if at < lf.kind.NumField() {
@@ -83,7 +87,7 @@ func (lf *labelFinder) findNext(run rt.Runtime, i int, a Arg) (ret int, err erro
 					ret, lf.next = at, at+1
 					lf.noMoreBlanks = true
 				} else {
-					err = errutil.Fmt("mismatched field(%s) for arg(%s) in %q", fn, n, lf.kind.Name())
+					err = errutil.Fmt("mismatched field %q", fn)
 				}
 			}
 		}

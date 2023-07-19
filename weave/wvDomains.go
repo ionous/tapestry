@@ -125,10 +125,12 @@ func (d *Domain) findNoun(name, q string) (ret *ScopedNoun, err error) {
 	return
 }
 
+// returns nil, no noun if it already existed
 func (d *Domain) AddNoun(long, short, kind string) (ret *ScopedNoun, err error) {
 	at := d.cat.cursor
-	if e := d.cat.Pin(d.name, at).AddNoun(short, kind); e != nil {
-		err = e
+	pen := d.cat.Pin(d.name, at)
+	if e := pen.AddNoun(short, kind); e != nil {
+		err = d.cat.eatDuplicates(e)
 	} else if e := d.makeNames(short, long, at); e != nil {
 		err = e
 	} else {
