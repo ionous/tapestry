@@ -9,7 +9,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/weave"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
-	"github.com/ionous/sliceOf"
 )
 
 // Execute - called by the macro runtime during weave.
@@ -63,13 +62,7 @@ func (op *DefineFields) Weave(cat *weave.Catalog) (err error) {
 				if el := field.FieldInfo(); el.Affinity != affine.Bool {
 					fields.AddField(el)
 				} else {
-					// tbd: would it be nicer to support single trait kinds?
-					// not_aspect would instead be: Not{IsTrait{PositiveName}}
-					if e := pen.AddAspect(el.Name, sliceOf.String("not "+el.Name, "is "+el.Name)); e != nil {
-						err = errutil.Append(err, e)
-					} else {
-						fields.AddAspect(el.Name)
-					}
+					fields.AddAspect(el.Name)
 				}
 			}
 			if err == nil {

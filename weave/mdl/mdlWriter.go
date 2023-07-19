@@ -39,6 +39,11 @@ func eatDuplicates(l Log, e error) (err error) {
 // join at runtime to synthesize fields; would fix the questions of adding bad traits ( see comments )
 // ( could potentially write both as a bridge )
 func (pen *Pen) AddAspect(aspect string, traits []string) (err error) {
+	_, err = pen.addAspect(aspect, traits)
+	return
+}
+
+func (pen *Pen) addAspect(aspect string, traits []string) (ret kindInfo, err error) {
 	domain, at := pen.domain, pen.at
 	var existingTraits int
 	if kid, e := pen.addKind(aspect, kindsOf.Aspect.String()); e != nil {
@@ -67,6 +72,9 @@ func (pen *Pen) AddAspect(aspect string, traits []string) (err error) {
 				err = errutil.New("database error", e)
 				break
 			}
+		}
+		if err == nil {
+			ret = kid
 		}
 	}
 	return
