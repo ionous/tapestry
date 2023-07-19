@@ -29,10 +29,7 @@
             "--": ""
           },
           {
-            "Define kinds:as:": [
-              "cats",
-              "animal"
-            ]
+            "Declare:": "Cats are kinds of animal."
           },
           {
             "Declare:": "The broom, a hat, and two cats are in the kitchen."

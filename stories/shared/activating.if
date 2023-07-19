@@ -312,10 +312,7 @@
       ]
     },
     {
-      "Define kinds:as:": [
-        "activation",
-        "aspect"
-      ]
+      "Declare:": "Activation is a kind of aspect."
     },
     {
       "Define traits:as:": [

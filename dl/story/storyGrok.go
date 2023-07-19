@@ -51,7 +51,7 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 
 func grokKindPhrase(w *weave.Weaver, res grok.Results) (err error) {
 	if len(res.Targets) != 0 {
-		err = errutil.Fmt("%s only expected sources", res.Macro.Name)
+		err = errutil.Fmt("%q only expected sources", res.Macro.Name)
 	} else {
 		pen := w.Pin()
 		for _, src := range res.Sources {
@@ -59,7 +59,7 @@ func grokKindPhrase(w *weave.Weaver, res grok.Results) (err error) {
 			// and one where its seen as a generic name.
 			if grok.MatchLen(src.Name) == 0 {
 				if len(src.Kinds) != 2 {
-					err = errutil.Fmt("%s expected a single kind per source", res.Macro.Name)
+					err = errutil.Fmt("%q expected a single kind per source", res.Macro.Name)
 				} else {
 					kind := lang.Normalize(src.Kinds[0].String())
 					ancestor := lang.Normalize(src.Kinds[1].String())
@@ -70,7 +70,7 @@ func grokKindPhrase(w *weave.Weaver, res grok.Results) (err error) {
 				}
 			} else {
 				if len(src.Kinds) != 1 {
-					err = errutil.Fmt("%s expected a single kind per source", res.Macro.Name)
+					err = errutil.Fmt("%q allow a single kind per source", res.Macro.Name)
 				} else {
 					kind := lang.Normalize(src.Name.String())
 					ancestor := lang.Normalize(src.Kinds[0].String())
@@ -208,7 +208,7 @@ func genNouns(w *weave.Weaver, ns []grok.Noun, multi bool) (ret g.Value, err err
 	names := make([]string, 0, len(ns))
 	for _, n := range ns {
 		if n.Article.Count > 0 {
-			if ns, e := importCountedNoun(w.Catalog, n); e != nil {
+			if ns, e := importCountedNoun(w, n); e != nil {
 				err = e
 				break
 			} else {
@@ -302,56 +302,64 @@ func importNamedNoun(w *weave.Weaver, n grok.Noun) (ret string, err error) {
 // - uses "triangle" as an alias and printed name for each of the new nouns
 // - flags them all as "counted.
 // - ensures "triangle/s" are things
-func importCountedNoun(cat *weave.Catalog, noun grok.Noun) (ret []string, err error) {
+func importCountedNoun(w *weave.Weaver, noun grok.Noun) (ret []string, err error) {
 	// ..kindOrKinds string, article grok.Article, traits []grok.Match
 	if cnt := noun.Article.Count; cnt > 0 {
-		kindOrKinds := lang.Normalize(noun.Kinds[0].String())
 		// generate unique names for each of the counted nouns.
 		// fix: we probably want nouns to "stack", and be have individually duplicated objects.
 		// ie. a single stackable "cats" with a value of 5, rather than cat_1, cat_2, etc.
 		// and when you pick up one cat now you have two object stacks, both referring to the kind cats
 		// an empty stack acts like no object, and gets collected in some fashion.
+		var name, parent string
+		if len(noun.Name) > 0 {
+			// ex. ""An empire apple, a pen, and two triangles are props in the lab."
+			// fix: grok should return that as an object *called* two triangles, not something counted.
+			name = noun.Name.String()
+			parent = noun.Kinds[0].String()
+		} else {
+			name = noun.Kinds[0].String()
+			parent = "thing"
+		}
+		name = lang.Normalize(name)
+
 		names := make([]string, cnt)
 		for i := 0; i < cnt; i++ {
-			names[i] = cat.NewCounter(kindOrKinds, nil)
+			names[i] = w.Catalog.NewCounter(name, nil)
 		}
-		if e := cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
-			var kind, kinds string
-			// note: kind is phrased in the singular here when count is 1, plural otherwise.
-			if cnt == 1 {
-				kind = kindOrKinds
-				kinds = w.PluralOf(kindOrKinds)
-			} else {
-				kinds = kindOrKinds
-				kind = w.SingularOf(kindOrKinds)
-			}
-			if e := w.Pin().AddKind(kinds, "thing"); e != nil {
-				err = e
-			} else {
-				pen := w.Pin()
-				for _, n := range names {
-					if n, e := w.Domain.AddNoun(n, n, kindOrKinds); e != nil {
-						err = e
-					} else if e := pen.AddName(n.Name(), kind, -1); e != nil {
-						err = e // ^ so that typing "triangle" means "triangles-1"
-						break
-					} else if e := n.WriteValue(w.At, "counted", nil, B(true)); e != nil {
-						err = e
-						break
-					} else if e := n.WriteValue(w.At, "printed name", nil, T(kind)); e != nil {
-						err = e // so that printing "triangles-1" yields "triangle"
-						break   // FIX: itd make a lot more sense to have a default value for the kind
-					} else if e := assignTraits(w, n, noun.Traits); e != nil {
-						err = e
-						break
-					}
-				}
-			}
-			return
-		}); e != nil {
+
+		var kind, kinds string
+		// note: kind is phrased in the singular here when count is 1, plural otherwise.
+		if cnt == 1 {
+			kind = name
+			kinds = w.PluralOf(name)
+		} else {
+			kinds = name
+			kind = w.SingularOf(name)
+		}
+		if e := w.Pin().AddKind(kinds, parent); e != nil {
 			err = e
 		} else {
-			ret = names
+			pen := w.Pin()
+			for _, n := range names {
+				if n, e := w.Domain.AddNoun(n, n, kinds); e != nil {
+					err = e
+				} else if e := pen.AddName(n.Name(), kind, -1); e != nil {
+					err = e // ^ so that typing "triangle" means "triangles-1"
+					break
+				} else if e := n.WriteValue(w.At, "counted", nil, B(true)); e != nil {
+					err = e
+					break
+				} else if e := n.WriteValue(w.At, "printed name", nil, T(kind)); e != nil {
+					err = e // so that printing "triangles-1" yields "triangle"
+					break   // FIX: itd make a lot more sense to have a default value for the kind
+				} else if e := assignTraits(w, n, noun.Traits); e != nil {
+					err = e
+					break
+				}
+			}
+			if err == nil {
+				ret = names
+			}
 		}
 	}
 	return

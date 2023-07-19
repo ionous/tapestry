@@ -1,10 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Define kinds:as:": [
-        "Settings",
-        "object"
-      ]
+      "Declare:": "Settings are kinds of object."
     },
     {
       "--": "Settings is a global singleton for controlling various gameplay options.",
@@ -24,10 +21,7 @@
       ]
     },
     {
-      "Define kinds:as:": [
-        "abbreviated room descriptions",
-        "aspect"
-      ]
+      "Declare:": "Abbreviated room descriptions are kinds of aspect."
     },
     {
       "Define traits:as:": [

@@ -1,16 +1,10 @@
 {
   "Tapestry:": [
     {
-      "Define kinds:as:": [
-        "agents",
-        "object"
-      ]
+      "Declare:": "Agents are kinds of object."
     },
     {
-      "Define kinds:as:": [
-        "players",
-        "agent"
-      ]
+      "Declare:": "Players are kinds of agent."
     },
     {
       "Define nouns:as:": [

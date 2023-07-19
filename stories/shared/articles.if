@@ -24,10 +24,7 @@
       ]
     },
     {
-      "Define kinds:as:": [
-        "pluralization",
-        "aspect"
-      ]
+      "Declare:": "Pluralization is a kind of aspect."
     },
     {
       "--": ""

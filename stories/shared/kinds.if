@@ -1,10 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Define kinds:as:": [
-        "Objects",
-        "kind"
-      ]
+      "Declare:": "Objects are kinds of kind."
     },
     {
       "Define kind:fields:": [
@@ -58,16 +55,10 @@
       "--": ""
     },
     {
-      "Define kinds:as:": [
-        "Things",
-        "object"
-      ]
+      "Declare:": "Things are kinds of object."
     },
     {
-      "Define kinds:as:": [
-        "possessiveness",
-        "aspect"
-      ]
+      "Declare:": "Possessiveness is a kind of aspect."
     },
     {
       "Define traits:as:": [
@@ -79,10 +70,7 @@
       ]
     },
     {
-      "Define kinds:as:": [
-        "portability",
-        "aspect"
-      ]
+      "Declare:": "Portability is a kind of aspect."
     },
     {
       "Define traits:as:": [
@@ -110,10 +98,7 @@
       ]
     },
     {
-      "Define kinds:as:": [
-        "scenery status",
-        "aspect"
-      ]
+      "Declare:": "Scenery status is a kind of aspect."
     },
     {
       "Define traits:as:": [
@@ -155,10 +140,7 @@
       ]
     },
     {
-      "Define kinds:as:": [
-        "mentionable",
-        "aspect"
-      ]
+      "Declare:": "Mentionable is a kind of aspect."
     },
     {
       "Define traits:as:": [
@@ -180,10 +162,7 @@
       ]
     },
     {
-      "Define kinds:as:": [
-        "handleable",
-        "aspect"
-      ]
+      "Declare:": "Handleable is a kind of aspect."
     },
     {
       "Define traits:as:": [
@@ -195,10 +174,7 @@
       ]
     },
     {
-      "Define kinds:as:": [
-        "wearability",
-        "aspect"
-      ]
+      "Declare:": "Wearability is a kind of aspect."
     },
     {
       "Define traits:as:": [
@@ -213,40 +189,16 @@
       "--": ""
     },
     {
-      "Define kinds:as:": [
-        "Actors",
-        "thing"
-      ]
+      "Declare:": "Actors and props are a kind of thing."
     },
     {
-      "Define kinds:as:": [
-        "animals",
-        "actor"
-      ]
+      "Declare:": "Animals are a kind of actor."
     },
     {
-      "--": ""
+      "Declare:": "Openers are a kind of prop."
     },
     {
-      "Define kinds:as:": [
-        "props",
-        "thing"
-      ]
-    },
-    {
-      "--": ""
-    },
-    {
-      "Define kinds:as:": [
-        "openers",
-        "prop"
-      ]
-    },
-    {
-      "Define kinds:as:": [
-        "open status",
-        "aspect"
-      ]
+      "Declare:": "Open status is a kind of aspect."
     },
     {
       "Define traits:as:": [
@@ -258,10 +210,7 @@
       ]
     },
     {
-      "Define kinds:as:": [
-        "openability",
-        "aspect"
-      ]
+      "Declare:": "Openability is a kind of aspect."
     },
     {
       "Define traits:as:": [
@@ -273,10 +222,7 @@
       ]
     },
     {
-      "Define kinds:as:": [
-        "locked status",
-        "aspect"
-      ]
+      "Declare:": "Locked status are kinds of aspect."
     },
     {
       "Define traits:as:": [
@@ -288,10 +234,7 @@
       ]
     },
     {
-      "Define kinds:as:": [
-        "lockable status",
-        "aspect"
-      ]
+      "Declare:": "Lockable status are kinds of aspect."
     },
     {
       "Define traits:as:": [
@@ -325,16 +268,10 @@
       "--": ""
     },
     {
-      "Define kinds:as:": [
-        "containers",
-        "opener"
-      ]
+      "Declare:": "Containers are kinds of opener."
     },
     {
-      "Define kinds:as:": [
-        "enterability",
-        "aspect"
-      ]
+      "Declare:": "Enterability is a kind of aspect."
     },
     {
       "Define traits:as:": [
@@ -346,10 +283,7 @@
       ]
     },
     {
-      "Define kinds:as:": [
-        "opacity",
-        "aspect"
-      ]
+      "Declare:": "Opacity is a kind of aspect."
     },
     {
       "Define traits:as:": [
@@ -377,10 +311,7 @@
       "--": ""
     },
     {
-      "Define kinds:as:": [
-        "illumination",
-        "aspect"
-      ]
+      "Declare:": "Illumination is a kind of aspect."
     },
     {
       "Define traits:as:": [
@@ -418,19 +349,10 @@
       "--": ""
     },
     {
-      "Define kinds:as:": [
-        "supporters",
-        "prop"
-      ]
+      "Declare:": "Supporters are kinds of prop."
     },
     {
-      "--": ""
-    },
-    {
-      "Define kinds:as:": [
-        "rooms",
-        "object"
-      ]
+      "Declare:": "Rooms are kinds of object."
     },
     {
       "--": "generates 'is visited' and 'not visited'",
@@ -447,10 +369,7 @@
       "--": ""
     },
     {
-      "Define kinds:as:": [
-        "regions",
-        "object"
-      ]
+      "Declare:": "Regions are a kind of object."
     }
   ]
 }

@@ -202,10 +202,7 @@
       "--": ""
     },
     {
-      "Define kinds:as:": [
-        "Groupings",
-        "record"
-      ]
+      "Declare:": "Groupings are kinds of record."
     },
     {
       "Define kind:fields:": [
@@ -234,10 +231,7 @@
       "--": ""
     },
     {
-      "Define kinds:as:": [
-        "Object groups",
-        "records"
-      ]
+      "Declare:": "Object groups are kinds of records."
     },
     {
       "Define kind:fields:": [

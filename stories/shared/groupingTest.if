@@ -11,10 +11,7 @@
             "Declare:": "Clarence is an actor."
           },
           {
-            "Define kinds:as:": [
-              "cats",
-              "animals"
-            ]
+            "Declare:": "Cats are kinds of animals."
           },
           {
             "Declare:": "Two cats are in the lab."
@@ -23,16 +20,10 @@
             "Declare:": "An empire apple, a pen, and two triangles are props in the lab."
           },
           {
-            "Define kinds:as:": [
-              "triangles",
-              "prop"
-            ]
+            "Declare:": "Triangles are kinds of prop."
           },
           {
-            "Define kinds:as:": [
-              "scrabble tiles",
-              "prop"
-            ]
+            "Declare:": "Scrabble tiles are kinds of prop."
           },
           {
             "Declare:": "An X, a W, an F, a Y, and a Z are scrabble tiles in the lab."

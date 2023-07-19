@@ -1,10 +1,7 @@
 {
   "Tapestry:": [
     {
-      "Define kinds:as:": [
-        "Compasses",
-        "records"
-      ]
+      "Declare:": "Compasses are kinds of records."
     },
     {
       "Define kind:fields:": [
@@ -78,10 +75,7 @@
       ]
     },
     {
-      "Define kinds:as:": [
-        "Doors",
-        "opener"
-      ]
+      "Declare:": "Doors are kinds of opener."
     },
     {
       "Define kind:fields:": [
