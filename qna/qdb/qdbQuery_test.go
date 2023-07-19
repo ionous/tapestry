@@ -425,7 +425,7 @@ func mdlRule(m *mdl.Modeler, els ...any) (err error) {
 			row[4].(string),
 			row[5].(string),
 			row[6].(string)
-		if e := m.Pin(domain, at).AddPlainRule(pattern, target, phase, filter, prog); e != nil {
+		if e := m.Pin(domain, at).AddTestRule(pattern, target, phase, filter, prog); e != nil {
 			err = e
 			break
 		}
@@ -441,7 +441,7 @@ func mdlValue(m *mdl.Modeler, els ...any) (err error) {
 			row[2].(string),
 			row[3].(string),
 			row[4].(string)
-		if e := m.Pin(domain, at).AddPlainValue(noun, field, value); e != nil {
+		if e := m.Pin(domain, at).AddTestValue(noun, field, value); e != nil {
 			err = e
 			break
 		}

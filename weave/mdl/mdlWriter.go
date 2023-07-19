@@ -632,6 +632,7 @@ func (pen *Pen) ExtendPattern(pat Pattern) (err error) {
 	} else if e := pat.writePattern(pen, false); e != nil {
 		err = errutil.Fmt("%w in pattern %q domain %q", e, pat.name, pen.domain)
 	}
+
 	return
 }
 
@@ -806,12 +807,10 @@ func (pen *Pen) addRule(pattern, target kindInfo, phase int, filter, prog string
 }
 
 // public for tests:
-func (pen *Pen) AddPlainRule(pattern, target string, phase int, filter, prog string) (err error) {
+func (pen *Pen) AddTestRule(pattern, target string, phase int, filter, prog string) (err error) {
 	domain, at := pen.domain, pen.at
 	if kid, e := pen.findRequiredKind(pattern); e != nil {
 		err = e
-	} else if !strings.HasSuffix(kid.fullpath(), pen.paths.patternPath) {
-		err = errutil.Fmt("kind %q in domain %q is not a pattern", pattern, domain)
 	} else if tgt, e := pen.findOptionalKind(target); e != nil {
 		err = e
 	} else {
@@ -825,7 +824,25 @@ func (pen *Pen) AddPlainRule(pattern, target string, phase int, filter, prog str
 var mdl_value = tables.Insert("mdl_value", "noun", "field", "value", "at")
 
 // public for tests:
-func (pen *Pen) AddPlainValue(noun, field, value string) (err error) {
+func (pen *Pen) AddTestValue(noun, field, value string) error {
+	return pen.addValue(noun, field, value)
+}
+
+// the noun half of what was Start.
+// domain, noun, field reference a join of Noun and Kind to get a filtered Field.
+// FIX: nouns should be able to store EVALS too
+// example: an object with a counter in its description.
+func (pen *Pen) AddValue(noun, field string, value literal.LiteralValue) (err error) {
+	if value, e := marshalout(value); e != nil {
+		err = e
+	} else {
+		err = pen.addValue(noun, field, value)
+	}
+	return
+}
+
+// public for tests:
+func (pen *Pen) addValue(noun, field, value string) (err error) {
 	if noun, e := pen.findRequiredNoun(noun, nounWithKind); e != nil {
 		err = e
 	} else {
@@ -844,19 +861,6 @@ func (pen *Pen) AddPlainValue(noun, field, value string) (err error) {
 		} else {
 			_, err = pen.db.Exec(mdl_value, noun.id, fieldId, value, pen.at)
 		}
-	}
-	return
-}
-
-// the noun half of what was Start.
-// domain, noun, field reference a join of Noun and Kind to get a filtered Field.
-// FIX: nouns should be able to store EVALS too
-// example: an object with a counter in its description.
-func (pen *Pen) AddValue(noun, field string, value literal.LiteralValue) (err error) {
-	if value, e := marshalout(value); e != nil {
-		err = e
-	} else {
-		err = pen.AddPlainValue(noun, field, value)
 	}
 	return
 }

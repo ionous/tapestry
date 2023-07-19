@@ -41,7 +41,7 @@ type kindInfo struct {
 	name      string // validated name of the kind
 	domain    string // validated domain name
 	path      string // comma separated ids of ancestors: ,2,1,
-	exact     bool
+	exact     bool   // allows plural named kinds for nouns, etc. not for patterns and built in kinds.
 	_fullpath string
 }
 
