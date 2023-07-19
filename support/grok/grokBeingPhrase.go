@@ -81,8 +81,19 @@ Hack:
 						err = makeWordError(rhs[0], "some unexpected kind of properties")
 					} else if postMacroTraits, e := ParseTraitSet(known, postMacro); e != nil {
 						err = e
-					} else {
+					} else if postMacroTraits.WordCount > 0 {
 						postMacroTraits.applyTraits(*sources)
+					} else if len(postMacro) > 0 {
+						if macro.Type != Macro_SourcesOnly {
+							err = errutil.New("unconsumed words", Span(postMacro).String())
+						} else {
+							// hack part 2 for "are a kind of"
+							// should be revisited at some point
+							for i, src := range *sources {
+								src.Kinds = append(src.Kinds, Span(postMacro))
+								(*sources)[i] = src
+							}
+						}
 					}
 				}
 			}

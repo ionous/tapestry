@@ -9,6 +9,7 @@ type TraitSet struct {
 func (ts *TraitSet) hasKind() bool {
 	return ts.Kind != nil
 }
+
 func (ts *TraitSet) kinds() (ret []Match) {
 	if ts.hasKind() {
 		ret = []Match{ts.Kind}

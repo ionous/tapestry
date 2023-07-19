@@ -16,6 +16,18 @@ func Phrases(t *testing.T, g grok.Grokker) {
 		skip   any
 	}{
 		{
+			test: `Devices are a kind of prop.`,
+			result: map[string]any{
+				"macro": "inherit",
+				"sources": []map[string]any{
+					{
+						"kinds": []string{"prop"},
+						"name":  "Devices",
+					},
+				},
+			},
+		},
+		{
 			// note: in inform...	 §4.14. Duplicates
 			// "Two circles are in the Lab."
 			// it only works if "circles" is a known kind
