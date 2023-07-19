@@ -7,7 +7,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
@@ -19,7 +18,7 @@ func (op *ActionDecl) Execute(macro rt.Runtime) error {
 
 // Execute - actions generate pattern ephemera.
 func (op *ActionDecl) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(assert.RequireAncestry, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) (err error) {
 		patterns := []string{op.Action.Str, op.Event.Str}
 		targets := []string{"agent", "actor"}
 		ancestors := []kindsOf.Kinds{kindsOf.Action, kindsOf.Event}

@@ -7,7 +7,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 	"github.com/ionous/sliceOf"
@@ -20,7 +19,7 @@ func (op *DefineKinds) Execute(macro rt.Runtime) error {
 
 // ex. "cats are a kind of animal"
 func (op *DefineKinds) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(assert.RequirePlurals, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if kinds, e := safe.GetTextList(w, op.Kinds); e != nil {
 			err = e
 		} else if ancestor, e := safe.GetText(w, op.Ancestor); e != nil {
@@ -52,7 +51,7 @@ func (op *DefineFields) Execute(macro rt.Runtime) error {
 // ex. cats have some text called breed.
 // ex. horses have an aspect called speed.
 func (op *DefineFields) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if kind, e := safe.GetText(cat.Runtime(), op.Kind); e != nil {
 			err = e
 		} else {

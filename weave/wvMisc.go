@@ -5,7 +5,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
 func makeCard(amany, bmany bool) (ret string) {
@@ -34,20 +34,20 @@ func addField(ctx *Weaver, kindName, fieldName, fieldClass string,
 	return
 }
 
-func fromTiming(timing assert.EventTiming) int {
+func fromTiming(timing mdl.EventTiming) int {
 	var part int
-	always := timing&assert.RunAlways != 0
+	always := timing&mdl.RunAlways != 0
 	if always {
-		timing ^= assert.RunAlways
+		timing ^= mdl.RunAlways
 	}
 	switch timing {
-	case assert.Before:
+	case mdl.Before:
 		part = 0
-	case assert.During:
+	case mdl.During:
 		part = 1
-	case assert.After:
+	case mdl.After:
 		part = 2
-	case assert.Later:
+	case mdl.Later:
 		part = 3
 	}
 	flags := part + int(rt.FirstPhase)

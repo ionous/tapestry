@@ -7,7 +7,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 
 	"git.sr.ht/~ionous/tapestry/dl/grammar"
@@ -21,7 +20,7 @@ func (op *DefineTraits) Execute(macro rt.Runtime) error {
 
 // (the) colors are red, blue, or green.
 func (op *DefineTraits) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if aspect, e := safe.GetText(w, op.Aspect); e != nil {
 			err = e
 		} else if traits, e := safe.GetTextList(w, op.Traits); e != nil {
@@ -51,7 +50,7 @@ func (op *GrammarDecl) Weave(cat *weave.Catalog) (err error) {
 	case *grammar.Directive:
 		// jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
 		name := strings.Join(el.Lede, "/")
-		return cat.Schedule(assert.RequireRules, func(w *weave.Weaver) error {
+		return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
 			return w.Pin().AddGrammar(name, el)
 		})
 	default:
@@ -66,7 +65,7 @@ func (op *DefineNounTraits) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
 		} else if kind, e := safe.GetOptionalText(w, op.Kind, ""); e != nil {
@@ -111,7 +110,7 @@ func (op *DefinePhrase) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefinePhrase) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(assert.RequireAncestry, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) (err error) {
 		if phrase, e := safe.GetText(w, op.Phrase); e != nil {
 			err = e
 		} else if macro, e := safe.GetText(w, op.Macro); e != nil {
@@ -133,7 +132,7 @@ func (op *DefineNouns) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineNouns) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
 		} else if kind, e := safe.GetText(w, op.Kind); e != nil {
@@ -165,7 +164,7 @@ func (op *NounAssignment) Execute(macro rt.Runtime) error {
 
 // ex. The description of the nets is xxx
 func (op *NounAssignment) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
 		} else if field, e := safe.GetText(w, op.FieldName); e != nil {
@@ -193,7 +192,7 @@ func (op *DefineRelatives) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineRelatives) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
 		} else if kind, e := safe.GetOptionalText(w, op.Kind, ""); e != nil {
@@ -234,7 +233,7 @@ func (op *DefineOtherRelatives) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineOtherRelatives) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
 		} else if relation, e := safe.GetText(w, op.Relation); e != nil {

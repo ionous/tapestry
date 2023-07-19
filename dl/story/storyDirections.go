@@ -8,7 +8,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
 
@@ -48,7 +47,7 @@ func (op *MapHeading) Execute(macro rt.Runtime) error {
 
 // departing from the current room in a direction
 func (op *MapHeading) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if room, e := makeNoun(w, op.RoomName); e != nil {
 			err = e
 		} else if len(room.name) == 0 {
@@ -108,7 +107,7 @@ func (op *MapDeparting) Execute(macro rt.Runtime) error {
 
 // departing from the current room via a door
 func (op *MapDeparting) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(assert.RequireDeterminers, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if room, e := makeNoun(w, op.RoomName); e != nil {
 			err = e // ^ todo: ensure the room exists without declaring it
 		} else if door, e := makeNoun(w, op.DoorName); e != nil {

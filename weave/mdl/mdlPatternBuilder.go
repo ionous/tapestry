@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
 )
 
 type PatternBuilder struct {
@@ -29,7 +28,7 @@ func (p *Pattern) Parent() string {
 type rule struct {
 	target string
 	filter rt.BoolEval
-	flags  assert.EventTiming
+	flags  EventTiming
 	prog   []rt.Execute
 }
 
@@ -78,7 +77,7 @@ func (b *PatternBuilder) AddParam(fn FieldInfo) {
 
 // defers execution; so no return value.
 // expects target class name to be normalized.
-func (b *PatternBuilder) AddRule(target string, filter rt.BoolEval, flags assert.EventTiming, prog []rt.Execute) {
+func (b *PatternBuilder) AddRule(target string, filter rt.BoolEval, flags EventTiming, prog []rt.Execute) {
 	b.rules = append(b.rules, rule{
 		target: target,
 		filter: filter,
@@ -126,20 +125,20 @@ func (pat *Pattern) writePattern(pen *Pen, create bool) (err error) {
 	return
 }
 
-func fromTiming(timing assert.EventTiming) int {
+func fromTiming(timing EventTiming) int {
 	var part int
-	always := timing&assert.RunAlways != 0
+	always := timing&RunAlways != 0
 	if always {
-		timing ^= assert.RunAlways
+		timing ^= RunAlways
 	}
 	switch timing {
-	case assert.Before:
+	case Before:
 		part = 0
-	case assert.During:
+	case During:
 		part = 1
-	case assert.After:
+	case After:
 		part = 2
-	case assert.Later:
+	case Later:
 		part = 3
 	}
 	flags := part + int(rt.FirstPhase)

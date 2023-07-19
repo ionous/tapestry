@@ -11,7 +11,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/support/grok"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 
@@ -26,7 +25,7 @@ func (op *DeclareStatement) Execute(macro rt.Runtime) error {
 }
 
 func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(assert.RequireRules, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) (err error) {
 		if text, e := safe.GetText(w, op.Text); e != nil {
 			err = e
 		} else {
@@ -316,7 +315,7 @@ func importCountedNoun(cat *weave.Catalog, noun grok.Noun) (ret []string, err er
 		for i := 0; i < cnt; i++ {
 			names[i] = cat.NewCounter(kindOrKinds, nil)
 		}
-		if e := cat.Schedule(assert.RequirePlurals, func(w *weave.Weaver) (err error) {
+		if e := cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
 			var kind, kinds string
 			// note: kind is phrased in the singular here when count is 1, plural otherwise.
 			if cnt == 1 {

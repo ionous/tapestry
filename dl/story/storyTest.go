@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
 
@@ -27,7 +26,7 @@ func (op *Test) Weave(cat *weave.Catalog) (err error) {
 			if e := WeaveStatements(cat, op.TestStatements); e != nil {
 				err = e
 			} else if len(op.Do) > 0 {
-				err = cat.Schedule(assert.RequireAll, func(w *weave.Weaver) error {
+				err = cat.Schedule(weave.RequireAll, func(w *weave.Weaver) error {
 					return w.Pin().AddCheck(name, nil, op.Do)
 				})
 			}

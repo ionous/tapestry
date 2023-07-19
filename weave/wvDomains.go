@@ -7,7 +7,6 @@ import (
 
 	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
@@ -15,15 +14,15 @@ import (
 type Domain struct {
 	name       string
 	cat        *Catalog
-	currPhase  assert.Phase                     // updated during weave, ends at NumPhases
-	scheduling [assert.RequireAll + 1][]memento // separates commands into phases
-	suspended  []memento                        // for missing definitions
+	currPhase  Phase                     // updated during weave, ends at NumPhases
+	scheduling [RequireAll + 1][]memento // separates commands into phases
+	suspended  []memento                 // for missing definitions
 }
 
 type memento struct {
 	cb    func(*Weaver) error
 	at    string
-	phase assert.Phase
+	phase Phase
 	err   error
 }
 
@@ -61,7 +60,7 @@ func (d *Domain) isReadyForProcessing() (okay bool, err error) {
 	return
 }
 
-func (d *Domain) schedule(at string, when assert.Phase, what func(*Weaver) error) (err error) {
+func (d *Domain) schedule(at string, when Phase, what func(*Weaver) error) (err error) {
 	if d.currPhase < 0 {
 		err = errutil.Fmt("domain %q already finished", d.name)
 	} else if d.currPhase <= when {

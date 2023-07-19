@@ -5,7 +5,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
@@ -16,7 +15,7 @@ func (op *EventBlock) Execute(macro rt.Runtime) error {
 }
 
 func (op *EventBlock) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(assert.RequireAncestry, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) (err error) {
 		// todo: always assumed to be a kind right now;
 		// could auto switch, ex. prefer nouns if a match is found
 		if tgt, e := safe.GetText(cat.Runtime(), op.Target); e != nil {
@@ -42,14 +41,14 @@ func (op *EventBlock) Weave(cat *weave.Catalog) (err error) {
 	})
 }
 
-func (op *EventPhase) ReadFlags() (ret assert.EventTiming, err error) {
+func (op *EventPhase) ReadFlags() (ret mdl.EventTiming, err error) {
 	switch str := op.Str; str {
 	case EventPhase_Before:
-		ret = assert.Before
+		ret = mdl.Before
 	case EventPhase_While:
-		ret = assert.During
+		ret = mdl.During
 	case EventPhase_After:
-		ret = assert.After
+		ret = mdl.After
 	default:
 		if len(str) > 0 {
 			err = errutil.Fmt("unknown event flags %q", str)

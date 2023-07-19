@@ -5,7 +5,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/literal"
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
@@ -26,7 +25,7 @@ type Aspects struct {
 }
 
 func (op *Aspects) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
 		return w.Pin().AddAspect(op.Aspects, op.Traits)
 	})
 }
@@ -47,7 +46,7 @@ type Directives struct {
 }
 
 func (op *Directives) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(assert.RequireRules, func(w *weave.Weaver) error {
+	return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
 		return w.Pin().AddGrammar(op.Name, &op.Directive)
 	})
 }
@@ -72,7 +71,7 @@ type Kinds struct {
 }
 
 func (op *Kinds) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
 		pen := w.Pin()
 		if e := pen.AddKind(op.Kind, op.Ancestor); e != nil {
 			err = e
@@ -112,7 +111,7 @@ type Opposites struct {
 }
 
 func (op *Opposites) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(assert.RequireDependencies, func(ctx *weave.Weaver) error {
+	return cat.Schedule(weave.RequireDependencies, func(ctx *weave.Weaver) error {
 		return ctx.Pin().AddOpposite(op.Opposite, op.Word)
 	})
 }
@@ -131,7 +130,7 @@ type Patterns struct {
 }
 
 func (op *Patterns) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
 		kb := mdl.NewPatternBuilder(op.PatternName)
 		if ps := op.Params; err == nil && len(ps) > 0 {
 			for _, p := range ps {
@@ -159,7 +158,7 @@ type Plurals struct {
 }
 
 func (op *Plurals) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) error {
+	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) error {
 		return w.Pin().AddPlural(op.Plural, op.Singular)
 	})
 }
@@ -221,7 +220,7 @@ type Rules struct {
 }
 
 func (op *Rules) Assert(cat *weave.Catalog) (err error) {
-	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
 		kb := mdl.NewPatternBuilder(op.PatternName)
 		flags := toTiming(op.When, op.Touch)
 		kb.AddRule(op.Target, op.Filter, flags, op.Exe)

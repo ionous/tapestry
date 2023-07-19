@@ -10,7 +10,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
@@ -22,7 +21,7 @@ func (op *DefineMacro) Execute(macro rt.Runtime) error {
 // Schedule - register the macro with the importer;
 // subsequent CallMacro(s) will be able to run it.
 func (op *DefineMacro) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(assert.RequirePlurals, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetText(cat.Runtime(), op.MacroName); e != nil {
 			err = e
 		} else {
@@ -44,7 +43,7 @@ func (op *DefineMacro) Weave(cat *weave.Catalog) (err error) {
 
 // Schedule for macros calls Execute... eventually... to generate dynamic assertions.
 func (op *CallMacro) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(assert.RequireNouns /*assert.MacroPhase*/, func(w *weave.Weaver) error {
+	return cat.Schedule(weave.RequireNouns, func(w *weave.Weaver) error {
 		return op.Execute(w)
 	})
 }

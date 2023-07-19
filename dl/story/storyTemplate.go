@@ -11,7 +11,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/template"
 	"git.sr.ht/~ionous/tapestry/template/types"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
@@ -26,7 +25,7 @@ func (op *SayResponse) PreImport(cat *weave.Catalog) (ret interface{}, err error
 	fields := mdl.NewFieldBuilder(kindsOf.Response.String())
 	fields.AddField(mdl.FieldInfo{Name: op.Name, Affinity: affine.Text, Init: &assign.FromText{Value: op.Text}})
 
-	if e := cat.Schedule(assert.RequireResults, func(ctx *weave.Weaver) (err error) {
+	if e := cat.Schedule(weave.RequirePatterns, func(ctx *weave.Weaver) (err error) {
 		return ctx.Pin().AddFields(fields.Fields)
 	}); e != nil {
 		err = e

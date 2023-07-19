@@ -2,22 +2,22 @@ package eph
 
 import (
 	"git.sr.ht/~ionous/tapestry/dl/composer"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
+	"git.sr.ht/~ionous/tapestry/weave/mdl"
 )
 
-func toTiming(t Timing, always Always) (ret assert.EventTiming) {
+func toTiming(t Timing, always Always) (ret mdl.EventTiming) {
 	switch t.Str {
 	case Timing_Before:
-		ret = assert.Before
+		ret = mdl.Before
 	case Timing_During:
-		ret = assert.During
+		ret = mdl.During
 	case Timing_After:
-		ret = assert.After
+		ret = mdl.After
 	case Timing_Later:
-		ret = assert.Later
+		ret = mdl.Later
 	}
 	if always.Str == Always_Always {
-		ret |= assert.RunAlways
+		ret |= mdl.RunAlways
 	}
 	return
 }

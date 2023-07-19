@@ -13,7 +13,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/grokdb"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
@@ -166,7 +165,7 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 		} else {
 			cat.processing.Push(d)
 			//
-			for p := assert.Phase(0); p <= assert.RequireAll; p++ {
+			for p := Phase(0); p <= RequireAll; p++ {
 				ctx := Weaver{Catalog: cat, Domain: d, Phase: p, Runtime: cat.run}
 				if e := d.runPhase(&ctx); e != nil {
 					err = e
@@ -192,7 +191,7 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 }
 
 func (cat *Catalog) AssertAlias(opShortName string, opAliases ...string) error {
-	return cat.Schedule(assert.RequireAll, func(ctx *Weaver) (err error) {
+	return cat.Schedule(RequireAll, func(ctx *Weaver) (err error) {
 		d := ctx.Domain
 		if shortName, ok := UniformString(opShortName); !ok {
 			err = errutil.New("invalid name", opShortName)
@@ -237,7 +236,7 @@ func (cat *Catalog) DomainEnd() (err error) {
 }
 
 func (cat *Catalog) AssertNounKind(name, kind string) error {
-	return cat.Schedule(assert.RequireDefaults, func(ctx *Weaver) (err error) {
+	return cat.Schedule(RequireDefaults, func(ctx *Weaver) (err error) {
 		noun, kind := lang.Normalize(name), lang.Normalize(kind)
 		_, err = ctx.Domain.AddNoun(name, noun, kind)
 		return
@@ -246,7 +245,7 @@ func (cat *Catalog) AssertNounKind(name, kind string) error {
 
 // note: values are written per *noun* not per domain....
 func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, value literal.LiteralValue) error {
-	return cat.Schedule(assert.RequireNames, func(ctx *Weaver) (err error) {
+	return cat.Schedule(RequireNames, func(ctx *Weaver) (err error) {
 		d, at := ctx.Domain, ctx.At
 		if noun, ok := UniformString(opNoun); !ok {
 			err = InvalidString(opNoun)
@@ -287,7 +286,7 @@ Loop:
 
 func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error {
 	// uses ancestry because it defines kinds for each relation
-	return cat.Schedule(assert.RequireDeterminers, func(ctx *Weaver) (err error) {
+	return cat.Schedule(RequirePlurals, func(ctx *Weaver) (err error) {
 		// like aspects, we dont try to singularize these.
 		if rel, ok := UniformString(opRel); !ok {
 			err = InvalidString(opRel)
@@ -301,7 +300,7 @@ func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error 
 			if e := ctx.Pin().AddKind(rel, kindsOf.Relation.String()); e != nil {
 				err = e
 			} else {
-				err = cat.Schedule(assert.RequireResults, func(ctx *Weaver) (err error) {
+				err = cat.Schedule(RequirePatterns, func(ctx *Weaver) (err error) {
 					return ctx.Pin().AddRel(rel, acls, bcls, card)
 				})
 			}
@@ -313,7 +312,7 @@ func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error 
 // validate that the pattern for the rule exists then add the rule to the *current* domain
 // ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
 func (cat *Catalog) AssertRelative(opRel, opNoun, opOtherNoun string) error {
-	return cat.Schedule(assert.RequireNames, func(ctx *Weaver) (err error) {
+	return cat.Schedule(RequireNames, func(ctx *Weaver) (err error) {
 		d := ctx.Domain
 		if noun, ok := UniformString(opNoun); !ok {
 			err = InvalidString(opNoun)
@@ -346,7 +345,7 @@ func (cat *Catalog) NewCounter(name string, markup map[string]any) (ret string) 
 	return
 }
 
-func (cat *Catalog) Schedule(when assert.Phase, what func(*Weaver) error) (err error) {
+func (cat *Catalog) Schedule(when Phase, what func(*Weaver) error) (err error) {
 	if d, ok := cat.processing.Top(); !ok {
 		err = errutil.New("unknown top level domain")
 	} else {
@@ -365,7 +364,7 @@ func (cat *Catalog) addDomain(n, at string, reqs ...string) (ret *Domain, err er
 		cat.domains[n] = d
 	}
 
-	if d.currPhase < 0 || d.currPhase >= assert.RequireDependencies {
+	if d.currPhase < 0 || d.currPhase >= RequireDependencies {
 		err = errutil.New("can't add new dependencies to parent domains", d.name)
 	} else {
 		// domains are implicitly dependent on their parent domain

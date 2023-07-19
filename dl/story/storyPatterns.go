@@ -5,7 +5,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
 	"github.com/ionous/errutil"
 )
@@ -16,14 +15,14 @@ func (op *ExtendPattern) Execute(macro rt.Runtime) error {
 }
 
 func (op *ExtendPattern) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetText(cat.Runtime(), op.PatternName); e != nil {
 			err = e
 		} else {
 			pb := mdl.NewPatternBuilder(name.String())
 			if e := addFields(pb, mdl.PatternLocals, op.Locals); e != nil {
 				err = e
-			} else if e := addRules(pb, "", op.Rules, assert.DefaultTiming); e != nil {
+			} else if e := addRules(pb, "", op.Rules, mdl.DefaultTiming); e != nil {
 				err = e
 			} else {
 				err = w.Pin().ExtendPattern(pb.Pattern)
@@ -40,7 +39,7 @@ func (op *DefinePattern) Execute(macro rt.Runtime) error {
 
 // Adds a new pattern declaration and optionally some associated pattern parameters.
 func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
-	return cat.Schedule(assert.RequireDependencies, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
 		if name, e := safe.GetText(cat.Runtime(), op.PatternName); e != nil {
 			err = e
 		} else {
@@ -51,7 +50,7 @@ func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 				err = e
 			} else if e := addOptionalField(pb, mdl.PatternResults, op.Result); e != nil {
 				err = e
-			} else if e := addRules(pb, "", op.Rules, assert.DefaultTiming); e != nil {
+			} else if e := addRules(pb, "", op.Rules, mdl.DefaultTiming); e != nil {
 				err = e
 			} else {
 				err = w.Pin().AddPattern(pb.Pattern)
@@ -62,7 +61,7 @@ func (op *DefinePattern) Weave(cat *weave.Catalog) (err error) {
 }
 
 // note:  statements can set flags for a bunch of rules at once or within each rule separately, but not both.
-func ImportRules(pb *mdl.PatternBuilder, target string, els []PatternRule, flags assert.EventTiming) (err error) {
+func ImportRules(pb *mdl.PatternBuilder, target string, els []PatternRule, flags mdl.EventTiming) (err error) {
 	// write in reverse order because within a given pattern, earlier rules take precedence.
 	for i := len(els) - 1; i >= 0; i-- {
 		if e := els[i].addRule(pb, target, flags); e != nil {
@@ -72,7 +71,7 @@ func ImportRules(pb *mdl.PatternBuilder, target string, els []PatternRule, flags
 	return
 }
 
-func (op *PatternRule) addRule(pb *mdl.PatternBuilder, target string, tgtFlags assert.EventTiming) (err error) {
+func (op *PatternRule) addRule(pb *mdl.PatternBuilder, target string, tgtFlags mdl.EventTiming) (err error) {
 	act := op.Does
 	if flags, e := op.Flags.ReadFlags(); e != nil {
 		err = e
@@ -83,7 +82,7 @@ func (op *PatternRule) addRule(pb *mdl.PatternBuilder, target string, tgtFlags a
 		if tgtFlags > 0 {
 			flags = tgtFlags
 		} else if flags == 0 {
-			flags = assert.During
+			flags = mdl.During
 		}
 
 		// check if this rule is declared inside a specific domain
@@ -94,7 +93,7 @@ func (op *PatternRule) addRule(pb *mdl.PatternBuilder, target string, tgtFlags a
 			// also might be cool to augment or replace the serialized type
 			// with our own that has an pre-calced field ( at import, via state parser )
 			if SearchForCounters(guard) {
-				flags |= assert.RunAlways
+				flags |= mdl.RunAlways
 			}
 			// fix via runtime? check if this rule is declared inside a specific domain
 			// if domain != k.Env().Game.Domain {
@@ -108,14 +107,14 @@ func (op *PatternRule) addRule(pb *mdl.PatternBuilder, target string, tgtFlags a
 	return
 }
 
-func (op *PatternFlags) ReadFlags() (ret assert.EventTiming, err error) {
+func (op *PatternFlags) ReadFlags() (ret mdl.EventTiming, err error) {
 	switch str := op.Str; str {
 	case PatternFlags_Before:
-		ret = assert.After // run other matching patterns, and then run this pattern. other...this.
+		ret = mdl.After // run other matching patterns, and then run this pattern. other...this.
 	case PatternFlags_After:
-		ret = assert.Before // keep going after running the current pattern. this...others.
+		ret = mdl.Before // keep going after running the current pattern. this...others.
 	case PatternFlags_Terminate:
-		ret = assert.During
+		ret = mdl.During
 	default:
 		if len(str) > 0 {
 			err = errutil.Fmt("unknown pattern flags %q", str)
@@ -147,7 +146,7 @@ func addFields(pb *mdl.PatternBuilder, ft mdl.FieldType, fields []FieldDefinitio
 }
 
 // note:  statements can set flags for a bunch of rules at once or within each rule separately, but not both.
-func addRules(pb *mdl.PatternBuilder, target string, els []PatternRule, flags assert.EventTiming) (err error) {
+func addRules(pb *mdl.PatternBuilder, target string, els []PatternRule, flags mdl.EventTiming) (err error) {
 	// write in reverse order because within a given pattern, earlier rules take precedence.
 	for i := len(els) - 1; i >= 0; i-- {
 		if e := els[i].addRule(pb, target, flags); e != nil {

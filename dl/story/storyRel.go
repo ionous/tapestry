@@ -4,7 +4,6 @@ import (
 	"git.sr.ht/~ionous/tapestry/rt"
 	"git.sr.ht/~ionous/tapestry/rt/safe"
 	"git.sr.ht/~ionous/tapestry/weave"
-	"git.sr.ht/~ionous/tapestry/weave/assert"
 	"github.com/ionous/errutil"
 )
 
@@ -14,7 +13,7 @@ func (op *DefineRelation) Execute(macro rt.Runtime) error {
 }
 
 func (op *DefineRelation) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(assert.RequireAncestry, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequireAncestry, func(w *weave.Weaver) (err error) {
 		if rel, e := safe.GetText(w, op.Relation); e != nil {
 			err = e
 		} else {
