@@ -5,43 +5,21 @@
         "thingaverse",
         [
           {
-            "Declare:": "Mildred is an actor."
-          },
-          {
-            "Declare:": "An empire apple, and a pen are props."
-          },
-          {
-            "Declare:": "The flower is a wearable, worn thing."
-          },
-          {
-            "Declare:": "The headlamp is a lit, wearable, worn thing."
-          },
-          {
-            "Declare:": "The flashlight is a lit thing."
-          },
-          {
-            "Declare:": "The book of wisdom is an openable, open container."
-          },
-          {
-            "Declare:": "The book of secrets is an openable, closed, locked container."
-          },
-          {
-            "Declare:": "The clutch is an openable, open container."
-          },
-          {
-            "Declare:": "The purse is a wearable, openable, open container."
-          },
-          {
-            "Declare:": "The coin is a thing."
-          },
-          {
-            "Declare:": "Mildred is carrying the flower, the headlamp, secrets and wisdom, and the clutch."
-          },
-          {
-            "Declare:": "The coin is in the purse."
-          },
-          {
-            "Declare:": "The purse is in the clutch."
+            "Declare:": [
+              "Mildred is an actor.",
+              "An empire apple, and a pen are props.",
+              "The flower is a wearable, worn thing.",
+              "The headlamp is a lit, wearable, worn thing.",
+              "The flashlight is a lit thing.",
+              "The book of wisdom is an openable, open container.",
+              "The book of secrets is an openable, closed, locked container.",
+              "The clutch is an openable, open container.",
+              "The purse is a wearable, openable, open container.",
+              "The coin is a thing.",
+              "Mildred is carrying the flower, the headlamp, secrets and wisdom, and the clutch.",
+              "The coin is in the purse.",
+              "The purse is in the clutch."
+            ]
           }
         ],
         [

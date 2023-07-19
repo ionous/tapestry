@@ -5,11 +5,8 @@
         "Kitchenette",
         "Thingaverse",
         [
-        	{
-            "Declare:": "The kitchen is a room."
-          },
           {
-            "Declare:": "You are in the kitchen."
+            "Declare:": "The kitchen is a room. You are in the kitchen."
           },
           {
             "Define value:of:asLines:": [
@@ -29,13 +26,11 @@
             "--": ""
           },
           {
-            "Declare:": "Cats are kinds of animal."
-          },
-          {
-            "Declare:": "The broom, a hat, and two cats are in the kitchen."
-          },
-          {
-            "Declare:": "The broom and the hat are things."
+            "Declare:": [
+              "Cats are kinds of animal.",
+              "The broom, a hat, and two cats are in the kitchen.",
+              "The broom and the hat are things."
+            ]
           },
           {
             "Define value:of:asLines:": [
@@ -55,13 +50,11 @@
             "--": ""
           },
           {
-            "Declare:": "The container called the cabinet is in the kitchen."
-          },
-          {
-            "Declare:": "The cabinet is openable, enterable, scenery."
-          },
-          {
-            "Declare:": "The book of matches, a bottle of descaling solution, a fish hook, a rusty knife are things in the cabinet."
+            "Declare:": [
+              "The container called the cabinet is in the kitchen.",
+              "The cabinet is openable, enterable, scenery.",
+              "The book of matches, a bottle of descaling solution, a fish hook, a rusty knife are things in the cabinet."
+            ]
           },
           {
             "Define value:of:asLines:": [
@@ -89,34 +82,16 @@
             "--": ""
           },
           {
-            "Declare:": "The shelf is scenery."
-          },
-          {
-            "Declare:": "The shelf is a supporter in the kitchen."
-          },
-          {
-            "Declare:": "A can of tomatoes, a can of potato leek soup, and a tin of deflating powder are things on the shelf."
-          },
-          {
-            "--": ""
-          },
-          {
-            "Declare:": "The counter is a supporter in the kitchen."
-          },
-          {
-            "Declare:": "The espresso machine is a fixed in place, closed container on the counter."
-          },
-          {
-            "Declare:": "Some coffee beans are in the espresso machine."
-          },
-          {
-            "Declare:": "The beans are plural named."
-          },
-          {
-            "Declare:": "A blender and a mortar are containers on the counter."
-          },
-          {
-            "Declare:": "A pestle is in the mortar."
+            "Declare:": [
+              "The shelf is a supporter in the kitchen. The shelf is scenery.",
+              "A can of tomatoes, a can of potato leek soup, and a tin of deflating powder are things on the shelf.",
+              "The counter is a supporter in the kitchen.",
+              "The espresso machine is a fixed in place, closed container on the counter.",
+              "Some coffee beans are in the espresso machine.",
+              "The beans are plural named.",
+              "A blender and a mortar are containers on the counter.",
+              "A pestle is in the mortar."
+            ]
           },
           {
             "Define value:of:asLines:": [

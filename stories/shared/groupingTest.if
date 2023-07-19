@@ -4,29 +4,17 @@
       "Test:withScene:do:": [
         "grouping tests",
         [
-        	{
-            "Declare:": "The lab is a room."
-          },
           {
-            "Declare:": "Clarence is an actor."
-          },
-          {
-            "Declare:": "Cats are kinds of animals."
-          },
-          {
-            "Declare:": "Two cats are in the lab."
-          },
-          {
-            "Declare:": "An empire apple, a pen, and two triangles are props in the lab."
-          },
-          {
-            "Declare:": "Triangles are kinds of prop."
-          },
-          {
-            "Declare:": "Scrabble tiles are kinds of prop."
-          },
-          {
-            "Declare:": "An X, a W, an F, a Y, and a Z are scrabble tiles in the lab."
+            "Declare:": [
+              "The lab is a room.",
+              "Clarence is an actor.",
+              "Cats are kinds of animals.",
+              "Two cats are in the lab.",
+              "An empire apple, a pen, and two triangles are props in the lab.",
+              "Triangles are kinds of prop.",
+              "Scrabble tiles are kinds of prop.",
+              "An X, a W, an F, a Y, and a Z are scrabble tiles in the lab."
+            ]
           },
           {
             "Comment:": [

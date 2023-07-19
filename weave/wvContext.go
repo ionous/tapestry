@@ -14,8 +14,8 @@ type Weaver struct {
 	rt.Runtime
 }
 
-func (w *Weaver) Grok(p string) (grok.Results, error) {
-	return w.Catalog.gdb.Grok(w.Domain.name, p)
+func (w *Weaver) GrokSpan(p grok.Span) (grok.Results, error) {
+	return w.Catalog.gdb.GrokSpan(w.Domain.name, p)
 }
 
 func (w *Weaver) MatchArticle(ws []string) (ret int, err error) {

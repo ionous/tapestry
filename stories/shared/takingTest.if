@@ -6,19 +6,13 @@
         "Kitchenette",
         [
           {
-            "Declare:": "You are in the purse."
-          },
-          {
-            "Declare:": "Mildred and the purse are in the kitchen."
-          },
-          {
-            "Declare:": "You are carrying the coin."
-          },
-          {
-            "Declare:": "Mildred is carrying the empire apple."
-          },
-          {
-            "Declare:": "The coffee is in the machine."
+            "Declare:": [
+            		"You are carrying the coin.",
+            		"Mildred is carrying the empire apple.",
+            		"Mildred and the purse are in the kitchen.",
+            		"You are in the purse.",
+            		"The coffee is in the machine."
+            	]
           }
         ],
         [

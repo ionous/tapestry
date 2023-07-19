@@ -88,24 +88,31 @@ func (s Span) NumWords() int {
 	return len(s)
 }
 
+// expects at most a single sentence.
 func Grok(known Grokker, p string) (ret Results, err error) {
 	if words, e := MakeSpan(p); e != nil {
 		err = e
 	} else {
-		// scan for "is/are" or a macro verb, which ever comes first;
-		// the order can reverse subjects and objects.
-		for i, w := range words {
-			if w.equals(keywords.is) || w.equals(keywords.are) {
-				ret, err = beingPhrase(known, words[:i], words[i+1:])
-				break
-			} else if macro, e := known.FindMacro(words[i:]); e != nil {
-				err = e
-			} else if len(macro.Name) > 0 {
-				ret, err = macroPhrase(known, macro, words[i+macro.Match.NumWords():])
-				break
-			}
+		ret, err = GrokSpan(known, words)
+	}
+	return
+}
+
+func GrokSpan(known Grokker, words Span) (ret Results, err error) {
+	// scan for "is/are" or a macro verb, which ever comes first;
+	// the order can reverse subjects and objects.
+	for i, w := range words {
+		if w.equals(keywords.is) || w.equals(keywords.are) {
+			ret, err = beingPhrase(known, words[:i], words[i+1:])
+			break
+		} else if macro, e := known.FindMacro(words[i:]); e != nil {
+			err = e
+		} else if len(macro.Name) > 0 {
+			ret, err = macroPhrase(known, macro, words[i+macro.Match.NumWords():])
+			break
 		}
 	}
+
 	return
 }
 

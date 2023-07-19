@@ -25,24 +25,35 @@ func (op *DeclareStatement) Execute(macro rt.Runtime) error {
 }
 
 func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) (err error) {
+	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
 		if text, e := safe.GetText(w, op.Text); e != nil {
 			err = e
+		} else if spans, e := grok.MakeSpans(text.String()); e != nil {
+			err = e
 		} else {
-			if res, e := w.Grok(text.String()); e != nil {
-				err = e
-			} else if strings.HasPrefix(res.Macro.Name, "inherit") {
-				// hack for handling "kinds of"
-				// alt, could maybe look at the number of fields of the macro
-				// it'd be amazing to handle all of validate and genNouns in macros
-				// (so no decisions are needed here ) but dont think that's easily possible.
-				err = grokKindPhrase(w, res)
-			} else {
-				err = grokNounPhrase(w, res)
-			}
-			//
-			if err != nil {
-				err = errutil.Fmt("%w grokking %q", err, text.String())
+			// split each statement into its own evaluation
+			// ( to break up interdependence )
+			for _, temp := range spans {
+				span := temp // pin otherwise the callback(s) all see the same last loop value
+				if e := cat.Schedule(weave.RequireRules, func(w *weave.Weaver) (err error) {
+					if res, e := w.GrokSpan(span); e != nil {
+						err = errutil.Fmt("%w reading of %v", mdl.Missing, span.String())
+					} else {
+						if strings.HasPrefix(res.Macro.Name, "inherit") {
+							// handle"kinds of"
+							// alt, could maybe look at the number of fields of the macro
+							// it'd be amazing to handle all of validate and genNouns in macros
+							// (so no decisions are needed here ) but dont think that's easily possible.
+							err = grokKindPhrase(w, res)
+						} else {
+							err = grokNounPhrase(w, res)
+						}
+					}
+					return
+				}); e != nil {
+					err = e
+					break
+				}
 			}
 		}
 		return
@@ -310,15 +321,18 @@ func importCountedNoun(w *weave.Weaver, noun grok.Noun) (ret []string, err error
 		// ie. a single stackable "cats" with a value of 5, rather than cat_1, cat_2, etc.
 		// and when you pick up one cat now you have two object stacks, both referring to the kind cats
 		// an empty stack acts like no object, and gets collected in some fashion.
-		var name, parent string
-		if len(noun.Name) > 0 {
+		var name string
+		parent := "thing"
+		if len(noun.Name) == 0 {
+			name = noun.Kinds[0].String()
+			parent = "thing"
+		} else {
 			// ex. ""An empire apple, a pen, and two triangles are props in the lab."
 			// fix: grok should return that as an object *called* two triangles, not something counted.
 			name = noun.Name.String()
-			parent = noun.Kinds[0].String()
-		} else {
-			name = noun.Kinds[0].String()
-			parent = "thing"
+			if len(noun.Kinds) > 0 {
+				parent = noun.Kinds[0].String()
+			}
 		}
 		name = lang.Normalize(name)
 

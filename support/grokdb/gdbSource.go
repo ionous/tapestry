@@ -20,6 +20,11 @@ func (x *Source) Grok(domain, phrase string) (grok.Results, error) {
 	return grok.Grok(&x.inner, phrase)
 }
 
+func (x *Source) GrokSpan(domain string, span grok.Span) (grok.Results, error) {
+	x.inner.domain = domain
+	return grok.GrokSpan(&x.inner, span)
+}
+
 func (x *Source) MatchArticle(ws []string) (ret int, err error) {
 	if len(ws) > 0 {
 		// assumes all articles are one word.

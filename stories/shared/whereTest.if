@@ -6,34 +6,18 @@
         "thingaverse",
         [
           {
-            "Declare:": "Mildred is an actor."
-          },
-          {
-            "Declare:": "The table is a supporter."
-          },
-          {
-            "Declare:": "The lab is a room."
-          },
-          {
-            "Declare:": "The basket is a container."
-          },
-          {
-            "Declare:": "An scalpel, an empire apple, and a pen are props."
-          },
-          {
-            "Declare:": "Mildred is in the lab."
-          },
-          {
-            "Declare:": "The basket is on the table."
-          },
-          {
-            "Declare:": "Mildred is carrying the pen and the scalpel."
-          },
-          {
-            "Declare:": "The pen is worn."
-          },
-          {
-            "Declare:": "The apple is in the basket."
+            "Declare:": [
+              "Mildred is an actor.",
+              "The table is a supporter.",
+              "The lab is a room.",
+              "The basket is a container.",
+              "An scalpel, an empire apple, and a pen are props.",
+              "Mildred is in the lab.",
+              "The basket is on the table.",
+              "Mildred is carrying the pen and the scalpel.",
+              "The pen is worn.",
+              "The apple is in the basket."
+            ]
           }
         ],
         [

@@ -2,6 +2,7 @@ package literal
 
 import (
 	"encoding/json"
+	"strings"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/jsn"
@@ -109,10 +110,16 @@ func readLiteral(typeName, kind string, msg json.RawMessage) (ret LiteralValue, 
 
 	case rt.TextEval_Type:
 		var val string
-		if e := json.Unmarshal(msg, &val); e != nil {
-			err = chart.Unhandled(typeName)
-		} else {
+		if e := json.Unmarshal(msg, &val); e == nil {
 			ret = &TextValue{Value: val, Kind: kind}
+		} else {
+			var vals []string
+			if e := json.Unmarshal(msg, &vals); e == nil {
+				val := strings.Join(vals, "\n")
+				ret = &TextValue{Value: val, Kind: kind}
+			} else {
+				err = chart.Unhandled(typeName)
+			}
 		}
 
 	case rt.NumListEval_Type:

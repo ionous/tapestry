@@ -102,6 +102,7 @@ func (dec *xDecoder) readSlot(slot jsn.SlotBlock, msg json.RawMessage) (okay boo
 		}
 		var unhandled chart.Unhandled
 		if !errors.As(e, &unhandled) {
+			dec.customSlot(dec, slot, msg)
 			dec.Error(e)
 		} else if op, e := ReadOp(msg); e != nil {
 			dec.Error(e)

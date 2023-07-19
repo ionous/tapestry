@@ -17,7 +17,31 @@ import (
 // fix? quote escaping?
 // rationale: since trimming and separating by spaces would require string allocation (probably multiple)
 // we might as well generate some hashes instead.
-func MakeSpan(s string) (out Span, err error) {
+func MakeSpan(s string) (ret Span, err error) {
+	if out, rem, e := makeSpan(s); e != nil {
+		err = e
+	} else if len(rem) > 0 {
+		err = errutil.New("expected at most a single sentence")
+	} else {
+		ret = out
+	}
+	return
+}
+
+func MakeSpans(s string) (ret []Span, err error) {
+	next := s
+	for len(next) > 0 {
+		if out, rem, e := makeSpan(next); e != nil {
+			err = e
+		} else {
+			ret = append(ret, out)
+			next = rem
+		}
+	}
+	return
+}
+
+func makeSpan(s string) (out Span, rem string, err error) {
 	flushWord := func(start, end int, hash uint64) {
 		if start >= 0 {
 			if end > start {
@@ -38,7 +62,7 @@ Loop:
 		switch {
 		case terminal > 0:
 			if !unicode.IsSpace(r) {
-				err = errutil.New("unexpected full stop at", terminal)
+				rem = s[i:]
 				break Loop
 			}
 

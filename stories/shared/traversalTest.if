@@ -5,13 +5,11 @@
         "traversal",
         [
           {
-            "Declare:": "The Lobby, the Parapet, the Foyer, the Cloak Room, the Basement, and the Outside are rooms."
-          },
-          {
-            "Declare:": "You are in the Lobby."
-          },
-          {
-            "Declare:": "The faux door is a door in the Lobby."
+            "Declare:": [
+              "The Lobby, the Parapet, the Foyer, the Cloak Room, the Basement, and the Outside are rooms.",
+              "You are in the Lobby.",
+              "The faux door is a door in the Lobby."
+            ]
           },
           {
             "--": "fix: this should have made the doors 'plural named' automatically.",

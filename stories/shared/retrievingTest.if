@@ -5,14 +5,12 @@
         "retrieving test",
         "Kitchenette",
         [
-        	{
-            "Declare:": "You and Mildred are in the kitchen."
-          },
           {
-            "Declare:": "The coffee is in the machine."
-          },
-          {
-            "Declare:": "Mildred is carrying the empire apple."
+            "Declare:": [
+              "You and Mildred are in the kitchen.",
+              "The coffee is in the machine.",
+              "Mildred is carrying the empire apple."
+            ]
           }
         ],
         [

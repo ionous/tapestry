@@ -6,10 +6,7 @@
         "Kitchenette",
         [
           {
-          	"Declare:": "You are carrying the knife"
-          },
-          {
-            "--": ""
+          	"Declare:": "You are carrying the knife."
           },
           {
             "Declare:": "The espresso controls are a device in the kitchen."
