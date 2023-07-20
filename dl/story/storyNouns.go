@@ -9,5 +9,5 @@ import (
 func assertNounValue(cat *weave.Catalog, val literal.LiteralValue, noun string, path ...string) error {
 	last := len(path) - 1
 	field, parts := path[last], path[:last]
-	return cat.AssertNounValue(noun, field, parts, val)
+	return cat.AddNounValue(noun, field, parts, val)
 }

@@ -612,9 +612,23 @@ func (pen *Pen) AddPair(rel, oneNoun, otherNoun string) (err error) {
 			if e := pen.checkPair(rel, one, other, reverse, multi); e != nil {
 				err = eatDuplicates(pen.warn, e)
 			} else {
-				err = pen.addPair(rel, one, other)
+				_, err = pen.db.Exec(mdl_pair, pen.domain, rel.id, one.id, other.id, pen.at)
 			}
 		}
+	}
+	return
+}
+
+func (pen *Pen) findCardinality(kind kindInfo) (ret string, err error) {
+	if e := pen.db.QueryRow(`
+	select cardinality
+	from mdl_rel
+	where relKind = ?1 
+	limit 1
+	`, kind.id).Scan(&ret); e == sql.ErrNoRows {
+		err = errutil.Fmt("unknown or invalid cardinality for %q in %q", kind.name, kind.domain)
+	} else {
+		err = e
 	}
 	return
 }
@@ -743,35 +757,59 @@ func (pen *Pen) AddPlural(many, one string) (err error) {
 }
 
 //	fix? the data is duplicated in kinds and fields... should this be removed?
-//
 // might also consider adding a "cardinality" field to the relation kind, and then use init for individual relations
 var mdl_rel = tables.Insert("mdl_rel", "relKind", "oneKind", "otherKind", "cardinality", "at")
 
-// relation and constraint between two kinds of nouns
-
-// relation and constraint between two kinds of nouns
-//
-//	fix? the data is duplicated in kinds and fields... should this be removed?
-//
-// might also consider adding a cardinality field to the relation kind, and then use init for individual relations
-func (pen *Pen) AddRel(relKind, oneKind, otherKind, cardinality string) (err error) {
-	domain, at := pen.domain, pen.at
-	if rel, e := pen.findRequiredKind(relKind); e != nil {
-		err = e
-	} else if rel.domain != domain {
-		err = errutil.New("relation signature expected in the same domain as relation declaration")
-	} else if one, e := pen.findRequiredKind(oneKind); e != nil {
+// relation and constraint between two kinds
+func (pen *Pen) AddRelation(name, oneKind, otherKind string, amany bool, bmany bool) (err error) {
+	if one, e := pen.findRequiredKind(oneKind); e != nil {
 		err = e
 	} else if other, e := pen.findRequiredKind(otherKind); e != nil {
 		err = e
-	} else if _, e := pen.db.Exec(mdl_rel, rel.id, one.id, other.id, cardinality, at); e != nil {
-		err = e // improve the error result if the relation existed vefore?
 	} else {
-		a, b := makeRel(oneKind, otherKind, cardinality)
-		if e := pen.addField(rel, one, a.lhs(), a.affinity()); e != nil {
-			err = eatDuplicates(pen.warn, e)
-		} else if e := pen.addField(rel, other, b.rhs(), b.affinity()); e != nil {
-			err = eatDuplicates(pen.warn, e)
+		info := relInfo{oneKind, otherKind, makeCard(amany, bmany)}
+		var prev struct {
+			id     int64
+			domain string
+			relInfo
+		}
+		if e := pen.db.QueryRow(
+			`select rel.rowid, rk.domain, ak.kind, bk.kind, rel.cardinality
+			from mdl_rel rel
+			join mdl_kind rk
+				on (rel.relKind = rk.rowid)
+			join domain_tree dt
+				on (dt.uses = rk.domain)
+			left join mdl_kind ak 
+				on (rel.oneKind = ak.rowid)
+			left join mdl_kind bk
+				on (rel.otherKind = bk.rowid)
+			where base = ?1
+			and rk.kind = ?2
+		`, pen.domain, name).Scan(&prev.id, &prev.domain, &prev.one, &prev.other, &prev.cardinality); e != nil && e != sql.ErrNoRows {
+			err = errutil.New("database error", e)
+		} else {
+			if prev.id != 0 {
+				if prev.relInfo != info {
+					err = errutil.Fmt("%w relation %q in %q defined as %s, now %s",
+						Conflict, name, prev.domain, prev.relInfo, info)
+				} else {
+					pen.warn("%w relation %q in domain %q", Duplicate, name, pen.domain)
+				}
+			} else {
+				if rel, e := pen.addKind(name, kindsOf.Relation.String()); e != nil {
+					err = e
+				} else {
+					a, b := info.makeRel()
+					if e := pen.addField(rel, one, a.lhs(), a.affinity()); e != nil {
+						err = e
+					} else if e := pen.addField(rel, other, b.rhs(), b.affinity()); e != nil {
+						err = e
+					} else if _, e := pen.db.Exec(mdl_rel, rel.id, one.id, other.id, info.cardinality, pen.at); e != nil {
+						err = e // improve the error result if the relation existed vefore?
+					}
+				}
+			}
 		}
 	}
 	return

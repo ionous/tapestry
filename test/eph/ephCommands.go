@@ -9,19 +9,32 @@ import (
 )
 
 type Aliases struct {
-	ShortName string   `if:"label=understand,type=text"`
-	Aliases   []string `if:"label=as,type=text"`
+	ShortName string
+	Aliases   []string
 }
 
 func (op *Aliases) Assert(cat *weave.Catalog) (err error) {
-	return cat.AssertAlias(op.ShortName, op.Aliases...)
+	return cat.Schedule(weave.RequireAll, func(w *weave.Weaver) (err error) {
+		if n, e := w.GetClosestNoun(op.ShortName); e != nil {
+			err = e
+		} else {
+			pen := w.Pin()
+			for _, a := range op.Aliases {
+				if e := pen.AddName(n, a, -1); e != nil {
+					err = e
+					break
+				}
+			}
+		}
+		return
+	})
 }
 
 // Aspects A set of related object states such that exactly one member of the set is true for a given object at a single time.
 // Generates an implicit kind of 'aspect' where every field of the kind is a boolean property.
 type Aspects struct {
-	Aspects string   `if:"label=aspects,type=text"`
-	Traits  []string `if:"label=traits,type=text"`
+	Aspects string
+	Traits  []string
 }
 
 func (op *Aspects) Assert(cat *weave.Catalog) (err error) {
@@ -31,8 +44,8 @@ func (op *Aspects) Assert(cat *weave.Catalog) (err error) {
 }
 
 type BeginDomain struct {
-	Name     string   `if:"label=domain,type=text"`
-	Requires []string `if:"label=requires,type=text"`
+	Name     string
+	Requires []string
 }
 
 func (op *BeginDomain) Assert(cat *weave.Catalog) (err error) {
@@ -41,8 +54,8 @@ func (op *BeginDomain) Assert(cat *weave.Catalog) (err error) {
 
 // Directives
 type Directives struct {
-	Name      string            `if:"label=go,type=text"`
-	Directive grammar.Directive `if:"label=parse"`
+	Name      string
+	Directive grammar.Directive
 }
 
 func (op *Directives) Assert(cat *weave.Catalog) (err error) {
@@ -53,7 +66,7 @@ func (op *Directives) Assert(cat *weave.Catalog) (err error) {
 
 // EndDomain
 type EndDomain struct {
-	Name string `if:"label=domain,type=text"`
+	Name string
 }
 
 func (op *EndDomain) Assert(cat *weave.Catalog) (err error) {
@@ -65,9 +78,9 @@ func (op *EndDomain) Assert(cat *weave.Catalog) (err error) {
 // and it can be used wherever one of its ancestor kinds is needed.
 // ( The reverse isn't true because the new kind can have its own unique properties not available to its ancestors. )
 type Kinds struct {
-	Kind     string   `if:"label=kinds,type=text"`
-	Ancestor string   `if:"label=from,type=text"`
-	Contain  []Params `if:"label=contain"`
+	Kind     string
+	Ancestor string
+	Contain  []Params
 }
 
 func (op *Kinds) Assert(cat *weave.Catalog) (err error) {
@@ -86,33 +99,29 @@ func (op *Kinds) Assert(cat *weave.Catalog) (err error) {
 	})
 }
 
-// EphMacro - hijacks pattern registration for use with macros
-// type Macro struct {
-// 	Patterns
-// 	MacroStatements []rt.Execute
-// }
-
 // Nouns
 type Nouns struct {
-	Noun string `if:"label=noun,type=text"`
-	Kind string `if:"label=kind,type=text"`
+	Noun string
+	Kind string
 }
 
-func (op *Nouns) Assert(cat *weave.Catalog) (err error) {
-	return cat.AssertNounKind(op.Noun, op.Kind)
+func (op *Nouns) Assert(cat *weave.Catalog) error {
+	return cat.Schedule(weave.RequireDefaults, func(w *weave.Weaver) error {
+		return w.AddNoun(op.Noun, op.Kind)
+	})
 }
 
 // Opposites Rules for transforming plural text to singular text and back again.
 // Used by the assembler to help interpret author definitions,
 // and at runtime to help the parser interpret user input.
 type Opposites struct {
-	Opposite string `if:"label=opposite,type=text"`
-	Word     string `if:"label=word,type=text"`
+	Opposite string
+	Word     string
 }
 
 func (op *Opposites) Assert(cat *weave.Catalog) error {
-	return cat.Schedule(weave.RequireDependencies, func(ctx *weave.Weaver) error {
-		return ctx.Pin().AddOpposite(op.Opposite, op.Word)
+	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) error {
+		return w.Pin().AddOpposite(op.Opposite, op.Word)
 	})
 }
 
@@ -123,10 +132,10 @@ func (op *Opposites) Assert(cat *weave.Catalog) error {
 // While multiple pattern commands can be used to define a pattern,
 // the set of arguments and the return can only be specified once.
 type Patterns struct {
-	PatternName string   `if:"label=pattern,type=text"`
-	Params      []Params `if:"label=with,optional"`
-	Locals      []Params `if:"label=locals,optional"`
-	Result      *Params  `if:"label=result,optional"`
+	PatternName string
+	Params      []Params
+	Locals      []Params
+	Result      *Params
 }
 
 func (op *Patterns) Assert(cat *weave.Catalog) (err error) {
@@ -153,8 +162,8 @@ func (op *Patterns) Assert(cat *weave.Catalog) (err error) {
 // Used by the assembler to help interpret author definitions,
 // and at runtime to help the parser interpret user input.
 type Plurals struct {
-	Plural   string `if:"label=plural,type=text"`
-	Singular string `if:"label=singular,type=text"`
+	Plural   string
+	Singular string
 }
 
 func (op *Plurals) Assert(cat *weave.Catalog) error {
@@ -163,60 +172,50 @@ func (op *Plurals) Assert(cat *weave.Catalog) error {
 	})
 }
 
-// Refs Implies some fact about the world that will be defined elsewhere.
-// Reuses the set of ephemera to limit redefinition. Not all are valid.
-// type Refs struct {
-// 	Refs []Ephemera `if:"label=refs"`
-// }
-
-// func (op *Refs) Assert(cat*weave.Catalog) (err error) {
-// 	refsNotImplemented.PrintOnce()
-// 	return
-// }
-
-// // refs imply some fact about the world that will be defined elsewhere.
-// // assembly would verify that the referenced thing really exists
-// var refsNotImplemented PrintOnce = "refs not implemented"
-
 // Relations
 type Relations struct {
-	Rel         string      `if:"label=_,type=text"`
-	Cardinality Cardinality `if:"label=relate"`
+	Rel         string
+	Cardinality Cardinality
 }
 
-func (op *Relations) Assert(cat *weave.Catalog) (err error) {
-	switch c := op.Cardinality.(type) {
-	case *OneOne:
-		err = cat.AssertRelation(op.Rel, c.Kind, c.OtherKind, false, false)
-	case *OneMany:
-		err = cat.AssertRelation(op.Rel, c.Kind, c.OtherKinds, false, true)
-	case *ManyOne:
-		err = cat.AssertRelation(op.Rel, c.Kinds, c.OtherKind, true, false)
-	case *ManyMany:
-		err = cat.AssertRelation(op.Rel, c.Kinds, c.OtherKinds, true, true)
-	}
-	return
+func (op *Relations) Assert(cat *weave.Catalog) error {
+	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) (err error) {
+		pen := w.Pin()
+		switch c := op.Cardinality.(type) {
+		case *OneOne:
+			err = pen.AddRelation(op.Rel, c.Kind, c.OtherKind, false, false)
+		case *OneMany:
+			err = pen.AddRelation(op.Rel, c.Kind, c.OtherKinds, false, true)
+		case *ManyOne:
+			err = pen.AddRelation(op.Rel, c.Kinds, c.OtherKind, true, false)
+		case *ManyMany:
+			err = pen.AddRelation(op.Rel, c.Kinds, c.OtherKinds, true, true)
+		}
+		return
+	})
 }
 
 // Relatives
 type Relatives struct {
-	Rel       string `if:"label=_,type=text"`
-	Noun      string `if:"label=relates,type=text"`
-	OtherNoun string `if:"label=to,type=text"`
+	Rel       string
+	Noun      string
+	OtherNoun string
 }
 
-func (op *Relatives) Assert(cat *weave.Catalog) (err error) {
-	return cat.AssertRelative(op.Rel, op.Noun, op.OtherNoun)
+func (op *Relatives) Assert(cat *weave.Catalog) error {
+	return cat.Schedule(weave.RequireDependencies, func(w *weave.Weaver) error {
+		return w.Pin().AddPair(op.Rel, op.Noun, op.OtherNoun)
+	})
 }
 
 // Rules
 type Rules struct {
-	PatternName string       `if:"label=pattern,type=text"`
-	Target      string       `if:"label=target,optional,type=text"`
-	Filter      rt.BoolEval  `if:"label=if"`
-	When        Timing       `if:"label=when"`
-	Exe         []rt.Execute `if:"label=does"`
-	Touch       Always       `if:"label=touch,optional"`
+	PatternName string
+	Target      string
+	Filter      rt.BoolEval
+	When        Timing
+	Exe         []rt.Execute
+	Touch       Always
 }
 
 func (op *Rules) Assert(cat *weave.Catalog) (err error) {
@@ -234,12 +233,12 @@ func (op *Rules) Assert(cat *weave.Catalog) (err error) {
 // 2. The values inside of records can be set using a 'path' to find them, however individual values within lists cannot be set.
 // Note: when using a path, the path addresses the noun first, the named field - referring to the inner most record - last.
 type Values struct {
-	Noun  string               `if:"label=noun,type=text"`
-	Field string               `if:"label=has,type=text"`
-	Path  []string             `if:"label=path,optional,type=text"`
-	Value literal.LiteralValue `if:"label=value"`
+	Noun  string
+	Field string
+	Path  []string
+	Value literal.LiteralValue
 }
 
 func (op *Values) Assert(cat *weave.Catalog) (err error) {
-	return cat.AssertNounValue(op.Noun, op.Field, op.Path, op.Value)
+	return cat.AddNounValue(op.Noun, op.Field, op.Path, op.Value)
 }

@@ -1,24 +1,51 @@
 package mdl
 
 import (
-	"database/sql"
-	"strings"
+	"fmt"
 
 	"git.sr.ht/~ionous/tapestry/affine"
 	"git.sr.ht/~ionous/tapestry/tables"
-	"github.com/ionous/errutil"
 )
 
-func (pen *Pen) findCardinality(kind kindInfo) (ret string, err error) {
-	if e := pen.db.QueryRow(`
-	select cardinality
-	from mdl_rel
-	where relKind = ?1 
-	limit 1
-	`, kind.id).Scan(&ret); e == sql.ErrNoRows {
-		err = errutil.Fmt("unknown or invalid cardinality for %q in %q", kind.name, kind.domain)
-	} else {
-		err = e
+func makeCard(amany, bmany bool) (ret string) {
+	switch {
+	case !amany && !bmany:
+		ret = tables.ONE_TO_ONE
+	case !amany && bmany:
+		ret = tables.ONE_TO_MANY
+	case amany && !bmany:
+		ret = tables.MANY_TO_ONE
+	case amany && bmany:
+		ret = tables.MANY_TO_MANY
+	}
+	return
+}
+
+type relInfo struct {
+	one, other  string
+	cardinality string
+}
+
+func (rel *relInfo) String() string {
+	return fmt.Sprint(rel.other, rel.other, rel.cardinality)
+}
+
+func (rel *relInfo) makeRel() (first, second relKind) {
+	switch rel.cardinality {
+	case tables.ONE_TO_ONE:
+		first = relKind{rel.one, false}
+		second = relKind{rel.other, false}
+	case tables.ONE_TO_MANY:
+		first = relKind{rel.one, false}
+		second = relKind{rel.other, true}
+	case tables.MANY_TO_ONE:
+		first = relKind{rel.one, true}
+		second = relKind{rel.other, false}
+	case tables.MANY_TO_MANY:
+		first = relKind{rel.one, true}
+		second = relKind{rel.other, true}
+	default:
+		panic("unknown cardinality")
 	}
 	return
 }
@@ -53,34 +80,4 @@ func (k *relKind) rhs() (ret string) {
 		ret = "other kind"
 	}
 	return
-}
-
-func makeRel(a, b string, card string) (first, second relKind) {
-	switch card {
-	case tables.ONE_TO_ONE:
-		first = relKind{a, false}
-		second = relKind{b, false}
-	case tables.ONE_TO_MANY:
-		first = relKind{a, false}
-		second = relKind{b, true}
-	case tables.MANY_TO_ONE:
-		first = relKind{a, true}
-		second = relKind{b, false}
-	case tables.MANY_TO_MANY:
-		first = relKind{a, true}
-		second = relKind{b, true}
-	default:
-		panic("unknown cardinality")
-	}
-	return
-}
-
-// the reversed relation name
-func fmtMacro(name string, reversed bool) (ret string) {
-	ps := []string{"the"}
-	if reversed {
-		ps = append(ps, "reversed")
-	}
-	ps = append(ps, "macro", name)
-	return strings.Join(ps, " ")
 }

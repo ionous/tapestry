@@ -6,11 +6,9 @@ import (
 	"log"
 
 	"git.sr.ht/~ionous/tapestry/dl/literal"
-	"git.sr.ht/~ionous/tapestry/lang"
 	"git.sr.ht/~ionous/tapestry/qna"
 	"git.sr.ht/~ionous/tapestry/qna/qdb"
 	"git.sr.ht/~ionous/tapestry/rt"
-	"git.sr.ht/~ionous/tapestry/rt/kindsOf"
 	"git.sr.ht/~ionous/tapestry/support/grokdb"
 	"git.sr.ht/~ionous/tapestry/tables"
 	"git.sr.ht/~ionous/tapestry/weave/mdl"
@@ -190,28 +188,6 @@ func (cat *Catalog) assembleNext() (ret *Domain, err error) {
 	return
 }
 
-func (cat *Catalog) AssertAlias(opShortName string, opAliases ...string) error {
-	return cat.Schedule(RequireAll, func(ctx *Weaver) (err error) {
-		d := ctx.Domain
-		if shortName, ok := UniformString(opShortName); !ok {
-			err = errutil.New("invalid name", opShortName)
-		} else if n, e := d.GetClosestNoun(shortName); e != nil {
-			err = e
-		} else {
-			out := ctx.Pin()
-			for _, a := range opAliases {
-				if a := lang.Normalize(a); len(a) > 0 {
-					if e := out.AddName(n.name, a, -1); e != nil {
-						err = e
-						break
-					}
-				}
-			}
-		}
-		return
-	})
-}
-
 // calls to schedule() between begin/end domain write to this newly declared domain.
 func (cat *Catalog) DomainStart(name string, requires []string) (err error) {
 	if n, ok := UniformString(name); !ok {
@@ -235,16 +211,10 @@ func (cat *Catalog) DomainEnd() (err error) {
 	return
 }
 
-func (cat *Catalog) AssertNounKind(name, kind string) error {
-	return cat.Schedule(RequireDefaults, func(ctx *Weaver) (err error) {
-		noun, kind := lang.Normalize(name), lang.Normalize(kind)
-		_, err = ctx.Domain.AddNoun(name, noun, kind)
-		return
-	})
-}
-
 // note: values are written per *noun* not per domain....
-func (cat *Catalog) AssertNounValue(opNoun, opField string, opPath []string, value literal.LiteralValue) error {
+// todo: this should be removed once the values can be written directly into the db
+// see writeValues()
+func (cat *Catalog) AddNounValue(opNoun, opField string, opPath []string, value literal.LiteralValue) error {
 	return cat.Schedule(RequireNames, func(ctx *Weaver) (err error) {
 		d, at := ctx.Domain, ctx.At
 		if noun, ok := UniformString(opNoun); !ok {
@@ -282,53 +252,6 @@ Loop:
 		}
 	}
 	return
-}
-
-func (cat *Catalog) AssertRelation(opRel, a, b string, amany, bmany bool) error {
-	// uses ancestry because it defines kinds for each relation
-	return cat.Schedule(RequirePlurals, func(ctx *Weaver) (err error) {
-		// like aspects, we dont try to singularize these.
-		if rel, ok := UniformString(opRel); !ok {
-			err = InvalidString(opRel)
-		} else if acls, ok := UniformString(a); !ok {
-			err = InvalidString(a)
-		} else if bcls, ok := UniformString(b); !ok {
-			err = InvalidString(b)
-		} else if card := makeCard(amany, bmany); len(card) == 0 {
-			err = errutil.New("unknown cardinality")
-		} else {
-			if e := ctx.Pin().AddKind(rel, kindsOf.Relation.String()); e != nil {
-				err = e
-			} else {
-				err = cat.Schedule(RequirePatterns, func(ctx *Weaver) (err error) {
-					return ctx.Pin().AddRel(rel, acls, bcls, card)
-				})
-			}
-		}
-		return
-	})
-}
-
-// validate that the pattern for the rule exists then add the rule to the *current* domain
-// ( rules are de/activated based on domain, they can be part some child of the domain where the pattern was defined. )
-func (cat *Catalog) AssertRelative(opRel, opNoun, opOtherNoun string) error {
-	return cat.Schedule(RequireNames, func(ctx *Weaver) (err error) {
-		d := ctx.Domain
-		if noun, ok := UniformString(opNoun); !ok {
-			err = InvalidString(opNoun)
-		} else if otherNoun, ok := UniformString(opOtherNoun); !ok {
-			err = InvalidString(opOtherNoun)
-		} else if rel, ok := UniformString(opRel); !ok {
-			err = InvalidString(opRel)
-		} else if first, e := d.GetClosestNoun(noun); e != nil {
-			err = e
-		} else if second, e := d.GetClosestNoun(otherNoun); e != nil {
-			err = e
-		} else {
-			err = ctx.Pin().AddPair(rel, first.name, second.name)
-		}
-		return
-	})
 }
 
 // NewCounter generates a unique string, and uses local markup to try to create a stable one.

@@ -19,7 +19,7 @@ type helperNoun struct {
 
 // return the name of a noun based on the name of the current noun
 func (h *helperNoun) dependentNoun(name string) helperNoun {
-	next := h.name + "-" + name
+	next := h.uniform + "-" + name
 	return helperNoun{name: next, uniform: next}
 }
 
@@ -61,7 +61,7 @@ func (op *MapHeading) Weave(cat *weave.Catalog) error {
 		} else {
 			// exit this room moving through the (optional) door
 			pen := w.Pin()
-			mapDirect(cat, room, otherRoom, door, op.Dir)
+			mapDirect(w, room, otherRoom, door, op.Dir)
 
 			// write a fact stating the general direction from one room to the other has been established.
 			// ( used to detect conflicts in (the reverse directional) implications of some other statement )
@@ -86,7 +86,7 @@ func (op *MapHeading) Weave(cat *weave.Catalog) error {
 							err = e
 						} else {
 							// create the reverse door, etc.
-							err = mapDirect(cat, otherRoom, room, missingDoor, MapDirection{otherDir})
+							err = mapDirect(w, otherRoom, room, missingDoor, MapDirection{otherDir})
 						}
 					}
 				}
@@ -114,9 +114,9 @@ func (op *MapDeparting) Weave(cat *weave.Catalog) error {
 			err = e
 		} else if otherRoom, e := makeNoun(w, op.OtherRoomName); e != nil {
 			err = e
-		} else if e := cat.AssertNounKind(door.name, "doors"); e != nil {
+		} else if e := w.AddNoun(door.name, "doors"); e != nil {
 			err = e // ^ ensure the exit exists
-		} else if e := cat.AssertRelative("whereabouts", room.name, door.name); e != nil {
+		} else if e := relateNouns(w, room, door); e != nil {
 			err = e // ^ put the exit in the current room
 		} else if e := assertNounValue(cat, Tx(otherRoom.uniform, "rooms"), door.name, "destination"); e != nil {
 			err = e // ^ set the door's target to the other room; todo:
@@ -126,7 +126,8 @@ func (op *MapDeparting) Weave(cat *weave.Catalog) error {
 }
 
 // set the room's compass, creating an exit if needed to normalize directional travel to always involve a door.
-func mapDirect(cat *weave.Catalog, room, otherRoom, exitDoor helperNoun, mapDir MapDirection) (err error) {
+func mapDirect(w *weave.Weaver, room, otherRoom, exitDoor helperNoun, mapDir MapDirection) (err error) {
+	cat := w.Catalog
 	if dir := lang.Normalize(mapDir.Str); len(dir) == 0 {
 		err = errutil.New("missing map direction")
 	} else {
@@ -138,9 +139,9 @@ func mapDirect(cat *weave.Catalog, room, otherRoom, exitDoor helperNoun, mapDir 
 		exitName, otherName := exitDoor.uniform, otherRoom.uniform
 		// -- Refs(nounOf(room, "rooms")))// verify the current room
 		// -- Refs(nounOf(otherRoom, "rooms")))// verify the target room
-		if e := cat.AssertNounKind(exitDoor.name, "doors"); e != nil {
+		if e := w.AddNoun(exitDoor.name, "doors"); e != nil {
 			err = e // ^ ensure the existence of the door
-		} else if e := cat.AssertRelative("whereabouts", room.name, exitDoor.name); e != nil {
+		} else if e := relateNouns(w, room, exitDoor); e != nil {
 			err = e // ^ put the exit in the current room
 		} else if e := assertNounValue(cat, Tx(exitName, "door"), room.name, "compass", dir); e != nil {
 			err = e // ^ set the room's compass to the exit
@@ -163,4 +164,10 @@ func mapDirect(cat *weave.Catalog, room, otherRoom, exitDoor helperNoun, mapDir 
 
 func (op *MapConnection) isTwoWay() bool {
 	return op.Str == MapConnection_ConnectingTo
+}
+
+func relateNouns(w *weave.Weaver, noun, other helperNoun) error {
+	return w.Catalog.Schedule(weave.RequireNames, func(w *weave.Weaver) error {
+		return w.Pin().AddPair("whereabouts", noun.uniform, other.uniform)
+	})
 }

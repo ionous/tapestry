@@ -121,9 +121,9 @@ func TestQueries(t *testing.T) {
 			} else if e := mdlRel(m,
 				// domain, rel, kind, otherKind, cardinality, at
 				// ---------------------------------------------
-				domain, relation, kind, kind, tables.ONE_TO_MANY, at,
+				domain, relation, kind, kind, false, true, at,
 				// ( something random )
-				subDomain, otherRelation, kind, aspect, tables.ONE_TO_ONE, at,
+				subDomain, otherRelation, kind, aspect, false, false, at,
 			); e != nil {
 				err = e
 				t.Fatal(e)
@@ -398,16 +398,17 @@ func mdlPlural(m *mdl.Modeler, els ...any) (err error) {
 }
 
 func mdlRel(m *mdl.Modeler, els ...any) (err error) {
-	for i, cnt := 0, len(els); i < cnt; i += 6 {
+	for i, cnt := 0, len(els); i < cnt; i += 7 {
 		row := els[i:]
-		domain, relKind, oneKind, otherKind, cardinality, at :=
+		domain, relKind, oneKind, otherKind, oneMany, otherMany, at :=
 			row[0].(string),
 			row[1].(string),
 			row[2].(string),
 			row[3].(string),
-			row[4].(string),
-			row[5].(string)
-		if e := m.Pin(domain, at).AddRel(relKind, oneKind, otherKind, cardinality); e != nil {
+			row[4].(bool),
+			row[5].(bool),
+			row[6].(string)
+		if e := m.Pin(domain, at).AddRelation(relKind, oneKind, otherKind, oneMany, otherMany); e != nil {
 			err = e
 			break
 		}

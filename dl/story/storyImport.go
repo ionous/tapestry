@@ -46,11 +46,27 @@ func (op *GrammarDecl) Weave(cat *weave.Catalog) (err error) {
 	// fix: why have a generic "grammar" decl, just to switch on two sub decls
 	// they should be top level.
 	case *grammar.Alias:
-		err = cat.AssertAlias(el.AsNoun, el.Names...)
+		err = cat.Schedule(weave.RequireAll, func(w *weave.Weaver) (err error) {
+			if n, e := w.GetClosestNoun(el.AsNoun); e != nil {
+				err = e
+			} else {
+				pen := w.Pin()
+				for _, a := range el.Names {
+					if a := lang.Normalize(a); len(a) > 0 {
+						if e := pen.AddName(n, a, -1); e != nil {
+							err = e
+							break
+						}
+					}
+				}
+			}
+			return
+		})
+
 	case *grammar.Directive:
 		// jump/skip/hop	{"Directive:scans:":[["jump","skip","hop"],[{"As:":"jumping"}]]}
 		name := strings.Join(el.Lede, "/")
-		return cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
+		err = cat.Schedule(weave.RequireRules, func(w *weave.Weaver) error {
 			return w.Pin().AddGrammar(name, el)
 		})
 	default:
@@ -82,7 +98,7 @@ func (op *DefineNounTraits) Weave(cat *weave.Catalog) error {
 						err = errutil.Append(err, e)
 					} else {
 						names[i] = name // replace for the traits loop
-						if e := cat.AssertNounKind(name, kind); e != nil {
+						if e := w.AddNoun(name, kind); e != nil {
 							err = errutil.Append(err, e)
 						}
 					}
@@ -146,7 +162,7 @@ func (op *DefineNouns) Weave(cat *weave.Catalog) error {
 					for _, noun := range names {
 						if noun, e := grok.StripArticle(noun); e != nil {
 							err = errutil.Append(err, e)
-						} else if e := cat.AssertNounKind(noun, kind); e != nil {
+						} else if e := w.AddNoun(noun, kind); e != nil {
 							err = errutil.Append(err, e)
 						}
 					}
@@ -193,36 +209,15 @@ func (op *DefineRelatives) Execute(macro rt.Runtime) error {
 
 func (op *DefineRelatives) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
-		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
+		if rel, e := safe.GetText(w, op.Relation); e != nil {
 			err = e
-		} else if kind, e := safe.GetOptionalText(w, op.Kind, ""); e != nil {
-			err = e
-		} else if relation, e := safe.GetText(w, op.Relation); e != nil {
+		} else if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
 		} else if otherNouns, e := safe.GetTextList(w, op.OtherNouns); e != nil {
 			err = e
 		} else {
-			a, b := nouns.Strings(), otherNouns.Strings()
-			for _, subject := range a {
-				if subject, e := grok.StripArticle(subject); e != nil {
-					err = errutil.Append(err, e)
-				} else if kind := kind.String(); len(kind) > 0 {
-					if e := cat.AssertNounKind(subject, kind); e != nil {
-						err = errutil.New(err, e)
-					}
-				}
-				if rel := relation.String(); len(rel) > 0 {
-					for _, object := range b {
-						if object, e := grok.StripArticle(object); e != nil {
-							err = errutil.Append(err, e)
-						} else if e := cat.AssertRelative(rel, object, subject); e != nil {
-							err = errutil.New(err, e)
-						}
-					}
-				}
-			}
+			err = defineRelatives(w, rel.String(), nouns.Strings(), otherNouns.Strings())
 		}
-
 		return
 	})
 }
@@ -234,30 +229,35 @@ func (op *DefineOtherRelatives) Execute(macro rt.Runtime) error {
 
 func (op *DefineOtherRelatives) Weave(cat *weave.Catalog) error {
 	return cat.Schedule(weave.RequirePlurals, func(w *weave.Weaver) (err error) {
-		if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
+		if rel, e := safe.GetText(w, op.Relation); e != nil {
 			err = e
-		} else if relation, e := safe.GetText(w, op.Relation); e != nil {
+		} else if nouns, e := safe.GetTextList(w, op.Nouns); e != nil {
 			err = e
 		} else if otherNouns, e := safe.GetTextList(w, op.OtherNouns); e != nil {
 			err = e
 		} else {
-			a, b := nouns.Strings(), otherNouns.Strings()
-			if rel := relation.String(); len(rel) > 0 {
-				for _, subject := range a {
-					if subject, e := grok.StripArticle(subject); e != nil {
-						err = errutil.New(err, e)
-					} else {
-						for _, object := range b {
-							if object, e := grok.StripArticle(object); e != nil {
-								err = errutil.New(err, e)
-							} else if e := cat.AssertRelative(rel, object, subject); e != nil {
-								err = errutil.New(err, e)
-							}
-						}
+			err = defineRelatives(w, rel.String(), otherNouns.Strings(), nouns.Strings())
+		}
+		return
+	})
+}
+
+func defineRelatives(w *weave.Weaver, rel string, nouns, otherNouns []string) (err error) {
+	pen, rel := w.Pin(), lang.Normalize(rel)
+	for _, one := range nouns {
+		if a, e := w.GetClosestNoun(one); e != nil {
+			err = errutil.Append(err, e)
+		} else {
+			for _, other := range otherNouns {
+				if b, e := w.GetClosestNoun(other); e != nil {
+					err = errutil.Append(err, e)
+				} else {
+					if e := pen.AddPair(rel, a, b); e != nil {
+						err = errutil.Append(err, e)
 					}
 				}
 			}
 		}
-		return
-	})
+	}
+	return
 }

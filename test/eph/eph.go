@@ -1,3 +1,4 @@
+// pacakge eph provides helpers for testing
 package eph
 
 import (

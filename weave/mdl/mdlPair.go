@@ -34,12 +34,6 @@ func (pen *Pen) checkPair(rel kindInfo, one, other nounInfo, reverse, multi bool
 	return
 }
 
-func (pen *Pen) addPair(kind kindInfo, one, other nounInfo) (err error) {
-	domain, at := pen.domain, pen.at
-	_, err = pen.db.Exec(mdl_pair, domain, kind.id, one.id, other.id, at)
-	return
-}
-
 // for a given rhs, there can be only one lhs
 var forwardPairs = `
 	select mn.rowid, mn.noun

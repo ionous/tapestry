@@ -37,7 +37,7 @@ func (op *DeclareStatement) Weave(cat *weave.Catalog) error {
 				span := temp // pin otherwise the callback(s) all see the same last loop value
 				if e := cat.Schedule(weave.RequireRules, func(w *weave.Weaver) (err error) {
 					if res, e := w.GrokSpan(span); e != nil {
-						err = errutil.Fmt("%w reading of %v", mdl.Missing, span.String())
+						err = errutil.Fmt("%w reading of %v b/c %v", mdl.Missing, span.String(), e)
 					} else {
 						if strings.HasPrefix(res.Macro.Name, "inherit") {
 							// handle"kinds of"
