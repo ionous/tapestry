@@ -1,5 +1,5 @@
-// Copyright 2022 Simon Travis.
 // Copyright 2017 The Go Authors. All rights reserved.
+// Copyright 2022 - Modifications by Simon Travis.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
