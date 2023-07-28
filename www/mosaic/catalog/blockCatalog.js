@@ -1,18 +1,17 @@
 import Cataloger from './cataloger.js'
-import http from '/lib/http.js'
 import { CatalogFolder, CatalogFile } from './catalogItems.js'
-import { reactive } from "vue"
+import http from '/lib/http.js'
+
+// fix? i dont know why these were reactive; i dont think they need to be
+//import { reactive } from 'vue'
+function reactive(r) {
+  return r;
+}
 
 export default class BlockCatalog extends Cataloger {
   constructor(url) {
     super(url);
     this._store= {}; // stores catalog items
-    this._saving= false; // false or an arbitrary non-zero number
-    this._saved= false; // false or an arbitrary non-zero number
-    this._saves= 0; //
-  }
-  get busy() {
-    return !!this._saving;
   }
   // inject an .if directory listing into folder
   loadFolder(folder) {
@@ -28,6 +27,8 @@ export default class BlockCatalog extends Cataloger {
           }
         }
       }
+    }).catch((error) => {
+      console.log('error:', error)
     });
   }
   // store some json string content in memory.
@@ -62,52 +63,12 @@ export default class BlockCatalog extends Cataloger {
           store[path]= file= reactive(new CatalogFile(name, dir));
         }
         const contents= JSON.stringify(pod);
-        file.updateContents(contents, true);
+        file.updateContents(contents);
         return file;
       });
     }
     return ret;
   }
-  // collect all changes from all files and put them to the server.
-  saveStories() {
-    const { _saving:saving, _saved:last, _store:store } = this;
-    if (!saving) {
-      const next= ++this._saves; // increment the save attempt.
-      //
-      let out= [];
-      for (const key in store) {
-        const item= store[key];
-        if (item instanceof CatalogFile) {
-          const contents= item.collect(last, next);
-          if (contents) {
-            out.push({
-              path: item.path,
-              // contents: {toJSON: ()=> contents}, this double encodes the string.
-              contents: JSON.parse(contents),
-            });
-          }
-        }
-      }
-      if (out.length>0) {
-        this._saving = next; // stores the save id for debugging.
-        console.log(`saving ${out.length} files via ${this.base}`);
-        http.put(this.base, out).then((res)=>{
-          console.log("SAVED:", res);
-          this._saved= next;
-          this._saving= false;
-        }).catch((reason)=>{
-          console.log("failed to save", reason);
-          this._saving= false;
-        });
-      }
-    }
-  }
-  // run an action like "check", etc. against a specific file.
-  // run(action, file, options, cb) {
-  //   const { path } = file;
-  //   this._post(`${path}/${action}`, options, cb);
-  // }
-
   // turns a json array of paths into CatalogItems
   // ["/curr","/proj1","/proj2","/shared", "currStory.if"]
   _readFolder(path, got) {

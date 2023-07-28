@@ -4,8 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -70,32 +72,53 @@ func (d blocksFolder) Put(ctx context.Context, r io.Reader, w http.ResponseWrite
 				err = errutil.Append(err, e)
 			} else if data, e := story.Encode(&file); e != nil {
 				err = errutil.Append(err, e)
-			} else if e := files.WriteJson(at, data, true); e != nil {
-				err = errutil.Append(err, e)
+			} else if fp, e := os.OpenFile(d.path, os.O_WRONLY|os.O_TRUNC, 0); e != nil {
+				err = e
+			} else {
+				if e := files.WriteJsonFile(fp, data, true); e != nil {
+					err = errutil.Append(err, e)
+				}
+				fp.Close()
 			}
 		}
 	}
 	if err != nil {
-		log.Println("ERROR", err)
+		log.Println("Error putting files", err)
 	}
 	return
 }
 
-// Find actions for individual files ( none right now )
+// Find sub actions for individual files ( none right now )
 func (d blocksFile) Find(sub string) (none web.Resource) {
 	return
 }
 
 // files dont support posting; returns error
-// ( blocksFolder however support put )
 func (d blocksFile) Post(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
 	return errutil.New("unsupported post", d)
 }
 
-// files dont support putting; returns error
-// ( blocksFolder however support put )
+// save an individual file
 func (d blocksFile) Put(ctx context.Context, r io.Reader, w http.ResponseWriter) (err error) {
-	return errutil.New("unsupported put", d)
+	var file story.StoryFile // mosaic hands back blocks
+	if raw, e := ioutil.ReadAll(r); e != nil {
+		err = e
+	} else if e := unblock.Decode(&file, "story_file", story.Registry(), raw); e != nil {
+		err = e
+	} else if data, e := story.Encode(&file); e != nil {
+		err = e
+	} else if fp, e := os.OpenFile(d.path, os.O_WRONLY|os.O_TRUNC, 0); e != nil {
+		err = e
+	} else {
+		if e := files.WriteJsonFile(fp, data, true); e != nil {
+			err = e
+		}
+		fp.Close()
+	}
+	if err != nil {
+		log.Println("Error putting file", err)
+	}
+	return
 }
 
 // gets the contents of the story file, transforms it into blocks

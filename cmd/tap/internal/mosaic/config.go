@@ -27,6 +27,11 @@ func (cfg *Config) Cmd(which string) string {
 	return path.Join(cfg.cmds, "bin", which)
 }
 
+func (cfg *Config) Stories() string {
+	// without the manually added trailing slash, the file open dialog doesnt follow symlink(s) correctly.
+	return cfg.PathTo("stories") + "/"
+}
+
 // Configure creates a reasonable(?) config based on the developer go path.
 func Configure(types rs.TypeSpecs, cmdDir, dataDir string) *Config {
 	return &Config{

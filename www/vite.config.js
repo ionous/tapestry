@@ -12,9 +12,9 @@ export default defineConfig(({ command /*, mode, ssrBuild*/ }) => {
       appcfg: JSON.stringify({
         // run by cmd/serve. somebody has to fix these names.
         // plus that person should probably make these the same port.
-        live: build ? "http://wails.localhost" : "http://localhost:8088",
+        live: build ? "wails://wails" : "http://localhost:8088",
         // run by cmd/mosaic.
-        mosaic: build ? "http://wails.localhost" : "http://localhost:8080",
+        mosaic: build ? "wails://wails" : "http://localhost:8080",
       }),
     },
     server: {

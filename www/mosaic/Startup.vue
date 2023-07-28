@@ -1,45 +1,20 @@
- <template>
+<template>
   <p>loading...</p>
 </template>
  
 <script>
-import Blockly from 'blockly';
-import { inject } from 'vue'
-
-// shapes is an array of blockly shape data.
-const shapesUrl= appcfg.mosaic + '/shapes/';
-const toolboxUrl= appcfg.mosaic + '/boxes/';
+import shapeData from './shapeData.js';
 
 export default {
   // reports back on shapeData
   // ( the custom data defined by Tapestry for each block )
   emits: ['started'],
   // note: setup has no "this" value
-  setup(props, { emit /*attrs, slots, emit, expose*/ }) {
+  setup(props, { emit }) {
     // fix: ref some error text or something to the display?
-    // fix: push your json fetch into a shared library?
-    let toolboxData;
-    fetch(toolboxUrl).then((response) => {
-      return (!response.ok) ?
-        Promise.reject({status: response.status, url}) :
-        response.json().then((jsonData) => {
-          toolboxData= jsonData;
-    }).then(
-    fetch(shapesUrl).then((response) => {
-      return (!response.ok) ?
-        Promise.reject({status: response.status, url}) :
-        response.json().then((jsonData) => {
-          let shapeData= {};
-          jsonData.forEach(function(el) {
-            Blockly.defineBlocksWithJsonArray([el]);
-            let { customData } = el;
-            if (customData) { // ironically: mutators use standard blocks.
-              shapeData[el.type]= customData;
-            }
-          });
-          emit('started', {shapeData, toolboxData});
-        });
-    }))}).catch((error) => {
+    shapeData.getShapeData().then((b) => {
+      emit('started', b);
+    }).catch((error) => {
       console.log('error:', error)
     });
   } 

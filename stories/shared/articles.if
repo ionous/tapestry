@@ -34,7 +34,7 @@
         "articles",
         [
           {
-          	"Declare:" : "The lamp-post, some soldiers, and Trevor are things."
+            "Declare:": "The lamp-post, some soldiers, and Trevor are things."
           }
         ],
         [
@@ -94,7 +94,7 @@
         {
           "Nothing": true
         },
-        []
+        null
       ]
     },
     {
@@ -140,7 +140,7 @@
         {
           "Nothing": true
         },
-        []
+        null
       ]
     },
     {
@@ -206,7 +206,7 @@
         {
           "Nothing": true
         },
-        []
+        null
       ]
     },
     {

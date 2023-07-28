@@ -1,8 +1,11 @@
 <template><div 
+  class="mk-homebox"
   :class="bemBlock()"
-  ><mk-folder
+  ><b>Story file browser</b><mk-folder
       v-if="!!folder.contents"
       :folder="folder"
+      @fileSelected="onFile"
+      @folderSelected="onFolder"
   ></mk-folder
 ></div></template>
 
@@ -18,6 +21,7 @@ export default {
     catalog: Cataloger,
   },
   components: { mkFolder },
+  emits: ['fileSelected'],
   data() {
     const { catalog } = this;
     return {
@@ -27,6 +31,21 @@ export default {
   mounted() {
     const { catalog, folder } = this;
     catalog.loadFolder(folder);
+  },
+  methods: {
+    onFile(file) {
+      this.$emit('fileSelected', file.path);
+    },
+    onFolder(folder) {
+      if (folder.contents) {
+        console.log("closing", folder.name);
+        folder.contents= false;
+      } else {
+        // injects the list of sub-files into the passed folder
+        console.log("opening", folder.name, folder.path);
+        this.catalog.loadFolder(folder);
+      }
+    },
   }
 }
 </script>

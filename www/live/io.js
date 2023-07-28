@@ -32,11 +32,13 @@ export default class Io {
     let msgCnt=0;
     this.sending= Promise.allSettled([this.getting, this.sending]).then(()=>{
       // expects zero or more messages back
-      return http.post(this.endpoint, cmd, true).then((msgs) => {
+      return http.post(this.endpoint, cmd).then((msgs) => {
         if (Array.isArray(msgs)) {
           this.msgcb(msgs);
           msgCnt= msgs.length;
         }
+      }).catch((e)  => {
+        console.warn("io error", e);
       }).finally(()=>{
         this.startPolling(this.keepalive, msgCnt>500);
       });
@@ -50,6 +52,8 @@ export default class Io {
       return http.get(this.endpoint).then((msgs) => {
         this.msgcb(msgs);
         msgCnt= msgs.length;
+      }).catch((error) => {
+        console.log('error:', error)
       }).finally(()=>{
         this.startPolling(this.keepalive, msgCnt>500);
       });

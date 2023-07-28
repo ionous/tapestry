@@ -1,7 +1,6 @@
 package cmdmosaic
 
 import (
-	"context"
 	"io/fs"
 	"log"
 	"net/http"
@@ -13,13 +12,11 @@ import (
 )
 
 // wails application framing
-type Host struct{ ctx context.Context }
+//
+type Host struct{}
 
 // startup is called when the app starts.
 // saves context in case we need to call wails runtime methods
-func (w *Host) startup(ctx context.Context) {
-	w.ctx = ctx
-}
 
 // not expected to return
 func startBackend(listenTo int, mux http.Handler) {
@@ -31,7 +28,7 @@ func startBackend(listenTo int, mux http.Handler) {
 }
 
 // not expected to return
-func runWails(width, height int, mux http.Handler) {
+func runWails(ws *mosaic.Workspace, width, height int, mux http.Handler) {
 	var wailsFakeout fs.FS
 	if mosaic.BuildConfig == mosaic.Prod {
 		wailsFakeout = mosaic.ErrFS{}
@@ -42,15 +39,15 @@ func runWails(width, height int, mux http.Handler) {
 		Title:  "Tapestry",
 		Width:  width,
 		Height: height,
-		// in dev: we pass nil, and all files are served via the "AssetsHandler"
-		// in production: we pass a special filesystem that always errors out.
+		// in dev: this is nil, so that all files are served via the mux "AssetsHandler".
+		// in production: all assets are built in, and so anything else is considered an error.
 		Assets: wailsFakeout,
-		// a way to serve dynamic data from specific endpoints
+		// this serves dynamic data from specific endpoints:
 		// in dev: any paths not handled are passed to vite for processing.
 		// in production: it excludes the fallback handler
 		AssetsHandler: mux,
 		//BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
-		OnStartup: host.startup,
+		OnStartup: ws.Startup,
 		// OnShutdown: host.shutdown,
 		//Menu:       host.menu(), -> https://wails.io/docs/reference/menus
 		Bind: []interface{}{

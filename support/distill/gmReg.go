@@ -7,7 +7,7 @@ import (
 	"git.sr.ht/~ionous/tapestry/dl/spec"
 )
 
-// Accumulates types to build signatures and lists of slots and slats
+// Accumulates tapestry type specs to build lists of slots and slats and their signatures.
 // Doesnt currently support multiple groups
 type Registry struct {
 	Types        []string

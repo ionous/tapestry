@@ -7,8 +7,6 @@ import (
 	"github.com/ionous/errutil"
 )
 
-const DefaultFolder int = 8080
-
 // implements the flag.Value interface for locating the author's stories.
 type Folder string
 

@@ -22,8 +22,8 @@ import (
 var CmdMosaic = &base.Command{
 	Run:       runMosaic,
 	Flag:      buildFlags(),
-	UsageLine: "tap mosaic [-in <directory>] [mosaic flags]",
-	Short:     "tapestry story editor",
+	UsageLine: "tap edit [-in <directory>] [mosaic flags]",
+	Short:     "run the tapestry story editor",
 	Long: `Start the Tapestry story editor.
 
 The 'in' directory should contain two sub-directories:
@@ -40,11 +40,8 @@ func runMosaic(ctx context.Context, cmd *base.Command, args []string) (err error
 	} else if types, e := rs.FromSpecs(idl.Specs); e != nil {
 		err = errutil.New("fatal error:", e)
 	} else {
+		var ws mosaic.Workspace
 		mux := http.NewServeMux()
-
-		// redirect index.html to the mosaic app.
-		// [ doesnt work for wails -- it looks for a built in index.html ]
-		// composer.RedirectIndex(mux, "mosaic")
 
 		// FIX: remove the "cmdDir"
 		// everything should be using tap internals at this point i think.
@@ -61,6 +58,9 @@ func runMosaic(ctx context.Context, cmd *base.Command, args []string) (err error
 
 		// blockly shape files ( from .ifspecs )
 		mux.Handle("/boxes/", http.StripPrefix("/boxes/", web.HandleResource(mosaic.BoxesApi(cfg))))
+
+		// ui actions
+		mux.Handle("/actions/", http.StripPrefix("/actions/", web.HandleResource(mosaic.ActionsApi(cfg, &ws))))
 
 		// fix: serve .ifspecs from package idl?
 		// below is the older .ifspec endpoint --
@@ -88,32 +88,42 @@ func runMosaic(ctx context.Context, cmd *base.Command, args []string) (err error
 				log.Fatal(e)
 			} else {
 				// anything not handled by "mux" gets sent to the vite backend.
+				vite := httputil.NewSingleHostReverseProxy(viteBackend)
 				mux.Handle("/", web.MethodHandler{
-					http.MethodGet:  httputil.NewSingleHostReverseProxy(viteBackend),
+					http.MethodGet: http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+						log.Println(req.Method, req.RequestURI)
+						vite.ServeHTTP(w, req)
+					}),
 					http.MethodPost: mosaic.HandleCommands(cfg),
 				})
 
 			}
 
-			// web mode stops here
+			if mosaic.BuildConfig != mosaic.Prod {
+				log.Println("don't forget to run the backend:")
+				log.Println("in the directory tapestry/www type 'npm run dev'.")
+			}
+
+			// NOTE: web mode stops here
 			if mosaic.BuildConfig != mosaic.Dev {
-				startBackend(listenTo, mux) // doesn't return.
+				startBackend(listenTo, mux)
+				// doesn't return.
 			}
 
 			// dev mode starts the tapestry server; then continues on to start the wails webkit browser.
 			// the server has to tell the browser that its okay to make requests from the webkit origin.
-			// wails webkit requests pages from: "http://wails.localhost"
+			// wails webkit requests pages from "wails://" ( used to be from "http://wails.localhost" )
 			// the webapps ask for ( and post/put data at ) "http://localhost:8080"
-			go startBackend(listenTo, web.HandleCors("http://wails.localhost", mux))
+			go startBackend(listenTo, web.HandleCors("wails://wails", mux))
 
 			// fix? having these commented out skips activating the wails dev server.
-			// i haven't quite figured out how to integrate it with succesfully with backend
+			// i haven't quite figured out how to integrate it with successfully with backend
 			// not sure if its really needed, but it really *wants* to serve content.
 			//os.Setenv("devserver", "http://localhost:34115")
 			//os.Setenv("frontenddevserverurl", "http://localhost:3000")
 		}
 		// doesn't return.
-		runWails(mosaicFlags.width, mosaicFlags.height, mux)
+		runWails(&ws, mosaicFlags.width, mosaicFlags.height, mux)
 	}
 	return
 }
